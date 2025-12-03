@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domma Demo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #555;
+            margin-top: 30px;
+        }
+
+        section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .demo-box {
+            background: #e9ecef;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 4px;
+            min-height: 50px;
+        }
+
+        .item {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 4px;
+        }
+
+        .highlight {
+            background: #ffc107 !important;
+            color: #333 !important;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        input, select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 5px;
+        }
+
+        #console {
+            background: #1e1e1e;
+            color: #0f0;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        #console div {
+            margin: 2px 0;
+        }
+
+        .fade-box, .slide-box {
+            background: #28a745;
+            color: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .animate-box {
+            width: 100px;
+            height: 100px;
+            background: #dc3545;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+        }
+
+        .tab {
+            background: #e9ecef;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .tab.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #f8f9fa;
+        }
+
+        .hover-card {
+            background: cornflowerblue;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            width: 200px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+        .hover-card h4 {
+            margin: 0 0 10px 0;
+        }
+
+        .hover-card p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .callback-btn {
+            background: #17a2b8;
+            padding: 12px 24px;
+        }
+
+        #callback-output {
+            margin-left: 15px;
+            font-weight: bold;
+        }
+
+        /* Tabs styles */
+        .tab {
+            padding: 10px 20px;
+            background: #e9ecef;
+            cursor: pointer;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .tab.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .tab-content {
+            padding: 20px;
+            border: 1px solid #ddd;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Accordion styles */
+        .accordion-item {
+            border: 1px solid #ddd;
+            margin-bottom: -1px;
+        }
+
+        .accordion-header {
+            padding: 15px;
+            background: #f8f9fa;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .accordion-header:hover {
+            background: #e9ecef;
+        }
+
+        .accordion-item.active .accordion-header {
+            background: #007bff;
+            color: white;
+        }
+
+        .accordion-content {
+            padding: 0 15px;
+        }
+    </style>
+</head>
+<body>
+<h1>Domma Demo</h1>
+<p>Interactive demonstration of Domma's jQuery-compatible DOM API and Lodash-style utilities.</p>
+<p><strong>Aliases:</strong> <code>$</code> = Domma, <code>_</code> = Domma.utils</p>
+
+<!-- DOM Selection -->
+<section>
+    <h2>DOM Selection</h2>
+    <div class="demo-box">
+        <span class="item" data-id="1">Item 1</span>
+        <span class="item" data-id="2">Item 2</span>
+        <span class="item" data-id="3">Item 3</span>
+    </div>
+    <button id="btn-select">Select All Items</button>
+    <button id="btn-first">First Item</button>
+    <button id="btn-last">Last Item</button>
+    <button id="btn-filter">Filter Odd</button>
+    <button id="btn-reset-items">Reset</button>
+</section>
+
+<!-- Content Manipulation -->
+<section>
+    <h2>Content Manipulation</h2>
+    <div id="content-box" class="demo-box">Original content here</div>
+    <button id="btn-text">Set Text</button>
+    <button id="btn-html">Set HTML</button>
+    <button id="btn-append">Append</button>
+    <button id="btn-prepend">Prepend</button>
+    <button id="btn-empty">Empty</button>
+    <button id="btn-reset-content">Reset</button>
+</section>
+
+<!-- CSS & Classes -->
+<section>
+    <h2>CSS & Classes</h2>
+    <div id="style-box" class="demo-box">Style this box</div>
+    <button id="btn-css-color">Change Color</button>
+    <button id="btn-css-bg">Change Background</button>
+    <button id="btn-add-class">Add Highlight</button>
+    <button id="btn-remove-class">Remove Highlight</button>
+    <button id="btn-toggle-class">Toggle Highlight</button>
+</section>
+
+<!-- Events -->
+<section>
+    <h2>Events</h2>
+    <div id="event-box" class="demo-box">Hover over me or click me!</div>
+    <input type="text" id="event-input" placeholder="Type here...">
+    <div id="console"></div>
+</section>
+
+<!-- Effects -->
+<section>
+    <h2>Effects</h2>
+    <div class="fade-box" id="fade-box">Fade Me</div>
+    <button id="btn-fade-out">Fade Out</button>
+    <button id="btn-fade-in">Fade In</button>
+    <button id="btn-fade-toggle">Fade Toggle</button>
+
+    <div class="slide-box" id="slide-box">Slide Me</div>
+    <button id="btn-slide-up">Slide Up</button>
+    <button id="btn-slide-down">Slide Down</button>
+    <button id="btn-slide-toggle">Slide Toggle</button>
+
+    <h3>Animation</h3>
+    <div class="animate-box" id="animate-box"></div>
+    <button id="btn-animate">Animate</button>
+    <button id="btn-stop">Stop</button>
+</section>
+
+<!-- Traversal -->
+<section>
+    <h2>Traversal</h2>
+    <div id="traversal-demo">
+        <div class="card" id="parent-card">
+            <h4>Parent Card</h4>
+            <div class="card" id="child-1">
+                <span>Child 1</span>
+                <span class="target">Target A</span>
+            </div>
+            <div class="card" id="child-2">
+                <span>Child 2</span>
+                <span class="target">Target B</span>
+            </div>
+            <div class="card" id="child-3">
+                <span>Child 3</span>
+                <span class="target">Target C</span>
+            </div>
+        </div>
+    </div>
+    <button id="btn-children">Highlight Children</button>
+    <button id="btn-find">Find .target</button>
+    <button id="btn-siblings">Siblings of Child 2</button>
+    <button id="btn-parent">Parent of Child 1</button>
+    <button id="btn-reset-traversal">Reset</button>
+</section>
+
+<!-- Utilities -->
+<section>
+    <h2>Utilities (Lodash-compatible)</h2>
+
+    <h3>Array Utilities</h3>
+    <table>
+        <tr>
+            <th>Function</th>
+            <th>Input</th>
+            <th>Output</th>
+        </tr>
+        <tr>
+            <td><code>_.chunk()</code></td>
+            <td><code>[1,2,3,4,5], 2</code></td>
+            <td id="util-chunk"></td>
+        </tr>
+        <tr>
+            <td><code>_.flatten()</code></td>
+            <td><code>[1,[2,[3,[4]]]]</code></td>
+            <td id="util-flatten"></td>
+        </tr>
+        <tr>
+            <td><code>_.uniq()</code></td>
+            <td><code>[1,2,2,3,3,3]</code></td>
+            <td id="util-uniq"></td>
+        </tr>
+        <tr>
+            <td><code>_.difference()</code></td>
+            <td><code>[1,2,3], [2,3,4]</code></td>
+            <td id="util-difference"></td>
+        </tr>
+    </table>
+
+    <h3>Object Utilities</h3>
+    <table>
+        <tr>
+            <th>Function</th>
+            <th>Input</th>
+            <th>Output</th>
+        </tr>
+        <tr>
+            <td><code>_.get()</code></td>
+            <td><code>{a:{b:{c:3}}}, 'a.b.c'</code></td>
+            <td id="util-get"></td>
+        </tr>
+        <tr>
+            <td><code>_.pick()</code></td>
+            <td><code>{a:1,b:2,c:3}, 'a','c'</code></td>
+            <td id="util-pick"></td>
+        </tr>
+        <tr>
+            <td><code>_.merge()</code></td>
+            <td><code>{a:1}, {b:2}</code></td>
+            <td id="util-merge"></td>
+        </tr>
+    </table>
+
+    <h3>String Utilities</h3>
+    <table>
+        <tr>
+            <th>Function</th>
+            <th>Input</th>
+            <th>Output</th>
+        </tr>
+        <tr>
+            <td><code>_.camelCase()</code></td>
+            <td><code>'foo-bar-baz'</code></td>
+            <td id="util-camel"></td>
+        </tr>
+        <tr>
+            <td><code>_.kebabCase()</code></td>
+            <td><code>'fooBarBaz'</code></td>
+            <td id="util-kebab"></td>
+        </tr>
+        <tr>
+            <td><code>_.capitalize()</code></td>
+            <td><code>'hello world'</code></td>
+            <td id="util-capitalize"></td>
+        </tr>
+    </table>
+
+    <h3>Function Utilities</h3>
+    <p>
+        <button id="btn-debounce">Click Rapidly (debounced)</button>
+        <span id="debounce-count">Count: 0</span>
+    </p>
+    <p>
+        <button id="btn-once">Click Multiple Times (once)</button>
+        <span id="once-result"></span>
+    </p>
+</section>
+
+<!-- JSON Config -->
+<section>
+    <h2>JSON Configuration</h2>
+    <p>Declarative DOM behavior via <code>Domma.setup()</code>:</p>
+
+    <h3>Declarative Actions</h3>
+    <div id="config-demo">
+        <button class="config-btn">Configured Button</button>
+        <div id="config-target" class="demo-box">Target Element</div>
+    </div>
+
+    <h3>Inline Callbacks</h3>
+    <p>Mix declarative actions with custom functions:</p>
+    <div id="callback-demo">
+        <button class="callback-btn">Click Me</button>
+        <span id="callback-output">Waiting...</span>
+    </div>
+
+    <h3>Interactive Cards</h3>
+    <p>Cards with hover effects defined via config:</p>
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px;">
+        <div class="hover-card" id="card-1">
+            <h4>Card One</h4>
+            <p>Hover to see the grow effect</p>
+        </div>
+        <div class="hover-card" id="card-2">
+            <h4>Card Two</h4>
+            <p>Smooth transition on hover</p>
+        </div>
+        <div class="hover-card" id="card-3">
+            <h4>Card Three</h4>
+            <p>Configured declaratively</p>
+        </div>
+    </div>
+</section>
+
+<!-- Dates Module -->
+<section>
+    <h2>Dates Module</h2>
+    <p>Moment.js-style chainable date manipulation via <code>D()</code> or <code>Domma.dates()</code></p>
+
+    <h3>Current Date/Time</h3>
+    <div class="demo-box">
+        <p><strong>Now:</strong> <span id="date-now"></span></p>
+        <p><strong>Formatted:</strong> <span id="date-formatted"></span></p>
+        <p><strong>Relative:</strong> <span id="date-relative"></span></p>
+    </div>
+
+    <h3>Date Manipulation</h3>
+    <div class="demo-box">
+        <p><strong>+7 days:</strong> <span id="date-add"></span></p>
+        <p><strong>Start of month:</strong> <span id="date-start"></span></p>
+        <p><strong>End of month:</strong> <span id="date-end"></span></p>
+    </div>
+
+    <h3>Date Comparison</h3>
+    <div class="demo-box">
+        <p id="date-compare"></p>
+    </div>
+</section>
+
+<!-- Models Module -->
+<section>
+    <h2>Models Module</h2>
+    <p>Reactive data binding via <code>M</code> or <code>Domma.models</code></p>
+
+    <h3>Reactive Form</h3>
+    <div class="demo-box">
+        <div style="margin-bottom: 15px;">
+            <label>Name: </label>
+            <input type="text" id="model-name" placeholder="Enter name">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label>Email: </label>
+            <input type="email" id="model-email" placeholder="Enter email">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label>Age: </label>
+            <input type="number" id="model-age" min="0" max="150">
+        </div>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 4px;">
+            <strong>Live Preview:</strong>
+            <p>Hello, <span id="model-display-name">-</span>!</p>
+            <p>Email: <span id="model-display-email">-</span></p>
+            <p>Age: <span id="model-display-age">-</span></p>
+        </div>
+        <button id="model-reset" style="margin-top: 10px;">Reset</button>
+    </div>
+
+    <h3>Pub/Sub Events</h3>
+    <div class="demo-box">
+        <button id="pubsub-publish">Publish Event</button>
+        <span id="pubsub-output">Waiting for events...</span>
+    </div>
+</section>
+
+<!-- Elements Module -->
+<section>
+    <h2>Elements Module</h2>
+    <p>UI components via <code>Domma.elements</code></p>
+
+    <h3>Modal</h3>
+    <button id="open-modal">Open Modal</button>
+    <div id="demo-modal" style="display: none; background: white; padding: 30px; border-radius: 8px; max-width: 400px;">
+        <h3 style="margin-top: 0;">Modal Title</h3>
+        <p>This is a modal dialog created with Domma.elements.modal()</p>
+        <button class="modal-close">Close</button>
+    </div>
+
+    <h3>Tabs</h3>
+    <div id="demo-tabs">
+        <div style="display: flex; gap: 5px; margin-bottom: -1px;">
+            <div data-tab class="tab active">Tab 1</div>
+            <div data-tab class="tab">Tab 2</div>
+            <div data-tab class="tab">Tab 3</div>
+        </div>
+        <div data-panel class="tab-content active">Content for Tab 1</div>
+        <div data-panel class="tab-content">Content for Tab 2</div>
+        <div data-panel class="tab-content">Content for Tab 3</div>
+    </div>
+
+    <h3>Accordion</h3>
+    <div id="demo-accordion">
+        <div class="accordion-item">
+            <div data-accordion-header class="accordion-header">Section 1</div>
+            <div data-accordion-content class="accordion-content">
+                <p>Content for section 1. Click the header to toggle.</p>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <div data-accordion-header class="accordion-header">Section 2</div>
+            <div data-accordion-content class="accordion-content">
+                <p>Content for section 2. Only one section open at a time.</p>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <div data-accordion-header class="accordion-header">Section 3</div>
+            <div data-accordion-content class="accordion-content">
+                <p>Content for section 3. Smooth animation on open/close.</p>
+            </div>
+        </div>
+    </div>
+
+    <h3>Tooltips</h3>
+    <div style="display: flex; gap: 10px; margin-top: 15px;">
+        <button data-tooltip="Tooltip on top!" class="tooltip-demo">Hover me (top)</button>
+        <button data-tooltip="Tooltip on right!" class="tooltip-demo-right">Hover me (right)</button>
+    </div>
+</section>
+
+<!-- Tables Module -->
+<section>
+    <h2>Tables Module</h2>
+    <p>DataTable-like functionality via <code>Domma.tables</code></p>
+
+    <div id="demo-table"></div>
+</section>
+
+<script src="/dist/domma.min.js"></script>
+<script>
+    // Helper to log to console div
+    function log(msg) {
+        const console = $('#console');
+        console.append('<div>' + msg + '</div>');
+        console.get(0).scrollTop = console.get(0).scrollHeight;
+    }
+
+    // DOM Selection Demo
+    $('#btn-select').click(function () {
+        $('.item').addClass('highlight');
+        log('Selected ' + $('.item').length + ' items');
+    });
+    $('#btn-first').click(function () {
+        $('.item').removeClass('highlight');
+        $('.item').first().addClass('highlight');
+        log('Highlighted first item');
+    });
+    $('#btn-last').click(function () {
+        $('.item').removeClass('highlight');
+        $('.item').last().addClass('highlight');
+        log('Highlighted last item');
+    });
+    $('#btn-filter').click(function () {
+        $('.item').removeClass('highlight');
+        $('.item').filter(function (i) {
+            return i % 2 === 0;
+        }).addClass('highlight');
+        log('Filtered odd-indexed items');
+    });
+    $('#btn-reset-items').click(function () {
+        $('.item').removeClass('highlight');
+        log('Reset items');
+    });
+
+    // Content Manipulation Demo
+    $('#btn-text').click(function () {
+        $('#content-box').text('Text set at ' + new Date().toLocaleTimeString());
+    });
+    $('#btn-html').click(function () {
+        $('#content-box').html('<strong>Bold HTML</strong> with <em>emphasis</em>');
+    });
+    $('#btn-append').click(function () {
+        $('#content-box').append('<div class="item">Appended</div>');
+    });
+    $('#btn-prepend').click(function () {
+        $('#content-box').prepend('<div class="item">Prepended</div>');
+    });
+    $('#btn-empty').click(function () {
+        $('#content-box').empty();
+    });
+    $('#btn-reset-content').click(function () {
+        $('#content-box').html('Original content here');
+    });
+
+    // CSS & Classes Demo
+    $('#btn-css-color').click(function () {
+        const colors = ['#333', '#007bff', '#28a745', '#dc3545', '#ffc107'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        $('#style-box').css('color', color);
+    });
+    $('#btn-css-bg').click(function () {
+        const colors = ['#e9ecef', '#cce5ff', '#d4edda', '#f8d7da', '#fff3cd'];
+        const bg = colors[Math.floor(Math.random() * colors.length)];
+        $('#style-box').css('background', bg);
+    });
+    $('#btn-add-class').click(function () {
+        $('#style-box').addClass('highlight');
+    });
+    $('#btn-remove-class').click(function () {
+        $('#style-box').removeClass('highlight');
+    });
+    $('#btn-toggle-class').click(function () {
+        $('#style-box').toggleClass('highlight');
+    });
+
+    // Events Demo
+    $('#event-box')
+        .on('click', function () {
+            log('Box clicked!');
+        })
+        .on('mouseenter', function () {
+            $(this).css('background', '#007bff').css('color', 'white');
+            log('Mouse entered');
+        })
+        .on('mouseleave', function () {
+            $(this).css('background', '#e9ecef').css('color', '#333');
+            log('Mouse left');
+        });
+
+    $('#event-input')
+        .on('focus', function () {
+            log('Input focused');
+        })
+        .on('blur', function () {
+            log('Input blurred');
+        })
+        .on('keyup', function (e) {
+            log('Key pressed: ' + e.key);
+        });
+
+    // Effects Demo
+    $('#btn-fade-out').click(function () {
+        $('#fade-box').fadeOut();
+    });
+    $('#btn-fade-in').click(function () {
+        $('#fade-box').fadeIn();
+    });
+    $('#btn-fade-toggle').click(function () {
+        $('#fade-box').fadeToggle();
+    });
+    $('#btn-slide-up').click(function () {
+        $('#slide-box').slideUp();
+    });
+    $('#btn-slide-down').click(function () {
+        $('#slide-box').slideDown();
+    });
+    $('#btn-slide-toggle').click(function () {
+        $('#slide-box').slideToggle();
+    });
+    $('#btn-animate').click(function () {
+        $('#animate-box').animate({left: '200px', opacity: 0.5}, 500, function () {
+            $(this).animate({left: '0px', opacity: 1}, 500);
+        });
+    });
+    $('#btn-stop').click(function () {
+        $('#animate-box').stop();
+    });
+
+    // Traversal Demo
+    $('#btn-children').click(function () {
+        $('#parent-card').children('.card').addClass('highlight');
+    });
+    $('#btn-find').click(function () {
+        $('#parent-card').find('.target').addClass('highlight');
+    });
+    $('#btn-siblings').click(function () {
+        $('#child-2').siblings().addClass('highlight');
+    });
+    $('#btn-parent').click(function () {
+        $('#child-1').parent().css('border', '3px solid #007bff');
+    });
+    $('#btn-reset-traversal').click(function () {
+        $('#traversal-demo .card').removeClass('highlight');
+        $('#traversal-demo .target').removeClass('highlight');
+        $('#parent-card').css('border', '');
+    });
+
+    // Utilities Demo
+    $('#util-chunk').text(JSON.stringify(_.chunk([1, 2, 3, 4, 5], 2)));
+    $('#util-flatten').text(JSON.stringify(_.flatten([1, [2, [3, [4]]]])));
+    $('#util-uniq').text(JSON.stringify(_.uniq([1, 2, 2, 3, 3, 3])));
+    $('#util-difference').text(JSON.stringify(_.difference([1, 2, 3], [2, 3, 4])));
+    $('#util-get').text(_.get({a: {b: {c: 3}}}, 'a.b.c'));
+    $('#util-pick').text(JSON.stringify(_.pick({a: 1, b: 2, c: 3}, 'a', 'c')));
+    $('#util-merge').text(JSON.stringify(_.merge({a: 1}, {b: 2})));
+    $('#util-camel').text(_.camelCase('foo-bar-baz'));
+    $('#util-kebab').text(_.kebabCase('fooBarBaz'));
+    $('#util-capitalize').text(_.capitalize('hello world'));
+
+    // Debounce demo
+    let debounceRaw = 0;
+    let debounceActual = 0;
+    const debouncedFn = _.debounce(function () {
+        debounceActual++;
+        $('#debounce-count').text('Raw clicks: ' + debounceRaw + ', Debounced calls: ' + debounceActual);
+    }, 300);
+    $('#btn-debounce').click(function () {
+        debounceRaw++;
+        $('#debounce-count').text('Raw clicks: ' + debounceRaw + ', Debounced calls: ' + debounceActual);
+        debouncedFn();
+    });
+
+    // Once demo
+    let onceCount = 0;
+    const onceFn = _.once(function () {
+        return 'Executed! (only once)';
+    });
+    $('#btn-once').click(function () {
+        onceCount++;
+        const result = onceFn();
+        $('#once-result').text('Clicks: ' + onceCount + ', Result: ' + (result || 'undefined'));
+    });
+
+    // JSON Config Demo - Declarative
+    $.setup({
+        '.config-btn': {
+            initial: {
+                css: {background: '#6f42c1'}
+            },
+            events: {
+                click: {target: '#config-target', toggleClass: 'highlight'},
+                mouseenter: {css: {background: '#5a32a3'}},
+                mouseleave: {css: {background: '#6f42c1'}}
+            }
+        }
+    });
+
+    // JSON Config Demo - Inline Callbacks
+    let clickCount = 0;
+    $.setup({
+        '.callback-btn': {
+            events: {
+                click: [
+                    {addClass: 'highlight'},
+                    function (event, $el) {
+                        clickCount++;
+                        $('#callback-output').text('Clicked ' + clickCount + ' times at ' + new Date().toLocaleTimeString());
+                        log('Callback executed! Count: ' + clickCount);
+                    }
+                ],
+                mouseenter: function (event, $el) {
+                    $el.css('transform', 'scale(1.05)');
+                },
+                mouseleave: function (event, $el) {
+                    $el.css('transform', 'scale(1)').removeClass('highlight');
+                }
+            }
+        }
+    });
+
+    // JSON Config Demo - Interactive Cards
+    $.setup({
+        '.hover-card': {
+            events: {
+                mouseenter: {
+                    css: {
+                        transform: 'scale(1.05)',
+                        boxShadow: '0 8px 20px rgba(0,0,0,0.25)'
+                    }
+                },
+                mouseleave: {
+                    css: {
+                        transform: 'scale(1)',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+                    }
+                },
+                click: function (event, $el) {
+                    const cardId = $el.attr('id');
+                    log('Card clicked: ' + cardId);
+                }
+            }
+        }
+    });
+
+    // ============================================
+    // Dates Module Demo
+    // ============================================
+    $('#date-now').text(D().format('YYYY-MM-DD HH:mm:ss'));
+    $('#date-formatted').text(D().format('dddd, MMMM D, YYYY'));
+    $('#date-relative').text(D().subtract(2, 'hours').fromNow());
+
+    $('#date-add').text(D().add(7, 'days').format('MMMM D, YYYY'));
+    $('#date-start').text(D().startOf('month').format('MMMM D, YYYY'));
+    $('#date-end').text(D().endOf('month').format('MMMM D, YYYY'));
+
+    const christmas = D('2025-12-25');
+    const today = D();
+    const daysUntil = christmas.diff(today, 'days');
+    $('#date-compare').html(
+        'Days until Christmas 2025: <strong>' + daysUntil + '</strong><br>' +
+        'Is Christmas after today? <strong>' + christmas.isAfter(today) + '</strong>'
+    );
+
+    // ============================================
+    // Models Module Demo
+    // ============================================
+    const userModel = M.create({
+        name: {type: 'string', default: ''},
+        email: {type: 'string', default: ''},
+        age: {type: 'number', default: null}
+    }, {
+        name: 'John Doe',
+        email: 'john@example.com',
+        age: 30
+    });
+
+    // Two-way binding for inputs
+    M.bind(userModel, 'name', '#model-name', {twoWay: true});
+    M.bind(userModel, 'email', '#model-email', {twoWay: true});
+    M.bind(userModel, 'age', '#model-age', {twoWay: true});
+
+    // One-way binding for display
+    M.bind(userModel, 'name', '#model-display-name');
+    M.bind(userModel, 'email', '#model-display-email');
+    M.bind(userModel, 'age', '#model-display-age');
+
+    $('#model-reset').click(function () {
+        userModel.reset();
+        log('Model reset');
+    });
+
+    // Pub/Sub demo
+    let eventCount = 0;
+    M.subscribe('demo-event', function (data) {
+        eventCount++;
+        $('#pubsub-output').text('Event #' + eventCount + ': ' + data.message);
+        log('Pub/Sub event received: ' + data.message);
+    });
+
+    $('#pubsub-publish').click(function () {
+        M.publish('demo-event', {message: 'Hello at ' + new Date().toLocaleTimeString()});
+    });
+
+    // ============================================
+    // Elements Module Demo
+    // ============================================
+
+    // Modal
+    const modal = Domma.elements.modal('#demo-modal', {
+        backdrop: true,
+        backdropClose: true,
+        animation: 'fade',
+        onOpened: function () {
+            log('Modal opened');
+        },
+        onClosed: function () {
+            log('Modal closed');
+        }
+    });
+
+    $('#open-modal').click(function () {
+        modal.open();
+    });
+
+    // Tabs
+    Domma.elements.tabs('#demo-tabs', {
+        tabSelector: '[data-tab]',
+        panelSelector: '[data-panel]',
+        onChange: function (info) {
+            log('Tab changed to index ' + info.index);
+        }
+    });
+
+    // Accordion
+    Domma.elements.accordion('#demo-accordion', {
+        allowMultiple: false,
+        onChange: function (info) {
+            log('Accordion section ' + info.index + (info.isOpen ? ' opened' : ' closed'));
+        }
+    });
+
+    // Tooltips
+    Domma.elements.tooltip('.tooltip-demo', {
+        position: 'top',
+        trigger: 'hover'
+    });
+
+    Domma.elements.tooltip('.tooltip-demo-right', {
+        position: 'right',
+        trigger: 'hover'
+    });
+
+    // ============================================
+    // Tables Module Demo
+    // ============================================
+    const sampleData = [
+        {id: 1, name: 'Alice Johnson', email: 'alice@example.com', role: 'Admin', status: 'Active'},
+        {id: 2, name: 'Bob Smith', email: 'bob@example.com', role: 'User', status: 'Active'},
+        {id: 3, name: 'Charlie Brown', email: 'charlie@example.com', role: 'User', status: 'Inactive'},
+        {id: 4, name: 'Diana Prince', email: 'diana@example.com', role: 'Admin', status: 'Active'},
+        {id: 5, name: 'Edward Norton', email: 'edward@example.com', role: 'User', status: 'Active'},
+        {id: 6, name: 'Fiona Apple', email: 'fiona@example.com', role: 'User', status: 'Inactive'},
+        {id: 7, name: 'George Lucas', email: 'george@example.com', role: 'Admin', status: 'Active'},
+        {id: 8, name: 'Helen Troy', email: 'helen@example.com', role: 'User', status: 'Active'},
+        {id: 9, name: 'Ivan Petrov', email: 'ivan@example.com', role: 'User', status: 'Inactive'},
+        {id: 10, name: 'Julia Roberts', email: 'julia@example.com', role: 'Admin', status: 'Active'},
+        {id: 11, name: 'Kevin Hart', email: 'kevin@example.com', role: 'User', status: 'Active'},
+        {id: 12, name: 'Laura Palmer', email: 'laura@example.com', role: 'User', status: 'Inactive'}
+    ];
+
+    const table = Domma.tables.create('#demo-table', {
+        data: sampleData,
+        columns: [
+            {key: 'id', title: 'ID', width: 60},
+            {key: 'name', title: 'Name', sortable: true},
+            {key: 'email', title: 'Email', sortable: true},
+            {key: 'role', title: 'Role', sortable: true},
+            {
+                key: 'status', title: 'Status', sortable: true, render: function (val) {
+                    const color = val === 'Active' ? '#28a745' : '#dc3545';
+                    return '<span style="color: ' + color + '">' + val + '</span>';
+                }
+            }
+        ],
+        pagination: true,
+        pageSize: 5,
+        searchable: true,
+        selectable: true,
+        selectionMode: 'multiple',
+        onSort: function (info) {
+            log('Sorted by ' + info.column + ' ' + info.direction);
+        },
+        onSelect: function (selected) {
+            log('Selected ' + selected.length + ' rows');
+        }
+    });
+
+    log('Domma demo loaded. New modules: D (dates), M (models), elements, tables');
+</script>
+</body>
+</html>
