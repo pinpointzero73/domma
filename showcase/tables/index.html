@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tables - Domma Showcase</title>
+    <link rel="stylesheet" href="../css/domma.css">
+    <style>
+        .demo-area {
+            background: var(--dm-gray-100);
+            padding: var(--dm-space-4);
+            border-radius: var(--dm-radius-md);
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: var(--dm-space-2);
+        }
+
+        .method-item {
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            padding: var(--dm-space-2);
+            background: var(--dm-gray-100);
+            border-radius: var(--dm-radius-sm);
+        }
+
+        .category-title {
+            font-weight: 600;
+            color: var(--dm-primary);
+            margin: var(--dm-space-4) 0 var(--dm-space-2);
+            padding-bottom: var(--dm-space-2);
+            border-bottom: 2px solid var(--dm-primary);
+        }
+
+        .table-controls {
+            display: flex;
+            gap: var(--dm-space-3);
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: var(--dm-space-4);
+        }
+
+        .table-info {
+            font-size: var(--dm-font-size-sm);
+            color: var(--dm-gray-600);
+        }
+
+        .option-table {
+            width: 100%;
+            font-size: var(--dm-font-size-sm);
+        }
+
+        .option-table th {
+            text-align: left;
+            padding: var(--dm-space-2);
+            background: var(--dm-gray-100);
+        }
+
+        .option-table td {
+            padding: var(--dm-space-2);
+            border-bottom: 1px solid var(--dm-gray-200);
+        }
+
+        .option-table code {
+            font-size: var(--dm-font-size-xs);
+        }
+
+        .table-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .selected-row {
+            background: rgba(100, 149, 237, 0.1) !important;
+        }
+
+        .editable-cell {
+            cursor: pointer;
+        }
+
+        .editable-cell:hover {
+            background: var(--dm-gray-200);
+        }
+
+        .editing input {
+            width: 100%;
+            padding: var(--dm-space-1);
+            border: 2px solid var(--dm-primary);
+            border-radius: var(--dm-radius-sm);
+        }
+    </style>
+</head>
+<body>
+<script src="../js/layout.js"></script>
+
+<div class="container py-8">
+    <header class="mb-8">
+        <h1 class="text-4xl font-bold mb-2">Tables</h1>
+        <p class="text-muted text-lg">DataTable-like functionality for interactive data grids with sorting, filtering,
+            pagination, and more.</p>
+        <p class="mt-2"><code>Domma.tables</code></p>
+    </header>
+
+    <!-- Basic Setup -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Creating Tables</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Transform a table element into an interactive data grid.</p>
+
+            <pre class="code-block">// Create a table instance
+const table = Domma.tables.create('#my-table', {
+    data: [
+        { id: 1, name: 'Alice', email: 'alice@example.com', role: 'Admin' },
+        { id: 2, name: 'Bob', email: 'bob@example.com', role: 'User' },
+        // ...more rows
+    ],
+    columns: [
+        { key: 'id', title: 'ID', sortable: true },
+        { key: 'name', title: 'Name', sortable: true },
+        { key: 'email', title: 'Email', sortable: true, editable: true },
+        { key: 'role', title: 'Role', filterable: true },
+        {
+            key: 'actions',
+            title: '',
+            render: (val, row) => `&lt;button data-id="${row.id}"&gt;Edit&lt;/button&gt;`
+        }
+    ],
+    pagination: true,
+    pageSize: 10,
+    selectable: true
+});
+
+// HTML
+&lt;table id="my-table" class="table"&gt;&lt;/table&gt;</pre>
+
+            <h4 class="category-title">Column Options</h4>
+            <table class="option-table mb-4">
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>key</code></td>
+                    <td>string</td>
+                    <td>Property name in data object</td>
+                </tr>
+                <tr>
+                    <td><code>title</code></td>
+                    <td>string</td>
+                    <td>Column header text</td>
+                </tr>
+                <tr>
+                    <td><code>sortable</code></td>
+                    <td>boolean</td>
+                    <td>Enable sorting on this column</td>
+                </tr>
+                <tr>
+                    <td><code>filterable</code></td>
+                    <td>boolean</td>
+                    <td>Enable filtering on this column</td>
+                </tr>
+                <tr>
+                    <td><code>editable</code></td>
+                    <td>boolean</td>
+                    <td>Enable inline editing</td>
+                </tr>
+                <tr>
+                    <td><code>render</code></td>
+                    <td>function</td>
+                    <td>Custom cell renderer (val, row) => html</td>
+                </tr>
+                <tr>
+                    <td><code>width</code></td>
+                    <td>string</td>
+                    <td>Column width (e.g., '100px', '20%')</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Table Options</h4>
+            <table class="option-table">
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>data</code></td>
+                    <td>array</td>
+                    <td>[]</td>
+                    <td>Array of row objects</td>
+                </tr>
+                <tr>
+                    <td><code>columns</code></td>
+                    <td>array</td>
+                    <td>[]</td>
+                    <td>Column configuration</td>
+                </tr>
+                <tr>
+                    <td><code>pagination</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>Enable pagination</td>
+                </tr>
+                <tr>
+                    <td><code>pageSize</code></td>
+                    <td>number</td>
+                    <td>10</td>
+                    <td>Rows per page</td>
+                </tr>
+                <tr>
+                    <td><code>selectable</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>Enable row selection</td>
+                </tr>
+                <tr>
+                    <td><code>selectionMode</code></td>
+                    <td>string</td>
+                    <td>'multiple'</td>
+                    <td>'single' or 'multiple'</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- Interactive Demo -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Interactive Demo</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-controls">
+                <input type="text" id="table-search" class="form-input" placeholder="Search..." style="width: 250px;">
+                <select id="role-filter" class="form-select" style="width: 150px;">
+                    <option value="">All Roles</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Developer">Developer</option>
+                    <option value="Designer">Designer</option>
+                </select>
+                <button class="btn btn-outline btn-sm" id="clear-filters">Clear Filters</button>
+                <div class="flex-1"></div>
+                <span class="table-info" id="table-info">Showing 0 of 0</span>
+            </div>
+
+            <div class="demo-area mb-4">
+                <table id="demo-table" class="table table-striped">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <div class="flex gap-2">
+                    <button class="btn btn-outline btn-sm" id="select-all">Select All</button>
+                    <button class="btn btn-outline btn-sm" id="deselect-all">Deselect All</button>
+                    <button class="btn btn-danger btn-sm" id="delete-selected" disabled>Delete Selected</button>
+                </div>
+                <div id="pagination" class="pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sorting -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Sorting</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Sort data by one or multiple columns.</p>
+
+            <pre class="code-block">// Single column sort
+table.sort('name', 'asc');
+table.sort('age', 'desc');
+
+// Multi-column sort
+table.sortMultiple([
+    { key: 'department', direction: 'asc' },
+    { key: 'name', direction: 'asc' }
+]);
+
+// Clear sorting
+table.clearSort();
+
+// Get current sort state
+const sortState = table.getSortState();
+// { column: 'name', direction: 'asc' }
+
+// Listen for sort events
+table.on('sort', (column, direction) => {
+    console.log(`Sorted by ${column} ${direction}`);
+});</pre>
+
+            <div class="demo-area">
+                <p class="text-sm text-muted mb-3">Click column headers in the demo table above to sort. Click again to
+                    reverse order.</p>
+                <div class="flex gap-2">
+                    <button class="btn btn-outline btn-sm" id="sort-name">Sort by Name</button>
+                    <button class="btn btn-outline btn-sm" id="sort-role">Sort by Role</button>
+                    <button class="btn btn-outline btn-sm" id="sort-date">Sort by Date</button>
+                    <button class="btn btn-outline btn-sm" id="clear-sort">Clear Sort</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filtering -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Filtering</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Filter data with text search or column-specific filters.</p>
+
+            <pre class="code-block">// Global text search
+table.search('alice');
+
+// Column filter
+table.filter('role', 'Admin');
+table.filter('status', 'active', 'equals');
+
+// Filter operators
+table.filter('age', 25, 'gt');      // Greater than
+table.filter('age', 30, 'lt');      // Less than
+table.filter('age', 25, 'gte');     // Greater or equal
+table.filter('name', 'al', 'contains');
+
+// Custom filter function
+table.filterBy((row) => {
+    return row.age >= 25 && row.status === 'active';
+});
+
+// Clear filters
+table.clearFilters();
+
+// Listen for filter events
+table.on('filter', (filters) => {
+    console.log('Active filters:', filters);
+});</pre>
+        </div>
+    </section>
+
+    <!-- Pagination -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Pagination</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Navigate through large datasets with pagination controls.</p>
+
+            <pre class="code-block">// Create table with pagination
+const table = Domma.tables.create('#table', {
+    data: largeDataset,
+    pagination: true,
+    pageSize: 25
+});
+
+// Navigate pages
+table.page(1);          // Go to page 1 (0-indexed)
+table.nextPage();
+table.prevPage();
+table.firstPage();
+table.lastPage();
+
+// Change page size
+table.pageSize(50);
+
+// Get pagination info
+const info = table.pageInfo();
+// {
+//   currentPage: 0,
+//   pageSize: 25,
+//   totalPages: 10,
+//   totalRows: 250,
+//   startRow: 1,
+//   endRow: 25
+// }
+
+// Listen for page events
+table.on('page', (page, pageSize) => {
+    console.log(`Page ${page + 1}`);
+});</pre>
+
+            <div class="demo-area">
+                <div class="flex gap-2 items-center">
+                    <span class="text-sm">Page Size:</span>
+                    <select id="page-size" class="form-select" style="width: 80px;">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                    <button class="btn btn-outline btn-sm" id="first-page">First</button>
+                    <button class="btn btn-outline btn-sm" id="prev-page">Prev</button>
+                    <button class="btn btn-outline btn-sm" id="next-page">Next</button>
+                    <button class="btn btn-outline btn-sm" id="last-page">Last</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Selection -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Row Selection</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Select single or multiple rows for bulk operations.</p>
+
+            <pre class="code-block">// Enable selection
+const table = Domma.tables.create('#table', {
+    data: data,
+    selectable: true,
+    selectionMode: 'multiple'  // or 'single'
+});
+
+// Select rows
+table.select(0);           // Select first row
+table.select([0, 1, 2]);   // Select multiple rows
+table.selectAll();
+
+// Deselect
+table.deselect(0);
+table.deselectAll();
+
+// Toggle selection
+table.toggleSelect(0);
+
+// Get selected rows
+const selected = table.getSelected();
+// Returns array of selected row data
+
+const selectedIndices = table.getSelectedIndices();
+// Returns array of selected row indices
+
+// Listen for selection events
+table.on('select', (selectedRows, selectedIndices) => {
+    console.log(`${selectedRows.length} rows selected`);
+});</pre>
+
+            <div class="demo-area">
+                <p class="text-sm text-muted mb-3">Use checkboxes in the demo table to select rows. Selected rows are
+                    highlighted.</p>
+                <div id="selected-info" class="text-sm">No rows selected</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Methods -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Data Management</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Add, update, and remove data dynamically.</p>
+
+            <pre class="code-block">// Set all data
+table.setData(newDataArray);
+
+// Get all data (filtered/sorted state)
+const currentData = table.getData();
+
+// Get original data
+const originalData = table.getData(true);
+
+// Add rows
+table.addRow({ id: 100, name: 'New User', ... });
+table.addRows([{ ... }, { ... }]);
+
+// Update row
+table.updateRow(0, { name: 'Updated Name' });
+table.updateRow(0, newRowData, true);  // Replace entire row
+
+// Remove rows
+table.removeRow(0);
+table.removeRows([0, 1, 2]);
+
+// Clear all data
+table.clear();
+
+// Refresh table (re-render)
+table.refresh();</pre>
+
+            <div class="demo-area">
+                <div class="flex gap-2">
+                    <button class="btn btn-success btn-sm" id="add-row">Add Random Row</button>
+                    <button class="btn btn-warning btn-sm" id="update-first">Update First Row</button>
+                    <button class="btn btn-danger btn-sm" id="remove-last">Remove Last Row</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Export -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Export Data</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Export table data to CSV or JSON format.</p>
+
+            <pre class="code-block">// Export as CSV string
+const csv = table.toCSV();
+// "id,name,email,role\n1,Alice,alice@example.com,Admin\n..."
+
+// Export as JSON
+const json = table.toJSON();
+// Returns array of row objects
+
+// Download as file
+table.download('csv', 'users.csv');
+table.download('json', 'users.json');
+
+// Export only selected rows
+const selectedCsv = table.toCSV({ selected: true });
+table.download('csv', 'selected-users.csv', { selected: true });
+
+// Export only visible (filtered) data
+const visibleJson = table.toJSON({ filtered: true });</pre>
+
+            <div class="demo-area">
+                <div class="flex gap-2">
+                    <button class="btn btn-primary btn-sm" id="export-csv">Download CSV</button>
+                    <button class="btn btn-primary btn-sm" id="export-json">Download JSON</button>
+                    <button class="btn btn-outline btn-sm" id="export-selected-csv">Export Selected (CSV)</button>
+                    <button class="btn btn-outline btn-sm" id="copy-csv">Copy CSV to Clipboard</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Events</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Listen to table events for custom behavior.</p>
+
+            <pre class="code-block">// Available events
+table.on('sort', (column, direction) => { });
+table.on('filter', (activeFilters) => { });
+table.on('search', (query) => { });
+table.on('page', (page, pageSize) => { });
+table.on('select', (rows, indices) => { });
+table.on('edit', (row, column, oldValue, newValue) => { });
+table.on('render', () => { });
+table.on('dataChange', (data) => { });
+
+// Remove event listener
+table.off('sort', handler);
+
+// One-time listener
+table.once('render', () => {
+    console.log('Table rendered for the first time');
+});</pre>
+        </div>
+    </section>
+
+    <!-- Method Reference -->
+    <section class="card">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Complete Method Reference</h2>
+        </div>
+        <div class="card-body">
+            <h4 class="category-title">Data Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">setData()</span>
+                <span class="method-item">getData()</span>
+                <span class="method-item">addRow()</span>
+                <span class="method-item">addRows()</span>
+                <span class="method-item">updateRow()</span>
+                <span class="method-item">removeRow()</span>
+                <span class="method-item">removeRows()</span>
+                <span class="method-item">clear()</span>
+                <span class="method-item">refresh()</span>
+            </div>
+
+            <h4 class="category-title">Sorting Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">sort()</span>
+                <span class="method-item">sortMultiple()</span>
+                <span class="method-item">clearSort()</span>
+                <span class="method-item">getSortState()</span>
+            </div>
+
+            <h4 class="category-title">Filtering Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">search()</span>
+                <span class="method-item">filter()</span>
+                <span class="method-item">filterBy()</span>
+                <span class="method-item">clearFilters()</span>
+                <span class="method-item">getFilters()</span>
+            </div>
+
+            <h4 class="category-title">Pagination Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">page()</span>
+                <span class="method-item">pageSize()</span>
+                <span class="method-item">nextPage()</span>
+                <span class="method-item">prevPage()</span>
+                <span class="method-item">firstPage()</span>
+                <span class="method-item">lastPage()</span>
+                <span class="method-item">pageInfo()</span>
+            </div>
+
+            <h4 class="category-title">Selection Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">select()</span>
+                <span class="method-item">deselect()</span>
+                <span class="method-item">selectAll()</span>
+                <span class="method-item">deselectAll()</span>
+                <span class="method-item">toggleSelect()</span>
+                <span class="method-item">getSelected()</span>
+                <span class="method-item">getSelectedIndices()</span>
+            </div>
+
+            <h4 class="category-title">Export Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">toCSV()</span>
+                <span class="method-item">toJSON()</span>
+                <span class="method-item">download()</span>
+            </div>
+
+            <h4 class="category-title">Event Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">on()</span>
+                <span class="method-item">off()</span>
+                <span class="method-item">once()</span>
+            </div>
+
+            <h4 class="category-title">Static Methods</h4>
+            <div class="method-grid">
+                <span class="method-item">tables.create()</span>
+                <span class="method-item">tables.get()</span>
+                <span class="method-item">tables.destroy()</span>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+    // Sample data
+    const sampleData = [
+        {
+            id: 1,
+            name: 'Alice Johnson',
+            email: 'alice@example.com',
+            role: 'Admin',
+            status: 'Active',
+            joined: '2024-01-15'
+        },
+        {id: 2, name: 'Bob Smith', email: 'bob@example.com', role: 'Developer', status: 'Active', joined: '2024-02-20'},
+        {
+            id: 3,
+            name: 'Carol White',
+            email: 'carol@example.com',
+            role: 'Designer',
+            status: 'Active',
+            joined: '2024-03-10'
+        },
+        {
+            id: 4,
+            name: 'David Brown',
+            email: 'david@example.com',
+            role: 'Manager',
+            status: 'Inactive',
+            joined: '2024-01-05'
+        },
+        {
+            id: 5,
+            name: 'Eva Martinez',
+            email: 'eva@example.com',
+            role: 'Developer',
+            status: 'Active',
+            joined: '2024-04-01'
+        },
+        {
+            id: 6,
+            name: 'Frank Wilson',
+            email: 'frank@example.com',
+            role: 'Admin',
+            status: 'Active',
+            joined: '2024-02-14'
+        },
+        {
+            id: 7,
+            name: 'Grace Lee',
+            email: 'grace@example.com',
+            role: 'Designer',
+            status: 'Active',
+            joined: '2024-05-22'
+        },
+        {
+            id: 8,
+            name: 'Henry Davis',
+            email: 'henry@example.com',
+            role: 'Developer',
+            status: 'Inactive',
+            joined: '2024-03-30'
+        },
+        {id: 9, name: 'Ivy Chen', email: 'ivy@example.com', role: 'Manager', status: 'Active', joined: '2024-06-15'},
+        {
+            id: 10,
+            name: 'Jack Taylor',
+            email: 'jack@example.com',
+            role: 'Developer',
+            status: 'Active',
+            joined: '2024-04-18'
+        },
+        {
+            id: 11,
+            name: 'Kate Anderson',
+            email: 'kate@example.com',
+            role: 'Designer',
+            status: 'Active',
+            joined: '2024-07-01'
+        },
+        {id: 12, name: 'Leo Thomas', email: 'leo@example.com', role: 'Admin', status: 'Inactive', joined: '2024-01-28'},
+        {
+            id: 13,
+            name: 'Mia Jackson',
+            email: 'mia@example.com',
+            role: 'Developer',
+            status: 'Active',
+            joined: '2024-08-10'
+        },
+        {
+            id: 14,
+            name: 'Noah Garcia',
+            email: 'noah@example.com',
+            role: 'Manager',
+            status: 'Active',
+            joined: '2024-05-05'
+        },
+        {
+            id: 15,
+            name: 'Olivia Moore',
+            email: 'olivia@example.com',
+            role: 'Designer',
+            status: 'Active',
+            joined: '2024-09-20'
+        }
+    ];
+
+    // Create table
+    const table = Domma.tables.create('#demo-table', {
+        data: sampleData,
+        columns: [
+            {
+                key: '_select',
+                title: '<input type="checkbox" id="select-all-checkbox" class="table-checkbox">',
+                render: (val, row, index) => `<input type="checkbox" class="row-checkbox table-checkbox" data-index="${index}">`
+            },
+            {key: 'id', title: 'ID', sortable: true, width: '60px'},
+            {key: 'name', title: 'Name', sortable: true},
+            {key: 'email', title: 'Email', sortable: true},
+            {key: 'role', title: 'Role', sortable: true, filterable: true},
+            {
+                key: 'status',
+                title: 'Status',
+                render: (val) => `<span class="badge ${val === 'Active' ? 'badge-success' : 'badge-secondary'}">${val}</span>`
+            },
+            {key: 'joined', title: 'Joined', sortable: true}
+        ],
+        pagination: true,
+        pageSize: 10,
+        selectable: true
+    });
+
+    function updateTableInfo() {
+        const info = table.pageInfo();
+        $('#table-info').text(`Showing ${info.startRow}-${info.endRow} of ${info.totalRows}`);
+    }
+
+    function updatePagination() {
+        const info = table.pageInfo();
+        let html = '';
+        for (let i = 0; i < info.totalPages; i++) {
+            html += `<li class="pagination-item">
+                    <a href="#" class="pagination-link ${i === info.currentPage ? 'active' : ''}" data-page="${i}">${i + 1}</a>
+                </li>`;
+        }
+        $('#pagination').html(html);
+    }
+
+    function updateSelectedInfo() {
+        const selected = table.getSelected();
+        if (selected.length === 0) {
+            $('#selected-info').text('No rows selected');
+            $('#delete-selected').prop('disabled', true);
+        } else {
+            $('#selected-info').text(`${selected.length} row(s) selected: ${selected.map(r => r.name).join(', ')}`);
+            $('#delete-selected').prop('disabled', false);
+        }
+    }
+
+    // Initial render
+    updateTableInfo();
+    updatePagination();
+
+    // Table events
+    table.on('render', () => {
+        updateTableInfo();
+        updatePagination();
+    });
+
+    table.on('select', () => {
+        updateSelectedInfo();
+    });
+
+    // Search
+    $('#table-search').on('input', _.debounce(function () {
+        table.search($(this).val());
+    }, 300));
+
+    // Role filter
+    $('#role-filter').on('change', function () {
+        const role = $(this).val();
+        if (role) {
+            table.filter('role', role);
+        } else {
+            table.clearFilters();
+        }
+    });
+
+    $('#clear-filters').on('click', function () {
+        $('#table-search').val('');
+        $('#role-filter').val('');
+        table.clearFilters();
+    });
+
+    // Sorting buttons
+    $('#sort-name').on('click', () => table.sort('name', 'asc'));
+    $('#sort-role').on('click', () => table.sort('role', 'asc'));
+    $('#sort-date').on('click', () => table.sort('joined', 'desc'));
+    $('#clear-sort').on('click', () => table.clearSort());
+
+    // Selection
+    $(document).on('change', '#select-all-checkbox', function () {
+        if ($(this).is(':checked')) {
+            table.selectAll();
+        } else {
+            table.deselectAll();
+        }
+    });
+
+    $(document).on('change', '.row-checkbox', function () {
+        const index = parseInt($(this).data('index'));
+        table.toggleSelect(index);
+    });
+
+    $('#select-all').on('click', () => table.selectAll());
+    $('#deselect-all').on('click', () => table.deselectAll());
+    $('#delete-selected').on('click', function () {
+        const indices = table.getSelectedIndices();
+        if (indices.length && confirm(`Delete ${indices.length} row(s)?`)) {
+            table.removeRows(indices);
+        }
+    });
+
+    // Pagination
+    $(document).on('click', '.pagination-link', function (e) {
+        e.preventDefault();
+        table.page(parseInt($(this).data('page')));
+    });
+
+    $('#page-size').on('change', function () {
+        table.pageSize(parseInt($(this).val()));
+    });
+
+    $('#first-page').on('click', () => table.firstPage());
+    $('#prev-page').on('click', () => table.prevPage());
+    $('#next-page').on('click', () => table.nextPage());
+    $('#last-page').on('click', () => table.lastPage());
+
+    // Data manipulation
+    let nextId = 100;
+    const roles = ['Admin', 'Manager', 'Developer', 'Designer'];
+    const names = ['Alex', 'Blake', 'Casey', 'Dana', 'Ellis', 'Finn'];
+
+    $('#add-row').on('click', function () {
+        const name = names[Math.floor(Math.random() * names.length)] + ' ' +
+            names[Math.floor(Math.random() * names.length)];
+        table.addRow({
+            id: nextId++,
+            name: name,
+            email: name.toLowerCase().replace(' ', '.') + '@example.com',
+            role: roles[Math.floor(Math.random() * roles.length)],
+            status: Math.random() > 0.3 ? 'Active' : 'Inactive',
+            joined: D().format('YYYY-MM-DD')
+        });
+    });
+
+    $('#update-first').on('click', function () {
+        table.updateRow(0, {name: 'Updated Name ' + Math.floor(Math.random() * 100)});
+    });
+
+    $('#remove-last').on('click', function () {
+        const data = table.getData();
+        if (data.length > 0) {
+            table.removeRow(data.length - 1);
+        }
+    });
+
+    // Export
+    $('#export-csv').on('click', () => table.download('csv', 'users.csv'));
+    $('#export-json').on('click', () => table.download('json', 'users.json'));
+    $('#export-selected-csv').on('click', () => {
+        const selected = table.getSelected();
+        if (selected.length === 0) {
+            alert('No rows selected');
+            return;
+        }
+        table.download('csv', 'selected-users.csv', {selected: true});
+    });
+    $('#copy-csv').on('click', function () {
+        const csv = table.toCSV();
+        navigator.clipboard.writeText(csv).then(() => {
+            $(this).text('Copied!');
+            setTimeout(() => $(this).text('Copy CSV to Clipboard'), 2000);
+        });
+    });
+</script>
+</body>
+</html>

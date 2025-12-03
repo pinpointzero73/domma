@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elements - Domma Showcase</title>
+    <link rel="stylesheet" href="../css/domma.css">
+    <style>
+        .demo-area {
+            background: var(--dm-gray-100);
+            padding: var(--dm-space-6);
+            border-radius: var(--dm-radius-md);
+            min-height: 200px;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: var(--dm-space-2);
+        }
+
+        .method-item {
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            padding: var(--dm-space-2);
+            background: var(--dm-gray-100);
+            border-radius: var(--dm-radius-sm);
+        }
+
+        .category-title {
+            font-weight: 600;
+            color: var(--dm-primary);
+            margin: var(--dm-space-4) 0 var(--dm-space-2);
+            padding-bottom: var(--dm-space-2);
+            border-bottom: 2px solid var(--dm-primary);
+        }
+
+        .option-table {
+            width: 100%;
+            font-size: var(--dm-font-size-sm);
+        }
+
+        .option-table th {
+            text-align: left;
+            padding: var(--dm-space-2);
+            background: var(--dm-gray-100);
+        }
+
+        .option-table td {
+            padding: var(--dm-space-2);
+            border-bottom: 1px solid var(--dm-gray-200);
+        }
+
+        .option-table code {
+            font-size: var(--dm-font-size-xs);
+        }
+    </style>
+</head>
+<body>
+<script src="../js/layout.js"></script>
+
+<div class="container py-8">
+    <header class="mb-8">
+        <h1 class="text-4xl font-bold mb-2">Elements</h1>
+        <p class="text-muted text-lg">Ready-to-use UI components with JavaScript interactivity.</p>
+        <p class="mt-2"><code>Domma.elements</code></p>
+    </header>
+
+    <!-- Cards -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Cards</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Flexible content containers with optional header, footer, and hover effects.</p>
+
+            <pre class="code-block">// Initialize card with hover effect
+const card = Domma.elements.card('#my-card', {
+    hover: true,           // Enable hover effects
+    clickable: true,       // Make entire card clickable
+    onClick: (e) => console.log('Card clicked')
+});
+
+// Or via config engine
+$.setup({
+    '.product-card': {
+        component: 'card',
+        options: { hover: true }
+    }
+});</pre>
+
+            <h4 class="category-title">Options</h4>
+            <table class="option-table mb-4">
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>hover</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>Enable hover lift effect</td>
+                </tr>
+                <tr>
+                    <td><code>clickable</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>Make card clickable</td>
+                </tr>
+                <tr>
+                    <td><code>onClick</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Click handler</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Examples</h4>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="card" id="card-basic">
+                    <div class="card-body">
+                        <h5 class="card-title">Basic Card</h5>
+                        <p class="card-text">Simple card without effects.</p>
+                    </div>
+                </div>
+                <div class="card" id="card-hover">
+                    <div class="card-body">
+                        <h5 class="card-title">Hover Card</h5>
+                        <p class="card-text">Hover me to see the lift effect.</p>
+                    </div>
+                </div>
+                <div class="card card-primary" id="card-styled">
+                    <div class="card-header">Featured</div>
+                    <div class="card-body">
+                        <h5 class="card-title">Styled Card</h5>
+                        <p class="card-text">With header and primary styling.</p>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary btn-sm">Action</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Modals</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Dialog windows with backdrop, keyboard support, and animations.</p>
+
+            <pre class="code-block">// Create modal instance
+const modal = Domma.elements.modal('#my-modal', {
+    backdrop: true,        // Show backdrop
+    backdropClose: true,   // Close on backdrop click
+    keyboard: true,        // Close on Escape key
+    animation: 'fade',     // Animation type
+    onOpen: () => console.log('Modal opened'),
+    onClose: () => console.log('Modal closing'),
+    onClosed: () => console.log('Modal closed')
+});
+
+// Control the modal
+modal.open();
+modal.close();
+modal.toggle();
+modal.isOpen();  // Returns boolean
+
+// HTML structure
+&lt;div id="my-modal" class="modal"&gt;
+    &lt;div class="modal-header"&gt;
+        &lt;h5 class="modal-title"&gt;Title&lt;/h5&gt;
+        &lt;button class="modal-close"&gt;&amp;times;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="modal-body"&gt;Content&lt;/div&gt;
+    &lt;div class="modal-footer"&gt;
+        &lt;button class="btn"&gt;Close&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+            <h4 class="category-title">Options</h4>
+            <table class="option-table mb-4">
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>backdrop</code></td>
+                    <td>boolean</td>
+                    <td>true</td>
+                    <td>Show backdrop overlay</td>
+                </tr>
+                <tr>
+                    <td><code>backdropClose</code></td>
+                    <td>boolean</td>
+                    <td>true</td>
+                    <td>Close when backdrop clicked</td>
+                </tr>
+                <tr>
+                    <td><code>keyboard</code></td>
+                    <td>boolean</td>
+                    <td>true</td>
+                    <td>Close on Escape key</td>
+                </tr>
+                <tr>
+                    <td><code>animation</code></td>
+                    <td>string</td>
+                    <td>'fade'</td>
+                    <td>Animation type</td>
+                </tr>
+                <tr>
+                    <td><code>onOpen</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Called when modal opens</td>
+                </tr>
+                <tr>
+                    <td><code>onClose</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Called when close starts</td>
+                </tr>
+                <tr>
+                    <td><code>onClosed</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Called after modal closed</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Try It</h4>
+            <div class="flex gap-2">
+                <button class="btn btn-primary" id="open-modal">Open Modal</button>
+                <button class="btn btn-secondary" id="open-modal-lg">Open Large Modal</button>
+            </div>
+
+            <!-- Modal HTML -->
+            <div id="demo-modal" class="modal">
+                <div class="modal-header">
+                    <h5 class="modal-title">Demo Modal</h5>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>This is a modal dialog. You can close it by:</p>
+                    <ul class="mt-2">
+                        <li>Clicking the X button</li>
+                        <li>Clicking outside (backdrop)</li>
+                        <li>Pressing Escape</li>
+                        <li>Clicking the Close button</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary modal-close-btn">Close</button>
+                    <button class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+
+            <div id="demo-modal-lg" class="modal modal-lg">
+                <div class="modal-header">
+                    <h5 class="modal-title">Large Modal</h5>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>This is a larger modal for more content.</p>
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-input" placeholder="John">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-input" placeholder="Doe">
+                        </div>
+                        <div class="form-group col-span-full">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" placeholder="john@example.com">
+                        </div>
+                        <div class="form-group col-span-full">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-textarea" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary modal-close-btn">Cancel</button>
+                    <button class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+            <!-- Backdrop -->
+            <div id="modal-backdrop" class="modal-backdrop"></div>
+        </div>
+    </section>
+
+    <!-- Tabs -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Tabs</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Tabbed navigation with panel switching.</p>
+
+            <pre class="code-block">// Initialize tabs
+const tabs = Domma.elements.tabs('#my-tabs', {
+    activeIndex: 0,        // Initially active tab
+    animation: true,       // Animate panel transitions
+    onChange: (index, panel) => console.log('Tab changed:', index)
+});
+
+// Control tabs programmatically
+tabs.show(2);              // Show third tab
+tabs.getActive();          // Get active index
+tabs.next();               // Go to next tab
+tabs.prev();               // Go to previous tab
+
+// HTML structure
+&lt;div id="my-tabs" class="tabs"&gt;
+    &lt;ul class="tab-list"&gt;
+        &lt;li class="tab-item active"&gt;Tab 1&lt;/li&gt;
+        &lt;li class="tab-item"&gt;Tab 2&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div class="tab-content"&gt;
+        &lt;div class="tab-panel active"&gt;Content 1&lt;/div&gt;
+        &lt;div class="tab-panel"&gt;Content 2&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+            <h4 class="category-title">Options</h4>
+            <table class="option-table mb-4">
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>activeIndex</code></td>
+                    <td>number</td>
+                    <td>0</td>
+                    <td>Initially active tab</td>
+                </tr>
+                <tr>
+                    <td><code>animation</code></td>
+                    <td>boolean</td>
+                    <td>true</td>
+                    <td>Animate transitions</td>
+                </tr>
+                <tr>
+                    <td><code>onChange</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Tab change callback</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Standard Tabs</h4>
+            <div class="demo-area mb-4">
+                <div id="demo-tabs" class="tabs">
+                    <ul class="tab-list">
+                        <li class="tab-item active">Overview</li>
+                        <li class="tab-item">Features</li>
+                        <li class="tab-item">Pricing</li>
+                        <li class="tab-item">FAQ</li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-panel active">
+                            <h4 class="font-semibold mb-2">Overview</h4>
+                            <p>Welcome to our product overview. This section provides a high-level look at what we
+                                offer.</p>
+                        </div>
+                        <div class="tab-panel">
+                            <h4 class="font-semibold mb-2">Features</h4>
+                            <ul>
+                                <li>Feature 1: Responsive design</li>
+                                <li>Feature 2: Fast performance</li>
+                                <li>Feature 3: Easy integration</li>
+                            </ul>
+                        </div>
+                        <div class="tab-panel">
+                            <h4 class="font-semibold mb-2">Pricing</h4>
+                            <p>Our pricing is simple and transparent. Contact us for a custom quote.</p>
+                        </div>
+                        <div class="tab-panel">
+                            <h4 class="font-semibold mb-2">FAQ</h4>
+                            <p><strong>Q: How do I get started?</strong></p>
+                            <p>A: Simply include Domma in your project and start using the components!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Pill Style Tabs</h4>
+            <div class="demo-area">
+                <div id="demo-tabs-pills" class="tabs tabs-pills">
+                    <ul class="tab-list">
+                        <li class="tab-item active">All</li>
+                        <li class="tab-item">Active</li>
+                        <li class="tab-item">Completed</li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-panel active">
+                            <p>Showing all items (15 total)</p>
+                        </div>
+                        <div class="tab-panel">
+                            <p>Showing active items (8 items)</p>
+                        </div>
+                        <div class="tab-panel">
+                            <p>Showing completed items (7 items)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Accordion -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Accordion</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Collapsible content sections with smooth animations.</p>
+
+            <pre class="code-block">// Initialize accordion
+const accordion = Domma.elements.accordion('#my-accordion', {
+    multiExpand: false,    // Allow multiple open panels
+    animation: true,       // Animate open/close
+    activeIndex: 0,        // Initially open panel
+    onChange: (index, isOpen) => console.log(index, isOpen)
+});
+
+// Control accordion
+accordion.open(1);         // Open second panel
+accordion.close(0);        // Close first panel
+accordion.toggle(2);       // Toggle third panel
+accordion.openAll();
+accordion.closeAll();
+
+// HTML structure
+&lt;div id="my-accordion" class="accordion"&gt;
+    &lt;div class="accordion-item"&gt;
+        &lt;div class="accordion-header"&gt;
+            Section 1
+            &lt;span class="accordion-icon"&gt;&#9660;&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class="accordion-body"&gt;
+            &lt;div class="accordion-content"&gt;Content&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+            <h4 class="category-title">Options</h4>
+            <table class="option-table mb-4">
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>multiExpand</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>Allow multiple panels open</td>
+                </tr>
+                <tr>
+                    <td><code>animation</code></td>
+                    <td>boolean</td>
+                    <td>true</td>
+                    <td>Animate transitions</td>
+                </tr>
+                <tr>
+                    <td><code>activeIndex</code></td>
+                    <td>number/array</td>
+                    <td>null</td>
+                    <td>Initially open panel(s)</td>
+                </tr>
+                <tr>
+                    <td><code>onChange</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Panel change callback</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Single Expand</h4>
+            <div class="demo-area mb-4">
+                <div id="demo-accordion" class="accordion">
+                    <div class="accordion-item active">
+                        <div class="accordion-header">
+                            <span>What is Domma?</span>
+                            <span class="accordion-icon">&#9660;</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="accordion-content">
+                                Domma is a lightweight, zero-dependency JavaScript framework that combines jQuery-style
+                                DOM manipulation, Lodash utilities, and modern UI components in one cohesive package.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>How big is the bundle?</span>
+                            <span class="accordion-icon">&#9660;</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="accordion-content">
+                                The minified bundle is approximately 125KB, which includes all namespaces: DOM, Utils,
+                                Dates, Models, Elements, and Tables.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>Is it compatible with other frameworks?</span>
+                            <span class="accordion-icon">&#9660;</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="accordion-content">
+                                Yes! Domma works alongside any CSS framework like Tailwind or Bootstrap (CSS). It's
+                                framework-agnostic and can be used in any project.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Multi-Expand Mode</h4>
+            <div class="flex gap-2 mb-3">
+                <button class="btn btn-outline btn-sm" id="acc-open-all">Open All</button>
+                <button class="btn btn-outline btn-sm" id="acc-close-all">Close All</button>
+            </div>
+            <div class="demo-area">
+                <div id="demo-accordion-multi" class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>Section A</span>
+                            <span class="accordion-icon">&#9660;</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="accordion-content">Content for Section A. Multiple sections can be open at
+                                once.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>Section B</span>
+                            <span class="accordion-icon">&#9660;</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="accordion-content">Content for Section B. Click multiple headers to open them.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>Section C</span>
+                            <span class="accordion-icon">&#9660;</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="accordion-content">Content for Section C. All sections can be open
+                                simultaneously.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tooltips -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Tooltips</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Contextual information on hover or focus.</p>
+
+            <pre class="code-block">// Initialize tooltip
+const tooltip = Domma.elements.tooltip('#my-element', {
+    content: 'Tooltip text',
+    position: 'top',       // top, bottom, left, right
+    trigger: 'hover',      // hover, click, focus
+    delay: 200,            // Show delay in ms
+    animation: true
+});
+
+// Control tooltip
+tooltip.show();
+tooltip.hide();
+tooltip.toggle();
+tooltip.setContent('New text');
+tooltip.destroy();
+
+// Using data attributes
+&lt;button data-tooltip="Click me!" data-tooltip-position="bottom"&gt;
+    Button
+&lt;/button&gt;</pre>
+
+            <h4 class="category-title">Options</h4>
+            <table class="option-table mb-4">
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>content</code></td>
+                    <td>string</td>
+                    <td>''</td>
+                    <td>Tooltip text</td>
+                </tr>
+                <tr>
+                    <td><code>position</code></td>
+                    <td>string</td>
+                    <td>'top'</td>
+                    <td>Position: top, bottom, left, right</td>
+                </tr>
+                <tr>
+                    <td><code>trigger</code></td>
+                    <td>string</td>
+                    <td>'hover'</td>
+                    <td>Trigger: hover, click, focus</td>
+                </tr>
+                <tr>
+                    <td><code>delay</code></td>
+                    <td>number</td>
+                    <td>0</td>
+                    <td>Show delay in ms</td>
+                </tr>
+                <tr>
+                    <td><code>animation</code></td>
+                    <td>boolean</td>
+                    <td>true</td>
+                    <td>Animate show/hide</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Positions</h4>
+            <div class="demo-area">
+                <div class="flex justify-center items-center gap-8 py-8">
+                    <div class="tooltip" id="tooltip-top">
+                        <button class="btn btn-primary">Top</button>
+                        <span class="tooltip-content tooltip-top">Tooltip on top</span>
+                    </div>
+                    <div class="tooltip" id="tooltip-bottom">
+                        <button class="btn btn-primary">Bottom</button>
+                        <span class="tooltip-content tooltip-bottom">Tooltip on bottom</span>
+                    </div>
+                    <div class="tooltip" id="tooltip-left">
+                        <button class="btn btn-primary">Left</button>
+                        <span class="tooltip-content tooltip-left">Tooltip on left</span>
+                    </div>
+                    <div class="tooltip" id="tooltip-right">
+                        <button class="btn btn-primary">Right</button>
+                        <span class="tooltip-content tooltip-right">Tooltip on right</span>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Triggers</h4>
+            <div class="demo-area">
+                <div class="flex justify-center items-center gap-4">
+                        <span class="tooltip" id="tt-hover">
+                            <button class="btn btn-outline">Hover Me</button>
+                            <span class="tooltip-content tooltip-top">Shown on hover</span>
+                        </span>
+                    <span class="tooltip" id="tt-click">
+                            <button class="btn btn-outline" id="click-trigger">Click Me</button>
+                            <span class="tooltip-content tooltip-top" id="click-tooltip">Shown on click (click again to hide)</span>
+                        </span>
+                    <span class="tooltip" id="tt-focus">
+                            <input type="text" class="form-input" placeholder="Focus Me" style="width: 150px;">
+                            <span class="tooltip-content tooltip-top">Shown on focus</span>
+                        </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Config Integration -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Config Engine Integration</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Initialize components declaratively using the config engine.</p>
+
+            <pre class="code-block">// Initialize multiple components at once
+$.setup({
+    // Cards with hover
+    '.product-card': {
+        component: 'card',
+        options: { hover: true }
+    },
+
+    // Modal
+    '#signup-modal': {
+        component: 'modal',
+        options: {
+            backdrop: true,
+            keyboard: true,
+            onOpen: () => analytics.track('modal_open')
+        }
+    },
+
+    // Tabs
+    '#product-tabs': {
+        component: 'tabs',
+        options: {
+            activeIndex: 0,
+            onChange: (index) => loadTabContent(index)
+        }
+    },
+
+    // Accordion FAQ
+    '#faq-accordion': {
+        component: 'accordion',
+        options: { multiExpand: true }
+    },
+
+    // Tooltips on all elements with data-tooltip
+    '[data-tooltip]': {
+        component: 'tooltip',
+        options: { position: 'top', trigger: 'hover' }
+    }
+});
+
+// Components are now initialized and ready to use!</pre>
+        </div>
+    </section>
+
+    <!-- Method Reference -->
+    <section class="card">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Complete Method Reference</h2>
+        </div>
+        <div class="card-body">
+            <h4 class="category-title">Card Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">destroy()</span>
+            </div>
+
+            <h4 class="category-title">Modal Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">open()</span>
+                <span class="method-item">close()</span>
+                <span class="method-item">toggle()</span>
+                <span class="method-item">isOpen()</span>
+                <span class="method-item">destroy()</span>
+            </div>
+
+            <h4 class="category-title">Tabs Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">show()</span>
+                <span class="method-item">getActive()</span>
+                <span class="method-item">next()</span>
+                <span class="method-item">prev()</span>
+                <span class="method-item">destroy()</span>
+            </div>
+
+            <h4 class="category-title">Accordion Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">open()</span>
+                <span class="method-item">close()</span>
+                <span class="method-item">toggle()</span>
+                <span class="method-item">openAll()</span>
+                <span class="method-item">closeAll()</span>
+                <span class="method-item">destroy()</span>
+            </div>
+
+            <h4 class="category-title">Tooltip Methods</h4>
+            <div class="method-grid">
+                <span class="method-item">show()</span>
+                <span class="method-item">hide()</span>
+                <span class="method-item">toggle()</span>
+                <span class="method-item">setContent()</span>
+                <span class="method-item">destroy()</span>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+    // Initialize card with hover
+    Domma.elements.card('#card-hover', {hover: true});
+
+    // Initialize modals
+    const modal = Domma.elements.modal('#demo-modal', {
+        backdrop: true,
+        backdropClose: true,
+        keyboard: true
+    });
+
+    const modalLg = Domma.elements.modal('#demo-modal-lg', {
+        backdrop: true,
+        backdropClose: true,
+        keyboard: true
+    });
+
+    $('#open-modal').on('click', () => modal.open());
+    $('#open-modal-lg').on('click', () => modalLg.open());
+    $('.modal-close-btn').on('click', function () {
+        modal.close();
+        modalLg.close();
+    });
+
+    // Initialize tabs
+    Domma.elements.tabs('#demo-tabs', {
+        animation: true
+    });
+
+    Domma.elements.tabs('#demo-tabs-pills', {
+        animation: true
+    });
+
+    // Initialize accordions
+    Domma.elements.accordion('#demo-accordion', {
+        multiExpand: false,
+        activeIndex: 0
+    });
+
+    const accordionMulti = Domma.elements.accordion('#demo-accordion-multi', {
+        multiExpand: true
+    });
+
+    $('#acc-open-all').on('click', () => accordionMulti.openAll());
+    $('#acc-close-all').on('click', () => accordionMulti.closeAll());
+
+    // Initialize tooltips
+    Domma.elements.tooltip('#tooltip-top', {content: 'Tooltip on top', position: 'top'});
+    Domma.elements.tooltip('#tooltip-bottom', {content: 'Tooltip on bottom', position: 'bottom'});
+    Domma.elements.tooltip('#tooltip-left', {content: 'Tooltip on left', position: 'left'});
+    Domma.elements.tooltip('#tooltip-right', {content: 'Tooltip on right', position: 'right'});
+
+    // Click tooltip
+    let clickTooltipVisible = false;
+    $('#click-trigger').on('click', function () {
+        clickTooltipVisible = !clickTooltipVisible;
+        $('#click-tooltip').toggleClass('active');
+    });
+
+    // Focus tooltip
+    $('#tt-focus input').on('focus', function () {
+        $(this).siblings('.tooltip-content').addClass('active');
+    }).on('blur', function () {
+        $(this).siblings('.tooltip-content').removeClass('active');
+    });
+</script>
+</body>
+</html>

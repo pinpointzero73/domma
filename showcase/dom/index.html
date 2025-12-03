@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM - Domma Showcase</title>
+    <link rel="stylesheet" href="../css/domma.css">
+    <style>
+        .demo-box {
+            background: var(--dm-gray-100);
+            border: 2px dashed var(--dm-gray-300);
+            padding: var(--dm-space-4);
+            border-radius: var(--dm-radius-md);
+            margin: var(--dm-space-4) 0;
+            min-height: 60px;
+        }
+
+        .demo-item {
+            display: inline-block;
+            padding: var(--dm-space-2) var(--dm-space-4);
+            background: var(--dm-primary);
+            color: white;
+            border-radius: var(--dm-radius-md);
+            margin: var(--dm-space-1);
+            transition: all 0.3s ease;
+        }
+
+        .demo-result {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
+            padding: var(--dm-space-3);
+            border-radius: var(--dm-radius-md);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            margin-top: var(--dm-space-2);
+            min-height: 40px;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: var(--dm-space-2);
+        }
+
+        .method-item {
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            padding: var(--dm-space-2);
+            background: var(--dm-gray-100);
+            border-radius: var(--dm-radius-sm);
+        }
+
+        .category-title {
+            font-weight: 600;
+            color: var(--dm-primary);
+            margin: var(--dm-space-4) 0 var(--dm-space-2);
+            padding-bottom: var(--dm-space-2);
+            border-bottom: 2px solid var(--dm-primary);
+        }
+    </style>
+</head>
+<body>
+<script src="../js/layout.js"></script>
+
+<div class="container py-8">
+    <header class="mb-8">
+        <h1 class="text-4xl font-bold mb-2">DOM Manipulation</h1>
+        <p class="text-muted text-lg">jQuery-compatible API with 90+ methods for traversal, manipulation, events, and
+            more.</p>
+        <p class="mt-2"><code>$('selector')</code> or <code>Domma('selector')</code></p>
+    </header>
+
+    <!-- Selectors -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Selectors</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Select elements using CSS selectors, DOM elements, or HTML strings.</p>
+            <pre class="code-block">// CSS selector
+$('.class')
+$('#id')
+$('div.container > p')
+
+// DOM element
+$(document.body)
+$(element)
+
+// HTML string
+$('&lt;div class="new"&gt;Content&lt;/div&gt;')
+
+// Collection from NodeList
+$(document.querySelectorAll('p'))</pre>
+
+            <h4 class="category-title">Try It</h4>
+            <div class="flex gap-2 mb-4">
+                <input type="text" id="selector-input" class="form-input" value=".demo-item"
+                       placeholder="Enter selector">
+                <button class="btn btn-primary" id="selector-btn">Select</button>
+            </div>
+            <div class="demo-box">
+                <span class="demo-item">Item 1</span>
+                <span class="demo-item">Item 2</span>
+                <span class="demo-item special">Item 3</span>
+                <span class="demo-item">Item 4</span>
+            </div>
+            <div class="demo-result" id="selector-result">Click "Select" to see result</div>
+        </div>
+    </section>
+
+    <!-- Traversal -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Traversal</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Navigate the DOM tree with chainable methods.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">find()</span>
+                <span class="method-item">children()</span>
+                <span class="method-item">parent()</span>
+                <span class="method-item">parents()</span>
+                <span class="method-item">closest()</span>
+                <span class="method-item">siblings()</span>
+                <span class="method-item">next()</span>
+                <span class="method-item">prev()</span>
+                <span class="method-item">nextAll()</span>
+                <span class="method-item">prevAll()</span>
+                <span class="method-item">first()</span>
+                <span class="method-item">last()</span>
+                <span class="method-item">eq()</span>
+                <span class="method-item">filter()</span>
+                <span class="method-item">not()</span>
+                <span class="method-item">has()</span>
+                <span class="method-item">is()</span>
+                <span class="method-item">add()</span>
+                <span class="method-item">contents()</span>
+                <span class="method-item">offsetParent()</span>
+            </div>
+
+            <pre class="code-block">// Find descendants
+$('#container').find('.item')
+
+// Navigate up
+$('.item').parent()
+$('.item').closest('.container')
+$('.item').parents('div')
+
+// Siblings
+$('.active').siblings()
+$('.item').next()
+$('.item').prev()
+
+// Filtering
+$('.items').filter('.active')
+$('.items').not('.disabled')
+$('.items').eq(2)  // Third element
+$('.items').first()
+$('.items').last()</pre>
+
+            <h4 class="category-title">Try It</h4>
+            <div class="flex gap-2 flex-wrap mb-4">
+                <button class="btn btn-outline btn-sm" data-traverse="parent">parent()</button>
+                <button class="btn btn-outline btn-sm" data-traverse="siblings">siblings()</button>
+                <button class="btn btn-outline btn-sm" data-traverse="next">next()</button>
+                <button class="btn btn-outline btn-sm" data-traverse="prev">prev()</button>
+                <button class="btn btn-outline btn-sm" data-traverse="first">first()</button>
+                <button class="btn btn-outline btn-sm" data-traverse="last">last()</button>
+            </div>
+            <div class="demo-box" id="traverse-container">
+                <div class="demo-item" id="traverse-target" style="background: var(--dm-success);">Target</div>
+                <div class="demo-item">Sibling 1</div>
+                <div class="demo-item">Sibling 2</div>
+                <div class="demo-item">Sibling 3</div>
+            </div>
+            <div class="demo-result" id="traverse-result">Click a method to see result</div>
+        </div>
+    </section>
+
+    <!-- Content Manipulation -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Content Manipulation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Get and set element content, attributes, and values.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">html()</span>
+                <span class="method-item">text()</span>
+                <span class="method-item">val()</span>
+                <span class="method-item">attr()</span>
+                <span class="method-item">removeAttr()</span>
+                <span class="method-item">prop()</span>
+                <span class="method-item">removeProp()</span>
+                <span class="method-item">data()</span>
+                <span class="method-item">removeData()</span>
+            </div>
+
+            <pre class="code-block">// Get/set HTML content
+$('#box').html()              // Get
+$('#box').html('&lt;b&gt;New&lt;/b&gt;')  // Set
+
+// Get/set text content
+$('#box').text()
+$('#box').text('Plain text')
+
+// Get/set form values
+$('input').val()
+$('input').val('New value')
+
+// Attributes
+$('img').attr('src')
+$('img').attr('src', 'new.jpg')
+$('img').attr({ src: 'img.jpg', alt: 'Image' })
+
+// Data attributes
+$('#el').data('id')          // data-id
+$('#el').data('id', '123')</pre>
+
+            <h4 class="category-title">Try It</h4>
+            <div class="flex gap-2 flex-wrap mb-4">
+                <button class="btn btn-outline btn-sm" id="get-html">Get html()</button>
+                <button class="btn btn-outline btn-sm" id="set-html">Set html()</button>
+                <button class="btn btn-outline btn-sm" id="get-text">Get text()</button>
+                <button class="btn btn-outline btn-sm" id="set-text">Set text()</button>
+            </div>
+            <div class="demo-box" id="content-box">
+                <strong>Hello</strong> <em>World</em>
+            </div>
+            <div class="demo-result" id="content-result">Click a button to see result</div>
+        </div>
+    </section>
+
+    <!-- CSS & Classes -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">CSS & Classes</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Manipulate styles and CSS classes.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">css()</span>
+                <span class="method-item">addClass()</span>
+                <span class="method-item">removeClass()</span>
+                <span class="method-item">toggleClass()</span>
+                <span class="method-item">hasClass()</span>
+                <span class="method-item">show()</span>
+                <span class="method-item">hide()</span>
+                <span class="method-item">toggle()</span>
+            </div>
+
+            <pre class="code-block">// Get/set CSS
+$('#box').css('color')
+$('#box').css('color', 'red')
+$('#box').css({ color: 'red', fontSize: '16px' })
+
+// Classes
+$('#box').addClass('active')
+$('#box').removeClass('active')
+$('#box').toggleClass('active')
+$('#box').hasClass('active')  // Returns boolean
+
+// Visibility
+$('#box').show()
+$('#box').hide()
+$('#box').toggle()</pre>
+
+            <h4 class="category-title">Try It</h4>
+            <div class="flex gap-2 flex-wrap mb-4">
+                <button class="btn btn-outline btn-sm" id="toggle-class">toggleClass('special')</button>
+                <button class="btn btn-outline btn-sm" id="change-color">css('background')</button>
+                <button class="btn btn-outline btn-sm" id="toggle-vis">toggle()</button>
+            </div>
+            <div class="demo-box">
+                <div class="demo-item" id="css-target">Style Me</div>
+            </div>
+            <div class="demo-result" id="css-result">Click a button to manipulate styles</div>
+        </div>
+    </section>
+
+    <!-- DOM Manipulation -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">DOM Manipulation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Insert, replace, and remove elements.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">append()</span>
+                <span class="method-item">prepend()</span>
+                <span class="method-item">after()</span>
+                <span class="method-item">before()</span>
+                <span class="method-item">appendTo()</span>
+                <span class="method-item">prependTo()</span>
+                <span class="method-item">insertAfter()</span>
+                <span class="method-item">insertBefore()</span>
+                <span class="method-item">wrap()</span>
+                <span class="method-item">wrapAll()</span>
+                <span class="method-item">wrapInner()</span>
+                <span class="method-item">unwrap()</span>
+                <span class="method-item">clone()</span>
+                <span class="method-item">remove()</span>
+                <span class="method-item">detach()</span>
+                <span class="method-item">empty()</span>
+                <span class="method-item">replaceWith()</span>
+                <span class="method-item">replaceAll()</span>
+            </div>
+
+            <pre class="code-block">// Inserting content
+$('#list').append('&lt;li&gt;New item&lt;/li&gt;')
+$('#list').prepend('&lt;li&gt;First item&lt;/li&gt;')
+$('#item').after('&lt;li&gt;After&lt;/li&gt;')
+$('#item').before('&lt;li&gt;Before&lt;/li&gt;')
+
+// Moving elements
+$('&lt;li&gt;New&lt;/li&gt;').appendTo('#list')
+
+// Wrapping
+$('.item').wrap('&lt;div class="wrapper"&gt;&lt;/div&gt;')
+$('.item').unwrap()
+
+// Removing
+$('#item').remove()
+$('#list').empty()
+
+// Cloning
+$('#item').clone()</pre>
+
+            <h4 class="category-title">Try It</h4>
+            <div class="flex gap-2 flex-wrap mb-4">
+                <button class="btn btn-outline btn-sm" id="dom-append">append()</button>
+                <button class="btn btn-outline btn-sm" id="dom-prepend">prepend()</button>
+                <button class="btn btn-outline btn-sm" id="dom-remove">remove() last</button>
+                <button class="btn btn-outline btn-sm" id="dom-empty">empty()</button>
+                <button class="btn btn-outline btn-sm" id="dom-reset">Reset</button>
+            </div>
+            <div class="demo-box" id="dom-container">
+                <span class="demo-item">Original 1</span>
+                <span class="demo-item">Original 2</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Events</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Attach, trigger, and manage events.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">on()</span>
+                <span class="method-item">off()</span>
+                <span class="method-item">one()</span>
+                <span class="method-item">trigger()</span>
+                <span class="method-item">click()</span>
+                <span class="method-item">dblclick()</span>
+                <span class="method-item">mouseenter()</span>
+                <span class="method-item">mouseleave()</span>
+                <span class="method-item">mouseover()</span>
+                <span class="method-item">mouseout()</span>
+                <span class="method-item">mousemove()</span>
+                <span class="method-item">mousedown()</span>
+                <span class="method-item">mouseup()</span>
+                <span class="method-item">hover()</span>
+                <span class="method-item">focus()</span>
+                <span class="method-item">blur()</span>
+                <span class="method-item">change()</span>
+                <span class="method-item">submit()</span>
+                <span class="method-item">keydown()</span>
+                <span class="method-item">keyup()</span>
+                <span class="method-item">keypress()</span>
+                <span class="method-item">scroll()</span>
+                <span class="method-item">resize()</span>
+                <span class="method-item">load()</span>
+            </div>
+
+            <pre class="code-block">// Basic event binding
+$('#btn').on('click', function(e) {
+    console.log('Clicked!', this);
+});
+
+// Event delegation
+$('#list').on('click', '.item', handler);
+
+// One-time event
+$('#btn').one('click', handler);
+
+// Remove events
+$('#btn').off('click');
+$('#btn').off('click', specificHandler);
+
+// Trigger events
+$('#btn').trigger('click');
+
+// Shorthand methods
+$('#btn').click(handler);
+$('#input').focus(handler);
+$('#form').submit(handler);
+
+// Hover (mouseenter + mouseleave)
+$('#box').hover(enterFn, leaveFn);</pre>
+
+            <h4 class="category-title">Try It</h4>
+            <div class="demo-box">
+                <button class="btn btn-primary" id="event-btn">Click Me</button>
+                <button class="btn btn-secondary" id="event-trigger">Trigger Click</button>
+                <div class="demo-item mt-4" id="event-hover" style="cursor: pointer;">Hover Me</div>
+            </div>
+            <div class="demo-result" id="event-result">Interact with elements above</div>
+        </div>
+    </section>
+
+    <!-- Effects -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Effects & Animation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Animate elements with built-in effects.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">fadeIn()</span>
+                <span class="method-item">fadeOut()</span>
+                <span class="method-item">fadeToggle()</span>
+                <span class="method-item">fadeTo()</span>
+                <span class="method-item">slideDown()</span>
+                <span class="method-item">slideUp()</span>
+                <span class="method-item">slideToggle()</span>
+                <span class="method-item">animate()</span>
+                <span class="method-item">stop()</span>
+                <span class="method-item">delay()</span>
+            </div>
+
+            <pre class="code-block">// Fade effects
+$('#box').fadeIn(400)
+$('#box').fadeOut(400)
+$('#box').fadeToggle()
+$('#box').fadeTo(400, 0.5)  // Fade to 50% opacity
+
+// Slide effects
+$('#box').slideDown(400)
+$('#box').slideUp(400)
+$('#box').slideToggle()
+
+// Custom animation
+$('#box').animate({
+    opacity: 0.5,
+    marginLeft: '100px'
+}, 500)
+
+// Chained animations with delay
+$('#box')
+    .fadeOut(200)
+    .delay(500)
+    .fadeIn(200)</pre>
+
+            <h4 class="category-title">Try It</h4>
+            <div class="flex gap-2 flex-wrap mb-4">
+                <button class="btn btn-outline btn-sm" id="fx-fade">fadeToggle()</button>
+                <button class="btn btn-outline btn-sm" id="fx-slide">slideToggle()</button>
+                <button class="btn btn-outline btn-sm" id="fx-animate">animate()</button>
+            </div>
+            <div class="demo-box">
+                <div class="demo-item" id="fx-target" style="width: 100px; text-align: center;">Animate</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dimensions -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Dimensions & Position</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Get and set element dimensions and position.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">width()</span>
+                <span class="method-item">height()</span>
+                <span class="method-item">innerWidth()</span>
+                <span class="method-item">innerHeight()</span>
+                <span class="method-item">outerWidth()</span>
+                <span class="method-item">outerHeight()</span>
+                <span class="method-item">offset()</span>
+                <span class="method-item">position()</span>
+                <span class="method-item">scrollTop()</span>
+                <span class="method-item">scrollLeft()</span>
+            </div>
+
+            <pre class="code-block">// Dimensions
+$('#box').width()              // Content width
+$('#box').width(200)           // Set width
+$('#box').height()
+$('#box').innerWidth()         // Including padding
+$('#box').outerWidth()         // Including padding + border
+$('#box').outerWidth(true)     // Including margin
+
+// Position
+$('#box').offset()             // { top, left } relative to document
+$('#box').position()           // { top, left } relative to offset parent
+
+// Scroll
+$(window).scrollTop()
+$(window).scrollTop(0)         // Scroll to top
+$('#box').scrollLeft()</pre>
+
+            <h4 class="category-title">Try It</h4>
+            <button class="btn btn-primary mb-4" id="dim-btn">Get Dimensions</button>
+            <div class="demo-box" id="dim-target"
+                 style="width: 200px; height: 100px; padding: 20px; border: 5px solid var(--dm-primary); margin: 10px;">
+                Measure Me
+            </div>
+            <div class="demo-result" id="dim-result">Click button to measure the box</div>
+        </div>
+    </section>
+
+    <!-- Utilities -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Collection Utilities</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Iterate and work with element collections.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">each()</span>
+                <span class="method-item">map()</span>
+                <span class="method-item">get()</span>
+                <span class="method-item">index()</span>
+                <span class="method-item">toArray()</span>
+                <span class="method-item">slice()</span>
+                <span class="method-item">length</span>
+            </div>
+
+            <pre class="code-block">// Iterate
+$('.items').each(function(index, element) {
+    console.log(index, $(this).text());
+});
+
+// Map to values
+const texts = $('.items').map(function() {
+    return $(this).text();
+}).toArray();
+
+// Get raw elements
+$('.items').get()     // All elements as array
+$('.items').get(0)    // First element
+$('.items')[0]        // Same as get(0)
+
+// Index
+$('.items').index($('.active'))  // Position of element
+
+// Length
+$('.items').length    // Number of elements</pre>
+        </div>
+    </section>
+
+    <!-- All Methods Reference -->
+    <section class="card">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Complete Method Reference</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">All 90+ methods available in the DOM namespace.</p>
+
+            <h4 class="category-title">Traversal (20)</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">find()</span>
+                <span class="method-item">children()</span>
+                <span class="method-item">parent()</span>
+                <span class="method-item">parents()</span>
+                <span class="method-item">parentsUntil()</span>
+                <span class="method-item">closest()</span>
+                <span class="method-item">siblings()</span>
+                <span class="method-item">next()</span>
+                <span class="method-item">nextAll()</span>
+                <span class="method-item">nextUntil()</span>
+                <span class="method-item">prev()</span>
+                <span class="method-item">prevAll()</span>
+                <span class="method-item">prevUntil()</span>
+                <span class="method-item">first()</span>
+                <span class="method-item">last()</span>
+                <span class="method-item">eq()</span>
+                <span class="method-item">filter()</span>
+                <span class="method-item">not()</span>
+                <span class="method-item">has()</span>
+                <span class="method-item">is()</span>
+            </div>
+
+            <h4 class="category-title">Content (9)</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">html()</span>
+                <span class="method-item">text()</span>
+                <span class="method-item">val()</span>
+                <span class="method-item">attr()</span>
+                <span class="method-item">removeAttr()</span>
+                <span class="method-item">prop()</span>
+                <span class="method-item">removeProp()</span>
+                <span class="method-item">data()</span>
+                <span class="method-item">removeData()</span>
+            </div>
+
+            <h4 class="category-title">CSS & Classes (8)</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">css()</span>
+                <span class="method-item">addClass()</span>
+                <span class="method-item">removeClass()</span>
+                <span class="method-item">toggleClass()</span>
+                <span class="method-item">hasClass()</span>
+                <span class="method-item">show()</span>
+                <span class="method-item">hide()</span>
+                <span class="method-item">toggle()</span>
+            </div>
+
+            <h4 class="category-title">Manipulation (14)</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">append()</span>
+                <span class="method-item">prepend()</span>
+                <span class="method-item">after()</span>
+                <span class="method-item">before()</span>
+                <span class="method-item">appendTo()</span>
+                <span class="method-item">prependTo()</span>
+                <span class="method-item">insertAfter()</span>
+                <span class="method-item">insertBefore()</span>
+                <span class="method-item">wrap()</span>
+                <span class="method-item">wrapAll()</span>
+                <span class="method-item">wrapInner()</span>
+                <span class="method-item">unwrap()</span>
+                <span class="method-item">clone()</span>
+                <span class="method-item">remove()</span>
+            </div>
+
+            <h4 class="category-title">Events (24)</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">on()</span>
+                <span class="method-item">off()</span>
+                <span class="method-item">one()</span>
+                <span class="method-item">trigger()</span>
+                <span class="method-item">click()</span>
+                <span class="method-item">dblclick()</span>
+                <span class="method-item">mouseenter()</span>
+                <span class="method-item">mouseleave()</span>
+                <span class="method-item">mouseover()</span>
+                <span class="method-item">mouseout()</span>
+                <span class="method-item">mousemove()</span>
+                <span class="method-item">mousedown()</span>
+                <span class="method-item">mouseup()</span>
+                <span class="method-item">hover()</span>
+                <span class="method-item">focus()</span>
+                <span class="method-item">blur()</span>
+                <span class="method-item">change()</span>
+                <span class="method-item">submit()</span>
+                <span class="method-item">keydown()</span>
+                <span class="method-item">keyup()</span>
+                <span class="method-item">keypress()</span>
+                <span class="method-item">scroll()</span>
+                <span class="method-item">resize()</span>
+                <span class="method-item">load()</span>
+            </div>
+
+            <h4 class="category-title">Effects (10)</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">fadeIn()</span>
+                <span class="method-item">fadeOut()</span>
+                <span class="method-item">fadeToggle()</span>
+                <span class="method-item">fadeTo()</span>
+                <span class="method-item">slideDown()</span>
+                <span class="method-item">slideUp()</span>
+                <span class="method-item">slideToggle()</span>
+                <span class="method-item">animate()</span>
+                <span class="method-item">stop()</span>
+                <span class="method-item">delay()</span>
+            </div>
+
+            <h4 class="category-title">Dimensions (10)</h4>
+            <div class="method-grid">
+                <span class="method-item">width()</span>
+                <span class="method-item">height()</span>
+                <span class="method-item">innerWidth()</span>
+                <span class="method-item">innerHeight()</span>
+                <span class="method-item">outerWidth()</span>
+                <span class="method-item">outerHeight()</span>
+                <span class="method-item">offset()</span>
+                <span class="method-item">position()</span>
+                <span class="method-item">scrollTop()</span>
+                <span class="method-item">scrollLeft()</span>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+    // Selector demo
+    $('#selector-btn').on('click', function () {
+        const selector = $('#selector-input').val();
+        try {
+            const $els = $(selector);
+            $('#selector-result').text(`Found ${$els.length} element(s) matching "${selector}"`);
+            // Highlight selected elements briefly
+            $els.css('background', 'var(--dm-warning)');
+            setTimeout(() => $els.css('background', 'var(--dm-primary)'), 1000);
+        } catch (e) {
+            $('#selector-result').text(`Error: ${e.message}`);
+        }
+    });
+
+    // Traversal demo
+    $('[data-traverse]').on('click', function () {
+        const method = $(this).data('traverse');
+        const $target = $('#traverse-target');
+        let $result;
+        let description = '';
+
+        switch (method) {
+            case 'parent':
+                $result = $target.parent();
+                description = 'parent() - the container div';
+                break;
+            case 'siblings':
+                $result = $target.siblings();
+                description = `siblings() - found ${$result.length} siblings`;
+                break;
+            case 'next':
+                $result = $target.next();
+                description = 'next() - the next sibling';
+                break;
+            case 'prev':
+                $result = $target.prev();
+                description = 'prev() - no previous sibling (target is first)';
+                break;
+            case 'first':
+                $result = $('#traverse-container .demo-item').first();
+                description = 'first() - the first .demo-item';
+                break;
+            case 'last':
+                $result = $('#traverse-container .demo-item').last();
+                description = 'last() - the last .demo-item';
+                break;
+        }
+
+        // Reset colors
+        $('#traverse-container .demo-item').css('background', 'var(--dm-primary)');
+        $('#traverse-target').css('background', 'var(--dm-success)');
+
+        // Highlight result
+        if ($result && $result.length) {
+            $result.css('background', 'var(--dm-warning)');
+        }
+        $('#traverse-result').text(description);
+    });
+
+    // Content demo
+    $('#get-html').on('click', function () {
+        $('#content-result').text('html(): ' + $('#content-box').html());
+    });
+    $('#set-html').on('click', function () {
+        $('#content-box').html('<u>Updated</u> <mark>HTML</mark>');
+        $('#content-result').text('Set new HTML content');
+    });
+    $('#get-text').on('click', function () {
+        $('#content-result').text('text(): ' + $('#content-box').text());
+    });
+    $('#set-text').on('click', function () {
+        $('#content-box').text('Plain text only');
+        $('#content-result').text('Set plain text (HTML escaped)');
+    });
+
+    // CSS demo
+    let colorIndex = 0;
+    const colors = ['var(--dm-primary)', 'var(--dm-success)', 'var(--dm-danger)', 'var(--dm-warning)'];
+
+    $('#toggle-class').on('click', function () {
+        const $target = $('#css-target');
+        $target.toggleClass('special');
+        $('#css-result').text('hasClass("special"): ' + $target.hasClass('special'));
+    });
+
+    $('#change-color').on('click', function () {
+        colorIndex = (colorIndex + 1) % colors.length;
+        $('#css-target').css('background', colors[colorIndex]);
+        $('#css-result').text('css("background") changed to: ' + colors[colorIndex]);
+    });
+
+    $('#toggle-vis').on('click', function () {
+        $('#css-target').toggle();
+    });
+
+    // DOM manipulation demo
+    let itemCount = 2;
+    const originalHTML = '<span class="demo-item">Original 1</span><span class="demo-item">Original 2</span>';
+
+    $('#dom-append').on('click', function () {
+        itemCount++;
+        $('#dom-container').append(`<span class="demo-item">Appended ${itemCount}</span>`);
+    });
+
+    $('#dom-prepend').on('click', function () {
+        itemCount++;
+        $('#dom-container').prepend(`<span class="demo-item">Prepended ${itemCount}</span>`);
+    });
+
+    $('#dom-remove').on('click', function () {
+        $('#dom-container .demo-item').last().remove();
+    });
+
+    $('#dom-empty').on('click', function () {
+        $('#dom-container').empty();
+    });
+
+    $('#dom-reset').on('click', function () {
+        itemCount = 2;
+        $('#dom-container').html(originalHTML);
+    });
+
+    // Events demo
+    let clickCount = 0;
+    $('#event-btn').on('click', function () {
+        clickCount++;
+        $('#event-result').text(`Button clicked ${clickCount} time(s)`);
+    });
+
+    $('#event-trigger').on('click', function () {
+        $('#event-btn').trigger('click');
+    });
+
+    $('#event-hover').hover(
+        function () {
+            $('#event-result').text('Mouse entered!');
+            $(this).css('background', 'var(--dm-success)');
+        },
+        function () {
+            $('#event-result').text('Mouse left!');
+            $(this).css('background', 'var(--dm-primary)');
+        }
+    );
+
+    // Effects demo
+    $('#fx-fade').on('click', function () {
+        $('#fx-target').fadeToggle(400);
+    });
+
+    $('#fx-slide').on('click', function () {
+        $('#fx-target').slideToggle(400);
+    });
+
+    $('#fx-animate').on('click', function () {
+        const $target = $('#fx-target');
+        const currentMargin = parseInt($target.css('marginLeft')) || 0;
+        $target.animate({
+            marginLeft: currentMargin > 100 ? '0px' : '200px',
+            opacity: currentMargin > 100 ? 1 : 0.5
+        }, 500);
+    });
+
+    // Dimensions demo
+    $('#dim-btn').on('click', function () {
+        const $box = $('#dim-target');
+        const dims = {
+            'width()': $box.width(),
+            'height()': $box.height(),
+            'innerWidth()': $box.innerWidth(),
+            'innerHeight()': $box.innerHeight(),
+            'outerWidth()': $box.outerWidth(),
+            'outerHeight()': $box.outerHeight(),
+            'outerWidth(true)': $box.outerWidth(true),
+            'offset()': JSON.stringify($box.offset())
+        };
+        $('#dim-result').html(Object.entries(dims).map(([k, v]) => `${k}: ${v}`).join('<br>'));
+    });
+</script>
+</body>
+</html>

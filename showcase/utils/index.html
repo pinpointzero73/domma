@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utils - Domma Showcase</title>
+    <link rel="stylesheet" href="../css/domma.css">
+    <style>
+        .demo-result {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
+            padding: var(--dm-space-3);
+            border-radius: var(--dm-radius-md);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            margin-top: var(--dm-space-2);
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: var(--dm-space-2);
+        }
+
+        .method-item {
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            padding: var(--dm-space-2);
+            background: var(--dm-gray-100);
+            border-radius: var(--dm-radius-sm);
+        }
+
+        .category-title {
+            font-weight: 600;
+            color: var(--dm-primary);
+            margin: var(--dm-space-4) 0 var(--dm-space-2);
+            padding-bottom: var(--dm-space-2);
+            border-bottom: 2px solid var(--dm-primary);
+        }
+
+        .try-section {
+            background: var(--dm-gray-100);
+            padding: var(--dm-space-4);
+            border-radius: var(--dm-radius-md);
+            margin-top: var(--dm-space-4);
+        }
+    </style>
+</head>
+<body>
+<script src="../js/layout.js"></script>
+
+<div class="container py-8">
+    <header class="mb-8">
+        <h1 class="text-4xl font-bold mb-2">Utilities</h1>
+        <p class="text-muted text-lg">Lodash-compatible utility functions with 120+ methods for arrays, objects,
+            strings, and more.</p>
+        <p class="mt-2"><code>_</code> or <code>Domma.utils</code></p>
+    </header>
+
+    <!-- Array Methods -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Array Methods</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Manipulate and transform arrays with powerful utility functions.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">chunk()</span>
+                <span class="method-item">compact()</span>
+                <span class="method-item">concat()</span>
+                <span class="method-item">difference()</span>
+                <span class="method-item">drop()</span>
+                <span class="method-item">dropRight()</span>
+                <span class="method-item">dropWhile()</span>
+                <span class="method-item">fill()</span>
+                <span class="method-item">flatten()</span>
+                <span class="method-item">flattenDeep()</span>
+                <span class="method-item">flattenDepth()</span>
+                <span class="method-item">fromPairs()</span>
+                <span class="method-item">head()</span>
+                <span class="method-item">indexOf()</span>
+                <span class="method-item">initial()</span>
+                <span class="method-item">intersection()</span>
+                <span class="method-item">join()</span>
+                <span class="method-item">last()</span>
+                <span class="method-item">lastIndexOf()</span>
+                <span class="method-item">nth()</span>
+                <span class="method-item">pull()</span>
+                <span class="method-item">pullAll()</span>
+                <span class="method-item">pullAt()</span>
+                <span class="method-item">remove()</span>
+                <span class="method-item">reverse()</span>
+                <span class="method-item">slice()</span>
+                <span class="method-item">sortedIndex()</span>
+                <span class="method-item">sortedUniq()</span>
+                <span class="method-item">tail()</span>
+                <span class="method-item">take()</span>
+                <span class="method-item">takeRight()</span>
+                <span class="method-item">takeWhile()</span>
+                <span class="method-item">union()</span>
+                <span class="method-item">uniq()</span>
+                <span class="method-item">uniqBy()</span>
+                <span class="method-item">unzip()</span>
+                <span class="method-item">without()</span>
+                <span class="method-item">xor()</span>
+                <span class="method-item">zip()</span>
+                <span class="method-item">zipObject()</span>
+            </div>
+
+            <pre class="code-block">// Chunk array into groups
+_.chunk([1, 2, 3, 4, 5], 2)  // [[1, 2], [3, 4], [5]]
+
+// Remove falsy values
+_.compact([0, 1, false, 2, '', 3])  // [1, 2, 3]
+
+// Array difference
+_.difference([1, 2, 3], [2, 3])  // [1]
+
+// Flatten nested arrays
+_.flatten([[1, 2], [3, [4]]])  // [1, 2, 3, [4]]
+_.flattenDeep([[1, [2, [3]]]])  // [1, 2, 3]
+
+// Get unique values
+_.uniq([1, 2, 2, 3, 3, 3])  // [1, 2, 3]
+_.uniqBy([{x:1}, {x:1}, {x:2}], 'x')  // [{x:1}, {x:2}]
+
+// Combine arrays
+_.union([1, 2], [2, 3])  // [1, 2, 3]
+_.intersection([1, 2], [2, 3])  // [2]
+
+// Array to object
+_.zipObject(['a', 'b'], [1, 2])  // {a: 1, b: 2}
+_.fromPairs([['a', 1], ['b', 2]])  // {a: 1, b: 2}</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It</h4>
+                <div class="flex gap-2 flex-wrap mb-3">
+                    <button class="btn btn-outline btn-sm" data-util="chunk">chunk([1,2,3,4,5], 2)</button>
+                    <button class="btn btn-outline btn-sm" data-util="compact">compact([0,1,false,2])</button>
+                    <button class="btn btn-outline btn-sm" data-util="uniq">uniq([1,2,2,3,3])</button>
+                    <button class="btn btn-outline btn-sm" data-util="flatten">flattenDeep([[1,[2,[3]]]])</button>
+                </div>
+                <div class="demo-result" id="array-result">Click a button to see result</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collection Methods -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Collection Methods</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Iterate, search, and transform collections (arrays and objects).</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">countBy()</span>
+                <span class="method-item">each()</span>
+                <span class="method-item">every()</span>
+                <span class="method-item">filter()</span>
+                <span class="method-item">find()</span>
+                <span class="method-item">findIndex()</span>
+                <span class="method-item">findLast()</span>
+                <span class="method-item">flatMap()</span>
+                <span class="method-item">forEach()</span>
+                <span class="method-item">groupBy()</span>
+                <span class="method-item">includes()</span>
+                <span class="method-item">invokeMap()</span>
+                <span class="method-item">keyBy()</span>
+                <span class="method-item">map()</span>
+                <span class="method-item">orderBy()</span>
+                <span class="method-item">partition()</span>
+                <span class="method-item">reduce()</span>
+                <span class="method-item">reduceRight()</span>
+                <span class="method-item">reject()</span>
+                <span class="method-item">sample()</span>
+                <span class="method-item">sampleSize()</span>
+                <span class="method-item">shuffle()</span>
+                <span class="method-item">size()</span>
+                <span class="method-item">some()</span>
+                <span class="method-item">sortBy()</span>
+            </div>
+
+            <pre class="code-block">const users = [
+    { name: 'Alice', age: 25, dept: 'Engineering' },
+    { name: 'Bob', age: 30, dept: 'Sales' },
+    { name: 'Carol', age: 25, dept: 'Engineering' }
+];
+
+// Group by property
+_.groupBy(users, 'dept')
+// { Engineering: [...], Sales: [...] }
+
+// Sort by property
+_.sortBy(users, 'age')
+_.orderBy(users, ['dept', 'name'], ['asc', 'desc'])
+
+// Filter and find
+_.filter(users, { dept: 'Engineering' })
+_.find(users, { name: 'Bob' })
+
+// Key by unique property
+_.keyBy(users, 'name')
+// { Alice: {...}, Bob: {...}, Carol: {...} }
+
+// Partition by condition
+_.partition(users, u => u.age > 25)
+// [[Bob], [Alice, Carol]]
+
+// Count by property
+_.countBy(users, 'dept')
+// { Engineering: 2, Sales: 1 }</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It</h4>
+                <div class="flex gap-2 flex-wrap mb-3">
+                    <button class="btn btn-outline btn-sm" data-util="groupBy">groupBy(users, 'dept')</button>
+                    <button class="btn btn-outline btn-sm" data-util="sortBy">sortBy(users, 'age')</button>
+                    <button class="btn btn-outline btn-sm" data-util="filter">filter(users, {dept:'Engineering'})
+                    </button>
+                    <button class="btn btn-outline btn-sm" data-util="countBy">countBy(users, 'dept')</button>
+                </div>
+                <div class="demo-result" id="collection-result">Click a button to see result</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Object Methods -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Object Methods</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Work with objects - access, transform, and manipulate properties.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">assign()</span>
+                <span class="method-item">at()</span>
+                <span class="method-item">defaults()</span>
+                <span class="method-item">defaultsDeep()</span>
+                <span class="method-item">entries()</span>
+                <span class="method-item">findKey()</span>
+                <span class="method-item">forIn()</span>
+                <span class="method-item">forOwn()</span>
+                <span class="method-item">get()</span>
+                <span class="method-item">has()</span>
+                <span class="method-item">hasIn()</span>
+                <span class="method-item">invert()</span>
+                <span class="method-item">invoke()</span>
+                <span class="method-item">keys()</span>
+                <span class="method-item">mapKeys()</span>
+                <span class="method-item">mapValues()</span>
+                <span class="method-item">merge()</span>
+                <span class="method-item">mergeWith()</span>
+                <span class="method-item">omit()</span>
+                <span class="method-item">omitBy()</span>
+                <span class="method-item">pick()</span>
+                <span class="method-item">pickBy()</span>
+                <span class="method-item">result()</span>
+                <span class="method-item">set()</span>
+                <span class="method-item">toPairs()</span>
+                <span class="method-item">transform()</span>
+                <span class="method-item">unset()</span>
+                <span class="method-item">update()</span>
+                <span class="method-item">values()</span>
+            </div>
+
+            <pre class="code-block">const obj = {
+    user: { name: 'Alice', address: { city: 'NYC' } },
+    settings: { theme: 'dark' }
+};
+
+// Safe property access
+_.get(obj, 'user.name')  // 'Alice'
+_.get(obj, 'user.phone', 'N/A')  // 'N/A' (default)
+_.get(obj, 'user.address.city')  // 'NYC'
+
+// Set nested property
+_.set(obj, 'user.address.zip', '10001')
+
+// Check if path exists
+_.has(obj, 'user.name')  // true
+_.has(obj, 'user.email')  // false
+
+// Pick/omit properties
+_.pick(obj.user, ['name'])  // { name: 'Alice' }
+_.omit(obj.user, ['address'])  // { name: 'Alice' }
+
+// Merge objects
+_.merge({a: 1}, {b: 2}, {a: 3})  // {a: 3, b: 2}
+_.defaults({a: 1}, {a: 2, b: 2})  // {a: 1, b: 2}
+
+// Transform keys/values
+_.mapKeys({a: 1, b: 2}, (v, k) => k.toUpperCase())  // {A: 1, B: 2}
+_.mapValues({a: 1, b: 2}, v => v * 2)  // {a: 2, b: 4}
+
+// Invert object
+_.invert({a: 1, b: 2})  // {1: 'a', 2: 'b'}</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It</h4>
+                <div class="flex gap-2 flex-wrap mb-3">
+                    <button class="btn btn-outline btn-sm" data-util="get">get(obj, 'user.address.city')</button>
+                    <button class="btn btn-outline btn-sm" data-util="pick">pick(user, ['name'])</button>
+                    <button class="btn btn-outline btn-sm" data-util="merge">merge({a:1}, {b:2})</button>
+                    <button class="btn btn-outline btn-sm" data-util="invert">invert({a:1, b:2})</button>
+                </div>
+                <div class="demo-result" id="object-result">Click a button to see result</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Function Methods -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Function Methods</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Control function execution with debounce, throttle, memoize, and more.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">after()</span>
+                <span class="method-item">ary()</span>
+                <span class="method-item">before()</span>
+                <span class="method-item">bind()</span>
+                <span class="method-item">curry()</span>
+                <span class="method-item">curryRight()</span>
+                <span class="method-item">debounce()</span>
+                <span class="method-item">defer()</span>
+                <span class="method-item">delay()</span>
+                <span class="method-item">flip()</span>
+                <span class="method-item">memoize()</span>
+                <span class="method-item">negate()</span>
+                <span class="method-item">once()</span>
+                <span class="method-item">partial()</span>
+                <span class="method-item">partialRight()</span>
+                <span class="method-item">rearg()</span>
+                <span class="method-item">rest()</span>
+                <span class="method-item">spread()</span>
+                <span class="method-item">throttle()</span>
+                <span class="method-item">unary()</span>
+                <span class="method-item">wrap()</span>
+            </div>
+
+            <pre class="code-block">// Debounce - wait for pause in calls
+const search = _.debounce((query) => {
+    console.log('Searching:', query);
+}, 300);
+
+input.addEventListener('input', e => search(e.target.value));
+
+// Throttle - limit call frequency
+const scroll = _.throttle(() => {
+    console.log('Scroll position:', window.scrollY);
+}, 100);
+
+window.addEventListener('scroll', scroll);
+
+// Memoize - cache results
+const expensive = _.memoize((n) => {
+    console.log('Computing...');
+    return n * n;
+});
+expensive(5);  // Computing... 25
+expensive(5);  // 25 (cached)
+
+// Once - only call once
+const init = _.once(() => console.log('Initialized!'));
+init();  // Initialized!
+init();  // (nothing)
+
+// Curry - partial application
+const add = _.curry((a, b, c) => a + b + c);
+add(1)(2)(3);  // 6
+add(1, 2)(3);  // 6
+add(1)(2, 3);  // 6</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It - Debounce</h4>
+                <input type="text" id="debounce-input" class="form-input mb-2" placeholder="Type here (debounced)">
+                <div class="demo-result" id="debounce-result">Start typing to see debounce in action...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- String Methods -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">String Methods</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Transform and manipulate strings.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">camelCase()</span>
+                <span class="method-item">capitalize()</span>
+                <span class="method-item">deburr()</span>
+                <span class="method-item">endsWith()</span>
+                <span class="method-item">escape()</span>
+                <span class="method-item">escapeRegExp()</span>
+                <span class="method-item">kebabCase()</span>
+                <span class="method-item">lowerCase()</span>
+                <span class="method-item">lowerFirst()</span>
+                <span class="method-item">pad()</span>
+                <span class="method-item">padEnd()</span>
+                <span class="method-item">padStart()</span>
+                <span class="method-item">parseInt()</span>
+                <span class="method-item">repeat()</span>
+                <span class="method-item">replace()</span>
+                <span class="method-item">snakeCase()</span>
+                <span class="method-item">split()</span>
+                <span class="method-item">startCase()</span>
+                <span class="method-item">startsWith()</span>
+                <span class="method-item">template()</span>
+                <span class="method-item">toLower()</span>
+                <span class="method-item">toUpper()</span>
+                <span class="method-item">trim()</span>
+                <span class="method-item">trimEnd()</span>
+                <span class="method-item">trimStart()</span>
+                <span class="method-item">truncate()</span>
+                <span class="method-item">unescape()</span>
+                <span class="method-item">upperCase()</span>
+                <span class="method-item">upperFirst()</span>
+                <span class="method-item">words()</span>
+            </div>
+
+            <pre class="code-block">// Case conversion
+_.camelCase('hello world')    // 'helloWorld'
+_.kebabCase('helloWorld')     // 'hello-world'
+_.snakeCase('Hello World')    // 'hello_world'
+_.startCase('helloWorld')     // 'Hello World'
+
+// Capitalize
+_.capitalize('hello')         // 'Hello'
+_.upperFirst('hello')         // 'Hello'
+_.lowerFirst('HELLO')         // 'hELLO'
+
+// Padding
+_.pad('abc', 8)               // '  abc   '
+_.padStart('5', 3, '0')       // '005'
+_.padEnd('5', 3, '0')         // '500'
+
+// Truncate
+_.truncate('Hello World', { length: 8 })  // 'Hello...'
+
+// Template
+const tpl = _.template('Hello, &lt;%= name %&gt;!');
+tpl({ name: 'Alice' })        // 'Hello, Alice!'
+
+// Escape HTML
+_.escape('&lt;div&gt;')            // '&amp;lt;div&amp;gt;'
+
+// Words
+_.words('fred, barney, & pebbles')  // ['fred', 'barney', 'pebbles']</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It</h4>
+                <input type="text" id="string-input" class="form-input mb-3" value="hello world example">
+                <div class="flex gap-2 flex-wrap mb-3">
+                    <button class="btn btn-outline btn-sm" data-string="camelCase">camelCase</button>
+                    <button class="btn btn-outline btn-sm" data-string="kebabCase">kebabCase</button>
+                    <button class="btn btn-outline btn-sm" data-string="snakeCase">snakeCase</button>
+                    <button class="btn btn-outline btn-sm" data-string="startCase">startCase</button>
+                    <button class="btn btn-outline btn-sm" data-string="capitalize">capitalize</button>
+                </div>
+                <div class="demo-result" id="string-result">Click a button to transform the string</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lang Methods -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Lang (Type) Methods</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Type checking, comparison, and cloning utilities.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">castArray()</span>
+                <span class="method-item">clone()</span>
+                <span class="method-item">cloneDeep()</span>
+                <span class="method-item">conformsTo()</span>
+                <span class="method-item">eq()</span>
+                <span class="method-item">gt()</span>
+                <span class="method-item">gte()</span>
+                <span class="method-item">isArray()</span>
+                <span class="method-item">isBoolean()</span>
+                <span class="method-item">isDate()</span>
+                <span class="method-item">isElement()</span>
+                <span class="method-item">isEmpty()</span>
+                <span class="method-item">isEqual()</span>
+                <span class="method-item">isEqualWith()</span>
+                <span class="method-item">isError()</span>
+                <span class="method-item">isFinite()</span>
+                <span class="method-item">isFunction()</span>
+                <span class="method-item">isInteger()</span>
+                <span class="method-item">isLength()</span>
+                <span class="method-item">isMatch()</span>
+                <span class="method-item">isNaN()</span>
+                <span class="method-item">isNil()</span>
+                <span class="method-item">isNull()</span>
+                <span class="method-item">isNumber()</span>
+                <span class="method-item">isObject()</span>
+                <span class="method-item">isPlainObject()</span>
+                <span class="method-item">isRegExp()</span>
+                <span class="method-item">isString()</span>
+                <span class="method-item">isSymbol()</span>
+                <span class="method-item">isUndefined()</span>
+                <span class="method-item">lt()</span>
+                <span class="method-item">lte()</span>
+                <span class="method-item">toArray()</span>
+                <span class="method-item">toFinite()</span>
+                <span class="method-item">toInteger()</span>
+                <span class="method-item">toLength()</span>
+                <span class="method-item">toNumber()</span>
+                <span class="method-item">toPlainObject()</span>
+                <span class="method-item">toString()</span>
+            </div>
+
+            <pre class="code-block">// Type checking
+_.isArray([1, 2])        // true
+_.isObject({})           // true
+_.isPlainObject({})      // true
+_.isFunction(() => {})   // true
+_.isString('hello')      // true
+_.isNumber(123)          // true
+_.isNil(null)            // true
+_.isEmpty([])            // true
+_.isEmpty({})            // true
+
+// Deep equality
+_.isEqual({a: 1}, {a: 1})  // true
+_.isEqual([1, 2], [1, 2])  // true
+
+// Cloning
+const obj = { a: { b: 1 } };
+const shallow = _.clone(obj);      // Shallow copy
+const deep = _.cloneDeep(obj);     // Deep copy
+
+// Object matching
+_.isMatch({a: 1, b: 2}, {a: 1})  // true
+
+// Conversions
+_.toArray('abc')         // ['a', 'b', 'c']
+_.toNumber('3.14')       // 3.14
+_.toInteger('3.7')       // 3
+_.castArray(1)           // [1]
+_.castArray([1])         // [1]</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It</h4>
+                <div class="flex gap-2 flex-wrap mb-3">
+                    <button class="btn btn-outline btn-sm" data-lang="isEqual">isEqual({a:1}, {a:1})</button>
+                    <button class="btn btn-outline btn-sm" data-lang="isEmpty">isEmpty([])</button>
+                    <button class="btn btn-outline btn-sm" data-lang="cloneDeep">cloneDeep(obj)</button>
+                    <button class="btn btn-outline btn-sm" data-lang="isMatch">isMatch({a:1,b:2}, {a:1})</button>
+                </div>
+                <div class="demo-result" id="lang-result">Click a button to see result</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Math Methods -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Math Methods</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Mathematical operations and aggregations.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">add()</span>
+                <span class="method-item">ceil()</span>
+                <span class="method-item">divide()</span>
+                <span class="method-item">floor()</span>
+                <span class="method-item">max()</span>
+                <span class="method-item">maxBy()</span>
+                <span class="method-item">mean()</span>
+                <span class="method-item">meanBy()</span>
+                <span class="method-item">min()</span>
+                <span class="method-item">minBy()</span>
+                <span class="method-item">multiply()</span>
+                <span class="method-item">round()</span>
+                <span class="method-item">subtract()</span>
+                <span class="method-item">sum()</span>
+                <span class="method-item">sumBy()</span>
+                <span class="method-item">clamp()</span>
+                <span class="method-item">inRange()</span>
+                <span class="method-item">random()</span>
+            </div>
+
+            <pre class="code-block">// Basic math
+_.add(6, 4)              // 10
+_.subtract(6, 4)         // 2
+_.multiply(6, 4)         // 24
+_.divide(6, 4)           // 1.5
+
+// Rounding
+_.round(4.567, 2)        // 4.57
+_.floor(4.567)           // 4
+_.ceil(4.123)            // 5
+
+// Aggregations
+_.sum([1, 2, 3, 4])      // 10
+_.mean([1, 2, 3, 4])     // 2.5
+_.max([1, 2, 3, 4])      // 4
+_.min([1, 2, 3, 4])      // 1
+
+// With iteratee
+const items = [{n: 1}, {n: 2}, {n: 3}];
+_.sumBy(items, 'n')      // 6
+_.maxBy(items, 'n')      // {n: 3}
+_.minBy(items, 'n')      // {n: 1}
+_.meanBy(items, 'n')     // 2
+
+// Number utilities
+_.clamp(10, 0, 5)        // 5 (clamp to range)
+_.inRange(3, 2, 4)       // true
+_.random(0, 100)         // Random number 0-100
+_.random(1.5, 5.5, true) // Random float</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It</h4>
+                <div class="flex gap-2 flex-wrap mb-3">
+                    <button class="btn btn-outline btn-sm" data-math="sum">sum([1,2,3,4,5])</button>
+                    <button class="btn btn-outline btn-sm" data-math="mean">mean([1,2,3,4,5])</button>
+                    <button class="btn btn-outline btn-sm" data-math="random">random(1, 100)</button>
+                    <button class="btn btn-outline btn-sm" data-math="clamp">clamp(150, 0, 100)</button>
+                </div>
+                <div class="demo-result" id="math-result">Click a button to see result</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Utility Methods -->
+    <section class="card">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Utility Methods</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">General utility functions.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">attempt()</span>
+                <span class="method-item">cond()</span>
+                <span class="method-item">conforms()</span>
+                <span class="method-item">constant()</span>
+                <span class="method-item">defaultTo()</span>
+                <span class="method-item">flow()</span>
+                <span class="method-item">flowRight()</span>
+                <span class="method-item">identity()</span>
+                <span class="method-item">iteratee()</span>
+                <span class="method-item">matches()</span>
+                <span class="method-item">matchesProperty()</span>
+                <span class="method-item">method()</span>
+                <span class="method-item">methodOf()</span>
+                <span class="method-item">noop()</span>
+                <span class="method-item">nthArg()</span>
+                <span class="method-item">over()</span>
+                <span class="method-item">overEvery()</span>
+                <span class="method-item">overSome()</span>
+                <span class="method-item">property()</span>
+                <span class="method-item">propertyOf()</span>
+                <span class="method-item">range()</span>
+                <span class="method-item">rangeRight()</span>
+                <span class="method-item">stubArray()</span>
+                <span class="method-item">stubFalse()</span>
+                <span class="method-item">stubObject()</span>
+                <span class="method-item">stubString()</span>
+                <span class="method-item">stubTrue()</span>
+                <span class="method-item">times()</span>
+                <span class="method-item">toPath()</span>
+                <span class="method-item">uniqueId()</span>
+            </div>
+
+            <pre class="code-block">// Generate ranges
+_.range(5)               // [0, 1, 2, 3, 4]
+_.range(1, 5)            // [1, 2, 3, 4]
+_.range(0, 10, 2)        // [0, 2, 4, 6, 8]
+
+// Unique IDs
+_.uniqueId()             // '1'
+_.uniqueId('user_')      // 'user_2'
+
+// Run function N times
+_.times(3, i => i * 2)   // [0, 2, 4]
+
+// Default values
+_.defaultTo(null, 10)    // 10
+_.defaultTo(1, 10)       // 1
+
+// Function composition
+const addOne = x => x + 1;
+const double = x => x * 2;
+const composed = _.flow([addOne, double]);
+composed(5)              // 12 (5+1=6, 6*2=12)
+
+// Property accessor
+const getName = _.property('name');
+getName({ name: 'Alice' })  // 'Alice'
+
+// Identity
+_.identity('hello')      // 'hello'
+
+// Noop
+_.noop()                 // undefined (do nothing)</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It</h4>
+                <div class="flex gap-2 flex-wrap mb-3">
+                    <button class="btn btn-outline btn-sm" data-utility="range">range(0, 10, 2)</button>
+                    <button class="btn btn-outline btn-sm" data-utility="uniqueId">uniqueId('id_')</button>
+                    <button class="btn btn-outline btn-sm" data-utility="times">times(5, i => i*i)</button>
+                </div>
+                <div class="demo-result" id="utility-result">Click a button to see result</div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+    // Sample data for demos
+    const users = [
+        {name: 'Alice', age: 25, dept: 'Engineering'},
+        {name: 'Bob', age: 30, dept: 'Sales'},
+        {name: 'Carol', age: 25, dept: 'Engineering'},
+        {name: 'Dave', age: 35, dept: 'Marketing'}
+    ];
+    const obj = {
+        user: {name: 'Alice', address: {city: 'NYC'}},
+        settings: {theme: 'dark'}
+    };
+
+    // Array demos
+    $('[data-util]').on('click', function () {
+        const util = $(this).data('util');
+        let result;
+
+        switch (util) {
+            case 'chunk':
+                result = _.chunk([1, 2, 3, 4, 5], 2);
+                break;
+            case 'compact':
+                result = _.compact([0, 1, false, 2, '', 3]);
+                break;
+            case 'uniq':
+                result = _.uniq([1, 2, 2, 3, 3, 3]);
+                break;
+            case 'flatten':
+                result = _.flattenDeep([[1, [2, [3]]]]);
+                break;
+            case 'groupBy':
+                result = _.groupBy(users, 'dept');
+                break;
+            case 'sortBy':
+                result = _.sortBy(users, 'age');
+                break;
+            case 'filter':
+                result = _.filter(users, {dept: 'Engineering'});
+                break;
+            case 'countBy':
+                result = _.countBy(users, 'dept');
+                break;
+        }
+
+        const targetId = ['chunk', 'compact', 'uniq', 'flatten'].includes(util) ? 'array-result' : 'collection-result';
+        $('#' + targetId).text(JSON.stringify(result, null, 2));
+    });
+
+    // Object demos
+    $('[data-util="get"]').on('click', function () {
+        const result = _.get(obj, 'user.address.city');
+        $('#object-result').text(`_.get(obj, 'user.address.city') = "${result}"`);
+    });
+    $('[data-util="pick"]').on('click', function () {
+        const result = _.pick(obj.user, ['name']);
+        $('#object-result').text(JSON.stringify(result, null, 2));
+    });
+    $('[data-util="merge"]').on('click', function () {
+        const result = _.merge({a: 1}, {b: 2}, {c: 3});
+        $('#object-result').text(JSON.stringify(result, null, 2));
+    });
+    $('[data-util="invert"]').on('click', function () {
+        const result = _.invert({a: '1', b: '2', c: '3'});
+        $('#object-result').text(JSON.stringify(result, null, 2));
+    });
+
+    // Debounce demo
+    const debouncedSearch = _.debounce(function (value) {
+        $('#debounce-result').text(`Debounced callback fired with: "${value}"`);
+    }, 500);
+
+    $('#debounce-input').on('input', function () {
+        const value = $(this).val();
+        $('#debounce-result').text(`Typing... (waiting for 500ms pause)`);
+        debouncedSearch(value);
+    });
+
+    // String demos
+    $('[data-string]').on('click', function () {
+        const method = $(this).data('string');
+        const input = $('#string-input').val();
+        const result = _[method](input);
+        $('#string-result').text(`_.${method}("${input}") = "${result}"`);
+    });
+
+    // Lang demos
+    $('[data-lang]').on('click', function () {
+        const method = $(this).data('lang');
+        let result, description;
+
+        switch (method) {
+            case 'isEqual':
+                result = _.isEqual({a: 1}, {a: 1});
+                description = `_.isEqual({a: 1}, {a: 1}) = ${result}`;
+                break;
+            case 'isEmpty':
+                result = _.isEmpty([]);
+                description = `_.isEmpty([]) = ${result}`;
+                break;
+            case 'cloneDeep':
+                const original = {a: {b: 1}};
+                const cloned = _.cloneDeep(original);
+                cloned.a.b = 999;
+                description = `Original: ${JSON.stringify(original)}\nCloned (modified): ${JSON.stringify(cloned)}`;
+                break;
+            case 'isMatch':
+                result = _.isMatch({a: 1, b: 2}, {a: 1});
+                description = `_.isMatch({a:1, b:2}, {a:1}) = ${result}`;
+                break;
+        }
+
+        $('#lang-result').text(description);
+    });
+
+    // Math demos
+    $('[data-math]').on('click', function () {
+        const method = $(this).data('math');
+        let result, description;
+
+        switch (method) {
+            case 'sum':
+                result = _.sum([1, 2, 3, 4, 5]);
+                description = `_.sum([1, 2, 3, 4, 5]) = ${result}`;
+                break;
+            case 'mean':
+                result = _.mean([1, 2, 3, 4, 5]);
+                description = `_.mean([1, 2, 3, 4, 5]) = ${result}`;
+                break;
+            case 'random':
+                result = _.random(1, 100);
+                description = `_.random(1, 100) = ${result}`;
+                break;
+            case 'clamp':
+                result = _.clamp(150, 0, 100);
+                description = `_.clamp(150, 0, 100) = ${result}`;
+                break;
+        }
+
+        $('#math-result').text(description);
+    });
+
+    // Utility demos
+    $('[data-utility]').on('click', function () {
+        const method = $(this).data('utility');
+        let result, description;
+
+        switch (method) {
+            case 'range':
+                result = _.range(0, 10, 2);
+                description = `_.range(0, 10, 2) = [${result.join(', ')}]`;
+                break;
+            case 'uniqueId':
+                result = _.uniqueId('id_');
+                description = `_.uniqueId('id_') = "${result}"`;
+                break;
+            case 'times':
+                result = _.times(5, i => i * i);
+                description = `_.times(5, i => i*i) = [${result.join(', ')}]`;
+                break;
+        }
+
+        $('#utility-result').text(description);
+    });
+</script>
+</body>
+</html>

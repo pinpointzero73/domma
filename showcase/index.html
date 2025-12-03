@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domma - Lightweight JavaScript Framework</title>
+    <link rel="stylesheet" href="css/domma.css">
+    <style>
+        .hero {
+            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
+            color: white;
+            padding: var(--dm-space-16) var(--dm-space-4);
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 0 0 var(--dm-space-4);
+            letter-spacing: -0.025em;
+        }
+
+        .hero-subtitle {
+            font-size: var(--dm-font-size-xl);
+            opacity: 0.9;
+            margin: 0 0 var(--dm-space-8);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: var(--dm-space-3);
+            flex-wrap: wrap;
+        }
+
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: var(--dm-space-2) var(--dm-space-4);
+            border-radius: var(--dm-radius-full);
+            font-size: var(--dm-font-size-sm);
+            font-weight: 500;
+        }
+
+        .namespace-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .namespace-card .card-body {
+            flex: 1;
+        }
+
+        .namespace-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--dm-space-4);
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: var(--dm-space-4) 0 0;
+        }
+
+        .feature-list li {
+            padding: var(--dm-space-1) 0;
+            color: var(--dm-gray-600);
+            font-size: var(--dm-font-size-sm);
+        }
+
+        .feature-list li::before {
+            content: "\2713";
+            color: var(--dm-success);
+            margin-right: var(--dm-space-2);
+            font-weight: bold;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: var(--dm-space-8);
+        }
+
+        .section-title h2 {
+            font-size: var(--dm-font-size-3xl);
+            margin: 0 0 var(--dm-space-2);
+        }
+
+        .section-title p {
+            color: var(--dm-gray-600);
+            margin: 0;
+        }
+
+        .quick-start {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
+            padding: var(--dm-space-6);
+            border-radius: var(--dm-radius-lg);
+            margin-top: var(--dm-space-8);
+        }
+
+        .quick-start code {
+            background: var(--dm-gray-800);
+            color: var(--dm-primary-light);
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-dark">
+    <a href="index.html" class="navbar-brand">Domma</a>
+    <ul class="navbar-nav">
+        <li><a href="dom/index.html" class="navbar-link">DOM</a></li>
+        <li><a href="utils/index.html" class="navbar-link">Utils</a></li>
+        <li><a href="dates/index.html" class="navbar-link">Dates</a></li>
+        <li><a href="models/index.html" class="navbar-link">Models</a></li>
+        <li><a href="elements/index.html" class="navbar-link">Elements</a></li>
+        <li><a href="tables/index.html" class="navbar-link">Tables</a></li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <h1 class="hero-title">Domma</h1>
+    <p class="hero-subtitle">
+        <strong>D</strong>ynamic <strong>O</strong>bject <strong>M</strong>anipulation & <strong>M</strong>odeling
+        <strong>A</strong>PI
+    </p>
+    <p class="hero-subtitle" style="opacity: 0.85; font-size: 1rem; margin-top: 0.5rem;">
+        A lightweight, zero-dependency JavaScript framework combining jQuery-style DOM manipulation,
+        Lodash utilities, and modern components.
+    </p>
+    <div class="hero-badges">
+        <span class="hero-badge">Zero Dependencies</span>
+        <span class="hero-badge">~125KB Bundled</span>
+        <span class="hero-badge">ES Modules</span>
+        <span class="hero-badge">Chainable API</span>
+    </div>
+</section>
+
+<main class="container py-8">
+    <section class="mb-8">
+        <div class="section-title">
+            <h2>Namespaces</h2>
+            <p>Everything you need to build modern web applications</p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+            <!-- DOM -->
+            <a href="dom/index.html" class="card card-hover namespace-card"
+               style="text-decoration: none; color: inherit;">
+                <div class="card-body">
+                    <div class="namespace-icon">$</div>
+                    <h3 class="card-title">DOM</h3>
+                    <p class="card-text">jQuery-compatible DOM manipulation with a chainable API.</p>
+                    <ul class="feature-list">
+                        <li>90+ methods</li>
+                        <li>Traversal & manipulation</li>
+                        <li>Events & animations</li>
+                        <li>CSS & attributes</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <code>$('.selector').addClass('active')</code>
+                </div>
+            </a>
+
+            <!-- Utils -->
+            <a href="utils/index.html" class="card card-hover namespace-card"
+               style="text-decoration: none; color: inherit;">
+                <div class="card-body">
+                    <div class="namespace-icon">_</div>
+                    <h3 class="card-title">Utils</h3>
+                    <p class="card-text">Lodash-compatible utility functions for common operations.</p>
+                    <ul class="feature-list">
+                        <li>120+ utilities</li>
+                        <li>Array & collection methods</li>
+                        <li>Object manipulation</li>
+                        <li>String & function helpers</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <code>_.groupBy(users, 'role')</code>
+                </div>
+            </a>
+
+            <!-- Dates -->
+            <a href="dates/index.html" class="card card-hover namespace-card"
+               style="text-decoration: none; color: inherit;">
+                <div class="card-body">
+                    <div class="namespace-icon">D</div>
+                    <h3 class="card-title">Dates</h3>
+                    <p class="card-text">Moment.js-style chainable date manipulation.</p>
+                    <ul class="feature-list">
+                        <li>Chainable API</li>
+                        <li>Formatting & parsing</li>
+                        <li>Relative time (fromNow)</li>
+                        <li>Comparison & diff</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <code>D().add(7, 'days').format('MMM D')</code>
+                </div>
+            </a>
+
+            <!-- Models -->
+            <a href="models/index.html" class="card card-hover namespace-card"
+               style="text-decoration: none; color: inherit;">
+                <div class="card-body">
+                    <div class="namespace-icon">M</div>
+                    <h3 class="card-title">Models</h3>
+                    <p class="card-text">Reactive data models with pub/sub events and validation.</p>
+                    <ul class="feature-list">
+                        <li>Pub/Sub events</li>
+                        <li>Reactive data binding</li>
+                        <li>Schema validation</li>
+                        <li>Two-way DOM binding</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <code>M.bind(model, 'name', '#input')</code>
+                </div>
+            </a>
+
+            <!-- Elements -->
+            <a href="elements/index.html" class="card card-hover namespace-card"
+               style="text-decoration: none; color: inherit;">
+                <div class="card-body">
+                    <div class="namespace-icon">UI</div>
+                    <h3 class="card-title">Elements</h3>
+                    <p class="card-text">Ready-to-use UI components with JavaScript interactivity.</p>
+                    <ul class="feature-list">
+                        <li>Modals & tooltips</li>
+                        <li>Tabs & accordions</li>
+                        <li>Cards with effects</li>
+                        <li>Config integration</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <code>Domma.elements.modal('#dialog')</code>
+                </div>
+            </a>
+
+            <!-- Tables -->
+            <a href="tables/index.html" class="card card-hover namespace-card"
+               style="text-decoration: none; color: inherit;">
+                <div class="card-body">
+                    <div class="namespace-icon">TBL</div>
+                    <h3 class="card-title">Tables</h3>
+                    <p class="card-text">DataTable-like functionality for interactive data grids.</p>
+                    <ul class="feature-list">
+                        <li>Sorting & filtering</li>
+                        <li>Pagination</li>
+                        <li>Row selection</li>
+                        <li>CSV/JSON export</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <code>Domma.tables.create('#grid', opts)</code>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="mb-8">
+        <div class="section-title">
+            <h2>Quick Start</h2>
+            <p>Get up and running in seconds</p>
+        </div>
+
+        <div class="quick-start">
+            <p class="mb-4"><strong>1. Include Domma</strong></p>
+            <pre class="code-block mb-6">&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</pre>
+
+            <p class="mb-4"><strong>2. Use the short aliases</strong></p>
+            <pre class="code-block mb-6">// DOM manipulation (jQuery-style)
+$('.btn').on('click', () =&gt; alert('Clicked!'));
+
+// Utilities (Lodash-style)
+const grouped = _.groupBy(users, 'department');
+
+// Dates (Moment-style)
+const nextWeek = D().add(7, 'days').format('YYYY-MM-DD');
+
+// Models (Reactive)
+const user = M.create({ name: { type: 'string' } });
+M.bind(user, 'name', '#name-input', { twoWay: true });</pre>
+
+            <p class="mb-4"><strong>3. Or use the config engine for declarative setup</strong></p>
+            <pre class="code-block">$.setup({
+    '.card': {
+        component: 'card',
+        options: { hover: true }
+    },
+    '#submit': {
+        events: {
+            click: (e, $el) =&gt; $el.text('Submitted!')
+        }
+    }
+});</pre>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-title">
+            <h2>Why Domma?</h2>
+        </div>
+
+        <div class="grid grid-cols-3 gap-6">
+            <div class="text-center p-6">
+                <div class="text-4xl mb-4">0</div>
+                <h4 class="font-semibold mb-2">Zero Dependencies</h4>
+                <p class="text-muted text-sm">No external libraries required. Everything is self-contained.</p>
+            </div>
+            <div class="text-center p-6">
+                <div class="text-4xl mb-4">$</div>
+                <h4 class="font-semibold mb-2">Familiar APIs</h4>
+                <p class="text-muted text-sm">jQuery, Lodash, and Moment patterns you already know.</p>
+            </div>
+            <div class="text-center p-6">
+                <div class="text-4xl mb-4">ES</div>
+                <h4 class="font-semibold mb-2">Modern JavaScript</h4>
+                <p class="text-muted text-sm">ES modules, tree-shakeable, works with bundlers.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer footer-dark text-center">
+    <p class="mb-2">Domma &copy; 2025</p>
+    <p class="text-sm">A lightweight JavaScript framework for modern web development</p>
+</footer>
+</body>
+</html>

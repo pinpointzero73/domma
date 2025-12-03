@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Models - Domma Showcase</title>
+    <link rel="stylesheet" href="../css/domma.css">
+    <style>
+        .demo-result {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
+            padding: var(--dm-space-3);
+            border-radius: var(--dm-radius-md);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            margin-top: var(--dm-space-2);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: var(--dm-space-2);
+        }
+
+        .method-item {
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            padding: var(--dm-space-2);
+            background: var(--dm-gray-100);
+            border-radius: var(--dm-radius-sm);
+        }
+
+        .category-title {
+            font-weight: 600;
+            color: var(--dm-primary);
+            margin: var(--dm-space-4) 0 var(--dm-space-2);
+            padding-bottom: var(--dm-space-2);
+            border-bottom: 2px solid var(--dm-primary);
+        }
+
+        .try-section {
+            background: var(--dm-gray-100);
+            padding: var(--dm-space-4);
+            border-radius: var(--dm-radius-md);
+            margin-top: var(--dm-space-4);
+        }
+
+        .event-log {
+            background: var(--dm-gray-900);
+            color: var(--dm-success);
+            padding: var(--dm-space-3);
+            border-radius: var(--dm-radius-md);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            height: 150px;
+            overflow-y: auto;
+        }
+
+        .event-log .timestamp {
+            color: var(--dm-gray-500);
+        }
+
+        .event-log .event-name {
+            color: var(--dm-primary-light);
+        }
+
+        .model-display {
+            background: var(--dm-white);
+            border: 2px solid var(--dm-gray-200);
+            border-radius: var(--dm-radius-md);
+            padding: var(--dm-space-4);
+        }
+
+        .model-field {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--dm-space-2) 0;
+            border-bottom: 1px solid var(--dm-gray-200);
+        }
+
+        .model-field:last-child {
+            border-bottom: none;
+        }
+
+        .validation-error {
+            color: var(--dm-danger);
+            font-size: var(--dm-font-size-sm);
+            margin-top: var(--dm-space-1);
+        }
+
+        .bound-display {
+            font-size: var(--dm-font-size-2xl);
+            font-weight: 700;
+            color: var(--dm-primary);
+            padding: var(--dm-space-4);
+            background: var(--dm-gray-100);
+            border-radius: var(--dm-radius-md);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<script src="../js/layout.js"></script>
+
+<div class="container py-8">
+    <header class="mb-8">
+        <h1 class="text-4xl font-bold mb-2">Models</h1>
+        <p class="text-muted text-lg">Reactive data models with pub/sub events, validation, and DOM binding.</p>
+        <p class="mt-2"><code>M</code> or <code>Domma.models</code></p>
+    </header>
+
+    <!-- Pub/Sub Events -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Pub/Sub Events</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">A simple but powerful event system for decoupled communication between components.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">subscribe()</span>
+                <span class="method-item">publish()</span>
+                <span class="method-item">unsubscribe()</span>
+                <span class="method-item">once()</span>
+                <span class="method-item">on()</span>
+                <span class="method-item">off()</span>
+                <span class="method-item">emit()</span>
+            </div>
+
+            <pre class="code-block">// Subscribe to an event
+M.subscribe('user:login', (data) => {
+    console.log('User logged in:', data.username);
+});
+
+// Aliases
+M.on('user:login', callback);  // Same as subscribe
+
+// Publish an event
+M.publish('user:login', { username: 'alice' });
+M.emit('user:login', data);    // Same as publish
+
+// Unsubscribe
+M.unsubscribe('user:login', callback);
+M.off('user:login', callback);
+
+// One-time subscription
+M.once('app:ready', () => {
+    console.log('App initialized!');
+});
+
+// Namespace events
+M.on('cart:add', handler);
+M.on('cart:remove', handler);
+M.on('cart:clear', handler);</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It - Event Console</h4>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <div class="flex gap-2 mb-3">
+                            <input type="text" id="event-name" class="form-input" value="my:event"
+                                   placeholder="Event name">
+                        </div>
+                        <div class="flex gap-2 mb-3">
+                            <input type="text" id="event-data" class="form-input" value='{"message": "Hello!"}'
+                                   placeholder="Event data (JSON)">
+                        </div>
+                        <div class="flex gap-2 flex-wrap">
+                            <button class="btn btn-primary btn-sm" id="btn-subscribe">Subscribe</button>
+                            <button class="btn btn-success btn-sm" id="btn-publish">Publish</button>
+                            <button class="btn btn-danger btn-sm" id="btn-unsubscribe">Unsubscribe</button>
+                            <button class="btn btn-secondary btn-sm" id="btn-clear-log">Clear Log</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="event-log" id="event-log">
+                            <div class="text-muted">Event log will appear here...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reactive Models -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Reactive Models</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Create reactive data models with schema validation and change detection.</p>
+
+            <pre class="code-block">// Create a model with schema
+const user = M.create({
+    name: { type: 'string', required: true },
+    email: {
+        type: 'string',
+        required: true,
+        validate: v => v.includes('@') || 'Invalid email'
+    },
+    age: {
+        type: 'number',
+        min: 0,
+        max: 150,
+        default: 18
+    },
+    role: {
+        type: 'string',
+        enum: ['admin', 'user', 'guest'],
+        default: 'user'
+    }
+}, { name: 'Alice', email: 'alice@example.com' });
+
+// Get values
+user.get('name')           // 'Alice'
+user.get('email')          // 'alice@example.com'
+user.toJSON()              // { name: 'Alice', email: '...', age: 18, role: 'user' }
+
+// Set values (triggers validation)
+user.set('name', 'Bob');
+user.set('age', 25);
+
+// Set multiple values
+user.set({ name: 'Carol', age: 30 });
+
+// Listen for changes
+user.onChange((field, newValue, oldValue) => {
+    console.log(`${field} changed from ${oldValue} to ${newValue}`);
+});
+
+// Listen for specific field
+user.onChange('email', (newVal, oldVal) => {
+    console.log('Email updated');
+});
+
+// Validate
+const result = user.validate();
+// { valid: true, errors: {} }
+// or { valid: false, errors: { email: 'Invalid email' } }</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It - User Model</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label">Name (required)</label>
+                            <input type="text" id="model-name" class="form-input" placeholder="Enter name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email (required, must contain @)</label>
+                            <input type="email" id="model-email" class="form-input" placeholder="Enter email">
+                            <div class="validation-error" id="email-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Age (0-150)</label>
+                            <input type="number" id="model-age" class="form-input" placeholder="Enter age" min="0"
+                                   max="150">
+                            <div class="validation-error" id="age-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Role</label>
+                            <select id="model-role" class="form-select">
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                                <option value="guest">Guest</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="validate-model">Validate Model</button>
+                    </div>
+                    <div>
+                        <h5 class="font-semibold mb-2">Model State</h5>
+                        <div class="model-display" id="model-display">
+                            <div class="model-field">
+                                <span>name:</span>
+                                <span id="display-name">-</span>
+                            </div>
+                            <div class="model-field">
+                                <span>email:</span>
+                                <span id="display-email">-</span>
+                            </div>
+                            <div class="model-field">
+                                <span>age:</span>
+                                <span id="display-age">-</span>
+                            </div>
+                            <div class="model-field">
+                                <span>role:</span>
+                                <span id="display-role">-</span>
+                            </div>
+                        </div>
+                        <h5 class="font-semibold mt-4 mb-2">Change Log</h5>
+                        <div class="event-log" id="model-log" style="height: 100px;">
+                            <div class="text-muted">Changes will appear here...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schema Types -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Schema Types</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Built-in type validators for common data types.</p>
+
+            <pre class="code-block">// Available types
+M.types.string    // String values
+M.types.number    // Numeric values
+M.types.boolean   // true/false
+M.types.array     // Arrays
+M.types.object    // Plain objects
+M.types.date      // Date objects
+M.types.any       // Any type (no validation)
+
+// Schema options
+const schema = {
+    // Basic type
+    name: { type: 'string' },
+
+    // Required field
+    email: { type: 'string', required: true },
+
+    // Default value
+    status: { type: 'string', default: 'active' },
+
+    // Number constraints
+    age: { type: 'number', min: 0, max: 120 },
+    price: { type: 'number', min: 0 },
+
+    // String constraints
+    username: { type: 'string', minLength: 3, maxLength: 20 },
+
+    // Enum values
+    role: { type: 'string', enum: ['admin', 'user', 'guest'] },
+
+    // Custom validation
+    password: {
+        type: 'string',
+        validate: (value) => {
+            if (value.length < 8) return 'Min 8 characters';
+            if (!/[A-Z]/.test(value)) return 'Need uppercase';
+            if (!/[0-9]/.test(value)) return 'Need number';
+            return true;
+        }
+    },
+
+    // Array of items
+    tags: { type: 'array' },
+
+    // Nested object
+    address: { type: 'object' }
+};</pre>
+        </div>
+    </section>
+
+    <!-- Two-Way Binding -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Two-Way DOM Binding</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Automatically sync model data with DOM elements.</p>
+
+            <pre class="code-block">const user = M.create({
+    name: { type: 'string' },
+    email: { type: 'string' }
+}, { name: 'Alice' });
+
+// One-way binding (model -> DOM)
+M.bind(user, 'name', '#name-display');
+
+// Two-way binding (model <-> DOM)
+M.bind(user, 'name', '#name-input', { twoWay: true });
+
+// With formatter
+M.bind(user, 'name', '#greeting', {
+    format: (value) => `Hello, ${value}!`
+});
+
+// Multiple bindings
+M.bind(user, 'name', '#display1');
+M.bind(user, 'name', '#display2');
+M.bind(user, 'name', '#display3');
+
+// All update when model changes
+user.set('name', 'Bob');  // All three elements update
+
+// Unbind
+M.unbind(user, 'name', '#name-display');</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It - Live Binding</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label">Type your name (two-way bound)</label>
+                            <input type="text" id="bound-input" class="form-input" placeholder="Type here...">
+                        </div>
+                        <p class="text-sm text-muted">The input and display are both bound to the same model field.
+                            Changes in either direction are synced.</p>
+                    </div>
+                    <div>
+                        <label class="form-label">Live Display (one-way bound)</label>
+                        <div class="bound-display" id="bound-display">
+                            Type something...
+                        </div>
+                        <div class="mt-3 text-center">
+                            <span class="text-sm text-muted">Formatted:</span>
+                            <div id="bound-formatted" class="text-primary font-semibold">Hello, Guest!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Practical Example -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Practical Example: Shopping Cart</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">A complete example using pub/sub and reactive models together.</p>
+
+            <pre class="code-block">// Cart model
+const cart = M.create({
+    items: { type: 'array', default: [] },
+    total: { type: 'number', default: 0 }
+});
+
+// Subscribe to cart events
+M.on('cart:add', (item) => {
+    const items = cart.get('items');
+    items.push(item);
+    cart.set('items', items);
+    cart.set('total', calculateTotal(items));
+});
+
+M.on('cart:remove', (index) => {
+    const items = cart.get('items');
+    items.splice(index, 1);
+    cart.set('items', items);
+    cart.set('total', calculateTotal(items));
+});
+
+// UI updates on cart changes
+cart.onChange('total', (newTotal) => {
+    $('#cart-total').text('$' + newTotal.toFixed(2));
+});
+
+cart.onChange('items', (items) => {
+    $('#cart-count').text(items.length);
+});
+
+// Add item from anywhere in the app
+$('.add-to-cart').on('click', function() {
+    const product = {
+        name: $(this).data('name'),
+        price: $(this).data('price')
+    };
+    M.emit('cart:add', product);
+});</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It - Mini Cart</h4>
+                <div class="grid grid-cols-3 gap-4 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="font-semibold">Widget A</h5>
+                            <p class="text-muted">$9.99</p>
+                            <button class="btn btn-primary btn-sm add-to-cart" data-name="Widget A" data-price="9.99">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="font-semibold">Widget B</h5>
+                            <p class="text-muted">$19.99</p>
+                            <button class="btn btn-primary btn-sm add-to-cart" data-name="Widget B" data-price="19.99">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="font-semibold">Widget C</h5>
+                            <p class="text-muted">$29.99</p>
+                            <button class="btn btn-primary btn-sm add-to-cart" data-name="Widget C" data-price="29.99">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <div class="flex justify-between items-center mb-3">
+                            <h5 class="font-semibold">Shopping Cart (<span id="cart-count">0</span> items)</h5>
+                            <button class="btn btn-outline btn-sm" id="clear-cart">Clear Cart</button>
+                        </div>
+                        <div id="cart-items" class="mb-3">
+                            <p class="text-muted">Cart is empty</p>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-3">
+                            <span class="font-semibold">Total:</span>
+                            <span class="text-xl font-bold text-primary" id="cart-total">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Method Reference -->
+    <section class="card">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Complete Method Reference</h2>
+        </div>
+        <div class="card-body">
+            <h4 class="category-title">Pub/Sub Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">subscribe()</span>
+                <span class="method-item">publish()</span>
+                <span class="method-item">unsubscribe()</span>
+                <span class="method-item">once()</span>
+                <span class="method-item">on()</span>
+                <span class="method-item">off()</span>
+                <span class="method-item">emit()</span>
+            </div>
+
+            <h4 class="category-title">Model Factory</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">create()</span>
+                <span class="method-item">bind()</span>
+                <span class="method-item">unbind()</span>
+            </div>
+
+            <h4 class="category-title">Model Instance Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">get()</span>
+                <span class="method-item">set()</span>
+                <span class="method-item">toJSON()</span>
+                <span class="method-item">validate()</span>
+                <span class="method-item">onChange()</span>
+                <span class="method-item">offChange()</span>
+                <span class="method-item">reset()</span>
+            </div>
+
+            <h4 class="category-title">Type Validators</h4>
+            <div class="method-grid">
+                <span class="method-item">types.string</span>
+                <span class="method-item">types.number</span>
+                <span class="method-item">types.boolean</span>
+                <span class="method-item">types.array</span>
+                <span class="method-item">types.object</span>
+                <span class="method-item">types.date</span>
+                <span class="method-item">types.any</span>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+    // Pub/Sub Demo
+    const eventHandlers = {};
+
+    function logEvent(message) {
+        const log = $('#event-log');
+        const time = D().format('HH:mm:ss');
+        log.prepend(`<div><span class="timestamp">[${time}]</span> ${message}</div>`);
+    }
+
+    $('#btn-subscribe').on('click', function () {
+        const eventName = $('#event-name').val();
+        if (eventHandlers[eventName]) {
+            logEvent(`<span class="text-warning">Already subscribed to "${eventName}"</span>`);
+            return;
+        }
+
+        const handler = (data) => {
+            logEvent(`<span class="event-name">${eventName}</span> received: ${JSON.stringify(data)}`);
+        };
+        eventHandlers[eventName] = handler;
+        M.on(eventName, handler);
+        logEvent(`<span class="text-success">Subscribed to "${eventName}"</span>`);
+    });
+
+    $('#btn-publish').on('click', function () {
+        const eventName = $('#event-name').val();
+        let data;
+        try {
+            data = JSON.parse($('#event-data').val());
+        } catch (e) {
+            data = $('#event-data').val();
+        }
+        M.emit(eventName, data);
+        logEvent(`<span class="text-info">Published "${eventName}"</span>`);
+    });
+
+    $('#btn-unsubscribe').on('click', function () {
+        const eventName = $('#event-name').val();
+        if (eventHandlers[eventName]) {
+            M.off(eventName, eventHandlers[eventName]);
+            delete eventHandlers[eventName];
+            logEvent(`<span class="text-danger">Unsubscribed from "${eventName}"</span>`);
+        } else {
+            logEvent(`<span class="text-warning">Not subscribed to "${eventName}"</span>`);
+        }
+    });
+
+    $('#btn-clear-log').on('click', function () {
+        $('#event-log').html('<div class="text-muted">Event log cleared...</div>');
+    });
+
+    // Reactive Model Demo
+    const userModel = M.create({
+        name: {type: 'string', required: true},
+        email: {
+            type: 'string',
+            required: true,
+            validate: v => !v || v.includes('@') || 'Must contain @'
+        },
+        age: {type: 'number', min: 0, max: 150},
+        role: {type: 'string', enum: ['admin', 'user', 'guest'], default: 'user'}
+    });
+
+    function logModelChange(message) {
+        const log = $('#model-log');
+        const time = D().format('HH:mm:ss');
+        log.prepend(`<div><span class="timestamp">[${time}]</span> ${message}</div>`);
+    }
+
+    function updateModelDisplay() {
+        $('#display-name').text(userModel.get('name') || '-');
+        $('#display-email').text(userModel.get('email') || '-');
+        $('#display-age').text(userModel.get('age') ?? '-');
+        $('#display-role').text(userModel.get('role') || '-');
+    }
+
+    userModel.onChange((field, newVal, oldVal) => {
+        logModelChange(`${field}: "${oldVal}" → "${newVal}"`);
+        updateModelDisplay();
+    });
+
+    $('#model-name').on('input', function () {
+        userModel.set('name', $(this).val());
+    });
+
+    $('#model-email').on('input', function () {
+        userModel.set('email', $(this).val());
+        const result = userModel.validate();
+        $('#email-error').text(result.errors.email || '');
+    });
+
+    $('#model-age').on('input', function () {
+        userModel.set('age', parseInt($(this).val()) || 0);
+        const result = userModel.validate();
+        $('#age-error').text(result.errors.age || '');
+    });
+
+    $('#model-role').on('change', function () {
+        userModel.set('role', $(this).val());
+    });
+
+    $('#validate-model').on('click', function () {
+        const result = userModel.validate();
+        if (result.valid) {
+            logModelChange('<span class="text-success">Validation passed!</span>');
+        } else {
+            logModelChange(`<span class="text-danger">Validation failed: ${JSON.stringify(result.errors)}</span>`);
+        }
+    });
+
+    // Two-Way Binding Demo
+    const nameModel = M.create({
+        name: {type: 'string', default: 'Guest'}
+    }, {name: 'Guest'});
+
+    M.bind(nameModel, 'name', '#bound-input', {twoWay: true});
+    M.bind(nameModel, 'name', '#bound-display');
+    M.bind(nameModel, 'name', '#bound-formatted', {
+        format: (v) => `Hello, ${v || 'Guest'}!`
+    });
+
+    // Initialize display
+    $('#bound-display').text('Guest');
+    $('#bound-formatted').text('Hello, Guest!');
+
+    // Shopping Cart Demo
+    const cartModel = M.create({
+        items: {type: 'array', default: []},
+        total: {type: 'number', default: 0}
+    });
+
+    function calculateTotal(items) {
+        return items.reduce((sum, item) => sum + item.price, 0);
+    }
+
+    function renderCart() {
+        const items = cartModel.get('items');
+        const $container = $('#cart-items');
+
+        if (items.length === 0) {
+            $container.html('<p class="text-muted">Cart is empty</p>');
+        } else {
+            $container.html(items.map((item, i) => `
+                    <div class="flex justify-between items-center py-2 border-b">
+                        <span>${item.name}</span>
+                        <div>
+                            <span class="mr-2">$${item.price.toFixed(2)}</span>
+                            <button class="btn btn-danger btn-sm remove-item" data-index="${i}">x</button>
+                        </div>
+                    </div>
+                `).join(''));
+        }
+
+        $('#cart-count').text(items.length);
+        $('#cart-total').text('$' + cartModel.get('total').toFixed(2));
+    }
+
+    M.on('cart:add', (item) => {
+        const items = [...cartModel.get('items'), item];
+        cartModel.set('items', items);
+        cartModel.set('total', calculateTotal(items));
+        renderCart();
+    });
+
+    M.on('cart:remove', (index) => {
+        const items = cartModel.get('items').filter((_, i) => i !== index);
+        cartModel.set('items', items);
+        cartModel.set('total', calculateTotal(items));
+        renderCart();
+    });
+
+    M.on('cart:clear', () => {
+        cartModel.set('items', []);
+        cartModel.set('total', 0);
+        renderCart();
+    });
+
+    $('.add-to-cart').on('click', function () {
+        M.emit('cart:add', {
+            name: $(this).data('name'),
+            price: parseFloat($(this).data('price'))
+        });
+    });
+
+    $(document).on('click', '.remove-item', function () {
+        M.emit('cart:remove', parseInt($(this).data('index')));
+    });
+
+    $('#clear-cart').on('click', function () {
+        M.emit('cart:clear');
+    });
+</script>
+</body>
+</html>

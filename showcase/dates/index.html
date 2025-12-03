@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dates - Domma Showcase</title>
+    <link rel="stylesheet" href="../css/domma.css">
+    <style>
+        .demo-result {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
+            padding: var(--dm-space-3);
+            border-radius: var(--dm-radius-md);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            margin-top: var(--dm-space-2);
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: var(--dm-space-2);
+        }
+
+        .method-item {
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            padding: var(--dm-space-2);
+            background: var(--dm-gray-100);
+            border-radius: var(--dm-radius-sm);
+        }
+
+        .category-title {
+            font-weight: 600;
+            color: var(--dm-primary);
+            margin: var(--dm-space-4) 0 var(--dm-space-2);
+            padding-bottom: var(--dm-space-2);
+            border-bottom: 2px solid var(--dm-primary);
+        }
+
+        .try-section {
+            background: var(--dm-gray-100);
+            padding: var(--dm-space-4);
+            border-radius: var(--dm-radius-md);
+            margin-top: var(--dm-space-4);
+        }
+
+        .live-clock {
+            font-size: var(--dm-font-size-3xl);
+            font-weight: 700;
+            text-align: center;
+            padding: var(--dm-space-6);
+            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
+            color: white;
+            border-radius: var(--dm-radius-lg);
+            margin-bottom: var(--dm-space-4);
+        }
+
+        .live-date {
+            font-size: var(--dm-font-size-lg);
+            opacity: 0.9;
+        }
+
+        .format-token {
+            display: inline-block;
+            padding: var(--dm-space-1) var(--dm-space-2);
+            margin: var(--dm-space-1);
+            background: var(--dm-gray-200);
+            border-radius: var(--dm-radius-sm);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+        }
+
+        .format-token span {
+            color: var(--dm-gray-600);
+            font-size: var(--dm-font-size-xs);
+        }
+    </style>
+</head>
+<body>
+<script src="../js/layout.js"></script>
+
+<div class="container py-8">
+    <header class="mb-8">
+        <h1 class="text-4xl font-bold mb-2">Dates</h1>
+        <p class="text-muted text-lg">Moment.js-style chainable date manipulation without the bloat.</p>
+        <p class="mt-2"><code>D()</code> or <code>Domma.dates()</code></p>
+    </header>
+
+    <!-- Live Clock -->
+    <div class="live-clock">
+        <div id="live-time">--:--:--</div>
+        <div class="live-date" id="live-date">Loading...</div>
+    </div>
+
+    <!-- Creating Dates -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Creating Dates</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Create DommaDate instances from various inputs.</p>
+
+            <pre class="code-block">// Current date/time
+D()
+D(new Date())
+
+// From string
+D('2025-12-25')
+D('2025-12-25T10:30:00')
+D('December 25, 2025')
+
+// From timestamp
+D(1735084800000)
+
+// From Date object
+D(new Date(2025, 11, 25))
+
+// Parse with static method
+Domma.dates.parse('2025-12-25')
+
+// Get current timestamp
+Domma.dates.now()  // Returns timestamp number</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It</h4>
+                <div class="flex gap-2 flex-wrap mb-3">
+                    <button class="btn btn-outline btn-sm" data-create="now">D()</button>
+                    <button class="btn btn-outline btn-sm" data-create="string">D('2025-12-25')</button>
+                    <button class="btn btn-outline btn-sm" data-create="timestamp">D(1735084800000)</button>
+                    <button class="btn btn-outline btn-sm" data-create="static">dates.now()</button>
+                </div>
+                <div class="demo-result" id="create-result">Click a button to create a date</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formatting -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Formatting</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Format dates using tokens similar to Moment.js.</p>
+
+            <h4 class="category-title">Format Tokens</h4>
+            <div class="mb-4">
+                <div class="format-token">YYYY <span>2025</span></div>
+                <div class="format-token">YY <span>25</span></div>
+                <div class="format-token">MMMM <span>December</span></div>
+                <div class="format-token">MMM <span>Dec</span></div>
+                <div class="format-token">MM <span>12</span></div>
+                <div class="format-token">M <span>12</span></div>
+                <div class="format-token">DD <span>25</span></div>
+                <div class="format-token">D <span>25</span></div>
+                <div class="format-token">dddd <span>Thursday</span></div>
+                <div class="format-token">ddd <span>Thu</span></div>
+                <div class="format-token">dd <span>Th</span></div>
+                <div class="format-token">d <span>4</span></div>
+                <div class="format-token">HH <span>14</span></div>
+                <div class="format-token">H <span>14</span></div>
+                <div class="format-token">hh <span>02</span></div>
+                <div class="format-token">h <span>2</span></div>
+                <div class="format-token">mm <span>30</span></div>
+                <div class="format-token">m <span>30</span></div>
+                <div class="format-token">ss <span>45</span></div>
+                <div class="format-token">s <span>45</span></div>
+                <div class="format-token">A <span>PM</span></div>
+                <div class="format-token">a <span>pm</span></div>
+            </div>
+
+            <pre class="code-block">D().format('YYYY-MM-DD')           // '2025-12-03'
+D().format('MMMM D, YYYY')          // 'December 3, 2025'
+D().format('dddd, MMMM Do YYYY')    // 'Wednesday, December 3rd 2025'
+D().format('h:mm A')                // '2:30 PM'
+D().format('HH:mm:ss')              // '14:30:45'
+D().format('MMM D, YYYY h:mm A')    // 'Dec 3, 2025 2:30 PM'
+
+// ISO format
+D().toISOString()                   // '2025-12-03T14:30:45.000Z'
+
+// Unix timestamp
+D().unix()                          // 1733236245</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It</h4>
+                <input type="text" id="format-input" class="form-input mb-3" value="MMMM D, YYYY h:mm A"
+                       placeholder="Enter format string">
+                <div class="flex gap-2 flex-wrap mb-3">
+                    <button class="btn btn-outline btn-sm" data-format="YYYY-MM-DD">YYYY-MM-DD</button>
+                    <button class="btn btn-outline btn-sm" data-format="MMMM D, YYYY">MMMM D, YYYY</button>
+                    <button class="btn btn-outline btn-sm" data-format="dddd, MMM D">dddd, MMM D</button>
+                    <button class="btn btn-outline btn-sm" data-format="h:mm A">h:mm A</button>
+                    <button class="btn btn-primary btn-sm" id="format-btn">Format</button>
+                </div>
+                <div class="demo-result" id="format-result">Click a format or enter your own</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manipulation -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Manipulation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Add, subtract, and modify dates with a chainable API.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">add()</span>
+                <span class="method-item">subtract()</span>
+                <span class="method-item">startOf()</span>
+                <span class="method-item">endOf()</span>
+                <span class="method-item">set()</span>
+                <span class="method-item">clone()</span>
+            </div>
+
+            <pre class="code-block">// Add time
+D().add(7, 'days').format('MMM D')
+D().add(1, 'month').format('MMM D')
+D().add(2, 'hours').format('h:mm A')
+
+// Subtract time
+D().subtract(1, 'week').format('MMM D')
+D().subtract(3, 'months').format('MMM YYYY')
+
+// Units: years, months, weeks, days, hours, minutes, seconds
+
+// Start/end of period
+D().startOf('day')     // 00:00:00.000
+D().startOf('month')   // First day of month
+D().startOf('year')    // January 1st
+D().endOf('day')       // 23:59:59.999
+D().endOf('month')     // Last day of month
+
+// Set specific values
+D().set('year', 2030)
+D().set('month', 0)    // January (0-indexed)
+D().set('date', 15)
+
+// Chain operations
+D()
+    .add(1, 'month')
+    .startOf('month')
+    .format('MMMM D, YYYY')
+
+// Clone to avoid mutation
+const date = D('2025-06-15');
+const nextMonth = date.clone().add(1, 'month');</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It</h4>
+                <p class="text-sm text-muted mb-3">Starting from: <strong id="manip-base"></strong></p>
+                <div class="flex gap-2 flex-wrap mb-3">
+                    <button class="btn btn-outline btn-sm" data-manip="add-7-days">+7 days</button>
+                    <button class="btn btn-outline btn-sm" data-manip="add-1-month">+1 month</button>
+                    <button class="btn btn-outline btn-sm" data-manip="sub-1-week">-1 week</button>
+                    <button class="btn btn-outline btn-sm" data-manip="startOf-month">startOf('month')</button>
+                    <button class="btn btn-outline btn-sm" data-manip="endOf-month">endOf('month')</button>
+                    <button class="btn btn-outline btn-sm" data-manip="startOf-year">startOf('year')</button>
+                </div>
+                <div class="demo-result" id="manip-result">Click a button to manipulate the date</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Getters -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Getters & Setters</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Get and set individual date/time components.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">year()</span>
+                <span class="method-item">month()</span>
+                <span class="method-item">date()</span>
+                <span class="method-item">day()</span>
+                <span class="method-item">hour()</span>
+                <span class="method-item">minute()</span>
+                <span class="method-item">second()</span>
+                <span class="method-item">millisecond()</span>
+                <span class="method-item">dayOfYear()</span>
+                <span class="method-item">week()</span>
+                <span class="method-item">quarter()</span>
+            </div>
+
+            <pre class="code-block">const d = D('2025-12-25T14:30:45');
+
+// Getters (no argument)
+d.year()        // 2025
+d.month()       // 11 (December, 0-indexed)
+d.date()        // 25
+d.day()         // 4 (Thursday, 0=Sunday)
+d.hour()        // 14
+d.minute()      // 30
+d.second()      // 45
+d.dayOfYear()   // 359
+d.week()        // 52
+d.quarter()     // 4
+
+// Setters (with argument)
+d.year(2030)
+d.month(5)      // June
+d.date(1)
+d.hour(9)
+
+// Get native Date object
+d.toDate()      // Returns Date instance
+
+// Get as object
+d.toObject()
+// { year: 2025, month: 11, date: 25, ... }</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Current Date Components</h4>
+                <div class="grid grid-cols-4 gap-3" id="getters-display">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Relative Time -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Relative Time</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Display human-readable relative time strings.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">fromNow()</span>
+                <span class="method-item">from()</span>
+                <span class="method-item">toNow()</span>
+                <span class="method-item">to()</span>
+            </div>
+
+            <pre class="code-block">// Time from now
+D().subtract(5, 'minutes').fromNow()  // 'a few minutes ago'
+D().subtract(2, 'hours').fromNow()    // '2 hours ago'
+D().subtract(3, 'days').fromNow()     // '3 days ago'
+D().add(1, 'week').fromNow()          // 'in 7 days'
+
+// Time from another date
+const past = D('2025-01-01');
+const future = D('2025-12-31');
+past.from(future)                      // '12 months ago'
+future.from(past)                      // 'in 12 months'
+
+// Time to now/another date
+D().add(2, 'weeks').toNow()            // 'in 2 weeks'
+past.to(future)                        // 'in 12 months'</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It</h4>
+                <div class="flex gap-2 flex-wrap mb-3">
+                    <button class="btn btn-outline btn-sm" data-relative="-5-minutes">5 minutes ago</button>
+                    <button class="btn btn-outline btn-sm" data-relative="-2-hours">2 hours ago</button>
+                    <button class="btn btn-outline btn-sm" data-relative="-3-days">3 days ago</button>
+                    <button class="btn btn-outline btn-sm" data-relative="-2-weeks">2 weeks ago</button>
+                    <button class="btn btn-outline btn-sm" data-relative="1-hour">in 1 hour</button>
+                    <button class="btn btn-outline btn-sm" data-relative="7-days">in 7 days</button>
+                    <button class="btn btn-outline btn-sm" data-relative="1-month">in 1 month</button>
+                </div>
+                <div class="demo-result" id="relative-result">Click a button to see relative time</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Comparison & Difference</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Compare dates and calculate differences.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">isBefore()</span>
+                <span class="method-item">isAfter()</span>
+                <span class="method-item">isSame()</span>
+                <span class="method-item">isSameOrBefore()</span>
+                <span class="method-item">isSameOrAfter()</span>
+                <span class="method-item">isBetween()</span>
+                <span class="method-item">diff()</span>
+            </div>
+
+            <pre class="code-block">const jan = D('2025-01-15');
+const dec = D('2025-12-25');
+
+// Comparison
+jan.isBefore(dec)                    // true
+dec.isAfter(jan)                     // true
+jan.isSame(jan.clone())              // true
+
+// Compare by unit
+D('2025-01-15').isSame('2025-01-20', 'month')  // true
+D('2025-01-15').isSame('2025-02-15', 'year')   // true
+
+// Range check
+const mid = D('2025-06-15');
+mid.isBetween(jan, dec)              // true
+mid.isBetween(jan, dec, 'month')     // true
+
+// Difference
+dec.diff(jan, 'days')                // 344
+dec.diff(jan, 'months')              // 11
+dec.diff(jan, 'weeks')               // 49
+
+// Float difference
+dec.diff(jan, 'months', true)        // 11.33...</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It - Date Difference</h4>
+                <div class="grid grid-cols-2 gap-4 mb-3">
+                    <div>
+                        <label class="form-label">Start Date</label>
+                        <input type="date" id="diff-start" class="form-input" value="2025-01-01">
+                    </div>
+                    <div>
+                        <label class="form-label">End Date</label>
+                        <input type="date" id="diff-end" class="form-input" value="2025-12-31">
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-sm mb-3" id="diff-calc">Calculate Difference</button>
+                <div class="demo-result" id="diff-result">Enter dates and click Calculate</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Validation -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Validation & Utilities</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Validate dates and use helpful static methods.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">isValid()</span>
+                <span class="method-item">isLeapYear()</span>
+                <span class="method-item">daysInMonth()</span>
+                <span class="method-item">dates.isValid()</span>
+                <span class="method-item">dates.min()</span>
+                <span class="method-item">dates.max()</span>
+            </div>
+
+            <pre class="code-block">// Instance validation
+D('2025-12-25').isValid()            // true
+D('invalid').isValid()               // false
+
+// Static validation
+Domma.dates.isValid('2025-02-30')    // false (Feb 30 doesn't exist)
+Domma.dates.isValid('2025-12-25')    // true
+
+// Leap year check
+D('2024-01-01').isLeapYear()         // true
+D('2025-01-01').isLeapYear()         // false
+
+// Days in month
+D('2025-02-01').daysInMonth()        // 28
+D('2024-02-01').daysInMonth()        // 29 (leap year)
+D('2025-12-01').daysInMonth()        // 31
+
+// Min/Max of dates
+const dates = [D('2025-03-15'), D('2025-01-01'), D('2025-06-20')];
+Domma.dates.min(dates).format('MMM D')  // 'Jan 1'
+Domma.dates.max(dates).format('MMM D')  // 'Jun 20'</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It</h4>
+                <div class="flex gap-2 flex-wrap mb-3">
+                    <button class="btn btn-outline btn-sm" data-valid="valid">isValid('2025-12-25')</button>
+                    <button class="btn btn-outline btn-sm" data-valid="invalid">isValid('2025-02-30')</button>
+                    <button class="btn btn-outline btn-sm" data-valid="leap2024">isLeapYear(2024)</button>
+                    <button class="btn btn-outline btn-sm" data-valid="leap2025">isLeapYear(2025)</button>
+                    <button class="btn btn-outline btn-sm" data-valid="days">daysInMonth(Feb 2025)</button>
+                </div>
+                <div class="demo-result" id="valid-result">Click a button to see result</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Method Reference -->
+    <section class="card">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Complete Method Reference</h2>
+        </div>
+        <div class="card-body">
+            <h4 class="category-title">Instance Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">format()</span>
+                <span class="method-item">toISOString()</span>
+                <span class="method-item">toDate()</span>
+                <span class="method-item">toObject()</span>
+                <span class="method-item">unix()</span>
+                <span class="method-item">valueOf()</span>
+                <span class="method-item">clone()</span>
+                <span class="method-item">add()</span>
+                <span class="method-item">subtract()</span>
+                <span class="method-item">startOf()</span>
+                <span class="method-item">endOf()</span>
+                <span class="method-item">set()</span>
+                <span class="method-item">year()</span>
+                <span class="method-item">month()</span>
+                <span class="method-item">date()</span>
+                <span class="method-item">day()</span>
+                <span class="method-item">hour()</span>
+                <span class="method-item">minute()</span>
+                <span class="method-item">second()</span>
+                <span class="method-item">millisecond()</span>
+                <span class="method-item">dayOfYear()</span>
+                <span class="method-item">week()</span>
+                <span class="method-item">quarter()</span>
+                <span class="method-item">daysInMonth()</span>
+                <span class="method-item">isLeapYear()</span>
+                <span class="method-item">isValid()</span>
+                <span class="method-item">isBefore()</span>
+                <span class="method-item">isAfter()</span>
+                <span class="method-item">isSame()</span>
+                <span class="method-item">isSameOrBefore()</span>
+                <span class="method-item">isSameOrAfter()</span>
+                <span class="method-item">isBetween()</span>
+                <span class="method-item">diff()</span>
+                <span class="method-item">fromNow()</span>
+                <span class="method-item">from()</span>
+                <span class="method-item">toNow()</span>
+                <span class="method-item">to()</span>
+            </div>
+
+            <h4 class="category-title">Static Methods</h4>
+            <div class="method-grid">
+                <span class="method-item">dates.now()</span>
+                <span class="method-item">dates.parse()</span>
+                <span class="method-item">dates.isValid()</span>
+                <span class="method-item">dates.min()</span>
+                <span class="method-item">dates.max()</span>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+    // Live clock
+    function updateClock() {
+        const now = D();
+        $('#live-time').text(now.format('HH:mm:ss'));
+        $('#live-date').text(now.format('dddd, MMMM D, YYYY'));
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Update base date display
+    $('#manip-base').text(D().format('MMMM D, YYYY'));
+
+    // Create demos
+    $('[data-create]').on('click', function () {
+        const type = $(this).data('create');
+        let result, code;
+
+        switch (type) {
+            case 'now':
+                result = D();
+                code = "D()";
+                break;
+            case 'string':
+                result = D('2025-12-25');
+                code = "D('2025-12-25')";
+                break;
+            case 'timestamp':
+                result = D(1735084800000);
+                code = "D(1735084800000)";
+                break;
+            case 'static':
+                result = Domma.dates.now();
+                code = "Domma.dates.now()";
+                $('#create-result').text(`${code} = ${result}`);
+                return;
+        }
+
+        $('#create-result').text(`${code}.format('MMMM D, YYYY HH:mm:ss')\n= "${result.format('MMMM D, YYYY HH:mm:ss')}"`);
+    });
+
+    // Format demos
+    $('[data-format]').on('click', function () {
+        const format = $(this).data('format');
+        $('#format-input').val(format);
+        $('#format-btn').trigger('click');
+    });
+
+    $('#format-btn').on('click', function () {
+        const format = $('#format-input').val();
+        const result = D().format(format);
+        $('#format-result').text(`D().format('${format}')\n= "${result}"`);
+    });
+
+    // Manipulation demos
+    $('[data-manip]').on('click', function () {
+        const manip = $(this).data('manip');
+        let result, code;
+        const base = D();
+
+        switch (manip) {
+            case 'add-7-days':
+                result = base.clone().add(7, 'days');
+                code = "D().add(7, 'days')";
+                break;
+            case 'add-1-month':
+                result = base.clone().add(1, 'month');
+                code = "D().add(1, 'month')";
+                break;
+            case 'sub-1-week':
+                result = base.clone().subtract(1, 'week');
+                code = "D().subtract(1, 'week')";
+                break;
+            case 'startOf-month':
+                result = base.clone().startOf('month');
+                code = "D().startOf('month')";
+                break;
+            case 'endOf-month':
+                result = base.clone().endOf('month');
+                code = "D().endOf('month')";
+                break;
+            case 'startOf-year':
+                result = base.clone().startOf('year');
+                code = "D().startOf('year')";
+                break;
+        }
+
+        $('#manip-result').text(`${code}.format('MMMM D, YYYY HH:mm:ss')\n= "${result.format('MMMM D, YYYY HH:mm:ss')}"`);
+    });
+
+    // Getters display
+    function updateGetters() {
+        const now = D();
+        const getters = [
+            ['year()', now.year()],
+            ['month()', now.month()],
+            ['date()', now.date()],
+            ['day()', now.day()],
+            ['hour()', now.hour()],
+            ['minute()', now.minute()],
+            ['second()', now.second()],
+            ['dayOfYear()', now.dayOfYear()],
+            ['week()', now.week()],
+            ['quarter()', now.quarter()],
+            ['daysInMonth()', now.daysInMonth()],
+            ['isLeapYear()', now.isLeapYear()]
+        ];
+
+        $('#getters-display').html(getters.map(([name, value]) =>
+            `<div class="p-3 bg-white rounded border">
+                    <div class="text-sm text-muted">${name}</div>
+                    <div class="font-semibold">${value}</div>
+                </div>`
+        ).join(''));
+    }
+
+    updateGetters();
+
+    // Relative time demos
+    $('[data-relative]').on('click', function () {
+        const rel = $(this).data('relative');
+        const parts = rel.split('-');
+        const negative = parts[0] === '';
+        const amount = parseInt(negative ? parts[1] : parts[0]);
+        const unit = negative ? parts[2] : parts[1];
+
+        let result;
+        if (negative) {
+            result = D().subtract(amount, unit);
+        } else {
+            result = D().add(amount, unit);
+        }
+
+        const fromNow = result.fromNow();
+        const formatted = result.format('MMMM D, YYYY h:mm A');
+        $('#relative-result').text(`Date: ${formatted}\nfromNow(): "${fromNow}"`);
+    });
+
+    // Diff calculator
+    $('#diff-calc').on('click', function () {
+        const start = D($('#diff-start').val());
+        const end = D($('#diff-end').val());
+
+        const days = end.diff(start, 'days');
+        const weeks = end.diff(start, 'weeks');
+        const months = end.diff(start, 'months');
+        const years = end.diff(start, 'years', true).toFixed(2);
+
+        $('#diff-result').text(
+            `Days: ${days}\n` +
+            `Weeks: ${weeks}\n` +
+            `Months: ${months}\n` +
+            `Years: ${years}`
+        );
+    });
+
+    // Validation demos
+    $('[data-valid]').on('click', function () {
+        const type = $(this).data('valid');
+        let result, code;
+
+        switch (type) {
+            case 'valid':
+                result = D('2025-12-25').isValid();
+                code = "D('2025-12-25').isValid()";
+                break;
+            case 'invalid':
+                result = D('2025-02-30').isValid();
+                code = "D('2025-02-30').isValid()";
+                break;
+            case 'leap2024':
+                result = D('2024-01-01').isLeapYear();
+                code = "D('2024-01-01').isLeapYear()";
+                break;
+            case 'leap2025':
+                result = D('2025-01-01').isLeapYear();
+                code = "D('2025-01-01').isLeapYear()";
+                break;
+            case 'days':
+                result = D('2025-02-01').daysInMonth();
+                code = "D('2025-02-01').daysInMonth()";
+                break;
+        }
+
+        $('#valid-result').text(`${code} = ${result}`);
+    });
+</script>
+</body>
+</html>
