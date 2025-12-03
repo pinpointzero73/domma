@@ -30,7 +30,8 @@ Domma('button').click(() => {
 
 ## JSON Configuration
 
-Domma allows you to define your application's behavior using a JSON object. This is great for separating logic from configuration.
+Domma allows you to define your application's behaviour using a JSON object. This is great for separating logic from
+configuration.
 
 ```javascript
 const config = {

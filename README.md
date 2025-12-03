@@ -1,82 +1,316 @@
-# Domma 🚀
+# Domma
 
-A lightweight JavaScript toolkit combining DOM manipulation, HTTP requests, and utilities with a unique JSON-based configuration engine.
+**D**ynamic **O**bject **M**anipulation & **M**odeling **A**PI
+
+A lightweight, zero-dependency JavaScript framework combining jQuery-style DOM manipulation, Lodash utilities, and
+modern UI components in one cohesive package.
 
 ## Features
 
-- **jQuery-like DOM manipulation**: Select, modify, and interact with DOM elements
-- **Axios-like HTTP client**: Simple async HTTP requests
-- **Lodash-like utilities**: Common utility functions
-- **JSON Configuration**: Define element behavior declaratively
+- **DOM Manipulation** - jQuery-compatible API with 90+ methods
+- **Utilities** - 120+ Lodash-compatible utility functions
+- **Dates** - Moment.js-style chainable date manipulation
+- **Models** - Reactive data models with pub/sub events
+- **Elements** - UI components (modals, tabs, accordions, tooltips)
+- **Tables** - DataTable-like functionality (sort, filter, paginate, export)
+- **HTTP Client** - Simple async HTTP requests
+- **Config Engine** - Declarative JSON-based behavior configuration
 
 ## Installation
 
 **Browser (UMD):**
 
 ```html
-
 <script src="dist/domma.min.js"></script>
 ```
 
 **ES Module:**
 
 ```javascript
-import Domma from './dist/domma.esm.js';
+import Domma, { $, _, M, D } from './dist/domma.esm.js';
 ```
+
+## Short Aliases
+
+| Namespace | Full Path      | Alias | Description                   |
+|-----------|----------------|-------|-------------------------------|
+| DOM       | `Domma()`      | `$`   | jQuery-style DOM manipulation |
+| Utils     | `Domma.utils`  | `_`   | Lodash-style utilities        |
+| Models    | `Domma.models` | `M`   | Reactive models & pub/sub     |
+| Dates     | `Domma.dates`  | `D`   | Date manipulation             |
 
 ## Quick Start
 
 ```javascript
-import Domma from './dist/domma.esm.js';
+// DOM manipulation (jQuery-style)
+$('.btn').on('click', () => alert('Clicked!'));
+$('#box').addClass('active').css({color: 'blue'});
 
-// Select and modify elements
-Domma('#myElement').text('Hello World!');
+// Utilities (Lodash-style)
+const grouped = _.groupBy(users, 'department');
+const unique = _.uniq([1, 2, 2, 3]);
 
-// Handle events
-Domma('button').click(() => alert('Clicked!'));
+// Dates (Moment-style)
+const nextWeek = D().add(7, 'days').format('MMMM D, YYYY');
+const timeAgo = D('2025-01-01').fromNow();
 
-// Make HTTP requests
-const data = await Domma.http.get('https://api.example.com/data');
+// Reactive Models
+const user = M.create({
+    name: {type: 'string', required: true},
+    email: {type: 'string', validate: v => v.includes('@')}
+});
+M.bind(user, 'name', '#name-input', {twoWay: true});
 
-// Use utilities
-const merged = Domma.utils.merge({}, obj1, obj2);
+// Pub/Sub Events
+M.on('cart:add', (item) => updateCart(item));
+M.emit('cart:add', {id: 1, name: 'Widget'});
+
+// UI Components
+const modal = Domma.elements.modal('#my-modal', {backdrop: true});
+modal.open();
+
+// Interactive Tables
+const table = Domma.tables.create('#users', {
+    data: usersArray,
+    columns: [
+        {key: 'name', title: 'Name', sortable: true},
+        {key: 'email', title: 'Email', sortable: true}
+    ],
+    pagination: true,
+    pageSize: 25
+});
 ```
 
-## JSON Configuration
+## Config Engine
 
-Define your app's behavior with a simple JSON object:
+Define behavior declaratively with JSON:
 
 ```javascript
-Domma.setup({
+$.setup({
     '#header': {
         initial: {
-            css: { color: 'blue' },
+            css: { backgroundColor: '#333' },
             text: 'Welcome!'
         },
         events: {
-            click: {
-                addClass: 'active'
-            }
+            click: (e, $el) => $el.toggleClass('active')
         }
+    },
+    '#my-modal': {
+        component: 'modal',
+        options: { backdrop: true, keyboard: true }
+    },
+    '.product-card': {
+        component: 'card',
+        options: { hover: true }
     }
 });
 ```
 
-## Documentation
+## Namespaces
 
-- [Getting Started](docs/GettingStarted.md)
-- [API Reference](docs/API.md)
+### DOM (`$` or `Domma`)
 
-## Demo
+jQuery-compatible DOM manipulation with 90+ methods.
 
-Open `demo.html` in your browser to see Domma in action with:
-- Interactive color switcher
-- HTTP request examples
-- Todo list application
+```javascript
+// Selecting & traversing
+$('.items').find('.active').parent();
 
-## Testing
+// Manipulation
+$('#list').append('<li>New item</li>');
+$('.box').addClass('highlight').css({ opacity: 0.5 });
 
-Open `tests/test.html` in your browser to run the test suite.
+// Events
+$('button').on('click', handler);
+$('#form').submit((e) => e.preventDefault());
+
+// Effects
+$('#box').fadeIn(400).slideUp(300);
+```
+
+### Utils (`_` or `Domma.utils`)
+
+120+ Lodash-compatible utility functions.
+
+```javascript
+// Arrays
+_.chunk([1, 2, 3, 4], 2);      // [[1, 2], [3, 4]]
+_.uniq([1, 1, 2, 2, 3]);       // [1, 2, 3]
+_.difference([1, 2, 3], [2]);  // [1, 3]
+
+// Collections
+_.groupBy(users, 'role');
+_.sortBy(items, 'price');
+_.filter(users, { active: true });
+
+// Objects
+_.get(obj, 'user.address.city', 'N/A');
+_.pick(user, ['name', 'email']);
+_.merge({}, defaults, options);
+
+// Functions
+_.debounce(search, 300);
+_.throttle(scroll, 100);
+_.memoize(expensive);
+
+// Strings
+_.camelCase('hello world');    // 'helloWorld'
+_.kebabCase('helloWorld');     // 'hello-world'
+_.truncate(text, { length: 50 });
+```
+
+### Dates (`D` or `Domma.dates`)
+
+Moment.js-style chainable date manipulation.
+
+```javascript
+// Create
+D();                           // Now
+D('2025-12-25');              // Parse string
+D(timestamp);                  // From timestamp
+
+// Manipulate
+D().add(7, 'days');
+D().subtract(1, 'month');
+D().startOf('week');
+D().endOf('month');
+
+// Format
+D().format('MMMM D, YYYY');    // 'December 3, 2025'
+D().format('h:mm A');          // '2:30 PM'
+
+// Relative time
+D().subtract(5, 'minutes').fromNow();  // 'a few minutes ago'
+
+// Compare
+D('2025-01-01').isBefore('2025-12-31');
+D().diff(otherDate, 'days');
+```
+
+### Models (`M` or `Domma.models`)
+
+Reactive data models with pub/sub events.
+
+```javascript
+// Pub/Sub
+M.on('user:login', (data) => console.log(data));
+M.emit('user:login', { username: 'alice' });
+M.off('user:login', handler);
+
+// Reactive Models
+const user = M.create({
+    name: { type: 'string', required: true },
+    age: { type: 'number', min: 0, max: 150 }
+}, { name: 'Alice', age: 25 });
+
+user.get('name');
+user.set('name', 'Bob');
+user.onChange((field, newVal, oldVal) => {});
+user.validate();
+
+// DOM Binding
+M.bind(user, 'name', '#name-input', { twoWay: true });
+M.bind(user, 'name', '#display', { format: v => `Hello, ${v}!` });
+```
+
+### Elements (`Domma.elements`)
+
+UI components with JavaScript interactivity.
+
+```javascript
+// Modal
+const modal = Domma.elements.modal('#dialog', {
+    backdrop: true,
+    keyboard: true,
+    onOpen: () => console.log('Opened')
+});
+modal.open();
+modal.close();
+
+// Tabs
+const tabs = Domma.elements.tabs('#product-tabs', {
+    activeIndex: 0,
+    onChange: (index) => loadContent(index)
+});
+
+// Accordion
+const accordion = Domma.elements.accordion('#faq', {
+    multiExpand: false
+});
+
+// Tooltip
+Domma.elements.tooltip('.help-icon', {
+    content: 'Click for help',
+    position: 'top'
+});
+```
+
+### Tables (`Domma.tables`)
+
+DataTable-like functionality.
+
+```javascript
+const table = Domma.tables.create('#users', {
+    data: usersArray,
+    columns: [
+        { key: 'name', title: 'Name', sortable: true },
+        { key: 'email', title: 'Email', editable: true },
+        { key: 'role', title: 'Role', filterable: true }
+    ],
+    pagination: true,
+    pageSize: 25,
+    selectable: true
+});
+
+// Sorting & filtering
+table.sort('name', 'asc');
+table.search('alice');
+table.filter('role', 'Admin');
+
+// Pagination
+table.page(2);
+table.nextPage();
+
+// Selection
+table.selectAll();
+const selected = table.getSelected();
+
+// Export
+table.download('csv', 'users.csv');
+table.toJSON();
+```
+
+## Demo & Showcase
+
+```bash
+# Run the demo
+npm run demo
+
+# Run the showcase (comprehensive examples)
+npm run showcase
+```
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Build
+npm run build
+
+# Run tests
+npm test
+```
+
+## Bundle Size
+
+~125KB minified (includes all namespaces)
+
+## Browser Support
+
+Modern browsers (ES6+)
 
 ## License
 
