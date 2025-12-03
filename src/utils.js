@@ -2473,5 +2473,101 @@ export const utils = {
             return string.match(pattern) || [];
         }
         return string.match(/[a-zA-Z0-9]+/g) || [];
+    },
+
+    /**
+     * Returns a formatted string using printf-style format specifiers.
+     * Supports: %s (string), %d/%i (integer), %f (float), %o (object), %j (JSON), %% (literal %)
+     * Also supports width, precision, and flags: %10s, %-10s, %010d, %.2f, %10.2f
+     * @param {string} format - The format string
+     * @param {...*} args - Values to substitute
+     * @returns {string}
+     */
+    sprintf(format, ...args) {
+        if (!format) return '';
+
+        let argIndex = 0;
+
+        return format.replace(
+            /%(?:(\d+)\$)?([+-])?(\d+)?(?:\.(\d+))?([sdifojx%])/g,
+            (match, position, flags, width, precision, specifier) => {
+                // Handle %% escape
+                if (specifier === '%') return '%';
+
+                // Get the argument (positional or sequential)
+                const index = position ? parseInt(position, 10) - 1 : argIndex++;
+                const arg = args[index];
+
+                // Handle undefined/null
+                if (arg === undefined) return match;
+                if (arg === null) return 'null';
+
+                let result;
+
+                switch (specifier) {
+                    case 's': // String
+                        result = String(arg);
+                        break;
+                    case 'd': // Integer (decimal)
+                    case 'i': // Integer
+                        result = String(parseInt(arg, 10));
+                        break;
+                    case 'f': // Float
+                        const num = parseFloat(arg);
+                        result = precision !== undefined
+                            ? num.toFixed(parseInt(precision, 10))
+                            : String(num);
+                        break;
+                    case 'o': // Object (simple representation)
+                        result = Object.prototype.toString.call(arg);
+                        break;
+                    case 'j': // JSON
+                        try {
+                            result = JSON.stringify(arg);
+                        } catch (e) {
+                            result = '[Circular]';
+                        }
+                        break;
+                    case 'x': // Hexadecimal
+                        result = parseInt(arg, 10).toString(16);
+                        break;
+                    default:
+                        result = String(arg);
+                }
+
+                // Apply width padding
+                if (width) {
+                    const w = parseInt(width, 10);
+                    const padChar = flags === '0' ? '0' : ' ';
+                    if (flags === '-') {
+                        // Left-align
+                        result = result.padEnd(w, ' ');
+                    } else {
+                        // Right-align (default)
+                        result = result.padStart(w, padChar);
+                    }
+                }
+
+                // Apply + flag for positive numbers
+                if (flags === '+' && (specifier === 'd' || specifier === 'i' || specifier === 'f')) {
+                    const numVal = parseFloat(result);
+                    if (numVal >= 0 && !result.startsWith('+')) {
+                        result = '+' + result;
+                    }
+                }
+
+                return result;
+            }
+        );
+    },
+
+    /**
+     * Alias for sprintf - returns formatted string.
+     * @param {string} format - The format string
+     * @param {...*} args - Values to substitute
+     * @returns {string}
+     */
+    format(format, ...args) {
+        return this.sprintf(format, ...args);
     }
 };

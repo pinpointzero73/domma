@@ -1,4 +1,5 @@
-import { dom } from './dom.js';
+import {dom} from './dom.js';
+import {elements} from './elements.js';
 
 export const configEngine = {
     process(config) {
@@ -6,49 +7,82 @@ export const configEngine = {
 
         Object.keys(config).forEach(selector => {
             const rules = config[selector];
-            const elements = dom(selector);
+            const domElements = dom(selector);
+
+            // Component initialization
+            if (rules.component) {
+                this.initComponent(selector, rules.component, rules.options || {});
+            }
 
             if (rules.initial) {
-                this.applyProperties(elements, rules.initial);
+                this.applyProperties(domElements, rules.initial);
             }
 
             if (rules.events) {
-                this.bindEvents(elements, rules.events);
+                this.bindEvents(domElements, rules.events);
             }
         });
     },
 
-    applyProperties(elements, properties) {
+    initComponent(selector, componentType, options) {
+        const componentMap = {
+            card: elements.card,
+            modal: elements.modal,
+            tabs: elements.tabs,
+            accordion: elements.accordion,
+            tooltip: elements.tooltip
+        };
+
+        const factory = componentMap[componentType];
+        if (factory) {
+            return factory.call(elements, selector, options);
+        } else {
+            console.warn(`Unknown component type: ${componentType}`);
+        }
+    },
+
+    applyProperties(domElements, properties) {
         Object.keys(properties).forEach(prop => {
             if (prop === 'css') {
-                elements.css(properties[prop]);
+                domElements.css(properties[prop]);
             } else if (prop === 'text') {
-                elements.text(properties[prop]);
+                domElements.text(properties[prop]);
             } else if (prop === 'html') {
-                elements.html(properties[prop]);
+                domElements.html(properties[prop]);
             } else if (prop === 'addClass') {
-                elements.addClass(properties[prop]);
+                domElements.addClass(properties[prop]);
             } else if (prop === 'removeClass') {
-                elements.removeClass(properties[prop]);
+                domElements.removeClass(properties[prop]);
             }
         });
     },
 
-    bindEvents(elements, events) {
+    bindEvents(domElements, events) {
         Object.keys(events).forEach(event => {
             const actions = events[event];
-            elements.on(event, (e) => {
-                this.executeActions(e.target, actions);
+            domElements.on(event, (e) => {
+                this.executeActions(e, actions);
             });
         });
     },
 
-    executeActions(target, actions) {
-        // Actions can be an array or a single object
+    executeActions(event, actions) {
+        // Actions can be a function, an array, or a single object
+        if (typeof actions === 'function') {
+            actions.call(event.target, event, dom(event.target));
+            return;
+        }
+
         const actionList = Array.isArray(actions) ? actions : [actions];
-        const $target = dom(target);
+        const $target = dom(event.target);
 
         actionList.forEach(action => {
+            // Support function in action array
+            if (typeof action === 'function') {
+                action.call(event.target, event, $target);
+                return;
+            }
+
             // If action has a target selector, use that, otherwise use the event target
             const $el = action.target ? dom(action.target) : $target;
 
@@ -57,6 +91,7 @@ export const configEngine = {
             if (action.html) $el.html(action.html);
             if (action.addClass) $el.addClass(action.addClass);
             if (action.removeClass) $el.removeClass(action.removeClass);
+            if (action.toggleClass) $el.toggleClass(action.toggleClass);
             if (action.log) console.log(action.log);
         });
     }
