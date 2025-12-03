@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## What is Domma?
+
+**D**ynamic **O**bject **M**anipulation & **M**odeling **A**PI
+
+A lightweight, zero-dependency JavaScript framework combining jQuery-style DOM manipulation, Lodash utilities, and
+modern UI components.
+
 ## Commands
 
 **Build:**
@@ -12,62 +19,155 @@ npm run build
 
 Outputs minified + obfuscated bundles to `dist/`.
 
-**Run tests:**
+**Demo:**
+
+```bash
+npm run demo      # Basic demo
+npm run showcase  # Comprehensive showcase
+```
+
+**Tests:**
 Open `tests/test.html` in a browser.
 
 ## Architecture
 
-Domma is a lightweight JavaScript toolkit with four core modules exposed through a single entry point (`src/index.js`):
+Domma has six core modules exposed through `src/index.js`:
 
-- **dom.js** - Full jQuery-compatible DOM API. The main `Domma(selector)` function returns a `DommaCollection` with chainable methods:
-  - **Traversal** (22): `find()`, `children()`, `parent()`, `parents()`, `closest()`, `siblings()`, `next()`, `prev()`, `nextAll()`, `prevAll()`, `first()`, `last()`, `eq()`, `get()`, `filter()`, `not()`, `is()`, `has()`, `add()`, `contents()`, `toArray()`, `index()`
-  - **Content** (3): `html()`, `text()`, `val()`
-  - **Attributes** (6): `attr()`, `removeAttr()`, `prop()`, `removeProp()`, `data()`, `removeData()`
-  - **CSS/Classes** (5): `css()`, `addClass()`, `removeClass()`, `toggleClass()`, `hasClass()`
-  - **DOM Manipulation** (16): `append()`, `prepend()`, `after()`, `before()`, `appendTo()`, `prependTo()`, `insertAfter()`, `insertBefore()`, `wrap()`, `wrapAll()`, `wrapInner()`, `unwrap()`, `remove()`, `detach()`, `empty()`, `clone()`, `replaceWith()`, `replaceAll()`
-  - **Events** (22+): `on()` (with delegation), `off()`, `one()`, `trigger()`, `hover()` + shortcuts (`click`, `dblclick`, `focus`, `blur`, `change`, `submit`, `keydown`, `keyup`, `keypress`, `mouseenter`, `mouseleave`, `mouseover`, `mouseout`, `mousedown`, `mouseup`, `mousemove`, `scroll`, `resize`)
-  - **Effects** (12): `show()`, `hide()`, `toggle()`, `fadeIn()`, `fadeOut()`, `fadeToggle()`, `fadeTo()`, `slideUp()`, `slideDown()`, `slideToggle()`, `animate()`, `stop()`, `delay()`
-  - **Dimensions** (11): `width()`, `height()`, `innerWidth()`, `innerHeight()`, `outerWidth()`, `outerHeight()`, `offset()`, `position()`, `scrollTop()`, `scrollLeft()`, `offsetParent()`
+### dom.js - jQuery-compatible DOM API
 
-- **http.js** - Fetch-based HTTP client with `get()`, `post()`, `put()`, `delete()` methods. All methods return promises resolving to JSON.
+The main `Domma(selector)` / `$(selector)` function returns a `DommaCollection` with 90+ chainable methods:
 
-- **utils.js** - 120+ Lodash-compatible utility functions:
-  - **Array** (30+): `chunk()`, `compact()`, `concat()`, `difference()`, `drop()`, `flatten()`, `flattenDeep()`, `head()`, `last()`, `initial()`, `tail()`, `nth()`, `pull()`, `pullAt()`, `remove()`, `reverse()`, `slice()`, `take()`, `uniq()`, `uniqBy()`, `without()`, `zip()`, `unzip()`, `intersection()`, `union()`, `xor()`
-  - **Collection** (20+): `each()`, `filter()`, `find()`, `findIndex()`, `groupBy()`, `keyBy()`, `map()`, `orderBy()`, `partition()`, `reduce()`, `reduceRight()`, `reject()`, `sample()`, `shuffle()`, `size()`, `some()`, `every()`, `sortBy()`, `includes()`, `countBy()`
-  - **Function** (18): `debounce()`, `throttle()`, `memoize()`, `once()`, `after()`, `before()`, `curry()`, `curryRight()`, `flip()`, `negate()`, `partial()`, `partialRight()`, `rearg()`, `spread()`, `unary()`, `wrap()`, `flow()`, `flowRight()`
-  - **Object** (30+): `get()`, `set()`, `has()`, `pick()`, `omit()`, `merge()`, `defaults()`, `defaultsDeep()`, `cloneDeep()`, `keys()`, `values()`, `entries()`, `fromEntries()`, `assign()`, `mapKeys()`, `mapValues()`, `invert()`, `invertBy()`, `findKey()`, `forOwn()`, `forIn()`, `transform()`, `update()`, `unset()`
-  - **Lang** (18): `isArray()`, `isObject()`, `isPlainObject()`, `isFunction()`, `isString()`, `isNumber()`, `isBoolean()`, `isNil()`, `isNull()`, `isUndefined()`, `isEmpty()`, `isEqual()`, `isDate()`, `isRegExp()`, `isSymbol()`, `isElement()`, `isNaN()`, `toArray()`
-  - **Math** (14): `sum()`, `sumBy()`, `mean()`, `meanBy()`, `max()`, `maxBy()`, `min()`, `minBy()`, `ceil()`, `floor()`, `round()`, `clamp()`, `inRange()`, `random()`
-  - **String** (24): `camelCase()`, `capitalize()`, `kebabCase()`, `lowerCase()`, `snakeCase()`, `startCase()`, `upperCase()`, `upperFirst()`, `lowerFirst()`, `trim()`, `trimStart()`, `trimEnd()`, `pad()`, `padStart()`, `padEnd()`, `repeat()`, `replace()`, `split()`, `startsWith()`, `endsWith()`, `truncate()`, `escape()`, `unescape()`, `words()`
+- **Traversal** (22): `find()`, `children()`, `parent()`, `parents()`, `closest()`, `siblings()`, `next()`, `prev()`,
+  `nextAll()`, `prevAll()`, `first()`, `last()`, `eq()`, `get()`, `filter()`, `not()`, `is()`, `has()`, `add()`,
+  `contents()`, `toArray()`, `index()`
+- **Content** (3): `html()`, `text()`, `val()`
+- **Attributes** (6): `attr()`, `removeAttr()`, `prop()`, `removeProp()`, `data()`, `removeData()`
+- **CSS/Classes** (5): `css()`, `addClass()`, `removeClass()`, `toggleClass()`, `hasClass()`
+- **Manipulation** (16): `append()`, `prepend()`, `after()`, `before()`, `appendTo()`, `prependTo()`, `insertAfter()`,
+  `insertBefore()`, `wrap()`, `wrapAll()`, `wrapInner()`, `unwrap()`, `remove()`, `detach()`, `empty()`, `clone()`,
+  `replaceWith()`, `replaceAll()`
+- **Events** (22+): `on()` (with delegation), `off()`, `one()`, `trigger()`, `hover()` + shortcuts
+- **Effects** (12): `show()`, `hide()`, `toggle()`, `fadeIn()`, `fadeOut()`, `fadeToggle()`, `fadeTo()`, `slideUp()`,
+  `slideDown()`, `slideToggle()`, `animate()`, `stop()`, `delay()`
+- **Dimensions** (11): `width()`, `height()`, `innerWidth()`, `innerHeight()`, `outerWidth()`, `outerHeight()`,
+  `offset()`, `position()`, `scrollTop()`, `scrollLeft()`, `offsetParent()`
 
-- **config.js** - JSON configuration engine allowing declarative DOM behaviour. `Domma.setup(config)` processes a config object where keys are selectors and values define `initial` properties and `events` with associated actions.
+### utils.js - 120+ Lodash-compatible utilities
 
-## Module Pattern
+Accessed via `Domma.utils` or `_`:
 
-All modules use ES modules. The main export pattern:
+- **Array** (30+): `chunk()`, `compact()`, `difference()`, `flatten()`, `flattenDeep()`, `uniq()`, `uniqBy()`, `zip()`,
+  `intersection()`, `union()`, etc.
+- **Collection** (20+): `each()`, `filter()`, `find()`, `groupBy()`, `keyBy()`, `map()`, `orderBy()`, `sortBy()`,
+  `reduce()`, `partition()`, etc.
+- **Function** (18): `debounce()`, `throttle()`, `memoize()`, `once()`, `curry()`, `partial()`, `flow()`, etc.
+- **Object** (30+): `get()`, `set()`, `has()`, `pick()`, `omit()`, `merge()`, `cloneDeep()`, `mapKeys()`, `mapValues()`,
+  etc.
+- **Lang** (18): `isArray()`, `isObject()`, `isPlainObject()`, `isFunction()`, `isEmpty()`, `isEqual()`, etc.
+- **Math** (14): `sum()`, `mean()`, `max()`, `min()`, `clamp()`, `random()`, etc.
+- **String** (24): `camelCase()`, `kebabCase()`, `snakeCase()`, `capitalize()`, `truncate()`, `template()`, etc.
+
+### dates.js - Moment.js-style date manipulation
+
+Accessed via `Domma.dates` or `D()`:
+
+- **Create**: `D()`, `D('2025-12-25')`, `D(timestamp)`
+- **Manipulate**: `add()`, `subtract()`, `startOf()`, `endOf()`, `set()`
+- **Format**: `format()`, `toISOString()`, `unix()`
+- **Getters**: `year()`, `month()`, `date()`, `day()`, `hour()`, `minute()`, `second()`
+- **Compare**: `isBefore()`, `isAfter()`, `isSame()`, `isBetween()`, `diff()`
+- **Relative**: `fromNow()`, `from()`, `toNow()`, `to()`
+- **Static**: `dates.now()`, `dates.parse()`, `dates.isValid()`, `dates.min()`, `dates.max()`
+
+### models.js - Reactive models & pub/sub
+
+Accessed via `Domma.models` or `M`:
+
+- **Pub/Sub**: `subscribe()`/`on()`, `publish()`/`emit()`, `unsubscribe()`/`off()`, `once()`
+- **Model Factory**: `create(schema, initialData)` returns a Model instance
+- **Model Instance**: `get()`, `set()`, `toJSON()`, `validate()`, `onChange()`, `offChange()`, `reset()`
+- **DOM Binding**: `M.bind(model, field, selector, options)`, `M.unbind()`
+- **Types**: `M.types.string`, `M.types.number`, `M.types.boolean`, `M.types.array`, `M.types.object`, `M.types.date`,
+  `M.types.any`
+
+### elements.js - UI components
+
+Accessed via `Domma.elements`:
+
+- **Card**: `elements.card(selector, { hover, clickable, onClick })`
+- **Modal**: `elements.modal(selector, { backdrop, backdropClose, keyboard, animation, onOpen, onClose, onClosed })` →
+  `open()`, `close()`, `toggle()`, `isOpen()`
+- **Tabs**: `elements.tabs(selector, { activeIndex, animation, onChange })` → `show()`, `getActive()`, `next()`,
+  `prev()`
+- **Accordion**: `elements.accordion(selector, { multiExpand, animation, activeIndex, onChange })` → `open()`,
+  `close()`, `toggle()`, `openAll()`, `closeAll()`
+- **Tooltip**: `elements.tooltip(selector, { content, position, trigger, delay, animation })` → `show()`, `hide()`,
+  `toggle()`, `setContent()`
+
+### tables.js - DataTable-like functionality
+
+Accessed via `Domma.tables`:
+
+- **Create**: `tables.create(selector, { data, columns, pagination, pageSize, selectable, selectionMode })`
+- **Data**: `setData()`, `getData()`, `addRow()`, `addRows()`, `updateRow()`, `removeRow()`, `removeRows()`, `clear()`,
+  `refresh()`
+- **Sort**: `sort()`, `sortMultiple()`, `clearSort()`, `getSortState()`
+- **Filter**: `search()`, `filter()`, `filterBy()`, `clearFilters()`, `getFilters()`
+- **Pagination**: `page()`, `pageSize()`, `nextPage()`, `prevPage()`, `firstPage()`, `lastPage()`, `pageInfo()`
+- **Selection**: `select()`, `deselect()`, `selectAll()`, `deselectAll()`, `toggleSelect()`, `getSelected()`,
+  `getSelectedIndices()`
+- **Export**: `toCSV()`, `toJSON()`, `download()`
+- **Events**: `on()`, `off()`, `once()`
+
+### config.js - Declarative configuration engine
+
+`Domma.setup(config)` / `$.setup(config)` processes config objects:
+
 ```javascript
-const Domma = (selector) => dom(selector);
-Domma.http = http;
-Domma.utils = utils;
-Domma.setup = (config) => configEngine.process(config);
-
-// Short aliases (like jQuery's $ and Lodash's _)
-const $ = Domma;
-const _ = Domma.utils;
-
-export default Domma;
-export { Domma, $, _ };
+$.setup({
+    '#selector': {
+        component: 'modal',           // Auto-init Elements component
+        options: { backdrop: true },
+        initial: { css: {...}, text: '...' },
+        events: {
+            click: (e, $el) => { }    // Inline callbacks supported
+        }
+    }
+});
 ```
+
+### http.js - Fetch-based HTTP client
+
+`Domma.http.get()`, `.post()`, `.put()`, `.delete()` - all return promises resolving to JSON.
 
 ## Aliases
 
-| Full Name | Alias | Description |
-|-----------|-------|-------------|
-| `Domma` | `$` | DOM selection/manipulation |
-| `Domma.utils` | `_` | Utility functions |
+| Full Path       | Alias | Global     | Description                |
+|-----------------|-------|------------|----------------------------|
+| `Domma()`       | `$`   | `window.$` | DOM selection/manipulation |
+| `Domma.utils`   | `_`   | `window._` | Utility functions          |
+| `Domma.models`  | `M`   | `window.M` | Reactive models & pub/sub  |
+| `Domma.dates()` | `D()` | `window.D` | Date manipulation          |
 
-All three (`Domma`, `$`, `_`) are exposed globally in browser environments.
+## File Structure
 
-## Testing
+```
+src/
+├── index.js      # Main entry, exports Domma + aliases
+├── dom.js        # jQuery-compatible DOM API
+├── utils.js      # Lodash-compatible utilities
+├── dates.js      # Moment-style date manipulation
+├── models.js     # Reactive models & pub/sub
+├── elements.js   # UI components
+├── tables.js     # DataTable functionality
+├── config.js     # JSON configuration engine
+└── http.js       # HTTP client
 
-Tests use a simple custom runner with basic `assert(condition, message)` pattern. Run in browser via `tests/test.html`.
+showcase/         # Comprehensive demos for each namespace
+demo/             # Basic demo page
+dist/             # Built bundles (UMD + ESM)
+```
+
+## Bundle
+
+~125KB minified, includes all namespaces, zero external dependencies.
