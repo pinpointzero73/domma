@@ -9,10 +9,25 @@ A lightweight JavaScript toolkit combining DOM manipulation, HTTP requests, and 
 - **Lodash-like utilities**: Common utility functions
 - **JSON Configuration**: Define element behavior declaratively
 
+## Installation
+
+**Browser (UMD):**
+
+```html
+
+<script src="dist/domma.min.js"></script>
+```
+
+**ES Module:**
+
+```javascript
+import Domma from './dist/domma.esm.js';
+```
+
 ## Quick Start
 
 ```javascript
-import Domma from './src/index.js';
+import Domma from './dist/domma.esm.js';
 
 // Select and modify elements
 Domma('#myElement').text('Hello World!');
