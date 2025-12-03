@@ -3,79 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Domma Toolkit Demo</title>
+    <title>Domma - Dynamic Object Manipulation & Modeling API</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; }
-        .box { width: 100px; height: 100px; background: #ddd; margin: 10px; display: inline-block; text-align: center; line-height: 100px; cursor: pointer; }
-        .highlight { border: 2px solid red; }
-        .active { background: #aaf; }
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--gray-900);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .logo {
+            font-size: 5rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 0.5rem;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                filter: drop-shadow(0 0 20px rgba(129, 140, 248, 0.3));
+            }
+            to {
+                filter: drop-shadow(0 0 40px rgba(192, 132, 252, 0.5));
+            }
+        }
+
+        .backronym {
+            font-size: 1.1rem;
+            color: var(--gray-100);
+            margin: 0 0 1rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        .backronym strong {
+            color: #c084fc;
+            font-weight: 600;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            color: #9ca3af;
+            max-width: 600px;
+            line-height: 1.6;
+            margin: 0 0 2.5rem;
+        }
+
+        .features {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            min-width: 140px;
+        }
+
+        .feature-icon {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #818cf8;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-label {
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
+
+        .cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            color: white;
+            text-decoration: none;
+            font-size: 1.25rem;
+            font-weight: 600;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(79, 70, 229, 0.6);
+        }
+
+        .cta-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .cta:hover .cta-arrow {
+            transform: translateX(4px);
+        }
+
+        .badges {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 1.5rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: #818cf8;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-    <h1>Domma Toolkit Demo</h1>
-    
-    <div id="app">
-        <div class="box" id="box1">Box 1</div>
-        <div class="box" id="box2">Box 2</div>
-        <button id="fetch-btn">Fetch Data</button>
-        <div id="output"></div>
+<h1 class="logo">Domma</h1>
+
+<p class="backronym">
+    <strong>D</strong>ynamic <strong>O</strong>bject <strong>M</strong>anipulation & <strong>M</strong>odeling
+    <strong>A</strong>PI
+</p>
+
+<p class="tagline">
+    A lightweight, zero-dependency JavaScript framework combining jQuery-style DOM manipulation,
+    Lodash utilities, and modern UI components.
+</p>
+
+<div class="features">
+    <div class="feature">
+        <div class="feature-icon">$</div>
+        <div class="feature-label">DOM</div>
     </div>
+    <div class="feature">
+        <div class="feature-icon">_</div>
+        <div class="feature-label">Utils</div>
+    </div>
+    <div class="feature">
+        <div class="feature-icon">D</div>
+        <div class="feature-label">Dates</div>
+    </div>
+    <div class="feature">
+        <div class="feature-icon">M</div>
+        <div class="feature-label">Models</div>
+    </div>
+    <div class="feature">
+        <div class="feature-icon">UI</div>
+        <div class="feature-label">Elements</div>
+    </div>
+    <div class="feature">
+        <div class="feature-icon">TBL</div>
+        <div class="feature-label">Tables</div>
+    </div>
+</div>
 
-    <script type="module">
-        import Domma from './src/index.js';
+<a href="showcase/index.html" class="cta">
+    Explore the Showcase
+    <span class="cta-arrow">&rarr;</span>
+</a>
 
-        // 1. Test Core DOM
-        Domma('#output').text('Ready...');
+<div class="badges">
+    <span class="badge">Zero Dependencies</span>
+    <span class="badge">~125KB Bundled</span>
+    <span class="badge">ES Modules</span>
+    <span class="badge">Chainable API</span>
+</div>
 
-        // 2. Test JSON Configuration
-        const config = {
-            '#box1': {
-                initial: {
-                    css: { backgroundColor: '#faa' },
-                    text: 'Configured!'
-                },
-                events: {
-                    click: {
-                        addClass: 'highlight',
-                        text: 'Clicked!',
-                        log: 'Box 1 clicked'
-                    },
-                    dblclick: {
-                        removeClass: 'highlight',
-                        text: 'Configured!',
-                        log: 'Box 1 double clicked'
-                    }
-                }
-            },
-            '#box2': {
-                events: {
-                    click: [
-                        { css: { backgroundColor: '#afa' } },
-                        { target: '#output', text: 'Box 2 changed Box 1 color via config!' }
-                    ]
-                }
-            }
-        };
-
-        Domma.setup(config);
-
-        // 3. Test HTTP & Utils
-        Domma('#fetch-btn').click(async () => {
-            try {
-                Domma('#output').text('Fetching...');
-                // Using a dummy JSON API
-                const data = await Domma.http.get('https://jsonplaceholder.typicode.com/todos/1');
-                
-                const merged = Domma.utils.merge({}, data, { localTimestamp: Date.now() });
-                
-                Domma('#output').html(`<pre>${JSON.stringify(merged, null, 2)}</pre>`);
-            } catch (e) {
-                Domma('#output').text('Error fetching data');
-                console.error(e);
-            }
-        });
-
-        console.log('Domma initialized');
-    </script>
+<footer>
+    <a href="demo/index.html">Demo</a> &middot;
+    <a href="https://github.com">GitHub</a> &middot;
+    Domma &copy; 2025
+</footer>
 </body>
 </html>
