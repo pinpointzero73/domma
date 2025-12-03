@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domma Quickstart</title>
+    <link rel="stylesheet" href="css/domma.css">
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-dark">
+    <a href="#" class="navbar-brand">My App</a>
+    <ul class="navbar-nav">
+        <li><a href="#" class="navbar-link">Home</a></li>
+        <li><a href="#" class="navbar-link">About</a></li>
+        <li><a href="#" class="navbar-link">Contact</a></li>
+    </ul>
+</nav>
+
+<main class="container py-8">
+    <h1 class="text-4xl font-bold mb-4">Domma Quickstart</h1>
+    <p class="text-muted mb-8">A blueprint for getting started with Domma.</p>
+
+    <!-- Grid Layout Example -->
+    <section class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Cards</h2>
+        <div class="grid grid-cols-3 gap-4">
+            <div class="card card-hover" id="card-1">
+                <div class="card-body">
+                    <h3 class="card-title">DOM ($)</h3>
+                    <p class="card-text">jQuery-style DOM manipulation with 90+ methods.</p>
+                </div>
+                <div class="card-footer">
+                    <code>$('.selector').addClass('active')</code>
+                </div>
+            </div>
+            <div class="card card-hover" id="card-2">
+                <div class="card-body">
+                    <h3 class="card-title">Utils (_)</h3>
+                    <p class="card-text">Lodash-compatible utility functions.</p>
+                </div>
+                <div class="card-footer">
+                    <code>_.groupBy(users, 'role')</code>
+                </div>
+            </div>
+            <div class="card card-hover" id="card-3">
+                <div class="card-body">
+                    <h3 class="card-title">Dates (D)</h3>
+                    <p class="card-text">Moment-style date manipulation.</p>
+                </div>
+                <div class="card-footer">
+                    <code>D().add(7, 'days').format('MMM D')</code>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tabs Example -->
+    <section class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Tabs</h2>
+        <div id="demo-tabs" class="tabs">
+            <ul class="tab-list">
+                <li class="tab-item active">Overview</li>
+                <li class="tab-item">Features</li>
+                <li class="tab-item">Usage</li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-panel active">
+                    <h4 class="font-semibold mb-2">Overview</h4>
+                    <p>Domma is a lightweight, zero-dependency JavaScript framework.</p>
+                </div>
+                <div class="tab-panel">
+                    <h4 class="font-semibold mb-2">Features</h4>
+                    <ul>
+                        <li>jQuery-compatible DOM API</li>
+                        <li>Lodash-style utilities</li>
+                        <li>Moment-style dates</li>
+                        <li>Reactive models with pub/sub</li>
+                        <li>UI components</li>
+                        <li>DataTable-like tables</li>
+                    </ul>
+                </div>
+                <div class="tab-panel">
+                    <h4 class="font-semibold mb-2">Usage</h4>
+                    <pre class="code-block">// Include Domma
+&lt;script src="js/domma.min.js"&gt;&lt;/script&gt;
+
+// Use the short aliases
+$('#element').addClass('active');
+const data = _.groupBy(items, 'category');
+const date = D().format('YYYY-MM-DD');</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Accordion Example -->
+    <section class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Accordion</h2>
+        <div id="demo-accordion" class="accordion">
+            <div class="accordion-item active">
+                <div class="accordion-header">
+                    <span>What is Domma?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <strong>D</strong>ynamic <strong>O</strong>bject <strong>M</strong>anipulation &
+                        <strong>M</strong>odeling <strong>A</strong>PI — a complete front-end toolkit.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>How do I get started?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        Include the CSS and JS files, then start using the <code>$</code>, <code>_</code>,
+                        <code>D</code>, and <code>M</code> aliases in your code.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>What are the short aliases?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <ul>
+                            <li><code>$</code> — DOM manipulation (jQuery-style)</li>
+                            <li><code>_</code> — Utilities (Lodash-style)</li>
+                            <li><code>D</code> — Dates (Moment-style)</li>
+                            <li><code>M</code> — Models (Reactive data)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Example -->
+    <section class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Forms</h2>
+        <div class="card">
+            <div class="card-body">
+                <form id="demo-form">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-input" id="firstName" placeholder="Enter first name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-input" id="lastName" placeholder="Enter last name">
+                        </div>
+                        <div class="form-group col-span-full">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" id="email" placeholder="Enter email">
+                        </div>
+                        <div class="form-group col-span-full">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-textarea" id="message" rows="3" placeholder="Your message"></textarea>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="reset" class="btn btn-outline">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Example -->
+    <section class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Modal</h2>
+        <button class="btn btn-primary" id="open-modal">Open Modal</button>
+
+        <div id="demo-modal" class="modal">
+            <div class="modal-header">
+                <h5 class="modal-title">Example Modal</h5>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>This is a modal dialog. You can close it by clicking the X, clicking the backdrop, or pressing
+                    Escape.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-close-btn">Close</button>
+                <button class="btn btn-primary">Confirm</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Toast Example -->
+    <section class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Toasts</h2>
+        <div class="flex gap-2">
+            <button class="btn btn-success" id="toast-success">Success Toast</button>
+            <button class="btn btn-danger" id="toast-error">Error Toast</button>
+            <button class="btn btn-warning" id="toast-warning">Warning Toast</button>
+            <button class="btn btn-info" id="toast-info">Info Toast</button>
+        </div>
+    </section>
+
+    <!-- Utilities Demo -->
+    <section class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Utilities Demo</h2>
+        <div class="card">
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Enter comma-separated numbers</label>
+                    <input type="text" class="form-input" id="util-input" placeholder="1, 2, 2, 3, 4, 4, 5">
+                </div>
+                <button class="btn btn-primary mt-2" id="util-run">Run _.uniq()</button>
+                <div id="util-output" class="mt-4 p-4 bg-gray-100 rounded hidden">
+                    <strong>Result:</strong> <code id="util-result"></code>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dates Demo -->
+    <section class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Dates Demo</h2>
+        <div class="card">
+            <div class="card-body">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p><strong>Today:</strong> <span id="date-today"></span></p>
+                        <p><strong>Formatted:</strong> <span id="date-formatted"></span></p>
+                        <p><strong>Relative:</strong> <span id="date-relative"></span></p>
+                    </div>
+                    <div>
+                        <p><strong>Next week:</strong> <span id="date-next-week"></span></p>
+                        <p><strong>Last month:</strong> <span id="date-last-month"></span></p>
+                        <p><strong>Quarter:</strong> <span id="date-quarter"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer footer-dark text-center">
+    <p class="mb-2">Built with Domma</p>
+    <p class="text-sm">Dynamic Object Manipulation & Modeling API</p>
+</footer>
+
+<!-- Include Domma -->
+<script src="js/domma.min.js"></script>
+<script>
+    // ============================================
+    // Initialise Components
+    // ============================================
+
+    // Tabs
+    Domma.elements.tabs('#demo-tabs', {
+        animation: true
+    });
+
+    // Accordion
+    Domma.elements.accordion('#demo-accordion', {
+        multiExpand: false,
+        activeIndex: 0
+    });
+
+    // Modal
+    const modal = Domma.elements.modal('#demo-modal', {
+        backdrop: true,
+        backdropClose: true,
+        keyboard: true
+    });
+
+    $('#open-modal').on('click', () => modal.open());
+    $('.modal-close-btn').on('click', () => modal.close());
+
+    // Cards with hover effect
+    Domma.elements.card('#card-1', {hoverable: true});
+    Domma.elements.card('#card-2', {hoverable: true});
+    Domma.elements.card('#card-3', {hoverable: true});
+
+    // ============================================
+    // Toast Examples
+    // ============================================
+
+    $('#toast-success').on('click', () => {
+        Domma.elements.toast.success('Operation completed successfully!');
+    });
+
+    $('#toast-error').on('click', () => {
+        Domma.elements.toast.error('Something went wrong. Please try again.');
+    });
+
+    $('#toast-warning').on('click', () => {
+        Domma.elements.toast.warning('Please review your input before continuing.');
+    });
+
+    $('#toast-info').on('click', () => {
+        Domma.elements.toast.info('New updates are available.');
+    });
+
+    // ============================================
+    // Form Handling
+    // ============================================
+
+    $('#demo-form').on('submit', function (e) {
+        e.preventDefault();
+
+        const data = {
+            firstName: $('#firstName').val(),
+            lastName: $('#lastName').val(),
+            email: $('#email').val(),
+            message: $('#message').val()
+        };
+
+        console.log('Form submitted:', data);
+        Domma.elements.toast.success('Form submitted successfully!');
+    });
+
+    // ============================================
+    // Utilities Demo
+    // ============================================
+
+    $('#util-run').on('click', function () {
+        const input = $('#util-input').val();
+        const numbers = input.split(',').map(n => parseInt(n.trim(), 10)).filter(n => !isNaN(n));
+        const unique = _.uniq(numbers);
+
+        $('#util-result').text(JSON.stringify(unique));
+        $('#util-output').removeClass('hidden');
+    });
+
+    // ============================================
+    // Dates Demo
+    // ============================================
+
+    function updateDates() {
+        $('#date-today').text(D().format('YYYY-MM-DD'));
+        $('#date-formatted').text(D().format('dddd, MMMM D, YYYY'));
+        $('#date-relative').text(D().subtract(5, 'minutes').fromNow());
+        $('#date-next-week').text(D().add(7, 'days').format('MMM D, YYYY'));
+        $('#date-last-month').text(D().subtract(1, 'month').format('MMM D, YYYY'));
+        $('#date-quarter').text('Q' + D().quarter());
+    }
+
+    updateDates();
+
+    // ============================================
+    // Config Engine Example
+    // ============================================
+
+    // You can also use the declarative config engine:
+    // $.setup({
+    //     '.card-hover': {
+    //         component: 'card',
+    //         options: { hoverable: true }
+    //     },
+    //     '#my-modal': {
+    //         component: 'modal',
+    //         options: { backdrop: true }
+    //     }
+    // });
+
+    console.log('Domma initialised successfully!');
+</script>
+</body>
+</html>
