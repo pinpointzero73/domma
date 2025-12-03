@@ -1,41 +1,539 @@
 import { utils } from './utils.js';
 
 class DommaCollection {
-    constructor(selector) {
+    constructor(selector, context) {
         if (typeof selector === 'string') {
-            this.elements = Array.from(document.querySelectorAll(selector));
+            if (selector.trim().startsWith('<')) {
+                // HTML string - create elements
+                const temp = document.createElement('div');
+                temp.innerHTML = selector.trim();
+                this.elements = Array.from(temp.children);
+            } else {
+                // CSS selector
+                const ctx = context || document;
+                this.elements = Array.from(ctx.querySelectorAll(selector));
+            }
         } else if (selector instanceof HTMLElement) {
             this.elements = [selector];
-        } else if (selector instanceof NodeList) {
+        } else if (selector instanceof NodeList || selector instanceof HTMLCollection) {
             this.elements = Array.from(selector);
+        } else if (Array.isArray(selector)) {
+            this.elements = selector.filter(el => el instanceof HTMLElement);
+        } else if (selector instanceof DommaCollection) {
+            this.elements = [...selector.elements];
         } else {
             this.elements = [];
         }
+        this.length = this.elements.length;
     }
 
+    // ============================================
+    // Traversal Methods
+    // ============================================
+
+    /**
+     * Get descendants matching selector.
+     * @param {string} selector
+     * @returns {DommaCollection}
+     */
+    find(selector) {
+        const found = [];
+        this.elements.forEach(el => {
+            found.push(...el.querySelectorAll(selector));
+        });
+        return new DommaCollection(found);
+    }
+
+    /**
+     * Get immediate children, optionally filtered by selector.
+     * @param {string} [selector]
+     * @returns {DommaCollection}
+     */
+    children(selector) {
+        const children = [];
+        this.elements.forEach(el => {
+            children.push(...el.children);
+        });
+        if (selector) {
+            return new DommaCollection(children.filter(el => el.matches(selector)));
+        }
+        return new DommaCollection(children);
+    }
+
+    /**
+     * Get parent of each element, optionally filtered by selector.
+     * @param {string} [selector]
+     * @returns {DommaCollection}
+     */
+    parent(selector) {
+        const parents = [];
+        this.elements.forEach(el => {
+            if (el.parentElement) {
+                if (!selector || el.parentElement.matches(selector)) {
+                    if (!parents.includes(el.parentElement)) {
+                        parents.push(el.parentElement);
+                    }
+                }
+            }
+        });
+        return new DommaCollection(parents);
+    }
+
+    /**
+     * Get all ancestors, optionally filtered by selector.
+     * @param {string} [selector]
+     * @returns {DommaCollection}
+     */
+    parents(selector) {
+        const ancestors = [];
+        this.elements.forEach(el => {
+            let parent = el.parentElement;
+            while (parent) {
+                if (!selector || parent.matches(selector)) {
+                    if (!ancestors.includes(parent)) {
+                        ancestors.push(parent);
+                    }
+                }
+                parent = parent.parentElement;
+            }
+        });
+        return new DommaCollection(ancestors);
+    }
+
+    /**
+     * Get closest ancestor matching selector.
+     * @param {string} selector
+     * @returns {DommaCollection}
+     */
+    closest(selector) {
+        const closest = [];
+        this.elements.forEach(el => {
+            const match = el.closest(selector);
+            if (match && !closest.includes(match)) {
+                closest.push(match);
+            }
+        });
+        return new DommaCollection(closest);
+    }
+
+    /**
+     * Get siblings, optionally filtered by selector.
+     * @param {string} [selector]
+     * @returns {DommaCollection}
+     */
+    siblings(selector) {
+        const sibs = [];
+        this.elements.forEach(el => {
+            if (el.parentElement) {
+                Array.from(el.parentElement.children).forEach(child => {
+                    if (child !== el && !sibs.includes(child)) {
+                        if (!selector || child.matches(selector)) {
+                            sibs.push(child);
+                        }
+                    }
+                });
+            }
+        });
+        return new DommaCollection(sibs);
+    }
+
+    /**
+     * Get next sibling, optionally filtered by selector.
+     * @param {string} [selector]
+     * @returns {DommaCollection}
+     */
+    next(selector) {
+        const nexts = [];
+        this.elements.forEach(el => {
+            let sibling = el.nextElementSibling;
+            if (sibling) {
+                if (!selector || sibling.matches(selector)) {
+                    nexts.push(sibling);
+                }
+            }
+        });
+        return new DommaCollection(nexts);
+    }
+
+    /**
+     * Get all following siblings, optionally filtered by selector.
+     * @param {string} [selector]
+     * @returns {DommaCollection}
+     */
+    nextAll(selector) {
+        const nexts = [];
+        this.elements.forEach(el => {
+            let sibling = el.nextElementSibling;
+            while (sibling) {
+                if (!selector || sibling.matches(selector)) {
+                    if (!nexts.includes(sibling)) {
+                        nexts.push(sibling);
+                    }
+                }
+                sibling = sibling.nextElementSibling;
+            }
+        });
+        return new DommaCollection(nexts);
+    }
+
+    /**
+     * Get previous sibling, optionally filtered by selector.
+     * @param {string} [selector]
+     * @returns {DommaCollection}
+     */
+    prev(selector) {
+        const prevs = [];
+        this.elements.forEach(el => {
+            let sibling = el.previousElementSibling;
+            if (sibling) {
+                if (!selector || sibling.matches(selector)) {
+                    prevs.push(sibling);
+                }
+            }
+        });
+        return new DommaCollection(prevs);
+    }
+
+    /**
+     * Get all preceding siblings, optionally filtered by selector.
+     * @param {string} [selector]
+     * @returns {DommaCollection}
+     */
+    prevAll(selector) {
+        const prevs = [];
+        this.elements.forEach(el => {
+            let sibling = el.previousElementSibling;
+            while (sibling) {
+                if (!selector || sibling.matches(selector)) {
+                    if (!prevs.includes(sibling)) {
+                        prevs.unshift(sibling);
+                    }
+                }
+                sibling = sibling.previousElementSibling;
+            }
+        });
+        return new DommaCollection(prevs);
+    }
+
+    /**
+     * Get first element in collection.
+     * @returns {DommaCollection}
+     */
+    first() {
+        return new DommaCollection(this.elements[0] ? [this.elements[0]] : []);
+    }
+
+    /**
+     * Get last element in collection.
+     * @returns {DommaCollection}
+     */
+    last() {
+        return new DommaCollection(this.elements.length ? [this.elements[this.elements.length - 1]] : []);
+    }
+
+    /**
+     * Get element at index.
+     * @param {number} index
+     * @returns {DommaCollection}
+     */
+    eq(index) {
+        const idx = index < 0 ? this.elements.length + index : index;
+        return new DommaCollection(this.elements[idx] ? [this.elements[idx]] : []);
+    }
+
+    /**
+     * Get raw element at index.
+     * @param {number} index
+     * @returns {HTMLElement|undefined}
+     */
+    get(index) {
+        if (index === undefined) {
+            return this.elements;
+        }
+        const idx = index < 0 ? this.elements.length + index : index;
+        return this.elements[idx];
+    }
+
+    /**
+     * Filter elements by selector or function.
+     * @param {string|Function} selector
+     * @returns {DommaCollection}
+     */
+    filter(selector) {
+        if (typeof selector === 'function') {
+            return new DommaCollection(this.elements.filter((el, i) => selector.call(el, i, el)));
+        }
+        return new DommaCollection(this.elements.filter(el => el.matches(selector)));
+    }
+
+    /**
+     * Remove elements matching selector from collection.
+     * @param {string|Function} selector
+     * @returns {DommaCollection}
+     */
+    not(selector) {
+        if (typeof selector === 'function') {
+            return new DommaCollection(this.elements.filter((el, i) => !selector.call(el, i, el)));
+        }
+        return new DommaCollection(this.elements.filter(el => !el.matches(selector)));
+    }
+
+    /**
+     * Check if any element matches selector.
+     * @param {string} selector
+     * @returns {boolean}
+     */
+    is(selector) {
+        return this.elements.some(el => el.matches(selector));
+    }
+
+    /**
+     * Filter elements that have descendants matching selector.
+     * @param {string} selector
+     * @returns {DommaCollection}
+     */
+    has(selector) {
+        return new DommaCollection(this.elements.filter(el => el.querySelector(selector)));
+    }
+
+    /**
+     * Add elements to the collection.
+     * @param {string|HTMLElement|DommaCollection} selector
+     * @returns {DommaCollection}
+     */
+    add(selector) {
+        const additional = new DommaCollection(selector);
+        const combined = [...this.elements];
+        additional.elements.forEach(el => {
+            if (!combined.includes(el)) {
+                combined.push(el);
+            }
+        });
+        return new DommaCollection(combined);
+    }
+
+    /**
+     * Get children including text nodes.
+     * @returns {DommaCollection}
+     */
+    contents() {
+        const contents = [];
+        this.elements.forEach(el => {
+            contents.push(...el.childNodes);
+        });
+        return new DommaCollection(contents);
+    }
+
+    /**
+     * Convert to array.
+     * @returns {Array}
+     */
+    toArray() {
+        return [...this.elements];
+    }
+
+    /**
+     * Get index of element in collection or in parent.
+     * @param {string|HTMLElement} [selector]
+     * @returns {number}
+     */
+    index(selector) {
+        if (selector === undefined) {
+            const el = this.elements[0];
+            if (!el || !el.parentElement) return -1;
+            return Array.from(el.parentElement.children).indexOf(el);
+        }
+        if (typeof selector === 'string') {
+            return new DommaCollection(selector).elements.indexOf(this.elements[0]);
+        }
+        return this.elements.indexOf(selector);
+    }
+
+    // ============================================
+    // Content Methods
+    // ============================================
+
+    /**
+     * Iterate over each element.
+     * @param {Function} callback
+     * @returns {DommaCollection}
+     */
     each(callback) {
-        utils.each(this.elements, callback);
+        this.elements.forEach((el, i) => callback.call(el, i, el));
         return this;
     }
 
+    /**
+     * Get or set inner HTML.
+     * @param {string} [content]
+     * @returns {string|DommaCollection}
+     */
     html(content) {
         if (content === undefined) {
             return this.elements[0] ? this.elements[0].innerHTML : '';
         }
-        return this.each(el => el.innerHTML = content);
+        return this.each((i, el) => { el.innerHTML = content; });
     }
 
+    /**
+     * Get or set text content.
+     * @param {string} [content]
+     * @returns {string|DommaCollection}
+     */
     text(content) {
         if (content === undefined) {
-            return this.elements[0] ? this.elements[0].textContent : '';
+            return this.elements.map(el => el.textContent).join('');
         }
-        return this.each(el => el.textContent = content);
+        return this.each((i, el) => { el.textContent = content; });
     }
 
+    /**
+     * Get or set form element value.
+     * @param {string} [value]
+     * @returns {string|DommaCollection}
+     */
+    val(value) {
+        if (value === undefined) {
+            const el = this.elements[0];
+            if (!el) return undefined;
+            if (el.type === 'checkbox' || el.type === 'radio') {
+                return el.checked ? el.value : undefined;
+            }
+            if (el.tagName === 'SELECT' && el.multiple) {
+                return Array.from(el.selectedOptions).map(opt => opt.value);
+            }
+            return el.value;
+        }
+        return this.each((i, el) => {
+            if (el.type === 'checkbox' || el.type === 'radio') {
+                el.checked = Array.isArray(value) ? value.includes(el.value) : el.value === value;
+            } else if (el.tagName === 'SELECT' && el.multiple && Array.isArray(value)) {
+                Array.from(el.options).forEach(opt => {
+                    opt.selected = value.includes(opt.value);
+                });
+            } else {
+                el.value = value;
+            }
+        });
+    }
+
+    // ============================================
+    // Attribute Methods
+    // ============================================
+
+    /**
+     * Get or set attribute.
+     * @param {string|Object} name
+     * @param {string} [value]
+     * @returns {string|DommaCollection}
+     */
+    attr(name, value) {
+        if (typeof name === 'object') {
+            return this.each((i, el) => {
+                Object.entries(name).forEach(([key, val]) => {
+                    el.setAttribute(key, val);
+                });
+            });
+        }
+        if (value === undefined) {
+            return this.elements[0] ? this.elements[0].getAttribute(name) : undefined;
+        }
+        return this.each((i, el) => { el.setAttribute(name, value); });
+    }
+
+    /**
+     * Remove attribute.
+     * @param {string} name
+     * @returns {DommaCollection}
+     */
+    removeAttr(name) {
+        const attrs = name.split(/\s+/);
+        return this.each((i, el) => {
+            attrs.forEach(attr => el.removeAttribute(attr));
+        });
+    }
+
+    /**
+     * Get or set property.
+     * @param {string|Object} name
+     * @param {*} [value]
+     * @returns {*|DommaCollection}
+     */
+    prop(name, value) {
+        if (typeof name === 'object') {
+            return this.each((i, el) => {
+                Object.entries(name).forEach(([key, val]) => {
+                    el[key] = val;
+                });
+            });
+        }
+        if (value === undefined) {
+            return this.elements[0] ? this.elements[0][name] : undefined;
+        }
+        return this.each((i, el) => { el[name] = value; });
+    }
+
+    /**
+     * Remove property.
+     * @param {string} name
+     * @returns {DommaCollection}
+     */
+    removeProp(name) {
+        return this.each((i, el) => { delete el[name]; });
+    }
+
+    /**
+     * Get or set data attributes.
+     * @param {string|Object} [key]
+     * @param {*} [value]
+     * @returns {*|DommaCollection}
+     */
+    data(key, value) {
+        if (key === undefined) {
+            const el = this.elements[0];
+            if (!el) return undefined;
+            const data = {};
+            Object.keys(el.dataset).forEach(k => {
+                data[k] = el.dataset[k];
+            });
+            return data;
+        }
+        if (typeof key === 'object') {
+            return this.each((i, el) => {
+                Object.entries(key).forEach(([k, v]) => {
+                    el.dataset[k] = v;
+                });
+            });
+        }
+        if (value === undefined) {
+            return this.elements[0] ? this.elements[0].dataset[key] : undefined;
+        }
+        return this.each((i, el) => { el.dataset[key] = value; });
+    }
+
+    /**
+     * Remove data attribute.
+     * @param {string} key
+     * @returns {DommaCollection}
+     */
+    removeData(key) {
+        return this.each((i, el) => { delete el.dataset[key]; });
+    }
+
+    // ============================================
+    // CSS/Class Methods
+    // ============================================
+
+    /**
+     * Get or set CSS styles.
+     * @param {string|Object} property
+     * @param {string} [value]
+     * @returns {string|DommaCollection}
+     */
     css(property, value) {
         if (typeof property === 'object') {
-            return this.each(el => {
-                utils.each(property, (val, prop) => {
+            return this.each((i, el) => {
+                Object.entries(property).forEach(([prop, val]) => {
                     el.style[prop] = val;
                 });
             });
@@ -43,32 +541,962 @@ class DommaCollection {
         if (value === undefined) {
             return this.elements[0] ? getComputedStyle(this.elements[0])[property] : '';
         }
-        return this.each(el => el.style[property] = value);
+        return this.each((i, el) => { el.style[property] = value; });
     }
 
+    /**
+     * Add class(es).
+     * @param {string|Function} className
+     * @returns {DommaCollection}
+     */
     addClass(className) {
-        return this.each(el => el.classList.add(...className.split(' ')));
+        if (typeof className === 'function') {
+            return this.each((i, el) => {
+                const classes = className.call(el, i, el.className);
+                if (classes) el.classList.add(...classes.split(/\s+/).filter(Boolean));
+            });
+        }
+        const classes = className.split(/\s+/).filter(Boolean);
+        return this.each((i, el) => { el.classList.add(...classes); });
     }
 
+    /**
+     * Remove class(es).
+     * @param {string|Function} [className]
+     * @returns {DommaCollection}
+     */
     removeClass(className) {
-        return this.each(el => el.classList.remove(...className.split(' ')));
+        if (className === undefined) {
+            return this.each((i, el) => { el.className = ''; });
+        }
+        if (typeof className === 'function') {
+            return this.each((i, el) => {
+                const classes = className.call(el, i, el.className);
+                if (classes) el.classList.remove(...classes.split(/\s+/).filter(Boolean));
+            });
+        }
+        const classes = className.split(/\s+/).filter(Boolean);
+        return this.each((i, el) => { el.classList.remove(...classes); });
     }
 
-    on(event, handler) {
-        return this.each(el => el.addEventListener(event, handler));
+    /**
+     * Toggle class(es).
+     * @param {string|Function} className
+     * @param {boolean} [state]
+     * @returns {DommaCollection}
+     */
+    toggleClass(className, state) {
+        if (typeof className === 'function') {
+            return this.each((i, el) => {
+                const classes = className.call(el, i, el.className, state);
+                if (classes) {
+                    classes.split(/\s+/).filter(Boolean).forEach(cls => {
+                        el.classList.toggle(cls, state);
+                    });
+                }
+            });
+        }
+        const classes = className.split(/\s+/).filter(Boolean);
+        return this.each((i, el) => {
+            classes.forEach(cls => {
+                el.classList.toggle(cls, state);
+            });
+        });
     }
 
-    off(event, handler) {
-        return this.each(el => el.removeEventListener(event, handler));
+    /**
+     * Check if any element has class.
+     * @param {string} className
+     * @returns {boolean}
+     */
+    hasClass(className) {
+        return this.elements.some(el => el.classList.contains(className));
     }
 
-    click(handler) {
-        return this.on('click', handler);
+    // ============================================
+    // DOM Manipulation
+    // ============================================
+
+    /**
+     * Append content to each element.
+     * @param {string|HTMLElement|DommaCollection|Function} content
+     * @returns {DommaCollection}
+     */
+    append(content) {
+        return this.each((i, el) => {
+            const nodes = this._getNodes(content, i, el);
+            nodes.forEach(node => el.appendChild(node));
+        });
     }
 
-    dblclick(handler) {
-        return this.on('dblclick', handler);
+    /**
+     * Prepend content to each element.
+     * @param {string|HTMLElement|DommaCollection|Function} content
+     * @returns {DommaCollection}
+     */
+    prepend(content) {
+        return this.each((i, el) => {
+            const nodes = this._getNodes(content, i, el);
+            const first = el.firstChild;
+            nodes.forEach(node => el.insertBefore(node, first));
+        });
+    }
+
+    /**
+     * Insert content after each element.
+     * @param {string|HTMLElement|DommaCollection|Function} content
+     * @returns {DommaCollection}
+     */
+    after(content) {
+        return this.each((i, el) => {
+            const nodes = this._getNodes(content, i, el);
+            const parent = el.parentNode;
+            const next = el.nextSibling;
+            nodes.forEach(node => parent.insertBefore(node, next));
+        });
+    }
+
+    /**
+     * Insert content before each element.
+     * @param {string|HTMLElement|DommaCollection|Function} content
+     * @returns {DommaCollection}
+     */
+    before(content) {
+        return this.each((i, el) => {
+            const nodes = this._getNodes(content, i, el);
+            const parent = el.parentNode;
+            nodes.forEach(node => parent.insertBefore(node, el));
+        });
+    }
+
+    /**
+     * Append elements to target.
+     * @param {string|HTMLElement|DommaCollection} target
+     * @returns {DommaCollection}
+     */
+    appendTo(target) {
+        new DommaCollection(target).append(this);
+        return this;
+    }
+
+    /**
+     * Prepend elements to target.
+     * @param {string|HTMLElement|DommaCollection} target
+     * @returns {DommaCollection}
+     */
+    prependTo(target) {
+        new DommaCollection(target).prepend(this);
+        return this;
+    }
+
+    /**
+     * Insert elements after target.
+     * @param {string|HTMLElement|DommaCollection} target
+     * @returns {DommaCollection}
+     */
+    insertAfter(target) {
+        new DommaCollection(target).after(this);
+        return this;
+    }
+
+    /**
+     * Insert elements before target.
+     * @param {string|HTMLElement|DommaCollection} target
+     * @returns {DommaCollection}
+     */
+    insertBefore(target) {
+        new DommaCollection(target).before(this);
+        return this;
+    }
+
+    /**
+     * Wrap each element with structure.
+     * @param {string|HTMLElement|Function} wrapper
+     * @returns {DommaCollection}
+     */
+    wrap(wrapper) {
+        return this.each((i, el) => {
+            const wrap = this._getWrapper(wrapper, i, el);
+            el.parentNode.insertBefore(wrap, el);
+            wrap.appendChild(el);
+        });
+    }
+
+    /**
+     * Wrap all elements together with structure.
+     * @param {string|HTMLElement} wrapper
+     * @returns {DommaCollection}
+     */
+    wrapAll(wrapper) {
+        if (this.elements.length === 0) return this;
+        const wrap = this._getWrapper(wrapper, 0, this.elements[0]);
+        this.elements[0].parentNode.insertBefore(wrap, this.elements[0]);
+        this.elements.forEach(el => wrap.appendChild(el));
+        return this;
+    }
+
+    /**
+     * Wrap inner contents of each element.
+     * @param {string|HTMLElement|Function} wrapper
+     * @returns {DommaCollection}
+     */
+    wrapInner(wrapper) {
+        return this.each((i, el) => {
+            const wrap = this._getWrapper(wrapper, i, el);
+            while (el.firstChild) {
+                wrap.appendChild(el.firstChild);
+            }
+            el.appendChild(wrap);
+        });
+    }
+
+    /**
+     * Remove parent wrapper from each element.
+     * @param {string} [selector]
+     * @returns {DommaCollection}
+     */
+    unwrap(selector) {
+        this.parent(selector).each((i, parent) => {
+            const grandparent = parent.parentNode;
+            while (parent.firstChild) {
+                grandparent.insertBefore(parent.firstChild, parent);
+            }
+            grandparent.removeChild(parent);
+        });
+        return this;
+    }
+
+    /**
+     * Remove elements from DOM.
+     * @param {string} [selector]
+     * @returns {DommaCollection}
+     */
+    remove(selector) {
+        const toRemove = selector ? this.filter(selector) : this;
+        toRemove.each((i, el) => {
+            if (el.parentNode) {
+                el.parentNode.removeChild(el);
+            }
+        });
+        return this;
+    }
+
+    /**
+     * Remove elements from DOM (alias for remove, simplified).
+     * @returns {DommaCollection}
+     */
+    detach() {
+        return this.remove();
+    }
+
+    /**
+     * Remove all children from elements.
+     * @returns {DommaCollection}
+     */
+    empty() {
+        return this.each((i, el) => { el.innerHTML = ''; });
+    }
+
+    /**
+     * Clone elements.
+     * @param {boolean} [deep=true]
+     * @returns {DommaCollection}
+     */
+    clone(deep = true) {
+        return new DommaCollection(this.elements.map(el => el.cloneNode(deep)));
+    }
+
+    /**
+     * Replace each element with content.
+     * @param {string|HTMLElement|DommaCollection|Function} content
+     * @returns {DommaCollection}
+     */
+    replaceWith(content) {
+        return this.each((i, el) => {
+            const nodes = this._getNodes(content, i, el);
+            const parent = el.parentNode;
+            nodes.forEach((node, idx) => {
+                if (idx === 0) {
+                    parent.replaceChild(node, el);
+                } else {
+                    parent.insertBefore(node, nodes[idx - 1].nextSibling);
+                }
+            });
+        });
+    }
+
+    /**
+     * Replace target with elements.
+     * @param {string|HTMLElement|DommaCollection} target
+     * @returns {DommaCollection}
+     */
+    replaceAll(target) {
+        new DommaCollection(target).replaceWith(this);
+        return this;
+    }
+
+    // Helper: Get nodes from content
+    _getNodes(content, index, element) {
+        if (typeof content === 'function') {
+            content = content.call(element, index, element.innerHTML);
+        }
+        if (typeof content === 'string') {
+            if (content.trim().startsWith('<')) {
+                const temp = document.createElement('div');
+                temp.innerHTML = content;
+                return Array.from(temp.childNodes);
+            }
+            return [document.createTextNode(content)];
+        }
+        if (content instanceof HTMLElement) {
+            return [content.cloneNode(true)];
+        }
+        if (content instanceof DommaCollection) {
+            return content.elements.map(el => el.cloneNode(true));
+        }
+        return [];
+    }
+
+    // Helper: Get wrapper element
+    _getWrapper(wrapper, index, element) {
+        if (typeof wrapper === 'function') {
+            wrapper = wrapper.call(element, index);
+        }
+        if (typeof wrapper === 'string') {
+            const temp = document.createElement('div');
+            temp.innerHTML = wrapper.trim();
+            return temp.firstElementChild;
+        }
+        if (wrapper instanceof HTMLElement) {
+            return wrapper.cloneNode(true);
+        }
+        if (wrapper instanceof DommaCollection) {
+            return wrapper.elements[0].cloneNode(true);
+        }
+        return document.createElement('div');
+    }
+
+    // ============================================
+    // Event Methods
+    // ============================================
+
+    /**
+     * Attach event handler.
+     * @param {string} event
+     * @param {string|Function} [selector]
+     * @param {Function} [handler]
+     * @returns {DommaCollection}
+     */
+    on(event, selector, handler) {
+        if (typeof selector === 'function') {
+            handler = selector;
+            selector = null;
+        }
+        const events = event.split(/\s+/);
+        return this.each((i, el) => {
+            events.forEach(evt => {
+                if (selector) {
+                    // Delegated event
+                    const delegated = (e) => {
+                        const target = e.target.closest(selector);
+                        if (target && el.contains(target)) {
+                            handler.call(target, e);
+                        }
+                    };
+                    el.addEventListener(evt, delegated);
+                    el._dommaHandlers = el._dommaHandlers || [];
+                    el._dommaHandlers.push({ event: evt, selector, handler, delegated });
+                } else {
+                    el.addEventListener(evt, handler);
+                }
+            });
+        });
+    }
+
+    /**
+     * Remove event handler.
+     * @param {string} [event]
+     * @param {string|Function} [selector]
+     * @param {Function} [handler]
+     * @returns {DommaCollection}
+     */
+    off(event, selector, handler) {
+        if (typeof selector === 'function') {
+            handler = selector;
+            selector = null;
+        }
+        return this.each((i, el) => {
+            if (event) {
+                const events = event.split(/\s+/);
+                events.forEach(evt => {
+                    if (selector && el._dommaHandlers) {
+                        el._dommaHandlers = el._dommaHandlers.filter(h => {
+                            if (h.event === evt && h.selector === selector && (!handler || h.handler === handler)) {
+                                el.removeEventListener(evt, h.delegated);
+                                return false;
+                            }
+                            return true;
+                        });
+                    } else if (handler) {
+                        el.removeEventListener(evt, handler);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Attach handler that executes once.
+     * @param {string} event
+     * @param {string|Function} [selector]
+     * @param {Function} [handler]
+     * @returns {DommaCollection}
+     */
+    one(event, selector, handler) {
+        if (typeof selector === 'function') {
+            handler = selector;
+            selector = null;
+        }
+        const self = this;
+        const wrapper = function(e) {
+            handler.call(this, e);
+            self.off(event, selector, wrapper);
+        };
+        return this.on(event, selector, wrapper);
+    }
+
+    /**
+     * Trigger event on elements.
+     * @param {string} event
+     * @param {*} [data]
+     * @returns {DommaCollection}
+     */
+    trigger(event, data) {
+        const evt = new CustomEvent(event, { detail: data, bubbles: true, cancelable: true });
+        return this.each((i, el) => { el.dispatchEvent(evt); });
+    }
+
+    /**
+     * Trigger native event.
+     * @param {string} eventType
+     * @returns {DommaCollection}
+     */
+    triggerNative(eventType) {
+        return this.each((i, el) => {
+            const evt = new Event(eventType, { bubbles: true, cancelable: true });
+            el.dispatchEvent(evt);
+        });
+    }
+
+    // Event shortcuts
+    click(handler) { return handler ? this.on('click', handler) : this.trigger('click'); }
+    dblclick(handler) { return handler ? this.on('dblclick', handler) : this.trigger('dblclick'); }
+    mousedown(handler) { return handler ? this.on('mousedown', handler) : this.trigger('mousedown'); }
+    mouseup(handler) { return handler ? this.on('mouseup', handler) : this.trigger('mouseup'); }
+    mousemove(handler) { return handler ? this.on('mousemove', handler) : this.trigger('mousemove'); }
+    mouseover(handler) { return handler ? this.on('mouseover', handler) : this.trigger('mouseover'); }
+    mouseout(handler) { return handler ? this.on('mouseout', handler) : this.trigger('mouseout'); }
+    mouseenter(handler) { return handler ? this.on('mouseenter', handler) : this.trigger('mouseenter'); }
+    mouseleave(handler) { return handler ? this.on('mouseleave', handler) : this.trigger('mouseleave'); }
+    keydown(handler) { return handler ? this.on('keydown', handler) : this.trigger('keydown'); }
+    keyup(handler) { return handler ? this.on('keyup', handler) : this.trigger('keyup'); }
+    keypress(handler) { return handler ? this.on('keypress', handler) : this.trigger('keypress'); }
+    focus(handler) { return handler ? this.on('focus', handler) : this.each((i, el) => el.focus()); }
+    blur(handler) { return handler ? this.on('blur', handler) : this.each((i, el) => el.blur()); }
+    change(handler) { return handler ? this.on('change', handler) : this.trigger('change'); }
+    select(handler) { return handler ? this.on('select', handler) : this.trigger('select'); }
+    submit(handler) {
+        if (handler) {
+            return this.on('submit', handler);
+        }
+        return this.each((i, el) => { if (el.submit) el.submit(); });
+    }
+    scroll(handler) { return handler ? this.on('scroll', handler) : this.trigger('scroll'); }
+    resize(handler) { return handler ? this.on('resize', handler) : this.trigger('resize'); }
+
+    /**
+     * Handle mouseenter and mouseleave.
+     * @param {Function} enterHandler
+     * @param {Function} [leaveHandler]
+     * @returns {DommaCollection}
+     */
+    hover(enterHandler, leaveHandler) {
+        this.on('mouseenter', enterHandler);
+        if (leaveHandler) {
+            this.on('mouseleave', leaveHandler);
+        } else {
+            this.on('mouseleave', enterHandler);
+        }
+        return this;
+    }
+
+    // ============================================
+    // Effects/Animation
+    // ============================================
+
+    /**
+     * Show elements.
+     * @param {number|string} [duration]
+     * @param {Function} [callback]
+     * @returns {DommaCollection}
+     */
+    show(duration, callback) {
+        return this.each((i, el) => {
+            if (duration) {
+                el.style.display = '';
+                el.style.opacity = '0';
+                el.style.transition = `opacity ${this._getDuration(duration)}ms`;
+                requestAnimationFrame(() => {
+                    el.style.opacity = '1';
+                    if (callback) {
+                        setTimeout(() => callback.call(el), this._getDuration(duration));
+                    }
+                });
+            } else {
+                el.style.display = '';
+                if (callback) callback.call(el);
+            }
+        });
+    }
+
+    /**
+     * Hide elements.
+     * @param {number|string} [duration]
+     * @param {Function} [callback]
+     * @returns {DommaCollection}
+     */
+    hide(duration, callback) {
+        return this.each((i, el) => {
+            if (duration) {
+                el.style.transition = `opacity ${this._getDuration(duration)}ms`;
+                el.style.opacity = '0';
+                setTimeout(() => {
+                    el.style.display = 'none';
+                    el.style.opacity = '';
+                    el.style.transition = '';
+                    if (callback) callback.call(el);
+                }, this._getDuration(duration));
+            } else {
+                el.style.display = 'none';
+                if (callback) callback.call(el);
+            }
+        });
+    }
+
+    /**
+     * Toggle visibility.
+     * @param {number|string} [duration]
+     * @param {Function} [callback]
+     * @returns {DommaCollection}
+     */
+    toggle(duration, callback) {
+        return this.each((i, el) => {
+            const isHidden = getComputedStyle(el).display === 'none';
+            if (isHidden) {
+                new DommaCollection(el).show(duration, callback);
+            } else {
+                new DommaCollection(el).hide(duration, callback);
+            }
+        });
+    }
+
+    /**
+     * Fade in elements.
+     * @param {number|string} [duration=400]
+     * @param {Function} [callback]
+     * @returns {DommaCollection}
+     */
+    fadeIn(duration = 400, callback) {
+        return this.each((i, el) => {
+            el.style.display = '';
+            el.style.opacity = '0';
+            el.style.transition = `opacity ${this._getDuration(duration)}ms`;
+            requestAnimationFrame(() => {
+                el.style.opacity = '1';
+                setTimeout(() => {
+                    el.style.transition = '';
+                    if (callback) callback.call(el);
+                }, this._getDuration(duration));
+            });
+        });
+    }
+
+    /**
+     * Fade out elements.
+     * @param {number|string} [duration=400]
+     * @param {Function} [callback]
+     * @returns {DommaCollection}
+     */
+    fadeOut(duration = 400, callback) {
+        return this.each((i, el) => {
+            el.style.transition = `opacity ${this._getDuration(duration)}ms`;
+            el.style.opacity = '0';
+            setTimeout(() => {
+                el.style.display = 'none';
+                el.style.opacity = '';
+                el.style.transition = '';
+                if (callback) callback.call(el);
+            }, this._getDuration(duration));
+        });
+    }
+
+    /**
+     * Toggle fade.
+     * @param {number|string} [duration=400]
+     * @param {Function} [callback]
+     * @returns {DommaCollection}
+     */
+    fadeToggle(duration = 400, callback) {
+        return this.each((i, el) => {
+            const isHidden = getComputedStyle(el).display === 'none' || getComputedStyle(el).opacity === '0';
+            if (isHidden) {
+                new DommaCollection(el).fadeIn(duration, callback);
+            } else {
+                new DommaCollection(el).fadeOut(duration, callback);
+            }
+        });
+    }
+
+    /**
+     * Fade to opacity.
+     * @param {number|string} duration
+     * @param {number} opacity
+     * @param {Function} [callback]
+     * @returns {DommaCollection}
+     */
+    fadeTo(duration, opacity, callback) {
+        return this.each((i, el) => {
+            el.style.display = '';
+            el.style.transition = `opacity ${this._getDuration(duration)}ms`;
+            requestAnimationFrame(() => {
+                el.style.opacity = String(opacity);
+                setTimeout(() => {
+                    el.style.transition = '';
+                    if (callback) callback.call(el);
+                }, this._getDuration(duration));
+            });
+        });
+    }
+
+    /**
+     * Slide up (hide).
+     * @param {number|string} [duration=400]
+     * @param {Function} [callback]
+     * @returns {DommaCollection}
+     */
+    slideUp(duration = 400, callback) {
+        return this.each((i, el) => {
+            const height = el.offsetHeight;
+            el.style.overflow = 'hidden';
+            el.style.height = height + 'px';
+            el.style.transition = `height ${this._getDuration(duration)}ms`;
+            requestAnimationFrame(() => {
+                el.style.height = '0';
+                setTimeout(() => {
+                    el.style.display = 'none';
+                    el.style.height = '';
+                    el.style.overflow = '';
+                    el.style.transition = '';
+                    if (callback) callback.call(el);
+                }, this._getDuration(duration));
+            });
+        });
+    }
+
+    /**
+     * Slide down (show).
+     * @param {number|string} [duration=400]
+     * @param {Function} [callback]
+     * @returns {DommaCollection}
+     */
+    slideDown(duration = 400, callback) {
+        return this.each((i, el) => {
+            el.style.display = '';
+            const height = el.scrollHeight;
+            el.style.overflow = 'hidden';
+            el.style.height = '0';
+            el.style.transition = `height ${this._getDuration(duration)}ms`;
+            requestAnimationFrame(() => {
+                el.style.height = height + 'px';
+                setTimeout(() => {
+                    el.style.height = '';
+                    el.style.overflow = '';
+                    el.style.transition = '';
+                    if (callback) callback.call(el);
+                }, this._getDuration(duration));
+            });
+        });
+    }
+
+    /**
+     * Toggle slide.
+     * @param {number|string} [duration=400]
+     * @param {Function} [callback]
+     * @returns {DommaCollection}
+     */
+    slideToggle(duration = 400, callback) {
+        return this.each((i, el) => {
+            const isHidden = getComputedStyle(el).display === 'none';
+            if (isHidden) {
+                new DommaCollection(el).slideDown(duration, callback);
+            } else {
+                new DommaCollection(el).slideUp(duration, callback);
+            }
+        });
+    }
+
+    /**
+     * Animate CSS properties.
+     * @param {Object} properties
+     * @param {number|string} [duration=400]
+     * @param {string} [easing='ease']
+     * @param {Function} [callback]
+     * @returns {DommaCollection}
+     */
+    animate(properties, duration = 400, easing = 'ease', callback) {
+        if (typeof duration === 'function') {
+            callback = duration;
+            duration = 400;
+            easing = 'ease';
+        } else if (typeof easing === 'function') {
+            callback = easing;
+            easing = 'ease';
+        }
+
+        const props = Object.keys(properties).join(', ');
+        const dur = this._getDuration(duration);
+
+        return this.each((i, el) => {
+            el.style.transition = `${props} ${dur}ms ${easing}`;
+            requestAnimationFrame(() => {
+                Object.entries(properties).forEach(([prop, value]) => {
+                    el.style[prop] = typeof value === 'number' ? value + 'px' : value;
+                });
+                setTimeout(() => {
+                    el.style.transition = '';
+                    if (callback) callback.call(el);
+                }, dur);
+            });
+        });
+    }
+
+    /**
+     * Stop animations.
+     * @returns {DommaCollection}
+     */
+    stop() {
+        return this.each((i, el) => {
+            const computed = getComputedStyle(el);
+            el.style.transition = 'none';
+            // Capture current computed values
+            ['opacity', 'height', 'width'].forEach(prop => {
+                if (el.style[prop]) {
+                    el.style[prop] = computed[prop];
+                }
+            });
+        });
+    }
+
+    /**
+     * Delay next animation.
+     * @param {number} duration
+     * @returns {DommaCollection}
+     */
+    delay(duration) {
+        return new Promise(resolve => {
+            setTimeout(() => resolve(this), duration);
+        });
+    }
+
+    // Helper: Convert duration string to ms
+    _getDuration(duration) {
+        if (typeof duration === 'number') return duration;
+        if (duration === 'fast') return 200;
+        if (duration === 'slow') return 600;
+        return 400;
+    }
+
+    // ============================================
+    // Dimensions
+    // ============================================
+
+    /**
+     * Get or set width.
+     * @param {number|string|Function} [value]
+     * @returns {number|DommaCollection}
+     */
+    width(value) {
+        if (value === undefined) {
+            const el = this.elements[0];
+            if (!el) return undefined;
+            return el.getBoundingClientRect().width;
+        }
+        return this.each((i, el) => {
+            const val = typeof value === 'function' ? value.call(el, i, new DommaCollection(el).width()) : value;
+            el.style.width = typeof val === 'number' ? val + 'px' : val;
+        });
+    }
+
+    /**
+     * Get or set height.
+     * @param {number|string|Function} [value]
+     * @returns {number|DommaCollection}
+     */
+    height(value) {
+        if (value === undefined) {
+            const el = this.elements[0];
+            if (!el) return undefined;
+            return el.getBoundingClientRect().height;
+        }
+        return this.each((i, el) => {
+            const val = typeof value === 'function' ? value.call(el, i, new DommaCollection(el).height()) : value;
+            el.style.height = typeof val === 'number' ? val + 'px' : val;
+        });
+    }
+
+    /**
+     * Get inner width (content + padding).
+     * @returns {number}
+     */
+    innerWidth() {
+        const el = this.elements[0];
+        return el ? el.clientWidth : undefined;
+    }
+
+    /**
+     * Get inner height (content + padding).
+     * @returns {number}
+     */
+    innerHeight() {
+        const el = this.elements[0];
+        return el ? el.clientHeight : undefined;
+    }
+
+    /**
+     * Get outer width (content + padding + border + optional margin).
+     * @param {boolean} [includeMargin=false]
+     * @returns {number}
+     */
+    outerWidth(includeMargin = false) {
+        const el = this.elements[0];
+        if (!el) return undefined;
+        let width = el.offsetWidth;
+        if (includeMargin) {
+            const style = getComputedStyle(el);
+            width += parseFloat(style.marginLeft) + parseFloat(style.marginRight);
+        }
+        return width;
+    }
+
+    /**
+     * Get outer height (content + padding + border + optional margin).
+     * @param {boolean} [includeMargin=false]
+     * @returns {number}
+     */
+    outerHeight(includeMargin = false) {
+        const el = this.elements[0];
+        if (!el) return undefined;
+        let height = el.offsetHeight;
+        if (includeMargin) {
+            const style = getComputedStyle(el);
+            height += parseFloat(style.marginTop) + parseFloat(style.marginBottom);
+        }
+        return height;
+    }
+
+    /**
+     * Get or set offset (position relative to document).
+     * @param {Object} [coords]
+     * @returns {Object|DommaCollection}
+     */
+    offset(coords) {
+        if (coords === undefined) {
+            const el = this.elements[0];
+            if (!el) return undefined;
+            const rect = el.getBoundingClientRect();
+            return {
+                top: rect.top + window.pageYOffset,
+                left: rect.left + window.pageXOffset
+            };
+        }
+        return this.each((i, el) => {
+            const position = getComputedStyle(el).position;
+            if (position === 'static') {
+                el.style.position = 'relative';
+            }
+            const currentOffset = new DommaCollection(el).offset();
+            const currentLeft = parseFloat(getComputedStyle(el).left) || 0;
+            const currentTop = parseFloat(getComputedStyle(el).top) || 0;
+
+            if (coords.left !== undefined) {
+                el.style.left = (currentLeft + coords.left - currentOffset.left) + 'px';
+            }
+            if (coords.top !== undefined) {
+                el.style.top = (currentTop + coords.top - currentOffset.top) + 'px';
+            }
+        });
+    }
+
+    /**
+     * Get position (relative to offset parent).
+     * @returns {Object}
+     */
+    position() {
+        const el = this.elements[0];
+        if (!el) return undefined;
+        return {
+            top: el.offsetTop,
+            left: el.offsetLeft
+        };
+    }
+
+    /**
+     * Get or set scroll top position.
+     * @param {number} [value]
+     * @returns {number|DommaCollection}
+     */
+    scrollTop(value) {
+        if (value === undefined) {
+            const el = this.elements[0];
+            if (!el) return undefined;
+            return el === window ? window.pageYOffset : el.scrollTop;
+        }
+        return this.each((i, el) => {
+            if (el === window) {
+                window.scrollTo(window.pageXOffset, value);
+            } else {
+                el.scrollTop = value;
+            }
+        });
+    }
+
+    /**
+     * Get or set scroll left position.
+     * @param {number} [value]
+     * @returns {number|DommaCollection}
+     */
+    scrollLeft(value) {
+        if (value === undefined) {
+            const el = this.elements[0];
+            if (!el) return undefined;
+            return el === window ? window.pageXOffset : el.scrollLeft;
+        }
+        return this.each((i, el) => {
+            if (el === window) {
+                window.scrollTo(value, window.pageYOffset);
+            } else {
+                el.scrollLeft = value;
+            }
+        });
+    }
+
+    /**
+     * Get offset parent.
+     * @returns {DommaCollection}
+     */
+    offsetParent() {
+        return new DommaCollection(this.elements.map(el => el.offsetParent || document.body));
     }
 }
 
-export const dom = (selector) => new DommaCollection(selector);
+export const dom = (selector, context) => new DommaCollection(selector, context);
