@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domma Test Suite</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .test-result {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+
+        .test-pass {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .test-fail {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #test-container {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Domma Test Suite</h1>
+    <div id="results"></div>
+    <div class="summary" id="summary"></div>
+    <div id="test-container">
+        <div id="test-elem" class="test-class">Test Element</div>
+        <button id="test-btn">Test Button</button>
+    </div>
+
+    <script type="module">
+        import Domma from '../src/index.js';
+
+        const results = [];
+
+        function assert(condition, message) {
+            if (!condition) throw new Error(message);
+        }
+
+        function test(name, fn) {
+            try {
+                fn();
+                results.push({ name, passed: true });
+                console.log(`✅ ${name}`);
+            } catch (e) {
+                results.push({ name, passed: false, error: e.message });
+                console.error(`❌ ${name}: ${e.message}`);
+            }
+        }
+
+        // DOM Tests
+        test('Domma selection by ID', () => {
+            const el = Domma('#test-elem');
+            assert(el.elements.length === 1, 'Should select one element');
+        });
+
+        test('Domma text getter', () => {
+            const el = Domma('#test-elem');
+            assert(el.text() === 'Test Element', 'Should get text content');
+        });
+
+        test('Domma text setter', () => {
+            const el = Domma('#test-elem');
+            el.text('Modified');
+            assert(el.text() === 'Modified', 'Should set text content');
+            el.text('Test Element'); // reset
+        });
+
+        test('Domma html setter', () => {
+            const el = Domma('#test-elem');
+            el.html('<strong>Bold</strong>');
+            assert(el.html().includes('Bold'), 'Should set HTML content');
+            el.html('Test Element'); // reset
+        });
+
+        test('Domma css setter', () => {
+            const el = Domma('#test-elem');
+            el.css('color', 'red');
+            assert(el.elements[0].style.color === 'red', 'Should set CSS property');
+        });
+
+        test('Domma css object setter', () => {
+            const el = Domma('#test-elem');
+            el.css({ fontSize: '20px', fontWeight: 'bold' });
+            assert(el.elements[0].style.fontSize === '20px', 'Should set multiple CSS properties');
+        });
+
+        test('Domma addClass', () => {
+            const el = Domma('#test-elem');
+            el.addClass('new-class');
+            assert(el.elements[0].classList.contains('new-class'), 'Should add class');
+        });
+
+        test('Domma removeClass', () => {
+            const el = Domma('#test-elem');
+            el.removeClass('new-class');
+            assert(!el.elements[0].classList.contains('new-class'), 'Should remove class');
+        });
+
+        test('Domma event binding', () => {
+            const el = Domma('#test-btn');
+            let clicked = false;
+            const handler = () => { clicked = true; };
+            el.on('click', handler);
+            el.elements[0].click();
+            assert(clicked, 'Should bind event');
+            el.off('click', handler);
+        });
+
+        // Utils Tests
+        test('Utils.merge', () => {
+            const a = { x: 1, nested: { a: 1 } };
+            const b = { y: 2, nested: { b: 2 } };
+            const c = Domma.utils.merge({}, a, b);
+            assert(c.x === 1 && c.y === 2 && c.nested.a === 1 && c.nested.b === 2, 'Should deep merge objects');
+        });
+
+        test('Utils.each with array', () => {
+            let sum = 0;
+            Domma.utils.each([1, 2, 3], (val) => { sum += val; });
+            assert(sum === 6, 'Should iterate over array');
+        });
+
+        test('Utils.each with object', () => {
+            let keys = [];
+            Domma.utils.each({ a: 1, b: 2 }, (val, key) => { keys.push(key); });
+            assert(keys.length === 2, 'Should iterate over object');
+        });
+
+        test('Utils.clone', () => {
+            const obj = { a: 1, b: { c: 2 } };
+            const clone = Domma.utils.clone(obj);
+            clone.b.c = 3;
+            assert(obj.b.c === 2, 'Should deep clone object');
+        });
+
+        // Config Engine Tests
+        test('Config engine initial state', () => {
+            const testDiv = document.createElement('div');
+            testDiv.id = 'config-test';
+            document.body.appendChild(testDiv);
+
+            Domma.setup({
+                '#config-test': {
+                    initial: {
+                        text: 'Configured',
+                        addClass: 'configured'
+                    }
+                }
+            });
+
+            assert(testDiv.textContent === 'Configured', 'Should apply initial text');
+            assert(testDiv.classList.contains('configured'), 'Should apply initial class');
+            document.body.removeChild(testDiv);
+        });
+
+        // Render Results
+        const resultsHtml = results.map(r =>
+            `<div class="test-result ${r.passed ? 'test-pass' : 'test-fail'}">
+                ${r.passed ? '✅' : '❌'} ${r.name}
+                ${r.error ? `<br><small>${r.error}</small>` : ''}
+            </div>`
+        ).join('');
+
+        const passed = results.filter(r => r.passed).length;
+        const total = results.length;
+
+        document.getElementById('results').innerHTML = resultsHtml;
+        document.getElementById('summary').innerHTML = `
+            <strong>Test Results:</strong> ${passed}/${total} passed
+            ${passed === total ? ' 🎉' : ' ⚠️'}
+        `;
+    </script>
+</body>
+
+</html>

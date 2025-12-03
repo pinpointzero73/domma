@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domma Toolkit Demo</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .box { width: 100px; height: 100px; background: #ddd; margin: 10px; display: inline-block; text-align: center; line-height: 100px; cursor: pointer; }
+        .highlight { border: 2px solid red; }
+        .active { background: #aaf; }
+    </style>
+</head>
+<body>
+    <h1>Domma Toolkit Demo</h1>
+    
+    <div id="app">
+        <div class="box" id="box1">Box 1</div>
+        <div class="box" id="box2">Box 2</div>
+        <button id="fetch-btn">Fetch Data</button>
+        <div id="output"></div>
+    </div>
+
+    <script type="module">
+        import Domma from './src/index.js';
+
+        // 1. Test Core DOM
+        Domma('#output').text('Ready...');
+
+        // 2. Test JSON Configuration
+        const config = {
+            '#box1': {
+                initial: {
+                    css: { backgroundColor: '#faa' },
+                    text: 'Configured!'
+                },
+                events: {
+                    click: {
+                        addClass: 'highlight',
+                        text: 'Clicked!',
+                        log: 'Box 1 clicked'
+                    },
+                    dblclick: {
+                        removeClass: 'highlight',
+                        text: 'Configured!',
+                        log: 'Box 1 double clicked'
+                    }
+                }
+            },
+            '#box2': {
+                events: {
+                    click: [
+                        { css: { backgroundColor: '#afa' } },
+                        { target: '#output', text: 'Box 2 changed Box 1 color via config!' }
+                    ]
+                }
+            }
+        };
+
+        Domma.setup(config);
+
+        // 3. Test HTTP & Utils
+        Domma('#fetch-btn').click(async () => {
+            try {
+                Domma('#output').text('Fetching...');
+                // Using a dummy JSON API
+                const data = await Domma.http.get('https://jsonplaceholder.typicode.com/todos/1');
+                
+                const merged = Domma.utils.merge({}, data, { localTimestamp: Date.now() });
+                
+                Domma('#output').html(`<pre>${JSON.stringify(merged, null, 2)}</pre>`);
+            } catch (e) {
+                Domma('#output').text('Error fetching data');
+                console.error(e);
+            }
+        });
+
+        console.log('Domma initialized');
+    </script>
+</body>
+</html>

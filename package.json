@@ -1,0 +1,19 @@
+{
+  "name": "domma",
+  "version": "1.0.0",
+  "description": "A JavaScript toolkit for DOM manipulation, HTTP requests, and Utilities with JSON configuration.",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/test.js"
+  },
+  "keywords": [
+    "dom",
+    "http",
+    "utils",
+    "toolkit",
+    "json-config"
+  ],
+  "author": "",
+  "license": "ISC"
+}
