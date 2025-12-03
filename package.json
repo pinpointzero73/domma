@@ -2,9 +2,11 @@
   "name": "domma",
   "version": "1.0.0",
   "description": "A JavaScript toolkit for DOM manipulation, HTTP requests, and Utilities with JSON configuration.",
-  "main": "src/index.js",
+  "main": "dist/domma.min.js",
+  "module": "dist/domma.esm.js",
   "type": "module",
   "scripts": {
+    "build": "rollup -c",
     "test": "node tests/test.js"
   },
   "keywords": [
@@ -14,6 +16,12 @@
     "toolkit",
     "json-config"
   ],
-  "author": "",
-  "license": "ISC"
+  "author": "Darryl Waterhouse",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.28.0",
+    "rollup-plugin-obfuscator": "^1.1.0"
+  }
 }
