@@ -425,6 +425,60 @@ export const utils = {
         return result;
     },
 
+    /**
+     * Invokes the iteratee n times, returning an array of the results.
+     * @param {number} n - The number of times to invoke iteratee
+     * @param {Function} [iteratee] - The function invoked per iteration
+     * @returns {Array} The array of results
+     */
+    times(n, iteratee) {
+        n = Math.floor(n);
+        if (n < 1) return [];
+        const result = new Array(n);
+        for (let i = 0; i < n; i++) {
+            result[i] = iteratee ? iteratee(i) : i;
+        }
+        return result;
+    },
+
+    /**
+     * Creates an array of numbers from start up to, but not including, end.
+     * @param {number} [start=0] - The start of the range
+     * @param {number} end - The end of the range (exclusive)
+     * @param {number} [step=1] - The increment value
+     * @returns {Array} The range of numbers
+     */
+    range(start, end, step) {
+        if (end === undefined) {
+            end = start;
+            start = 0;
+        }
+        step = step === undefined ? (start < end ? 1 : -1) : step;
+
+        if (step === 0) return [];
+
+        const length = Math.max(Math.ceil((end - start) / (step || 1)), 0);
+        const result = new Array(length);
+
+        for (let i = 0; i < length; i++) {
+            result[i] = start + (i * step);
+        }
+        return result;
+    },
+
+    /**
+     * Generates a unique ID. If prefix is given, the ID is appended to it.
+     * @param {string} [prefix=''] - The value to prefix the ID with
+     * @returns {string} The unique ID
+     */
+    uniqueId: (() => {
+        let idCounter = 0;
+        return function (prefix = '') {
+            const id = ++idCounter;
+            return prefix ? `${prefix}${id}` : String(id);
+        };
+    })(),
+
     // ============================================
     // Collection Utilities
     // ============================================
@@ -1776,6 +1830,31 @@ export const utils = {
         if (valueKeys.length !== otherKeys.length) return false;
 
         return valueKeys.every(key => this.isEqual(value[key], other[key]));
+    },
+
+    /**
+     * Performs a partial deep comparison to determine if object contains equivalent property values.
+     * @param {Object} object - The object to inspect
+     * @param {Object} source - The object of property values to match
+     * @returns {boolean} Returns true if object is a match
+     */
+    isMatch(object, source) {
+        if (object === source) return true;
+        if (object == null || source == null) return false;
+        if (typeof object !== 'object' || typeof source !== 'object') return false;
+
+        const keys = Object.keys(source);
+        for (const key of keys) {
+            const objVal = object[key];
+            const srcVal = source[key];
+
+            if (typeof srcVal === 'object' && srcVal !== null) {
+                if (!this.isMatch(objVal, srcVal)) return false;
+            } else if (objVal !== srcVal) {
+                return false;
+            }
+        }
+        return true;
     },
 
     /**
