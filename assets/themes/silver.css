@@ -1,0 +1,87 @@
+/**
+ * Domma Silver Theme Variant
+ * Light gray/silver colour palette
+ * Combinable with light or dark theme: .dm-theme-light.dm-theme-silver
+ */
+
+.dm-theme-silver {
+    /* ================================================
+       PRIMARY COLOURS - Silver Gray
+       ================================================ */
+    --dm-primary: #708090;
+    --dm-primary-hover: #84929f;
+    --dm-primary-active: #98a4ae;
+    --dm-primary-light: #f0f2f4;
+    --dm-primary-dark: #4a5568;
+
+    /* Focus ring with silver colour */
+    --dm-focus-ring: 0 0 0 3px rgba(112, 128, 144, 0.3);
+    --dm-border-focus: #708090;
+
+    /* ================================================
+       SECONDARY COLOURS - Cool Gray
+       ================================================ */
+    --dm-secondary: #a0aec0;
+    --dm-secondary-hover: #b0bac9;
+    --dm-secondary-active: #c0c6d2;
+    --dm-secondary-light: #f7f8fa;
+    --dm-secondary-dark: #718096;
+
+    /* ================================================
+       STATUS COLOURS - Neutral-tinted
+       ================================================ */
+    --dm-success: #68d391;
+    --dm-success-hover: #7cdaa0;
+    --dm-success-active: #90e1af;
+    --dm-success-light: #f0faf4;
+    --dm-success-dark: #48bb78;
+
+    --dm-info: #63b3ed;
+    --dm-info-hover: #79bff0;
+    --dm-info-active: #8fcbf3;
+    --dm-info-light: #ebf8ff;
+    --dm-info-dark: #4299e1;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #e2e8f0; /* Light slate */
+    --dm-accent-2: #cbd5e0; /* Cool gray */
+    --dm-accent-3: #a0aec0; /* Gray blue */
+    --dm-accent-4: #4a5568; /* Dark slate */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(112, 128, 144, 0.12);
+    --dm-tab-active-border: #708090;
+    --dm-tab-active-text: #4a5568;
+    --dm-progress-bar: #708090;
+}
+
+/* Dark mode adjustments for silver */
+.dm-theme-dark.dm-theme-silver {
+    --dm-primary: #a0aec0;
+    --dm-primary-hover: #b0bac9;
+    --dm-primary-active: #c0c6d2;
+    --dm-primary-light: rgba(160, 174, 192, 0.15);
+    --dm-primary-dark: #718096;
+
+    --dm-secondary: #cbd5e0;
+    --dm-secondary-hover: #d5dce6;
+    --dm-secondary-active: #dfe3ec;
+    --dm-secondary-light: rgba(203, 213, 224, 0.15);
+    --dm-secondary-dark: #a0aec0;
+
+    --dm-success: #9ae6b4;
+    --dm-success-light: rgba(154, 230, 180, 0.15);
+
+    --dm-info: #90cdf4;
+    --dm-info-light: rgba(144, 205, 244, 0.15);
+
+    --dm-focus-ring: 0 0 0 3px rgba(160, 174, 192, 0.35);
+    --dm-selected-bg: rgba(160, 174, 192, 0.2);
+    --dm-tab-active-border: #a0aec0;
+    --dm-tab-active-text: #a0aec0;
+    --dm-progress-bar: #a0aec0;
+}

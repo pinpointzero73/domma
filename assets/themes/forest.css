@@ -1,0 +1,98 @@
+/**
+ * Domma Forest Theme Variant
+ * Natural green colour palette inspired by nature
+ * Combinable with light or dark theme: .dm-theme-light.dm-theme-forest
+ */
+
+.dm-theme-forest {
+    /* ================================================
+       PRIMARY COLOURS - Forest Green
+       ================================================ */
+    --dm-primary: #2d6a4f;
+    --dm-primary-hover: #40916c;
+    --dm-primary-active: #52b788;
+    --dm-primary-light: #d8f3dc;
+    --dm-primary-dark: #1b4332;
+
+    /* Focus ring with forest colour */
+    --dm-focus-ring: 0 0 0 3px rgba(45, 106, 79, 0.3);
+    --dm-border-focus: #2d6a4f;
+
+    /* ================================================
+       SECONDARY COLOURS - Earth Brown
+       ================================================ */
+    --dm-secondary: #6b705c;
+    --dm-secondary-hover: #7d826d;
+    --dm-secondary-active: #8f937e;
+    --dm-secondary-light: #f0efe9;
+    --dm-secondary-dark: #52554a;
+
+    /* ================================================
+       STATUS COLOURS - Nature-tinted
+       ================================================ */
+    --dm-success: #40916c;
+    --dm-success-hover: #52b788;
+    --dm-success-active: #74c69d;
+    --dm-success-light: #d8f3dc;
+    --dm-success-dark: #2d6a4f;
+
+    --dm-info: #588157;
+    --dm-info-hover: #6b9669;
+    --dm-info-active: #7eab7c;
+    --dm-info-light: #e2f0e1;
+    --dm-info-dark: #3a5a40;
+
+    --dm-warning: #dda15e;
+    --dm-warning-hover: #e3b276;
+    --dm-warning-active: #e9c38e;
+    --dm-warning-light: #faf3e7;
+    --dm-warning-dark: #bc6c25;
+    --dm-warning-text: #bc6c25;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #95d5b2; /* Mint */
+    --dm-accent-2: #74c69d; /* Sage */
+    --dm-accent-3: #52b788; /* Emerald */
+    --dm-accent-4: #1b4332; /* Pine */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(45, 106, 79, 0.15);
+    --dm-tab-active-border: #2d6a4f;
+    --dm-tab-active-text: #2d6a4f;
+    --dm-progress-bar: #2d6a4f;
+}
+
+/* Dark mode adjustments for forest */
+.dm-theme-dark.dm-theme-forest {
+    --dm-primary: #74c69d;
+    --dm-primary-hover: #88d0ac;
+    --dm-primary-active: #9cdabb;
+    --dm-primary-light: rgba(116, 198, 157, 0.15);
+    --dm-primary-dark: #52b788;
+
+    --dm-secondary: #a3b899;
+    --dm-secondary-hover: #b2c4a9;
+    --dm-secondary-active: #c1d0b9;
+    --dm-secondary-light: rgba(163, 184, 153, 0.15);
+    --dm-secondary-dark: #7d9273;
+
+    --dm-success: #95d5b2;
+    --dm-success-light: rgba(149, 213, 178, 0.15);
+
+    --dm-info: #95d5b2;
+    --dm-info-light: rgba(149, 213, 178, 0.15);
+
+    --dm-warning: #e9c38e;
+    --dm-warning-light: rgba(233, 195, 142, 0.15);
+    --dm-warning-text: #e9c38e;
+
+    --dm-focus-ring: 0 0 0 3px rgba(116, 198, 157, 0.35);
+    --dm-selected-bg: rgba(116, 198, 157, 0.2);
+    --dm-tab-active-border: #74c69d;
+    --dm-tab-active-text: #74c69d;
+    --dm-progress-bar: #74c69d;
+}

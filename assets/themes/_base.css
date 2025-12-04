@@ -1,0 +1,267 @@
+/**
+ * Domma Theme Base
+ * Shared design tokens: spacing, typography, radii, shadows, transitions
+ */
+
+:root {
+    /* ================================================
+       SPACING SCALE
+       ================================================ */
+    --dm-space-0: 0;
+    --dm-space-1: 0.25rem; /* 4px */
+    --dm-space-2: 0.5rem; /* 8px */
+    --dm-space-3: 0.75rem; /* 12px */
+    --dm-space-4: 1rem; /* 16px */
+    --dm-space-5: 1.25rem; /* 20px */
+    --dm-space-6: 1.5rem; /* 24px */
+    --dm-space-8: 2rem; /* 32px */
+    --dm-space-10: 2.5rem; /* 40px */
+    --dm-space-12: 3rem; /* 48px */
+    --dm-space-16: 4rem; /* 64px */
+    --dm-space-20: 5rem; /* 80px */
+    --dm-space-24: 6rem; /* 96px */
+
+    /* ================================================
+       TYPOGRAPHY
+       ================================================ */
+    --dm-font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --dm-font-serif: Georgia, Cambria, 'Times New Roman', Times, serif;
+    --dm-font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Menlo, Consolas, monospace;
+
+    /* Font Sizes */
+    --dm-text-xs: 0.75rem; /* 12px */
+    --dm-text-sm: 0.875rem; /* 14px */
+    --dm-text-base: 1rem; /* 16px */
+    --dm-text-lg: 1.125rem; /* 18px */
+    --dm-text-xl: 1.25rem; /* 20px */
+    --dm-text-2xl: 1.5rem; /* 24px */
+    --dm-text-3xl: 1.875rem; /* 30px */
+    --dm-text-4xl: 2.25rem; /* 36px */
+    --dm-text-5xl: 3rem; /* 48px */
+
+    /* Line Heights */
+    --dm-leading-none: 1;
+    --dm-leading-tight: 1.25;
+    --dm-leading-snug: 1.375;
+    --dm-leading-normal: 1.5;
+    --dm-leading-relaxed: 1.625;
+    --dm-leading-loose: 2;
+
+    /* Font Weights */
+    --dm-font-light: 300;
+    --dm-font-normal: 400;
+    --dm-font-medium: 500;
+    --dm-font-semibold: 600;
+    --dm-font-bold: 700;
+
+    /* Letter Spacing */
+    --dm-tracking-tighter: -0.05em;
+    --dm-tracking-tight: -0.025em;
+    --dm-tracking-normal: 0;
+    --dm-tracking-wide: 0.025em;
+    --dm-tracking-wider: 0.05em;
+    --dm-tracking-widest: 0.1em;
+
+    /* ================================================
+       BORDER RADIUS
+       ================================================ */
+    --dm-radius-none: 0;
+    --dm-radius-sm: 0.125rem; /* 2px */
+    --dm-radius-md: 0.25rem; /* 4px */
+    --dm-radius-lg: 0.5rem; /* 8px */
+    --dm-radius-xl: 0.75rem; /* 12px */
+    --dm-radius-2xl: 1rem; /* 16px */
+    --dm-radius-full: 9999px;
+
+    /* ================================================
+       SHADOWS
+       ================================================ */
+    --dm-shadow-none: none;
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* ================================================
+       TRANSITIONS
+       ================================================ */
+    --dm-transition-fast: 150ms ease;
+    --dm-transition-normal: 200ms ease;
+    --dm-transition-slow: 300ms ease;
+    --dm-transition-slower: 500ms ease;
+
+    /* Timing Functions */
+    --dm-ease-linear: linear;
+    --dm-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --dm-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --dm-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --dm-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* ================================================
+       Z-INDEX SCALE
+       ================================================ */
+    --dm-z-0: 0;
+    --dm-z-10: 10;
+    --dm-z-20: 20;
+    --dm-z-30: 30;
+    --dm-z-40: 40;
+    --dm-z-50: 50;
+    --dm-z-dropdown: 1000;
+    --dm-z-sticky: 1020;
+    --dm-z-fixed: 1030;
+    --dm-z-modal-backdrop: 1040;
+    --dm-z-modal: 1050;
+    --dm-z-popover: 1060;
+    --dm-z-tooltip: 1070;
+    --dm-z-toast: 1080;
+
+    /* ================================================
+       BREAKPOINTS (for reference)
+       ================================================ */
+    --dm-breakpoint-sm: 640px;
+    --dm-breakpoint-md: 768px;
+    --dm-breakpoint-lg: 1024px;
+    --dm-breakpoint-xl: 1280px;
+    --dm-breakpoint-2xl: 1536px;
+
+    /* ================================================
+       CONTAINER WIDTHS
+       ================================================ */
+    --dm-container-sm: 640px;
+    --dm-container-md: 768px;
+    --dm-container-lg: 1024px;
+    --dm-container-xl: 1280px;
+
+    /* ================================================
+       OPACITY
+       ================================================ */
+    --dm-opacity-0: 0;
+    --dm-opacity-5: 0.05;
+    --dm-opacity-10: 0.1;
+    --dm-opacity-20: 0.2;
+    --dm-opacity-25: 0.25;
+    --dm-opacity-30: 0.3;
+    --dm-opacity-40: 0.4;
+    --dm-opacity-50: 0.5;
+    --dm-opacity-60: 0.6;
+    --dm-opacity-70: 0.7;
+    --dm-opacity-75: 0.75;
+    --dm-opacity-80: 0.8;
+    --dm-opacity-90: 0.9;
+    --dm-opacity-95: 0.95;
+    --dm-opacity-100: 1;
+}
+
+/* ================================================
+   ICON UTILITIES
+   ================================================ */
+.dm-icon {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.dm-icon-xs {
+    width: 12px;
+    height: 12px;
+}
+
+.dm-icon-sm {
+    width: 16px;
+    height: 16px;
+}
+
+.dm-icon-md {
+    width: 24px;
+    height: 24px;
+}
+
+.dm-icon-lg {
+    width: 32px;
+    height: 32px;
+}
+
+.dm-icon-xl {
+    width: 48px;
+    height: 48px;
+}
+
+.dm-icon-2xl {
+    width: 64px;
+    height: 64px;
+}
+
+/* Icon colour utilities (use theme colours) */
+.dm-icon-primary {
+    color: var(--dm-primary);
+}
+
+.dm-icon-secondary {
+    color: var(--dm-secondary);
+}
+
+.dm-icon-success {
+    color: var(--dm-success);
+}
+
+.dm-icon-danger {
+    color: var(--dm-danger);
+}
+
+.dm-icon-warning {
+    color: var(--dm-warning);
+}
+
+.dm-icon-info {
+    color: var(--dm-info);
+}
+
+.dm-icon-muted {
+    color: var(--dm-text-muted);
+}
+
+/* Spinner animation */
+@keyframes dm-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.dm-icon-spin {
+    animation: dm-spin 1s linear infinite;
+}
+
+/* Pulse animation for notifications */
+@keyframes dm-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.dm-icon-pulse {
+    animation: dm-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Bounce animation */
+@keyframes dm-bounce {
+    0%, 100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
+
+.dm-icon-bounce {
+    animation: dm-bounce 1s infinite;
+}

@@ -1,0 +1,87 @@
+/**
+ * Domma Charcoal Theme Variant
+ * Dark gray/charcoal colour palette
+ * Combinable with light or dark theme: .dm-theme-light.dm-theme-charcoal
+ */
+
+.dm-theme-charcoal {
+    /* ================================================
+       PRIMARY COLOURS - Charcoal Gray
+       ================================================ */
+    --dm-primary: #36454f;
+    --dm-primary-hover: #4a5d69;
+    --dm-primary-active: #5e7583;
+    --dm-primary-light: #e8ebed;
+    --dm-primary-dark: #1c2428;
+
+    /* Focus ring with charcoal colour */
+    --dm-focus-ring: 0 0 0 3px rgba(54, 69, 79, 0.3);
+    --dm-border-focus: #36454f;
+
+    /* ================================================
+       SECONDARY COLOURS - Slate
+       ================================================ */
+    --dm-secondary: #5f6f7a;
+    --dm-secondary-hover: #738290;
+    --dm-secondary-active: #8795a0;
+    --dm-secondary-light: #f0f2f3;
+    --dm-secondary-dark: #3d4a52;
+
+    /* ================================================
+       STATUS COLOURS - Neutral-tinted
+       ================================================ */
+    --dm-success: #4caf50;
+    --dm-success-hover: #61b965;
+    --dm-success-active: #76c37a;
+    --dm-success-light: #e8f5e9;
+    --dm-success-dark: #388e3c;
+
+    --dm-info: #2196f3;
+    --dm-info-hover: #42a5f5;
+    --dm-info-active: #64b5f6;
+    --dm-info-light: #e3f2fd;
+    --dm-info-dark: #1976d2;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #78909c; /* Blue gray */
+    --dm-accent-2: #607d8b; /* Gray blue */
+    --dm-accent-3: #455a64; /* Dark blue gray */
+    --dm-accent-4: #263238; /* Charcoal */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(54, 69, 79, 0.12);
+    --dm-tab-active-border: #36454f;
+    --dm-tab-active-text: #1c2428;
+    --dm-progress-bar: #36454f;
+}
+
+/* Dark mode adjustments for charcoal */
+.dm-theme-dark.dm-theme-charcoal {
+    --dm-primary: #78909c;
+    --dm-primary-hover: #8a9fa9;
+    --dm-primary-active: #9caeb6;
+    --dm-primary-light: rgba(120, 144, 156, 0.15);
+    --dm-primary-dark: #607d8b;
+
+    --dm-secondary: #90a4ae;
+    --dm-secondary-hover: #a1b3bb;
+    --dm-secondary-active: #b2c2c8;
+    --dm-secondary-light: rgba(144, 164, 174, 0.15);
+    --dm-secondary-dark: #78909c;
+
+    --dm-success: #81c784;
+    --dm-success-light: rgba(129, 199, 132, 0.15);
+
+    --dm-info: #64b5f6;
+    --dm-info-light: rgba(100, 181, 246, 0.15);
+
+    --dm-focus-ring: 0 0 0 3px rgba(120, 144, 156, 0.35);
+    --dm-selected-bg: rgba(120, 144, 156, 0.2);
+    --dm-tab-active-border: #78909c;
+    --dm-tab-active-text: #78909c;
+    --dm-progress-bar: #78909c;
+}

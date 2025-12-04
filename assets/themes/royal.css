@@ -1,0 +1,87 @@
+/**
+ * Domma Royal Theme Variant
+ * Rich royal blue colour palette
+ * Combinable with light or dark theme: .dm-theme-light.dm-theme-royal
+ */
+
+.dm-theme-royal {
+    /* ================================================
+       PRIMARY COLOURS - Royal Blue
+       ================================================ */
+    --dm-primary: #4169e1;
+    --dm-primary-hover: #5a7de6;
+    --dm-primary-active: #7391eb;
+    --dm-primary-light: #e8edfc;
+    --dm-primary-dark: #2c4a9e;
+
+    /* Focus ring with royal colour */
+    --dm-focus-ring: 0 0 0 3px rgba(65, 105, 225, 0.3);
+    --dm-border-focus: #4169e1;
+
+    /* ================================================
+       SECONDARY COLOURS - Purple Blue
+       ================================================ */
+    --dm-secondary: #6a5acd;
+    --dm-secondary-hover: #7d6fd4;
+    --dm-secondary-active: #9084db;
+    --dm-secondary-light: #f0eefa;
+    --dm-secondary-dark: #483d8b;
+
+    /* ================================================
+       STATUS COLOURS - Royal-tinted
+       ================================================ */
+    --dm-success: #32cd32;
+    --dm-success-hover: #4ad34a;
+    --dm-success-active: #62d962;
+    --dm-success-light: #e6f9e6;
+    --dm-success-dark: #228b22;
+
+    --dm-info: #6495ed;
+    --dm-info-hover: #79a5f0;
+    --dm-info-active: #8eb5f3;
+    --dm-info-light: #ebf1fd;
+    --dm-info-dark: #4169e1;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #b0c4de; /* Light steel blue */
+    --dm-accent-2: #6495ed; /* Cornflower blue */
+    --dm-accent-3: #4169e1; /* Royal blue */
+    --dm-accent-4: #191970; /* Midnight blue */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(65, 105, 225, 0.15);
+    --dm-tab-active-border: #4169e1;
+    --dm-tab-active-text: #4169e1;
+    --dm-progress-bar: #4169e1;
+}
+
+/* Dark mode adjustments for royal */
+.dm-theme-dark.dm-theme-royal {
+    --dm-primary: #6495ed;
+    --dm-primary-hover: #79a5f0;
+    --dm-primary-active: #8eb5f3;
+    --dm-primary-light: rgba(100, 149, 237, 0.15);
+    --dm-primary-dark: #4169e1;
+
+    --dm-secondary: #9370db;
+    --dm-secondary-hover: #a384e0;
+    --dm-secondary-active: #b398e5;
+    --dm-secondary-light: rgba(147, 112, 219, 0.15);
+    --dm-secondary-dark: #6a5acd;
+
+    --dm-success: #50fa7b;
+    --dm-success-light: rgba(80, 250, 123, 0.15);
+
+    --dm-info: #87ceeb;
+    --dm-info-light: rgba(135, 206, 235, 0.15);
+
+    --dm-focus-ring: 0 0 0 3px rgba(100, 149, 237, 0.35);
+    --dm-selected-bg: rgba(100, 149, 237, 0.2);
+    --dm-tab-active-border: #6495ed;
+    --dm-tab-active-text: #6495ed;
+    --dm-progress-bar: #6495ed;
+}

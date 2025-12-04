@@ -1,0 +1,107 @@
+/**
+ * Domma Sunset Theme Variant
+ * Warm orange and coral colour palette
+ * Combinable with light or dark theme: .dm-theme-light.dm-theme-sunset
+ */
+
+.dm-theme-sunset {
+    /* ================================================
+       PRIMARY COLOURS - Sunset Orange
+       ================================================ */
+    --dm-primary: #e85d04;
+    --dm-primary-hover: #f77f00;
+    --dm-primary-active: #fcbf49;
+    --dm-primary-light: #fff1e6;
+    --dm-primary-dark: #dc2f02;
+
+    /* Focus ring with sunset colour */
+    --dm-focus-ring: 0 0 0 3px rgba(232, 93, 4, 0.3);
+    --dm-border-focus: #e85d04;
+
+    /* ================================================
+       SECONDARY COLOURS - Warm Rose
+       ================================================ */
+    --dm-secondary: #9d4c5a;
+    --dm-secondary-hover: #b35d6c;
+    --dm-secondary-active: #c96e7e;
+    --dm-secondary-light: #f8eaed;
+    --dm-secondary-dark: #7a3a45;
+
+    /* ================================================
+       STATUS COLOURS - Sunset-tinted
+       ================================================ */
+    --dm-success: #72b01d;
+    --dm-success-hover: #85c131;
+    --dm-success-active: #98d244;
+    --dm-success-light: #e8f5d6;
+    --dm-success-dark: #5a8d17;
+
+    --dm-info: #f77f00;
+    --dm-info-hover: #f99526;
+    --dm-info-active: #faab4d;
+    --dm-info-light: #fff3e6;
+    --dm-info-dark: #dc7000;
+
+    --dm-warning: #fcbf49;
+    --dm-warning-hover: #fcca66;
+    --dm-warning-active: #fdd583;
+    --dm-warning-light: #fef8e9;
+    --dm-warning-dark: #e6a619;
+    --dm-warning-text: #b07e0c;
+
+    --dm-danger: #d90429;
+    --dm-danger-hover: #ef233c;
+    --dm-danger-active: #f24358;
+    --dm-danger-light: #fde4e8;
+    --dm-danger-dark: #a90320;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #fcbf49; /* Golden */
+    --dm-accent-2: #f77f00; /* Tangerine */
+    --dm-accent-3: #e85d04; /* Burnt orange */
+    --dm-accent-4: #d00000; /* Crimson */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(232, 93, 4, 0.12);
+    --dm-tab-active-border: #e85d04;
+    --dm-tab-active-text: #e85d04;
+    --dm-progress-bar: #e85d04;
+}
+
+/* Dark mode adjustments for sunset */
+.dm-theme-dark.dm-theme-sunset {
+    --dm-primary: #f77f00;
+    --dm-primary-hover: #f99526;
+    --dm-primary-active: #faab4d;
+    --dm-primary-light: rgba(247, 127, 0, 0.15);
+    --dm-primary-dark: #e85d04;
+
+    --dm-secondary: #d8838e;
+    --dm-secondary-hover: #df969f;
+    --dm-secondary-active: #e6a9b0;
+    --dm-secondary-light: rgba(216, 131, 142, 0.15);
+    --dm-secondary-dark: #c96e7e;
+
+    --dm-success: #98d244;
+    --dm-success-light: rgba(152, 210, 68, 0.15);
+
+    --dm-info: #faab4d;
+    --dm-info-light: rgba(250, 171, 77, 0.15);
+
+    --dm-warning: #fdd583;
+    --dm-warning-light: rgba(253, 213, 131, 0.15);
+    --dm-warning-text: #fcbf49;
+
+    --dm-danger: #f24358;
+    --dm-danger-light: rgba(242, 67, 88, 0.15);
+
+    --dm-focus-ring: 0 0 0 3px rgba(247, 127, 0, 0.35);
+    --dm-selected-bg: rgba(247, 127, 0, 0.2);
+    --dm-tab-active-border: #f77f00;
+    --dm-tab-active-text: #f77f00;
+    --dm-progress-bar: #f77f00;
+}

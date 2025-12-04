@@ -1,0 +1,87 @@
+/**
+ * Domma Ocean Theme Variant
+ * Cool blue colour palette inspired by the sea
+ * Combinable with light or dark theme: .dm-theme-light.dm-theme-ocean
+ */
+
+.dm-theme-ocean {
+    /* ================================================
+       PRIMARY COLOURS - Ocean Blue
+       ================================================ */
+    --dm-primary: #0077b6;
+    --dm-primary-hover: #0096c7;
+    --dm-primary-active: #00b4d8;
+    --dm-primary-light: #caf0f8;
+    --dm-primary-dark: #023e8a;
+
+    /* Focus ring with ocean colour */
+    --dm-focus-ring: 0 0 0 3px rgba(0, 119, 182, 0.3);
+    --dm-border-focus: #0077b6;
+
+    /* ================================================
+       SECONDARY COLOURS - Slate Blue
+       ================================================ */
+    --dm-secondary: #457b9d;
+    --dm-secondary-hover: #5a8fad;
+    --dm-secondary-active: #6ea3bd;
+    --dm-secondary-light: #e8f4f8;
+    --dm-secondary-dark: #1d3557;
+
+    /* ================================================
+       STATUS COLOURS - Ocean-tinted
+       ================================================ */
+    --dm-success: #06d6a0;
+    --dm-success-hover: #1fe0ac;
+    --dm-success-active: #39eab7;
+    --dm-success-light: #d4f5ed;
+    --dm-success-dark: #05a87d;
+
+    --dm-info: #48cae4;
+    --dm-info-hover: #5cd2e8;
+    --dm-info-active: #70daec;
+    --dm-info-light: #daf4f9;
+    --dm-info-dark: #00b4d8;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #90e0ef; /* Light cyan */
+    --dm-accent-2: #00b4d8; /* Bright cyan */
+    --dm-accent-3: #0096c7; /* Medium blue */
+    --dm-accent-4: #023e8a; /* Deep blue */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(0, 119, 182, 0.15);
+    --dm-tab-active-border: #0077b6;
+    --dm-tab-active-text: #0077b6;
+    --dm-progress-bar: #0077b6;
+}
+
+/* Dark mode adjustments for ocean */
+.dm-theme-dark.dm-theme-ocean {
+    --dm-primary: #48cae4;
+    --dm-primary-hover: #5cd2e8;
+    --dm-primary-active: #70daec;
+    --dm-primary-light: rgba(72, 202, 228, 0.15);
+    --dm-primary-dark: #00b4d8;
+
+    --dm-secondary: #90e0ef;
+    --dm-secondary-hover: #a6e7f2;
+    --dm-secondary-active: #bceef5;
+    --dm-secondary-light: rgba(144, 224, 239, 0.15);
+    --dm-secondary-dark: #48cae4;
+
+    --dm-success: #52e3b8;
+    --dm-success-light: rgba(82, 227, 184, 0.15);
+
+    --dm-info: #90e0ef;
+    --dm-info-light: rgba(144, 224, 239, 0.15);
+
+    --dm-focus-ring: 0 0 0 3px rgba(72, 202, 228, 0.35);
+    --dm-selected-bg: rgba(72, 202, 228, 0.2);
+    --dm-tab-active-border: #48cae4;
+    --dm-tab-active-text: #48cae4;
+    --dm-progress-bar: #48cae4;
+}
