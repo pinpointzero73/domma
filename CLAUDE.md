@@ -19,11 +19,10 @@ npm run build
 
 Outputs minified + obfuscated bundles to `dist/`.
 
-**Demo:**
+**Showcase:**
 
 ```bash
-npm run demo      # Basic demo
-npm run showcase  # Comprehensive showcase
+npm run showcase  # Comprehensive showcase with all features
 ```
 
 **Tests:**
@@ -103,6 +102,11 @@ Accessed via `Domma.elements`:
   `close()`, `toggle()`, `openAll()`, `closeAll()`
 - **Tooltip**: `elements.tooltip(selector, { content, position, trigger, delay, animation })` → `show()`, `hide()`,
   `toggle()`, `setContent()`
+- **Carousel**:
+  `elements.carousel(selector, { autoplay, interval, pauseOnHover, loop, animation, showArrows, showIndicators, onChange })` →
+  `next()`, `prev()`, `goTo()`, `play()`, `pause()`, `getIndex()`, `getSlide()`
+- **Jumbotron**: CSS-only component using classes: `.jumbotron`, `.jumbotron-primary`, `.jumbotron-dark`,
+  `.jumbotron-center`, `.jumbotron-cover`, `.jumbotron-overlay`, `.jumbotron-sm`, `.jumbotron-lg`
 
 ### tables.js - DataTable-like functionality
 
@@ -136,6 +140,24 @@ $.setup({
 });
 ```
 
+**Mutable Configuration** - update, retrieve, or reset configuration after setup:
+
+```javascript
+// Update configuration (deep merges changes)
+$.update('#selector', {
+    options: { backdrop: false },
+    events: { mouseenter: handler }
+});
+
+// Retrieve configuration
+$.config('#selector');  // Returns config for selector
+$.config();             // Returns all stored configs
+
+// Reset/destroy (removes component, unbinds events, clears config)
+$.reset('#selector');   // Reset specific selector
+$.reset();              // Reset all configurations
+```
+
 ### http.js - Fetch-based HTTP client
 
 `Domma.http.get()`, `.post()`, `.put()`, `.delete()` - all return promises resolving to JSON.
@@ -164,10 +186,12 @@ src/
 └── http.js       # HTTP client
 
 showcase/         # Comprehensive demos for each namespace
-demo/             # Basic demo page
+quickstart/       # Getting started blueprint
 dist/             # Built bundles (UMD + ESM)
 ```
 
 ## Bundle
 
-~125KB minified, includes all namespaces, zero external dependencies.
+~160KB minified, includes all namespaces, zero external dependencies.
+
+- When updating features or adding new ones, the documentation and showcase should be updated in-line
