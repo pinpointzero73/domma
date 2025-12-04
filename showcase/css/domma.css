@@ -1658,13 +1658,8 @@ code, pre {
 }
 
 .accordion-body {
-    max-height: 0;
     overflow: hidden;
-    transition: max-height var(--dm-transition-normal);
-}
-
-.accordion-item.active .accordion-body {
-    max-height: 500px;
+    transition: height var(--dm-transition-normal);
 }
 
 .accordion-content {
@@ -2050,6 +2045,7 @@ code {
     align-items: center;
     justify-content: space-between;
     padding: var(--dm-space-4) var(--dm-space-6);
+    padding-right: 4rem; /* Leave space for theme toggle */
     background-color: var(--dm-white);
     border-bottom: 1px solid var(--dm-gray-200);
 }
@@ -2129,6 +2125,301 @@ code {
     background-color: var(--dm-gray-900);
     border-top-color: var(--dm-gray-800);
     color: var(--dm-gray-400);
+}
+
+/* ============================================
+   LAYOUT: Jumbotron
+   ============================================ */
+
+.jumbotron {
+    position: relative;
+    padding: var(--dm-space-12) var(--dm-space-6);
+    background-color: var(--dm-gray-100);
+    border-radius: var(--dm-radius-lg);
+    margin-bottom: var(--dm-space-6);
+}
+
+.jumbotron-fluid {
+    border-radius: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.jumbotron-dark {
+    background-color: var(--dm-gray-900);
+    color: var(--dm-white);
+}
+
+.jumbotron-primary {
+    background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark, #4a7fd4) 100%);
+    color: var(--dm-white);
+}
+
+.jumbotron-cover {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.jumbotron-overlay {
+    position: relative;
+}
+
+.jumbotron-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: inherit;
+}
+
+.jumbotron-overlay > * {
+    position: relative;
+    z-index: 1;
+}
+
+.jumbotron-content {
+    max-width: 800px;
+}
+
+.jumbotron-center {
+    text-align: center;
+}
+
+.jumbotron-center .jumbotron-content {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.jumbotron-title {
+    font-size: var(--dm-font-size-4xl);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--dm-space-4);
+}
+
+.jumbotron-subtitle {
+    font-size: var(--dm-font-size-xl);
+    opacity: 0.9;
+    margin-bottom: var(--dm-space-6);
+}
+
+.jumbotron-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--dm-space-3);
+}
+
+.jumbotron-center .jumbotron-actions {
+    justify-content: center;
+}
+
+/* Jumbotron sizes */
+.jumbotron-sm {
+    padding: var(--dm-space-8) var(--dm-space-4);
+}
+
+.jumbotron-sm .jumbotron-title {
+    font-size: var(--dm-font-size-2xl);
+}
+
+.jumbotron-sm .jumbotron-subtitle {
+    font-size: var(--dm-font-size-lg);
+}
+
+.jumbotron-lg {
+    padding: var(--dm-space-16) var(--dm-space-8);
+}
+
+.jumbotron-lg .jumbotron-title {
+    font-size: var(--dm-font-size-5xl);
+}
+
+.jumbotron-full {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================
+   COMPONENTS: Carousel
+   ============================================ */
+
+.carousel {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--dm-radius-lg);
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.carousel-slide {
+    flex-shrink: 0;
+    width: 100%;
+    position: relative;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.carousel-slide-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--dm-space-6);
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    color: var(--dm-white);
+}
+
+.carousel-slide-title {
+    font-size: var(--dm-font-size-2xl);
+    font-weight: 700;
+    margin-bottom: var(--dm-space-2);
+}
+
+.carousel-slide-description {
+    font-size: var(--dm-font-size-base);
+    opacity: 0.9;
+}
+
+/* Carousel arrows (JS adds inline styles, these are fallbacks) */
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: var(--dm-shadow-md);
+}
+
+.carousel-arrow:hover {
+    background: var(--dm-white);
+}
+
+.carousel-prev {
+    left: var(--dm-space-4);
+}
+
+.carousel-next {
+    right: var(--dm-space-4);
+}
+
+/* Carousel indicators */
+.carousel-indicators {
+    position: absolute;
+    bottom: var(--dm-space-4);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: var(--dm-space-2);
+    z-index: 10;
+}
+
+.carousel-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s ease;
+}
+
+.carousel-indicator:hover,
+.carousel-indicator.active {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.2);
+}
+
+/* Carousel with thumbnails */
+.carousel-thumbnails {
+    display: flex;
+    gap: var(--dm-space-2);
+    margin-top: var(--dm-space-3);
+    justify-content: center;
+}
+
+.carousel-thumbnail {
+    width: 60px;
+    height: 40px;
+    border-radius: var(--dm-radius-sm);
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.carousel-thumbnail:hover {
+    opacity: 0.8;
+}
+
+.carousel-thumbnail.active {
+    opacity: 1;
+    border-color: var(--dm-primary);
+}
+
+.carousel-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Carousel variants */
+.carousel-fade .carousel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.carousel-fade .carousel-slide.active {
+    position: relative;
+    opacity: 1;
+}
+
+/* Carousel sizes */
+.carousel-sm {
+    max-height: 300px;
+}
+
+.carousel-lg {
+    min-height: 500px;
+}
+
+.carousel-full {
+    height: 100vh;
+}
+
+.carousel-full .carousel-slide {
+    height: 100vh;
+}
+
+.carousel-full .carousel-slide img {
+    height: 100%;
+    object-fit: cover;
 }
 
 /* ============================================

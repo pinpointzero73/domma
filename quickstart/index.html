@@ -4,16 +4,186 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Domma Quickstart</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/logo/domma-icon.svg">
     <link rel="stylesheet" href="css/domma.css">
+    <link rel="stylesheet" href="css/domma-themes.css">
+    <style>
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem;
+            background: var(--dm-surface);
+            border: 1px solid var(--dm-border);
+            border-radius: 9999px;
+            cursor: pointer;
+            z-index: 1000;
+            width: 40px;
+            height: 40px;
+        }
+
+        .variant-selector {
+            position: fixed;
+            top: 4rem;
+            right: 1rem;
+            z-index: 1000;
+        }
+
+        .variant-trigger {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--dm-border);
+            cursor: pointer;
+            background: conic-gradient(#adb5bd 0deg 45deg, #0077b6 45deg 90deg, #2d6a4f 90deg 135deg, #e85d04 135deg 180deg, #4169e1 180deg 225deg, #f0e68c 225deg 270deg, #708090 270deg 315deg, #36454f 315deg 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            padding: 0;
+        }
+
+        .variant-trigger:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .variant-options {
+            position: absolute;
+            top: 48px;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+        }
+
+        .variant-selector:hover .variant-options,
+        .variant-selector:focus-within .variant-options {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .variant-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--dm-border);
+            cursor: pointer;
+            transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+            padding: 0;
+            position: relative;
+        }
+
+        .variant-dot:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .variant-dot.active {
+            border-color: var(--dm-primary);
+            box-shadow: 0 0 0 2px var(--dm-primary);
+        }
+
+        .variant-dot-default {
+            background: var(--dm-gray-400);
+        }
+
+        .variant-dot-ocean {
+            background: linear-gradient(135deg, #0077b6, #48cae4);
+        }
+
+        .variant-dot-forest {
+            background: linear-gradient(135deg, #2d6a4f, #74c69d);
+        }
+
+        .variant-dot-sunset {
+            background: linear-gradient(135deg, #e85d04, #f77f00);
+        }
+
+        .variant-dot-royal {
+            background: linear-gradient(135deg, #4169e1, #6495ed);
+        }
+
+        .variant-dot-lemon {
+            background: linear-gradient(135deg, #f0e68c, #fffacd);
+        }
+
+        .variant-dot-silver {
+            background: linear-gradient(135deg, #708090, #a0aec0);
+        }
+
+        .variant-dot-charcoal {
+            background: linear-gradient(135deg, #36454f, #607d8b);
+        }
+
+        .variant-dot::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--dm-gray-800);
+            color: var(--dm-white);
+            padding: 0.35rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease;
+        }
+
+        .variant-dot:hover::after {
+            opacity: 1;
+        }
+
+        .navbar-logo {
+            vertical-align: middle;
+            margin-right: 0.35rem;
+            margin-top: -2px;
+        }
+    </style>
 </head>
-<body>
+<body class="dm-theme-light">
+<div class="variant-selector" id="variant-selector">
+    <button class="variant-trigger" title="Colour variants"></button>
+    <div class="variant-options">
+        <button class="variant-dot variant-dot-default" data-variant="" data-tooltip="Default"></button>
+        <button class="variant-dot variant-dot-ocean" data-variant="ocean" data-tooltip="Ocean"></button>
+        <button class="variant-dot variant-dot-forest" data-variant="forest" data-tooltip="Forest"></button>
+        <button class="variant-dot variant-dot-sunset" data-variant="sunset" data-tooltip="Sunset"></button>
+        <button class="variant-dot variant-dot-royal" data-variant="royal" data-tooltip="Royal"></button>
+        <button class="variant-dot variant-dot-lemon" data-variant="lemon" data-tooltip="Lemon"></button>
+        <button class="variant-dot variant-dot-silver" data-variant="silver" data-tooltip="Silver"></button>
+        <button class="variant-dot variant-dot-charcoal" data-variant="charcoal" data-tooltip="Charcoal"></button>
+    </div>
+</div>
+<button class="theme-toggle" id="theme-toggle" title="Toggle theme"></button>
+
 <!-- Navigation -->
 <nav class="navbar navbar-dark">
-    <a href="#" class="navbar-brand">My App</a>
+    <a href="../index.html" class="navbar-brand">
+        <svg class="navbar-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="28"
+             height="28">
+            <path d="M12 8 L12 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            <path d="M12 8 L24 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            <path d="M12 40 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            <path d="M24 8 L36 16" stroke="currentColor" stroke-width="4" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+            <path d="M36 16 L36 32" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            <path d="M36 32 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+            <circle cx="24" cy="24" r="3" fill="currentColor"/>
+        </svg>
+        Domma</a>
     <ul class="navbar-nav">
-        <li><a href="#" class="navbar-link">Home</a></li>
-        <li><a href="#" class="navbar-link">About</a></li>
-        <li><a href="#" class="navbar-link">Contact</a></li>
+        <li><a href="../showcase/index.html" class="navbar-link">Showcase</a></li>
+        <li><a href="index.html" class="navbar-link active">Quickstart</a></li>
     </ul>
 </nav>
 
@@ -246,8 +416,8 @@ const date = D().format('YYYY-MM-DD');</pre>
 </main>
 
 <footer class="footer footer-dark text-center">
-    <p class="mb-2">Built with Domma</p>
-    <p class="text-sm">Dynamic Object Manipulation & Modeling API</p>
+    <p class="mb-2">Domma</p>
+    <p class="text-sm">&copy; DCBW-IT (2025)</p>
 </footer>
 
 <!-- Include Domma -->
@@ -371,6 +541,42 @@ const date = D().format('YYYY-MM-DD');</pre>
     // });
 
     console.log('Domma initialised successfully!');
+
+    // ============================================
+    // Theme Toggle
+    // ============================================
+
+    Domma.theme.init({autoDetect: true});
+
+    function updateThemeToggle() {
+        const btn = $('#theme-toggle');
+        btn.html(Domma.icons.html(Domma.theme.isDark() ? 'sun' : 'moon', {size: 20}));
+    }
+
+    $('#theme-toggle').on('click', () => {
+        Domma.theme.toggle();
+        updateThemeToggle();
+    });
+
+    updateThemeToggle();
+
+    // Variant selector functionality
+    function updateVariantActive() {
+        const current = Domma.theme.getVariant() || '';
+        document.querySelectorAll('.variant-dot').forEach(dot => {
+            dot.classList.toggle('active', dot.dataset.variant === current);
+        });
+    }
+
+    document.querySelectorAll('.variant-dot').forEach(dot => {
+        dot.addEventListener('click', () => {
+            const variant = dot.dataset.variant || null;
+            Domma.theme.setVariant(variant);
+            updateVariantActive();
+        });
+    });
+
+    updateVariantActive();
 </script>
 </body>
 </html>
