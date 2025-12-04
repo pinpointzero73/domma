@@ -326,7 +326,12 @@ const date = D().format('YYYY-MM-DD');</pre>
     // ============================================
 
     $('#util-run').on('click', function () {
-        const input = $('#util-input').val();
+        const input = $('#util-input').val() || '';
+        if (!input.trim()) {
+            $('#util-result').text('Please enter some numbers');
+            $('#util-output').removeClass('hidden');
+            return;
+        }
         const numbers = input.split(',').map(n => parseInt(n.trim(), 10)).filter(n => !isNaN(n));
         const unique = _.uniq(numbers);
 

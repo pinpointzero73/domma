@@ -1,6 +1,5 @@
 import resolve from '@rollup/plugin-node-resolve';
 import terser from '@rollup/plugin-terser';
-import obfuscator from 'rollup-plugin-obfuscator';
 
 const obfuscatorOptions = {
     compact: true,
@@ -33,7 +32,7 @@ export default {
     ],
     plugins: [
         resolve(),
-        terser(),
-        obfuscator({ options: obfuscatorOptions })
+        terser()
+        // obfuscator({ options: obfuscatorOptions })  // Disabled - can cause issues
     ]
 };
