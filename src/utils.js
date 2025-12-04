@@ -1898,6 +1898,156 @@ export const utils = {
     },
 
     // ============================================
+    // Type Conversion Utilities
+    // ============================================
+
+    /**
+     * Converts string to an integer of the specified radix.
+     * @param {string} string - The string to convert
+     * @param {number} [radix=10] - The radix to interpret the value
+     * @returns {number} The converted integer
+     */
+    parseInt(string, radix = 10) {
+        if (string == null) return NaN;
+        if (typeof string === 'number') return Math.trunc(string);
+        string = String(string).trim();
+        return parseInt(string, radix);
+    },
+
+    /**
+     * Converts value to a number.
+     * @param {*} value - The value to process
+     * @returns {number} The number
+     */
+    toNumber(value) {
+        if (typeof value === 'number') return value;
+        if (typeof value === 'symbol') return NaN;
+        if (this.isObject(value)) {
+            const other = typeof value.valueOf === 'function' ? value.valueOf() : value;
+            value = this.isObject(other) ? (other + '') : other;
+        }
+        if (typeof value !== 'string') {
+            return value === 0 ? value : +value;
+        }
+        value = value.trim();
+        const isBinary = /^0b[01]+$/i.test(value);
+        const isOctal = /^0o[0-7]+$/i.test(value);
+        const isBadHex = /^[-+]0x[0-9a-f]+$/i.test(value);
+        if (isBinary || isOctal) {
+            return parseInt(value.slice(2), isBinary ? 2 : 8);
+        }
+        return isBadHex ? NaN : +value;
+    },
+
+    /**
+     * Converts value to an integer.
+     * @param {*} value - The value to convert
+     * @returns {number} The converted integer
+     */
+    toInteger(value) {
+        const result = this.toNumber(value);
+        if (Number.isNaN(result)) return 0;
+        if (result === 0 || !Number.isFinite(result)) return result;
+        return Math.trunc(result);
+    },
+
+    /**
+     * Converts value to a finite number.
+     * @param {*} value - The value to convert
+     * @returns {number} The converted number
+     */
+    toFinite(value) {
+        const MAX_INTEGER = 1.7976931348623157e+308;
+        if (!value) return value === 0 ? value : 0;
+        const result = this.toNumber(value);
+        if (result === Infinity) return MAX_INTEGER;
+        if (result === -Infinity) return -MAX_INTEGER;
+        return result === result ? result : 0; // NaN check
+    },
+
+    /**
+     * Converts value to a safe integer.
+     * @param {*} value - The value to convert
+     * @returns {number} The converted safe integer
+     */
+    toSafeInteger(value) {
+        const MAX_SAFE_INTEGER = 9007199254740991;
+        const result = this.toInteger(value);
+        if (result < -MAX_SAFE_INTEGER) return -MAX_SAFE_INTEGER;
+        if (result > MAX_SAFE_INTEGER) return MAX_SAFE_INTEGER;
+        return result;
+    },
+
+    /**
+     * Converts value to a string.
+     * @param {*} value - The value to convert
+     * @returns {string} The converted string
+     */
+    toString(value) {
+        if (value == null) return '';
+        if (typeof value === 'string') return value;
+        if (Array.isArray(value)) return value.map(v => v == null ? '' : this.toString(v)).join(',');
+        if (typeof value === 'symbol') return value.toString();
+        const result = String(value);
+        return (result === '0' && (1 / value) === -Infinity) ? '-0' : result;
+    },
+
+    /**
+     * Converts value to an array.
+     * @param {*} value - The value to convert
+     * @returns {Array} The converted array
+     */
+    toArray(value) {
+        if (!value) return [];
+        if (this.isArray(value)) return [...value];
+        if (typeof value === 'string') return value.split('');
+        if (this.isObject(value)) {
+            if (typeof value[Symbol.iterator] === 'function') {
+                return [...value];
+            }
+            return Object.values(value);
+        }
+        return [];
+    },
+
+    /**
+     * Casts value as an array if it's not one.
+     * @returns {Array} The cast array
+     * @param args
+     */
+    castArray(...args) {
+        if (!args.length) return [];
+        const value = args[0];
+        return this.isArray(value) ? value : [value];
+    },
+
+    /**
+     * Converts value to an integer suitable for use as the length of an array-like object.
+     * @param {*} value - The value to convert
+     * @returns {number} The converted integer
+     */
+    toLength(value) {
+        const MAX_ARRAY_LENGTH = 4294967295;
+        const length = this.toInteger(value);
+        if (length < 0) return 0;
+        if (length > MAX_ARRAY_LENGTH) return MAX_ARRAY_LENGTH;
+        return length;
+    },
+
+    /**
+     * Converts value to a plain object flattening inherited enumerable string keyed properties.
+     * @param {*} value - The value to convert
+     * @returns {Object} The converted plain object
+     */
+    toPlainObject(value) {
+        const result = {};
+        for (const key in value) {
+            result[key] = value[key];
+        }
+        return result;
+    },
+
+    // ============================================
     // Math Utilities
     // ============================================
 
