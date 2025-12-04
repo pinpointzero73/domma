@@ -444,12 +444,11 @@ M.bind(user, 'name', '#name-input', { twoWay: true });</pre>
 
     // Update toggle button icon
     function updateToggleIcon() {
-        const btn = document.getElementById('theme-toggle');
-        btn.innerHTML = Domma.icons.html(Domma.theme.isDark() ? 'sun' : 'moon', {size: 20});
+        $('#theme-toggle').html(Domma.icons.html(Domma.theme.isDark() ? 'sun' : 'moon', {size: 20}));
     }
 
     // Toggle handler
-    document.getElementById('theme-toggle').addEventListener('click', () => {
+    $('#theme-toggle').on('click', () => {
         Domma.theme.toggle();
         updateToggleIcon();
     });

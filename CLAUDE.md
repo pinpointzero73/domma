@@ -64,7 +64,10 @@ Accessed via `Domma.utils` or `_`:
   etc.
 - **Lang** (18): `isArray()`, `isObject()`, `isPlainObject()`, `isFunction()`, `isEmpty()`, `isEqual()`, etc.
 - **Math** (14): `sum()`, `mean()`, `max()`, `min()`, `clamp()`, `random()`, etc.
-- **String** (24): `camelCase()`, `kebabCase()`, `snakeCase()`, `capitalize()`, `truncate()`, `template()`, etc.
+- **String** (24): `camelCase()`, `kebabCase()`, `snakeCase()`, `capitalize()`, `truncate()`, etc.
+- **Template** (2): `template()` (compile), `render()` (one-shot) - Mustache-style with `{{var}}`, `{{#if}}`,
+  `{{#each}}`,
+  `{{#with}}`, `{{> partial}}`, `{{{raw}}}`
 
 ### dates.js - Moment.js-style date manipulation
 
@@ -195,3 +198,4 @@ dist/             # Built bundles (UMD + ESM)
 ~160KB minified, includes all namespaces, zero external dependencies.
 
 - When updating features or adding new ones, the documentation and showcase should be updated in-line
+- Where and whenever possible use Domma in the showcase, documentation and tutorials

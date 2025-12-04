@@ -867,7 +867,7 @@ $('.items').length    // Number of elements</pre>
 
     $('#fx-animate').on('click', function () {
         const $target = $('#fx-target');
-        const currentMargin = parseInt($target.css('marginLeft')) || 0;
+        const currentMargin = _.parseInt($target.css('marginLeft')) || 0;
         $target.animate({
             marginLeft: currentMargin > 100 ? '0px' : '200px',
             opacity: currentMargin > 100 ? 1 : 0.5

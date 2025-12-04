@@ -563,17 +563,15 @@ const date = D().format('YYYY-MM-DD');</pre>
     // Variant selector functionality
     function updateVariantActive() {
         const current = Domma.theme.getVariant() || '';
-        document.querySelectorAll('.variant-dot').forEach(dot => {
-            dot.classList.toggle('active', dot.dataset.variant === current);
+        $('.variant-dot').each(function () {
+            $(this).toggleClass('active', this.dataset.variant === current);
         });
     }
 
-    document.querySelectorAll('.variant-dot').forEach(dot => {
-        dot.addEventListener('click', () => {
-            const variant = dot.dataset.variant || null;
-            Domma.theme.setVariant(variant);
-            updateVariantActive();
-        });
+    $('.variant-dot').on('click', function () {
+        const variant = this.dataset.variant || null;
+        Domma.theme.setVariant(variant);
+        updateVariantActive();
     });
 
     updateVariantActive();

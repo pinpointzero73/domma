@@ -660,7 +660,7 @@ $('.add-to-cart').on('click', function() {
     });
 
     $('#model-age').on('input', function () {
-        userModel.set('age', parseInt($(this).val()) || 0);
+        userModel.set('age', _.parseInt($(this).val()) || 0);
         const result = userModel.validate();
         $('#age-error').text(result.errors.age || '');
     });
@@ -748,12 +748,12 @@ $('.add-to-cart').on('click', function() {
     $('.add-to-cart').on('click', function () {
         M.emit('cart:add', {
             name: $(this).data('name'),
-            price: parseFloat($(this).data('price'))
+            price: _.toNumber($(this).data('price'))
         });
     });
 
     $(document).on('click', '.remove-item', function () {
-        M.emit('cart:remove', parseInt($(this).data('index')));
+        M.emit('cart:remove', _.parseInt($(this).data('index')));
     });
 
     $('#clear-cart').on('click', function () {

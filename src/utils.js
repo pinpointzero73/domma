@@ -2569,5 +2569,167 @@ export const utils = {
      */
     format(format, ...args) {
         return this.sprintf(format, ...args);
+    },
+
+    // ============================================
+    // Template Engine
+    // ============================================
+
+    /**
+     * Compiles a template string into a reusable function.
+     * Supports Mustache-style syntax with extensions.
+     *
+     * Syntax:
+     * - {{variable}} - Escaped output
+     * - {{{variable}}} - Raw/unescaped output
+     * - {{obj.prop}} - Dot notation access
+     * - {{#if condition}}...{{/if}} - Conditionals
+     * - {{#unless condition}}...{{/unless}} - Negative conditionals
+     * - {{#each items}}...{{/each}} - Loops (use {{.}} for current item, {{@index}} for index)
+     * - {{#with obj}}...{{/with}} - Context shifting
+     * - {{> partialName}} - Partial inclusion (if registered)
+     *
+     * @param {string} template - The template string
+     * @param {Object} [options] - Compilation options
+     * @param {Object} [options.partials] - Named partial templates
+     * @param {Object} [options.helpers] - Custom helper functions
+     * @returns {Function} Compiled template function that accepts data
+     */
+    template(template, options = {}) {
+        const {partials = {}, helpers = {}} = options;
+
+        // HTML escape function
+        const escapeHtml = (str) => {
+            if (str == null) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        };
+
+        // Get value from object using dot notation
+        const getValue = (obj, path) => {
+            if (path === '.') return obj;
+            if (path.startsWith('@')) {
+                // Special variables
+                return obj[path];
+            }
+            return path.split('.').reduce((o, k) => (o && o[k] !== undefined) ? o[k] : '', obj);
+        };
+
+        // Process template blocks
+        const processBlock = (tmpl, data, parentData = null) => {
+            let result = tmpl;
+
+            // Process {{#with obj}}...{{/with}}
+            result = result.replace(
+                /\{\{#with\s+([^}]+)\}\}([\s\S]*?)\{\{\/with\}\}/g,
+                (match, expr, content) => {
+                    const context = getValue(data, expr.trim());
+                    if (context && typeof context === 'object') {
+                        return processBlock(content, context, data);
+                    }
+                    return '';
+                }
+            );
+
+            // Process {{#each items}}...{{/each}}
+            result = result.replace(
+                /\{\{#each\s+([^}]+)\}\}([\s\S]*?)\{\{\/each\}\}/g,
+                (match, expr, content) => {
+                    const items = getValue(data, expr.trim());
+                    if (!Array.isArray(items)) return '';
+                    return items.map((item, index) => {
+                        const itemData = typeof item === 'object'
+                            ? {...item, '@index': index, '@first': index === 0, '@last': index === items.length - 1}
+                            : {'.': item, '@index': index, '@first': index === 0, '@last': index === items.length - 1};
+                        return processBlock(content, itemData, data);
+                    }).join('');
+                }
+            );
+
+            // Process {{#if condition}}...{{else}}...{{/if}}
+            result = result.replace(
+                /\{\{#if\s+([^}]+)\}\}([\s\S]*?)(?:\{\{else\}\}([\s\S]*?))?\{\{\/if\}\}/g,
+                (match, expr, ifContent, elseContent = '') => {
+                    const value = getValue(data, expr.trim());
+                    const isTruthy = Array.isArray(value) ? value.length > 0 : Boolean(value);
+                    return processBlock(isTruthy ? ifContent : elseContent, data, parentData);
+                }
+            );
+
+            // Process {{#unless condition}}...{{/unless}}
+            result = result.replace(
+                /\{\{#unless\s+([^}]+)\}\}([\s\S]*?)\{\{\/unless\}\}/g,
+                (match, expr, content) => {
+                    const value = getValue(data, expr.trim());
+                    const isFalsy = Array.isArray(value) ? value.length === 0 : !value;
+                    return isFalsy ? processBlock(content, data, parentData) : '';
+                }
+            );
+
+            // Process {{> partialName}}
+            result = result.replace(
+                /\{\{>\s*([^}]+)\}\}/g,
+                (match, name) => {
+                    const partialTmpl = partials[name.trim()];
+                    if (partialTmpl) {
+                        return processBlock(partialTmpl, data, parentData);
+                    }
+                    return '';
+                }
+            );
+
+            // Process {{{raw}}} - unescaped output
+            result = result.replace(
+                /\{\{\{([^}]+)\}\}\}/g,
+                (match, expr) => {
+                    const value = getValue(data, expr.trim());
+                    return value != null ? String(value) : '';
+                }
+            );
+
+            // Process {{variable}} - escaped output
+            result = result.replace(
+                /\{\{([^#/>][^}]*)\}\}/g,
+                (match, expr) => {
+                    const trimmed = expr.trim();
+
+                    // Check for helper functions
+                    const helperMatch = trimmed.match(/^(\w+)\s+(.+)$/);
+                    if (helperMatch && helpers[helperMatch[1]]) {
+                        const args = helperMatch[2].split(/\s+/).map(arg => {
+                            // Handle string literals
+                            if (/^["'].*["']$/.test(arg)) {
+                                return arg.slice(1, -1);
+                            }
+                            return getValue(data, arg);
+                        });
+                        return escapeHtml(helpers[helperMatch[1]](...args));
+                    }
+
+                    const value = getValue(data, trimmed);
+                    return escapeHtml(value);
+                }
+            );
+
+            return result;
+        };
+
+        // Return compiled function
+        return (data = {}) => processBlock(template, data);
+    },
+
+    /**
+     * Renders a template string with the given data (one-shot).
+     * @param {string} template - The template string
+     * @param {Object} data - The data object
+     * @param {Object} [options] - Template options (partials, helpers)
+     * @returns {string} Rendered output
+     */
+    render(template, data, options = {}) {
+        return this.template(template, options)(data);
     }
 };

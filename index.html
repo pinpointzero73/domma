@@ -499,9 +499,23 @@
                     </div>
                 </div>
 
-                <!-- 3. Lodash Utils -->
+                <!-- 3. Template Engine -->
                 <div class="carousel-slide">
                     <span class="slide-number">3</span>
+                    <h3 class="slide-title">Template Engine</h3>
+                    <p class="slide-description">
+                        Mustache-style templates with loops, conditionals, partials, and auto-escaping built in.
+                    </p>
+                    <div class="slide-code">
+                        const tmpl = _.template('Hello {{name}}!');<br>
+                        tmpl({ name: 'World' }); <span class="comment">// "Hello World!"</span><br>
+                        _.render('{{#each items}}{{.}}{{/each}}', data);
+                    </div>
+                </div>
+
+                <!-- 4. Lodash Utils -->
+                <div class="carousel-slide">
+                    <span class="slide-number">4</span>
                     <h3 class="slide-title">Lodash-Compatible Utils</h3>
                     <p class="slide-description">
                         120+ utility functions for arrays, objects, strings, and functions &mdash; all via the _ alias.
@@ -513,9 +527,9 @@
                     </div>
                 </div>
 
-                <!-- 4. Moment-Style Dates -->
+                <!-- 5. Moment-Style Dates -->
                 <div class="carousel-slide">
-                    <span class="slide-number">4</span>
+                    <span class="slide-number">5</span>
                     <h3 class="slide-title">Moment-Style Dates</h3>
                     <p class="slide-description">
                         Chainable date manipulation with formatting, parsing, comparison, and relative time.
@@ -527,9 +541,9 @@
                     </div>
                 </div>
 
-                <!-- 5. Reactive Models -->
+                <!-- 6. Reactive Models -->
                 <div class="carousel-slide">
-                    <span class="slide-number">5</span>
+                    <span class="slide-number">6</span>
                     <h3 class="slide-title">Reactive Models</h3>
                     <p class="slide-description">
                         Pub/sub events, schema validation, and two-way DOM binding for reactive data.
@@ -541,9 +555,9 @@
                     </div>
                 </div>
 
-                <!-- 6. UI Components -->
+                <!-- 7. UI Components -->
                 <div class="carousel-slide">
-                    <span class="slide-number">6</span>
+                    <span class="slide-number">7</span>
                     <h3 class="slide-title">UI Components</h3>
                     <p class="slide-description">
                         Ready-to-use modals, tabs, accordions, carousels, tooltips, and toasts.
@@ -555,9 +569,9 @@
                     </div>
                 </div>
 
-                <!-- 7. DataTable-Like Tables -->
+                <!-- 8. DataTable-Like Tables -->
                 <div class="carousel-slide">
-                    <span class="slide-number">7</span>
+                    <span class="slide-number">8</span>
                     <h3 class="slide-title">DataTable-Like Tables</h3>
                     <p class="slide-description">
                         Sorting, filtering, pagination, row selection, and CSV/JSON export built in.
@@ -570,9 +584,9 @@
                     </div>
                 </div>
 
-                <!-- 8. Mutable Configuration -->
+                <!-- 9. Mutable Configuration -->
                 <div class="carousel-slide">
-                    <span class="slide-number">8</span>
+                    <span class="slide-number">9</span>
                     <h3 class="slide-title">Mutable Configuration</h3>
                     <p class="slide-description">
                         Setup once, update anytime. Inspect and reset configuration at runtime.
@@ -584,9 +598,9 @@
                     </div>
                 </div>
 
-                <!-- 9. 100+ SVG Icons -->
+                <!-- 10. 100+ SVG Icons -->
                 <div class="carousel-slide">
-                    <span class="slide-number">9</span>
+                    <span class="slide-number">10</span>
                     <h3 class="slide-title">100+ SVG Icons</h3>
                     <p class="slide-description">
                         Built-in icon library with render, inject, and scan modes. Customisable size and colour.
@@ -598,13 +612,12 @@
                     </div>
                 </div>
 
-                <!-- 10. Theme System -->
+                <!-- 11. Theme System -->
                 <div class="carousel-slide">
-                    <span class="slide-number">10</span>
+                    <span class="slide-number">11</span>
                     <h3 class="slide-title">Theme System</h3>
                     <p class="slide-description">
-                        Light and dark modes with ocean, forest, and sunset colour variants. System preference
-                        detection.
+                        Light/dark modes with 8 colour variants. Auto-detects system preference and persists choices.
                     </p>
                     <div class="slide-code">
                         Domma.theme.init({ autoDetect: true });<br>
@@ -645,12 +658,11 @@
 
     // Update toggle button icon
     function updateToggleIcon() {
-        const btn = document.getElementById('theme-toggle');
-        btn.innerHTML = Domma.icons.html(Domma.theme.isDark() ? 'sun' : 'moon', {size: 20});
+        $('#theme-toggle').html(Domma.icons.html(Domma.theme.isDark() ? 'sun' : 'moon', {size: 20}));
     }
 
     // Toggle handler
-    document.getElementById('theme-toggle').addEventListener('click', () => {
+    $('#theme-toggle').on('click', () => {
         Domma.theme.toggle();
         updateToggleIcon();
     });
@@ -660,17 +672,15 @@
     // Variant selector functionality
     function updateVariantActive() {
         const current = Domma.theme.getVariant() || '';
-        document.querySelectorAll('.variant-dot').forEach(dot => {
-            dot.classList.toggle('active', dot.dataset.variant === current);
+        $('.variant-dot').each(function () {
+            $(this).toggleClass('active', this.dataset.variant === current);
         });
     }
 
-    document.querySelectorAll('.variant-dot').forEach(dot => {
-        dot.addEventListener('click', () => {
-            const variant = dot.dataset.variant || null;
-            Domma.theme.setVariant(variant);
-            updateVariantActive();
-        });
+    $('.variant-dot').on('click', function () {
+        const variant = this.dataset.variant || null;
+        Domma.theme.setVariant(variant);
+        updateVariantActive();
     });
 
     updateVariantActive();

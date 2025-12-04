@@ -474,6 +474,89 @@ _.words('fred, barney, & pebbles')  // ['fred', 'barney', 'pebbles']</pre>
         </div>
     </section>
 
+    <!-- Template Engine -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Template Engine</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Mustache-style templates with loops, conditionals, partials, and automatic HTML
+                escaping.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">template()</span>
+                <span class="method-item">render()</span>
+            </div>
+
+            <h4 class="category-title">Basic Usage</h4>
+            <pre class="code-block">// Compile and reuse
+const tmpl = _.template('Hello {{name}}!');
+tmpl({ name: 'World' });  // 'Hello World!'
+
+// One-shot render
+_.render('Welcome, {{user.name}}!', { user: { name: 'Alice' } });
+// 'Welcome, Alice!'
+
+// HTML is escaped by default
+_.render('&lt;p&gt;{{content}}&lt;/p&gt;', { content: '&lt;script&gt;' });
+// '&lt;p&gt;&amp;lt;script&amp;gt;&lt;/p&gt;'
+
+// Use triple braces for raw output
+_.render('{{{html}}}', { html: '&lt;strong&gt;Bold&lt;/strong&gt;' });
+// '&lt;strong&gt;Bold&lt;/strong&gt;'</pre>
+
+            <h4 class="category-title">Conditionals</h4>
+            <pre class="code-block">// {{#if}}...{{/if}}
+_.render('{{#if active}}Online{{/if}}', { active: true });
+// 'Online'
+
+// {{#if}}...{{else}}...{{/if}}
+_.render('{{#if premium}}Pro{{else}}Free{{/if}}', { premium: false });
+// 'Free'
+
+// {{#unless}}...{{/unless}}
+_.render('{{#unless verified}}Please verify{{/unless}}', { verified: false });
+// 'Please verify'</pre>
+
+            <h4 class="category-title">Loops</h4>
+            <pre class="code-block">// {{#each}}...{{/each}}
+_.render('{{#each items}}&lt;li&gt;{{name}}&lt;/li&gt;{{/each}}', {
+    items: [{ name: 'Apple' }, { name: 'Banana' }]
+});
+// '&lt;li&gt;Apple&lt;/li&gt;&lt;li&gt;Banana&lt;/li&gt;'
+
+// Primitive arrays use {{.}}
+_.render('{{#each tags}}#{{.}} {{/each}}', { tags: ['js', 'css', 'html'] });
+// '#js #css #html '
+
+// Access loop metadata
+_.render('{{#each items}}{{@index}}: {{name}}{{/each}}', { items: [...] });
+// '0: Apple1: Banana'</pre>
+
+            <h4 class="category-title">Context & Partials</h4>
+            <pre class="code-block">// {{#with}}...{{/with}} - shift context
+_.render('{{#with user}}{{firstName}} {{lastName}}{{/with}}', {
+    user: { firstName: 'John', lastName: 'Doe' }
+});
+// 'John Doe'
+
+// {{> partial}} - include named partials
+const opts = { partials: { header: '&lt;h1&gt;{{title}}&lt;/h1&gt;' } };
+_.render('{{> header}}', { title: 'Welcome' }, opts);
+// '&lt;h1&gt;Welcome&lt;/h1&gt;'</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It</h4>
+                <textarea id="template-input" class="form-input mb-2" rows="3"
+                          style="font-family: var(--dm-font-mono); font-size: 0.875rem;">Hello {{name}}! {{#if premium}}(Premium){{/if}}</textarea>
+                <input type="text" id="template-data" class="form-input mb-3" value='{"name": "Alice", "premium": true}'
+                       placeholder="JSON data">
+                <button class="btn btn-primary btn-sm" id="template-run">Render</button>
+                <div class="demo-result mt-3" id="template-result">Click 'Render' to see the output</div>
+            </div>
+        </div>
+    </section>
+
     <!-- Lang Methods -->
     <section class="card mb-6">
         <div class="card-header">
@@ -889,6 +972,18 @@ _.noop()                 // undefined (do nothing)</pre>
         }
 
         $('#utility-result').text(description);
+    });
+
+    // Template demo
+    $('#template-run').on('click', function () {
+        try {
+            const template = $('#template-input').val();
+            const data = JSON.parse($('#template-data').val());
+            const result = _.render(template, data);
+            $('#template-result').text(result);
+        } catch (e) {
+            $('#template-result').text('Error: ' + e.message);
+        }
     });
 </script>
 </body>

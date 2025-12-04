@@ -893,20 +893,19 @@ table.once('render', () => {
     const names = ['Alex', 'Blake', 'Casey', 'Dana', 'Ellis', 'Finn'];
 
     $('#add-row').on('click', function () {
-        const name = names[Math.floor(Math.random() * names.length)] + ' ' +
-            names[Math.floor(Math.random() * names.length)];
+        const name = _.sample(names) + ' ' + _.sample(names);
         table.addRow({
             id: nextId++,
             name: name,
             email: name.toLowerCase().replace(' ', '.') + '@example.com',
-            role: roles[Math.floor(Math.random() * roles.length)],
-            status: Math.random() > 0.3 ? 'Active' : 'Inactive',
+            role: _.sample(roles),
+            status: _.random(0, 9) > 2 ? 'Active' : 'Inactive',
             joined: D().format('YYYY-MM-DD')
         });
     });
 
     $('#update-first').on('click', function () {
-        table.updateRow(0, {name: 'Updated Name ' + Math.floor(Math.random() * 100)});
+        table.updateRow(0, {name: 'Updated Name ' + _.random(0, 99)});
     });
 
     $('#remove-last').on('click', function () {

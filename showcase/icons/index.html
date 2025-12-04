@@ -321,7 +321,7 @@
     $('.size-btn').on('click', function () {
         $('.size-btn').removeClass('active');
         $(this).addClass('active');
-        currentSize = parseInt($(this).attr('data-size'), 10);
+        currentSize = _.parseInt($(this).attr('data-size'));
         renderGallery($('#search').val());
     });
 
