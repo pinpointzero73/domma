@@ -224,6 +224,14 @@
             border-radius: 12px;
             padding: 1.25rem 1.5rem;
             min-width: 120px;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .feature-icon {
@@ -443,30 +451,38 @@
     </p>
 
     <div class="features">
-        <div class="feature card-hover">
+        <a href="showcase/dom/index.html" class="feature card-hover">
             <div class="feature-icon">$</div>
             <div class="feature-label">DOM</div>
-        </div>
-        <div class="feature card-hover">
+        </a>
+        <a href="showcase/utils/index.html" class="feature card-hover">
             <div class="feature-icon">_</div>
             <div class="feature-label">Utils</div>
-        </div>
-        <div class="feature card-hover">
+        </a>
+        <a href="showcase/dates/index.html" class="feature card-hover">
             <div class="feature-icon">D</div>
             <div class="feature-label">Dates</div>
-        </div>
-        <div class="feature card-hover">
+        </a>
+        <a href="showcase/models/index.html" class="feature card-hover">
             <div class="feature-icon">M</div>
             <div class="feature-label">Models</div>
-        </div>
-        <div class="feature card-hover">
+        </a>
+        <a href="showcase/elements/index.html" class="feature card-hover">
             <div class="feature-icon">UI</div>
             <div class="feature-label">Elements</div>
-        </div>
-        <div class="feature card-hover">
+        </a>
+        <a href="showcase/tables/index.html" class="feature card-hover">
             <div class="feature-icon">TBL</div>
             <div class="feature-label">Tables</div>
-        </div>
+        </a>
+        <a href="showcase/icons/index.html" class="feature card-hover">
+            <div class="feature-icon" data-icon="image" data-icon-size="28"></div>
+            <div class="feature-label">Icons</div>
+        </a>
+        <a href="showcase/themes/index.html" class="feature card-hover">
+            <div class="feature-icon" data-icon="sun" data-icon-size="28"></div>
+            <div class="feature-label">Themes</div>
+        </a>
     </div>
 
     <div class="splash-carousel">
@@ -656,6 +672,22 @@
     // Initialise theme
     Domma.theme.init({autoDetect: true});
 
+    // Declarative setup for components
+    $.setup({
+        '#features-carousel': {
+            component: 'carousel',
+            options: {
+                autoplay: true,
+                interval: 6000,
+                pauseOnHover: true,
+                loop: true,
+                animation: 'fade',
+                showArrows: true,
+                showIndicators: true
+            }
+        }
+    });
+
     // Update toggle button icon
     function updateToggleIcon() {
         $('#theme-toggle').html(Domma.icons.html(Domma.theme.isDark() ? 'sun' : 'moon', {size: 20}));
@@ -685,16 +717,8 @@
 
     updateVariantActive();
 
-    // Initialise features carousel
-    Domma.elements.carousel('#features-carousel', {
-        autoplay: true,
-        interval: 6000,
-        pauseOnHover: true,
-        loop: true,
-        animation: 'fade',
-        showArrows: true,
-        showIndicators: true
-    });
+    // Scan for data-icon attributes
+    Domma.icons.scan();
 </script>
 </body>
 </html>

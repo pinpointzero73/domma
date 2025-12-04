@@ -48,22 +48,32 @@
             word-break: break-word;
         }
 
-        .category-section {
-            margin-bottom: 3rem;
+        #icon-tabs .tab-list {
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            border-bottom: none;
+            margin-bottom: 1.5rem;
         }
 
-        .category-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--dm-border);
+        #icon-tabs .tab-item {
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            border-bottom: 1px solid var(--dm-border);
+            background: var(--dm-surface);
         }
 
-        .category-count {
-            font-size: var(--dm-text-sm);
-            color: var(--dm-text-muted);
+        #icon-tabs .tab-item:hover {
+            border-color: var(--dm-primary);
+        }
+
+        #icon-tabs .tab-item.active {
+            background: var(--dm-primary);
+            color: white;
+            border-color: var(--dm-primary);
+        }
+
+        #icon-tabs .tab-panel {
+            padding: 0;
         }
 
         .search-box {
@@ -197,7 +207,10 @@
         <button class="size-btn" data-size="48">48px</button>
     </div>
 
-    <div id="icon-gallery"></div>
+    <div class="tabs" id="icon-tabs">
+        <div class="tab-list" id="tab-list"></div>
+        <div class="tab-content" id="icon-gallery"></div>
+    </div>
 
     <div class="no-results" id="no-results" style="display:none">
         <p class="text-2xl mb-2">No icons found</p>
@@ -227,15 +240,21 @@
         navigation: {name: 'Navigation', description: 'Directional and navigation'}
     };
 
+    // Track tabs instance
+    let tabsInstance = null;
+
     // Render the icon gallery
     function renderGallery(filter = '') {
         const gallery = $('#icon-gallery');
+        const tabList = $('#tab-list');
         const categories = Domma.icons.listCategories();
         const filterLower = filter.toLowerCase();
 
         let totalIcons = 0;
         let totalCategories = 0;
-        let html = '';
+        let navHtml = '';
+        let panelsHtml = '';
+        let firstCategory = true;
 
         Object.entries(categories).forEach(([key, cat]) => {
             let icons = cat.icons;
@@ -251,22 +270,21 @@
             totalIcons += icons.length;
 
             const meta = categoryMeta[key] || {name: key, description: ''};
+            const activeClass = firstCategory ? ' active' : '';
 
-            html += `
-                <section class="category-section" data-category="${key}">
-                    <div class="category-header">
-                        <div>
-                            <h2 class="text-xl font-semibold">${meta.name}</h2>
-                            <p class="text-sm text-muted">${meta.description}</p>
-                        </div>
-                        <span class="category-count">${icons.length} icons</span>
-                    </div>
+            // Tab navigation item
+            navHtml += `<button class="tab-item${activeClass}" data-tab="${key}">${meta.name} (${icons.length})</button>`;
+
+            // Tab panel content
+            panelsHtml += `
+                <div class="tab-panel${activeClass}" data-panel="${key}">
+                    <p class="text-muted mb-4">${meta.description}</p>
                     <div class="icon-grid">
             `;
 
             icons.forEach(name => {
                 const iconHtml = Domma.icons.html(name, {size: currentSize});
-                html += `
+                panelsHtml += `
                     <div class="icon-card" data-icon-name="${name}" title="Click to copy">
                         ${iconHtml}
                         <span class="icon-name">${name}</span>
@@ -274,17 +292,26 @@
                 `;
             });
 
-            html += '</div></section>';
+            panelsHtml += '</div></div>';
+            firstCategory = false;
         });
 
-        gallery.html(html);
+        tabList.html(navHtml);
+        gallery.html(panelsHtml);
 
         // Update stats
         $('#total-icons').text(totalIcons);
         $('#total-categories').text(totalCategories);
 
-        // Show/hide no results
-        $('#no-results').css('display', totalIcons === 0 ? 'block' : 'none');
+        // Show/hide elements based on results
+        const hasResults = totalIcons > 0;
+        $('#no-results').css('display', hasResults ? 'none' : 'block');
+        $('#icon-tabs').css('display', hasResults ? 'block' : 'none');
+
+        // Initialise tabs component
+        if (hasResults) {
+            tabsInstance = Domma.elements.tabs('#icon-tabs', {animation: true});
+        }
 
         // Attach click handlers
         $('.icon-card').on('click', function () {
@@ -321,7 +348,7 @@
     $('.size-btn').on('click', function () {
         $('.size-btn').removeClass('active');
         $(this).addClass('active');
-        currentSize = _.parseInt($(this).attr('data-size'));
+        currentSize = parseInt($(this).attr('data-size'), 10);
         renderGallery($('#search').val());
     });
 

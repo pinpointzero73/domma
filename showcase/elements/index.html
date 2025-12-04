@@ -1072,87 +1072,131 @@ $.setup({
 
 <script src="../../dist/domma.min.js"></script>
 <script>
-    // Initialize card with hover
-    Domma.elements.card('#card-hover', {hover: true});
+    // Declarative component setup - demonstrates the config engine
+    $.setup({
+        // Card with hover effect
+        '#card-hover': {
+            component: 'card',
+            options: {hover: true}
+        },
 
-    // Initialize modals
-    const modal = Domma.elements.modal('#demo-modal', {
-        backdrop: true,
-        backdropClose: true,
-        keyboard: true
+        // Modals
+        '#demo-modal': {
+            component: 'modal',
+            options: {backdrop: true, backdropClose: true, keyboard: true}
+        },
+        '#demo-modal-lg': {
+            component: 'modal',
+            options: {backdrop: true, backdropClose: true, keyboard: true}
+        },
+
+        // Tabs
+        '#demo-tabs': {
+            component: 'tabs',
+            options: {animation: true}
+        },
+        '#demo-tabs-pills': {
+            component: 'tabs',
+            options: {animation: true}
+        },
+
+        // Accordions
+        '#demo-accordion': {
+            component: 'accordion',
+            options: {multiExpand: false, activeIndex: 0}
+        },
+        '#demo-accordion-multi': {
+            component: 'accordion',
+            options: {multiExpand: true}
+        },
+
+        // Carousels
+        '#demo-carousel': {
+            component: 'carousel',
+            options: {animation: 'slide', loop: true}
+        },
+        '#demo-carousel-fade': {
+            component: 'carousel',
+            options: {animation: 'fade', loop: true}
+        },
+
+        // Tooltips
+        '#tooltip-top': {
+            component: 'tooltip',
+            options: {content: 'Tooltip on top', position: 'top'}
+        },
+        '#tooltip-bottom': {
+            component: 'tooltip',
+            options: {content: 'Tooltip on bottom', position: 'bottom'}
+        },
+        '#tooltip-left': {
+            component: 'tooltip',
+            options: {content: 'Tooltip on left', position: 'left'}
+        },
+        '#tooltip-right': {
+            component: 'tooltip',
+            options: {content: 'Tooltip on right', position: 'right'}
+        },
+
+        // Modal trigger buttons
+        '#open-modal': {
+            events: {
+                click: () => Domma.elements.get('#demo-modal').open()
+            }
+        },
+        '#open-modal-lg': {
+            events: {
+                click: () => Domma.elements.get('#demo-modal-lg').open()
+            }
+        },
+        '.modal-close-btn': {
+            events: {
+                click: () => {
+                    Domma.elements.get('#demo-modal').close();
+                    Domma.elements.get('#demo-modal-lg').close();
+                }
+            }
+        },
+
+        // Accordion controls
+        '#acc-open-all': {
+            events: {
+                click: () => Domma.elements.get('#demo-accordion-multi').openAll()
+            }
+        },
+        '#acc-close-all': {
+            events: {
+                click: () => Domma.elements.get('#demo-accordion-multi').closeAll()
+            }
+        },
+
+        // Carousel controls
+        '#carousel-prev': {
+            events: {click: () => Domma.elements.get('#demo-carousel').prev()}
+        },
+        '#carousel-next': {
+            events: {click: () => Domma.elements.get('#demo-carousel').next()}
+        },
+        '#carousel-play': {
+            events: {click: () => Domma.elements.get('#demo-carousel').play()}
+        },
+        '#carousel-pause': {
+            events: {click: () => Domma.elements.get('#demo-carousel').pause()}
+        }
     });
 
-    const modalLg = Domma.elements.modal('#demo-modal-lg', {
-        backdrop: true,
-        backdropClose: true,
-        keyboard: true
-    });
-
-    $('#open-modal').on('click', () => modal.open());
-    $('#open-modal-lg').on('click', () => modalLg.open());
-    $('.modal-close-btn').on('click', function () {
-        modal.close();
-        modalLg.close();
-    });
-
-    // Initialize tabs
-    Domma.elements.tabs('#demo-tabs', {
-        animation: true
-    });
-
-    Domma.elements.tabs('#demo-tabs-pills', {
-        animation: true
-    });
-
-    // Initialize accordions
-    Domma.elements.accordion('#demo-accordion', {
-        multiExpand: false,
-        activeIndex: 0
-    });
-
-    const accordionMulti = Domma.elements.accordion('#demo-accordion-multi', {
-        multiExpand: true
-    });
-
-    $('#acc-open-all').on('click', () => accordionMulti.openAll());
-    $('#acc-close-all').on('click', () => accordionMulti.closeAll());
-
-    // Initialize tooltips
-    Domma.elements.tooltip('#tooltip-top', {content: 'Tooltip on top', position: 'top'});
-    Domma.elements.tooltip('#tooltip-bottom', {content: 'Tooltip on bottom', position: 'bottom'});
-    Domma.elements.tooltip('#tooltip-left', {content: 'Tooltip on left', position: 'left'});
-    Domma.elements.tooltip('#tooltip-right', {content: 'Tooltip on right', position: 'right'});
-
-    // Click tooltip
+    // Interactive tooltip demos (require runtime state)
     let clickTooltipVisible = false;
     $('#click-trigger').on('click', function () {
         clickTooltipVisible = !clickTooltipVisible;
         $('#click-tooltip').toggleClass('active');
     });
 
-    // Focus tooltip
     $('#tt-focus input').on('focus', function () {
         $(this).siblings('.tooltip-content').addClass('active');
     }).on('blur', function () {
         $(this).siblings('.tooltip-content').removeClass('active');
     });
-
-    // Initialize carousels
-    const carousel = Domma.elements.carousel('#demo-carousel', {
-        animation: 'slide',
-        loop: true
-    });
-
-    const carouselFade = Domma.elements.carousel('#demo-carousel-fade', {
-        animation: 'fade',
-        loop: true
-    });
-
-    // Carousel controls
-    $('#carousel-prev').on('click', () => carousel.prev());
-    $('#carousel-next').on('click', () => carousel.next());
-    $('#carousel-play').on('click', () => carousel.play());
-    $('#carousel-pause').on('click', () => carousel.pause());
 </script>
 </body>
 </html>

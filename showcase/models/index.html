@@ -101,6 +101,62 @@
             border-radius: var(--dm-radius-md);
             text-align: center;
         }
+
+        .user-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--dm-space-2) var(--dm-space-3);
+            border: 1px solid var(--dm-gray-200);
+            border-radius: var(--dm-radius-sm);
+            margin-bottom: var(--dm-space-2);
+            background: var(--dm-white);
+        }
+
+        .user-item:hover {
+            background: var(--dm-gray-50);
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .user-meta {
+            font-size: var(--dm-font-size-sm);
+            color: var(--dm-gray-600);
+        }
+
+        .user-actions {
+            display: flex;
+            gap: var(--dm-space-1);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            font-size: var(--dm-font-size-xs);
+            margin-left: var(--dm-space-2);
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--dm-success);
+        }
+
+        .status-inactive {
+            background: var(--dm-gray-200);
+            color: var(--dm-gray-600);
+        }
     </style>
 </head>
 <body>
@@ -517,50 +573,156 @@ $('.add-to-cart').on('click', function() {
         </div>
     </section>
 
+    <!-- User Management Demo -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Practical Example: User Management</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">A complete CRUD example with model-based form validation and clipboard export.</p>
+
+            <pre class="code-block">// Users collection model
+const usersModel = M.create({
+    users: { type: 'array', default: [] }
+});
+
+// Form validation model
+const formModel = M.create({
+    name: { type: 'string', required: true },
+    email: {
+        type: 'string',
+        required: true,
+        validate: v => v.includes('@') || 'Invalid email'
+    },
+    role: { type: 'string', enum: ['user', 'admin', 'editor'] },
+    status: { type: 'string', enum: ['active', 'inactive'] }
+});
+
+// Add user
+formModel.set({ name: 'Alice', email: 'alice@example.com', role: 'admin', status: 'active' });
+if (formModel.validate().valid) {
+    const users = [...usersModel.get('users'), formModel.toJSON()];
+    usersModel.set('users', users);
+}
+
+// Export to clipboard
+navigator.clipboard.writeText(JSON.stringify(usersModel.get('users'), null, 2));</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It - User Manager</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Left: Add/Edit Form -->
+                    <div>
+                        <h5 class="font-semibold mb-2" id="um-form-title">Add New User</h5>
+                        <form id="um-form">
+                            <div class="form-group">
+                                <label class="form-label">Name (required)</label>
+                                <input type="text" id="um-name" class="form-input" placeholder="Enter name">
+                                <div class="validation-error" id="um-name-error"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email (required)</label>
+                                <input type="email" id="um-email" class="form-input" placeholder="Enter email">
+                                <div class="validation-error" id="um-email-error"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Role</label>
+                                <select id="um-role" class="form-select">
+                                    <option value="user">User</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="editor">Editor</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Status</label>
+                                <select id="um-status" class="form-select">
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="submit" class="btn btn-primary" id="um-save">Add User</button>
+                                <button type="button" class="btn btn-secondary" id="um-cancel" style="display:none">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Right: User List -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <h5 class="font-semibold">Users (<span id="um-count">0</span>)</h5>
+                            <button class="btn btn-outline btn-sm" id="um-copy">Copy to Clipboard</button>
+                        </div>
+                        <div id="um-list" class="user-list">
+                            <p class="text-muted">No users yet. Add one using the form.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Method Reference -->
     <section class="card">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Complete Method Reference</h2>
         </div>
         <div class="card-body">
-            <h4 class="category-title">Pub/Sub Methods</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">subscribe()</span>
-                <span class="method-item">publish()</span>
-                <span class="method-item">unsubscribe()</span>
-                <span class="method-item">once()</span>
-                <span class="method-item">on()</span>
-                <span class="method-item">off()</span>
-                <span class="method-item">emit()</span>
-            </div>
-
-            <h4 class="category-title">Model Factory</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">create()</span>
-                <span class="method-item">bind()</span>
-                <span class="method-item">unbind()</span>
-            </div>
-
-            <h4 class="category-title">Model Instance Methods</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">get()</span>
-                <span class="method-item">set()</span>
-                <span class="method-item">toJSON()</span>
-                <span class="method-item">validate()</span>
-                <span class="method-item">onChange()</span>
-                <span class="method-item">offChange()</span>
-                <span class="method-item">reset()</span>
-            </div>
-
-            <h4 class="category-title">Type Validators</h4>
-            <div class="method-grid">
-                <span class="method-item">types.string</span>
-                <span class="method-item">types.number</span>
-                <span class="method-item">types.boolean</span>
-                <span class="method-item">types.array</span>
-                <span class="method-item">types.object</span>
-                <span class="method-item">types.date</span>
-                <span class="method-item">types.any</span>
+            <div id="method-tabs" class="tabs">
+                <div class="tab-list">
+                    <button class="tab-item active" data-tab="pubsub">Pub/Sub</button>
+                    <button class="tab-item" data-tab="factory">Model Factory</button>
+                    <button class="tab-item" data-tab="instance">Instance Methods</button>
+                    <button class="tab-item" data-tab="types">Type Validators</button>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-panel active" data-tab="pubsub">
+                        <p class="text-muted mb-3">Event system for decoupled communication between components.</p>
+                        <div class="method-grid">
+                            <span class="method-item">subscribe()</span>
+                            <span class="method-item">publish()</span>
+                            <span class="method-item">unsubscribe()</span>
+                            <span class="method-item">once()</span>
+                            <span class="method-item">on()</span>
+                            <span class="method-item">off()</span>
+                            <span class="method-item">emit()</span>
+                        </div>
+                    </div>
+                    <div class="tab-panel" data-tab="factory">
+                        <p class="text-muted mb-3">Static methods on the M/Models namespace.</p>
+                        <div class="method-grid">
+                            <span class="method-item">create()</span>
+                            <span class="method-item">bind()</span>
+                            <span class="method-item">unbind()</span>
+                        </div>
+                    </div>
+                    <div class="tab-panel" data-tab="instance">
+                        <p class="text-muted mb-3">Methods available on model instances returned by M.create().</p>
+                        <div class="method-grid">
+                            <span class="method-item">get()</span>
+                            <span class="method-item">set()</span>
+                            <span class="method-item">toJSON()</span>
+                            <span class="method-item">validate()</span>
+                            <span class="method-item">onChange()</span>
+                            <span class="method-item">offChange()</span>
+                            <span class="method-item">reset()</span>
+                        </div>
+                    </div>
+                    <div class="tab-panel" data-tab="types">
+                        <p class="text-muted mb-3">Built-in validators for schema definitions.</p>
+                        <div class="method-grid">
+                            <span class="method-item">types.string</span>
+                            <span class="method-item">types.number</span>
+                            <span class="method-item">types.boolean</span>
+                            <span class="method-item">types.array</span>
+                            <span class="method-item">types.object</span>
+                            <span class="method-item">types.date</span>
+                            <span class="method-item">types.any</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -660,7 +822,7 @@ $('.add-to-cart').on('click', function() {
     });
 
     $('#model-age').on('input', function () {
-        userModel.set('age', _.parseInt($(this).val()) || 0);
+        userModel.set('age', parseInt($(this).val(), 10) || 0);
         const result = userModel.validate();
         $('#age-error').text(result.errors.age || '');
     });
@@ -753,12 +915,172 @@ $('.add-to-cart').on('click', function() {
     });
 
     $(document).on('click', '.remove-item', function () {
-        M.emit('cart:remove', _.parseInt($(this).data('index')));
+        M.emit('cart:remove', parseInt($(this).data('index'), 10));
     });
 
     $('#clear-cart').on('click', function () {
         M.emit('cart:clear');
     });
+
+    // User Management Demo
+    const umModel = M.create({
+        users: {type: 'array', default: []}
+    });
+
+    const umFormModel = M.create({
+        name: {type: 'string', required: true},
+        email: {
+            type: 'string',
+            required: true,
+            validate: v => !v || v.includes('@') || 'Must contain @'
+        },
+        role: {type: 'string', enum: ['user', 'admin', 'editor'], default: 'user'},
+        status: {type: 'string', enum: ['active', 'inactive'], default: 'active'}
+    });
+
+    let umEditIndex = -1;
+
+    function renderUserList() {
+        const users = umModel.get('users');
+        const $list = $('#um-list');
+
+        if (users.length === 0) {
+            $list.html('<p class="text-muted">No users yet. Add one using the form.</p>');
+        } else {
+            $list.html(users.map((user, i) => `
+                <div class="user-item">
+                    <div class="user-info">
+                        <div class="user-name">${_.escape(user.name)}</div>
+                        <div class="user-meta">
+                            ${_.escape(user.email)} · ${user.role}
+                            <span class="status-badge status-${user.status}">${user.status}</span>
+                        </div>
+                    </div>
+                    <div class="user-actions">
+                        <button class="btn btn-outline btn-sm um-edit" data-index="${i}">Edit</button>
+                        <button class="btn btn-danger btn-sm um-remove" data-index="${i}">Remove</button>
+                    </div>
+                </div>
+            `).join(''));
+        }
+        $('#um-count').text(users.length);
+    }
+
+    // Form submission - Add or Update
+    $('#um-form').on('submit', function (e) {
+        e.preventDefault();
+
+        const userData = {
+            name: $('#um-name').val().trim(),
+            email: $('#um-email').val().trim(),
+            role: $('#um-role').val(),
+            status: $('#um-status').val()
+        };
+
+        // Clear previous errors
+        $('#um-name-error').text('');
+        $('#um-email-error').text('');
+
+        // Validate name
+        if (!userData.name) {
+            $('#um-name-error').text('Name is required');
+            return;
+        }
+
+        // Validate email
+        if (!userData.email) {
+            $('#um-email-error').text('Email is required');
+            return;
+        }
+        if (!userData.email.includes('@')) {
+            $('#um-email-error').text('Must contain @');
+            return;
+        }
+
+        const users = [...umModel.get('users')];
+
+        if (umEditIndex >= 0) {
+            // Update existing
+            users[umEditIndex] = userData;
+            umEditIndex = -1;
+            $('#um-form-title').text('Add New User');
+            $('#um-save').text('Add User');
+            $('#um-cancel').hide();
+        } else {
+            // Add new
+            users.push(userData);
+        }
+
+        umModel.set('users', users);
+        renderUserList();
+        this.reset();
+        $('#um-role').val('user');
+        $('#um-status').val('active');
+    });
+
+    // Edit user
+    $(document).on('click', '.um-edit', function () {
+        const index = parseInt($(this).data('index'), 10);
+        const user = umModel.get('users')[index];
+
+        umEditIndex = index;
+        $('#um-name').val(user.name);
+        $('#um-email').val(user.email);
+        $('#um-role').val(user.role);
+        $('#um-status').val(user.status);
+
+        $('#um-form-title').text('Edit User');
+        $('#um-save').text('Update User');
+        $('#um-cancel').show();
+    });
+
+    // Cancel edit
+    $('#um-cancel').on('click', function () {
+        umEditIndex = -1;
+        $('#um-form')[0].reset();
+        $('#um-role').val('user');
+        $('#um-status').val('active');
+        $('#um-form-title').text('Add New User');
+        $('#um-save').text('Add User');
+        $('#um-name-error').text('');
+        $('#um-email-error').text('');
+        $(this).hide();
+    });
+
+    // Remove user
+    $(document).on('click', '.um-remove', function () {
+        const index = parseInt($(this).data('index'), 10);
+        const users = umModel.get('users').filter((_, i) => i !== index);
+        umModel.set('users', users);
+        renderUserList();
+
+        // Reset form if editing the removed user
+        if (umEditIndex === index) {
+            $('#um-cancel').trigger('click');
+        } else if (umEditIndex > index) {
+            umEditIndex--;
+        }
+    });
+
+    // Copy to clipboard
+    $('#um-copy').on('click', function () {
+        const users = umModel.get('users');
+        const json = JSON.stringify(users, null, 2);
+
+        navigator.clipboard.writeText(json).then(() => {
+            const $btn = $(this);
+            const originalText = $btn.text();
+            $btn.text('Copied!').addClass('btn-success').removeClass('btn-outline');
+            setTimeout(() => {
+                $btn.text(originalText).removeClass('btn-success').addClass('btn-outline');
+            }, 2000);
+        }).catch(() => {
+            alert('Failed to copy to clipboard');
+        });
+    });
+
+    // Method Reference Tabs
+    Domma.elements.tabs('#method-tabs', {animation: true});
 </script>
 </body>
 </html>

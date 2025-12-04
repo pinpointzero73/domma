@@ -584,127 +584,149 @@ $('.items').length    // Number of elements</pre>
         <div class="card-body">
             <p class="mb-4">All 90+ methods available in the DOM namespace.</p>
 
-            <h4 class="category-title">Traversal (20)</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">find()</span>
-                <span class="method-item">children()</span>
-                <span class="method-item">parent()</span>
-                <span class="method-item">parents()</span>
-                <span class="method-item">parentsUntil()</span>
-                <span class="method-item">closest()</span>
-                <span class="method-item">siblings()</span>
-                <span class="method-item">next()</span>
-                <span class="method-item">nextAll()</span>
-                <span class="method-item">nextUntil()</span>
-                <span class="method-item">prev()</span>
-                <span class="method-item">prevAll()</span>
-                <span class="method-item">prevUntil()</span>
-                <span class="method-item">first()</span>
-                <span class="method-item">last()</span>
-                <span class="method-item">eq()</span>
-                <span class="method-item">filter()</span>
-                <span class="method-item">not()</span>
-                <span class="method-item">has()</span>
-                <span class="method-item">is()</span>
-            </div>
-
-            <h4 class="category-title">Content (9)</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">html()</span>
-                <span class="method-item">text()</span>
-                <span class="method-item">val()</span>
-                <span class="method-item">attr()</span>
-                <span class="method-item">removeAttr()</span>
-                <span class="method-item">prop()</span>
-                <span class="method-item">removeProp()</span>
-                <span class="method-item">data()</span>
-                <span class="method-item">removeData()</span>
-            </div>
-
-            <h4 class="category-title">CSS & Classes (8)</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">css()</span>
-                <span class="method-item">addClass()</span>
-                <span class="method-item">removeClass()</span>
-                <span class="method-item">toggleClass()</span>
-                <span class="method-item">hasClass()</span>
-                <span class="method-item">show()</span>
-                <span class="method-item">hide()</span>
-                <span class="method-item">toggle()</span>
-            </div>
-
-            <h4 class="category-title">Manipulation (14)</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">append()</span>
-                <span class="method-item">prepend()</span>
-                <span class="method-item">after()</span>
-                <span class="method-item">before()</span>
-                <span class="method-item">appendTo()</span>
-                <span class="method-item">prependTo()</span>
-                <span class="method-item">insertAfter()</span>
-                <span class="method-item">insertBefore()</span>
-                <span class="method-item">wrap()</span>
-                <span class="method-item">wrapAll()</span>
-                <span class="method-item">wrapInner()</span>
-                <span class="method-item">unwrap()</span>
-                <span class="method-item">clone()</span>
-                <span class="method-item">remove()</span>
-            </div>
-
-            <h4 class="category-title">Events (24)</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">on()</span>
-                <span class="method-item">off()</span>
-                <span class="method-item">one()</span>
-                <span class="method-item">trigger()</span>
-                <span class="method-item">click()</span>
-                <span class="method-item">dblclick()</span>
-                <span class="method-item">mouseenter()</span>
-                <span class="method-item">mouseleave()</span>
-                <span class="method-item">mouseover()</span>
-                <span class="method-item">mouseout()</span>
-                <span class="method-item">mousemove()</span>
-                <span class="method-item">mousedown()</span>
-                <span class="method-item">mouseup()</span>
-                <span class="method-item">hover()</span>
-                <span class="method-item">focus()</span>
-                <span class="method-item">blur()</span>
-                <span class="method-item">change()</span>
-                <span class="method-item">submit()</span>
-                <span class="method-item">keydown()</span>
-                <span class="method-item">keyup()</span>
-                <span class="method-item">keypress()</span>
-                <span class="method-item">scroll()</span>
-                <span class="method-item">resize()</span>
-                <span class="method-item">load()</span>
-            </div>
-
-            <h4 class="category-title">Effects (10)</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">fadeIn()</span>
-                <span class="method-item">fadeOut()</span>
-                <span class="method-item">fadeToggle()</span>
-                <span class="method-item">fadeTo()</span>
-                <span class="method-item">slideDown()</span>
-                <span class="method-item">slideUp()</span>
-                <span class="method-item">slideToggle()</span>
-                <span class="method-item">animate()</span>
-                <span class="method-item">stop()</span>
-                <span class="method-item">delay()</span>
-            </div>
-
-            <h4 class="category-title">Dimensions (10)</h4>
-            <div class="method-grid">
-                <span class="method-item">width()</span>
-                <span class="method-item">height()</span>
-                <span class="method-item">innerWidth()</span>
-                <span class="method-item">innerHeight()</span>
-                <span class="method-item">outerWidth()</span>
-                <span class="method-item">outerHeight()</span>
-                <span class="method-item">offset()</span>
-                <span class="method-item">position()</span>
-                <span class="method-item">scrollTop()</span>
-                <span class="method-item">scrollLeft()</span>
+            <div id="dom-method-tabs" class="tabs">
+                <div class="tab-list">
+                    <button class="tab-item active" data-tab="traversal">Traversal</button>
+                    <button class="tab-item" data-tab="content">Content</button>
+                    <button class="tab-item" data-tab="css">CSS & Classes</button>
+                    <button class="tab-item" data-tab="manipulation">Manipulation</button>
+                    <button class="tab-item" data-tab="events">Events</button>
+                    <button class="tab-item" data-tab="effects">Effects</button>
+                    <button class="tab-item" data-tab="dimensions">Dimensions</button>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-panel active" data-tab="traversal">
+                        <p class="text-muted mb-3">Navigate the DOM tree to find related elements (20 methods).</p>
+                        <div class="method-grid">
+                            <span class="method-item">find()</span>
+                            <span class="method-item">children()</span>
+                            <span class="method-item">parent()</span>
+                            <span class="method-item">parents()</span>
+                            <span class="method-item">parentsUntil()</span>
+                            <span class="method-item">closest()</span>
+                            <span class="method-item">siblings()</span>
+                            <span class="method-item">next()</span>
+                            <span class="method-item">nextAll()</span>
+                            <span class="method-item">nextUntil()</span>
+                            <span class="method-item">prev()</span>
+                            <span class="method-item">prevAll()</span>
+                            <span class="method-item">prevUntil()</span>
+                            <span class="method-item">first()</span>
+                            <span class="method-item">last()</span>
+                            <span class="method-item">eq()</span>
+                            <span class="method-item">filter()</span>
+                            <span class="method-item">not()</span>
+                            <span class="method-item">has()</span>
+                            <span class="method-item">is()</span>
+                        </div>
+                    </div>
+                    <div class="tab-panel" data-tab="content">
+                        <p class="text-muted mb-3">Get and set element content and attributes (9 methods).</p>
+                        <div class="method-grid">
+                            <span class="method-item">html()</span>
+                            <span class="method-item">text()</span>
+                            <span class="method-item">val()</span>
+                            <span class="method-item">attr()</span>
+                            <span class="method-item">removeAttr()</span>
+                            <span class="method-item">prop()</span>
+                            <span class="method-item">removeProp()</span>
+                            <span class="method-item">data()</span>
+                            <span class="method-item">removeData()</span>
+                        </div>
+                    </div>
+                    <div class="tab-panel" data-tab="css">
+                        <p class="text-muted mb-3">Manipulate styles and CSS classes (8 methods).</p>
+                        <div class="method-grid">
+                            <span class="method-item">css()</span>
+                            <span class="method-item">addClass()</span>
+                            <span class="method-item">removeClass()</span>
+                            <span class="method-item">toggleClass()</span>
+                            <span class="method-item">hasClass()</span>
+                            <span class="method-item">show()</span>
+                            <span class="method-item">hide()</span>
+                            <span class="method-item">toggle()</span>
+                        </div>
+                    </div>
+                    <div class="tab-panel" data-tab="manipulation">
+                        <p class="text-muted mb-3">Insert, move, copy and remove DOM elements (14 methods).</p>
+                        <div class="method-grid">
+                            <span class="method-item">append()</span>
+                            <span class="method-item">prepend()</span>
+                            <span class="method-item">after()</span>
+                            <span class="method-item">before()</span>
+                            <span class="method-item">appendTo()</span>
+                            <span class="method-item">prependTo()</span>
+                            <span class="method-item">insertAfter()</span>
+                            <span class="method-item">insertBefore()</span>
+                            <span class="method-item">wrap()</span>
+                            <span class="method-item">wrapAll()</span>
+                            <span class="method-item">wrapInner()</span>
+                            <span class="method-item">unwrap()</span>
+                            <span class="method-item">clone()</span>
+                            <span class="method-item">remove()</span>
+                        </div>
+                    </div>
+                    <div class="tab-panel" data-tab="events">
+                        <p class="text-muted mb-3">Attach, remove and trigger event handlers (24 methods).</p>
+                        <div class="method-grid">
+                            <span class="method-item">on()</span>
+                            <span class="method-item">off()</span>
+                            <span class="method-item">one()</span>
+                            <span class="method-item">trigger()</span>
+                            <span class="method-item">click()</span>
+                            <span class="method-item">dblclick()</span>
+                            <span class="method-item">mouseenter()</span>
+                            <span class="method-item">mouseleave()</span>
+                            <span class="method-item">mouseover()</span>
+                            <span class="method-item">mouseout()</span>
+                            <span class="method-item">mousemove()</span>
+                            <span class="method-item">mousedown()</span>
+                            <span class="method-item">mouseup()</span>
+                            <span class="method-item">hover()</span>
+                            <span class="method-item">focus()</span>
+                            <span class="method-item">blur()</span>
+                            <span class="method-item">change()</span>
+                            <span class="method-item">submit()</span>
+                            <span class="method-item">keydown()</span>
+                            <span class="method-item">keyup()</span>
+                            <span class="method-item">keypress()</span>
+                            <span class="method-item">scroll()</span>
+                            <span class="method-item">resize()</span>
+                            <span class="method-item">load()</span>
+                        </div>
+                    </div>
+                    <div class="tab-panel" data-tab="effects">
+                        <p class="text-muted mb-3">Animate elements with fades, slides and custom animations (10
+                            methods).</p>
+                        <div class="method-grid">
+                            <span class="method-item">fadeIn()</span>
+                            <span class="method-item">fadeOut()</span>
+                            <span class="method-item">fadeToggle()</span>
+                            <span class="method-item">fadeTo()</span>
+                            <span class="method-item">slideDown()</span>
+                            <span class="method-item">slideUp()</span>
+                            <span class="method-item">slideToggle()</span>
+                            <span class="method-item">animate()</span>
+                            <span class="method-item">stop()</span>
+                            <span class="method-item">delay()</span>
+                        </div>
+                    </div>
+                    <div class="tab-panel" data-tab="dimensions">
+                        <p class="text-muted mb-3">Get and set element dimensions and positions (10 methods).</p>
+                        <div class="method-grid">
+                            <span class="method-item">width()</span>
+                            <span class="method-item">height()</span>
+                            <span class="method-item">innerWidth()</span>
+                            <span class="method-item">innerHeight()</span>
+                            <span class="method-item">outerWidth()</span>
+                            <span class="method-item">outerHeight()</span>
+                            <span class="method-item">offset()</span>
+                            <span class="method-item">position()</span>
+                            <span class="method-item">scrollTop()</span>
+                            <span class="method-item">scrollLeft()</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -867,7 +889,7 @@ $('.items').length    // Number of elements</pre>
 
     $('#fx-animate').on('click', function () {
         const $target = $('#fx-target');
-        const currentMargin = _.parseInt($target.css('marginLeft')) || 0;
+        const currentMargin = parseInt($target.css('marginLeft'), 10) || 0;
         $target.animate({
             marginLeft: currentMargin > 100 ? '0px' : '200px',
             opacity: currentMargin > 100 ? 1 : 0.5
@@ -889,6 +911,9 @@ $('.items').length    // Number of elements</pre>
         };
         $('#dim-result').html(Object.entries(dims).map(([k, v]) => `${k}: ${v}`).join('<br>'));
     });
+
+    // Method Reference Tabs
+    Domma.elements.tabs('#dom-method-tabs', {animation: true});
 </script>
 </body>
 </html>

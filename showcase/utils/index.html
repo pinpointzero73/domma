@@ -598,12 +598,15 @@ _.render('{{> header}}', { title: 'Welcome' }, opts);
                 <span class="method-item">isUndefined()</span>
                 <span class="method-item">lt()</span>
                 <span class="method-item">lte()</span>
+                <span class="method-item">castArray()</span>
+                <span class="method-item">parseInt()</span>
                 <span class="method-item">toArray()</span>
                 <span class="method-item">toFinite()</span>
                 <span class="method-item">toInteger()</span>
                 <span class="method-item">toLength()</span>
                 <span class="method-item">toNumber()</span>
                 <span class="method-item">toPlainObject()</span>
+                <span class="method-item">toSafeInteger()</span>
                 <span class="method-item">toString()</span>
             </div>
 
@@ -631,9 +634,14 @@ const deep = _.cloneDeep(obj);     // Deep copy
 _.isMatch({a: 1, b: 2}, {a: 1})  // true
 
 // Conversions
-_.toArray('abc')         // ['a', 'b', 'c']
+_.parseInt('42')         // 42
+_.parseInt('08', 10)     // 8
 _.toNumber('3.14')       // 3.14
 _.toInteger('3.7')       // 3
+_.toFinite(Infinity)     // 1.7976931348623157e+308
+_.toSafeInteger(3.7)     // 3
+_.toArray('abc')         // ['a', 'b', 'c']
+_.toString([1, 2, 3])    // '1,2,3'
 _.castArray(1)           // [1]
 _.castArray([1])         // [1]</pre>
 
@@ -644,6 +652,8 @@ _.castArray([1])         // [1]</pre>
                     <button class="btn btn-outline btn-sm" data-lang="isEmpty">isEmpty([])</button>
                     <button class="btn btn-outline btn-sm" data-lang="cloneDeep">cloneDeep(obj)</button>
                     <button class="btn btn-outline btn-sm" data-lang="isMatch">isMatch({a:1,b:2}, {a:1})</button>
+                    <button class="btn btn-outline btn-sm" data-lang="parseInt">parseInt('42')</button>
+                    <button class="btn btn-outline btn-sm" data-lang="toNumber">toNumber('3.14')</button>
                 </div>
                 <div class="demo-result" id="lang-result">Click a button to see result</div>
             </div>
@@ -918,6 +928,14 @@ _.noop()                 // undefined (do nothing)</pre>
             case 'isMatch':
                 result = _.isMatch({a: 1, b: 2}, {a: 1});
                 description = `_.isMatch({a:1, b:2}, {a:1}) = ${result}`;
+                break;
+            case 'parseInt':
+                result = _.parseInt('42');
+                description = `_.parseInt('42') = ${result}\n_.parseInt('08', 10) = ${_.parseInt('08', 10)}\n_.parseInt('0xff', 16) = ${_.parseInt('0xff', 16)}`;
+                break;
+            case 'toNumber':
+                result = _.toNumber('3.14');
+                description = `_.toNumber('3.14') = ${result}\n_.toNumber('0b101') = ${_.toNumber('0b101')}\n_.toNumber(null) = ${_.toNumber(null)}`;
                 break;
         }
 

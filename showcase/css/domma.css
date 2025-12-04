@@ -1568,8 +1568,12 @@ code, pre {
 .tab-item {
     padding: var(--dm-space-3) var(--dm-space-4);
     cursor: pointer;
+    border: none;
     border-bottom: 2px solid transparent;
+    background: transparent;
     color: var(--dm-gray-600);
+    font-family: inherit;
+    font-size: inherit;
     font-weight: 500;
     transition: all var(--dm-transition-fast);
     margin-bottom: -1px;
@@ -1607,6 +1611,7 @@ code, pre {
 
 .tabs-pills .tab-item {
     border-radius: var(--dm-radius-md);
+    border: none;
     border-bottom: none;
     margin-bottom: 0;
 }
@@ -1614,6 +1619,7 @@ code, pre {
 .tabs-pills .tab-item.active {
     background-color: var(--dm-white);
     box-shadow: var(--dm-shadow-sm);
+    border-bottom: none;
 }
 
 /* ============================================
