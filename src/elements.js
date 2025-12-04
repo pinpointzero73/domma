@@ -26,6 +26,22 @@ class Component {
         }
     }
 
+    /**
+     * Update component options at runtime
+     * @param {Object} newOptions - New options to merge
+     * @returns {this} The component instance for chaining
+     */
+    setOptions(newOptions) {
+        this.options = {...this.options, ...newOptions};
+
+        // Call _applyOptions if the subclass implements it
+        if (typeof this._applyOptions === 'function') {
+            this._applyOptions();
+        }
+
+        return this;
+    }
+
     _addEventListener(element, event, handler) {
         element.addEventListener(event, handler);
         this._eventHandlers.push({element, event, handler});
@@ -1569,6 +1585,294 @@ class ToastInstance {
 }
 
 // ============================================
+// Carousel Component
+// ============================================
+
+class Carousel extends Component {
+    static defaults = {
+        autoplay: false,
+        interval: 5000,
+        pauseOnHover: true,
+        loop: true,
+        animation: 'slide',
+        animationDuration: 500,
+        showArrows: true,
+        showIndicators: true,
+        slideSelector: '.carousel-slide, [data-slide]',
+        activeClass: 'active',
+        onChange: null
+    };
+
+    constructor(selector, options = {}) {
+        super(selector, options);
+        this._currentIndex = 0;
+        this._autoplayTimer = null;
+        this._isAnimating = false;
+        this._init();
+    }
+
+    _init() {
+        if (!this.element) return;
+
+        const opts = this.options;
+        this._slides = this.element.querySelectorAll(opts.slideSelector);
+        this._track = this.element.querySelector('.carousel-track');
+
+        if (this._slides.length === 0) return;
+
+        // Setup container styles
+        this.element.style.position = 'relative';
+        this.element.style.overflow = 'hidden';
+
+        // Setup slides
+        this._slides.forEach((slide, i) => {
+            if (opts.animation === 'fade') {
+                // First slide stays relative to maintain container height
+                // Other slides are absolutely positioned on top
+                slide.style.position = i === 0 ? 'relative' : 'absolute';
+                slide.style.top = '0';
+                slide.style.left = '0';
+                slide.style.width = '100%';
+                slide.style.opacity = i === 0 ? '1' : '0';
+                slide.style.zIndex = i === 0 ? '1' : '0';
+                slide.style.transition = `opacity ${opts.animationDuration}ms ease`;
+            } else {
+                slide.style.position = 'relative';
+                slide.style.width = '100%';
+                slide.style.flexShrink = '0';
+            }
+        });
+
+        // Setup track for slide animation
+        if (opts.animation === 'slide' && this._track) {
+            this._track.style.display = 'flex';
+            this._track.style.transition = `transform ${opts.animationDuration}ms ease`;
+        }
+
+        // Create arrows
+        if (opts.showArrows) {
+            this._createArrows();
+        }
+
+        // Create indicators
+        if (opts.showIndicators) {
+            this._createIndicators();
+        }
+
+        // Autoplay
+        if (opts.autoplay) {
+            this._startAutoplay();
+
+            if (opts.pauseOnHover) {
+                this._addEventListener(this.element, 'mouseenter', () => this._stopAutoplay());
+                this._addEventListener(this.element, 'mouseleave', () => this._startAutoplay());
+            }
+        }
+
+        // Keyboard navigation
+        this._addEventListener(this.element, 'keydown', (e) => {
+            if (e.key === 'ArrowLeft') this.prev();
+            if (e.key === 'ArrowRight') this.next();
+        });
+
+        // Make focusable
+        this.element.tabIndex = 0;
+
+        // Initial state
+        this._updateState();
+    }
+
+    _createArrows() {
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'carousel-arrow carousel-prev';
+        prevBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
+        prevBtn.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        `;
+        this._addEventListener(prevBtn, 'click', () => this.prev());
+        this._addEventListener(prevBtn, 'mouseenter', () => prevBtn.style.background = '#fff');
+        this._addEventListener(prevBtn, 'mouseleave', () => prevBtn.style.background = 'rgba(255,255,255,0.9)');
+
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'carousel-arrow carousel-next';
+        nextBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
+        nextBtn.style.cssText = prevBtn.style.cssText.replace('left: 1rem', 'right: 1rem');
+        this._addEventListener(nextBtn, 'click', () => this.next());
+        this._addEventListener(nextBtn, 'mouseenter', () => nextBtn.style.background = '#fff');
+        this._addEventListener(nextBtn, 'mouseleave', () => nextBtn.style.background = 'rgba(255,255,255,0.9)');
+
+        this.element.appendChild(prevBtn);
+        this.element.appendChild(nextBtn);
+
+        this._prevBtn = prevBtn;
+        this._nextBtn = nextBtn;
+    }
+
+    _createIndicators() {
+        const indicators = document.createElement('div');
+        indicators.className = 'carousel-indicators';
+        indicators.style.cssText = `
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 10;
+        `;
+
+        this._slides.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'carousel-indicator';
+            dot.style.cssText = `
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                border: none;
+                background: rgba(255,255,255,0.5);
+                cursor: pointer;
+                padding: 0;
+                transition: all 0.2s ease;
+            `;
+            this._addEventListener(dot, 'click', () => this.goTo(i));
+            indicators.appendChild(dot);
+        });
+
+        this.element.appendChild(indicators);
+        this._indicators = indicators;
+    }
+
+    _updateState() {
+        const opts = this.options;
+
+        // Update slides
+        if (opts.animation === 'fade') {
+            this._slides.forEach((slide, i) => {
+                const isActive = i === this._currentIndex;
+                // Active slide is relative to maintain container height
+                slide.style.position = isActive ? 'relative' : 'absolute';
+                slide.style.opacity = isActive ? '1' : '0';
+                slide.style.zIndex = isActive ? '1' : '0';
+            });
+        } else if (this._track) {
+            this._track.style.transform = `translateX(-${this._currentIndex * 100}%)`;
+        }
+
+        // Update indicators
+        if (this._indicators) {
+            const dots = this._indicators.querySelectorAll('.carousel-indicator');
+            dots.forEach((dot, i) => {
+                dot.style.background = i === this._currentIndex
+                    ? 'rgba(255,255,255,1)'
+                    : 'rgba(255,255,255,0.5)';
+                dot.style.transform = i === this._currentIndex ? 'scale(1.2)' : 'scale(1)';
+            });
+        }
+
+        // Update arrow visibility if not looping
+        if (!opts.loop && this._prevBtn && this._nextBtn) {
+            this._prevBtn.style.opacity = this._currentIndex === 0 ? '0.3' : '1';
+            this._prevBtn.style.pointerEvents = this._currentIndex === 0 ? 'none' : 'auto';
+            this._nextBtn.style.opacity = this._currentIndex === this._slides.length - 1 ? '0.3' : '1';
+            this._nextBtn.style.pointerEvents = this._currentIndex === this._slides.length - 1 ? 'none' : 'auto';
+        }
+    }
+
+    _startAutoplay() {
+        if (this._autoplayTimer) return;
+
+        this._autoplayTimer = setInterval(() => {
+            this.next();
+        }, this.options.interval);
+    }
+
+    _stopAutoplay() {
+        if (this._autoplayTimer) {
+            clearInterval(this._autoplayTimer);
+            this._autoplayTimer = null;
+        }
+    }
+
+    goTo(index) {
+        if (this._isAnimating) return this;
+
+        const opts = this.options;
+        const oldIndex = this._currentIndex;
+        const maxIndex = this._slides.length - 1;
+
+        // Handle bounds
+        if (opts.loop) {
+            if (index < 0) index = maxIndex;
+            if (index > maxIndex) index = 0;
+        } else {
+            if (index < 0 || index > maxIndex) return this;
+        }
+
+        if (index === this._currentIndex) return this;
+
+        this._isAnimating = true;
+        this._currentIndex = index;
+        this._updateState();
+
+        setTimeout(() => {
+            this._isAnimating = false;
+        }, opts.animationDuration);
+
+        if (opts.onChange) {
+            opts.onChange({index, oldIndex, slide: this._slides[index]});
+        }
+
+        return this;
+    }
+
+    next() {
+        return this.goTo(this._currentIndex + 1);
+    }
+
+    prev() {
+        return this.goTo(this._currentIndex - 1);
+    }
+
+    play() {
+        this._startAutoplay();
+        return this;
+    }
+
+    pause() {
+        this._stopAutoplay();
+        return this;
+    }
+
+    getIndex() {
+        return this._currentIndex;
+    }
+
+    getSlide(index = this._currentIndex) {
+        return this._slides[index];
+    }
+
+    destroy() {
+        super.destroy();
+        this._stopAutoplay();
+    }
+}
+
+// ============================================
 // Elements Module Export
 // ============================================
 
@@ -1643,6 +1947,14 @@ export const elements = {
 
     dropdown(selector, options = {}) {
         const instance = new Dropdown(selector, options);
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
+    carousel(selector, options = {}) {
+        const instance = new Carousel(selector, options);
         if (instance.element) {
             this._instances.set(instance.element, instance);
         }

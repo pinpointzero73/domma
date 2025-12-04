@@ -68,6 +68,10 @@ class TableInstance {
                 search: 'domma-table-search'
             },
 
+            // Export panel
+            exportPanel: false,
+            exportOptions: ['copy', 'csv', 'excel', 'json'],
+
             // Callbacks
             onSort: null,
             onFilter: null,
@@ -75,6 +79,7 @@ class TableInstance {
             onSelect: null,
             onEdit: null,
             onRender: null,
+            onExport: null,
 
             ...options
         };
@@ -567,11 +572,14 @@ class TableInstance {
         const {columns = this._columns.filter(c => c.visible), includeHeaders = true} = options;
         const rows = [];
 
+        // Use selected rows if any, otherwise use filtered data
+        const data = this._getExportData();
+
         if (includeHeaders) {
             rows.push(columns.map(c => `"${c.title}"`).join(','));
         }
 
-        for (const row of this._filteredData) {
+        for (const row of data) {
             const values = columns.map(c => {
                 const val = row[c.key];
                 if (val == null) return '""';
@@ -583,11 +591,20 @@ class TableInstance {
         return rows.join('\n');
     }
 
+    _getExportData() {
+        // If rows are selected, export only those; otherwise export all filtered data
+        const selected = this.getSelected();
+        return selected.length > 0 ? selected : this._filteredData;
+    }
+
     toJSON(options = {}) {
         const {columns = this._columns.filter(c => c.visible), pretty = false} = options;
         const keys = columns.map(c => c.key);
 
-        const data = this._filteredData.map(row => {
+        // Use selected rows if any, otherwise use filtered data
+        const sourceData = this._getExportData();
+
+        const data = sourceData.map(row => {
             const obj = {};
             for (const key of keys) {
                 obj[key] = row[key];
@@ -601,14 +618,22 @@ class TableInstance {
     download(format, filename) {
         let content, mimeType;
 
-        if (format === 'csv') {
-            content = this.toCSV();
-            mimeType = 'text/csv';
-            filename = filename || 'data.csv';
-        } else {
-            content = this.toJSON({pretty: true});
-            mimeType = 'application/json';
-            filename = filename || 'data.json';
+        switch (format) {
+            case 'csv':
+                content = this.toCSV();
+                mimeType = 'text/csv';
+                filename = filename || 'data.csv';
+                break;
+            case 'excel':
+                content = this.toExcel();
+                mimeType = 'application/vnd.ms-excel';
+                filename = filename || 'data.xls';
+                break;
+            case 'json':
+            default:
+                content = this.toJSON({pretty: true});
+                mimeType = 'application/json';
+                filename = filename || 'data.json';
         }
 
         const blob = new Blob([content], {type: mimeType});
@@ -620,6 +645,133 @@ class TableInstance {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+
+        if (this.options.onExport) {
+            const exportData = this._getExportData();
+            const selected = this.getSelected();
+            this.options.onExport({
+                format,
+                filename,
+                rowCount: exportData.length,
+                selectedOnly: selected.length > 0
+            });
+        }
+    }
+
+    toExcel(options = {}) {
+        const {columns = this._columns.filter(c => c.visible)} = options;
+
+        // Use selected rows if any, otherwise use filtered data
+        const data = this._getExportData();
+
+        // Create HTML table that Excel can open
+        let html = `
+            <html xmlns:o="urn:schemas-microsoft-com:office:office"
+                  xmlns:x="urn:schemas-microsoft-com:office:excel">
+            <head>
+                <meta charset="UTF-8">
+                <!--[if gte mso 9]>
+                <xml>
+                    <x:ExcelWorkbook>
+                        <x:ExcelWorksheets>
+                            <x:ExcelWorksheet>
+                                <x:Name>Data</x:Name>
+                                <x:WorksheetOptions>
+                                    <x:DisplayGridlines/>
+                                </x:WorksheetOptions>
+                            </x:ExcelWorksheet>
+                        </x:ExcelWorksheets>
+                    </x:ExcelWorkbook>
+                </xml>
+                <![endif]-->
+                <style>
+                    table { border-collapse: collapse; }
+                    th, td { border: 1px solid #000; padding: 8px; }
+                    th { background: #f0f0f0; font-weight: bold; }
+                </style>
+            </head>
+            <body>
+                <table>
+                    <thead>
+                        <tr>`;
+
+        // Headers
+        for (const col of columns) {
+            html += `<th>${this._escapeHtml(col.title)}</th>`;
+        }
+
+        html += `</tr></thead><tbody>`;
+
+        // Data rows
+        for (const row of data) {
+            html += '<tr>';
+            for (const col of columns) {
+                const val = row[col.key];
+                html += `<td>${val != null ? this._escapeHtml(String(val)) : ''}</td>`;
+            }
+            html += '</tr>';
+        }
+
+        html += '</tbody></table></body></html>';
+
+        return html;
+    }
+
+    copyToClipboard(format = 'text') {
+        let content;
+
+        // Use selected rows if any, otherwise use filtered data
+        const data = this._getExportData();
+
+        if (format === 'json') {
+            content = this.toJSON({pretty: true});
+        } else if (format === 'csv') {
+            content = this.toCSV();
+        } else {
+            // Tab-separated for easy pasting into spreadsheets
+            const columns = this._columns.filter(c => c.visible);
+            const rows = [];
+
+            // Headers
+            rows.push(columns.map(c => c.title).join('\t'));
+
+            // Data
+            for (const row of data) {
+                rows.push(columns.map(c => row[c.key] ?? '').join('\t'));
+            }
+
+            content = rows.join('\n');
+        }
+
+        // Use clipboard API if available
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(content).then(() => {
+                if (this.options.onExport) {
+                    this.options.onExport({format: 'clipboard', rowCount: this._filteredData.length});
+                }
+            });
+        } else {
+            // Fallback for older browsers
+            const textarea = document.createElement('textarea');
+            textarea.value = content;
+            textarea.style.cssText = 'position: fixed; left: -9999px;';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            if (this.options.onExport) {
+                this.options.onExport({format: 'clipboard', rowCount: this._filteredData.length});
+            }
+        }
+
+        return this;
+    }
+
+    _escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     // ============================================
@@ -642,11 +794,15 @@ class TableInstance {
         const wrapper = document.createElement('div');
         wrapper.className = classes.wrapper;
 
+        // Toolbar (search + export)
+        const toolbar = document.createElement('div');
+        toolbar.className = 'domma-table-toolbar';
+        toolbar.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;';
+
         // Search bar
         if (opts.searchable) {
             const searchWrapper = document.createElement('div');
             searchWrapper.className = classes.search;
-            searchWrapper.style.marginBottom = '10px';
 
             const searchInput = document.createElement('input');
             searchInput.type = 'text';
@@ -659,7 +815,201 @@ class TableInstance {
             }, 300));
 
             searchWrapper.appendChild(searchInput);
-            wrapper.appendChild(searchWrapper);
+            toolbar.appendChild(searchWrapper);
+        }
+
+        // Export panel
+        if (opts.exportPanel) {
+            const exportWrapper = document.createElement('div');
+            exportWrapper.className = 'domma-table-export';
+            exportWrapper.style.cssText = 'display: flex; gap: 8px; align-items: center;';
+
+            // Mode toggle (Copy / Download)
+            let downloadMode = false;
+
+            const toggleWrapper = document.createElement('div');
+            toggleWrapper.style.cssText = 'display: flex; align-items: center; gap: 6px; margin-right: 8px;';
+
+            const toggleLabel = document.createElement('span');
+            toggleLabel.textContent = 'Copy';
+            toggleLabel.style.cssText = 'font-size: 12px; color: #666;';
+
+            const toggleSwitch = document.createElement('label');
+            toggleSwitch.style.cssText = `
+                position: relative;
+                display: inline-block;
+                width: 44px;
+                height: 22px;
+                cursor: pointer;
+            `;
+
+            const toggleInput = document.createElement('input');
+            toggleInput.type = 'checkbox';
+            toggleInput.style.cssText = 'opacity: 0; width: 0; height: 0;';
+
+            const toggleSlider = document.createElement('span');
+            toggleSlider.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: #ccc;
+                border-radius: 22px;
+                transition: 0.3s;
+            `;
+
+            const toggleKnob = document.createElement('span');
+            toggleKnob.style.cssText = `
+                position: absolute;
+                height: 16px;
+                width: 16px;
+                left: 3px;
+                bottom: 3px;
+                background: white;
+                border-radius: 50%;
+                transition: 0.3s;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            `;
+
+            toggleSlider.appendChild(toggleKnob);
+            toggleSwitch.appendChild(toggleInput);
+            toggleSwitch.appendChild(toggleSlider);
+
+            const toggleLabelRight = document.createElement('span');
+            toggleLabelRight.textContent = 'Download';
+            toggleLabelRight.style.cssText = 'font-size: 12px; color: #999;';
+
+            const updateToggleState = () => {
+                if (downloadMode) {
+                    toggleSlider.style.background = '#4f46e5';
+                    toggleKnob.style.transform = 'translateX(22px)';
+                    toggleLabel.style.color = '#999';
+                    toggleLabelRight.style.color = '#4f46e5';
+                    toggleLabelRight.style.fontWeight = '600';
+                    toggleLabel.style.fontWeight = 'normal';
+                } else {
+                    toggleSlider.style.background = '#ccc';
+                    toggleKnob.style.transform = 'translateX(0)';
+                    toggleLabel.style.color = '#333';
+                    toggleLabel.style.fontWeight = '600';
+                    toggleLabelRight.style.color = '#999';
+                    toggleLabelRight.style.fontWeight = 'normal';
+                }
+            };
+
+            this._addEventHandler(toggleInput, 'change', () => {
+                downloadMode = toggleInput.checked;
+                updateToggleState();
+            });
+
+            updateToggleState();
+
+            toggleWrapper.appendChild(toggleLabel);
+            toggleWrapper.appendChild(toggleSwitch);
+            toggleWrapper.appendChild(toggleLabelRight);
+            exportWrapper.appendChild(toggleWrapper);
+
+            // Separator
+            const separator = document.createElement('span');
+            separator.style.cssText = 'width: 1px; height: 20px; background: #ddd;';
+            exportWrapper.appendChild(separator);
+
+            const btnStyle = `
+                padding: 6px 12px;
+                border: 1px solid #ddd;
+                background: #fff;
+                border-radius: 4px;
+                font-size: 13px;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                transition: all 0.15s ease;
+            `;
+
+            const exportFormats = {
+                text: {
+                    label: 'Text',
+                    icon: '📋',
+                    format: 'text'
+                },
+                csv: {
+                    label: 'CSV',
+                    icon: '📄',
+                    format: 'csv'
+                },
+                excel: {
+                    label: 'Excel',
+                    icon: '📊',
+                    format: 'excel'
+                },
+                json: {
+                    label: 'JSON',
+                    icon: '{ }',
+                    format: 'json'
+                }
+            };
+
+            // Map old 'copy' option to 'text'
+            const normalizedOptions = opts.exportOptions.map(opt => opt === 'copy' ? 'text' : opt);
+
+            for (const exportType of normalizedOptions) {
+                const config = exportFormats[exportType];
+                if (!config) continue;
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.setAttribute('data-export', exportType);
+                btn.innerHTML = `<span style="font-size: 14px;">${config.icon}</span> ${config.label}`;
+                btn.style.cssText = btnStyle;
+
+                const showFeedback = (message, success = true) => {
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = message;
+                    btn.style.background = success ? '#d4edda' : '#f8d7da';
+                    btn.style.borderColor = success ? '#28a745' : '#dc3545';
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.style.background = '#fff';
+                        btn.style.borderColor = '#ddd';
+                    }, 1500);
+                };
+
+                this._addEventHandler(btn, 'mouseenter', () => {
+                    btn.style.background = '#f8f9fa';
+                    btn.style.borderColor = '#adb5bd';
+                });
+                this._addEventHandler(btn, 'mouseleave', () => {
+                    btn.style.background = '#fff';
+                    btn.style.borderColor = '#ddd';
+                });
+                this._addEventHandler(btn, 'click', () => {
+                    const selected = this.getSelected();
+                    const rowCount = selected.length > 0 ? selected.length : this._filteredData.length;
+                    const suffix = selected.length > 0 ? ` (${rowCount} selected)` : ` (${rowCount} rows)`;
+
+                    if (downloadMode) {
+                        // Download mode
+                        const format = config.format === 'text' ? 'csv' : config.format;
+                        this.download(format);
+                        showFeedback('✓ Downloaded!' + suffix);
+                    } else {
+                        // Copy mode
+                        const format = config.format === 'excel' ? 'text' : config.format;
+                        this.copyToClipboard(format);
+                        showFeedback('✓ Copied!' + suffix);
+                    }
+                });
+
+                exportWrapper.appendChild(btn);
+            }
+
+            toolbar.appendChild(exportWrapper);
+        }
+
+        if (opts.searchable || opts.exportPanel) {
+            wrapper.appendChild(toolbar);
         }
 
         // Table
