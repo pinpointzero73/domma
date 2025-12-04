@@ -4,8 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DOM - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
     <link rel="stylesheet" href="../css/domma.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <style>
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem;
+            background: var(--dm-surface);
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-full);
+            cursor: pointer;
+            z-index: 1000;
+            width: 40px;
+            height: 40px;
+        }
         .demo-box {
             background: var(--dm-gray-100);
             border: 2px dashed var(--dm-gray-300);

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domma Themes</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../css/domma.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <style>
+        .theme-controls {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem;
+            background: var(--dm-surface);
+            border-bottom: 1px solid var(--dm-border);
+            margin-bottom: 2rem;
+        }
+
+        .theme-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .theme-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--dm-border);
+            border-radius: var(--dm-radius-lg);
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            cursor: pointer;
+            transition: all var(--dm-transition-fast);
+            font-weight: var(--dm-font-medium);
+        }
+
+        .theme-btn:hover {
+            border-color: var(--dm-primary);
+        }
+
+        .theme-btn.active {
+            background: var(--dm-primary);
+            color: white;
+            border-color: var(--dm-primary);
+        }
+
+        .variant-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .variant-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid transparent;
+            border-radius: var(--dm-radius-lg);
+            cursor: pointer;
+            transition: all var(--dm-transition-fast);
+            font-weight: var(--dm-font-medium);
+            color: white;
+        }
+
+        .variant-btn[data-variant="none"] {
+            background: linear-gradient(135deg, #6495ED, #6495ED);
+            border-color: var(--dm-border);
+        }
+
+        .variant-btn[data-variant="ocean"] {
+            background: linear-gradient(135deg, #0077b6, #48cae4);
+        }
+
+        .variant-btn[data-variant="forest"] {
+            background: linear-gradient(135deg, #2d6a4f, #74c69d);
+        }
+
+        .variant-btn[data-variant="sunset"] {
+            background: linear-gradient(135deg, #e85d04, #fcbf49);
+        }
+
+        .variant-btn.active {
+            box-shadow: 0 0 0 3px var(--dm-primary);
+        }
+
+        .preview-section {
+            margin-bottom: 3rem;
+        }
+
+        .preview-card {
+            padding: 2rem;
+            background: var(--dm-surface);
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-xl);
+            margin-bottom: 1rem;
+        }
+
+        .colour-swatches {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .swatch {
+            padding: 1rem;
+            border-radius: var(--dm-radius-lg);
+            text-align: center;
+        }
+
+        .swatch-colour {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--dm-radius-full);
+            margin: 0 auto 0.5rem;
+            border: 2px solid var(--dm-border);
+        }
+
+        .swatch-name {
+            font-size: var(--dm-text-sm);
+            font-weight: var(--dm-font-medium);
+            color: var(--dm-text);
+        }
+
+        .swatch-value {
+            font-size: var(--dm-text-xs);
+            color: var(--dm-text-muted);
+            font-family: var(--dm-font-mono);
+        }
+
+        .component-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .demo-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .demo-alerts {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: var(--dm-radius-lg);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .alert-success {
+            background: var(--dm-success-light);
+            color: var(--dm-success-dark);
+            border: 1px solid var(--dm-success);
+        }
+
+        .alert-danger {
+            background: var(--dm-danger-light);
+            color: var(--dm-danger-dark);
+            border: 1px solid var(--dm-danger);
+        }
+
+        .alert-warning {
+            background: var(--dm-warning-light);
+            color: var(--dm-warning-dark);
+            border: 1px solid var(--dm-warning);
+        }
+
+        .alert-info {
+            background: var(--dm-info-light);
+            color: var(--dm-info-dark);
+            border: 1px solid var(--dm-info);
+        }
+
+        .code-example {
+            background: var(--dm-code-bg);
+            border: 1px solid var(--dm-code-border);
+            border-radius: var(--dm-radius-lg);
+            padding: 1rem;
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-text-sm);
+            overflow-x: auto;
+        }
+
+        .code-example code {
+            color: var(--dm-code-text);
+        }
+
+        .demo-form {
+            max-width: 400px;
+        }
+
+        .current-theme-info {
+            padding: 1rem;
+            background: var(--dm-selected-bg);
+            border-radius: var(--dm-radius-lg);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-text-sm);
+        }
+    </style>
+</head>
+<body class="dm-theme-light">
+<script src="../js/layout.js"></script>
+
+<div class="theme-controls">
+    <div class="container">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-bold">Domma Themes</h1>
+            <div class="current-theme-info" id="current-theme">
+                Theme: light | Variant: none
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="text-sm font-semibold text-muted mb-2 block">Base Theme</label>
+            <div class="theme-buttons">
+                <button class="theme-btn active" data-theme="light">Light</button>
+                <button class="theme-btn" data-theme="dark">Dark</button>
+            </div>
+        </div>
+
+        <div>
+            <label class="text-sm font-semibold text-muted mb-2 block">Colour Variant</label>
+            <div class="variant-buttons">
+                <button class="variant-btn active" data-variant="none">Default</button>
+                <button class="variant-btn" data-variant="ocean">Ocean</button>
+                <button class="variant-btn" data-variant="forest">Forest</button>
+                <button class="variant-btn" data-variant="sunset">Sunset</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main class="container py-8">
+    <!-- Colour Palette -->
+    <section class="preview-section">
+        <h2 class="text-2xl font-semibold mb-4">Colour Palette</h2>
+        <div class="preview-card">
+            <h3 class="text-lg font-medium mb-4">Brand Colours</h3>
+            <div class="colour-swatches" id="brand-swatches">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <div class="preview-card">
+            <h3 class="text-lg font-medium mb-4">Status Colours</h3>
+            <div class="colour-swatches" id="status-swatches">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <div class="preview-card">
+            <h3 class="text-lg font-medium mb-4">Surface Colours</h3>
+            <div class="colour-swatches" id="surface-swatches">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Components Preview -->
+    <section class="preview-section">
+        <h2 class="text-2xl font-semibold mb-4">Component Preview</h2>
+        <div class="component-preview">
+            <div class="preview-card">
+                <h3 class="text-lg font-medium mb-4">Buttons</h3>
+                <div class="demo-buttons">
+                    <button class="btn btn-primary">Primary</button>
+                    <button class="btn btn-secondary">Secondary</button>
+                    <button class="btn btn-success">Success</button>
+                    <button class="btn btn-danger">Danger</button>
+                    <button class="btn btn-warning">Warning</button>
+                    <button class="btn btn-info">Info</button>
+                    <button class="btn btn-outline">Outline</button>
+                </div>
+            </div>
+
+            <div class="preview-card">
+                <h3 class="text-lg font-medium mb-4">Alerts</h3>
+                <div class="demo-alerts">
+                    <div class="alert alert-success">
+                        <span data-icon="check-circle" data-icon-size="20"></span>
+                        Success! Your changes have been saved.
+                    </div>
+                    <div class="alert alert-danger">
+                        <span data-icon="x-circle" data-icon-size="20"></span>
+                        Error! Something went wrong.
+                    </div>
+                    <div class="alert alert-warning">
+                        <span data-icon="warning" data-icon-size="20"></span>
+                        Warning! Please review before continuing.
+                    </div>
+                    <div class="alert alert-info">
+                        <span data-icon="info" data-icon-size="20"></span>
+                        Info: Updates are available.
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-card">
+                <h3 class="text-lg font-medium mb-4">Form Elements</h3>
+                <form class="demo-form">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" placeholder="you@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-input" placeholder="Enter password">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Select Option</label>
+                        <select class="form-select">
+                            <option>Option 1</option>
+                            <option>Option 2</option>
+                            <option>Option 3</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+            <div class="preview-card">
+                <h3 class="text-lg font-medium mb-4">Card Example</h3>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Card Title</h4>
+                        <p class="card-text text-muted">This is a sample card demonstrating the theme's card styling
+                            with surface colours and borders.</p>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary btn-sm">Action</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Usage Examples -->
+    <section class="preview-section">
+        <h2 class="text-2xl font-semibold mb-4">Usage</h2>
+
+        <div class="preview-card">
+            <h3 class="text-lg font-medium mb-4">CSS Only (No JavaScript Required)</h3>
+            <div class="code-example">
+                <code>&lt;!-- Include theme CSS --&gt;<br>
+                    &lt;link rel="stylesheet" href="dist/themes/domma-themes.css"&gt;<br><br>
+                    &lt;!-- Apply theme via class --&gt;<br>
+                    &lt;body class="dm-theme-dark dm-theme-ocean"&gt;</code>
+            </div>
+        </div>
+
+        <div class="preview-card">
+            <h3 class="text-lg font-medium mb-4">JavaScript API</h3>
+            <div class="code-example">
+                <code>// Quick setup<br>
+                    $.setup({ theme: 'dark', themeVariant: 'forest' });<br><br>
+                    // Or initialise directly<br>
+                    Domma.theme.init({ theme: 'dark', variant: 'ocean', autoDetect: true });<br><br>
+                    // Runtime control<br>
+                    Domma.theme.toggle(); // Toggle light/dark<br>
+                    Domma.theme.set('dark'); // Set specific theme<br>
+                    Domma.theme.setVariant('sunset'); // Change colour variant<br><br>
+                    // Listen for changes<br>
+                    Domma.theme.onChange(({ newTheme, variant }) => {<br>
+                    &nbsp;&nbsp;console.log('Theme changed:', newTheme, variant);<br>
+                    });</code>
+            </div>
+        </div>
+
+        <div class="preview-card">
+            <h3 class="text-lg font-medium mb-4">Theme Preview (for Theme Pickers)</h3>
+            <div class="code-example">
+                <code>// Preview a theme temporarily<br>
+                    const restore = Domma.theme.preview('dark', 'sunset');<br><br>
+                    // User clicks "Cancel"<br>
+                    restore(); // Reverts to previous theme<br><br>
+                    // Or user clicks "Apply"<br>
+                    Domma.theme.set('dark');<br>
+                    Domma.theme.setVariant('sunset');</code>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+    // Colour definitions for swatches
+    const brandColours = [
+        {name: 'Primary', var: '--dm-primary'},
+        {name: 'Primary Hover', var: '--dm-primary-hover'},
+        {name: 'Primary Light', var: '--dm-primary-light'},
+        {name: 'Secondary', var: '--dm-secondary'}
+    ];
+
+    const statusColours = [
+        {name: 'Success', var: '--dm-success'},
+        {name: 'Danger', var: '--dm-danger'},
+        {name: 'Warning', var: '--dm-warning'},
+        {name: 'Info', var: '--dm-info'}
+    ];
+
+    const surfaceColours = [
+        {name: 'Background', var: '--dm-background'},
+        {name: 'Surface', var: '--dm-surface'},
+        {name: 'Text', var: '--dm-text'},
+        {name: 'Text Muted', var: '--dm-text-muted'},
+        {name: 'Border', var: '--dm-border'}
+    ];
+
+    // Render colour swatches
+    function renderSwatches() {
+        const style = getComputedStyle(document.body);
+
+        function renderGroup(container, colours) {
+            const el = $(container);
+            let html = '';
+
+            colours.forEach(colour => {
+                const value = style.getPropertyValue(colour.var).trim();
+                html += `
+                    <div class="swatch">
+                        <div class="swatch-colour" style="background: var(${colour.var})"></div>
+                        <div class="swatch-name">${colour.name}</div>
+                        <div class="swatch-value">${value}</div>
+                    </div>
+                `;
+            });
+
+            el.html(html);
+        }
+
+        renderGroup('#brand-swatches', brandColours);
+        renderGroup('#status-swatches', statusColours);
+        renderGroup('#surface-swatches', surfaceColours);
+    }
+
+    // Update current theme display
+    function updateThemeInfo() {
+        const theme = Domma.theme.get();
+        const variant = Domma.theme.getVariant() || 'none';
+        $('#current-theme').text(`Theme: ${theme} | Variant: ${variant}`);
+
+        // Update active buttons
+        $('.theme-btn').removeClass('active');
+        $(`.theme-btn[data-theme="${theme}"]`).addClass('active');
+
+        $('.variant-btn').removeClass('active');
+        $(`.variant-btn[data-variant="${variant || 'none'}"]`).addClass('active');
+    }
+
+    // Theme button handlers
+    $('.theme-btn').on('click', function () {
+        const theme = $(this).attr('data-theme');
+        Domma.theme.set(theme);
+        updateThemeInfo();
+        setTimeout(renderSwatches, 50);
+    });
+
+    // Variant button handlers
+    $('.variant-btn').on('click', function () {
+        let variant = $(this).attr('data-variant');
+        if (variant === 'none') variant = null;
+        Domma.theme.setVariant(variant);
+        updateThemeInfo();
+        setTimeout(renderSwatches, 50);
+    });
+
+    // Listen for theme changes
+    Domma.theme.onChange(() => {
+        updateThemeInfo();
+        setTimeout(renderSwatches, 50);
+    });
+
+    // Initial setup
+    Domma.theme.init({autoDetect: false});
+    Domma.icons.scan();
+    updateThemeInfo();
+    renderSwatches();
+
+    console.log('Domma Themes showcase loaded');
+</script>
+</body>
+</html>

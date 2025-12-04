@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domma Icons Gallery</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../css/domma.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <style>
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .icon-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-lg);
+            background: var(--dm-surface);
+            transition: all var(--dm-transition-fast);
+            cursor: pointer;
+        }
+
+        .icon-card:hover {
+            border-color: var(--dm-primary);
+            box-shadow: var(--dm-shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .icon-card svg {
+            margin-bottom: 0.5rem;
+            color: var(--dm-text);
+        }
+
+        .icon-card:hover svg {
+            color: var(--dm-primary);
+        }
+
+        .icon-card .icon-name {
+            font-size: var(--dm-text-xs);
+            color: var(--dm-text-muted);
+            text-align: center;
+            word-break: break-word;
+        }
+
+        .category-section {
+            margin-bottom: 3rem;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--dm-border);
+        }
+
+        .category-count {
+            font-size: var(--dm-text-sm);
+            color: var(--dm-text-muted);
+        }
+
+        .search-box {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 0;
+            background: var(--dm-background);
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: var(--dm-text-base);
+            border: 2px solid var(--dm-border);
+            border-radius: var(--dm-radius-lg);
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            transition: border-color var(--dm-transition-fast);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--dm-primary);
+        }
+
+        .size-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .size-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            cursor: pointer;
+            transition: all var(--dm-transition-fast);
+        }
+
+        .size-btn.active {
+            background: var(--dm-primary);
+            color: white;
+            border-color: var(--dm-primary);
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 2rem;
+            padding: 1rem;
+            background: var(--dm-surface-raised);
+            border-radius: var(--dm-radius-lg);
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: var(--dm-text-2xl);
+            font-weight: var(--dm-font-bold);
+            color: var(--dm-primary);
+        }
+
+        .stat-label {
+            font-size: var(--dm-text-sm);
+            color: var(--dm-text-muted);
+        }
+
+        .copy-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: 0.75rem 1.5rem;
+            background: var(--dm-text);
+            color: var(--dm-background);
+            border-radius: var(--dm-radius-lg);
+            font-size: var(--dm-text-sm);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .copy-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: var(--dm-text-muted);
+        }
+    </style>
+</head>
+<body class="dm-theme-light">
+<script src="../js/layout.js"></script>
+
+<main class="container py-8">
+    <header class="mb-8">
+        <h1 class="text-4xl font-bold mb-2">Domma Icons</h1>
+        <p class="text-muted">A comprehensive SVG icon library for your projects</p>
+    </header>
+
+    <div class="stats-bar" id="stats-bar">
+        <div class="stat-item">
+            <div class="stat-value" id="total-icons">0</div>
+            <div class="stat-label">Total Icons</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="total-categories">0</div>
+            <div class="stat-label">Categories</div>
+        </div>
+    </div>
+
+    <div class="search-box">
+        <input type="text" class="search-input" id="search" placeholder="Search icons... (e.g., arrow, check, user)">
+    </div>
+
+    <div class="size-controls">
+        <span class="text-muted">Size:</span>
+        <button class="size-btn" data-size="16">16px</button>
+        <button class="size-btn active" data-size="24">24px</button>
+        <button class="size-btn" data-size="32">32px</button>
+        <button class="size-btn" data-size="48">48px</button>
+    </div>
+
+    <div id="icon-gallery"></div>
+
+    <div class="no-results" id="no-results" style="display:none">
+        <p class="text-2xl mb-2">No icons found</p>
+        <p>Try a different search term</p>
+    </div>
+</main>
+
+<div class="copy-toast" id="copy-toast">Copied to clipboard!</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+    // Initialise theme
+    Domma.theme.init({autoDetect: true});
+
+    // Icon size state
+    let currentSize = 24;
+
+    // Category data
+    const categoryMeta = {
+        ui: {name: 'UI', description: 'Core user interface icons'},
+        communication: {name: 'Communication', description: 'Messaging and notifications'},
+        media: {name: 'Media', description: 'Audio, video, and images'},
+        files: {name: 'Files', description: 'Documents and file operations'},
+        social: {name: 'Social', description: 'Social interactions and sharing'},
+        commerce: {name: 'Commerce', description: 'Shopping and payments'},
+        status: {name: 'Status', description: 'Indicators and alerts'},
+        navigation: {name: 'Navigation', description: 'Directional and navigation'}
+    };
+
+    // Render the icon gallery
+    function renderGallery(filter = '') {
+        const gallery = $('#icon-gallery');
+        const categories = Domma.icons.listCategories();
+        const filterLower = filter.toLowerCase();
+
+        let totalIcons = 0;
+        let totalCategories = 0;
+        let html = '';
+
+        Object.entries(categories).forEach(([key, cat]) => {
+            let icons = cat.icons;
+
+            // Filter icons
+            if (filterLower) {
+                icons = icons.filter(name => name.toLowerCase().includes(filterLower));
+            }
+
+            if (icons.length === 0) return;
+
+            totalCategories++;
+            totalIcons += icons.length;
+
+            const meta = categoryMeta[key] || {name: key, description: ''};
+
+            html += `
+                <section class="category-section" data-category="${key}">
+                    <div class="category-header">
+                        <div>
+                            <h2 class="text-xl font-semibold">${meta.name}</h2>
+                            <p class="text-sm text-muted">${meta.description}</p>
+                        </div>
+                        <span class="category-count">${icons.length} icons</span>
+                    </div>
+                    <div class="icon-grid">
+            `;
+
+            icons.forEach(name => {
+                const iconHtml = Domma.icons.html(name, {size: currentSize});
+                html += `
+                    <div class="icon-card" data-icon-name="${name}" title="Click to copy">
+                        ${iconHtml}
+                        <span class="icon-name">${name}</span>
+                    </div>
+                `;
+            });
+
+            html += '</div></section>';
+        });
+
+        gallery.html(html);
+
+        // Update stats
+        $('#total-icons').text(totalIcons);
+        $('#total-categories').text(totalCategories);
+
+        // Show/hide no results
+        $('#no-results').css('display', totalIcons === 0 ? 'block' : 'none');
+
+        // Attach click handlers
+        $('.icon-card').on('click', function () {
+            const name = $(this).attr('data-icon-name');
+            copyToClipboard(name);
+        });
+    }
+
+    // Copy icon name to clipboard
+    function copyToClipboard(name) {
+        const text = `Domma.icons.render('${name}')`;
+        navigator.clipboard.writeText(text).then(() => {
+            showToast(`Copied: ${name}`);
+        });
+    }
+
+    // Show toast notification
+    function showToast(message) {
+        const toast = $('#copy-toast');
+        toast.text(message).addClass('show');
+        setTimeout(() => toast.removeClass('show'), 2000);
+    }
+
+    // Search handler
+    let searchTimeout;
+    $('#search').on('input', function () {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            renderGallery($(this).val());
+        }, 200);
+    });
+
+    // Size controls
+    $('.size-btn').on('click', function () {
+        $('.size-btn').removeClass('active');
+        $(this).addClass('active');
+        currentSize = parseInt($(this).attr('data-size'), 10);
+        renderGallery($('#search').val());
+    });
+
+    // Initial render
+    renderGallery();
+    Domma.icons.scan();
+
+    console.log(`Domma Icons Gallery loaded: ${Domma.icons.count()} icons available`);
+</script>
+</body>
+</html>

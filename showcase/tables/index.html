@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tables - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
     <link rel="stylesheet" href="../css/domma.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <style>
         .demo-area {
             background: var(--dm-gray-100);
@@ -236,35 +238,31 @@ const table = Domma.tables.create('#my-table', {
             <h2 class="text-xl font-semibold">Interactive Demo</h2>
         </div>
         <div class="card-body">
-            <div class="table-controls">
-                <input type="text" id="table-search" class="form-input" placeholder="Search..." style="width: 250px;">
-                <select id="role-filter" class="form-select" style="width: 150px;">
-                    <option value="">All Roles</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Manager">Manager</option>
-                    <option value="Developer">Developer</option>
-                    <option value="Designer">Designer</option>
-                </select>
-                <button class="btn btn-outline btn-sm" id="clear-filters">Clear Filters</button>
-                <div class="flex-1"></div>
-                <span class="table-info" id="table-info">Showing 0 of 0</span>
-            </div>
+            <p class="mb-4 text-muted">This demo includes the <strong>Export Panel</strong> — use the Copy/Download
+                toggle to switch between copying to clipboard or downloading files.</p>
 
             <div class="demo-area mb-4">
-                <table id="demo-table" class="table table-striped">
-                    <thead></thead>
-                    <tbody></tbody>
-                </table>
+                <div id="demo-table"></div>
             </div>
 
             <div class="flex justify-between items-center">
+                <div class="flex gap-2">
+                    <select id="role-filter" class="form-select" style="width: 150px;">
+                        <option value="">All Roles</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Developer">Developer</option>
+                        <option value="Designer">Designer</option>
+                    </select>
+                    <button class="btn btn-outline btn-sm" id="clear-filters">Clear Filters</button>
+                </div>
                 <div class="flex gap-2">
                     <button class="btn btn-outline btn-sm" id="select-all">Select All</button>
                     <button class="btn btn-outline btn-sm" id="deselect-all">Deselect All</button>
                     <button class="btn btn-danger btn-sm" id="delete-selected" disabled>Delete Selected</button>
                 </div>
-                <div id="pagination" class="pagination"></div>
             </div>
+            <div id="selected-info" class="text-sm text-muted mt-3">No rows selected</div>
         </div>
     </section>
 
@@ -498,39 +496,97 @@ table.refresh();</pre>
         </div>
     </section>
 
-    <!-- Export -->
+    <!-- Export Panel -->
     <section class="card mb-6">
         <div class="card-header">
-            <h2 class="text-xl font-semibold">Export Data</h2>
+            <h2 class="text-xl font-semibold">Export Panel</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">Export table data to CSV or JSON format.</p>
+            <p class="mb-4">Enable a built-in export toolbar with Copy/Download toggle and format buttons.</p>
 
-            <pre class="code-block">// Export as CSV string
-const csv = table.toCSV();
-// "id,name,email,role\n1,Alice,alice@example.com,Admin\n..."
+            <pre class="code-block">// Enable export panel
+const table = Domma.tables.create('#my-table', {
+    data: myData,
+    columns: [...],
+    exportPanel: true,  // Enable the export toolbar
+    exportOptions: ['copy', 'csv', 'excel', 'json'],  // Choose which buttons to show
+    onExport: (info) => {
+        console.log(`Exported ${info.rowCount} rows as ${info.format}`);
+    }
+});
 
-// Export as JSON
-const json = table.toJSON();
-// Returns array of row objects
+// The panel shows:
+// [ Copy (•)──Download ]  |  📋 Text  📄 CSV  📊 Excel  { } JSON
+//
+// Toggle LEFT  = Copy mode (copies to clipboard)
+// Toggle RIGHT = Download mode (downloads file)</pre>
 
-// Download as file
+            <h4 class="category-title">Export Panel Options</h4>
+            <table class="option-table mb-4">
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>exportPanel</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>Show the export toolbar</td>
+                </tr>
+                <tr>
+                    <td><code>exportOptions</code></td>
+                    <td>array</td>
+                    <td>['copy', 'csv', 'excel', 'json']</td>
+                    <td>Which export buttons to display</td>
+                </tr>
+                <tr>
+                    <td><code>onExport</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Callback when data is exported</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- Export Methods -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Export Methods</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Programmatically export data in various formats.</p>
+
+            <pre class="code-block">// Copy to clipboard
+table.copyToClipboard();        // Tab-separated (paste into Excel)
+table.copyToClipboard('csv');   // CSV format
+table.copyToClipboard('json');  // JSON format
+
+// Get data as string
+const csv = table.toCSV();      // CSV string
+const json = table.toJSON();    // JSON string
+const excel = table.toExcel();  // HTML table (Excel-compatible)
+
+// Download files
 table.download('csv', 'users.csv');
+table.download('excel', 'users.xls');
 table.download('json', 'users.json');
 
-// Export only selected rows
-const selectedCsv = table.toCSV({ selected: true });
-table.download('csv', 'selected-users.csv', { selected: true });
-
-// Export only visible (filtered) data
-const visibleJson = table.toJSON({ filtered: true });</pre>
+// Export callback
+table.on('export', (info) => {
+    // info = { format: 'csv', filename: 'users.csv', rowCount: 15 }
+});</pre>
 
             <div class="demo-area">
-                <div class="flex gap-2">
+                <p class="text-sm text-muted mb-3">Try the export buttons in the Interactive Demo above, or use
+                    these:</p>
+                <div class="flex gap-2 flex-wrap">
                     <button class="btn btn-primary btn-sm" id="export-csv">Download CSV</button>
+                    <button class="btn btn-primary btn-sm" id="export-excel">Download Excel</button>
                     <button class="btn btn-primary btn-sm" id="export-json">Download JSON</button>
-                    <button class="btn btn-outline btn-sm" id="export-selected-csv">Export Selected (CSV)</button>
-                    <button class="btn btn-outline btn-sm" id="copy-csv">Copy CSV to Clipboard</button>
+                    <button class="btn btn-outline btn-sm" id="copy-clipboard">Copy to Clipboard</button>
                 </div>
             </div>
         </div>
@@ -626,7 +682,9 @@ table.once('render', () => {
             <div class="method-grid mb-4">
                 <span class="method-item">toCSV()</span>
                 <span class="method-item">toJSON()</span>
+                <span class="method-item">toExcel()</span>
                 <span class="method-item">download()</span>
+                <span class="method-item">copyToClipboard()</span>
             </div>
 
             <h4 class="category-title">Event Methods</h4>
@@ -751,15 +809,10 @@ table.once('render', () => {
         }
     ];
 
-    // Create table
+    // Create table with export panel
     const table = Domma.tables.create('#demo-table', {
         data: sampleData,
         columns: [
-            {
-                key: '_select',
-                title: '<input type="checkbox" id="select-all-checkbox" class="table-checkbox">',
-                render: (val, row, index) => `<input type="checkbox" class="row-checkbox table-checkbox" data-index="${index}">`
-            },
             {key: 'id', title: 'ID', sortable: true, width: '60px'},
             {key: 'name', title: 'Name', sortable: true},
             {key: 'email', title: 'Email', sortable: true},
@@ -773,24 +826,15 @@ table.once('render', () => {
         ],
         pagination: true,
         pageSize: 10,
-        selectable: true
-    });
-
-    function updateTableInfo() {
-        const info = table.pageInfo();
-        $('#table-info').text(`Showing ${info.startRow}-${info.endRow} of ${info.totalRows}`);
-    }
-
-    function updatePagination() {
-        const info = table.pageInfo();
-        let html = '';
-        for (let i = 0; i < info.totalPages; i++) {
-            html += `<li class="pagination-item">
-                    <a href="#" class="pagination-link ${i === info.currentPage ? 'active' : ''}" data-page="${i}">${i + 1}</a>
-                </li>`;
+        selectable: true,
+        selectionMode: 'multiple',
+        // Export panel options
+        exportPanel: true,
+        exportOptions: ['copy', 'csv', 'excel', 'json'],
+        onExport: (info) => {
+            console.log(`Exported ${info.rowCount} rows as ${info.format}`);
         }
-        $('#pagination').html(html);
-    }
+    });
 
     function updateSelectedInfo() {
         const selected = table.getSelected();
@@ -798,29 +842,17 @@ table.once('render', () => {
             $('#selected-info').text('No rows selected');
             $('#delete-selected').prop('disabled', true);
         } else {
-            $('#selected-info').text(`${selected.length} row(s) selected: ${selected.map(r => r.name).join(', ')}`);
+            const names = selected.slice(0, 3).map(r => r.name).join(', ');
+            const extra = selected.length > 3 ? ` and ${selected.length - 3} more` : '';
+            $('#selected-info').text(`${selected.length} row(s) selected: ${names}${extra}`);
             $('#delete-selected').prop('disabled', false);
         }
     }
 
-    // Initial render
-    updateTableInfo();
-    updatePagination();
-
     // Table events
-    table.on('render', () => {
-        updateTableInfo();
-        updatePagination();
-    });
-
     table.on('select', () => {
         updateSelectedInfo();
     });
-
-    // Search
-    $('#table-search').on('input', _.debounce(function () {
-        table.search($(this).val());
-    }, 300));
 
     // Role filter
     $('#role-filter').on('change', function () {
@@ -844,43 +876,16 @@ table.once('render', () => {
     $('#sort-date').on('click', () => table.sort('joined', 'desc'));
     $('#clear-sort').on('click', () => table.clearSort());
 
-    // Selection
-    $(document).on('change', '#select-all-checkbox', function () {
-        if ($(this).is(':checked')) {
-            table.selectAll();
-        } else {
-            table.deselectAll();
-        }
-    });
-
-    $(document).on('change', '.row-checkbox', function () {
-        const index = parseInt($(this).data('index'));
-        table.toggleSelect(index);
-    });
-
+    // Selection buttons
     $('#select-all').on('click', () => table.selectAll());
     $('#deselect-all').on('click', () => table.deselectAll());
     $('#delete-selected').on('click', function () {
-        const indices = table.getSelectedIndices();
-        if (indices.length && confirm(`Delete ${indices.length} row(s)?`)) {
-            table.removeRows(indices);
+        const selected = table.getSelected();
+        if (selected.length && confirm(`Delete ${selected.length} row(s)?`)) {
+            // Remove by row key (id)
+            selected.forEach(row => table.removeRow(row.id));
         }
     });
-
-    // Pagination
-    $(document).on('click', '.pagination-link', function (e) {
-        e.preventDefault();
-        table.page(parseInt($(this).data('page')));
-    });
-
-    $('#page-size').on('change', function () {
-        table.pageSize(parseInt($(this).val()));
-    });
-
-    $('#first-page').on('click', () => table.firstPage());
-    $('#prev-page').on('click', () => table.prevPage());
-    $('#next-page').on('click', () => table.nextPage());
-    $('#last-page').on('click', () => table.lastPage());
 
     // Data manipulation
     let nextId = 100;
@@ -911,23 +916,16 @@ table.once('render', () => {
         }
     });
 
-    // Export
+    // Export buttons
     $('#export-csv').on('click', () => table.download('csv', 'users.csv'));
+    $('#export-excel').on('click', () => table.download('excel', 'users.xls'));
     $('#export-json').on('click', () => table.download('json', 'users.json'));
-    $('#export-selected-csv').on('click', () => {
-        const selected = table.getSelected();
-        if (selected.length === 0) {
-            alert('No rows selected');
-            return;
-        }
-        table.download('csv', 'selected-users.csv', {selected: true});
-    });
-    $('#copy-csv').on('click', function () {
-        const csv = table.toCSV();
-        navigator.clipboard.writeText(csv).then(() => {
-            $(this).text('Copied!');
-            setTimeout(() => $(this).text('Copy CSV to Clipboard'), 2000);
-        });
+    $('#copy-clipboard').on('click', function () {
+        table.copyToClipboard();
+        $(this).text('Copied!').addClass('btn-success').removeClass('btn-outline');
+        setTimeout(() => {
+            $(this).text('Copy to Clipboard').removeClass('btn-success').addClass('btn-outline');
+        }, 1500);
     });
 </script>
 </body>

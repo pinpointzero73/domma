@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elements - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
     <link rel="stylesheet" href="../css/domma.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <style>
         .demo-area {
             background: var(--dm-gray-100);
@@ -686,6 +688,273 @@ tooltip.destroy();
         </div>
     </section>
 
+    <!-- Jumbotron -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Jumbotron</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Large hero sections for showcasing key content.</p>
+
+            <pre class="code-block">// Jumbotron is primarily CSS-based
+&lt;div class="jumbotron jumbotron-primary jumbotron-center"&gt;
+    &lt;div class="jumbotron-content"&gt;
+        &lt;h1 class="jumbotron-title"&gt;Welcome&lt;/h1&gt;
+        &lt;p class="jumbotron-subtitle"&gt;A tagline here&lt;/p&gt;
+        &lt;div class="jumbotron-actions"&gt;
+            &lt;button class="btn btn-lg"&gt;Get Started&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+// With background image
+&lt;div class="jumbotron jumbotron-cover jumbotron-overlay"
+     style="background-image: url('hero.jpg')"&gt;
+    ...
+&lt;/div&gt;</pre>
+
+            <h4 class="category-title">CSS Classes</h4>
+            <table class="option-table mb-4">
+                <tr>
+                    <th>Class</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron</code></td>
+                    <td>Base jumbotron container</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-fluid</code></td>
+                    <td>Full-width without border radius</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-dark</code></td>
+                    <td>Dark background theme</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-primary</code></td>
+                    <td>Primary colour gradient</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-center</code></td>
+                    <td>Centre-aligned content</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-cover</code></td>
+                    <td>Background image cover</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-overlay</code></td>
+                    <td>Dark overlay for images</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-sm</code></td>
+                    <td>Smaller padding</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-lg</code></td>
+                    <td>Larger padding</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Basic Jumbotron</h4>
+            <div class="jumbotron mb-4">
+                <div class="jumbotron-content">
+                    <h1 class="jumbotron-title">Hello, World!</h1>
+                    <p class="jumbotron-subtitle">This is a simple jumbotron-style component for calling extra attention
+                        to featured content.</p>
+                    <div class="jumbotron-actions">
+                        <button class="btn btn-primary btn-lg">Learn More</button>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Primary Gradient (Centred)</h4>
+            <div class="jumbotron jumbotron-primary jumbotron-center mb-4">
+                <div class="jumbotron-content">
+                    <h1 class="jumbotron-title">Launch Your Project</h1>
+                    <p class="jumbotron-subtitle">Build amazing web applications with Domma's powerful toolkit.</p>
+                    <div class="jumbotron-actions">
+                        <button class="btn btn-lg" style="background: white; color: var(--dm-primary);">Get Started
+                        </button>
+                        <button class="btn btn-outline btn-lg" style="border-color: white; color: white;">
+                            Documentation
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Dark Theme</h4>
+            <div class="jumbotron jumbotron-dark jumbotron-sm">
+                <div class="jumbotron-content">
+                    <h1 class="jumbotron-title">Dark Mode Ready</h1>
+                    <p class="jumbotron-subtitle">Perfect for modern dark-themed interfaces.</p>
+                    <div class="jumbotron-actions">
+                        <button class="btn btn-primary">Explore</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Carousel -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Carousel</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Image and content sliders with navigation, indicators, and autoplay.</p>
+
+            <pre class="code-block">// Initialize carousel
+const carousel = Domma.elements.carousel('#my-carousel', {
+    autoplay: true,        // Auto-advance slides
+    interval: 5000,        // Autoplay interval (ms)
+    pauseOnHover: true,    // Pause on mouse hover
+    loop: true,            // Loop to beginning
+    animation: 'slide',    // 'slide' or 'fade'
+    showArrows: true,      // Show prev/next arrows
+    showIndicators: true,  // Show dot indicators
+    onChange: (index) => console.log('Slide:', index)
+});
+
+// Control carousel
+carousel.next();           // Go to next slide
+carousel.prev();           // Go to previous slide
+carousel.goTo(2);          // Go to specific slide
+carousel.play();           // Start autoplay
+carousel.pause();          // Pause autoplay
+carousel.getIndex();       // Get current index
+
+// HTML structure
+&lt;div id="my-carousel" class="carousel"&gt;
+    &lt;div class="carousel-track"&gt;
+        &lt;div class="carousel-slide"&gt;
+            &lt;img src="slide1.jpg" alt="Slide 1"&gt;
+        &lt;/div&gt;
+        &lt;div class="carousel-slide"&gt;
+            &lt;img src="slide2.jpg" alt="Slide 2"&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+            <h4 class="category-title">Options</h4>
+            <table class="option-table mb-4">
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>autoplay</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>Auto-advance slides</td>
+                </tr>
+                <tr>
+                    <td><code>interval</code></td>
+                    <td>number</td>
+                    <td>5000</td>
+                    <td>Autoplay interval in ms</td>
+                </tr>
+                <tr>
+                    <td><code>pauseOnHover</code></td>
+                    <td>boolean</td>
+                    <td>true</td>
+                    <td>Pause autoplay on hover</td>
+                </tr>
+                <tr>
+                    <td><code>loop</code></td>
+                    <td>boolean</td>
+                    <td>true</td>
+                    <td>Loop back to start</td>
+                </tr>
+                <tr>
+                    <td><code>animation</code></td>
+                    <td>string</td>
+                    <td>'slide'</td>
+                    <td>Animation: 'slide' or 'fade'</td>
+                </tr>
+                <tr>
+                    <td><code>showArrows</code></td>
+                    <td>boolean</td>
+                    <td>true</td>
+                    <td>Show navigation arrows</td>
+                </tr>
+                <tr>
+                    <td><code>showIndicators</code></td>
+                    <td>boolean</td>
+                    <td>true</td>
+                    <td>Show dot indicators</td>
+                </tr>
+                <tr>
+                    <td><code>onChange</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Slide change callback</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Basic Carousel</h4>
+            <div class="demo-area mb-4">
+                <div id="demo-carousel" class="carousel" style="max-width: 600px; margin: 0 auto;">
+                    <div class="carousel-track">
+                        <div class="carousel-slide"
+                             style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 300px; display: flex; align-items: center; justify-content: center; color: white;">
+                            <div class="text-center">
+                                <h3 class="text-2xl font-bold mb-2">Slide One</h3>
+                                <p>First slide content</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide"
+                             style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); height: 300px; display: flex; align-items: center; justify-content: center; color: white;">
+                            <div class="text-center">
+                                <h3 class="text-2xl font-bold mb-2">Slide Two</h3>
+                                <p>Second slide content</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide"
+                             style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); height: 300px; display: flex; align-items: center; justify-content: center; color: white;">
+                            <div class="text-center">
+                                <h3 class="text-2xl font-bold mb-2">Slide Three</h3>
+                                <p>Third slide content</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Controls</h4>
+            <div class="flex gap-2 mb-4">
+                <button class="btn btn-outline btn-sm" id="carousel-prev">Previous</button>
+                <button class="btn btn-outline btn-sm" id="carousel-next">Next</button>
+                <button class="btn btn-primary btn-sm" id="carousel-play">Play</button>
+                <button class="btn btn-secondary btn-sm" id="carousel-pause">Pause</button>
+            </div>
+
+            <h4 class="category-title">Fade Animation</h4>
+            <div class="demo-area">
+                <div id="demo-carousel-fade" class="carousel carousel-fade"
+                     style="max-width: 600px; margin: 0 auto; height: 250px;">
+                    <div class="carousel-track" style="position: relative; height: 100%;">
+                        <div class="carousel-slide"
+                             style="background: var(--dm-success); height: 250px; display: flex; align-items: center; justify-content: center; color: white;">
+                            <h3 class="text-xl font-bold">Fade Slide 1</h3>
+                        </div>
+                        <div class="carousel-slide"
+                             style="background: var(--dm-warning); height: 250px; display: flex; align-items: center; justify-content: center; color: white;">
+                            <h3 class="text-xl font-bold">Fade Slide 2</h3>
+                        </div>
+                        <div class="carousel-slide"
+                             style="background: var(--dm-danger); height: 250px; display: flex; align-items: center; justify-content: center; color: white;">
+                            <h3 class="text-xl font-bold">Fade Slide 3</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Config Integration -->
     <section class="card mb-6">
         <div class="card-header">
@@ -778,11 +1047,23 @@ $.setup({
             </div>
 
             <h4 class="category-title">Tooltip Methods</h4>
-            <div class="method-grid">
+            <div class="method-grid mb-4">
                 <span class="method-item">show()</span>
                 <span class="method-item">hide()</span>
                 <span class="method-item">toggle()</span>
                 <span class="method-item">setContent()</span>
+                <span class="method-item">destroy()</span>
+            </div>
+
+            <h4 class="category-title">Carousel Methods</h4>
+            <div class="method-grid">
+                <span class="method-item">next()</span>
+                <span class="method-item">prev()</span>
+                <span class="method-item">goTo()</span>
+                <span class="method-item">play()</span>
+                <span class="method-item">pause()</span>
+                <span class="method-item">getIndex()</span>
+                <span class="method-item">getSlide()</span>
                 <span class="method-item">destroy()</span>
             </div>
         </div>
@@ -855,6 +1136,23 @@ $.setup({
     }).on('blur', function () {
         $(this).siblings('.tooltip-content').removeClass('active');
     });
+
+    // Initialize carousels
+    const carousel = Domma.elements.carousel('#demo-carousel', {
+        animation: 'slide',
+        loop: true
+    });
+
+    const carouselFade = Domma.elements.carousel('#demo-carousel-fade', {
+        animation: 'fade',
+        loop: true
+    });
+
+    // Carousel controls
+    $('#carousel-prev').on('click', () => carousel.prev());
+    $('#carousel-next').on('click', () => carousel.next());
+    $('#carousel-play').on('click', () => carousel.play());
+    $('#carousel-pause').on('click', () => carousel.pause());
 </script>
 </body>
 </html>
