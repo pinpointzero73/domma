@@ -8,8 +8,12 @@ import {dates} from './dates.js';
 import {tables} from './tables.js';
 import {theme} from './theme.js';
 import {icons} from './icons.js';
+import {storage} from './storage.js';
 
 const Domma = (selector) => dom(selector);
+
+// Version (keep in sync with package.json)
+Domma.version = '1.0.0';
 
 // Attach modules
 Domma.http = http;
@@ -49,16 +53,19 @@ Domma.dates = dates;
 Domma.tables = tables;
 Domma.theme = theme;
 Domma.icons = icons;
+Domma.storage = storage;
 
 // Short aliases
 const $ = Domma;
 const _ = utils;
 const M = models;
 const D = dates;
+const S = storage;
 
 // Attach aliases to Domma
 Domma.M = M;
 Domma.D = D;
+Domma.S = S;
 
 // Expose globally if needed
 if (typeof window !== 'undefined') {
@@ -67,7 +74,8 @@ if (typeof window !== 'undefined') {
     window._ = _;
     window.M = M;
     window.D = D;
+    window.S = S;
 }
 
 export default Domma;
-export {Domma, $, _, M, D};
+export {Domma, $, _, M, D, S};
