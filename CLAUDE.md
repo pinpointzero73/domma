@@ -126,12 +126,17 @@ Accessed via `Domma.elements`:
   `.jumbotron-center`, `.jumbotron-cover`, `.jumbotron-overlay`, `.jumbotron-sm`, `.jumbotron-lg`
 - **BackToTop**: `elements.backToTop(selector, { showAfter, duration, position, offset, target, onShow, onHide })` →
   `scroll()`, `show()`, `hide()`, `toggle()`, `isVisible()`, `getButton()`, `destroy()`
+- **ButtonGroup**: `elements.buttonGroup(selector, { mode, activeClass, allowEmpty, onChange })` →
+  `getValue()`, `getActive()`, `setValue()`, `toggle()`, `selectAll()`, `deselectAll()`
+  - CSS classes: `.btn-group`, `.btn-group-vertical`, `.active`
+  - Mode: `'single'` (radio) or `'multiple'` (checkbox)
 
 ### tables.js - DataTable-like functionality
 
 Accessed via `Domma.tables`:
 
-- **Create**: `tables.create(selector, { data, columns, pagination, pageSize, selectable, selectionMode })`
+- **Create**:
+  `tables.create(selector, { data, columns, pagination, pageSize, selectable, selectionMode, exportPanel, columnToggle, regexSearch })`
 - **Data**: `setData()`, `getData()`, `addRow()`, `addRows()`, `updateRow()`, `removeRow()`, `removeRows()`, `clear()`,
   `refresh()`
 - **Sort**: `sort()`, `sortMultiple()`, `clearSort()`, `getSortState()`
