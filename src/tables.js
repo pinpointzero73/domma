@@ -73,6 +73,12 @@ class TableInstance {
             exportPanel: false,
             exportOptions: ['copy', 'csv', 'excel', 'json'],
 
+            // Column visibility
+            columnToggle: false,
+
+            // Regex search toggle
+            regexSearch: false,
+
             // Callbacks
             onSort: null,
             onFilter: null,
@@ -97,6 +103,8 @@ class TableInstance {
         this._selected = new Set();
         this._editingCell = null;
         this._eventListeners = new Map();
+        this._columnDropdownOpen = false;
+        this._searchIsRegex = false;
 
         // Normalize columns
         this._columns = this.options.columns.map(col => ({
@@ -248,14 +256,28 @@ class TableInstance {
     // ============================================
 
     search(query) {
-        this._searchQuery = query.toLowerCase().trim();
+        this._searchQuery = this._searchIsRegex ? query.trim() : query.toLowerCase().trim();
         this._applyFiltersAndSort();
         this._currentPage = 1;
         this.render();
         if (this.options.onFilter) {
-            this.options.onFilter({query, type: 'search'});
+            this.options.onFilter({query, type: 'search', isRegex: this._searchIsRegex});
         }
         return this;
+    }
+
+    setSearchMode(isRegex) {
+        this._searchIsRegex = isRegex;
+        if (this._searchQuery) {
+            // Re-apply search with new mode
+            this._applyFiltersAndSort();
+            this.render();
+        }
+        return this;
+    }
+
+    toggleSearchMode() {
+        return this.setSearchMode(!this._searchIsRegex);
     }
 
     filter(column, value, operator = 'equals') {
@@ -298,12 +320,29 @@ class TableInstance {
 
         // Apply search
         if (this._searchQuery) {
-            filtered = filtered.filter(row => {
-                return this._columns.some(col => {
-                    const val = row[col.key];
-                    return val != null && String(val).toLowerCase().includes(this._searchQuery);
+            if (this._searchIsRegex) {
+                // Regex search
+                try {
+                    const regex = new RegExp(this._searchQuery, 'i');
+                    filtered = filtered.filter(row => {
+                        return this._columns.some(col => {
+                            const val = row[col.key];
+                            return val != null && regex.test(String(val));
+                        });
+                    });
+                } catch (e) {
+                    // Invalid regex, return no results
+                    filtered = [];
+                }
+            } else {
+                // Plain text search
+                filtered = filtered.filter(row => {
+                    return this._columns.some(col => {
+                        const val = row[col.key];
+                        return val != null && String(val).toLowerCase().includes(this._searchQuery);
+                    });
                 });
-            });
+            }
         }
 
         // Apply column filters
@@ -526,6 +565,23 @@ class TableInstance {
             this.render();
         }
         return this;
+    }
+
+    toggleColumn(key) {
+        const col = this._columns.find(c => c.key === key);
+        if (col) {
+            col.visible = !col.visible;
+            this.render();
+        }
+        return this;
+    }
+
+    getVisibleColumns() {
+        return this._columns.filter(c => c.visible);
+    }
+
+    getHiddenColumns() {
+        return this._columns.filter(c => !c.visible);
     }
 
     resizeColumn(key, width) {
@@ -804,19 +860,241 @@ class TableInstance {
         if (opts.searchable) {
             const searchWrapper = document.createElement('div');
             searchWrapper.className = classes.search;
+            searchWrapper.style.cssText = 'display: flex; align-items: center; gap: 4px;';
 
             const searchInput = document.createElement('input');
             searchInput.type = 'text';
-            searchInput.placeholder = opts.searchPlaceholder;
+            searchInput.placeholder = this._searchIsRegex ? 'Regex pattern...' : opts.searchPlaceholder;
             searchInput.value = this._searchQuery;
-            searchInput.style.cssText = 'padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; width: 250px;';
+            searchInput.style.cssText = `
+                padding: 8px 12px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                width: 250px;
+                ${this._searchIsRegex ? 'font-family: monospace; background: #f8f5ff;' : ''}
+            `;
 
             this._addEventHandler(searchInput, 'input', utils.debounce((e) => {
                 this.search(e.target.value);
             }, 300));
 
             searchWrapper.appendChild(searchInput);
+
+            // Regex toggle button (conditional)
+            if (opts.regexSearch) {
+                const regexBtn = document.createElement('button');
+                regexBtn.type = 'button';
+                regexBtn.title = this._searchIsRegex ? 'Regex mode (click for text)' : 'Text mode (click for regex)';
+                regexBtn.innerHTML = '.*';
+                regexBtn.style.cssText = `
+                    padding: 8px 10px;
+                    border: 1px solid ${this._searchIsRegex ? '#4f46e5' : '#ddd'};
+                    background: ${this._searchIsRegex ? '#4f46e5' : '#fff'};
+                    color: ${this._searchIsRegex ? '#fff' : '#666'};
+                    border-radius: 4px;
+                    font-family: monospace;
+                    font-size: 13px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.15s;
+                `;
+
+                this._addEventHandler(regexBtn, 'click', () => {
+                    this._searchIsRegex = !this._searchIsRegex;
+                    // Re-run search with current query in new mode
+                    if (this._searchQuery) {
+                        this._searchQuery = this._searchIsRegex
+                            ? searchInput.value.trim()
+                            : searchInput.value.toLowerCase().trim();
+                        this._applyFiltersAndSort();
+                    }
+                    this.render();
+                });
+
+                this._addEventHandler(regexBtn, 'mouseenter', () => {
+                    if (!this._searchIsRegex) {
+                        regexBtn.style.background = '#f8f9fa';
+                        regexBtn.style.borderColor = '#adb5bd';
+                    }
+                });
+                this._addEventHandler(regexBtn, 'mouseleave', () => {
+                    if (!this._searchIsRegex) {
+                        regexBtn.style.background = '#fff';
+                        regexBtn.style.borderColor = '#ddd';
+                    }
+                });
+
+                searchWrapper.appendChild(regexBtn);
+            }
+
             toolbar.appendChild(searchWrapper);
+        }
+
+        // Column visibility toggle
+        if (opts.columnToggle) {
+            const columnWrapper = document.createElement('div');
+            columnWrapper.className = 'domma-table-column-toggle';
+            columnWrapper.style.cssText = 'position: relative;';
+
+            const columnBtn = document.createElement('button');
+            columnBtn.type = 'button';
+            columnBtn.innerHTML = `${icons.html('columns', {size: 16})} Columns`;
+            columnBtn.style.cssText = `
+                padding: 8px 12px;
+                border: 1px solid #ddd;
+                background: ${this._columnDropdownOpen ? '#f0f0f0' : '#fff'};
+                border-radius: 4px;
+                font-size: 13px;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            `;
+
+            const dropdown = document.createElement('div');
+            dropdown.className = 'domma-column-dropdown';
+            dropdown.style.cssText = `
+                position: absolute;
+                top: 100%;
+                left: 0;
+                margin-top: 4px;
+                background: #fff;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                min-width: 200px;
+                z-index: 1000;
+                display: ${this._columnDropdownOpen ? 'block' : 'none'};
+                max-height: 300px;
+                overflow-y: auto;
+            `;
+
+            // Build column list with styled toggles
+            for (const col of this._columns) {
+                const item = document.createElement('label');
+                item.style.cssText = `
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 12px;
+                    padding: 10px 12px;
+                    cursor: pointer;
+                    font-size: 13px;
+                    transition: background 0.15s;
+                    border-bottom: 1px solid #f0f0f0;
+                `;
+
+                const labelText = document.createElement('span');
+                labelText.textContent = col.title;
+                labelText.style.cssText = col.visible ? 'color: #333;' : 'color: #999;';
+
+                // Styled toggle switch
+                const toggleWrapper = document.createElement('div');
+                toggleWrapper.style.cssText = `
+                    position: relative;
+                    width: 36px;
+                    height: 20px;
+                    flex-shrink: 0;
+                `;
+
+                const toggleInput = document.createElement('input');
+                toggleInput.type = 'checkbox';
+                toggleInput.checked = col.visible;
+                toggleInput.style.cssText = 'opacity: 0; width: 0; height: 0; position: absolute;';
+
+                const toggleTrack = document.createElement('span');
+                toggleTrack.style.cssText = `
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: ${col.visible ? '#4f46e5' : '#ccc'};
+                    border-radius: 20px;
+                    transition: background 0.2s;
+                `;
+
+                const toggleKnob = document.createElement('span');
+                toggleKnob.style.cssText = `
+                    position: absolute;
+                    height: 16px;
+                    width: 16px;
+                    left: ${col.visible ? '18px' : '2px'};
+                    top: 2px;
+                    background: white;
+                    border-radius: 50%;
+                    transition: left 0.2s;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+                `;
+
+                toggleTrack.appendChild(toggleKnob);
+                toggleWrapper.appendChild(toggleInput);
+                toggleWrapper.appendChild(toggleTrack);
+
+                this._addEventHandler(item, 'click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    col.visible = !col.visible;
+                    // Update visuals immediately
+                    toggleTrack.style.background = col.visible ? '#4f46e5' : '#ccc';
+                    toggleKnob.style.left = col.visible ? '18px' : '2px';
+                    labelText.style.color = col.visible ? '#333' : '#999';
+                    toggleInput.checked = col.visible;
+                    // Re-render table but keep dropdown open
+                    this._columnDropdownOpen = true;
+                    this.render();
+                });
+
+                this._addEventHandler(item, 'mouseenter', () => {
+                    item.style.background = '#f8f9fa';
+                });
+                this._addEventHandler(item, 'mouseleave', () => {
+                    item.style.background = 'transparent';
+                });
+
+                item.appendChild(labelText);
+                item.appendChild(toggleWrapper);
+                dropdown.appendChild(item);
+            }
+
+            // Remove border from last item
+            if (dropdown.lastChild) {
+                dropdown.lastChild.style.borderBottom = 'none';
+            }
+
+            // Toggle dropdown
+            this._addEventHandler(columnBtn, 'click', (e) => {
+                e.stopPropagation();
+                this._columnDropdownOpen = !this._columnDropdownOpen;
+                dropdown.style.display = this._columnDropdownOpen ? 'block' : 'none';
+                columnBtn.style.background = this._columnDropdownOpen ? '#f0f0f0' : '#fff';
+            });
+
+            // Close on outside click
+            this._addEventHandler(document, 'click', () => {
+                if (this._columnDropdownOpen) {
+                    this._columnDropdownOpen = false;
+                    dropdown.style.display = 'none';
+                    columnBtn.style.background = '#fff';
+                }
+            });
+
+            // Prevent dropdown clicks from closing
+            this._addEventHandler(dropdown, 'click', (e) => {
+                e.stopPropagation();
+            });
+
+            // Hover effects for button
+            this._addEventHandler(columnBtn, 'mouseenter', () => {
+                if (!this._columnDropdownOpen) columnBtn.style.background = '#f8f9fa';
+            });
+            this._addEventHandler(columnBtn, 'mouseleave', () => {
+                if (!this._columnDropdownOpen) columnBtn.style.background = '#fff';
+            });
+
+            columnWrapper.appendChild(columnBtn);
+            columnWrapper.appendChild(dropdown);
+            toolbar.appendChild(columnWrapper);
         }
 
         // Export panel
@@ -1009,7 +1287,7 @@ class TableInstance {
             toolbar.appendChild(exportWrapper);
         }
 
-        if (opts.searchable || opts.exportPanel) {
+        if (opts.searchable || opts.columnToggle || opts.exportPanel) {
             wrapper.appendChild(toolbar);
         }
 

@@ -420,7 +420,7 @@ class Accordion extends Component {
         animation: true,
         animationDuration: 300,
         headerSelector: '.accordion-header, [data-accordion-header]',
-        contentSelector: '.accordion-body, .accordion-content, [data-accordion-content]',
+        contentSelector: '.accordion-body, [data-accordion-content]',
         activeClass: 'active',
         onChange: null
     };
@@ -467,7 +467,10 @@ class Accordion extends Component {
                 }
             }
 
-            if (!shouldBeActive) {
+            if (shouldBeActive) {
+                // Active items need explicit height for overflow:hidden to work
+                content.style.height = 'auto';
+            } else {
                 content.style.height = '0';
             }
         });
@@ -2089,6 +2092,343 @@ class BackToTop extends Component {
 }
 
 // ============================================
+// Dialog Component (Alert, Confirm, Prompt)
+// ============================================
+
+const Dialog = {
+    _container: null,
+    _defaults: {
+        title: '',
+        message: '',
+        confirmText: 'OK',
+        cancelText: 'Cancel',
+        inputPlaceholder: '',
+        inputValue: '',
+        inputType: 'text',
+        animation: true,
+        backdrop: true,
+        backdropClose: false,
+        keyboard: true,
+        className: ''
+    },
+
+    _ensureContainer() {
+        if (!this._container) {
+            this._container = document.createElement('div');
+            this._container.className = 'dm-dialog-container';
+            document.body.appendChild(this._container);
+        }
+        return this._container;
+    },
+
+    _createDialog(type, options) {
+        const opts = {...this._defaults, ...options};
+        const container = this._ensureContainer();
+
+        return new Promise((resolve) => {
+            // Create dialog elements
+            const overlay = document.createElement('div');
+            overlay.className = `dm-dialog-overlay${opts.animation ? ' dm-dialog-animate' : ''}`;
+
+            const dialog = document.createElement('div');
+            dialog.className = `dm-dialog dm-dialog-${type}${opts.className ? ' ' + opts.className : ''}`;
+            dialog.setAttribute('role', 'dialog');
+            dialog.setAttribute('aria-modal', 'true');
+
+            // Build dialog content
+            let html = '<div class="dm-dialog-content">';
+
+            if (opts.title) {
+                html += `<div class="dm-dialog-header"><h3 class="dm-dialog-title">${opts.title}</h3></div>`;
+            }
+
+            html += '<div class="dm-dialog-body">';
+            if (opts.message) {
+                html += `<p class="dm-dialog-message">${opts.message}</p>`;
+            }
+
+            if (type === 'prompt') {
+                html += `<input type="${opts.inputType}" class="dm-dialog-input form-input" placeholder="${opts.inputPlaceholder}" value="${opts.inputValue}">`;
+            }
+
+            html += '</div>';
+
+            // Footer with buttons
+            html += '<div class="dm-dialog-footer">';
+
+            if (type === 'confirm' || type === 'prompt') {
+                html += `<button type="button" class="btn btn-outline dm-dialog-cancel">${opts.cancelText}</button>`;
+            }
+
+            html += `<button type="button" class="btn btn-primary dm-dialog-confirm">${opts.confirmText}</button>`;
+            html += '</div></div>';
+
+            dialog.innerHTML = html;
+            overlay.appendChild(dialog);
+            container.appendChild(overlay);
+
+            // Get elements
+            const confirmBtn = dialog.querySelector('.dm-dialog-confirm');
+            const cancelBtn = dialog.querySelector('.dm-dialog-cancel');
+            const input = dialog.querySelector('.dm-dialog-input');
+
+            // Focus management
+            const focusTarget = input || confirmBtn;
+            setTimeout(() => focusTarget?.focus(), 50);
+
+            // Select input text if present
+            if (input) {
+                input.select();
+            }
+
+            // Cleanup function
+            const cleanup = (result) => {
+                if (opts.animation) {
+                    overlay.classList.add('dm-dialog-closing');
+                    setTimeout(() => {
+                        overlay.remove();
+                        resolve(result);
+                    }, 200);
+                } else {
+                    overlay.remove();
+                    resolve(result);
+                }
+            };
+
+            // Event handlers
+            const handleConfirm = () => {
+                if (type === 'prompt') {
+                    cleanup(input.value);
+                } else if (type === 'confirm') {
+                    cleanup(true);
+                } else {
+                    cleanup(undefined);
+                }
+            };
+
+            const handleCancel = () => {
+                if (type === 'prompt') {
+                    cleanup(null);
+                } else {
+                    cleanup(false);
+                }
+            };
+
+            confirmBtn.addEventListener('click', handleConfirm);
+            cancelBtn?.addEventListener('click', handleCancel);
+
+            // Backdrop click
+            if (opts.backdropClose) {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        handleCancel();
+                    }
+                });
+            }
+
+            // Keyboard handling
+            if (opts.keyboard) {
+                const handleKeydown = (e) => {
+                    if (e.key === 'Escape') {
+                        handleCancel();
+                        document.removeEventListener('keydown', handleKeydown);
+                    } else if (e.key === 'Enter' && type !== 'prompt') {
+                        handleConfirm();
+                        document.removeEventListener('keydown', handleKeydown);
+                    } else if (e.key === 'Enter' && type === 'prompt' && e.target === input) {
+                        handleConfirm();
+                        document.removeEventListener('keydown', handleKeydown);
+                    }
+                };
+                document.addEventListener('keydown', handleKeydown);
+            }
+        });
+    },
+
+    /**
+     * Show an alert dialog
+     * @param {string} message - The message to display
+     * @param {object} options - Optional configuration
+     * @returns {Promise<void>}
+     */
+    alert(message, options = {}) {
+        if (typeof message === 'object') {
+            options = message;
+            message = options.message || '';
+        }
+        return this._createDialog('alert', {...options, message});
+    },
+
+    /**
+     * Show a confirm dialog
+     * @param {string} message - The message to display
+     * @param {object} options - Optional configuration
+     * @returns {Promise<boolean>} - True if confirmed, false if cancelled
+     */
+    confirm(message, options = {}) {
+        if (typeof message === 'object') {
+            options = message;
+            message = options.message || '';
+        }
+        return this._createDialog('confirm', {...options, message});
+    },
+
+    /**
+     * Show a prompt dialog
+     * @param {string} message - The message to display
+     * @param {object} options - Optional configuration
+     * @returns {Promise<string|null>} - Input value if confirmed, null if cancelled
+     */
+    prompt(message, options = {}) {
+        if (typeof message === 'object') {
+            options = message;
+            message = options.message || '';
+        }
+        return this._createDialog('prompt', {...options, message});
+    }
+};
+
+// ============================================
+// ButtonGroup Component
+// ============================================
+
+class ButtonGroup extends Component {
+    static defaults = {
+        mode: 'single',           // 'single' (radio) or 'multiple' (checkbox)
+        activeClass: 'active',
+        allowEmpty: false,        // Allow no selection in single mode
+        onChange: null
+    };
+
+    constructor(selector, options = {}) {
+        super(selector, options);
+        this._init();
+    }
+
+    _init() {
+        if (!this.element) return;
+
+        this.buttons = Array.from(this.element.querySelectorAll('.btn'));
+
+        this.buttons.forEach((btn, index) => {
+            btn.dataset.index = index;
+            this._addEventListener(btn, 'click', (e) => {
+                e.preventDefault();
+                this._handleClick(btn, index);
+            });
+        });
+    }
+
+    _handleClick(btn, index) {
+        const wasActive = btn.classList.contains(this.options.activeClass);
+
+        if (this.options.mode === 'single') {
+            // In single mode, deselect all others
+            if (!wasActive || !this.options.allowEmpty) {
+                this.buttons.forEach(b => b.classList.remove(this.options.activeClass));
+                btn.classList.add(this.options.activeClass);
+            } else if (this.options.allowEmpty) {
+                btn.classList.remove(this.options.activeClass);
+            }
+        } else {
+            // In multiple mode, just toggle this button
+            btn.classList.toggle(this.options.activeClass);
+        }
+
+        if (this.options.onChange) {
+            this.options.onChange(this.getValue(), index, btn);
+        }
+    }
+
+    /**
+     * Get the current value(s)
+     * @returns {number|number[]|null} Index (single) or array of indices (multiple)
+     */
+    getValue() {
+        const activeIndices = this.buttons
+            .map((btn, i) => btn.classList.contains(this.options.activeClass) ? i : -1)
+            .filter(i => i !== -1);
+
+        if (this.options.mode === 'single') {
+            return activeIndices.length > 0 ? activeIndices[0] : null;
+        }
+        return activeIndices;
+    }
+
+    /**
+     * Get the active button element(s)
+     * @returns {HTMLElement|HTMLElement[]|null}
+     */
+    getActive() {
+        const active = this.buttons.filter(btn =>
+            btn.classList.contains(this.options.activeClass)
+        );
+
+        if (this.options.mode === 'single') {
+            return active.length > 0 ? active[0] : null;
+        }
+        return active;
+    }
+
+    /**
+     * Set the active button(s) by index
+     * @param {number|number[]} value - Index or array of indices
+     * @returns {this}
+     */
+    setValue(value) {
+        const indices = Array.isArray(value) ? value : [value];
+
+        this.buttons.forEach((btn, i) => {
+            if (indices.includes(i)) {
+                btn.classList.add(this.options.activeClass);
+            } else {
+                btn.classList.remove(this.options.activeClass);
+            }
+        });
+
+        return this;
+    }
+
+    /**
+     * Toggle a specific button by index
+     * @param {number} index
+     * @returns {this}
+     */
+    toggle(index) {
+        if (index >= 0 && index < this.buttons.length) {
+            this._handleClick(this.buttons[index], index);
+        }
+        return this;
+    }
+
+    /**
+     * Select all buttons (multiple mode only)
+     * @returns {this}
+     */
+    selectAll() {
+        if (this.options.mode === 'multiple') {
+            this.buttons.forEach(btn => btn.classList.add(this.options.activeClass));
+            if (this.options.onChange) {
+                this.options.onChange(this.getValue(), -1, null);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Deselect all buttons
+     * @returns {this}
+     */
+    deselectAll() {
+        this.buttons.forEach(btn => btn.classList.remove(this.options.activeClass));
+        if (this.options.onChange) {
+            this.options.onChange(this.getValue(), -1, null);
+        }
+        return this;
+    }
+}
+
+// ============================================
 // Elements Module Export
 // ============================================
 
@@ -2183,7 +2523,31 @@ export const elements = {
         return instance;
     },
 
+    buttonGroup(selector, options = {}) {
+        // Support multiple elements
+        const selectorElements = typeof selector === 'string'
+            ? document.querySelectorAll(selector)
+            : [selector];
+
+        const instances = [];
+
+        for (const el of selectorElements) {
+            const instance = new ButtonGroup(el, options);
+            this._instances.set(el, instance);
+            instances.push(instance);
+        }
+
+        return instances.length === 1 ? instances[0] : instances;
+    },
+
     toast: Toast,
+
+    dialog: Dialog,
+
+    // Convenience shortcuts for dialog methods
+    alert: Dialog.alert.bind(Dialog),
+    confirm: Dialog.confirm.bind(Dialog),
+    prompt: Dialog.prompt.bind(Dialog),
 
     get(selector) {
         const el = typeof selector === 'string'
