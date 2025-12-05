@@ -7,10 +7,11 @@
     function init() {
     // Determine the base path based on current location
     const path = window.location.pathname;
-    const isSubpage = path.includes('/dom/') || path.includes('/utils/') ||
-        path.includes('/dates/') || path.includes('/models/') ||
-        path.includes('/elements/') || path.includes('/tables/') ||
-        path.includes('/icons/') || path.includes('/themes/');
+        const isSubpage = path.includes('/config/') || path.includes('/dom/') ||
+            path.includes('/utils/') || path.includes('/dates/') ||
+            path.includes('/models/') || path.includes('/elements/') ||
+            path.includes('/tables/') || path.includes('/icons/') ||
+            path.includes('/themes/') || path.includes('/storage/');
     const base = isSubpage ? '../' : '';
         const splashPath = isSubpage ? '../../index.html' : '../index.html';
 
@@ -40,12 +41,14 @@
     <nav class="navbar navbar-dark">
         <a href="${splashPath}" class="navbar-brand">${logoSvg} Domma</a>
         <ul class="navbar-nav">
+            <li><a href="${base}config/index.html" class="${getNavClass('config')}">Config</a></li>
             <li><a href="${base}dom/index.html" class="${getNavClass('dom')}">DOM</a></li>
             <li><a href="${base}utils/index.html" class="${getNavClass('utils')}">Utils</a></li>
             <li><a href="${base}dates/index.html" class="${getNavClass('dates')}">Dates</a></li>
             <li><a href="${base}models/index.html" class="${getNavClass('models')}">Models</a></li>
             <li><a href="${base}elements/index.html" class="${getNavClass('elements')}">Elements</a></li>
             <li><a href="${base}tables/index.html" class="${getNavClass('tables')}">Tables</a></li>
+            <li><a href="${base}storage/index.html" class="${getNavClass('storage')}">Storage</a></li>
             <li><a href="${base}icons/index.html" class="${getNavClass('icons')}">Icons</a></li>
             <li><a href="${base}themes/index.html" class="${getNavClass('themes')}">Themes</a></li>
         </ul>
@@ -217,7 +220,7 @@
     const footer = `
     <footer class="footer footer-dark text-center">
         <p class="mb-2">Domma</p>
-        <p class="text-sm">&copy; DCBW-IT (2025)</p>
+        <p class="text-sm">&copy; Darryl Waterhouse &amp; DCBW-IT 2025</p>
     </footer>`;
 
         // Add theme class to body if not present
@@ -229,15 +232,15 @@
         // Inject styles into head
         document.head.insertAdjacentHTML('beforeend', themeStyles);
 
-    // Inject navbar at the start of body
-    document.body.insertAdjacentHTML('afterbegin', navbar);
+        // Inject navbar at the start of body
+        document.body.insertAdjacentHTML('afterbegin', navbar);
 
         // Inject theme toggle and variant selector after navbar
         document.body.insertAdjacentHTML('afterbegin', themeToggle);
         document.body.insertAdjacentHTML('afterbegin', variantSelector);
 
-    // Inject footer at the end of body
-    document.body.insertAdjacentHTML('beforeend', footer);
+        // Inject footer at the end of body
+        document.body.insertAdjacentHTML('beforeend', footer);
 
         // Theme toggle functionality (works even before Domma loads)
         function updateThemeIcon() {
@@ -329,6 +332,23 @@
         });
 
         updateVariantActive();
+
+        // Back to top - initialise when Domma is available
+        function initBackToTop() {
+            if (window.Domma && Domma.elements && Domma.elements.backToTop) {
+                Domma.elements.backToTop('body', {
+                    duration: 300,
+                    showAfter: window.innerHeight
+                });
+            }
+        }
+
+        // Try immediately, or wait for Domma to load
+        if (window.Domma) {
+            initBackToTop();
+        } else {
+            window.addEventListener('load', initBackToTop);
+        }
     }
 
     // Wait for DOM to be ready before injecting layout
