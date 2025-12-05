@@ -135,7 +135,7 @@
 <div class="container py-8">
 
     <!-- Basic Setup -->
-    <section class="card mb-6">
+    <section class="card mb-6" data-section="Creating Tables">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Creating Tables</h2>
         </div>
@@ -290,7 +290,7 @@ const table = Domma.tables.create('#my-table', {
     </section>
 
     <!-- Interactive Demo -->
-    <section class="card mb-6">
+    <section class="card mb-6" data-section="Interactive Demo">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Interactive Demo</h2>
         </div>
@@ -325,7 +325,7 @@ const table = Domma.tables.create('#my-table', {
     </section>
 
     <!-- Sorting -->
-    <section class="card mb-6">
+    <section class="card mb-6" data-section="Sorting">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Sorting</h2>
         </div>
@@ -368,7 +368,7 @@ table.on('sort', (column, direction) => {
     </section>
 
     <!-- Filtering -->
-    <section class="card mb-6">
+    <section class="card mb-6" data-section="Filtering">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Filtering</h2>
         </div>
@@ -404,7 +404,7 @@ table.on('filter', (filters) => {
     </section>
 
     <!-- Pagination -->
-    <section class="card mb-6">
+    <section class="card mb-6" data-section="Pagination">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Pagination</h2>
         </div>
@@ -463,7 +463,7 @@ table.on('page', (page, pageSize) => {
     </section>
 
     <!-- Selection -->
-    <section class="card mb-6">
+    <section class="card mb-6" data-section="Row Selection">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Row Selection</h2>
         </div>
@@ -510,7 +510,7 @@ table.on('select', (selectedRows, selectedIndices) => {
     </section>
 
     <!-- Data Methods -->
-    <section class="card mb-6">
+    <section class="card mb-6" data-section="Data Management">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Data Management</h2>
         </div>
@@ -555,7 +555,7 @@ table.refresh();</pre>
     </section>
 
     <!-- Export Panel -->
-    <section class="card mb-6">
+    <section class="card mb-6" data-section="Export Panel">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Export Panel</h2>
         </div>
@@ -610,7 +610,7 @@ const table = Domma.tables.create('#my-table', {
     </section>
 
     <!-- Column Visibility -->
-    <section class="card mb-6">
+    <section class="card mb-6" data-section="Column Visibility">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Column Visibility</h2>
         </div>
@@ -676,7 +676,7 @@ table.getColumns();             // All columns</pre>
     </section>
 
     <!-- Export Methods -->
-    <section class="card mb-6">
+    <section class="card mb-6" data-section="Export Methods">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Export Methods</h2>
         </div>
@@ -717,7 +717,7 @@ table.on('export', (info) => {
     </section>
 
     <!-- Events -->
-    <section class="card mb-6">
+    <section class="card mb-6" data-section="Events">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Events</h2>
         </div>
@@ -745,7 +745,7 @@ table.once('render', () => {
     </section>
 
     <!-- Method Reference -->
-    <section class="card">
+    <section class="card" data-section="Method Reference">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Complete Method Reference</h2>
         </div>
