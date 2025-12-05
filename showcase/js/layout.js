@@ -235,11 +235,212 @@
         <p class="text-sm">&copy; Darryl Waterhouse &amp; DCBW-IT 2025</p>
     </footer>`;
 
+        // Sidebar templates (using Domma's _.template() for cleaner code)
+        const SIDEBAR_TEMPLATE = `
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">On This Page</div>
+                <ul class="sidebar-nav">
+                    {{#each items}}
+                    <li><a href="#{{id}}" class="sidebar-link">{{text}}</a></li>
+                    {{/each}}
+                </ul>
+            </aside>
+        `;
+
+        const TOGGLE_TEMPLATE = `
+            <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        `;
+
+        const OVERLAY_TEMPLATE = `<div class="sidebar-overlay" id="sidebar-overlay"></div>`;
+
+        // Sidebar navigation builder
+        function buildSidebar() {
+            // Find all section headings (supports data-section attribute or card headers)
+            const sections = document.querySelectorAll('[data-section]');
+            const headings = sections.length > 0
+                ? sections
+                : document.querySelectorAll('.card-header h2, .card-header h3');
+
+            if (headings.length < 2) return; // Don't show sidebar for pages with few sections
+
+            // Generate IDs and build nav items
+            const navItems = [];
+            headings.forEach((el) => {
+                let text, id, card;
+
+                if (el.hasAttribute('data-section')) {
+                    // Using data-section attribute
+                    text = el.dataset.section;
+                    id = 'section-' + text.toLowerCase()
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-|-$/g, '');
+                    el.id = id;
+                } else {
+                    // Using card header detection
+                    text = el.textContent.trim();
+                    id = 'section-' + text.toLowerCase()
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-|-$/g, '');
+                    card = el.closest('.card, section');
+                    if (card) {
+                        card.id = id;
+                    }
+                }
+
+                navItems.push({id, text});
+            });
+
+            // Render sidebar HTML using Domma's template system if available
+            let sidebarHtml;
+            if (window._ && _.template) {
+                const render = _.template(SIDEBAR_TEMPLATE);
+                sidebarHtml = render({items: navItems});
+            } else {
+                // Fallback for when Domma isn't loaded yet
+                sidebarHtml = `
+                    <aside class="sidebar" id="sidebar">
+                        <div class="sidebar-header">On This Page</div>
+                        <ul class="sidebar-nav">
+                            ${navItems.map(item => `
+                                <li><a href="#${item.id}" class="sidebar-link">${item.text}</a></li>
+                            `).join('')}
+                        </ul>
+                    </aside>
+                `;
+            }
+
+            // Toggle and overlay HTML (static, no templating needed)
+            const toggleHtml = TOGGLE_TEMPLATE;
+            const overlayHtml = OVERLAY_TEMPLATE;
+
+            // Find the hero and content container
+            const hero = document.querySelector('.hero');
+            const container = document.querySelector('.container');
+
+            if (container) {
+                // Wrap content in showcase-layout
+                const wrapper = document.createElement('div');
+                wrapper.className = 'showcase-layout';
+
+                // Insert sidebar
+                wrapper.innerHTML = sidebarHtml;
+
+                // Wrap the container
+                const contentWrapper = document.createElement('div');
+                contentWrapper.className = 'showcase-content';
+
+                // Move container into content wrapper
+                container.parentNode.insertBefore(wrapper, container);
+                contentWrapper.appendChild(container);
+                wrapper.appendChild(contentWrapper);
+
+                // Move footer inside content wrapper if it exists after wrapper
+                const existingFooter = document.querySelector('.footer');
+                if (existingFooter && !contentWrapper.contains(existingFooter)) {
+                    contentWrapper.appendChild(existingFooter);
+                }
+            }
+
+            // Add toggle button and overlay to body
+            document.body.insertAdjacentHTML('beforeend', toggleHtml);
+            document.body.insertAdjacentHTML('beforeend', overlayHtml);
+
+            // Initialize sidebar interactions
+            initSidebarToggle();
+            initScrollSpy(navItems);
+        }
+
+        // Sidebar toggle for mobile
+        function initSidebarToggle() {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.getElementById('sidebar-toggle');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            if (!sidebar || !toggle || !overlay) return;
+
+            function openSidebar() {
+                sidebar.classList.add('open');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            toggle.addEventListener('click', () => {
+                if (sidebar.classList.contains('open')) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            });
+
+            overlay.addEventListener('click', closeSidebar);
+
+            // Close on link click (mobile)
+            sidebar.querySelectorAll('.sidebar-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 1024) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            // Close on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+                    closeSidebar();
+                }
+            });
+        }
+
+        // Scroll spy to highlight current section
+        function initScrollSpy(navItems) {
+            const links = document.querySelectorAll('.sidebar-link');
+            const sections = navItems.map(item => document.getElementById(item.id)).filter(Boolean);
+
+            if (sections.length === 0) return;
+
+            // Use Intersection Observer for scroll spy
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        links.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+                        });
+                    }
+                });
+            }, {
+                rootMargin: '-20% 0px -60% 0px',
+                threshold: 0
+            });
+
+            sections.forEach(section => observer.observe(section));
+        }
+
         // Add theme class to body if not present
         if (!document.body.classList.contains('dm-theme-light') &&
             !document.body.classList.contains('dm-theme-dark')) {
             document.body.classList.add('dm-theme-light');
         }
+
+        // Inject Google Fonts link (more reliable than CSS @import)
+        const fontLink = `
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+        `;
+        document.head.insertAdjacentHTML('afterbegin', fontLink);
 
         // Inject styles into head
         document.head.insertAdjacentHTML('beforeend', themeStyles);
@@ -253,6 +454,11 @@
 
         // Inject footer at the end of body
         document.body.insertAdjacentHTML('beforeend', footer);
+
+        // Build sidebar navigation (only on showcase subpages)
+        if (isShowcaseSubpage) {
+            buildSidebar();
+        }
 
         // Theme toggle functionality (works even before Domma loads)
         function updateThemeIcon() {
