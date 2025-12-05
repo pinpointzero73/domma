@@ -10,7 +10,7 @@
     "dev": "live-server --port=3000 --open=/index.html",
     "build": "rollup -c && npm run build:css",
     "build:js": "rollup -c",
-    "build:css": "cat assets/themes/_base.css assets/themes/light.css assets/themes/dark.css assets/themes/ocean.css assets/themes/forest.css assets/themes/sunset.css assets/themes/royal.css assets/themes/lemon.css assets/themes/silver.css assets/themes/charcoal.css > dist/themes/domma-themes.css",
+    "build:css": "node scripts/build-css.js",
     "test": "node tests/test.js",
     "showcase": "live-server --port=3000 --open=/showcase/index.html"
   },
