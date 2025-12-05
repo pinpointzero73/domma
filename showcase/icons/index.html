@@ -3,95 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Domma Icons Gallery</title>
+    <title>Icons - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
     <link rel="stylesheet" href="../css/domma.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <style>
-        .icon-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 1rem;
-        }
-
-        .icon-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1rem;
-            border: 1px solid var(--dm-border);
-            border-radius: var(--dm-radius-lg);
-            background: var(--dm-surface);
-            transition: all var(--dm-transition-fast);
-            cursor: pointer;
-        }
-
-        .icon-card:hover {
-            border-color: var(--dm-primary);
-            box-shadow: var(--dm-shadow-md);
-            transform: translateY(-2px);
-        }
-
-        .icon-card svg {
-            margin-bottom: 0.5rem;
-            color: var(--dm-text);
-        }
-
-        .icon-card:hover svg {
-            color: var(--dm-primary);
-        }
-
-        .icon-card .icon-name {
-            font-size: var(--dm-text-xs);
-            color: var(--dm-text-muted);
-            text-align: center;
-            word-break: break-word;
-        }
-
-        #icon-tabs .tab-list {
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            border-bottom: none;
-            margin-bottom: 1.5rem;
-        }
-
-        #icon-tabs .tab-item {
-            border: 1px solid var(--dm-border);
-            border-radius: var(--dm-radius-md);
-            border-bottom: 1px solid var(--dm-border);
-            background: var(--dm-surface);
-        }
-
-        #icon-tabs .tab-item:hover {
-            border-color: var(--dm-primary);
-        }
-
-        #icon-tabs .tab-item.active {
-            background: var(--dm-primary);
+        .hero {
+            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
             color: white;
-            border-color: var(--dm-primary);
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 0;
         }
 
-        #icon-tabs .tab-panel {
-            padding: 0;
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
         }
 
-        .search-box {
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .hero-stats {
+            display: inline-flex;
+            gap: 2rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1rem 2rem;
+            border-radius: var(--dm-radius-full);
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .hero-stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .controls-bar {
             position: sticky;
             top: 0;
             z-index: 100;
+            background: var(--dm-surface);
+            border-bottom: 1px solid var(--dm-border);
             padding: 1rem 0;
-            background: var(--dm-background);
             margin-bottom: 2rem;
+        }
+
+        .controls-inner {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-wrapper {
+            flex: 1;
+            min-width: 250px;
         }
 
         .search-input {
             width: 100%;
             padding: 0.75rem 1rem;
+            padding-left: 2.5rem;
             font-size: var(--dm-text-base);
             border: 2px solid var(--dm-border);
-            border-radius: var(--dm-radius-lg);
-            background: var(--dm-surface);
+            border-radius: var(--dm-radius-full);
+            background: var(--dm-background);
             color: var(--dm-text);
             transition: border-color var(--dm-transition-fast);
         }
@@ -101,51 +90,133 @@
             border-color: var(--dm-primary);
         }
 
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dm-text-muted);
+            pointer-events: none;
+        }
+
         .size-controls {
             display: flex;
-            gap: 0.5rem;
-            align-items: center;
-            margin-bottom: 1rem;
+            gap: 0.25rem;
+            background: var(--dm-gray-100);
+            padding: 0.25rem;
+            border-radius: var(--dm-radius-full);
         }
 
         .size-btn {
             padding: 0.5rem 1rem;
-            border: 1px solid var(--dm-border);
-            border-radius: var(--dm-radius-md);
-            background: var(--dm-surface);
-            color: var(--dm-text);
+            border: none;
+            border-radius: var(--dm-radius-full);
+            background: transparent;
+            color: var(--dm-text-muted);
             cursor: pointer;
             transition: all var(--dm-transition-fast);
+            font-size: var(--dm-text-sm);
+            font-weight: 500;
+        }
+
+        .size-btn:hover {
+            color: var(--dm-text);
         }
 
         .size-btn.active {
             background: var(--dm-primary);
             color: white;
-            border-color: var(--dm-primary);
         }
 
-        .stats-bar {
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--dm-primary);
+            display: inline-block;
+        }
+
+        #icon-tabs .tab-list {
             display: flex;
-            gap: 2rem;
-            padding: 1rem;
-            background: var(--dm-surface-raised);
-            border-radius: var(--dm-radius-lg);
-            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            border-bottom: none;
+            margin-bottom: 1.5rem;
         }
 
-        .stat-item {
-            text-align: center;
+        #icon-tabs .tab-item {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--dm-radius-full);
+            background: var(--dm-gray-100);
+            color: var(--dm-text-muted);
+            cursor: pointer;
+            font-size: var(--dm-text-sm);
+            font-weight: 500;
+            transition: all var(--dm-transition-fast);
         }
 
-        .stat-value {
-            font-size: var(--dm-text-2xl);
-            font-weight: var(--dm-font-bold);
+        #icon-tabs .tab-item:hover {
+            background: var(--dm-gray-200);
+            color: var(--dm-text);
+        }
+
+        #icon-tabs .tab-item.active {
+            background: var(--dm-primary);
+            color: white;
+        }
+
+        #icon-tabs .tab-panel {
+            padding: 0;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .icon-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem 0.75rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-xl);
+            background: var(--dm-surface);
+            transition: all var(--dm-transition-fast);
+            cursor: pointer;
+            min-height: 100px;
+        }
+
+        .icon-card:hover {
+            border-color: var(--dm-primary);
+            box-shadow: var(--dm-shadow-lg);
+            transform: translateY(-3px);
+        }
+
+        .icon-card:hover svg {
             color: var(--dm-primary);
         }
 
-        .stat-label {
-            font-size: var(--dm-text-sm);
+        .icon-card svg {
+            margin-bottom: 0.5rem;
+            color: var(--dm-text);
+            transition: color var(--dm-transition-fast);
+        }
+
+        .icon-card .icon-name {
+            font-size: 0.7rem;
             color: var(--dm-text-muted);
+            text-align: center;
+            word-break: break-word;
+            line-height: 1.2;
         }
 
         .copy-toast {
@@ -153,14 +224,16 @@
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
-            padding: 0.75rem 1.5rem;
-            background: var(--dm-text);
-            color: var(--dm-background);
-            border-radius: var(--dm-radius-lg);
+            padding: 0.875rem 1.5rem;
+            background: var(--dm-gray-900);
+            color: white;
+            border-radius: var(--dm-radius-full);
             font-size: var(--dm-text-sm);
+            font-weight: 500;
             opacity: 0;
             transition: all 0.3s ease;
             z-index: 1000;
+            box-shadow: var(--dm-shadow-xl);
         }
 
         .copy-toast.show {
@@ -170,52 +243,158 @@
 
         .no-results {
             text-align: center;
-            padding: 3rem;
+            padding: 4rem 2rem;
             color: var(--dm-text-muted);
+        }
+
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .usage-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--dm-border);
+        }
+
+        .usage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .usage-card {
+            background: var(--dm-surface);
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-xl);
+            padding: 1.5rem;
+        }
+
+        .usage-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
+            border-radius: var(--dm-radius-lg);
+            padding: 1rem;
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-text-sm);
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .code-block .comment {
+            color: var(--dm-gray-500);
+        }
+
+        .code-block .string {
+            color: #c3e88d;
+        }
+
+        .code-block .function {
+            color: #82aaff;
+        }
+
+        .category-description {
+            color: var(--dm-text-muted);
+            font-size: var(--dm-text-sm);
+            margin-bottom: 1.5rem;
         }
     </style>
 </head>
 <body class="dm-theme-light">
 <script src="../js/layout.js"></script>
 
-<main class="container py-8">
-    <header class="mb-8">
-        <h1 class="text-4xl font-bold mb-2">Domma Icons</h1>
-        <p class="text-muted">A comprehensive SVG icon library for your projects</p>
-    </header>
-
-    <div class="stats-bar" id="stats-bar">
-        <div class="stat-item">
-            <div class="stat-value" id="total-icons">0</div>
-            <div class="stat-label">Total Icons</div>
+<!-- Hero Section -->
+<div class="hero">
+    <h1>Domma Icons</h1>
+    <p>A comprehensive SVG icon library with 100+ icons across 8 categories. Click any icon to copy.</p>
+    <div class="hero-stats">
+        <div class="hero-stat">
+            <div class="hero-stat-value" id="total-icons">0</div>
+            <div class="hero-stat-label">Icons</div>
         </div>
-        <div class="stat-item">
-            <div class="stat-value" id="total-categories">0</div>
-            <div class="stat-label">Categories</div>
+        <div class="hero-stat">
+            <div class="hero-stat-value" id="total-categories">0</div>
+            <div class="hero-stat-label">Categories</div>
         </div>
     </div>
+</div>
 
-    <div class="search-box">
-        <input type="text" class="search-input" id="search" placeholder="Search icons... (e.g., arrow, check, user)">
+<!-- Controls Bar -->
+<div class="controls-bar">
+    <div class="container">
+        <div class="controls-inner">
+            <div class="search-wrapper">
+                <span class="search-icon" data-icon="search" data-icon-size="18"></span>
+                <input type="text" class="search-input" id="search" placeholder="Search icons...">
+            </div>
+            <div class="size-controls">
+                <button class="size-btn" data-size="16">16</button>
+                <button class="size-btn active" data-size="24">24</button>
+                <button class="size-btn" data-size="32">32</button>
+                <button class="size-btn" data-size="48">48</button>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="size-controls">
-        <span class="text-muted">Size:</span>
-        <button class="size-btn" data-size="16">16px</button>
-        <button class="size-btn active" data-size="24">24px</button>
-        <button class="size-btn" data-size="32">32px</button>
-        <button class="size-btn" data-size="48">48px</button>
-    </div>
-
+<main class="container pb-8">
+    <!-- Icon Gallery -->
     <div class="tabs" id="icon-tabs">
         <div class="tab-list" id="tab-list"></div>
         <div class="tab-content" id="icon-gallery"></div>
     </div>
 
     <div class="no-results" id="no-results" style="display:none">
-        <p class="text-2xl mb-2">No icons found</p>
+        <div class="no-results-icon" data-icon="search" data-icon-size="64"></div>
+        <p class="text-2xl font-semibold mb-2">No icons found</p>
         <p>Try a different search term</p>
     </div>
+
+    <!-- Usage Section -->
+    <section class="usage-section">
+        <h2 class="section-title">Usage</h2>
+        <div class="usage-grid">
+            <div class="usage-card">
+                <h3>HTML Data Attributes</h3>
+                <div class="code-block">
+                    <span class="comment">&lt;!-- Basic usage --&gt;</span>
+                    &lt;span <span class="string">data-icon="check"</span>&gt;&lt;/span&gt;
+
+                    <span class="comment">&lt;!-- With size --&gt;</span>
+                    &lt;span <span class="string">data-icon="user"</span>
+                    <span class="string">data-icon-size="32"</span>&gt;&lt;/span&gt;
+
+                    <span class="comment">&lt;!-- Scan and render --&gt;</span>
+                    Domma.icons.<span class="function">scan</span>();
+                </div>
+            </div>
+
+            <div class="usage-card">
+                <h3>JavaScript API</h3>
+                <div class="code-block">
+                    <span class="comment">// Render to element</span>
+                    Domma.icons.<span class="function">render</span>(<span class="string">'heart'</span>, element);
+
+                    <span class="comment">// Get SVG HTML string</span>
+                    const svg = Domma.icons.<span class="function">html</span>(<span class="string">'star'</span>, {
+                    size: 24,
+                    class: <span class="string">'my-icon'</span>
+                    });
+
+                    <span class="comment">// List all categories</span>
+                    Domma.icons.<span class="function">listCategories</span>();
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 
 <div class="copy-toast" id="copy-toast">Copied to clipboard!</div>
@@ -230,14 +409,14 @@
 
     // Category data
     const categoryMeta = {
-        ui: {name: 'UI', description: 'Core user interface icons'},
-        communication: {name: 'Communication', description: 'Messaging and notifications'},
-        media: {name: 'Media', description: 'Audio, video, and images'},
-        files: {name: 'Files', description: 'Documents and file operations'},
-        social: {name: 'Social', description: 'Social interactions and sharing'},
-        commerce: {name: 'Commerce', description: 'Shopping and payments'},
-        status: {name: 'Status', description: 'Indicators and alerts'},
-        navigation: {name: 'Navigation', description: 'Directional and navigation'}
+        ui: {name: 'UI', description: 'Core user interface elements - buttons, menus, controls'},
+        communication: {name: 'Communication', description: 'Messaging, email, and notification icons'},
+        media: {name: 'Media', description: 'Audio, video, images, and playback controls'},
+        files: {name: 'Files', description: 'Documents, folders, and file operations'},
+        social: {name: 'Social', description: 'Social media, sharing, and user interactions'},
+        commerce: {name: 'Commerce', description: 'Shopping, payments, and e-commerce'},
+        status: {name: 'Status', description: 'Indicators, alerts, and state icons'},
+        navigation: {name: 'Navigation', description: 'Arrows, directions, and navigation elements'}
     };
 
     // Track tabs instance
@@ -278,14 +457,14 @@
             // Tab panel content
             panelsHtml += `
                 <div class="tab-panel${activeClass}" data-panel="${key}">
-                    <p class="text-muted mb-4">${meta.description}</p>
+                    <p class="category-description">${meta.description}</p>
                     <div class="icon-grid">
             `;
 
             icons.forEach(name => {
                 const iconHtml = Domma.icons.html(name, {size: currentSize});
                 panelsHtml += `
-                    <div class="icon-card" data-icon-name="${name}" title="Click to copy">
+                    <div class="icon-card" data-icon-name="${name}" title="Click to copy: ${name}">
                         ${iconHtml}
                         <span class="icon-name">${name}</span>
                     </div>
@@ -322,7 +501,7 @@
 
     // Copy icon name to clipboard
     function copyToClipboard(name) {
-        const text = `Domma.icons.render('${name}')`;
+        const text = `data-icon="${name}"`;
         navigator.clipboard.writeText(text).then(() => {
             showToast(`Copied: ${name}`);
         });
@@ -335,7 +514,7 @@
         setTimeout(() => toast.removeClass('show'), 2000);
     }
 
-    // Search handler
+    // Search handler with debounce
     let searchTimeout;
     $('#search').on('input', function () {
         clearTimeout(searchTimeout);
@@ -355,8 +534,6 @@
     // Initial render
     renderGallery();
     Domma.icons.scan();
-
-    console.log(`Domma Icons Gallery loaded: ${Domma.icons.count()} icons available`);
 </script>
 </body>
 </html>

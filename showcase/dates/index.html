@@ -8,6 +8,33 @@
     <link rel="stylesheet" href="../css/domma.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <style>
+        .hero {
+            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 0;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero code {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--dm-radius-full);
+        }
+
         .demo-result {
             background: var(--dm-gray-900);
             color: var(--dm-gray-100);
@@ -82,20 +109,20 @@
 <body>
 <script src="../js/layout.js"></script>
 
-<div class="container py-8">
-    <header class="mb-8">
-        <h1 class="text-4xl font-bold mb-2">Dates</h1>
-        <p class="text-muted text-lg">Moment.js-style chainable date manipulation without the bloat.</p>
-        <p class="mt-2"><code>D()</code> or <code>Domma.dates()</code></p>
-    </header>
-
-    <!-- Live Clock -->
-    <div class="live-clock">
-        <div id="live-time">--:--:--</div>
-        <div class="live-date" id="live-date">Loading...</div>
+<!-- Hero Section with Live Clock -->
+<div class="hero">
+    <h1>Dates</h1>
+    <p>Moment.js-style chainable date manipulation without the bloat.</p>
+    <p style="margin-bottom: 1.5rem;"><code>D()</code> or <code>Domma.dates()</code></p>
+    <div style="background: rgba(255,255,255,0.15); border-radius: var(--dm-radius-lg); padding: 1.5rem 2rem; display: inline-block;">
+        <div id="live-time" style="font-size: 2.5rem; font-weight: 700;">--:--:--</div>
+        <div id="live-date" style="opacity: 0.9;">Loading...</div>
     </div>
+</div>
 
-    <!-- Creating Dates -->
+<div class="container py-8">
+
+<!-- Creating Dates -->
     <section class="card mb-6">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Creating Dates</h2>

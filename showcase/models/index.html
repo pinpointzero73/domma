@@ -8,6 +8,33 @@
     <link rel="stylesheet" href="../css/domma.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <style>
+        .hero {
+            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero code {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--dm-radius-full);
+        }
+
         .demo-result {
             background: var(--dm-gray-900);
             color: var(--dm-gray-100);
@@ -162,12 +189,14 @@
 <body>
 <script src="../js/layout.js"></script>
 
+<!-- Hero Section -->
+<div class="hero">
+    <h1>Models</h1>
+    <p>Reactive data models with pub/sub events, validation, and two-way DOM binding.</p>
+    <p><code>M</code> or <code>Domma.models</code></p>
+</div>
+
 <div class="container py-8">
-    <header class="mb-8">
-        <h1 class="text-4xl font-bold mb-2">Models</h1>
-        <p class="text-muted text-lg">Reactive data models with pub/sub events, validation, and DOM binding.</p>
-        <p class="mt-2"><code>M</code> or <code>Domma.models</code></p>
-    </header>
 
     <!-- Pub/Sub Events -->
     <section class="card mb-6">

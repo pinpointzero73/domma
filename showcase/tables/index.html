@@ -8,6 +8,33 @@
     <link rel="stylesheet" href="../css/domma.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <style>
+        .hero {
+            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero code {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--dm-radius-full);
+        }
+
         .demo-area {
             background: var(--dm-gray-100);
             padding: var(--dm-space-4);
@@ -98,13 +125,14 @@
 <body>
 <script src="../js/layout.js"></script>
 
+<!-- Hero Section -->
+<div class="hero">
+    <h1>Tables</h1>
+    <p>DataTable-like functionality for interactive data grids with sorting, filtering, pagination, and more.</p>
+    <p><code>Domma.tables</code></p>
+</div>
+
 <div class="container py-8">
-    <header class="mb-8">
-        <h1 class="text-4xl font-bold mb-2">Tables</h1>
-        <p class="text-muted text-lg">DataTable-like functionality for interactive data grids with sorting, filtering,
-            pagination, and more.</p>
-        <p class="mt-2"><code>Domma.tables</code></p>
-    </header>
 
     <!-- Basic Setup -->
     <section class="card mb-6">
