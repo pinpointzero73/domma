@@ -4,6 +4,7 @@
  */
 
 import {utils} from './utils.js';
+import {icons} from './icons.js';
 
 /**
  * Table Instance Class
@@ -931,22 +932,22 @@ class TableInstance {
             const exportFormats = {
                 text: {
                     label: 'Text',
-                    icon: '📋',
+                    icon: icons.html('clipboard', {size: 16}),
                     format: 'text'
                 },
                 csv: {
                     label: 'CSV',
-                    icon: '📄',
+                    icon: icons.html('document', {size: 16}),
                     format: 'csv'
                 },
                 excel: {
                     label: 'Excel',
-                    icon: '📊',
+                    icon: icons.html('grid', {size: 16}),
                     format: 'excel'
                 },
                 json: {
                     label: 'JSON',
-                    icon: '{ }',
+                    icon: icons.html('file-code', {size: 16}),
                     format: 'json'
                 }
             };
@@ -961,7 +962,7 @@ class TableInstance {
                 const btn = document.createElement('button');
                 btn.type = 'button';
                 btn.setAttribute('data-export', exportType);
-                btn.innerHTML = `<span style="font-size: 14px;">${config.icon}</span> ${config.label}`;
+                btn.innerHTML = `${config.icon} ${config.label}`;
                 btn.style.cssText = btnStyle;
 
                 const showFeedback = (message, success = true) => {
@@ -1203,18 +1204,22 @@ class TableInstance {
 
             // Page buttons
             const buttonsWrapper = document.createElement('span');
-            const createBtn = (text, onClick, disabled = false) => {
+            const createBtn = (content, onClick, disabled = false, isIcon = false) => {
                 const btn = document.createElement('button');
-                btn.textContent = text;
+                if (isIcon) {
+                    btn.innerHTML = content;
+                } else {
+                    btn.textContent = content;
+                }
                 btn.disabled = disabled;
-                btn.style.cssText = 'padding: 6px 12px; margin: 0 2px; border: 1px solid #ddd; background: #fff; cursor: pointer; border-radius: 4px;';
+                btn.style.cssText = 'padding: 6px 12px; margin: 0 2px; border: 1px solid #ddd; background: #fff; cursor: pointer; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center;';
                 if (disabled) btn.style.opacity = '0.5';
                 this._addEventHandler(btn, 'click', onClick);
                 return btn;
             };
 
-            buttonsWrapper.appendChild(createBtn('«', () => this.firstPage(), this._currentPage === 1));
-            buttonsWrapper.appendChild(createBtn('‹', () => this.prevPage(), this._currentPage === 1));
+            buttonsWrapper.appendChild(createBtn(icons.html('chevrons-left', {size: 14}), () => this.firstPage(), this._currentPage === 1, true));
+            buttonsWrapper.appendChild(createBtn(icons.html('chevron-left', {size: 14}), () => this.prevPage(), this._currentPage === 1, true));
 
             // Page numbers
             const maxButtons = 5;
@@ -1232,8 +1237,8 @@ class TableInstance {
                 buttonsWrapper.appendChild(btn);
             }
 
-            buttonsWrapper.appendChild(createBtn('›', () => this.nextPage(), this._currentPage === info.totalPages));
-            buttonsWrapper.appendChild(createBtn('»', () => this.lastPage(), this._currentPage === info.totalPages));
+            buttonsWrapper.appendChild(createBtn(icons.html('chevron-right', {size: 14}), () => this.nextPage(), this._currentPage === info.totalPages, true));
+            buttonsWrapper.appendChild(createBtn(icons.html('chevrons-right', {size: 14}), () => this.lastPage(), this._currentPage === info.totalPages, true));
 
             paginationWrapper.appendChild(pageSizeWrapper);
             paginationWrapper.appendChild(infoSpan);
