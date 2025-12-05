@@ -1,6 +1,6 @@
 /**
  * Domma Elements Module
- * UI Components: Cards, Modals, Tabs, Accordions, Tooltips
+ * UI Components: Cards, Modals, Tabs, Accordions, Tooltips, BackToTop
  */
 
 // ============================================
@@ -1873,6 +1873,222 @@ class Carousel extends Component {
 }
 
 // ============================================
+// BackToTop Component
+// ============================================
+
+class BackToTop extends Component {
+    static defaults = {
+        showAfter: null,        // Scroll distance to show (null = viewport height)
+        duration: 300,          // Scroll animation duration in ms
+        position: 'bottom-right', // Position: bottom-right, bottom-left
+        offset: 16,             // Distance from edge in px
+        target: null,           // Existing button selector (null = create new)
+        zIndex: 1000,
+        onShow: null,
+        onHide: null,
+        onScroll: null
+    };
+
+    constructor(selector, options = {}) {
+        super(selector, options);
+        this._isVisible = false;
+        this._isScrolling = false;
+        this._init();
+    }
+
+    _init() {
+        this._setupButton();
+        this._bindEvents();
+        this._checkVisibility();
+    }
+
+    _setupButton() {
+        // Use existing button or create new one
+        if (this.options.target) {
+            this._button = typeof this.options.target === 'string'
+                ? document.querySelector(this.options.target)
+                : this.options.target;
+            this._created = false;
+        } else {
+            this._button = this._createButton();
+            this._created = true;
+            document.body.appendChild(this._button);
+        }
+
+        if (this._button) {
+            this._applyStyles();
+        }
+    }
+
+    _createButton() {
+        const btn = document.createElement('button');
+        btn.className = 'dm-back-to-top';
+        btn.setAttribute('title', 'Back to top');
+        btn.setAttribute('aria-label', 'Scroll back to top');
+        btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>`;
+        return btn;
+    }
+
+    _applyStyles() {
+        const {position, offset, zIndex} = this.options;
+        const isLeft = position === 'bottom-left';
+
+        const styles = {
+            position: 'fixed',
+            bottom: `${offset}px`,
+            [isLeft ? 'left' : 'right']: `${offset}px`,
+            padding: '0.5rem',
+            background: 'var(--dm-surface, #fff)',
+            border: '1px solid var(--dm-border, #dee2e6)',
+            borderRadius: '9999px',
+            cursor: 'pointer',
+            zIndex: zIndex,
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: '0',
+            visibility: 'hidden',
+            transform: 'translateY(10px)',
+            transition: 'opacity 0.2s ease, transform 0.15s ease, visibility 0.2s, background 0.2s ease, box-shadow 0.15s ease'
+        };
+
+        Object.assign(this._button.style, styles);
+
+        // Add hover styles via event listeners
+        this._addEventListener(this._button, 'mouseenter', () => {
+            if (this._isVisible) {
+                this._button.style.background = 'var(--dm-hover-bg, rgba(0,0,0,0.04))';
+                this._button.style.transform = 'translateY(0) scale(1.1)';
+                this._button.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+            }
+        });
+
+        this._addEventListener(this._button, 'mouseleave', () => {
+            if (this._isVisible) {
+                this._button.style.background = 'var(--dm-surface, #fff)';
+                this._button.style.transform = 'translateY(0)';
+                this._button.style.boxShadow = 'none';
+            }
+        });
+
+        // Style the SVG
+        const svg = this._button.querySelector('svg');
+        if (svg) {
+            svg.style.color = 'var(--dm-text, #212529)';
+        }
+    }
+
+    _bindEvents() {
+        // Scroll listener
+        this._scrollHandler = () => this._checkVisibility();
+        window.addEventListener('scroll', this._scrollHandler, {passive: true});
+
+        // Click handler
+        this._addEventListener(this._button, 'click', (e) => {
+            e.preventDefault();
+            this.scroll();
+        });
+    }
+
+    _checkVisibility() {
+        const threshold = this.options.showAfter ?? window.innerHeight;
+        const shouldShow = window.scrollY > threshold;
+
+        if (shouldShow && !this._isVisible) {
+            this.show();
+        } else if (!shouldShow && this._isVisible) {
+            this.hide();
+        }
+
+        if (this.options.onScroll) {
+            this.options.onScroll({scrollY: window.scrollY, isVisible: this._isVisible});
+        }
+    }
+
+    scroll() {
+        if (this._isScrolling) return this;
+
+        this._isScrolling = true;
+        const start = window.scrollY;
+        const startTime = performance.now();
+        const duration = this.options.duration;
+
+        // easeOutQuad: fast start, gentle end
+        const easeOutQuad = t => t * (2 - t);
+
+        const animate = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = easeOutQuad(progress);
+
+            window.scrollTo(0, start * (1 - eased));
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                this._isScrolling = false;
+            }
+        };
+
+        requestAnimationFrame(animate);
+        return this;
+    }
+
+    show() {
+        if (this._isVisible) return this;
+
+        this._isVisible = true;
+        this._button.style.opacity = '1';
+        this._button.style.visibility = 'visible';
+        this._button.style.transform = 'translateY(0)';
+
+        if (this.options.onShow) {
+            this.options.onShow({button: this._button});
+        }
+
+        return this;
+    }
+
+    hide() {
+        if (!this._isVisible) return this;
+
+        this._isVisible = false;
+        this._button.style.opacity = '0';
+        this._button.style.visibility = 'hidden';
+        this._button.style.transform = 'translateY(10px)';
+
+        if (this.options.onHide) {
+            this.options.onHide({button: this._button});
+        }
+
+        return this;
+    }
+
+    toggle() {
+        return this._isVisible ? this.hide() : this.show();
+    }
+
+    isVisible() {
+        return this._isVisible;
+    }
+
+    getButton() {
+        return this._button;
+    }
+
+    destroy() {
+        window.removeEventListener('scroll', this._scrollHandler);
+        super.destroy();
+
+        if (this._created && this._button && this._button.parentNode) {
+            this._button.parentNode.removeChild(this._button);
+        }
+    }
+}
+
+// ============================================
 // Elements Module Export
 // ============================================
 
@@ -1958,6 +2174,12 @@ export const elements = {
         if (instance.element) {
             this._instances.set(instance.element, instance);
         }
+        return instance;
+    },
+
+    backToTop(selector, options = {}) {
+        const instance = new BackToTop(selector, options);
+        this._instances.set('backToTop', instance);
         return instance;
     },
 

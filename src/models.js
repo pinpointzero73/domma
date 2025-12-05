@@ -4,12 +4,13 @@
  */
 
 import {utils} from './utils.js';
+import {storage} from './storage.js';
 
 /**
  * Reactive Model Class
  */
 class Model {
-    constructor(schema, data = {}) {
+    constructor(schema, data = {}, options = {}) {
         this._schema = schema;
         this._data = {};
         this._initialData = {};
@@ -17,12 +18,21 @@ class Model {
         this._changeCallbacks = new Set();
         this._fieldCallbacks = new Map();
 
-        // Initialize with defaults and provided data
+        // Persistence configuration
+        this._persistKey = options.persist || null;
+        this._autoSave = options.autoSave !== false; // Default true when persist is set
+
+        // Initialise with defaults and provided data
         for (const field in schema) {
             const fieldDef = schema[field];
             const defaultVal = fieldDef.default !== undefined ? fieldDef.default : null;
             this._data[field] = data[field] !== undefined ? data[field] : defaultVal;
             this._initialData[field] = this._data[field];
+        }
+
+        // Load from storage if persist key provided (overrides initial data)
+        if (this._persistKey) {
+            this._loadFromStorage();
         }
     }
 
@@ -62,6 +72,11 @@ class Model {
         if (!utils.isEqual(oldValue, value)) {
             this._notifyChange(field, value, oldValue);
             this._updateBindings(field, value);
+
+            // Auto-save to storage if persistence enabled
+            if (this._persistKey && this._autoSave) {
+                this._saveToStorage();
+            }
         }
     }
 
@@ -180,17 +195,114 @@ class Model {
         }
     }
 
-    reset() {
+    reset(clearStorage = false) {
         for (const field in this._initialData) {
             this.set(field, utils.cloneDeep(this._initialData[field]));
         }
+
+        if (clearStorage && this._persistKey) {
+            this.clearStorage();
+        }
+
         return this;
     }
 
-    destroy() {
+    destroy(clearStorage = false) {
+        if (clearStorage && this._persistKey) {
+            this.clearStorage();
+        }
+
         this._changeCallbacks.clear();
         this._fieldCallbacks.clear();
         this._bindings.clear();
+    }
+
+    // ============================================
+    // Persistence Methods
+    // ============================================
+
+    /**
+     * Manually save model to localStorage
+     * @returns {boolean} - True if successful
+     */
+    save() {
+        return this._saveToStorage();
+    }
+
+    /**
+     * Manually load model from localStorage
+     * @returns {boolean} - True if data was loaded
+     */
+    load() {
+        return this._loadFromStorage();
+    }
+
+    /**
+     * Clear persisted data from localStorage
+     * @returns {boolean} - True if successful
+     */
+    clearStorage() {
+        if (!this._persistKey) return false;
+        return storage.remove(`model:${this._persistKey}`);
+    }
+
+    /**
+     * Get the persistence key
+     * @returns {string|null}
+     */
+    getPersistKey() {
+        return this._persistKey;
+    }
+
+    /**
+     * Check if model is persisted
+     * @returns {boolean}
+     */
+    isPersisted() {
+        return this._persistKey !== null;
+    }
+
+    /**
+     * Save model data to localStorage
+     * @returns {boolean}
+     * @private
+     */
+    _saveToStorage() {
+        if (!this._persistKey) return false;
+
+        try {
+            return storage.set(`model:${this._persistKey}`, this._data);
+        } catch (e) {
+            console.warn('Domma Model: Failed to save to storage', e);
+            return false;
+        }
+    }
+
+    /**
+     * Load model data from localStorage
+     * @returns {boolean} - True if data was loaded
+     * @private
+     */
+    _loadFromStorage() {
+        if (!this._persistKey) return false;
+
+        try {
+            const stored = storage.get(`model:${this._persistKey}`);
+
+            if (stored && typeof stored === 'object') {
+                // Merge stored data with current (stored takes precedence)
+                for (const field in stored) {
+                    if (this._schema[field] !== undefined) {
+                        this._data[field] = stored[field];
+                    }
+                }
+                return true;
+            }
+            return false;
+        } catch (e) {
+            console.warn('Domma Model: Failed to load from storage', e);
+            return false;
+        }
     }
 }
 
@@ -344,8 +456,15 @@ export const models = {
     // Model Creation
     // ============================================
 
-    create(schema, initialData = {}) {
-        return new Model(schema, initialData);
+    /**
+     * Create a new reactive model
+     * @param {Object} schema - Field definitions
+     * @param {Object} [initialData={}] - Initial data values
+     * @param {Object} [options={}] - Options (persist, autoSave)
+     * @returns {Model}
+     */
+    create(schema, initialData = {}, options = {}) {
+        return new Model(schema, initialData, options);
     },
 
     // ============================================

@@ -30,7 +30,7 @@ Open `tests/test.html` in a browser.
 
 ## Architecture
 
-Domma has six core modules exposed through `src/index.js`:
+Domma has core modules exposed through `src/index.js`:
 
 ### dom.js - jQuery-compatible DOM API
 
@@ -88,11 +88,23 @@ Accessed via `Domma.dates` or `D()`:
 Accessed via `Domma.models` or `M`:
 
 - **Pub/Sub**: `subscribe()`/`on()`, `publish()`/`emit()`, `unsubscribe()`/`off()`, `once()`
-- **Model Factory**: `create(schema, initialData)` returns a Model instance
+- **Model Factory**: `create(schema, initialData, options)` returns a Model instance
 - **Model Instance**: `get()`, `set()`, `toJSON()`, `validate()`, `onChange()`, `offChange()`, `reset()`
+- **Persistence**: `save()`, `load()`, `clearStorage()`, `isPersisted()`, `getPersistKey()`
 - **DOM Binding**: `M.bind(model, field, selector, options)`, `M.unbind()`
 - **Types**: `M.types.string`, `M.types.number`, `M.types.boolean`, `M.types.array`, `M.types.object`, `M.types.date`,
   `M.types.any`
+
+**Model Persistence** - auto-save/load from localStorage:
+
+```javascript
+const settings = M.create(schema, data, {persist: 'app-settings'});
+// Auto-loads on creation, auto-saves on every change
+settings.save();           // Manual save
+settings.load();           // Manual reload
+settings.clearStorage();   // Remove from localStorage
+settings.reset(true);      // Reset and clear storage
+```
 
 ### elements.js - UI components
 
@@ -112,6 +124,8 @@ Accessed via `Domma.elements`:
   `next()`, `prev()`, `goTo()`, `play()`, `pause()`, `getIndex()`, `getSlide()`
 - **Jumbotron**: CSS-only component using classes: `.jumbotron`, `.jumbotron-primary`, `.jumbotron-dark`,
   `.jumbotron-center`, `.jumbotron-cover`, `.jumbotron-overlay`, `.jumbotron-sm`, `.jumbotron-lg`
+- **BackToTop**: `elements.backToTop(selector, { showAfter, duration, position, offset, target, onShow, onHide })` →
+  `scroll()`, `show()`, `hide()`, `toggle()`, `isVisible()`, `getButton()`, `destroy()`
 
 ### tables.js - DataTable-like functionality
 
@@ -167,6 +181,22 @@ $.reset();              // Reset all configurations
 
 `Domma.http.get()`, `.post()`, `.put()`, `.delete()` - all return promises resolving to JSON.
 
+### storage.js - localStorage wrapper
+
+Accessed via `Domma.storage` or `S`:
+
+- **Core**: `get(key, default)`, `set(key, value)`, `remove(key)`, `has(key)`, `clear()`, `keys()`
+- **Utilities**: `size(key)`, `totalSize()`, `getAll()`, `setAll(data)`, `isAvailable()`
+- **Features**: Auto JSON serialisation, `domma:` key prefix, graceful fallbacks
+
+```javascript
+S.set('user', { name: 'Alice', role: 'admin' });  // Auto-stringify
+S.get('user');                                     // Auto-parse → { name: 'Alice', role: 'admin' }
+S.get('missing', []);                              // Default value
+S.keys();                                          // List all Domma keys
+S.clear();                                         // Clear only Domma keys
+```
+
 ## Aliases
 
 | Full Path       | Alias | Global     | Description                |
@@ -175,6 +205,7 @@ $.reset();              // Reset all configurations
 | `Domma.utils`   | `_`   | `window._` | Utility functions          |
 | `Domma.models`  | `M`   | `window.M` | Reactive models & pub/sub  |
 | `Domma.dates()` | `D()` | `window.D` | Date manipulation          |
+| `Domma.storage` | `S`   | `window.S` | localStorage wrapper       |
 
 ## File Structure
 
@@ -188,7 +219,8 @@ src/
 ├── elements.js   # UI components
 ├── tables.js     # DataTable functionality
 ├── config.js     # JSON configuration engine
-└── http.js       # HTTP client
+├── http.js       # HTTP client
+└── storage.js    # localStorage wrapper
 
 showcase/         # Comprehensive demos for each namespace
 quickstart/       # Getting started blueprint
@@ -201,3 +233,5 @@ dist/             # Built bundles (UMD + ESM)
 
 - When updating features or adding new ones, the documentation and showcase should be updated in-line
 - Where and whenever possible use Domma in the showcase, documentation and tutorials
+- When making changes to the namespaces/modules ensure that we update the PHPStorm code intelligence files
+  @assets/ide/phpstorm
