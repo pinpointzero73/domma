@@ -1,32 +1,46 @@
 /**
  * Domma Showcase - Shared Layout
  * Injects consistent header, footer, and theme toggle across all showcase pages
+ * Uses Domma APIs throughout (now loads after Domma)
  */
 
 (function () {
+    // Storage key migration: old domma-theme → new S (domma:) prefix
+    const oldTheme = localStorage.getItem('domma-theme');
+    if (oldTheme && !S.has('theme')) {
+        S.set('theme', oldTheme);
+        localStorage.removeItem('domma-theme');
+    }
+    const oldVariant = localStorage.getItem('domma-theme-variant');
+    if (oldVariant && !S.has('theme-variant')) {
+        S.set('theme-variant', oldVariant);
+        localStorage.removeItem('domma-theme-variant');
+    }
+
     function init() {
-    // Determine the base path based on current location
-    const path = window.location.pathname;
+        // Determine the base path based on current location
+        const path = window.location.pathname;
         const isShowcaseSubpage = path.includes('/config/') || path.includes('/dom/') ||
             path.includes('/utils/') || path.includes('/dates/') ||
             path.includes('/models/') || path.includes('/elements/') ||
             path.includes('/tables/') || path.includes('/icons/') ||
             path.includes('/themes/') || path.includes('/storage/') ||
-            path.includes('/download/') || path.includes('/http/');
+            path.includes('/download/') || path.includes('/http/') ||
+            path.includes('/grid/');
         const isQuickstart = path.includes('/quickstart/');
         const isSubpage = isShowcaseSubpage;
         const base = isSubpage ? '../' : (isQuickstart ? '../showcase/' : '');
         const splashPath = isSubpage ? '../../index.html' : (isQuickstart ? '../index.html' : '../index.html');
 
-    // Get current page for active nav state
-    const currentPage = path.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index';
-    const currentSection = path.split('/').filter(Boolean).slice(-2, -1)[0] || '';
+        // Get current page for active nav state
+        const currentPage = path.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index';
+        const currentSection = path.split('/').filter(Boolean).slice(-2, -1)[0] || '';
 
-    function getNavClass(page) {
-        if (currentSection === page) return 'navbar-link active';
-        if (currentPage === page) return 'navbar-link active';
-        return 'navbar-link';
-    }
+        function getNavClass(page) {
+            if (currentSection === page) return 'navbar-link active';
+            if (currentPage === page) return 'navbar-link active';
+            return 'navbar-link';
+        }
 
         // Logo SVG (inline for theme adaptability)
         const logoSvg = `<svg class="navbar-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
@@ -39,8 +53,8 @@
         <circle cx="24" cy="24" r="3" fill="currentColor"/>
     </svg>`;
 
-    // Create navbar HTML
-    const navbar = `
+        // Create navbar HTML
+        const navbar = `
     <nav class="navbar navbar-dark">
         <div class="navbar-brand-group">
             <a href="${splashPath}" class="navbar-brand">${logoSvg} Domma</a>
@@ -53,6 +67,7 @@
             <li><a href="${base}dates/index.html" class="${getNavClass('dates')}">Dates</a></li>
             <li><a href="${base}models/index.html" class="${getNavClass('models')}">Models</a></li>
             <li><a href="${base}elements/index.html" class="${getNavClass('elements')}">Elements</a></li>
+            <li><a href="${base}grid/index.html" class="${getNavClass('grid')}">Grid</a></li>
             <li><a href="${base}tables/index.html" class="${getNavClass('tables')}">Tables</a></li>
             <li><a href="${base}storage/index.html" class="${getNavClass('storage')}">Storage</a></li>
             <li><a href="${base}http/index.html" class="${getNavClass('http')}">HTTP</a></li>
@@ -228,14 +243,14 @@
         }
     </style>`;
 
-    // Create footer HTML
-    const footer = `
+        // Create footer HTML
+        const footer = `
     <footer class="footer footer-dark text-center">
         <p class="mb-2">Domma</p>
         <p class="text-sm">&copy; Darryl Waterhouse &amp; DCBW-IT 2025</p>
     </footer>`;
 
-        // Sidebar templates (using Domma's _.template() for cleaner code)
+        // Sidebar templates (using Domma's _.template())
         const SIDEBAR_TEMPLATE = `
             <aside class="sidebar" id="sidebar">
                 <div class="sidebar-header">On This Page</div>
@@ -262,142 +277,121 @@
         // Sidebar navigation builder
         function buildSidebar() {
             // Find all section headings (supports data-section attribute or card headers)
-            const sections = document.querySelectorAll('[data-section]');
-            const headings = sections.length > 0
-                ? sections
-                : document.querySelectorAll('.card-header h2, .card-header h3');
+            const $sections = $('[data-section]');
+            const $headings = $sections.length > 0
+                ? $sections
+                : $('.card-header h2, .card-header h3');
 
-            if (headings.length < 2) return; // Don't show sidebar for pages with few sections
+            if ($headings.length < 2) return; // Don't show sidebar for pages with few sections
 
             // Generate IDs and build nav items
             const navItems = [];
-            headings.forEach((el) => {
-                let text, id, card;
+            $headings.each(function () {
+                const $el = $(this);
+                let text, id;
 
-                if (el.hasAttribute('data-section')) {
+                if ($el.attr('data-section') !== undefined) {
                     // Using data-section attribute
-                    text = el.dataset.section;
+                    text = $el.data('section');
                     id = 'section-' + text.toLowerCase()
                         .replace(/[^a-z0-9]+/g, '-')
                         .replace(/^-|-$/g, '');
-                    el.id = id;
+                    $el.attr('id', id);
                 } else {
                     // Using card header detection
-                    text = el.textContent.trim();
+                    text = $el.text().trim();
                     id = 'section-' + text.toLowerCase()
                         .replace(/[^a-z0-9]+/g, '-')
                         .replace(/^-|-$/g, '');
-                    card = el.closest('.card, section');
-                    if (card) {
-                        card.id = id;
+                    const $card = $el.closest('.card, section');
+                    if ($card.length) {
+                        $card.attr('id', id);
                     }
                 }
 
                 navItems.push({id, text});
             });
 
-            // Render sidebar HTML using Domma's template system if available
-            let sidebarHtml;
-            if (window._ && _.template) {
-                const render = _.template(SIDEBAR_TEMPLATE);
-                sidebarHtml = render({items: navItems});
-            } else {
-                // Fallback for when Domma isn't loaded yet
-                sidebarHtml = `
-                    <aside class="sidebar" id="sidebar">
-                        <div class="sidebar-header">On This Page</div>
-                        <ul class="sidebar-nav">
-                            ${navItems.map(item => `
-                                <li><a href="#${item.id}" class="sidebar-link">${item.text}</a></li>
-                            `).join('')}
-                        </ul>
-                    </aside>
-                `;
-            }
+            // Render sidebar HTML using Domma's template system
+            const render = _.template(SIDEBAR_TEMPLATE);
+            const sidebarHtml = render({items: navItems});
 
             // Toggle and overlay HTML (static, no templating needed)
             const toggleHtml = TOGGLE_TEMPLATE;
             const overlayHtml = OVERLAY_TEMPLATE;
 
             // Find the hero and content container
-            const hero = document.querySelector('.hero');
-            const container = document.querySelector('.container');
+            const $container = $('.container');
 
-            if (container) {
-                // Wrap content in showcase-layout
-                const wrapper = document.createElement('div');
-                wrapper.className = 'showcase-layout';
+            if ($container.length) {
+                // Create wrapper elements using Domma
+                const $wrapper = $('<div class="showcase-layout">');
+                const $contentWrapper = $('<div class="showcase-content">');
 
-                // Insert sidebar
-                wrapper.innerHTML = sidebarHtml;
+                // Insert sidebar into wrapper
+                $wrapper.html(sidebarHtml);
 
                 // Wrap the container
-                const contentWrapper = document.createElement('div');
-                contentWrapper.className = 'showcase-content';
-
-                // Move container into content wrapper
-                container.parentNode.insertBefore(wrapper, container);
-                contentWrapper.appendChild(container);
-                wrapper.appendChild(contentWrapper);
+                $wrapper.insertBefore($container);
+                $contentWrapper.append($container);
+                $wrapper.append($contentWrapper);
 
                 // Move footer inside content wrapper if it exists after wrapper
-                const existingFooter = document.querySelector('.footer');
-                if (existingFooter && !contentWrapper.contains(existingFooter)) {
-                    contentWrapper.appendChild(existingFooter);
+                const $existingFooter = $('.footer');
+                if ($existingFooter.length && !$contentWrapper.find('.footer').length) {
+                    $contentWrapper.append($existingFooter);
                 }
             }
 
             // Add toggle button and overlay to body
-            document.body.insertAdjacentHTML('beforeend', toggleHtml);
-            document.body.insertAdjacentHTML('beforeend', overlayHtml);
+            $('body').append(toggleHtml).append(overlayHtml);
 
-            // Initialize sidebar interactions
+            // Initialise sidebar interactions
             initSidebarToggle();
             initScrollSpy(navItems);
         }
 
         // Sidebar toggle for mobile
         function initSidebarToggle() {
-            const sidebar = document.getElementById('sidebar');
-            const toggle = document.getElementById('sidebar-toggle');
-            const overlay = document.getElementById('sidebar-overlay');
+            const $sidebar = $('#sidebar');
+            const $toggle = $('#sidebar-toggle');
+            const $overlay = $('#sidebar-overlay');
+            const $body = $('body');
 
-            if (!sidebar || !toggle || !overlay) return;
+            if (!$sidebar.length || !$toggle.length || !$overlay.length) return;
 
             function openSidebar() {
-                sidebar.classList.add('open');
-                overlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
+                $sidebar.addClass('open');
+                $overlay.addClass('active');
+                $body.css('overflow', 'hidden');
             }
 
             function closeSidebar() {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
+                $sidebar.removeClass('open');
+                $overlay.removeClass('active');
+                $body.css('overflow', '');
             }
 
-            toggle.addEventListener('click', () => {
-                if (sidebar.classList.contains('open')) {
+            $toggle.on('click', function () {
+                if ($sidebar.hasClass('open')) {
                     closeSidebar();
                 } else {
                     openSidebar();
                 }
             });
 
-            overlay.addEventListener('click', closeSidebar);
+            $overlay.on('click', closeSidebar);
 
             // Close on link click (mobile)
-            sidebar.querySelectorAll('.sidebar-link').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (window.innerWidth <= 1024) {
-                        closeSidebar();
-                    }
-                });
+            $sidebar.find('.sidebar-link').on('click', function () {
+                if (window.innerWidth <= 1024) {
+                    closeSidebar();
+                }
             });
 
             // Close on escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+            $(document).on('keydown', function (e) {
+                if (e.key === 'Escape' && $sidebar.hasClass('open')) {
                     closeSidebar();
                 }
             });
@@ -405,7 +399,7 @@
 
         // Scroll spy to highlight current section
         function initScrollSpy(navItems) {
-            const links = document.querySelectorAll('.sidebar-link');
+            const $links = $('.sidebar-link');
             const sections = navItems.map(item => document.getElementById(item.id)).filter(Boolean);
 
             if (sections.length === 0) return;
@@ -415,8 +409,9 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const id = entry.target.id;
-                        links.forEach(link => {
-                            link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+                        $links.each(function () {
+                            const $link = $(this);
+                            $link.toggleClass('active', $link.attr('href') === '#' + id);
                         });
                     }
                 });
@@ -429,9 +424,9 @@
         }
 
         // Add theme class to body if not present
-        if (!document.body.classList.contains('dm-theme-light') &&
-            !document.body.classList.contains('dm-theme-dark')) {
-            document.body.classList.add('dm-theme-light');
+        const $body = $('body');
+        if (!$body.hasClass('dm-theme-light') && !$body.hasClass('dm-theme-dark')) {
+            $body.addClass('dm-theme-light');
         }
 
         // Inject Google Fonts link (more reliable than CSS @import)
@@ -440,83 +435,73 @@
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
         `;
-        document.head.insertAdjacentHTML('afterbegin', fontLink);
+        $('head').prepend(fontLink);
 
         // Inject styles into head
-        document.head.insertAdjacentHTML('beforeend', themeStyles);
+        $('head').append(themeStyles);
 
         // Inject navbar at the start of body
-        document.body.insertAdjacentHTML('afterbegin', navbar);
+        $body.prepend(navbar);
 
         // Inject theme toggle and variant selector after navbar
-        document.body.insertAdjacentHTML('afterbegin', themeToggle);
-        document.body.insertAdjacentHTML('afterbegin', variantSelector);
+        $body.prepend(themeToggle);
+        $body.prepend(variantSelector);
 
         // Inject footer at the end of body
-        document.body.insertAdjacentHTML('beforeend', footer);
+        $body.append(footer);
 
         // Build sidebar navigation (only on showcase subpages)
         if (isShowcaseSubpage) {
             buildSidebar();
         }
 
-        // Theme toggle functionality (works even before Domma loads)
+        // Theme toggle functionality
         function updateThemeIcon() {
-            const isDark = document.body.classList.contains('dm-theme-dark');
-            document.getElementById('theme-icon-sun').style.display = isDark ? 'block' : 'none';
-            document.getElementById('theme-icon-moon').style.display = isDark ? 'none' : 'block';
+            const isDark = $body.hasClass('dm-theme-dark');
+            isDark ? $('#theme-icon-sun').show() : $('#theme-icon-sun').hide();
+            isDark ? $('#theme-icon-moon').hide() : $('#theme-icon-moon').show();
         }
 
         function toggleTheme() {
-            const isDark = document.body.classList.contains('dm-theme-dark');
-            document.body.classList.remove('dm-theme-light', 'dm-theme-dark');
-            document.body.classList.add(isDark ? 'dm-theme-light' : 'dm-theme-dark');
+            const isDark = $body.hasClass('dm-theme-dark');
+            $body.removeClass('dm-theme-light dm-theme-dark');
+            $body.addClass(isDark ? 'dm-theme-light' : 'dm-theme-dark');
 
-            // Save preference
-            try {
-                localStorage.setItem('domma-theme', isDark ? 'light' : 'dark');
-            } catch (e) {
-            }
+            // Save preference using Domma storage
+            S.set('theme', isDark ? 'light' : 'dark');
 
             updateThemeIcon();
 
             // Sync with Domma.theme if available
-            if (window.Domma && Domma.theme) {
+            if (Domma.theme) {
                 Domma.theme.set(isDark ? 'light' : 'dark');
             }
         }
 
         // Load saved theme preference
-        try {
-            const saved = localStorage.getItem('domma-theme');
-            if (saved === 'dark') {
-                document.body.classList.remove('dm-theme-light');
-                document.body.classList.add('dm-theme-dark');
-            }
-        } catch (e) {
+        const saved = S.get('theme');
+        if (saved === 'dark') {
+            $body.removeClass('dm-theme-light').addClass('dm-theme-dark');
         }
 
-        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+        $('#theme-toggle').on('click', toggleTheme);
         updateThemeIcon();
 
         // Variant selector functionality
         function setVariant(variant) {
             // Remove existing variant classes
-            document.body.classList.remove('dm-theme-ocean', 'dm-theme-forest', 'dm-theme-sunset', 'dm-theme-royal', 'dm-theme-lemon', 'dm-theme-silver', 'dm-theme-charcoal');
+            $body.removeClass('dm-theme-ocean dm-theme-forest dm-theme-sunset dm-theme-royal dm-theme-lemon dm-theme-silver dm-theme-charcoal');
 
             // Add new variant if specified
             if (variant) {
-                document.body.classList.add(`dm-theme-${variant}`);
+                $body.addClass('dm-theme-' + variant);
             }
 
-            // Save to localStorage
-            try {
-                localStorage.setItem('domma-theme-variant', variant || '');
-            } catch (e) {
-            }
+            // Save to storage
+            S.set('theme-variant', variant || '');
 
             // Sync with Domma.theme if available
-            if (window.Domma && Domma.theme) {
+            if (Domma.theme) {
                 Domma.theme.setVariant(variant || null);
             }
 
@@ -524,48 +509,32 @@
         }
 
         function updateVariantActive() {
-            let current = '';
-            try {
-                current = localStorage.getItem('domma-theme-variant') || '';
-            } catch (e) {
-            }
-
-            document.querySelectorAll('.variant-dot').forEach(dot => {
-                dot.classList.toggle('active', dot.dataset.variant === current);
+            const current = S.get('theme-variant') || '';
+            $('.variant-dot').each(function () {
+                const $dot = $(this);
+                $dot.toggleClass('active', $dot.data('variant') === current);
             });
         }
 
         // Load saved variant preference
-        try {
-            const savedVariant = localStorage.getItem('domma-theme-variant');
-            if (savedVariant) {
-                document.body.classList.add(`dm-theme-${savedVariant}`);
-            }
-        } catch (e) {
+        const savedVariant = S.get('theme-variant');
+        if (savedVariant) {
+            $body.addClass('dm-theme-' + savedVariant);
         }
 
         // Attach click handlers to variant dots
-        document.querySelectorAll('.variant-dot').forEach(dot => {
-            dot.addEventListener('click', () => setVariant(dot.dataset.variant));
+        $('.variant-dot').on('click', function () {
+            setVariant($(this).data('variant'));
         });
 
         updateVariantActive();
 
-        // Back to top - initialise when Domma is available
-        function initBackToTop() {
-            if (window.Domma && Domma.elements && Domma.elements.backToTop) {
-                Domma.elements.backToTop('body', {
-                    duration: 300,
-                    showAfter: window.innerHeight
-                });
-            }
-        }
-
-        // Try immediately, or wait for Domma to load
-        if (window.Domma) {
-            initBackToTop();
-        } else {
-            window.addEventListener('load', initBackToTop);
+        // Back to top - initialise with Domma
+        if (Domma.elements && Domma.elements.backToTop) {
+            Domma.elements.backToTop('body', {
+                duration: 300,
+                showAfter: window.innerHeight
+            });
         }
     }
 
