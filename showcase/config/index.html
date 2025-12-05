@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Config Engine - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../css/domma.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <style>
+        .hero {
+            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero code {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--dm-radius-full);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--dm-space-4);
+            margin: var(--dm-space-6) 0;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: var(--dm-space-4);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: var(--dm-space-2);
+        }
+
+        .demo-result {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
+            padding: var(--dm-space-3);
+            border-radius: var(--dm-radius-md);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            margin-top: var(--dm-space-2);
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .category-title {
+            font-weight: 600;
+            color: var(--dm-primary);
+            margin: var(--dm-space-4) 0 var(--dm-space-2);
+            padding-bottom: var(--dm-space-2);
+            border-bottom: 2px solid var(--dm-primary);
+        }
+
+        .try-section {
+            background: var(--dm-gray-100);
+            padding: var(--dm-space-4);
+            border-radius: var(--dm-radius-md);
+            margin-top: var(--dm-space-4);
+        }
+
+        .api-table {
+            width: 100%;
+            font-size: var(--dm-font-size-sm);
+        }
+
+        .api-table th {
+            text-align: left;
+            padding: var(--dm-space-2);
+            background: var(--dm-gray-100);
+        }
+
+        .api-table td {
+            padding: var(--dm-space-2);
+            border-bottom: 1px solid var(--dm-gray-200);
+            vertical-align: top;
+        }
+
+        .live-demo {
+            border: 2px dashed var(--dm-border);
+            padding: var(--dm-space-4);
+            border-radius: var(--dm-radius-md);
+            margin: var(--dm-space-4) 0;
+        }
+    </style>
+</head>
+<body>
+<script src="../js/layout.js"></script>
+
+<!-- Hero Section -->
+<div class="hero">
+    <h1>Config Engine</h1>
+    <p>Declarative component initialisation with JSON configuration. Setup once, update anytime, clean up when done.</p>
+    <p style="margin-top: 1rem;"><code>$.setup({ ... })</code> <code>$.update()</code> <code>$.config()</code> <code>$.reset()</code>
+    </p>
+</div>
+
+<div class="container py-8">
+    <!-- Key Features -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Why Config Engine?</h2>
+        </div>
+        <div class="card-body">
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">{ }</div>
+                    <h4 class="font-semibold">Declarative</h4>
+                    <p class="text-sm text-muted">Define components with JSON, not imperative code</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">&#x21bb;</div>
+                    <h4 class="font-semibold">Mutable</h4>
+                    <p class="text-sm text-muted">Update configuration at runtime with deep merging</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">&#x1F50D;</div>
+                    <h4 class="font-semibold">Inspectable</h4>
+                    <p class="text-sm text-muted">Retrieve current config for debugging</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">&#x2715;</div>
+                    <h4 class="font-semibold">Cleanable</h4>
+                    <p class="text-sm text-muted">Reset components and free resources</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Basic Setup -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Basic Setup</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Initialise multiple components at once with a single configuration object.</p>
+
+            <pre class="code-block mb-4">// Initialise components declaratively
+$.setup({
+    // Selector: configuration
+    '#my-modal': {
+        component: 'modal',
+        options: { backdrop: true, keyboard: true }
+    },
+
+    '.product-card': {
+        component: 'card',
+        options: { hover: true }
+    },
+
+    '#main-tabs': {
+        component: 'tabs',
+        options: { animation: true, activeIndex: 0 }
+    }
+});</pre>
+
+            <h4 class="category-title">Supported Components</h4>
+            <div class="grid grid-cols-3 gap-4">
+                <div><code>card</code> - Interactive cards</div>
+                <div><code>modal</code> - Dialog windows</div>
+                <div><code>tabs</code> - Tabbed panels</div>
+                <div><code>accordion</code> - Collapsible sections</div>
+                <div><code>tooltip</code> - Hover tooltips</div>
+                <div><code>carousel</code> - Image sliders</div>
+                <div><code>dropdown</code> - Dropdown menus</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Binding -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Event Binding</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Bind event handlers directly in configuration using inline functions or action objects.</p>
+
+            <pre class="code-block mb-4">$.setup({
+    // Inline function handler
+    '#submit-btn': {
+        events: {
+            click: (e, $el) => {
+                e.preventDefault();
+                $el.text('Submitted!');
+            }
+        }
+    },
+
+    // Multiple events
+    '#search-input': {
+        events: {
+            focus: (e, $el) => $el.addClass('focused'),
+            blur: (e, $el) => $el.removeClass('focused'),
+            input: (e, $el) => console.log($el.val())
+        }
+    },
+
+    // Action objects for declarative changes
+    '#theme-toggle': {
+        events: {
+            click: [
+                { toggleClass: 'active' },
+                { target: 'body', toggleClass: 'dm-theme-dark' }
+            ]
+        }
+    }
+});</pre>
+
+            <div class="try-section">
+                <h5 class="font-semibold mb-3">Try it</h5>
+                <div class="flex gap-4 items-center">
+                    <button id="demo-click-btn" class="btn btn-primary">Click me</button>
+                    <span id="demo-click-result" class="text-muted">Click count: 0</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Initial State -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Initial State</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Set initial properties like CSS, text, HTML, classes, and attributes.</p>
+
+            <pre class="code-block mb-4">$.setup({
+    '#welcome-message': {
+        initial: {
+            text: 'Welcome to Domma!',
+            css: { color: 'var(--dm-primary)', fontWeight: 'bold' },
+            addClass: 'animated fadeIn'
+        }
+    },
+
+    '#status-badge': {
+        initial: {
+            html: '&lt;span class="badge badge-success"&gt;Online&lt;/span&gt;',
+            attr: { 'data-status': 'online', 'aria-label': 'Status' }
+        }
+    },
+
+    '.disabled-section': {
+        initial: {
+            addClass: 'opacity-50',
+            attr: { 'aria-disabled': 'true' }
+        }
+    }
+});</pre>
+
+            <h4 class="category-title">Available Properties</h4>
+            <table class="api-table">
+                <tr>
+                    <th>Property</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><code>text</code></td>
+                    <td>Set text content</td>
+                    <td><code>text: 'Hello'</code></td>
+                </tr>
+                <tr>
+                    <td><code>html</code></td>
+                    <td>Set HTML content</td>
+                    <td><code>html: '&lt;b&gt;Bold&lt;/b&gt;'</code></td>
+                </tr>
+                <tr>
+                    <td><code>css</code></td>
+                    <td>Apply CSS styles</td>
+                    <td><code>css: { color: 'red' }</code></td>
+                </tr>
+                <tr>
+                    <td><code>addClass</code></td>
+                    <td>Add CSS classes</td>
+                    <td><code>addClass: 'active highlighted'</code></td>
+                </tr>
+                <tr>
+                    <td><code>removeClass</code></td>
+                    <td>Remove CSS classes</td>
+                    <td><code>removeClass: 'hidden'</code></td>
+                </tr>
+                <tr>
+                    <td><code>toggleClass</code></td>
+                    <td>Toggle CSS classes</td>
+                    <td><code>toggleClass: 'expanded'</code></td>
+                </tr>
+                <tr>
+                    <td><code>attr</code></td>
+                    <td>Set attributes</td>
+                    <td><code>attr: { disabled: true }</code></td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- Runtime Updates -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Runtime Updates</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Modify configuration after initialisation with <code>$.update()</code>. Changes are
+                deep-merged.</p>
+
+            <pre class="code-block mb-4">// Initial setup
+$.setup({
+    '#my-modal': {
+        component: 'modal',
+        options: { backdrop: true, keyboard: true }
+    }
+});
+
+// Later: update options
+$.update('#my-modal', {
+    options: { backdrop: false }  // backdrop changed, keyboard preserved
+});
+
+// Add new event handlers
+$.update('#my-modal', {
+    events: {
+        click: () => console.log('Modal clicked')
+    }
+});
+
+// Update initial state
+$.update('#status', {
+    initial: {
+        text: 'Updated status',
+        addClass: 'pulse'
+    }
+});</pre>
+
+            <div class="try-section">
+                <h5 class="font-semibold mb-3">Try it</h5>
+                <div class="flex gap-4 items-center mb-3">
+                    <div id="demo-update-box" class="p-4 rounded"
+                         style="background: var(--dm-gray-200); min-width: 150px; text-align: center;">
+                        Original State
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button id="demo-update-1" class="btn btn-outline btn-sm">Update Text</button>
+                    <button id="demo-update-2" class="btn btn-outline btn-sm">Update Style</button>
+                    <button id="demo-update-3" class="btn btn-outline btn-sm">Reset</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Configuration Inspection -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Configuration Inspection</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Retrieve current configuration for debugging or dynamic adjustments.</p>
+
+            <pre class="code-block mb-4">// Get config for specific selector
+const modalConfig = $.config('#my-modal');
+console.log(modalConfig);
+// { component: 'modal', options: { backdrop: true, keyboard: true } }
+
+// Get all configurations
+const allConfigs = $.config();
+console.log(allConfigs);
+// { '#my-modal': {...}, '.card': {...}, ... }</pre>
+
+            <div class="try-section">
+                <h5 class="font-semibold mb-3">Current Page Configurations</h5>
+                <button id="demo-inspect" class="btn btn-primary btn-sm mb-3">Inspect $.config()</button>
+                <div id="demo-inspect-result" class="demo-result" style="display: none;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cleanup -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Cleanup</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Reset configuration, destroy components, and unbind events with <code>$.reset()</code>.</p>
+
+            <pre class="code-block mb-4">// Reset specific selector
+$.reset('#my-modal');
+// - Destroys the modal component
+// - Unbinds all event handlers
+// - Clears stored configuration
+
+// Reset ALL configurations
+$.reset();
+// Resets every selector that was configured</pre>
+
+            <div class="alert alert-warning">
+                <strong>Memory Management:</strong> Always call <code>$.reset()</code> when removing configured elements
+                from the DOM to prevent memory leaks.
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-World Example -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Real-World Example</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">A complete form with validation, dynamic UI, and component integration.</p>
+
+            <pre class="code-block mb-4">$.setup({
+    // Form validation
+    '#contact-form': {
+        events: {
+            submit: (e, $form) => {
+                e.preventDefault();
+                const data = {
+                    name: $('#name').val(),
+                    email: $('#email').val()
+                };
+                console.log('Submitting:', data);
+            }
+        }
+    },
+
+    // Input validation on blur
+    '#email': {
+        events: {
+            blur: (e, $el) => {
+                const valid = $el.val().includes('@');
+                $el.removeClass('success error')
+                   .addClass(valid ? 'success' : 'error');
+            }
+        }
+    },
+
+    // Success modal
+    '#success-modal': {
+        component: 'modal',
+        options: {
+            backdrop: true,
+            onClose: () => $('#contact-form')[0].reset()
+        }
+    },
+
+    // Submit button state
+    '#submit-btn': {
+        initial: { text: 'Send Message' },
+        events: {
+            click: (e, $el) => {
+                $el.text('Sending...').attr('disabled', true);
+                setTimeout(() => {
+                    $el.text('Send Message').attr('disabled', false);
+                    Domma.elements.get('#success-modal').open();
+                }, 1500);
+            }
+        }
+    }
+});</pre>
+
+            <div class="live-demo">
+                <h5 class="font-semibold mb-3">Live Demo</h5>
+                <form id="live-form" class="grid grid-cols-2 gap-4" style="max-width: 500px;">
+                    <div class="form-group">
+                        <label class="form-label">Name</label>
+                        <input type="text" id="live-name" class="form-input" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="live-email" class="form-input" placeholder="you@example.com">
+                    </div>
+                    <div class="col-span-2">
+                        <button type="submit" id="live-submit" class="btn btn-primary">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Reference -->
+    <section class="card">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">API Reference</h2>
+        </div>
+        <div class="card-body">
+            <table class="api-table">
+                <tr>
+                    <th style="width: 200px;">Method</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>$.setup(config)</code></td>
+                    <td>Process initial configuration object. Keys are CSS selectors, values are config objects with
+                        <code>component</code>, <code>options</code>, <code>initial</code>, and <code>events</code>
+                        properties.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>$.update(selector, changes)</code></td>
+                    <td>Deep-merge changes into existing configuration. Updates component options, re-applies initial
+                        properties, and rebinds events.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>$.config(selector?)</code></td>
+                    <td>Retrieve configuration. With selector: returns config for that selector. Without: returns all
+                        configurations as object.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>$.reset(selector?)</code></td>
+                    <td>Reset configuration. Destroys components, unbinds events, clears config. Without selector:
+                        resets all.
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </section>
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+    // Demo: Click counter
+    let clickCount = 0;
+    $.setup({
+        '#demo-click-btn': {
+            events: {
+                click: (e, $el) => {
+                    clickCount++;
+                    $('#demo-click-result').text('Click count: ' + clickCount);
+                }
+            }
+        }
+    });
+
+    // Demo: Runtime updates
+    $.setup({
+        '#demo-update-box': {
+            initial: {
+                text: 'Original State',
+                css: {background: 'var(--dm-gray-200)'}
+            }
+        },
+        '#demo-update-1': {
+            events: {
+                click: () => $.update('#demo-update-box', {
+                    initial: {text: 'Text Updated!'}
+                })
+            }
+        },
+        '#demo-update-2': {
+            events: {
+                click: () => $.update('#demo-update-box', {
+                    initial: {
+                        css: {background: 'var(--dm-primary)', color: 'white'}
+                    }
+                })
+            }
+        },
+        '#demo-update-3': {
+            events: {
+                click: () => $.update('#demo-update-box', {
+                    initial: {
+                        text: 'Original State',
+                        css: {background: 'var(--dm-gray-200)', color: 'inherit'}
+                    }
+                })
+            }
+        }
+    });
+
+    // Demo: Config inspection
+    $.setup({
+        '#demo-inspect': {
+            events: {
+                click: () => {
+                    const config = $.config();
+                    const result = $('#demo-inspect-result');
+                    result.css({display: 'block'});
+                    result.text(JSON.stringify(config, (key, value) => {
+                        if (typeof value === 'function') return '[Function]';
+                        return value;
+                    }, 2));
+                }
+            }
+        }
+    });
+
+    // Demo: Live form
+    $.setup({
+        '#live-email': {
+            events: {
+                blur: (e, $el) => {
+                    const val = $el.val();
+                    if (val) {
+                        const valid = val.includes('@');
+                        $el.removeClass('success error warning')
+                            .addClass(valid ? 'success' : 'error');
+                    }
+                },
+                input: (e, $el) => {
+                    $el.removeClass('success error warning');
+                }
+            }
+        },
+        '#live-form': {
+            events: {
+                submit: (e, $form) => {
+                    e.preventDefault();
+                    const $btn = $('#live-submit');
+                    $btn.text('Sending...').attr('disabled', true);
+
+                    setTimeout(() => {
+                        $btn.text('Sent!').addClass('btn-success').removeClass('btn-primary');
+                        setTimeout(() => {
+                            $btn.text('Send Message').addClass('btn-primary').removeClass('btn-success').attr('disabled', false);
+                            $form.find('input').val('').removeClass('success error');
+                        }, 1500);
+                    }, 1000);
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

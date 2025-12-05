@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../css/domma.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <style>
+        .hero {
+            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero code {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--dm-radius-full);
+        }
+
+        .demo-result {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
+            padding: var(--dm-space-3);
+            border-radius: var(--dm-radius-md);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            margin-top: var(--dm-space-2);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: var(--dm-space-2);
+        }
+
+        .method-item {
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            padding: var(--dm-space-2);
+            background: var(--dm-gray-100);
+            border-radius: var(--dm-radius-sm);
+        }
+
+        .category-title {
+            font-weight: 600;
+            color: var(--dm-primary);
+            margin: var(--dm-space-4) 0 var(--dm-space-2);
+            padding-bottom: var(--dm-space-2);
+            border-bottom: 2px solid var(--dm-primary);
+        }
+
+        .try-section {
+            background: var(--dm-gray-100);
+            padding: var(--dm-space-4);
+            border-radius: var(--dm-radius-md);
+            margin-top: var(--dm-space-4);
+        }
+
+        .storage-inspector {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
+            border-radius: var(--dm-radius-md);
+            padding: var(--dm-space-4);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .storage-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: var(--dm-space-2) 0;
+            border-bottom: 1px solid var(--dm-gray-700);
+        }
+
+        .storage-item:last-child {
+            border-bottom: none;
+        }
+
+        .storage-key {
+            color: var(--dm-primary-light);
+            font-weight: 600;
+        }
+
+        .storage-value {
+            color: var(--dm-success-light);
+            max-width: 60%;
+            word-break: break-all;
+        }
+
+        .storage-actions {
+            display: flex;
+            gap: var(--dm-space-1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--dm-space-4);
+            margin-bottom: var(--dm-space-4);
+        }
+
+        .stat-card {
+            background: var(--dm-gray-100);
+            padding: var(--dm-space-4);
+            border-radius: var(--dm-radius-md);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: var(--dm-font-size-2xl);
+            font-weight: 700;
+            color: var(--dm-primary);
+        }
+
+        .stat-label {
+            font-size: var(--dm-font-size-sm);
+            color: var(--dm-gray-600);
+        }
+    </style>
+</head>
+<body>
+<script src="../js/layout.js"></script>
+
+<!-- Hero Section -->
+<div class="hero">
+    <h1>Storage</h1>
+    <p>Simple, prefixed localStorage with auto-serialisation and model persistence.</p>
+    <p><code>S</code> or <code>Domma.storage</code></p>
+</div>
+
+<div class="container py-8">
+
+    <!-- Basic Operations -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Basic Operations</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Store and retrieve data with automatic JSON serialisation. All keys are prefixed with
+                <code>domma:</code> to avoid collisions.</p>
+
+            <div class="method-grid mb-4">
+                <span class="method-item">get()</span>
+                <span class="method-item">set()</span>
+                <span class="method-item">remove()</span>
+                <span class="method-item">has()</span>
+                <span class="method-item">clear()</span>
+                <span class="method-item">keys()</span>
+                <span class="method-item">getAll()</span>
+                <span class="method-item">setAll()</span>
+                <span class="method-item">size()</span>
+                <span class="method-item">totalSize()</span>
+                <span class="method-item">isAvailable()</span>
+            </div>
+
+            <pre class="code-block">// Set values (auto-stringify)
+S.set('user', { name: 'Alice', role: 'admin' });
+S.set('preferences', ['dark', 'compact']);
+S.set('count', 42);
+
+// Get values (auto-parse)
+S.get('user');           // { name: 'Alice', role: 'admin' }
+S.get('preferences');    // ['dark', 'compact']
+S.get('missing', []);    // Default value if not found
+
+// Check and manage
+S.has('user');           // true
+S.keys();                // ['user', 'preferences', 'count']
+S.remove('count');
+S.clear();               // Clear only Domma keys</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="form-group">
+                            <label>Key</label>
+                            <input type="text" id="storage-key" class="form-input" value="test-key">
+                        </div>
+                        <div class="form-group">
+                            <label>Value (JSON)</label>
+                            <textarea id="storage-value" class="form-input"
+                                      rows="3">{"message": "Hello, Domma!"}</textarea>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="btn btn-primary" id="btn-set">Set</button>
+                            <button class="btn btn-secondary" id="btn-get">Get</button>
+                            <button class="btn btn-outline" id="btn-remove">Remove</button>
+                            <button class="btn btn-danger" id="btn-clear">Clear All</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="font-semibold mb-2 block">Result</label>
+                        <div class="demo-result" id="storage-result">Click a button to see result</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Model Persistence -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Model Persistence</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Models can automatically persist to localStorage. Data is saved on every change and restored
+                when the model is created.</p>
+
+            <pre class="code-block">// Create a persistent model
+const settings = M.create({
+    theme: { type: 'string', default: 'light' },
+    fontSize: { type: 'number', default: 14 },
+    notifications: { type: 'boolean', default: true }
+}, {}, { persist: 'app-settings' });
+
+// Changes auto-save to localStorage
+settings.set('theme', 'dark');
+settings.set('fontSize', 16);
+
+// On page reload, data is automatically restored!
+
+// Manual control
+settings.save();           // Force save
+settings.load();           // Force reload from storage
+settings.clearStorage();   // Remove from localStorage
+settings.reset(true);      // Reset and clear storage</pre>
+
+            <div class="try-section">
+                <h4 class="font-semibold mb-3">Try It - Persistent Settings</h4>
+                <p class="text-muted mb-4">Change these settings and refresh the page - they'll persist!</p>
+
+                <div class="grid grid-cols-3 gap-4 mb-4">
+                    <div class="form-group">
+                        <label>Theme</label>
+                        <select id="pref-theme" class="form-select">
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Font Size</label>
+                        <input type="number" id="pref-fontsize" class="form-input" min="10" max="24" value="14">
+                    </div>
+                    <div class="form-group">
+                        <label>Notifications</label>
+                        <select id="pref-notifications" class="form-select">
+                            <option value="true">Enabled</option>
+                            <option value="false">Disabled</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <button class="btn btn-outline" id="btn-reset-prefs">Reset to Defaults</button>
+                    <button class="btn btn-danger btn-sm" id="btn-clear-prefs">Clear Storage</button>
+                </div>
+
+                <div class="demo-result mt-4" id="prefs-state">Loading...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Storage Inspector -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Storage Inspector</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">View all Domma storage keys in real-time.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-keys">0</div>
+                    <div class="stat-label">Keys</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-size">0 B</div>
+                    <div class="stat-label">Total Size</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-available">-</div>
+                    <div class="stat-label">Available</div>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-2">
+                <span class="font-semibold">Stored Data</span>
+                <button class="btn btn-outline btn-sm" id="btn-refresh-inspector">Refresh</button>
+            </div>
+            <div class="storage-inspector" id="storage-inspector">
+                <p class="text-muted">No data stored</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Method Reference -->
+    <section class="card">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Method Reference</h2>
+        </div>
+        <div class="card-body">
+            <h4 class="category-title">Core Methods</h4>
+            <table class="w-full text-sm mb-6">
+                <tr>
+                    <td class="py-2 font-mono">get(key, default)</td>
+                    <td class="py-2 text-muted">Retrieve and auto-parse a value. Returns default if not found.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 font-mono">set(key, value)</td>
+                    <td class="py-2 text-muted">Store a value with auto-stringify. Returns true if successful.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 font-mono">remove(key)</td>
+                    <td class="py-2 text-muted">Remove a key from storage.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 font-mono">has(key)</td>
+                    <td class="py-2 text-muted">Check if a key exists.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 font-mono">clear()</td>
+                    <td class="py-2 text-muted">Clear all Domma-prefixed keys. Returns count of cleared keys.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 font-mono">keys()</td>
+                    <td class="py-2 text-muted">List all Domma keys (without prefix).</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Utility Methods</h4>
+            <table class="w-full text-sm mb-6">
+                <tr>
+                    <td class="py-2 font-mono">getAll()</td>
+                    <td class="py-2 text-muted">Get all stored data as an object.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 font-mono">setAll(data)</td>
+                    <td class="py-2 text-muted">Set multiple values at once from an object.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 font-mono">size(key)</td>
+                    <td class="py-2 text-muted">Get size of a stored value in bytes.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 font-mono">totalSize()</td>
+                    <td class="py-2 text-muted">Get total size of all Domma storage in bytes.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 font-mono">isAvailable()</td>
+                    <td class="py-2 text-muted">Check if localStorage is available.</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Model Persistence Methods</h4>
+            <table class="w-full text-sm">
+                <tr>
+                    <td class="py-2 font-mono">model.save()</td>
+                    <td class="py-2 text-muted">Manually save model to localStorage.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 font-mono">model.load()</td>
+                    <td class="py-2 text-muted">Manually load model from localStorage.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 font-mono">model.clearStorage()</td>
+                    <td class="py-2 text-muted">Remove model data from localStorage.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 font-mono">model.isPersisted()</td>
+                    <td class="py-2 text-muted">Check if model has persistence enabled.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 font-mono">model.getPersistKey()</td>
+                    <td class="py-2 text-muted">Get the persistence key.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 font-mono">model.reset(true)</td>
+                    <td class="py-2 text-muted">Reset model and clear storage.</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+    // Initialise theme
+    Domma.theme.init({autoDetect: true});
+
+    // ============================================
+    // Basic Storage Demo
+    // ============================================
+
+    const $result = $('#storage-result');
+
+    function showResult(data) {
+        $result.text(JSON.stringify(data, null, 2));
+    }
+
+    $('#btn-set').on('click', function () {
+        const key = $('#storage-key').val();
+        let value;
+        try {
+            value = JSON.parse($('#storage-value').val());
+        } catch (e) {
+            value = $('#storage-value').val();
+        }
+
+        const success = S.set(key, value);
+        showResult({action: 'set', key, success, value});
+        refreshInspector();
+    });
+
+    $('#btn-get').on('click', function () {
+        const key = $('#storage-key').val();
+        const value = S.get(key, null);
+        showResult({action: 'get', key, value, found: value !== null});
+    });
+
+    $('#btn-remove').on('click', function () {
+        const key = $('#storage-key').val();
+        const success = S.remove(key);
+        showResult({action: 'remove', key, success});
+        refreshInspector();
+    });
+
+    $('#btn-clear').on('click', function () {
+        const count = S.clear();
+        showResult({action: 'clear', keysCleared: count});
+        refreshInspector();
+        updatePrefsDisplay();
+    });
+
+    // ============================================
+    // Model Persistence Demo
+    // ============================================
+
+    const prefsModel = M.create({
+        theme: {type: 'string', default: 'light'},
+        fontSize: {type: 'number', default: 14, min: 10, max: 24},
+        notifications: {type: 'boolean', default: true}
+    }, {}, {persist: 'demo-prefs'});
+
+    function updatePrefsDisplay() {
+        const data = prefsModel.toJSON();
+        $('#prefs-state').text(JSON.stringify(data, null, 2));
+
+        // Update form inputs to match model
+        $('#pref-theme').val(data.theme);
+        $('#pref-fontsize').val(data.fontSize);
+        $('#pref-notifications').val(String(data.notifications));
+    }
+
+    // Bind form inputs to model
+    $('#pref-theme').on('change', function () {
+        prefsModel.set('theme', $(this).val());
+        updatePrefsDisplay();
+        refreshInspector();
+    });
+
+    $('#pref-fontsize').on('input', function () {
+        const val = parseInt($(this).val(), 10);
+        if (val >= 10 && val <= 24) {
+            prefsModel.set('fontSize', val);
+            updatePrefsDisplay();
+            refreshInspector();
+        }
+    });
+
+    $('#pref-notifications').on('change', function () {
+        prefsModel.set('notifications', $(this).val() === 'true');
+        updatePrefsDisplay();
+        refreshInspector();
+    });
+
+    $('#btn-reset-prefs').on('click', function () {
+        prefsModel.reset();
+        updatePrefsDisplay();
+        refreshInspector();
+    });
+
+    $('#btn-clear-prefs').on('click', function () {
+        prefsModel.reset(true);
+        updatePrefsDisplay();
+        refreshInspector();
+    });
+
+    // Initial display
+    updatePrefsDisplay();
+
+    // ============================================
+    // Storage Inspector
+    // ============================================
+
+    function formatBytes(bytes) {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function refreshInspector() {
+        const keys = S.keys();
+        const totalSize = S.totalSize();
+        const available = S.isAvailable();
+
+        // Update stats
+        $('#stat-keys').text(keys.length);
+        $('#stat-size').text(formatBytes(totalSize));
+        $('#stat-available').text(available ? 'Yes' : 'No');
+
+        // Update inspector
+        const $inspector = $('#storage-inspector');
+
+        if (keys.length === 0) {
+            $inspector.html('<p class="text-muted">No data stored</p>');
+            return;
+        }
+
+        let html = '';
+        keys.forEach(key => {
+            const value = S.get(key);
+            const displayValue = JSON.stringify(value);
+            html += `
+                <div class="storage-item">
+                    <span class="storage-key">${_.escape(key)}</span>
+                    <span class="storage-value">${_.escape(displayValue)}</span>
+                </div>
+            `;
+        });
+
+        $inspector.html(html);
+    }
+
+    $('#btn-refresh-inspector').on('click', refreshInspector);
+
+    // Initial inspector load
+    refreshInspector();
+</script>
+</body>
+</html>

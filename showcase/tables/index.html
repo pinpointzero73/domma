@@ -205,12 +205,35 @@ const table = Domma.tables.create('#my-table', {
                     <td>function</td>
                     <td>Custom cell renderer (val, row) => html</td>
                 </tr>
-                <tr>
-                    <td><code>width</code></td>
-                    <td>string</td>
-                    <td>Column width (e.g., '100px', '20%')</td>
-                </tr>
             </table>
+
+            <h4 class="category-title">Custom Render Examples</h4>
+            <p class="mb-4">Use the <code>render</code> function to transform cell values — perfect for date formatting,
+                badges, or custom HTML.</p>
+            <pre class="code-block mb-4">// Format dates using Domma's date module
+{
+    key: 'joined',
+    title: 'Joined',
+    sortable: true,
+    render: (val) => D(val).format('DD/MM/YYYY')  // 15/01/2024
+}
+
+// Status badge with conditional styling
+{
+    key: 'status',
+    title: 'Status',
+    render: (val) => `&lt;span class="badge ${val === 'Active' ? 'badge-success' : 'badge-secondary'}"&gt;${val}&lt;/span&gt;`
+}
+
+// Action buttons with row data
+{
+    key: 'actions',
+    title: '',
+    render: (val, row) => `&lt;button data-id="${row.id}"&gt;Edit ${row.name}&lt;/button&gt;`
+}</pre>
+
+            <p class="text-sm text-muted mb-4"><strong>Tip:</strong> Use <code>width: '100px'</code> or <code>width:
+                '20%'</code> to set column widths.</p>
 
             <h4 class="category-title">Table Options</h4>
             <table class="option-table">
@@ -267,7 +290,8 @@ const table = Domma.tables.create('#my-table', {
         </div>
         <div class="card-body">
             <p class="mb-4 text-muted">This demo includes the <strong>Export Panel</strong> — use the Copy/Download
-                toggle to switch between copying to clipboard or downloading files.</p>
+                toggle to switch between copying to clipboard or downloading files. Note the <strong>Joined</strong>
+                column uses a custom <code>render</code> function to format dates as DD/MM/YYYY.</p>
 
             <div class="demo-area mb-4">
                 <div id="demo-table"></div>
@@ -850,7 +874,12 @@ table.once('render', () => {
                 title: 'Status',
                 render: (val) => `<span class="badge ${val === 'Active' ? 'badge-success' : 'badge-secondary'}">${val}</span>`
             },
-            {key: 'joined', title: 'Joined', sortable: true}
+            {
+                key: 'joined',
+                title: 'Joined',
+                sortable: true,
+                render: (val) => D(val).format('DD/MM/YYYY')
+            }
         ],
         pagination: true,
         pageSize: 10,

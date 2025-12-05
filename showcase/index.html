@@ -8,33 +8,6 @@
     <link rel="stylesheet" href="css/domma.css">
     <link rel="stylesheet" href="../dist/themes/domma-themes.css">
     <style>
-        .theme-toggle {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            padding: 0.5rem;
-            background: var(--dm-surface);
-            border: 1px solid var(--dm-border);
-            border-radius: var(--dm-radius-full);
-            cursor: pointer;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            transition: all 0.2s ease;
-        }
-
-        .theme-toggle:hover {
-            background: var(--dm-hover-bg);
-        }
-
-        .theme-toggle svg {
-            width: 20px;
-            height: 20px;
-        }
-
         .hero {
             background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
             color: white;
@@ -84,8 +57,13 @@
         }
 
         .namespace-icon {
-            font-size: 2.5rem;
             margin-bottom: var(--dm-space-4);
+            color: var(--dm-primary);
+        }
+
+        .namespace-icon svg {
+            width: 48px;
+            height: 48px;
         }
 
         .feature-list {
@@ -137,21 +115,6 @@
     </style>
 </head>
 <body class="dm-theme-light">
-<button class="theme-toggle" id="theme-toggle" title="Toggle theme"></button>
-
-<nav class="navbar navbar-dark">
-    <a href="/index.html" class="navbar-brand">Domma</a>
-    <ul class="navbar-nav">
-        <li><a href="dom/index.html" class="navbar-link">DOM</a></li>
-        <li><a href="utils/index.html" class="navbar-link">Utils</a></li>
-        <li><a href="dates/index.html" class="navbar-link">Dates</a></li>
-        <li><a href="models/index.html" class="navbar-link">Models</a></li>
-        <li><a href="elements/index.html" class="navbar-link">Elements</a></li>
-        <li><a href="tables/index.html" class="navbar-link">Tables</a></li>
-        <li><a href="icons/index.html" class="navbar-link">Icons</a></li>
-        <li><a href="themes/index.html" class="navbar-link">Themes</a></li>
-    </ul>
-</nav>
 
 <section class="hero">
     <h1 class="hero-title">Domma</h1>
@@ -172,41 +135,6 @@
 </section>
 
 <main class="container py-8">
-    <!-- Mutable Configuration Highlight -->
-    <!--    <section class="mb-8">-->
-    <!--        <div class="card"-->
-    <!--             style="background: linear-gradient(135deg, var(&#45;&#45;dm-primary) 0%, var(&#45;&#45;dm-primary-dark) 100%); color: white; border: none;">-->
-    <!--            <div class="card-body" style="padding: 2rem;">-->
-    <!--                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">-->
-    <!--                    <h2 style="margin: 0; font-size: 1.75rem;">Mutable Configuration</h2>-->
-    <!--                    <span style="background: rgba(255,255,255,0.25); padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">New</span>-->
-    <!--                </div>-->
-    <!--                <p style="opacity: 0.9; margin-bottom: 1.5rem; max-width: 600px;">-->
-    <!--                    Configure once, update anytime. The config engine now supports runtime updates, inspection, and-->
-    <!--                    cleanup.-->
-    <!--                </p>-->
-    <!--                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">-->
-    <!--                    <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 1rem;">-->
-    <!--                        <code style="color: rgba(255,255,255,0.6);">// Initial setup</code><br>-->
-    <!--                        <code>$.setup({ '#modal': { component: 'modal', options: { backdrop: true } } });</code>-->
-    <!--                    </div>-->
-    <!--                    <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 1rem;">-->
-    <!--                        <code style="color: rgba(255,255,255,0.6);">// Update options at runtime</code><br>-->
-    <!--                        <code>$.update('#modal', { options: { backdrop: false } });</code>-->
-    <!--                    </div>-->
-    <!--                    <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 1rem;">-->
-    <!--                        <code style="color: rgba(255,255,255,0.6);">// Inspect current config</code><br>-->
-    <!--                        <code>$.config('#modal');</code>-->
-    <!--                    </div>-->
-    <!--                    <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 1rem;">-->
-    <!--                        <code style="color: rgba(255,255,255,0.6);">// Reset and cleanup</code><br>-->
-    <!--                        <code>$.reset('#modal');</code>-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </section>-->
-
     <section class="mb-8">
         <div class="section-title">
             <h2>Namespaces</h2>
@@ -214,11 +142,30 @@
         </div>
 
         <div class="grid grid-cols-1 gap-6" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+            <!-- Config -->
+            <a href="config/index.html" class="card card-hover namespace-card"
+               style="text-decoration: none; color: inherit;">
+                <div class="card-body">
+                    <div class="namespace-icon" data-icon="settings"></div>
+                    <h3 class="card-title">Config</h3>
+                    <p class="card-text">Declarative configuration engine for component initialisation.</p>
+                    <ul class="feature-list">
+                        <li>JSON-based setup</li>
+                        <li>Auto component init</li>
+                        <li>Runtime updates</li>
+                        <li>Lifecycle management</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <code>$.setup({ '#modal': { component: 'modal' } })</code>
+                </div>
+            </a>
+
             <!-- DOM -->
             <a href="dom/index.html" class="card card-hover namespace-card"
                style="text-decoration: none; color: inherit;">
                 <div class="card-body">
-                    <div class="namespace-icon">$</div>
+                    <div class="namespace-icon" data-icon="file-code"></div>
                     <h3 class="card-title">DOM</h3>
                     <p class="card-text">jQuery-compatible DOM manipulation with a chainable API.</p>
                     <ul class="feature-list">
@@ -237,7 +184,7 @@
             <a href="utils/index.html" class="card card-hover namespace-card"
                style="text-decoration: none; color: inherit;">
                 <div class="card-body">
-                    <div class="namespace-icon">_</div>
+                    <div class="namespace-icon" data-icon="grid"></div>
                     <h3 class="card-title">Utils</h3>
                     <p class="card-text">Lodash-compatible utility functions for common operations.</p>
                     <ul class="feature-list">
@@ -256,7 +203,7 @@
             <a href="dates/index.html" class="card card-hover namespace-card"
                style="text-decoration: none; color: inherit;">
                 <div class="card-body">
-                    <div class="namespace-icon">D</div>
+                    <div class="namespace-icon" data-icon="calendar"></div>
                     <h3 class="card-title">Dates</h3>
                     <p class="card-text">Moment.js-style chainable date manipulation.</p>
                     <ul class="feature-list">
@@ -275,7 +222,7 @@
             <a href="models/index.html" class="card card-hover namespace-card"
                style="text-decoration: none; color: inherit;">
                 <div class="card-body">
-                    <div class="namespace-icon">M</div>
+                    <div class="namespace-icon" data-icon="database"></div>
                     <h3 class="card-title">Models</h3>
                     <p class="card-text">Reactive data models with pub/sub events and validation.</p>
                     <ul class="feature-list">
@@ -294,7 +241,7 @@
             <a href="elements/index.html" class="card card-hover namespace-card"
                style="text-decoration: none; color: inherit;">
                 <div class="card-body">
-                    <div class="namespace-icon">UI</div>
+                    <div class="namespace-icon" data-icon="list"></div>
                     <h3 class="card-title">Elements</h3>
                     <p class="card-text">Ready-to-use UI components with JavaScript interactivity.</p>
                     <ul class="feature-list">
@@ -313,7 +260,7 @@
             <a href="tables/index.html" class="card card-hover namespace-card"
                style="text-decoration: none; color: inherit;">
                 <div class="card-body">
-                    <div class="namespace-icon">TBL</div>
+                    <div class="namespace-icon" data-icon="clipboard-list"></div>
                     <h3 class="card-title">Tables</h3>
                     <p class="card-text">DataTable-like functionality for interactive data grids.</p>
                     <ul class="feature-list">
@@ -328,11 +275,30 @@
                 </div>
             </a>
 
+            <!-- Storage -->
+            <a href="storage/index.html" class="card card-hover namespace-card"
+               style="text-decoration: none; color: inherit;">
+                <div class="card-body">
+                    <div class="namespace-icon" data-icon="hard-drive"></div>
+                    <h3 class="card-title">Storage</h3>
+                    <p class="card-text">localStorage wrapper with auto-serialisation and model persistence.</p>
+                    <ul class="feature-list">
+                        <li>Auto JSON serialisation</li>
+                        <li>Prefixed keys</li>
+                        <li>Model persistence</li>
+                        <li>Graceful fallbacks</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <code>S.set('user', { name: 'Alice' })</code>
+                </div>
+            </a>
+
             <!-- Icons -->
             <a href="icons/index.html" class="card card-hover namespace-card"
                style="text-decoration: none; color: inherit;">
                 <div class="card-body">
-                    <div class="namespace-icon">SVG</div>
+                    <div class="namespace-icon" data-icon="star"></div>
                     <h3 class="card-title">Icons</h3>
                     <p class="card-text">Comprehensive SVG icon library with 100+ icons.</p>
                     <ul class="feature-list">
@@ -351,7 +317,7 @@
             <a href="themes/index.html" class="card card-hover namespace-card"
                style="text-decoration: none; color: inherit;">
                 <div class="card-body">
-                    <div class="namespace-icon">THM</div>
+                    <div class="namespace-icon" data-icon="sun"></div>
                     <h3 class="card-title">Themes</h3>
                     <p class="card-text">Complete theming system with light/dark modes and colour variants.</p>
                     <ul class="feature-list">
@@ -388,9 +354,13 @@ const grouped = _.groupBy(users, 'department');
 // Dates (Moment-style)
 const nextWeek = D().add(7, 'days').format('YYYY-MM-DD');
 
-// Models (Reactive)
-const user = M.create({ name: { type: 'string' } });
-M.bind(user, 'name', '#name-input', { twoWay: true });</pre>
+// Models (Reactive with persistence)
+const user = M.create({ name: { type: 'string' } }, {}, { persist: 'user' });
+M.bind(user, 'name', '#name-input', { twoWay: true });
+
+// Storage (localStorage)
+S.set('prefs', { theme: 'dark' });
+S.get('prefs');  // { theme: 'dark' }</pre>
 
             <p class="mb-4"><strong>3. Or use the config engine for declarative setup</strong></p>
             <pre class="code-block">$.setup({
@@ -432,28 +402,11 @@ M.bind(user, 'name', '#name-input', { twoWay: true });</pre>
     </section>
 </main>
 
-<footer class="footer footer-dark text-center">
-    <p class="mb-2">Domma</p>
-    <p class="text-sm">&copy; DCBW-IT 2025</p>
-</footer>
-
+<script src="js/layout.js"></script>
 <script src="../dist/domma.min.js"></script>
 <script>
-    // Initialise theme
-    Domma.theme.init({autoDetect: true});
-
-    // Update toggle button icon
-    function updateToggleIcon() {
-        $('#theme-toggle').html(Domma.icons.html(Domma.theme.isDark() ? 'sun' : 'moon', {size: 20}));
-    }
-
-    // Toggle handler
-    $('#theme-toggle').on('click', () => {
-        Domma.theme.toggle();
-        updateToggleIcon();
-    });
-
-    updateToggleIcon();
+    // Scan and inject icons
+    Domma.icons.scan();
 </script>
 </body>
 </html>

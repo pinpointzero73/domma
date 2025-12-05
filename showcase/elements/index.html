@@ -91,8 +91,8 @@
 <!-- Hero Section -->
 <div class="hero">
     <h1>Elements</h1>
-    <p>Ready-to-use UI components with JavaScript interactivity. Cards, Modals, Tabs, Accordions, Tooltips, and
-        Carousels.</p>
+    <p>Ready-to-use UI components with JavaScript interactivity. Cards, Modals, Tabs, Accordions, Tooltips, Carousels,
+        and themed Forms.</p>
     <p><code>Domma.elements</code></p>
 </div>
 
@@ -985,6 +985,211 @@ carousel.getIndex();       // Get current index
         </div>
     </section>
 
+    <!-- Forms -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Forms</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-6">Comprehensive form components with theme support. All elements adapt to light/dark modes and
+                colour variants.</p>
+
+            <!-- Checkboxes & Radios -->
+            <h4 class="category-title">Custom Checkboxes & Radios</h4>
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                    <p class="text-sm text-muted mb-3">Checkboxes</p>
+                    <div class="flex flex-col gap-2">
+                        <label class="form-check">
+                            <input type="checkbox" class="form-check-input" checked>
+                            <span class="form-check-label">Checked option</span>
+                        </label>
+                        <label class="form-check">
+                            <input type="checkbox" class="form-check-input">
+                            <span class="form-check-label">Unchecked option</span>
+                        </label>
+                        <label class="form-check">
+                            <input type="checkbox" class="form-check-input" disabled>
+                            <span class="form-check-label">Disabled option</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-sm text-muted mb-3">Radio buttons</p>
+                    <div class="flex flex-col gap-2">
+                        <label class="form-check">
+                            <input type="radio" name="demo-radio" class="form-check-input" checked>
+                            <span class="form-check-label">Option one</span>
+                        </label>
+                        <label class="form-check">
+                            <input type="radio" name="demo-radio" class="form-check-input">
+                            <span class="form-check-label">Option two</span>
+                        </label>
+                        <label class="form-check">
+                            <input type="radio" name="demo-radio" class="form-check-input" disabled>
+                            <span class="form-check-label">Disabled option</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toggle Switches -->
+            <h4 class="category-title">Toggle Switches</h4>
+            <div class="flex flex-wrap gap-6 mb-6">
+                <label class="form-switch">
+                    <input type="checkbox" class="form-switch-input" checked>
+                    <span class="form-switch-label">Enabled</span>
+                </label>
+                <label class="form-switch">
+                    <input type="checkbox" class="form-switch-input">
+                    <span class="form-switch-label">Disabled</span>
+                </label>
+                <label class="form-switch">
+                    <input type="checkbox" class="form-switch-input" disabled>
+                    <span class="form-switch-label">Inactive</span>
+                </label>
+            </div>
+
+            <!-- Input Sizes -->
+            <h4 class="category-title">Input Sizes</h4>
+            <div class="flex flex-col gap-3 mb-6" style="max-width: 400px;">
+                <input type="text" class="form-input form-input-sm" placeholder="Small input">
+                <input type="text" class="form-input" placeholder="Default input">
+                <input type="text" class="form-input form-input-lg" placeholder="Large input">
+            </div>
+
+            <!-- Validation States -->
+            <h4 class="category-title">Validation States</h4>
+            <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="form-group">
+                    <label class="form-label">Success</label>
+                    <input type="text" class="form-input success" value="Valid input">
+                    <p class="form-success">Looks good!</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Warning</label>
+                    <input type="text" class="form-input warning" value="Check this">
+                    <p class="form-warning">Please review this field</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Error</label>
+                    <input type="text" class="form-input error" value="Invalid">
+                    <p class="form-error">This field is required</p>
+                </div>
+            </div>
+
+            <!-- Input Groups -->
+            <h4 class="category-title">Input Groups</h4>
+            <div class="flex flex-col gap-4 mb-6" style="max-width: 500px;">
+                <div class="input-group">
+                    <span class="input-group-text">@</span>
+                    <input type="text" class="form-input" placeholder="Username">
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-input" placeholder="Search...">
+                    <button class="btn btn-primary">Search</button>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" class="form-input" placeholder="0.00">
+                    <span class="input-group-text">.00</span>
+                </div>
+            </div>
+
+            <!-- Range Slider -->
+            <h4 class="category-title">Range Slider</h4>
+            <div class="mb-6" style="max-width: 400px;">
+                <label class="form-label">Volume: <span id="range-value">50</span>%</label>
+                <input type="range" class="form-range" min="0" max="100" value="50" id="demo-range">
+            </div>
+
+            <!-- Colour & File Inputs -->
+            <h4 class="category-title">Specialised Inputs</h4>
+            <div class="grid grid-cols-3 gap-6 mb-6">
+                <div class="form-group">
+                    <label class="form-label">Colour Picker</label>
+                    <input type="color" class="form-color" value="#6495ED">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">File Upload</label>
+                    <div class="form-file">
+                        <input type="file" class="form-file-input" id="demo-file">
+                        <label class="form-file-label" for="demo-file">Choose file...</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Search</label>
+                    <input type="search" class="form-input form-search" placeholder="Search...">
+                </div>
+            </div>
+
+            <!-- Date/Time Inputs -->
+            <h4 class="category-title">Date & Time</h4>
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Time</label>
+                    <input type="time" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Datetime</label>
+                    <input type="datetime-local" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Month</label>
+                    <input type="month" class="form-input">
+                </div>
+            </div>
+
+            <!-- Floating Labels -->
+            <h4 class="category-title">Floating Labels</h4>
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="form-floating">
+                    <input type="text" class="form-input" id="float-name" placeholder=" ">
+                    <label class="form-label" for="float-name">Full Name</label>
+                </div>
+                <div class="form-floating">
+                    <input type="email" class="form-input" id="float-email" placeholder=" ">
+                    <label class="form-label" for="float-email">Email Address</label>
+                </div>
+            </div>
+
+            <!-- Code Example -->
+            <h4 class="category-title">Usage</h4>
+            <pre class="code-block">&lt;!-- Custom Checkbox --&gt;
+&lt;label class="form-check"&gt;
+    &lt;input type="checkbox" class="form-check-input"&gt;
+    &lt;span class="form-check-label"&gt;Accept terms&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;!-- Toggle Switch --&gt;
+&lt;label class="form-switch"&gt;
+    &lt;input type="checkbox" class="form-switch-input"&gt;
+    &lt;span class="form-switch-label"&gt;Dark mode&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;!-- Input Group --&gt;
+&lt;div class="input-group"&gt;
+    &lt;span class="input-group-text"&gt;@&lt;/span&gt;
+    &lt;input type="text" class="form-input" placeholder="Username"&gt;
+&lt;/div&gt;
+
+&lt;!-- Validation --&gt;
+&lt;input type="text" class="form-input success"&gt;
+&lt;input type="text" class="form-input warning"&gt;
+&lt;input type="text" class="form-input error"&gt;
+
+&lt;!-- Floating Label --&gt;
+&lt;div class="form-floating"&gt;
+    &lt;input type="text" class="form-input" placeholder=" "&gt;
+    &lt;label class="form-label"&gt;Label&lt;/label&gt;
+&lt;/div&gt;</pre>
+        </div>
+    </section>
+
     <!-- Config Integration -->
     <section class="card mb-6">
         <div class="card-header">
@@ -1226,6 +1431,17 @@ $.setup({
         $(this).siblings('.tooltip-content').addClass('active');
     }).on('blur', function () {
         $(this).siblings('.tooltip-content').removeClass('active');
+    });
+
+    // Range slider demo
+    $('#demo-range').on('input', function () {
+        $('#range-value').text(this.value);
+    });
+
+    // File input demo - show filename
+    $('#demo-file').on('change', function () {
+        const fileName = this.files[0]?.name || 'Choose file...';
+        $(this).siblings('.form-file-label').text(fileName);
     });
 </script>
 </body>

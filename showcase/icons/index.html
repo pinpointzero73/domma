@@ -219,28 +219,6 @@
             line-height: 1.2;
         }
 
-        .copy-toast {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            padding: 0.875rem 1.5rem;
-            background: var(--dm-gray-900);
-            color: white;
-            border-radius: var(--dm-radius-full);
-            font-size: var(--dm-text-sm);
-            font-weight: 500;
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            box-shadow: var(--dm-shadow-xl);
-        }
-
-        .copy-toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
         .no-results {
             text-align: center;
             padding: 4rem 2rem;
@@ -397,8 +375,6 @@
     </section>
 </main>
 
-<div class="copy-toast" id="copy-toast">Copied to clipboard!</div>
-
 <script src="../../dist/domma.min.js"></script>
 <script>
     // Initialise theme
@@ -503,15 +479,11 @@
     function copyToClipboard(name) {
         const text = `data-icon="${name}"`;
         navigator.clipboard.writeText(text).then(() => {
-            showToast(`Copied: ${name}`);
+            Domma.elements.toast.success(`Copied: ${name}`, {
+                position: 'bottom-center',
+                duration: 2000
+            });
         });
-    }
-
-    // Show toast notification
-    function showToast(message) {
-        const toast = $('#copy-toast');
-        toast.text(message).addClass('show');
-        setTimeout(() => toast.removeClass('show'), 2000);
     }
 
     // Search handler with debounce
