@@ -2,18 +2,18 @@
   "name": "domma",
   "version": "1.0.0",
   "description": "Dynamic Object Manipulation & Modeling API - A complete front-end toolkit.",
-  "main": "dist/domma.min.js",
-  "module": "dist/domma.esm.js",
-  "types": "types/index.d.ts",
+  "main": "public/dist/domma.min.js",
+  "module": "public/dist/domma.esm.js",
+  "types": "assets/types/index.d.ts",
   "type": "module",
   "scripts": {
-    "dev": "live-server --port=3000 --open=/index.html",
+    "dev": "live-server public --port=3000 --open=/index.html",
     "build": "node scripts/build-info.js && rollup -c && npm run build:css",
     "build:js": "rollup -c",
     "build:css": "node scripts/build-css.js",
     "build:info": "node scripts/build-info.js",
     "test": "node tests/test.js",
-    "showcase": "live-server --port=3000 --open=/showcase/index.html"
+    "showcase": "live-server public --port=3000 --open=/showcase/index.html"
   },
   "keywords": [
     "dom",
@@ -28,7 +28,7 @@
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-replace": "^6.0.3",
     "@rollup/plugin-terser": "^0.4.4",
-    "live-server": "^1.2.2",
+    "live-server": "^1.2.0",
     "rollup": "^4.28.0",
     "rollup-plugin-obfuscator": "^1.1.0"
   }

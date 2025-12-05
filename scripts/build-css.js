@@ -25,17 +25,17 @@ const getGitCommit = () => {
 
 // Theme CSS files in order
 const themeFiles = [
-    'assets/themes/_base.css',
-    'assets/themes/light.css',
-    'assets/themes/dark.css',
-    'assets/themes/ocean.css',
-    'assets/themes/forest.css',
-    'assets/themes/sunset.css',
-    'assets/themes/royal.css',
-    'assets/themes/lemon.css',
-    'assets/themes/silver.css',
-    'assets/themes/charcoal.css',
-    'assets/themes/christmas.css'
+    'public/assets/themes/_base.css',
+    'public/assets/themes/light.css',
+    'public/assets/themes/dark.css',
+    'public/assets/themes/ocean.css',
+    'public/assets/themes/forest.css',
+    'public/assets/themes/sunset.css',
+    'public/assets/themes/royal.css',
+    'public/assets/themes/lemon.css',
+    'public/assets/themes/silver.css',
+    'public/assets/themes/charcoal.css',
+    'public/assets/themes/christmas.css'
 ];
 
 // Build banner
@@ -62,7 +62,7 @@ for (const file of themeFiles) {
 }
 
 // Ensure output directory exists
-const outputDir = join(rootDir, 'dist/themes');
+const outputDir = join(rootDir, 'public/dist/themes');
 if (!existsSync(outputDir)) {
     mkdirSync(outputDir, {recursive: true});
 }

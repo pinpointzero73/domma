@@ -42,7 +42,7 @@ const buildInfo = {
 };
 
 // Ensure dist directory exists
-const distDir = join(rootDir, 'dist');
+const distDir = join(rootDir, 'public/dist');
 if (!existsSync(distDir)) {
     mkdirSync(distDir, {recursive: true});
 }

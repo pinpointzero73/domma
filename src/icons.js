@@ -3,7 +3,7 @@
  * Provides SVG icon rendering, injection, and management
  */
 
-import {categories, icons as defaultIcons} from '../assets/icons/index.js';
+import {categories, icons as defaultIcons} from '../public/assets/icons/index.js';
 
 const NAMESPACE = 'http://www.w3.org/2000/svg';
 

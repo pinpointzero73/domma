@@ -54,14 +54,14 @@ export default {
     input: 'src/index.js',
     output: [
         {
-            file: 'dist/domma.min.js',
+            file: 'public/dist/domma.min.js',
             format: 'umd',
             name: 'Domma',
             sourcemap: false,
             banner
         },
         {
-            file: 'dist/domma.esm.js',
+            file: 'public/dist/domma.esm.js',
             format: 'es',
             sourcemap: false,
             banner
