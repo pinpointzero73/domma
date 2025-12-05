@@ -242,6 +242,66 @@ dist/             # Built bundles (UMD + ESM)
 
 ~160KB minified, includes all namespaces, zero external dependencies.
 
+## CSS Grid System
+
+Domma provides both modern CSS Grid utilities and Bootstrap-style flexbox grid.
+
+### Bootstrap-Style Row/Column Grid
+
+12-column flexbox grid with mobile-first stacking (columns stack below 576px):
+
+```html
+<div class="container">
+    <div class="row">
+        <div class="col-4">Column 1</div>
+        <div class="col-4">Column 2</div>
+        <div class="col-4">Column 3</div>
+    </div>
+</div>
+```
+
+**Classes:**
+
+- **Row**: `.row`, `.row.no-gutters`
+- **Columns**: `.col` (equal), `.col-auto`, `.col-1` through `.col-12`
+- **Offsets**: `.offset-1` through `.offset-11`
+- **Alignment**: `.row.justify-center`, `.row.align-center`, etc.
+- **Order**: `.order-first`, `.order-last`, `.order-1` through `.order-12`
+- **Gap**: `.row.gap-1` through `.row.gap-6`
+
+### CSS Grid (Tailwind-style)
+
+```html
+<div class="grid grid-cols-3 gap-4">
+    <div>Item 1</div>
+    <div class="col-span-2">Item 2 (spans 2)</div>
+</div>
+```
+
+**Classes:**
+
+- **Grid**: `.grid`
+- **Columns**: `.grid-cols-1` through `.grid-cols-12`
+- **Span**: `.col-span-1` through `.col-span-6`, `.col-span-full`
+
+### Containers
+
+```css
+.container      /* max-width: 1200px, centered */
+.container-sm   /* 640px */
+.container-md   /* 768px */
+.container-lg   /* 1024px */
+.container-xl   /* 1280px */
+```
+
+### Standalone Usage
+
+Grid system is available as a standalone file:
+
+```html
+<link rel="stylesheet" href="showcase/css/grid.css">
+```
+
 ## CSS-Free Usage (BYOS - Bring Your Own Styles)
 
 Domma's JavaScript functionality works **completely independently** of its CSS. Users integrating into existing
