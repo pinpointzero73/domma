@@ -16,6 +16,7 @@ class ThemeEngine {
         this._initialised = false;
         this._systemMediaQuery = null;
         this._autoDetect = false;
+        this._disabled = false;
     }
 
     /**
@@ -25,6 +26,7 @@ class ThemeEngine {
      * @param {string} [options.variant] - Initial variant ('ocean', 'forest', 'sunset')
      * @param {boolean} [options.autoDetect=false] - Respect system preference
      * @param {boolean} [options.persist=true] - Save to localStorage
+     * @param {boolean} [options.disabled=false] - Disable theming entirely (no classes applied)
      * @param {HTMLElement|string} [options.target=document.body] - Target element
      * @returns {ThemeEngine}
      */
@@ -34,8 +36,16 @@ class ThemeEngine {
             variant = null,
             autoDetect = false,
             persist = true,
+            disabled = false,
             target = document.body
         } = options;
+
+        // If disabled, skip all theme application
+        if (disabled) {
+            this._disabled = true;
+            this._initialised = true;
+            return this;
+        }
 
         // Set target element
         this._target = typeof target === 'string'
@@ -243,7 +253,8 @@ class ThemeEngine {
             theme: this._theme,
             variant: this._variant,
             autoDetect: this._autoDetect,
-            persist: this._persist
+            persist: this._persist,
+            disabled: this._disabled
         };
     }
 
@@ -268,12 +279,44 @@ class ThemeEngine {
     }
 
     /**
+     * Check if theming is disabled
+     * @returns {boolean}
+     */
+    isDisabled() {
+        return this._disabled;
+    }
+
+    /**
+     * Enable theming (if previously disabled)
+     * @returns {ThemeEngine}
+     */
+    enable() {
+        this._disabled = false;
+        this._applyTheme();
+        return this;
+    }
+
+    /**
+     * Disable theming (remove all theme classes)
+     * @returns {ThemeEngine}
+     */
+    disable() {
+        this._disabled = true;
+        if (this._target) {
+            // Remove all theme classes
+            const classes = this._target.className.split(' ').filter(c => !c.startsWith(CLASS_PREFIX));
+            this._target.className = classes.join(' ').trim();
+        }
+        return this;
+    }
+
+    /**
      * Apply the current theme to the target element
      * @param {boolean} [updateMeta=true] - Whether to update meta theme-color
      * @private
      */
     _applyTheme(updateMeta = true) {
-        if (!this._target) {
+        if (!this._target || this._disabled) {
             return;
         }
 

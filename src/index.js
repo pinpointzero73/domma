@@ -20,7 +20,10 @@ Domma.http = http;
 Domma.utils = utils;
 Domma.setup = (config) => {
     // Handle theme configuration
-    if (config.theme || config.themeVariant || config.autoDetectTheme) {
+    // noStyles: true disables all Domma theming (for BYOS - Bring Your Own Styles)
+    if (config.noStyles) {
+        theme.init({disabled: true});
+    } else if (config.theme || config.themeVariant || config.autoDetectTheme) {
         theme.init({
             theme: config.theme,
             variant: config.themeVariant,

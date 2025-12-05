@@ -242,6 +242,86 @@ dist/             # Built bundles (UMD + ESM)
 
 ~160KB minified, includes all namespaces, zero external dependencies.
 
+## CSS-Free Usage (BYOS - Bring Your Own Styles)
+
+Domma's JavaScript functionality works **completely independently** of its CSS. Users integrating into existing
+sites or using their own styling can:
+
+### Option 1: Don't Load Domma CSS
+
+Simply don't include the theme CSS file:
+
+```html
+<!-- Only load JavaScript - no Domma CSS -->
+<script src="dist/domma.min.js"></script>
+
+<!-- Your own styles work fine -->
+<link rel="stylesheet" href="your-styles.css">
+```
+
+### Option 2: Disable Theme Classes
+
+Prevent Domma from adding any `dm-theme-*` classes to the DOM:
+
+```javascript
+// Via setup config
+$.setup({
+    noStyles: true,
+    // ... rest of your config
+});
+
+// Or directly via theme API
+Domma.theme.init({ disabled: true });
+
+// Can also disable at runtime
+Domma.theme.disable();  // Removes all dm-theme-* classes
+Domma.theme.enable();   // Re-enables theming
+```
+
+### What Works Without CSS
+
+These modules work 100% without any Domma CSS:
+
+| Module    | Alias | Notes                                           |
+|-----------|-------|-------------------------------------------------|
+| `dom`     | `$`   | Full jQuery-compatible DOM manipulation         |
+| `utils`   | `_`   | All 120+ Lodash-compatible utilities            |
+| `dates`   | `D`   | All date manipulation/formatting                |
+| `models`  | `M`   | Pub/sub, reactive models, persistence           |
+| `tables`  |       | Data management, sorting, filtering, pagination |
+| `http`    |       | All HTTP requests                               |
+| `storage` | `S`   | All localStorage operations                     |
+
+### What Needs CSS (or Your Own Styles)
+
+| Module     | Without CSS                                                                  |
+|------------|------------------------------------------------------------------------------|
+| `elements` | Components work but need your own styles for visibility (modals, tabs, etc.) |
+| `theme`    | Can be disabled entirely - no effect without CSS                             |
+| `icons`    | SVGs render, but you'll need to style size/colour                            |
+
+### Integration Example
+
+```javascript
+// Use Domma's JS with Bootstrap/Tailwind/your CSS
+$.setup({ noStyles: true });
+
+// DOM manipulation works normally
+$('.my-element').addClass('tailwind-class').fadeIn();
+
+// Utils work normally
+const grouped = _.groupBy(data, 'category');
+
+// Models work normally
+const user = M.create({ name: { type: 'string' } });
+
+// Tables - you provide your own table styles
+const table = Domma.tables.create('#my-table', {
+    data: myData,
+    columns: [...]
+});
+```
+
 - When updating features or adding new ones, the documentation and showcase should be updated in-line
 - Where and whenever possible use Domma in the showcase, documentation and tutorials
 - When making changes to the namespaces/modules ensure that we update the PHPStorm code intelligence files
