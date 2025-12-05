@@ -12,8 +12,15 @@ import {storage} from './storage.js';
 
 const Domma = (selector) => dom(selector);
 
-// Version (keep in sync with package.json)
-Domma.version = '1.0.0';
+// Version and build info (injected at build time by Rollup)
+/* eslint-disable no-undef */
+Domma.version = __BUILD_VERSION__;
+Domma.buildInfo = {
+    version: __BUILD_VERSION__,
+    built: __BUILD_DATE__,
+    commit: __BUILD_COMMIT__
+};
+/* eslint-enable no-undef */
 
 // Attach modules
 Domma.http = http;

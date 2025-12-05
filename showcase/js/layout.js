@@ -53,11 +53,20 @@
         <circle cx="24" cy="24" r="3" fill="currentColor"/>
     </svg>`;
 
+        // Get build info (fallback for dev mode)
+        const buildInfo = Domma.buildInfo || {version: '1.0.0', built: 'dev', commit: 'dev'};
+
         // Create navbar HTML
         const navbar = `
     <nav class="navbar navbar-dark">
         <div class="navbar-brand-group">
-            <a href="${splashPath}" class="navbar-brand">${logoSvg} Domma</a>
+            <a href="${splashPath}" class="navbar-brand">
+                ${logoSvg}
+                <span class="navbar-brand-text">
+                    Domma
+                    <span class="header-version">v${buildInfo.version}</span>
+                </span>
+            </a>
             <a href="${base}download/index.html" class="pill pill-light">Download</a>
         </div>
         <ul class="navbar-nav">
@@ -73,6 +82,7 @@
             <li><a href="${base}http/index.html" class="${getNavClass('http')}">HTTP</a></li>
             <li><a href="${base}icons/index.html" class="${getNavClass('icons')}">Icons</a></li>
             <li><a href="${base}themes/index.html" class="${getNavClass('themes')}">Themes</a></li>
+            <li><span class="nav-version">v${buildInfo.version}</span></li>
         </ul>
     </nav>`;
 
@@ -245,13 +255,61 @@
         .variant-dot:hover::after {
             opacity: 1;
         }
+        /* Version displays */
+        .navbar-brand-text {
+            display: inline-flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        .header-version {
+            font-size: 0.65rem;
+            opacity: 0.6;
+            font-weight: 400;
+            margin-top: -2px;
+        }
+        .nav-version {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            color: inherit;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer-version {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        .footer-copyright {
+            font-size: 0.85rem;
+        }
+        @media (max-width: 576px) {
+            .footer-content {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+                padding: 1rem;
+            }
+            .nav-version {
+                display: none;
+            }
+        }
     </style>`;
 
         // Create footer HTML
         const footer = `
-    <footer class="footer footer-dark text-center">
-        <p class="mb-2">Domma</p>
-        <p class="text-sm">&copy; Darryl Waterhouse &amp; DCBW-IT 2025</p>
+    <footer class="footer footer-dark">
+        <div class="footer-content">
+            <span class="footer-version">v${buildInfo.version} · ${buildInfo.built}</span>
+            <span class="footer-copyright">&copy; Darryl Waterhouse &amp; DCBW-IT 2025</span>
+        </div>
     </footer>`;
 
         // Sidebar templates (using Domma's _.template())
@@ -315,6 +373,9 @@
 
                 navItems.push({id, text});
             });
+
+            // Sort alphabetically by text
+            navItems.sort((a, b) => a.text.localeCompare(b.text));
 
             // Render sidebar HTML using Domma's template system
             const render = _.template(SIDEBAR_TEMPLATE);

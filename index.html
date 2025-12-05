@@ -7,6 +7,8 @@
     <link rel="icon" type="image/svg+xml" href="assets/logo/domma-icon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap"
+          rel="stylesheet">
     <link rel="stylesheet" href="showcase/css/domma.css">
     <link rel="stylesheet" href="dist/themes/domma-themes.css">
     <style>
@@ -392,8 +394,7 @@
         .splash-footer {
             background: var(--dm-gray-900);
             color: var(--dm-gray-400);
-            padding: 1.5rem;
-            text-align: center;
+            padding: 1.5rem 2rem;
         }
 
         .splash-footer a {
@@ -403,6 +404,27 @@
 
         .splash-footer a:hover {
             text-decoration: underline;
+        }
+
+        .splash-footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .splash-footer-version {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 576px) {
+            .splash-footer-content {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
         }
 
         .navbar-brand-group {
@@ -438,6 +460,19 @@
         .pill-light:hover {
             background: rgba(255, 255, 255, 0.25);
         }
+
+        .navbar-brand-text {
+            display: inline-flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .header-version {
+            font-size: 0.65rem;
+            opacity: 0.6;
+            font-weight: 400;
+            margin-top: -2px;
+        }
     </style>
 </head>
 <body class="dm-theme-light">
@@ -458,7 +493,12 @@
 
 <nav class="navbar navbar-dark">
     <div class="navbar-brand-group">
-        <a href="index.html" class="navbar-brand">Domma</a>
+        <a href="index.html" class="navbar-brand">
+            <span class="navbar-brand-text">
+                Domma
+                <span class="header-version" id="header-version"></span>
+            </span>
+        </a>
         <a href="showcase/download/index.html" class="pill pill-light">Download</a>
     </div>
     <ul class="navbar-nav">
@@ -491,7 +531,7 @@
 
     <div class="features">
         <a href="showcase/config/index.html" class="feature card-hover">
-            <div class="feature-icon">CFG</div>
+            <div class="feature-icon" data-icon="settings" data-icon-size="42"></div>
             <div class="feature-label">Config</div>
         </a>
         <a href="showcase/dom/index.html" class="feature card-hover">
@@ -503,23 +543,23 @@
             <div class="feature-label">Utils</div>
         </a>
         <a href="showcase/dates/index.html" class="feature card-hover">
-            <div class="feature-icon">D</div>
+            <div class="feature-icon" data-icon="calendar" data-icon-size="42"></div>
             <div class="feature-label">Dates</div>
         </a>
         <a href="showcase/models/index.html" class="feature card-hover">
-            <div class="feature-icon">M</div>
+            <div class="feature-icon" data-icon="database" data-icon-size="42"></div>
             <div class="feature-label">Models</div>
         </a>
         <a href="showcase/elements/index.html" class="feature card-hover">
-            <div class="feature-icon">UI</div>
+            <div class="feature-icon" data-icon="layout" data-icon-size="42"></div>
             <div class="feature-label">Elements</div>
         </a>
         <a href="showcase/storage/index.html" class="feature card-hover">
-            <div class="feature-icon">S</div>
+            <div class="feature-icon" data-icon="save" data-icon-size="42"></div>
             <div class="feature-label">Storage</div>
         </a>
         <a href="showcase/tables/index.html" class="feature card-hover">
-            <div class="feature-icon">TBL</div>
+            <div class="feature-icon" data-icon="grid" data-icon-size="42"></div>
             <div class="feature-label">Tables</div>
         </a>
         <a href="showcase/http/index.html" class="feature card-hover">
@@ -719,7 +759,10 @@
 </section>
 
 <footer class="splash-footer">
-    <p>&copy; DCBW-IT (2025)</p>
+    <div class="splash-footer-content">
+        <span class="splash-footer-version" id="footer-version"></span>
+        <span>&copy; DCBW-IT (2025)</span>
+    </div>
 </footer>
 
 <script src="dist/domma.min.js"></script>
@@ -774,6 +817,11 @@
 
     // Scan for data-icon attributes
     Domma.icons.scan();
+
+    // Populate version info
+    const buildInfo = Domma.buildInfo || {version: '1.0.0', built: 'dev'};
+    $('#header-version').text(`v${buildInfo.version}`);
+    $('#footer-version').text(`v${buildInfo.version} · ${buildInfo.built}`);
 </script>
 </body>
 </html>
