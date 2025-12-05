@@ -11,6 +11,7 @@ import {social} from './social.js';
 import {commerce} from './commerce.js';
 import {status} from './status.js';
 import {navigation} from './navigation.js';
+import {seasonal} from './seasonal.js';
 
 // Merge all icon categories
 export const icons = {
@@ -21,7 +22,8 @@ export const icons = {
     ...social,
     ...commerce,
     ...status,
-    ...navigation
+    ...navigation,
+    ...seasonal
 };
 
 // Export categories for selective imports
@@ -33,7 +35,8 @@ export {
     social,
     commerce,
     status,
-    navigation
+    navigation,
+    seasonal
 };
 
 // Category metadata for icon gallery
@@ -77,6 +80,11 @@ export const categories = {
         name: 'Navigation',
         description: 'Directional and navigation',
         icons: Object.keys(navigation)
+    },
+    seasonal: {
+        name: 'Seasonal',
+        description: 'Festive and holiday icons',
+        icons: Object.keys(seasonal)
     }
 };
 

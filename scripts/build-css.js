@@ -34,7 +34,8 @@ const themeFiles = [
     'assets/themes/royal.css',
     'assets/themes/lemon.css',
     'assets/themes/silver.css',
-    'assets/themes/charcoal.css'
+    'assets/themes/charcoal.css',
+    'assets/themes/christmas.css'
 ];
 
 // Build banner

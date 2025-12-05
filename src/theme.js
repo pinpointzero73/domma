@@ -241,7 +241,7 @@ class ThemeEngine {
      * @returns {string[]}
      */
     listVariants() {
-        return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal'];
+        return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas'];
     }
 
     /**

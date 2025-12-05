@@ -100,6 +100,7 @@
             <button class="variant-dot variant-dot-lemon" data-variant="lemon" data-tooltip="Lemon"></button>
             <button class="variant-dot variant-dot-silver" data-variant="silver" data-tooltip="Silver"></button>
             <button class="variant-dot variant-dot-charcoal" data-variant="charcoal" data-tooltip="Charcoal"></button>
+            <button class="variant-dot variant-dot-christmas" data-variant="christmas" data-tooltip="Christmas"></button>
         </div>
     </div>`;
 
@@ -151,7 +152,7 @@
             border-radius: 50%;
             border: 2px solid var(--dm-border, #dee2e6);
             cursor: pointer;
-            background: conic-gradient(#adb5bd 0deg 45deg, #0077b6 45deg 90deg, #2d6a4f 90deg 135deg, #e85d04 135deg 180deg, #4169e1 180deg 225deg, #f0e68c 225deg 270deg, #708090 270deg 315deg, #36454f 315deg 360deg);
+            background: conic-gradient(#adb5bd 0deg 40deg, #0077b6 40deg 80deg, #2d6a4f 80deg 120deg, #c67b5c 120deg 160deg, #4169e1 160deg 200deg, #c9b458 200deg 240deg, #708090 240deg 280deg, #36454f 280deg 320deg, #c41e3a 320deg 360deg);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -208,19 +209,22 @@
             background: linear-gradient(135deg, #2d6a4f, #74c69d);
         }
         .variant-dot-sunset {
-            background: linear-gradient(135deg, #e85d04, #f77f00);
+            background: linear-gradient(135deg, #c67b5c, #da9d82);
         }
         .variant-dot-royal {
             background: linear-gradient(135deg, #4169e1, #6495ed);
         }
         .variant-dot-lemon {
-            background: linear-gradient(135deg, #f0e68c, #fffacd);
+            background: linear-gradient(135deg, #c9b458, #d4c06a);
         }
         .variant-dot-silver {
             background: linear-gradient(135deg, #708090, #a0aec0);
         }
         .variant-dot-charcoal {
             background: linear-gradient(135deg, #36454f, #607d8b);
+        }
+        .variant-dot-christmas {
+            background: linear-gradient(135deg, #c41e3a, #165b33);
         }
         .variant-dot::after {
             content: attr(data-tooltip);

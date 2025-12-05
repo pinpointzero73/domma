@@ -1,0 +1,113 @@
+/**
+ * Domma Christmas Theme Variant
+ * Traditional festive colour palette: red, green, gold
+ * Combinable with light or dark theme: .dm-theme-light.dm-theme-christmas
+ */
+
+.dm-theme-christmas {
+    /* ================================================
+       PRIMARY COLOURS - Christmas Red
+       ================================================ */
+    --dm-primary: #c41e3a;
+    --dm-primary-hover: #d42c48;
+    --dm-primary-active: #e43a56;
+    --dm-primary-light: #fce4e8;
+    --dm-primary-dark: #9a1830;
+
+    /* Focus ring with festive red */
+    --dm-focus-ring: 0 0 0 3px rgba(196, 30, 58, 0.3);
+    --dm-border-focus: #c41e3a;
+
+    /* ================================================
+       SECONDARY COLOURS - Christmas Green
+       ================================================ */
+    --dm-secondary: #165b33;
+    --dm-secondary-hover: #1e7a45;
+    --dm-secondary-active: #269957;
+    --dm-secondary-light: #e3f2e9;
+    --dm-secondary-dark: #0f3d23;
+
+    /* ================================================
+       STATUS COLOURS - Festive tinted
+       ================================================ */
+    --dm-success: #228b22;
+    --dm-success-hover: #2ea02e;
+    --dm-success-active: #3ab53a;
+    --dm-success-light: #e6f4e6;
+    --dm-success-dark: #1a6b1a;
+
+    --dm-info: #a8d5e5;
+    --dm-info-hover: #b8dde9;
+    --dm-info-active: #c8e5ed;
+    --dm-info-light: #f0f9fc;
+    --dm-info-dark: #6bb8d1;
+
+    --dm-warning: #d4af37;
+    --dm-warning-hover: #dabb4f;
+    --dm-warning-active: #e0c767;
+    --dm-warning-light: #faf6e7;
+    --dm-warning-dark: #b8962d;
+    --dm-warning-text: #8b7021;
+
+    --dm-danger: #bb2528;
+    --dm-danger-hover: #cc3336;
+    --dm-danger-active: #dd4144;
+    --dm-danger-light: #fce8e8;
+    --dm-danger-dark: #991e20;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #d4af37; /* Gold */
+    --dm-accent-2: #bb2528; /* Holly Berry */
+    --dm-accent-3: #228b22; /* Pine Green */
+    --dm-accent-4: #f5f5f5; /* Snow White */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(196, 30, 58, 0.12);
+    --dm-tab-active-border: #c41e3a;
+    --dm-tab-active-text: #c41e3a;
+    --dm-progress-bar: #c41e3a;
+}
+
+/* Dark mode adjustments for christmas */
+.dm-theme-dark.dm-theme-christmas {
+    --dm-primary: #ef5566;
+    --dm-primary-hover: #f16d7a;
+    --dm-primary-active: #f3858e;
+    --dm-primary-light: rgba(239, 85, 102, 0.15);
+    --dm-primary-dark: #e43a56;
+
+    --dm-secondary: #5cb85c;
+    --dm-secondary-hover: #6dc46d;
+    --dm-secondary-active: #7ed07e;
+    --dm-secondary-light: rgba(92, 184, 92, 0.15);
+    --dm-secondary-dark: #4cae4c;
+
+    --dm-success: #6dd66d;
+    --dm-success-light: rgba(109, 214, 109, 0.15);
+
+    --dm-info: #a8d5e5;
+    --dm-info-light: rgba(168, 213, 229, 0.15);
+
+    --dm-warning: #f0d264;
+    --dm-warning-light: rgba(240, 210, 100, 0.15);
+    --dm-warning-text: #f0d264;
+
+    --dm-danger: #ef6b6b;
+    --dm-danger-light: rgba(239, 107, 107, 0.15);
+
+    /* Gold accents pop nicely on dark */
+    --dm-accent-1: #f0d264;
+    --dm-accent-2: #ef6b6b;
+    --dm-accent-3: #6dd66d;
+    --dm-accent-4: #e0e0e0;
+
+    --dm-focus-ring: 0 0 0 3px rgba(239, 85, 102, 0.35);
+    --dm-selected-bg: rgba(239, 85, 102, 0.2);
+    --dm-tab-active-border: #ef5566;
+    --dm-tab-active-text: #ef5566;
+    --dm-progress-bar: #ef5566;
+}
