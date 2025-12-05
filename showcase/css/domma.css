@@ -2,6 +2,9 @@
  * Component styles + utility classes
  */
 
+/* Google Fonts - Roboto */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap');
+
 /* ============================================
    CSS Variables / Design Tokens
    ============================================ */
@@ -32,7 +35,7 @@
     --dm-gray-900: #212529;
 
     /* Typography */
-    --dm-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --dm-font-sans: Roboto, Lato, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
     --dm-font-mono: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --dm-font-size-xs: 0.75rem;
     --dm-font-size-sm: 0.875rem;
@@ -2222,6 +2225,90 @@ select:not([class]):hover:not(:disabled) {
     border-bottom-right-radius: var(--dm-radius-md);
 }
 
+/* Button Groups */
+.btn-group {
+    display: inline-flex;
+    vertical-align: middle;
+}
+
+.btn-group > .btn {
+    border-radius: 0;
+    position: relative;
+}
+
+.btn-group > .btn:not(:last-child) {
+    border-right-width: 0;
+}
+
+.btn-group > .btn:first-child {
+    border-top-left-radius: var(--dm-radius-md);
+    border-bottom-left-radius: var(--dm-radius-md);
+}
+
+.btn-group > .btn:last-child {
+    border-top-right-radius: var(--dm-radius-md);
+    border-bottom-right-radius: var(--dm-radius-md);
+    border-right-width: 1px;
+}
+
+.btn-group > .btn:hover,
+.btn-group > .btn:focus {
+    z-index: 1;
+}
+
+.btn-group > .btn.active {
+    z-index: 2;
+}
+
+/* Active states for outline buttons in groups */
+.btn-group > .btn-outline.active {
+    background-color: var(--dm-primary);
+    border-color: var(--dm-primary);
+    color: var(--dm-white);
+}
+
+.btn-group > .btn-secondary.active {
+    background-color: var(--dm-gray-700);
+    border-color: var(--dm-gray-700);
+}
+
+/* Vertical Button Group */
+.btn-group-vertical {
+    display: inline-flex;
+    flex-direction: column;
+    vertical-align: middle;
+}
+
+.btn-group-vertical > .btn {
+    border-radius: 0;
+    position: relative;
+    width: 100%;
+}
+
+.btn-group-vertical > .btn:not(:last-child) {
+    border-bottom-width: 0;
+}
+
+.btn-group-vertical > .btn:first-child {
+    border-top-left-radius: var(--dm-radius-md);
+    border-top-right-radius: var(--dm-radius-md);
+}
+
+.btn-group-vertical > .btn:last-child {
+    border-bottom-left-radius: var(--dm-radius-md);
+    border-bottom-right-radius: var(--dm-radius-md);
+    border-bottom-width: 1px;
+}
+
+.btn-group-vertical > .btn:hover,
+.btn-group-vertical > .btn:focus {
+    z-index: 1;
+}
+
+.btn-group-vertical > .btn.active {
+    z-index: 2;
+}
+
 /* Range Slider */
 .form-range {
     appearance: none;
@@ -2477,6 +2564,89 @@ select:not([class]):hover:not(:disabled) {
 .badge-info {
     background-color: var(--dm-info);
     color: var(--dm-white);
+}
+
+/* ============================================
+   COMPONENT: Pill
+   ============================================ */
+
+.pill {
+    display: inline-block;
+    padding: var(--dm-space-1) var(--dm-space-3);
+    font-size: var(--dm-font-size-xs);
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: var(--dm-radius-full);
+    border: 1px solid transparent;
+    transition: background 0.2s ease, transform 0.15s ease, border-color 0.2s ease;
+    cursor: pointer;
+}
+
+.pill:hover {
+    transform: translateY(-1px);
+}
+
+.pill-primary {
+    background-color: var(--dm-primary);
+    color: var(--dm-white);
+}
+
+.pill-primary:hover {
+    background-color: var(--dm-primary-dark);
+}
+
+.pill-secondary {
+    background-color: var(--dm-gray-200);
+    color: var(--dm-gray-700);
+}
+
+.pill-secondary:hover {
+    background-color: var(--dm-gray-300);
+}
+
+.pill-outline {
+    background-color: transparent;
+    border-color: var(--dm-border);
+    color: var(--dm-text);
+}
+
+.pill-outline:hover {
+    background-color: var(--dm-gray-100);
+    border-color: var(--dm-gray-400);
+}
+
+.pill-outline-primary {
+    background-color: transparent;
+    border-color: var(--dm-primary);
+    color: var(--dm-primary);
+}
+
+.pill-outline-primary:hover {
+    background-color: var(--dm-primary);
+    color: var(--dm-white);
+}
+
+.pill-light {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.pill-light:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Pill sizes */
+.pill-sm {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.65rem;
+}
+
+.pill-lg {
+    padding: var(--dm-space-2) var(--dm-space-4);
+    font-size: var(--dm-font-size-sm);
 }
 
 /* ============================================
@@ -3051,4 +3221,161 @@ code {
     .lg\:grid-cols-4 {
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
+}
+
+/* ============================================
+   COMPONENT: Dialog (Alert, Confirm, Prompt)
+   ============================================ */
+
+.dm-dialog-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 10000;
+}
+
+.dm-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--dm-space-4);
+    pointer-events: auto;
+}
+
+.dm-dialog-overlay.dm-dialog-animate {
+    animation: dm-dialog-fade-in 0.2s ease;
+}
+
+.dm-dialog-overlay.dm-dialog-animate .dm-dialog {
+    animation: dm-dialog-slide-in 0.2s ease;
+}
+
+.dm-dialog-overlay.dm-dialog-closing {
+    animation: dm-dialog-fade-out 0.2s ease forwards;
+}
+
+.dm-dialog-overlay.dm-dialog-closing .dm-dialog {
+    animation: dm-dialog-slide-out 0.2s ease forwards;
+}
+
+@keyframes dm-dialog-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes dm-dialog-fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes dm-dialog-slide-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes dm-dialog-slide-out {
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+}
+
+.dm-dialog {
+    background: var(--dm-surface, #fff);
+    border-radius: var(--dm-radius-lg);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.dm-dialog-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.dm-dialog-header {
+    padding: var(--dm-space-4) var(--dm-space-6);
+    border-bottom: 1px solid var(--dm-border, #dee2e6);
+}
+
+.dm-dialog-title {
+    margin: 0;
+    font-size: var(--dm-font-size-lg);
+    font-weight: 600;
+    color: var(--dm-text, #212529);
+}
+
+.dm-dialog-body {
+    padding: var(--dm-space-6);
+}
+
+.dm-dialog-message {
+    margin: 0 0 var(--dm-space-4);
+    color: var(--dm-text, #212529);
+    line-height: 1.6;
+}
+
+.dm-dialog-body > .dm-dialog-message:last-child {
+    margin-bottom: 0;
+}
+
+.dm-dialog-input {
+    width: 100%;
+    margin-top: var(--dm-space-2);
+}
+
+.dm-dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--dm-space-2);
+    padding: var(--dm-space-4) var(--dm-space-6);
+    background: var(--dm-gray-50, #f8f9fa);
+    border-top: 1px solid var(--dm-border, #dee2e6);
+}
+
+.dm-dialog-footer .btn {
+    min-width: 80px;
+}
+
+/* Dark theme support */
+.dm-theme-dark .dm-dialog {
+    background: var(--dm-surface);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.dm-theme-dark .dm-dialog-header {
+    border-bottom-color: var(--dm-border);
+}
+
+.dm-theme-dark .dm-dialog-footer {
+    background: var(--dm-gray-800);
+    border-top-color: var(--dm-border);
 }
