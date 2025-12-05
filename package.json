@@ -8,9 +8,10 @@
   "type": "module",
   "scripts": {
     "dev": "live-server --port=3000 --open=/index.html",
-    "build": "rollup -c && npm run build:css",
+    "build": "node scripts/build-info.js && rollup -c && npm run build:css",
     "build:js": "rollup -c",
     "build:css": "node scripts/build-css.js",
+    "build:info": "node scripts/build-info.js",
     "test": "node tests/test.js",
     "showcase": "live-server --port=3000 --open=/showcase/index.html"
   },
@@ -25,6 +26,7 @@
   "license": "ISC",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-replace": "^6.0.3",
     "@rollup/plugin-terser": "^0.4.4",
     "live-server": "^1.2.2",
     "rollup": "^4.28.0",
