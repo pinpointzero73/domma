@@ -7,13 +7,16 @@
     function init() {
     // Determine the base path based on current location
     const path = window.location.pathname;
-        const isSubpage = path.includes('/config/') || path.includes('/dom/') ||
+        const isShowcaseSubpage = path.includes('/config/') || path.includes('/dom/') ||
             path.includes('/utils/') || path.includes('/dates/') ||
             path.includes('/models/') || path.includes('/elements/') ||
             path.includes('/tables/') || path.includes('/icons/') ||
-            path.includes('/themes/') || path.includes('/storage/');
-    const base = isSubpage ? '../' : '';
-        const splashPath = isSubpage ? '../../index.html' : '../index.html';
+            path.includes('/themes/') || path.includes('/storage/') ||
+            path.includes('/download/') || path.includes('/http/');
+        const isQuickstart = path.includes('/quickstart/');
+        const isSubpage = isShowcaseSubpage;
+        const base = isSubpage ? '../' : (isQuickstart ? '../showcase/' : '');
+        const splashPath = isSubpage ? '../../index.html' : (isQuickstart ? '../index.html' : '../index.html');
 
     // Get current page for active nav state
     const currentPage = path.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index';
@@ -39,7 +42,10 @@
     // Create navbar HTML
     const navbar = `
     <nav class="navbar navbar-dark">
-        <a href="${splashPath}" class="navbar-brand">${logoSvg} Domma</a>
+        <div class="navbar-brand-group">
+            <a href="${splashPath}" class="navbar-brand">${logoSvg} Domma</a>
+            <a href="${base}download/index.html" class="pill pill-light">Download</a>
+        </div>
         <ul class="navbar-nav">
             <li><a href="${base}config/index.html" class="${getNavClass('config')}">Config</a></li>
             <li><a href="${base}dom/index.html" class="${getNavClass('dom')}">DOM</a></li>
@@ -49,6 +55,7 @@
             <li><a href="${base}elements/index.html" class="${getNavClass('elements')}">Elements</a></li>
             <li><a href="${base}tables/index.html" class="${getNavClass('tables')}">Tables</a></li>
             <li><a href="${base}storage/index.html" class="${getNavClass('storage')}">Storage</a></li>
+            <li><a href="${base}http/index.html" class="${getNavClass('http')}">HTTP</a></li>
             <li><a href="${base}icons/index.html" class="${getNavClass('icons')}">Icons</a></li>
             <li><a href="${base}themes/index.html" class="${getNavClass('themes')}">Themes</a></li>
         </ul>
@@ -88,6 +95,11 @@
             vertical-align: middle;
             margin-right: 0.35rem;
             margin-top: -2px;
+        }
+        .navbar-brand-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
         .theme-toggle {
             position: fixed;

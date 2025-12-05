@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download - Domma</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../css/domma.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <style>
+        .download-hero {
+            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
+            color: white;
+            padding: var(--dm-space-12) var(--dm-space-4);
+            text-align: center;
+        }
+
+        .download-hero h1 {
+            font-size: 2.5rem;
+            margin: 0 0 var(--dm-space-3);
+        }
+
+        .download-hero p {
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .download-card {
+            text-align: center;
+            height: 100%;
+        }
+
+        .download-card .card-body {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .download-icon {
+            font-size: 3rem;
+            margin-bottom: var(--dm-space-4);
+            color: var(--dm-primary);
+        }
+
+        .download-size {
+            font-size: var(--dm-font-size-sm);
+            color: var(--dm-gray-500);
+            margin-top: var(--dm-space-2);
+        }
+
+        .download-description {
+            flex: 1;
+            color: var(--dm-gray-600);
+            margin-bottom: var(--dm-space-4);
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: var(--dm-primary);
+            color: white;
+            padding: var(--dm-space-1) var(--dm-space-3);
+            border-radius: var(--dm-radius-full);
+            font-size: var(--dm-font-size-sm);
+            font-weight: 600;
+            margin-bottom: var(--dm-space-4);
+        }
+
+        .requirements-table {
+            width: 100%;
+        }
+
+        .requirements-table th {
+            text-align: left;
+            padding: var(--dm-space-3);
+            background: var(--dm-gray-100);
+        }
+
+        .requirements-table td {
+            padding: var(--dm-space-3);
+            border-bottom: 1px solid var(--dm-border);
+        }
+
+        .browser-icon {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--dm-space-2);
+        }
+
+        .check-icon {
+            color: var(--dm-success);
+        }
+
+        .theme-preview {
+            display: flex;
+            gap: var(--dm-space-2);
+            justify-content: center;
+            margin: var(--dm-space-4) 0;
+        }
+
+        .theme-swatch {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--dm-radius-full);
+            border: 2px solid var(--dm-border);
+        }
+
+        .cdn-code {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
+            padding: var(--dm-space-4);
+            border-radius: var(--dm-radius-md);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            overflow-x: auto;
+            text-align: left;
+        }
+
+        .cdn-code .comment {
+            color: var(--dm-gray-500);
+        }
+
+        .feature-support {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--dm-space-2);
+            margin-top: var(--dm-space-3);
+        }
+
+        .feature-tag {
+            background: var(--dm-gray-100);
+            padding: var(--dm-space-1) var(--dm-space-2);
+            border-radius: var(--dm-radius-sm);
+            font-size: var(--dm-font-size-xs);
+            color: var(--dm-gray-600);
+        }
+    </style>
+</head>
+<body class="dm-theme-light">
+<main class="container py-8">
+    <!-- Hero Section -->
+    <section class="download-hero mb-8"
+             style="margin: calc(var(--dm-space-8) * -1); margin-bottom: var(--dm-space-8); padding: var(--dm-space-12) var(--dm-space-4);">
+        <h1>Download Domma</h1>
+        <p>Get the latest version of Domma and start building modern web applications with zero dependencies.</p>
+    </section>
+
+    <!-- Version Info -->
+    <section class="text-center mb-8">
+        <span class="version-badge" id="current-version">v1.0.0</span>
+        <p class="text-muted">Released: December 2025</p>
+    </section>
+
+    <!-- Download Cards -->
+    <section class="mb-8">
+        <h2 class="text-2xl font-semibold mb-6 text-center">Core Library</h2>
+        <div class="grid grid-cols-1 grid-cols-md-2 gap-6">
+            <!-- UMD Bundle -->
+            <div class="card download-card">
+                <div class="card-body">
+                    <div class="download-icon" data-icon="file-text" data-icon-size="48"></div>
+                    <h3 class="text-xl font-semibold mb-2">domma.min.js</h3>
+                    <p class="download-description">
+                        UMD bundle for use with <code>&lt;script&gt;</code> tags.
+                        Works in browsers and with AMD/CommonJS loaders.
+                    </p>
+                    <p class="download-size" id="umd-size">~183 KB minified</p>
+                    <a href="../../dist/domma.min.js" download class="btn btn-primary btn-block mt-auto">
+                        <span data-icon="download" data-icon-size="16"></span>
+                        Download UMD
+                    </a>
+                </div>
+            </div>
+
+            <!-- ESM Bundle -->
+            <div class="card download-card">
+                <div class="card-body">
+                    <div class="download-icon" data-icon="file-text" data-icon-size="48"></div>
+                    <h3 class="text-xl font-semibold mb-2">domma.esm.js</h3>
+                    <p class="download-description">
+                        ES Module bundle for modern build tools like Vite, Webpack, or Rollup.
+                        Supports tree-shaking.
+                    </p>
+                    <p class="download-size" id="esm-size">~183 KB minified</p>
+                    <a href="../../dist/domma.esm.js" download class="btn btn-outline btn-block mt-auto">
+                        <span data-icon="download" data-icon-size="16"></span>
+                        Download ESM
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Themes -->
+    <section class="mb-8">
+        <h2 class="text-2xl font-semibold mb-6 text-center">Themes</h2>
+        <div class="grid grid-cols-1 grid-cols-md-2 gap-6">
+            <!-- Theme CSS -->
+            <div class="card download-card">
+                <div class="card-body">
+                    <div class="download-icon" data-icon="palette" data-icon-size="48"></div>
+                    <h3 class="text-xl font-semibold mb-2">domma-themes.css</h3>
+                    <p class="download-description">
+                        Complete theme system with light/dark modes and 8 colour variants.
+                    </p>
+                    <div class="theme-preview">
+                        <span class="theme-swatch" style="background: #6495ed;" title="Default"></span>
+                        <span class="theme-swatch" style="background: linear-gradient(135deg, #0077b6, #48cae4);"
+                              title="Ocean"></span>
+                        <span class="theme-swatch" style="background: linear-gradient(135deg, #2d6a4f, #74c69d);"
+                              title="Forest"></span>
+                        <span class="theme-swatch" style="background: linear-gradient(135deg, #e85d04, #f77f00);"
+                              title="Sunset"></span>
+                        <span class="theme-swatch" style="background: linear-gradient(135deg, #4169e1, #6495ed);"
+                              title="Royal"></span>
+                        <span class="theme-swatch" style="background: linear-gradient(135deg, #f0e68c, #fffacd);"
+                              title="Lemon"></span>
+                        <span class="theme-swatch" style="background: linear-gradient(135deg, #708090, #a0aec0);"
+                              title="Silver"></span>
+                        <span class="theme-swatch" style="background: linear-gradient(135deg, #36454f, #607d8b);"
+                              title="Charcoal"></span>
+                    </div>
+                    <p class="download-size" id="theme-size">~40 KB</p>
+                    <a href="../../dist/themes/domma-themes.css" download class="btn btn-primary btn-block mt-auto">
+                        <span data-icon="download" data-icon-size="16"></span>
+                        Download Themes
+                    </a>
+                </div>
+            </div>
+
+            <!-- Base CSS -->
+            <div class="card download-card">
+                <div class="card-body">
+                    <div class="download-icon" data-icon="layout" data-icon-size="48"></div>
+                    <h3 class="text-xl font-semibold mb-2">domma.css</h3>
+                    <p class="download-description">
+                        Core CSS framework with grid, typography, forms, buttons, cards, and all UI component styles.
+                    </p>
+                    <p class="download-size" id="css-size">~58 KB</p>
+                    <a href="../css/domma.css" download class="btn btn-outline btn-block mt-auto">
+                        <span data-icon="download" data-icon-size="16"></span>
+                        Download CSS
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CDN Usage -->
+    <section class="card mb-8">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Quick Start via CDN</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Include Domma directly in your HTML without downloading:</p>
+            <div class="cdn-code">
+                <span class="comment">&lt;!-- CSS --&gt;</span><br>
+                &lt;link rel="stylesheet" href="path/to/domma.css"&gt;<br>
+                &lt;link rel="stylesheet" href="path/to/domma-themes.css"&gt;<br><br>
+                <span class="comment">&lt;!-- JavaScript --&gt;</span><br>
+                &lt;script src="path/to/domma.min.js"&gt;&lt;/script&gt;<br><br>
+                <span class="comment">&lt;!-- Ready to use! --&gt;</span><br>
+                &lt;script&gt;<br>
+                &nbsp;&nbsp;$('.btn').on('click', () =&gt; console.log('Clicked!'));<br>
+                &nbsp;&nbsp;Domma.theme.init({ autoDetect: true });<br>
+                &lt;/script&gt;
+            </div>
+        </div>
+    </section>
+
+    <!-- Browser Requirements -->
+    <section class="card mb-8">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Browser Requirements</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma requires modern browser features and supports the following minimum versions:</p>
+            <table class="requirements-table">
+                <thead>
+                <tr>
+                    <th>Browser</th>
+                    <th>Minimum Version</th>
+                    <th>Release Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                            <span class="browser-icon">
+                                <span data-icon="globe" data-icon-size="20"></span>
+                                Chrome
+                            </span>
+                    </td>
+                    <td><span class="check-icon" data-icon="check" data-icon-size="16"></span> 80+</td>
+                    <td>February 2020</td>
+                </tr>
+                <tr>
+                    <td>
+                            <span class="browser-icon">
+                                <span data-icon="globe" data-icon-size="20"></span>
+                                Firefox
+                            </span>
+                    </td>
+                    <td><span class="check-icon" data-icon="check" data-icon-size="16"></span> 75+</td>
+                    <td>April 2020</td>
+                </tr>
+                <tr>
+                    <td>
+                            <span class="browser-icon">
+                                <span data-icon="globe" data-icon-size="20"></span>
+                                Safari
+                            </span>
+                    </td>
+                    <td><span class="check-icon" data-icon="check" data-icon-size="16"></span> 13.1+</td>
+                    <td>March 2020</td>
+                </tr>
+                <tr>
+                    <td>
+                            <span class="browser-icon">
+                                <span data-icon="globe" data-icon-size="20"></span>
+                                Edge
+                            </span>
+                    </td>
+                    <td><span class="check-icon" data-icon="check" data-icon-size="16"></span> 80+</td>
+                    <td>February 2020</td>
+                </tr>
+                <tr>
+                    <td>
+                            <span class="browser-icon">
+                                <span data-icon="globe" data-icon-size="20"></span>
+                                Opera
+                            </span>
+                    </td>
+                    <td><span class="check-icon" data-icon="check" data-icon-size="16"></span> 67+</td>
+                    <td>March 2020</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Required Features</h3>
+            <p class="text-muted mb-3">Domma uses the following modern JavaScript features:</p>
+            <div class="feature-support">
+                <span class="feature-tag">ES6+ Syntax</span>
+                <span class="feature-tag">Promises</span>
+                <span class="feature-tag">Fetch API</span>
+                <span class="feature-tag">CSS Custom Properties</span>
+                <span class="feature-tag">CSS Grid</span>
+                <span class="feature-tag">CSS Flexbox</span>
+                <span class="feature-tag">IntersectionObserver</span>
+                <span class="feature-tag">MutationObserver</span>
+                <span class="feature-tag">localStorage</span>
+                <span class="feature-tag">matchMedia</span>
+            </div>
+
+            <div class="alert alert-warning mt-4">
+                <strong>Note:</strong> Internet Explorer is not supported. For legacy browser support, consider using
+                polyfills or a transpiler like Babel.
+            </div>
+        </div>
+    </section>
+
+    <!-- Package Contents -->
+    <section class="card mb-8">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">What's Included</h2>
+        </div>
+        <div class="card-body">
+            <div class="grid grid-cols-1 grid-cols-md-2 gap-6">
+                <div>
+                    <h3 class="font-semibold mb-3">JavaScript Modules</h3>
+                    <ul class="list-disc pl-4">
+                        <li><strong>DOM</strong> - jQuery-compatible API (90+ methods)</li>
+                        <li><strong>Utils</strong> - Lodash-compatible utilities (120+)</li>
+                        <li><strong>Dates</strong> - Moment-style date manipulation</li>
+                        <li><strong>Models</strong> - Reactive models & pub/sub</li>
+                        <li><strong>Elements</strong> - UI components (Modal, Tabs, etc.)</li>
+                        <li><strong>Tables</strong> - DataTable-like functionality</li>
+                        <li><strong>Config</strong> - Declarative setup engine</li>
+                        <li><strong>HTTP</strong> - Fetch-based client</li>
+                        <li><strong>Icons</strong> - 100+ SVG icons</li>
+                        <li><strong>Theme</strong> - Theme management</li>
+                        <li><strong>Storage</strong> - localStorage/sessionStorage wrapper</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">CSS Components</h3>
+                    <ul class="list-disc pl-4">
+                        <li><strong>Grid System</strong> - 12-column responsive grid</li>
+                        <li><strong>Typography</strong> - Headings, text utilities</li>
+                        <li><strong>Buttons</strong> - Multiple styles and sizes</li>
+                        <li><strong>Forms</strong> - Inputs, selects, checkboxes</li>
+                        <li><strong>Cards</strong> - Content containers</li>
+                        <li><strong>Tables</strong> - Styled data tables</li>
+                        <li><strong>Navigation</strong> - Navbar, tabs, breadcrumbs</li>
+                        <li><strong>Alerts</strong> - Notification styles</li>
+                        <li><strong>Badges</strong> - Labels and counters</li>
+                        <li><strong>Utilities</strong> - Spacing, colours, display</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Licence -->
+    <section class="card">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Licence</h2>
+        </div>
+        <div class="card-body">
+            <p>Domma is released under the <strong>MIT Licence</strong>. You are free to use it in personal and
+                commercial projects.</p>
+            <p class="text-muted mt-2">Copyright &copy; 2025 DCBW-IT. All rights reserved.</p>
+        </div>
+    </section>
+</main>
+
+<script src="../js/layout.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script>
+    // Scan for icons
+    Domma.icons.scan();
+</script>
+</body>
+</html>

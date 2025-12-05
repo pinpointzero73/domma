@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Domma - Dynamic Object Manipulation & Modeling API</title>
     <link rel="icon" type="image/svg+xml" href="assets/logo/domma-icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="showcase/css/domma.css">
     <link rel="stylesheet" href="dist/themes/domma-themes.css">
     <style>
@@ -402,6 +404,40 @@
         .splash-footer a:hover {
             text-decoration: underline;
         }
+
+        .navbar-brand-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 9999px;
+            border: 1px solid transparent;
+            transition: background 0.2s ease, transform 0.15s ease;
+            cursor: pointer;
+        }
+
+        .pill:hover {
+            transform: translateY(-1px);
+        }
+
+        .pill-light {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .pill-light:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
     </style>
 </head>
 <body class="dm-theme-light">
@@ -421,7 +457,10 @@
 <button class="theme-toggle" id="theme-toggle" title="Toggle theme"></button>
 
 <nav class="navbar navbar-dark">
-    <a href="index.html" class="navbar-brand">Domma</a>
+    <div class="navbar-brand-group">
+        <a href="index.html" class="navbar-brand">Domma</a>
+        <a href="showcase/download/index.html" class="pill pill-light">Download</a>
+    </div>
     <ul class="navbar-nav">
         <li><a href="showcase/index.html" class="navbar-link">Showcase</a></li>
         <li><a href="quickstart/index.html" class="navbar-link">Quickstart</a></li>
@@ -482,6 +521,10 @@
         <a href="showcase/tables/index.html" class="feature card-hover">
             <div class="feature-icon">TBL</div>
             <div class="feature-label">Tables</div>
+        </a>
+        <a href="showcase/http/index.html" class="feature card-hover">
+            <div class="feature-icon" data-icon="globe" data-icon-size="42"></div>
+            <div class="feature-label">HTTP</div>
         </a>
         <a href="showcase/icons/index.html" class="feature card-hover">
             <div class="feature-icon" data-icon="image" data-icon-size="42"></div>
@@ -660,6 +703,10 @@
         </a>
         <a href="quickstart/index.html" class="cta cta-secondary">
             Quickstart
+        </a>
+        <a href="showcase/download/index.html" class="cta cta-secondary">
+            <span data-icon="download" data-icon-size="18"></span>
+            Download
         </a>
     </div>
 

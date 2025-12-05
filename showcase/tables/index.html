@@ -279,6 +279,12 @@ const table = Domma.tables.create('#my-table', {
                     <td>'multiple'</td>
                     <td>'single' or 'multiple'</td>
                 </tr>
+                <tr>
+                    <td><code>columnToggle</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>Show column visibility dropdown</td>
+                </tr>
             </table>
         </div>
     </section>
@@ -289,9 +295,9 @@ const table = Domma.tables.create('#my-table', {
             <h2 class="text-xl font-semibold">Interactive Demo</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4 text-muted">This demo includes the <strong>Export Panel</strong> — use the Copy/Download
-                toggle to switch between copying to clipboard or downloading files. Note the <strong>Joined</strong>
-                column uses a custom <code>render</code> function to format dates as DD/MM/YYYY.</p>
+            <p class="mb-4 text-muted">This demo includes the <strong>Columns</strong> dropdown (to show/hide columns)
+                and the <strong>Export Panel</strong> (Copy/Download toggle). Note the <strong>Joined</strong> column
+                uses a custom <code>render</code> function to format dates as DD/MM/YYYY.</p>
 
             <div class="demo-area mb-4">
                 <div id="demo-table"></div>
@@ -603,6 +609,72 @@ const table = Domma.tables.create('#my-table', {
         </div>
     </section>
 
+    <!-- Column Visibility -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Column Visibility</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Enable a dropdown to show/hide columns dynamically. Users can toggle column visibility
+                without reloading the table.</p>
+
+            <pre class="code-block">// Enable column toggle dropdown
+const table = Domma.tables.create('#my-table', {
+    data: myData,
+    columns: [
+        { key: 'id', title: 'ID' },
+        { key: 'name', title: 'Name' },
+        { key: 'email', title: 'Email', visible: false },  // Hidden by default
+        { key: 'role', title: 'Role' }
+    ],
+    columnToggle: true  // Enable the Columns dropdown
+});
+
+// Programmatic control
+table.showColumn('email');      // Show a hidden column
+table.hideColumn('role');       // Hide a visible column
+table.toggleColumn('name');     // Toggle visibility
+
+// Get column info
+table.getVisibleColumns();      // Array of visible column configs
+table.getHiddenColumns();       // Array of hidden column configs
+table.getColumns();             // All columns</pre>
+
+            <h4 class="category-title">Column Visibility Options</h4>
+            <table class="option-table mb-4">
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>columnToggle</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>Show the Columns dropdown in the toolbar</td>
+                </tr>
+                <tr>
+                    <td><code>regexSearch</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>Show the regex toggle button next to search input</td>
+                </tr>
+                <tr>
+                    <td><code>visible</code> (column)</td>
+                    <td>boolean</td>
+                    <td>true</td>
+                    <td>Initial visibility of a column</td>
+                </tr>
+            </table>
+
+            <div class="demo-area">
+                <p class="text-sm text-muted mb-3">Try the <strong>Columns</strong> dropdown in the Interactive Demo
+                    above to show/hide columns.</p>
+            </div>
+        </div>
+    </section>
+
     <!-- Export Methods -->
     <section class="card mb-6">
         <div class="card-header">
@@ -728,6 +800,16 @@ table.once('render', () => {
                 <span class="method-item">toggleSelect()</span>
                 <span class="method-item">getSelected()</span>
                 <span class="method-item">getSelectedIndices()</span>
+            </div>
+
+            <h4 class="category-title">Column Methods</h4>
+            <div class="method-grid mb-4">
+                <span class="method-item">showColumn()</span>
+                <span class="method-item">hideColumn()</span>
+                <span class="method-item">toggleColumn()</span>
+                <span class="method-item">getColumns()</span>
+                <span class="method-item">getVisibleColumns()</span>
+                <span class="method-item">getHiddenColumns()</span>
             </div>
 
             <h4 class="category-title">Export Methods</h4>
@@ -885,6 +967,10 @@ table.once('render', () => {
         pageSize: 10,
         selectable: true,
         selectionMode: 'multiple',
+        // Column visibility toggle
+        columnToggle: true,
+        // Regex search toggle
+        regexSearch: true,
         // Export panel options
         exportPanel: true,
         exportOptions: ['copy', 'csv', 'excel', 'json'],

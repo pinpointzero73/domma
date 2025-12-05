@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../css/domma.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <style>
+        .hero {
+            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero code {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--dm-radius-full);
+        }
+
+        .method-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--dm-radius-sm);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .method-get {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .method-post {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .method-put {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .method-delete {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .response-area {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
+            padding: var(--dm-space-4);
+            border-radius: var(--dm-radius-md);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            max-height: 300px;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .response-area.loading {
+            color: var(--dm-gray-500);
+        }
+
+        .response-area.error {
+            color: #f87171;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--dm-space-4);
+        }
+
+        @media (max-width: 768px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<script src="../js/layout.js"></script>
+
+<!-- Hero Section -->
+<div class="hero">
+    <h1>HTTP Client</h1>
+    <p>Fetch-based HTTP client for making API requests with Promises and async/await support.</p>
+    <p><code>Domma.http</code></p>
+</div>
+
+<div class="container py-8">
+    <!-- Overview -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Overview</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>Domma.http</code> provides a simple, Promise-based HTTP client built on the Fetch API.
+                All methods return Promises that resolve to parsed JSON responses.
+            </p>
+            <div class="alert alert-info">
+                <strong>Note:</strong> All requests automatically set <code>Content-Type: application/json</code>
+                and parse responses as JSON.
+            </div>
+        </div>
+    </section>
+
+    <!-- API Reference -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">API Reference</h2>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Signature</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><span class="method-badge method-get">GET</span></td>
+                    <td><code>http.get(url, config)</code></td>
+                    <td>Fetch data from a URL</td>
+                </tr>
+                <tr>
+                    <td><span class="method-badge method-post">POST</span></td>
+                    <td><code>http.post(url, data, config)</code></td>
+                    <td>Send data to create a resource</td>
+                </tr>
+                <tr>
+                    <td><span class="method-badge method-put">PUT</span></td>
+                    <td><code>http.put(url, data, config)</code></td>
+                    <td>Send data to update a resource</td>
+                </tr>
+                <tr>
+                    <td><span class="method-badge method-delete">DELETE</span></td>
+                    <td><code>http.delete(url, config)</code></td>
+                    <td>Delete a resource</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Config Options</h3>
+            <p class="mb-3">The <code>config</code> parameter accepts any valid <a
+                    href="https://developer.mozilla.org/en-US/docs/Web/API/fetch#options" target="_blank"
+                    class="text-primary">fetch options</a>:</p>
+            <pre class="code-block">{
+    headers: {
+        'Authorization': 'Bearer token123',
+        'X-Custom-Header': 'value'
+    },
+    mode: 'cors',
+    credentials: 'include'
+}</pre>
+        </div>
+    </section>
+
+    <!-- GET Demo -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">
+                <span class="method-badge method-get">GET</span>
+                Fetch Data
+            </h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Fetch posts from JSONPlaceholder API:</p>
+
+            <div class="demo-grid">
+                <div>
+                    <pre class="code-block mb-4">// Fetch a single post
+const post = await Domma.http.get(
+    'https://jsonplaceholder.typicode.com/posts/1'
+);
+console.log(post.title);
+
+// Fetch multiple posts
+const posts = await Domma.http.get(
+    'https://jsonplaceholder.typicode.com/posts?_limit=3'
+);</pre>
+                    <button class="btn btn-primary" id="demo-get">
+                        <span data-icon="download" data-icon-size="16"></span>
+                        Fetch Posts
+                    </button>
+                </div>
+                <div>
+                    <label class="form-label">Response:</label>
+                    <div class="response-area" id="get-response">Click "Fetch Posts" to see the response...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- POST Demo -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">
+                <span class="method-badge method-post">POST</span>
+                Create Resource
+            </h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Create a new post (simulated with JSONPlaceholder):</p>
+
+            <div class="demo-grid">
+                <div>
+                    <div class="form-group mb-3">
+                        <label class="form-label">Title</label>
+                        <input type="text" class="form-input" id="post-title" value="My New Post">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label">Body</label>
+                        <textarea class="form-textarea" id="post-body" rows="2">This is the post content.</textarea>
+                    </div>
+                    <pre class="code-block mb-4">const newPost = await Domma.http.post(
+    'https://jsonplaceholder.typicode.com/posts',
+    {
+        title: 'My New Post',
+        body: 'This is the post content.',
+        userId: 1
+    }
+);</pre>
+                    <button class="btn btn-primary" id="demo-post">
+                        <span data-icon="plus" data-icon-size="16"></span>
+                        Create Post
+                    </button>
+                </div>
+                <div>
+                    <label class="form-label">Response:</label>
+                    <div class="response-area" id="post-response">Click "Create Post" to see the response...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PUT Demo -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">
+                <span class="method-badge method-put">PUT</span>
+                Update Resource
+            </h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Update an existing post:</p>
+
+            <div class="demo-grid">
+                <div>
+                    <pre class="code-block mb-4">const updated = await Domma.http.put(
+    'https://jsonplaceholder.typicode.com/posts/1',
+    {
+        id: 1,
+        title: 'Updated Title',
+        body: 'Updated content here.',
+        userId: 1
+    }
+);</pre>
+                    <button class="btn btn-warning" id="demo-put">
+                        <span data-icon="edit" data-icon-size="16"></span>
+                        Update Post
+                    </button>
+                </div>
+                <div>
+                    <label class="form-label">Response:</label>
+                    <div class="response-area" id="put-response">Click "Update Post" to see the response...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DELETE Demo -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">
+                <span class="method-badge method-delete">DELETE</span>
+                Delete Resource
+            </h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Delete a post:</p>
+
+            <div class="demo-grid">
+                <div>
+                    <pre class="code-block mb-4">await Domma.http.delete(
+    'https://jsonplaceholder.typicode.com/posts/1'
+);
+// Returns empty object {} on success</pre>
+                    <button class="btn btn-danger" id="demo-delete">
+                        <span data-icon="trash" data-icon-size="16"></span>
+                        Delete Post
+                    </button>
+                </div>
+                <div>
+                    <label class="form-label">Response:</label>
+                    <div class="response-area" id="delete-response">Click "Delete Post" to see the response...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Error Handling -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Error Handling</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Handle errors with try/catch:</p>
+
+            <div class="demo-grid">
+                <div>
+                    <pre class="code-block mb-4">try {
+    const data = await Domma.http.get(
+        'https://jsonplaceholder.typicode.com/posts/999'
+    );
+} catch (error) {
+    console.error('Request failed:', error.message);
+    // "HTTP Error: 404"
+}</pre>
+                    <button class="btn btn-outline" id="demo-error">
+                        <span data-icon="alert-triangle" data-icon-size="16"></span>
+                        Trigger 404 Error
+                    </button>
+                </div>
+                <div>
+                    <label class="form-label">Response:</label>
+                    <div class="response-area" id="error-response">Click to trigger an error...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Headers -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Custom Headers</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Add custom headers to your requests:</p>
+
+            <pre class="code-block">// Add authorization header
+const data = await Domma.http.get('/api/protected', {
+    headers: {
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIs...',
+        'X-Request-ID': 'abc123'
+    }
+});
+
+// Custom content type
+const xml = await Domma.http.post('/api/xml', xmlData, {
+    headers: {
+        'Content-Type': 'application/xml'
+    }
+});</pre>
+        </div>
+    </section>
+
+    <!-- Quick Reference -->
+    <section class="card">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Quick Reference</h2>
+        </div>
+        <div class="card-body">
+            <div class="grid grid-cols-1 grid-cols-md-2 gap-4">
+                <div>
+                    <h4 class="font-semibold mb-2">Basic Usage</h4>
+                    <pre class="code-block">// GET
+const users = await Domma.http.get('/api/users');
+
+// POST
+const user = await Domma.http.post('/api/users', {
+    name: 'John',
+    email: 'john@example.com'
+});
+
+// PUT
+await Domma.http.put('/api/users/1', { name: 'Jane' });
+
+// DELETE
+await Domma.http.delete('/api/users/1');</pre>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">With async/await</h4>
+                    <pre class="code-block">async function fetchData() {
+    try {
+        const data = await Domma.http.get('/api/data');
+        console.log(data);
+    } catch (err) {
+        console.error(err.message);
+    }
+}
+
+// Or with .then()
+Domma.http.get('/api/data')
+    .then(data => console.log(data))
+    .catch(err => console.error(err));</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+    // Scan icons
+    Domma.icons.scan();
+
+    // Helper to format JSON
+    function formatJson(obj) {
+        return JSON.stringify(obj, null, 2);
+    }
+
+    // GET Demo
+    $('#demo-get').on('click', async () => {
+        const output = $('#get-response');
+        output.addClass('loading').text('Loading...');
+
+        try {
+            const posts = await Domma.http.get('https://jsonplaceholder.typicode.com/posts?_limit=3');
+            output.removeClass('loading error').text(formatJson(posts));
+        } catch (err) {
+            output.removeClass('loading').addClass('error').text('Error: ' + err.message);
+        }
+    });
+
+    // POST Demo
+    $('#demo-post').on('click', async () => {
+        const output = $('#post-response');
+        const title = $('#post-title').val();
+        const body = $('#post-body').val();
+
+        output.addClass('loading').text('Creating...');
+
+        try {
+            const result = await Domma.http.post('https://jsonplaceholder.typicode.com/posts', {
+                title: title,
+                body: body,
+                userId: 1
+            });
+            output.removeClass('loading error').text(formatJson(result));
+            Domma.elements.toast.success('Post created successfully!');
+        } catch (err) {
+            output.removeClass('loading').addClass('error').text('Error: ' + err.message);
+        }
+    });
+
+    // PUT Demo
+    $('#demo-put').on('click', async () => {
+        const output = $('#put-response');
+        output.addClass('loading').text('Updating...');
+
+        try {
+            const result = await Domma.http.put('https://jsonplaceholder.typicode.com/posts/1', {
+                id: 1,
+                title: 'Updated Title',
+                body: 'This post has been updated.',
+                userId: 1
+            });
+            output.removeClass('loading error').text(formatJson(result));
+            Domma.elements.toast.success('Post updated successfully!');
+        } catch (err) {
+            output.removeClass('loading').addClass('error').text('Error: ' + err.message);
+        }
+    });
+
+    // DELETE Demo
+    $('#demo-delete').on('click', async () => {
+        const output = $('#delete-response');
+        output.addClass('loading').text('Deleting...');
+
+        try {
+            const result = await Domma.http.delete('https://jsonplaceholder.typicode.com/posts/1');
+            output.removeClass('loading error').text(formatJson(result) + '\n\n// Post deleted successfully');
+            Domma.elements.toast.success('Post deleted successfully!');
+        } catch (err) {
+            output.removeClass('loading').addClass('error').text('Error: ' + err.message);
+        }
+    });
+
+    // Error Demo
+    $('#demo-error').on('click', async () => {
+        const output = $('#error-response');
+        output.addClass('loading').text('Requesting invalid resource...');
+
+        try {
+            await Domma.http.get('https://jsonplaceholder.typicode.com/posts/99999');
+            output.removeClass('loading').text('Unexpected success');
+        } catch (err) {
+            output.removeClass('loading').addClass('error').text('Caught error:\n' + err.message);
+            Domma.elements.toast.error('Request failed: ' + err.message);
+        }
+    });
+</script>
+</body>
+</html>

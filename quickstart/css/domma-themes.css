@@ -1,3 +1,11 @@
+/*!
+ * Domma Themes v1.0.0
+ * Dynamic Object Manipulation & Modeling API
+ * (c) 2025 Darryl Waterhouse & DCBW-IT
+ * Built: 2025-12-05T14:05:36.397Z
+ * Commit: e26e52c
+ */
+
 /**
  * Domma Theme Base
  * Shared design tokens: spacing, typography, radii, shadows, transitions
@@ -1056,57 +1064,57 @@
 
 .dm-theme-lemon {
     /* ================================================
-       PRIMARY COLOURS - Lemon Yellow
+       PRIMARY COLOURS - Soft Pastel Yellow
        ================================================ */
-    --dm-primary: #daa520;
-    --dm-primary-hover: #e0b43a;
-    --dm-primary-active: #e6c354;
-    --dm-primary-light: #fffacd;
-    --dm-primary-dark: #b8860b;
+    --dm-primary: #f0e68c;
+    --dm-primary-hover: #f5ed9e;
+    --dm-primary-active: #faf4b0;
+    --dm-primary-light: #fffef5;
+    --dm-primary-dark: #daa520;
 
-    /* Focus ring with lemon colour */
-    --dm-focus-ring: 0 0 0 3px rgba(218, 165, 32, 0.3);
-    --dm-border-focus: #daa520;
+    /* Focus ring with pastel lemon colour */
+    --dm-focus-ring: 0 0 0 3px rgba(240, 230, 140, 0.4);
+    --dm-border-focus: #f0e68c;
 
     /* ================================================
-       SECONDARY COLOURS - Soft Peach
+       SECONDARY COLOURS - Soft Cream
        ================================================ */
-    --dm-secondary: #deb887;
-    --dm-secondary-hover: #e4c49a;
-    --dm-secondary-active: #ead0ad;
-    --dm-secondary-light: #fdf5e6;
-    --dm-secondary-dark: #cd853f;
+    --dm-secondary: #fafad2;
+    --dm-secondary-hover: #fcfce0;
+    --dm-secondary-active: #fefee8;
+    --dm-secondary-light: #fffff8;
+    --dm-secondary-dark: #eee8aa;
 
     /* ================================================
        STATUS COLOURS - Pastel-tinted
        ================================================ */
-    --dm-success: #9acd32;
-    --dm-success-hover: #a9d44b;
-    --dm-success-active: #b8db64;
-    --dm-success-light: #f5fae6;
-    --dm-success-dark: #6b8e23;
+    --dm-success: #c5e1a5;
+    --dm-success-hover: #d1e7b5;
+    --dm-success-active: #ddedc5;
+    --dm-success-light: #f5faf0;
+    --dm-success-dark: #9ccc65;
 
-    --dm-info: #87ceeb;
-    --dm-info-hover: #98d6ef;
-    --dm-info-active: #a9def3;
-    --dm-info-light: #f0f9fd;
-    --dm-info-dark: #4682b4;
+    --dm-info: #b3e5fc;
+    --dm-info-hover: #c3ebfd;
+    --dm-info-active: #d3f1fe;
+    --dm-info-light: #f5fcff;
+    --dm-info-dark: #81d4fa;
 
     /* ================================================
        ACCENT COLOURS
        ================================================ */
-    --dm-accent-1: #fffacd; /* Lemon chiffon */
-    --dm-accent-2: #fafad2; /* Light goldenrod */
-    --dm-accent-3: #f0e68c; /* Khaki */
-    --dm-accent-4: #daa520; /* Goldenrod */
+    --dm-accent-1: #fffef5; /* Near white yellow */
+    --dm-accent-2: #fffacd; /* Lemon chiffon */
+    --dm-accent-3: #fafad2; /* Light goldenrod */
+    --dm-accent-4: #f0e68c; /* Khaki */
 
     /* ================================================
        SELECTION
        ================================================ */
-    --dm-selected-bg: rgba(218, 165, 32, 0.15);
-    --dm-tab-active-border: #daa520;
+    --dm-selected-bg: rgba(240, 230, 140, 0.2);
+    --dm-tab-active-border: #f0e68c;
     --dm-tab-active-text: #b8860b;
-    --dm-progress-bar: #daa520;
+    --dm-progress-bar: #f0e68c;
 }
 
 /* Dark mode adjustments for lemon */
@@ -1311,3 +1319,4 @@
     --dm-tab-active-text: #78909c;
     --dm-progress-bar: #78909c;
 }
+

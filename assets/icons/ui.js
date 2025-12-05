@@ -131,6 +131,24 @@ export const ui = {
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
     },
+    'columns': {
+        viewBox: '0 0 24 24',
+        path: 'M12 3v18M3 3h18v18H3V3z',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'layout': {
+        viewBox: '0 0 24 24',
+        path: 'M4 3h16a1 1 0 011 1v16a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1zM9 21V9m12-6H3',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
 
     // Actions
     'close': {
