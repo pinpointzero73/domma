@@ -732,6 +732,95 @@
                         Domma.theme.setVariant('ocean');
                     </div>
                 </div>
+
+                <!-- 12. HTTP Client -->
+                <div class="carousel-slide">
+                    <span class="slide-number">12</span>
+                    <h3 class="slide-title">HTTP Client</h3>
+                    <p class="slide-description">
+                        Fetch-based HTTP client with promise API. GET, POST, PUT, DELETE with automatic JSON handling.
+                    </p>
+                    <div class="slide-code">
+                        const users = await Domma.http.get('/api/users');<br>
+                        await Domma.http.post('/api/users', { name: 'Alice' });<br>
+                        await Domma.http.delete('/api/users/1');
+                    </div>
+                </div>
+
+                <!-- 13. Storage Wrapper -->
+                <div class="carousel-slide">
+                    <span class="slide-number">13</span>
+                    <h3 class="slide-title">Storage Wrapper</h3>
+                    <p class="slide-description">
+                        localStorage wrapper with auto JSON serialisation, namespaced keys, and graceful fallbacks.
+                    </p>
+                    <div class="slide-code">
+                        S.set('user', { name: 'Alice', role: 'admin' });<br>
+                        const user = S.get('user'); <span class="comment">// Auto-parsed</span><br>
+                        S.keys(); S.has('user'); S.clear();
+                    </div>
+                </div>
+
+                <!-- 14. Model Persistence -->
+                <div class="carousel-slide">
+                    <span class="slide-number">14</span>
+                    <h3 class="slide-title">Model Persistence</h3>
+                    <p class="slide-description">
+                        Models auto-save to localStorage. Load state on page refresh, reset to defaults anytime.
+                    </p>
+                    <div class="slide-code">
+                        const settings = M.create(schema, data, {<br>
+                        &nbsp;&nbsp;persist: 'app-settings' <span class="comment">// Auto-save key</span><br>
+                        });<br>
+                        settings.reset(true); <span class="comment">// Clear storage too</span>
+                    </div>
+                </div>
+
+                <!-- 15. Comprehensive Tests -->
+                <div class="carousel-slide">
+                    <span class="slide-number">15</span>
+                    <h3 class="slide-title">100+ Unit Tests</h3>
+                    <p class="slide-description">
+                        Comprehensive test suite covering all modules: DOM, utils, dates, models, storage, tables,
+                        elements, and more.
+                    </p>
+                    <div class="slide-code">
+                        <span class="comment">// Run tests in browser</span><br>
+                        open tests/test.html<br>
+                        <span class="comment">// DOM, Utils, Dates, Models, Storage...</span>
+                    </div>
+                </div>
+
+                <!-- 16. CSS Grid System -->
+                <div class="carousel-slide">
+                    <span class="slide-number">16</span>
+                    <h3 class="slide-title">CSS Grid System</h3>
+                    <p class="slide-description">
+                        Bootstrap-style 12-column grid plus modern CSS Grid utilities. Mobile-first, responsive
+                        breakpoints.
+                    </p>
+                    <div class="slide-code">
+                        &lt;div class="row"&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="col-6"&gt;Half&lt;/div&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="col-6"&gt;Half&lt;/div&gt;<br>
+                        &lt;/div&gt;
+                    </div>
+                </div>
+
+                <!-- 17. BYOS - Bring Your Own Styles -->
+                <div class="carousel-slide">
+                    <span class="slide-number">17</span>
+                    <h3 class="slide-title">CSS-Free Usage</h3>
+                    <p class="slide-description">
+                        Use Domma's JS with your own CSS framework. Disable theming entirely for Bootstrap, Tailwind, or
+                        custom styles.
+                    </p>
+                    <div class="slide-code">
+                        $.setup({ noStyles: true });<br>
+                        <span class="comment">// All JS features work without Domma CSS</span><br>
+                        $('.tailwind-class').fadeIn().on('click', fn);
+                    </div>
+                </div>
             </div>
         </div>
     </div>

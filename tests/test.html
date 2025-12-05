@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Domma Test Suite</title>
+    <title>Domma Test Suite - Comprehensive Coverage</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -181,6 +181,1046 @@
             assert(testDiv.textContent === 'Configured', 'Should apply initial text');
             assert(testDiv.classList.contains('configured'), 'Should apply initial class');
             document.body.removeChild(testDiv);
+        });
+
+        // ============================================
+        // DATES MODULE TESTS
+        // ============================================
+
+        test('Dates - create from current time', () => {
+            const d = Domma.dates();
+            assert(d.isValid(), 'Should create valid date from now');
+            assert(typeof d.year() === 'number', 'Should have year getter');
+        });
+
+        test('Dates - create from string', () => {
+            const d = Domma.dates('2025-06-15');
+            assert(d.isValid(), 'Should parse date string');
+            assert(d.year() === 2025, 'Should have correct year');
+            assert(d.month() === 5, 'Month should be 0-indexed (June = 5)');
+            assert(d.date() === 15, 'Should have correct date');
+        });
+
+        test('Dates - create from timestamp', () => {
+            const timestamp = 1718452800000; // 2024-06-15 12:00:00 UTC
+            const d = Domma.dates(timestamp);
+            assert(d.isValid(), 'Should parse timestamp');
+        });
+
+        test('Dates - format basic', () => {
+            const d = Domma.dates('2025-12-25');
+            assert(d.format('YYYY') === '2025', 'Should format year');
+            assert(d.format('MM') === '12', 'Should format month');
+            assert(d.format('DD') === '25', 'Should format day');
+        });
+
+        test('Dates - format full', () => {
+            const d = Domma.dates('2025-03-05');
+            const formatted = d.format('DD/MM/YYYY');
+            assert(formatted === '05/03/2025', 'Should format as DD/MM/YYYY');
+        });
+
+        test('Dates - add days', () => {
+            const d = Domma.dates('2025-01-01').add(5, 'days');
+            assert(d.date() === 6, 'Should add 5 days');
+        });
+
+        test('Dates - add months', () => {
+            const d = Domma.dates('2025-01-15').add(2, 'months');
+            assert(d.month() === 2, 'Should add 2 months (March = 2)');
+        });
+
+        test('Dates - subtract days', () => {
+            const d = Domma.dates('2025-01-10').subtract(3, 'days');
+            assert(d.date() === 7, 'Should subtract 3 days');
+        });
+
+        test('Dates - startOf day', () => {
+            const d = Domma.dates('2025-06-15T14:30:00').startOf('day');
+            assert(d.hour() === 0, 'Hour should be 0');
+            assert(d.minute() === 0, 'Minute should be 0');
+        });
+
+        test('Dates - startOf month', () => {
+            const d = Domma.dates('2025-06-15').startOf('month');
+            assert(d.date() === 1, 'Date should be 1');
+        });
+
+        test('Dates - endOf month', () => {
+            const d = Domma.dates('2025-02-10').endOf('month');
+            assert(d.date() === 28, 'February 2025 ends on 28th');
+        });
+
+        test('Dates - isBefore', () => {
+            const d1 = Domma.dates('2025-01-01');
+            const d2 = Domma.dates('2025-12-31');
+            assert(d1.isBefore(d2), 'Jan should be before Dec');
+            assert(!d2.isBefore(d1), 'Dec should not be before Jan');
+        });
+
+        test('Dates - isAfter', () => {
+            const d1 = Domma.dates('2025-12-31');
+            const d2 = Domma.dates('2025-01-01');
+            assert(d1.isAfter(d2), 'Dec should be after Jan');
+        });
+
+        test('Dates - isSame', () => {
+            const d1 = Domma.dates('2025-06-15');
+            const d2 = Domma.dates('2025-06-15');
+            assert(d1.isSame(d2, 'day'), 'Same dates should be equal');
+        });
+
+        test('Dates - diff in days', () => {
+            const d1 = Domma.dates('2025-01-01');
+            const d2 = Domma.dates('2025-01-11');
+            assert(d2.diff(d1, 'days') === 10, 'Difference should be 10 days');
+        });
+
+        test('Dates - clone', () => {
+            const d1 = Domma.dates('2025-06-15');
+            const d2 = d1.clone().add(1, 'day');
+            assert(d1.date() === 15, 'Original should be unchanged');
+            assert(d2.date() === 16, 'Clone should be modified');
+        });
+
+        test('Dates - isValid false for invalid', () => {
+            const d = Domma.dates('invalid-date');
+            assert(!d.isValid(), 'Invalid string should return invalid date');
+        });
+
+        test('Dates - unix timestamp', () => {
+            const d = Domma.dates('2025-01-01T00:00:00Z');
+            const unix = d.unix();
+            assert(typeof unix === 'number', 'unix() should return number');
+        });
+
+        test('Dates - toISOString', () => {
+            const d = Domma.dates('2025-06-15');
+            const iso = d.toISOString();
+            assert(iso.includes('2025-06-15'), 'Should contain date in ISO string');
+        });
+
+        // ============================================
+        // STORAGE MODULE TESTS
+        // ============================================
+
+        test('Storage - set and get string', () => {
+            Domma.storage.set('test-string', 'hello');
+            assert(Domma.storage.get('test-string') === 'hello', 'Should store and retrieve string');
+            Domma.storage.remove('test-string');
+        });
+
+        test('Storage - set and get object', () => {
+            const obj = {name: 'Alice', age: 30};
+            Domma.storage.set('test-object', obj);
+            const retrieved = Domma.storage.get('test-object');
+            assert(retrieved.name === 'Alice', 'Should auto-serialize objects');
+            assert(retrieved.age === 30, 'Should preserve object properties');
+            Domma.storage.remove('test-object');
+        });
+
+        test('Storage - set and get array', () => {
+            const arr = [1, 2, 3, 4, 5];
+            Domma.storage.set('test-array', arr);
+            const retrieved = Domma.storage.get('test-array');
+            assert(Array.isArray(retrieved), 'Should return array');
+            assert(retrieved.length === 5, 'Should preserve array length');
+            Domma.storage.remove('test-array');
+        });
+
+        test('Storage - get with default', () => {
+            const result = Domma.storage.get('non-existent-key', 'default-value');
+            assert(result === 'default-value', 'Should return default for missing key');
+        });
+
+        test('Storage - has', () => {
+            Domma.storage.set('test-has', 'value');
+            assert(Domma.storage.has('test-has'), 'Should return true for existing key');
+            assert(!Domma.storage.has('non-existent'), 'Should return false for missing key');
+            Domma.storage.remove('test-has');
+        });
+
+        test('Storage - remove', () => {
+            Domma.storage.set('test-remove', 'value');
+            Domma.storage.remove('test-remove');
+            assert(!Domma.storage.has('test-remove'), 'Key should be removed');
+        });
+
+        test('Storage - keys', () => {
+            Domma.storage.set('test-keys-1', 'a');
+            Domma.storage.set('test-keys-2', 'b');
+            const keys = Domma.storage.keys();
+            assert(Array.isArray(keys), 'keys() should return array');
+            assert(keys.includes('test-keys-1'), 'Should include first key');
+            assert(keys.includes('test-keys-2'), 'Should include second key');
+            Domma.storage.remove('test-keys-1');
+            Domma.storage.remove('test-keys-2');
+        });
+
+        test('Storage - isAvailable', () => {
+            assert(Domma.storage.isAvailable() === true, 'localStorage should be available in browser');
+        });
+
+        // ============================================
+        // MODELS MODULE TESTS
+        // ============================================
+
+        test('Models - create simple model', () => {
+            const User = Domma.models.create({
+                name: {type: 'string', default: ''},
+                age: {type: 'number', default: 0}
+            });
+            assert(User.get('name') === '', 'Should have default string value');
+            assert(User.get('age') === 0, 'Should have default number value');
+        });
+
+        test('Models - set and get values', () => {
+            const User = Domma.models.create({
+                name: {type: 'string'}
+            });
+            User.set('name', 'Alice');
+            assert(User.get('name') === 'Alice', 'Should set and get value');
+        });
+
+        test('Models - set multiple values', () => {
+            const User = Domma.models.create({
+                name: {type: 'string'},
+                email: {type: 'string'}
+            });
+            User.set({name: 'Bob', email: 'bob@example.com'});
+            assert(User.get('name') === 'Bob', 'Should set name');
+            assert(User.get('email') === 'bob@example.com', 'Should set email');
+        });
+
+        test('Models - toJSON', () => {
+            const User = Domma.models.create({
+                name: {type: 'string', default: 'Test'}
+            });
+            const json = User.toJSON();
+            assert(json.name === 'Test', 'toJSON should return data object');
+        });
+
+        test('Models - onChange callback', () => {
+            let changed = false;
+            let changedField = null;
+            const User = Domma.models.create({
+                name: {type: 'string'}
+            });
+            User.onChange((field, value) => {
+                changed = true;
+                changedField = field;
+            });
+            User.set('name', 'Changed');
+            assert(changed, 'onChange should be called');
+            assert(changedField === 'name', 'Should receive field name');
+        });
+
+        test('Models - validation required', () => {
+            const User = Domma.models.create({
+                name: {type: 'string', required: true}
+            });
+            User.set('name', '');
+            const validation = User.validate();
+            assert(!validation.valid, 'Should fail validation when required field is empty');
+        });
+
+        test('Models - validation passes', () => {
+            const User = Domma.models.create({
+                name: {type: 'string', required: true}
+            });
+            User.set('name', 'Valid Name');
+            const validation = User.validate();
+            assert(validation.valid, 'Should pass validation with valid data');
+        });
+
+        test('Models - reset to defaults', () => {
+            const User = Domma.models.create({
+                name: {type: 'string', default: 'Default'}
+            });
+            User.set('name', 'Changed');
+            User.reset();
+            assert(User.get('name') === 'Default', 'Should reset to default value');
+        });
+
+        test('Models - pub/sub subscribe and publish', () => {
+            let received = null;
+            Domma.models.subscribe('test-event', (data) => {
+                received = data;
+            });
+            Domma.models.publish('test-event', {message: 'hello'});
+            assert(received !== null, 'Should receive published event');
+            assert(received.message === 'hello', 'Should receive event data');
+        });
+
+        test('Models - pub/sub once', () => {
+            let callCount = 0;
+            Domma.models.once('once-event', () => {
+                callCount++;
+            });
+            Domma.models.publish('once-event');
+            Domma.models.publish('once-event');
+            assert(callCount === 1, 'once() should only fire once');
+        });
+
+        // ============================================
+        // THEME MODULE TESTS
+        // ============================================
+
+        test('Theme - getTheme returns current theme', () => {
+            const theme = Domma.theme.getTheme();
+            assert(typeof theme === 'string', 'getTheme should return string');
+        });
+
+        test('Theme - setTheme changes theme', () => {
+            const original = Domma.theme.getTheme();
+            Domma.theme.setTheme('dark');
+            assert(Domma.theme.getTheme() === 'dark', 'Should set dark theme');
+            Domma.theme.setTheme(original); // restore
+        });
+
+        test('Theme - getAvailableThemes returns array', () => {
+            const themes = Domma.theme.getAvailableThemes();
+            assert(Array.isArray(themes), 'Should return array');
+            assert(themes.includes('light'), 'Should include light theme');
+            assert(themes.includes('dark'), 'Should include dark theme');
+        });
+
+        test('Theme - toggle switches theme', () => {
+            Domma.theme.setTheme('light');
+            Domma.theme.toggle();
+            assert(Domma.theme.getTheme() === 'dark', 'Should toggle to dark');
+            Domma.theme.toggle();
+            assert(Domma.theme.getTheme() === 'light', 'Should toggle back to light');
+        });
+
+        test('Theme - onChange callback', () => {
+            let newTheme = null;
+            const unsubscribe = Domma.theme.onChange((theme) => {
+                newTheme = theme;
+            });
+            Domma.theme.setTheme('ocean');
+            assert(newTheme === 'ocean', 'onChange should receive new theme');
+            unsubscribe();
+            Domma.theme.setTheme('light'); // restore
+        });
+
+        // ============================================
+        // ICONS MODULE TESTS
+        // ============================================
+
+        test('Icons - get returns SVG string', () => {
+            const svg = Domma.icons.get('home');
+            assert(typeof svg === 'string', 'Should return string');
+            assert(svg.includes('<svg'), 'Should contain SVG element');
+        });
+
+        test('Icons - get with size option', () => {
+            const svg = Domma.icons.get('home', {size: 32});
+            assert(svg.includes('width="32"'), 'Should set width');
+            assert(svg.includes('height="32"'), 'Should set height');
+        });
+
+        test('Icons - get with colour option', () => {
+            const svg = Domma.icons.get('home', {color: 'red'});
+            assert(svg.includes('stroke="red"') || svg.includes('red'), 'Should apply colour');
+        });
+
+        test('Icons - list returns array', () => {
+            const icons = Domma.icons.list();
+            assert(Array.isArray(icons), 'Should return array');
+            assert(icons.length > 0, 'Should have icons');
+            assert(icons.includes('home'), 'Should include home icon');
+        });
+
+        test('Icons - has returns boolean', () => {
+            assert(Domma.icons.has('home') === true, 'Should return true for existing icon');
+            assert(Domma.icons.has('non-existent-icon-xyz') === false, 'Should return false for missing icon');
+        });
+
+        test('Icons - register custom icon', () => {
+            Domma.icons.register('custom-test', '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>');
+            assert(Domma.icons.has('custom-test'), 'Should register custom icon');
+            const svg = Domma.icons.get('custom-test');
+            assert(svg.includes('circle'), 'Should return custom SVG');
+        });
+
+        // ============================================
+        // EXPANDED UTILS TESTS
+        // ============================================
+
+        test('Utils.chunk', () => {
+            const result = Domma.utils.chunk([1, 2, 3, 4, 5], 2);
+            assert(result.length === 3, 'Should create 3 chunks');
+            assert(result[0].length === 2, 'First chunk should have 2 items');
+            assert(result[2].length === 1, 'Last chunk should have 1 item');
+        });
+
+        test('Utils.compact', () => {
+            const result = Domma.utils.compact([0, 1, false, 2, '', 3, null, undefined]);
+            assert(result.length === 3, 'Should remove falsy values');
+            assert(result.join(',') === '1,2,3', 'Should keep truthy values');
+        });
+
+        test('Utils.flatten', () => {
+            const result = Domma.utils.flatten([1, [2, [3, [4]]]]);
+            assert(result.length === 4, 'Should flatten one level');
+            assert(Array.isArray(result[2]), 'Should only flatten one level');
+        });
+
+        test('Utils.flattenDeep', () => {
+            const result = Domma.utils.flattenDeep([1, [2, [3, [4]]]]);
+            assert(result.length === 4, 'Should flatten all levels');
+            assert(result.join(',') === '1,2,3,4', 'Should be completely flat');
+        });
+
+        test('Utils.uniq', () => {
+            const result = Domma.utils.uniq([1, 2, 1, 3, 2, 4]);
+            assert(result.length === 4, 'Should remove duplicates');
+            assert(result.join(',') === '1,2,3,4', 'Should preserve order');
+        });
+
+        test('Utils.difference', () => {
+            const result = Domma.utils.difference([1, 2, 3], [2, 4]);
+            assert(result.length === 2, 'Should return items not in second array');
+            assert(result.join(',') === '1,3', 'Should contain 1 and 3');
+        });
+
+        test('Utils.intersection', () => {
+            const result = Domma.utils.intersection([1, 2, 3], [2, 3, 4]);
+            assert(result.length === 2, 'Should return common items');
+            assert(result.join(',') === '2,3', 'Should contain 2 and 3');
+        });
+
+        test('Utils.groupBy', () => {
+            const result = Domma.utils.groupBy([
+                {type: 'a', val: 1},
+                {type: 'b', val: 2},
+                {type: 'a', val: 3}
+            ], 'type');
+            assert(result.a.length === 2, 'Should group by type a');
+            assert(result.b.length === 1, 'Should group by type b');
+        });
+
+        test('Utils.keyBy', () => {
+            const result = Domma.utils.keyBy([
+                {id: 'x', name: 'Alice'},
+                {id: 'y', name: 'Bob'}
+            ], 'id');
+            assert(result.x.name === 'Alice', 'Should key by id');
+            assert(result.y.name === 'Bob', 'Should key by id');
+        });
+
+        test('Utils.sortBy', () => {
+            const result = Domma.utils.sortBy([
+                {name: 'Charlie'},
+                {name: 'Alice'},
+                {name: 'Bob'}
+            ], 'name');
+            assert(result[0].name === 'Alice', 'Should sort alphabetically');
+            assert(result[2].name === 'Charlie', 'Should be in order');
+        });
+
+        test('Utils.debounce', (done) => {
+            let callCount = 0;
+            const debounced = Domma.utils.debounce(() => {
+                callCount++;
+            }, 50);
+            debounced();
+            debounced();
+            debounced();
+            assert(callCount === 0, 'Should not call immediately');
+        });
+
+        test('Utils.throttle', () => {
+            let callCount = 0;
+            const throttled = Domma.utils.throttle(() => {
+                callCount++;
+            }, 100);
+            throttled();
+            throttled();
+            throttled();
+            assert(callCount === 1, 'Should only call once immediately');
+        });
+
+        test('Utils.memoize', () => {
+            let callCount = 0;
+            const fn = Domma.utils.memoize((x) => {
+                callCount++;
+                return x * 2;
+            });
+            fn(5);
+            fn(5);
+            fn(5);
+            assert(callCount === 1, 'Should only compute once');
+            assert(fn(5) === 10, 'Should return cached result');
+        });
+
+        test('Utils.get nested path', () => {
+            const obj = {a: {b: {c: 42}}};
+            assert(Domma.utils.get(obj, 'a.b.c') === 42, 'Should get nested value');
+            assert(Domma.utils.get(obj, 'a.b.d', 'default') === 'default', 'Should return default');
+        });
+
+        test('Utils.set nested path', () => {
+            const obj = {};
+            Domma.utils.set(obj, 'a.b.c', 42);
+            assert(obj.a.b.c === 42, 'Should set nested value');
+        });
+
+        test('Utils.pick', () => {
+            const obj = {a: 1, b: 2, c: 3};
+            const result = Domma.utils.pick(obj, ['a', 'c']);
+            assert(result.a === 1, 'Should include picked key');
+            assert(result.c === 3, 'Should include picked key');
+            assert(result.b === undefined, 'Should exclude unpicked key');
+        });
+
+        test('Utils.omit', () => {
+            const obj = {a: 1, b: 2, c: 3};
+            const result = Domma.utils.omit(obj, ['b']);
+            assert(result.a === 1, 'Should include non-omitted key');
+            assert(result.b === undefined, 'Should omit specified key');
+            assert(result.c === 3, 'Should include non-omitted key');
+        });
+
+        test('Utils.isEmpty', () => {
+            assert(Domma.utils.isEmpty({}) === true, 'Empty object should be empty');
+            assert(Domma.utils.isEmpty([]) === true, 'Empty array should be empty');
+            assert(Domma.utils.isEmpty('') === true, 'Empty string should be empty');
+            assert(Domma.utils.isEmpty({a: 1}) === false, 'Object with props not empty');
+        });
+
+        test('Utils.isEqual', () => {
+            assert(Domma.utils.isEqual({a: 1}, {a: 1}) === true, 'Equal objects');
+            assert(Domma.utils.isEqual([1, 2], [1, 2]) === true, 'Equal arrays');
+            assert(Domma.utils.isEqual({a: 1}, {a: 2}) === false, 'Different values');
+        });
+
+        test('Utils.camelCase', () => {
+            assert(Domma.utils.camelCase('hello-world') === 'helloWorld', 'Should convert kebab');
+            assert(Domma.utils.camelCase('hello_world') === 'helloWorld', 'Should convert snake');
+        });
+
+        test('Utils.kebabCase', () => {
+            assert(Domma.utils.kebabCase('helloWorld') === 'hello-world', 'Should convert camel');
+            assert(Domma.utils.kebabCase('HelloWorld') === 'hello-world', 'Should convert pascal');
+        });
+
+        test('Utils.snakeCase', () => {
+            assert(Domma.utils.snakeCase('helloWorld') === 'hello_world', 'Should convert camel');
+            assert(Domma.utils.snakeCase('hello-world') === 'hello_world', 'Should convert kebab');
+        });
+
+        test('Utils.capitalize', () => {
+            assert(Domma.utils.capitalize('hello') === 'Hello', 'Should capitalise first letter');
+            assert(Domma.utils.capitalize('HELLO') === 'Hello', 'Should lowercase rest');
+        });
+
+        test('Utils.truncate', () => {
+            const result = Domma.utils.truncate('This is a long string', {length: 10});
+            assert(result.length <= 10, 'Should truncate to length');
+            assert(result.endsWith('...'), 'Should add ellipsis');
+        });
+
+        test('Utils.sum', () => {
+            assert(Domma.utils.sum([1, 2, 3, 4]) === 10, 'Should sum array');
+        });
+
+        test('Utils.mean', () => {
+            assert(Domma.utils.mean([2, 4, 6, 8]) === 5, 'Should calculate mean');
+        });
+
+        test('Utils.clamp', () => {
+            assert(Domma.utils.clamp(5, 0, 10) === 5, 'Should return value in range');
+            assert(Domma.utils.clamp(-5, 0, 10) === 0, 'Should clamp to min');
+            assert(Domma.utils.clamp(15, 0, 10) === 10, 'Should clamp to max');
+        });
+
+        test('Utils.random', () => {
+            const r = Domma.utils.random(1, 10);
+            assert(r >= 1 && r <= 10, 'Should be within range');
+        });
+
+        test('Utils.template basic', () => {
+            const compiled = Domma.utils.template('Hello {{name}}!');
+            const result = compiled({name: 'World'});
+            assert(result === 'Hello World!', 'Should interpolate variables');
+        });
+
+        test('Utils.range', () => {
+            const result = Domma.utils.range(0, 5);
+            assert(result.length === 5, 'Should create range');
+            assert(result.join(',') === '0,1,2,3,4', 'Should contain correct values');
+        });
+
+        test('Utils.times', () => {
+            const result = Domma.utils.times(3, (i) => i * 2);
+            assert(result.length === 3, 'Should call n times');
+            assert(result.join(',') === '0,2,4', 'Should contain mapped values');
+        });
+
+        // ============================================
+        // TABLES MODULE TESTS
+        // ============================================
+
+        test('Tables - create basic table', () => {
+            const container = document.createElement('div');
+            container.id = 'test-table';
+            document.body.appendChild(container);
+
+            const table = Domma.tables.create('#test-table', {
+                data: [
+                    {id: 1, name: 'Alice'},
+                    {id: 2, name: 'Bob'}
+                ],
+                columns: [
+                    {field: 'id', title: 'ID'},
+                    {field: 'name', title: 'Name'}
+                ]
+            });
+
+            assert(table !== null, 'Should create table instance');
+            assert(typeof table.getData === 'function', 'Should have getData method');
+            document.body.removeChild(container);
+        });
+
+        test('Tables - getData returns data', () => {
+            const container = document.createElement('div');
+            container.id = 'test-table-data';
+            document.body.appendChild(container);
+
+            const data = [
+                {id: 1, name: 'Alice'},
+                {id: 2, name: 'Bob'}
+            ];
+
+            const table = Domma.tables.create('#test-table-data', {
+                data: data,
+                columns: [
+                    {field: 'id', title: 'ID'},
+                    {field: 'name', title: 'Name'}
+                ]
+            });
+
+            const retrieved = table.getData();
+            assert(retrieved.length === 2, 'Should return all data');
+            document.body.removeChild(container);
+        });
+
+        test('Tables - addRow adds data', () => {
+            const container = document.createElement('div');
+            container.id = 'test-table-add';
+            document.body.appendChild(container);
+
+            const table = Domma.tables.create('#test-table-add', {
+                data: [{id: 1, name: 'Alice'}],
+                columns: [
+                    {field: 'id', title: 'ID'},
+                    {field: 'name', title: 'Name'}
+                ]
+            });
+
+            table.addRow({id: 2, name: 'Bob'});
+            assert(table.getData().length === 2, 'Should add row');
+            document.body.removeChild(container);
+        });
+
+        test('Tables - search filters data', () => {
+            const container = document.createElement('div');
+            container.id = 'test-table-search';
+            document.body.appendChild(container);
+
+            const table = Domma.tables.create('#test-table-search', {
+                data: [
+                    {id: 1, name: 'Alice'},
+                    {id: 2, name: 'Bob'},
+                    {id: 3, name: 'Charlie'}
+                ],
+                columns: [
+                    {field: 'id', title: 'ID'},
+                    {field: 'name', title: 'Name'}
+                ]
+            });
+
+            table.search('Bob');
+            const filtered = table.getData();
+            assert(filtered.length === 1, 'Should filter to matching row');
+            assert(filtered[0].name === 'Bob', 'Should find Bob');
+            document.body.removeChild(container);
+        });
+
+        test('Tables - clear removes all data', () => {
+            const container = document.createElement('div');
+            container.id = 'test-table-clear';
+            document.body.appendChild(container);
+
+            const table = Domma.tables.create('#test-table-clear', {
+                data: [
+                    {id: 1, name: 'Alice'},
+                    {id: 2, name: 'Bob'}
+                ],
+                columns: [
+                    {field: 'id', title: 'ID'},
+                    {field: 'name', title: 'Name'}
+                ]
+            });
+
+            table.clear();
+            assert(table.getData().length === 0, 'Should clear all data');
+            document.body.removeChild(container);
+        });
+
+        test('Tables - toJSON exports data', () => {
+            const container = document.createElement('div');
+            container.id = 'test-table-json';
+            document.body.appendChild(container);
+
+            const table = Domma.tables.create('#test-table-json', {
+                data: [{id: 1, name: 'Alice'}],
+                columns: [
+                    {field: 'id', title: 'ID'},
+                    {field: 'name', title: 'Name'}
+                ]
+            });
+
+            const json = table.toJSON();
+            assert(typeof json === 'string', 'Should return JSON string');
+            assert(json.includes('Alice'), 'Should contain data');
+            document.body.removeChild(container);
+        });
+
+        test('Tables - toCSV exports data', () => {
+            const container = document.createElement('div');
+            container.id = 'test-table-csv';
+            document.body.appendChild(container);
+
+            const table = Domma.tables.create('#test-table-csv', {
+                data: [{id: 1, name: 'Alice'}],
+                columns: [
+                    {field: 'id', title: 'ID'},
+                    {field: 'name', title: 'Name'}
+                ]
+            });
+
+            const csv = table.toCSV();
+            assert(typeof csv === 'string', 'Should return CSV string');
+            assert(csv.includes('Alice'), 'Should contain data');
+            document.body.removeChild(container);
+        });
+
+        test('Tables - pageInfo returns pagination info', () => {
+            const container = document.createElement('div');
+            container.id = 'test-table-page';
+            document.body.appendChild(container);
+
+            const table = Domma.tables.create('#test-table-page', {
+                data: [
+                    {id: 1}, {id: 2}, {id: 3},
+                    {id: 4}, {id: 5}, {id: 6}
+                ],
+                columns: [{field: 'id', title: 'ID'}],
+                pageSize: 2,
+                pagination: true
+            });
+
+            const info = table.pageInfo();
+            assert(info.page === 1, 'Should start at page 1');
+            assert(info.pageSize === 2, 'Should have page size 2');
+            assert(info.totalPages === 3, 'Should have 3 pages');
+            document.body.removeChild(container);
+        });
+
+        // ============================================
+        // ELEMENTS MODULE TESTS
+        // ============================================
+
+        test('Elements - modal create and destroy', () => {
+            const container = document.createElement('div');
+            container.id = 'test-modal';
+            container.className = 'modal';
+            container.innerHTML = '<div class="modal-content">Test</div>';
+            document.body.appendChild(container);
+
+            const modal = Domma.elements.modal('#test-modal');
+            assert(modal !== null, 'Should create modal instance');
+            assert(typeof modal.open === 'function', 'Should have open method');
+            assert(typeof modal.close === 'function', 'Should have close method');
+            document.body.removeChild(container);
+        });
+
+        test('Elements - modal open and close', () => {
+            const container = document.createElement('div');
+            container.id = 'test-modal-toggle';
+            container.className = 'modal';
+            container.innerHTML = '<div class="modal-content">Test</div>';
+            document.body.appendChild(container);
+
+            const modal = Domma.elements.modal('#test-modal-toggle');
+            modal.open();
+            assert(modal.isOpen(), 'Should be open after open()');
+            modal.close();
+            assert(!modal.isOpen(), 'Should be closed after close()');
+            document.body.removeChild(container);
+        });
+
+        test('Elements - tabs create', () => {
+            const container = document.createElement('div');
+            container.id = 'test-tabs';
+            container.innerHTML = `
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-tab="tab1">Tab 1</button>
+                    <button class="tab-btn" data-tab="tab2">Tab 2</button>
+                </div>
+                <div class="tabs-content">
+                    <div class="tab-pane active" data-tab="tab1">Content 1</div>
+                    <div class="tab-pane" data-tab="tab2">Content 2</div>
+                </div>
+            `;
+            document.body.appendChild(container);
+
+            const tabs = Domma.elements.tabs('#test-tabs');
+            assert(tabs !== null, 'Should create tabs instance');
+            assert(typeof tabs.show === 'function', 'Should have show method');
+            document.body.removeChild(container);
+        });
+
+        test('Elements - accordion create', () => {
+            const container = document.createElement('div');
+            container.id = 'test-accordion';
+            container.innerHTML = `
+                <div class="accordion-item">
+                    <div class="accordion-header">Header 1</div>
+                    <div class="accordion-content">Content 1</div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">Header 2</div>
+                    <div class="accordion-content">Content 2</div>
+                </div>
+            `;
+            document.body.appendChild(container);
+
+            const accordion = Domma.elements.accordion('#test-accordion');
+            assert(accordion !== null, 'Should create accordion instance');
+            assert(typeof accordion.open === 'function', 'Should have open method');
+            assert(typeof accordion.close === 'function', 'Should have close method');
+            document.body.removeChild(container);
+        });
+
+        test('Elements - tooltip create', () => {
+            const btn = document.createElement('button');
+            btn.id = 'test-tooltip-btn';
+            btn.textContent = 'Hover me';
+            document.body.appendChild(btn);
+
+            const tooltip = Domma.elements.tooltip('#test-tooltip-btn', {
+                content: 'Tooltip text'
+            });
+            assert(tooltip !== null, 'Should create tooltip instance');
+            assert(typeof tooltip.show === 'function', 'Should have show method');
+            assert(typeof tooltip.hide === 'function', 'Should have hide method');
+            document.body.removeChild(btn);
+        });
+
+        test('Elements - card create', () => {
+            const container = document.createElement('div');
+            container.id = 'test-card';
+            container.className = 'card';
+            container.innerHTML = '<div class="card-body">Card content</div>';
+            document.body.appendChild(container);
+
+            const card = Domma.elements.card('#test-card', {hover: true});
+            assert(card !== null, 'Should create card instance');
+            document.body.removeChild(container);
+        });
+
+        test('Elements - buttonGroup create', () => {
+            const container = document.createElement('div');
+            container.id = 'test-btn-group';
+            container.className = 'btn-group';
+            container.innerHTML = `
+                <button class="btn" data-value="a">A</button>
+                <button class="btn" data-value="b">B</button>
+                <button class="btn" data-value="c">C</button>
+            `;
+            document.body.appendChild(container);
+
+            const group = Domma.elements.buttonGroup('#test-btn-group', {mode: 'single'});
+            assert(group !== null, 'Should create button group');
+            assert(typeof group.getValue === 'function', 'Should have getValue method');
+            document.body.removeChild(container);
+        });
+
+        test('Elements - backToTop create', () => {
+            const btn = document.createElement('button');
+            btn.id = 'test-back-to-top';
+            btn.textContent = 'Top';
+            document.body.appendChild(btn);
+
+            const backToTop = Domma.elements.backToTop('#test-back-to-top');
+            assert(backToTop !== null, 'Should create backToTop instance');
+            assert(typeof backToTop.scroll === 'function', 'Should have scroll method');
+            backToTop.destroy();
+            document.body.removeChild(btn);
+        });
+
+        // ============================================
+        // HTTP MODULE TESTS
+        // ============================================
+
+        test('HTTP - module exists', () => {
+            assert(Domma.http !== undefined, 'http module should exist');
+            assert(typeof Domma.http.get === 'function', 'Should have get method');
+            assert(typeof Domma.http.post === 'function', 'Should have post method');
+            assert(typeof Domma.http.put === 'function', 'Should have put method');
+            assert(typeof Domma.http.delete === 'function', 'Should have delete method');
+        });
+
+        // ============================================
+        // ADDITIONAL DOM TESTS
+        // ============================================
+
+        test('DOM - attr getter and setter', () => {
+            const el = Domma('#test-elem');
+            el.attr('data-test', 'value');
+            assert(el.attr('data-test') === 'value', 'Should set and get attribute');
+            el.removeAttr('data-test');
+        });
+
+        test('DOM - data getter and setter', () => {
+            const el = Domma('#test-elem');
+            el.data('key', 'dataValue');
+            assert(el.data('key') === 'dataValue', 'Should set and get data');
+        });
+
+        test('DOM - prop getter and setter', () => {
+            const el = Domma('#test-btn');
+            el.prop('disabled', true);
+            assert(el.prop('disabled') === true, 'Should set and get property');
+            el.prop('disabled', false);
+        });
+
+        test('DOM - hasClass', () => {
+            const el = Domma('#test-elem');
+            assert(el.hasClass('test-class'), 'Should detect existing class');
+            assert(!el.hasClass('non-existent'), 'Should return false for missing class');
+        });
+
+        test('DOM - toggleClass', () => {
+            const el = Domma('#test-elem');
+            el.toggleClass('toggled');
+            assert(el.hasClass('toggled'), 'Should add class on toggle');
+            el.toggleClass('toggled');
+            assert(!el.hasClass('toggled'), 'Should remove class on toggle');
+        });
+
+        test('DOM - find', () => {
+            const container = document.createElement('div');
+            container.id = 'find-test';
+            container.innerHTML = '<span class="inner">Inner</span>';
+            document.body.appendChild(container);
+
+            const found = Domma('#find-test').find('.inner');
+            assert(found.elements.length === 1, 'Should find inner element');
+            document.body.removeChild(container);
+        });
+
+        test('DOM - parent', () => {
+            const parent = Domma('#test-elem').parent();
+            assert(parent.elements.length === 1, 'Should get parent element');
+        });
+
+        test('DOM - children', () => {
+            const container = document.createElement('div');
+            container.id = 'children-test';
+            container.innerHTML = '<span>1</span><span>2</span><span>3</span>';
+            document.body.appendChild(container);
+
+            const children = Domma('#children-test').children();
+            assert(children.elements.length === 3, 'Should get all children');
+            document.body.removeChild(container);
+        });
+
+        test('DOM - first and last', () => {
+            const container = document.createElement('div');
+            container.id = 'first-last-test';
+            container.innerHTML = '<span>First</span><span>Middle</span><span>Last</span>';
+            document.body.appendChild(container);
+
+            const first = Domma('#first-last-test span').first();
+            const last = Domma('#first-last-test span').last();
+            assert(first.text() === 'First', 'Should get first element');
+            assert(last.text() === 'Last', 'Should get last element');
+            document.body.removeChild(container);
+        });
+
+        test('DOM - eq', () => {
+            const container = document.createElement('div');
+            container.id = 'eq-test';
+            container.innerHTML = '<span>0</span><span>1</span><span>2</span>';
+            document.body.appendChild(container);
+
+            const second = Domma('#eq-test span').eq(1);
+            assert(second.text() === '1', 'Should get element at index');
+            document.body.removeChild(container);
+        });
+
+        test('DOM - append and prepend', () => {
+            const container = document.createElement('div');
+            container.id = 'append-test';
+            container.innerHTML = '<span>Middle</span>';
+            document.body.appendChild(container);
+
+            Domma('#append-test').prepend('<span>First</span>');
+            Domma('#append-test').append('<span>Last</span>');
+
+            const children = container.children;
+            assert(children[0].textContent === 'First', 'Should prepend element');
+            assert(children[2].textContent === 'Last', 'Should append element');
+            document.body.removeChild(container);
+        });
+
+        test('DOM - empty', () => {
+            const container = document.createElement('div');
+            container.id = 'empty-test';
+            container.innerHTML = '<span>Content</span>';
+            document.body.appendChild(container);
+
+            Domma('#empty-test').empty();
+            assert(container.innerHTML === '', 'Should empty element');
+            document.body.removeChild(container);
+        });
+
+        test('DOM - clone', () => {
+            const el = Domma('#test-elem');
+            const cloned = el.clone();
+            assert(cloned.elements.length === 1, 'Should clone element');
+            assert(cloned.elements[0] !== el.elements[0], 'Should be different element');
+        });
+
+        test('DOM - width and height', () => {
+            const container = document.createElement('div');
+            container.id = 'dimension-test';
+            container.style.width = '100px';
+            container.style.height = '50px';
+            document.body.appendChild(container);
+
+            const el = Domma('#dimension-test');
+            assert(el.width() === 100, 'Should get width');
+            assert(el.height() === 50, 'Should get height');
+            document.body.removeChild(container);
+        });
+
+        test('DOM - show and hide', () => {
+            const container = document.createElement('div');
+            container.id = 'visibility-test';
+            document.body.appendChild(container);
+
+            const el = Domma('#visibility-test');
+            el.hide();
+            assert(container.style.display === 'none', 'Should hide element');
+            el.show();
+            assert(container.style.display !== 'none', 'Should show element');
+            document.body.removeChild(container);
         });
 
         // Render Results

@@ -38,7 +38,7 @@
     --dm-gray-900: #212529;
 
     /* Typography */
-    --dm-font-sans: Roboto, Lato, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --dm-font-sans: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
     --dm-font-mono: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --dm-font-size-xs: 0.75rem;
     --dm-font-size-sm: 0.875rem;
@@ -3449,6 +3449,14 @@ code {
 
 .showcase-content {
     width: 100%;
+}
+
+/* Add left margin on desktop to account for fixed sidebar */
+@media (min-width: 1025px) {
+    .showcase-content {
+        margin-left: 240px;
+        width: calc(100% - 240px);
+    }
 }
 
 /* Sidebar toggle button (mobile) */
