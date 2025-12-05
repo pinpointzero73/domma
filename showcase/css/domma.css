@@ -3394,8 +3394,8 @@ code {
 
 .sidebar {
     position: fixed;
-    bottom: 1rem;
-    left: 1rem;
+    bottom: 4px;
+    left: 2px;
     width: 220px;
     max-height: 50vh;
     overflow-y: auto;
