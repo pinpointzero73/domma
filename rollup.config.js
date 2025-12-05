@@ -1,4 +1,5 @@
 import resolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
 import {execSync} from 'child_process';
 import {readFileSync} from 'fs';
@@ -13,6 +14,17 @@ const getGitCommit = () => {
     } catch {
         return 'unknown';
     }
+};
+
+// Format date as dd/mm/YYYY hh:mm
+const formatDate = (date) => {
+    const pad = (n) => String(n).padStart(2, '0');
+    const day = pad(date.getDate());
+    const month = pad(date.getMonth() + 1);
+    const year = date.getFullYear();
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
 };
 
 // Build banner with version metadata
@@ -57,6 +69,12 @@ export default {
     ],
     plugins: [
         resolve(),
+        replace({
+            preventAssignment: true,
+            __BUILD_VERSION__: JSON.stringify(pkg.version),
+            __BUILD_DATE__: JSON.stringify(formatDate(new Date())),
+            __BUILD_COMMIT__: JSON.stringify(getGitCommit())
+        }),
         terser()
         // obfuscator({ options: obfuscatorOptions })  // Disabled - can cause issues
     ]
