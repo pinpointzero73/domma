@@ -1188,7 +1188,8 @@ class TableInstance {
             const pageSizeWrapper = document.createElement('span');
             pageSizeWrapper.innerHTML = 'Show ';
             const select = document.createElement('select');
-            select.style.cssText = 'padding: 4px 8px; margin: 0 5px;';
+            select.className = 'form-select';
+            select.style.cssText = 'width: auto; display: inline-block; margin: 0 5px;';
             for (const size of opts.pageSizeOptions) {
                 const option = document.createElement('option');
                 option.value = size;
