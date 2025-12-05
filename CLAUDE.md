@@ -130,6 +130,12 @@ Accessed via `Domma.elements`:
   `getValue()`, `getActive()`, `setValue()`, `toggle()`, `selectAll()`, `deselectAll()`
   - CSS classes: `.btn-group`, `.btn-group-vertical`, `.active`
   - Mode: `'single'` (radio) or `'multiple'` (checkbox)
+- **Dialog**: Promise-based modal dialogs (replacements for browser `alert`/`confirm`/`prompt`)
+  - `elements.alert(message, options)` → `Promise<void>` - Simple message with OK button
+  - `elements.confirm(message, options)` → `Promise<boolean>` - OK/Cancel, returns true/false
+  - `elements.prompt(message, options)` → `Promise<string|null>` - Text input, returns value or null
+  - Options: `title`, `confirmText`, `cancelText`, `inputPlaceholder`, `inputValue`, `inputType`, `animation`,
+    `keyboard`
 
 ### tables.js - DataTable-like functionality
 
