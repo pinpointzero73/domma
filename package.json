@@ -1,13 +1,13 @@
 {
   "name": "domma",
-  "version": "1.0.0",
+  "version": "0.8.0b",
   "description": "Dynamic Object Manipulation & Modeling API - A complete front-end toolkit.",
   "main": "public/dist/domma.min.js",
   "module": "public/dist/domma.esm.js",
   "types": "assets/types/index.d.ts",
   "type": "module",
   "scripts": {
-    "dev": "live-server public --port=3000 --open=/index.html",
+    "dev": "node scripts/build-info.js && rollup -c && npm run build:css && live-server public --port=3000 --open=/index.html",
     "build": "node scripts/build-info.js && rollup -c && npm run build:css",
     "build:js": "rollup -c",
     "build:css": "node scripts/build-css.js",
