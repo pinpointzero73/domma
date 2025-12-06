@@ -12,6 +12,13 @@ import {commerce} from './commerce.js';
 import {status} from './status.js';
 import {navigation} from './navigation.js';
 import {seasonal} from './seasonal.js';
+import {weather} from './weather.js';
+import {devices} from './devices.js';
+import {finance} from './finance.js';
+import {health} from './health.js';
+import {sport} from './sport.js';
+import {buildings} from './buildings.js';
+import {emojis} from './emojis.js';
 
 // Merge all icon categories
 export const icons = {
@@ -23,7 +30,14 @@ export const icons = {
     ...commerce,
     ...status,
     ...navigation,
-    ...seasonal
+    ...seasonal,
+    ...weather,
+    ...devices,
+    ...finance,
+    ...health,
+    ...sport,
+    ...buildings,
+    ...emojis
 };
 
 // Export categories for selective imports
@@ -36,7 +50,14 @@ export {
     commerce,
     status,
     navigation,
-    seasonal
+    seasonal,
+    weather,
+    devices,
+    finance,
+    health,
+    sport,
+    buildings,
+    emojis
 };
 
 // Category metadata for icon gallery
@@ -85,6 +106,41 @@ export const categories = {
         name: 'Seasonal',
         description: 'Festive and holiday icons',
         icons: Object.keys(seasonal)
+    },
+    weather: {
+        name: 'Weather',
+        description: 'Weather conditions and meteorology',
+        icons: Object.keys(weather)
+    },
+    devices: {
+        name: 'Devices',
+        description: 'Electronic devices and hardware',
+        icons: Object.keys(devices)
+    },
+    finance: {
+        name: 'Finance',
+        description: 'Financial and charts',
+        icons: Object.keys(finance)
+    },
+    health: {
+        name: 'Health',
+        description: 'Medical and wellness',
+        icons: Object.keys(health)
+    },
+    sport: {
+        name: 'Sport',
+        description: 'Sports and fitness',
+        icons: Object.keys(sport)
+    },
+    buildings: {
+        name: 'Buildings',
+        description: 'Architecture and structures',
+        icons: Object.keys(buildings)
+    },
+    emojis: {
+        name: 'Emojis',
+        description: 'Emoji expressions and faces',
+        icons: Object.keys(emojis)
     }
 };
 
