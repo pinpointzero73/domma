@@ -1,10 +1,10 @@
 /**
- * Quick Roller - Page Builder Component
+ * Page Roller - Page Builder Component
  *
  * A visual page builder for creating web pages through drag-and-drop
  * with template management, split-screen preview, and multiple export options.
  *
- * @module quick-roller
+ * @module page-roller
  */
 
 import {storage as S} from './storage.js';
@@ -15,6 +15,68 @@ import {utils} from './utils.js';
 // ============================================================================
 
 const SECTION_REGISTRY = {
+    navbar: {
+        name: 'Navigation Bar',
+        icon: 'menu',
+        category: 'headers',
+        description: 'Top navigation bar with logo and menu links',
+        defaults: {
+            brandText: 'My Site',
+            brandImage: '',
+            style: 'light',
+            sticky: false,
+            links: [
+                {text: 'Home', url: '#'},
+                {text: 'About', url: '#'},
+                {text: 'Services', url: '#'},
+                {text: 'Contact', url: '#'}
+            ],
+            showCta: true,
+            ctaText: 'Get Started',
+            ctaUrl: '#'
+        },
+        editableFields: [
+            {key: 'brandText', type: 'text', label: 'Brand Text'},
+            {key: 'brandImage', type: 'text', label: 'Logo URL'},
+            {key: 'style', type: 'select', label: 'Style', options: ['light', 'dark', 'transparent']},
+            {key: 'sticky', type: 'toggle', label: 'Sticky'},
+            {key: 'links', type: 'links', label: 'Menu Links'},
+            {key: 'showCta', type: 'toggle', label: 'Show CTA Button'},
+            {key: 'ctaText', type: 'text', label: 'CTA Text', showWhen: {showCta: true}},
+            {key: 'ctaUrl', type: 'text', label: 'CTA URL', showWhen: {showCta: true}}
+        ],
+        template: (config) => {
+            const styleClass = config.style === 'dark' ? 'navbar-dark' :
+                config.style === 'transparent' ? 'navbar-transparent' : 'navbar-light';
+            const stickyClass = config.sticky ? 'navbar-sticky' : '';
+
+            const brandHtml = config.brandImage ?
+                `<img src="${config.brandImage}" alt="${config.brandText}" class="navbar-logo">` :
+                `<span class="navbar-brand-text">${config.brandText}</span>`;
+
+            const linksHtml = config.links.map(link =>
+                `<a href="${link.url}" class="nav-link">${link.text}</a>`
+            ).join('\n            ');
+
+            const ctaHtml = config.showCta ?
+                `<a href="${config.ctaUrl}" class="btn btn-primary btn-sm">${config.ctaText}</a>` : '';
+
+            return `<nav class="navbar ${styleClass} ${stickyClass}">
+    <div class="container">
+        <a href="#" class="navbar-brand">
+            ${brandHtml}
+        </a>
+        <div class="navbar-nav">
+            ${linksHtml}
+        </div>
+        <div class="navbar-actions">
+            ${ctaHtml}
+        </div>
+    </div>
+</nav>`;
+        }
+    },
+
     hero: {
         name: 'Hero',
         icon: 'layout',
@@ -146,6 +208,62 @@ const SECTION_REGISTRY = {
         ${headerHtml}
         <div class="grid grid-cols-${config.columns} ${gapClass}">
 ${cardsHtml}
+        </div>
+    </div>
+</section>`;
+        }
+    },
+
+    content: {
+        name: 'Content Block',
+        icon: 'document-text',
+        category: 'content',
+        description: 'Rich text content section with optional image',
+        defaults: {
+            title: 'About Us',
+            content: '<p>Write your content here. This section supports rich text formatting.</p>',
+            layout: 'text-only',
+            imagePosition: 'right',
+            image: '',
+            imageAlt: ''
+        },
+        editableFields: [
+            {key: 'title', type: 'text', label: 'Title'},
+            {key: 'content', type: 'richtext', label: 'Content'},
+            {key: 'layout', type: 'select', label: 'Layout', options: ['text-only', 'text-image', 'image-text']},
+            {key: 'image', type: 'text', label: 'Image URL', showWhen: {layout: ['text-image', 'image-text']}},
+            {key: 'imageAlt', type: 'text', label: 'Image Alt Text', showWhen: {layout: ['text-image', 'image-text']}}
+        ],
+        template: (config) => {
+            if (config.layout === 'text-only') {
+                return `<section class="py-12">
+    <div class="container">
+        <div class="max-w-3xl mx-auto">
+            ${config.title ? `<h2 class="text-3xl font-bold mb-4">${config.title}</h2>` : ''}
+            <div class="content">
+                ${config.content}
+            </div>
+        </div>
+    </div>
+</section>`;
+            }
+
+            const imageFirst = config.layout === 'image-text';
+            const imageCol = `<div class="col-6">
+                <img src="${config.image}" alt="${config.imageAlt}" class="img-fluid rounded">
+            </div>`;
+            const textCol = `<div class="col-6">
+                ${config.title ? `<h2 class="text-3xl font-bold mb-4">${config.title}</h2>` : ''}
+                <div class="content">
+                    ${config.content}
+                </div>
+            </div>`;
+
+            return `<section class="py-12">
+    <div class="container">
+        <div class="row align-center gap-6">
+            ${imageFirst ? imageCol : textCol}
+            ${imageFirst ? textCol : imageCol}
         </div>
     </div>
 </section>`;
@@ -324,124 +442,6 @@ ${fieldsHtml}
     </div>
 </footer>`;
         }
-    },
-
-    content: {
-        name: 'Content Block',
-        icon: 'document-text',
-        category: 'content',
-        description: 'Rich text content section with optional image',
-        defaults: {
-            title: 'About Us',
-            content: '<p>Write your content here. This section supports rich text formatting.</p>',
-            layout: 'text-only',
-            imagePosition: 'right',
-            image: '',
-            imageAlt: ''
-        },
-        editableFields: [
-            {key: 'title', type: 'text', label: 'Title'},
-            {key: 'content', type: 'richtext', label: 'Content'},
-            {key: 'layout', type: 'select', label: 'Layout', options: ['text-only', 'text-image', 'image-text']},
-            {key: 'image', type: 'text', label: 'Image URL', showWhen: {layout: ['text-image', 'image-text']}},
-            {key: 'imageAlt', type: 'text', label: 'Image Alt Text', showWhen: {layout: ['text-image', 'image-text']}}
-        ],
-        template: (config) => {
-            if (config.layout === 'text-only') {
-                return `<section class="py-12">
-    <div class="container">
-        <div class="max-w-3xl mx-auto">
-            ${config.title ? `<h2 class="text-3xl font-bold mb-4">${config.title}</h2>` : ''}
-            <div class="content">
-                ${config.content}
-            </div>
-        </div>
-    </div>
-</section>`;
-            }
-
-            const imageFirst = config.layout === 'image-text';
-            const imageCol = `<div class="col-6">
-                <img src="${config.image}" alt="${config.imageAlt}" class="img-fluid rounded">
-            </div>`;
-            const textCol = `<div class="col-6">
-                ${config.title ? `<h2 class="text-3xl font-bold mb-4">${config.title}</h2>` : ''}
-                <div class="content">
-                    ${config.content}
-                </div>
-            </div>`;
-
-            return `<section class="py-12">
-    <div class="container">
-        <div class="row align-center gap-6">
-            ${imageFirst ? imageCol : textCol}
-            ${imageFirst ? textCol : imageCol}
-        </div>
-    </div>
-</section>`;
-        }
-    },
-
-    navbar: {
-        name: 'Navigation Bar',
-        icon: 'menu',
-        category: 'headers',
-        description: 'Top navigation bar with logo and menu links',
-        defaults: {
-            brandText: 'My Site',
-            brandImage: '',
-            style: 'light',
-            sticky: false,
-            links: [
-                {text: 'Home', url: '#'},
-                {text: 'About', url: '#'},
-                {text: 'Services', url: '#'},
-                {text: 'Contact', url: '#'}
-            ],
-            showCta: true,
-            ctaText: 'Get Started',
-            ctaUrl: '#'
-        },
-        editableFields: [
-            {key: 'brandText', type: 'text', label: 'Brand Text'},
-            {key: 'brandImage', type: 'text', label: 'Logo URL'},
-            {key: 'style', type: 'select', label: 'Style', options: ['light', 'dark', 'transparent']},
-            {key: 'sticky', type: 'toggle', label: 'Sticky'},
-            {key: 'links', type: 'links', label: 'Menu Links'},
-            {key: 'showCta', type: 'toggle', label: 'Show CTA Button'},
-            {key: 'ctaText', type: 'text', label: 'CTA Text', showWhen: {showCta: true}},
-            {key: 'ctaUrl', type: 'text', label: 'CTA URL', showWhen: {showCta: true}}
-        ],
-        template: (config) => {
-            const styleClass = config.style === 'dark' ? 'navbar-dark' :
-                config.style === 'transparent' ? 'navbar-transparent' : 'navbar-light';
-            const stickyClass = config.sticky ? 'navbar-sticky' : '';
-
-            const brandHtml = config.brandImage ?
-                `<img src="${config.brandImage}" alt="${config.brandText}" class="navbar-logo">` :
-                `<span class="navbar-brand-text">${config.brandText}</span>`;
-
-            const linksHtml = config.links.map(link =>
-                `<a href="${link.url}" class="nav-link">${link.text}</a>`
-            ).join('\n            ');
-
-            const ctaHtml = config.showCta ?
-                `<a href="${config.ctaUrl}" class="btn btn-primary btn-sm">${config.ctaText}</a>` : '';
-
-            return `<nav class="navbar ${styleClass} ${stickyClass}">
-    <div class="container">
-        <a href="#" class="navbar-brand">
-            ${brandHtml}
-        </a>
-        <div class="navbar-nav">
-            ${linksHtml}
-        </div>
-        <div class="navbar-actions">
-            ${ctaHtml}
-        </div>
-    </div>
-</nav>`;
-        }
     }
 };
 
@@ -451,8 +451,8 @@ ${fieldsHtml}
 // ============================================================================
 
 class TemplateManager {
-    static STORAGE_KEY = 'quick-roller-templates';
-    static ACTIVE_KEY = 'quick-roller-active';
+    static STORAGE_KEY = 'page-roller-templates';
+    static ACTIVE_KEY = 'page-roller-active';
 
     /**
      * List all saved templates
@@ -554,13 +554,13 @@ class TemplateManager {
 
 
 // ============================================================================
-// QuickRoller Class - Main component
+// PageRoller Class - Main component
 // ============================================================================
 
 /**
- * QuickRoller - Page Builder Component
+ * PageRoller - Page Builder Component
  */
-class QuickRoller {
+class PageRoller {
     static defaults = {
         template: null,
         theme: 'light',
@@ -577,7 +577,7 @@ class QuickRoller {
     };
 
     /**
-     * Create a QuickRoller instance
+     * Create a PageRoller instance
      * @param {string|Element} selector - Container selector or element
      * @param {Object} options - Configuration options
      */
@@ -586,11 +586,11 @@ class QuickRoller {
             document.querySelector(selector) : selector;
 
         if (!this.element) {
-            console.error('QuickRoller: Container element not found');
+            console.error('PageRoller: Container element not found');
             return;
         }
 
-        this.options = {...QuickRoller.defaults, ...options};
+        this.options = {...PageRoller.defaults, ...options};
         this._sections = [];
         this._selectedIndex = -1;
         this._pageConfig = {
@@ -715,7 +715,7 @@ class QuickRoller {
                     <input type="text" class="qr-template-name" placeholder="Untitled Page" value="${this._escapeHtml(this._templateName)}">
                 </div>
                 <div class="qr-header-center">
-                    <span class="qr-title">Quick Roller</span>
+                    <span class="qr-title">Page Roller</span>
                 </div>
                 <div class="qr-header-right">
                     <label class="qr-label">Theme:</label>
@@ -1603,7 +1603,7 @@ ${sectionsHtml}
                 duration: 3000
             }) || Domma.elements.toast.show(message);
         } else {
-            console.log(`[QuickRoller] ${message}`);
+            console.log(`[PageRoller] ${message}`);
         }
     }
 
@@ -1615,12 +1615,12 @@ ${sectionsHtml}
      * Add a section to the page
      * @param {string} type - Section type from registry
      * @param {number} [position] - Insert position (defaults to end)
-     * @returns {QuickRoller} this
+     * @returns {PageRoller} this
      */
     addSection(type, position) {
         const definition = SECTION_REGISTRY[type];
         if (!definition) {
-            console.error(`QuickRoller: Unknown section type "${type}"`);
+            console.error(`PageRoller: Unknown section type "${type}"`);
             return this;
         }
 
@@ -1648,7 +1648,7 @@ ${sectionsHtml}
     /**
      * Remove a section by index
      * @param {number} index - Section index
-     * @returns {QuickRoller} this
+     * @returns {PageRoller} this
      */
     removeSection(index) {
         if (index < 0 || index >= this._sections.length) return this;
@@ -1673,7 +1673,7 @@ ${sectionsHtml}
      * Move a section to a new position
      * @param {number} from - Current index
      * @param {number} to - Target position
-     * @returns {QuickRoller} this
+     * @returns {PageRoller} this
      */
     moveSection(from, to) {
         if (from < 0 || from >= this._sections.length) return this;
@@ -1699,7 +1699,7 @@ ${sectionsHtml}
      * Update a section's configuration
      * @param {number} index - Section index
      * @param {Object} config - Configuration updates
-     * @returns {QuickRoller} this
+     * @returns {PageRoller} this
      */
     updateSection(index, config) {
         if (index < 0 || index >= this._sections.length) return this;
@@ -1736,7 +1736,7 @@ ${sectionsHtml}
      * Set theme and variant
      * @param {string|null} theme - 'light', 'dark', or null
      * @param {string|null} [variant] - Theme variant
-     * @returns {QuickRoller} this
+     * @returns {PageRoller} this
      */
     setTheme(theme, variant) {
         this._pageConfig.theme = theme;
@@ -1759,7 +1759,7 @@ ${sectionsHtml}
     /**
      * Set grid enabled state
      * @param {boolean} enabled
-     * @returns {QuickRoller} this
+     * @returns {PageRoller} this
      */
     setGridEnabled(enabled) {
         this._pageConfig.useGrid = enabled;
@@ -1860,7 +1860,7 @@ ${sectionsHtml}
 
     /**
      * Copy HTML to clipboard
-     * @returns {Promise<QuickRoller>} this
+     * @returns {Promise<PageRoller>} this
      */
     async copyToClipboard() {
         const html = this.exportHTML({standalone: true});
@@ -1878,7 +1878,7 @@ ${sectionsHtml}
     /**
      * Download as HTML file
      * @param {string} [filename='page'] - Filename without extension
-     * @returns {QuickRoller} this
+     * @returns {PageRoller} this
      */
     download(filename) {
         const name = filename || this._templateName || 'page';
@@ -1906,7 +1906,7 @@ ${sectionsHtml}
 
     /**
      * Save to localStorage
-     * @returns {QuickRoller} this
+     * @returns {PageRoller} this
      */
     saveToStorage() {
         TemplateManager.saveActive(this._getPageData());
@@ -1918,7 +1918,7 @@ ${sectionsHtml}
     /**
      * Save as named template
      * @param {string} name - Template name
-     * @returns {QuickRoller} this
+     * @returns {PageRoller} this
      */
     saveTemplate(name) {
         this._templateName = name;
@@ -1938,7 +1938,7 @@ ${sectionsHtml}
     /**
      * Load a named template
      * @param {string} name - Template name
-     * @returns {QuickRoller} this
+     * @returns {PageRoller} this
      */
     loadTemplate(name) {
         const template = TemplateManager.load(name);
@@ -1972,7 +1972,7 @@ ${sectionsHtml}
     /**
      * Delete a named template
      * @param {string} name - Template name
-     * @returns {QuickRoller} this
+     * @returns {PageRoller} this
      */
     deleteTemplate(name) {
         if (TemplateManager.delete(name)) {
@@ -1991,7 +1991,7 @@ ${sectionsHtml}
 
     /**
      * Start a new page
-     * @returns {QuickRoller} this
+     * @returns {PageRoller} this
      */
     newPage() {
         if (this._isDirty) {
@@ -2035,7 +2035,7 @@ ${sectionsHtml}
     /**
      * Open preview in new window
      * Uses the same inlined CSS approach as the iframe preview
-     * @returns {QuickRoller} this
+     * @returns {PageRoller} this
      */
     openPreviewWindow() {
         // Use the same preview HTML as the iframe (with inlined styles)
@@ -2048,7 +2048,7 @@ ${sectionsHtml}
 
     /**
      * Force preview refresh
-     * @returns {QuickRoller} this
+     * @returns {PageRoller} this
      */
     refreshPreview() {
         this._refreshPreview();
@@ -2077,4 +2077,4 @@ ${sectionsHtml}
 }
 
 // Export
-export {QuickRoller, TemplateManager, SECTION_REGISTRY};
+export {PageRoller, TemplateManager, SECTION_REGISTRY};

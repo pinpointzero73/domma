@@ -38,7 +38,7 @@ const banner = `/*!
 
 const toolsBanner = `/*!
  * Domma Tools v${pkg.version}
- * Developer tools: Theme Roller & Quick Roller
+ * Developer tools: Theme Roller & Page Roller
  * (c) ${new Date().getFullYear()} Darryl Waterhouse & DCBW-IT
  * Built: ${new Date().toISOString()}
  * Commit: ${getGitCommit()}
@@ -133,7 +133,7 @@ export default [
         ],
         plugins: commonPlugins
     },
-    // Tools bundle (Theme Roller + Quick Roller)
+    // Tools bundle (Theme Roller + Page Roller)
     {
         input: 'src/tools.js',
         output: [

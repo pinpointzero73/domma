@@ -262,7 +262,7 @@ src/
 ├── theme.js         # Theme management
 ├── icons.js         # SVG icon system
 ├── theme-roller.js  # Theme customisation tool (tools bundle)
-└── quick-roller.js  # Page builder tool (tools bundle)
+└── page-roller.js   # Page builder tool (tools bundle)
 
 showcase/            # Comprehensive demos for each namespace
 quickstart/          # Getting started blueprint
@@ -294,7 +294,7 @@ The tools bundle attaches to `Domma.elements` automatically when loaded:
 ```javascript
 // Available after loading domma-tools.min.js
 Domma.elements.themeRoller('#container', options);
-Domma.elements.quickRoller('#container', options);
+Domma.elements.pageRoller('#container', options);
 ```
 
 Zero external dependencies.

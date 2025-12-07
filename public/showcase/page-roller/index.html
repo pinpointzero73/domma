@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quick Roller - Domma Showcase</title>
+    <title>Page Roller - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
     <link rel="stylesheet" href="../css/domma.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <style>
-        /* Quick Roller Component Styles */
+        /* Page Roller Component Styles */
         .qr-container {
             display: flex;
             flex-direction: column;
@@ -648,12 +648,12 @@
         </div>
     </section>
 
-    <!-- Quick Roller Component -->
+    <!-- Page Roller Component -->
     <section data-section="Page Builder">
         <h2 class="text-2xl font-bold mb-4">Page Builder</h2>
         <p class="text-muted mb-4">Click sections on the left to add them, or drag to reorder. Edit properties when a
             section is selected.</p>
-        <div id="quick-roller-container"></div>
+        <div id="page-roller-container"></div>
     </section>
 
     <!-- Usage Section -->
@@ -664,8 +664,8 @@
                 <div class="card-body">
                     <h3 class="card-title">JavaScript API</h3>
                     <div class="code-block">
-                        <span class="comment">// Create a Quick Roller instance</span>
-                        const builder = Domma.elements.quickRoller('#container', {
+                        <span class="comment">// Create a Page Roller instance</span>
+                        const builder = Domma.elements.pageRoller('#container', {
                         theme: 'light',
                         themeVariant: 'ocean',
                         useGrid: true,
@@ -728,8 +728,8 @@
     // Scan icons
     Domma.icons.scan();
 
-    // Create Quick Roller instance
-    const builder = Domma.elements.quickRoller('#quick-roller-container', {
+    // Create Page Roller instance
+    const builder = Domma.elements.pageRoller('#page-roller-container', {
         theme: Domma.theme.get(),
         splitView: true,
         autoSave: true

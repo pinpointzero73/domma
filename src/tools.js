@@ -8,7 +8,7 @@
  */
 
 import {ThemeRoller} from './theme-roller.js';
-import {QuickRoller} from './quick-roller.js';
+import {PageRoller} from './page-roller.js';
 
 // Factory functions
 const tools = {
@@ -20,8 +20,8 @@ const tools = {
         return instance;
     },
 
-    quickRoller(selector, options = {}) {
-        const instance = new QuickRoller(selector, options);
+    pageRoller(selector, options = {}) {
+        const instance = new PageRoller(selector, options);
         if (instance.element && typeof Domma !== 'undefined') {
             Domma.elements._instances.set(instance.element, instance);
         }
@@ -32,7 +32,7 @@ const tools = {
 // Attach to Domma.elements when available
 if (typeof Domma !== 'undefined' && Domma.elements) {
     Domma.elements.themeRoller = tools.themeRoller;
-    Domma.elements.quickRoller = tools.quickRoller;
+    Domma.elements.pageRoller = tools.pageRoller;
 }
 
 // Also expose as DommaTools for direct access
@@ -40,5 +40,5 @@ if (typeof window !== 'undefined') {
     window.DommaTools = tools;
 }
 
-export {tools, ThemeRoller, QuickRoller};
+export {tools, ThemeRoller, PageRoller};
 export default tools;

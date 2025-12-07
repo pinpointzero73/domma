@@ -49,7 +49,7 @@
             path.includes('/themes/') || path.includes('/storage/') ||
             path.includes('/download/') || path.includes('/http/') ||
             path.includes('/grid/') || path.includes('/theme-roller/') ||
-            path.includes('/quick-roller/');
+            path.includes('/page-roller/');
         const isQuickstart = path.includes('/quickstart/');
         const isSubpage = isShowcaseSubpage;
         const base = isSubpage ? '../' : (isQuickstart ? '../showcase/' : '');
@@ -136,7 +136,7 @@
             <li><a href="${base}icons/index.html" class="${getNavClass('icons')}">Icons</a></li>
             <li><a href="${base}themes/index.html" class="${getNavClass('themes')}">Themes</a></li>
             <li><a href="${base}theme-roller/index.html" class="${getNavClass('theme-roller')}">Theme Roller</a></li>
-            <li><a href="${base}quick-roller/index.html" class="${getNavClass('quick-roller')}">Quick Roller</a></li>
+            <li><a href="${base}page-roller/index.html" class="${getNavClass('page-roller')}">Page Roller</a></li>
 <!--            <li><span class="nav-version">v${buildInfo.version}</span></li>-->
         </ul>
     </nav>`;

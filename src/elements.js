@@ -2,7 +2,7 @@
  * Domma Elements Module
  * UI Components: Cards, Modals, Tabs, Accordions, Tooltips, BackToTop
  *
- * Note: ThemeRoller and QuickRoller are in the separate tools bundle (domma-tools.min.js)
+ * Note: ThemeRoller and PageRoller are in the separate tools bundle (domma-tools.min.js)
  */
 
 // ============================================
@@ -3587,8 +3587,8 @@ export const elements = {
     confirm: Dialog.confirm.bind(Dialog),
     prompt: Dialog.prompt.bind(Dialog),
 
-    // Note: themeRoller() and quickRoller() are in domma-tools.min.js
-    // Load that bundle to enable: Domma.elements.themeRoller(), Domma.elements.quickRoller()
+    // Note: themeRoller() and pageRoller() are in domma-tools.min.js
+    // Load that bundle to enable: Domma.elements.themeRoller(), Domma.elements.pageRoller()
 
     get(selector) {
         const el = typeof selector === 'string'
