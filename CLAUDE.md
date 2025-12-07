@@ -160,7 +160,7 @@ Accessed via `Domma.elements`:
 Accessed via `Domma.tables`:
 
 - **Create**:
-  `tables.create(selector, { data, columns, pagination, pageSize, selectable, selectionMode, exportPanel, columnToggle, regexSearch })`
+  `tables.create(selector, { data, columns, pagination, pageSize, selectable, selectionMode, exportPanel, columnToggle, regexSearch, evenRowColor, oddRowColor, hoverColor })`
 - **Data**: `setData()`, `getData()`, `addRow()`, `addRows()`, `updateRow()`, `removeRow()`, `removeRows()`, `clear()`,
   `refresh()`
 - **Sort**: `sort()`, `sortMultiple()`, `clearSort()`, `getSortState()`
@@ -170,6 +170,14 @@ Accessed via `Domma.tables`:
   `getSelectedIndices()`
 - **Export**: `toCSV()`, `toJSON()`, `download()`
 - **Events**: `on()`, `off()`, `once()`
+- **Stripe Configuration**: Control row striping with named variants or custom colors:
+  - `evenRowColor`: Color for even rows (0, 2, 4...) - named variant or hex/rgb value (default: transparent)
+  - `oddRowColor`: Color for odd rows (1, 3, 5...) - named variant or hex/rgb value (default: '#f9f9f9')
+  - `hoverColor`: Color for row hover state - named variant or hex/rgb value (default: '#f0f0f0')
+  - Named variants: `'none'`, `'lighter'`, `'light'`, `'medium'`, `'dark'`, `'primary-tint'`, `'success-tint'`,
+    `'warning-tint'`, `'danger-tint'`, `'info-tint'`
+  - Example:
+    `tables.create('#table', { data, columns, striped: true, evenRowColor: 'lighter', oddRowColor: 'light', hoverColor: 'medium' })`
 
 ### config.js - Declarative configuration engine
 
