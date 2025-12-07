@@ -190,7 +190,7 @@
 
         // Theme toggle button HTML
         const themeToggle = `
-    <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+    <button class="theme-toggle" id="theme-toggle" data-tooltip="Toggle theme">
         <svg id="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
         </svg>
@@ -202,7 +202,7 @@
         // Variant selector HTML
         const variantSelector = `
     <div class="variant-selector" id="variant-selector">
-        <button class="variant-trigger" title="Colour variants"></button>
+        <button class="variant-trigger" data-tooltip="Colour variants"></button>
         <div class="variant-options">
             <button class="variant-dot variant-dot-default" data-variant="" data-tooltip="Default"></button>
             <button class="variant-dot variant-dot-ocean" data-variant="ocean" data-tooltip="Ocean"></button>
@@ -231,7 +231,8 @@
         }
         .theme-toggle {
             position: fixed;
-            top: 1rem;
+            top: 50vh;
+            transform: translateY(-50%);
             right: 1rem;
             padding: 0.5rem;
             background: var(--dm-surface, #fff);
@@ -244,7 +245,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s ease;
+            transition: background 0.2s ease, transform 0.2s ease;
         }
         .theme-toggle:hover {
             background: var(--dm-hover-bg, rgba(0,0,0,0.04));
@@ -252,9 +253,29 @@
         .theme-toggle svg {
             color: var(--dm-text, #212529);
         }
+        .theme-toggle::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--dm-gray-800, #343a40);
+            color: var(--dm-white, #fff);
+            padding: 0.35rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease;
+        }
+        .theme-toggle:hover::after {
+            opacity: 1;
+        }
         .variant-selector {
             position: fixed;
-            top: 4rem;
+            top: 50vh;
+            transform: translateY(50px);
             right: 1rem;
             z-index: 1000;
         }
@@ -274,6 +295,25 @@
         .variant-trigger:hover {
             transform: scale(1.1);
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .variant-trigger::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--dm-gray-800, #343a40);
+            color: var(--dm-white, #fff);
+            padding: 0.35rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease;
+        }
+        .variant-trigger:hover::after {
+            opacity: 1;
         }
         .variant-options {
             position: absolute;
@@ -572,6 +612,65 @@
             max-width: none;
             padding: 0 1rem;
         }
+
+        /* Navbar base styles (fallback if dynamic injection fails) */
+        #main-navbar.dm-navbar {
+            display: flex;
+            padding: 0.75rem 1rem;
+            background: var(--dm-gray-900, #212529);
+            border-bottom: 1px solid var(--dm-border, #dee2e6);
+        }
+
+        #main-navbar .dm-navbar-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 0.5rem;
+        }
+
+        #main-navbar .dm-navbar-link {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        #main-navbar .dm-navbar-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        #main-navbar .dm-navbar-dropdown-toggle {
+            color: rgba(255, 255, 255, 0.85);
+            background: none;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: inherit;
+            font-family: inherit;
+        }
+
+        #main-navbar .dm-navbar-dropdown-menu {
+            background: var(--dm-gray-800, #343a40);
+            border: 1px solid var(--dm-border, #dee2e6);
+            border-radius: 0.25rem;
+            padding: 0.5rem 0;
+        }
+
+        #main-navbar .dm-navbar-dropdown-item {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        #main-navbar .dm-navbar-dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
     </style>`;
 
         // Create footer HTML (for showcase pages)
@@ -851,7 +950,7 @@
             const isDark = $body.hasClass('dm-theme-dark');
             isDark ? $('#theme-icon-sun').show() : $('#theme-icon-sun').hide();
             isDark ? $('#theme-icon-moon').hide() : $('#theme-icon-moon').show();
-            $('#theme-toggle').attr('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+            $('#theme-toggle').attr('data-tooltip', isDark ? 'Switch to light mode' : 'Switch to dark mode');
         }
 
         function toggleTheme() {
