@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Domma</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/logo/domma-icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="../showcase/css/domma.css">
+    <link rel="stylesheet" href="../dist/themes/domma-themes.css">
+    <style>
+        .page-header {
+            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin: 0 0 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .blog-section {
+            padding: 4rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .blog-card {
+            background: var(--dm-card-bg, white);
+            border: 1px solid var(--dm-border, #e5e7eb);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-card-image {
+            height: 160px;
+            background: linear-gradient(135deg, var(--dm-primary-light) 0%, var(--dm-primary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .blog-card-body {
+            padding: 1.5rem;
+        }
+
+        .blog-card-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--dm-gray-500);
+            margin-bottom: 0.75rem;
+        }
+
+        .blog-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0 0 0.75rem;
+            color: var(--dm-text);
+        }
+
+        .blog-card-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .blog-card-title a:hover {
+            color: var(--dm-primary);
+        }
+
+        .blog-card-excerpt {
+            font-size: 0.95rem;
+            color: var(--dm-gray-600);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .blog-card-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .blog-tag {
+            background: var(--dm-primary-light);
+            color: var(--dm-primary-dark);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
+
+        .coming-soon {
+            text-align: center;
+            padding: 3rem;
+            background: var(--dm-gray-100);
+            border-radius: 12px;
+            color: var(--dm-gray-600);
+        }
+
+        .coming-soon h3 {
+            font-size: 1.5rem;
+            margin: 0 0 1rem;
+            color: var(--dm-gray-700);
+        }
+
+        .page-footer {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-400);
+            padding: 1.5rem 2rem;
+        }
+
+        .page-footer a {
+            color: var(--dm-primary-light);
+            text-decoration: none;
+        }
+
+        .page-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .page-footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-footer-nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .page-footer-nav a {
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 576px) {
+            .page-footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body class="dm-theme-light">
+<nav class="navbar navbar-dark">
+    <div class="navbar-brand-group" style="display: flex; align-items: center; gap: 0.75rem;">
+        <a href="../index.html" class="navbar-brand">Domma</a>
+        <a href="../showcase/download/index.html" class="pill pill-light" style="display: inline-block; padding: 0.35rem 0.75rem; font-size: 0.75rem; font-weight: 600; text-decoration: none; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 9999px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white;">Download</a>
+    </div>
+    <ul class="navbar-nav">
+        <li><a href="../showcase/index.html" class="navbar-link">Showcase</a></li>
+        <li><a href="../quickstart/index.html" class="navbar-link">Quickstart</a></li>
+        <li><a href="../about.html" class="navbar-link">About Us</a></li>
+        <li><a href="../faq.html" class="navbar-link">FAQs</a></li>
+        <li><a href="index.html" class="navbar-link active">Blog</a></li>
+    </ul>
+</nav>
+
+<header class="page-header">
+    <h1>Blog</h1>
+    <p>News, tutorials, and insights about Domma and modern JavaScript development.</p>
+</header>
+
+<section class="blog-section">
+    <div class="blog-grid">
+        <article class="blog-card">
+            <div class="blog-card-image">
+                <span data-icon="book-open" data-icon-size="48"></span>
+            </div>
+            <div class="blog-card-body">
+                <div class="blog-card-meta">
+                    <span>Dec 7, 2025</span>
+                    <span>5 min read</span>
+                </div>
+                <h2 class="blog-card-title"><a href="#">Introducing Domma 1.0</a></h2>
+                <p class="blog-card-excerpt">We're excited to announce the release of Domma 1.0, a lightweight JavaScript framework that combines the best of jQuery, Lodash, and modern UI components.</p>
+                <div class="blog-card-tags">
+                    <span class="blog-tag">Release</span>
+                    <span class="blog-tag">Announcement</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="blog-card">
+            <div class="blog-card-image">
+                <span data-icon="code" data-icon-size="48"></span>
+            </div>
+            <div class="blog-card-body">
+                <div class="blog-card-meta">
+                    <span>Dec 5, 2025</span>
+                    <span>8 min read</span>
+                </div>
+                <h2 class="blog-card-title"><a href="#">Getting Started with Reactive Models</a></h2>
+                <p class="blog-card-excerpt">Learn how to use Domma's reactive model system to create data-driven applications with automatic DOM updates and validation.</p>
+                <div class="blog-card-tags">
+                    <span class="blog-tag">Tutorial</span>
+                    <span class="blog-tag">Models</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="blog-card">
+            <div class="blog-card-image">
+                <span data-icon="layout" data-icon-size="48"></span>
+            </div>
+            <div class="blog-card-body">
+                <div class="blog-card-meta">
+                    <span>Dec 3, 2025</span>
+                    <span>6 min read</span>
+                </div>
+                <h2 class="blog-card-title"><a href="#">Building Dynamic UIs with Elements</a></h2>
+                <p class="blog-card-excerpt">Explore Domma's UI component library including modals, tabs, accordions, carousels, and more with practical examples.</p>
+                <div class="blog-card-tags">
+                    <span class="blog-tag">Tutorial</span>
+                    <span class="blog-tag">UI</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="blog-card">
+            <div class="blog-card-image">
+                <span data-icon="zap" data-icon-size="48"></span>
+            </div>
+            <div class="blog-card-body">
+                <div class="blog-card-meta">
+                    <span>Dec 1, 2025</span>
+                    <span>4 min read</span>
+                </div>
+                <h2 class="blog-card-title"><a href="#">Why Zero Dependencies Matter</a></h2>
+                <p class="blog-card-excerpt">In an age of npm bloat, we explain our philosophy of keeping Domma dependency-free and what it means for your projects.</p>
+                <div class="blog-card-tags">
+                    <span class="blog-tag">Philosophy</span>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <div class="coming-soon" style="margin-top: 3rem;">
+        <h3>More Articles Coming Soon</h3>
+        <p>We're working on more tutorials, tips, and deep dives into Domma's features. Check back regularly for new content.</p>
+    </div>
+</section>
+
+<footer class="page-footer">
+    <div class="page-footer-content">
+        <span>&copy; DCBW-IT (2025)</span>
+        <nav class="page-footer-nav">
+            <a href="../about.html">About Us</a>
+            <a href="../faq.html">FAQs</a>
+            <a href="index.html">Blog</a>
+        </nav>
+    </div>
+</footer>
+
+<script src="../dist/domma.min.js"></script>
+<script>
+    Domma.theme.init({ autoDetect: true });
+    Domma.icons.scan();
+</script>
+</body>
+</html>
