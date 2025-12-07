@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Roller - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../css/domma.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <style>
+        /* ============================================
+           Theme Roller Component Styles
+           ============================================ */
+
+        .dm-theme-roller {
+            background: var(--dm-surface);
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-xl);
+            overflow: hidden;
+        }
+
+        .dm-theme-roller-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: var(--dm-background-alt);
+            border-bottom: 1px solid var(--dm-border);
+        }
+
+        .dm-theme-roller-title {
+            font-size: var(--dm-text-xl);
+            font-weight: 600;
+            margin: 0;
+            color: var(--dm-text);
+        }
+
+        .dm-theme-roller-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .dm-theme-toggle {
+            display: flex;
+            background: var(--dm-gray-200);
+            border-radius: var(--dm-radius-full);
+            padding: 0.25rem;
+        }
+
+        .dm-theme-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--dm-radius-full);
+            background: transparent;
+            color: var(--dm-text-muted);
+            cursor: pointer;
+            font-size: var(--dm-text-sm);
+            font-weight: 500;
+            transition: all var(--dm-transition-fast);
+        }
+
+        .dm-theme-btn:hover {
+            color: var(--dm-text);
+        }
+
+        .dm-theme-btn.active {
+            background: var(--dm-primary);
+            color: white;
+        }
+
+        /* Presets Bar */
+        .dm-theme-roller-presets {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--dm-border);
+            flex-wrap: wrap;
+        }
+
+        .dm-presets-label {
+            font-size: var(--dm-text-sm);
+            color: var(--dm-text-muted);
+            margin-right: 0.5rem;
+        }
+
+        .dm-preset-btn {
+            padding: 0.375rem 0.75rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-full);
+            background: var(--dm-surface);
+            color: var(--dm-text-secondary);
+            cursor: pointer;
+            font-size: var(--dm-text-xs);
+            font-weight: 500;
+            transition: all var(--dm-transition-fast);
+        }
+
+        .dm-preset-btn:hover {
+            border-color: var(--dm-primary);
+            color: var(--dm-primary);
+        }
+
+        .dm-preset-btn.active {
+            background: var(--dm-primary);
+            border-color: var(--dm-primary);
+            color: white;
+        }
+
+        /* Sections (Accordion) */
+        .dm-theme-roller-sections {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .dm-theme-roller-sections .accordion-item {
+            border-bottom: 1px solid var(--dm-border);
+        }
+
+        .dm-theme-roller-sections .accordion-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: var(--dm-surface);
+            cursor: pointer;
+            font-weight: 500;
+            transition: background var(--dm-transition-fast);
+        }
+
+        .dm-theme-roller-sections .accordion-header:hover {
+            background: var(--dm-hover-bg);
+        }
+
+        .dm-theme-roller-sections .accordion-content {
+            padding: 1rem 1.5rem;
+            background: var(--dm-background-alt);
+        }
+
+        /* Variable Groups */
+        .dm-var-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .dm-var-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .dm-var-group-title {
+            font-size: var(--dm-text-sm);
+            font-weight: 600;
+            color: var(--dm-text-secondary);
+            margin: 0 0 0.75rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .dm-var-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        /* Variable Items */
+        .dm-var-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+        }
+
+        .dm-var-item label {
+            font-size: var(--dm-text-xs);
+            color: var(--dm-text-muted);
+            font-weight: 500;
+        }
+
+        /* Colour Input */
+        .dm-color-input-wrapper {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .dm-color-input-wrapper input[type="color"] {
+            width: 36px;
+            height: 36px;
+            border: 2px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            cursor: pointer;
+            padding: 0;
+            background: none;
+        }
+
+        .dm-color-input-wrapper input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 2px;
+        }
+
+        .dm-color-input-wrapper input[type="color"]::-webkit-color-swatch {
+            border-radius: 2px;
+            border: none;
+        }
+
+        .dm-color-text {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-text-sm);
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            text-transform: uppercase;
+        }
+
+        .dm-color-text:focus {
+            outline: none;
+            border-color: var(--dm-primary);
+        }
+
+        /* Size Input (Range + Value) */
+        .dm-size-input-wrapper {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .dm-size-input-wrapper input[type="range"] {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--dm-gray-300);
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .dm-size-input-wrapper input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--dm-primary);
+            cursor: pointer;
+            transition: transform var(--dm-transition-fast);
+        }
+
+        .dm-size-input-wrapper input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .dm-size-value {
+            min-width: 60px;
+            text-align: right;
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-text-xs);
+            color: var(--dm-text-muted);
+        }
+
+        /* Select Input */
+        .dm-var-select select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            font-size: var(--dm-text-sm);
+            cursor: pointer;
+        }
+
+        .dm-var-select select:focus {
+            outline: none;
+            border-color: var(--dm-primary);
+        }
+
+        /* Preview Panel */
+        .dm-theme-roller-preview {
+            padding: 1.5rem;
+            border-top: 1px solid var(--dm-border);
+            background: var(--dm-surface);
+        }
+
+        .dm-theme-roller-preview h4 {
+            font-size: var(--dm-text-sm);
+            font-weight: 600;
+            color: var(--dm-text-secondary);
+            margin: 0 0 1rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .dm-preview-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .dm-preview-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .dm-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--dm-radius-md);
+            font-size: var(--dm-text-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--dm-transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dm-btn-primary {
+            background: var(--dm-primary);
+            color: white;
+        }
+
+        .dm-btn-primary:hover {
+            background: var(--dm-primary-hover);
+        }
+
+        .dm-btn-secondary {
+            background: var(--dm-secondary);
+            color: white;
+        }
+
+        .dm-btn-secondary:hover {
+            background: var(--dm-secondary-hover);
+        }
+
+        .dm-btn-success {
+            background: var(--dm-success);
+            color: white;
+        }
+
+        .dm-btn-success:hover {
+            background: var(--dm-success-hover);
+        }
+
+        .dm-btn-danger {
+            background: var(--dm-danger);
+            color: white;
+        }
+
+        .dm-btn-danger:hover {
+            background: var(--dm-danger-hover);
+        }
+
+        .dm-preview-card {
+            background: var(--dm-surface);
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-lg);
+            padding: 1rem;
+            box-shadow: var(--dm-shadow-sm);
+        }
+
+        .dm-preview-card h5 {
+            margin: 0 0 0.5rem 0;
+            font-size: var(--dm-text-base);
+            font-weight: 600;
+            color: var(--dm-text);
+        }
+
+        .dm-preview-card p {
+            margin: 0;
+            font-size: var(--dm-text-sm);
+            color: var(--dm-text-secondary);
+        }
+
+        .dm-preview-input input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            font-size: var(--dm-text-sm);
+        }
+
+        .dm-preview-input input:focus {
+            outline: none;
+            border-color: var(--dm-primary);
+            box-shadow: var(--dm-focus-ring);
+        }
+
+        .dm-preview-alerts {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .dm-alert {
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--dm-radius-md);
+            font-size: var(--dm-text-xs);
+            font-weight: 500;
+        }
+
+        .dm-alert-success {
+            background: var(--dm-success-light);
+            color: var(--dm-success-dark);
+        }
+
+        .dm-alert-warning {
+            background: var(--dm-warning-light);
+            color: var(--dm-warning-dark);
+        }
+
+        .dm-alert-danger {
+            background: var(--dm-danger-light);
+            color: var(--dm-danger-dark);
+        }
+
+        .dm-alert-info {
+            background: var(--dm-info-light);
+            color: var(--dm-info-dark);
+        }
+
+        /* Action Buttons */
+        .dm-theme-roller-actions {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--dm-border);
+            background: var(--dm-background-alt);
+            flex-wrap: wrap;
+        }
+
+        .dm-theme-roller-actions .dm-btn {
+            flex: 1;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        /* ============================================
+           Page Layout Styles
+           ============================================ */
+
+        .hero {
+            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 0;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        @media (min-width: 1024px) {
+            .main-content {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        .roller-container {
+            /* The theme roller component */
+        }
+
+        .usage-section {
+            background: var(--dm-surface);
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-xl);
+            padding: 1.5rem;
+        }
+
+        .usage-section h3 {
+            font-size: var(--dm-text-lg);
+            font-weight: 600;
+            margin: 0 0 1rem 0;
+            color: var(--dm-text);
+        }
+
+        .code-block {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
+            border-radius: var(--dm-radius-lg);
+            padding: 1rem;
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-text-sm);
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .code-block .comment {
+            color: var(--dm-gray-500);
+        }
+
+        .code-block .string {
+            color: #c3e88d;
+        }
+
+        .code-block .function {
+            color: #82aaff;
+        }
+
+        .code-block .keyword {
+            color: #c792ea;
+        }
+    </style>
+</head>
+<body class="dm-theme-light">
+
+<!-- Hero Section -->
+<div class="hero">
+    <h1>Theme Roller</h1>
+    <p>Customise every aspect of your Domma theme with live preview and one-click export.</p>
+</div>
+
+<main class="container pb-8">
+    <div class="main-content">
+        <!-- Theme Roller Component -->
+        <div class="roller-container" id="theme-roller-container">
+            <!-- Theme Roller will be rendered here -->
+        </div>
+
+        <!-- Usage Section -->
+        <div class="usage-section">
+            <h3>Usage</h3>
+
+            <div class="code-block">
+                <span class="comment">// Initialise Theme Roller</span>
+                <span class="keyword">const</span> roller = Domma.elements.<span class="function">themeRoller</span>(
+                <span class="string">'#container'</span>, {
+                baseTheme: <span class="string">'light'</span>,
+                showPresets: <span class="keyword">true</span>,
+                livePreview: <span class="keyword">true</span>
+                });
+
+                <span class="comment">// Get/Set values</span>
+                roller.<span class="function">set</span>(<span class="string">'--dm-primary'</span>, <span
+                    class="string">'#ff6b6b'</span>);
+                roller.<span class="function">get</span>(<span class="string">'--dm-primary'</span>);
+
+                <span class="comment">// Export options</span>
+                roller.<span class="function">download</span>(<span class="string">'my-theme'</span>);
+                roller.<span class="function">copyToClipboard</span>();
+                roller.<span class="function">saveToStorage</span>();
+
+                <span class="comment">// Reset to defaults</span>
+                roller.<span class="function">reset</span>();
+            </div>
+
+            <h3 style="margin-top: 1.5rem;">Features</h3>
+            <ul style="margin: 0; padding-left: 1.25rem; color: var(--dm-text-secondary);">
+                <li>Live preview of all changes</li>
+                <li>Colour picker for all colour variables</li>
+                <li>Sliders for sizing and spacing</li>
+                <li>Preset theme loading</li>
+                <li>Light/Dark mode toggle</li>
+                <li>Download CSS file</li>
+                <li>Copy CSS to clipboard</li>
+                <li>Save to browser storage</li>
+            </ul>
+
+            <h3 style="margin-top: 1.5rem;">Categories</h3>
+            <ul style="margin: 0; padding-left: 1.25rem; color: var(--dm-text-secondary);">
+                <li><strong>Colours:</strong> Brand, status, backgrounds, text, borders</li>
+                <li><strong>Typography:</strong> Font families, sizes</li>
+                <li><strong>Spacing:</strong> Spacing scale values</li>
+                <li><strong>Borders:</strong> Border radius options</li>
+                <li><strong>Transitions:</strong> Animation durations</li>
+                <li><strong>States:</strong> Interactive state styles</li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-tools.min.js"></script>
+<script src="../js/layout.js"></script>
+<script>
+    // Initialise theme
+    Domma.theme.init({autoDetect: true});
+
+    // Create Theme Roller
+    const roller = Domma.elements.themeRoller('#theme-roller-container', {
+        baseTheme: Domma.theme.get(),
+        baseVariant: Domma.theme.getVariant(),
+        showPresets: true,
+        showPreviewPanel: true,
+        livePreview: true,
+        onChange: (variable, value) => {
+            console.log(`Changed: ${variable} = ${value}`);
+        }
+    });
+
+    // Try to load saved theme
+    roller.loadFromStorage();
+
+    // Scan icons
+    Domma.icons.scan();
+</script>
+</body>
+</html>

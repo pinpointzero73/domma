@@ -292,7 +292,7 @@
             line-height: 1.6;
         }
 
-        .slide-code {
+        .splash-carousel .code-block {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
             padding: 1rem 1.25rem;
@@ -304,7 +304,7 @@
             overflow-x: auto;
         }
 
-        .slide-code .comment {
+        .splash-carousel .code-block .comment {
             opacity: 0.6;
         }
 
@@ -584,12 +584,13 @@
                     <span class="slide-number">1</span>
                     <h3 class="slide-title">Zero Dependencies</h3>
                     <p class="slide-description">
-                        No external libraries required. Everything is self-contained in a single ~186KB bundle.
+                        No external libraries required. Everything is self-contained in a single <span data-build-size>~250KB</span>
+                        bundle.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         &lt;script src="domma.min.js"&gt;&lt;/script&gt;<br>
                         <span class="comment">// That's it. You're ready to go!</span>
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 2. jQuery-Style DOM -->
@@ -599,11 +600,11 @@
                     <p class="slide-description">
                         Familiar $() syntax with 90+ chainable methods for traversal, manipulation, events, and effects.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         $('.card').addClass('active')<br>
                         &nbsp;&nbsp;.fadeIn(300)<br>
                         &nbsp;&nbsp;.on('click', handler);
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 3. Template Engine -->
@@ -613,11 +614,11 @@
                     <p class="slide-description">
                         Mustache-style templates with loops, conditionals, partials, and auto-escaping built in.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         const tmpl = _.template('Hello {{name}}!');<br>
                         tmpl({ name: 'World' }); <span class="comment">// "Hello World!"</span><br>
                         _.render('{{#each items}}{{.}}{{/each}}', data);
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 4. Lodash Utils -->
@@ -627,11 +628,11 @@
                     <p class="slide-description">
                         120+ utility functions for arrays, objects, strings, and functions &mdash; all via the _ alias.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         const grouped = _.groupBy(users, 'role');<br>
                         const unique = _.uniqBy(items, 'id');<br>
                         const result = _.flow([fn1, fn2])(data);
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 5. Moment-Style Dates -->
@@ -641,11 +642,11 @@
                     <p class="slide-description">
                         Chainable date manipulation with formatting, parsing, comparison, and relative time.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         D().add(7, 'days').format('MMM D, YYYY');<br>
                         D('2025-01-01').fromNow();<br>
                         D().startOf('month').isBefore(D());
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 6. Reactive Models -->
@@ -655,11 +656,11 @@
                     <p class="slide-description">
                         Pub/sub events, schema validation, and two-way DOM binding for reactive data.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         const user = M.create({ name: M.types.string });<br>
                         M.bind(user, 'name', '#input', { twoWay: true });<br>
                         user.onChange('name', val =&gt; console.log(val));
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 7. UI Components -->
@@ -669,11 +670,11 @@
                     <p class="slide-description">
                         Ready-to-use modals, tabs, accordions, carousels, tooltips, and toasts.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         const modal = Domma.elements.modal('#dialog');<br>
                         modal.open();<br>
                         Domma.elements.toast.success('Saved!');
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 8. DataTable-Like Tables -->
@@ -683,12 +684,12 @@
                     <p class="slide-description">
                         Sorting, filtering, pagination, row selection, and CSV/JSON export built in.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         const table = Domma.tables.create('#grid', {<br>
                         &nbsp;&nbsp;data, columns, pagination: true<br>
                         });<br>
                         table.search('query').toCSV();
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 9. Mutable Configuration -->
@@ -698,11 +699,11 @@
                     <p class="slide-description">
                         Setup once, update anytime. Inspect and reset configuration at runtime.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         $.setup({ '#modal': { component: 'modal' } });<br>
                         $.update('#modal', { options: { backdrop: false } });<br>
                         $.config('#modal'); $.reset('#modal');
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 10. 100+ SVG Icons -->
@@ -712,11 +713,11 @@
                     <p class="slide-description">
                         Built-in icon library with render, inject, and scan modes. Customisable size and colour.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         Domma.icons.render('search', { size: 24 });<br>
                         Domma.icons.inject('#icon-container', 'check');<br>
                         &lt;i data-icon="heart"&gt;&lt;/i&gt; <span class="comment">// Auto-scanned</span>
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 11. Theme System -->
@@ -726,11 +727,11 @@
                     <p class="slide-description">
                         Light/dark modes with 8 colour variants. Auto-detects system preference and persists choices.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         Domma.theme.init({ autoDetect: true });<br>
                         Domma.theme.set('dark');<br>
                         Domma.theme.setVariant('ocean');
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 12. HTTP Client -->
@@ -740,11 +741,11 @@
                     <p class="slide-description">
                         Fetch-based HTTP client with promise API. GET, POST, PUT, DELETE with automatic JSON handling.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         const users = await Domma.http.get('/api/users');<br>
                         await Domma.http.post('/api/users', { name: 'Alice' });<br>
                         await Domma.http.delete('/api/users/1');
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 13. Storage Wrapper -->
@@ -754,11 +755,11 @@
                     <p class="slide-description">
                         localStorage wrapper with auto JSON serialisation, namespaced keys, and graceful fallbacks.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         S.set('user', { name: 'Alice', role: 'admin' });<br>
                         const user = S.get('user'); <span class="comment">// Auto-parsed</span><br>
                         S.keys(); S.has('user'); S.clear();
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 14. Model Persistence -->
@@ -768,12 +769,12 @@
                     <p class="slide-description">
                         Models auto-save to localStorage. Load state on page refresh, reset to defaults anytime.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         const settings = M.create(schema, data, {<br>
                         &nbsp;&nbsp;persist: 'app-settings' <span class="comment">// Auto-save key</span><br>
                         });<br>
                         settings.reset(true); <span class="comment">// Clear storage too</span>
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 15. Comprehensive Tests -->
@@ -784,11 +785,11 @@
                         Comprehensive test suite covering all modules: DOM, utils, dates, models, storage, tables,
                         elements, and more.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         <span class="comment">// Run tests in browser</span><br>
                         open tests/test.html<br>
                         <span class="comment">// DOM, Utils, Dates, Models, Storage...</span>
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 16. CSS Grid System -->
@@ -799,12 +800,12 @@
                         Bootstrap-style 12-column grid plus modern CSS Grid utilities. Mobile-first, responsive
                         breakpoints.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         &lt;div class="row"&gt;<br>
                         &nbsp;&nbsp;&lt;div class="col-6"&gt;Half&lt;/div&gt;<br>
                         &nbsp;&nbsp;&lt;div class="col-6"&gt;Half&lt;/div&gt;<br>
                         &lt;/div&gt;
-                    </div>
+                    </pre>
                 </div>
 
                 <!-- 17. BYOS - Bring Your Own Styles -->
@@ -815,11 +816,11 @@
                         Use Domma's JS with your own CSS framework. Disable theming entirely for Bootstrap, Tailwind, or
                         custom styles.
                     </p>
-                    <div class="slide-code">
+                    <pre class="code-block">
                         $.setup({ noStyles: true });<br>
                         <span class="comment">// All JS features work without Domma CSS</span><br>
                         $('.tailwind-class').fadeIn().on('click', fn);
-                    </div>
+                    </pre>
                 </div>
             </div>
         </div>
@@ -911,6 +912,17 @@
     const buildInfo = Domma.buildInfo || {version: '1.0.0', built: 'dev'};
     $('#header-version').text(`v${buildInfo.version}`);
     $('#footer-version').text(`v${buildInfo.version} · ${buildInfo.built}`);
+
+    // Fetch build info for bundle size
+    fetch('dist/build-info.json')
+        .then(r => r.json())
+        .then(info => {
+            document.querySelectorAll('[data-build-size]').forEach(el => {
+                el.textContent = info.size || '~250KB';
+            });
+        })
+        .catch(() => {
+        });
 </script>
 </body>
 </html>
