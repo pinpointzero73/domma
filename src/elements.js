@@ -1,6 +1,8 @@
 /**
  * Domma Elements Module
  * UI Components: Cards, Modals, Tabs, Accordions, Tooltips, BackToTop
+ *
+ * Note: ThemeRoller and QuickRoller are in the separate tools bundle (domma-tools.min.js)
  */
 
 // ============================================
@@ -2429,6 +2431,1013 @@ class ButtonGroup extends Component {
 }
 
 // ============================================
+// Loader Component
+// ============================================
+
+class Loader extends Component {
+    static defaults = {
+        type: 'spinner',        // 'spinner', 'dots', 'pulse', 'bars'
+        size: 'medium',         // 'small', 'medium', 'large', or number (px)
+        color: 'primary',       // 'primary', 'secondary', 'white', or hex
+        overlay: false,         // Show with backdrop overlay
+        text: '',               // Optional loading text
+        centered: true          // Centre in container
+    };
+
+    static sizes = {
+        small: 24,
+        medium: 40,
+        large: 64
+    };
+
+    static _overlayInstances = new Map();
+
+    constructor(selector, options = {}) {
+        super(selector, options);
+        this._visible = false;
+        this._init();
+    }
+
+    _init() {
+        if (!this.element) return;
+        this._render();
+    }
+
+    _getSize() {
+        const {size} = this.options;
+        if (typeof size === 'number') return size;
+        return Loader.sizes[size] || Loader.sizes.medium;
+    }
+
+    _getColor() {
+        const {color} = this.options;
+        const colorMap = {
+            primary: 'var(--dm-primary, #6495ED)',
+            secondary: 'var(--dm-secondary, #6c757d)',
+            success: 'var(--dm-success, #28a745)',
+            danger: 'var(--dm-danger, #dc3545)',
+            warning: 'var(--dm-warning, #ffc107)',
+            info: 'var(--dm-info, #17a2b8)',
+            white: '#ffffff',
+            dark: 'var(--dm-gray-800, #343a40)'
+        };
+        return colorMap[color] || color;
+    }
+
+    _render() {
+        const size = this._getSize();
+        const color = this._getColor();
+        const {type, overlay, text, centered} = this.options;
+
+        // Create wrapper
+        this._wrapper = document.createElement('div');
+        this._wrapper.className = 'dm-loader';
+        this._wrapper.setAttribute('role', 'status');
+        this._wrapper.setAttribute('aria-live', 'polite');
+
+        // Base wrapper styles
+        const wrapperStyles = {
+            display: 'inline-flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.75rem'
+        };
+
+        if (overlay) {
+            Object.assign(wrapperStyles, {
+                position: 'absolute',
+                inset: '0',
+                background: 'rgba(0, 0, 0, 0.5)',
+                zIndex: '1000'
+            });
+            this.element.style.position = 'relative';
+        } else if (centered) {
+            Object.assign(wrapperStyles, {
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)'
+            });
+            if (getComputedStyle(this.element).position === 'static') {
+                this.element.style.position = 'relative';
+            }
+        }
+
+        Object.assign(this._wrapper.style, wrapperStyles);
+
+        // Create spinner element
+        this._spinner = document.createElement('div');
+        this._spinner.className = `dm-loader-${type}`;
+
+        // Apply type-specific rendering
+        switch (type) {
+            case 'dots':
+                this._renderDots(size, color);
+                break;
+            case 'pulse':
+                this._renderPulse(size, color);
+                break;
+            case 'bars':
+                this._renderBars(size, color);
+                break;
+            case 'spinner':
+            default:
+                this._renderSpinner(size, color);
+        }
+
+        this._wrapper.appendChild(this._spinner);
+
+        // Add text if provided
+        if (text) {
+            this._textEl = document.createElement('span');
+            this._textEl.className = 'dm-loader-text';
+            this._textEl.textContent = text;
+            this._textEl.style.cssText = `
+                color: ${overlay ? '#fff' : 'var(--dm-text, #212529)'};
+                font-size: var(--dm-text-sm, 0.875rem);
+            `;
+            this._wrapper.appendChild(this._textEl);
+        }
+
+        // Add to DOM but hidden initially
+        this._wrapper.style.display = 'none';
+        this.element.appendChild(this._wrapper);
+    }
+
+    _renderSpinner(size, color) {
+        this._spinner.style.cssText = `
+            width: ${size}px;
+            height: ${size}px;
+            border: ${Math.max(2, size / 10)}px solid ${color};
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: dm-loader-spin 0.8s linear infinite;
+        `;
+
+        this._injectKeyframes('dm-loader-spin', `
+            @keyframes dm-loader-spin {
+                to { transform: rotate(360deg); }
+            }
+        `);
+    }
+
+    _renderDots(size, color) {
+        const dotSize = size / 4;
+        this._spinner.style.cssText = `
+            display: flex;
+            gap: ${dotSize / 2}px;
+        `;
+
+        for (let i = 0; i < 3; i++) {
+            const dot = document.createElement('span');
+            dot.style.cssText = `
+                width: ${dotSize}px;
+                height: ${dotSize}px;
+                background: ${color};
+                border-radius: 50%;
+                animation: dm-loader-bounce 1.4s ease-in-out ${i * 0.16}s infinite both;
+            `;
+            this._spinner.appendChild(dot);
+        }
+
+        this._injectKeyframes('dm-loader-bounce', `
+            @keyframes dm-loader-bounce {
+                0%, 80%, 100% { transform: scale(0); }
+                40% { transform: scale(1); }
+            }
+        `);
+    }
+
+    _renderPulse(size, color) {
+        this._spinner.style.cssText = `
+            width: ${size}px;
+            height: ${size}px;
+            background: ${color};
+            border-radius: 50%;
+            animation: dm-loader-pulse 1.2s ease-in-out infinite;
+        `;
+
+        this._injectKeyframes('dm-loader-pulse', `
+            @keyframes dm-loader-pulse {
+                0% { transform: scale(0); opacity: 1; }
+                100% { transform: scale(1); opacity: 0; }
+            }
+        `);
+    }
+
+    _renderBars(size, color) {
+        const barWidth = size / 6;
+        const barHeight = size;
+
+        this._spinner.style.cssText = `
+            display: flex;
+            align-items: center;
+            gap: ${barWidth / 2}px;
+            height: ${barHeight}px;
+        `;
+
+        for (let i = 0; i < 4; i++) {
+            const bar = document.createElement('span');
+            bar.style.cssText = `
+                width: ${barWidth}px;
+                height: 100%;
+                background: ${color};
+                border-radius: 2px;
+                animation: dm-loader-bars 1s ease-in-out ${i * 0.1}s infinite;
+            `;
+            this._spinner.appendChild(bar);
+        }
+
+        this._injectKeyframes('dm-loader-bars', `
+            @keyframes dm-loader-bars {
+                0%, 40%, 100% { transform: scaleY(0.4); }
+                20% { transform: scaleY(1); }
+            }
+        `);
+    }
+
+    _injectKeyframes(name, css) {
+        if (document.getElementById(`dm-loader-${name}`)) return;
+
+        const style = document.createElement('style');
+        style.id = `dm-loader-${name}`;
+        style.textContent = css;
+        document.head.appendChild(style);
+    }
+
+    show() {
+        if (this._wrapper) {
+            this._wrapper.style.display = 'inline-flex';
+            this._visible = true;
+        }
+        return this;
+    }
+
+    hide() {
+        if (this._wrapper) {
+            this._wrapper.style.display = 'none';
+            this._visible = false;
+        }
+        return this;
+    }
+
+    toggle() {
+        return this._visible ? this.hide() : this.show();
+    }
+
+    isVisible() {
+        return this._visible;
+    }
+
+    setText(text) {
+        if (this._textEl) {
+            this._textEl.textContent = text;
+        } else if (text && this._wrapper) {
+            this._textEl = document.createElement('span');
+            this._textEl.className = 'dm-loader-text';
+            this._textEl.textContent = text;
+            this._textEl.style.cssText = `
+                color: ${this.options.overlay ? '#fff' : 'var(--dm-text, #212529)'};
+                font-size: var(--dm-text-sm, 0.875rem);
+            `;
+            this._wrapper.appendChild(this._textEl);
+        }
+        return this;
+    }
+
+    destroy() {
+        if (this._wrapper) {
+            this._wrapper.remove();
+        }
+        super.destroy();
+    }
+
+    // Static convenience methods
+    static show(selector, options = {}) {
+        const el = typeof selector === 'string'
+            ? document.querySelector(selector)
+            : selector;
+
+        if (!el) return null;
+
+        let instance = Loader._overlayInstances.get(el);
+        if (!instance) {
+            instance = new Loader(el, options);
+            Loader._overlayInstances.set(el, instance);
+        }
+
+        instance.show();
+        return instance;
+    }
+
+    static hide(selector) {
+        const el = typeof selector === 'string'
+            ? document.querySelector(selector)
+            : selector;
+
+        const instance = Loader._overlayInstances.get(el);
+        if (instance) {
+            instance.hide();
+        }
+    }
+
+    static fullscreen(text = 'Loading...', options = {}) {
+        let container = document.getElementById('dm-loader-fullscreen');
+
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'dm-loader-fullscreen';
+            container.style.cssText = `
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+            `;
+            document.body.appendChild(container);
+        }
+
+        const instance = new Loader(container, {
+            type: options.type || 'spinner',
+            size: options.size || 'large',
+            color: options.color || 'white',
+            text,
+            overlay: false,
+            centered: false
+        });
+
+        instance.show();
+        instance._fullscreenContainer = container;
+
+        // Override destroy to also remove the container
+        const originalDestroy = instance.destroy.bind(instance);
+        instance.destroy = () => {
+            originalDestroy();
+            if (container.parentNode) {
+                container.remove();
+            }
+        };
+
+        return instance;
+    }
+}
+
+// ============================================
+// Breadcrumbs Component
+// ============================================
+
+class Breadcrumbs extends Component {
+    static defaults = {
+        items: [],
+        separator: '/',        // '/', '>', '→', 'chevron', or custom HTML
+        homeIcon: false,       // Show home icon for first item
+        responsive: true,      // Collapse on mobile
+        onChange: null         // Callback when item clicked
+    };
+
+    static separators = {
+        '/': '/',
+        '>': '›',
+        '→': '→',
+        'chevron': '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>'
+    };
+
+    constructor(selector, options = {}) {
+        super(selector, options);
+        this._init();
+    }
+
+    _init() {
+        if (!this.element) return;
+        this._render();
+        this._bindEvents();
+    }
+
+    _getSeparatorHTML() {
+        const {separator} = this.options;
+        return Breadcrumbs.separators[separator] || separator;
+    }
+
+    _render() {
+        const {items, homeIcon, responsive} = this.options;
+        const separatorHTML = this._getSeparatorHTML();
+
+        this.element.className = 'dm-breadcrumbs';
+        if (responsive) {
+            this.element.classList.add('dm-breadcrumbs-responsive');
+        }
+
+        this.element.setAttribute('aria-label', 'Breadcrumb');
+        this.element.style.cssText = `
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            font-size: var(--dm-text-sm, 0.875rem);
+            color: var(--dm-text-muted, #6c757d);
+        `;
+
+        let html = '';
+        items.forEach((item, index) => {
+            const isLast = index === items.length - 1;
+            const isFirst = index === 0;
+
+            // Add separator (except before first item)
+            if (index > 0) {
+                html += `<span class="dm-breadcrumb-separator" aria-hidden="true" style="
+                    display: inline-flex;
+                    align-items: center;
+                    opacity: 0.5;
+                ">${separatorHTML}</span>`;
+            }
+
+            // Item content
+            let content = item.text || item;
+            if (isFirst && homeIcon) {
+                content = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>${content}`;
+            }
+
+            if (isLast || item.active) {
+                html += `<span class="dm-breadcrumb-item active" aria-current="page" style="
+                    color: var(--dm-text, #212529);
+                    font-weight: 500;
+                ">${content}</span>`;
+            } else {
+                html += `<a href="${item.url || '#'}" class="dm-breadcrumb-item dm-breadcrumb-link" data-index="${index}" style="
+                    color: inherit;
+                    text-decoration: none;
+                    transition: color 0.15s ease;
+                ">${content}</a>`;
+            }
+        });
+
+        this.element.innerHTML = html;
+
+        // Add hover styles
+        this._injectStyles();
+    }
+
+    _injectStyles() {
+        if (document.getElementById('dm-breadcrumbs-styles')) return;
+
+        const style = document.createElement('style');
+        style.id = 'dm-breadcrumbs-styles';
+        style.textContent = `
+            .dm-breadcrumb-link:hover {
+                color: var(--dm-primary, #6495ED) !important;
+            }
+            @media (max-width: 576px) {
+                .dm-breadcrumbs-responsive .dm-breadcrumb-item:not(:last-child):not(:first-child) {
+                    display: none;
+                }
+                .dm-breadcrumbs-responsive .dm-breadcrumb-separator:not(:first-of-type):not(:last-of-type) {
+                    display: none;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    _bindEvents() {
+        this._addEventListener(this.element, 'click', (e) => {
+            const link = e.target.closest('.dm-breadcrumb-link');
+            if (link) {
+                const index = parseInt(link.dataset.index, 10);
+                if (this.options.onChange) {
+                    e.preventDefault();
+                    this.options.onChange(this.options.items[index], index, e);
+                }
+            }
+        });
+    }
+
+    setItems(items) {
+        this.options.items = items;
+        this._render();
+        return this;
+    }
+
+    addItem(item) {
+        // Remove active from previous last item
+        if (this.options.items.length > 0) {
+            const last = this.options.items[this.options.items.length - 1];
+            if (typeof last === 'object') {
+                last.active = false;
+            }
+        }
+        this.options.items.push(item);
+        this._render();
+        return this;
+    }
+
+    removeItem(index) {
+        if (index >= 0 && index < this.options.items.length) {
+            this.options.items.splice(index, 1);
+            this._render();
+        }
+        return this;
+    }
+
+    getItems() {
+        return [...this.options.items];
+    }
+}
+
+// ============================================
+// Navbar Component
+// ============================================
+
+class Navbar extends Component {
+    static defaults = {
+        brand: null,            // { text, logo, url }
+        items: [],              // [{ text, url, active, items (for dropdown) }]
+        position: 'static',     // 'static', 'fixed', 'sticky'
+        variant: 'light',       // 'light', 'dark', 'transparent'
+        collapsible: true,      // Mobile hamburger menu
+        collapseAt: 768,        // Breakpoint for collapse
+        actions: [],            // Right-side buttons/elements [{ text, url, variant }]
+        onItemClick: null
+    };
+
+    constructor(selector, options = {}) {
+        super(selector, options);
+        this._isCollapsed = true;
+        this._init();
+    }
+
+    _init() {
+        if (!this.element) return;
+        this._render();
+        this._bindEvents();
+        this._injectStyles();
+    }
+
+    _render() {
+        const {brand, items, position, variant, collapsible, actions} = this.options;
+
+        // Set up navbar element
+        this.element.className = 'dm-navbar';
+        this.element.classList.add(`dm-navbar-${variant}`);
+        if (position !== 'static') {
+            this.element.classList.add(`dm-navbar-${position}`);
+        }
+
+        this.element.setAttribute('role', 'navigation');
+
+        let html = '<div class="dm-navbar-container">';
+
+        // Brand section
+        if (brand) {
+            html += '<div class="dm-navbar-brand">';
+            if (brand.url) {
+                html += `<a href="${brand.url}" class="dm-navbar-brand-link">`;
+            }
+            if (brand.logo) {
+                html += `<img src="${brand.logo}" alt="${brand.text || ''}" class="dm-navbar-logo">`;
+            }
+            if (brand.text) {
+                html += `<span class="dm-navbar-brand-text">${brand.text}</span>`;
+            }
+            if (brand.url) {
+                html += '</a>';
+            }
+            html += '</div>';
+        }
+
+        // Mobile toggle button
+        if (collapsible) {
+            html += `
+                <button class="dm-navbar-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                    <span class="dm-navbar-toggle-icon"></span>
+                </button>
+            `;
+        }
+
+        // Nav items container
+        html += '<div class="dm-navbar-collapse">';
+        html += '<ul class="dm-navbar-nav">';
+
+        items.forEach((item, index) => {
+            if (item.items && item.items.length > 0) {
+                // Dropdown
+                html += `<li class="dm-navbar-item dm-navbar-dropdown">`;
+                html += `<button class="dm-navbar-link dm-navbar-dropdown-toggle" data-index="${index}">
+                    ${item.text}
+                    <svg class="dm-navbar-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </button>`;
+                html += '<ul class="dm-navbar-dropdown-menu">';
+                item.items.forEach((subItem, subIndex) => {
+                    html += `<li><a href="${subItem.url || '#'}" class="dm-navbar-dropdown-item" data-index="${index}" data-subindex="${subIndex}">${subItem.text}</a></li>`;
+                });
+                html += '</ul>';
+                html += '</li>';
+            } else {
+                // Regular item
+                html += `<li class="dm-navbar-item">`;
+                html += `<a href="${item.url || '#'}" class="dm-navbar-link${item.active ? ' active' : ''}" data-index="${index}">${item.text}</a>`;
+                html += '</li>';
+            }
+        });
+
+        html += '</ul>';
+
+        // Actions section
+        if (actions && actions.length > 0) {
+            html += '<div class="dm-navbar-actions">';
+            actions.forEach((action, index) => {
+                const variant = action.variant || 'primary';
+                html += `<a href="${action.url || '#'}" class="dm-navbar-action dm-btn dm-btn-${variant}" data-action="${index}">${action.text}</a>`;
+            });
+            html += '</div>';
+        }
+
+        html += '</div>'; // .dm-navbar-collapse
+        html += '</div>'; // .dm-navbar-container
+
+        this.element.innerHTML = html;
+
+        // Store references
+        this._toggle = this.element.querySelector('.dm-navbar-toggle');
+        this._collapse = this.element.querySelector('.dm-navbar-collapse');
+    }
+
+    _bindEvents() {
+        // Toggle button click
+        if (this._toggle) {
+            this._addEventListener(this._toggle, 'click', () => {
+                this.toggle();
+            });
+        }
+
+        // Nav link clicks
+        this._addEventListener(this.element, 'click', (e) => {
+            const link = e.target.closest('.dm-navbar-link:not(.dm-navbar-dropdown-toggle)');
+            if (link) {
+                const index = parseInt(link.dataset.index, 10);
+                if (this.options.onItemClick) {
+                    e.preventDefault();
+                    this.options.onItemClick(this.options.items[index], index, e);
+                }
+                // Collapse on mobile after click
+                if (window.innerWidth < this.options.collapseAt) {
+                    this.collapse();
+                }
+            }
+
+            // Dropdown item clicks
+            const dropdownItem = e.target.closest('.dm-navbar-dropdown-item');
+            if (dropdownItem) {
+                const index = parseInt(dropdownItem.dataset.index, 10);
+                const subIndex = parseInt(dropdownItem.dataset.subindex, 10);
+                if (this.options.onItemClick) {
+                    e.preventDefault();
+                    const parentItem = this.options.items[index];
+                    this.options.onItemClick(parentItem.items[subIndex], subIndex, e, parentItem);
+                }
+            }
+        });
+
+        // Dropdown toggle
+        this._addEventListener(this.element, 'click', (e) => {
+            const toggle = e.target.closest('.dm-navbar-dropdown-toggle');
+            if (toggle) {
+                const dropdown = toggle.closest('.dm-navbar-dropdown');
+                dropdown.classList.toggle('open');
+            }
+        });
+
+        // Close dropdowns on outside click
+        this._addEventListener(document, 'click', (e) => {
+            if (!e.target.closest('.dm-navbar-dropdown')) {
+                this.element.querySelectorAll('.dm-navbar-dropdown.open').forEach(dd => {
+                    dd.classList.remove('open');
+                });
+            }
+        });
+
+        // Handle resize
+        this._addEventListener(window, 'resize', () => {
+            if (window.innerWidth >= this.options.collapseAt) {
+                this._collapse?.classList.remove('show');
+                this._isCollapsed = true;
+                if (this._toggle) {
+                    this._toggle.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
+    }
+
+    _injectStyles() {
+        if (document.getElementById('dm-navbar-styles')) return;
+
+        const style = document.createElement('style');
+        style.id = 'dm-navbar-styles';
+        style.textContent = `
+            .dm-navbar {
+                display: flex;
+                padding: 0.75rem 1rem;
+                background: var(--dm-surface, #fff);
+                border-bottom: 1px solid var(--dm-border, #dee2e6);
+            }
+            .dm-navbar-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                max-width: 1200px;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+            .dm-navbar-brand {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .dm-navbar-brand-link {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                text-decoration: none;
+                color: inherit;
+            }
+            .dm-navbar-logo {
+                height: 32px;
+                width: auto;
+            }
+            .dm-navbar-brand-text {
+                font-weight: 600;
+                font-size: 1.25rem;
+                color: var(--dm-text, #212529);
+            }
+            .dm-navbar-toggle {
+                display: none;
+                padding: 0.5rem;
+                background: none;
+                border: 1px solid var(--dm-border, #dee2e6);
+                border-radius: var(--dm-radius-md, 0.25rem);
+                cursor: pointer;
+            }
+            .dm-navbar-toggle-icon {
+                display: block;
+                width: 24px;
+                height: 2px;
+                background: var(--dm-text, #212529);
+                position: relative;
+            }
+            .dm-navbar-toggle-icon::before,
+            .dm-navbar-toggle-icon::after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background: inherit;
+                left: 0;
+            }
+            .dm-navbar-toggle-icon::before { top: -6px; }
+            .dm-navbar-toggle-icon::after { top: 6px; }
+            .dm-navbar-collapse {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
+            .dm-navbar-nav {
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+            .dm-navbar-item {
+                position: relative;
+            }
+            .dm-navbar-link {
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+                padding: 0.5rem 0.75rem;
+                color: var(--dm-text-muted, #6c757d);
+                text-decoration: none;
+                border-radius: var(--dm-radius-md, 0.25rem);
+                background: none;
+                border: none;
+                font: inherit;
+                cursor: pointer;
+                transition: color 0.15s ease, background 0.15s ease;
+            }
+            .dm-navbar-link:hover {
+                color: var(--dm-text, #212529);
+                background: var(--dm-hover-bg, rgba(0,0,0,0.05));
+            }
+            .dm-navbar-link.active {
+                color: var(--dm-primary, #6495ED);
+                font-weight: 500;
+            }
+            .dm-navbar-caret {
+                transition: transform 0.2s ease;
+            }
+            .dm-navbar-dropdown.open .dm-navbar-caret {
+                transform: rotate(180deg);
+            }
+            .dm-navbar-dropdown-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                min-width: 180px;
+                background: var(--dm-surface, #fff);
+                border: 1px solid var(--dm-border, #dee2e6);
+                border-radius: var(--dm-radius-md, 0.25rem);
+                box-shadow: var(--dm-shadow-md);
+                list-style: none;
+                margin: 0.25rem 0 0;
+                padding: 0.5rem 0;
+                display: none;
+                z-index: var(--dm-z-dropdown, 1000);
+            }
+            .dm-navbar-dropdown.open .dm-navbar-dropdown-menu {
+                display: block;
+            }
+            .dm-navbar-dropdown-item {
+                display: block;
+                padding: 0.5rem 1rem;
+                color: var(--dm-text, #212529);
+                text-decoration: none;
+                transition: background 0.15s ease;
+            }
+            .dm-navbar-dropdown-item:hover {
+                background: var(--dm-hover-bg, rgba(0,0,0,0.05));
+            }
+            .dm-navbar-actions {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .dm-navbar-action {
+                display: inline-flex;
+                align-items: center;
+                padding: 0.5rem 1rem;
+                border-radius: var(--dm-radius-md, 0.25rem);
+                text-decoration: none;
+                font-weight: 500;
+                font-size: var(--dm-text-sm, 0.875rem);
+                transition: all 0.15s ease;
+            }
+            .dm-btn-primary {
+                background: var(--dm-primary, #6495ED);
+                color: white;
+            }
+            .dm-btn-primary:hover {
+                background: var(--dm-primary-hover, #5280d8);
+            }
+            .dm-btn-secondary {
+                background: var(--dm-secondary, #6c757d);
+                color: white;
+            }
+            .dm-btn-outline {
+                background: transparent;
+                border: 1px solid var(--dm-border, #dee2e6);
+                color: var(--dm-text, #212529);
+            }
+            .dm-btn-outline:hover {
+                background: var(--dm-hover-bg, rgba(0,0,0,0.05));
+            }
+
+            /* Dark variant */
+            .dm-navbar-dark {
+                background: var(--dm-gray-800, #343a40);
+                border-color: var(--dm-gray-700, #495057);
+            }
+            .dm-navbar-dark .dm-navbar-brand-text,
+            .dm-navbar-dark .dm-navbar-link {
+                color: rgba(255,255,255,0.75);
+            }
+            .dm-navbar-dark .dm-navbar-link:hover,
+            .dm-navbar-dark .dm-navbar-link.active {
+                color: #fff;
+            }
+            .dm-navbar-dark .dm-navbar-toggle {
+                border-color: rgba(255,255,255,0.2);
+            }
+            .dm-navbar-dark .dm-navbar-toggle-icon,
+            .dm-navbar-dark .dm-navbar-toggle-icon::before,
+            .dm-navbar-dark .dm-navbar-toggle-icon::after {
+                background: #fff;
+            }
+
+            /* Transparent variant */
+            .dm-navbar-transparent {
+                background: transparent;
+                border: none;
+            }
+
+            /* Fixed/Sticky position */
+            .dm-navbar-fixed {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: var(--dm-z-fixed, 1030);
+            }
+            .dm-navbar-sticky {
+                position: sticky;
+                top: 0;
+                z-index: var(--dm-z-sticky, 1020);
+            }
+
+            /* Mobile responsive */
+            @media (max-width: 768px) {
+                .dm-navbar-toggle {
+                    display: block;
+                }
+                .dm-navbar-collapse {
+                    display: none;
+                    flex-basis: 100%;
+                    flex-direction: column;
+                    align-items: stretch;
+                    padding-top: 1rem;
+                }
+                .dm-navbar-collapse.show {
+                    display: flex;
+                }
+                .dm-navbar-nav {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+                .dm-navbar-link {
+                    padding: 0.75rem 0;
+                }
+                .dm-navbar-dropdown-menu {
+                    position: static;
+                    border: none;
+                    box-shadow: none;
+                    padding-left: 1rem;
+                }
+                .dm-navbar-actions {
+                    flex-direction: column;
+                    align-items: stretch;
+                    padding-top: 0.5rem;
+                    border-top: 1px solid var(--dm-border, #dee2e6);
+                    margin-top: 0.5rem;
+                }
+                .dm-navbar-action {
+                    justify-content: center;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    setActive(index) {
+        this.options.items.forEach((item, i) => {
+            item.active = i === index;
+        });
+        this._render();
+        return this;
+    }
+
+    setItems(items) {
+        this.options.items = items;
+        this._render();
+        return this;
+    }
+
+    expand() {
+        if (this._collapse) {
+            this._collapse.classList.add('show');
+            this._isCollapsed = false;
+            if (this._toggle) {
+                this._toggle.setAttribute('aria-expanded', 'true');
+            }
+        }
+        return this;
+    }
+
+    collapse() {
+        if (this._collapse) {
+            this._collapse.classList.remove('show');
+            this._isCollapsed = true;
+            if (this._toggle) {
+                this._toggle.setAttribute('aria-expanded', 'false');
+            }
+        }
+        return this;
+    }
+
+    toggle() {
+        return this._isCollapsed ? this.expand() : this.collapse();
+    }
+
+    isCollapsed() {
+        return this._isCollapsed;
+    }
+}
+
+// ============================================
 // Elements Module Export
 // ============================================
 
@@ -2540,6 +3549,35 @@ export const elements = {
         return instances.length === 1 ? instances[0] : instances;
     },
 
+    loader(selector, options = {}) {
+        const instance = new Loader(selector, options);
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
+    // Static loader methods for convenience
+    showLoader: Loader.show.bind(Loader),
+    hideLoader: Loader.hide.bind(Loader),
+    fullscreenLoader: Loader.fullscreen.bind(Loader),
+
+    breadcrumbs(selector, options = {}) {
+        const instance = new Breadcrumbs(selector, options);
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
+    navbar(selector, options = {}) {
+        const instance = new Navbar(selector, options);
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
     toast: Toast,
 
     dialog: Dialog,
@@ -2548,6 +3586,9 @@ export const elements = {
     alert: Dialog.alert.bind(Dialog),
     confirm: Dialog.confirm.bind(Dialog),
     prompt: Dialog.prompt.bind(Dialog),
+
+    // Note: themeRoller() and quickRoller() are in domma-tools.min.js
+    // Load that bundle to enable: Domma.elements.themeRoller(), Domma.elements.quickRoller()
 
     get(selector) {
         const el = typeof selector === 'string'
