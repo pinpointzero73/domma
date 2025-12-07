@@ -10,6 +10,30 @@ import {icons} from './icons.js';
  * Table Instance Class
  */
 class TableInstance {
+    // Static color dictionaries for stripe and hover colors
+    static stripeColors = {
+        none: 'transparent',
+        lighter: 'var(--dm-gray-100, #f8f9fa)',
+        light: 'var(--dm-gray-200, #e9ecef)',
+        medium: 'var(--dm-gray-300, #dee2e6)',
+        dark: 'var(--dm-gray-400, #ced4da)',
+        'primary-tint': 'rgba(100, 149, 237, 0.05)',
+        'success-tint': 'rgba(40, 167, 69, 0.05)',
+        'warning-tint': 'rgba(255, 193, 7, 0.05)',
+        'danger-tint': 'rgba(220, 53, 69, 0.05)',
+        'info-tint': 'rgba(23, 162, 184, 0.05)',
+        default: '#f9f9f9'  // Current hardcoded value for backwards compatibility
+    };
+
+    static hoverColors = {
+        none: 'transparent',
+        lighter: 'var(--dm-gray-200, #e9ecef)',
+        light: 'var(--dm-gray-300, #dee2e6)',
+        medium: 'var(--dm-gray-400, #ced4da)',
+        dark: 'var(--dm-gray-500, #adb5bd)',
+        default: '#f0f0f0'  // Current hardcoded value for backwards compatibility
+    };
+
     constructor(element, options = {}) {
         this.element = typeof element === 'string'
             ? document.querySelector(element)
@@ -52,6 +76,11 @@ class TableInstance {
             hover: true,
             bordered: true,
             responsive: true,
+
+            // Stripe color configuration
+            evenRowColor: null,      // null = transparent, or named variant / hex value
+            oddRowColor: null,       // null = default '#f9f9f9', or named variant / hex value
+            hoverColor: null,        // null = default '#f0f0f0', or named variant / hex value
 
             // Classes
             classes: {
@@ -132,6 +161,88 @@ class TableInstance {
 
         // Initial render
         this.render();
+    }
+
+    // ============================================
+    // Color Resolution Helpers
+    // ============================================
+
+    /**
+     * Resolve a color value - supports named variants, CSS variables, and direct colors
+     * @param {string} colorValue - Named variant (e.g., 'light') or direct color (e.g., '#fff')
+     * @param {Object} colorMap - Dictionary to lookup named variants
+     * @param {string} fallback - Fallback color if value is invalid
+     * @returns {string} Resolved color value
+     * @private
+     */
+    _resolveColor(colorValue, colorMap, fallback) {
+        if (!colorValue) return fallback;
+
+        // Check if it's a named variant
+        if (colorMap[colorValue]) {
+            return colorMap[colorValue];
+        }
+
+        // Check if it's a direct color value (hex, rgb, rgba, hsl, var())
+        if (colorValue.startsWith('#') ||
+            colorValue.startsWith('rgb') ||
+            colorValue.startsWith('hsl') ||
+            colorValue.startsWith('var(')) {
+            return colorValue;
+        }
+
+        // Invalid value, return fallback
+        return fallback;
+    }
+
+    /**
+     * Get the stripe color configuration for a row
+     * @param {number} rowIndex - The row index (0-based)
+     * @returns {Object} Object with { background, hover } colors
+     * @private
+     */
+    _getRowColors(rowIndex) {
+        const opts = this.options;
+
+        // Striping disabled
+        if (!opts.striped) {
+            return {
+                background: 'transparent',
+                hover: opts.hover ? this._resolveColor(
+                    opts.hoverColor,
+                    TableInstance.hoverColors,
+                    TableInstance.hoverColors.default
+                ) : 'transparent'
+            };
+        }
+
+        // Determine if this is an even or odd row
+        const isOddRow = rowIndex % 2 === 1;
+
+        // Get base stripe colors
+        const evenColor = this._resolveColor(
+            opts.evenRowColor,
+            TableInstance.stripeColors,
+            'transparent'
+        );
+
+        const oddColor = this._resolveColor(
+            opts.oddRowColor,
+            TableInstance.stripeColors,
+            TableInstance.stripeColors.default  // '#f9f9f9' - maintains current default
+        );
+
+        // Get hover color
+        const hoverColor = opts.hover ? this._resolveColor(
+            opts.hoverColor,
+            TableInstance.hoverColors,
+            TableInstance.hoverColors.default  // '#f0f0f0' - maintains current default
+        ) : null;
+
+        return {
+            background: isOddRow ? oddColor : evenColor,
+            hover: hoverColor
+        };
     }
 
     // ============================================
@@ -1341,13 +1452,18 @@ class TableInstance {
             const tr = document.createElement('tr');
             tr.className = classes.row;
 
-            if (opts.striped && rowIndex % 2 === 1) {
-                tr.style.background = '#f9f9f9';
-            }
-            if (opts.hover) {
+            // Get row colors based on configuration
+            const rowColors = this._getRowColors(rowIndex);
+
+            // Apply background color
+            tr.style.background = rowColors.background;
+
+            // Apply hover effect
+            if (opts.hover && rowColors.hover) {
                 tr.style.transition = 'background 0.2s';
-                this._addEventHandler(tr, 'mouseenter', () => tr.style.background = '#f0f0f0');
-                this._addEventHandler(tr, 'mouseleave', () => tr.style.background = opts.striped && rowIndex % 2 === 1 ? '#f9f9f9' : '');
+                const originalBg = rowColors.background;
+                this._addEventHandler(tr, 'mouseenter', () => tr.style.background = rowColors.hover);
+                this._addEventHandler(tr, 'mouseleave', () => tr.style.background = originalBg);
             }
 
             if (this._selected.has(row[key])) {

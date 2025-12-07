@@ -674,6 +674,97 @@ table.getColumns();             // All columns</pre>
         </div>
     </section>
 
+    <!-- Stripe Styling -->
+    <section class="card mb-6" data-section="Stripe Styling">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Stripe Styling Configuration</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Customise row stripe and hover colours using named variants or custom hex/RGB values.</p>
+
+            <pre class="code-block">// Named variants (uses CSS variables)
+const table1 = Domma.tables.create('#table', {
+    data: data,
+    striped: true,
+    evenRowColor: 'lighter',   // var(--dm-gray-100)
+    oddRowColor: 'light',      // var(--dm-gray-200)
+    hoverColor: 'medium'       // var(--dm-gray-300)
+});
+
+// Custom hex colors
+const table2 = Domma.tables.create('#table', {
+    data: data,
+    striped: true,
+    evenRowColor: '#ffffff',
+    oddRowColor: '#f9f9f9',
+    hoverColor: '#e6f2ff'
+});
+
+// Semantic tints
+const table3 = Domma.tables.create('#table', {
+    data: data,
+    striped: true,
+    evenRowColor: 'none',
+    oddRowColor: 'primary-tint',
+    hoverColor: 'light'
+});
+
+// Named variants: 'none', 'lighter', 'light', 'medium', 'dark',
+//                 'primary-tint', 'success-tint', 'warning-tint',
+//                 'danger-tint', 'info-tint'</pre>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Stripe Colour Options</h3>
+            <table class="option-table">
+                <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>evenRowColor</code></td>
+                    <td>string</td>
+                    <td><code>null</code> (transparent)</td>
+                    <td>Colour for even rows (0, 2, 4...). Named variant or hex/rgb value.</td>
+                </tr>
+                <tr>
+                    <td><code>oddRowColor</code></td>
+                    <td>string</td>
+                    <td><code>null</code> ('#f9f9f9')</td>
+                    <td>Colour for odd rows (1, 3, 5...). Named variant or hex/rgb value.</td>
+                </tr>
+                <tr>
+                    <td><code>hoverColor</code></td>
+                    <td>string</td>
+                    <td><code>null</code> ('#f0f0f0')</td>
+                    <td>Colour for row hover state. Named variant or hex/rgb value.</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="demo-area mt-4">
+                <p class="text-sm text-muted mb-3">Interactive demo with different stripe configurations:</p>
+
+                <div class="mb-4">
+                    <label class="text-sm font-semibold mb-2 block">Choose Stripe Style:</label>
+                    <div class="flex gap-2 flex-wrap">
+                        <button class="btn btn-sm btn-outline" id="stripe-default">Default</button>
+                        <button class="btn btn-sm btn-outline" id="stripe-light">Light Grey</button>
+                        <button class="btn btn-sm btn-outline" id="stripe-medium">Medium Grey</button>
+                        <button class="btn btn-sm btn-outline" id="stripe-primary">Primary Tint</button>
+                        <button class="btn btn-sm btn-outline" id="stripe-success">Success Tint</button>
+                        <button class="btn btn-sm btn-outline" id="stripe-custom">Custom Hex</button>
+                    </div>
+                </div>
+
+                <div id="stripe-demo-table"></div>
+            </div>
+        </div>
+    </section>
+
     <!-- Export Methods -->
     <section class="card mb-6" data-section="Export Methods">
         <div class="card-header">
@@ -1068,6 +1159,103 @@ table.once('render', () => {
         setTimeout(() => {
             $(this).text('Copy to Clipboard').removeClass('btn-success').addClass('btn-outline');
         }, 1500);
+    });
+
+    // ============================================
+    // Stripe Styling Demo
+    // ============================================
+
+    // Sample data for stripe demo
+    const stripeData = sampleData.slice(0, 6);
+
+    // Create initial stripe demo table
+    let stripeTable = Domma.tables.create('#stripe-demo-table', {
+        data: stripeData,
+        columns: [
+            {key: 'name', title: 'Name'},
+            {key: 'email', title: 'Email'},
+            {key: 'role', title: 'Role'}
+        ],
+        pagination: false,
+        striped: true
+    });
+
+    // Helper to recreate table with new stripe config
+    function updateStripeDemo(config) {
+        const buttons = ['stripe-default', 'stripe-light', 'stripe-medium', 'stripe-primary', 'stripe-success', 'stripe-custom'];
+        buttons.forEach(id => {
+            $('#' + id).removeClass('btn-primary').addClass('btn-outline');
+        });
+        $('#' + config.activeButton).removeClass('btn-outline').addClass('btn-primary');
+
+        stripeTable = Domma.tables.create('#stripe-demo-table', {
+            data: stripeData,
+            columns: [
+                {key: 'name', title: 'Name'},
+                {key: 'email', title: 'Email'},
+                {key: 'role', title: 'Role'}
+            ],
+            pagination: false,
+            striped: true,
+            evenRowColor: config.evenRowColor,
+            oddRowColor: config.oddRowColor,
+            hoverColor: config.hoverColor
+        });
+    }
+
+    // Stripe style buttons
+    $('#stripe-default').on('click', () => {
+        updateStripeDemo({
+            activeButton: 'stripe-default',
+            evenRowColor: null,
+            oddRowColor: null,
+            hoverColor: null
+        });
+    });
+
+    $('#stripe-light').on('click', () => {
+        updateStripeDemo({
+            activeButton: 'stripe-light',
+            evenRowColor: 'lighter',
+            oddRowColor: 'light',
+            hoverColor: 'medium'
+        });
+    });
+
+    $('#stripe-medium').on('click', () => {
+        updateStripeDemo({
+            activeButton: 'stripe-medium',
+            evenRowColor: 'light',
+            oddRowColor: 'medium',
+            hoverColor: 'dark'
+        });
+    });
+
+    $('#stripe-primary').on('click', () => {
+        updateStripeDemo({
+            activeButton: 'stripe-primary',
+            evenRowColor: 'none',
+            oddRowColor: 'primary-tint',
+            hoverColor: 'light'
+        });
+    });
+
+    $('#stripe-success').on('click', () => {
+        updateStripeDemo({
+            activeButton: 'stripe-success',
+            evenRowColor: 'none',
+            oddRowColor: 'success-tint',
+            hoverColor: 'light'
+        });
+    });
+
+    $('#stripe-custom').on('click', () => {
+        updateStripeDemo({
+            activeButton: 'stripe-custom',
+            evenRowColor: '#ffffff',
+            oddRowColor: '#e8f4f8',
+            hoverColor: '#d4e9f2'
+        });
     });
 </script>
 </body>
