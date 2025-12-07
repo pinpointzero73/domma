@@ -303,7 +303,9 @@ class BundleBuilder {
 
         if (matchingPreset) {
             // Download pre-built bundle
-            window.location.href = `../../dist/domma-${matchingPreset}.min.js`;
+            // Note: "full" preset uses the main domma.min.js (not domma-full.min.js)
+            const filename = matchingPreset === 'full' ? 'domma.min.js' : `domma-${matchingPreset}.min.js`;
+            window.location.href = `../../dist/${filename}`;
         } else {
             // Show build instructions for custom bundle
             this.showCustomBuildInstructions();

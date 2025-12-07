@@ -419,11 +419,30 @@
             opacity: 0.8;
         }
 
+        .splash-footer-nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .splash-footer-nav a {
+            color: var(--dm-primary-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .splash-footer-nav a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 576px) {
             .splash-footer-content {
                 flex-direction: column;
                 gap: 0.5rem;
                 text-align: center;
+            }
+
+            .splash-footer-nav {
+                gap: 1rem;
             }
         }
 
@@ -504,6 +523,9 @@
     <ul class="navbar-nav">
         <li><a href="showcase/index.html" class="navbar-link">Showcase</a></li>
         <li><a href="quickstart/index.html" class="navbar-link">Quickstart</a></li>
+        <li><a href="about.html" class="navbar-link">About Us</a></li>
+        <li><a href="faq.html" class="navbar-link">FAQs</a></li>
+        <li><a href="blog/index.html" class="navbar-link">Blog</a></li>
     </ul>
 </nav>
 
@@ -851,6 +873,11 @@
 <footer class="splash-footer">
     <div class="splash-footer-content">
         <span class="splash-footer-version" id="footer-version"></span>
+        <nav class="splash-footer-nav">
+            <a href="about.html">About Us</a>
+            <a href="faq.html">FAQs</a>
+            <a href="blog/index.html">Blog</a>
+        </nav>
         <span>&copy; DCBW-IT (2025)</span>
     </div>
 </footer>
@@ -876,9 +903,12 @@
         }
     });
 
-    // Update toggle button icon
+    // Update toggle button icon and tooltip
     function updateToggleIcon() {
-        $('#theme-toggle').html(Domma.icons.html(Domma.theme.isDark() ? 'sun' : 'moon', {size: 20}));
+        const isDark = Domma.theme.isDark();
+        $('#theme-toggle')
+            .html(Domma.icons.html(isDark ? 'sun' : 'moon', {size: 20}))
+            .attr('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
     }
 
     // Toggle handler

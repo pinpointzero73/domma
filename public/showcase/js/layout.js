@@ -617,6 +617,7 @@
             const isDark = $body.hasClass('dm-theme-dark');
             isDark ? $('#theme-icon-sun').show() : $('#theme-icon-sun').hide();
             isDark ? $('#theme-icon-moon').hide() : $('#theme-icon-moon').show();
+            $('#theme-toggle').attr('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
         }
 
         function toggleTheme() {
