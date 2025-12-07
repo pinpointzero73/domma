@@ -70,6 +70,7 @@ Accessed via `Domma.utils` or `_`:
 - **Template** (2): `template()` (compile), `render()` (one-shot) - Mustache-style with `{{var}}`, `{{#if}}`,
   `{{#each}}`,
   `{{#with}}`, `{{> partial}}`, `{{{raw}}}`
+- **Browser** (1): `copyToClipboard(text)` - async clipboard copy with fallback for older browsers
 
 ### dates.js - Moment.js-style date manipulation
 
@@ -136,6 +137,23 @@ Accessed via `Domma.elements`:
   - `elements.prompt(message, options)` → `Promise<string|null>` - Text input, returns value or null
   - Options: `title`, `confirmText`, `cancelText`, `inputPlaceholder`, `inputValue`, `inputType`, `animation`,
     `keyboard`
+- **Loader**: Loading indicators with multiple animation types
+    - `elements.loader(selector, { type, size, color, overlay, text, centered })` →
+      `show()`, `hide()`, `toggle()`, `isVisible()`, `setText()`, `destroy()`
+    - Types: `'spinner'`, `'dots'`, `'pulse'`, `'bars'`
+    - Sizes: `'small'`, `'medium'`, `'large'`, or number (px)
+    - Static: `elements.showLoader(selector)`, `elements.hideLoader(selector)`, `elements.fullscreenLoader(text)`
+- **Breadcrumbs**: Navigation trail component
+    - `elements.breadcrumbs(selector, { items, separator, homeIcon, responsive, onChange })` →
+      `setItems()`, `addItem()`, `removeItem()`, `getItems()`, `destroy()`
+    - Separators: `'/'`, `'>'`, `'→'`, `'chevron'`, or custom HTML
+- **Navbar**: Responsive navigation bar
+    - `elements.navbar(selector, { brand, items, position, variant, collapsible, collapseAt, actions, onItemClick })` →
+      `setActive()`, `setItems()`, `expand()`, `collapse()`, `toggle()`, `isCollapsed()`, `destroy()`
+    - Brand: `{ text, logo, url }`
+    - Items: Support nested arrays for dropdowns
+    - Variants: `'light'`, `'dark'`, `'transparent'`
+    - Position: `'static'`, `'fixed'`, `'sticky'`
 
 ### tables.js - DataTable-like functionality
 
@@ -222,25 +240,56 @@ S.clear();                                         // Clear only Domma keys
 
 ```
 src/
-├── index.js      # Main entry, exports Domma + aliases
-├── dom.js        # jQuery-compatible DOM API
-├── utils.js      # Lodash-compatible utilities
-├── dates.js      # Moment-style date manipulation
-├── models.js     # Reactive models & pub/sub
-├── elements.js   # UI components
-├── tables.js     # DataTable functionality
-├── config.js     # JSON configuration engine
-├── http.js       # HTTP client
-└── storage.js    # localStorage wrapper
+├── index.js         # Main entry, exports Domma + aliases
+├── tools.js         # Tools bundle entry (Theme Roller, Quick Roller)
+├── dom.js           # jQuery-compatible DOM API
+├── utils.js         # Lodash-compatible utilities
+├── dates.js         # Moment-style date manipulation
+├── models.js        # Reactive models & pub/sub
+├── elements.js      # UI components
+├── tables.js        # DataTable functionality
+├── config.js        # JSON configuration engine
+├── http.js          # HTTP client
+├── storage.js       # localStorage wrapper
+├── theme.js         # Theme management
+├── icons.js         # SVG icon system
+├── theme-roller.js  # Theme customisation tool (tools bundle)
+└── quick-roller.js  # Page builder tool (tools bundle)
 
-showcase/         # Comprehensive demos for each namespace
-quickstart/       # Getting started blueprint
-dist/             # Built bundles (UMD + ESM)
+showcase/            # Comprehensive demos for each namespace
+quickstart/          # Getting started blueprint
+public/dist/         # Built bundles (UMD + ESM)
 ```
 
-## Bundle
+## Bundles
 
-~160KB minified, includes all namespaces, zero external dependencies.
+Domma is split into two bundles:
+
+| Bundle               | Size   | Contents                                                                                          |
+|----------------------|--------|---------------------------------------------------------------------------------------------------|
+| `domma.min.js`       | ~258KB | Core framework (DOM, utils, dates, models, elements, tables, config, http, storage, theme, icons) |
+| `domma-tools.min.js` | ~78KB  | Developer tools (Theme Roller, Quick Roller)                                                      |
+
+**Usage:**
+
+```html
+<!-- Core only -->
+<script src="dist/domma.min.js"></script>
+
+<!-- With developer tools -->
+<script src="dist/domma.min.js"></script>
+<script src="dist/domma-tools.min.js"></script>
+```
+
+The tools bundle attaches to `Domma.elements` automatically when loaded:
+
+```javascript
+// Available after loading domma-tools.min.js
+Domma.elements.themeRoller('#container', options);
+Domma.elements.quickRoller('#container', options);
+```
+
+Zero external dependencies.
 
 ## CSS Grid System
 

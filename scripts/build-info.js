@@ -1,9 +1,9 @@
 /**
  * Build Info Generator
- * Creates build-info.json with version, timestamp, and commit hash
+ * Creates build-info.json with version, timestamp, commit hash, and bundle size
  */
 
-import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'fs';
+import {existsSync, mkdirSync, readFileSync, statSync, writeFileSync} from 'fs';
 import {execSync} from 'child_process';
 import {dirname, join} from 'path';
 import {fileURLToPath} from 'url';
@@ -34,11 +34,16 @@ const formatDate = (date) => {
     return `${day}/${month}/${year} ${hours}:${minutes}`;
 };
 
-// Build info object
-const buildInfo = {
-    version: pkg.version,
-    built: formatDate(new Date()),
-    commit: getGitCommit()
+// Get bundle size in KB
+const getBundleSize = () => {
+    const bundlePath = join(rootDir, 'public/dist/domma.min.js');
+    try {
+        const stats = statSync(bundlePath);
+        const sizeKB = Math.round(stats.size / 1024);
+        return `${sizeKB}KB`;
+    } catch {
+        return 'unknown';
+    }
 };
 
 // Ensure dist directory exists
@@ -46,6 +51,14 @@ const distDir = join(rootDir, 'public/dist');
 if (!existsSync(distDir)) {
     mkdirSync(distDir, {recursive: true});
 }
+
+// Build info object
+const buildInfo = {
+    version: pkg.version,
+    built: formatDate(new Date()),
+    commit: getGitCommit(),
+    size: getBundleSize()
+};
 
 // Write build-info.json
 const outputPath = join(distDir, 'build-info.json');
@@ -55,3 +68,4 @@ console.log(`✓ Generated ${outputPath}`);
 console.log(`  Version: ${buildInfo.version}`);
 console.log(`  Built: ${buildInfo.built}`);
 console.log(`  Commit: ${buildInfo.commit}`);
+console.log(`  Size: ${buildInfo.size}`);
