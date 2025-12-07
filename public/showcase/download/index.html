@@ -134,6 +134,168 @@
             font-size: var(--dm-font-size-xs);
             color: var(--dm-gray-600);
         }
+
+        /* Bundle Builder Styles */
+        .preset-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--dm-space-2);
+            margin-bottom: var(--dm-space-4);
+        }
+
+        .preset-btn {
+            flex: 1 1 auto;
+            min-width: 150px;
+        }
+
+        .preset-btn.active {
+            background: var(--dm-primary);
+            color: white;
+            border-color: var(--dm-primary);
+        }
+
+        .module-tier {
+            border-left: 3px solid var(--dm-primary);
+            padding-left: var(--dm-space-4);
+            margin-bottom: var(--dm-space-6);
+        }
+
+        .module-tier h4 {
+            margin: 0 0 var(--dm-space-3) 0;
+        }
+
+        .module-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--dm-space-2);
+            padding: var(--dm-space-3);
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .module-checkbox:hover {
+            border-color: var(--dm-primary);
+            background: var(--dm-gray-50);
+        }
+
+        .module-checkbox input[type="checkbox"] {
+            margin-top: 4px;
+            cursor: pointer;
+        }
+
+        .module-checkbox input[type="checkbox"]:disabled {
+            cursor: not-allowed;
+        }
+
+        .module-checkbox.required {
+            background: rgba(100, 149, 237, 0.1);
+            border-color: var(--dm-primary);
+        }
+
+        .module-checkbox.has-dependencies {
+            border-left: 3px solid var(--dm-warning);
+        }
+
+        .module-info {
+            flex: 1;
+        }
+
+        .module-name {
+            font-weight: 600;
+            margin-bottom: var(--dm-space-1);
+            display: flex;
+            align-items: center;
+            gap: var(--dm-space-2);
+        }
+
+        .module-alias {
+            font-size: var(--dm-font-size-xs);
+            color: var(--dm-primary);
+            font-weight: 500;
+        }
+
+        .module-description {
+            font-size: var(--dm-font-size-sm);
+            color: var(--dm-gray-600);
+            margin-bottom: var(--dm-space-1);
+        }
+
+        .module-meta {
+            font-size: var(--dm-font-size-xs);
+            color: var(--dm-gray-500);
+            display: flex;
+            gap: var(--dm-space-3);
+        }
+
+        .module-size {
+            font-weight: 600;
+        }
+
+        .module-dependencies {
+            font-style: italic;
+        }
+
+        .bundle-summary {
+            background: var(--dm-gray-50);
+            padding: var(--dm-space-4);
+            border-radius: var(--dm-radius-md);
+            border: 2px dashed var(--dm-border);
+        }
+
+        .bundle-size-display {
+            text-align: right;
+        }
+
+        #bundle-size {
+            display: block;
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        .build-instructions {
+            margin-top: var(--dm-space-6);
+        }
+
+        .code-block {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
+            padding: var(--dm-space-4);
+            border-radius: var(--dm-radius-md);
+            font-family: var(--dm-font-mono);
+            font-size: var(--dm-font-size-sm);
+            overflow-x: auto;
+            white-space: pre;
+            margin: 0;
+        }
+
+        .accordion-item {
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            margin-bottom: var(--dm-space-2);
+        }
+
+        .accordion-header {
+            padding: var(--dm-space-3);
+            cursor: pointer;
+            background: var(--dm-gray-50);
+            border-radius: var(--dm-radius-md);
+            transition: background 0.2s;
+        }
+
+        .accordion-header:hover {
+            background: var(--dm-gray-100);
+        }
+
+        .accordion-content {
+            padding: var(--dm-space-4);
+            display: none;
+        }
+
+        .accordion-item.active .accordion-content {
+            display: block;
+        }
     </style>
 </head>
 <body class="dm-theme-light">
@@ -241,6 +403,164 @@
                         <span data-icon="download" data-icon-size="16"></span>
                         Download CSS
                     </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Bundle Builder -->
+    <section class="mb-8">
+        <h2 class="text-2xl font-semibold mb-6 text-center">Custom Bundle Builder</h2>
+
+        <div class="card">
+            <div class="card-body">
+                <!-- Preset Buttons -->
+                <div class="preset-section mb-6">
+                    <h3 class="text-lg font-semibold mb-3">Quick Presets</h3>
+                    <p class="text-muted mb-4">Select a pre-configured bundle or customise below:</p>
+
+                    <div class="preset-buttons">
+                        <button class="btn btn-outline preset-btn" data-preset="minimal">
+                            <span data-icon="box" data-icon-size="16"></span>
+                            Minimal (~144KB)
+                        </button>
+                        <button class="btn btn-outline preset-btn" data-preset="essentials">
+                            <span data-icon="star" data-icon-size="16"></span>
+                            Essentials (~211KB)
+                        </button>
+                        <button class="btn btn-outline preset-btn" data-preset="full">
+                            <span data-icon="package" data-icon-size="16"></span>
+                            Full (~258KB)
+                        </button>
+                        <button class="btn btn-outline preset-btn" data-preset="data-focused">
+                            <span data-icon="database" data-icon-size="16"></span>
+                            Data-Focused (~172KB)
+                        </button>
+                        <button class="btn btn-outline preset-btn" data-preset="no-ui">
+                            <span data-icon="code" data-icon-size="16"></span>
+                            No-UI (~39KB)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Module Selection -->
+                <div class="module-selection mb-6">
+                    <h3 class="text-lg font-semibold mb-3">Select Modules</h3>
+                    <p class="text-muted mb-4">Choose specific modules to include. Dependencies are automatically
+                        selected.</p>
+
+                    <div class="module-grid">
+                        <!-- Tier 1 Modules -->
+                        <div class="module-tier">
+                            <h4 class="font-semibold text-sm text-muted">Core Utilities (No Dependencies)</h4>
+                            <div class="grid grid-cols-1 grid-cols-md-2 gap-3">
+                                <!-- Module checkboxes will be dynamically generated -->
+                            </div>
+                        </div>
+
+                        <!-- Tier 2 Modules -->
+                        <div class="module-tier">
+                            <h4 class="font-semibold text-sm text-muted">Intermediate Features</h4>
+                            <div class="grid grid-cols-1 grid-cols-md-2 gap-3">
+                                <!-- Module checkboxes will be dynamically generated -->
+                            </div>
+                        </div>
+
+                        <!-- Tier 3 Modules -->
+                        <div class="module-tier">
+                            <h4 class="font-semibold text-sm text-muted">Advanced Features</h4>
+                            <div class="grid grid-cols-1 grid-cols-md-2 gap-3">
+                                <!-- Module checkboxes will be dynamically generated -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bundle Summary -->
+                <div class="bundle-summary">
+                    <div class="row align-center mb-4">
+                        <div class="col-6">
+                            <h3 class="text-lg font-semibold">Your Bundle</h3>
+                            <p class="text-muted" id="selected-count">0 modules selected</p>
+                        </div>
+                        <div class="col-6 text-right">
+                            <div class="bundle-size-display">
+                                <span class="text-muted">Estimated size:</span>
+                                <strong id="bundle-size" class="text-2xl text-primary">0 KB</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="bundle-actions">
+                        <div class="grid grid-cols-1 grid-cols-md-3 gap-3">
+                            <button class="btn btn-outline" id="reset-selection">
+                                <span data-icon="x" data-icon-size="16"></span>
+                                Reset Selection
+                            </button>
+                            <button class="btn btn-primary" id="download-bundle" disabled>
+                                <span data-icon="download" data-icon-size="16"></span>
+                                Download Bundle
+                            </button>
+                            <button class="btn btn-outline" id="view-instructions">
+                                <span data-icon="book" data-icon-size="16"></span>
+                                Build Instructions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Build Instructions (Hidden by default) -->
+                <div class="build-instructions" id="build-instructions" style="display: none;">
+                    <hr class="my-6">
+                    <h3 class="text-lg font-semibold mb-3">Build Instructions</h3>
+                    <p class="text-muted mb-4">To build this custom bundle, follow these steps:</p>
+
+                    <div class="accordion" id="instructions-accordion">
+                        <!-- Step 1: Entry Point -->
+                        <div class="accordion-item active">
+                            <div class="accordion-header">
+                                <h4>1. Create Custom Entry Point</h4>
+                            </div>
+                            <div class="accordion-content">
+                                <p class="mb-2">Create <code>src/bundles/custom.js</code>:</p>
+                                <pre class="code-block" id="entry-point-code">// Code will be generated based on your selection</pre>
+                                <button class="btn btn-sm btn-outline mt-2" data-copy="entry-point-code">
+                                    <span data-icon="copy" data-icon-size="14"></span>
+                                    Copy Code
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Rollup Config -->
+                        <div class="accordion-item">
+                            <div class="accordion-header">
+                                <h4>2. Update Rollup Configuration</h4>
+                            </div>
+                            <div class="accordion-content">
+                                <p class="mb-2">Add to <code>rollup.config.js</code>:</p>
+                                <pre class="code-block" id="rollup-config-code">// Configuration will be generated</pre>
+                                <button class="btn btn-sm btn-outline mt-2" data-copy="rollup-config-code">
+                                    <span data-icon="copy" data-icon-size="14"></span>
+                                    Copy Code
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Build -->
+                        <div class="accordion-item">
+                            <div class="accordion-header">
+                                <h4>3. Build Your Bundle</h4>
+                            </div>
+                            <div class="accordion-content">
+                                <p class="mb-2">Run the build command:</p>
+                                <pre class="code-block">npm run build</pre>
+                                <p class="mt-3">Your custom bundle will be in
+                                    <code>public/dist/domma-custom.min.js</code>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -416,6 +736,7 @@
 
 <script src="../../dist/domma.min.js"></script>
 <script src="../js/layout.js"></script>
+<script src="bundle-builder.js"></script>
 <script>
     // Scan for icons
     Domma.icons.scan();

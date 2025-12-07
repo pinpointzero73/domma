@@ -7,11 +7,13 @@
   "types": "assets/types/index.d.ts",
   "type": "module",
   "scripts": {
-    "dev": "rollup -c && node scripts/build-info.js && npm run build:css && live-server public --port=3000 --open=/index.html",
-    "build": "rollup -c && node scripts/build-info.js && npm run build:css",
+    "dev": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run build:css && live-server public --port=3000 --open=/index.html",
+    "build": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run build:css",
     "build:js": "rollup -c",
     "build:css": "node scripts/build-css.js",
     "build:info": "node scripts/build-info.js",
+    "build:metadata": "node scripts/copy-metadata.js",
+    "generate:bundles": "node scripts/generate-bundles.js",
     "test": "node tests/test.js",
     "showcase": "live-server public --port=3000 --open=/showcase/index.html"
   },

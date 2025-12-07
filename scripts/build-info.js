@@ -34,16 +34,37 @@ const formatDate = (date) => {
     return `${day}/${month}/${year} ${hours}:${minutes}`;
 };
 
-// Get bundle size in KB
-const getBundleSize = () => {
-    const bundlePath = join(rootDir, 'public/dist/domma.min.js');
-    try {
-        const stats = statSync(bundlePath);
-        const sizeKB = Math.round(stats.size / 1024);
-        return `${sizeKB}KB`;
-    } catch {
-        return 'unknown';
-    }
+// Get bundle sizes for all bundles
+const getBundleSizes = () => {
+    const bundles = [
+        {name: 'full', path: 'public/dist/domma.min.js'},
+        {name: 'minimal', path: 'public/dist/domma-minimal.min.js'},
+        {name: 'essentials', path: 'public/dist/domma-essentials.min.js'},
+        {name: 'data-focused', path: 'public/dist/domma-data-focused.min.js'},
+        {name: 'no-ui', path: 'public/dist/domma-no-ui.min.js'},
+        {name: 'tools', path: 'public/dist/domma-tools.min.js'}
+    ];
+
+    const sizes = {};
+
+    bundles.forEach(bundle => {
+        const bundlePath = join(rootDir, bundle.path);
+        try {
+            const stats = statSync(bundlePath);
+            const sizeKB = Math.round(stats.size / 1024);
+            sizes[bundle.name] = {
+                size: sizeKB,
+                sizeFormatted: `${sizeKB}KB`
+            };
+        } catch {
+            sizes[bundle.name] = {
+                size: 0,
+                sizeFormatted: 'not built'
+            };
+        }
+    });
+
+    return sizes;
 };
 
 // Ensure dist directory exists
@@ -57,7 +78,7 @@ const buildInfo = {
     version: pkg.version,
     built: formatDate(new Date()),
     commit: getGitCommit(),
-    size: getBundleSize()
+    bundles: getBundleSizes()
 };
 
 // Write build-info.json
@@ -68,4 +89,7 @@ console.log(`✓ Generated ${outputPath}`);
 console.log(`  Version: ${buildInfo.version}`);
 console.log(`  Built: ${buildInfo.built}`);
 console.log(`  Commit: ${buildInfo.commit}`);
-console.log(`  Size: ${buildInfo.size}`);
+console.log(`  Bundles:`);
+Object.entries(buildInfo.bundles).forEach(([name, info]) => {
+    console.log(`    ${name.padEnd(15)} ${info.sizeFormatted}`);
+});

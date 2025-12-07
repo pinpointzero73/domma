@@ -291,6 +291,73 @@ Domma.elements.quickRoller('#container', options);
 
 Zero external dependencies.
 
+## Custom Bundles
+
+Domma supports custom bundles for optimised file sizes. Several preset bundles are provided, or you can create your own.
+
+### Preset Bundles
+
+| Bundle                      | Size   | Modules                                  | Use Case                             |
+|-----------------------------|--------|------------------------------------------|--------------------------------------|
+| `domma-minimal.min.js`      | ~144KB | dom, utils, storage, icons               | Simple DOM manipulation              |
+| `domma-essentials.min.js`   | ~211KB | minimal + elements, config, http         | Interactive sites with UI components |
+| `domma-data-focused.min.js` | ~172KB | dom, utils, tables, icons, storage, http | Data-heavy applications, dashboards  |
+| `domma-no-ui.min.js`        | ~39KB  | utils, http, dates, models, storage      | Headless/BYOS integration            |
+| `domma.min.js` (Full)       | ~258KB | All modules                              | Complete framework                   |
+
+**Size Comparison:**
+
+- **Minimal**: 44% smaller than full bundle
+- **Essentials**: 18% smaller
+- **Data-Focused**: 33% smaller
+- **No-UI**: 85% smaller (perfect for headless apps)
+
+### Using Preset Bundles
+
+```html
+<!-- Minimal bundle - just DOM and utilities -->
+<script src="dist/domma-minimal.min.js"></script>
+
+<!-- Essentials bundle - most common features -->
+<script src="dist/domma-essentials.min.js"></script>
+
+<!-- No-UI bundle - BYOS (Bring Your Own Styles) -->
+<script src="dist/domma-no-ui.min.js"></script>
+```
+
+### Creating Custom Bundles
+
+Visit the [Download Page](./public/showcase/download/index.html) and use the **Bundle Builder** to:
+
+1. Select specific modules you need
+2. View automatic dependency resolution (dependencies are selected automatically)
+3. Download pre-built preset bundles instantly
+4. Generate build instructions for truly custom combinations
+
+**Example:** If you only need DOM manipulation and HTTP requests, select `dom`, `utils`, and `http`. The Bundle Builder
+will automatically include `utils` (required by `dom`) and show you the total size.
+
+### Module Dependencies
+
+When creating custom bundles, these dependencies are automatically included:
+
+- **dom** → requires `utils`
+- **models** → requires `utils`, `storage`
+- **tables** → requires `utils`, `icons`
+- **config** → requires `dom`, `elements`, `utils`
+
+The Bundle Builder handles this automatically - when you select a module, its dependencies are selected and locked.
+
+### Build Your Own
+
+To manually create a custom bundle:
+
+1. Create an entry point in `src/bundles/` (or use the Bundle Builder to generate one)
+2. Add configuration to `rollup.config.js`
+3. Run `npm run build`
+
+See `src/bundles/README.md` for detailed instructions and examples.
+
 ## CSS Grid System
 
 Domma provides both modern CSS Grid utilities and Bootstrap-style flexbox grid.

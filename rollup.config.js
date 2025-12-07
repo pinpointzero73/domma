@@ -71,8 +71,49 @@ const commonPlugins = [
     terser()
 ];
 
+// Preset bundles configuration
+const presetBundles = [
+    {name: 'minimal', description: 'Minimal Bundle'},
+    {name: 'essentials', description: 'Essentials Bundle'},
+    {name: 'data-focused', description: 'Data-Focused Bundle'},
+    {name: 'no-ui', description: 'No-UI Bundle'}
+];
+
+// Generate bundle configurations for each preset
+const bundleConfigs = presetBundles.map(preset => ({
+    input: `src/bundles/${preset.name}.js`,
+    output: [
+        {
+            file: `public/dist/domma-${preset.name}.min.js`,
+            format: 'umd',
+            name: 'Domma',
+            sourcemap: false,
+            banner: `/*!
+ * Domma ${preset.description} v${pkg.version}
+ * Dynamic Object Manipulation & Modeling API
+ * (c) ${new Date().getFullYear()} Darryl Waterhouse & DCBW-IT
+ * Built: ${new Date().toISOString()}
+ * Commit: ${getGitCommit()}
+ */`
+        },
+        {
+            file: `public/dist/domma-${preset.name}.esm.js`,
+            format: 'es',
+            sourcemap: false,
+            banner: `/*!
+ * Domma ${preset.description} v${pkg.version}
+ * Dynamic Object Manipulation & Modeling API
+ * (c) ${new Date().getFullYear()} Darryl Waterhouse & DCBW-IT
+ * Built: ${new Date().toISOString()}
+ * Commit: ${getGitCommit()}
+ */`
+        }
+    ],
+    plugins: commonPlugins
+}));
+
 export default [
-    // Main Domma bundle
+    // Main Domma bundle (Full)
     {
         input: 'src/index.js',
         output: [
@@ -111,5 +152,7 @@ export default [
             }
         ],
         plugins: commonPlugins
-    }
+    },
+    // Preset bundles (Minimal, Essentials, Data-Focused, No-UI)
+    ...bundleConfigs
 ];

@@ -1,0 +1,189 @@
+{
+  "modules": {
+    "utils": {
+      "name": "Utils",
+      "description": "120+ Lodash-compatible utilities",
+      "size": 45,
+      "dependencies": [],
+      "aliases": [
+        "_"
+      ],
+      "tier": 1
+    },
+    "http": {
+      "name": "HTTP",
+      "description": "Fetch-based HTTP client",
+      "size": 2,
+      "dependencies": [],
+      "aliases": [],
+      "tier": 1
+    },
+    "dates": {
+      "name": "Dates",
+      "description": "Moment-style date manipulation",
+      "size": 12,
+      "dependencies": [],
+      "aliases": [
+        "D"
+      ],
+      "tier": 1
+    },
+    "storage": {
+      "name": "Storage",
+      "description": "localStorage/sessionStorage wrapper",
+      "size": 5,
+      "dependencies": [],
+      "aliases": [
+        "S"
+      ],
+      "tier": 1
+    },
+    "theme": {
+      "name": "Theme",
+      "description": "Theme management system",
+      "size": 10,
+      "dependencies": [],
+      "aliases": [],
+      "tier": 1
+    },
+    "dom": {
+      "name": "DOM",
+      "description": "jQuery-compatible DOM API (90+ methods)",
+      "size": 38,
+      "dependencies": [
+        "utils"
+      ],
+      "aliases": [
+        "$"
+      ],
+      "tier": 2
+    },
+    "icons": {
+      "name": "Icons",
+      "description": "SVG icon system (100+ icons)",
+      "size": 8,
+      "dependencies": [],
+      "aliases": [],
+      "tier": 2
+    },
+    "models": {
+      "name": "Models",
+      "description": "Reactive models & pub/sub",
+      "size": 13,
+      "dependencies": [
+        "utils",
+        "storage"
+      ],
+      "aliases": [
+        "M"
+      ],
+      "tier": 2
+    },
+    "elements": {
+      "name": "Elements",
+      "description": "UI components (Modal, Tabs, Carousel, etc.)",
+      "size": 85,
+      "dependencies": [],
+      "aliases": [],
+      "tier": 2
+    },
+    "tables": {
+      "name": "Tables",
+      "description": "DataTable-like functionality",
+      "size": 40,
+      "dependencies": [
+        "utils",
+        "icons"
+      ],
+      "aliases": [],
+      "tier": 3
+    },
+    "config": {
+      "name": "Config",
+      "description": "Declarative configuration engine",
+      "size": 8,
+      "dependencies": [
+        "dom",
+        "elements",
+        "utils"
+      ],
+      "aliases": [],
+      "tier": 3
+    }
+  },
+  "presets": {
+    "minimal": {
+      "name": "Minimal",
+      "description": "Core DOM manipulation and utilities",
+      "modules": [
+        "utils",
+        "dom",
+        "storage",
+        "icons"
+      ],
+      "estimatedSize": 144,
+      "useCase": "Simple DOM manipulation, no UI components"
+    },
+    "essentials": {
+      "name": "Essentials",
+      "description": "Most commonly used features",
+      "modules": [
+        "utils",
+        "dom",
+        "storage",
+        "icons",
+        "elements",
+        "config",
+        "http"
+      ],
+      "estimatedSize": 211,
+      "useCase": "Interactive sites with UI components"
+    },
+    "full": {
+      "name": "Full",
+      "description": "Complete Domma framework",
+      "modules": [
+        "utils",
+        "dom",
+        "storage",
+        "icons",
+        "elements",
+        "config",
+        "http",
+        "dates",
+        "models",
+        "tables",
+        "theme"
+      ],
+      "estimatedSize": 258,
+      "useCase": "Applications using all features"
+    },
+    "data-focused": {
+      "name": "Data-Focused",
+      "description": "Data manipulation and tables",
+      "modules": [
+        "utils",
+        "dom",
+        "tables",
+        "icons",
+        "storage",
+        "http"
+      ],
+      "estimatedSize": 172,
+      "useCase": "Data-heavy applications, dashboards"
+    },
+    "no-ui": {
+      "name": "No-UI",
+      "description": "Headless utilities (BYOS)",
+      "modules": [
+        "utils",
+        "http",
+        "dates",
+        "models",
+        "storage"
+      ],
+      "estimatedSize": 39,
+      "useCase": "Integration with existing frameworks"
+    }
+  }
+}
