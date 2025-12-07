@@ -774,7 +774,7 @@ class TableInstance {
         return html;
     }
 
-    copyToClipboard(format = 'text') {
+    async copyToClipboard(format = 'text') {
         let content;
 
         // Use selected rows if any, otherwise use filtered data
@@ -800,26 +800,10 @@ class TableInstance {
             content = rows.join('\n');
         }
 
-        // Use clipboard API if available
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(content).then(() => {
-                if (this.options.onExport) {
-                    this.options.onExport({format: 'clipboard', rowCount: this._filteredData.length});
-                }
-            });
-        } else {
-            // Fallback for older browsers
-            const textarea = document.createElement('textarea');
-            textarea.value = content;
-            textarea.style.cssText = 'position: fixed; left: -9999px;';
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
+        await utils.copyToClipboard(content);
 
-            if (this.options.onExport) {
-                this.options.onExport({format: 'clipboard', rowCount: this._filteredData.length});
-            }
+        if (this.options.onExport) {
+            this.options.onExport({format: 'clipboard', rowCount: this._filteredData.length});
         }
 
         return this;

@@ -36,6 +36,16 @@ const banner = `/*!
  * Commit: ${getGitCommit()}
  */`;
 
+const toolsBanner = `/*!
+ * Domma Tools v${pkg.version}
+ * Developer tools: Theme Roller & Quick Roller
+ * (c) ${new Date().getFullYear()} Darryl Waterhouse & DCBW-IT
+ * Built: ${new Date().toISOString()}
+ * Commit: ${getGitCommit()}
+ *
+ * Requires: domma.min.js
+ */`;
+
 const obfuscatorOptions = {
     compact: true,
     controlFlowFlattening: true,
@@ -50,32 +60,56 @@ const obfuscatorOptions = {
     stringArrayThreshold: 0.75
 };
 
-export default {
-    input: 'src/index.js',
-    output: [
-        {
-            file: 'public/dist/domma.min.js',
-            format: 'umd',
-            name: 'Domma',
-            sourcemap: false,
-            banner
-        },
-        {
-            file: 'public/dist/domma.esm.js',
-            format: 'es',
-            sourcemap: false,
-            banner
-        }
-    ],
-    plugins: [
-        resolve(),
-        replace({
-            preventAssignment: true,
-            __BUILD_VERSION__: JSON.stringify(pkg.version),
-            __BUILD_DATE__: JSON.stringify(formatDate(new Date())),
-            __BUILD_COMMIT__: JSON.stringify(getGitCommit())
-        }),
-        terser()
-        // obfuscator({ options: obfuscatorOptions })  // Disabled - can cause issues
-    ]
-};
+const commonPlugins = [
+    resolve(),
+    replace({
+        preventAssignment: true,
+        __BUILD_VERSION__: JSON.stringify(pkg.version),
+        __BUILD_DATE__: JSON.stringify(formatDate(new Date())),
+        __BUILD_COMMIT__: JSON.stringify(getGitCommit())
+    }),
+    terser()
+];
+
+export default [
+    // Main Domma bundle
+    {
+        input: 'src/index.js',
+        output: [
+            {
+                file: 'public/dist/domma.min.js',
+                format: 'umd',
+                name: 'Domma',
+                sourcemap: false,
+                banner
+            },
+            {
+                file: 'public/dist/domma.esm.js',
+                format: 'es',
+                sourcemap: false,
+                banner
+            }
+        ],
+        plugins: commonPlugins
+    },
+    // Tools bundle (Theme Roller + Quick Roller)
+    {
+        input: 'src/tools.js',
+        output: [
+            {
+                file: 'public/dist/domma-tools.min.js',
+                format: 'umd',
+                name: 'DommaTools',
+                sourcemap: false,
+                banner: toolsBanner
+            },
+            {
+                file: 'public/dist/domma-tools.esm.js',
+                format: 'es',
+                sourcemap: false,
+                banner: toolsBanner
+            }
+        ],
+        plugins: commonPlugins
+    }
+];

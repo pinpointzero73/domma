@@ -2127,7 +2127,7 @@ export const utils = {
     },
 
     // ============================================
-    // Math Utilities
+    // Maths Utilities
     // ============================================
 
     /**
@@ -2960,5 +2960,38 @@ export const utils = {
      */
     render(template, data, options = {}) {
         return this.template(template, options)(data);
+    },
+
+    // ============================================
+    // Browser Utilities
+    // ============================================
+
+    /**
+     * Copy text to clipboard.
+     * Uses modern Clipboard API with fallback for older browsers.
+     * @param {string} text - Text to copy
+     * @returns {Promise<boolean>} True if copy succeeded
+     */
+    async copyToClipboard(text) {
+        if (navigator.clipboard?.writeText) {
+            try {
+                await navigator.clipboard.writeText(text);
+                return true;
+            } catch {
+                // Fall through to fallback
+            }
+        }
+        // Fallback for older browsers or when Clipboard API fails
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            return true;
+        } finally {
+            document.body.removeChild(textarea);
+        }
     }
 };
