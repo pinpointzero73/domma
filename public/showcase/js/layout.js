@@ -5,16 +5,38 @@
  */
 
 (function () {
-    // Storage key migration: old domma-theme → new S (domma:) prefix
-    const oldTheme = localStorage.getItem('domma-theme');
-    if (oldTheme && !S.has('theme')) {
-        S.set('theme', oldTheme);
-        localStorage.removeItem('domma-theme');
-    }
-    const oldVariant = localStorage.getItem('domma-theme-variant');
-    if (oldVariant && !S.has('theme-variant')) {
-        S.set('theme-variant', oldVariant);
-        localStorage.removeItem('domma-theme-variant');
+    // Storage helper - use Domma.storage if available, fallback to localStorage
+    const storage = typeof Domma !== 'undefined' && Domma.storage ? Domma.storage : {
+        get: (key, def) => {
+            try {
+                return JSON.parse(localStorage.getItem('domma:' + key)) ?? def;
+            } catch {
+                return def;
+            }
+        },
+        set: (key, val) => {
+            try {
+                localStorage.setItem('domma:' + key, JSON.stringify(val));
+            } catch {
+            }
+        },
+        has: (key) => localStorage.getItem('domma:' + key) !== null
+    };
+
+    // Storage key migration: old domma-theme → new storage prefix
+    try {
+        const oldTheme = localStorage.getItem('domma-theme');
+        if (oldTheme && !storage.has('theme')) {
+            storage.set('theme', oldTheme);
+            localStorage.removeItem('domma-theme');
+        }
+        const oldVariant = localStorage.getItem('domma-theme-variant');
+        if (oldVariant && !storage.has('theme-variant')) {
+            storage.set('theme-variant', oldVariant);
+            localStorage.removeItem('domma-theme-variant');
+        }
+    } catch (e) {
+        console.warn('Layout: Storage migration skipped', e);
     }
 
     function init() {
@@ -26,7 +48,8 @@
             path.includes('/tables/') || path.includes('/icons/') ||
             path.includes('/themes/') || path.includes('/storage/') ||
             path.includes('/download/') || path.includes('/http/') ||
-            path.includes('/grid/');
+            path.includes('/grid/') || path.includes('/theme-roller/') ||
+            path.includes('/quick-roller/');
         const isQuickstart = path.includes('/quickstart/');
         const isSubpage = isShowcaseSubpage;
         const base = isSubpage ? '../' : (isQuickstart ? '../showcase/' : '');
@@ -54,7 +77,33 @@
     </svg>`;
 
         // Get build info (fallback for dev mode)
-        const buildInfo = Domma.buildInfo || {version: '1.0.0', built: 'dev', commit: 'dev'};
+        const buildInfo = Domma.buildInfo || {version: '1.0.0', built: 'dev', commit: 'dev', size: '~250KB'};
+
+        // Fetch extended build info (includes size) and update placeholders
+        const distBase = isSubpage ? '../../dist/' : (isQuickstart ? '../dist/' : 'dist/');
+        fetch(distBase + 'build-info.json')
+            .then(r => r.json())
+            .then(info => {
+                // Update any elements with data-build-size attribute
+                document.querySelectorAll('[data-build-size]').forEach(el => {
+                    el.textContent = info.size || '~250KB';
+                });
+            })
+            .catch(() => {
+            });
+
+        // Hamburger icon SVG
+        const hamburgerSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>`;
+
+        // Close icon SVG
+        const closeSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>`;
 
         // Create navbar HTML
         const navbar = `
@@ -69,7 +118,11 @@
             </a>
             <a href="${base}download/index.html" class="pill pill-light">Download</a>
         </div>
-        <ul class="navbar-nav">
+        <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <span class="navbar-toggle-open">${hamburgerSvg}</span>
+            <span class="navbar-toggle-close" style="display:none">${closeSvg}</span>
+        </button>
+        <ul class="navbar-nav" id="navbar-nav">
             <li><a href="${base}config/index.html" class="${getNavClass('config')}">Config</a></li>
             <li><a href="${base}dom/index.html" class="${getNavClass('dom')}">DOM</a></li>
             <li><a href="${base}utils/index.html" class="${getNavClass('utils')}">Utils</a></li>
@@ -82,7 +135,9 @@
             <li><a href="${base}http/index.html" class="${getNavClass('http')}">HTTP</a></li>
             <li><a href="${base}icons/index.html" class="${getNavClass('icons')}">Icons</a></li>
             <li><a href="${base}themes/index.html" class="${getNavClass('themes')}">Themes</a></li>
-            <li><span class="nav-version">v${buildInfo.version}</span></li>
+            <li><a href="${base}theme-roller/index.html" class="${getNavClass('theme-roller')}">Theme Roller</a></li>
+            <li><a href="${base}quick-roller/index.html" class="${getNavClass('quick-roller')}">Quick Roller</a></li>
+<!--            <li><span class="nav-version">v${buildInfo.version}</span></li>-->
         </ul>
     </nav>`;
 
@@ -275,6 +330,13 @@
             background: rgba(255,255,255,0.1);
             color: inherit;
         }
+        /* Navbar toggle icon states */
+        .navbar-toggle-open,
+        .navbar-toggle-close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .footer-content {
             display: flex;
             justify-content: space-between;
@@ -300,6 +362,44 @@
             .nav-version {
                 display: none;
             }
+        }
+        /* Code block copy button */
+        .code-block-wrapper {
+            position: relative;
+        }
+        .code-block-copy {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--dm-gray-400, #adb5bd);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+            z-index: 10;
+        }
+        .code-block-wrapper:hover .code-block-copy,
+        .code-block-copy:focus {
+            opacity: 1;
+        }
+        .code-block-copy:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--dm-gray-100, #f8f9fa);
+        }
+        .code-block-copy.copied {
+            background: var(--dm-success, #198754);
+            color: white;
+        }
+        .code-block-copy svg {
+            width: 16px;
+            height: 16px;
         }
     </style>`;
 
@@ -465,7 +565,7 @@
         // Scroll spy to highlight current section
         function initScrollSpy(navItems) {
             const $links = $('.sidebar-link');
-            const sections = navItems.map(item => document.getElementById(item.id)).filter(Boolean);
+            const sections = navItems.map(item => $('#' + item.id)[0]).filter(Boolean);
 
             if (sections.length === 0) return;
 
@@ -525,7 +625,7 @@
             $body.addClass(isDark ? 'dm-theme-light' : 'dm-theme-dark');
 
             // Save preference using Domma storage
-            S.set('theme', isDark ? 'light' : 'dark');
+            storage.set('theme', isDark ? 'light' : 'dark');
 
             updateThemeIcon();
 
@@ -536,13 +636,44 @@
         }
 
         // Load saved theme preference
-        const saved = S.get('theme');
+        const saved = storage.get('theme');
         if (saved === 'dark') {
             $body.removeClass('dm-theme-light').addClass('dm-theme-dark');
         }
 
         $('#theme-toggle').on('click', toggleTheme);
         updateThemeIcon();
+
+        // Navbar toggle functionality (mobile)
+        const $navbarToggle = $('#navbar-toggle');
+        const $navbarNav = $('#navbar-nav');
+
+        function toggleNavbar() {
+            const isOpen = $navbarNav.hasClass('open');
+            $navbarNav.toggleClass('open');
+            $navbarToggle.attr('aria-expanded', !isOpen);
+            $('.navbar-toggle-open').toggle(isOpen);
+            $('.navbar-toggle-close').toggle(!isOpen);
+        }
+
+        $navbarToggle.on('click', toggleNavbar);
+
+        // Close navbar on link click (mobile)
+        $navbarNav.find('a').on('click', function () {
+            if (window.innerWidth <= 992 && $navbarNav.hasClass('open')) {
+                toggleNavbar();
+            }
+        });
+
+        // Close navbar on window resize if open
+        $(window).on('resize', _.debounce(function () {
+            if (window.innerWidth > 992 && $navbarNav.hasClass('open')) {
+                $navbarNav.removeClass('open');
+                $navbarToggle.attr('aria-expanded', 'false');
+                $('.navbar-toggle-open').show();
+                $('.navbar-toggle-close').hide();
+            }
+        }, 100));
 
         // Variant selector functionality
         function setVariant(variant) {
@@ -555,7 +686,7 @@
             }
 
             // Save to storage
-            S.set('theme-variant', variant || '');
+            storage.set('theme-variant', variant || '');
 
             // Sync with Domma.theme if available
             if (Domma.theme) {
@@ -566,7 +697,7 @@
         }
 
         function updateVariantActive() {
-            const current = S.get('theme-variant') || '';
+            const current = storage.get('theme-variant') || '';
             $('.variant-dot').each(function () {
                 const $dot = $(this);
                 $dot.toggleClass('active', $dot.data('variant') === current);
@@ -574,7 +705,7 @@
         }
 
         // Load saved variant preference
-        const savedVariant = S.get('theme-variant');
+        const savedVariant = storage.get('theme-variant');
         if (savedVariant) {
             $body.addClass('dm-theme-' + savedVariant);
         }
@@ -593,6 +724,94 @@
                 showAfter: window.innerHeight
             });
         }
+
+        // Code block copy-to-clipboard functionality
+        function setupCodeBlockCopy() {
+            const copyIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>`;
+
+            const checkIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>`;
+
+            // Find all code blocks using native DOM
+            const codeBlocks = document.querySelectorAll('.code-block');
+
+            codeBlocks.forEach(codeBlock => {
+                // Skip if already wrapped
+                if (codeBlock.parentElement?.classList.contains('code-block-wrapper')) {
+                    return;
+                }
+
+                // Create wrapper
+                const wrapper = document.createElement('div');
+                wrapper.className = 'code-block-wrapper';
+                codeBlock.parentNode.insertBefore(wrapper, codeBlock);
+                wrapper.appendChild(codeBlock);
+
+                // Create copy button
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'code-block-copy';
+                copyBtn.innerHTML = copyIcon;
+                wrapper.appendChild(copyBtn);
+
+                // Add tooltip if Domma available
+                if (Domma?.elements?.tooltip) {
+                    try {
+                        Domma.elements.tooltip(copyBtn, {
+                            content: 'Copy code',
+                            position: 'top'
+                        });
+                    } catch (e) { /* ignore */
+                    }
+                }
+
+                // Handle click
+                copyBtn.addEventListener('click', async function () {
+                    const code = codeBlock.textContent;
+
+                    try {
+                        // Try Domma utility first, fallback to native
+                        if (Domma?.utils?.copyToClipboard) {
+                            await Domma.utils.copyToClipboard(code);
+                        } else {
+                            await navigator.clipboard.writeText(code);
+                        }
+
+                        // Show success state
+                        copyBtn.classList.add('copied');
+                        copyBtn.innerHTML = checkIcon;
+
+                        // Show toast if available
+                        if (Domma?.elements?.toast) {
+                            Domma.elements.toast.success('Code copied!', {
+                                position: 'bottom-center',
+                                duration: 2000
+                            });
+                        }
+                    } catch (err) {
+                        console.error('Copy failed:', err);
+                        if (Domma?.elements?.toast) {
+                            Domma.elements.toast.error('Copy failed', {
+                                position: 'bottom-center',
+                                duration: 2000
+                            });
+                        }
+                    }
+
+                    // Reset after delay
+                    setTimeout(() => {
+                        copyBtn.classList.remove('copied');
+                        copyBtn.innerHTML = copyIcon;
+                    }, 2000);
+                });
+            });
+        }
+
+        // Run code block copy setup
+        setupCodeBlockCopy();
     }
 
     // Wait for DOM to be ready before injecting layout
