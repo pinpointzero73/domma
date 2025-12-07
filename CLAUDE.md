@@ -276,7 +276,7 @@ Domma is split into two bundles:
 | Bundle               | Size   | Contents                                                                                          |
 |----------------------|--------|---------------------------------------------------------------------------------------------------|
 | `domma.min.js`       | ~258KB | Core framework (DOM, utils, dates, models, elements, tables, config, http, storage, theme, icons) |
-| `domma-tools.min.js` | ~78KB  | Developer tools (Theme Roller, Quick Roller)                                                      |
+| `domma-tools.min.js` | ~141KB | Developer tools (Theme Roller, Page Roller)                                                       |
 
 **Usage:**
 
@@ -505,6 +505,252 @@ const table = Domma.tables.create('#my-table', {
     columns: [...]
 });
 ```
+
+## Page Roller (Developer Tool)
+
+**Page Roller** is a visual page builder included in `domma-tools.min.js`. Build complete web pages with drag-and-drop
+sections, configure layouts with Divi-style row/column system, and export production-ready HTML.
+
+### Initialisation
+
+```javascript
+// Attach to container
+const pageRoller = Domma.elements.pageRoller('#container', {
+  onChange: (data) => console.log('Page changed', data),
+  onSave: ({name, data}) => console.log('Page saved', name)
+});
+```
+
+### Features
+
+- **16 Section Types** (6 original + 1 layout + 9 interactive)
+  - **Layout**: Navbar, Hero, Card Grid, Content, Form, Footer, **Row Layout**
+  - **Interactive**: Carousel, Accordion, Tabs, Modal, Toast, Breadcrumbs, Button Group, Tag Cloud, Dropdown
+
+- **Row/Column System** (Divi-inspired)
+  - 22+ layout presets (single, equal-2/3/4/5/6, thirds, quarters, fifths, sixths, asymmetric)
+  - Proportional width system (0.0-1.0) for flexible layouts
+  - Nested rows (max 3 levels)
+  - Column spacing controls (padding, margin, gutter)
+  - Height options (auto/min/max/fixed)
+  - Alignment controls (horizontal/vertical)
+  - Responsive behaviour (stack/keep/hide per breakpoint)
+  - Background options (none/colour/gradient/image)
+
+- **Visual Editor**
+  - Drag-and-drop sections
+  - Real-time preview
+  - Property inspector with custom controls
+  - Template save/load
+  - Version migration (v1 → v2)
+
+- **Export**
+  - Standalone HTML with CSS
+  - Component auto-initialization script
+  - Minification option
+  - Copy to clipboard
+
+### Row/Column Layout Presets
+
+```javascript
+const LAYOUT_PRESETS = {
+    'single': [1.0],                        // 1 Column
+    'equal-2': [0.5, 0.5],                  // 1/2 + 1/2
+    'third-twothirds': [0.333, 0.667],      // 1/3 + 2/3
+    'twothirds-third': [0.667, 0.333],      // 2/3 + 1/3
+    'quarter-threequarters': [0.25, 0.75],  // 1/4 + 3/4
+    'threequarters-quarter': [0.75, 0.25],  // 3/4 + 1/4
+    'equal-3': [0.333, 0.333, 0.333],       // 1/3 × 3
+    'quarter-half-quarter': [0.25, 0.5, 0.25], // 1/4 + 1/2 + 1/4
+    'equal-4': [0.25, 0.25, 0.25, 0.25],    // 1/4 × 4
+    'equal-5': [0.2, 0.2, 0.2, 0.2, 0.2],   // 1/5 × 5
+    'equal-6': [0.167, 0.167, 0.167, 0.167, 0.167, 0.167], // 1/6 × 6
+    'sidebar-main': [0.3, 0.7],             // Sidebar + Main
+    'main-sidebar': [0.7, 0.3],             // Main + Sidebar
+    // ... and 9 more asymmetric layouts
+};
+```
+
+### Section Configuration Examples
+
+**Row Layout:**
+
+```javascript
+{
+    type: 'row',
+    config: {
+        layout: 'equal-2',
+        columns: [{width: 0.5}, {width: 0.5}],
+        spacing: {
+            padding: {top: 3, right: 3, bottom: 3, left: 3},
+            margin: {top: 0, right: 0, bottom: 0, left: 0},
+            gutter: 4,
+            locked: false
+        },
+        height: {type: 'auto', value: null, equalize: false},
+        alignment: {horizontal: 'start', vertical: 'start'},
+        responsive: {mobile: 'stack', tablet: 'keep', desktop: 'keep'},
+        background: {type: 'none', color: '', gradient: '', image: ''}
+    },
+    children: [
+        {columnIndex: 0, section: {type: 'hero', config: {...}}},
+        {columnIndex: 1, section: {type: 'cardGrid', config: {...}}}
+    ]
+}
+```
+
+**Carousel:**
+
+```javascript
+{
+    type: 'carousel',
+    config: {
+        slides: [
+            {image: 'url', caption: 'Title', content: 'Description'},
+            {image: 'url', caption: 'Title 2', content: 'Description 2'}
+        ],
+        autoplay: true,
+        interval: 5000,
+        pauseOnHover: true,
+        loop: true,
+        animation: 'slide',      // or 'fade'
+        showArrows: true,
+        showIndicators: true,
+        height: 400
+    }
+}
+```
+
+**Accordion:**
+
+```javascript
+{
+    type: 'accordion',
+    config: {
+        title: 'FAQ',
+        items: [
+            {title: 'Question?', content: 'Answer'},
+            {title: 'Another?', content: 'Response'}
+        ],
+        allowMultiple: false,
+        activeIndex: 0,
+        animation: true,
+        style: 'default'         // or 'bordered', 'minimal'
+    }
+}
+```
+
+**Tabs:**
+
+```javascript
+{
+    type: 'tabs',
+    config: {
+        tabs: [
+            {label: 'Tab 1', content: '<p>Content</p>'},
+            {label: 'Tab 2', content: '<p>More content</p>'}
+        ],
+        activeIndex: 0,
+        style: 'default',        // or 'pills', 'underline'
+        animation: 'fade'        // or 'none', 'slide'
+    }
+}
+```
+
+### API Methods
+
+```javascript
+// Section management
+pageRoller.addSection(type);
+pageRoller.removeSection(index);
+pageRoller.moveSection(fromIndex, toIndex);
+pageRoller.getSections();
+
+// Template management
+pageRoller.saveTemplate(name);
+pageRoller.loadTemplate(name);
+pageRoller.newTemplate();
+
+// Theme
+pageRoller.setTheme(theme, variant);  // 'light', 'dark', or null
+pageRoller.setGridEnabled(enabled);
+
+// Export
+pageRoller.exportHTML(options);       // {minify, includeComments, standalone}
+pageRoller.copyToClipboard();
+pageRoller.openPreviewWindow();
+
+// Configuration
+pageRoller.getPageConfig();
+```
+
+### Component Auto-Initialization
+
+Exported HTML includes auto-initialization script for interactive components:
+
+```javascript
+document.addEventListener("DOMContentLoaded", function() {
+    // Icons
+    Domma.icons.scan();
+
+    // Carousels
+    document.querySelectorAll("[data-component='carousel']").forEach(el => {
+        Domma.elements.carousel(el.querySelector('.carousel'), options);
+    });
+
+    // Accordions, Tabs, Modals, Breadcrumbs, etc.
+    // ... automatically initialized based on data-component attributes
+});
+```
+
+### Responsive Behaviour
+
+Row layouts respond to viewport changes:
+
+```css
+/* Mobile (<576px) */
+.pr-row-stack-mobile { grid-template-columns: 1fr !important; }
+.pr-row[data-hide-mobile="true"] { display: none; }
+
+/* Tablet (576-768px) */
+.pr-row-stack-tablet { grid-template-columns: 1fr !important; }
+.pr-row[data-hide-tablet="true"] { display: none; }
+
+/* Desktop (>768px) */
+.pr-row[data-hide-desktop="true"] { display: none; }
+```
+
+### Data Structure (v2)
+
+```javascript
+{
+    version: 2,
+    name: 'My Page',
+    config: {
+        meta: {
+            title: 'Page Title',
+            description: 'Description',
+            charset: 'UTF-8',
+            viewport: 'width=device-width, initial-scale=1.0'
+        },
+        theme: 'light',
+        variant: null,
+        useTheme: true,
+        useGrid: true,
+        customCSS: ''
+    },
+    sections: [...]  // Array of section objects (can be nested for rows)
+}
+```
+
+### Version Migration
+
+Page Roller automatically migrates v1 documents to v2:
+
+- Wraps v1 sections in single-column rows
+- Adds version field
+- Maintains backwards compatibility
+- No manual intervention required
 
 - When updating features or adding new ones, the documentation and showcase should be updated in-line
 - Where and whenever possible use Domma in the showcase, documentation and tutorials

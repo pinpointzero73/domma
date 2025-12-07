@@ -599,13 +599,202 @@
                 order: -1;
             }
         }
+
+        /* Row/Column Canvas Styles */
+        .pr-row {
+            position: relative;
+            margin: 1rem 0;
+        }
+
+        .pr-column {
+            position: relative;
+            min-height: 80px;
+        }
+
+        .qr-canvas-row {
+            border: 2px dashed var(--dm-border);
+            margin: 1rem 0;
+            padding: 0.5rem;
+            background: var(--dm-surface);
+            border-radius: var(--dm-radius-lg);
+            position: relative;
+        }
+
+        .qr-row-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: var(--dm-background-alt, var(--dm-gray-100));
+            border-bottom: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md) var(--dm-radius-md) 0 0;
+            margin: -0.5rem -0.5rem 0.5rem -0.5rem;
+        }
+
+        .qr-row-label {
+            font-weight: 600;
+            font-size: var(--dm-text-sm);
+            color: var(--dm-text);
+        }
+
+        .qr-row-actions {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .qr-canvas-column {
+            border: 1px solid var(--dm-border);
+            padding: 0.5rem;
+            min-height: 100px;
+            background: var(--dm-background, white);
+            border-radius: var(--dm-radius-md);
+        }
+
+        .qr-column-header {
+            font-size: var(--dm-text-xs, 0.75rem);
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            background: var(--dm-primary, #6495ED);
+            color: white;
+            text-align: center;
+            border-radius: var(--dm-radius-sm);
+            margin-bottom: 0.5rem;
+        }
+
+        .qr-column-drop-zone {
+            min-height: 80px;
+            position: relative;
+        }
+
+        .qr-drop-active {
+            background: rgba(100, 149, 237, 0.1);
+            border: 2px dashed var(--dm-primary);
+            border-radius: var(--dm-radius-md);
+        }
+
+        .qr-empty-column {
+            text-align: center;
+            padding: 2rem;
+            color: var(--dm-text-muted);
+            font-size: var(--dm-text-sm);
+        }
+
+        /* Preset Grid */
+        .qr-preset-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .qr-preset-btn {
+            padding: 0.5rem;
+            border: 2px solid var(--dm-border);
+            background: var(--dm-surface);
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: var(--dm-radius-md);
+            text-align: center;
+        }
+
+        .qr-preset-btn:hover {
+            border-color: var(--dm-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--dm-shadow-sm);
+        }
+
+        .qr-preset-btn.active {
+            border-color: var(--dm-primary);
+            background: rgba(100, 149, 237, 0.1);
+            box-shadow: 0 0 0 2px rgba(100, 149, 237, 0.2);
+        }
+
+        /* Button Groups */
+        .qr-btn-group {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .qr-align-btn,
+        .qr-preset-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--dm-border);
+            background: var(--dm-surface);
+            cursor: pointer;
+            border-radius: var(--dm-radius-md);
+            transition: all 0.2s;
+        }
+
+        .qr-align-btn:hover {
+            background: var(--dm-hover-bg, var(--dm-gray-100));
+        }
+
+        .qr-align-btn.active {
+            background: var(--dm-primary);
+            color: white;
+            border-color: var(--dm-primary);
+        }
+
+        /* Spacing Inputs */
+        .qr-spacing-inputs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+
+        .qr-chainlink {
+            background: none;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            padding: 4px 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .qr-chainlink:hover {
+            background: var(--dm-hover-bg, var(--dm-gray-100));
+        }
+
+        .qr-chainlink.locked {
+            background: var(--dm-primary);
+            color: white;
+            border-color: var(--dm-primary);
+        }
+
+        /* Responsive Stacking for Rows */
+        @media (max-width: 576px) {
+            .pr-row-stack-mobile {
+                grid-template-columns: 1fr !important;
+            }
+
+            .pr-row[data-hide-mobile="true"] {
+                display: none;
+            }
+        }
+
+        @media (min-width: 577px) and (max-width: 768px) {
+            .pr-row-stack-tablet {
+                grid-template-columns: 1fr !important;
+            }
+
+            .pr-row[data-hide-tablet="true"] {
+                display: none;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .pr-row[data-hide-desktop="true"] {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body class="dm-theme-light">
 
 <!-- Hero Section -->
 <div class="hero">
-    <h1>Quick Roller</h1>
+    <h1>Page Roller</h1>
     <p>Build complete web pages visually with drag-and-drop sections. Export ready-to-use HTML with all styles and
         scripts included.</p>
 </div>

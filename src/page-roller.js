@@ -442,7 +442,489 @@ ${fieldsHtml}
     </div>
 </footer>`;
         }
+    },
+
+    row: {
+        name: 'Row Layout',
+        icon: 'grid',
+        category: 'layout',
+        description: 'Container for multi-column layouts with nested sections',
+        defaults: {
+            layout: 'equal-2',
+            columns: [{width: 0.5}, {width: 0.5}],
+            spacing: {
+                padding: {top: 3, right: 3, bottom: 3, left: 3},
+                margin: {top: 0, right: 0, bottom: 0, left: 0},
+                gutter: 4,
+                locked: false
+            },
+            height: {type: 'auto', value: null, equalize: false},
+            alignment: {horizontal: 'start', vertical: 'start'},
+            responsive: {mobile: 'stack', tablet: 'keep', desktop: 'keep'},
+            background: {type: 'none', color: '', gradient: '', image: ''}
+        },
+        editableFields: [
+            {key: 'layout', type: 'layout-preset', label: 'Layout Preset'},
+            {key: 'columns', type: 'column-widths', label: 'Column Widths'},
+            {key: 'spacing', type: 'spacing-controls', label: 'Spacing'},
+            {key: 'height', type: 'height-controls', label: 'Height'},
+            {key: 'alignment', type: 'alignment-controls', label: 'Alignment'},
+            {key: 'responsive', type: 'responsive-controls', label: 'Responsive'},
+            {key: 'background', type: 'background-controls', label: 'Background'}
+        ],
+        template: (config) => {
+            // This will be implemented later with the recursive rendering system
+            return '<section class="pr-row" data-row-placeholder="true">Row Layout (placeholder)</section>';
+        }
+    },
+
+    carousel: {
+        name: 'Carousel',
+        icon: 'image',
+        category: 'interactive',
+        description: 'Image/content carousel with autoplay and navigation',
+        defaults: {
+            slides: [
+                {image: 'https://via.placeholder.com/800x400', caption: 'Slide 1', content: 'First slide content'},
+                {image: 'https://via.placeholder.com/800x400', caption: 'Slide 2', content: 'Second slide content'},
+                {image: 'https://via.placeholder.com/800x400', caption: 'Slide 3', content: 'Third slide content'}
+            ],
+            autoplay: true,
+            interval: 5000,
+            pauseOnHover: true,
+            loop: true,
+            animation: 'slide',
+            showArrows: true,
+            showIndicators: true,
+            height: 400
+        },
+        editableFields: [
+            {key: 'slides', type: 'slides', label: 'Slides'},
+            {key: 'autoplay', type: 'toggle', label: 'Autoplay'},
+            {key: 'interval', type: 'number', label: 'Interval (ms)', showWhen: {autoplay: true}},
+            {key: 'pauseOnHover', type: 'toggle', label: 'Pause on Hover'},
+            {key: 'loop', type: 'toggle', label: 'Loop'},
+            {key: 'animation', type: 'select', label: 'Animation', options: ['slide', 'fade']},
+            {key: 'showArrows', type: 'toggle', label: 'Show Arrows'},
+            {key: 'showIndicators', type: 'toggle', label: 'Show Indicators'},
+            {key: 'height', type: 'number', label: 'Height (px)'}
+        ],
+        template: (config) => {
+            const slidesHtml = config.slides.map((slide, idx) => `
+        <div class="carousel-slide ${idx === 0 ? 'active' : ''}" style="height: ${config.height}px;">
+            ${slide.image ? `<img src="${slide.image}" alt="${slide.caption}" style="width: 100%; height: 100%; object-fit: cover;">` : ''}
+            ${slide.caption || slide.content ? `
+                <div class="carousel-caption" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: white; text-align: center; background: rgba(0,0,0,0.6); padding: 1rem 2rem; border-radius: 8px;">
+                    ${slide.caption ? `<h3 style="margin: 0 0 0.5rem 0;">${slide.caption}</h3>` : ''}
+                    ${slide.content ? `<p style="margin: 0;">${slide.content}</p>` : ''}
+                </div>
+            ` : ''}
+        </div>`).join('');
+
+            return `<section class="py-6" data-component="carousel">
+    <div class="container">
+        <div class="carousel" data-autoplay="${config.autoplay}" data-interval="${config.interval}" data-pause-hover="${config.pauseOnHover}" data-loop="${config.loop}" data-animation="${config.animation}" style="position: relative; overflow: hidden;">
+            ${slidesHtml}
+            ${config.showArrows ? `
+            <button class="carousel-prev" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; padding: 1rem; cursor: pointer; font-size: 1.5rem;">‹</button>
+            <button class="carousel-next" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; padding: 1rem; cursor: pointer; font-size: 1.5rem;">›</button>
+            ` : ''}
+            ${config.showIndicators ? `
+            <div class="carousel-indicators" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 0.5rem;">
+                ${config.slides.map((_, idx) => `<button data-slide="${idx}" class="${idx === 0 ? 'active' : ''}" style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; background: ${idx === 0 ? 'white' : 'transparent'}; cursor: pointer;"></button>`).join('')}
+            </div>
+            ` : ''}
+        </div>
+    </div>
+</section>`;
+        }
+    },
+
+    accordion: {
+        name: 'Accordion',
+        icon: 'chevron-down',
+        category: 'interactive',
+        description: 'Expandable FAQ or content blocks',
+        defaults: {
+            title: 'Frequently Asked Questions',
+            items: [
+                {
+                    title: 'What is your return policy?',
+                    content: 'We offer a 30-day money-back guarantee on all products.'
+                },
+                {title: 'How long does shipping take?', content: 'Standard shipping takes 5-7 business days.'},
+                {title: 'Do you ship internationally?', content: 'Yes, we ship to most countries worldwide.'}
+            ],
+            allowMultiple: false,
+            activeIndex: 0,
+            animation: true,
+            style: 'default'
+        },
+        editableFields: [
+            {key: 'title', type: 'text', label: 'Section Title'},
+            {key: 'items', type: 'accordionItems', label: 'Items'},
+            {key: 'allowMultiple', type: 'toggle', label: 'Allow Multiple Open'},
+            {key: 'activeIndex', type: 'number', label: 'Initially Active (index)'},
+            {key: 'animation', type: 'toggle', label: 'Animated'},
+            {key: 'style', type: 'select', label: 'Style', options: ['default', 'bordered', 'minimal']}
+        ],
+        template: (config) => {
+            const itemsHtml = config.items.map((item, idx) => `
+        <div class="accordion-item ${idx === config.activeIndex ? 'active' : ''}" style="border: 1px solid var(--dm-border, #dee2e6); margin-bottom: 0.5rem; border-radius: 4px;">
+            <button class="accordion-header" style="width: 100%; padding: 1rem; text-align: left; background: var(--dm-surface, #fff); border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 500;">
+                ${item.title}
+                <span class="accordion-icon" style="transition: transform 0.3s; ${idx === config.activeIndex ? 'transform: rotate(180deg);' : ''}">▼</span>
+            </button>
+            <div class="accordion-content" style="padding: ${idx === config.activeIndex ? '1rem' : '0 1rem'}; max-height: ${idx === config.activeIndex ? '500px' : '0'}; overflow: hidden; transition: all 0.3s;">
+                ${item.content}
+            </div>
+        </div>`).join('');
+
+            return `<section class="py-12" data-component="accordion">
+    <div class="container">
+        ${config.title ? `<h2 class="text-3xl font-bold mb-6 text-center">${config.title}</h2>` : ''}
+        <div class="accordion accordion-${config.style}" data-allow-multiple="${config.allowMultiple}" data-animation="${config.animation}" style="max-width: 800px; margin: 0 auto;">
+            ${itemsHtml}
+        </div>
+    </div>
+</section>`;
+        }
+    },
+
+    tabs: {
+        name: 'Tabs',
+        icon: 'menu',
+        category: 'interactive',
+        description: 'Tabbed content sections',
+        defaults: {
+            tabs: [
+                {label: 'Overview', content: '<p>Overview content goes here.</p>'},
+                {label: 'Features', content: '<p>Feature details go here.</p>'},
+                {label: 'Pricing', content: '<p>Pricing information goes here.</p>'}
+            ],
+            activeIndex: 0,
+            style: 'default',
+            animation: 'fade'
+        },
+        editableFields: [
+            {key: 'tabs', type: 'tabItems', label: 'Tabs'},
+            {key: 'activeIndex', type: 'number', label: 'Initially Active (index)'},
+            {key: 'style', type: 'select', label: 'Style', options: ['default', 'pills', 'underline']},
+            {key: 'animation', type: 'select', label: 'Animation', options: ['none', 'fade', 'slide']}
+        ],
+        template: (config) => {
+            const navHtml = config.tabs.map((tab, idx) => `
+        <button class="tab-button ${idx === config.activeIndex ? 'active' : ''}" data-tab="${idx}" style="padding: 0.75rem 1.5rem; border: 1px solid var(--dm-border, #dee2e6); background: ${idx === config.activeIndex ? 'var(--dm-primary, #6495ED)' : 'transparent'}; color: ${idx === config.activeIndex ? 'white' : 'inherit'}; cursor: pointer; border-radius: 4px 4px 0 0; margin-right: 0.25rem;">
+            ${tab.label}
+        </button>`).join('');
+
+            const panelsHtml = config.tabs.map((tab, idx) => `
+        <div class="tab-panel ${idx === config.activeIndex ? 'active' : ''}" data-panel="${idx}" style="display: ${idx === config.activeIndex ? 'block' : 'none'}; padding: 2rem; border: 1px solid var(--dm-border, #dee2e6); border-top: none;">
+            ${tab.content}
+        </div>`).join('');
+
+            return `<section class="py-12" data-component="tabs">
+    <div class="container">
+        <div class="tabs tabs-${config.style}" data-animation="${config.animation}">
+            <div class="tabs-nav" style="display: flex; border-bottom: 2px solid var(--dm-border, #dee2e6);">
+                ${navHtml}
+            </div>
+            <div class="tabs-content">
+                ${panelsHtml}
+            </div>
+        </div>
+    </div>
+</section>`;
+        }
+    },
+
+    modal: {
+        name: 'Modal',
+        icon: 'box',
+        category: 'interactive',
+        description: 'Popup modal trigger with content',
+        defaults: {
+            triggerText: 'Open Modal',
+            triggerStyle: 'primary',
+            modalTitle: 'Modal Title',
+            modalContent: '<p>Modal content goes here.</p>',
+            backdrop: true,
+            keyboard: true,
+            animation: true
+        },
+        editableFields: [
+            {key: 'triggerText', type: 'text', label: 'Button Text'},
+            {key: 'triggerStyle', type: 'select', label: 'Button Style', options: ['primary', 'secondary', 'outline']},
+            {key: 'modalTitle', type: 'text', label: 'Modal Title'},
+            {key: 'modalContent', type: 'richtext', label: 'Modal Content'},
+            {key: 'backdrop', type: 'toggle', label: 'Show Backdrop'},
+            {key: 'keyboard', type: 'toggle', label: 'Close on ESC'},
+            {key: 'animation', type: 'toggle', label: 'Animated'}
+        ],
+        template: (config) => {
+            const btnClass = config.triggerStyle === 'primary' ? 'btn btn-primary' :
+                config.triggerStyle === 'secondary' ? 'btn btn-secondary' : 'btn btn-outline';
+
+            return `<section class="py-12 text-center" data-component="modal">
+    <div class="container">
+        <button class="${btnClass}" data-modal-trigger="modal-1">${config.triggerText}</button>
+        <div class="modal" id="modal-1" data-backdrop="${config.backdrop}" data-keyboard="${config.keyboard}" data-animation="${config.animation}" style="display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
+            <div class="modal-content" style="background: white; padding: 2rem; border-radius: 8px; max-width: 600px; width: 90%; position: relative;">
+                <button class="modal-close" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer;">×</button>
+                <h2 class="modal-title" style="margin-bottom: 1rem;">${config.modalTitle}</h2>
+                <div class="modal-body">${config.modalContent}</div>
+            </div>
+        </div>
+    </div>
+</section>`;
+        }
+    },
+
+    toast: {
+        name: 'Toast',
+        icon: 'document',
+        category: 'interactive',
+        description: 'Notification toast trigger',
+        defaults: {
+            triggerText: 'Show Notification',
+            toastMessage: 'This is a toast notification!',
+            toastType: 'info',
+            position: 'top-right',
+            duration: 3000
+        },
+        editableFields: [
+            {key: 'triggerText', type: 'text', label: 'Button Text'},
+            {key: 'toastMessage', type: 'textarea', label: 'Toast Message'},
+            {key: 'toastType', type: 'select', label: 'Type', options: ['info', 'success', 'warning', 'error']},
+            {
+                key: 'position',
+                type: 'select',
+                label: 'Position',
+                options: ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right']
+            },
+            {key: 'duration', type: 'number', label: 'Duration (ms)'}
+        ],
+        template: (config) => {
+            return `<section class="py-12 text-center" data-component="toast">
+    <div class="container">
+        <button class="btn btn-primary" data-toast-trigger data-toast-message="${config.toastMessage}" data-toast-type="${config.toastType}" data-toast-position="${config.position}" data-toast-duration="${config.duration}">
+            ${config.triggerText}
+        </button>
+    </div>
+</section>`;
+        }
+    },
+
+    breadcrumbs: {
+        name: 'Breadcrumbs',
+        icon: 'chevron-right',
+        category: 'interactive',
+        description: 'Navigation breadcrumb trail',
+        defaults: {
+            items: [
+                {text: 'Home', url: '#'},
+                {text: 'Products', url: '#'},
+                {text: 'Category', url: '#'},
+                {text: 'Current Page', url: ''}
+            ],
+            separator: '/',
+            homeIcon: true
+        },
+        editableFields: [
+            {key: 'items', type: 'breadcrumbItems', label: 'Items'},
+            {key: 'separator', type: 'select', label: 'Separator', options: ['/', '>', '→', 'chevron']},
+            {key: 'homeIcon', type: 'toggle', label: 'Show Home Icon'}
+        ],
+        template: (config) => {
+            const itemsHtml = config.items.map((item, idx) => {
+                const isLast = idx === config.items.length - 1;
+                const separator = config.separator === 'chevron' ? '<span data-icon="chevron-right" data-icon-size="14"></span>' : config.separator;
+
+                return `
+        ${idx === 0 && config.homeIcon ? '<span data-icon="home" data-icon-size="16" style="margin-right: 0.5rem;"></span>' : ''}
+        ${item.url && !isLast ? `<a href="${item.url}" style="color: var(--dm-primary, #6495ED); text-decoration: none;">${item.text}</a>` : `<span style="color: ${isLast ? 'var(--dm-text, #212529)' : 'var(--dm-text-muted, #6c757d)'};">${item.text}</span>`}
+        ${!isLast ? `<span style="margin: 0 0.5rem; color: var(--dm-text-muted, #6c757d);">${separator}</span>` : ''}`;
+            }).join('');
+
+            return `<section class="py-6" data-component="breadcrumbs">
+    <div class="container">
+        <nav class="breadcrumbs" style="display: flex; align-items: center; font-size: 0.875rem;">
+            ${itemsHtml}
+        </nav>
+    </div>
+</section>`;
+        }
+    },
+
+    buttonGroup: {
+        name: 'Button Group',
+        icon: 'grid',
+        category: 'interactive',
+        description: 'Radio or checkbox button group',
+        defaults: {
+            title: 'Select an Option',
+            mode: 'single',
+            buttons: [
+                {label: 'Option 1', value: 'opt1'},
+                {label: 'Option 2', value: 'opt2'},
+                {label: 'Option 3', value: 'opt3'}
+            ],
+            activeIndex: 0,
+            vertical: false
+        },
+        editableFields: [
+            {key: 'title', type: 'text', label: 'Title'},
+            {key: 'mode', type: 'select', label: 'Mode', options: ['single', 'multiple']},
+            {key: 'buttons', type: 'buttonGroupItems', label: 'Buttons'},
+            {key: 'activeIndex', type: 'number', label: 'Initially Active (index)'},
+            {key: 'vertical', type: 'toggle', label: 'Vertical Layout'}
+        ],
+        template: (config) => {
+            const buttonsHtml = config.buttons.map((btn, idx) => `
+        <button class="btn-group-item ${idx === config.activeIndex ? 'active' : ''}" data-value="${btn.value}" style="padding: 0.75rem 1.5rem; border: 1px solid var(--dm-border, #dee2e6); background: ${idx === config.activeIndex ? 'var(--dm-primary, #6495ED)' : 'transparent'}; color: ${idx === config.activeIndex ? 'white' : 'inherit'}; cursor: pointer;">
+            ${btn.label}
+        </button>`).join('');
+
+            return `<section class="py-12" data-component="button-group">
+    <div class="container">
+        ${config.title ? `<h3 class="text-xl font-semibold mb-4">${config.title}</h3>` : ''}
+        <div class="btn-group ${config.vertical ? 'btn-group-vertical' : ''}" data-mode="${config.mode}" style="display: flex; ${config.vertical ? 'flex-direction: column;' : ''} gap: ${config.vertical ? '0.5rem' : '0'};">
+            ${buttonsHtml}
+        </div>
+    </div>
+</section>`;
+        }
+    },
+
+    tagCloud: {
+        name: 'Tag Cloud',
+        icon: 'star',
+        category: 'interactive',
+        description: 'Badge/tag collection display',
+        defaults: {
+            title: 'Tags',
+            tags: [
+                {text: 'JavaScript', color: 'primary'},
+                {text: 'React', color: 'success'},
+                {text: 'Node.js', color: 'info'},
+                {text: 'CSS', color: 'warning'},
+                {text: 'HTML', color: 'danger'}
+            ],
+            size: 'medium',
+            pill: true
+        },
+        editableFields: [
+            {key: 'title', type: 'text', label: 'Title'},
+            {key: 'tags', type: 'tagItems', label: 'Tags'},
+            {key: 'size', type: 'select', label: 'Size', options: ['small', 'medium', 'large']},
+            {key: 'pill', type: 'toggle', label: 'Pill Style'}
+        ],
+        template: (config) => {
+            const sizeClass = config.size === 'small' ? 'text-sm' : config.size === 'large' ? 'text-lg' : '';
+            const tagsHtml = config.tags.map(tag => {
+                const colorMap = {
+                    primary: 'var(--dm-primary, #6495ED)',
+                    success: 'var(--dm-success, #28a745)',
+                    info: 'var(--dm-info, #17a2b8)',
+                    warning: 'var(--dm-warning, #ffc107)',
+                    danger: 'var(--dm-danger, #dc3545)'
+                };
+                const bgColor = colorMap[tag.color] || colorMap.primary;
+
+                return `<span class="badge ${sizeClass}" style="display: inline-block; padding: 0.375rem 0.75rem; background: ${bgColor}; color: white; border-radius: ${config.pill ? '50px' : '4px'}; margin: 0.25rem; font-size: ${config.size === 'small' ? '0.75rem' : config.size === 'large' ? '1rem' : '0.875rem'};">
+            ${tag.text}
+        </span>`;
+            }).join('');
+
+            return `<section class="py-12" data-component="tag-cloud">
+    <div class="container">
+        ${config.title ? `<h3 class="text-xl font-semibold mb-4">${config.title}</h3>` : ''}
+        <div class="tag-cloud" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+            ${tagsHtml}
+        </div>
+    </div>
+</section>`;
+        }
+    },
+
+    dropdown: {
+        name: 'Dropdown',
+        icon: 'chevron-down',
+        category: 'interactive',
+        description: 'Dropdown menu with items',
+        defaults: {
+            triggerText: 'Menu',
+            triggerStyle: 'primary',
+            items: [
+                {text: 'Action 1', url: '#'},
+                {text: 'Action 2', url: '#'},
+                {text: 'divider', url: ''},
+                {text: 'Action 3', url: '#'}
+            ],
+            position: 'bottom'
+        },
+        editableFields: [
+            {key: 'triggerText', type: 'text', label: 'Button Text'},
+            {key: 'triggerStyle', type: 'select', label: 'Button Style', options: ['primary', 'secondary', 'outline']},
+            {key: 'items', type: 'dropdownItems', label: 'Items'},
+            {key: 'position', type: 'select', label: 'Position', options: ['bottom', 'top', 'left', 'right']}
+        ],
+        template: (config) => {
+            const btnClass = config.triggerStyle === 'primary' ? 'btn btn-primary' :
+                config.triggerStyle === 'secondary' ? 'btn btn-secondary' : 'btn btn-outline';
+
+            const itemsHtml = config.items.map(item => {
+                if (item.text === 'divider') {
+                    return '<div style="height: 1px; background: var(--dm-border, #dee2e6); margin: 0.5rem 0;"></div>';
+                }
+                return `<a href="${item.url}" style="display: block; padding: 0.5rem 1rem; color: var(--dm-text, #212529); text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='var(--dm-hover-bg, #f8f9fa)'" onmouseout="this.style.background='transparent'">${item.text}</a>`;
+            }).join('');
+
+            return `<section class="py-12 text-center" data-component="dropdown">
+    <div class="container">
+        <div class="dropdown" data-position="${config.position}" style="position: relative; display: inline-block;">
+            <button class="${btnClass} dropdown-trigger" style="display: flex; align-items: center; gap: 0.5rem;">
+                ${config.triggerText}
+                <span data-icon="chevron-down" data-icon-size="14"></span>
+            </button>
+            <div class="dropdown-menu" style="display: none; position: absolute; top: 100%; left: 0; margin-top: 0.5rem; background: white; border: 1px solid var(--dm-border, #dee2e6); border-radius: 4px; box-shadow: var(--dm-shadow-md); min-width: 200px; z-index: 1000;">
+                ${itemsHtml}
+            </div>
+        </div>
+    </div>
+</section>`;
+        }
     }
+};
+
+
+// ============================================================================
+// Layout Presets - Divi-style row layout configurations
+// ============================================================================
+
+const LAYOUT_PRESETS = {
+    'single': {columns: [1.0], label: '1 Column'},
+    'equal-2': {columns: [0.5, 0.5], label: '1/2 + 1/2'},
+    'third-twothirds': {columns: [0.333, 0.667], label: '1/3 + 2/3'},
+    'twothirds-third': {columns: [0.667, 0.333], label: '2/3 + 1/3'},
+    'quarter-threequarters': {columns: [0.25, 0.75], label: '1/4 + 3/4'},
+    'threequarters-quarter': {columns: [0.75, 0.25], label: '3/4 + 1/4'},
+    'equal-3': {columns: [0.333, 0.333, 0.333], label: '1/3 × 3'},
+    'quarter-half-quarter': {columns: [0.25, 0.5, 0.25], label: '1/4 + 1/2 + 1/4'},
+    'equal-4': {columns: [0.25, 0.25, 0.25, 0.25], label: '1/4 × 4'},
+    'fifth-fourfifths': {columns: [0.2, 0.8], label: '1/5 + 4/5'},
+    'fourfifths-fifth': {columns: [0.8, 0.2], label: '4/5 + 1/5'},
+    'equal-5': {columns: [0.2, 0.2, 0.2, 0.2, 0.2], label: '1/5 × 5'},
+    'sixth-fivesixths': {columns: [0.167, 0.833], label: '1/6 + 5/6'},
+    'fivesixths-sixth': {columns: [0.833, 0.167], label: '5/6 + 1/6'},
+    'equal-6': {columns: [0.167, 0.167, 0.167, 0.167, 0.167, 0.167], label: '1/6 × 6'},
+    'sidebar-main': {columns: [0.3, 0.7], label: 'Sidebar + Main'},
+    'main-sidebar': {columns: [0.7, 0.3], label: 'Main + Sidebar'},
+    'narrow-wide-narrow': {columns: [0.2, 0.6, 0.2], label: '1/5 + 3/5 + 1/5'},
+    'wide-narrow-wide': {columns: [0.4, 0.2, 0.4], label: '2/5 + 1/5 + 2/5'},
+    'third-sixth-half': {columns: [0.333, 0.167, 0.5], label: '1/3 + 1/6 + 1/2'},
+    'asymmetric-3': {columns: [0.5, 0.3, 0.2], label: '1/2 + 3/10 + 1/5'},
+    'asymmetric-4': {columns: [0.4, 0.3, 0.2, 0.1], label: '2/5 + 3/10 + 1/5 + 1/10'}
 };
 
 
@@ -905,6 +1387,19 @@ class PageRoller {
             this._handleEditorChange(e);
         });
 
+        // Editor button clicks (alignment, presets, etc.)
+        this._on(this._refs.editor, 'click', 'button', (e) => {
+            const btn = e.target.closest('button');
+            const action = btn.dataset.action;
+
+            if (action) {
+                this._handleEditorAction(action, btn);
+            } else if (btn.dataset.field) {
+                // Button with data-field (alignment, presets)
+                this._handleEditorChange(e);
+            }
+        });
+
         // Load templates dropdown
         this._on(this.element, 'click', '.qr-templates-menu .qr-menu-item', (e) => {
             const name = e.target.closest('.qr-menu-item').dataset.template;
@@ -971,22 +1466,144 @@ class PageRoller {
     _handleEditorChange(e) {
         if (this._selectedIndex < 0) return;
 
-        const field = e.target.closest('[data-field]');
+        const target = e.target;
+        const field = target.closest('[data-field]');
         if (!field) return;
 
-        const key = field.dataset.field;
+        const key = field.dataset.field || target.dataset.field;
+        if (!key) return;
+
         let value;
 
-        if (e.target.type === 'checkbox') {
-            value = e.target.checked;
-        } else if (e.target.type === 'number') {
-            value = parseInt(e.target.value) || 0;
-        } else {
-            value = e.target.value;
+        // Handle button clicks with data-value
+        if (target.tagName === 'BUTTON' && target.dataset.value) {
+            value = target.dataset.value;
+        }
+        // Handle checkbox
+        else if (target.type === 'checkbox') {
+            value = target.checked;
+        }
+        // Handle number inputs
+        else if (target.type === 'number') {
+            value = parseFloat(target.value) || 0;
+        }
+        // Handle range inputs for column widths (percentage to decimal)
+        else if (target.type === 'range' && target.classList.contains('qr-width-slider')) {
+            value = parseFloat(target.value);
+        }
+        // Handle number inputs for column widths (percentage to decimal)
+        else if (target.type === 'number' && target.classList.contains('qr-width-number')) {
+            value = parseFloat(target.value) / 100;
+        }
+        // Handle JSON textarea fields
+        else if (target.tagName === 'TEXTAREA' && target.classList.contains('qr-json')) {
+            try {
+                value = JSON.parse(target.value);
+            } catch (e) {
+                // Invalid JSON - skip update and show error in console
+                console.warn('Invalid JSON in field:', key, e);
+                return;
+            }
+        }
+        // Default to string value
+        else {
+            value = target.value;
         }
 
-        this._sections[this._selectedIndex].config[key] = value;
+        // Handle nested property changes (e.g., "spacing.padding.top")
+        const currentSection = this._sections[this._selectedIndex];
+        if (key.includes('.')) {
+            const parts = key.split('.');
+            let obj = currentSection.config;
+            for (let i = 0; i < parts.length - 1; i++) {
+                // Handle array indices in paths like "columns.0.width"
+                const part = parts[i];
+                const nextPart = parts[i + 1];
+                if (!isNaN(nextPart)) {
+                    // Next part is an index
+                    obj = obj[part][parseInt(nextPart)];
+                    i++; // Skip the index part
+                } else {
+                    obj = obj[part];
+                }
+            }
+            const lastKey = parts[parts.length - 1];
+            obj[lastKey] = value;
+        } else {
+            currentSection.config[key] = value;
+        }
+
+        // Special handling for layout preset changes
+        if (key === 'layout' && LAYOUT_PRESETS[value]) {
+            const preset = LAYOUT_PRESETS[value];
+            currentSection.config.columns = preset.columns.map(width => ({width}));
+        }
+
         this._markDirty();
+        this._refreshPreview();
+        this._renderCanvasSections();
+
+        // Re-render editor to update dynamic fields (like background type changes)
+        if (key === 'background.type' || key === 'height.type') {
+            this._renderEditor();
+        }
+    }
+
+    /**
+     * Handle editor button actions (add/remove columns, equalize, etc.)
+     * @private
+     */
+    _handleEditorAction(action, button) {
+        if (this._selectedIndex < 0) return;
+
+        const currentSection = this._sections[this._selectedIndex];
+        if (currentSection.type !== 'row') return;
+
+        switch (action) {
+            case 'add-column':
+                // Add a new column with equal width distribution
+                const newWidth = 1.0 / (currentSection.config.columns.length + 1);
+                currentSection.config.columns.push({width: newWidth});
+                // Redistribute existing columns
+                currentSection.config.columns.forEach(col => {
+                    col.width = newWidth;
+                });
+                break;
+
+            case 'remove-column':
+                // Remove last column if more than 1
+                if (currentSection.config.columns.length > 1) {
+                    currentSection.config.columns.pop();
+                    // Redistribute remaining columns
+                    const equalWidth = 1.0 / currentSection.config.columns.length;
+                    currentSection.config.columns.forEach(col => {
+                        col.width = equalWidth;
+                    });
+                    // Remove children in removed column
+                    if (currentSection.children) {
+                        currentSection.children = currentSection.children.filter(
+                            child => child.columnIndex < currentSection.config.columns.length
+                        );
+                    }
+                }
+                break;
+
+            case 'equalize-columns':
+                // Set all columns to equal width
+                const equalWidth = 1.0 / currentSection.config.columns.length;
+                currentSection.config.columns.forEach(col => {
+                    col.width = equalWidth;
+                });
+                break;
+
+            case 'toggle-lock':
+                // Toggle spacing lock
+                currentSection.config.spacing.locked = !currentSection.config.spacing.locked;
+                break;
+        }
+
+        this._markDirty();
+        this._renderEditor();
         this._refreshPreview();
         this._renderCanvasSections();
     }
@@ -1149,12 +1766,276 @@ class PageRoller {
             case 'links':
             case 'footerColumns':
             case 'socialLinks':
-                // Complex fields - simplified for now
+            case 'slides':
+            case 'accordionItems':
+            case 'tabItems':
+            case 'breadcrumbItems':
+            case 'buttonGroupItems':
+            case 'tagItems':
+            case 'dropdownItems':
+                // Complex fields - JSON editor
                 return `
                     <div class="qr-field" data-field="${field.key}">
                         <label class="qr-field-label">${field.label}</label>
-                        <p class="qr-field-note">Edit in JSON format (advanced)</p>
-                        <textarea class="qr-input qr-textarea qr-json">${JSON.stringify(value, null, 2)}</textarea>
+                        <p class="qr-field-note" style="font-size: 0.875rem; color: var(--dm-text-muted, #6c757d); margin: 0.25rem 0;">Edit in JSON format</p>
+                        <textarea class="qr-input qr-textarea qr-json" rows="12" style="font-family: monospace; font-size: 0.875rem;">${JSON.stringify(value, null, 2)}</textarea>
+                    </div>
+                `;
+
+            case 'layout-preset':
+                const presets = Object.entries(LAYOUT_PRESETS).map(([key, preset]) => {
+                    const isActive = key === value;
+                    const visualBars = preset.columns.map(width =>
+                        `<div style="flex: ${width}; background: ${isActive ? 'var(--dm-primary, #6495ED)' : 'var(--dm-gray-300, #dee2e6)'}; height: 100%; border-radius: 2px;"></div>`
+                    ).join('');
+
+                    return `
+                        <button class="qr-preset-btn ${isActive ? 'active' : ''}"
+                                type="button"
+                                data-preset="${key}"
+                                data-field="layout"
+                                title="${preset.label}">
+                            <div class="qr-preset-visual" style="display: flex; gap: 2px; height: 30px; margin-bottom: 4px;">
+                                ${visualBars}
+                            </div>
+                            <span class="qr-preset-label" style="font-size: 0.75rem; display: block;">${preset.label}</span>
+                        </button>
+                    `;
+                }).join('');
+                return `
+                    <div class="qr-field" data-field="${field.key}">
+                        <label class="qr-field-label">${field.label}</label>
+                        <div class="qr-preset-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 0.5rem;">
+                            ${presets}
+                        </div>
+                    </div>
+                `;
+
+            case 'column-widths':
+                const widthControls = value.map((col, idx) => `
+                    <div class="qr-width-control" style="margin-bottom: 0.75rem;">
+                        <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem;">Column ${idx + 1}</label>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <input type="range"
+                                   min="0.1"
+                                   max="1"
+                                   step="0.01"
+                                   value="${col.width}"
+                                   data-col-idx="${idx}"
+                                   data-field="columns.${idx}.width"
+                                   class="qr-width-slider"
+                                   style="flex: 1;">
+                            <input type="number"
+                                   min="10"
+                                   max="100"
+                                   value="${(col.width * 100).toFixed(0)}"
+                                   data-col-idx="${idx}"
+                                   data-field="columns.${idx}.width"
+                                   class="qr-width-number"
+                                   style="width: 60px;">
+                            <span>%</span>
+                        </div>
+                    </div>
+                `).join('');
+
+                return `
+                    <div class="qr-field" data-field="${field.key}">
+                        <label class="qr-field-label">${field.label}</label>
+                        ${widthControls}
+                        <div class="qr-width-actions" style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                            <button type="button" class="qr-btn qr-btn-sm qr-btn-equalize" data-action="equalize-columns">Equalize</button>
+                            <button type="button" class="qr-btn qr-btn-sm qr-btn-add-col" data-action="add-column">+ Column</button>
+                            ${value.length > 1 ? '<button type="button" class="qr-btn qr-btn-sm qr-btn-remove-col" data-action="remove-column">- Column</button>' : ''}
+                        </div>
+                    </div>
+                `;
+
+            case 'spacing-controls':
+                return `
+                    <div class="qr-field" data-field="${field.key}">
+                        <label class="qr-field-label">${field.label}</label>
+
+                        <div class="qr-spacing-section" style="margin-bottom: 1rem;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <h4 style="margin: 0; font-size: 0.875rem;">Padding</h4>
+                                <button type="button"
+                                        class="qr-chainlink ${value.locked ? 'locked' : ''}"
+                                        data-action="toggle-lock"
+                                        data-field="spacing.locked"
+                                        title="${value.locked ? 'Unlock' : 'Lock'} sides"
+                                        style="background: none; border: 1px solid var(--dm-border, #dee2e6); border-radius: 4px; padding: 4px 8px; cursor: pointer;">
+                                    ${value.locked ? '🔒' : '🔓'}
+                                </button>
+                            </div>
+                            <div class="qr-spacing-inputs" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
+                                <input type="number" data-field="spacing.padding.top" value="${value.padding.top}" placeholder="Top" class="qr-input" style="width: 100%;">
+                                <input type="number" data-field="spacing.padding.right" value="${value.padding.right}" placeholder="Right" class="qr-input" style="width: 100%;">
+                                <input type="number" data-field="spacing.padding.bottom" value="${value.padding.bottom}" placeholder="Bottom" class="qr-input" style="width: 100%;">
+                                <input type="number" data-field="spacing.padding.left" value="${value.padding.left}" placeholder="Left" class="qr-input" style="width: 100%;">
+                            </div>
+                        </div>
+
+                        <div class="qr-spacing-section" style="margin-bottom: 1rem;">
+                            <h4 style="margin: 0 0 0.5rem 0; font-size: 0.875rem;">Margin</h4>
+                            <div class="qr-spacing-inputs" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
+                                <input type="number" data-field="spacing.margin.top" value="${value.margin.top}" placeholder="Top" class="qr-input" style="width: 100%;">
+                                <input type="number" data-field="spacing.margin.right" value="${value.margin.right}" placeholder="Right" class="qr-input" style="width: 100%;">
+                                <input type="number" data-field="spacing.margin.bottom" value="${value.margin.bottom}" placeholder="Bottom" class="qr-input" style="width: 100%;">
+                                <input type="number" data-field="spacing.margin.left" value="${value.margin.left}" placeholder="Left" class="qr-input" style="width: 100%;">
+                            </div>
+                        </div>
+
+                        <div class="qr-spacing-section">
+                            <h4 style="margin: 0 0 0.5rem 0; font-size: 0.875rem;">Gutter (Column Gap)</h4>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <input type="range"
+                                       min="0"
+                                       max="10"
+                                       step="0.5"
+                                       value="${value.gutter}"
+                                       data-field="spacing.gutter"
+                                       class="qr-gutter-slider"
+                                       style="flex: 1;">
+                                <span class="qr-gutter-value" style="min-width: 50px;">${value.gutter}rem</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+            case 'height-controls':
+                return `
+                    <div class="qr-field" data-field="${field.key}">
+                        <label class="qr-field-label">${field.label}</label>
+                        <select class="qr-select" data-field="height.type" style="margin-bottom: 0.5rem;">
+                            <option value="auto" ${value.type === 'auto' ? 'selected' : ''}>Auto</option>
+                            <option value="min" ${value.type === 'min' ? 'selected' : ''}>Minimum</option>
+                            <option value="max" ${value.type === 'max' ? 'selected' : ''}>Maximum</option>
+                            <option value="fixed" ${value.type === 'fixed' ? 'selected' : ''}>Fixed</option>
+                        </select>
+                        ${value.type !== 'auto' ? `
+                            <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
+                                <input type="number"
+                                       class="qr-input qr-height-value"
+                                       data-field="height.value"
+                                       value="${value.value || 300}"
+                                       min="0"
+                                       step="10"
+                                       style="flex: 1;">
+                                <span>px</span>
+                            </div>
+                        ` : ''}
+                        <label class="qr-checkbox">
+                            <input type="checkbox"
+                                   ${value.equalize ? 'checked' : ''}
+                                   data-field="height.equalize">
+                            <span>Equalize Column Heights</span>
+                        </label>
+                    </div>
+                `;
+
+            case 'alignment-controls':
+                const hAlign = value.horizontal || 'start';
+                const vAlign = value.vertical || 'start';
+                return `
+                    <div class="qr-field" data-field="${field.key}">
+                        <label class="qr-field-label">${field.label}</label>
+
+                        <div class="qr-align-section" style="margin-bottom: 1rem;">
+                            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.5rem;">Horizontal</label>
+                            <div class="qr-btn-group" style="display: flex; gap: 0.25rem;">
+                                ${['start', 'center', 'end', 'stretch'].map(align => `
+                                    <button type="button"
+                                            class="qr-align-btn ${hAlign === align ? 'active' : ''}"
+                                            data-field="alignment.horizontal"
+                                            data-value="${align}"
+                                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--dm-border, #dee2e6); background: ${hAlign === align ? 'var(--dm-primary, #6495ED)' : 'var(--dm-surface, #fff)'}; color: ${hAlign === align ? 'white' : 'inherit'}; border-radius: 4px; cursor: pointer;">
+                                        ${align}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="qr-align-section">
+                            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.5rem;">Vertical</label>
+                            <div class="qr-btn-group" style="display: flex; gap: 0.25rem;">
+                                ${['start', 'center', 'end', 'stretch'].map(align => `
+                                    <button type="button"
+                                            class="qr-align-btn ${vAlign === align ? 'active' : ''}"
+                                            data-field="alignment.vertical"
+                                            data-value="${align}"
+                                            style="flex: 1; padding: 0.5rem; border: 1px solid var(--dm-border, #dee2e6); background: ${vAlign === align ? 'var(--dm-primary, #6495ED)' : 'var(--dm-surface, #fff)'}; color: ${vAlign === align ? 'white' : 'inherit'}; border-radius: 4px; cursor: pointer;">
+                                        ${align}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+            case 'responsive-controls':
+                return `
+                    <div class="qr-field" data-field="${field.key}">
+                        <label class="qr-field-label">${field.label}</label>
+
+                        <div class="qr-responsive-section" style="margin-bottom: 0.75rem;">
+                            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem;">Mobile (&lt;576px)</label>
+                            <select data-field="responsive.mobile" class="qr-select">
+                                <option value="stack" ${value.mobile === 'stack' ? 'selected' : ''}>Stack</option>
+                                <option value="keep" ${value.mobile === 'keep' ? 'selected' : ''}>Keep Layout</option>
+                                <option value="hide" ${value.mobile === 'hide' ? 'selected' : ''}>Hide</option>
+                            </select>
+                        </div>
+
+                        <div class="qr-responsive-section" style="margin-bottom: 0.75rem;">
+                            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem;">Tablet (576-768px)</label>
+                            <select data-field="responsive.tablet" class="qr-select">
+                                <option value="stack" ${value.tablet === 'stack' ? 'selected' : ''}>Stack</option>
+                                <option value="keep" ${value.tablet === 'keep' ? 'selected' : ''}>Keep Layout</option>
+                                <option value="hide" ${value.tablet === 'hide' ? 'selected' : ''}>Hide</option>
+                            </select>
+                        </div>
+
+                        <div class="qr-responsive-section">
+                            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem;">Desktop (&gt;768px)</label>
+                            <select data-field="responsive.desktop" class="qr-select">
+                                <option value="keep" ${value.desktop === 'keep' ? 'selected' : ''}>Keep Layout</option>
+                                <option value="hide" ${value.desktop === 'hide' ? 'selected' : ''}>Hide</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+
+            case 'background-controls':
+                return `
+                    <div class="qr-field" data-field="${field.key}">
+                        <label class="qr-field-label">${field.label}</label>
+                        <select class="qr-select qr-bg-type" data-field="background.type" style="margin-bottom: 0.5rem;">
+                            <option value="none" ${value.type === 'none' ? 'selected' : ''}>None</option>
+                            <option value="color" ${value.type === 'color' ? 'selected' : ''}>Solid Colour</option>
+                            <option value="gradient" ${value.type === 'gradient' ? 'selected' : ''}>Gradient</option>
+                            <option value="image" ${value.type === 'image' ? 'selected' : ''}>Image</option>
+                        </select>
+                        ${value.type === 'color' ? `
+                            <input type="color"
+                                   class="qr-bg-color"
+                                   data-field="background.color"
+                                   value="${value.color || '#ffffff'}"
+                                   style="width: 100%; height: 40px;">
+                        ` : ''}
+                        ${value.type === 'gradient' ? `
+                            <input type="text"
+                                   class="qr-input qr-bg-gradient"
+                                   data-field="background.gradient"
+                                   value="${this._escapeHtml(value.gradient || '')}"
+                                   placeholder="linear-gradient(...)">
+                        ` : ''}
+                        ${value.type === 'image' ? `
+                            <input type="text"
+                                   class="qr-input qr-bg-image"
+                                   data-field="background.image"
+                                   value="${this._escapeHtml(value.image || '')}"
+                                   placeholder="Image URL">
+                        ` : ''}
                     </div>
                 `;
 
@@ -1486,6 +2367,86 @@ ${sectionsHtml}
     }
 
     /**
+     * Render a section (row or standard) to HTML
+     * @private
+     * @param {Object} section - Section data
+     * @returns {string} HTML string
+     */
+    _renderSectionHTML(section) {
+        if (section.type === 'row') {
+            return this._renderRowHTML(section);
+        }
+        const definition = SECTION_REGISTRY[section.type];
+        return definition?.template(section.config) || '';
+    }
+
+    /**
+     * Render a row with its column structure and children
+     * @private
+     * @param {Object} rowSection - Row section data
+     * @returns {string} HTML string
+     */
+    _renderRowHTML(rowSection) {
+        const config = rowSection.config;
+        const children = rowSection.children || [];
+
+        // Build CSS Grid template-columns from proportional widths
+        const gridCols = config.columns
+            .map(col => `${(col.width * 100).toFixed(2)}%`)
+            .join(' ');
+
+        // Apply spacing, height, alignment styles
+        const styles = [
+            `display: grid`,
+            `grid-template-columns: ${gridCols}`,
+            `gap: ${config.spacing.gutter}rem`,
+            `padding: ${config.spacing.padding.top}rem ${config.spacing.padding.right}rem ${config.spacing.padding.bottom}rem ${config.spacing.padding.left}rem`,
+            `margin: ${config.spacing.margin.top}rem ${config.spacing.margin.right}rem ${config.spacing.margin.bottom}rem ${config.spacing.margin.left}rem`,
+            config.height.type === 'min' ? `min-height: ${config.height.value}px` : '',
+            config.height.type === 'max' ? `max-height: ${config.height.value}px` : '',
+            config.height.type === 'fixed' ? `height: ${config.height.value}px` : '',
+            `align-items: ${config.alignment.vertical}`,
+            `justify-items: ${config.alignment.horizontal}`,
+            config.background.type === 'color' ? `background-color: ${config.background.color}` : '',
+            config.background.type === 'gradient' ? `background: ${config.background.gradient}` : '',
+            config.background.type === 'image' ? `background-image: url('${config.background.image}'); background-size: cover; background-position: center` : ''
+        ].filter(Boolean).join('; ');
+
+        // Responsive classes based on config
+        let responsiveClass = 'pr-row';
+        if (config.responsive.mobile === 'stack') {
+            responsiveClass += ' pr-row-stack-mobile';
+        }
+        if (config.responsive.tablet === 'stack') {
+            responsiveClass += ' pr-row-stack-tablet';
+        }
+        if (config.responsive.mobile === 'hide' || config.responsive.tablet === 'hide' || config.responsive.desktop === 'hide') {
+            // Add data attributes for responsive visibility
+            responsiveClass += ' pr-row-responsive';
+        }
+
+        // Group children by column
+        const columnGroups = config.columns.map((_, idx) =>
+            children.filter(child => child.columnIndex === idx)
+        );
+
+        // Render each column
+        const columnsHtml = columnGroups.map((columnChildren, idx) => {
+            const childrenHtml = columnChildren
+                .map(child => this._renderSectionHTML(child.section))
+                .join('\n');
+
+            return `    <div class="pr-column" data-column="${idx}">
+${childrenHtml || '        <!-- Empty column -->'}
+    </div>`;
+        }).join('\n');
+
+        return `<section class="${responsiveClass}" style="${styles}"${config.responsive.mobile === 'hide' ? ' data-hide-mobile="true"' : ''}${config.responsive.tablet === 'hide' ? ' data-hide-tablet="true"' : ''}${config.responsive.desktop === 'hide' ? ' data-hide-desktop="true"' : ''}>
+${columnsHtml}
+</section>`;
+    }
+
+    /**
      * Show save dialog
      * @private
      */
@@ -1549,13 +2510,34 @@ ${sectionsHtml}
      */
     _getPageData() {
         return {
+            version: 2,
             name: this._templateName,
             config: {...this._pageConfig},
-            sections: this._sections.map(s => ({
-                type: s.type,
-                config: {...s.config}
-            }))
+            sections: this._sections.map(s => this._serializeSection(s))
         };
+    }
+
+    /**
+     * Serialize a section, handling nested structure
+     * @private
+     * @param {Object} section - Section data
+     * @returns {Object} Serialized section
+     */
+    _serializeSection(section) {
+        const serialized = {
+            type: section.type,
+            config: {...section.config}
+        };
+
+        // If it's a row, serialize children
+        if (section.type === 'row' && section.children) {
+            serialized.children = section.children.map(child => ({
+                columnIndex: child.columnIndex,
+                section: this._serializeSection(child.section)
+            }));
+        }
+
+        return serialized;
     }
 
     /**
@@ -1565,13 +2547,63 @@ ${sectionsHtml}
     _loadPageData(data) {
         if (!data) return;
 
-        this._templateName = data.name || '';
-        this._pageConfig = {...this._pageConfig, ...data.config};
-        this._sections = (data.sections || []).map(s => ({
+        // Migrate v1 documents to v2 structure
+        const migratedData = this._migrateV1ToV2(data);
+
+        this._templateName = migratedData.name || '';
+        this._pageConfig = {...this._pageConfig, ...migratedData.config};
+        this._sections = (migratedData.sections || []).map(s => this._deserializeSection(s));
+        this._selectedIndex = -1;
+    }
+
+    /**
+     * Migrate v1 documents to v2 (wrap sections in single-column rows)
+     * @private
+     * @param {Object} data - Document data
+     * @returns {Object} Migrated data
+     */
+    _migrateV1ToV2(data) {
+        // Already v2
+        if (data.version === 2) return data;
+
+        // v1 document - wrap each section in a single-column row
+        return {
+            version: 2,
+            name: data.name || 'Untitled',
+            config: data.config || {},
+            sections: data.sections ? data.sections.map(section => ({
+                type: 'row',
+                config: {
+                    ...SECTION_REGISTRY.row.defaults,
+                    layout: 'single',
+                    columns: [{width: 1.0}]
+                },
+                children: [{columnIndex: 0, section}]
+            })) : []
+        };
+    }
+
+    /**
+     * Deserialize a section, handling nested structure
+     * @private
+     * @param {Object} s - Section data
+     * @returns {Object} Deserialized section
+     */
+    _deserializeSection(s) {
+        const section = {
             type: s.type,
             config: {...(SECTION_REGISTRY[s.type]?.defaults || {}), ...s.config}
-        }));
-        this._selectedIndex = -1;
+        };
+
+        // If it's a row, deserialize children
+        if (s.type === 'row' && s.children) {
+            section.children = s.children.map(child => ({
+                columnIndex: child.columnIndex,
+                section: this._deserializeSection(child.section)
+            }));
+        }
+
+        return section;
     }
 
     /**
@@ -1832,14 +2864,14 @@ ${sectionsHtml}
             html += `<body${bodyClasses.length ? ` class="${bodyClasses.join(' ')}"` : ''}>\n`;
         }
 
-        // Sections
+        // Sections - use recursive rendering for rows
         for (const section of this._sections) {
             const definition = SECTION_REGISTRY[section.type];
-            if (definition?.template) {
+            if (definition) {
                 if (includeComments) {
                     html += `\n<!-- ${definition.name} Section -->\n`;
                 }
-                html += definition.template(section.config);
+                html += this._renderSectionHTML(section);
                 html += '\n';
             }
         }
@@ -1849,7 +2881,101 @@ ${sectionsHtml}
             html += '\n    <script src="domma.min.js"><\/script>\n';
             html += '    <script>\n';
             html += '        // Initialise Domma\n';
-            html += '        Domma.icons.scan();\n';
+            html += '        document.addEventListener("DOMContentLoaded", function() {\n';
+            html += '            // Scan and initialise icons\n';
+            html += '            if (window.Domma && Domma.icons) Domma.icons.scan();\n';
+            html += '\n';
+            html += '            // Auto-init carousels\n';
+            html += '            document.querySelectorAll("[data-component=\'carousel\']").forEach(function(el) {\n';
+            html += '                var carousel = el.querySelector(".carousel");\n';
+            html += '                if (carousel && Domma.elements && Domma.elements.carousel) {\n';
+            html += '                    Domma.elements.carousel(carousel, {\n';
+            html += '                        autoplay: carousel.dataset.autoplay === "true",\n';
+            html += '                        interval: parseInt(carousel.dataset.interval) || 5000,\n';
+            html += '                        pauseOnHover: carousel.dataset.pauseHover === "true",\n';
+            html += '                        loop: carousel.dataset.loop === "true",\n';
+            html += '                        animation: carousel.dataset.animation || "slide"\n';
+            html += '                    });\n';
+            html += '                }\n';
+            html += '            });\n';
+            html += '\n';
+            html += '            // Auto-init accordions\n';
+            html += '            document.querySelectorAll("[data-component=\'accordion\']").forEach(function(el) {\n';
+            html += '                var accordion = el.querySelector(".accordion");\n';
+            html += '                if (accordion && Domma.elements && Domma.elements.accordion) {\n';
+            html += '                    Domma.elements.accordion(accordion, {\n';
+            html += '                        allowMultiple: accordion.dataset.allowMultiple === "true",\n';
+            html += '                        animation: accordion.dataset.animation !== "false"\n';
+            html += '                    });\n';
+            html += '                }\n';
+            html += '            });\n';
+            html += '\n';
+            html += '            // Auto-init tabs\n';
+            html += '            document.querySelectorAll("[data-component=\'tabs\']").forEach(function(el) {\n';
+            html += '                var tabs = el.querySelector(".tabs");\n';
+            html += '                if (tabs && Domma.elements && Domma.elements.tabs) {\n';
+            html += '                    Domma.elements.tabs(tabs, {\n';
+            html += '                        animation: tabs.dataset.animation || "fade"\n';
+            html += '                    });\n';
+            html += '                }\n';
+            html += '            });\n';
+            html += '\n';
+            html += '            // Auto-init modals\n';
+            html += '            document.querySelectorAll("[data-component=\'modal\']").forEach(function(el) {\n';
+            html += '                var modal = el.querySelector(".modal");\n';
+            html += '                var trigger = el.querySelector("[data-modal-trigger]");\n';
+            html += '                if (modal && trigger && Domma.elements && Domma.elements.modal) {\n';
+            html += '                    var instance = Domma.elements.modal(modal, {\n';
+            html += '                        backdrop: modal.dataset.backdrop !== "false",\n';
+            html += '                        keyboard: modal.dataset.keyboard !== "false",\n';
+            html += '                        animation: modal.dataset.animation !== "false"\n';
+            html += '                    });\n';
+            html += '                    trigger.addEventListener("click", function() { instance.open(); });\n';
+            html += '                }\n';
+            html += '            });\n';
+            html += '\n';
+            html += '            // Auto-init toast triggers\n';
+            html += '            document.querySelectorAll("[data-toast-trigger]").forEach(function(trigger) {\n';
+            html += '                trigger.addEventListener("click", function() {\n';
+            html += '                    if (Domma.elements && Domma.elements.toast) {\n';
+            html += '                        Domma.elements.toast({\n';
+            html += '                            message: trigger.dataset.toastMessage || "Notification",\n';
+            html += '                            type: trigger.dataset.toastType || "info",\n';
+            html += '                            position: trigger.dataset.toastPosition || "top-right",\n';
+            html += '                            duration: parseInt(trigger.dataset.toastDuration) || 3000\n';
+            html += '                        });\n';
+            html += '                    }\n';
+            html += '                });\n';
+            html += '            });\n';
+            html += '\n';
+            html += '            // Auto-init breadcrumbs\n';
+            html += '            document.querySelectorAll("[data-component=\'breadcrumbs\']").forEach(function(el) {\n';
+            html += '                var breadcrumbs = el.querySelector(".breadcrumbs");\n';
+            html += '                if (breadcrumbs && Domma.elements && Domma.elements.breadcrumbs) {\n';
+            html += '                    Domma.elements.breadcrumbs(breadcrumbs);\n';
+            html += '                }\n';
+            html += '            });\n';
+            html += '\n';
+            html += '            // Auto-init button groups\n';
+            html += '            document.querySelectorAll("[data-component=\'button-group\']").forEach(function(el) {\n';
+            html += '                var btnGroup = el.querySelector(".btn-group");\n';
+            html += '                if (btnGroup && Domma.elements && Domma.elements.buttonGroup) {\n';
+            html += '                    Domma.elements.buttonGroup(btnGroup, {\n';
+            html += '                        mode: btnGroup.dataset.mode || "single"\n';
+            html += '                    });\n';
+            html += '                }\n';
+            html += '            });\n';
+            html += '\n';
+            html += '            // Auto-init dropdowns\n';
+            html += '            document.querySelectorAll("[data-component=\'dropdown\']").forEach(function(el) {\n';
+            html += '                var dropdown = el.querySelector(".dropdown");\n';
+            html += '                if (dropdown && Domma.elements && Domma.elements.dropdown) {\n';
+            html += '                    Domma.elements.dropdown(dropdown, {\n';
+            html += '                        position: dropdown.dataset.position || "bottom"\n';
+            html += '                    });\n';
+            html += '                }\n';
+            html += '            });\n';
+            html += '        });\n';
             html += '    <\/script>\n';
             html += '</body>\n';
             html += '</html>\n';
