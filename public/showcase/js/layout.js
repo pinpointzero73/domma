@@ -522,15 +522,29 @@
             background: rgba(255, 255, 255, 0.25);
         }
         /* Navbar component overrides for dark variant */
+        #main-navbar {
+            font-family: var(--dm-font-sans);
+        }
         #main-navbar.dm-navbar-dark {
             background: var(--dm-gray-900);
             border-bottom: none;
+        }
+        #main-navbar .dm-navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
         #main-navbar .dm-navbar-brand-text {
             display: inline-flex;
             flex-direction: column;
             line-height: 1.2;
             color: white;
+            font-family: inherit;
+        }
+        #main-navbar .dm-navbar-link,
+        #main-navbar .dm-navbar-dropdown-toggle,
+        #main-navbar .dm-navbar-dropdown-item {
+            font-family: inherit;
         }
         #main-navbar .header-version {
             font-size: 0.65rem;
@@ -780,22 +794,24 @@
             items: navItems,
             variant: 'dark',
             position: 'static',
-            collapseAt: 992,
-            actions: [
-                {text: 'Download', url: downloadPath, variant: 'outline'}
-            ]
+            collapseAt: 992
         });
 
-        // Customize brand section with SVG logo + version
-        const $brand = $('#main-navbar .dm-navbar-brand-link');
-        if ($brand.length) {
-            $brand.html(`
+        // Customize brand section with SVG logo + version + Download pill
+        const $brandLink = $('#main-navbar .dm-navbar-brand-link');
+        const $brandContainer = $('#main-navbar .dm-navbar-brand');
+        if ($brandLink.length) {
+            $brandLink.html(`
                 ${logoSvg}
                 <span class="dm-navbar-brand-text">
                     Domma
                     <span class="header-version">v${buildInfo.version}</span>
                 </span>
             `);
+        }
+        // Add Download pill next to brand
+        if ($brandContainer.length) {
+            $brandContainer.append(`<a href="${downloadPath}" class="pill pill-light">Download</a>`);
         }
 
         // Set active state on dropdown toggles for showcase pages
