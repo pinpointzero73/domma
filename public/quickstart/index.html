@@ -137,15 +137,12 @@
                 <li><code>domma.min.js</code> - JavaScript (<span data-build-size>~250KB</span>)</li>
             </ul>
         </div>
-        <pre class="code-block">
-            <span class="comment">&lt;!-- CSS --&gt;</span>
-            &lt;<span class="keyword">link</span> rel="stylesheet" href="<span class="string">domma.css</span>"&gt;
-            &lt;<span class="keyword">link</span> rel="stylesheet" href="<span class="string">domma-themes.css</span>"&gt;
+        <pre class="code-block"><span class="comment">&lt;!-- CSS --&gt;</span>
+&lt;<span class="keyword">link</span> rel="stylesheet" href="<span class="string">domma.css</span>"&gt;
+&lt;<span class="keyword">link</span> rel="stylesheet" href="<span class="string">domma-themes.css</span>"&gt;
 
-            <span class="comment">&lt;!-- JavaScript --&gt;</span>
-            &lt;<span class="keyword">script</span> src="<span class="string">domma.min.js</span>"&gt;&lt;/<span
-                class="keyword">script</span>&gt;
-        </pre>
+<span class="comment">&lt;!-- JavaScript --&gt;</span>
+&lt;<span class="keyword">script</span> src="<span class="string">domma.min.js</span>"&gt;&lt;/<span class="keyword">script</span>&gt;</pre>
     </div>
 
     <!-- 2. Cards with Config Engine -->
@@ -171,24 +168,22 @@
             </div>
             <div class="demo-output" id="card-output">Click a card...</div>
         </div>
-        <pre class="code-block">
-            $.<span class="function">setup</span>({
-            <span class="string">'.feature-card'</span>: {
-            component: <span class="string">'card'</span>,
-            options: {
+        <pre class="code-block">$.<span class="function">setup</span>({
+    <span class="string">'.feature-card'</span>: {
+        component: <span class="string">'card'</span>,
+        options: {
             hover: <span class="keyword">true</span>,
             clickable: <span class="keyword">true</span>
-            },
-            events: {
+        },
+        events: {
             click: (e, $el) =&gt; {
-            <span class="keyword">const</span> title = $el.<span class="function">find</span>(<span class="string">'.card-title'</span>).<span
-                class="function">text</span>();
-            console.<span class="function">log</span>(<span class="string">'Clicked:'</span>, title);
+                <span class="keyword">const</span> title = $el.<span class="function">find</span>(<span class="string">'.card-title'</span>).<span
+                    class="function">text</span>();
+                console.<span class="function">log</span>(<span class="string">'Clicked:'</span>, title);
             }
-            }
-            }
-            });
-        </pre>
+        }
+    }
+});</pre>
     </div>
 
     <!-- 3. Modal -->
@@ -215,23 +210,21 @@
                 </div>
             </div>
         </div>
-        <pre class="code-block">
-            $.<span class="function">setup</span>({
-            <span class="string">'#demo-modal'</span>: {
-            component: <span class="string">'modal'</span>,
-            options: {
+        <pre class="code-block">$.<span class="function">setup</span>({
+    <span class="string">'#demo-modal'</span>: {
+        component: <span class="string">'modal'</span>,
+        options: {
             backdrop: <span class="keyword">true</span>,
             keyboard: <span class="keyword">true</span>,
             onOpen: () =&gt; console.<span class="function">log</span>(<span class="string">'Opened!'</span>),
             onClose: () =&gt; console.<span class="function">log</span>(<span class="string">'Closed!'</span>)
-            }
-            }
-            });
+        }
+    }
+});
 
-            <span class="comment">// Open programmatically</span>
-            $.<span class="function">config</span>(<span class="string">'#demo-modal'</span>).instance.<span
-                class="function">open</span>();
-        </pre>
+<span class="comment">// Open programmatically</span>
+$.<span class="function">config</span>(<span class="string">'#demo-modal'</span>).instance.<span
+                    class="function">open</span>();</pre>
     </div>
 
     <!-- 4. Tabs -->
@@ -261,19 +254,17 @@
                 </div>
             </div>
         </div>
-        <pre class="code-block">
-            $.<span class="function">setup</span>({
-            <span class="string">'#demo-tabs'</span>: {
-            component: <span class="string">'tabs'</span>,
-            options: {
+        <pre class="code-block">$.<span class="function">setup</span>({
+    <span class="string">'#demo-tabs'</span>: {
+        component: <span class="string">'tabs'</span>,
+        options: {
             animation: <span class="keyword">true</span>,
             onChange: (index) =&gt; {
-            console.<span class="function">log</span>(<span class="string">'Tab changed to:'</span>, index);
+                console.<span class="function">log</span>(<span class="string">'Tab changed to:'</span>, index);
             }
-            }
-            }
-            });
-        </pre>
+        }
+    }
+});</pre>
     </div>
 
     <!-- 5. Accordion -->
@@ -309,17 +300,15 @@
                 </div>
             </div>
         </div>
-        <pre class="code-block">
-            $.<span class="function">setup</span>({
-            <span class="string">'#demo-accordion'</span>: {
-            component: <span class="string">'accordion'</span>,
-            options: {
+        <pre class="code-block">$.<span class="function">setup</span>({
+    <span class="string">'#demo-accordion'</span>: {
+        component: <span class="string">'accordion'</span>,
+        options: {
             multiExpand: <span class="keyword">false</span>,
             activeIndex: 0
-            }
-            }
-            });
-        </pre>
+        }
+    }
+});</pre>
     </div>
 
     <!-- 6. Toast Notifications -->
@@ -336,14 +325,11 @@
                 <button class="btn btn-info btn-sm" id="toast-info">Info</button>
             </div>
         </div>
-        <pre class="code-block">
-            <span class="comment">// Show toast notifications</span>
-            Domma.elements.toast.<span class="function">success</span>(<span class="string">'Saved!'</span>);
-            Domma.elements.toast.<span class="function">error</span>(<span class="string">'Something went wrong'</span>);
-            Domma.elements.toast.<span class="function">warning</span>(<span
-                class="string">'Please check your input'</span>);
-            Domma.elements.toast.<span class="function">info</span>(<span class="string">'New updates available'</span>);
-        </pre>
+        <pre class="code-block"><span class="comment">// Show toast notifications</span>
+Domma.elements.toast.<span class="function">success</span>(<span class="string">'Saved!'</span>);
+Domma.elements.toast.<span class="function">error</span>(<span class="string">'Something went wrong'</span>);
+Domma.elements.toast.<span class="function">warning</span>(<span class="string">'Please check your input'</span>);
+Domma.elements.toast.<span class="function">info</span>(<span class="string">'New updates available'</span>);</pre>
     </div>
 
     <!-- 7. DOM Manipulation -->
@@ -362,23 +348,20 @@
                 <button class="btn btn-sm btn-outline" id="dom-text">Change Text</button>
             </div>
         </div>
-        <pre class="code-block">
-            <span class="comment">// Toggle a class</span>
-            $(<span class="string">'#box'</span>).<span class="function">toggleClass</span>(<span class="string">'active'</span>);
+        <pre class="code-block"><span class="comment">// Toggle a class</span>
+$(<span class="string">'#box'</span>).<span class="function">toggleClass</span>(<span class="string">'active'</span>);
 
-            <span class="comment">// Fade effects</span>
-            $(<span class="string">'#box'</span>).<span class="function">fadeToggle</span>(300);
+<span class="comment">// Fade effects</span>
+$(<span class="string">'#box'</span>).<span class="function">fadeToggle</span>(300);
 
-            <span class="comment">// Change content</span>
-            $(<span class="string">'#box'</span>).<span class="function">text</span>(<span
-                class="string">'New text!'</span>);
+<span class="comment">// Change content</span>
+$(<span class="string">'#box'</span>).<span class="function">text</span>(<span class="string">'New text!'</span>);
 
-            <span class="comment">// Chain methods</span>
-            $(<span class="string">'.card'</span>)
-            .<span class="function">addClass</span>(<span class="string">'active'</span>)
-            .<span class="function">css</span>({ opacity: 1 })
-            .<span class="function">fadeIn</span>(300);
-        </pre>
+<span class="comment">// Chain methods</span>
+$(<span class="string">'.card'</span>)
+    .<span class="function">addClass</span>(<span class="string">'active'</span>)
+    .<span class="function">css</span>({ opacity: 1 })
+    .<span class="function">fadeIn</span>(300);</pre>
     </div>
 
     <!-- 8. Utilities -->
@@ -395,19 +378,17 @@
             <button class="btn btn-primary btn-sm" id="util-run">Run _.uniq()</button>
             <div class="demo-output" id="util-output"></div>
         </div>
-        <pre class="code-block">
-            <span class="comment">// Remove duplicates</span>
-            _.<span class="function">uniq</span>([1, 2, 2, 3]); <span class="comment">// [1, 2, 3]</span>
+        <pre class="code-block"><span class="comment">// Remove duplicates</span>
+_.<span class="function">uniq</span>([1, 2, 2, 3]); <span class="comment">// [1, 2, 3]</span>
 
-            <span class="comment">// Group by property</span>
-            _.<span class="function">groupBy</span>(users, <span class="string">'role'</span>);
+<span class="comment">// Group by property</span>
+_.<span class="function">groupBy</span>(users, <span class="string">'role'</span>);
 
-            <span class="comment">// Deep clone</span>
-            _.<span class="function">cloneDeep</span>(obj);
+<span class="comment">// Deep clone</span>
+_.<span class="function">cloneDeep</span>(obj);
 
-            <span class="comment">// Debounce function</span>
-            _.<span class="function">debounce</span>(fn, 300);
-        </pre>
+<span class="comment">// Debounce function</span>
+_.<span class="function">debounce</span>(fn, 300);</pre>
     </div>
 
     <!-- 9. Dates -->
@@ -428,23 +409,19 @@
                 <div id="date-relative"></div>
             </div>
         </div>
-        <pre class="code-block">
-            <span class="comment">// Current date</span>
-            <span class="function">D</span>().<span class="function">format</span>(<span
-                class="string">'YYYY-MM-DD'</span>);
+        <pre class="code-block"><span class="comment">// Current date</span>
+<span class="function">D</span>().<span class="function">format</span>(<span class="string">'YYYY-MM-DD'</span>);
 
-            <span class="comment">// Add time</span>
-            <span class="function">D</span>().<span class="function">add</span>(7, <span
-                class="string">'days'</span>).<span class="function">format</span>(<span class="string">'MMM D'</span>);
+<span class="comment">// Add time</span>
+<span class="function">D</span>().<span class="function">add</span>(7, <span class="string">'days'</span>).<span
+                    class="function">format</span>(<span class="string">'MMM D'</span>);
 
-            <span class="comment">// Relative time</span>
-            <span class="function">D</span>(<span class="string">'2025-01-01'</span>).<span
-                class="function">fromNow</span>();
+<span class="comment">// Relative time</span>
+<span class="function">D</span>(<span class="string">'2025-01-01'</span>).<span class="function">fromNow</span>();
 
-            <span class="comment">// Compare dates</span>
-            <span class="function">D</span>().<span class="function">isBefore</span>(<span
-                class="function">D</span>(<span class="string">'2026-01-01'</span>));
-        </pre>
+<span class="comment">// Compare dates</span>
+<span class="function">D</span>().<span class="function">isBefore</span>(<span class="function">D</span>(<span
+                    class="string">'2026-01-01'</span>));</pre>
     </div>
 
     <!-- Next Steps -->
