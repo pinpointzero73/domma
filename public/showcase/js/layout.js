@@ -51,22 +51,47 @@
             path.includes('/grid/') || path.includes('/theme-roller/') ||
             path.includes('/page-roller/');
         const isQuickstart = path.includes('/quickstart/');
+
+        // Public pages (About, FAQ, Blog) - not showcase subpages
+        const isAboutPage = path.endsWith('/about.html') || path.endsWith('/about');
+        const isFaqPage = path.endsWith('/faq.html') || path.endsWith('/faq');
+        const isBlogPage = path.includes('/blog/');
+        const isPublicPage = isAboutPage || isFaqPage || isBlogPage;
+        const isSplashPage = (path === '/' || path.endsWith('/index.html') || path.endsWith('/public/')) &&
+            !path.includes('/showcase/') && !path.includes('/quickstart/') && !path.includes('/blog/');
+
         const isSubpage = isShowcaseSubpage;
-        const base = isSubpage ? '../' : (isQuickstart ? '../showcase/' : '');
-        const splashPath = isSubpage ? '../../index.html' : (isQuickstart ? '../index.html' : '../index.html');
+
+        // Calculate base paths for different page types
+        let base, splashPath, publicBase;
+        if (isSubpage) {
+            base = '../';
+            splashPath = '../../index.html';
+            publicBase = '../../';
+        } else if (isQuickstart) {
+            base = '../showcase/';
+            splashPath = '../index.html';
+            publicBase = '../';
+        } else if (isBlogPage) {
+            base = '../showcase/';
+            splashPath = '../index.html';
+            publicBase = '../';
+        } else if (isPublicPage || isSplashPage) {
+            base = 'showcase/';
+            splashPath = 'index.html';
+            publicBase = '';
+        } else {
+            base = '';
+            splashPath = '../index.html';
+            publicBase = '../';
+        }
 
         // Get current page for active nav state
         const currentPage = path.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index';
         const currentSection = path.split('/').filter(Boolean).slice(-2, -1)[0] || '';
 
-        function getNavClass(page) {
-            if (currentSection === page) return 'navbar-link active';
-            if (currentPage === page) return 'navbar-link active';
-            return 'navbar-link';
-        }
-
         // Logo SVG (inline for theme adaptability)
-        const logoSvg = `<svg class="navbar-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+        const logoSvg = `<svg class="dm-navbar-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
         <path d="M12 8 L12 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
         <path d="M12 8 L24 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
         <path d="M12 40 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
@@ -76,11 +101,70 @@
         <circle cx="24" cy="24" r="3" fill="currentColor"/>
     </svg>`;
 
+        // Navbar items configuration - showcase pages with dropdowns
+        const showcaseItems = [
+            {
+                text: 'Core',
+                items: [
+                    {text: 'Config', url: `${base}config/index.html`},
+                    {text: 'DOM', url: `${base}dom/index.html`},
+                    {text: 'Utils', url: `${base}utils/index.html`},
+                    {text: 'Storage', url: `${base}storage/index.html`},
+                    {text: 'HTTP', url: `${base}http/index.html`}
+                ]
+            },
+            {
+                text: 'Data',
+                items: [
+                    {text: 'Dates', url: `${base}dates/index.html`},
+                    {text: 'Models', url: `${base}models/index.html`},
+                    {text: 'Tables', url: `${base}tables/index.html`}
+                ]
+            },
+            {
+                text: 'UI',
+                items: [
+                    {text: 'Elements', url: `${base}elements/index.html`},
+                    {text: 'Grid', url: `${base}grid/index.html`},
+                    {text: 'Icons', url: `${base}icons/index.html`},
+                    {text: 'Themes', url: `${base}themes/index.html`}
+                ]
+            },
+            {
+                text: 'Tools',
+                items: [
+                    {text: 'Theme Roller', url: `${base}theme-roller/index.html`},
+                    {text: 'Page Roller', url: `${base}page-roller/index.html`}
+                ]
+            }
+        ];
+
+        // Navbar items configuration - public pages (flat)
+        const publicItems = [
+            {text: 'Showcase', url: `${publicBase}showcase/index.html`},
+            {text: 'Quickstart', url: `${publicBase}quickstart/index.html`},
+            {text: 'About Us', url: `${publicBase}about.html`},
+            {text: 'FAQs', url: `${publicBase}faq.html`},
+            {text: 'Blog', url: `${publicBase}blog/index.html`}
+        ];
+
+        // Download path calculation
+        const downloadPath = (isPublicPage || isSplashPage) ? `${publicBase}showcase/download/index.html` : `${base}download/index.html`;
+
         // Get build info (fallback for dev mode)
         const buildInfo = Domma.buildInfo || {version: '1.0.0', built: 'dev', commit: 'dev', size: '~250KB'};
 
         // Fetch extended build info (includes size) and update placeholders
-        const distBase = isSubpage ? '../../dist/' : (isQuickstart ? '../dist/' : 'dist/');
+        let distBase;
+        if (isSubpage) {
+            distBase = '../../dist/';
+        } else if (isQuickstart || isBlogPage) {
+            distBase = '../dist/';
+        } else if (isPublicPage || isSplashPage) {
+            distBase = 'dist/';
+        } else {
+            distBase = '../dist/';
+        }
         fetch(distBase + 'build-info.json')
             .then(r => r.json())
             .then(info => {
@@ -92,54 +176,17 @@
             .catch(() => {
             });
 
-        // Hamburger icon SVG
-        const hamburgerSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>`;
-
-        // Close icon SVG
-        const closeSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>`;
-
-        // Create navbar HTML
-        const navbar = `
-    <nav class="navbar navbar-dark">
-        <div class="navbar-brand-group">
-            <a href="${splashPath}" class="navbar-brand">
-                ${logoSvg}
-                <span class="navbar-brand-text">
-                    Domma
-                    <span class="header-version">v${buildInfo.version}</span>
-                </span>
-            </a>
-            <a href="${base}download/index.html" class="pill pill-light">Download</a>
-        </div>
-        <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle navigation" aria-expanded="false">
-            <span class="navbar-toggle-open">${hamburgerSvg}</span>
-            <span class="navbar-toggle-close" style="display:none">${closeSvg}</span>
-        </button>
-        <ul class="navbar-nav" id="navbar-nav">
-            <li><a href="${base}config/index.html" class="${getNavClass('config')}">Config</a></li>
-            <li><a href="${base}dom/index.html" class="${getNavClass('dom')}">DOM</a></li>
-            <li><a href="${base}utils/index.html" class="${getNavClass('utils')}">Utils</a></li>
-            <li><a href="${base}dates/index.html" class="${getNavClass('dates')}">Dates</a></li>
-            <li><a href="${base}models/index.html" class="${getNavClass('models')}">Models</a></li>
-            <li><a href="${base}elements/index.html" class="${getNavClass('elements')}">Elements</a></li>
-            <li><a href="${base}grid/index.html" class="${getNavClass('grid')}">Grid</a></li>
-            <li><a href="${base}tables/index.html" class="${getNavClass('tables')}">Tables</a></li>
-            <li><a href="${base}storage/index.html" class="${getNavClass('storage')}">Storage</a></li>
-            <li><a href="${base}http/index.html" class="${getNavClass('http')}">HTTP</a></li>
-            <li><a href="${base}icons/index.html" class="${getNavClass('icons')}">Icons</a></li>
-            <li><a href="${base}themes/index.html" class="${getNavClass('themes')}">Themes</a></li>
-            <li><a href="${base}theme-roller/index.html" class="${getNavClass('theme-roller')}">Theme Roller</a></li>
-            <li><a href="${base}page-roller/index.html" class="${getNavClass('page-roller')}">Page Roller</a></li>
-<!--            <li><span class="nav-version">v${buildInfo.version}</span></li>-->
-        </ul>
-    </nav>`;
+        // Function to set active state on public navbar items
+        function setPublicActiveState() {
+            if (isAboutPage) {
+                publicItems.find(i => i.text === 'About Us').active = true;
+            } else if (isFaqPage) {
+                publicItems.find(i => i.text === 'FAQs').active = true;
+            } else if (isBlogPage) {
+                publicItems.find(i => i.text === 'Blog').active = true;
+            }
+        }
+        setPublicActiveState();
 
         // Theme toggle button HTML
         const themeToggle = `
@@ -401,14 +448,137 @@
             width: 16px;
             height: 16px;
         }
+        /* Public page footer styles */
+        .page-footer {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-400);
+            padding: 1.5rem 2rem;
+        }
+        .page-footer a {
+            color: var(--dm-primary-light);
+            text-decoration: none;
+        }
+        .page-footer a:hover {
+            text-decoration: underline;
+        }
+        .page-footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .page-footer-nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .page-footer-nav a {
+            font-size: 0.9rem;
+        }
+        @media (max-width: 576px) {
+            .page-footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+        /* Public page header styles */
+        .page-header {
+            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin: 0 0 1rem;
+        }
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        /* Pill button styles */
+        .pill {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 9999px;
+            border: 1px solid transparent;
+            transition: background 0.2s ease, transform 0.15s ease;
+            cursor: pointer;
+        }
+        .pill-light {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        .pill-light:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        /* Navbar component overrides for dark variant */
+        #main-navbar.dm-navbar-dark {
+            background: var(--dm-gray-900);
+            border-bottom: none;
+        }
+        #main-navbar .dm-navbar-brand-text {
+            display: inline-flex;
+            flex-direction: column;
+            line-height: 1.2;
+            color: white;
+        }
+        #main-navbar .header-version {
+            font-size: 0.65rem;
+            opacity: 0.6;
+            font-weight: 400;
+        }
+        #main-navbar .dm-navbar-logo {
+            vertical-align: middle;
+            margin-right: 0.35rem;
+            color: white;
+        }
+        #main-navbar .dm-navbar-action {
+            border-radius: 9999px;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        /* Active dropdown toggle */
+        #main-navbar .dm-navbar-dropdown-toggle.active {
+            color: var(--dm-primary-light);
+        }
+        /* Fix navbar container to be full width */
+        #main-navbar .dm-navbar-container {
+            max-width: none;
+            padding: 0 1rem;
+        }
     </style>`;
 
-        // Create footer HTML
+        // Create footer HTML (for showcase pages)
         const footer = `
     <footer class="footer footer-dark">
         <div class="footer-content">
             <span class="footer-version">v${buildInfo.version} · ${buildInfo.built}</span>
             <span class="footer-copyright">&copy; Darryl Waterhouse &amp; DCBW-IT 2025</span>
+        </div>
+    </footer>`;
+
+        // Public page footer HTML (for About, FAQ, Blog, Splash)
+        const publicFooter = `
+    <footer class="page-footer">
+        <div class="page-footer-content">
+            <span>&copy; DCBW-IT (2025)</span>
+            <nav class="page-footer-nav">
+                <a href="${publicBase}about.html">About Us</a>
+                <a href="${publicBase}faq.html">FAQs</a>
+                <a href="${publicBase}blog/index.html">Blog</a>
+            </nav>
         </div>
     </footer>`;
 
@@ -597,15 +767,63 @@
         // Inject styles into head
         $('head').append(themeStyles);
 
-        // Inject navbar at the start of body
-        $body.prepend(navbar);
+        // Choose footer based on page type
+        const footerToUse = (isPublicPage || isSplashPage) ? publicFooter : footer;
+
+        // Inject navbar container at the start of body
+        $body.prepend('<nav id="main-navbar"></nav>');
+
+        // Determine which items to use and initialize navbar component
+        const navItems = (isPublicPage || isSplashPage) ? publicItems : showcaseItems;
+        Domma.elements.navbar('#main-navbar', {
+            brand: {text: 'Domma', url: splashPath},
+            items: navItems,
+            variant: 'dark',
+            position: 'static',
+            collapseAt: 992,
+            actions: [
+                {text: 'Download', url: downloadPath, variant: 'outline'}
+            ]
+        });
+
+        // Customize brand section with SVG logo + version
+        const $brand = $('#main-navbar .dm-navbar-brand-link');
+        if ($brand.length) {
+            $brand.html(`
+                ${logoSvg}
+                <span class="dm-navbar-brand-text">
+                    Domma
+                    <span class="header-version">v${buildInfo.version}</span>
+                </span>
+            `);
+        }
+
+        // Set active state on dropdown toggles for showcase pages
+        function setActiveDropdown() {
+            if (isPublicPage || isSplashPage) return; // Public pages use flat items with active state
+            const dropdowns = $('#main-navbar .dm-navbar-dropdown');
+            dropdowns.each(function () {
+                const $dd = $(this);
+                const links = $dd.find('.dm-navbar-dropdown-item');
+                const isActive = links.toArray().some(link => {
+                    const href = $(link).attr('href');
+                    if (!href) return false;
+                    const section = href.split('/').slice(-2, -1)[0];
+                    return section && currentSection === section;
+                });
+                if (isActive) {
+                    $dd.find('.dm-navbar-dropdown-toggle').addClass('active');
+                }
+            });
+        }
+        setActiveDropdown();
 
         // Inject theme toggle and variant selector after navbar
         $body.prepend(themeToggle);
         $body.prepend(variantSelector);
 
         // Inject footer at the end of body
-        $body.append(footer);
+        $body.append(footerToUse);
 
         // Build sidebar navigation (only on showcase subpages)
         if (isShowcaseSubpage) {
@@ -644,37 +862,6 @@
 
         $('#theme-toggle').on('click', toggleTheme);
         updateThemeIcon();
-
-        // Navbar toggle functionality (mobile)
-        const $navbarToggle = $('#navbar-toggle');
-        const $navbarNav = $('#navbar-nav');
-
-        function toggleNavbar() {
-            const isOpen = $navbarNav.hasClass('open');
-            $navbarNav.toggleClass('open');
-            $navbarToggle.attr('aria-expanded', !isOpen);
-            $('.navbar-toggle-open').toggle(isOpen);
-            $('.navbar-toggle-close').toggle(!isOpen);
-        }
-
-        $navbarToggle.on('click', toggleNavbar);
-
-        // Close navbar on link click (mobile)
-        $navbarNav.find('a').on('click', function () {
-            if (window.innerWidth <= 992 && $navbarNav.hasClass('open')) {
-                toggleNavbar();
-            }
-        });
-
-        // Close navbar on window resize if open
-        $(window).on('resize', _.debounce(function () {
-            if (window.innerWidth > 992 && $navbarNav.hasClass('open')) {
-                $navbarNav.removeClass('open');
-                $navbarToggle.attr('aria-expanded', 'false');
-                $('.navbar-toggle-open').show();
-                $('.navbar-toggle-close').hide();
-            }
-        }, 100));
 
         // Variant selector functionality
         function setVariant(variant) {

@@ -12,25 +12,6 @@
     <link rel="stylesheet" href="showcase/css/domma.css">
     <link rel="stylesheet" href="dist/themes/domma-themes.css">
     <style>
-        .page-header {
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-
-        .page-header h1 {
-            font-size: 2.5rem;
-            margin: 0 0 1rem;
-        }
-
-        .page-header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
         .content-section {
             padding: 4rem 2rem;
             max-width: 900px;
@@ -103,62 +84,9 @@
             line-height: 1.8;
             color: var(--dm-gray-700);
         }
-
-        .page-footer {
-            background: var(--dm-gray-900);
-            color: var(--dm-gray-400);
-            padding: 1.5rem 2rem;
-        }
-
-        .page-footer a {
-            color: var(--dm-primary-light);
-            text-decoration: none;
-        }
-
-        .page-footer a:hover {
-            text-decoration: underline;
-        }
-
-        .page-footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .page-footer-nav {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .page-footer-nav a {
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 576px) {
-            .page-footer-content {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-        }
     </style>
 </head>
 <body class="dm-theme-light">
-<nav class="navbar navbar-dark">
-    <div class="navbar-brand-group" style="display: flex; align-items: center; gap: 0.75rem;">
-        <a href="index.html" class="navbar-brand">Domma</a>
-        <a href="showcase/download/index.html" class="pill pill-light" style="display: inline-block; padding: 0.35rem 0.75rem; font-size: 0.75rem; font-weight: 600; text-decoration: none; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 9999px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white;">Download</a>
-    </div>
-    <ul class="navbar-nav">
-        <li><a href="showcase/index.html" class="navbar-link">Showcase</a></li>
-        <li><a href="quickstart/index.html" class="navbar-link">Quickstart</a></li>
-        <li><a href="about.html" class="navbar-link active">About Us</a></li>
-        <li><a href="faq.html" class="navbar-link">FAQs</a></li>
-        <li><a href="blog/index.html" class="navbar-link">Blog</a></li>
-    </ul>
-</nav>
 
 <header class="page-header">
     <h1>About Domma</h1>
@@ -212,20 +140,9 @@
     </div>
 </section>
 
-<footer class="page-footer">
-    <div class="page-footer-content">
-        <span>&copy; DCBW-IT (2025)</span>
-        <nav class="page-footer-nav">
-            <a href="about.html">About Us</a>
-            <a href="faq.html">FAQs</a>
-            <a href="blog/index.html">Blog</a>
-        </nav>
-    </div>
-</footer>
-
 <script src="dist/domma.min.js"></script>
+<script src="showcase/js/layout.js"></script>
 <script>
-    Domma.theme.init({ autoDetect: true });
     Domma.icons.scan();
 </script>
 </body>
