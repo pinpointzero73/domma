@@ -1,0 +1,44 @@
+/**
+ * Domma Tools Bundle
+ * Developer tools for theme customisation and page building
+ *
+ * Load after domma.min.js:
+ * <script src="domma.min.js"></script>
+ * <script src="domma-tools.min.js"></script>
+ */
+
+import {ThemeRoller} from './theme-roller.js';
+import {QuickRoller} from './quick-roller.js';
+
+// Factory functions
+const tools = {
+    themeRoller(selector, options = {}) {
+        const instance = new ThemeRoller(selector, options);
+        if (instance.element && typeof Domma !== 'undefined') {
+            Domma.elements._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
+    quickRoller(selector, options = {}) {
+        const instance = new QuickRoller(selector, options);
+        if (instance.element && typeof Domma !== 'undefined') {
+            Domma.elements._instances.set(instance.element, instance);
+        }
+        return instance;
+    }
+};
+
+// Attach to Domma.elements when available
+if (typeof Domma !== 'undefined' && Domma.elements) {
+    Domma.elements.themeRoller = tools.themeRoller;
+    Domma.elements.quickRoller = tools.quickRoller;
+}
+
+// Also expose as DommaTools for direct access
+if (typeof window !== 'undefined') {
+    window.DommaTools = tools;
+}
+
+export {tools, ThemeRoller, QuickRoller};
+export default tools;
