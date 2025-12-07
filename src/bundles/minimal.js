@@ -3,7 +3,7 @@
  * Core DOM manipulation and utilities
  *
  * Modules: utils, dom, storage, icons
- * Estimated Size: ~100KB
+ * Estimated Size: ~144KB
  * Use Case: Simple DOM manipulation, no UI components
  */
 

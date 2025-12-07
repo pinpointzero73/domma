@@ -3,7 +3,7 @@
  * Most commonly used features
  *
  * Modules: utils, dom, storage, icons, elements, config, http
- * Estimated Size: ~180KB
+ * Estimated Size: ~211KB
  * Use Case: Interactive sites with UI components
  */
 

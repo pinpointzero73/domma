@@ -3,7 +3,7 @@
  * Data manipulation and tables
  *
  * Modules: utils, dom, tables, icons, storage, http
- * Estimated Size: ~150KB
+ * Estimated Size: ~172KB
  * Use Case: Data-heavy applications, dashboards
  */
 

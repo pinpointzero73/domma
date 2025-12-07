@@ -740,6 +740,39 @@
 <script>
     // Scan for icons
     Domma.icons.scan();
+
+    // Load and display actual bundle sizes from build-info.json
+    fetch('../../dist/build-info.json')
+        .then(r => r.json())
+        .then(info => {
+            // Update UMD and ESM sizes (both are the same - full bundle)
+            if (info.bundles && info.bundles.full) {
+                const fullSize = info.bundles.full.sizeFormatted;
+                document.getElementById('umd-size').textContent = fullSize + ' minified';
+                document.getElementById('esm-size').textContent = fullSize + ' minified';
+            }
+
+            // Update tools bundle size
+            if (info.bundles && info.bundles.tools) {
+                const toolsSize = info.bundles.tools.sizeFormatted;
+                // If there's a tools size element, update it
+                const toolsEl = document.getElementById('tools-size');
+                if (toolsEl) {
+                    toolsEl.textContent = toolsSize;
+                }
+            }
+
+            // Update current version
+            if (info.version) {
+                const versionEl = document.getElementById('current-version');
+                if (versionEl) {
+                    versionEl.textContent = 'v' + info.version;
+                }
+            }
+        })
+        .catch(err => {
+            console.warn('Could not load build info:', err);
+        });
 </script>
 </body>
 </html>

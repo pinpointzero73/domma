@@ -3,7 +3,7 @@
  * Headless utilities (BYOS)
  *
  * Modules: utils, http, dates, models, storage
- * Estimated Size: ~80KB
+ * Estimated Size: ~39KB
  * Use Case: Integration with existing frameworks
  */
 
