@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Debug</title>
+    <style>
+        body {
+            font-family: system-ui;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            margin: 0.5rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 4px;
+            background: #0066cc;
+            color: white;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #0052a3;
+        }
+
+        #log {
+            background: #f5f5f5;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            background: #e3f2fd;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Desktop Notification Debug</h1>
+
+<div class="status">
+    <strong>Browser Support:</strong> <span id="support-status">Checking...</span><br>
+    <strong>Permission:</strong> <span id="permission-status">Checking...</span><br>
+    <strong>Domma.DesktopNotification available:</strong> <span id="domma-status">Checking...</span>
+</div>
+
+<div class="status" style="background: #fff3cd; border-left: 4px solid #ffc107;">
+    <strong>⚠️ Important:</strong> If the log says notifications are shown but you don't see them, check:
+    <ul style="margin: 0.5rem 0;">
+        <li><strong>Windows:</strong> Click the notification icon in system tray (bottom-right)</li>
+        <li><strong>macOS:</strong> Click notification icon in menu bar (top-right)</li>
+        <li><strong>Linux:</strong> Check your notification daemon/center</li>
+        <li><strong>Browser:</strong> Some browsers show notifications in their own notification center</li>
+        <li><strong>Focus Assist / Do Not Disturb:</strong> May hide popup notifications but still log them</li>
+    </ul>
+</div>
+
+<div>
+    <button class="btn" onclick="testNative()">Test Native Notification API</button>
+    <button class="btn" onclick="testDommaNotify()">Test Domma.elements.notify()</button>
+    <button class="btn" onclick="testDommaInstance()">Test Domma Instance Method</button>
+    <button class="btn" onclick="requestPerm()">Request Permission</button>
+    <button class="btn" onclick="clearLog()">Clear Log</button>
+</div>
+
+<div id="log"></div>
+
+<script src="dist/domma.min.js"></script>
+<script>
+    const log = document.getElementById('log');
+
+    function addLog(message) {
+        const timestamp = new Date().toLocaleTimeString();
+        log.textContent += `[${timestamp}] ${message}\n`;
+        log.scrollTop = log.scrollHeight;
+        console.log(message);
+    }
+
+    function clearLog() {
+        log.textContent = '';
+    }
+
+    // Check support
+    document.getElementById('support-status').textContent =
+        typeof Notification !== 'undefined' ? '✅ Supported' : '❌ Not Supported';
+
+    document.getElementById('permission-status').textContent =
+        typeof Notification !== 'undefined' ? Notification.permission : 'N/A';
+
+    document.getElementById('domma-status').textContent =
+        typeof Domma !== 'undefined' && Domma.DesktopNotification ? '✅ Available' : '❌ Not Available';
+
+    addLog('Page loaded');
+    addLog(`Browser: ${navigator.userAgent}`);
+    addLog(`Protocol: ${window.location.protocol}`);
+    addLog(`Notification support: ${typeof Notification !== 'undefined'}`);
+    if (typeof Notification !== 'undefined') {
+        addLog(`Permission: ${Notification.permission}`);
+    }
+    if (typeof Domma !== 'undefined' && Domma.DesktopNotification) {
+        addLog(`Domma.DesktopNotification.isSupported: ${Domma.DesktopNotification.isSupported}`);
+        addLog(`Domma.DesktopNotification.permission: ${Domma.DesktopNotification.permission}`);
+    }
+
+    async function requestPerm() {
+        addLog('Requesting permission...');
+        try {
+            if (typeof Notification === 'undefined') {
+                addLog('❌ Notification API not available');
+                return;
+            }
+
+            const permission = await Notification.requestPermission();
+            addLog(`✅ Permission result: ${permission}`);
+            document.getElementById('permission-status').textContent = permission;
+        } catch (error) {
+            addLog(`❌ Error requesting permission: ${error.message}`);
+        }
+    }
+
+    async function testNative() {
+        addLog('Testing native Notification API...');
+
+        try {
+            if (typeof Notification === 'undefined') {
+                addLog('❌ Notification API not available');
+                return;
+            }
+
+            if (Notification.permission !== 'granted') {
+                addLog(`⚠️ Permission not granted (${Notification.permission})`);
+                return;
+            }
+
+            addLog('Creating native notification...');
+            const notif = new Notification('Native Test', {
+                body: 'This is a native browser notification',
+                icon: '/assets/logo/domma-icon.svg'
+            });
+
+            notif.onclick = () => addLog('✅ Native notification clicked');
+            notif.onshow = () => addLog('✅ Native notification shown');
+            notif.onerror = (e) => addLog(`❌ Native notification error: ${e}`);
+            notif.onclose = () => addLog('Native notification closed');
+
+            addLog('Native notification created');
+        } catch (error) {
+            addLog(`❌ Native error: ${error.message}`);
+        }
+    }
+
+    async function testDommaNotify() {
+        addLog('Testing Domma.elements.notify()...');
+
+        try {
+            if (typeof Domma === 'undefined') {
+                addLog('❌ Domma not loaded');
+                return;
+            }
+
+            if (!Domma.DesktopNotification) {
+                addLog('❌ Domma.DesktopNotification not available');
+                return;
+            }
+
+            addLog(`Domma.DesktopNotification.isSupported: ${Domma.DesktopNotification.isSupported}`);
+            addLog(`Domma.DesktopNotification.permission: ${Domma.DesktopNotification.permission}`);
+
+            addLog('Calling Domma.elements.notify()...');
+            const notif = Domma.elements.notify('Domma Test', {
+                body: 'Testing Domma notification system',
+                onClick: () => addLog('✅ Domma notification clicked'),
+                onShow: () => addLog('✅ Domma notification shown'),
+                onError: (error) => addLog(`❌ Domma notification error: ${error.message}`),
+                onClose: () => addLog('Domma notification closed')
+            });
+
+            addLog(`Notify returned: ${notif ? 'instance' : 'null'}`);
+            if (notif) {
+                addLog(`Notification._shown: ${notif._shown}`);
+            }
+        } catch (error) {
+            addLog(`❌ Domma notify error: ${error.message}`);
+            addLog(`Stack: ${error.stack}`);
+        }
+    }
+
+    async function testDommaInstance() {
+        addLog('Testing Domma instance method...');
+
+        try {
+            addLog('Creating notification instance...');
+            const notif = Domma.elements.notification({
+                title: 'Domma Instance Test',
+                body: 'Testing instance-based notification',
+                onClick: () => addLog('✅ Instance notification clicked'),
+                onShow: () => addLog('✅ Instance notification shown'),
+                onError: (error) => addLog(`❌ Instance notification error: ${error.message}`),
+                onClose: () => addLog('Instance notification closed')
+            });
+
+            addLog('Instance created, calling show()...');
+            await notif.show();
+            addLog('show() completed');
+            addLog(`Notification._shown: ${notif._shown}`);
+        } catch (error) {
+            addLog(`❌ Instance error: ${error.message}`);
+            addLog(`Stack: ${error.stack}`);
+        }
+    }
+</script>
+
+</body>
+</html>

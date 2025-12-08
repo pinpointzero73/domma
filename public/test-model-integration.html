@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Integration Test</title>
+    <link rel="stylesheet" href="showcase/css/domma.css">
+    <style>
+        body {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .test-section {
+            margin-bottom: 3rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .test-section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .result {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            background: #f5f5f5;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .control-buttons {
+            margin-top: 1rem;
+        }
+
+        .control-buttons button {
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body class="dm-theme-light">
+
+<h1>Model Integration Test</h1>
+
+<!-- Autocomplete Test -->
+<div class="test-section">
+    <h2>Autocomplete Model Integration</h2>
+    <div class="mb-3">
+        <label for="test-autocomplete" class="form-label">Search Fruit:</label>
+        <input type="text" id="test-autocomplete" placeholder="Type to search...">
+    </div>
+    <div class="result">
+        Model Value: <span id="autocomplete-model-value">""</span>
+    </div>
+    <div class="result">
+        Component Value: <span id="autocomplete-component-value">""</span>
+    </div>
+    <div class="control-buttons">
+        <button onclick="setAutocompleteModel('Apple')">Set Model to "Apple"</button>
+        <button onclick="setAutocompleteModel('Banana')">Set Model to "Banana"</button>
+        <button onclick="clearAutocompleteModel()">Clear Model</button>
+    </div>
+    <div id="autocomplete-results"></div>
+</div>
+
+<!-- Pillbox Test -->
+<div class="test-section">
+    <h2>Pillbox Model Integration</h2>
+    <div class="mb-3">
+        <label for="test-pillbox" class="form-label">Select Tags:</label>
+        <select id="test-pillbox" multiple></select>
+    </div>
+    <div class="result">
+        Model Value: <span id="pillbox-model-value">[]</span>
+    </div>
+    <div class="result">
+        Component Value: <span id="pillbox-component-value">[]</span>
+    </div>
+    <div class="control-buttons">
+        <button onclick="setPillboxModel(['React', 'Vue'])">Set Model to ["React", "Vue"]</button>
+        <button onclick="setPillboxModel(['Angular'])">Set Model to ["Angular"]</button>
+        <button onclick="clearPillboxModel()">Clear Model</button>
+    </div>
+    <div id="pillbox-results"></div>
+</div>
+
+<div id="test-results"></div>
+
+<script src="dist/domma.min.js"></script>
+<script>
+    const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
+    const frameworks = ['React', 'Vue', 'Angular', 'Svelte', 'Ember', 'Backbone'];
+
+    // Test 1: Autocomplete Model Integration
+    console.log('=== Testing Autocomplete Model Integration ===');
+
+    const autocompleteModel = M.create({
+        query: {type: 'string', default: ''}
+    });
+
+    const autocomplete = Domma.elements.autocomplete('#test-autocomplete', {
+        data: fruits,
+        model: autocompleteModel,
+        modelKey: 'query'
+    });
+
+    // Monitor model changes
+    autocompleteModel.onChange((field, value) => {
+        console.log(`Autocomplete Model Changed: ${field} = "${value}"`);
+        document.getElementById('autocomplete-model-value').textContent = `"${value}"`;
+        checkAutocompleteSync();
+    });
+
+    // Monitor component changes
+    const originalAutocompleteInput = autocomplete._handleInput;
+    autocomplete._handleInput = function (e) {
+        originalAutocompleteInput.call(autocomplete, e);
+        document.getElementById('autocomplete-component-value').textContent = `"${autocomplete.getValue()}"`;
+    };
+
+    function setAutocompleteModel(value) {
+        autocompleteModel.set('query', value);
+    }
+
+    function clearAutocompleteModel() {
+        autocompleteModel.set('query', '');
+    }
+
+    function checkAutocompleteSync() {
+        const modelVal = autocompleteModel.get('query');
+        const componentVal = autocomplete.getValue();
+        const synced = modelVal === componentVal;
+
+        const resultsDiv = document.getElementById('autocomplete-results');
+        resultsDiv.innerHTML = `<div class="result ${synced ? 'success' : 'error'}">
+            Sync Status: ${synced ? '✓ Synchronized' : '✗ Out of Sync'}
+        </div>`;
+
+        console.log(`Autocomplete sync check: Model="${modelVal}" Component="${componentVal}" Synced=${synced}`);
+    }
+
+    // Test 2: Pillbox Model Integration
+    console.log('=== Testing Pillbox Model Integration ===');
+
+    const pillboxModel = M.create({
+        selectedTags: {type: 'array', default: []}
+    });
+
+    const pillbox = Domma.elements.pillbox('#test-pillbox', {
+        data: frameworks,
+        model: pillboxModel,
+        modelKey: 'selectedTags'
+    });
+
+    // Monitor model changes
+    pillboxModel.onChange((field, value) => {
+        console.log(`Pillbox Model Changed: ${field} =`, value);
+        document.getElementById('pillbox-model-value').textContent = JSON.stringify(value);
+        checkPillboxSync();
+    });
+
+    // Monitor component changes
+    const originalPillboxChange = pillbox._triggerChange;
+    pillbox._triggerChange = function () {
+        originalPillboxChange.call(pillbox);
+        document.getElementById('pillbox-component-value').textContent = JSON.stringify(pillbox.getValue());
+    };
+
+    function setPillboxModel(value) {
+        pillboxModel.set('selectedTags', value);
+    }
+
+    function clearPillboxModel() {
+        pillboxModel.set('selectedTags', []);
+    }
+
+    function checkPillboxSync() {
+        const modelVal = pillboxModel.get('selectedTags');
+        const componentVal = pillbox.getValue();
+        const synced = JSON.stringify(modelVal) === JSON.stringify(componentVal);
+
+        const resultsDiv = document.getElementById('pillbox-results');
+        resultsDiv.innerHTML = `<div class="result ${synced ? 'success' : 'error'}">
+            Sync Status: ${synced ? '✓ Synchronized' : '✗ Out of Sync'}
+        </div>`;
+
+        console.log(`Pillbox sync check: Model=${JSON.stringify(modelVal)} Component=${JSON.stringify(componentVal)} Synced=${synced}`);
+    }
+
+    // Initial sync checks
+    setTimeout(() => {
+        checkAutocompleteSync();
+        checkPillboxSync();
+
+        console.log('=== Initial Tests Complete ===');
+        console.log('Use the buttons or interact with the components to test two-way sync');
+    }, 100);
+
+    // Test Model API availability
+    const testResults = document.getElementById('test-results');
+    const tests = [];
+
+    tests.push(`Domma loaded: ${typeof Domma !== 'undefined' ? '✓' : '✗'}`);
+    tests.push(`M (Models) available: ${typeof M !== 'undefined' ? '✓' : '✗'}`);
+    tests.push(`Autocomplete has model property: ${autocomplete.model ? '✓' : '✗'}`);
+    tests.push(`Autocomplete has modelKey property: ${autocomplete.modelKey ? '✓' : '✗'}`);
+    tests.push(`Pillbox has model property: ${pillbox.model ? '✓' : '✗'}`);
+    tests.push(`Pillbox has modelKey property: ${pillbox.modelKey ? '✓' : '✗'}`);
+
+    testResults.innerHTML = `<div class="test-section"><h2>API Tests</h2>${tests.map(t => `<div class="result">${t}</div>`).join('')}</div>`;
+</script>
+
+</body>
+</html>

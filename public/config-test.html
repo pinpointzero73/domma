@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Config Engine Test - Newly Registered Components</title>
+    <link rel="stylesheet" href="showcase/css/domma.css">
+    <link rel="stylesheet" href="dist/themes/domma-themes.css">
+    <style>
+        body {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .test-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--dm-surface);
+            border-radius: 8px;
+            border: 1px solid var(--dm-border);
+        }
+
+        .test-section h2 {
+            margin-top: 0;
+            color: var(--dm-primary);
+        }
+
+        .test-item {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid var(--dm-border);
+        }
+
+        .success {
+            color: var(--dm-success);
+            font-weight: bold;
+        }
+
+        .btn-group {
+            display: inline-flex;
+            gap: 0;
+        }
+
+        .btn-group .btn {
+            border-radius: 0;
+        }
+
+        .btn-group .btn:first-child {
+            border-radius: 6px 0 0 6px;
+        }
+
+        .btn-group .btn:last-child {
+            border-radius: 0 6px 6px 0;
+        }
+    </style>
+</head>
+<body class="dm-theme-light">
+
+<h1>Config Engine Test: Newly Registered Components</h1>
+<p>Testing that badge, backToTop, buttonGroup, loader, breadcrumbs, and navbar work via <code>$.setup()</code></p>
+
+<div class="test-section">
+    <h2>1. Badge Component</h2>
+    <div class="test-item">
+        <p>Badge via $.setup(): <span id="test-badge"></span></p>
+        <p class="success" id="badge-status"></p>
+    </div>
+</div>
+
+<div class="test-section">
+    <h2>2. Back to Top Component</h2>
+    <div class="test-item">
+        <button id="test-back-to-top" class="btn btn-primary">Back to Top</button>
+        <p class="success" id="backtotop-status"></p>
+        <p><small>Scroll down to test functionality</small></p>
+    </div>
+</div>
+
+<div class="test-section">
+    <h2>3. Button Group Component</h2>
+    <div class="test-item">
+        <div id="test-button-group" class="btn-group">
+            <button class="btn btn-outline">Option 1</button>
+            <button class="btn btn-outline">Option 2</button>
+            <button class="btn btn-outline">Option 3</button>
+        </div>
+        <p class="success" id="buttongroup-status"></p>
+    </div>
+</div>
+
+<div class="test-section">
+    <h2>4. Loader Component</h2>
+    <div class="test-item">
+        <div id="test-loader" style="min-height: 100px;"></div>
+        <p class="success" id="loader-status"></p>
+    </div>
+</div>
+
+<div class="test-section">
+    <h2>5. Breadcrumbs Component</h2>
+    <div class="test-item">
+        <nav id="test-breadcrumbs"></nav>
+        <p class="success" id="breadcrumbs-status"></p>
+    </div>
+</div>
+
+<div class="test-section">
+    <h2>6. Navbar Component</h2>
+    <div class="test-item">
+        <nav id="test-navbar"></nav>
+        <p class="success" id="navbar-status"></p>
+    </div>
+</div>
+
+<!-- Add scroll space to test back-to-top -->
+<div style="height: 2000px;"></div>
+
+<script src="dist/domma.min.js"></script>
+<script>
+    console.log('Testing newly registered components via $.setup()...');
+
+    // Test all 6 newly registered components
+    try {
+        $.setup({
+            '#test-badge': {
+                component: 'badge',
+                initial: {
+                    text: 'NEW'
+                }
+            },
+            '#test-back-to-top': {
+                component: 'backToTop',
+                options: {
+                    showAfter: 100,
+                    duration: 300
+                }
+            },
+            '#test-button-group': {
+                component: 'buttonGroup',
+                options: {
+                    mode: 'single',
+                    onChange: (value, index) => {
+                        console.log('Button group selection:', value, index);
+                    }
+                }
+            },
+            '#test-loader': {
+                component: 'loader',
+                options: {
+                    type: 'spinner',
+                    size: 'medium',
+                    text: 'Loading...'
+                }
+            },
+            '#test-breadcrumbs': {
+                component: 'breadcrumbs',
+                options: {
+                    items: [
+                        {text: 'Home', url: '/'},
+                        {text: 'Tests', url: '/tests'},
+                        {text: 'Config Engine'}
+                    ]
+                }
+            },
+            '#test-navbar': {
+                component: 'navbar',
+                options: {
+                    brand: {text: 'Test App', url: '#'},
+                    items: [
+                        {text: 'Home', url: '#'},
+                        {text: 'About', url: '#'},
+                        {text: 'Contact', url: '#'}
+                    ],
+                    variant: 'light'
+                }
+            }
+        });
+
+        // Check if components were created
+        const configs = $.config();
+
+        // Check badge
+        if (configs['#test-badge']) {
+            document.getElementById('badge-status').textContent = '✓ Badge registered and initialized via config engine';
+        }
+
+        // Check backToTop
+        if (configs['#test-back-to-top']) {
+            document.getElementById('backtotop-status').textContent = '✓ Back to Top registered and initialized via config engine';
+        }
+
+        // Check buttonGroup
+        if (configs['#test-button-group']) {
+            document.getElementById('buttongroup-status').textContent = '✓ Button Group registered and initialized via config engine';
+        }
+
+        // Check loader
+        if (configs['#test-loader']) {
+            document.getElementById('loader-status').textContent = '✓ Loader registered and initialized via config engine';
+            // Show the loader
+            setTimeout(() => {
+                const loaderConfig = $.config('#test-loader');
+                if (loaderConfig._components) {
+                    // Loader is working
+                }
+            }, 100);
+        }
+
+        // Check breadcrumbs
+        if (configs['#test-breadcrumbs']) {
+            document.getElementById('breadcrumbs-status').textContent = '✓ Breadcrumbs registered and initialized via config engine';
+        }
+
+        // Check navbar
+        if (configs['#test-navbar']) {
+            document.getElementById('navbar-status').textContent = '✓ Navbar registered and initialized via config engine';
+        }
+
+        console.log('All components successfully registered!');
+        console.log('Config state:', configs);
+
+    } catch (error) {
+        console.error('Error testing components:', error);
+        alert('Error: ' + error.message);
+    }
+</script>
+
+</body>
+</html>
