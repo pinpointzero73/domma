@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badge - Elements - Domma Showcase</title>
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+</head>
+<body class="dm-theme-light">
+
+<section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Overview</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Badges are small labels that highlight counts, status, or categories. They're perfect for notification
+            counts, status indicators, labels, and tags. Domma's Badge is a CSS-only component with multiple style
+            variants.
+        </p>
+
+        <h3 class="category-title">Key Features</h3>
+        <ul class="feature-list mb-4">
+            <li><strong>CSS-Only</strong> - No JavaScript required</li>
+            <li><strong>Colour Variants</strong> - Primary, success, danger, warning, info styles</li>
+            <li><strong>Size Options</strong> - Small, default, and large badges</li>
+            <li><strong>Pill Style</strong> - Fully rounded corners for tags</li>
+        </ul>
+
+        <h3 class="category-title">Basic Usage</h3>
+        <div class="code-block">
+            <pre><code>&lt;span class="badge"&gt;Default&lt;/span&gt;
+&lt;span class="badge badge-primary"&gt;Primary&lt;/span&gt;
+&lt;span class="badge badge-success"&gt;Success&lt;/span&gt;</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Quick Start">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Quick Start</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Simple Badge</h3>
+        <div class="demo-area mb-4 text-center">
+            <span class="badge badge-primary">New</span>
+            <span class="badge badge-success">Active</span>
+            <span class="badge badge-danger">Urgent</span>
+        </div>
+        <div class="code-block">
+            <pre><code>&lt;span class="badge badge-primary"&gt;New&lt;/span&gt;
+&lt;span class="badge badge-success"&gt;Active&lt;/span&gt;
+&lt;span class="badge badge-danger"&gt;Urgent&lt;/span&gt;</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Tutorial">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Tutorial</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">Build a notification indicator with dynamic badge count.</p>
+
+        <div class="demo-area mb-4">
+            <div style="max-width: 400px; margin: 0 auto;">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="m-0">Notifications</h3>
+                            <span id="notification-count" class="badge badge-danger">3</span>
+                        </div>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding: 0.75rem; border-bottom: 1px solid var(--dm-border);">
+                                <div class="flex items-center justify-between">
+                                    <span>New message received</span>
+                                    <span class="badge badge-sm badge-primary">New</span>
+                                </div>
+                            </li>
+                            <li style="padding: 0.75rem; border-bottom: 1px solid var(--dm-border);">
+                                <div class="flex items-center justify-between">
+                                    <span>Task completed</span>
+                                    <span class="badge badge-sm badge-success">Done</span>
+                                </div>
+                            </li>
+                            <li style="padding: 0.75rem;">
+                                <div class="flex items-center justify-between">
+                                    <span>Server alert</span>
+                                    <span class="badge badge-sm badge-warning">Warning</span>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="mt-3 text-center">
+                            <button id="clear-notifications" class="btn btn-sm btn-outline">Clear All</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-block">
+            <pre><code>&lt;div class="flex items-center justify-between"&gt;
+    &lt;h3&gt;Notifications&lt;/h3&gt;
+    &lt;span class="badge badge-danger"&gt;3&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const badge = document.querySelector('.badge');
+let count = 3;
+
+document.getElementById('clear-btn').addEventListener('click', () => {
+    count = 0;
+    badge.textContent = count;
+    if (count === 0) {
+        badge.style.display = 'none';
+    }
+});
+&lt;/script&gt;</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Examples">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Examples</h2>
+    </div>
+    <div class="card-body">
+
+        <h3 class="category-title">Colour Variants</h3>
+        <div class="demo-area mb-4 text-center">
+            <span class="badge">Default</span>
+            <span class="badge badge-primary">Primary</span>
+            <span class="badge badge-success">Success</span>
+            <span class="badge badge-danger">Danger</span>
+            <span class="badge badge-warning">Warning</span>
+            <span class="badge badge-info">Info</span>
+        </div>
+
+        <h3 class="category-title">Sizes</h3>
+        <div class="demo-area mb-4 text-center">
+            <span class="badge badge-sm badge-primary">Small</span>
+            <span class="badge badge-primary">Default</span>
+            <span class="badge badge-lg badge-primary">Large</span>
+        </div>
+
+        <h3 class="category-title">Pill Style</h3>
+        <div class="demo-area mb-4 text-center">
+            <span class="badge badge-pill badge-primary">JavaScript</span>
+            <span class="badge badge-pill badge-success">CSS</span>
+            <span class="badge badge-pill badge-info">HTML</span>
+            <span class="badge badge-pill badge-warning">TypeScript</span>
+        </div>
+
+        <h3 class="category-title">In Buttons</h3>
+        <div class="demo-area mb-4 text-center">
+            <button class="btn btn-primary">
+                Messages <span class="badge badge-light">4</span>
+            </button>
+            <button class="btn btn-secondary">
+                Notifications <span class="badge badge-danger">12</span>
+            </button>
+        </div>
+
+        <h3 class="category-title">Status Indicators</h3>
+        <div class="demo-area mb-4">
+            <div style="max-width: 400px; margin: 0 auto;">
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="padding: 0.75rem; border-bottom: 1px solid var(--dm-border);">
+                        <div class="flex items-center justify-between">
+                            <span>API Server</span>
+                            <span class="badge badge-success">Online</span>
+                        </div>
+                    </li>
+                    <li style="padding: 0.75rem; border-bottom: 1px solid var(--dm-border);">
+                        <div class="flex items-center justify-between">
+                            <span>Database</span>
+                            <span class="badge badge-success">Connected</span>
+                        </div>
+                    </li>
+                    <li style="padding: 0.75rem; border-bottom: 1px solid var(--dm-border);">
+                        <div class="flex items-center justify-between">
+                            <span>Cache Server</span>
+                            <span class="badge badge-warning">Degraded</span>
+                        </div>
+                    </li>
+                    <li style="padding: 0.75rem;">
+                        <div class="flex items-center justify-between">
+                            <span>Queue Worker</span>
+                            <span class="badge badge-danger">Offline</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="category-title">Category Tags</h3>
+        <div class="demo-area text-center">
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <div class="card-body">
+                    <h3 class="card-title">Advanced JavaScript Patterns</h3>
+                    <p class="card-text mb-3">Learn advanced techniques for modern web development</p>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <span class="badge badge-pill">JavaScript</span>
+                        <span class="badge badge-pill">ES6+</span>
+                        <span class="badge badge-pill">Async/Await</span>
+                        <span class="badge badge-pill">Promises</span>
+                        <span class="badge badge-pill">Advanced</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Best Practices">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Best Practices</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Accessibility</h3>
+        <ul class="mb-4">
+            <li><strong>Descriptive Text</strong> - Use clear, meaningful badge text</li>
+            <li><strong>Colour Independence</strong> - Don't rely solely on colour to convey meaning</li>
+            <li><strong>ARIA Labels</strong> - Add <code>aria-label</code> for icon-only or number badges</li>
+        </ul>
+
+        <h3 class="category-title">Design Guidelines</h3>
+        <ul class="mb-4">
+            <li><strong>Consistent Meaning</strong> - Use colour variants consistently (red for errors/urgent, green for
+                success/active)
+            </li>
+            <li><strong>Appropriate Size</strong> - Match badge size to surrounding content</li>
+            <li><strong>Limit Usage</strong> - Don't overuse badges; they lose impact when too common</li>
+            <li><strong>Pill vs Default</strong> - Use pills for tags/categories, default for counts/status</li>
+        </ul>
+
+        <h3 class="category-title">Common Use Cases</h3>
+        <ul>
+            <li><strong>Notification Counts</strong> - Unread messages, pending tasks</li>
+            <li><strong>Status Indicators</strong> - Online/offline, active/inactive</li>
+            <li><strong>Category Tags</strong> - Content classification, filtering</li>
+            <li><strong>Labels</strong> - New features, beta status, version numbers</li>
+        </ul>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="API Reference">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">CSS Classes</h2>
+    </div>
+    <div class="card-body">
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>.badge</code></td>
+                    <td>Base badge class (required)</td>
+                </tr>
+                <tr>
+                    <td><code>.badge-primary</code></td>
+                    <td>Primary colour variant</td>
+                </tr>
+                <tr>
+                    <td><code>.badge-success</code></td>
+                    <td>Success/green variant</td>
+                </tr>
+                <tr>
+                    <td><code>.badge-danger</code></td>
+                    <td>Danger/red variant</td>
+                </tr>
+                <tr>
+                    <td><code>.badge-warning</code></td>
+                    <td>Warning/yellow variant</td>
+                </tr>
+                <tr>
+                    <td><code>.badge-info</code></td>
+                    <td>Info/blue variant</td>
+                </tr>
+                <tr>
+                    <td><code>.badge-light</code></td>
+                    <td>Light background variant</td>
+                </tr>
+                <tr>
+                    <td><code>.badge-dark</code></td>
+                    <td>Dark background variant</td>
+                </tr>
+                <tr>
+                    <td><code>.badge-sm</code></td>
+                    <td>Small size</td>
+                </tr>
+                <tr>
+                    <td><code>.badge-lg</code></td>
+                    <td>Large size</td>
+                </tr>
+                <tr>
+                    <td><code>.badge-pill</code></td>
+                    <td>Fully rounded corners</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Config Engine">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Config Engine</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">Badges are CSS-only, but you can dynamically update them:</p>
+        <div class="code-block">
+            <pre><code>$.setup({
+    '#notification-badge': {
+        initial: {
+            text: '0',
+            css: { display: 'none' }
+        },
+        events: {
+            // Update badge when notifications change
+        }
+    }
+});
+
+// Dynamic update
+function updateBadge(count) {
+    const $badge = $('#notification-badge');
+    $badge.text(count);
+    $badge.css('display', count > 0 ? 'inline-block' : 'none');
+}</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Related">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Related Elements</h2>
+    </div>
+    <div class="card-body">
+        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <a href="../button-group/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Button Group</h3>
+                    <p class="card-text">Combine badges with button groups for filters</p>
+                </div>
+            </a>
+            <a href="../toast/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Toast</h3>
+                    <p class="card-text">Show notifications that update badge counts</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    // Tutorial
+    document.getElementById('clear-notifications').addEventListener('click', () => {
+        const badge = document.getElementById('notification-count');
+        badge.textContent = '0';
+        badge.style.display = 'none';
+    });
+</script>
+
+</body>
+</html>

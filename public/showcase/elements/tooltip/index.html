@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tooltip - Elements - Domma Showcase</title>
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+</head>
+<body class="dm-theme-light">
+
+<section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Overview</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Tooltips display contextual information when users hover over, focus on, or click an element. They're
+            perfect for providing hints, definitions, or additional context without cluttering the interface.
+        </p>
+
+        <h3 class="category-title">Key Features</h3>
+        <ul class="feature-list mb-4">
+            <li><strong>Multiple Triggers</strong> - Hover, click, or focus activation</li>
+            <li><strong>Positioning</strong> - Top, bottom, left, or right placement</li>
+            <li><strong>Show Delay</strong> - Configurable delay before display</li>
+            <li><strong>Animations</strong> - Smooth fade-in transitions</li>
+            <li><strong>Dynamic Content</strong> - Update tooltip text on the fly</li>
+            <li><strong>Auto-positioning</strong> - Smart placement to avoid viewport edges</li>
+        </ul>
+
+        <h3 class="category-title">Basic Usage</h3>
+        <div class="code-block">
+            <pre><code>const tooltip = Domma.elements.tooltip('#my-button', {
+    content: 'Helpful information here',
+    position: 'top',
+    trigger: 'hover',
+    delay: 200
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Quick Start">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Quick Start</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Hover Tooltip</h3>
+        <div class="demo-area mb-4 text-center">
+            <button id="quick-hover" class="btn btn-primary">Hover Me</button>
+        </div>
+        <div class="code-block">
+            <pre><code>Domma.elements.tooltip('#button', {
+    content: 'This appears on hover',
+    position: 'top'
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Tutorial">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Tutorial</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">Build a form with helpful tooltips on input fields.</p>
+
+        <div class="demo-area">
+            <div class="form-group mb-3">
+                <label>Username <span id="username-help" style="cursor: help;">ⓘ</span></label>
+                <input type="text" class="form-input" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label>Password <span id="password-help" style="cursor: help;">ⓘ</span></label>
+                <input type="password" class="form-input" placeholder="Enter password">
+            </div>
+        </div>
+
+        <div class="code-block mt-4">
+            <pre><code>Domma.elements.tooltip('#username-help', {
+    content: 'Username must be 3-20 characters',
+    position: 'right',
+    trigger: 'hover'
+});
+
+Domma.elements.tooltip('#password-help', {
+    content: 'Password must be at least 8 characters',
+    position: 'right',
+    trigger: 'hover'
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Examples">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Examples</h2>
+    </div>
+    <div class="card-body">
+
+        <h3 class="category-title">Positioning Options</h3>
+        <div class="demo-area mb-4">
+            <div class="flex justify-center gap-4 py-4">
+                <button id="pos-top" class="btn btn-outline">Top</button>
+                <button id="pos-bottom" class="btn btn-outline">Bottom</button>
+                <button id="pos-left" class="btn btn-outline">Left</button>
+                <button id="pos-right" class="btn btn-outline">Right</button>
+            </div>
+        </div>
+
+        <h3 class="category-title">Trigger Types</h3>
+        <div class="demo-area mb-4">
+            <div class="flex justify-center gap-4">
+                <button id="trigger-hover" class="btn btn-primary">Hover</button>
+                <button id="trigger-click" class="btn btn-primary">Click</button>
+                <input id="trigger-focus" type="text" class="form-input" placeholder="Focus me" style="width: 150px;">
+            </div>
+        </div>
+
+        <h3 class="category-title">Dynamic Content</h3>
+        <div class="demo-area mb-4 text-center">
+            <button id="dynamic-tooltip" class="btn btn-secondary">Hover for count</button>
+            <p class="text-sm text-muted mt-2">Hover count: <span id="hover-count">0</span></p>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Best Practices">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Best Practices</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Accessibility</h3>
+        <ul class="mb-4">
+            <li><strong>Keyboard Access</strong> - Use focus trigger for keyboard users</li>
+            <li><strong>ARIA Labels</strong> - Add aria-describedby linking to tooltip</li>
+            <li><strong>Don't Hide Critical Info</strong> - Essential information shouldn't require tooltip interaction
+            </li>
+        </ul>
+
+        <h3 class="category-title">Performance</h3>
+        <ul class="mb-4">
+            <li><strong>Reuse Instances</strong> - Don't recreate tooltips on every interaction</li>
+            <li><strong>Delay Hover</strong> - Use 200ms+ delay to avoid accidental triggers</li>
+        </ul>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="API Reference">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">API Reference</h2>
+    </div>
+    <div class="card-body">
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>content</code></td>
+                    <td>String</td>
+                    <td><code>''</code></td>
+                    <td>Tooltip text content</td>
+                </tr>
+                <tr>
+                    <td><code>position</code></td>
+                    <td>String</td>
+                    <td><code>'top'</code></td>
+                    <td>Position: top, bottom, left, right</td>
+                </tr>
+                <tr>
+                    <td><code>trigger</code></td>
+                    <td>String</td>
+                    <td><code>'hover'</code></td>
+                    <td>Trigger: hover, click, focus</td>
+                </tr>
+                <tr>
+                    <td><code>delay</code></td>
+                    <td>Number</td>
+                    <td><code>0</code></td>
+                    <td>Show delay in milliseconds</td>
+                </tr>
+                <tr>
+                    <td><code>animation</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Enable fade animation</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title mt-4">Methods</h3>
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>show()</code></td>
+                    <td>Show tooltip immediately</td>
+                </tr>
+                <tr>
+                    <td><code>hide()</code></td>
+                    <td>Hide tooltip immediately</td>
+                </tr>
+                <tr>
+                    <td><code>toggle()</code></td>
+                    <td>Toggle tooltip visibility</td>
+                </tr>
+                <tr>
+                    <td><code>setContent(text)</code></td>
+                    <td>Update tooltip text</td>
+                </tr>
+                <tr>
+                    <td><code>destroy()</code></td>
+                    <td>Remove tooltip and clean up</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Config Engine">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Config Engine</h2>
+    </div>
+    <div class="card-body">
+        <div class="code-block">
+            <pre><code>$.setup({
+    '#help-icon': {
+        component: 'tooltip',
+        options: {
+            content: 'Click for help documentation',
+            position: 'right',
+            trigger: 'hover'
+        }
+    }
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Related">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Related Elements</h2>
+    </div>
+    <div class="card-body">
+        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <a href="../modal/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Modal</h3>
+                    <p class="card-text">For longer content that needs full focus</p>
+                </div>
+            </a>
+            <a href="../dropdown/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Dropdown</h3>
+                    <p class="card-text">For interactive menus and options</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    Domma.elements.tooltip('#quick-hover', {
+        content: 'This appears on hover',
+        position: 'top'
+    });
+
+    Domma.elements.tooltip('#username-help', {
+        content: 'Username must be 3-20 characters',
+        position: 'right'
+    });
+
+    Domma.elements.tooltip('#password-help', {
+        content: 'Password must be at least 8 characters',
+        position: 'right'
+    });
+
+    Domma.elements.tooltip('#pos-top', {content: 'Tooltip on top', position: 'top'});
+    Domma.elements.tooltip('#pos-bottom', {content: 'Tooltip on bottom', position: 'bottom'});
+    Domma.elements.tooltip('#pos-left', {content: 'Tooltip on left', position: 'left'});
+    Domma.elements.tooltip('#pos-right', {content: 'Tooltip on right', position: 'right'});
+
+    Domma.elements.tooltip('#trigger-hover', {content: 'Shown on hover', trigger: 'hover'});
+    Domma.elements.tooltip('#trigger-click', {content: 'Shown on click', trigger: 'click'});
+    Domma.elements.tooltip('#trigger-focus', {content: 'Shown on focus', trigger: 'focus'});
+
+    let hoverCount = 0;
+    const dynamicTip = Domma.elements.tooltip('#dynamic-tooltip', {
+        content: 'Hover count: 0',
+        position: 'top'
+    });
+
+    document.getElementById('dynamic-tooltip').addEventListener('mouseenter', () => {
+        hoverCount++;
+        document.getElementById('hover-count').textContent = hoverCount;
+        dynamicTip.setContent(`Hover count: ${hoverCount}`);
+    });
+</script>
+
+</body>
+</html>

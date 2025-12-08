@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel - Elements - Domma Showcase</title>
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+</head>
+<body class="dm-theme-light">
+
+<section class="card mb-6" data-section="Overview">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Overview</h2></div>
+    <div class="card-body">
+        <p class="mb-4">Carousels display rotating images or content with navigation arrows, indicators, and optional
+            autoplay.</p>
+        <h3 class="category-title">Key Features</h3>
+        <ul class="feature-list mb-4">
+            <li><strong>Autoplay</strong> - Automatic slide advancement with configurable interval</li>
+            <li><strong>Navigation</strong> - Arrow buttons and dot indicators</li>
+            <li><strong>Animations</strong> - Slide or fade transitions</li>
+            <li><strong>Loop Mode</strong> - Continuous cycling through slides</li>
+        </ul>
+        <div class="code-block">
+            <pre><code>const carousel = Domma.elements.carousel('#carousel', {
+    autoplay: true,
+    interval: 5000,
+    loop: true
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Quick Start">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Quick Start</h2></div>
+    <div class="card-body">
+        <div class="demo-area mb-4">
+            <div id="quick-carousel" class="carousel" style="max-width: 600px; margin: 0 auto;">
+                <div class="carousel-track">
+                    <div class="carousel-slide"
+                         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 300px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                        Slide 1
+                    </div>
+                    <div class="carousel-slide"
+                         style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 300px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                        Slide 2
+                    </div>
+                    <div class="carousel-slide"
+                         style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); min-height: 300px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                        Slide 3
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Examples">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Examples</h2></div>
+    <div class="card-body">
+        <h3 class="category-title">With Autoplay</h3>
+        <div class="demo-area">
+            <div id="autoplay-carousel" class="carousel" style="max-width: 600px; margin: 0 auto;">
+                <div class="carousel-track">
+                    <div class="carousel-slide"
+                         style="background: #6495ED; min-height: 200px; display: flex; align-items: center; justify-content: center; color: white;">
+                        Auto 1
+                    </div>
+                    <div class="carousel-slide"
+                         style="background: #28a745; min-height: 200px; display: flex; align-items: center; justify-content: center; color: white;">
+                        Auto 2
+                    </div>
+                    <div class="carousel-slide"
+                         style="background: #dc3545; min-height: 200px; display: flex; align-items: center; justify-content: center; color: white;">
+                        Auto 3
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Best Practices">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Best Practices</h2></div>
+    <div class="card-body">
+        <ul>
+            <li><strong>Accessibility</strong> - Provide alt text for images, pause controls</li>
+            <li><strong>Performance</strong> - Optimize images, lazy load off-screen slides</li>
+            <li><strong>Mobile</strong> - Ensure touch swipe gestures work properly</li>
+        </ul>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="API Reference">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">API Reference</h2></div>
+    <div class="card-body">
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>autoplay</code></td>
+                    <td>Boolean</td>
+                    <td><code>false</code></td>
+                    <td>Auto-advance slides</td>
+                </tr>
+                <tr>
+                    <td><code>interval</code></td>
+                    <td>Number</td>
+                    <td><code>5000</code></td>
+                    <td>Autoplay interval (ms)</td>
+                </tr>
+                <tr>
+                    <td><code>loop</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Loop to beginning</td>
+                </tr>
+                <tr>
+                    <td><code>animation</code></td>
+                    <td>String</td>
+                    <td><code>'slide'</code></td>
+                    <td>'slide' or 'fade'</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 class="category-title mt-4">Methods</h3>
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>next()</code></td>
+                    <td>Go to next slide</td>
+                </tr>
+                <tr>
+                    <td><code>prev()</code></td>
+                    <td>Go to previous slide</td>
+                </tr>
+                <tr>
+                    <td><code>goTo(index)</code></td>
+                    <td>Go to specific slide</td>
+                </tr>
+                <tr>
+                    <td><code>play()</code></td>
+                    <td>Start autoplay</td>
+                </tr>
+                <tr>
+                    <td><code>pause()</code></td>
+                    <td>Pause autoplay</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Related">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Related Elements</h2></div>
+    <div class="card-body">
+        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <a href="../modal/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Modal</h3>
+                    <p class="card-text">Display carousel in modal lightbox</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    Domma.elements.carousel('#quick-carousel', {autoplay: false, showArrows: true, showIndicators: true});
+    Domma.elements.carousel('#autoplay-carousel', {autoplay: true, interval: 3000, pauseOnHover: true});
+</script>
+
+</body>
+</html>

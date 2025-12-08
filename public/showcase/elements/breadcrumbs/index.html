@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breadcrumbs - Elements - Domma Showcase</title>
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+</head>
+<body class="dm-theme-light">
+
+<!-- SECTION 1: OVERVIEW -->
+<section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Overview</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Breadcrumbs provide a navigation trail showing the user's location within a site's hierarchy. They help
+            users understand where they are and enable quick navigation back to parent pages. Breadcrumbs are essential
+            for sites with deep navigation structures.
+        </p>
+
+        <h3 class="category-title">Key Features</h3>
+        <ul class="feature-list mb-4">
+            <li><strong>Hierarchical Navigation</strong> - Show path from root to current page</li>
+            <li><strong>Multiple Separators</strong> - Choose from /, >, →, chevron, or custom HTML</li>
+            <li><strong>Home Icon</strong> - Optional home icon for first breadcrumb</li>
+            <li><strong>Responsive Collapse</strong> - Auto-collapse middle items on mobile</li>
+            <li><strong>Click Callbacks</strong> - Handle breadcrumb navigation via JavaScript</li>
+            <li><strong>Dynamic Updates</strong> - Add, remove, or replace breadcrumb items</li>
+        </ul>
+
+        <h3 class="category-title">When to Use Breadcrumbs</h3>
+        <ul class="mb-4">
+            <li><strong>Multi-Level Sites</strong> - Sites with 3+ levels of hierarchy</li>
+            <li><strong>E-commerce</strong> - Category navigation (Home > Electronics > Phones > iPhone)</li>
+            <li><strong>Documentation</strong> - Section navigation (Docs > API > Elements > Modal)</li>
+            <li><strong>Admin Panels</strong> - Dashboard navigation paths</li>
+        </ul>
+
+        <h3 class="category-title">Basic Usage</h3>
+        <div class="code-block">
+            <pre><code>&lt;!-- HTML Container --&gt;
+&lt;nav id="breadcrumb-nav"&gt;&lt;/nav&gt;
+
+&lt;!-- JavaScript Initialisation --&gt;
+&lt;script&gt;
+const breadcrumbs = Domma.elements.breadcrumbs('#breadcrumb-nav', {
+    items: [
+        { text: 'Home', url: '/' },
+        { text: 'Products', url: '/products' },
+        { text: 'Electronics', url: '/products/electronics' },
+        { text: 'Smartphones', active: true }
+    ],
+    separator: '/',
+    homeIcon: false,
+    responsive: true
+});
+&lt;/script&gt;</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 2: QUICK START -->
+<section class="card mb-6" data-section="Quick Start">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Quick Start</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">Get started with Breadcrumbs in seconds. Here's the simplest implementation:</p>
+
+        <h3 class="category-title">Basic Breadcrumb Trail</h3>
+        <p class="text-muted mb-2">Create a simple breadcrumb navigation:</p>
+        <div class="demo-area mb-4">
+            <nav id="quick-start-breadcrumb"></nav>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>&lt;nav id="breadcrumb-nav"&gt;&lt;/nav&gt;
+
+&lt;script&gt;
+Domma.elements.breadcrumbs('#breadcrumb-nav', {
+    items: [
+        { text: 'Home', url: '#' },
+        { text: 'Products', url: '#' },
+        { text: 'Widget', active: true }
+    ]
+});
+&lt;/script&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title">With Home Icon</h3>
+        <p class="text-muted mb-2">Add a home icon to the first breadcrumb:</p>
+        <div class="demo-area mb-4">
+            <nav id="quick-start-home-icon"></nav>
+        </div>
+        <div class="code-block">
+            <pre><code>Domma.elements.breadcrumbs('#breadcrumb-nav', {
+    items: [
+        { text: 'Home', url: '#' },
+        { text: 'Category', url: '#' },
+        { text: 'Item', active: true }
+    ],
+    homeIcon: true  // Show home icon
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 3: TUTORIAL -->
+<section class="card mb-6" data-section="Tutorial">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Step-by-Step Tutorial</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Let's build an e-commerce category navigation system with dynamic breadcrumbs that update as users browse.
+        </p>
+
+        <h3 class="category-title">Step 1: Create the HTML Structure</h3>
+        <p class="text-muted mb-2">Set up a container for breadcrumbs and a category list:</p>
+        <div class="code-block mb-4">
+            <pre><code>&lt;nav id="product-breadcrumbs" aria-label="Breadcrumb navigation"&gt;&lt;/nav&gt;
+
+&lt;div class="mt-4"&gt;
+    &lt;h4&gt;Browse Categories:&lt;/h4&gt;
+    &lt;div id="category-list" class="flex gap-2"&gt;
+        &lt;button class="btn btn-sm btn-outline" data-category="electronics"&gt;Electronics&lt;/button&gt;
+        &lt;button class="btn btn-sm btn-outline" data-category="clothing"&gt;Clothing&lt;/button&gt;
+        &lt;button class="btn btn-sm btn-outline" data-category="books"&gt;Books&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 2: Initialise Breadcrumbs</h3>
+        <p class="text-muted mb-2">Create breadcrumbs with initial home item:</p>
+        <div class="code-block mb-4">
+            <pre><code>const productBreadcrumbs = Domma.elements.breadcrumbs('#product-breadcrumbs', {
+    items: [
+        { text: 'Home', url: '#' }
+    ],
+    separator: 'chevron',
+    homeIcon: true,
+    responsive: true
+});</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 3: Handle Category Navigation</h3>
+        <p class="text-muted mb-2">Update breadcrumbs when user clicks a category:</p>
+        <div class="code-block mb-4">
+            <pre><code>document.querySelectorAll('[data-category]').forEach(btn =&gt; {
+    btn.addEventListener('click', (e) =&gt; {
+        const category = e.target.dataset.category;
+        const categoryName = e.target.textContent;
+
+        // Add category to breadcrumbs
+        productBreadcrumbs.addItem({
+            text: categoryName,
+            active: true
+        });
+    });
+});</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 4: Enable Breadcrumb Navigation</h3>
+        <p class="text-muted mb-2">Handle clicks on breadcrumbs to navigate back:</p>
+        <div class="code-block mb-4">
+            <pre><code>const productBreadcrumbs = Domma.elements.breadcrumbs('#product-breadcrumbs', {
+    items: [{ text: 'Home', url: '#' }],
+    separator: 'chevron',
+    homeIcon: true,
+    onChange: (item, index) =&gt; {
+        console.log('Navigate to:', item.text);
+
+        // Remove items after clicked breadcrumb
+        const items = productBreadcrumbs.getItems();
+        const newItems = items.slice(0, index + 1);
+
+        // Mark last item as active
+        if (newItems.length &gt; 0) {
+            newItems[newItems.length - 1].active = true;
+        }
+
+        productBreadcrumbs.setItems(newItems);
+    }
+});</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 5: Add Subcategory Navigation</h3>
+        <p class="text-muted mb-2">Handle deeper navigation levels:</p>
+        <div class="code-block mb-4">
+            <pre><code>const subcategories = {
+    electronics: ['Phones', 'Laptops', 'Tablets'],
+    clothing: ['Shirts', 'Trousers', 'Shoes'],
+    books: ['Fiction', 'Non-Fiction', 'Comics']
+};
+
+// Show subcategories when category selected
+function showSubcategories(category) {
+    const subs = subcategories[category];
+    const html = subs.map(sub =&gt;
+        `&lt;button class="btn btn-sm btn-secondary" data-subcategory="${sub}"&gt;${sub}&lt;/button&gt;`
+    ).join('');
+
+    document.getElementById('subcategory-list').innerHTML = html;
+
+    // Add event listeners
+    document.querySelectorAll('[data-subcategory]').forEach(btn =&gt; {
+        btn.addEventListener('click', (e) =&gt; {
+            productBreadcrumbs.addItem({
+                text: e.target.textContent,
+                active: true
+            });
+        });
+    });
+}</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 6: Complete Working Demo</h3>
+        <p class="text-muted mb-2">Try the complete category navigation system:</p>
+        <div class="demo-area">
+            <nav id="tutorial-breadcrumbs" class="mb-4"></nav>
+
+            <div class="mb-3">
+                <h4 class="text-sm font-semibold mb-2">Categories:</h4>
+                <div class="flex gap-2 flex-wrap">
+                    <button class="btn btn-sm btn-outline" data-tutorial-category="electronics">Electronics</button>
+                    <button class="btn btn-sm btn-outline" data-tutorial-category="clothing">Clothing</button>
+                    <button class="btn btn-sm btn-outline" data-tutorial-category="books">Books</button>
+                </div>
+            </div>
+
+            <div id="tutorial-subcategories" style="display: none;">
+                <h4 class="text-sm font-semibold mb-2">Subcategories:</h4>
+                <div id="tutorial-subcategory-list" class="flex gap-2 flex-wrap"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 4: EXAMPLES -->
+<section class="card mb-6" data-section="Examples">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Examples & Variations</h2>
+    </div>
+    <div class="card-body">
+
+        <!-- Example 1: Separator Styles -->
+        <h3 class="category-title">Different Separator Styles</h3>
+        <p class="text-muted mb-2">Choose from built-in separators or use custom HTML:</p>
+        <div class="demo-area mb-4">
+            <div class="flex flex-col gap-3">
+                <nav id="separator-slash"></nav>
+                <nav id="separator-angle"></nav>
+                <nav id="separator-arrow"></nav>
+                <nav id="separator-chevron"></nav>
+                <nav id="separator-custom"></nav>
+            </div>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>// Slash separator (default)
+Domma.elements.breadcrumbs('#nav', {
+    items: [...],
+    separator: '/'
+});
+
+// Angle bracket
+Domma.elements.breadcrumbs('#nav', {
+    items: [...],
+    separator: '>'
+});
+
+// Right arrow
+Domma.elements.breadcrumbs('#nav', {
+    items: [...],
+    separator: '→'
+});
+
+// Chevron icon (SVG)
+Domma.elements.breadcrumbs('#nav', {
+    items: [...],
+    separator: 'chevron'
+});
+
+// Custom HTML
+Domma.elements.breadcrumbs('#nav', {
+    items: [...],
+    separator: '&lt;span style="color: #6495ED;"&gt;•&lt;/span&gt;'
+});</code></pre>
+        </div>
+
+        <!-- Example 2: With Home Icon -->
+        <h3 class="category-title">With Home Icon</h3>
+        <p class="text-muted mb-2">Add a home icon to the first breadcrumb:</p>
+        <div class="demo-area mb-4">
+            <nav id="home-icon-example"></nav>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>Domma.elements.breadcrumbs('#nav', {
+    items: [
+        { text: 'Home', url: '/' },
+        { text: 'Dashboard', url: '/dashboard' },
+        { text: 'Settings', active: true }
+    ],
+    homeIcon: true  // Show home icon on first item
+});</code></pre>
+        </div>
+
+        <!-- Example 3: Responsive Collapse -->
+        <h3 class="category-title">Responsive Mobile Collapse</h3>
+        <p class="text-muted mb-2">On mobile, middle items collapse to save space (resize browser to test):</p>
+        <div class="demo-area mb-4">
+            <nav id="responsive-example"></nav>
+            <p class="text-sm text-muted mt-2">Resize browser below 576px to see collapse effect</p>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>Domma.elements.breadcrumbs('#nav', {
+    items: [
+        { text: 'Home', url: '/' },
+        { text: 'Products', url: '/products' },
+        { text: 'Electronics', url: '/products/electronics' },
+        { text: 'Phones', url: '/products/electronics/phones' },
+        { text: 'iPhone 15', active: true }
+    ],
+    responsive: true  // Enable mobile collapse (default)
+});
+
+// On mobile (&lt;576px), displays: Home &gt; ... &gt; iPhone 15</code></pre>
+        </div>
+
+        <!-- Example 4: Click Handling -->
+        <h3 class="category-title">Custom Click Handling</h3>
+        <p class="text-muted mb-2">Handle breadcrumb clicks with onChange callback:</p>
+        <div class="demo-area mb-4">
+            <nav id="click-example"></nav>
+            <div class="mt-3 p-3 bg-surface rounded border">
+                <strong>Last clicked:</strong>
+                <span id="click-result" class="text-muted">None</span>
+            </div>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>Domma.elements.breadcrumbs('#nav', {
+    items: [
+        { text: 'Level 1', url: '#' },
+        { text: 'Level 2', url: '#' },
+        { text: 'Level 3', active: true }
+    ],
+    onChange: (item, index, event) =&gt; {
+        event.preventDefault();  // Prevent default navigation
+        console.log('Clicked:', item.text, 'at index:', index);
+
+        // Custom navigation logic
+        navigateToLevel(index);
+    }
+});</code></pre>
+        </div>
+
+        <!-- Example 5: Dynamic Updates -->
+        <h3 class="category-title">Dynamic Breadcrumb Updates</h3>
+        <p class="text-muted mb-2">Add, remove, or replace breadcrumb items programmatically:</p>
+        <div class="demo-area mb-4">
+            <nav id="dynamic-example"></nav>
+            <div class="flex gap-2 mt-3">
+                <button id="dynamic-add" class="btn btn-sm btn-primary">Add Item</button>
+                <button id="dynamic-remove" class="btn btn-sm btn-secondary">Remove Last</button>
+                <button id="dynamic-reset" class="btn btn-sm btn-secondary">Reset</button>
+            </div>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>const crumbs = Domma.elements.breadcrumbs('#nav', {
+    items: [{ text: 'Home', url: '#' }]
+});
+
+// Add a new item
+crumbs.addItem({ text: 'New Level', active: true });
+
+// Remove an item by index
+crumbs.removeItem(1);
+
+// Replace all items
+crumbs.setItems([
+    { text: 'Home', url: '#' },
+    { text: 'Products', active: true }
+]);
+
+// Get current items
+const items = crumbs.getItems();</code></pre>
+        </div>
+
+        <!-- Example 6: URL-Based Breadcrumbs -->
+        <h3 class="category-title">Generate from URL Path</h3>
+        <p class="text-muted mb-2">Automatically generate breadcrumbs from current URL:</p>
+        <div class="demo-area mb-4">
+            <nav id="url-example"></nav>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>// Generate breadcrumbs from URL path
+function generateBreadcrumbsFromURL() {
+    const path = window.location.pathname;
+    const segments = path.split('/').filter(s =&gt; s);
+
+    const items = [{ text: 'Home', url: '/' }];
+
+    segments.forEach((segment, index) =&gt; {
+        const text = segment.charAt(0).toUpperCase() + segment.slice(1);
+        const url = '/' + segments.slice(0, index + 1).join('/');
+        const active = index === segments.length - 1;
+
+        items.push({ text, url, active });
+    });
+
+    return Domma.elements.breadcrumbs('#nav', {
+        items,
+        separator: 'chevron',
+        homeIcon: true
+    });
+}
+
+// Example: /products/electronics/phones
+// Generates: Home &gt; Products &gt; Electronics &gt; Phones</code></pre>
+        </div>
+
+        <!-- Example 7: Styled Breadcrumbs -->
+        <h3 class="category-title">Custom Styling</h3>
+        <p class="text-muted mb-2">Apply custom colours and styles:</p>
+        <div class="demo-area mb-4">
+            <nav id="styled-example" style="font-size: 1rem; color: #6495ED;"></nav>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>&lt;nav id="breadcrumb-nav" style="font-size: 1rem; color: #6495ED;"&gt;&lt;/nav&gt;
+
+&lt;script&gt;
+Domma.elements.breadcrumbs('#breadcrumb-nav', {
+    items: [
+        { text: 'Styled', url: '#' },
+        { text: 'Breadcrumbs', active: true }
+    ],
+    separator: 'chevron'
+});
+&lt;/script&gt;
+
+&lt;!-- Custom CSS --&gt;
+&lt;style&gt;
+#breadcrumb-nav {
+    font-size: 1rem;
+    color: #6495ED;
+}
+&lt;/style&gt;</code></pre>
+        </div>
+
+        <!-- Example 8: Real-World Example -->
+        <h3 class="category-title">Real-World Example: Documentation Site</h3>
+        <p class="text-muted mb-2">Build documentation navigation with nested sections:</p>
+        <div class="demo-area">
+            <nav id="docs-breadcrumbs" class="mb-3"></nav>
+            <div class="p-4 bg-surface rounded border">
+                <h4 class="mb-2">Documentation Navigation</h4>
+                <p class="text-sm text-muted mb-3">Click breadcrumbs above to navigate hierarchy</p>
+                <div id="docs-content">
+                    <h5>Current Section: Modal Component</h5>
+                    <p class="text-sm">Complete documentation for the Modal element...</p>
+                </div>
+            </div>
+        </div>
+        <div class="code-block">
+            <pre><code>const docsStructure = {
+    'Getting Started': ['Installation', 'Quick Start', 'Configuration'],
+    'API Reference': ['DOM', 'Utils', 'Elements', 'Models'],
+    'Elements': ['Modal', 'Tabs', 'Accordion', 'Tooltip']
+};
+
+const docsBreadcrumbs = Domma.elements.breadcrumbs('#docs-breadcrumbs', {
+    items: [
+        { text: 'Documentation', url: '#' },
+        { text: 'API Reference', url: '#' },
+        { text: 'Elements', url: '#' },
+        { text: 'Modal', active: true }
+    ],
+    separator: 'chevron',
+    homeIcon: true,
+    onChange: (item, index) =&gt; {
+        // Navigate to clicked section
+        const items = docsBreadcrumbs.getItems();
+        const newItems = items.slice(0, index + 1);
+
+        // Mark as active
+        newItems[newItems.length - 1].active = true;
+
+        docsBreadcrumbs.setItems(newItems);
+
+        // Update content
+        updateDocsContent(item.text);
+    }
+});
+
+function updateDocsContent(section) {
+    document.getElementById('docs-content').innerHTML =
+        `&lt;h5&gt;Current Section: ${section}&lt;/h5&gt;
+         &lt;p class="text-sm"&gt;Documentation for ${section}...&lt;/p&gt;`;
+}</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 5: BEST PRACTICES -->
+<section class="card mb-6" data-section="Best Practices">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Best Practices</h2>
+    </div>
+    <div class="card-body">
+
+        <h3 class="category-title">Accessibility</h3>
+        <ul class="mb-4">
+            <li><strong>Semantic HTML</strong> - Use <code>&lt;nav&gt;</code> element with
+                <code>aria-label="Breadcrumb"</code> (automatically added)
+            </li>
+            <li><strong>Current Page</strong> - Last breadcrumb has <code>aria-current="page"</code> for screen readers
+            </li>
+            <li><strong>Descriptive Text</strong> - Use clear, descriptive labels (avoid "Click here" or generic text)
+            </li>
+            <li><strong>Keyboard Navigation</strong> - All breadcrumb links are keyboard accessible via Tab</li>
+            <li><strong>Skip Links</strong> - Consider adding skip link to bypass breadcrumbs for keyboard users</li>
+            <li><strong>Visual Separators</strong> - Separators have <code>aria-hidden="true"</code> to prevent screen
+                reader clutter
+            </li>
+        </ul>
+
+        <h3 class="category-title">Performance</h3>
+        <ul class="mb-4">
+            <li><strong>Reuse Instances</strong> - Use <code>setItems()</code> to update instead of destroying and
+                recreating
+            </li>
+            <li><strong>Minimal DOM Updates</strong> - Component batches changes when adding multiple items</li>
+            <li><strong>CSS Animations</strong> - Hover effects use CSS transitions, not JavaScript</li>
+            <li><strong>Lazy Loading</strong> - Don't initialise breadcrumbs until page content is ready</li>
+            <li><strong>Debounce Updates</strong> - If updating breadcrumbs frequently, debounce with
+                <code>_.debounce()</code></li>
+        </ul>
+
+        <h3 class="category-title">Common Gotchas</h3>
+        <ul class="mb-4">
+            <li>
+                <strong>Issue:</strong> Breadcrumbs not appearing<br>
+                <strong>Solution:</strong> Ensure container exists in DOM before initialisation<br>
+                <strong>Example:</strong> Wait for DOMContentLoaded or place script after element
+            </li>
+            <li>
+                <strong>Issue:</strong> Last breadcrumb is a link instead of plain text<br>
+                <strong>Solution:</strong> Set <code>active: true</code> on last item or omit <code>url</code>
+                property<br>
+                <strong>Example:</strong> <code>{ text: 'Current Page', active: true }</code>
+            </li>
+            <li>
+                <strong>Issue:</strong> onChange callback not firing<br>
+                <strong>Solution:</strong> Callback only fires when clicking non-active breadcrumbs with URLs<br>
+                <strong>Example:</strong> Active/current breadcrumb doesn't trigger onChange
+            </li>
+            <li>
+                <strong>Issue:</strong> Custom separator not rendering<br>
+                <strong>Solution:</strong> Use HTML string, not plain text with special chars<br>
+                <strong>Example:</strong> <code>separator: '&lt;span class="dot"&gt;•&lt;/span&gt;'</code>
+            </li>
+            <li>
+                <strong>Issue:</strong> Responsive collapse not working<br>
+                <strong>Solution:</strong> Ensure viewport meta tag is present and <code>responsive: true</code><br>
+                <strong>Example:</strong> <code>&lt;meta name="viewport" content="width=device-width"&gt;</code>
+            </li>
+        </ul>
+
+        <h3 class="category-title">Tips & Tricks</h3>
+        <ul class="mb-4">
+            <li><strong>Maximum Depth</strong> - Limit breadcrumbs to 4-5 levels to avoid clutter</li>
+            <li><strong>Mobile First</strong> - Enable <code>responsive: true</code> (default) for mobile-friendly
+                collapse
+            </li>
+            <li><strong>Home Icon</strong> - Use <code>homeIcon: true</code> for better visual hierarchy</li>
+            <li><strong>Consistent Separators</strong> - Use same separator style across your entire site</li>
+            <li><strong>URL Sync</strong> - Keep breadcrumbs synchronized with browser URL and history</li>
+            <li><strong>Schema Markup</strong> - Add JSON-LD breadcrumb schema for SEO benefits</li>
+        </ul>
+
+        <div class="code-block">
+            <pre><code>&lt;!-- Accessible Breadcrumbs with Schema Markup --&gt;
+&lt;nav id="breadcrumb-nav" aria-label="Breadcrumb navigation"&gt;&lt;/nav&gt;
+
+&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://example.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Products",
+      "item": "https://example.com/products"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Electronics"
+    }
+  ]
+}
+&lt;/script&gt;
+
+&lt;script&gt;
+Domma.elements.breadcrumbs('#breadcrumb-nav', {
+    items: [
+        { text: 'Home', url: 'https://example.com/' },
+        { text: 'Products', url: 'https://example.com/products' },
+        { text: 'Electronics', active: true }
+    ],
+    separator: 'chevron',
+    homeIcon: true,
+    responsive: true
+});
+&lt;/script&gt;</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 6: API REFERENCE -->
+<section class="card mb-6" data-section="API Reference">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">API Reference</h2>
+    </div>
+    <div class="card-body">
+
+        <h3 class="category-title">Constructor Options</h3>
+        <div class="option-table mb-6">
+            <table>
+                <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>items</code></td>
+                    <td>Array</td>
+                    <td><code>[]</code></td>
+                    <td>Array of breadcrumb items. Each item: <code>{ text, url, active }</code>. Last item or items
+                        with <code>active: true</code> render as plain text
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>separator</code></td>
+                    <td>String</td>
+                    <td><code>'/'</code></td>
+                    <td>Separator between items. Built-in: <code>'/'</code>, <code>'>'</code>, <code>'→'</code>, <code>'chevron'</code>.
+                        Or custom HTML string
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>homeIcon</code></td>
+                    <td>Boolean</td>
+                    <td><code>false</code></td>
+                    <td>Show home icon on first breadcrumb item</td>
+                </tr>
+                <tr>
+                    <td><code>responsive</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Collapse middle items on mobile (&lt;576px). Shows: First ... Last</td>
+                </tr>
+                <tr>
+                    <td><code>onChange</code></td>
+                    <td>Function</td>
+                    <td><code>null</code></td>
+                    <td>Callback when breadcrumb clicked. Receives <code>(item, index, event)</code>. Only fires for
+                        non-active items
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title">Methods</h3>
+        <div class="option-table mb-6">
+            <table>
+                <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Parameters</th>
+                    <th>Returns</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>setItems(items)</code></td>
+                    <td>Array</td>
+                    <td>this</td>
+                    <td>Replace all breadcrumb items. Chainable</td>
+                </tr>
+                <tr>
+                    <td><code>addItem(item)</code></td>
+                    <td>Object</td>
+                    <td>this</td>
+                    <td>Add new item to end. Automatically marks as active and removes active from previous last item.
+                        Chainable
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>removeItem(index)</code></td>
+                    <td>Number</td>
+                    <td>this</td>
+                    <td>Remove item at specified index. Chainable</td>
+                </tr>
+                <tr>
+                    <td><code>getItems()</code></td>
+                    <td>-</td>
+                    <td>Array</td>
+                    <td>Get copy of current items array</td>
+                </tr>
+                <tr>
+                    <td><code>destroy()</code></td>
+                    <td>-</td>
+                    <td>void</td>
+                    <td>Remove event listeners and clean up. Call before removing from DOM</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title">Events / Callbacks</h3>
+        <div class="option-table mb-6">
+            <table>
+                <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Parameters</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>onChange</code></td>
+                    <td><code>(item, index, event)</code></td>
+                    <td>
+                        Fired when user clicks a breadcrumb link (not active items).<br>
+                        <strong>item:</strong> The clicked breadcrumb object<br>
+                        <strong>index:</strong> Index in items array<br>
+                        <strong>event:</strong> Click event (call <code>event.preventDefault()</code> to prevent
+                        navigation)
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title">CSS Classes</h3>
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>.dm-breadcrumbs</code></td>
+                    <td>Main container element (automatically added to selector)</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-breadcrumbs-responsive</code></td>
+                    <td>Added when <code>responsive: true</code>. Enables mobile collapse behaviour</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-breadcrumb-item</code></td>
+                    <td>Individual breadcrumb item (both links and active text)</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-breadcrumb-link</code></td>
+                    <td>Clickable breadcrumb link element</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-breadcrumb-separator</code></td>
+                    <td>Separator element between breadcrumbs</td>
+                </tr>
+                <tr>
+                    <td><code>.active</code></td>
+                    <td>Applied to current/active breadcrumb (last item or items with <code>active: true</code>)</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="code-block mt-4">
+            <pre><code>// Complete API Example
+const breadcrumbs = Domma.elements.breadcrumbs('#nav', {
+    items: [
+        { text: 'Home', url: '/' },
+        { text: 'Products', url: '/products' },
+        { text: 'Widget', active: true }
+    ],
+    separator: 'chevron',
+    homeIcon: true,
+    responsive: true,
+    onChange: (item, index, event) =&gt; {
+        event.preventDefault();
+        console.log('Navigate to:', item.text);
+    }
+});
+
+// Methods
+breadcrumbs.addItem({ text: 'Details', active: true });
+breadcrumbs.removeItem(2);
+breadcrumbs.setItems([
+    { text: 'Home', url: '/' },
+    { text: 'New Path', active: true }
+]);
+const items = breadcrumbs.getItems();
+breadcrumbs.destroy();</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 7: CONFIG ENGINE -->
+<section class="card mb-6" data-section="Config Engine">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Config Engine Integration</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Use Domma's declarative <code>$.setup()</code> system to configure Breadcrumbs without manual
+            initialisation.
+        </p>
+
+        <h3 class="category-title">Basic Setup</h3>
+        <div class="code-block mb-6">
+            <pre><code>$.setup({
+    '#page-breadcrumbs': {
+        component: 'breadcrumbs',
+        options: {
+            items: [
+                { text: 'Home', url: '/' },
+                { text: 'Dashboard', url: '/dashboard' },
+                { text: 'Settings', active: true }
+            ],
+            separator: 'chevron',
+            homeIcon: true
+        }
+    }
+});</code></pre>
+        </div>
+
+        <h3 class="category-title">Multiple Breadcrumb Instances</h3>
+        <div class="code-block mb-6">
+            <pre><code>$.setup({
+    // Main page breadcrumbs
+    '#main-breadcrumbs': {
+        component: 'breadcrumbs',
+        options: {
+            items: [
+                { text: 'Home', url: '/' },
+                { text: 'Products', active: true }
+            ],
+            separator: 'chevron',
+            homeIcon: true,
+            onChange: (item) =&gt; {
+                window.location.href = item.url;
+            }
+        }
+    },
+
+    // Secondary navigation breadcrumbs
+    '#docs-breadcrumbs': {
+        component: 'breadcrumbs',
+        options: {
+            items: [
+                { text: 'Documentation', url: '/docs' },
+                { text: 'API Reference', active: true }
+            ],
+            separator: '/',
+            responsive: true
+        }
+    }
+});</code></pre>
+        </div>
+
+        <h3 class="category-title">Live Demo</h3>
+        <p class="text-muted mb-2">Breadcrumbs configured via Config Engine:</p>
+        <div class="demo-area mb-4">
+            <nav id="config-demo-breadcrumbs"></nav>
+            <p class="text-sm text-muted mt-2">Configured declaratively with $.setup()</p>
+        </div>
+        <div class="code-block">
+            <pre><code>// Configuration
+$.setup({
+    '#config-demo-breadcrumbs': {
+        component: 'breadcrumbs',
+        options: {
+            items: [
+                { text: 'Config', url: '#' },
+                { text: 'Engine', url: '#' },
+                { text: 'Demo', active: true }
+            ],
+            separator: 'chevron',
+            homeIcon: true
+        }
+    }
+});
+
+// Access instance later
+const breadcrumbs = Domma.elements.get('#config-demo-breadcrumbs');
+breadcrumbs.addItem({ text: 'New Level', active: true });</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 8: RELATED ELEMENTS -->
+<section class="card mb-6" data-section="Related">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Related Elements</h2>
+    </div>
+    <div class="card-body">
+        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <a href="../navbar/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Navbar</h3>
+                    <p class="card-text">Primary navigation bars. Breadcrumbs complement navbars by showing hierarchical
+                        position within the site.</p>
+                </div>
+            </a>
+
+            <a href="../tabs/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Tabs</h3>
+                    <p class="card-text">Tabbed navigation for content sections. Use breadcrumbs for vertical hierarchy,
+                        tabs for lateral navigation.</p>
+                </div>
+            </a>
+
+            <a href="../card/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Card</h3>
+                    <p class="card-text">Content containers. Place breadcrumbs above cards to show context within site
+                        hierarchy.</p>
+                </div>
+            </a>
+
+            <a href="../back-to-top/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Back to Top</h3>
+                    <p class="card-text">Scroll-to-top buttons. Both breadcrumbs and back-to-top help users navigate
+                        long pages efficiently.</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    const sampleItems = [
+        {text: 'Home', url: '#'},
+        {text: 'Products', url: '#'},
+        {text: 'Electronics', url: '#'},
+        {text: 'Smartphones', active: true}
+    ];
+
+    // Quick Start Examples
+    Domma.elements.breadcrumbs('#quick-start-breadcrumb', {
+        items: [
+            {text: 'Home', url: '#'},
+            {text: 'Products', url: '#'},
+            {text: 'Widget', active: true}
+        ]
+    });
+
+    Domma.elements.breadcrumbs('#quick-start-home-icon', {
+        items: [
+            {text: 'Home', url: '#'},
+            {text: 'Category', url: '#'},
+            {text: 'Item', active: true}
+        ],
+        homeIcon: true
+    });
+
+    // Tutorial Demo
+    const tutorialSubcategories = {
+        electronics: ['Phones', 'Laptops', 'Tablets'],
+        clothing: ['Shirts', 'Trousers', 'Shoes'],
+        books: ['Fiction', 'Non-Fiction', 'Comics']
+    };
+
+    const tutorialBreadcrumbs = Domma.elements.breadcrumbs('#tutorial-breadcrumbs', {
+        items: [{text: 'Home', url: '#'}],
+        separator: 'chevron',
+        homeIcon: true,
+        onChange: (item, index) => {
+            const items = tutorialBreadcrumbs.getItems();
+            const newItems = items.slice(0, index + 1);
+            newItems[newItems.length - 1].active = true;
+            tutorialBreadcrumbs.setItems(newItems);
+            $('#tutorial-subcategories').hide();
+        }
+    });
+
+    $('[data-tutorial-category]').on('click', function () {
+        const category = $(this).data('tutorial-category');
+        const categoryName = $(this).text();
+
+        tutorialBreadcrumbs.addItem({text: categoryName, active: true});
+
+        const subs = tutorialSubcategories[category];
+        const html = subs.map(sub =>
+            `<button class="btn btn-sm btn-secondary" data-tutorial-sub="${sub}">${sub}</button>`
+        ).join('');
+
+        $('#tutorial-subcategory-list').html(html);
+        $('#tutorial-subcategories').show();
+
+        $('[data-tutorial-sub]').on('click', function () {
+            tutorialBreadcrumbs.addItem({text: $(this).text(), active: true});
+        });
+    });
+
+    // Example 1: Separator Styles
+    Domma.elements.breadcrumbs('#separator-slash', {
+        items: sampleItems,
+        separator: '/'
+    });
+
+    Domma.elements.breadcrumbs('#separator-angle', {
+        items: sampleItems,
+        separator: '>'
+    });
+
+    Domma.elements.breadcrumbs('#separator-arrow', {
+        items: sampleItems,
+        separator: '→'
+    });
+
+    Domma.elements.breadcrumbs('#separator-chevron', {
+        items: sampleItems,
+        separator: 'chevron'
+    });
+
+    Domma.elements.breadcrumbs('#separator-custom', {
+        items: sampleItems,
+        separator: '<span style="color: #6495ED;">•</span>'
+    });
+
+    // Example 2: Home Icon
+    Domma.elements.breadcrumbs('#home-icon-example', {
+        items: [
+            {text: 'Home', url: '/'},
+            {text: 'Dashboard', url: '/dashboard'},
+            {text: 'Settings', active: true}
+        ],
+        homeIcon: true
+    });
+
+    // Example 3: Responsive
+    Domma.elements.breadcrumbs('#responsive-example', {
+        items: [
+            {text: 'Home', url: '/'},
+            {text: 'Products', url: '/products'},
+            {text: 'Electronics', url: '/products/electronics'},
+            {text: 'Phones', url: '/products/electronics/phones'},
+            {text: 'iPhone 15', active: true}
+        ],
+        responsive: true
+    });
+
+    // Example 4: Click Handling
+    Domma.elements.breadcrumbs('#click-example', {
+        items: [
+            {text: 'Level 1', url: '#'},
+            {text: 'Level 2', url: '#'},
+            {text: 'Level 3', active: true}
+        ],
+        onChange: (item, index, event) => {
+            event.preventDefault();
+            $('#click-result').text(`${item.text} (index ${index})`);
+        }
+    });
+
+    // Example 5: Dynamic Updates
+    let dynamicCounter = 1;
+    const dynamicCrumbs = Domma.elements.breadcrumbs('#dynamic-example', {
+        items: [{text: 'Home', url: '#'}]
+    });
+
+    $('#dynamic-add').on('click', () => {
+        dynamicCrumbs.addItem({text: `Level ${dynamicCounter++}`, active: true});
+    });
+
+    $('#dynamic-remove').on('click', () => {
+        const items = dynamicCrumbs.getItems();
+        if (items.length > 1) {
+            dynamicCrumbs.removeItem(items.length - 1);
+            if (items.length > 1) {
+                items[items.length - 2].active = true;
+                dynamicCrumbs.setItems(items);
+            }
+        }
+    });
+
+    $('#dynamic-reset').on('click', () => {
+        dynamicCrumbs.setItems([{text: 'Home', url: '#'}]);
+        dynamicCounter = 1;
+    });
+
+    // Example 6: URL-Based
+    Domma.elements.breadcrumbs('#url-example', {
+        items: [
+            {text: 'Home', url: '/'},
+            {text: 'Products', url: '/products'},
+            {text: 'Electronics', url: '/products/electronics'},
+            {text: 'Phones', active: true}
+        ],
+        separator: 'chevron',
+        homeIcon: true
+    });
+
+    // Example 7: Styled
+    Domma.elements.breadcrumbs('#styled-example', {
+        items: [
+            {text: 'Styled', url: '#'},
+            {text: 'Breadcrumbs', active: true}
+        ],
+        separator: 'chevron'
+    });
+
+    // Example 8: Documentation Site
+    const docsBreadcrumbs = Domma.elements.breadcrumbs('#docs-breadcrumbs', {
+        items: [
+            {text: 'Documentation', url: '#'},
+            {text: 'API Reference', url: '#'},
+            {text: 'Elements', url: '#'},
+            {text: 'Modal', active: true}
+        ],
+        separator: 'chevron',
+        homeIcon: true,
+        onChange: (item, index) => {
+            const items = docsBreadcrumbs.getItems();
+            const newItems = items.slice(0, index + 1);
+            newItems[newItems.length - 1].active = true;
+            docsBreadcrumbs.setItems(newItems);
+
+            $('#docs-content').html(`
+                <h5>Current Section: ${item.text}</h5>
+                <p class="text-sm">Documentation for ${item.text}...</p>
+            `);
+        }
+    });
+
+    // Config Engine Demo
+    $.setup({
+        '#config-demo-breadcrumbs': {
+            component: 'breadcrumbs',
+            options: {
+                items: [
+                    {text: 'Config', url: '#'},
+                    {text: 'Engine', url: '#'},
+                    {text: 'Demo', active: true}
+                ],
+                separator: 'chevron',
+                homeIcon: true
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

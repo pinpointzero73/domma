@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar - Elements - Domma Showcase</title>
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+</head>
+<body class="dm-theme-light">
+
+<!-- SECTION 1: OVERVIEW -->
+<section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Overview</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Navbars provide primary navigation for your application. They display branding, navigation links, dropdown
+            menus, and action buttons in a responsive bar that collapses to a hamburger menu on mobile devices. Domma's
+            Navbar component supports light, dark, and transparent variants, along with fixed and sticky positioning.
+        </p>
+
+        <h3 class="category-title">Key Features</h3>
+        <ul class="feature-list mb-4">
+            <li><strong>Brand Section</strong> - Logo, text, and link to homepage</li>
+            <li><strong>Navigation Links</strong> - Primary navigation menu items</li>
+            <li><strong>Dropdown Menus</strong> - Nested navigation for complex sites</li>
+            <li><strong>Action Buttons</strong> - Call-to-action buttons on right side</li>
+            <li><strong>Mobile Responsive</strong> - Hamburger menu with collapse behaviour</li>
+            <li><strong>Theme Variants</strong> - Light, dark, and transparent styles</li>
+            <li><strong>Positioning</strong> - Static, fixed, or sticky positioning</li>
+        </ul>
+
+        <h3 class="category-title">When to Use Navbars</h3>
+        <ul class="mb-4">
+            <li><strong>Primary Navigation</strong> - Main site navigation header</li>
+            <li><strong>Application Header</strong> - Dashboard or admin panel navigation</li>
+            <li><strong>Landing Pages</strong> - Marketing site headers</li>
+            <li><strong>Documentation Sites</strong> - API or product documentation navigation</li>
+        </ul>
+
+        <h3 class="category-title">Basic Usage</h3>
+        <div class="code-block">
+            <pre><code>&lt;!-- HTML Container --&gt;
+&lt;nav id="main-nav"&gt;&lt;/nav&gt;
+
+&lt;!-- JavaScript Initialisation --&gt;
+&lt;script&gt;
+const navbar = Domma.elements.navbar('#main-nav', {
+    brand: {
+        text: 'My App',
+        logo: '/logo.svg',
+        url: '/'
+    },
+    items: [
+        { text: 'Home', url: '/', active: true },
+        { text: 'About', url: '/about' },
+        { text: 'Contact', url: '/contact' }
+    ],
+    variant: 'light',
+    collapsible: true
+});
+&lt;/script&gt;</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 2: QUICK START -->
+<section class="card mb-6" data-section="Quick Start">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Quick Start</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">Get started with Navbars in seconds. Here's the simplest implementation:</p>
+
+        <h3 class="category-title">Basic Light Navbar</h3>
+        <p class="text-muted mb-2">Simple navbar with brand and links:</p>
+        <div class="demo-area mb-4">
+            <nav id="quick-start-navbar"></nav>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>&lt;nav id="navbar"&gt;&lt;/nav&gt;
+
+&lt;script&gt;
+Domma.elements.navbar('#navbar', {
+    brand: { text: 'Domma' },
+    items: [
+        { text: 'Home', url: '#', active: true },
+        { text: 'Features', url: '#' },
+        { text: 'Pricing', url: '#' }
+    ]
+});
+&lt;/script&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title">With Action Button</h3>
+        <p class="text-muted mb-2">Add a call-to-action button on the right:</p>
+        <div class="demo-area mb-4">
+            <nav id="quick-start-action"></nav>
+        </div>
+        <div class="code-block">
+            <pre><code>Domma.elements.navbar('#navbar', {
+    brand: { text: 'Domma' },
+    items: [
+        { text: 'Home', url: '#' },
+        { text: 'Docs', url: '#' }
+    ],
+    actions: [
+        { text: 'Sign Up', variant: 'primary', url: '#' }
+    ]
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 3: TUTORIAL -->
+<section class="card mb-6" data-section="Tutorial">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Step-by-Step Tutorial</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Let's build a complete application navbar with branding, navigation links, a dropdown menu, and action
+            buttons.
+        </p>
+
+        <h3 class="category-title">Step 1: Create the HTML Container</h3>
+        <p class="text-muted mb-2">Start with a nav element:</p>
+        <div class="code-block mb-4">
+            <pre><code>&lt;nav id="app-navbar"&gt;&lt;/nav&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 2: Add Brand and Basic Links</h3>
+        <p class="text-muted mb-2">Initialise with brand and navigation items:</p>
+        <div class="code-block mb-4">
+            <pre><code>const appNav = Domma.elements.navbar('#app-navbar', {
+    brand: {
+        text: 'My SaaS App',
+        logo: '/assets/logo.svg',
+        url: '/'
+    },
+    items: [
+        { text: 'Dashboard', url: '/dashboard', active: true },
+        { text: 'Analytics', url: '/analytics' },
+        { text: 'Settings', url: '/settings' }
+    ]
+});</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 3: Add a Dropdown Menu</h3>
+        <p class="text-muted mb-2">Create a nested dropdown for related items:</p>
+        <div class="code-block mb-4">
+            <pre><code>const appNav = Domma.elements.navbar('#app-navbar', {
+    brand: { text: 'My SaaS App', url: '/' },
+    items: [
+        { text: 'Dashboard', url: '/dashboard', active: true },
+        { text: 'Analytics', url: '/analytics' },
+        {
+            text: 'Resources',
+            items: [  // Dropdown menu
+                { text: 'Documentation', url: '/docs' },
+                { text: 'API Reference', url: '/api' },
+                { text: 'Support', url: '/support' }
+            ]
+        },
+        { text: 'Settings', url: '/settings' }
+    ]
+});</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 4: Add Action Buttons</h3>
+        <p class="text-muted mb-2">Include call-to-action buttons on the right side:</p>
+        <div class="code-block mb-4">
+            <pre><code>const appNav = Domma.elements.navbar('#app-navbar', {
+    brand: { text: 'My SaaS App', url: '/' },
+    items: [...],
+    actions: [
+        { text: 'Upgrade', variant: 'outline', url: '/upgrade' },
+        { text: 'Account', variant: 'primary', url: '/account' }
+    ]
+});</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 5: Handle Navigation Clicks</h3>
+        <p class="text-muted mb-2">Add click callback to handle navigation:</p>
+        <div class="code-block mb-4">
+            <pre><code>const appNav = Domma.elements.navbar('#app-navbar', {
+    brand: { text: 'My SaaS App', url: '/' },
+    items: [...],
+    actions: [...],
+    onItemClick: (item, index, event) =&gt; {
+        event.preventDefault();
+        console.log('Navigate to:', item.text, item.url);
+
+        // Update active state
+        appNav.setActive(index);
+
+        // Custom navigation logic
+        navigateToPage(item.url);
+    }
+});</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 6: Complete Working Demo</h3>
+        <p class="text-muted mb-2">Try the complete navbar with all features:</p>
+        <div class="demo-area">
+            <nav id="tutorial-navbar"></nav>
+            <div class="p-4 mt-3 bg-surface rounded border">
+                <strong>Navigation Log:</strong>
+                <div id="tutorial-log" class="text-sm text-muted mt-2">Click navigation items above</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 4: EXAMPLES -->
+<section class="card mb-6" data-section="Examples">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Examples & Variations</h2>
+    </div>
+    <div class="card-body">
+
+        <!-- Example 1: Theme Variants -->
+        <h3 class="category-title">Theme Variants</h3>
+        <p class="text-muted mb-2">Light, dark, and transparent navbar styles:</p>
+        <div class="demo-area mb-4">
+            <div class="mb-4">
+                <p class="text-sm font-semibold mb-2">Light Variant (Default):</p>
+                <nav id="variant-light"></nav>
+            </div>
+            <div class="mb-4">
+                <p class="text-sm font-semibold mb-2">Dark Variant:</p>
+                <nav id="variant-dark"></nav>
+            </div>
+            <div class="p-6" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <p class="text-sm font-semibold mb-2 text-white">Transparent Variant (on coloured background):</p>
+                <nav id="variant-transparent"></nav>
+            </div>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>// Light variant (default)
+Domma.elements.navbar('#nav', {
+    variant: 'light',
+    brand: { text: 'App' },
+    items: [...]
+});
+
+// Dark variant
+Domma.elements.navbar('#nav', {
+    variant: 'dark',
+    brand: { text: 'App' },
+    items: [...]
+});
+
+// Transparent variant (no background)
+Domma.elements.navbar('#nav', {
+    variant: 'transparent',
+    brand: { text: 'App' },
+    items: [...]
+});</code></pre>
+        </div>
+
+        <!-- Example 2: With Logo -->
+        <h3 class="category-title">With Logo Image</h3>
+        <p class="text-muted mb-2">Include logo alongside or instead of text:</p>
+        <div class="demo-area mb-4">
+            <nav id="logo-example"></nav>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>Domma.elements.navbar('#nav', {
+    brand: {
+        logo: 'https://via.placeholder.com/32x32/6495ED/ffffff?text=D',
+        text: 'Domma',
+        url: '/'
+    },
+    items: [
+        { text: 'Home', url: '#' },
+        { text: 'About', url: '#' }
+    ]
+});</code></pre>
+        </div>
+
+        <!-- Example 3: Dropdown Menus -->
+        <h3 class="category-title">Dropdown Menus</h3>
+        <p class="text-muted mb-2">Multi-level navigation with nested items:</p>
+        <div class="demo-area mb-4">
+            <nav id="dropdown-example"></nav>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>Domma.elements.navbar('#nav', {
+    brand: { text: 'App' },
+    items: [
+        { text: 'Home', url: '#' },
+        {
+            text: 'Products',
+            items: [
+                { text: 'Product A', url: '#' },
+                { text: 'Product B', url: '#' },
+                { text: 'Product C', url: '#' }
+            ]
+        },
+        {
+            text: 'Resources',
+            items: [
+                { text: 'Docs', url: '#' },
+                { text: 'Blog', url: '#' },
+                { text: 'Support', url: '#' }
+            ]
+        }
+    ]
+});</code></pre>
+        </div>
+
+        <!-- Example 4: Action Buttons -->
+        <h3 class="category-title">Multiple Action Buttons</h3>
+        <p class="text-muted mb-2">Add primary, secondary, or outline buttons on the right:</p>
+        <div class="demo-area mb-4">
+            <nav id="actions-example"></nav>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>Domma.elements.navbar('#nav', {
+    brand: { text: 'SaaS App' },
+    items: [
+        { text: 'Features', url: '#' },
+        { text: 'Pricing', url: '#' }
+    ],
+    actions: [
+        { text: 'Login', variant: 'outline', url: '/login' },
+        { text: 'Sign Up', variant: 'primary', url: '/signup' }
+    ]
+});</code></pre>
+        </div>
+
+        <!-- Example 5: Fixed Position -->
+        <h3 class="category-title">Fixed and Sticky Positioning</h3>
+        <p class="text-muted mb-2">Keep navbar visible while scrolling:</p>
+        <div class="demo-area mb-4">
+            <p class="text-sm text-muted mb-2">Fixed (stays at top even when scrolling):</p>
+            <div class="code-block mb-3">
+                <pre><code>Domma.elements.navbar('#nav', {
+    position: 'fixed',  // Always at top of viewport
+    brand: { text: 'App' },
+    items: [...]
+});</code></pre>
+            </div>
+            <p class="text-sm text-muted mb-2">Sticky (scrolls normally until reaching top):</p>
+            <div class="code-block">
+                <pre><code>Domma.elements.navbar('#nav', {
+    position: 'sticky',  // Sticks when scrolled to top
+    brand: { text: 'App' },
+    items: [...]
+});</code></pre>
+            </div>
+        </div>
+
+        <!-- Example 6: Mobile Responsive -->
+        <h3 class="category-title">Mobile Hamburger Menu</h3>
+        <p class="text-muted mb-2">Automatically collapses to hamburger menu on mobile (resize browser to test):</p>
+        <div class="demo-area mb-4">
+            <nav id="mobile-example"></nav>
+            <p class="text-sm text-muted mt-3">Resize browser width below 768px to see hamburger menu</p>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>Domma.elements.navbar('#nav', {
+    brand: { text: 'Responsive App' },
+    items: [
+        { text: 'Home', url: '#' },
+        { text: 'Features', url: '#' },
+        { text: 'Pricing', url: '#' },
+        { text: 'Contact', url: '#' }
+    ],
+    collapsible: true,  // Enable hamburger menu (default)
+    collapseAt: 768     // Breakpoint in pixels (default 768)
+});</code></pre>
+        </div>
+
+        <!-- Example 7: Programmatic Control -->
+        <h3 class="category-title">Programmatic Control</h3>
+        <p class="text-muted mb-2">Update navbar dynamically via JavaScript:</p>
+        <div class="demo-area mb-4">
+            <nav id="programmatic-example"></nav>
+            <div class="flex gap-2 mt-3">
+                <button id="prog-home" class="btn btn-sm btn-primary">Set Home Active</button>
+                <button id="prog-about" class="btn btn-sm btn-primary">Set About Active</button>
+                <button id="prog-expand" class="btn btn-sm btn-secondary">Expand Menu</button>
+                <button id="prog-collapse" class="btn btn-sm btn-secondary">Collapse Menu</button>
+            </div>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>const navbar = Domma.elements.navbar('#nav', {
+    brand: { text: 'App' },
+    items: [
+        { text: 'Home', url: '#', active: true },
+        { text: 'About', url: '#' },
+        { text: 'Contact', url: '#' }
+    ]
+});
+
+// Set active item by index
+navbar.setActive(1);  // Make "About" active
+
+// Update all items
+navbar.setItems([
+    { text: 'Dashboard', url: '/dashboard', active: true },
+    { text: 'Profile', url: '/profile' }
+]);
+
+// Control mobile menu
+navbar.expand();         // Show mobile menu
+navbar.collapse();       // Hide mobile menu
+navbar.toggle();         // Toggle mobile menu
+navbar.isCollapsed();    // Check state → true/false</code></pre>
+        </div>
+
+        <!-- Example 8: Real-World Example -->
+        <h3 class="category-title">Real-World Example: Documentation Site</h3>
+        <p class="text-muted mb-2">Complete navbar for a documentation website:</p>
+        <div class="demo-area">
+            <nav id="docs-navbar"></nav>
+        </div>
+        <div class="code-block">
+            <pre><code>Domma.elements.navbar('#docs-navbar', {
+    brand: {
+        logo: '/logo.svg',
+        text: 'API Docs',
+        url: '/'
+    },
+    items: [
+        { text: 'Home', url: '/', active: true },
+        {
+            text: 'Getting Started',
+            items: [
+                { text: 'Installation', url: '/docs/install' },
+                { text: 'Quick Start', url: '/docs/quickstart' },
+                { text: 'Configuration', url: '/docs/config' }
+            ]
+        },
+        {
+            text: 'API Reference',
+            items: [
+                { text: 'Elements', url: '/api/elements' },
+                { text: 'Utilities', url: '/api/utils' },
+                { text: 'Models', url: '/api/models' }
+            ]
+        },
+        { text: 'Examples', url: '/examples' }
+    ],
+    actions: [
+        { text: 'GitHub', variant: 'outline', url: 'https://github.com' }
+    ],
+    variant: 'light',
+    position: 'sticky',
+    onItemClick: (item, index, event) =&gt; {
+        event.preventDefault();
+        console.log('Navigate to:', item.url);
+    }
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 5: BEST PRACTICES -->
+<section class="card mb-6" data-section="Best Practices">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Best Practices</h2>
+    </div>
+    <div class="card-body">
+
+        <h3 class="category-title">Accessibility</h3>
+        <ul class="mb-4">
+            <li><strong>Semantic HTML</strong> - Navbar automatically uses <code>&lt;nav&gt;</code> element with <code>role="navigation"</code>
+            </li>
+            <li><strong>ARIA Expanded</strong> - Mobile toggle button includes <code>aria-expanded</code> state for
+                screen readers
+            </li>
+            <li><strong>Keyboard Navigation</strong> - All links and buttons are keyboard accessible via Tab key</li>
+            <li><strong>Focus Visible</strong> - Ensure focus rings are visible for keyboard users (don't remove
+                outline)
+            </li>
+            <li><strong>Descriptive Labels</strong> - Toggle button has <code>aria-label="Toggle navigation"</code></li>
+            <li><strong>Skip Link</strong> - Consider adding a skip navigation link for keyboard users to bypass navbar
+            </li>
+        </ul>
+
+        <h3 class="category-title">Performance</h3>
+        <ul class="mb-4">
+            <li><strong>Single Instance</strong> - Only create one navbar instance per page, reuse for updates</li>
+            <li><strong>Lazy Dropdowns</strong> - Dropdown menus only activate on click, not on hover for better mobile
+                UX
+            </li>
+            <li><strong>Debounce Resize</strong> - Component debounces window resize events to prevent excessive
+                re-renders
+            </li>
+            <li><strong>CSS Transitions</strong> - Uses CSS for animations, not JavaScript, for GPU acceleration</li>
+            <li><strong>Event Delegation</strong> - Uses single event listener for all navigation links</li>
+        </ul>
+
+        <h3 class="category-title">Common Gotchas</h3>
+        <ul class="mb-4">
+            <li>
+                <strong>Issue:</strong> Fixed navbar covers page content<br>
+                <strong>Solution:</strong> Add <code>padding-top</code> to <code>&lt;body&gt;</code> equal to navbar
+                height (~60px)<br>
+                <strong>Example:</strong> <code>body { padding-top: 60px; }</code>
+            </li>
+            <li>
+                <strong>Issue:</strong> Dropdown menu cut off by container<br>
+                <strong>Solution:</strong> Ensure navbar container doesn't have <code>overflow: hidden</code><br>
+                <strong>Example:</strong> Remove restrictive overflow styles from parent elements
+            </li>
+            <li>
+                <strong>Issue:</strong> Mobile menu not appearing<br>
+                <strong>Solution:</strong> Check that viewport width is below <code>collapseAt</code> breakpoint
+                (default 768px)<br>
+                <strong>Example:</strong> Test on device or resize browser to mobile width
+            </li>
+            <li>
+                <strong>Issue:</strong> Active state not updating<br>
+                <strong>Solution:</strong> Use <code>setActive(index)</code> to programmatically update active item<br>
+                <strong>Example:</strong> <code>navbar.setActive(2)</code> to activate third item
+            </li>
+            <li>
+                <strong>Issue:</strong> Logo image not displaying<br>
+                <strong>Solution:</strong> Verify logo URL is correct and image is accessible<br>
+                <strong>Example:</strong> Check browser console for 404 errors
+            </li>
+        </ul>
+
+        <h3 class="category-title">Tips & Tricks</h3>
+        <ul class="mb-4">
+            <li><strong>Sticky Positioning</strong> - Use <code>position: 'sticky'</code> for better UX than fixed
+                (allows scrolling past navbar initially)
+            </li>
+            <li><strong>Dark Mode</strong> - Use <code>variant: 'dark'</code> for dark theme sites</li>
+            <li><strong>Logo + Text</strong> - Include both logo and text in brand for better recognition</li>
+            <li><strong>Limit Top-Level Items</strong> - Keep 5-7 top-level items max, use dropdowns for more</li>
+            <li><strong>Mobile-First Actions</strong> - Place most important action button first in actions array</li>
+            <li><strong>Prevent Default</strong> - In <code>onItemClick</code>, call <code>event.preventDefault()</code>
+                to handle navigation via JavaScript
+            </li>
+        </ul>
+
+        <div class="code-block">
+            <pre><code>&lt;!-- Accessible Navbar with Skip Link --&gt;
+&lt;a href="#main-content" class="skip-link"&gt;Skip to main content&lt;/a&gt;
+&lt;nav id="main-nav"&gt;&lt;/nav&gt;
+&lt;main id="main-content"&gt;
+    &lt;!-- Page content --&gt;
+&lt;/main&gt;
+
+&lt;style&gt;
+/* Skip link (hidden until focused) */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--dm-primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    z-index: 100;
+}
+.skip-link:focus {
+    top: 0;
+}
+
+/* Fixed navbar body padding */
+body {
+    padding-top: 60px;
+}
+&lt;/style&gt;
+
+&lt;script&gt;
+Domma.elements.navbar('#main-nav', {
+    brand: {
+        logo: '/logo.svg',
+        text: 'Accessible App',
+        url: '/'
+    },
+    items: [
+        { text: 'Home', url: '/', active: true },
+        { text: 'Features', url: '/features' },
+        {
+            text: 'Resources',
+            items: [
+                { text: 'Documentation', url: '/docs' },
+                { text: 'Support', url: '/support' }
+            ]
+        }
+    ],
+    actions: [
+        { text: 'Sign Up', variant: 'primary', url: '/signup' }
+    ],
+    variant: 'light',
+    position: 'fixed',
+    onItemClick: (item, index, event) =&gt; {
+        event.preventDefault();
+        // Handle navigation with proper focus management
+        navigateToPage(item.url);
+    }
+});
+&lt;/script&gt;</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 6: API REFERENCE -->
+<section class="card mb-6" data-section="API Reference">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">API Reference</h2>
+    </div>
+    <div class="card-body">
+
+        <h3 class="category-title">Constructor Options</h3>
+        <div class="option-table mb-6">
+            <table>
+                <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>brand</code></td>
+                    <td>Object</td>
+                    <td><code>null</code></td>
+                    <td>Brand configuration: <code>{ text, logo, url }</code>. All properties optional</td>
+                </tr>
+                <tr>
+                    <td><code>items</code></td>
+                    <td>Array</td>
+                    <td><code>[]</code></td>
+                    <td>Navigation items. Each: <code>{ text, url, active, items }</code>. Nested <code>items</code>
+                        array creates dropdown
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>position</code></td>
+                    <td>String</td>
+                    <td><code>'static'</code></td>
+                    <td>Navbar position: <code>'static'</code>, <code>'fixed'</code> (top of viewport), or <code>'sticky'</code>
+                        (sticks when scrolled to top)
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>variant</code></td>
+                    <td>String</td>
+                    <td><code>'light'</code></td>
+                    <td>Colour variant: <code>'light'</code> (white bg), <code>'dark'</code> (dark bg), or <code>'transparent'</code>
+                        (no bg)
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>collapsible</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Enable mobile hamburger menu collapse behaviour</td>
+                </tr>
+                <tr>
+                    <td><code>collapseAt</code></td>
+                    <td>Number</td>
+                    <td><code>768</code></td>
+                    <td>Viewport width (px) below which navbar collapses to hamburger menu</td>
+                </tr>
+                <tr>
+                    <td><code>actions</code></td>
+                    <td>Array</td>
+                    <td><code>[]</code></td>
+                    <td>Action buttons on right side. Each: <code>{ text, url, variant }</code>. Variant: <code>'primary'</code>,
+                        <code>'secondary'</code>, <code>'outline'</code></td>
+                </tr>
+                <tr>
+                    <td><code>onItemClick</code></td>
+                    <td>Function</td>
+                    <td><code>null</code></td>
+                    <td>Callback when navigation item clicked. Receives <code>(item, index, event)</code> or <code>(subItem,
+                        subIndex, event, parentItem)</code> for dropdowns
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title">Methods</h3>
+        <div class="option-table mb-6">
+            <table>
+                <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Parameters</th>
+                    <th>Returns</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>setActive(index)</code></td>
+                    <td>Number</td>
+                    <td>this</td>
+                    <td>Set active navigation item by index. Updates visual state and <code>active</code> property.
+                        Chainable
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>setItems(items)</code></td>
+                    <td>Array</td>
+                    <td>this</td>
+                    <td>Replace all navigation items. Re-renders navbar. Chainable</td>
+                </tr>
+                <tr>
+                    <td><code>expand()</code></td>
+                    <td>-</td>
+                    <td>this</td>
+                    <td>Expand mobile menu (show navigation items). Only works when navbar is collapsed. Chainable</td>
+                </tr>
+                <tr>
+                    <td><code>collapse()</code></td>
+                    <td>-</td>
+                    <td>this</td>
+                    <td>Collapse mobile menu (hide navigation items). Only works when navbar is in mobile mode.
+                        Chainable
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>toggle()</code></td>
+                    <td>-</td>
+                    <td>this</td>
+                    <td>Toggle mobile menu visibility (expand if collapsed, collapse if expanded). Chainable</td>
+                </tr>
+                <tr>
+                    <td><code>isCollapsed()</code></td>
+                    <td>-</td>
+                    <td>Boolean</td>
+                    <td>Check if mobile menu is collapsed. Returns <code>true</code> if collapsed/hidden,
+                        <code>false</code> if expanded/visible
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>destroy()</code></td>
+                    <td>-</td>
+                    <td>void</td>
+                    <td>Remove event listeners and clean up. Call before removing navbar from DOM</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title">Events / Callbacks</h3>
+        <div class="option-table mb-6">
+            <table>
+                <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Parameters</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>onItemClick</code></td>
+                    <td><code>(item, index, event)</code></td>
+                    <td>
+                        Fired when top-level navigation item clicked.<br>
+                        <strong>item:</strong> The clicked item object<br>
+                        <strong>index:</strong> Item index in items array<br>
+                        <strong>event:</strong> Click event (call <code>preventDefault()</code> to prevent default
+                        navigation)
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>onItemClick</code></td>
+                    <td><code>(subItem, subIndex, event, parentItem)</code></td>
+                    <td>
+                        Fired when dropdown menu item clicked.<br>
+                        <strong>subItem:</strong> The clicked dropdown item<br>
+                        <strong>subIndex:</strong> Index within dropdown items<br>
+                        <strong>event:</strong> Click event<br>
+                        <strong>parentItem:</strong> Parent navigation item containing the dropdown
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title">CSS Classes</h3>
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>.dm-navbar</code></td>
+                    <td>Main navbar container (automatically added)</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-navbar-light</code></td>
+                    <td>Light variant styling (white background)</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-navbar-dark</code></td>
+                    <td>Dark variant styling (dark background, white text)</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-navbar-transparent</code></td>
+                    <td>Transparent variant (no background or border)</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-navbar-fixed</code></td>
+                    <td>Fixed positioning (stays at top of viewport)</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-navbar-sticky</code></td>
+                    <td>Sticky positioning (sticks when scrolled to top)</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-navbar-brand</code></td>
+                    <td>Brand section container (logo + text)</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-navbar-toggle</code></td>
+                    <td>Mobile hamburger menu button</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-navbar-nav</code></td>
+                    <td>Navigation items list</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-navbar-link</code></td>
+                    <td>Individual navigation link</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-navbar-dropdown</code></td>
+                    <td>Dropdown menu container</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-navbar-actions</code></td>
+                    <td>Action buttons container (right side)</td>
+                </tr>
+                <tr>
+                    <td><code>.active</code></td>
+                    <td>Applied to active/current navigation link</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="code-block mt-4">
+            <pre><code>// Complete API Example
+const navbar = Domma.elements.navbar('#nav', {
+    brand: {
+        text: 'My App',
+        logo: '/logo.svg',
+        url: '/'
+    },
+    items: [
+        { text: 'Home', url: '/', active: true },
+        {
+            text: 'Products',
+            items: [
+                { text: 'Product A', url: '/products/a' },
+                { text: 'Product B', url: '/products/b' }
+            ]
+        }
+    ],
+    actions: [
+        { text: 'Login', variant: 'outline', url: '/login' },
+        { text: 'Sign Up', variant: 'primary', url: '/signup' }
+    ],
+    variant: 'light',
+    position: 'sticky',
+    collapsible: true,
+    collapseAt: 768,
+    onItemClick: (item, index, event) =&gt; {
+        event.preventDefault();
+        console.log('Clicked:', item.text);
+    }
+});
+
+// Methods
+navbar.setActive(1);                // Activate second item
+navbar.setItems([...]);             // Replace all items
+navbar.expand();                    // Show mobile menu
+navbar.collapse();                  // Hide mobile menu
+navbar.toggle();                    // Toggle mobile menu
+const collapsed = navbar.isCollapsed(); // Check state
+navbar.destroy();                   // Clean up</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 7: CONFIG ENGINE -->
+<section class="card mb-6" data-section="Config Engine">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Config Engine Integration</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Use Domma's declarative <code>$.setup()</code> system to configure Navbars without manual initialisation.
+        </p>
+
+        <h3 class="category-title">Basic Setup</h3>
+        <div class="code-block mb-6">
+            <pre><code>$.setup({
+    '#main-nav': {
+        component: 'navbar',
+        options: {
+            brand: { text: 'My App', url: '/' },
+            items: [
+                { text: 'Home', url: '/', active: true },
+                { text: 'About', url: '/about' }
+            ],
+            variant: 'light'
+        }
+    }
+});</code></pre>
+        </div>
+
+        <h3 class="category-title">Complete Configuration</h3>
+        <div class="code-block mb-6">
+            <pre><code>$.setup({
+    '#app-navbar': {
+        component: 'navbar',
+        options: {
+            brand: {
+                logo: '/logo.svg',
+                text: 'SaaS Platform',
+                url: '/'
+            },
+            items: [
+                { text: 'Dashboard', url: '/dashboard', active: true },
+                {
+                    text: 'Tools',
+                    items: [
+                        { text: 'Analytics', url: '/tools/analytics' },
+                        { text: 'Reports', url: '/tools/reports' }
+                    ]
+                },
+                { text: 'Settings', url: '/settings' }
+            ],
+            actions: [
+                { text: 'Upgrade', variant: 'outline', url: '/upgrade' },
+                { text: 'Account', variant: 'primary', url: '/account' }
+            ],
+            variant: 'dark',
+            position: 'sticky',
+            onItemClick: (item, index, event) =&gt; {
+                event.preventDefault();
+                navigateToPage(item.url);
+            }
+        }
+    }
+});</code></pre>
+        </div>
+
+        <h3 class="category-title">Live Demo</h3>
+        <p class="text-muted mb-2">Navbar configured via Config Engine:</p>
+        <div class="demo-area mb-4">
+            <nav id="config-demo-navbar"></nav>
+        </div>
+        <div class="code-block">
+            <pre><code>// Configuration
+$.setup({
+    '#config-demo-navbar': {
+        component: 'navbar',
+        options: {
+            brand: { text: 'Config Demo' },
+            items: [
+                { text: 'Home', url: '#', active: true },
+                { text: 'Docs', url: '#' }
+            ],
+            actions: [
+                { text: 'Get Started', variant: 'primary', url: '#' }
+            ]
+        }
+    }
+});
+
+// Access instance later
+const navbar = Domma.elements.get('#config-demo-navbar');
+navbar.setActive(1);</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 8: RELATED ELEMENTS -->
+<section class="card mb-6" data-section="Related">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Related Elements</h2>
+    </div>
+    <div class="card-body">
+        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <a href="../breadcrumbs/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Breadcrumbs</h3>
+                    <p class="card-text">Navigation trails showing hierarchy. Complement navbar by providing secondary
+                        navigation below the header.</p>
+                </div>
+            </a>
+
+            <a href="../dropdown/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Dropdown</h3>
+                    <p class="card-text">Standalone dropdown menus. Navbar includes built-in dropdown support for nested
+                        navigation.</p>
+                </div>
+            </a>
+
+            <a href="../tabs/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Tabs</h3>
+                    <p class="card-text">Tabbed navigation. Use navbar for site-wide navigation, tabs for page-level
+                        content switching.</p>
+                </div>
+            </a>
+
+            <a href="../button-group/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Button Group</h3>
+                    <p class="card-text">Connected buttons. Use in navbar actions section for grouped controls or view
+                        toggles.</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    const sampleItems = [
+        {text: 'Home', url: '#', active: true},
+        {text: 'Features', url: '#'},
+        {text: 'Pricing', url: '#'}
+    ];
+
+    // Quick Start Examples
+    Domma.elements.navbar('#quick-start-navbar', {
+        brand: {text: 'Domma'},
+        items: sampleItems
+    });
+
+    Domma.elements.navbar('#quick-start-action', {
+        brand: {text: 'Domma'},
+        items: [
+            {text: 'Home', url: '#'},
+            {text: 'Docs', url: '#'}
+        ],
+        actions: [
+            {text: 'Sign Up', variant: 'primary', url: '#'}
+        ]
+    });
+
+    // Tutorial Demo
+    const tutorialNav = Domma.elements.navbar('#tutorial-navbar', {
+        brand: {text: 'My SaaS App', url: '#'},
+        items: [
+            {text: 'Dashboard', url: '/dashboard', active: true},
+            {text: 'Analytics', url: '/analytics'},
+            {
+                text: 'Resources',
+                items: [
+                    {text: 'Documentation', url: '/docs'},
+                    {text: 'API Reference', url: '/api'},
+                    {text: 'Support', url: '/support'}
+                ]
+            },
+            {text: 'Settings', url: '/settings'}
+        ],
+        actions: [
+            {text: 'Upgrade', variant: 'outline', url: '/upgrade'},
+            {text: 'Account', variant: 'primary', url: '/account'}
+        ],
+        onItemClick: (item, index, event) => {
+            event.preventDefault();
+            const log = document.getElementById('tutorial-log');
+            const timestamp = new Date().toLocaleTimeString();
+            log.textContent = `[${timestamp}] Clicked: ${item.text} → ${item.url}`;
+        }
+    });
+
+    // Example 1: Variants
+    Domma.elements.navbar('#variant-light', {
+        variant: 'light',
+        brand: {text: 'Light App'},
+        items: sampleItems
+    });
+
+    Domma.elements.navbar('#variant-dark', {
+        variant: 'dark',
+        brand: {text: 'Dark App'},
+        items: sampleItems
+    });
+
+    Domma.elements.navbar('#variant-transparent', {
+        variant: 'transparent',
+        brand: {text: 'Transparent App'},
+        items: sampleItems
+    });
+
+    // Example 2: Logo
+    Domma.elements.navbar('#logo-example', {
+        brand: {
+            logo: 'https://via.placeholder.com/32x32/6495ED/ffffff?text=D',
+            text: 'Domma',
+            url: '#'
+        },
+        items: [
+            {text: 'Home', url: '#'},
+            {text: 'About', url: '#'}
+        ]
+    });
+
+    // Example 3: Dropdowns
+    Domma.elements.navbar('#dropdown-example', {
+        brand: {text: 'App'},
+        items: [
+            {text: 'Home', url: '#'},
+            {
+                text: 'Products',
+                items: [
+                    {text: 'Product A', url: '#'},
+                    {text: 'Product B', url: '#'},
+                    {text: 'Product C', url: '#'}
+                ]
+            },
+            {
+                text: 'Resources',
+                items: [
+                    {text: 'Docs', url: '#'},
+                    {text: 'Blog', url: '#'},
+                    {text: 'Support', url: '#'}
+                ]
+            }
+        ]
+    });
+
+    // Example 4: Actions
+    Domma.elements.navbar('#actions-example', {
+        brand: {text: 'SaaS App'},
+        items: [
+            {text: 'Features', url: '#'},
+            {text: 'Pricing', url: '#'}
+        ],
+        actions: [
+            {text: 'Login', variant: 'outline', url: '#'},
+            {text: 'Sign Up', variant: 'primary', url: '#'}
+        ]
+    });
+
+    // Example 6: Mobile
+    Domma.elements.navbar('#mobile-example', {
+        brand: {text: 'Responsive App'},
+        items: [
+            {text: 'Home', url: '#'},
+            {text: 'Features', url: '#'},
+            {text: 'Pricing', url: '#'},
+            {text: 'Contact', url: '#'}
+        ],
+        collapsible: true,
+        collapseAt: 768
+    });
+
+    // Example 7: Programmatic
+    const progNav = Domma.elements.navbar('#programmatic-example', {
+        brand: {text: 'App'},
+        items: [
+            {text: 'Home', url: '#', active: true},
+            {text: 'About', url: '#'},
+            {text: 'Contact', url: '#'}
+        ]
+    });
+
+    $('#prog-home').on('click', () => progNav.setActive(0));
+    $('#prog-about').on('click', () => progNav.setActive(1));
+    $('#prog-expand').on('click', () => progNav.expand());
+    $('#prog-collapse').on('click', () => progNav.collapse());
+
+    // Example 8: Documentation Site
+    Domma.elements.navbar('#docs-navbar', {
+        brand: {
+            logo: 'https://via.placeholder.com/32x32/6495ED/ffffff?text=D',
+            text: 'API Docs',
+            url: '#'
+        },
+        items: [
+            {text: 'Home', url: '#', active: true},
+            {
+                text: 'Getting Started',
+                items: [
+                    {text: 'Installation', url: '#'},
+                    {text: 'Quick Start', url: '#'},
+                    {text: 'Configuration', url: '#'}
+                ]
+            },
+            {
+                text: 'API Reference',
+                items: [
+                    {text: 'Elements', url: '#'},
+                    {text: 'Utilities', url: '#'},
+                    {text: 'Models', url: '#'}
+                ]
+            },
+            {text: 'Examples', url: '#'}
+        ],
+        actions: [
+            {text: 'GitHub', variant: 'outline', url: '#'}
+        ],
+        variant: 'light',
+        position: 'static'
+    });
+
+    // Config Engine Demo
+    $.setup({
+        '#config-demo-navbar': {
+            component: 'navbar',
+            options: {
+                brand: {text: 'Config Demo'},
+                items: [
+                    {text: 'Home', url: '#', active: true},
+                    {text: 'Docs', url: '#'}
+                ],
+                actions: [
+                    {text: 'Get Started', variant: 'primary', url: '#'}
+                ]
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

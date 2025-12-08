@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toast - Elements - Domma Showcase</title>
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+</head>
+<body class="dm-theme-light">
+
+<section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Overview</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Toast notifications provide lightweight, non-blocking feedback to users. They appear briefly at screen edges
+            and auto-dismiss, perfect for success confirmations, warnings, and informational messages.
+        </p>
+
+        <h3 class="category-title">Key Features</h3>
+        <ul class="feature-list mb-4">
+            <li><strong>Auto-Dismiss</strong> - Configurable duration with optional persistence</li>
+            <li><strong>Multiple Types</strong> - Success, error, warning, info styles</li>
+            <li><strong>Positioning</strong> - 9 position options (top-left, bottom-right, etc.)</li>
+            <li><strong>Queueing</strong> - Stack multiple toasts automatically</li>
+        </ul>
+
+        <h3 class="category-title">Basic Usage</h3>
+        <div class="code-block">
+            <pre><code>Domma.elements.toast('Operation successful!', {
+    type: 'success',
+    duration: 3000,
+    position: 'top-right'
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Quick Start">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Quick Start</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Simple Toast</h3>
+        <div class="demo-area mb-4 text-center">
+            <button id="quick-toast" class="btn btn-primary">Show Toast</button>
+        </div>
+        <div class="code-block">
+            <pre><code>document.getElementById('btn').addEventListener('click', () => {
+    Domma.elements.toast('Hello, World!', {
+        type: 'info',
+        duration: 3000
+    });
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Tutorial">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Tutorial</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">Build a form submission flow with toast notifications.</p>
+
+        <div class="demo-area">
+            <div style="max-width: 400px; margin: 0 auto;">
+                <div class="form-group mb-3">
+                    <label>Email</label>
+                    <input type="email" id="tutorial-email" class="form-input" placeholder="you@example.com">
+                </div>
+                <div class="form-group mb-3">
+                    <label>Password</label>
+                    <input type="password" id="tutorial-password" class="form-input" placeholder="Enter password">
+                </div>
+                <button id="tutorial-submit" class="btn btn-primary w-full">Submit</button>
+            </div>
+        </div>
+
+        <div class="code-block mt-4">
+            <pre><code>document.getElementById('submit-btn').addEventListener('click', () => {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    // Validation with error toast
+    if (!email) {
+        Domma.elements.toast('Email is required', {
+            type: 'error',
+            duration: 3000
+        });
+        return;
+    }
+
+    if (password.length < 8) {
+        Domma.elements.toast('Password must be at least 8 characters', {
+            type: 'warning',
+            duration: 4000
+        });
+        return;
+    }
+
+    // Success toast
+    Domma.elements.toast('Account created successfully!', {
+        type: 'success',
+        duration: 5000
+    });
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Examples">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Examples</h2>
+    </div>
+    <div class="card-body">
+
+        <h3 class="category-title">Toast Types</h3>
+        <div class="demo-area mb-4">
+            <div class="flex gap-2 flex-wrap justify-center">
+                <button id="ex-success" class="btn btn-success">Success</button>
+                <button id="ex-error" class="btn btn-danger">Error</button>
+                <button id="ex-warning" class="btn btn-warning">Warning</button>
+                <button id="ex-info" class="btn btn-secondary">Info</button>
+            </div>
+        </div>
+
+        <h3 class="category-title">Positioning</h3>
+        <div class="demo-area mb-4">
+            <div class="grid gap-2" style="grid-template-columns: repeat(3, 1fr); max-width: 400px; margin: 0 auto;">
+                <button id="pos-tl" class="btn btn-outline btn-sm">Top Left</button>
+                <button id="pos-tc" class="btn btn-outline btn-sm">Top Center</button>
+                <button id="pos-tr" class="btn btn-outline btn-sm">Top Right</button>
+                <button id="pos-cl" class="btn btn-outline btn-sm">Center Left</button>
+                <button id="pos-cc" class="btn btn-outline btn-sm">Center</button>
+                <button id="pos-cr" class="btn btn-outline btn-sm">Center Right</button>
+                <button id="pos-bl" class="btn btn-outline btn-sm">Bottom Left</button>
+                <button id="pos-bc" class="btn btn-outline btn-sm">Bottom Center</button>
+                <button id="pos-br" class="btn btn-outline btn-sm">Bottom Right</button>
+            </div>
+        </div>
+
+        <h3 class="category-title">Duration Options</h3>
+        <div class="demo-area mb-4 text-center">
+            <div class="flex gap-2 justify-center">
+                <button id="dur-short" class="btn btn-outline">Short (1s)</button>
+                <button id="dur-medium" class="btn btn-outline">Medium (3s)</button>
+                <button id="dur-long" class="btn btn-outline">Long (5s)</button>
+                <button id="dur-persist" class="btn btn-outline">Persistent</button>
+            </div>
+        </div>
+
+        <h3 class="category-title">With Actions</h3>
+        <div class="demo-area text-center">
+            <button id="ex-action" class="btn btn-primary">Toast with Action</button>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Best Practices">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Best Practices</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Accessibility</h3>
+        <ul class="mb-4">
+            <li><strong>ARIA Live Regions</strong> - Toasts use <code>role="status"</code> and
+                <code>aria-live="polite"</code></li>
+            <li><strong>Avoid Essential Info</strong> - Don't put critical information only in toasts</li>
+            <li><strong>Dismissible</strong> - Provide close button for screen reader users</li>
+        </ul>
+
+        <h3 class="category-title">UX Guidelines</h3>
+        <ul class="mb-4">
+            <li><strong>Appropriate Duration</strong> - 3-5 seconds for reading time, longer for actions</li>
+            <li><strong>Type Matching</strong> - Success for confirmations, error for failures, warning for alerts</li>
+            <li><strong>Clear Messages</strong> - Concise text (1-2 sentences maximum)</li>
+            <li><strong>Limit Stack</strong> - Don't overwhelm users with too many simultaneous toasts</li>
+        </ul>
+
+        <h3 class="category-title">Performance</h3>
+        <ul>
+            <li><strong>Auto-Cleanup</strong> - Toasts automatically remove themselves from DOM</li>
+            <li><strong>Queue Management</strong> - System handles multiple toasts efficiently</li>
+        </ul>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="API Reference">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">API Reference</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Static Method</h3>
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>toast(message, options)</code></td>
+                    <td>Show toast notification, returns toast instance</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title mt-4">Options</h3>
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>type</code></td>
+                    <td>String</td>
+                    <td><code>'info'</code></td>
+                    <td>Type: success, error, warning, info</td>
+                </tr>
+                <tr>
+                    <td><code>duration</code></td>
+                    <td>Number</td>
+                    <td><code>3000</code></td>
+                    <td>Auto-dismiss time (ms), 0 for persistent</td>
+                </tr>
+                <tr>
+                    <td><code>position</code></td>
+                    <td>String</td>
+                    <td><code>'top-right'</code></td>
+                    <td>Position: top-left, top-center, top-right, center-left, center, center-right, bottom-left,
+                        bottom-center, bottom-right
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>closable</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Show close button</td>
+                </tr>
+                <tr>
+                    <td><code>animation</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Enable animations</td>
+                </tr>
+                <tr>
+                    <td><code>onClick</code></td>
+                    <td>Function</td>
+                    <td><code>null</code></td>
+                    <td>Click handler</td>
+                </tr>
+                <tr>
+                    <td><code>onClose</code></td>
+                    <td>Function</td>
+                    <td><code>null</code></td>
+                    <td>Close callback</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title mt-4">Methods</h3>
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>close()</code></td>
+                    <td>Manually close the toast</td>
+                </tr>
+                <tr>
+                    <td><code>destroy()</code></td>
+                    <td>Remove toast and clean up</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Config Engine">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Config Engine</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">Attach toasts to button clicks using the config engine:</p>
+        <div class="code-block">
+            <pre><code>$.setup({
+    '#save-btn': {
+        events: {
+            click: (e, $el) => {
+                Domma.elements.toast('Changes saved successfully!', {
+                    type: 'success',
+                    duration: 3000
+                });
+            }
+        }
+    },
+    '#delete-btn': {
+        events: {
+            click: (e, $el) => {
+                Domma.elements.toast('Item deleted', {
+                    type: 'error',
+                    duration: 4000
+                });
+            }
+        }
+    }
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Related">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Related Elements</h2>
+    </div>
+    <div class="card-body">
+        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <a href="../dialog/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Dialog</h3>
+                    <p class="card-text">For blocking confirmations and prompts</p>
+                </div>
+            </a>
+            <a href="../modal/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Modal</h3>
+                    <p class="card-text">For detailed content requiring user focus</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    // Quick Start
+    document.getElementById('quick-toast').addEventListener('click', () => {
+        Domma.elements.toast('Hello, World!', {
+            type: 'info',
+            duration: 3000
+        });
+    });
+
+    // Tutorial
+    document.getElementById('tutorial-submit').addEventListener('click', () => {
+        const email = document.getElementById('tutorial-email').value;
+        const password = document.getElementById('tutorial-password').value;
+
+        if (!email) {
+            Domma.elements.toast('Email is required', {
+                type: 'error',
+                duration: 3000
+            });
+            return;
+        }
+
+        if (password.length < 8) {
+            Domma.elements.toast('Password must be at least 8 characters', {
+                type: 'warning',
+                duration: 4000
+            });
+            return;
+        }
+
+        Domma.elements.toast('Account created successfully!', {
+            type: 'success',
+            duration: 5000
+        });
+    });
+
+    // Toast Types
+    document.getElementById('ex-success').addEventListener('click', () => {
+        Domma.elements.toast('Operation completed successfully!', {type: 'success'});
+    });
+    document.getElementById('ex-error').addEventListener('click', () => {
+        Domma.elements.toast('An error occurred. Please try again.', {type: 'error'});
+    });
+    document.getElementById('ex-warning').addEventListener('click', () => {
+        Domma.elements.toast('Warning: This action may have consequences.', {type: 'warning'});
+    });
+    document.getElementById('ex-info').addEventListener('click', () => {
+        Domma.elements.toast('For your information: Updates are available.', {type: 'info'});
+    });
+
+    // Positioning
+    const positions = {
+        'pos-tl': 'top-left',
+        'pos-tc': 'top-center',
+        'pos-tr': 'top-right',
+        'pos-cl': 'center-left',
+        'pos-cc': 'center',
+        'pos-cr': 'center-right',
+        'pos-bl': 'bottom-left',
+        'pos-bc': 'bottom-center',
+        'pos-br': 'bottom-right'
+    };
+
+    Object.keys(positions).forEach(id => {
+        document.getElementById(id).addEventListener('click', () => {
+            Domma.elements.toast(`Toast at ${positions[id]}`, {
+                position: positions[id],
+                type: 'info'
+            });
+        });
+    });
+
+    // Duration
+    document.getElementById('dur-short').addEventListener('click', () => {
+        Domma.elements.toast('Short duration (1 second)', {duration: 1000});
+    });
+    document.getElementById('dur-medium').addEventListener('click', () => {
+        Domma.elements.toast('Medium duration (3 seconds)', {duration: 3000});
+    });
+    document.getElementById('dur-long').addEventListener('click', () => {
+        Domma.elements.toast('Long duration (5 seconds)', {duration: 5000});
+    });
+    document.getElementById('dur-persist').addEventListener('click', () => {
+        Domma.elements.toast('Persistent toast - click X to close', {
+            duration: 0,
+            type: 'warning'
+        });
+    });
+
+    // Action
+    document.getElementById('ex-action').addEventListener('click', () => {
+        Domma.elements.toast('File uploaded successfully. Click to view.', {
+            type: 'success',
+            duration: 5000,
+            onClick: () => {
+                alert('Navigating to file...');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

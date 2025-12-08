@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabs - Domma Elements</title>
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+</head>
+<body class="dm-theme-light">
+
+<main class="container py-8">
+
+    <!-- SECTION 1: Overview -->
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Tabs</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Tabs organise related content into separate panels that users can switch between by clicking tab
+                headers.
+                They're perfect for displaying large amounts of information in a compact, organised way without
+                overwhelming users.
+            </p>
+
+            <h4 class="category-title">Key Features</h4>
+            <ul class="mb-4">
+                <li>Multiple visual styles (standard, pills, underline)</li>
+                <li>Smooth animated transitions between panels</li>
+                <li>Programmatic control (show, next, prev)</li>
+                <li>Keyboard navigation (arrow keys, Home, End)</li>
+                <li>Event callbacks for tab changes</li>
+                <li>Automatic ARIA attributes for accessibility</li>
+                <li>Responsive behaviour on mobile devices</li>
+            </ul>
+
+            <h4 class="category-title">When to Use Tabs</h4>
+            <ul class="mb-4">
+                <li><strong>Content Organisation</strong>: Product details, documentation, settings panels</li>
+                <li><strong>Alternative Views</strong>: Charts vs tables, grid vs list, different time periods</li>
+                <li><strong>Forms</strong>: Multi-step wizards, categorised form sections</li>
+                <li><strong>Dashboards</strong>: Different data views, analytics categories</li>
+                <li><strong>Navigation</strong>: Profile sections (about, posts, photos), account settings</li>
+            </ul>
+
+            <h4 class="category-title">Basic Usage</h4>
+            <pre class="code-block">// HTML structure
+&lt;div id="my-tabs" class="tabs"&gt;
+    &lt;ul class="tab-list"&gt;
+        &lt;li class="tab-item active"&gt;Tab 1&lt;/li&gt;
+        &lt;li class="tab-item"&gt;Tab 2&lt;/li&gt;
+        &lt;li class="tab-item"&gt;Tab 3&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div class="tab-content"&gt;
+        &lt;div class="tab-panel active"&gt;Panel 1 content&lt;/div&gt;
+        &lt;div class="tab-panel"&gt;Panel 2 content&lt;/div&gt;
+        &lt;div class="tab-panel"&gt;Panel 3 content&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+// JavaScript
+const tabs = Domma.elements.tabs('#my-tabs', {
+    activeIndex: 0,
+    animation: true
+});
+
+// Programmatic control
+tabs.show(1);     // Show second tab
+tabs.next();      // Go to next tab
+tabs.prev();      // Go to previous tab
+tabs.getActive(); // Returns active index</pre>
+        </div>
+    </section>
+
+    <!-- SECTION 2: Quick Start -->
+    <section class="card mb-6" data-section="Quick Start">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Quick Start</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Create basic tabs in under a minute. Tabs work automatically with the correct HTML structure.
+            </p>
+
+            <h4 class="category-title">Simple Tabs</h4>
+            <pre class="code-block">// HTML
+&lt;div id="quick-tabs" class="tabs"&gt;
+    &lt;ul class="tab-list"&gt;
+        &lt;li class="tab-item active"&gt;Home&lt;/li&gt;
+        &lt;li class="tab-item"&gt;Profile&lt;/li&gt;
+        &lt;li class="tab-item"&gt;Messages&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div class="tab-content"&gt;
+        &lt;div class="tab-panel active"&gt;
+            &lt;h3&gt;Home&lt;/h3&gt;
+            &lt;p&gt;Welcome to your dashboard.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class="tab-panel"&gt;
+            &lt;h3&gt;Profile&lt;/h3&gt;
+            &lt;p&gt;Your profile information.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class="tab-panel"&gt;
+            &lt;h3&gt;Messages&lt;/h3&gt;
+            &lt;p&gt;You have 3 new messages.&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+// JavaScript
+Domma.elements.tabs('#quick-tabs');</pre>
+
+            <div class="demo-area">
+                <div id="quick-tabs" class="tabs">
+                    <ul class="tab-list">
+                        <li class="tab-item active">Home</li>
+                        <li class="tab-item">Profile</li>
+                        <li class="tab-item">Messages</li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-panel active">
+                            <h3>Home</h3>
+                            <p>Welcome to your dashboard. Click the tabs above to navigate between sections.</p>
+                        </div>
+                        <div class="tab-panel">
+                            <h3>Profile</h3>
+                            <p>Your profile information goes here. Edit your details and preferences.</p>
+                        </div>
+                        <div class="tab-panel">
+                            <h3>Messages</h3>
+                            <p>You have 3 new messages. Click to view your conversations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: Step-by-Step Tutorial -->
+    <section class="card mb-6" data-section="Tutorial">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Step-by-Step Tutorial</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Build a product information page with tabs for Overview, Features, and Reviews.
+            </p>
+
+            <h4 class="category-title">Step 1: Create Tab Headers</h4>
+            <p class="mb-2">Start with the tab list structure:</p>
+            <pre class="code-block">&lt;div id="product-tabs" class="tabs"&gt;
+    &lt;ul class="tab-list"&gt;
+        &lt;li class="tab-item active"&gt;Overview&lt;/li&gt;
+        &lt;li class="tab-item"&gt;Features&lt;/li&gt;
+        &lt;li class="tab-item"&gt;Reviews&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;</pre>
+
+            <h4 class="category-title mt-4">Step 2: Add Tab Panels</h4>
+            <p class="mb-2">Add corresponding content panels (same order as tabs):</p>
+            <pre class="code-block">&lt;div id="product-tabs" class="tabs"&gt;
+    &lt;ul class="tab-list"&gt;...&lt;/ul&gt;
+    &lt;div class="tab-content"&gt;
+        &lt;div class="tab-panel active"&gt;
+            &lt;h3&gt;Product Overview&lt;/h3&gt;
+            &lt;p&gt;Description of the product...&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class="tab-panel"&gt;
+            &lt;h3&gt;Key Features&lt;/h3&gt;
+            &lt;ul&gt;
+                &lt;li&gt;Feature 1&lt;/li&gt;
+                &lt;li&gt;Feature 2&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+        &lt;div class="tab-panel"&gt;
+            &lt;h3&gt;Customer Reviews&lt;/h3&gt;
+            &lt;p&gt;⭐⭐⭐⭐⭐ (4.8/5)&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+            <h4 class="category-title mt-4">Step 3: Initialise with Animation</h4>
+            <p class="mb-2">Add smooth transitions between tabs:</p>
+            <pre class="code-block">const productTabs = Domma.elements.tabs('#product-tabs', {
+    activeIndex: 0,    // Start with first tab
+    animation: true    // Enable smooth transitions
+});</pre>
+
+            <h4 class="category-title mt-4">Step 4: Add Change Callback</h4>
+            <p class="mb-2">Track which tab users view:</p>
+            <pre class="code-block">const productTabs = Domma.elements.tabs('#product-tabs', {
+    activeIndex: 0,
+    animation: true,
+    onChange: (index, panel) => {
+        const tabs = ['Overview', 'Features', 'Reviews'];
+        console.log(`User viewing: ${tabs[index]}`);
+    }
+});</pre>
+
+            <h4 class="category-title mt-4">Step 5: Add Next/Previous Buttons</h4>
+            <p class="mb-2">Navigate programmatically with buttons:</p>
+            <pre class="code-block">&lt;button id="prev-tab"&gt;← Previous&lt;/button&gt;
+&lt;button id="next-tab"&gt;Next →&lt;/button&gt;
+
+document.getElementById('prev-tab').addEventListener('click', () => {
+    productTabs.prev();
+});
+
+document.getElementById('next-tab').addEventListener('click', () => {
+    productTabs.next();
+});</pre>
+
+            <h4 class="category-title mt-4">Step 6: Complete Working Demo</h4>
+            <div class="demo-area">
+                <div id="tutorial-tabs" class="tabs mb-3">
+                    <ul class="tab-list">
+                        <li class="tab-item active">Overview</li>
+                        <li class="tab-item">Features</li>
+                        <li class="tab-item">Reviews</li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-panel active">
+                            <h3>Product Overview</h3>
+                            <p class="mb-2">Premium wireless headphones with industry-leading noise cancellation
+                                technology.</p>
+                            <p>Experience crystal-clear audio quality and all-day comfort.</p>
+                        </div>
+                        <div class="tab-panel">
+                            <h3>Key Features</h3>
+                            <ul>
+                                <li>Active Noise Cancellation (ANC)</li>
+                                <li>30-hour battery life</li>
+                                <li>Premium leather cushions</li>
+                                <li>Bluetooth 5.0 connectivity</li>
+                                <li>Foldable design with carry case</li>
+                            </ul>
+                        </div>
+                        <div class="tab-panel">
+                            <h3>Customer Reviews</h3>
+                            <p style="font-size: 1.5rem; color: var(--dm-warning);">⭐⭐⭐⭐⭐</p>
+                            <p class="mb-2"><strong>4.8 out of 5</strong> (1,247 reviews)</p>
+                            <p class="text-sm">"Best headphones I've ever owned!" - Sarah M.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button class="btn btn-secondary" id="tutorial-prev">← Previous</button>
+                    <button class="btn btn-secondary" id="tutorial-next">Next →</button>
+                    <div class="demo-result flex-1" id="tutorial-result"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: Examples & Variations -->
+    <section class="card mb-6" data-section="Examples">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Examples & Variations</h2>
+        </div>
+        <div class="card-body">
+
+            <h4 class="category-title">Example 1: Standard Tabs</h4>
+            <p class="mb-2">Classic tab design with underline indicator:</p>
+            <div class="demo-area mb-4">
+                <div id="standard-tabs" class="tabs">
+                    <ul class="tab-list">
+                        <li class="tab-item active">All</li>
+                        <li class="tab-item">Active</li>
+                        <li class="tab-item">Completed</li>
+                        <li class="tab-item">Archived</li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-panel active"><p>Showing all items (24 total)</p></div>
+                        <div class="tab-panel"><p>Showing active items (15 items)</p></div>
+                        <div class="tab-panel"><p>Showing completed items (7 items)</p></div>
+                        <div class="tab-panel"><p>Showing archived items (2 items)</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Example 2: Pill Tabs</h4>
+            <p class="mb-2">Rounded pill-style tabs for modern interfaces:</p>
+            <div class="demo-area mb-4">
+                <div id="pill-tabs" class="tabs tabs-pills">
+                    <ul class="tab-list">
+                        <li class="tab-item active">Today</li>
+                        <li class="tab-item">This Week</li>
+                        <li class="tab-item">This Month</li>
+                        <li class="tab-item">All Time</li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-panel active"><p>Today's stats: 45 visitors, 12 conversions</p></div>
+                        <div class="tab-panel"><p>This week's stats: 312 visitors, 87 conversions</p></div>
+                        <div class="tab-panel"><p>This month's stats: 1,234 visitors, 342 conversions</p></div>
+                        <div class="tab-panel"><p>All time stats: 15,678 visitors, 4,123 conversions</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Example 3: Vertical Tabs</h4>
+            <p class="mb-2">Side-by-side layout for settings or profiles:</p>
+            <div class="demo-area mb-4">
+                <div id="vertical-tabs" class="tabs tabs-vertical">
+                    <ul class="tab-list">
+                        <li class="tab-item active">General</li>
+                        <li class="tab-item">Security</li>
+                        <li class="tab-item">Notifications</li>
+                        <li class="tab-item">Privacy</li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-panel active">
+                            <h4>General Settings</h4>
+                            <p>Configure general application preferences.</p>
+                        </div>
+                        <div class="tab-panel">
+                            <h4>Security Settings</h4>
+                            <p>Manage password and two-factor authentication.</p>
+                        </div>
+                        <div class="tab-panel">
+                            <h4>Notification Settings</h4>
+                            <p>Choose how you receive notifications.</p>
+                        </div>
+                        <div class="tab-panel">
+                            <h4>Privacy Settings</h4>
+                            <p>Control who can see your information.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Example 4: Tabs with Icons</h4>
+            <p class="mb-2">Enhance tabs with icons for better recognition:</p>
+            <div class="demo-area mb-4">
+                <div id="icon-tabs" class="tabs">
+                    <ul class="tab-list">
+                        <li class="tab-item active">
+                            <span data-icon="document" style="margin-right: 0.5rem;"></span>
+                            Documents
+                        </li>
+                        <li class="tab-item">
+                            <span data-icon="database" style="margin-right: 0.5rem;"></span>
+                            Data
+                        </li>
+                        <li class="tab-item">
+                            <span data-icon="layout" style="margin-right: 0.5rem;"></span>
+                            Media
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-panel active"><p>Your documents and files</p></div>
+                        <div class="tab-panel"><p>Database and spreadsheets</p></div>
+                        <div class="tab-panel"><p>Images and videos</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Example 5: Tabs with Badge Counts</h4>
+            <p class="mb-2">Show counts or status with badges:</p>
+            <div class="demo-area mb-4">
+                <div id="badge-tabs" class="tabs">
+                    <ul class="tab-list">
+                        <li class="tab-item active">
+                            Inbox <span class="badge badge-primary" style="margin-left: 0.5rem;">12</span>
+                        </li>
+                        <li class="tab-item">
+                            Drafts <span class="badge badge-secondary" style="margin-left: 0.5rem;">3</span>
+                        </li>
+                        <li class="tab-item">
+                            Sent <span class="badge badge-success" style="margin-left: 0.5rem;">45</span>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-panel active"><p>12 unread messages in your inbox</p></div>
+                        <div class="tab-panel"><p>3 draft messages waiting to be sent</p></div>
+                        <div class="tab-panel"><p>45 messages successfully sent</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Example 6: Dynamic Content Loading</h4>
+            <p class="mb-2">Load panel content dynamically on tab change:</p>
+            <div class="demo-area">
+                <div id="dynamic-tabs" class="tabs">
+                    <ul class="tab-list">
+                        <li class="tab-item active">Tab 1</li>
+                        <li class="tab-item">Tab 2</li>
+                        <li class="tab-item">Tab 3</li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-panel active"><p>Initial content for Tab 1</p></div>
+                        <div class="tab-panel"><p>Loading...</p></div>
+                        <div class="tab-panel"><p>Loading...</p></div>
+                    </div>
+                </div>
+                <p class="text-sm mt-2" style="color: var(--dm-text-muted);">Content loads when tab is clicked for the
+                    first time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: Best Practices -->
+    <section class="card mb-6" data-section="Best Practices">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Best Practices</h2>
+        </div>
+        <div class="card-body">
+
+            <h4 class="category-title">Accessibility</h4>
+            <ul class="mb-4">
+                <li><strong>ARIA Roles</strong>: Domma automatically adds <code>role="tablist"</code>,
+                    <code>role="tab"</code>, <code>role="tabpanel"</code></li>
+                <li><strong>Keyboard Navigation</strong>: Arrow keys to move between tabs, Home/End for first/last,
+                    Enter/Space to activate
+                </li>
+                <li><strong>Focus Management</strong>: Visible focus indicators on tabs, focus moves with arrow keys
+                </li>
+                <li><strong>Screen Readers</strong>: Proper labelling with <code>aria-selected</code>, <code>aria-controls</code>,
+                    <code>aria-labelledby</code></li>
+                <li><strong>Tab Order</strong>: Only active tab is in tab order (others reachable via arrow keys)</li>
+                <li><strong>Disabled States</strong>: Use <code>aria-disabled="true"</code> for disabled tabs with
+                    visual styling
+                </li>
+            </ul>
+
+            <h4 class="category-title">Performance</h4>
+            <ul class="mb-4">
+                <li><strong>Lazy Loading</strong>: Load heavy content only when tab is first activated</li>
+                <li><strong>Limit Tabs</strong>: Keep to 5-7 tabs maximum for usability; use dropdowns or accordions for
+                    more
+                </li>
+                <li><strong>Content Size</strong>: Keep panel content reasonably sized; long content should scroll
+                    within panel
+                </li>
+                <li><strong>Destroy Unused</strong>: Call <code>destroy()</code> when removing dynamic tab sets</li>
+                <li><strong>Animation Toggle</strong>: Disable animations (<code>animation: false</code>) for faster
+                    switching on low-end devices
+                </li>
+            </ul>
+
+            <h4 class="category-title">Common Gotchas</h4>
+            <table class="option-table mb-4">
+                <tr>
+                    <th>Issue</th>
+                    <th>Solution</th>
+                </tr>
+                <tr>
+                    <td>Wrong panel shows for tab</td>
+                    <td>Ensure tab items and panels are in the same order. First tab item corresponds to first panel,
+                        etc.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Content overflows tabs</td>
+                    <td>Set max-width on tab list or make tabs scrollable horizontally on mobile: <code>.tab-list {
+                        overflow-x: auto; }</code></td>
+                </tr>
+                <tr>
+                    <td>Active tab not visible</td>
+                    <td>When programmatically switching tabs, scroll the tab list to show active tab if it's
+                        off-screen.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Animation jank</td>
+                    <td>Ensure panels have consistent heights or set explicit height on <code>.tab-content</code> to
+                        prevent layout shift.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Nested tabs conflict</td>
+                    <td>Give each tab set a unique ID and initialise separately. Nested tabs work but can confuse
+                        users.
+                    </td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Tips & Tricks</h4>
+            <ul class="mb-4">
+                <li><strong>Deep Linking</strong>: Use URL hash to pre-select tab: <code>if (location.hash ===
+                    '#features') tabs.show(1);</code></li>
+                <li><strong>Persistent State</strong>: Save active tab to localStorage and restore on page load</li>
+                <li><strong>Validation</strong>: In forms, validate tab content before allowing switch to next tab</li>
+                <li><strong>Mobile Dropdown</strong>: On small screens, convert tabs to dropdown for better UX</li>
+                <li><strong>Smooth Transitions</strong>: Use <code>animation: true</code> for professional feel;
+                    crossfade looks better than slide
+                </li>
+                <li><strong>Equal Width Tabs</strong>: Use flexbox for equal-width tabs: <code>.tab-list { display:
+                    flex; } .tab-item { flex: 1; }</code></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- SECTION 6: API Reference -->
+    <section class="card mb-6" data-section="API Reference">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">API Reference</h2>
+        </div>
+        <div class="card-body">
+
+            <h4 class="category-title">Constructor Options</h4>
+            <table class="option-table mb-6">
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>activeIndex</code></td>
+                    <td>Number</td>
+                    <td><code>0</code></td>
+                    <td>Index of initially active tab (0-based)</td>
+                </tr>
+                <tr>
+                    <td><code>animation</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Enable smooth fade transitions between panels</td>
+                </tr>
+                <tr>
+                    <td><code>onChange</code></td>
+                    <td>Function</td>
+                    <td><code>null</code></td>
+                    <td>Callback fired when active tab changes: <code>(index, panel) => {}</code></td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Methods</h4>
+            <table class="option-table mb-6">
+                <tr>
+                    <th>Method</th>
+                    <th>Parameters</th>
+                    <th>Returns</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>show(index)</code></td>
+                    <td><code>index: Number</code></td>
+                    <td>this</td>
+                    <td>Activates the tab at specified index (0-based)</td>
+                </tr>
+                <tr>
+                    <td><code>getActive()</code></td>
+                    <td>None</td>
+                    <td>Number</td>
+                    <td>Returns the index of currently active tab</td>
+                </tr>
+                <tr>
+                    <td><code>next()</code></td>
+                    <td>None</td>
+                    <td>this</td>
+                    <td>Activates the next tab (wraps to first if at end)</td>
+                </tr>
+                <tr>
+                    <td><code>prev()</code></td>
+                    <td>None</td>
+                    <td>this</td>
+                    <td>Activates the previous tab (wraps to last if at start)</td>
+                </tr>
+                <tr>
+                    <td><code>destroy()</code></td>
+                    <td>None</td>
+                    <td>void</td>
+                    <td>Removes event listeners and cleans up instance</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Events</h4>
+            <table class="option-table mb-6">
+                <tr>
+                    <th>Event</th>
+                    <th>Parameters</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>onChange</code></td>
+                    <td><code>index: Number, panel: Element</code></td>
+                    <td>Fired when user or program switches to a different tab</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">CSS Classes</h4>
+            <table class="option-table mb-4">
+                <tr>
+                    <th>Class</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>.tabs</code></td>
+                    <td>Main container for tab component</td>
+                </tr>
+                <tr>
+                    <td><code>.tabs-pills</code></td>
+                    <td>Modifier for pill-style tabs with rounded backgrounds</td>
+                </tr>
+                <tr>
+                    <td><code>.tabs-vertical</code></td>
+                    <td>Modifier for vertical (side-by-side) layout</td>
+                </tr>
+                <tr>
+                    <td><code>.tab-list</code></td>
+                    <td>Container for tab headers (ul element)</td>
+                </tr>
+                <tr>
+                    <td><code>.tab-item</code></td>
+                    <td>Individual tab header (li element)</td>
+                </tr>
+                <tr>
+                    <td><code>.tab-item.active</code></td>
+                    <td>Currently active tab header</td>
+                </tr>
+                <tr>
+                    <td><code>.tab-content</code></td>
+                    <td>Container for all tab panels</td>
+                </tr>
+                <tr>
+                    <td><code>.tab-panel</code></td>
+                    <td>Individual content panel (div element)</td>
+                </tr>
+                <tr>
+                    <td><code>.tab-panel.active</code></td>
+                    <td>Currently visible content panel</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- SECTION 7: Config Engine Integration -->
+    <section class="card mb-6" data-section="Config Engine">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Config Engine Integration</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Declaratively initialise tabs using Domma's Config Engine.
+            </p>
+
+            <h4 class="category-title">Basic Setup</h4>
+            <pre class="code-block">$.setup({
+    '#product-tabs': {
+        component: 'tabs',
+        options: {
+            activeIndex: 0,
+            animation: true
+        }
+    }
+});</pre>
+
+            <h4 class="category-title mt-4">With Change Tracking</h4>
+            <pre class="code-block">$.setup({
+    '#analytics-tabs': {
+        component: 'tabs',
+        options: {
+            activeIndex: 0,
+            animation: true,
+            onChange: (index) => {
+                const views = ['Today', 'Week', 'Month', 'Year'];
+                console.log(`Viewing ${views[index]} analytics`);
+                // Could fetch data for selected period
+            }
+        }
+    }
+});</pre>
+
+            <h4 class="category-title mt-4">Multiple Tab Sets</h4>
+            <pre class="code-block">$.setup({
+    '.product-tabs': {
+        component: 'tabs',
+        options: {
+            activeIndex: 0,
+            animation: true
+        }
+    },
+    '#settings-tabs': {
+        component: 'tabs',
+        options: {
+            activeIndex: 1,  // Start on second tab
+            animation: false // No animation
+        }
+    }
+});</pre>
+
+            <h4 class="category-title mt-4">Demo</h4>
+            <div class="demo-area">
+                <div class="config-demo-tabs tabs">
+                    <ul class="tab-list">
+                        <li class="tab-item active">Config Tab 1</li>
+                        <li class="tab-item">Config Tab 2</li>
+                        <li class="tab-item">Config Tab 3</li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-panel active"><p>Initialised with Config Engine</p></div>
+                        <div class="tab-panel"><p>Smooth animations enabled</p></div>
+                        <div class="tab-panel"><p>onChange callback fires</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 8: Related Elements -->
+    <section class="card mb-6" data-section="Related">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Related Elements</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Tabs work great with these complementary components:</p>
+
+            <div class="grid grid-cols-1"
+                 style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--dm-space-4);">
+                <a href="../accordion/index.html" class="card card-hover"
+                   style="text-decoration: none; color: inherit;">
+                    <div class="card-body">
+                        <h4 class="card-title">Accordion</h4>
+                        <p class="card-text">Alternative to tabs when vertical space isn't limited; all content on one
+                            page.</p>
+                    </div>
+                </a>
+
+                <a href="../card/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+                    <div class="card-body">
+                        <h4 class="card-title">Card</h4>
+                        <p class="card-text">Wrap tab panels in cards for better visual separation and structure.</p>
+                    </div>
+                </a>
+
+                <a href="../modal/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+                    <div class="card-body">
+                        <h4 class="card-title">Modal</h4>
+                        <p class="card-text">Use tabs within modals for complex forms or multi-section content.</p>
+                    </div>
+                </a>
+
+                <a href="../loader/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+                    <div class="card-body">
+                        <h4 class="card-title">Loader</h4>
+                        <p class="card-text">Show loading states while tab content loads asynchronously.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    // Quick Start
+    Domma.elements.tabs('#quick-tabs');
+
+    // Tutorial
+    const tutorialTabs = Domma.elements.tabs('#tutorial-tabs', {
+        activeIndex: 0,
+        animation: true,
+        onChange: (index) => {
+            const tabs = ['Overview', 'Features', 'Reviews'];
+            document.getElementById('tutorial-result').textContent = `Now viewing: ${tabs[index]}`;
+        }
+    });
+
+    document.getElementById('tutorial-prev').addEventListener('click', () => tutorialTabs.prev());
+    document.getElementById('tutorial-next').addEventListener('click', () => tutorialTabs.next());
+
+    // Examples
+    Domma.elements.tabs('#standard-tabs');
+    Domma.elements.tabs('#pill-tabs');
+    Domma.elements.tabs('#vertical-tabs');
+    Domma.elements.tabs('#icon-tabs');
+    Domma.elements.tabs('#badge-tabs');
+
+    // Dynamic content loading example
+    const dynamicTabs = Domma.elements.tabs('#dynamic-tabs', {
+        onChange: (index, panel) => {
+            // Simulate loading content
+            if (!panel.dataset.loaded) {
+                const originalContent = panel.innerHTML;
+                panel.innerHTML = '<p style="color: var(--dm-text-muted);">Loading content...</p>';
+
+                setTimeout(() => {
+                    panel.innerHTML = `<p>Dynamically loaded content for Tab ${index + 1}</p>
+                    <p class="text-sm">Loaded at ${new Date().toLocaleTimeString()}</p>`;
+                    panel.dataset.loaded = 'true';
+                }, 800);
+            }
+        }
+    });
+
+    // Config Engine demo
+    $.setup({
+        '.config-demo-tabs': {
+            component: 'tabs',
+            options: {
+                activeIndex: 0,
+                animation: true,
+                onChange: (index) => {
+                    console.log('Config demo tab changed to:', index);
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

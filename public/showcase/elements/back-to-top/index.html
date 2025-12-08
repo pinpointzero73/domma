@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Back to Top - Elements - Domma Showcase</title>
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+</head>
+<body class="dm-theme-light">
+
+<section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Overview</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Back to Top provides a floating button that appears when users scroll down, allowing quick return to the
+            page top. Perfect for long pages, documentation, and content-heavy sites.
+        </p>
+
+        <h3 class="category-title">Key Features</h3>
+        <ul class="feature-list mb-4">
+            <li><strong>Auto Show/Hide</strong> - Appears after scrolling threshold</li>
+            <li><strong>Smooth Scrolling</strong> - Configurable animation duration</li>
+            <li><strong>Positioning</strong> - Bottom-right, bottom-left, or custom</li>
+            <li><strong>Callbacks</strong> - onShow and onHide events</li>
+        </ul>
+
+        <h3 class="category-title">Basic Usage</h3>
+        <div class="code-block">
+            <pre><code>const backToTop = Domma.elements.backToTop('#back-to-top', {
+    showAfter: 300,
+    duration: 600,
+    position: 'bottom-right'
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Quick Start">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Quick Start</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Simple Back to Top Button</h3>
+        <div class="demo-area mb-4">
+            <p class="text-center text-muted mb-3">Scroll down this demo area to see the button appear</p>
+            <div style="height: 400px; overflow-y: auto; border: 1px solid var(--dm-border); padding: 1rem; position: relative;"
+                 id="quick-demo-container">
+                <div style="height: 1200px;">
+                    <p><strong>Scroll down...</strong></p>
+                    <p style="margin-top: 300px;">Keep scrolling...</p>
+                    <p style="margin-top: 300px;">Almost there...</p>
+                    <p style="margin-top: 200px;">You should see the button now!</p>
+                </div>
+                <button id="quick-back-to-top" class="back-to-top-btn" style="display: none;">↑</button>
+            </div>
+        </div>
+        <div class="code-block">
+            <pre><code>&lt;button id="back-to-top" class="back-to-top-btn"&gt;↑&lt;/button&gt;
+
+&lt;script&gt;
+Domma.elements.backToTop('#back-to-top', {
+    showAfter: 200,
+    duration: 500
+});
+&lt;/script&gt;</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Tutorial">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Tutorial</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">Build a back to top button with custom styling and callbacks.</p>
+
+        <div class="demo-area">
+            <div style="height: 400px; overflow-y: auto; border: 1px solid var(--dm-border); padding: 1rem; position: relative;"
+                 id="tutorial-container">
+                <div style="height: 1500px;">
+                    <h3>Long Article Content</h3>
+                    <p>Scroll down to see the custom back to top button...</p>
+                    <div style="margin-top: 200px;">
+                        <h4>Section 1</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                    <div style="margin-top: 200px;">
+                        <h4>Section 2</h4>
+                        <p>Sed do eiusmod tempor incididunt ut labore et dolore.</p>
+                    </div>
+                    <div style="margin-top: 200px;">
+                        <h4>Section 3</h4>
+                        <p>Ut enim ad minim veniam, quis nostrud exercitation.</p>
+                    </div>
+                    <div style="margin-top: 200px;">
+                        <h4>Section 4</h4>
+                        <p>Duis aute irure dolor in reprehenderit in voluptate.</p>
+                    </div>
+                </div>
+                <button id="tutorial-back-to-top" class="btn btn-primary"
+                        style="display: none; position: absolute; bottom: 20px; right: 20px; border-radius: 50%; width: 50px; height: 50px; padding: 0;">
+                    <span style="font-size: 1.5rem;">↑</span>
+                </button>
+            </div>
+            <div id="tutorial-status" class="mt-3 p-3 bg-surface rounded text-center">
+                <p class="text-muted text-sm">Button status: <span id="button-status">Hidden</span></p>
+            </div>
+        </div>
+
+        <div class="code-block mt-4">
+            <pre><code>const backToTop = Domma.elements.backToTop('#back-to-top', {
+    showAfter: 300,
+    duration: 600,
+    position: 'bottom-right',
+    offset: { bottom: 20, right: 20 },
+    target: '#scrollable-container',
+    onShow: () => {
+        console.log('Button shown');
+        document.getElementById('status').textContent = 'Visible';
+    },
+    onHide: () => {
+        console.log('Button hidden');
+        document.getElementById('status').textContent = 'Hidden';
+    }
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Examples">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Examples</h2>
+    </div>
+    <div class="card-body">
+
+        <h3 class="category-title">Different Positions</h3>
+        <div class="demo-area mb-4">
+            <div class="flex gap-4 justify-center mb-3">
+                <button id="show-bottom-right" class="btn btn-outline btn-sm">Bottom Right</button>
+                <button id="show-bottom-left" class="btn btn-outline btn-sm">Bottom Left</button>
+            </div>
+            <div style="height: 300px; overflow-y: auto; border: 1px solid var(--dm-border); padding: 1rem; position: relative;"
+                 id="position-demo">
+                <div style="height: 800px;">
+                    <p>Scroll to see buttons at different positions...</p>
+                    <p style="margin-top: 200px;">Bottom right button appears first</p>
+                    <p style="margin-top: 300px;">You should see the buttons now</p>
+                </div>
+                <button id="btn-bottom-right" class="back-to-top-btn"
+                        style="display: none; position: absolute; bottom: 20px; right: 20px;">↑
+                </button>
+                <button id="btn-bottom-left" class="back-to-top-btn"
+                        style="display: none; position: absolute; bottom: 20px; left: 20px;">↑
+                </button>
+            </div>
+        </div>
+
+        <h3 class="category-title">Custom Duration</h3>
+        <div class="demo-area mb-4">
+            <div style="height: 300px; overflow-y: auto; border: 1px solid var(--dm-border); padding: 1rem; position: relative;"
+                 id="duration-demo">
+                <div style="height: 1000px;">
+                    <p>Try different scroll speeds...</p>
+                    <div class="flex gap-2 mt-4">
+                        <button class="btn btn-sm btn-outline" onclick="durationBtn.scroll(200)">Fast (200ms)</button>
+                        <button class="btn btn-sm btn-outline" onclick="durationBtn.scroll(1000)">Slow (1000ms)</button>
+                    </div>
+                    <p style="margin-top: 300px;">Scroll down to see the button</p>
+                </div>
+                <button id="duration-btn" class="back-to-top-btn" style="display: none;">↑</button>
+            </div>
+        </div>
+
+        <h3 class="category-title">Programmatic Control</h3>
+        <div class="demo-area text-center">
+            <div class="flex gap-2 justify-center mb-3">
+                <button id="prog-show" class="btn btn-outline btn-sm">Show</button>
+                <button id="prog-hide" class="btn btn-outline btn-sm">Hide</button>
+                <button id="prog-toggle" class="btn btn-outline btn-sm">Toggle</button>
+                <button id="prog-scroll" class="btn btn-outline btn-sm">Scroll to Top</button>
+            </div>
+            <div style="height: 300px; overflow-y: auto; border: 1px solid var(--dm-border); padding: 1rem; position: relative;"
+                 id="programmatic-demo">
+                <div style="height: 800px;">
+                    <p>Use buttons above to control the back to top button</p>
+                    <p style="margin-top: 600px;">Scroll position tracked</p>
+                </div>
+                <button id="programmatic-btn" class="back-to-top-btn" style="display: none;">↑</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Best Practices">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Best Practices</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Accessibility</h3>
+        <ul class="mb-4">
+            <li><strong>Keyboard Access</strong> - Ensure button is keyboard focusable</li>
+            <li><strong>ARIA Label</strong> - Add <code>aria-label="Back to top"</code> for screen readers</li>
+            <li><strong>Focus Visibility</strong> - Provide clear focus indicator</li>
+        </ul>
+
+        <h3 class="category-title">UX Guidelines</h3>
+        <ul class="mb-4">
+            <li><strong>Threshold</strong> - Show after 200-400px scroll for optimal UX</li>
+            <li><strong>Positioning</strong> - Bottom-right is conventional, but avoid blocking content</li>
+            <li><strong>Animation Duration</strong> - 400-800ms provides smooth but quick scrolling</li>
+            <li><strong>Visual Clarity</strong> - Use clear up arrow (↑) or icon</li>
+        </ul>
+
+        <h3 class="category-title">Performance</h3>
+        <ul>
+            <li><strong>Throttle Scroll Events</strong> - Component automatically throttles scroll listeners</li>
+            <li><strong>Destroy When Done</strong> - Call <code>destroy()</code> on single-page apps when navigating
+            </li>
+        </ul>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="API Reference">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">API Reference</h2>
+    </div>
+    <div class="card-body">
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>showAfter</code></td>
+                    <td>Number</td>
+                    <td><code>300</code></td>
+                    <td>Scroll pixels before showing button</td>
+                </tr>
+                <tr>
+                    <td><code>duration</code></td>
+                    <td>Number</td>
+                    <td><code>500</code></td>
+                    <td>Scroll animation duration (ms)</td>
+                </tr>
+                <tr>
+                    <td><code>position</code></td>
+                    <td>String</td>
+                    <td><code>'bottom-right'</code></td>
+                    <td>Position: bottom-right, bottom-left</td>
+                </tr>
+                <tr>
+                    <td><code>offset</code></td>
+                    <td>Object</td>
+                    <td><code>{ bottom: 20, right: 20 }</code></td>
+                    <td>Offset from edges (px)</td>
+                </tr>
+                <tr>
+                    <td><code>target</code></td>
+                    <td>String/Element</td>
+                    <td><code>window</code></td>
+                    <td>Scroll target (default: window)</td>
+                </tr>
+                <tr>
+                    <td><code>onShow</code></td>
+                    <td>Function</td>
+                    <td><code>null</code></td>
+                    <td>Show callback</td>
+                </tr>
+                <tr>
+                    <td><code>onHide</code></td>
+                    <td>Function</td>
+                    <td><code>null</code></td>
+                    <td>Hide callback</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title mt-4">Methods</h3>
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Parameters</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>scroll(duration)</code></td>
+                    <td>duration (optional)</td>
+                    <td>Scroll to top with optional custom duration</td>
+                </tr>
+                <tr>
+                    <td><code>show()</code></td>
+                    <td>-</td>
+                    <td>Show button immediately</td>
+                </tr>
+                <tr>
+                    <td><code>hide()</code></td>
+                    <td>-</td>
+                    <td>Hide button immediately</td>
+                </tr>
+                <tr>
+                    <td><code>toggle()</code></td>
+                    <td>-</td>
+                    <td>Toggle button visibility</td>
+                </tr>
+                <tr>
+                    <td><code>isVisible()</code></td>
+                    <td>-</td>
+                    <td>Check if button is visible</td>
+                </tr>
+                <tr>
+                    <td><code>getButton()</code></td>
+                    <td>-</td>
+                    <td>Get button element</td>
+                </tr>
+                <tr>
+                    <td><code>destroy()</code></td>
+                    <td>-</td>
+                    <td>Remove button and clean up</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Config Engine">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Config Engine</h2>
+    </div>
+    <div class="card-body">
+        <div class="code-block">
+            <pre><code>$.setup({
+    '#back-to-top': {
+        component: 'backToTop',
+        options: {
+            showAfter: 400,
+            duration: 600,
+            position: 'bottom-right',
+            onShow: () => console.log('Button appeared'),
+            onHide: () => console.log('Button hidden')
+        }
+    }
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Related">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Related Elements</h2>
+    </div>
+    <div class="card-body">
+        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <a href="../navbar/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Navbar</h3>
+                    <p class="card-text">Sticky navigation for page sections</p>
+                </div>
+            </a>
+            <a href="../breadcrumbs/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Breadcrumbs</h3>
+                    <p class="card-text">Navigation trail for deep content</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    // Quick Start
+    const quickBtn = Domma.elements.backToTop('#quick-back-to-top', {
+        showAfter: 200,
+        duration: 500,
+        target: '#quick-demo-container'
+    });
+
+    // Tutorial
+    const tutorialBtn = Domma.elements.backToTop('#tutorial-back-to-top', {
+        showAfter: 300,
+        duration: 600,
+        target: '#tutorial-container',
+        onShow: () => {
+            document.getElementById('button-status').textContent = 'Visible';
+        },
+        onHide: () => {
+            document.getElementById('button-status').textContent = 'Hidden';
+        }
+    });
+
+    // Position examples
+    const btnRight = Domma.elements.backToTop('#btn-bottom-right', {
+        showAfter: 200,
+        target: '#position-demo',
+        offset: {bottom: 20, right: 20}
+    });
+
+    const btnLeft = Domma.elements.backToTop('#btn-bottom-left', {
+        showAfter: 200,
+        target: '#position-demo',
+        offset: {bottom: 20, left: 20}
+    });
+
+    // Duration example
+    const durationBtn = Domma.elements.backToTop('#duration-btn', {
+        showAfter: 200,
+        duration: 600,
+        target: '#duration-demo'
+    });
+
+    // Programmatic control
+    const programmaticBtn = Domma.elements.backToTop('#programmatic-btn', {
+        showAfter: 200,
+        target: '#programmatic-demo'
+    });
+
+    document.getElementById('prog-show').addEventListener('click', () => programmaticBtn.show());
+    document.getElementById('prog-hide').addEventListener('click', () => programmaticBtn.hide());
+    document.getElementById('prog-toggle').addEventListener('click', () => programmaticBtn.toggle());
+    document.getElementById('prog-scroll').addEventListener('click', () => programmaticBtn.scroll(400));
+</script>
+
+</body>
+</html>

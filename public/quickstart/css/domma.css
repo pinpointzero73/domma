@@ -1418,7 +1418,7 @@ code, pre {
 .card-header {
     padding: var(--dm-space-4) var(--dm-space-6);
     border-bottom: 1px solid var(--dm-gray-200);
-    background-color: var(--dm-gray-100);
+    background-color: var(--dm-primary-light, var(--dm-gray-100));
 }
 
 .card-body {
@@ -1428,7 +1428,7 @@ code, pre {
 .card-footer {
     padding: var(--dm-space-4) var(--dm-space-6);
     border-top: 1px solid var(--dm-gray-200);
-    background-color: var(--dm-gray-100);
+    background-color: var(--dm-primary-light, var(--dm-gray-100));
 }
 
 .card-title {

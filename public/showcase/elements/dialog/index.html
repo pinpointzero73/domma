@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dialog - Elements - Domma Showcase</title>
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+</head>
+<body class="dm-theme-light">
+
+<section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Overview</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Dialogs are promise-based modal interactions that replace browser's native <code>alert()</code>, <code>confirm()</code>,
+            and <code>prompt()</code> with styled, customisable alternatives. Perfect for user confirmations, alerts,
+            and input collection.
+        </p>
+
+        <h3 class="category-title">Key Features</h3>
+        <ul class="feature-list mb-4">
+            <li><strong>Promise-Based API</strong> - Modern async/await support</li>
+            <li><strong>Three Types</strong> - Alert, confirm, and prompt dialogs</li>
+            <li><strong>Customisable</strong> - Custom titles, button text, input types</li>
+            <li><strong>Keyboard Support</strong> - Enter to confirm, Escape to cancel</li>
+        </ul>
+
+        <h3 class="category-title">Basic Usage</h3>
+        <div class="code-block">
+            <pre><code>// Alert
+await Domma.elements.alert('Operation successful!');
+
+// Confirm
+const confirmed = await Domma.elements.confirm('Delete this item?');
+
+// Prompt
+const name = await Domma.elements.prompt('Enter your name:');</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Quick Start">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Quick Start</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Simple Alert</h3>
+        <div class="demo-area mb-4 text-center">
+            <button id="quick-alert" class="btn btn-primary">Show Alert</button>
+        </div>
+        <div class="code-block">
+            <pre><code>document.getElementById('btn').addEventListener('click', async () => {
+    await Domma.elements.alert('This is an alert message!');
+    console.log('Alert closed');
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Tutorial">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Tutorial</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">Build a delete confirmation flow using dialogs.</p>
+
+        <div class="demo-area mb-4">
+            <div class="flex gap-4 justify-center">
+                <button id="tutorial-delete" class="btn btn-danger">Delete Item</button>
+            </div>
+            <div id="tutorial-result" class="mt-4 p-4 bg-surface rounded" style="min-height: 60px;">
+                <p class="text-muted">Click "Delete Item" to start the flow</p>
+            </div>
+        </div>
+
+        <div class="code-block">
+            <pre><code>document.getElementById('delete-btn').addEventListener('click', async () => {
+    // Step 1: Confirm deletion
+    const confirmed = await Domma.elements.confirm(
+        'Are you sure you want to delete this item?',
+        {
+            title: 'Confirm Deletion',
+            confirmText: 'Delete',
+            cancelText: 'Cancel'
+        }
+    );
+
+    if (!confirmed) return;
+
+    // Step 2: Prompt for confirmation text
+    const input = await Domma.elements.prompt(
+        'Type "DELETE" to confirm:',
+        {
+            title: 'Final Confirmation',
+            inputPlaceholder: 'Type DELETE'
+        }
+    );
+
+    if (input === 'DELETE') {
+        await Domma.elements.alert('Item deleted successfully!', {
+            title: 'Success'
+        });
+    } else {
+        await Domma.elements.alert('Deletion cancelled - text did not match.', {
+            title: 'Cancelled'
+        });
+    }
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Examples">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Examples</h2>
+    </div>
+    <div class="card-body">
+
+        <h3 class="category-title">Alert Dialog</h3>
+        <div class="demo-area mb-4 text-center">
+            <button id="ex-alert" class="btn btn-primary">Show Alert</button>
+        </div>
+
+        <h3 class="category-title">Confirm Dialog</h3>
+        <div class="demo-area mb-4 text-center">
+            <button id="ex-confirm" class="btn btn-warning">Show Confirm</button>
+            <p class="text-sm text-muted mt-2">Result: <span id="confirm-result">-</span></p>
+        </div>
+
+        <h3 class="category-title">Prompt Dialog (Text)</h3>
+        <div class="demo-area mb-4 text-center">
+            <button id="ex-prompt-text" class="btn btn-secondary">Show Text Prompt</button>
+            <p class="text-sm text-muted mt-2">Input: <span id="prompt-text-result">-</span></p>
+        </div>
+
+        <h3 class="category-title">Prompt Dialog (Email)</h3>
+        <div class="demo-area mb-4 text-center">
+            <button id="ex-prompt-email" class="btn btn-secondary">Show Email Prompt</button>
+            <p class="text-sm text-muted mt-2">Input: <span id="prompt-email-result">-</span></p>
+        </div>
+
+        <h3 class="category-title">Custom Button Text</h3>
+        <div class="demo-area text-center">
+            <button id="ex-custom" class="btn btn-danger">Delete Account</button>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Best Practices">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Best Practices</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Accessibility</h3>
+        <ul class="mb-4">
+            <li><strong>Keyboard Support</strong> - Always enabled: Enter confirms, Escape cancels</li>
+            <li><strong>Focus Management</strong> - Auto-focuses confirm button or input field</li>
+            <li><strong>Clear Actions</strong> - Use descriptive button text ("Delete" not "OK")</li>
+        </ul>
+
+        <h3 class="category-title">UX Guidelines</h3>
+        <ul class="mb-4">
+            <li><strong>Confirm Destructive Actions</strong> - Always confirm deletes, permanent changes</li>
+            <li><strong>Provide Context</strong> - Use custom titles to clarify the action</li>
+            <li><strong>Handle Cancellation</strong> - Check promise result and handle appropriately</li>
+        </ul>
+
+        <h3 class="category-title">Performance</h3>
+        <ul>
+            <li><strong>Await Properly</strong> - Always use <code>await</code> or <code>.then()</code> to handle
+                results
+            </li>
+            <li><strong>Error Handling</strong> - Wrap in try/catch for production environments</li>
+        </ul>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="API Reference">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">API Reference</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Static Methods</h3>
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Returns</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>alert(message, options)</code></td>
+                    <td>Promise&lt;void&gt;</td>
+                    <td>Show alert with OK button</td>
+                </tr>
+                <tr>
+                    <td><code>confirm(message, options)</code></td>
+                    <td>Promise&lt;boolean&gt;</td>
+                    <td>Show confirmation dialog, returns true/false</td>
+                </tr>
+                <tr>
+                    <td><code>prompt(message, options)</code></td>
+                    <td>Promise&lt;string|null&gt;</td>
+                    <td>Show input dialog, returns value or null</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title mt-4">Options</h3>
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>title</code></td>
+                    <td>String</td>
+                    <td><code>null</code></td>
+                    <td>Dialog title</td>
+                </tr>
+                <tr>
+                    <td><code>confirmText</code></td>
+                    <td>String</td>
+                    <td><code>'OK'</code></td>
+                    <td>Confirm button text</td>
+                </tr>
+                <tr>
+                    <td><code>cancelText</code></td>
+                    <td>String</td>
+                    <td><code>'Cancel'</code></td>
+                    <td>Cancel button text</td>
+                </tr>
+                <tr>
+                    <td><code>inputPlaceholder</code></td>
+                    <td>String</td>
+                    <td><code>''</code></td>
+                    <td>Prompt input placeholder</td>
+                </tr>
+                <tr>
+                    <td><code>inputValue</code></td>
+                    <td>String</td>
+                    <td><code>''</code></td>
+                    <td>Prompt input default value</td>
+                </tr>
+                <tr>
+                    <td><code>inputType</code></td>
+                    <td>String</td>
+                    <td><code>'text'</code></td>
+                    <td>Input type (text, email, etc.)</td>
+                </tr>
+                <tr>
+                    <td><code>animation</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Enable animations</td>
+                </tr>
+                <tr>
+                    <td><code>keyboard</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Enable keyboard shortcuts</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Config Engine">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Config Engine</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">Dialogs are typically called programmatically, but you can attach them to buttons:</p>
+        <div class="code-block">
+            <pre><code>$.setup({
+    '#delete-btn': {
+        events: {
+            click: async (e, $el) => {
+                const confirmed = await Domma.elements.confirm(
+                    'Delete this item?',
+                    { confirmText: 'Delete', cancelText: 'Cancel' }
+                );
+                if (confirmed) {
+                    // Perform deletion
+                }
+            }
+        }
+    }
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Related">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Related Elements</h2>
+    </div>
+    <div class="card-body">
+        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <a href="../modal/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Modal</h3>
+                    <p class="card-text">For custom modal content beyond simple dialogs</p>
+                </div>
+            </a>
+            <a href="../toast/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Toast</h3>
+                    <p class="card-text">Non-blocking notifications</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    // Quick Start
+    document.getElementById('quick-alert').addEventListener('click', async () => {
+        await Domma.elements.alert('This is an alert message!');
+    });
+
+    // Tutorial
+    document.getElementById('tutorial-delete').addEventListener('click', async () => {
+        const resultDiv = document.getElementById('tutorial-result');
+        resultDiv.innerHTML = '<p class="text-muted">Processing...</p>';
+
+        const confirmed = await Domma.elements.confirm(
+            'Are you sure you want to delete this item?',
+            {
+                title: 'Confirm Deletion',
+                confirmText: 'Delete',
+                cancelText: 'Cancel'
+            }
+        );
+
+        if (!confirmed) {
+            resultDiv.innerHTML = '<p class="text-warning">Deletion cancelled by user.</p>';
+            return;
+        }
+
+        const input = await Domma.elements.prompt(
+            'Type "DELETE" to confirm:',
+            {
+                title: 'Final Confirmation',
+                inputPlaceholder: 'Type DELETE'
+            }
+        );
+
+        if (input === 'DELETE') {
+            resultDiv.innerHTML = '<p class="text-success">✓ Item deleted successfully!</p>';
+        } else {
+            resultDiv.innerHTML = `<p class="text-warning">Deletion cancelled - you typed "${input || '(nothing)'}" instead of "DELETE".</p>`;
+        }
+    });
+
+    // Examples
+    document.getElementById('ex-alert').addEventListener('click', async () => {
+        await Domma.elements.alert('Operation completed successfully!', {
+            title: 'Success'
+        });
+    });
+
+    document.getElementById('ex-confirm').addEventListener('click', async () => {
+        const result = await Domma.elements.confirm('Do you want to proceed?', {
+            title: 'Confirm Action',
+            confirmText: 'Yes',
+            cancelText: 'No'
+        });
+        document.getElementById('confirm-result').textContent = result ? 'Confirmed' : 'Cancelled';
+    });
+
+    document.getElementById('ex-prompt-text').addEventListener('click', async () => {
+        const result = await Domma.elements.prompt('What is your name?', {
+            title: 'User Information',
+            inputPlaceholder: 'Enter your name'
+        });
+        document.getElementById('prompt-text-result').textContent = result || '(cancelled)';
+    });
+
+    document.getElementById('ex-prompt-email').addEventListener('click', async () => {
+        const result = await Domma.elements.prompt('Enter your email:', {
+            title: 'Email Address',
+            inputPlaceholder: 'you@example.com',
+            inputType: 'email'
+        });
+        document.getElementById('prompt-email-result').textContent = result || '(cancelled)';
+    });
+
+    document.getElementById('ex-custom').addEventListener('click', async () => {
+        const confirmed = await Domma.elements.confirm(
+            'This action cannot be undone. Are you absolutely sure?',
+            {
+                title: 'Delete Account',
+                confirmText: 'Yes, Delete My Account',
+                cancelText: 'Cancel'
+            }
+        );
+        if (confirmed) {
+            await Domma.elements.alert('Account deletion initiated.', {title: 'Account Deleted'});
+        }
+    });
+</script>
+
+</body>
+</html>

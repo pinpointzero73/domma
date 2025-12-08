@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loader - Elements - Domma Showcase</title>
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+</head>
+<body class="dm-theme-light">
+
+<!-- SECTION 1: OVERVIEW -->
+<section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Overview</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Loaders (also called spinners or throbbers) provide visual feedback during asynchronous operations. They
+            indicate that content is loading, a process is running, or the application is waiting for a response. Domma
+            provides four animated loader types with flexible sizing, colouring, and positioning options.
+        </p>
+
+        <h3 class="category-title">Key Features</h3>
+        <ul class="feature-list mb-4">
+            <li><strong>Four Animation Types</strong> - Spinner, dots, pulse, and bars</li>
+            <li><strong>Flexible Sizing</strong> - Small, medium, large, or custom pixel size</li>
+            <li><strong>Theme-Aware Colours</strong> - Primary, secondary, success, danger, or custom hex</li>
+            <li><strong>Overlay Mode</strong> - Cover entire container with backdrop</li>
+            <li><strong>Loading Text</strong> - Optional text label below animation</li>
+            <li><strong>Static Helpers</strong> - Fullscreen loader and quick show/hide methods</li>
+        </ul>
+
+        <h3 class="category-title">When to Use Loaders</h3>
+        <ul class="mb-4">
+            <li><strong>API Calls</strong> - Show whilst fetching data from a server</li>
+            <li><strong>File Uploads</strong> - Indicate progress during file transfers</li>
+            <li><strong>Page Transitions</strong> - Display whilst loading new content</li>
+            <li><strong>Heavy Computations</strong> - Provide feedback during intensive JavaScript operations</li>
+        </ul>
+
+        <h3 class="category-title">Basic Usage</h3>
+        <div class="code-block">
+            <pre><code>&lt;!-- HTML Container --&gt;
+&lt;div id="my-container" style="min-height: 120px; position: relative;"&gt;
+    &lt;!-- Loader will be inserted here --&gt;
+&lt;/div&gt;
+
+&lt;!-- JavaScript Initialisation --&gt;
+&lt;script&gt;
+const loader = Domma.elements.loader('#my-container', {
+    type: 'spinner',      // 'spinner', 'dots', 'pulse', 'bars'
+    size: 'medium',       // 'small', 'medium', 'large', or number (px)
+    color: 'primary'      // 'primary', 'secondary', 'white', or hex
+});
+
+// Show/hide
+loader.show();
+loader.hide();
+loader.toggle();
+&lt;/script&gt;</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 2: QUICK START -->
+<section class="card mb-6" data-section="Quick Start">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Quick Start</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">Get started with Loaders in seconds. Here's the simplest implementation:</p>
+
+        <h3 class="category-title">Basic Spinner Loader</h3>
+        <p class="text-muted mb-2">Create a container and initialise a loader:</p>
+        <div class="demo-area mb-4" style="min-height: 120px; position: relative;" id="quick-start-demo">
+            <!-- Loader will be inserted here -->
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>&lt;div id="my-loader-container" style="min-height: 120px; position: relative;"&gt;
+    &lt;!-- Loader appears here --&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const loader = Domma.elements.loader('#my-loader-container', {
+    type: 'spinner',
+    size: 'medium',
+    color: 'primary'
+});
+
+loader.show();  // Display the loader
+&lt;/script&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title">Static Fullscreen Loader</h3>
+        <p class="text-muted mb-2">Quick fullscreen loader with a single line:</p>
+        <div class="demo-area mb-4">
+            <button id="quick-fullscreen-btn" class="btn btn-primary">Show Fullscreen Loader</button>
+        </div>
+        <div class="code-block">
+            <pre><code>// Show fullscreen loader for 2 seconds
+const fsLoader = Domma.elements.fullscreenLoader('Loading content...');
+setTimeout(() => fsLoader.destroy(), 2000);</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 3: TUTORIAL -->
+<section class="card mb-6" data-section="Tutorial">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Step-by-Step Tutorial</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Let's build a data fetching interface that shows a loader whilst making an API call, then displays the
+            results.
+        </p>
+
+        <h3 class="category-title">Step 1: Create the HTML Structure</h3>
+        <p class="text-muted mb-2">Create a container with a button to trigger loading:</p>
+        <div class="code-block mb-4">
+            <pre><code>&lt;button id="load-data-btn" class="btn btn-primary"&gt;Load Data&lt;/button&gt;
+
+&lt;div id="data-container" class="demo-area mt-4"
+     style="min-height: 200px; position: relative;"&gt;
+    &lt;p class="text-center text-muted" id="placeholder-text"&gt;
+        Click "Load Data" to fetch content
+    &lt;/p&gt;
+    &lt;div id="data-result" style="display: none;"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 2: Create the Loader Instance</h3>
+        <p class="text-muted mb-2">Initialise a loader with overlay to block interaction:</p>
+        <div class="code-block mb-4">
+            <pre><code>const dataLoader = Domma.elements.loader('#data-container', {
+    type: 'spinner',
+    size: 'large',
+    color: 'white',
+    overlay: true,           // Semi-transparent backdrop
+    text: 'Loading data...'  // Text below spinner
+});</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 3: Show Loader During Async Operation</h3>
+        <p class="text-muted mb-2">Display the loader whilst fetching data:</p>
+        <div class="code-block mb-4">
+            <pre><code>async function loadData() {
+    // Hide placeholder
+    document.getElementById('placeholder-text').style.display = 'none';
+
+    // Show loader
+    dataLoader.show();
+
+    try {
+        // Simulate API call
+        const response = await fetch('https://api.example.com/data');
+        const data = await response.json();
+
+        // Process data...
+    } catch (error) {
+        console.error('Failed to load data:', error);
+    }
+}</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 4: Hide Loader and Display Results</h3>
+        <p class="text-muted mb-2">Hide the loader and show fetched data:</p>
+        <div class="code-block mb-4">
+            <pre><code>async function loadData() {
+    document.getElementById('placeholder-text').style.display = 'none';
+    dataLoader.show();
+
+    try {
+        const response = await fetch('https://api.example.com/data');
+        const data = await response.json();
+
+        // Hide loader
+        dataLoader.hide();
+
+        // Display results
+        const resultEl = document.getElementById('data-result');
+        resultEl.innerHTML = `&lt;h4&gt;Data Loaded!&lt;/h4&gt;&lt;pre&gt;${JSON.stringify(data, null, 2)}&lt;/pre&gt;`;
+        resultEl.style.display = 'block';
+    } catch (error) {
+        dataLoader.hide();
+        alert('Failed to load data');
+    }
+}</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 5: Update Loader Text Dynamically</h3>
+        <p class="text-muted mb-2">Change the loading message based on progress:</p>
+        <div class="code-block mb-4">
+            <pre><code>async function loadMultipleResources() {
+    dataLoader.setText('Loading users...');
+    dataLoader.show();
+
+    const users = await fetch('/api/users').then(r =&gt; r.json());
+
+    dataLoader.setText('Loading posts...');
+    const posts = await fetch('/api/posts').then(r =&gt; r.json());
+
+    dataLoader.setText('Loading comments...');
+    const comments = await fetch('/api/comments').then(r =&gt; r.json());
+
+    dataLoader.hide();
+    // Display all data...
+}</code></pre>
+        </div>
+
+        <h3 class="category-title">Step 6: Complete Working Demo</h3>
+        <p class="text-muted mb-2">Try the complete data loading example:</p>
+        <div class="demo-area">
+            <button id="tutorial-load-btn" class="btn btn-primary">Load Data</button>
+            <div id="tutorial-container" class="mt-4 p-4 bg-surface rounded border"
+                 style="min-height: 200px; position: relative;">
+                <p class="text-center text-muted" id="tutorial-placeholder">
+                    Click "Load Data" to fetch content
+                </p>
+                <div id="tutorial-result" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 4: EXAMPLES -->
+<section class="card mb-6" data-section="Examples">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Examples & Variations</h2>
+    </div>
+    <div class="card-body">
+
+        <!-- Example 1: Loader Types -->
+        <h3 class="category-title">Four Loader Types</h3>
+        <p class="text-muted mb-2">Domma provides four different animation styles:</p>
+        <div class="demo-area mb-4">
+            <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div id="type-spinner" class="p-4 bg-surface rounded border text-center"
+                     style="min-height: 120px; position: relative;">
+                    <p class="text-sm text-muted mb-2">Spinner</p>
+                </div>
+                <div id="type-dots" class="p-4 bg-surface rounded border text-center"
+                     style="min-height: 120px; position: relative;">
+                    <p class="text-sm text-muted mb-2">Dots</p>
+                </div>
+                <div id="type-pulse" class="p-4 bg-surface rounded border text-center"
+                     style="min-height: 120px; position: relative;">
+                    <p class="text-sm text-muted mb-2">Pulse</p>
+                </div>
+                <div id="type-bars" class="p-4 bg-surface rounded border text-center"
+                     style="min-height: 120px; position: relative;">
+                    <p class="text-sm text-muted mb-2">Bars</p>
+                </div>
+            </div>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>// Spinner (default)
+Domma.elements.loader('#spinner-container', { type: 'spinner' }).show();
+
+// Animated dots
+Domma.elements.loader('#dots-container', { type: 'dots' }).show();
+
+// Pulsing circle
+Domma.elements.loader('#pulse-container', { type: 'pulse' }).show();
+
+// Vertical bars
+Domma.elements.loader('#bars-container', { type: 'bars' }).show();</code></pre>
+        </div>
+
+        <!-- Example 2: Size Variants -->
+        <h3 class="category-title">Size Variants</h3>
+        <p class="text-muted mb-2">Small, medium, and large sizes, plus custom pixel values:</p>
+        <div class="demo-area mb-4">
+            <div class="flex items-center justify-around gap-4">
+                <div id="size-small" class="p-3" style="position: relative; min-height: 60px; min-width: 60px;"></div>
+                <div id="size-medium" class="p-3" style="position: relative; min-height: 80px; min-width: 80px;"></div>
+                <div id="size-large" class="p-3" style="position: relative; min-height: 100px; min-width: 100px;"></div>
+                <div id="size-custom" class="p-3"
+                     style="position: relative; min-height: 120px; min-width: 120px;"></div>
+            </div>
+            <p class="text-center text-sm text-muted mt-2">Small (24px) | Medium (40px) | Large (64px) | Custom
+                (80px)</p>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>// Small (24px)
+Domma.elements.loader('#container', { size: 'small' }).show();
+
+// Medium (40px - default)
+Domma.elements.loader('#container', { size: 'medium' }).show();
+
+// Large (64px)
+Domma.elements.loader('#container', { size: 'large' }).show();
+
+// Custom pixel size
+Domma.elements.loader('#container', { size: 80 }).show();</code></pre>
+        </div>
+
+        <!-- Example 3: Colour Variants -->
+        <h3 class="category-title">Colour Variants</h3>
+        <p class="text-muted mb-2">Theme-aware colours or custom hex values:</p>
+        <div class="demo-area mb-4">
+            <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                <div id="color-primary" class="p-3 bg-surface rounded border"
+                     style="min-height: 80px; position: relative;"></div>
+                <div id="color-success" class="p-3 bg-surface rounded border"
+                     style="min-height: 80px; position: relative;"></div>
+                <div id="color-danger" class="p-3 bg-surface rounded border"
+                     style="min-height: 80px; position: relative;"></div>
+                <div id="color-warning" class="p-3 bg-surface rounded border"
+                     style="min-height: 80px; position: relative;"></div>
+                <div id="color-dark" class="p-3 bg-surface rounded border"
+                     style="min-height: 80px; position: relative;"></div>
+                <div id="color-custom" class="p-3 bg-dark rounded border"
+                     style="min-height: 80px; position: relative;"></div>
+            </div>
+            <p class="text-center text-sm text-muted mt-2">Primary | Success | Danger | Warning | Dark | Custom
+                (#9b59b6)</p>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>// Theme colours
+Domma.elements.loader('#container', { color: 'primary' }).show();
+Domma.elements.loader('#container', { color: 'success' }).show();
+Domma.elements.loader('#container', { color: 'danger' }).show();
+Domma.elements.loader('#container', { color: 'warning' }).show();
+
+// Custom hex colour
+Domma.elements.loader('#container', { color: '#9b59b6' }).show();</code></pre>
+        </div>
+
+        <!-- Example 4: Overlay Mode -->
+        <h3 class="category-title">Overlay Mode</h3>
+        <p class="text-muted mb-2">Cover container with semi-transparent backdrop:</p>
+        <div class="demo-area mb-4">
+            <div id="overlay-container" class="p-4 bg-surface rounded border"
+                 style="min-height: 200px; position: relative;">
+                <h4>Content Being Loaded</h4>
+                <p>This content is blocked by the overlay loader.</p>
+                <button id="show-overlay-btn" class="btn btn-primary">Show Overlay Loader</button>
+            </div>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>const overlayLoader = Domma.elements.loader('#container', {
+    type: 'spinner',
+    size: 'large',
+    color: 'white',
+    overlay: true,           // Enable backdrop overlay
+    text: 'Loading content...'
+});
+
+// Show for 2 seconds
+overlayLoader.show();
+setTimeout(() => overlayLoader.hide(), 2000);</code></pre>
+        </div>
+
+        <!-- Example 5: With Loading Text -->
+        <h3 class="category-title">With Loading Text</h3>
+        <p class="text-muted mb-2">Add descriptive text below the loader animation:</p>
+        <div class="demo-area mb-4">
+            <div id="text-container" class="p-4 bg-surface rounded border"
+                 style="min-height: 150px; position: relative;">
+                <!-- Loader with text will appear here -->
+            </div>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>const textLoader = Domma.elements.loader('#container', {
+    type: 'dots',
+    size: 'medium',
+    color: 'primary',
+    text: 'Loading your data...'
+});
+
+textLoader.show();
+
+// Update text dynamically
+setTimeout(() => textLoader.setText('Almost there...'), 1500);</code></pre>
+        </div>
+
+        <!-- Example 6: Static Helper Methods -->
+        <h3 class="category-title">Static Helper Methods</h3>
+        <p class="text-muted mb-2">Quick show/hide without creating instances:</p>
+        <div class="demo-area mb-4">
+            <div class="flex gap-2 mb-3">
+                <button id="static-show-btn" class="btn btn-primary">Show Loader</button>
+                <button id="static-hide-btn" class="btn btn-secondary">Hide Loader</button>
+            </div>
+            <div id="static-container" class="p-4 bg-surface rounded border"
+                 style="min-height: 120px; position: relative;">
+                <p class="text-center text-muted">Click "Show Loader" to display</p>
+            </div>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>// Quick show (creates loader if needed)
+Domma.elements.showLoader('#container');
+
+// Quick hide
+Domma.elements.hideLoader('#container');
+
+// Fullscreen loader
+const fs = Domma.elements.fullscreenLoader('Processing...');
+setTimeout(() => fs.destroy(), 2000);</code></pre>
+        </div>
+
+        <!-- Example 7: Button Loading State -->
+        <h3 class="category-title">Button Loading State</h3>
+        <p class="text-muted mb-2">Show loader inside a button during submission:</p>
+        <div class="demo-area mb-4">
+            <button id="submit-btn" class="btn btn-primary"
+                    style="position: relative; min-width: 120px; min-height: 40px;">
+                Submit Form
+            </button>
+        </div>
+        <div class="code-block mb-6">
+            <pre><code>const submitBtn = document.getElementById('submit-btn');
+let btnLoader = null;
+
+submitBtn.addEventListener('click', async () => {
+    // Disable button and show loader
+    submitBtn.disabled = true;
+    submitBtn.textContent = '';
+
+    btnLoader = Domma.elements.loader(submitBtn, {
+        type: 'spinner',
+        size: 20,
+        color: 'white',
+        centered: true
+    });
+    btnLoader.show();
+
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // Re-enable button
+    btnLoader.destroy();
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Form';
+});</code></pre>
+        </div>
+
+        <!-- Example 8: Real-World Example -->
+        <h3 class="category-title">Real-World Example: Image Gallery Loader</h3>
+        <p class="text-muted mb-2">Load and display images with a progress loader:</p>
+        <div class="demo-area">
+            <button id="gallery-load-btn" class="btn btn-primary mb-3">Load Gallery</button>
+            <div id="gallery-container" class="grid grid-cols-3 gap-4" style="min-height: 200px; position: relative;">
+                <p class="text-center text-muted col-span-3">Click "Load Gallery" to fetch images</p>
+            </div>
+        </div>
+        <div class="code-block">
+            <pre><code>const galleryContainer = document.getElementById('gallery-container');
+const galleryLoader = Domma.elements.loader(galleryContainer, {
+    type: 'pulse',
+    size: 'large',
+    color: 'primary',
+    overlay: true,
+    text: 'Loading gallery...'
+});
+
+async function loadGallery() {
+    galleryContainer.innerHTML = '';
+    galleryLoader.show();
+
+    try {
+        // Fetch image URLs
+        const response = await fetch('/api/images');
+        const images = await response.json();
+
+        galleryLoader.setText(`Loading ${images.length} images...`);
+
+        // Load images
+        const imgPromises = images.map(url => {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.src = url;
+            });
+        });
+
+        await Promise.all(imgPromises);
+
+        // Hide loader and display images
+        galleryLoader.hide();
+        images.forEach(url => {
+            const imgEl = document.createElement('img');
+            imgEl.src = url;
+            imgEl.className = 'w-full h-auto rounded';
+            galleryContainer.appendChild(imgEl);
+        });
+    } catch (error) {
+        galleryLoader.hide();
+        alert('Failed to load gallery');
+    }
+}</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 5: BEST PRACTICES -->
+<section class="card mb-6" data-section="Best Practices">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Best Practices</h2>
+    </div>
+    <div class="card-body">
+
+        <h3 class="category-title">Accessibility</h3>
+        <ul class="mb-4">
+            <li><strong>ARIA Attributes</strong> - Loaders automatically include <code>role="status"</code> and <code>aria-live="polite"</code>
+                for screen readers
+            </li>
+            <li><strong>Loading Text</strong> - Always provide descriptive text via the <code>text</code> option for
+                screen reader users
+            </li>
+            <li><strong>Focus Management</strong> - When showing overlay loaders, consider trapping focus or announcing
+                the loading state
+            </li>
+            <li><strong>Colour Contrast</strong> - Ensure loader colour has sufficient contrast (4.5:1) against
+                background, especially with overlay mode
+            </li>
+            <li><strong>Timeout Handling</strong> - Provide fallback error messages if loading takes too long or fails
+            </li>
+            <li><strong>Keyboard Users</strong> - Don't rely solely on loaders - provide skip links or cancel buttons
+                for long operations
+            </li>
+        </ul>
+
+        <h3 class="category-title">Performance</h3>
+        <ul class="mb-4">
+            <li><strong>Destroy When Done</strong> - Call <code>loader.destroy()</code> after use to remove DOM elements
+                and prevent memory leaks
+            </li>
+            <li><strong>Reuse Instances</strong> - Create loader once, then show/hide repeatedly instead of recreating:
+                <code>loader.show() / loader.hide()</code></li>
+            <li><strong>CSS Animations</strong> - Loaders use CSS animations (not JavaScript), which are GPU-accelerated
+                and performant
+            </li>
+            <li><strong>Lazy Initialisation</strong> - Don't create loaders on page load - initialise only when needed
+            </li>
+            <li><strong>Debounce Quick Operations</strong> - For operations under 300ms, consider skipping the loader to
+                avoid flashing
+            </li>
+        </ul>
+
+        <h3 class="category-title">Common Gotchas</h3>
+        <ul class="mb-4">
+            <li>
+                <strong>Issue:</strong> Loader not visible or positioned incorrectly<br>
+                <strong>Solution:</strong> Ensure container has <code>position: relative</code> and
+                <code>min-height</code><br>
+                <strong>Example:</strong> <code>&lt;div style="position: relative; min-height: 120px;"&gt;</code>
+            </li>
+            <li>
+                <strong>Issue:</strong> Loader stays visible after operation completes<br>
+                <strong>Solution:</strong> Always call <code>loader.hide()</code> in both success and error handlers<br>
+                <strong>Example:</strong> Use try/finally or .finally() to ensure hide() is called
+            </li>
+            <li>
+                <strong>Issue:</strong> Multiple loaders stacking in same container<br>
+                <strong>Solution:</strong> Destroy previous loader before creating new one, or reuse same instance<br>
+                <strong>Example:</strong> <code>existingLoader?.destroy(); newLoader = Domma.elements.loader(...)</code>
+            </li>
+            <li>
+                <strong>Issue:</strong> Fullscreen loader not covering modal/dropdown<br>
+                <strong>Solution:</strong> Fullscreen loader has z-index: 9999. Ensure modals don't exceed this<br>
+                <strong>Example:</strong> Adjust modal z-index or create loader inside modal
+            </li>
+            <li>
+                <strong>Issue:</strong> setText() not working<br>
+                <strong>Solution:</strong> Must initialise loader with <code>text</code> option first, or setText()
+                creates new element<br>
+                <strong>Example:</strong> <code>{ text: 'Initial text...' }</code> then <code>loader.setText('New
+                text')</code>
+            </li>
+        </ul>
+
+        <h3 class="category-title">Tips & Tricks</h3>
+        <ul class="mb-4">
+            <li><strong>Minimum Display Time</strong> - Show loaders for at least 500ms to avoid jarring flashes on fast
+                connections
+            </li>
+            <li><strong>White Overlay</strong> - Use <code>color: 'white'</code> with <code>overlay: true</code> for
+                dark backdrops
+            </li>
+            <li><strong>Debounce Search</strong> - Combine with <code>_.debounce()</code> for live search: show loader
+                only if typing pauses
+            </li>
+            <li><strong>Progress Updates</strong> - Use <code>setText()</code> to show incremental progress: "Step 1 of
+                3..."
+            </li>
+            <li><strong>Container Sizing</strong> - For inline loaders, set explicit container dimensions to prevent
+                layout shift
+            </li>
+            <li><strong>Cleanup in SPA</strong> - Always destroy loaders when unmounting components/pages in single-page
+                apps
+            </li>
+        </ul>
+
+        <div class="code-block">
+            <pre><code>&lt;!-- Accessible Loader with Proper Container --&gt;
+&lt;div id="data-container"
+     role="region"
+     aria-label="Data content"
+     style="position: relative; min-height: 200px;"&gt;
+    &lt;!-- Content --&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const loader = Domma.elements.loader('#data-container', {
+    type: 'spinner',
+    size: 'medium',
+    color: 'primary',
+    overlay: true,
+    text: 'Loading data, please wait...'  // Screen reader accessible
+});
+
+async function fetchData() {
+    loader.show();
+
+    try {
+        const data = await fetch('/api/data').then(r =&gt; r.json());
+
+        // Ensure minimum display time
+        await new Promise(resolve =&gt; setTimeout(resolve, 500));
+
+        // Process data...
+    } catch (error) {
+        console.error('Failed:', error);
+        alert('Failed to load data. Please try again.');
+    } finally {
+        // Always hide loader, even on error
+        loader.hide();
+    }
+}
+&lt;/script&gt;</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 6: API REFERENCE -->
+<section class="card mb-6" data-section="API Reference">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">API Reference</h2>
+    </div>
+    <div class="card-body">
+
+        <h3 class="category-title">Constructor Options</h3>
+        <div class="option-table mb-6">
+            <table>
+                <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>type</code></td>
+                    <td>String</td>
+                    <td><code>'spinner'</code></td>
+                    <td>Animation type: <code>'spinner'</code>, <code>'dots'</code>, <code>'pulse'</code>, or <code>'bars'</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>size</code></td>
+                    <td>String | Number</td>
+                    <td><code>'medium'</code></td>
+                    <td>Size: <code>'small'</code> (24px), <code>'medium'</code> (40px), <code>'large'</code> (64px), or
+                        custom pixel number
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>color</code></td>
+                    <td>String</td>
+                    <td><code>'primary'</code></td>
+                    <td>Colour: <code>'primary'</code>, <code>'secondary'</code>, <code>'success'</code>,
+                        <code>'danger'</code>, <code>'warning'</code>, <code>'info'</code>, <code>'white'</code>, <code>'dark'</code>,
+                        or custom hex
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>overlay</code></td>
+                    <td>Boolean</td>
+                    <td><code>false</code></td>
+                    <td>Show with semi-transparent backdrop covering entire container</td>
+                </tr>
+                <tr>
+                    <td><code>text</code></td>
+                    <td>String</td>
+                    <td><code>''</code></td>
+                    <td>Optional loading text displayed below animation</td>
+                </tr>
+                <tr>
+                    <td><code>centered</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Centre loader in container. If false, loader displays inline</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title">Instance Methods</h3>
+        <div class="option-table mb-6">
+            <table>
+                <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Parameters</th>
+                    <th>Returns</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>show()</code></td>
+                    <td>-</td>
+                    <td>this</td>
+                    <td>Display the loader. Chainable</td>
+                </tr>
+                <tr>
+                    <td><code>hide()</code></td>
+                    <td>-</td>
+                    <td>this</td>
+                    <td>Hide the loader. Chainable</td>
+                </tr>
+                <tr>
+                    <td><code>toggle()</code></td>
+                    <td>-</td>
+                    <td>this</td>
+                    <td>Toggle visibility (show if hidden, hide if visible). Chainable</td>
+                </tr>
+                <tr>
+                    <td><code>isVisible()</code></td>
+                    <td>-</td>
+                    <td>Boolean</td>
+                    <td>Check if loader is currently visible</td>
+                </tr>
+                <tr>
+                    <td><code>setText(text)</code></td>
+                    <td>String</td>
+                    <td>this</td>
+                    <td>Update the loading text. Creates text element if it doesn't exist. Chainable</td>
+                </tr>
+                <tr>
+                    <td><code>destroy()</code></td>
+                    <td>-</td>
+                    <td>void</td>
+                    <td>Remove loader from DOM and clean up. Call before removing container</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title">Static Methods</h3>
+        <div class="option-table mb-6">
+            <table>
+                <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Parameters</th>
+                    <th>Returns</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>Domma.elements.showLoader(selector, options)</code></td>
+                    <td>String | Element, Object</td>
+                    <td>Loader instance</td>
+                    <td>Quick show loader in container. Creates instance if needed, reuses if exists</td>
+                </tr>
+                <tr>
+                    <td><code>Domma.elements.hideLoader(selector)</code></td>
+                    <td>String | Element</td>
+                    <td>void</td>
+                    <td>Quick hide loader in container. No-op if loader doesn't exist</td>
+                </tr>
+                <tr>
+                    <td><code>Domma.elements.fullscreenLoader(text, options)</code></td>
+                    <td>String, Object</td>
+                    <td>Loader instance</td>
+                    <td>Show fullscreen loader covering entire viewport. Call <code>instance.destroy()</code> to remove
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title">CSS Classes</h3>
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>.dm-loader</code></td>
+                    <td>Main wrapper element containing loader animation and optional text</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-loader-spinner</code></td>
+                    <td>Circular spinning animation element</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-loader-dots</code></td>
+                    <td>Three bouncing dots animation container</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-loader-pulse</code></td>
+                    <td>Pulsing circle animation element</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-loader-bars</code></td>
+                    <td>Four vertical bars animation container</td>
+                </tr>
+                <tr>
+                    <td><code>.dm-loader-text</code></td>
+                    <td>Loading text element displayed below animation</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="code-block mt-4">
+            <pre><code>// Complete API Example
+const loader = Domma.elements.loader('#my-container', {
+    type: 'spinner',
+    size: 'large',
+    color: 'primary',
+    overlay: true,
+    text: 'Loading...',
+    centered: true
+});
+
+// Instance methods
+loader.show();                        // Display loader
+loader.hide();                        // Hide loader
+loader.toggle();                      // Toggle visibility
+const visible = loader.isVisible();   // Check visibility → true/false
+loader.setText('Almost done...');     // Update text
+loader.destroy();                     // Clean up
+
+// Static methods
+Domma.elements.showLoader('#container');  // Quick show
+Domma.elements.hideLoader('#container');  // Quick hide
+
+const fs = Domma.elements.fullscreenLoader('Processing...');
+setTimeout(() => fs.destroy(), 2000);     // Remove after 2s</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 7: CONFIG ENGINE -->
+<section class="card mb-6" data-section="Config Engine">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Config Engine Integration</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Use Domma's declarative <code>$.setup()</code> system to configure Loaders. Note: Loaders typically need
+            imperative control (show/hide), but you can pre-configure them with the Config Engine.
+        </p>
+
+        <h3 class="category-title">Pre-Configure Loader</h3>
+        <div class="code-block mb-6">
+            <pre><code>// Pre-configure loader, then control manually
+let dataLoader;
+
+$.setup({
+    '#data-container': {
+        component: 'loader',
+        options: {
+            type: 'spinner',
+            size: 'large',
+            color: 'white',
+            overlay: true,
+            text: 'Loading data...'
+        },
+        initial: {
+            // Loader hidden by default
+        }
+    }
+});
+
+// Get instance and control manually
+dataLoader = Domma.elements.get('#data-container');
+
+async function fetchData() {
+    dataLoader.show();
+    const data = await fetch('/api/data').then(r =&gt; r.json());
+    dataLoader.hide();
+}</code></pre>
+        </div>
+
+        <h3 class="category-title">Event-Triggered Loader</h3>
+        <div class="code-block mb-6">
+            <pre><code>// Show loader on button click, hide after delay
+$.setup({
+    '#overlay-container': {
+        component: 'loader',
+        options: {
+            type: 'pulse',
+            size: 'large',
+            color: 'white',
+            overlay: true,
+            text: 'Loading content...'
+        }
+    },
+
+    '#load-btn': {
+        events: {
+            click: (e, $el) =&gt; {
+                const loader = Domma.elements.get('#overlay-container');
+                loader.show();
+
+                // Simulate async operation
+                setTimeout(() =&gt; {
+                    loader.setText('Almost done...');
+                }, 1000);
+
+                setTimeout(() =&gt; {
+                    loader.hide();
+                }, 2000);
+            }
+        }
+    }
+});</code></pre>
+        </div>
+
+        <h3 class="category-title">Live Demo</h3>
+        <p class="text-muted mb-2">Loader configured via Config Engine:</p>
+        <div class="demo-area mb-4">
+            <button id="config-trigger-btn" class="btn btn-primary mb-3">Show Config Loader</button>
+            <div id="config-demo-container" class="p-4 bg-surface rounded border"
+                 style="min-height: 150px; position: relative;">
+                <p class="text-center text-muted">Click button to show loader configured via Config Engine</p>
+            </div>
+        </div>
+        <div class="code-block">
+            <pre><code>// Configuration
+$.setup({
+    '#config-demo-container': {
+        component: 'loader',
+        options: {
+            type: 'dots',
+            size: 'medium',
+            color: 'primary',
+            overlay: true,
+            text: 'Config Engine Loader'
+        }
+    },
+
+    '#config-trigger-btn': {
+        events: {
+            click: () =&gt; {
+                const loader = Domma.elements.get('#config-demo-container');
+                loader.show();
+                setTimeout(() =&gt; loader.hide(), 2000);
+            }
+        }
+    }
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 8: RELATED ELEMENTS -->
+<section class="card mb-6" data-section="Related">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Related Elements</h2>
+    </div>
+    <div class="card-body">
+        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <a href="../modal/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Modal</h3>
+                    <p class="card-text">Dialogue windows with backdrops. Combine with loaders to show loading state
+                        inside modal content areas.</p>
+                </div>
+            </a>
+
+            <a href="../toast/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Toast</h3>
+                    <p class="card-text">Temporary notifications. Use toasts to notify users when background operations
+                        complete after showing a loader.</p>
+                </div>
+            </a>
+
+            <a href="../button-group/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Button Group</h3>
+                    <p class="card-text">Connected button controls. Show loaders inside buttons during form submissions
+                        or async actions.</p>
+                </div>
+            </a>
+
+            <a href="../card/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Card</h3>
+                    <p class="card-text">Content containers. Use overlay loaders within cards to indicate loading state
+                        for card-specific content.</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    // Quick Start Demo
+    const quickStartLoader = Domma.elements.loader('#quick-start-demo', {
+        type: 'spinner',
+        size: 'medium',
+        color: 'primary'
+    });
+    quickStartLoader.show();
+
+    // Quick Start Fullscreen
+    $('#quick-fullscreen-btn').on('click', () => {
+        const fs = Domma.elements.fullscreenLoader('Loading something amazing...');
+        setTimeout(() => fs.destroy(), 2000);
+    });
+
+    // Tutorial Demo
+    const tutorialLoader = Domma.elements.loader('#tutorial-container', {
+        type: 'spinner',
+        size: 'large',
+        color: 'white',
+        overlay: true,
+        text: 'Loading data...'
+    });
+
+    $('#tutorial-load-btn').on('click', async () => {
+        $('#tutorial-placeholder').hide();
+        $('#tutorial-result').hide();
+        tutorialLoader.show();
+
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        tutorialLoader.setText('Processing results...');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        tutorialLoader.hide();
+
+        $('#tutorial-result').html(`
+            <h4>Data Loaded Successfully!</h4>
+            <p class="text-muted">Fetched at: ${new Date().toLocaleTimeString()}</p>
+            <pre class="mt-2 p-3 bg-dark text-white rounded">{
+  "users": 42,
+  "posts": 128,
+  "comments": 356
+}</pre>
+        `).show();
+    });
+
+    // Example 1: Loader Types
+    const spinnerLoader = Domma.elements.loader('#type-spinner', {type: 'spinner', size: 'medium', color: 'primary'});
+    spinnerLoader.show();
+
+    const dotsLoader = Domma.elements.loader('#type-dots', {type: 'dots', size: 'medium', color: 'primary'});
+    dotsLoader.show();
+
+    const pulseLoader = Domma.elements.loader('#type-pulse', {type: 'pulse', size: 'medium', color: 'primary'});
+    pulseLoader.show();
+
+    const barsLoader = Domma.elements.loader('#type-bars', {type: 'bars', size: 'medium', color: 'primary'});
+    barsLoader.show();
+
+    // Example 2: Size Variants
+    Domma.elements.loader('#size-small', {type: 'spinner', size: 'small', color: 'primary'}).show();
+    Domma.elements.loader('#size-medium', {type: 'spinner', size: 'medium', color: 'primary'}).show();
+    Domma.elements.loader('#size-large', {type: 'spinner', size: 'large', color: 'primary'}).show();
+    Domma.elements.loader('#size-custom', {type: 'spinner', size: 80, color: 'primary'}).show();
+
+    // Example 3: Colour Variants
+    Domma.elements.loader('#color-primary', {type: 'spinner', size: 'medium', color: 'primary'}).show();
+    Domma.elements.loader('#color-success', {type: 'spinner', size: 'medium', color: 'success'}).show();
+    Domma.elements.loader('#color-danger', {type: 'spinner', size: 'medium', color: 'danger'}).show();
+    Domma.elements.loader('#color-warning', {type: 'spinner', size: 'medium', color: 'warning'}).show();
+    Domma.elements.loader('#color-dark', {type: 'spinner', size: 'medium', color: 'dark'}).show();
+    Domma.elements.loader('#color-custom', {type: 'spinner', size: 'medium', color: '#9b59b6'}).show();
+
+    // Example 4: Overlay Mode
+    let overlayLoader = null;
+    $('#show-overlay-btn').on('click', () => {
+        if (!overlayLoader) {
+            overlayLoader = Domma.elements.loader('#overlay-container', {
+                type: 'spinner',
+                size: 'large',
+                color: 'white',
+                overlay: true,
+                text: 'Loading content...'
+            });
+        }
+        overlayLoader.show();
+        setTimeout(() => overlayLoader.hide(), 2000);
+    });
+
+    // Example 5: With Loading Text
+    const textLoader = Domma.elements.loader('#text-container', {
+        type: 'dots',
+        size: 'medium',
+        color: 'primary',
+        text: 'Loading your data...'
+    });
+    textLoader.show();
+    setTimeout(() => textLoader.setText('Almost there...'), 2000);
+
+    // Example 6: Static Helper Methods
+    $('#static-show-btn').on('click', () => {
+        Domma.elements.showLoader('#static-container');
+    });
+
+    $('#static-hide-btn').on('click', () => {
+        Domma.elements.hideLoader('#static-container');
+    });
+
+    // Example 7: Button Loading State
+    let btnLoader = null;
+    const submitBtn = document.getElementById('submit-btn');
+
+    $('#submit-btn').on('click', async function () {
+        const originalText = this.textContent;
+        this.disabled = true;
+        this.textContent = '';
+
+        btnLoader = Domma.elements.loader(this, {
+            type: 'spinner',
+            size: 20,
+            color: 'white',
+            centered: true
+        });
+        btnLoader.show();
+
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        btnLoader.destroy();
+        this.disabled = false;
+        this.textContent = originalText;
+    });
+
+    // Example 8: Gallery Loader
+    const galleryLoader = Domma.elements.loader('#gallery-container', {
+        type: 'pulse',
+        size: 'large',
+        color: 'primary',
+        overlay: true,
+        text: 'Loading gallery...'
+    });
+
+    $('#gallery-load-btn').on('click', async () => {
+        $('#gallery-container').html('');
+        galleryLoader.show();
+
+        galleryLoader.setText('Fetching images...');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        galleryLoader.setText('Loading 6 images...');
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        galleryLoader.hide();
+
+        // Display placeholder images
+        const placeholderImages = [
+            'https://via.placeholder.com/200x150/6495ED/ffffff?text=Image+1',
+            'https://via.placeholder.com/200x150/28a745/ffffff?text=Image+2',
+            'https://via.placeholder.com/200x150/dc3545/ffffff?text=Image+3',
+            'https://via.placeholder.com/200x150/ffc107/333333?text=Image+4',
+            'https://via.placeholder.com/200x150/17a2b8/ffffff?text=Image+5',
+            'https://via.placeholder.com/200x150/6c757d/ffffff?text=Image+6'
+        ];
+
+        $('#gallery-container').html(placeholderImages.map(url =>
+            `<img src="${url}" class="w-full h-auto rounded border" alt="Gallery image">`
+        ).join(''));
+    });
+
+    // Config Engine Demo
+    $.setup({
+        '#config-demo-container': {
+            component: 'loader',
+            options: {
+                type: 'dots',
+                size: 'medium',
+                color: 'primary',
+                overlay: true,
+                text: 'Config Engine Loader'
+            }
+        },
+
+        '#config-trigger-btn': {
+            events: {
+                click: () => {
+                    const loader = Domma.elements.get('#config-demo-container');
+                    loader.show();
+                    setTimeout(() => loader.hide(), 2000);
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

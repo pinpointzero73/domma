@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropdown - Elements - Domma Showcase</title>
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+</head>
+<body class="dm-theme-light">
+
+<section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Overview</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Dropdowns display contextual menus and option lists. They're perfect for navigation menus, action lists, and
+            settings panels. Domma's dropdown supports positioning, triggers, and dynamic content.
+        </p>
+
+        <h3 class="category-title">Key Features</h3>
+        <ul class="feature-list mb-4">
+            <li><strong>Multiple Triggers</strong> - Click or hover activation</li>
+            <li><strong>Smart Positioning</strong> - Auto-adjusts to viewport edges</li>
+            <li><strong>Keyboard Navigation</strong> - Arrow keys and Enter/Escape support</li>
+            <li><strong>Close on Outside Click</strong> - Automatic dismiss behaviour</li>
+        </ul>
+
+        <h3 class="category-title">Basic Usage</h3>
+        <div class="code-block">
+            <pre><code>const dropdown = Domma.elements.dropdown('#my-dropdown', {
+    trigger: 'click',
+    position: 'bottom-start',
+    closeOnClick: true
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Quick Start">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Quick Start</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Simple Dropdown</h3>
+        <div class="demo-area mb-4 text-center">
+            <div class="dropdown" id="quick-dropdown">
+                <button class="btn btn-primary dropdown-toggle">Actions</button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Edit</a>
+                    <a href="#" class="dropdown-item">Duplicate</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item text-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+        <div class="code-block">
+            <pre><code>&lt;div class="dropdown" id="my-dropdown"&gt;
+    &lt;button class="btn btn-primary dropdown-toggle"&gt;Actions&lt;/button&gt;
+    &lt;div class="dropdown-menu"&gt;
+        &lt;a href="#" class="dropdown-item"&gt;Edit&lt;/a&gt;
+        &lt;a href="#" class="dropdown-item"&gt;Delete&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+Domma.elements.dropdown('#my-dropdown');
+&lt;/script&gt;</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Tutorial">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Tutorial</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">Build a user profile dropdown with event handling.</p>
+
+        <div class="demo-area mb-4 text-center">
+            <div class="dropdown" id="tutorial-dropdown">
+                <button class="btn btn-secondary dropdown-toggle">
+                    <span>👤</span> User Menu
+                </button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">Signed in as <strong>user@example.com</strong></div>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item" data-action="profile">Profile</a>
+                    <a href="#" class="dropdown-item" data-action="settings">Settings</a>
+                    <a href="#" class="dropdown-item" data-action="billing">Billing</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item" data-action="logout">Sign Out</a>
+                </div>
+            </div>
+            <div id="tutorial-result" class="mt-4 p-3 bg-surface rounded">
+                <p class="text-muted text-sm">Select an option from the dropdown</p>
+            </div>
+        </div>
+
+        <div class="code-block">
+            <pre><code>const dropdown = Domma.elements.dropdown('#user-dropdown', {
+    trigger: 'click',
+    closeOnClick: true,
+    onOpen: () => console.log('Dropdown opened'),
+    onClose: () => console.log('Dropdown closed')
+});
+
+// Handle item clicks
+document.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const action = e.target.dataset.action;
+        console.log(`Action selected: ${action}`);
+    });
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Examples">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Examples</h2>
+    </div>
+    <div class="card-body">
+
+        <h3 class="category-title">Hover Trigger</h3>
+        <div class="demo-area mb-4 text-center">
+            <div class="dropdown" id="hover-dropdown">
+                <button class="btn btn-outline dropdown-toggle">Hover Me</button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Option 1</a>
+                    <a href="#" class="dropdown-item">Option 2</a>
+                    <a href="#" class="dropdown-item">Option 3</a>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="category-title">Positioning</h3>
+        <div class="demo-area mb-4">
+            <div class="flex gap-4 justify-center flex-wrap">
+                <div class="dropdown" id="pos-bottom">
+                    <button class="btn btn-outline dropdown-toggle">Bottom</button>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item">Bottom Start</a>
+                        <a href="#" class="dropdown-item">Default Position</a>
+                    </div>
+                </div>
+                <div class="dropdown" id="pos-top">
+                    <button class="btn btn-outline dropdown-toggle">Top</button>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item">Top Start</a>
+                        <a href="#" class="dropdown-item">Upward Position</a>
+                    </div>
+                </div>
+                <div class="dropdown" id="pos-left">
+                    <button class="btn btn-outline dropdown-toggle">Left</button>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item">Left Start</a>
+                        <a href="#" class="dropdown-item">Leftward</a>
+                    </div>
+                </div>
+                <div class="dropdown" id="pos-right">
+                    <button class="btn btn-outline dropdown-toggle">Right</button>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item">Right Start</a>
+                        <a href="#" class="dropdown-item">Rightward</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="category-title">With Dividers and Headers</h3>
+        <div class="demo-area mb-4 text-center">
+            <div class="dropdown" id="structured-dropdown">
+                <button class="btn btn-primary dropdown-toggle">Menu</button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">Navigation</div>
+                    <a href="#" class="dropdown-item">Home</a>
+                    <a href="#" class="dropdown-item">Dashboard</a>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-header">Actions</div>
+                    <a href="#" class="dropdown-item">New Project</a>
+                    <a href="#" class="dropdown-item">Import</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item text-danger">Delete All</a>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="category-title">Programmatic Control</h3>
+        <div class="demo-area text-center">
+            <div class="dropdown" id="programmatic-dropdown">
+                <button class="btn btn-secondary dropdown-toggle">Controlled Dropdown</button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Item 1</a>
+                    <a href="#" class="dropdown-item">Item 2</a>
+                    <a href="#" class="dropdown-item">Item 3</a>
+                </div>
+            </div>
+            <div class="flex gap-2 justify-center mt-3">
+                <button id="prog-open" class="btn btn-outline btn-sm">Open</button>
+                <button id="prog-close" class="btn btn-outline btn-sm">Close</button>
+                <button id="prog-toggle" class="btn btn-outline btn-sm">Toggle</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Best Practices">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Best Practices</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Accessibility</h3>
+        <ul class="mb-4">
+            <li><strong>Keyboard Navigation</strong> - Use arrow keys to navigate items, Enter to select, Escape to
+                close
+            </li>
+            <li><strong>ARIA Attributes</strong> - Add <code>aria-haspopup="true"</code> and <code>aria-expanded</code>
+                to toggle button
+            </li>
+            <li><strong>Focus Management</strong> - Focus moves to first item when opened</li>
+            <li><strong>Screen Readers</strong> - Use semantic <code>&lt;button&gt;</code> elements for triggers</li>
+        </ul>
+
+        <h3 class="category-title">UX Guidelines</h3>
+        <ul class="mb-4">
+            <li><strong>Clear Trigger</strong> - Make dropdown button visually distinct with chevron icon</li>
+            <li><strong>Logical Grouping</strong> - Use dividers and headers to organise menu items</li>
+            <li><strong>Close on Action</strong> - Enable <code>closeOnClick</code> for action menus</li>
+            <li><strong>Hover Delay</strong> - Add slight delay for hover triggers to prevent accidental opens</li>
+        </ul>
+
+        <h3 class="category-title">Performance</h3>
+        <ul>
+            <li><strong>Event Delegation</strong> - Attach single listener to menu instead of individual items</li>
+            <li><strong>Destroy When Done</strong> - Call <code>destroy()</code> on dynamic dropdowns</li>
+        </ul>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="API Reference">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">API Reference</h2>
+    </div>
+    <div class="card-body">
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>trigger</code></td>
+                    <td>String</td>
+                    <td><code>'click'</code></td>
+                    <td>Trigger type: 'click' or 'hover'</td>
+                </tr>
+                <tr>
+                    <td><code>position</code></td>
+                    <td>String</td>
+                    <td><code>'bottom-start'</code></td>
+                    <td>Position: bottom-start, bottom-end, top-start, top-end, left-start, right-start</td>
+                </tr>
+                <tr>
+                    <td><code>closeOnClick</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Close when item clicked</td>
+                </tr>
+                <tr>
+                    <td><code>closeOnOutside</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Close when clicking outside</td>
+                </tr>
+                <tr>
+                    <td><code>animation</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Enable animations</td>
+                </tr>
+                <tr>
+                    <td><code>offset</code></td>
+                    <td>Number</td>
+                    <td><code>4</code></td>
+                    <td>Offset from toggle (px)</td>
+                </tr>
+                <tr>
+                    <td><code>onOpen</code></td>
+                    <td>Function</td>
+                    <td><code>null</code></td>
+                    <td>Open callback</td>
+                </tr>
+                <tr>
+                    <td><code>onClose</code></td>
+                    <td>Function</td>
+                    <td><code>null</code></td>
+                    <td>Close callback</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title mt-4">Methods</h3>
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>open()</code></td>
+                    <td>Open the dropdown</td>
+                </tr>
+                <tr>
+                    <td><code>close()</code></td>
+                    <td>Close the dropdown</td>
+                </tr>
+                <tr>
+                    <td><code>toggle()</code></td>
+                    <td>Toggle dropdown state</td>
+                </tr>
+                <tr>
+                    <td><code>isOpen()</code></td>
+                    <td>Check if dropdown is open</td>
+                </tr>
+                <tr>
+                    <td><code>destroy()</code></td>
+                    <td>Remove dropdown and clean up</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title mt-4">CSS Classes</h3>
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>.dropdown</code></td>
+                    <td>Container element</td>
+                </tr>
+                <tr>
+                    <td><code>.dropdown-toggle</code></td>
+                    <td>Trigger button</td>
+                </tr>
+                <tr>
+                    <td><code>.dropdown-menu</code></td>
+                    <td>Menu container</td>
+                </tr>
+                <tr>
+                    <td><code>.dropdown-item</code></td>
+                    <td>Menu item link</td>
+                </tr>
+                <tr>
+                    <td><code>.dropdown-divider</code></td>
+                    <td>Visual separator</td>
+                </tr>
+                <tr>
+                    <td><code>.dropdown-header</code></td>
+                    <td>Section header text</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Config Engine">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Config Engine</h2>
+    </div>
+    <div class="card-body">
+        <div class="code-block">
+            <pre><code>$.setup({
+    '#user-menu': {
+        component: 'dropdown',
+        options: {
+            trigger: 'click',
+            position: 'bottom-end',
+            closeOnClick: true,
+            onOpen: () => console.log('Menu opened')
+        }
+    },
+    '#hover-menu': {
+        component: 'dropdown',
+        options: {
+            trigger: 'hover',
+            position: 'bottom-start'
+        }
+    }
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Related">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Related Elements</h2>
+    </div>
+    <div class="card-body">
+        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <a href="../tooltip/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Tooltip</h3>
+                    <p class="card-text">For simple contextual information</p>
+                </div>
+            </a>
+            <a href="../navbar/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Navbar</h3>
+                    <p class="card-text">Navigation with built-in dropdowns</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    // Quick Start
+    Domma.elements.dropdown('#quick-dropdown');
+
+    // Tutorial
+    const tutorialDropdown = Domma.elements.dropdown('#tutorial-dropdown', {
+        onOpen: () => console.log('User menu opened'),
+        onClose: () => console.log('User menu closed')
+    });
+
+    document.querySelectorAll('#tutorial-dropdown .dropdown-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const action = e.target.dataset.action;
+            const resultDiv = document.getElementById('tutorial-result');
+            resultDiv.innerHTML = `<p class="text-primary text-sm">✓ Action selected: <strong>${action}</strong></p>`;
+        });
+    });
+
+    // Hover Trigger
+    Domma.elements.dropdown('#hover-dropdown', {
+        trigger: 'hover'
+    });
+
+    // Positioning
+    Domma.elements.dropdown('#pos-bottom', {position: 'bottom-start'});
+    Domma.elements.dropdown('#pos-top', {position: 'top-start'});
+    Domma.elements.dropdown('#pos-left', {position: 'left-start'});
+    Domma.elements.dropdown('#pos-right', {position: 'right-start'});
+
+    // Structured
+    Domma.elements.dropdown('#structured-dropdown');
+
+    // Programmatic
+    const programmaticDropdown = Domma.elements.dropdown('#programmatic-dropdown');
+    document.getElementById('prog-open').addEventListener('click', () => programmaticDropdown.open());
+    document.getElementById('prog-close').addEventListener('click', () => programmaticDropdown.close());
+    document.getElementById('prog-toggle').addEventListener('click', () => programmaticDropdown.toggle());
+</script>
+
+</body>
+</html>

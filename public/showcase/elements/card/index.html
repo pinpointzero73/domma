@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card - Domma Elements</title>
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+</head>
+<body class="dm-theme-light">
+
+<main class="container py-8">
+
+    <!-- SECTION 1: Overview -->
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Card</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Cards are flexible content containers that display information in a structured, visually appealing
+                format.
+                They're one of the most versatile UI components, perfect for showcasing products, articles, user
+                profiles,
+                or any grouped content.
+            </p>
+
+            <h4 class="category-title">Key Features</h4>
+            <ul class="mb-4">
+                <li>Flexible content structure with optional header, body, and footer</li>
+                <li>Hover effects with lift animation and shadow enhancement</li>
+                <li>Clickable cards that act as interactive links</li>
+                <li>Theme-aware styling with automatic light/dark mode support</li>
+                <li>Customisable shadows, borders, and spacing</li>
+            </ul>
+
+            <h4 class="category-title">When to Use Cards</h4>
+            <ul class="mb-4">
+                <li><strong>Content Collections</strong>: Blog posts, products, team members, portfolio items</li>
+                <li><strong>Dashboards</strong>: Statistics widgets, activity feeds, metric displays</li>
+                <li><strong>Navigation</strong>: Feature highlights, service offerings, call-to-action blocks</li>
+                <li><strong>Forms</strong>: Multi-step wizards, settings panels, grouped inputs</li>
+            </ul>
+
+            <h4 class="category-title">Basic Usage</h4>
+            <pre class="code-block">// HTML structure
+&lt;div id="my-card" class="card"&gt;
+    &lt;div class="card-header"&gt;Card Header&lt;/div&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h3 class="card-title"&gt;Card Title&lt;/h3&gt;
+        &lt;p class="card-text"&gt;Card content goes here.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="card-footer"&gt;Card Footer&lt;/div&gt;
+&lt;/div&gt;
+
+// JavaScript (optional - for hover/click effects)
+const card = Domma.elements.card('#my-card', {
+    hover: true,
+    clickable: false
+});</pre>
+        </div>
+    </section>
+
+    <!-- SECTION 2: Quick Start -->
+    <section class="card mb-6" data-section="Quick Start">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Quick Start</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Get started with a basic card in seconds. Cards work with pure CSS (no JavaScript required),
+                but you can enhance them with hover effects using the Card component.
+            </p>
+
+            <h4 class="category-title">CSS-Only Card (No JavaScript)</h4>
+            <pre class="code-block">&lt;div class="card"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h3 class="card-title"&gt;Simple Card&lt;/h3&gt;
+        &lt;p class="card-text"&gt;This card requires no JavaScript.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+            <div class="demo-area mb-4">
+                <div class="card" style="max-width: 400px;">
+                    <div class="card-body">
+                        <h3 class="card-title">Simple Card</h3>
+                        <p class="card-text">This card requires no JavaScript. It uses only CSS classes for styling.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Card with Hover Effect (JavaScript)</h4>
+            <pre class="code-block">// HTML
+&lt;div id="hover-card" class="card"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h3 class="card-title"&gt;Hover Me&lt;/h3&gt;
+        &lt;p class="card-text"&gt;Move your cursor over this card.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+// JavaScript
+Domma.elements.card('#hover-card', { hover: true });</pre>
+
+            <div class="demo-area">
+                <div id="quick-hover-card" class="card" style="max-width: 400px;">
+                    <div class="card-body">
+                        <h3 class="card-title">Hover Me</h3>
+                        <p class="card-text">Move your cursor over this card to see the lift effect.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: Step-by-Step Tutorial -->
+    <section class="card mb-6" data-section="Tutorial">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Step-by-Step Tutorial</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Learn how to build an interactive product card from scratch, step by step.
+            </p>
+
+            <h4 class="category-title">Step 1: HTML Structure</h4>
+            <p class="mb-2">Start with the basic card structure using semantic class names:</p>
+            <pre class="code-block">&lt;div id="product-card" class="card"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h3 class="card-title"&gt;Product Name&lt;/h3&gt;
+        &lt;p class="card-text"&gt;Brief description of the product.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+            <h4 class="category-title mt-4">Step 2: Add Header and Footer</h4>
+            <p class="mb-2">Expand the structure with a header (for images or badges) and footer (for actions):</p>
+            <pre class="code-block">&lt;div id="product-card" class="card"&gt;
+    &lt;div class="card-header"&gt;
+        &lt;span class="badge badge-primary"&gt;New&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h3 class="card-title"&gt;Premium Headphones&lt;/h3&gt;
+        &lt;p class="card-text"&gt;High-quality wireless headphones with noise cancellation.&lt;/p&gt;
+        &lt;p class="card-text"&gt;&lt;strong&gt;£149.99&lt;/strong&gt;&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="card-footer"&gt;
+        &lt;button class="btn btn-primary"&gt;Add to Cart&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+            <h4 class="category-title mt-4">Step 3: Enable Hover Effect</h4>
+            <p class="mb-2">Add the hover effect to make the card interactive:</p>
+            <pre class="code-block">const productCard = Domma.elements.card('#product-card', {
+    hover: true  // Enables lift animation on hover
+});</pre>
+
+            <h4 class="category-title mt-4">Step 4: Make It Clickable</h4>
+            <p class="mb-2">Turn the entire card into a clickable link:</p>
+            <pre class="code-block">const productCard = Domma.elements.card('#product-card', {
+    hover: true,
+    clickable: true,
+    onClick: (event) =&gt; {
+        console.log('Card clicked!');
+        window.location.href = '/product/premium-headphones';
+    }
+});</pre>
+
+            <h4 class="category-title mt-4">Step 5: Complete Working Demo</h4>
+            <p class="mb-2">Here's the finished interactive product card:</p>
+
+            <div class="demo-area">
+                <div id="tutorial-card" class="card" style="max-width: 350px; margin: 0 auto;">
+                    <div class="card-header">
+                        <span class="badge badge-primary">New</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Premium Headphones</h3>
+                        <p class="card-text mb-2">High-quality wireless headphones with active noise cancellation and
+                            30-hour battery life.</p>
+                        <p class="card-text"><strong>£149.99</strong></p>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary btn-sm">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: Examples & Variations -->
+    <section class="card mb-6" data-section="Examples">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Examples & Variations</h2>
+        </div>
+        <div class="card-body">
+
+            <h4 class="category-title">Example 1: Basic Card</h4>
+            <p class="mb-2">Simple card with title and content:</p>
+            <div class="demo-area mb-4">
+                <div class="card" style="max-width: 400px;">
+                    <div class="card-body">
+                        <h3 class="card-title">Basic Card</h3>
+                        <p class="card-text">A simple card with just a title and some text content. No header or footer
+                            required.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Example 2: Card with Hover Effect</h4>
+            <p class="mb-2">Card that lifts on hover with enhanced shadow:</p>
+            <div class="demo-area mb-4">
+                <div id="example-hover" class="card" style="max-width: 400px;">
+                    <div class="card-body">
+                        <h3 class="card-title">Hover Card</h3>
+                        <p class="card-text">Hover over this card to see the lift animation and enhanced shadow
+                            effect.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Example 3: Clickable Card</h4>
+            <p class="mb-2">Entire card acts as a button:</p>
+            <div class="demo-area mb-4">
+                <div id="example-clickable" class="card" style="max-width: 400px;">
+                    <div class="card-body">
+                        <h3 class="card-title">Clickable Card</h3>
+                        <p class="card-text">Click anywhere on this card to trigger an action.</p>
+                    </div>
+                </div>
+                <div class="demo-result mt-2" id="click-result" style="display: none;"></div>
+            </div>
+
+            <h4 class="category-title">Example 4: Styled Card (Primary)</h4>
+            <p class="mb-2">Card with primary colour border:</p>
+            <div class="demo-area mb-4">
+                <div class="card card-primary" style="max-width: 400px;">
+                    <div class="card-header">
+                        <h3 class="m-0" style="color: white;">Featured</h3>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Premium Plan</h3>
+                        <p class="card-text">Unlock all features with our premium plan.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Example 5: Profile Card</h4>
+            <p class="mb-2">User profile with avatar and actions:</p>
+            <div class="demo-area mb-4">
+                <div id="profile-card" class="card" style="max-width: 350px; margin: 0 auto;">
+                    <div class="card-body text-center">
+                        <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--dm-primary-light); margin: 0 auto var(--dm-space-3); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--dm-primary);">
+                            JD
+                        </div>
+                        <h3 class="card-title mb-1">Jane Doe</h3>
+                        <p class="card-subtitle mb-3">Senior Developer</p>
+                        <p class="card-text">Passionate about building beautiful, accessible web experiences.</p>
+                    </div>
+                    <div class="card-footer" style="display: flex; gap: 0.5rem; justify-content: center;">
+                        <button class="btn btn-secondary btn-sm">View Profile</button>
+                        <button class="btn btn-primary btn-sm">Message</button>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Example 6: Statistics Card</h4>
+            <p class="mb-2">Dashboard metric with icon:</p>
+            <div class="demo-area mb-4">
+                <div class="card" style="max-width: 300px;">
+                    <div class="card-body">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div>
+                                <p class="card-subtitle mb-1">Total Sales</p>
+                                <h2 class="m-0">£24,580</h2>
+                                <p class="card-text mt-2" style="color: var(--dm-success); font-size: 0.875rem;">
+                                    ↑ 12.5% from last month
+                                </p>
+                            </div>
+                            <div data-icon="database" style="color: var(--dm-primary); opacity: 0.6;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Example 7: Horizontal Card</h4>
+            <p class="mb-2">Card with side-by-side layout:</p>
+            <div class="demo-area mb-4">
+                <div class="card" style="max-width: 600px;">
+                    <div class="card-body"
+                         style="display: grid; grid-template-columns: 120px 1fr; gap: var(--dm-space-4);">
+                        <div style="background: var(--dm-gray-200); border-radius: var(--dm-radius-md); aspect-ratio: 1; display: flex; align-items: center; justify-content: center;"
+                             data-icon="box"></div>
+                        <div>
+                            <h3 class="card-title mt-0">Wireless Mouse</h3>
+                            <p class="card-text">Ergonomic design with precision tracking and long battery life. Perfect
+                                for productivity.</p>
+                            <button class="btn btn-primary btn-sm mt-2">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Example 8: Grid of Cards</h4>
+            <p class="mb-2">Multiple cards in a responsive grid:</p>
+            <div class="demo-area">
+                <div class="grid grid-cols-1"
+                     style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--dm-space-4);">
+                    <div id="grid-card-1" class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Feature One</h3>
+                            <p class="card-text">Fast and reliable performance.</p>
+                        </div>
+                    </div>
+                    <div id="grid-card-2" class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Feature Two</h3>
+                            <p class="card-text">Secure data encryption.</p>
+                        </div>
+                    </div>
+                    <div id="grid-card-3" class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Feature Three</h3>
+                            <p class="card-text">24/7 customer support.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: Best Practices -->
+    <section class="card mb-6" data-section="Best Practices">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Best Practices</h2>
+        </div>
+        <div class="card-body">
+
+            <h4 class="category-title">Accessibility</h4>
+            <ul class="mb-4">
+                <li><strong>Semantic Structure</strong>: Use proper heading hierarchy (h1-h6) within card content</li>
+                <li><strong>Clickable Cards</strong>: If the entire card is clickable, add <code>role="button"</code> or
+                    wrap in an <code>&lt;a&gt;</code> tag with meaningful <code>aria-label</code></li>
+                <li><strong>Keyboard Navigation</strong>: Ensure clickable cards are focusable with Tab and activatable
+                    with Enter/Space
+                </li>
+                <li><strong>Focus Indicators</strong>: Provide visible focus outlines for keyboard users (don't remove
+                    <code>outline: none</code>)
+                </li>
+                <li><strong>Colour Contrast</strong>: Maintain WCAG AA contrast ratios (4.5:1 for text, 3:1 for UI
+                    components)
+                </li>
+                <li><strong>Screen Readers</strong>: Add descriptive alt text for images within cards</li>
+            </ul>
+
+            <h4 class="category-title">Performance</h4>
+            <ul class="mb-4">
+                <li><strong>Lazy Initialisation</strong>: Only initialise hover/click effects on cards that need them
+                </li>
+                <li><strong>Event Delegation</strong>: For grids with many cards, consider single parent event listener
+                    instead of individual listeners
+                </li>
+                <li><strong>Destroy Instances</strong>: Call <code>card.destroy()</code> when removing cards from DOM to
+                    prevent memory leaks
+                </li>
+                <li><strong>CSS-First Approach</strong>: Use CSS classes (e.g., <code>.card-hover</code>) when
+                    JavaScript isn't needed
+                </li>
+                <li><strong>Debounce Hover</strong>: For expensive hover effects, consider debouncing the animation
+                    triggers
+                </li>
+            </ul>
+
+            <h4 class="category-title">Common Gotchas</h4>
+            <table class="option-table mb-4">
+                <tr>
+                    <th>Issue</th>
+                    <th>Solution</th>
+                </tr>
+                <tr>
+                    <td>Hover effect not working</td>
+                    <td>Ensure you're calling <code>elements.card()</code> with <code>hover: true</code>. CSS-only cards
+                        don't have hover effects unless you add <code>.card-hover</code> class manually.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Card stretching in grid</td>
+                    <td>Cards in CSS Grid will stretch by default. Add <code>align-self: start</code> or use <code>height:
+                        100%</code> on cards for equal-height rows.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Click events not firing</td>
+                    <td>Check z-index of child elements. Buttons/links inside cards may intercept clicks. Use <code>event.stopPropagation()</code>
+                        on child elements if needed.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Theme colours not applying</td>
+                    <td>Ensure <code>domma-themes.css</code> is loaded and a theme class (e.g.,
+                        <code>.dm-theme-light</code>) is on <code>&lt;body&gt;</code>.
+                    </td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Tips & Tricks</h4>
+            <ul class="mb-4">
+                <li><strong>Loading States</strong>: Combine cards with the Loader component for skeleton screens</li>
+                <li><strong>Animations</strong>: Stagger card entrance animations for visual interest (use CSS <code>animation-delay</code>)
+                </li>
+                <li><strong>Equal Heights</strong>: Use CSS Grid or Flexbox on the parent to create equal-height card
+                    rows
+                </li>
+                <li><strong>Responsive Images</strong>: Use <code>object-fit: cover</code> for card header images to
+                    maintain aspect ratio
+                </li>
+                <li><strong>Truncation</strong>: Limit card text with CSS: <code>display: -webkit-box;
+                    -webkit-line-clamp: 3; overflow: hidden;</code></li>
+                <li><strong>Integration</strong>: Cards work great inside Modals, Tabs, and Accordion panels</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- SECTION 6: API Reference -->
+    <section class="card mb-6" data-section="API Reference">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">API Reference</h2>
+        </div>
+        <div class="card-body">
+
+            <h4 class="category-title">Constructor Options</h4>
+            <table class="option-table mb-6">
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>hover</code></td>
+                    <td>Boolean</td>
+                    <td><code>false</code></td>
+                    <td>Enable hover lift effect with enhanced shadow</td>
+                </tr>
+                <tr>
+                    <td><code>clickable</code></td>
+                    <td>Boolean</td>
+                    <td><code>false</code></td>
+                    <td>Make the entire card clickable</td>
+                </tr>
+                <tr>
+                    <td><code>onClick</code></td>
+                    <td>Function</td>
+                    <td><code>null</code></td>
+                    <td>Callback function when card is clicked (requires <code>clickable: true</code>)</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Methods</h4>
+            <table class="option-table mb-6">
+                <tr>
+                    <th>Method</th>
+                    <th>Parameters</th>
+                    <th>Returns</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>destroy()</code></td>
+                    <td>None</td>
+                    <td>void</td>
+                    <td>Removes event listeners and cleans up the card instance</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Events</h4>
+            <table class="option-table mb-6">
+                <tr>
+                    <th>Event</th>
+                    <th>Parameters</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>onClick</code></td>
+                    <td><code>event: MouseEvent</code></td>
+                    <td>Fired when a clickable card is clicked</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">CSS Classes</h4>
+            <table class="option-table mb-4">
+                <tr>
+                    <th>Class</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>.card</code></td>
+                    <td>Base card container with background, border, and shadow</td>
+                </tr>
+                <tr>
+                    <td><code>.card-header</code></td>
+                    <td>Optional top section with subtle background</td>
+                </tr>
+                <tr>
+                    <td><code>.card-body</code></td>
+                    <td>Main content area with padding</td>
+                </tr>
+                <tr>
+                    <td><code>.card-footer</code></td>
+                    <td>Optional bottom section with subtle background</td>
+                </tr>
+                <tr>
+                    <td><code>.card-title</code></td>
+                    <td>Primary heading within card body</td>
+                </tr>
+                <tr>
+                    <td><code>.card-subtitle</code></td>
+                    <td>Secondary heading with muted colour</td>
+                </tr>
+                <tr>
+                    <td><code>.card-text</code></td>
+                    <td>Body text with appropriate line-height</td>
+                </tr>
+                <tr>
+                    <td><code>.card-hover</code></td>
+                    <td>CSS-only hover effect (alternative to JavaScript)</td>
+                </tr>
+                <tr>
+                    <td><code>.card-primary</code></td>
+                    <td>Card with primary colour border and themed header</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- SECTION 7: Config Engine Integration -->
+    <section class="card mb-6" data-section="Config Engine">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Config Engine Integration</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Use the Domma Config Engine to declaratively initialise multiple cards at once.
+            </p>
+
+            <h4 class="category-title">Single Card Setup</h4>
+            <pre class="code-block">$.setup({
+    '#product-card': {
+        component: 'card',
+        options: {
+            hover: true,
+            clickable: true
+        },
+        events: {
+            click: (e) => {
+                console.log('Product card clicked');
+            }
+        }
+    }
+});</pre>
+
+            <h4 class="category-title mt-4">Multiple Cards</h4>
+            <pre class="code-block">$.setup({
+    '.feature-card': {
+        component: 'card',
+        options: {
+            hover: true
+        }
+    },
+    '#cta-card': {
+        component: 'card',
+        options: {
+            hover: true,
+            clickable: true
+        },
+        events: {
+            click: () => window.location.href = '/signup'
+        }
+    }
+});</pre>
+
+            <h4 class="category-title mt-4">Demo</h4>
+            <div class="demo-area">
+                <div class="grid grid-cols-1"
+                     style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--dm-space-4);">
+                    <div class="config-demo-card card">
+                        <div class="card-body">
+                            <h4 class="card-title">Config Card 1</h4>
+                            <p class="card-text">Hover enabled</p>
+                        </div>
+                    </div>
+                    <div class="config-demo-card card">
+                        <div class="card-body">
+                            <h4 class="card-title">Config Card 2</h4>
+                            <p class="card-text">Hover enabled</p>
+                        </div>
+                    </div>
+                    <div class="config-demo-card card">
+                        <div class="card-body">
+                            <h4 class="card-title">Config Card 3</h4>
+                            <p class="card-text">Hover enabled</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 8: Related Elements -->
+    <section class="card mb-6" data-section="Related">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Related Elements</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Cards work great with these complementary components:</p>
+
+            <div class="grid grid-cols-1"
+                 style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--dm-space-4);">
+                <a href="../modal/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+                    <div class="card-body">
+                        <h4 class="card-title">Modal</h4>
+                        <p class="card-text">Display cards within modals for detailed views or forms.</p>
+                    </div>
+                </a>
+
+                <a href="../tabs/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+                    <div class="card-body">
+                        <h4 class="card-title">Tabs</h4>
+                        <p class="card-text">Organise cards into tabbed sections for categorised content.</p>
+                    </div>
+                </a>
+
+                <a href="../accordion/index.html" class="card card-hover"
+                   style="text-decoration: none; color: inherit;">
+                    <div class="card-body">
+                        <h4 class="card-title">Accordion</h4>
+                        <p class="card-text">Use cards as accordion items for collapsible content.</p>
+                    </div>
+                </a>
+
+                <a href="../loader/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+                    <div class="card-body">
+                        <h4 class="card-title">Loader</h4>
+                        <p class="card-text">Add loading states to cards for async content.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    // Quick Start examples
+    Domma.elements.card('#quick-hover-card', {hover: true});
+
+    // Tutorial example
+    Domma.elements.card('#tutorial-card', {
+        hover: true,
+        clickable: true,
+        onClick: () => {
+            alert('Product added to cart!');
+        }
+    });
+
+    // Examples section
+    Domma.elements.card('#example-hover', {hover: true});
+
+    Domma.elements.card('#example-clickable', {
+        hover: true,
+        clickable: true,
+        onClick: (e) => {
+            const result = document.getElementById('click-result');
+            result.style.display = 'block';
+            result.textContent = `Card clicked at ${new Date().toLocaleTimeString()}`;
+        }
+    });
+
+    Domma.elements.card('#profile-card', {hover: true});
+
+    // Grid cards with hover
+    ['#grid-card-1', '#grid-card-2', '#grid-card-3'].forEach(id => {
+        Domma.elements.card(id, {hover: true});
+    });
+
+    // Config Engine demo
+    $.setup({
+        '.config-demo-card': {
+            component: 'card',
+            options: {
+                hover: true
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jumbotron - Elements - Domma Showcase</title>
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+</head>
+<body class="dm-theme-light">
+
+<section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Overview</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Jumbotrons are large hero sections designed to showcase key content, announcements, or calls-to-action.
+            They're perfect for landing pages, marketing content, and feature highlights. Domma's Jumbotron is a
+            CSS-only component requiring no JavaScript.
+        </p>
+
+        <h3 class="category-title">Key Features</h3>
+        <ul class="feature-list mb-4">
+            <li><strong>CSS-Only</strong> - No JavaScript required</li>
+            <li><strong>Theme Variants</strong> - Default, dark, and primary gradient</li>
+            <li><strong>Background Images</strong> - Support for hero images with overlay</li>
+            <li><strong>Size Options</strong> - Small, default, and large padding</li>
+            <li><strong>Flexible Layout</strong> - Left-aligned or centred content</li>
+            <li><strong>Responsive</strong> - Mobile-optimised typography and spacing</li>
+        </ul>
+
+        <h3 class="category-title">Basic Usage</h3>
+        <div class="code-block">
+            <pre><code>&lt;div class="jumbotron"&gt;
+    &lt;div class="jumbotron-content"&gt;
+        &lt;h1 class="jumbotron-title"&gt;Welcome&lt;/h1&gt;
+        &lt;p class="jumbotron-subtitle"&gt;Subtitle text&lt;/p&gt;
+        &lt;div class="jumbotron-actions"&gt;
+            &lt;button class="btn btn-primary btn-lg"&gt;Get Started&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Quick Start">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Quick Start</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="category-title">Basic Jumbotron</h3>
+        <div class="demo-area mb-4">
+            <div class="jumbotron">
+                <div class="jumbotron-content">
+                    <h1 class="jumbotron-title">Hello, World!</h1>
+                    <p class="jumbotron-subtitle">Simple hero section for featured content</p>
+                    <div class="jumbotron-actions">
+                        <button class="btn btn-primary btn-lg">Learn More</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Examples">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Examples</h2>
+    </div>
+    <div class="card-body">
+
+        <h3 class="category-title">Primary Gradient (Centred)</h3>
+        <div class="demo-area mb-4">
+            <div class="jumbotron jumbotron-primary jumbotron-center">
+                <div class="jumbotron-content">
+                    <h1 class="jumbotron-title">Launch Your Project</h1>
+                    <p class="jumbotron-subtitle">Build amazing applications with Domma</p>
+                    <div class="jumbotron-actions">
+                        <button class="btn btn-lg" style="background: white; color: var(--dm-primary);">Get Started
+                        </button>
+                        <button class="btn btn-outline btn-lg" style="border-color: white; color: white;">
+                            Documentation
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="category-title">Dark Theme</h3>
+        <div class="demo-area mb-4">
+            <div class="jumbotron jumbotron-dark">
+                <div class="jumbotron-content">
+                    <h1 class="jumbotron-title">Dark Mode Ready</h1>
+                    <p class="jumbotron-subtitle">Beautiful dark theme variant</p>
+                    <div class="jumbotron-actions">
+                        <button class="btn btn-outline btn-lg" style="border-color: white; color: white;">Explore
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="category-title">With Background Image</h3>
+        <div class="demo-area mb-4">
+            <div class="jumbotron jumbotron-cover jumbotron-overlay jumbotron-center"
+                 style="background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 400px;">
+                <div class="jumbotron-content">
+                    <h1 class="jumbotron-title" style="color: white;">Cover Image</h1>
+                    <p class="jumbotron-subtitle" style="color: rgba(255,255,255,0.9);">Hero section with gradient
+                        background</p>
+                    <div class="jumbotron-actions">
+                        <button class="btn btn-lg" style="background: white; color: #667eea;">Discover More</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="category-title">Size Variants</h3>
+        <div class="demo-area">
+            <div class="jumbotron jumbotron-sm mb-3">
+                <div class="jumbotron-content">
+                    <h2 class="jumbotron-title">Small Jumbotron</h2>
+                    <p class="jumbotron-subtitle">Compact version with less padding</p>
+                </div>
+            </div>
+            <div class="jumbotron jumbotron-lg">
+                <div class="jumbotron-content">
+                    <h1 class="jumbotron-title">Large Jumbotron</h1>
+                    <p class="jumbotron-subtitle">Expanded version with extra padding</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Best Practices">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Best Practices</h2>
+    </div>
+    <div class="card-body">
+        <ul class="mb-4">
+            <li><strong>Above the Fold</strong> - Place jumbotrons at top of page for maximum impact</li>
+            <li><strong>Clear CTA</strong> - Include obvious call-to-action buttons</li>
+            <li><strong>Contrast</strong> - Ensure text is readable against background (4.5:1 ratio minimum)</li>
+            <li><strong>Mobile Responsive</strong> - Test on mobile devices for proper text sizing</li>
+            <li><strong>Image Optimisation</strong> - Compress background images for fast loading</li>
+        </ul>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="API Reference">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">CSS Classes</h2>
+    </div>
+    <div class="card-body">
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>.jumbotron</code></td>
+                    <td>Base jumbotron container</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-primary</code></td>
+                    <td>Primary colour gradient background</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-dark</code></td>
+                    <td>Dark background theme</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-center</code></td>
+                    <td>Centre-aligned content</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-cover</code></td>
+                    <td>Background image cover mode</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-overlay</code></td>
+                    <td>Dark overlay for background images</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-sm</code></td>
+                    <td>Smaller padding</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-lg</code></td>
+                    <td>Larger padding</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-content</code></td>
+                    <td>Content wrapper</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-title</code></td>
+                    <td>Main heading</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-subtitle</code></td>
+                    <td>Subtitle text</td>
+                </tr>
+                <tr>
+                    <td><code>.jumbotron-actions</code></td>
+                    <td>Button container</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Related">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Related Elements</h2>
+    </div>
+    <div class="card-body">
+        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <a href="../card/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Card</h3>
+                    <p class="card-text">Smaller content containers for page sections</p>
+                </div>
+            </a>
+            <a href="../navbar/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Navbar</h3>
+                    <p class="card-text">Navigation bar typically placed above jumbotron</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+
+</body>
+</html>

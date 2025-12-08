@@ -719,6 +719,46 @@
 
         const OVERLAY_TEMPLATE = `<div class="sidebar-overlay" id="sidebar-overlay"></div>`;
 
+        // Build "All Elements" navigation for element pages
+        function buildElementsNav() {
+            const elements = [
+                {name: 'Accordion', slug: 'accordion'},
+                {name: 'Back to Top', slug: 'back-to-top'},
+                {name: 'Badge', slug: 'badge'},
+                {name: 'Breadcrumbs', slug: 'breadcrumbs'},
+                {name: 'Button Group', slug: 'button-group'},
+                {name: 'Card', slug: 'card'},
+                {name: 'Carousel', slug: 'carousel'},
+                {name: 'Dialog', slug: 'dialog'},
+                {name: 'Dropdown', slug: 'dropdown'},
+                {name: 'Forms', slug: 'forms'},
+                {name: 'Jumbotron', slug: 'jumbotron'},
+                {name: 'Loader', slug: 'loader'},
+                {name: 'Modal', slug: 'modal'},
+                {name: 'Navbar', slug: 'navbar'},
+                {name: 'Tabs', slug: 'tabs'},
+                {name: 'Toast', slug: 'toast'},
+                {name: 'Tooltip', slug: 'tooltip'}
+            ];
+
+            const currentPath = window.location.pathname;
+
+            let html = '<div class="sidebar-section">';
+            html += '<div class="sidebar-header">All Elements</div>';
+            html += '<ul class="sidebar-nav">';
+
+            elements.forEach(({name, slug}) => {
+                const isActive = currentPath.includes(`/${slug}/`);
+                const activeClass = isActive ? ' active' : '';
+                html += `<li><a href="../${slug}/index.html" class="sidebar-link${activeClass}">${name}</a></li>`;
+            });
+
+            html += '</ul>';
+            html += '</div>';
+
+            return html;
+        }
+
         // Sidebar navigation builder
         function buildSidebar() {
             // Find all section headings (supports data-section attribute or card headers)
@@ -762,7 +802,23 @@
 
             // Render sidebar HTML using Domma's template system
             const render = _.template(SIDEBAR_TEMPLATE);
-            const sidebarHtml = render({items: navItems});
+            let sidebarHtml = render({items: navItems});
+
+            // Check if we're on an individual element page (not the main elements index)
+            const currentPath = window.location.pathname;
+            const isElementPage = currentPath.includes('/elements/') &&
+                !currentPath.endsWith('/elements/index.html') &&
+                !currentPath.match(/\/elements\/?$/);
+
+            // If on an element page, prepend "All Elements" navigation
+            if (isElementPage) {
+                const elementsNavHtml = buildElementsNav();
+                // Insert elements nav into sidebar before "On This Page"
+                sidebarHtml = sidebarHtml.replace(
+                    '<aside class="sidebar" id="sidebar">',
+                    '<aside class="sidebar" id="sidebar">' + elementsNavHtml
+                );
+            }
 
             // Toggle and overlay HTML (static, no templating needed)
             const toggleHtml = TOGGLE_TEMPLATE;

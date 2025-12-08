@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accordion - Elements - Domma Showcase</title>
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+</head>
+<body class="dm-theme-light">
+
+<section class="card mb-6" data-section="Overview">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Overview</h2></div>
+    <div class="card-body">
+        <p class="mb-4">Accordions organize content into collapsible sections, perfect for FAQs, product details, and
+            navigation menus.</p>
+        <h3 class="category-title">Key Features</h3>
+        <ul class="feature-list mb-4">
+            <li><strong>Single/Multi Expand</strong> - Control how many panels can be open</li>
+            <li><strong>Smooth Animations</strong> - Configurable slide transitions</li>
+            <li><strong>Programmatic Control</strong> - Open, close, toggle panels via API</li>
+        </ul>
+        <div class="code-block">
+            <pre><code>const accordion = Domma.elements.accordion('#accordion', {
+    multiExpand: false,
+    activeIndex: 0
+});</code></pre>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Quick Start">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Quick Start</h2></div>
+    <div class="card-body">
+        <div class="demo-area mb-4">
+            <div id="quick-accordion" class="accordion">
+                <div class="accordion-item active">
+                    <div class="accordion-header">
+                        <span>Section 1</span>
+                        <span class="accordion-icon">&#9660;</span>
+                    </div>
+                    <div class="accordion-body">
+                        <div class="accordion-content">Content for section 1</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Section 2</span>
+                        <span class="accordion-icon">&#9660;</span>
+                    </div>
+                    <div class="accordion-body">
+                        <div class="accordion-content">Content for section 2</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Examples">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Examples</h2></div>
+    <div class="card-body">
+        <h3 class="category-title">FAQ Accordion (Single Expand)</h3>
+        <div class="demo-area mb-4">
+            <div id="faq-accordion" class="accordion">
+                <div class="accordion-item active">
+                    <div class="accordion-header">
+                        <span>What is Domma?</span>
+                        <span class="accordion-icon">&#9660;</span>
+                    </div>
+                    <div class="accordion-body">
+                        <div class="accordion-content">A lightweight JavaScript framework with DOM, utilities, and UI
+                            components.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>How big is it?</span>
+                        <span class="accordion-icon">&#9660;</span>
+                    </div>
+                    <div class="accordion-body">
+                        <div class="accordion-content">Approximately 125KB minified.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="category-title">Multi-Expand Mode</h3>
+        <div class="demo-area">
+            <div id="multi-accordion" class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Panel 1</span>
+                        <span class="accordion-icon">&#9660;</span>
+                    </div>
+                    <div class="accordion-body">
+                        <div class="accordion-content">Multiple panels can be open simultaneously</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Panel 2</span>
+                        <span class="accordion-icon">&#9660;</span>
+                    </div>
+                    <div class="accordion-body">
+                        <div class="accordion-content">Click headers to toggle independently</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Best Practices">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Best Practices</h2></div>
+    <div class="card-body">
+        <ul>
+            <li><strong>Accessibility</strong> - Use semantic HTML, ARIA attributes for screen readers</li>
+            <li><strong>Clear Headers</strong> - Make accordion headers descriptive and actionable</li>
+            <li><strong>Initial State</strong> - Consider opening first panel by default for discoverability</li>
+        </ul>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="API Reference">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">API Reference</h2></div>
+    <div class="card-body">
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>multiExpand</code></td>
+                    <td>Boolean</td>
+                    <td><code>false</code></td>
+                    <td>Allow multiple panels open</td>
+                </tr>
+                <tr>
+                    <td><code>animation</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Enable animations</td>
+                </tr>
+                <tr>
+                    <td><code>activeIndex</code></td>
+                    <td>Number/Array</td>
+                    <td><code>null</code></td>
+                    <td>Initially open panel(s)</td>
+                </tr>
+                <tr>
+                    <td><code>onChange</code></td>
+                    <td>Function</td>
+                    <td><code>null</code></td>
+                    <td>Panel change callback</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 class="category-title mt-4">Methods</h3>
+        <div class="option-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>open(index)</code></td>
+                    <td>Open panel by index</td>
+                </tr>
+                <tr>
+                    <td><code>close(index)</code></td>
+                    <td>Close panel by index</td>
+                </tr>
+                <tr>
+                    <td><code>toggle(index)</code></td>
+                    <td>Toggle panel</td>
+                </tr>
+                <tr>
+                    <td><code>openAll()</code></td>
+                    <td>Open all panels</td>
+                </tr>
+                <tr>
+                    <td><code>closeAll()</code></td>
+                    <td>Close all panels</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-6" data-section="Related">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Related Elements</h2></div>
+    <div class="card-body">
+        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <a href="../tabs/index.html" class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title">Tabs</h3>
+                    <p class="card-text">Horizontal content organization</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    Domma.elements.accordion('#quick-accordion', {multiExpand: false, activeIndex: 0});
+    Domma.elements.accordion('#faq-accordion', {multiExpand: false, activeIndex: 0});
+    Domma.elements.accordion('#multi-accordion', {multiExpand: true});
+</script>
+
+</body>
+</html>
