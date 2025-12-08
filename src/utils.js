@@ -1135,6 +1135,55 @@ export const utils = {
     },
 
     /**
+     * Creates a function that performs a left-to-right function composition.
+     * The result of each function is passed as the argument to the next.
+     * @param {...Function} funcs - Functions to compose
+     * @returns {Function}
+     * @example
+     * const calculate = _.flow(
+     *     x => x * 2,
+     *     x => x + 10,
+     *     x => x / 3
+     * );
+     * calculate(5); // ((5 * 2) + 10) / 3 = 6.67
+     */
+    flow(...funcs) {
+        const length = funcs.length;
+        if (length === 0) {
+            return function (value) {
+                return value;
+            };
+        }
+        if (length === 1) {
+            return funcs[0];
+        }
+        return function (...args) {
+            let result = funcs[0].apply(this, args);
+            for (let i = 1; i < length; i++) {
+                result = funcs[i].call(this, result);
+            }
+            return result;
+        };
+    },
+
+    /**
+     * Creates a function that performs a right-to-left function composition.
+     * The result of each function is passed as the argument to the next (in reverse order).
+     * @param {...Function} funcs - Functions to compose
+     * @returns {Function}
+     * @example
+     * const calculate = _.compose(
+     *     x => x / 3,
+     *     x => x + 10,
+     *     x => x * 2
+     * );
+     * calculate(5); // ((5 * 2) + 10) / 3 = 6.67
+     */
+    compose(...funcs) {
+        return this.flow(...funcs.reverse());
+    },
+
+    /**
      * Creates a function that memoizes the result of func.
      * @param {Function} func
      * @param {Function} resolver
@@ -2993,5 +3042,79 @@ export const utils = {
         } finally {
             document.body.removeChild(textarea);
         }
+    },
+
+    // ============================================
+    // Chaining
+    // ============================================
+
+    /**
+     * Creates a lodash-style wrapper for explicit chaining.
+     * Allows method chaining with .value() to extract the final result.
+     * @param {*} value - The value to wrap
+     * @returns {Object} Chainable wrapper object
+     * @example
+     * _.chain([1, 2, 3, 4])
+     *     .map(x => x * 2)
+     *     .filter(x => x > 4)
+     *     .sum()
+     *     .value(); // 14
+     */
+    chain(value) {
+        const wrapper = {
+            _value: value,
+            value() {
+                return this._value;
+            }
+        };
+
+        // Add chainable versions of all utility methods
+        const chainableMethods = [
+            // Array methods
+            'chunk', 'compact', 'concat', 'difference', 'drop', 'dropRight', 'fill',
+            'findIndex', 'findLastIndex', 'flatten', 'flattenDeep', 'flattenDepth',
+            'fromPairs', 'head', 'indexOf', 'initial', 'intersection', 'join',
+            'last', 'lastIndexOf', 'nth', 'pull', 'pullAll', 'pullAt', 'remove',
+            'reverse', 'slice', 'sortedIndex', 'sortedUniq', 'tail', 'take',
+            'takeRight', 'union', 'uniq', 'uniqBy', 'unzip', 'without', 'xor', 'zip',
+            // Collection methods
+            'countBy', 'each', 'every', 'filter', 'find', 'findLast', 'flatMap',
+            'groupBy', 'includes', 'invokeMap', 'keyBy', 'map', 'orderBy', 'partition',
+            'reduce', 'reduceRight', 'reject', 'sample', 'sampleSize', 'shuffle',
+            'size', 'some', 'sortBy',
+            // Object methods
+            'assign', 'assignIn', 'at', 'defaults', 'entries', 'extend', 'findKey',
+            'findLastKey', 'forIn', 'forOwn', 'functions', 'get', 'has', 'invert',
+            'invertBy', 'invoke', 'keys', 'mapKeys', 'mapValues', 'merge', 'omit',
+            'omitBy', 'pick', 'pickBy', 'result', 'set', 'toPairs', 'transform',
+            'unset', 'update', 'values',
+            // String methods
+            'camelCase', 'capitalize', 'deburr', 'endsWith', 'escape', 'escapeRegExp',
+            'kebabCase', 'lowerCase', 'lowerFirst', 'pad', 'padEnd', 'padStart',
+            'parseInt', 'repeat', 'replace', 'snakeCase', 'split', 'startCase',
+            'startsWith', 'toLower', 'toUpper', 'trim', 'trimEnd', 'trimStart',
+            'truncate', 'unescape', 'upperCase', 'upperFirst', 'words'
+        ];
+
+        chainableMethods.forEach(method => {
+            if (typeof this[method] === 'function') {
+                wrapper[method] = function (...args) {
+                    this._value = utils[method](this._value, ...args);
+                    return this;
+                };
+            }
+        });
+
+        // Add terminal methods that return values (not chainable)
+        const terminalMethods = ['sum', 'mean', 'min', 'max', 'toArray', 'toJSON', 'toString'];
+        terminalMethods.forEach(method => {
+            if (typeof this[method] === 'function') {
+                wrapper[method] = function (...args) {
+                    return utils[method](this._value, ...args);
+                };
+            }
+        });
+
+        return wrapper;
     }
 };
