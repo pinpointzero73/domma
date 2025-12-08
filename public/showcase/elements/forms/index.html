@@ -443,39 +443,251 @@
     </div>
 </section>
 
-<section class="card mb-6" data-section="Config Engine">
+    <section class="card mb-6" data-section="Hybrid CSS + JavaScript">
     <div class="card-header">
-        <h2 class="text-xl font-semibold m-0">Config Engine</h2>
+        <h2 class="text-xl font-semibold m-0">Hybrid CSS + JavaScript</h2>
     </div>
     <div class="card-body">
-        <p class="mb-4">Forms work with native HTML, but you can enhance them with Domma:</p>
-        <div class="code-block">
-            <pre><code>$.setup({
+        <p class="mb-4">
+            Forms work perfectly with pure CSS styling, but you can enhance them with JavaScript for validation,
+            auto-save, dynamic fields, and more using Domma's declarative configuration.
+        </p>
+
+        <h4 class="category-title">Form Validation with $.setup()</h4>
+        <pre class="code-block">$.setup({
     '#registration-form': {
+        initial: {
+            data: { touched: {}, errors: {} }
+        },
         events: {
             submit: (e, $form) => {
                 e.preventDefault();
 
-                // Validate all inputs
-                $form.find('.form-input').each(function() {
-                    const $input = $(this);
-                    const $group = $input.closest('.form-group');
+                // Collect form data
+                const formData = {
+                    username: $form.find('[name="username"]').val(),
+                    email: $form.find('[name="email"]').val(),
+                    password: $form.find('[name="password"]').val()
+                };
 
-                    if (!$input.val()) {
-                        $group.addClass('has-error');
-                    } else {
-                        $group.removeClass('has-error').addClass('has-success');
-                    }
-                });
+                // Validate with utils
+                const errors = {};
+                if (_.isEmpty(_.trim(formData.username))) {
+                    errors.username = 'Username required';
+                }
+                if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                    errors.email = 'Invalid email';
+                }
+                if (formData.password.length < 8) {
+                    errors.password = 'Password must be 8+ characters';
+                }
 
-                // Submit if valid
-                if ($form.find('.has-error').length === 0) {
-                    console.log('Form is valid!');
+                $form.data('errors', errors);
+
+                if (_.isEmpty(errors)) {
+                    // Submit
+                    Domma.http.post('/api/register', formData)
+                        .then(() => {
+                            Domma.elements.toast.success('Registered successfully!');
+                            window.location = '/dashboard';
+                        })
+                        .catch(err => {
+                            Domma.elements.toast.error(err.message);
+                        });
+                } else {
+                    // Show errors
+                    _.forEach(errors, (msg, field) => {
+                        $form.find(`[name="${field}"]`)
+                            .closest('.form-group')
+                            .addClass('has-error')
+                            .find('.error-message').text(msg);
+                    });
+                }
+            },
+
+            'blur .form-input': _.debounce((e, $form) => {
+                const $input = $(e.target);
+                const field = $input.attr('name');
+                const value = $input.val();
+                const $group = $input.closest('.form-group');
+
+                // Mark as touched
+                const touched = $form.data('touched') || {};
+                touched[field] = true;
+                $form.data('touched', touched);
+
+                // Validate
+                let isValid = true;
+                if (field === 'email') {
+                    isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+                } else if (field === 'password') {
+                    isValid = value.length >= 8;
+                } else {
+                    isValid = !_.isEmpty(_.trim(value));
+                }
+
+                $group.toggleClass('has-error', !isValid);
+                $group.toggleClass('has-success', isValid);
+            }, 300)
+        }
+    }
+});</pre>
+
+        <h4 class="category-title">Auto-Save Draft</h4>
+        <pre class="code-block">$.setup({
+    '#article-form': {
+        initial: {
+            data: { saveTimer: null, lastSaved: null }
+        },
+        events: {
+            'input .form-input, change select': _.debounce((e, $form) => {
+                // Collect current state
+                const data = {
+                    title: $form.find('[name="title"]').val(),
+                    content: $form.find('[name="content"]').val(),
+                    category: $form.find('[name="category"]').val()
+                };
+
+                // Save draft
+                Domma.http.post('/api/drafts/auto-save', data)
+                    .then(() => {
+                        $form.data('lastSaved', new Date());
+                        $('#save-status').text('Draft saved ' + D().format('HH:mm:ss'));
+                    });
+            }, 2000)
+        }
+    }
+});</pre>
+
+        <h4 class="category-title">Dynamic Form Fields</h4>
+        <pre class="code-block">$.setup({
+    '#contact-form': {
+        events: {
+            'click #add-phone': (e, $form) => {
+                const phoneCount = $form.find('.phone-input').length;
+                const html = `
+                    <div class="form-group">
+                        <input type="tel" name="phone_${phoneCount}"
+                               class="form-input phone-input"
+                               placeholder="Phone ${phoneCount + 1}">
+                    </div>
+                `;
+                $form.find('#phone-inputs').append(html);
+            },
+
+            'change [name="contact-method"]': (e, $form) => {
+                const method = $(e.target).val();
+
+                // Show/hide relevant fields
+                $form.find('.email-field').toggle(method === 'email');
+                $form.find('.phone-field').toggle(method === 'phone');
+                $form.find('.address-field').toggle(method === 'mail');
+            }
+        }
+    }
+});</pre>
+
+        <h4 class="category-title">Multi-Step Form</h4>
+        <pre class="code-block">$.setup({
+    '#wizard-form': {
+        initial: {
+            data: { currentStep: 1, totalSteps: 3, formData: {} }
+        },
+        events: {
+            'click .next-step': (e, $form) => {
+                const data = $form.data();
+                if (data.currentStep < data.totalSteps) {
+                    // Collect current step data
+                    $form.find(`.step-${data.currentStep} .form-input`).each(function() {
+                        const $input = $(this);
+                        data.formData[$input.attr('name')] = $input.val();
+                    });
+
+                    // Move to next step
+                    data.currentStep++;
+                    $form.data(data);
+
+                    // Update UI
+                    $form.find('.step').hide();
+                    $form.find(`.step-${data.currentStep}`).fadeIn();
+
+                    $('#step-indicator').text(`Step ${data.currentStep} of ${data.totalSteps}`);
+                }
+            },
+
+            'click .prev-step': (e, $form) => {
+                const data = $form.data();
+                if (data.currentStep > 1) {
+                    data.currentStep--;
+                    $form.data(data);
+
+                    $form.find('.step').hide();
+                    $form.find(`.step-${data.currentStep}`).fadeIn();
+
+                    $('#step-indicator').text(`Step ${data.currentStep} of ${data.totalSteps}`);
                 }
             }
         }
     }
-});</code></pre>
+});</pre>
+
+        <h4 class="category-title">Benefits of Hybrid Approach</h4>
+        <ul class="mb-4">
+            <li><strong>Progressive Enhancement</strong> - Forms work without JS, enhanced with JS</li>
+            <li><strong>Better UX</strong> - Real-time validation, auto-save, dynamic fields</li>
+            <li><strong>Maintainability</strong> - Centralized logic with $.setup()</li>
+            <li><strong>Accessibility</strong> - CSS provides base styling, JS adds interactivity</li>
+        </ul>
+
+        <h4 class="category-title">CSS-Only vs CSS+JS Hybrid</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <p class="font-semibold mb-2">CSS-Only (Default)</p>
+                <pre class="code-block" style="font-size: 0.85em;">&lt;form action="/submit" method="POST"&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Email&lt;/label&gt;
+        &lt;input type="email"
+               class="form-input"
+               name="email"
+               required&gt;
+    &lt;/div&gt;
+
+    &lt;button type="submit"
+            class="btn btn-primary"&gt;
+        Submit
+    &lt;/button&gt;
+&lt;/form&gt;
+
+&lt;!-- Works with native validation --&gt;</pre>
+            </div>
+            <div>
+                <p class="font-semibold mb-2">CSS+JS Hybrid (Enhanced)</p>
+                <pre class="code-block" style="font-size: 0.85em;">&lt;form id="enhanced-form"&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Email&lt;/label&gt;
+        &lt;input type="email"
+               class="form-input"
+               name="email"&gt;
+        &lt;span class="error-message"&gt;&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;button type="submit"
+            class="btn btn-primary"&gt;
+        Submit
+    &lt;/button&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+$.setup({
+    '#enhanced-form': {
+        events: {
+            submit: validateAndSubmit,
+            'blur .form-input': validateField
+        }
+    }
+});
+&lt;/script&gt;</pre>
+            </div>
         </div>
     </div>
 </section>
@@ -514,67 +726,64 @@
 <script src="../../js/layout.js"></script>
 <script>
     // Tutorial form
-    document.getElementById('tutorial-form').addEventListener('submit', (e) => {
+    $('#tutorial-form').on('submit', (e) => {
         e.preventDefault();
 
         // Clear previous validation
-        document.querySelectorAll('.form-group').forEach(group => {
-            group.classList.remove('has-error', 'has-success');
-        });
+        $('.form-group').removeClass('has-error has-success');
 
         let isValid = true;
 
         // Validate name
-        const name = document.getElementById('name');
-        if (name.value.length < 2) {
-            name.closest('.form-group').classList.add('has-error');
+        const $name = $('#name');
+        if ($name.val().length < 2) {
+            $name.closest('.form-group').addClass('has-error');
             isValid = false;
         } else {
-            name.closest('.form-group').classList.add('has-success');
+            $name.closest('.form-group').addClass('has-success');
         }
 
         // Validate email
-        const email = document.getElementById('email');
-        if (!email.value.includes('@')) {
-            email.closest('.form-group').classList.add('has-error');
+        const $email = $('#email');
+        if (!$email.val().includes('@')) {
+            $email.closest('.form-group').addClass('has-error');
             isValid = false;
         } else {
-            email.closest('.form-group').classList.add('has-success');
+            $email.closest('.form-group').addClass('has-success');
         }
 
         // Validate password
-        const password = document.getElementById('password');
-        if (password.value.length < 8) {
-            password.closest('.form-group').classList.add('has-error');
+        const $password = $('#password');
+        if ($password.val().length < 8) {
+            $password.closest('.form-group').addClass('has-error');
             isValid = false;
         } else {
-            password.closest('.form-group').classList.add('has-success');
+            $password.closest('.form-group').addClass('has-success');
         }
 
         // Validate account type
-        const accountType = document.getElementById('account-type');
-        if (!accountType.value) {
-            accountType.closest('.form-group').classList.add('has-error');
+        const $accountType = $('#account-type');
+        if (!$accountType.val()) {
+            $accountType.closest('.form-group').addClass('has-error');
             isValid = false;
         } else {
-            accountType.closest('.form-group').classList.add('has-success');
+            $accountType.closest('.form-group').addClass('has-success');
         }
 
         // Validate terms
-        const terms = document.getElementById('terms');
-        if (!terms.checked) {
-            terms.closest('.form-group').classList.add('has-error');
+        const $terms = $('#terms');
+        if (!$terms.prop('checked')) {
+            $terms.closest('.form-group').addClass('has-error');
             isValid = false;
         } else {
-            terms.closest('.form-group').classList.add('has-success');
+            $terms.closest('.form-group').addClass('has-success');
         }
 
         // Show result
-        const resultDiv = document.getElementById('tutorial-result');
         if (isValid) {
-            resultDiv.innerHTML = '<p class="text-success">✓ Form submitted successfully!</p>';
+            $('#tutorial-result').html('<p class="text-success">✓ Form submitted successfully!</p>');
         } else {
-            resultDiv.innerHTML = '<p class="text-danger">✗ Please fix the errors above</p>';
+            $('#tutorial-result').html('<p class="text-danger">✗ Please fix the errors above</p>');
         }
     });
 </script>

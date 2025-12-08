@@ -156,21 +156,31 @@
 
         // Fetch extended build info (includes size) and update placeholders
         let distBase;
-        if (isSubpage) {
+        // Check if we're on a section index (like /showcase/elements/index.html)
+        const isSectionIndex = path.match(/\/showcase\/[^/]+\/index\.html$/);
+
+        if (isSubpage && !isSectionIndex) {
+            // Individual element pages like /showcase/elements/card/index.html (3 levels deep)
+            distBase = '../../../dist/';
+        } else if (isSectionIndex) {
+            // Section index pages like /showcase/elements/index.html (2 levels deep)
             distBase = '../../dist/';
         } else if (isQuickstart || isBlogPage) {
+            // Quickstart or blog pages (2 levels deep)
             distBase = '../dist/';
         } else if (isPublicPage || isSplashPage) {
+            // Public pages at root
             distBase = 'dist/';
         } else {
+            // Showcase main /showcase/index.html (1 level deep)
             distBase = '../dist/';
         }
         fetch(distBase + 'build-info.json')
             .then(r => r.json())
             .then(info => {
                 // Update any elements with data-build-size attribute
-                document.querySelectorAll('[data-build-size]').forEach(el => {
-                    el.textContent = info.size || '~250KB';
+                $('[data-build-size]').each(function () {
+                    $(this).text(info.size || '~250KB');
                 });
             })
             .catch(() => {
@@ -179,11 +189,11 @@
         // Function to set active state on public navbar items
         function setPublicActiveState() {
             if (isAboutPage) {
-                publicItems.find(i => i.text === 'About Us').active = true;
+                _.find(publicItems, i => i.text === 'About Us').active = true;
             } else if (isFaqPage) {
-                publicItems.find(i => i.text === 'FAQs').active = true;
+                _.find(publicItems, i => i.text === 'FAQs').active = true;
             } else if (isBlogPage) {
-                publicItems.find(i => i.text === 'Blog').active = true;
+                _.find(publicItems, i => i.text === 'Blog').active = true;
             }
         }
         setPublicActiveState();
@@ -723,6 +733,8 @@
         function buildElementsNav() {
             const elements = [
                 {name: 'Accordion', slug: 'accordion'},
+                {name: 'Alarm', slug: 'alarm'},
+                {name: 'Autocomplete', slug: 'autocomplete'},
                 {name: 'Back to Top', slug: 'back-to-top'},
                 {name: 'Badge', slug: 'badge'},
                 {name: 'Breadcrumbs', slug: 'breadcrumbs'},
@@ -736,7 +748,10 @@
                 {name: 'Loader', slug: 'loader'},
                 {name: 'Modal', slug: 'modal'},
                 {name: 'Navbar', slug: 'navbar'},
+                {name: 'Notification', slug: 'notification'},
+                {name: 'Pillbox', slug: 'pillbox'},
                 {name: 'Tabs', slug: 'tabs'},
+                {name: 'Timer', slug: 'timer'},
                 {name: 'Toast', slug: 'toast'},
                 {name: 'Tooltip', slug: 'tooltip'}
             ];
@@ -747,7 +762,7 @@
             html += '<div class="sidebar-header">All Elements</div>';
             html += '<ul class="sidebar-nav">';
 
-            elements.forEach(({name, slug}) => {
+            _.forEach(elements, ({name, slug}) => {
                 const isActive = currentPath.includes(`/${slug}/`);
                 const activeClass = isActive ? ' active' : '';
                 html += `<li><a href="../${slug}/index.html" class="sidebar-link${activeClass}">${name}</a></li>`;
@@ -904,7 +919,10 @@
         // Scroll spy to highlight current section
         function initScrollSpy(navItems) {
             const $links = $('.sidebar-link');
-            const sections = navItems.map(item => $('#' + item.id)[0]).filter(Boolean);
+            const sections = _.chain(navItems)
+                .map(item => $('#' + item.id)[0])
+                .filter(Boolean)
+                .value();
 
             if (sections.length === 0) return;
 
@@ -924,7 +942,7 @@
                 threshold: 0
             });
 
-            sections.forEach(section => observer.observe(section));
+            _.forEach(sections, section => observer.observe(section));
         }
 
         // Add theme class to body if not present
@@ -976,7 +994,7 @@
             dropdowns.each(function () {
                 const $dd = $(this);
                 const links = $dd.find('.dm-navbar-dropdown-item');
-                const isActive = links.toArray().some(link => {
+                const isActive = _.some(links.toArray(), link => {
                     const href = $(link).attr('href');
                     if (!href) return false;
                     const section = href.split('/').slice(-2, -1)[0];
@@ -1084,7 +1102,7 @@
             });
         }
 
-        // Code block copy-to-clipboard functionality
+        // Code block copy-to-clipboard functionality using Domma
         function setupCodeBlockCopy() {
             const copyIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -1095,31 +1113,27 @@
                 <polyline points="20 6 9 17 4 12"></polyline>
             </svg>`;
 
-            // Find all code blocks using native DOM
-            const codeBlocks = document.querySelectorAll('.code-block');
+            // Find all code blocks using Domma
+            $('.code-block').each(function () {
+                const $codeBlock = $(this);
 
-            codeBlocks.forEach(codeBlock => {
                 // Skip if already wrapped
-                if (codeBlock.parentElement?.classList.contains('code-block-wrapper')) {
+                if ($codeBlock.parent().hasClass('code-block-wrapper')) {
                     return;
                 }
 
-                // Create wrapper
-                const wrapper = document.createElement('div');
-                wrapper.className = 'code-block-wrapper';
-                codeBlock.parentNode.insertBefore(wrapper, codeBlock);
-                wrapper.appendChild(codeBlock);
+                // Wrap in container using Domma
+                $codeBlock.wrap('<div class="code-block-wrapper"></div>');
+                const $wrapper = $codeBlock.parent();
 
-                // Create copy button
-                const copyBtn = document.createElement('button');
-                copyBtn.className = 'code-block-copy';
-                copyBtn.innerHTML = copyIcon;
-                wrapper.appendChild(copyBtn);
+                // Create copy button using Domma
+                const $copyBtn = $('<button class="code-block-copy"></button>').html(copyIcon);
+                $wrapper.append($copyBtn);
 
                 // Add tooltip if Domma available
                 if (Domma?.elements?.tooltip) {
                     try {
-                        Domma.elements.tooltip(copyBtn, {
+                        Domma.elements.tooltip($copyBtn.get(0), {
                             content: 'Copy code',
                             position: 'top'
                         });
@@ -1127,21 +1141,20 @@
                     }
                 }
 
-                // Handle click
-                copyBtn.addEventListener('click', async function () {
-                    const code = codeBlock.textContent;
+                // Handle click using Domma
+                $copyBtn.on('click', async function () {
+                    const code = $codeBlock.text();
 
                     try {
-                        // Try Domma utility first, fallback to native
+                        // Use Domma utility
                         if (Domma?.utils?.copyToClipboard) {
                             await Domma.utils.copyToClipboard(code);
                         } else {
                             await navigator.clipboard.writeText(code);
                         }
 
-                        // Show success state
-                        copyBtn.classList.add('copied');
-                        copyBtn.innerHTML = checkIcon;
+                        // Show success state using Domma
+                        $copyBtn.addClass('copied').html(checkIcon);
 
                         // Show toast if available
                         if (Domma?.elements?.toast) {
@@ -1160,10 +1173,9 @@
                         }
                     }
 
-                    // Reset after delay
+                    // Reset after delay using Domma
                     setTimeout(() => {
-                        copyBtn.classList.remove('copied');
-                        copyBtn.innerHTML = copyIcon;
+                        $copyBtn.removeClass('copied').html(copyIcon);
                     }, 2000);
                 });
             });
@@ -1174,9 +1186,17 @@
     }
 
     // Wait for DOM to be ready before injecting layout
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
+    function waitForReady() {
+        if (document.readyState === 'loading') {
+            // DOM is still loading, wait for DOMContentLoaded
+            document.addEventListener('DOMContentLoaded', () => {
+                init();
+            });
+        } else {
+            // DOM is already ready
+            init();
+        }
     }
+
+    waitForReady();
 })();

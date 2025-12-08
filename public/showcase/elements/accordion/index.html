@@ -203,7 +203,116 @@
     </div>
 </section>
 
-<section class="card mb-6" data-section="Related">
+    <section class="card mb-6" data-section="Config Engine">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Declarative Configuration</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Use Domma's config engine for declarative accordion setup with <code>$.setup()</code>. This approach is
+                cleaner, more maintainable, and allows you to configure multiple components at once.
+            </p>
+
+            <h4 class="category-title">Single Accordion Setup</h4>
+            <pre class="code-block">$.setup({
+    '#my-accordion': {
+        component: 'accordion',
+        options: {
+            multiExpand: false,
+            activeIndex: 0,
+            animation: 'slide'
+        }
+    }
+});</pre>
+
+            <h4 class="category-title">Multiple Accordions at Once</h4>
+            <pre class="code-block">// Configure all FAQ accordions site-wide
+$.setup({
+    '.faq-accordion': {
+        component: 'accordion',
+        options: {
+            multiExpand: false,
+            activeIndex: 0
+        },
+        events: {
+            // Add click tracking
+            change: (index, $item, instance) => {
+                console.log(`FAQ ${index + 1} opened`);
+            }
+        }
+    },
+    '#settings-accordion': {
+        component: 'accordion',
+        options: {
+            multiExpand: true  // Allow multiple sections open
+        }
+    }
+});</pre>
+
+            <h4 class="category-title">With Initial State & Events</h4>
+            <pre class="code-block">$.setup({
+    '#product-details': {
+        component: 'accordion',
+        options: {
+            activeIndex: 0,
+            onChange: (index) => {
+                // Track which section users view
+                analytics.track('Product Section Viewed', {
+                    section: ['specs', 'reviews', 'shipping'][index]
+                });
+            }
+        },
+        initial: {
+            // Apply additional styling
+            css: {
+                border: '1px solid #e0e0e0',
+                borderRadius: '8px'
+            }
+        }
+    }
+});</pre>
+
+            <h4 class="category-title">Benefits of Declarative Config</h4>
+            <ul class="mb-4">
+                <li><strong>Centralized Configuration</strong> - All component setup in one place</li>
+                <li><strong>Easier Maintenance</strong> - Update options without touching HTML</li>
+                <li><strong>Batch Operations</strong> - Configure multiple components at once</li>
+                <li><strong>Mutable Config</strong> - Update with <code>$.update()</code>, query with
+                    <code>$.config()</code>, reset with <code>$.reset()</code></li>
+            </ul>
+
+            <h4 class="category-title">Programmatic vs Declarative</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <p class="font-semibold mb-2">Programmatic (Traditional)</p>
+                    <pre class="code-block" style="font-size: 0.85em;">// Scattered throughout code
+const acc1 = Domma.elements.accordion(
+    '#accordion-1',
+    {multiExpand: false}
+);
+
+const acc2 = Domma.elements.accordion(
+    '#accordion-2',
+    {multiExpand: true}
+);</pre>
+                </div>
+                <div>
+                    <p class="font-semibold mb-2">Declarative (Recommended)</p>
+                    <pre class="code-block" style="font-size: 0.85em;">// Clean, centralized config
+$.setup({
+    '#accordion-1': {
+        component: 'accordion',
+        options: {multiExpand: false}
+    },
+    '#accordion-2': {
+        component: 'accordion',
+        options: {multiExpand: true}
+    }
+});</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Related">
     <div class="card-header"><h2 class="text-xl font-semibold m-0">Related Elements</h2></div>
     <div class="card-body">
         <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">

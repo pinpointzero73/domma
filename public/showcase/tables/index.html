@@ -834,6 +834,261 @@ table.once('render', () => {
         </div>
     </section>
 
+    <!-- Config Engine -->
+    <section class="card mb-6" data-section="Config Engine">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Declarative Table Configuration</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                While tables use <code>Domma.tables.create()</code>, you can still leverage Domma's config engine to
+                declaratively manage table setups, event handlers, and interactions.
+            </p>
+
+            <h4 class="category-title">Centralized Table Config</h4>
+            <pre class="code-block">// Define all table configurations in one place
+const tableConfigs = {
+    users: {
+        selector: '#users-table',
+        options: {
+            data: userData,
+            columns: [
+                { key: 'id', title: 'ID', sortable: true },
+                { key: 'name', title: 'Name', sortable: true },
+                { key: 'email', title: 'Email', sortable: true },
+                { key: 'role', title: 'Role', filterable: true }
+            ],
+            pagination: true,
+            pageSize: 20,
+            selectable: true,
+            exportPanel: true
+        },
+        events: {
+            select: (rows) => {
+                console.log(`${rows.length} users selected`);
+            },
+            edit: (row, column, oldVal, newVal) => {
+                // Save to server
+                api.updateUser(row.id, { [column]: newVal });
+            }
+        }
+    },
+    products: {
+        selector: '#products-table',
+        options: {
+            data: productData,
+            columns: [
+                { key: 'sku', title: 'SKU', sortable: true },
+                { key: 'name', title: 'Product', sortable: true },
+                { key: 'price', title: 'Price', sortable: true, render: (val) => `$${val}` },
+                { key: 'stock', title: 'Stock', sortable: true }
+            ],
+            pagination: true,
+            pageSize: 50
+        }
+    }
+};
+
+// Initialize all tables
+Object.values(tableConfigs).forEach(config => {
+    const table = Domma.tables.create(config.selector, config.options);
+
+    // Attach event handlers
+    if (config.events) {
+        Object.entries(config.events).forEach(([event, handler]) => {
+            table.on(event, handler);
+        });
+    }
+});</pre>
+
+            <h4 class="category-title">Using $.setup() for Table Containers</h4>
+            <pre class="code-block">// Enhance table containers with config engine
+$.setup({
+    '.table-container': {
+        initial: {
+            css: {
+                background: 'var(--dm-gray-50)',
+                padding: 'var(--dm-space-4)',
+                borderRadius: 'var(--dm-radius-lg)'
+            }
+        },
+        events: {
+            ready: (e, $el) => {
+                // Create table when container is ready
+                const tableId = $el.find('table').attr('id');
+                const config = tableConfigs[tableId];
+
+                if (config) {
+                    const table = Domma.tables.create(`#${tableId}`, config.options);
+                    $el.data('tableInstance', table);
+                }
+            }
+        }
+    },
+
+    '#export-controls': {
+        events: {
+            'click .export-btn': (e, $el) => {
+                const format = $(e.target).data('format');
+                const table = $('.table-container').data('tableInstance');
+
+                if (table) {
+                    table.download(format);
+                    Domma.elements.toast.success(`Exported as ${format.toUpperCase()}`);
+                }
+            }
+        }
+    }
+});</pre>
+
+            <h4 class="category-title">Dynamic Table Factory</h4>
+            <pre class="code-block">// Create a reusable table factory with config
+class TableFactory {
+    static presets = {
+        users: {
+            columns: [
+                { key: 'id', title: 'ID', sortable: true },
+                { key: 'name', title: 'Name', sortable: true },
+                { key: 'email', title: 'Email', sortable: true, editable: true },
+                { key: 'role', title: 'Role', filterable: true }
+            ],
+            pagination: true,
+            pageSize: 20,
+            exportPanel: true
+        },
+        products: {
+            columns: [
+                { key: 'sku', title: 'SKU', sortable: true },
+                { key: 'name', title: 'Product', sortable: true },
+                { key: 'price', title: 'Price', sortable: true },
+                { key: 'stock', title: 'In Stock', sortable: true }
+            ],
+            pagination: true,
+            pageSize: 50
+        }
+    };
+
+    static create(selector, preset, data, customOptions = {}) {
+        const presetConfig = this.presets[preset];
+        if (!presetConfig) {
+            throw new Error(`Unknown preset: ${preset}`);
+        }
+
+        return Domma.tables.create(selector, {
+            ...presetConfig,
+            ...customOptions,
+            data
+        });
+    }
+}
+
+// Usage - clean and declarative
+const usersTable = TableFactory.create('#users', 'users', userData);
+const productsTable = TableFactory.create('#products', 'products', productData, {
+    pageSize: 100  // Override preset
+});</pre>
+
+            <h4 class="category-title">State-Driven Table Management</h4>
+            <pre class="code-block">// Use Domma models for reactive table state
+const tableState = M.create({
+    data: { type: 'array', default: [] },
+    sortColumn: { type: 'string', default: '' },
+    sortDirection: { type: 'string', default: 'asc' },
+    currentPage: { type: 'number', default: 1 },
+    pageSize: { type: 'number', default: 20 },
+    selectedRows: { type: 'array', default: [] }
+});
+
+// Create table
+const table = Domma.tables.create('#state-table', {
+    data: tableState.get('data'),
+    pageSize: tableState.get('pageSize'),
+    pagination: true
+});
+
+// Sync table events with state
+table.on('sort', (column, direction) => {
+    tableState.set({ sortColumn: column, sortDirection: direction });
+});
+
+table.on('page', (page) => {
+    tableState.set({ currentPage: page });
+});
+
+table.on('select', (rows) => {
+    tableState.set({ selectedRows: rows });
+});
+
+// React to state changes
+tableState.onChange('data', (newData) => {
+    table.setData(newData);
+});
+
+tableState.onChange('selectedRows', (rows) => {
+    $('#selection-count').text(`${rows.length} selected`);
+});</pre>
+
+            <h4 class="category-title">Benefits of Configuration-Driven Tables</h4>
+            <ul class="mb-4">
+                <li><strong>Maintainability</strong> - All table configs in centralized location</li>
+                <li><strong>Reusability</strong> - Share column definitions and presets across tables</li>
+                <li><strong>Testability</strong> - Easy to test config objects independently</li>
+                <li><strong>Type Safety</strong> - Config validation before table creation</li>
+                <li><strong>State Management</strong> - Integrate with reactive models for data flow</li>
+            </ul>
+
+            <h4 class="category-title">Imperative vs Configuration-Driven</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <p class="font-semibold mb-2">Imperative (Scattered)</p>
+                    <pre class="code-block" style="font-size: 0.85em;">// Table 1
+const table1 = Domma.tables.create('#t1', {
+    data: data1,
+    columns: [/*...*/],
+    pagination: true
+});
+
+table1.on('select', (rows) => {
+    console.log(rows);
+});
+
+// Table 2 - elsewhere in code
+const table2 = Domma.tables.create('#t2', {
+    data: data2,
+    columns: [/*...*/],
+    pageSize: 50
+});
+
+// Configurations spread out</pre>
+                </div>
+                <div>
+                    <p class="font-semibold mb-2">Configuration-Driven (Centralized)</p>
+                    <pre class="code-block" style="font-size: 0.85em;">// One config object
+const config = {
+    table1: {
+        selector: '#t1',
+        options: {
+            data: data1,
+            columns: [/*...*/],
+            pagination: true
+        },
+        events: {
+            select: (rows) => console.log(rows)
+        }
+    },
+    table2: {
+        selector: '#t2',
+        options: { data: data2, pageSize: 50 }
+    }
+};
+
+// Single init
+initTables(config);</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Method Reference -->
     <section class="card" data-section="Method Reference">
         <div class="card-header">

@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer - Domma Elements</title>
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <style>
+        .timer-demo {
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dm-timer {
+            text-align: center;
+        }
+
+        .dm-timer-display {
+            margin-bottom: 1rem;
+        }
+
+        .dm-timer-time {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--dm-primary);
+            font-family: 'Courier New', monospace;
+        }
+
+        .dm-timer-controls {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .dm-timer-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--dm-border);
+            border-radius: 4px;
+            background: var(--dm-primary);
+            color: white;
+            cursor: pointer;
+        }
+
+        .dm-timer-button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="dm-theme-light">
+
+<main class="container py-8">
+
+    <!-- SECTION 1: Overview -->
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Timer</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Timer is a flexible countdown component that works in both visual mode (with DOM display) and headless
+                mode (pure logic). Perfect for Pomodoro timers, cooking timers, workout intervals, and any countdown
+                scenario.
+            </p>
+
+            <h4 class="category-title">Key Features</h4>
+            <ul class="mb-4">
+                <li>Visual mode with customisable display and controls</li>
+                <li>Headless mode for background timers without UI</li>
+                <li>Multiple time formats (HH:MM:SS, MM:SS, SS)</li>
+                <li>Start, pause, reset, and stop controls</li>
+                <li>Dynamic time manipulation (add/subtract time)</li>
+                <li>Desktop notification integration on completion</li>
+                <li>Optional sound playback when timer finishes</li>
+                <li>Event callbacks for all lifecycle events</li>
+                <li>High-precision timing with configurable update intervals</li>
+            </ul>
+
+            <h4 class="category-title">When to Use Timers</h4>
+            <ul class="mb-4">
+                <li><strong>Productivity</strong>: Pomodoro technique, work/break intervals, time blocking</li>
+                <li><strong>Cooking & Recipes</strong>: Step timing, cooking duration, multi-stage recipes</li>
+                <li><strong>Fitness</strong>: Workout intervals, rest periods, HIIT training</li>
+                <li><strong>Education</strong>: Quiz time limits, study sessions, presentation timing</li>
+                <li><strong>Gaming</strong>: Turn timers, challenge countdowns, cooldown periods</li>
+                <li><strong>Meetings</strong>: Speaking time, agenda items, total meeting duration</li>
+            </ul>
+
+            <h4 class="category-title">Basic Usage</h4>
+            <pre class="code-block">// Visual timer with controls
+const timer = Domma.elements.timer('#timer', {
+    duration: 60000,  // 1 minute in milliseconds
+    format: 'mm:ss',
+    showControls: true,
+    onComplete: () => {
+        console.log('Timer finished!');
+    }
+});
+
+// Headless timer (no UI)
+const backgroundTimer = Domma.elements.timer(null, {
+    duration: 300000,  // 5 minutes
+    onTick: (remaining) => {
+        console.log(`${remaining}ms remaining`);
+    }
+});
+
+backgroundTimer.start();</pre>
+        </div>
+    </section>
+
+    <!-- SECTION 2: Quick Start -->
+    <section class="card mb-6" data-section="Quick Start">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Quick Start</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Create your first timer in seconds with automatic UI and controls.
+            </p>
+
+            <h4 class="category-title">Simplest Visual Timer</h4>
+            <pre class="code-block">// HTML: Just an empty div
+&lt;div id="my-timer"&gt;&lt;/div&gt;
+
+// JavaScript: Timer with controls
+const timer = Domma.elements.timer('#my-timer', {
+    duration: 30000,  // 30 seconds
+    showControls: true,
+    autoStart: true   // Starts immediately
+});</pre>
+
+            <div class="demo-area">
+                <div class="timer-demo" id="quick-timer"></div>
+            </div>
+
+            <h4 class="category-title">Simplest Headless Timer</h4>
+            <pre class="code-block">// No HTML needed - pure JavaScript
+const timer = Domma.elements.timer(null, {
+    duration: 10000,  // 10 seconds
+    onComplete: () => Domma.elements.alert('Done!')
+});
+
+timer.start();  // Go!</pre>
+
+            <div class="demo-area">
+                <button class="btn btn-primary" id="quick-headless">Start 10s Headless Timer</button>
+                <p id="headless-status" class="mt-2"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: Tutorial -->
+    <section class="card mb-6" data-section="Tutorial">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Step-by-Step Tutorial</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Build a Pomodoro timer with work/break intervals and notifications.
+            </p>
+
+            <h4 class="category-title">Step 1: Create Work Timer</h4>
+            <pre class="code-block">const workTimer = Domma.elements.timer('#work-timer', {
+    duration: 1500000,  // 25 minutes (Pomodoro work period)
+    format: 'mm:ss',
+    showControls: true,
+    notification: true,  // Desktop notification on complete
+    notificationOptions: {
+        title: 'Work Session Complete!',
+        body: 'Time for a 5-minute break',
+        requireInteraction: true
+    },
+    onComplete: () => {
+        console.log('Work session finished');
+        // Start break timer automatically
+        breakTimer.start();
+    }
+});</pre>
+
+            <h4 class="category-title">Step 2: Create Break Timer</h4>
+            <pre class="code-block">const breakTimer = Domma.elements.timer('#break-timer', {
+    duration: 300000,  // 5 minutes
+    format: 'mm:ss',
+    showControls: true,
+    notification: true,
+    notificationOptions: {
+        title: 'Break Complete!',
+        body: 'Ready to start another work session?'
+    },
+    onComplete: () => {
+        console.log('Break finished');
+        // Optionally auto-start work timer again
+    }
+});</pre>
+
+            <h4 class="category-title">Step 3: Add Controls</h4>
+            <pre class="code-block">// Manual control buttons
+document.getElementById('start-work').addEventListener('click', () => {
+    workTimer.start();
+});
+
+// Add time during work session
+document.getElementById('add-5min').addEventListener('click', () => {
+    workTimer.add(300000);  // Add 5 minutes
+});
+
+// Pause for interruption
+document.getElementById('pause').addEventListener('click', () => {
+    workTimer.pause();
+});</pre>
+
+            <div class="demo-area">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <h5>Work Timer (25 min)</h5>
+                        <div id="tutorial-work-timer" class="timer-demo"></div>
+                    </div>
+                    <div>
+                        <h5>Break Timer (5 min)</h5>
+                        <div id="tutorial-break-timer" class="timer-demo"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: Examples -->
+    <section class="card mb-6" data-section="Examples">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Real-World Examples</h2>
+        </div>
+        <div class="card-body">
+
+            <h4 class="category-title">1. Cooking Timer</h4>
+            <pre class="code-block">const cookingTimer = Domma.elements.timer('#cooking-timer', {
+    duration: 600000,  // 10 minutes
+    format: 'mm:ss',
+    showControls: true,
+    sound: true,
+    soundUrl: '/sounds/kitchen-bell.mp3',
+    notification: true,
+    notificationOptions: {
+        title: 'Cooking Timer',
+        body: 'Your food is ready!',
+        requireInteraction: true
+    }
+});</pre>
+
+            <div class="demo-area">
+                <div id="example-cooking" class="timer-demo"></div>
+            </div>
+
+            <h4 class="category-title">2. HIIT Workout Timer</h4>
+            <pre class="code-block">let currentRound = 1;
+const totalRounds = 8;
+
+const workoutTimer = Domma.elements.timer('#workout', {
+    duration: 30000,  // 30 seconds work
+    format: 'ss',
+    onComplete: () => {
+        if (currentRound < totalRounds) {
+            // Start rest period
+            restTimer.start();
+        } else {
+            Domma.elements.alert('Workout complete!', { title: 'HIIT Complete' });
+        }
+    }
+});
+
+const restTimer = Domma.elements.timer(null, {
+    duration: 10000,  // 10 seconds rest
+    onComplete: () => {
+        currentRound++;
+        workoutTimer.reset();
+        workoutTimer.start();
+    }
+});</pre>
+
+            <div class="demo-area">
+                <div id="example-workout" class="timer-demo"></div>
+                <p id="workout-status" class="mt-2">Round: 1/8</p>
+            </div>
+
+            <h4 class="category-title">3. Presentation Timer</h4>
+            <pre class="code-block">const presentationTimer = Domma.elements.timer('#presentation', {
+    duration: 600000,  // 10 minutes
+    format: 'mm:ss',
+    showControls: true,
+    onTick: (remaining) => {
+        // Visual warnings at certain thresholds
+        if (remaining === 120000) {  // 2 minutes
+            Domma.elements.alert('2 minutes remaining!', { title: 'Time Warning' });
+        } else if (remaining === 60000) {  // 1 minute
+            Domma.elements.alert('1 minute remaining!', { title: 'Time Warning' });
+        }
+    }
+});</pre>
+
+            <div class="demo-area">
+                <div id="example-presentation" class="timer-demo"></div>
+            </div>
+
+            <h4 class="category-title">4. Multiple Timers</h4>
+            <pre class="code-block">// Manage multiple cooking tasks
+const timers = {
+    pasta: Domma.elements.timer('#pasta-timer', {
+        duration: 480000,  // 8 minutes
+        format: 'mm:ss',
+        showControls: true
+    }),
+    sauce: Domma.elements.timer('#sauce-timer', {
+        duration: 900000,  // 15 minutes
+        format: 'mm:ss',
+        showControls: true
+    }),
+    garlic: Domma.elements.timer('#garlic-timer', {
+        duration: 120000,  // 2 minutes
+        format: 'mm:ss',
+        showControls: true
+    })
+};
+
+// Start all at once
+Object.values(timers).forEach(timer => timer.start());</pre>
+
+            <div class="demo-area">
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <h5>Pasta (8 min)</h5>
+                        <div id="multi-pasta" class="timer-demo"></div>
+                    </div>
+                    <div>
+                        <h5>Sauce (15 min)</h5>
+                        <div id="multi-sauce" class="timer-demo"></div>
+                    </div>
+                    <div>
+                        <h5>Garlic (2 min)</h5>
+                        <div id="multi-garlic" class="timer-demo"></div>
+                    </div>
+                </div>
+                <button class="btn btn-primary mt-4" id="start-all">Start All Timers</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: Best Practices -->
+    <section class="card mb-6" data-section="Best Practices">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Best Practices</h2>
+        </div>
+        <div class="card-body">
+
+            <h4 class="category-title">✅ Do's</h4>
+            <ul class="mb-4">
+                <li><strong>Use headless mode for background timers</strong> - No DOM overhead when UI not needed</li>
+                <li><strong>Set appropriate update intervals</strong> - 100ms for smooth UI, 1000ms for efficiency</li>
+                <li><strong>Add notifications for long timers</strong> - Users may switch tabs or minimize window</li>
+                <li><strong>Provide controls for user timers</strong> - showControls: true for user-facing timers</li>
+                <li><strong>Choose correct time format</strong> - HH:MM:SS for hours, MM:SS for minutes, SS for seconds
+                </li>
+                <li><strong>Clean up with destroy()</strong> - Stop timers and remove listeners when done</li>
+                <li><strong>Use onTick for progress bars</strong> - Update UI elements based on remaining time</li>
+            </ul>
+
+            <h4 class="category-title">❌ Don'ts</h4>
+            <ul class="mb-4">
+                <li><strong>Don't use very short update intervals</strong> - 10ms updates waste CPU, 100ms is sufficient
+                </li>
+                <li><strong>Don't forget to stop timers</strong> - Running timers continue even if element removed from
+                    DOM
+                </li>
+                <li><strong>Don't rely solely on client-side timing</strong> - For critical timings, validate
+                    server-side
+                </li>
+                <li><strong>Don't create excessive timer instances</strong> - Reuse timers with reset() and
+                    setDuration()
+                </li>
+                <li><strong>Don't use timers for real-time clocks</strong> - Use Date objects for wall-clock time</li>
+            </ul>
+
+            <h4 class="category-title">Performance Pattern</h4>
+            <pre class="code-block">// Good: Reuse timer for repeated countdowns
+const reusableTimer = Domma.elements.timer('#timer', {
+    duration: 60000,
+    showControls: true,
+    onComplete: () => {
+        console.log('Cycle complete');
+        // Reset and restart for next cycle
+        setTimeout(() => {
+            reusableTimer.reset();
+            reusableTimer.start();
+        }, 1000);
+    }
+});
+
+// Bad: Creating new timer each time (memory leak)
+function startNewTimer() {
+    const timer = Domma.elements.timer('#timer', {
+        duration: 60000,
+        onComplete: () => startNewTimer()  // Creates infinite timers!
+    });
+    timer.start();
+}</pre>
+
+            <h4 class="category-title">Cleanup Pattern</h4>
+            <pre class="code-block">// Store reference for cleanup
+let currentTimer = null;
+
+function setupTimer() {
+    // Clean up old timer
+    if (currentTimer) {
+        currentTimer.destroy();
+    }
+
+    // Create new timer
+    currentTimer = Domma.elements.timer('#timer', {
+        duration: 60000,
+        showControls: true
+    });
+}
+
+// Clean up when page unloads
+window.addEventListener('beforeunload', () => {
+    if (currentTimer) {
+        currentTimer.destroy();
+    }
+});</pre>
+        </div>
+    </section>
+
+    <!-- SECTION 6: API Reference -->
+    <section class="card mb-6" data-section="API Reference">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Complete API Reference</h2>
+        </div>
+        <div class="card-body">
+
+            <h4 class="category-title">Factory Method</h4>
+            <pre class="code-block">// Visual mode (with DOM element)
+elements.timer(selector, options)
+
+// Headless mode (no DOM element)
+elements.timer(null, options)</pre>
+
+            <h4 class="category-title">Options</h4>
+            <table class="options-table">
+                <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>duration</code></td>
+                    <td>number</td>
+                    <td>60000</td>
+                    <td>Timer duration in milliseconds</td>
+                </tr>
+                <tr>
+                    <td><code>autoStart</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>Start timer automatically on creation</td>
+                </tr>
+                <tr>
+                    <td><code>format</code></td>
+                    <td>string</td>
+                    <td>'mm:ss'</td>
+                    <td>Display format: 'hh:mm:ss', 'mm:ss', 'ss'</td>
+                </tr>
+                <tr>
+                    <td><code>showControls</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>Show start/pause/reset buttons</td>
+                </tr>
+                <tr>
+                    <td><code>updateInterval</code></td>
+                    <td>number</td>
+                    <td>100</td>
+                    <td>Update frequency in milliseconds</td>
+                </tr>
+                <tr>
+                    <td><code>notification</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>Show desktop notification on complete</td>
+                </tr>
+                <tr>
+                    <td><code>notificationOptions</code></td>
+                    <td>object</td>
+                    <td>{}</td>
+                    <td>Options passed to notification</td>
+                </tr>
+                <tr>
+                    <td><code>sound</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>Play sound on completion</td>
+                </tr>
+                <tr>
+                    <td><code>soundUrl</code></td>
+                    <td>string</td>
+                    <td>null</td>
+                    <td>URL to sound file</td>
+                </tr>
+                <tr>
+                    <td><code>onTick</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Callback on each update (remaining)</td>
+                </tr>
+                <tr>
+                    <td><code>onComplete</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Callback when timer reaches 0</td>
+                </tr>
+                <tr>
+                    <td><code>onStart</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Callback when timer starts</td>
+                </tr>
+                <tr>
+                    <td><code>onPause</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Callback when timer pauses</td>
+                </tr>
+                <tr>
+                    <td><code>onReset</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Callback when timer resets</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h4 class="category-title">Instance Methods</h4>
+            <pre class="code-block">// Control methods
+timer.start()          // Start or resume timer
+timer.pause()          // Pause timer
+timer.reset()          // Reset to initial duration
+timer.stop()           // Stop timer completely
+
+// Time manipulation
+timer.add(ms)          // Add milliseconds
+timer.subtract(ms)     // Subtract milliseconds
+timer.setDuration(ms)  // Change total duration
+
+// State methods
+timer.isRunning()      // Returns boolean
+timer.getRemaining()   // Returns milliseconds remaining
+timer.getElapsed()     // Returns milliseconds elapsed
+
+// Cleanup
+timer.destroy()        // Stop timer and clean up</pre>
+        </div>
+    </section>
+
+    <!-- SECTION 7: Config Engine -->
+    <section class="card mb-6" data-section="Config Engine">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Declarative Configuration</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Set up timers declaratively using the config engine.
+            </p>
+
+            <h4 class="category-title">Basic Timer Setup</h4>
+            <pre class="code-block">$.setup({
+    '#my-timer': {
+        component: 'timer',
+        options: {
+            duration: 300000,  // 5 minutes
+            format: 'mm:ss',
+            showControls: true,
+            notification: true
+        }
+    }
+});</pre>
+
+            <div class="demo-area">
+                <div id="config-timer" class="timer-demo"></div>
+            </div>
+
+            <h4 class="category-title">Multiple Timers</h4>
+            <pre class="code-block">$.setup({
+    '#quick-timer': {
+        component: 'timer',
+        options: {
+            duration: 60000,
+            format: 'ss',
+            showControls: true
+        }
+    },
+    '#long-timer': {
+        component: 'timer',
+        options: {
+            duration: 3600000,  // 1 hour
+            format: 'hh:mm:ss',
+            showControls: true
+        }
+    }
+});</pre>
+        </div>
+    </section>
+
+    <!-- SECTION 8: Related Elements -->
+    <section class="card mb-6" data-section="Related Elements">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Related Components</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Timer integrates seamlessly with other Domma components for complete timing solutions.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="related-card">
+                    <h4>DesktopNotification</h4>
+                    <p>Desktop alerts when timers complete</p>
+                    <a href="../notification/" class="btn btn-sm btn-outline">View Notification →</a>
+                </div>
+
+                <div class="related-card">
+                    <h4>Alarm</h4>
+                    <p>Schedule timers for specific times of day</p>
+                    <a href="../alarm/" class="btn btn-sm btn-outline">View Alarm →</a>
+                </div>
+
+                <div class="related-card">
+                    <h4>Progress Bar</h4>
+                    <p>Visual progress indication for timers</p>
+                    <a href="../progress/" class="btn btn-sm btn-outline">View Progress →</a>
+                </div>
+
+                <div class="related-card">
+                    <h4>Modal</h4>
+                    <p>Full-screen timer overlays</p>
+                    <a href="../modal/" class="btn btn-sm btn-outline">View Modal →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    // Quick Start: Visual Timer
+    const quickTimer = Domma.elements.timer('#quick-timer', {
+        duration: 30000,
+        showControls: true,
+        autoStart: false
+    });
+
+    // Quick Start: Headless Timer
+    document.getElementById('quick-headless').addEventListener('click', () => {
+        const status = document.getElementById('headless-status');
+        status.textContent = 'Timer started (10 seconds)...';
+
+        const headless = Domma.elements.timer(null, {
+            duration: 10000,
+            onTick: (remaining) => {
+                status.textContent = `${Math.ceil(remaining / 1000)}s remaining`;
+            },
+            onComplete: () => {
+                status.textContent = '✓ Headless timer complete!';
+                status.className = 'mt-2 text-success';
+            }
+        });
+
+        headless.start();
+    });
+
+    // Tutorial: Pomodoro Timers
+    const tutorialWorkTimer = Domma.elements.timer('#tutorial-work-timer', {
+        duration: 1500000,
+        format: 'mm:ss',
+        showControls: true
+    });
+
+    const tutorialBreakTimer = Domma.elements.timer('#tutorial-break-timer', {
+        duration: 300000,
+        format: 'mm:ss',
+        showControls: true
+    });
+
+    // Example 1: Cooking Timer
+    const cookingTimer = Domma.elements.timer('#example-cooking', {
+        duration: 600000,
+        format: 'mm:ss',
+        showControls: true
+    });
+
+    // Example 2: HIIT Workout
+    let workoutRound = 1;
+    const workoutTimer = Domma.elements.timer('#example-workout', {
+        duration: 30000,
+        format: 'ss',
+        showControls: true,
+        onComplete: () => {
+            if (workoutRound < 3) {
+                workoutRound++;
+                document.getElementById('workout-status').textContent = `Round: ${workoutRound}/3`;
+                workoutTimer.reset();
+                setTimeout(() => workoutTimer.start(), 1000);
+            } else {
+                document.getElementById('workout-status').textContent = 'Workout complete!';
+            }
+        }
+    });
+
+    // Example 3: Presentation Timer
+    const presentationTimer = Domma.elements.timer('#example-presentation', {
+        duration: 600000,
+        format: 'mm:ss',
+        showControls: true
+    });
+
+    // Example 4: Multiple Timers
+    const multiTimers = {
+        pasta: Domma.elements.timer('#multi-pasta', {
+            duration: 480000,
+            format: 'mm:ss',
+            showControls: true
+        }),
+        sauce: Domma.elements.timer('#multi-sauce', {
+            duration: 900000,
+            format: 'mm:ss',
+            showControls: true
+        }),
+        garlic: Domma.elements.timer('#multi-garlic', {
+            duration: 120000,
+            format: 'mm:ss',
+            showControls: true
+        })
+    };
+
+    document.getElementById('start-all').addEventListener('click', () => {
+        Object.values(multiTimers).forEach(timer => {
+            timer.reset();
+            timer.start();
+        });
+    });
+
+    // Config Engine Setup
+    $.setup({
+        '#config-timer': {
+            component: 'timer',
+            options: {
+                duration: 300000,
+                format: 'mm:ss',
+                showControls: true
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

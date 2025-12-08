@@ -171,7 +171,78 @@
     </div>
 </section>
 
-<section class="card mb-6" data-section="Related">
+    <section class="card mb-6" data-section="Config Engine">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Declarative Configuration</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Configure carousels declaratively with <code>$.setup()</code> for cleaner, more maintainable code.
+            </p>
+
+            <h4 class="category-title">Basic Carousel Setup</h4>
+            <pre class="code-block">$.setup({
+    '#hero-carousel': {
+        component: 'carousel',
+        options: {
+            autoplay: true,
+            interval: 5000,
+            loop: true,
+            animation: 'slide'
+        }
+    }
+});</pre>
+
+            <h4 class="category-title">Product Gallery with Events</h4>
+            <pre class="code-block">$.setup({
+    '.product-gallery': {
+        component: 'carousel',
+        options: {
+            showArrows: true,
+            showIndicators: true,
+            pauseOnHover: true,
+            onChange: (index, instance) => {
+                // Update product URL
+                history.replaceState(null, '', `?slide=${index}`);
+
+                // Track view
+                analytics.track('Product Image Viewed', {
+                    imageIndex: index
+                });
+            }
+        }
+    }
+});</pre>
+
+            <h4 class="category-title">Side-by-Side: Programmatic vs Declarative</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <p class="font-semibold mb-2">Programmatic</p>
+                    <pre class="code-block" style="font-size: 0.85em;">const carousel = Domma.elements.carousel(
+    '#carousel',
+    {
+        autoplay: true,
+        interval: 5000
+    }
+);
+
+carousel.play();</pre>
+                </div>
+                <div>
+                    <p class="font-semibold mb-2">Declarative (Recommended)</p>
+                    <pre class="code-block" style="font-size: 0.85em;">$.setup({
+    '#carousel': {
+        component: 'carousel',
+        options: {
+            autoplay: true,
+            interval: 5000
+        }
+    }
+});</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Related">
     <div class="card-header"><h2 class="text-xl font-semibold m-0">Related Elements</h2></div>
     <div class="card-body">
         <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">

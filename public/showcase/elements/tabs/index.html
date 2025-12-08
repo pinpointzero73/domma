@@ -756,12 +756,12 @@ document.getElementById('next-tab').addEventListener('click', () => {
         animation: true,
         onChange: (index) => {
             const tabs = ['Overview', 'Features', 'Reviews'];
-            document.getElementById('tutorial-result').textContent = `Now viewing: ${tabs[index]}`;
+            $('#tutorial-result').text(`Now viewing: ${tabs[index]}`);
         }
     });
 
-    document.getElementById('tutorial-prev').addEventListener('click', () => tutorialTabs.prev());
-    document.getElementById('tutorial-next').addEventListener('click', () => tutorialTabs.next());
+    $('#tutorial-prev').on('click', () => tutorialTabs.prev());
+    $('#tutorial-next').on('click', () => tutorialTabs.next());
 
     // Examples
     Domma.elements.tabs('#standard-tabs');
@@ -774,13 +774,13 @@ document.getElementById('next-tab').addEventListener('click', () => {
     const dynamicTabs = Domma.elements.tabs('#dynamic-tabs', {
         onChange: (index, panel) => {
             // Simulate loading content
+            const $panel = $(panel);
             if (!panel.dataset.loaded) {
-                const originalContent = panel.innerHTML;
-                panel.innerHTML = '<p style="color: var(--dm-text-muted);">Loading content...</p>';
+                $panel.html('<p style="color: var(--dm-text-muted);">Loading content...</p>');
 
                 setTimeout(() => {
-                    panel.innerHTML = `<p>Dynamically loaded content for Tab ${index + 1}</p>
-                    <p class="text-sm">Loaded at ${new Date().toLocaleTimeString()}</p>`;
+                    $panel.html(`<p>Dynamically loaded content for Tab ${index + 1}</p>
+                    <p class="text-sm">Loaded at ${new Date().toLocaleTimeString()}</p>`);
                     panel.dataset.loaded = 'true';
                 }, 800);
             }

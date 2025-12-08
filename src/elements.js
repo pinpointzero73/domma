@@ -1590,6 +1590,1142 @@ class ToastInstance {
 }
 
 // ============================================
+// DesktopNotification Component
+// ============================================
+
+/**
+ * DesktopNotification - Browser native notification wrapper
+ * Provides a clean API for desktop notifications with permission handling
+ */
+class DesktopNotification {
+    // Static properties
+    static permission = typeof Notification !== 'undefined' ? Notification.permission : 'denied';
+    static isSupported = typeof Notification !== 'undefined';
+    static _instances = [];
+
+    // Static defaults
+    static defaults = {
+        title: 'Notification',
+        body: '',
+        icon: null,
+        badge: null,
+        tag: null,
+        requireInteraction: false,
+        silent: false,
+        data: null,
+        onClick: null,
+        onClose: null,
+        onError: null,
+        onShow: null
+    };
+
+    /**
+     * Request notification permission
+     * @returns {Promise<string>} Permission state: 'granted', 'denied', or 'default'
+     */
+    static async requestPermission() {
+        if (!DesktopNotification.isSupported) {
+            console.warn('Notifications are not supported in this browser');
+            return 'denied';
+        }
+
+        try {
+            const permission = await Notification.requestPermission();
+            DesktopNotification.permission = permission;
+            return permission;
+        } catch (error) {
+            console.error('Error requesting notification permission:', error);
+            return 'denied';
+        }
+    }
+
+    /**
+     * Quick static method to show a notification
+     * @param {string} title - Notification title
+     * @param {Object} options - Notification options
+     * @returns {DesktopNotification|null} Notification instance or null if not supported/denied
+     */
+    static notify(title, options = {}) {
+        const notification = new DesktopNotification({title, ...options});
+        notification.show();
+        return notification;
+    }
+
+    /**
+     * Close all active notifications
+     */
+    static closeAll() {
+        DesktopNotification._instances.forEach(instance => {
+            if (instance.isShown()) {
+                instance.close();
+            }
+        });
+        DesktopNotification._instances = [];
+    }
+
+    /**
+     * Constructor
+     * @param {Object} options - Notification options
+     */
+    constructor(options = {}) {
+        this.options = {...DesktopNotification.defaults, ...options};
+        this.notification = null;
+        this._shown = false;
+    }
+
+    /**
+     * Show the notification
+     * @returns {Promise<this>} Resolves when notification is shown or rejects if denied/error
+     */
+    async show() {
+        if (!DesktopNotification.isSupported) {
+            console.warn('Notifications are not supported in this browser');
+            if (this.options.onError) {
+                this.options.onError(new Error('Notifications not supported'));
+            }
+            return this;
+        }
+
+        // Check permission
+        if (DesktopNotification.permission !== 'granted') {
+            if (DesktopNotification.permission === 'default') {
+                // Auto-request if not yet decided
+                const permission = await DesktopNotification.requestPermission();
+                if (permission !== 'granted') {
+                    console.warn('Notification permission denied');
+                    if (this.options.onError) {
+                        this.options.onError(new Error('Permission denied'));
+                    }
+                    return this;
+                }
+            } else {
+                console.warn('Notification permission denied');
+                if (this.options.onError) {
+                    this.options.onError(new Error('Permission denied'));
+                }
+                return this;
+            }
+        }
+
+        try {
+            // Create notification options
+            const notificationOptions = {};
+            if (this.options.body) notificationOptions.body = this.options.body;
+            if (this.options.icon) notificationOptions.icon = this.options.icon;
+            if (this.options.badge) notificationOptions.badge = this.options.badge;
+            if (this.options.tag) notificationOptions.tag = this.options.tag;
+            if (this.options.requireInteraction !== undefined) {
+                notificationOptions.requireInteraction = this.options.requireInteraction;
+            }
+            if (this.options.silent !== undefined) notificationOptions.silent = this.options.silent;
+            if (this.options.data) notificationOptions.data = this.options.data;
+
+            // Create native notification
+            this.notification = new Notification(this.options.title, notificationOptions);
+            this._shown = true;
+
+            // Add to instances
+            DesktopNotification._instances.push(this);
+
+            // Setup event handlers
+            if (this.options.onClick) {
+                this.notification.onclick = (event) => {
+                    this.options.onClick(event, this);
+                };
+            }
+
+            if (this.options.onClose) {
+                this.notification.onclose = (event) => {
+                    this._shown = false;
+                    // Remove from instances
+                    const index = DesktopNotification._instances.indexOf(this);
+                    if (index > -1) {
+                        DesktopNotification._instances.splice(index, 1);
+                    }
+                    this.options.onClose(event, this);
+                };
+            } else {
+                // Default onclose to clean up instances
+                this.notification.onclose = () => {
+                    this._shown = false;
+                    const index = DesktopNotification._instances.indexOf(this);
+                    if (index > -1) {
+                        DesktopNotification._instances.splice(index, 1);
+                    }
+                };
+            }
+
+            if (this.options.onError) {
+                this.notification.onerror = (event) => {
+                    this._shown = false;
+                    this.options.onError(event, this);
+                };
+            }
+
+            if (this.options.onShow) {
+                this.notification.onshow = (event) => {
+                    this.options.onShow(event, this);
+                };
+            }
+
+        } catch (error) {
+            console.error('Error showing notification:', error);
+            if (this.options.onError) {
+                this.options.onError(error);
+            }
+        }
+
+        return this;
+    }
+
+    /**
+     * Close the notification
+     * @returns {this}
+     */
+    close() {
+        if (this.notification && this._shown) {
+            this.notification.close();
+            this._shown = false;
+        }
+        return this;
+    }
+
+    /**
+     * Check if notification is currently shown
+     * @returns {boolean}
+     */
+    isShown() {
+        return this._shown;
+    }
+}
+
+// ============================================
+// Timer Component
+// ============================================
+
+/**
+ * Timer - Countdown timer with optional visual display
+ * Works in both visual mode (with DOM element) and headless mode (pure logic)
+ */
+class Timer extends Component {
+    static defaults = {
+        duration: 60000,          // 1 minute default (ms)
+        autoStart: false,
+        format: 'mm:ss',          // Display format: HH:MM:SS, MM:SS, SS
+        showControls: false,      // Show start/pause/reset buttons
+        updateInterval: 100,      // Update frequency (ms)
+        notification: false,      // Desktop notification on complete
+        notificationOptions: {},
+        sound: false,
+        soundUrl: null,
+        onTick: null,             // (remaining) => {}
+        onComplete: null,         // () => {}
+        onStart: null,
+        onPause: null,
+        onReset: null
+    };
+
+    constructor(selector, options = {}) {
+        // Allow headless mode (selector can be null/undefined)
+        if (selector) {
+            super(selector, options);
+        } else {
+            // Headless mode - no DOM element
+            this.element = null;
+            this.options = {...Timer.defaults, ...options};
+        }
+
+        this._running = false;
+        this._remaining = this.options.duration;
+        this._intervalId = null;
+        this._startTime = null;
+        this._pausedTime = null;
+        this._display = null;
+        this._controls = null;
+        this._audio = null;
+
+        this._init();
+    }
+
+    _init() {
+        // If element exists, create display
+        if (this.element) {
+            this._createDisplay();
+            if (this.options.showControls) {
+                this._createControls();
+            }
+        }
+
+        // Preload audio if sound enabled
+        if (this.options.sound && this.options.soundUrl) {
+            this._audio = new Audio(this.options.soundUrl);
+        }
+
+        if (this.options.autoStart) {
+            this.start();
+        }
+    }
+
+    /**
+     * Create visual display
+     * @private
+     */
+    _createDisplay() {
+        if (!this.element) return;
+
+        // Create timer container
+        const container = document.createElement('div');
+        container.className = 'dm-timer';
+
+        // Create display
+        this._display = document.createElement('div');
+        this._display.className = 'dm-timer-display';
+
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'dm-timer-time';
+        timeSpan.textContent = this._formatTime(this._remaining);
+
+        this._display.appendChild(timeSpan);
+        container.appendChild(this._display);
+
+        // Clear element and add container
+        this.element.innerHTML = '';
+        this.element.appendChild(container);
+
+        this._container = container;
+    }
+
+    /**
+     * Create control buttons
+     * @private
+     */
+    _createControls() {
+        if (!this.element || !this._container) return;
+
+        const controlsDiv = document.createElement('div');
+        controlsDiv.className = 'dm-timer-controls';
+
+        // Start button
+        this._startBtn = document.createElement('button');
+        this._startBtn.className = 'dm-timer-button dm-timer-start';
+        this._startBtn.textContent = 'Start';
+        this._startBtn.addEventListener('click', () => this.start());
+
+        // Pause button
+        this._pauseBtn = document.createElement('button');
+        this._pauseBtn.className = 'dm-timer-button dm-timer-pause';
+        this._pauseBtn.textContent = 'Pause';
+        this._pauseBtn.style.display = 'none';
+        this._pauseBtn.addEventListener('click', () => this.pause());
+
+        // Reset button
+        this._resetBtn = document.createElement('button');
+        this._resetBtn.className = 'dm-timer-button dm-timer-reset';
+        this._resetBtn.textContent = 'Reset';
+        this._resetBtn.addEventListener('click', () => this.reset());
+
+        controlsDiv.appendChild(this._startBtn);
+        controlsDiv.appendChild(this._pauseBtn);
+        controlsDiv.appendChild(this._resetBtn);
+
+        this._container.appendChild(controlsDiv);
+        this._controls = controlsDiv;
+    }
+
+    /**
+     * Update visual display
+     * @private
+     */
+    _updateDisplay() {
+        if (!this._display) return;
+
+        const timeSpan = this._display.querySelector('.dm-timer-time');
+        if (timeSpan) {
+            timeSpan.textContent = this._formatTime(this._remaining);
+        }
+    }
+
+    /**
+     * Format milliseconds to time string
+     * @param {number} ms - Milliseconds
+     * @returns {string} Formatted time
+     * @private
+     */
+    _formatTime(ms) {
+        const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        const format = this.options.format.toLowerCase();
+
+        if (format === 'hh:mm:ss') {
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        } else if (format === 'mm:ss') {
+            const totalMinutes = Math.floor(totalSeconds / 60);
+            return `${String(totalMinutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        } else if (format === 'ss') {
+            return String(totalSeconds).padStart(2, '0');
+        } else {
+            // Default to mm:ss
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+    }
+
+    /**
+     * Timer tick - called on each update interval
+     * @private
+     */
+    _tick() {
+        if (!this._running) return;
+
+        const now = Date.now();
+        const elapsed = now - this._startTime;
+        this._remaining = Math.max(0, this.options.duration - elapsed);
+
+        // Update display
+        this._updateDisplay();
+
+        // Call onTick callback
+        if (this.options.onTick) {
+            this.options.onTick(this._remaining);
+        }
+
+        // Check if complete
+        if (this._remaining === 0) {
+            this._complete();
+        }
+    }
+
+    /**
+     * Timer completion handler
+     * @private
+     */
+    _complete() {
+        this.stop();
+
+        // Play sound if enabled
+        if (this.options.sound && this._audio) {
+            this._audio.play().catch(err => {
+                console.warn('Failed to play timer sound:', err);
+            });
+        }
+
+        // Show notification if enabled
+        if (this.options.notification && DesktopNotification.isSupported) {
+            const notifOptions = {
+                title: 'Timer Complete',
+                body: 'Your countdown has finished',
+                ...this.options.notificationOptions
+            };
+            DesktopNotification.notify(notifOptions.title, notifOptions);
+        }
+
+        // Call onComplete callback
+        if (this.options.onComplete) {
+            this.options.onComplete();
+        }
+    }
+
+    /**
+     * Start the timer
+     * @returns {this}
+     */
+    start() {
+        if (this._running) return this;
+
+        this._running = true;
+        this._startTime = Date.now() - (this.options.duration - this._remaining);
+
+        // Start interval
+        this._intervalId = setInterval(() => this._tick(), this.options.updateInterval);
+
+        // Update button states
+        if (this._startBtn) {
+            this._startBtn.style.display = 'none';
+        }
+        if (this._pauseBtn) {
+            this._pauseBtn.style.display = 'inline-block';
+        }
+
+        // Call onStart callback
+        if (this.options.onStart) {
+            this.options.onStart();
+        }
+
+        return this;
+    }
+
+    /**
+     * Pause the timer
+     * @returns {this}
+     */
+    pause() {
+        if (!this._running) return this;
+
+        this._running = false;
+        this._pausedTime = Date.now();
+
+        // Clear interval
+        if (this._intervalId) {
+            clearInterval(this._intervalId);
+            this._intervalId = null;
+        }
+
+        // Update button states
+        if (this._startBtn) {
+            this._startBtn.style.display = 'inline-block';
+        }
+        if (this._pauseBtn) {
+            this._pauseBtn.style.display = 'none';
+        }
+
+        // Call onPause callback
+        if (this.options.onPause) {
+            this.options.onPause();
+        }
+
+        return this;
+    }
+
+    /**
+     * Reset the timer to initial duration
+     * @returns {this}
+     */
+    reset() {
+        this.stop();
+        this._remaining = this.options.duration;
+        this._updateDisplay();
+
+        // Update button states
+        if (this._startBtn) {
+            this._startBtn.style.display = 'inline-block';
+        }
+        if (this._pauseBtn) {
+            this._pauseBtn.style.display = 'none';
+        }
+
+        // Call onReset callback
+        if (this.options.onReset) {
+            this.options.onReset();
+        }
+
+        return this;
+    }
+
+    /**
+     * Stop the timer (pause without resuming)
+     * @returns {this}
+     */
+    stop() {
+        this._running = false;
+
+        // Clear interval
+        if (this._intervalId) {
+            clearInterval(this._intervalId);
+            this._intervalId = null;
+        }
+
+        return this;
+    }
+
+    /**
+     * Add time to the timer
+     * @param {number} ms - Milliseconds to add
+     * @returns {this}
+     */
+    add(ms) {
+        this._remaining = Math.min(this._remaining + ms, 24 * 60 * 60 * 1000); // Max 24 hours
+        this._updateDisplay();
+        return this;
+    }
+
+    /**
+     * Subtract time from the timer
+     * @param {number} ms - Milliseconds to subtract
+     * @returns {this}
+     */
+    subtract(ms) {
+        this._remaining = Math.max(0, this._remaining - ms);
+        this._updateDisplay();
+
+        // Check if we hit zero
+        if (this._remaining === 0 && this._running) {
+            this._complete();
+        }
+
+        return this;
+    }
+
+    /**
+     * Set a new duration
+     * @param {number} ms - New duration in milliseconds
+     * @returns {this}
+     */
+    setDuration(ms) {
+        this.options.duration = ms;
+        if (!this._running) {
+            this._remaining = ms;
+            this._updateDisplay();
+        }
+        return this;
+    }
+
+    /**
+     * Check if timer is running
+     * @returns {boolean}
+     */
+    isRunning() {
+        return this._running;
+    }
+
+    /**
+     * Get remaining time
+     * @returns {number} Remaining time in milliseconds
+     */
+    getRemaining() {
+        return this._remaining;
+    }
+
+    /**
+     * Get elapsed time
+     * @returns {number} Elapsed time in milliseconds
+     */
+    getElapsed() {
+        return this.options.duration - this._remaining;
+    }
+
+    /**
+     * Destroy the timer
+     */
+    destroy() {
+        this.stop();
+
+        // Remove event listeners if controls exist
+        if (this._startBtn) {
+            this._startBtn.removeEventListener('click', this.start);
+        }
+        if (this._pauseBtn) {
+            this._pauseBtn.removeEventListener('click', this.pause);
+        }
+        if (this._resetBtn) {
+            this._resetBtn.removeEventListener('click', this.reset);
+        }
+
+        // Clear display
+        if (this.element && this._container) {
+            this.element.removeChild(this._container);
+        }
+
+        // Clear references
+        this._display = null;
+        this._controls = null;
+        this._audio = null;
+        this._container = null;
+
+        if (super.destroy) {
+            super.destroy();
+        }
+    }
+}
+
+// ============================================
+// Alarm Component
+// ============================================
+
+/**
+ * Alarm - Scheduled time-based alerts with localStorage persistence
+ * Singleton pattern - only one instance manages all alarms
+ */
+class Alarm {
+    static defaults = {
+        alarms: [],
+        timezone: 'local',
+        checkInterval: 30000,     // Check every 30 seconds
+        storageKey: 'domma-alarms',
+        onTrigger: null,
+        onSnooze: null,
+        onDismiss: null,
+        onAlarmAdd: null,
+        onAlarmRemove: null
+    };
+
+    static _instance = null;      // Singleton
+    static _checkInterval = null;
+    static _nextAlarmId = 1;
+
+    /**
+     * Constructor - implements singleton pattern
+     * @param {Object} options - Alarm options
+     */
+    constructor(options = {}) {
+        // Singleton pattern - return existing instance if it exists
+        if (Alarm._instance) {
+            return Alarm._instance;
+        }
+
+        this.options = {...Alarm.defaults, ...options};
+        this._alarms = [];
+        this._init();
+
+        Alarm._instance = this;
+    }
+
+    /**
+     * Initialize alarm system
+     * @private
+     */
+    _init() {
+        this._loadAlarms();
+        this._startChecking();
+    }
+
+    /**
+     * Load alarms from localStorage
+     * @private
+     */
+    _loadAlarms() {
+        try {
+            const stored = localStorage.getItem(this.options.storageKey);
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                this._alarms = Array.isArray(parsed) ? parsed : [];
+
+                // Update nextAlarmId based on existing alarms
+                if (this._alarms.length > 0) {
+                    const maxId = Math.max(...this._alarms.map(a => {
+                        const match = String(a.id).match(/\d+$/);
+                        return match ? parseInt(match[0]) : 0;
+                    }));
+                    Alarm._nextAlarmId = maxId + 1;
+                }
+            } else if (this.options.alarms && this.options.alarms.length > 0) {
+                // Use initial alarms from options
+                this._alarms = this.options.alarms.map(alarm => ({
+                    id: `alarm-${Alarm._nextAlarmId++}`,
+                    enabled: true,
+                    notification: true,
+                    notificationOptions: {},
+                    sound: false,
+                    soundUrl: null,
+                    repeat: null,
+                    lastTriggered: null,
+                    snoozedUntil: null,
+                    ...alarm
+                }));
+                this._saveAlarms();
+            }
+        } catch (error) {
+            console.error('Failed to load alarms from localStorage:', error);
+            this._alarms = [];
+        }
+    }
+
+    /**
+     * Save alarms to localStorage
+     * @private
+     */
+    _saveAlarms() {
+        try {
+            localStorage.setItem(this.options.storageKey, JSON.stringify(this._alarms));
+        } catch (error) {
+            console.error('Failed to save alarms to localStorage:', error);
+        }
+    }
+
+    /**
+     * Start checking alarms at regular interval
+     * @private
+     */
+    _startChecking() {
+        if (Alarm._checkInterval) return;
+
+        Alarm._checkInterval = setInterval(() => {
+            this._checkAlarms();
+        }, this.options.checkInterval);
+
+        // Also check immediately
+        this._checkAlarms();
+    }
+
+    /**
+     * Stop checking alarms
+     * @private
+     */
+    _stopChecking() {
+        if (Alarm._checkInterval) {
+            clearInterval(Alarm._checkInterval);
+            Alarm._checkInterval = null;
+        }
+    }
+
+    /**
+     * Check all alarms and trigger if needed
+     * @private
+     */
+    _checkAlarms() {
+        const now = new Date();
+
+        this._alarms.forEach(alarm => {
+            if (!alarm.enabled) return;
+
+            // Check if snoozed
+            if (alarm.snoozedUntil && now < new Date(alarm.snoozedUntil)) {
+                return;
+            }
+
+            // Clear snooze if past snooze time
+            if (alarm.snoozedUntil && now >= new Date(alarm.snoozedUntil)) {
+                alarm.snoozedUntil = null;
+                this._saveAlarms();
+            }
+
+            if (this._shouldTrigger(alarm, now)) {
+                this._triggerAlarm(alarm);
+            }
+        });
+    }
+
+    /**
+     * Check if alarm should trigger at the given time
+     * @param {Object} alarm - Alarm object
+     * @param {Date} now - Current time
+     * @returns {boolean}
+     * @private
+     */
+    _shouldTrigger(alarm, now) {
+        // Parse alarm time
+        const {hours, minutes} = this._parseTime(alarm.time);
+
+        // Check if current time matches alarm time (within check interval tolerance)
+        const currentHours = now.getHours();
+        const currentMinutes = now.getMinutes();
+
+        if (currentHours !== hours || currentMinutes !== minutes) {
+            return false;
+        }
+
+        // Check if already triggered in the last minute to avoid double-firing
+        if (alarm.lastTriggered) {
+            const lastTrigger = new Date(alarm.lastTriggered);
+            const timeSinceLastTrigger = now - lastTrigger;
+
+            // Don't trigger if triggered in the last 50 seconds
+            if (timeSinceLastTrigger < 50000) {
+                return false;
+            }
+        }
+
+        // Check repeat pattern
+        if (!this._matchesRepeatPattern(alarm, now)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Parse time string (HH:MM format)
+     * @param {string} timeString - Time in HH:MM format
+     * @returns {Object} { hours, minutes }
+     * @private
+     */
+    _parseTime(timeString) {
+        const [hours, minutes] = timeString.split(':').map(n => parseInt(n, 10));
+        return {hours, minutes};
+    }
+
+    /**
+     * Check if alarm matches repeat pattern for given date
+     * @param {Object} alarm - Alarm object
+     * @param {Date} date - Date to check
+     * @returns {boolean}
+     * @private
+     */
+    _matchesRepeatPattern(alarm, date) {
+        if (!alarm.repeat) {
+            // One-time alarm - always match (user needs to disable after first trigger)
+            return true;
+        }
+
+        const dayOfWeek = date.getDay(); // 0 = Sunday, 6 = Saturday
+
+        if (alarm.repeat === 'daily') {
+            return true;
+        }
+
+        if (alarm.repeat === 'weekdays') {
+            return dayOfWeek >= 1 && dayOfWeek <= 5; // Monday-Friday
+        }
+
+        if (alarm.repeat === 'weekends') {
+            return dayOfWeek === 0 || dayOfWeek === 6; // Saturday-Sunday
+        }
+
+        if (Array.isArray(alarm.repeat)) {
+            // Custom days array: ['mon', 'wed', 'fri']
+            const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            const currentDayName = dayNames[dayOfWeek];
+            return alarm.repeat.includes(currentDayName);
+        }
+
+        return false;
+    }
+
+    /**
+     * Trigger an alarm
+     * @param {Object} alarm - Alarm to trigger
+     * @private
+     */
+    _triggerAlarm(alarm) {
+        // Update lastTriggered timestamp
+        alarm.lastTriggered = Date.now();
+        this._saveAlarms();
+
+        // Play sound if enabled
+        if (alarm.sound && alarm.soundUrl) {
+            const audio = new Audio(alarm.soundUrl);
+            audio.play().catch(err => {
+                console.warn('Failed to play alarm sound:', err);
+            });
+        }
+
+        // Show notification if enabled
+        if (alarm.notification && DesktopNotification.isSupported) {
+            const notifOptions = {
+                title: 'Alarm',
+                body: alarm.label || `Alarm at ${alarm.time}`,
+                requireInteraction: true,
+                ...alarm.notificationOptions
+            };
+            DesktopNotification.notify(notifOptions.title, notifOptions);
+        }
+
+        // Call onTrigger callback
+        if (this.options.onTrigger) {
+            this.options.onTrigger(alarm);
+        }
+
+        // Disable one-time alarms after triggering
+        if (!alarm.repeat) {
+            alarm.enabled = false;
+            this._saveAlarms();
+        }
+    }
+
+    /**
+     * Add a new alarm
+     * @param {Object} alarm - Alarm configuration
+     * @returns {Object} Created alarm with ID
+     */
+    add(alarm) {
+        const newAlarm = {
+            id: `alarm-${Alarm._nextAlarmId++}`,
+            enabled: true,
+            notification: true,
+            notificationOptions: {},
+            sound: false,
+            soundUrl: null,
+            repeat: null,
+            lastTriggered: null,
+            snoozedUntil: null,
+            ...alarm
+        };
+
+        this._alarms.push(newAlarm);
+        this._saveAlarms();
+
+        if (this.options.onAlarmAdd) {
+            this.options.onAlarmAdd(newAlarm);
+        }
+
+        return newAlarm;
+    }
+
+    /**
+     * Remove an alarm by ID
+     * @param {string} id - Alarm ID
+     * @returns {boolean} True if removed
+     */
+    remove(id) {
+        const index = this._alarms.findIndex(a => a.id === id);
+        if (index === -1) return false;
+
+        const removed = this._alarms.splice(index, 1)[0];
+        this._saveAlarms();
+
+        if (this.options.onAlarmRemove) {
+            this.options.onAlarmRemove(removed);
+        }
+
+        return true;
+    }
+
+    /**
+     * Update an alarm
+     * @param {string} id - Alarm ID
+     * @param {Object} changes - Changes to apply
+     * @returns {Object|null} Updated alarm or null if not found
+     */
+    update(id, changes) {
+        const alarm = this._alarms.find(a => a.id === id);
+        if (!alarm) return null;
+
+        Object.assign(alarm, changes);
+        this._saveAlarms();
+
+        return alarm;
+    }
+
+    /**
+     * Enable an alarm
+     * @param {string} id - Alarm ID
+     * @returns {boolean} True if enabled
+     */
+    enable(id) {
+        return this.update(id, {enabled: true}) !== null;
+    }
+
+    /**
+     * Disable an alarm
+     * @param {string} id - Alarm ID
+     * @returns {boolean} True if disabled
+     */
+    disable(id) {
+        return this.update(id, {enabled: false}) !== null;
+    }
+
+    /**
+     * Toggle alarm enabled state
+     * @param {string} id - Alarm ID
+     * @returns {boolean} New enabled state or null if not found
+     */
+    toggle(id) {
+        const alarm = this._alarms.find(a => a.id === id);
+        if (!alarm) return null;
+
+        alarm.enabled = !alarm.enabled;
+        this._saveAlarms();
+
+        return alarm.enabled;
+    }
+
+    /**
+     * Snooze an alarm for a duration
+     * @param {string} id - Alarm ID
+     * @param {number} duration - Snooze duration in milliseconds (default 5 minutes)
+     * @returns {boolean} True if snoozed
+     */
+    snooze(id, duration = 300000) {
+        const alarm = this._alarms.find(a => a.id === id);
+        if (!alarm) return false;
+
+        alarm.snoozedUntil = Date.now() + duration;
+        this._saveAlarms();
+
+        if (this.options.onSnooze) {
+            this.options.onSnooze(alarm, duration);
+        }
+
+        return true;
+    }
+
+    /**
+     * Get all alarms
+     * @returns {Array} Array of alarm objects
+     */
+    getAlarms() {
+        return [...this._alarms];
+    }
+
+    /**
+     * Get a specific alarm by ID
+     * @param {string} id - Alarm ID
+     * @returns {Object|null} Alarm object or null
+     */
+    getAlarm(id) {
+        return this._alarms.find(a => a.id === id) || null;
+    }
+
+    /**
+     * Get the next alarm that will trigger
+     * @returns {Object|null} Next alarm object with trigger time
+     */
+    getNextAlarm() {
+        const now = new Date();
+        let nextAlarm = null;
+        let nextTime = null;
+
+        this._alarms.forEach(alarm => {
+            if (!alarm.enabled) return;
+
+            const occurrence = this._getNextOccurrence(alarm, now);
+            if (!occurrence) return;
+
+            if (!nextTime || occurrence < nextTime) {
+                nextTime = occurrence;
+                nextAlarm = {
+                    ...alarm,
+                    nextTrigger: occurrence
+                };
+            }
+        });
+
+        return nextAlarm;
+    }
+
+    /**
+     * Get next occurrence time for an alarm
+     * @param {Object} alarm - Alarm object
+     * @param {Date} from - Start date
+     * @returns {Date|null} Next occurrence date
+     * @private
+     */
+    _getNextOccurrence(alarm, from) {
+        const {hours, minutes} = this._parseTime(alarm.time);
+        const now = new Date(from);
+
+        // Start checking from today
+        const checkDate = new Date(now);
+        checkDate.setHours(hours, minutes, 0, 0);
+
+        // If time already passed today, start from tomorrow
+        if (checkDate <= now) {
+            checkDate.setDate(checkDate.getDate() + 1);
+        }
+
+        // Check next 7 days to find matching repeat pattern
+        for (let i = 0; i < 7; i++) {
+            if (this._matchesRepeatPattern(alarm, checkDate)) {
+                return checkDate;
+            }
+            checkDate.setDate(checkDate.getDate() + 1);
+        }
+
+        return null;
+    }
+
+    /**
+     * Clear all alarms
+     * @returns {this}
+     */
+    clearAll() {
+        this._alarms = [];
+        this._saveAlarms();
+        return this;
+    }
+
+    /**
+     * Destroy alarm system
+     */
+    destroy() {
+        this._stopChecking();
+        this._alarms = [];
+        Alarm._instance = null;
+    }
+}
+
+// ============================================
 // Carousel Component
 // ============================================
 
@@ -3438,6 +4574,1147 @@ class Navbar extends Component {
 }
 
 // ============================================
+// Autocomplete Component
+// ============================================
+
+class Autocomplete extends Component {
+    static defaults = {
+        data: [],
+        dataSource: null,
+        minChars: 1,
+        maxResults: 10,
+        debounce: 300,
+        filterFn: null,
+        renderItem: null,
+        highlightMatches: true,
+        position: 'auto',
+        placeholder: '',
+        emptyMessage: 'No results found',
+        loadingMessage: 'Loading...',
+        caseSensitive: false,
+        selectOnEnter: true,
+        clearOnSelect: false,
+        onSelect: null,
+        onChange: null,
+        onOpen: null,
+        onClose: null,
+        onFilter: null
+    };
+
+    constructor(selector, options = {}) {
+        super(selector, options);
+        this.model = options.model || null;
+        this.modelKey = options.modelKey || null;
+        this._isOpen = false;
+        this._activeIndex = -1;
+        this._filteredData = [];
+        this._loading = false;
+        this._debounceTimer = null;
+        this._dropdown = null;
+        this._list = null;
+        this._loadingEl = null;
+        this._emptyEl = null;
+        this._init();
+
+        // Subscribe to model changes
+        if (this.model && typeof this.model.onChange === 'function') {
+            this._modelUnsubscribe = this.model.onChange((field, newVal) => {
+                if (field === this.modelKey && newVal !== this.getValue()) {
+                    this.setValue(newVal);
+                }
+            });
+        }
+    }
+
+    _init() {
+        if (!this.element) return;
+
+        // Ensure element is an input
+        if (this.element.tagName !== 'INPUT') {
+            console.error('Autocomplete requires an input element');
+            return;
+        }
+
+        // Set placeholder
+        if (this.options.placeholder) {
+            this.element.setAttribute('placeholder', this.options.placeholder);
+        }
+
+        // Create dropdown structure
+        this._createDropdown();
+
+        // Set up event listeners
+        this._bindEvents();
+
+        // Set ARIA attributes
+        this.element.setAttribute('role', 'combobox');
+        this.element.setAttribute('aria-autocomplete', 'list');
+        this.element.setAttribute('aria-expanded', 'false');
+        this.element.setAttribute('aria-controls', this._dropdown.id);
+    }
+
+    _createDropdown() {
+        // Create wrapper if input doesn't have one
+        let wrapper = this.element.parentElement;
+        if (!wrapper || !wrapper.classList.contains('dm-autocomplete')) {
+            wrapper = document.createElement('div');
+            wrapper.className = 'dm-autocomplete';
+            this.element.parentNode.insertBefore(wrapper, this.element);
+            wrapper.appendChild(this.element);
+        }
+
+        // Create dropdown
+        this._dropdown = document.createElement('div');
+        this._dropdown.className = 'dm-autocomplete-dropdown';
+        this._dropdown.id = `autocomplete-${Math.random().toString(36).substr(2, 9)}`;
+        this._dropdown.setAttribute('role', 'listbox');
+        this._dropdown.style.display = 'none';
+
+        // Create loading indicator
+        this._loadingEl = document.createElement('div');
+        this._loadingEl.className = 'dm-autocomplete-loading';
+        this._loadingEl.textContent = this.options.loadingMessage;
+        this._loadingEl.style.display = 'none';
+        this._dropdown.appendChild(this._loadingEl);
+
+        // Create empty message
+        this._emptyEl = document.createElement('div');
+        this._emptyEl.className = 'dm-autocomplete-empty';
+        this._emptyEl.textContent = this.options.emptyMessage;
+        this._emptyEl.style.display = 'none';
+        this._dropdown.appendChild(this._emptyEl);
+
+        // Create list
+        this._list = document.createElement('ul');
+        this._list.className = 'dm-autocomplete-list';
+        this._dropdown.appendChild(this._list);
+
+        wrapper.appendChild(this._dropdown);
+    }
+
+    _bindEvents() {
+        const inputHandler = this._handleInput.bind(this);
+        const keydownHandler = this._handleKeydown.bind(this);
+        const focusHandler = () => {
+            if (this.element.value.length >= this.options.minChars) {
+                this._filterData(this.element.value);
+            }
+        };
+        const blurHandler = (e) => {
+            // Delay close to allow click events on dropdown items
+            setTimeout(() => {
+                if (!this._dropdown.contains(document.activeElement)) {
+                    this.close();
+                }
+            }, 200);
+        };
+
+        this._addEventListener(this.element, 'input', inputHandler);
+        this._addEventListener(this.element, 'keydown', keydownHandler);
+        this._addEventListener(this.element, 'focus', focusHandler);
+        this._addEventListener(this.element, 'blur', blurHandler);
+    }
+
+    _handleInput(e) {
+        const value = e.target.value;
+
+        // Clear debounce timer
+        if (this._debounceTimer) {
+            clearTimeout(this._debounceTimer);
+        }
+
+        // Sync to model
+        if (this.model && this.modelKey) {
+            this.model.set(this.modelKey, value);
+        }
+
+        // Trigger onChange callback
+        if (this.options.onChange) {
+            this.options.onChange(value, e);
+        }
+
+        // Check minimum characters
+        if (value.length < this.options.minChars) {
+            this.close();
+            return;
+        }
+
+        // Debounce filtering
+        this._debounceTimer = setTimeout(() => {
+            this._filterData(value);
+        }, this.options.debounce);
+    }
+
+    _handleKeydown(e) {
+        if (!this._isOpen) {
+            // Open on arrow down if min chars met
+            if (e.key === 'ArrowDown' && this.element.value.length >= this.options.minChars) {
+                e.preventDefault();
+                this._filterData(this.element.value);
+            }
+            return;
+        }
+
+        const items = this._list.querySelectorAll('.dm-autocomplete-item');
+
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                this._activeIndex = Math.min(this._activeIndex + 1, items.length - 1);
+                this._updateActive();
+                break;
+
+            case 'ArrowUp':
+                e.preventDefault();
+                this._activeIndex = Math.max(this._activeIndex - 1, -1);
+                this._updateActive();
+                break;
+
+            case 'Enter':
+                e.preventDefault();
+                if (this._activeIndex >= 0 && this.options.selectOnEnter) {
+                    this._selectItem(this._activeIndex);
+                }
+                break;
+
+            case 'Escape':
+                e.preventDefault();
+                this.close();
+                break;
+
+            case 'Tab':
+                if (this._activeIndex >= 0) {
+                    e.preventDefault();
+                    this._selectItem(this._activeIndex);
+                }
+                this.close();
+                break;
+        }
+    }
+
+    async _filterData(query) {
+        let results = [];
+
+        // Show loading if using async data source
+        if (this.options.dataSource) {
+            this._setLoading(true);
+
+            try {
+                results = await this.options.dataSource(query);
+            } catch (error) {
+                console.error('Autocomplete dataSource error:', error);
+                results = [];
+            }
+
+            this._setLoading(false);
+        } else {
+            // Filter static data
+            const filterFn = this.options.filterFn || this._defaultFilter.bind(this);
+            results = this.options.data.filter(item => filterFn(item, query));
+        }
+
+        // Limit results
+        if (this.options.maxResults) {
+            results = results.slice(0, this.options.maxResults);
+        }
+
+        // Trigger onFilter callback
+        if (this.options.onFilter) {
+            results = this.options.onFilter(results, query) || results;
+        }
+
+        this._filteredData = results;
+        this._renderResults(query);
+    }
+
+    _defaultFilter(item, query) {
+        const itemStr = typeof item === 'string' ? item : item.label || item.value || String(item);
+        const queryStr = this.options.caseSensitive ? query : query.toLowerCase();
+        const compareStr = this.options.caseSensitive ? itemStr : itemStr.toLowerCase();
+        return compareStr.includes(queryStr);
+    }
+
+    _renderResults(query) {
+        // Clear list
+        this._list.innerHTML = '';
+        this._activeIndex = -1;
+
+        // Show/hide empty message
+        if (this._filteredData.length === 0) {
+            this._emptyEl.style.display = 'block';
+            this._list.style.display = 'none';
+            this.open();
+            return;
+        }
+
+        this._emptyEl.style.display = 'none';
+        this._list.style.display = 'block';
+
+        // Render items
+        this._filteredData.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.className = 'dm-autocomplete-item';
+            li.setAttribute('role', 'option');
+            li.setAttribute('data-index', index);
+
+            // Use custom renderer if provided
+            if (this.options.renderItem) {
+                const rendered = this.options.renderItem(item, query);
+                li.innerHTML = typeof rendered === 'string' ? rendered : '';
+                if (typeof rendered !== 'string') {
+                    li.appendChild(rendered);
+                }
+            } else {
+                // Default rendering with highlighting
+                const text = typeof item === 'string' ? item : item.label || item.value || String(item);
+                if (this.options.highlightMatches) {
+                    li.innerHTML = this._highlightMatch(text, query);
+                } else {
+                    li.textContent = text;
+                }
+            }
+
+            // Click handler
+            li.addEventListener('click', () => {
+                this._selectItem(index);
+            });
+
+            // Hover handler
+            li.addEventListener('mouseenter', () => {
+                this._activeIndex = index;
+                this._updateActive();
+            });
+
+            this._list.appendChild(li);
+        });
+
+        this.open();
+    }
+
+    _highlightMatch(text, query) {
+        if (!query) return text;
+
+        const regex = new RegExp(`(${this._escapeRegex(query)})`, this.options.caseSensitive ? 'g' : 'gi');
+        return text.replace(regex, '<span class="dm-autocomplete-match">$1</span>');
+    }
+
+    _escapeRegex(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    _updateActive() {
+        const items = this._list.querySelectorAll('.dm-autocomplete-item');
+        items.forEach((item, index) => {
+            if (index === this._activeIndex) {
+                item.classList.add('active');
+                item.setAttribute('aria-selected', 'true');
+                // Scroll into view if needed
+                item.scrollIntoView({block: 'nearest'});
+            } else {
+                item.classList.remove('active');
+                item.setAttribute('aria-selected', 'false');
+            }
+        });
+
+        // Update ARIA activedescendant
+        if (this._activeIndex >= 0) {
+            const activeItem = items[this._activeIndex];
+            if (activeItem) {
+                const id = activeItem.id || `autocomplete-item-${this._activeIndex}`;
+                activeItem.id = id;
+                this.element.setAttribute('aria-activedescendant', id);
+            }
+        } else {
+            this.element.removeAttribute('aria-activedescendant');
+        }
+    }
+
+    _selectItem(index) {
+        const item = this._filteredData[index];
+        if (!item) return;
+
+        const value = typeof item === 'string' ? item : item.value || item.label || String(item);
+        this.element.value = value;
+
+        // Trigger onSelect callback
+        if (this.options.onSelect) {
+            this.options.onSelect(item, {target: this.element});
+        }
+
+        // Clear on select if option enabled
+        if (this.options.clearOnSelect) {
+            setTimeout(() => {
+                this.element.value = '';
+            }, 100);
+        }
+
+        this.close();
+        this.element.focus();
+    }
+
+    _setLoading(loading) {
+        this._loading = loading;
+        if (loading) {
+            this._loadingEl.style.display = 'block';
+            this._list.style.display = 'none';
+            this._emptyEl.style.display = 'none';
+            this.open();
+        } else {
+            this._loadingEl.style.display = 'none';
+        }
+    }
+
+    _updatePosition() {
+        if (!this._isOpen || !this._dropdown) return;
+
+        const inputRect = this.element.getBoundingClientRect();
+        const dropdownHeight = this._dropdown.offsetHeight;
+        const viewportHeight = window.innerHeight;
+
+        let position = this.options.position;
+
+        // Auto-detect position if set to 'auto'
+        if (position === 'auto') {
+            const spaceBelow = viewportHeight - inputRect.bottom;
+            const spaceAbove = inputRect.top;
+
+            position = spaceBelow >= dropdownHeight || spaceBelow >= spaceAbove ? 'below' : 'above';
+        }
+
+        // Apply position
+        if (position === 'above') {
+            this._dropdown.style.top = 'auto';
+            this._dropdown.style.bottom = '100%';
+            this._dropdown.style.marginBottom = '4px';
+            this._dropdown.style.marginTop = '0';
+        } else {
+            this._dropdown.style.top = '100%';
+            this._dropdown.style.bottom = 'auto';
+            this._dropdown.style.marginTop = '4px';
+            this._dropdown.style.marginBottom = '0';
+        }
+    }
+
+    // Public methods
+
+    open() {
+        if (this._isOpen) return this;
+
+        this._isOpen = true;
+        this._dropdown.style.display = 'block';
+        this.element.setAttribute('aria-expanded', 'true');
+        this._updatePosition();
+
+        if (this.options.onOpen) {
+            this.options.onOpen();
+        }
+
+        return this;
+    }
+
+    close() {
+        if (!this._isOpen) return this;
+
+        this._isOpen = false;
+        this._dropdown.style.display = 'none';
+        this.element.setAttribute('aria-expanded', 'false');
+        this._activeIndex = -1;
+
+        if (this.options.onClose) {
+            this.options.onClose();
+        }
+
+        return this;
+    }
+
+    toggle() {
+        return this._isOpen ? this.close() : this.open();
+    }
+
+    isOpen() {
+        return this._isOpen;
+    }
+
+    setValue(value) {
+        this.element.value = value;
+        return this;
+    }
+
+    getValue() {
+        return this.element.value;
+    }
+
+    setData(data) {
+        this.options.data = data;
+        return this;
+    }
+
+    refresh() {
+        const value = this.element.value;
+        if (value.length >= this.options.minChars) {
+            this._filterData(value);
+        }
+        return this;
+    }
+
+    focus() {
+        this.element.focus();
+        return this;
+    }
+
+    clearValue() {
+        this.element.value = '';
+        this.close();
+        return this;
+    }
+
+    destroy() {
+        this.close();
+        if (this._dropdown && this._dropdown.parentNode) {
+            this._dropdown.parentNode.removeChild(this._dropdown);
+        }
+        if (this._debounceTimer) {
+            clearTimeout(this._debounceTimer);
+        }
+        // Unsubscribe from model
+        if (this._modelUnsubscribe) {
+            this._modelUnsubscribe();
+        }
+        super.destroy();
+    }
+}
+
+// ============================================
+// Pillbox Component
+// ============================================
+
+class Pillbox extends Component {
+    static defaults = {
+        data: [],
+        value: [],
+        placeholder: 'Add items...',
+        searchable: true,
+        creatable: false,
+        maxItems: null,
+        duplicates: false,
+        clearable: true,
+        size: 'medium',
+        renderPill: null,
+        renderOption: null,
+        pillTemplate: '<span>{label}</span>',
+        validatePill: null,
+        maxItemsMessage: 'Maximum {max} items allowed',
+        duplicateMessage: 'Item already exists',
+        noResultsMessage: 'No results found',
+        onAdd: null,
+        onRemove: null,
+        onChange: null,
+        onCreate: null,
+        onMaxReached: null,
+        onValidationError: null
+    };
+
+    constructor(selector, options = {}) {
+        super(selector, options);
+        this.model = options.model || null;
+        this.modelKey = options.modelKey || null;
+        this._pills = [];
+        this._isOpen = false;
+        this._activeIndex = -1;
+        this._container = null;
+        this._input = null;
+        this._clearBtn = null;
+        this._dropdown = null;
+        this._optionsList = null;
+        this._filteredData = [];
+        this._init();
+
+        // Subscribe to model changes
+        if (this.model && typeof this.model.onChange === 'function') {
+            this._modelUnsubscribe = this.model.onChange((field, newVal) => {
+                if (field === this.modelKey && Array.isArray(newVal)) {
+                    const currentVal = this.getValue();
+                    // Only update if values differ (avoid infinite loops)
+                    if (JSON.stringify(currentVal) !== JSON.stringify(newVal)) {
+                        this.setValue(newVal);
+                    }
+                }
+            });
+        }
+    }
+
+    _init() {
+        if (!this.element) return;
+
+        // Ensure element is an input
+        if (this.element.tagName !== 'INPUT') {
+            console.error('Pillbox requires an input element');
+            return;
+        }
+
+        // Hide original input (we'll create our own)
+        this.element.style.display = 'none';
+
+        // Create pillbox structure
+        this._createStructure();
+
+        // Initialize from value option
+        if (this.options.value && this.options.value.length > 0) {
+            this.options.value.forEach(val => {
+                const item = this._findItemByValue(val);
+                if (item) {
+                    this._addPill(item.value, item.label);
+                } else if (typeof val === 'string') {
+                    this._addPill(val, val);
+                }
+            });
+        }
+
+        // Bind events
+        this._bindEvents();
+
+        // Set ARIA attributes
+        this._input.setAttribute('role', 'combobox');
+        this._input.setAttribute('aria-autocomplete', 'list');
+        this._input.setAttribute('aria-expanded', 'false');
+    }
+
+    _createStructure() {
+        // Create wrapper
+        const wrapper = document.createElement('div');
+        wrapper.className = `dm-pillbox dm-pillbox-${this.options.size}`;
+
+        // Create container for pills + input
+        this._container = document.createElement('div');
+        this._container.className = 'dm-pillbox-container';
+
+        // Create input
+        this._input = document.createElement('input');
+        this._input.type = 'text';
+        this._input.className = 'dm-pillbox-input';
+        this._input.placeholder = this.options.placeholder;
+        this._container.appendChild(this._input);
+
+        wrapper.appendChild(this._container);
+
+        // Create clear button
+        if (this.options.clearable) {
+            this._clearBtn = document.createElement('button');
+            this._clearBtn.type = 'button';
+            this._clearBtn.className = 'dm-pillbox-clear';
+            this._clearBtn.innerHTML = '&times;';
+            this._clearBtn.title = 'Clear all';
+            this._clearBtn.style.display = 'none';
+            wrapper.appendChild(this._clearBtn);
+        }
+
+        // Create dropdown (if searchable)
+        if (this.options.searchable) {
+            this._dropdown = document.createElement('div');
+            this._dropdown.className = 'dm-pillbox-dropdown';
+            this._dropdown.style.display = 'none';
+
+            this._optionsList = document.createElement('ul');
+            this._optionsList.className = 'dm-pillbox-options';
+            this._dropdown.appendChild(this._optionsList);
+
+            const emptyEl = document.createElement('div');
+            emptyEl.className = 'dm-pillbox-empty';
+            emptyEl.textContent = this.options.noResultsMessage;
+            emptyEl.style.display = 'none';
+            this._dropdown.appendChild(emptyEl);
+
+            wrapper.appendChild(this._dropdown);
+        }
+
+        // Insert after original input
+        this.element.parentNode.insertBefore(wrapper, this.element.nextSibling);
+        this._wrapper = wrapper;
+    }
+
+    _bindEvents() {
+        // Input events
+        const inputHandler = this._handleInput.bind(this);
+        const keydownHandler = this._handleKeydown.bind(this);
+        const focusHandler = () => {
+            if (this.options.searchable && this._input.value) {
+                this._filterOptions(this._input.value);
+            }
+        };
+        const blurHandler = () => {
+            setTimeout(() => {
+                if (!this._dropdown?.contains(document.activeElement)) {
+                    this.close();
+                }
+            }, 200);
+        };
+
+        this._addEventListener(this._input, 'input', inputHandler);
+        this._addEventListener(this._input, 'keydown', keydownHandler);
+        this._addEventListener(this._input, 'focus', focusHandler);
+        this._addEventListener(this._input, 'blur', blurHandler);
+
+        // Clear button
+        if (this._clearBtn) {
+            this._addEventListener(this._clearBtn, 'click', () => {
+                this.clear();
+                this._input.focus();
+            });
+        }
+
+        // Container click - focus input
+        this._addEventListener(this._container, 'click', (e) => {
+            if (e.target === this._container) {
+                this._input.focus();
+            }
+        });
+    }
+
+    _handleInput(e) {
+        const value = e.target.value;
+
+        if (this.options.searchable && value) {
+            this._filterOptions(value);
+        } else {
+            this.close();
+        }
+    }
+
+    _handleKeydown(e) {
+        const value = this._input.value;
+
+        // Backspace on empty input - remove last pill
+        if (e.key === 'Backspace' && !value && this._pills.length > 0) {
+            e.preventDefault();
+            const lastPill = this._container.querySelectorAll('.dm-pill')[this._pills.length - 1];
+            this._removePill(lastPill);
+            return;
+        }
+
+        // Enter - create new pill if creatable
+        if (e.key === 'Enter' && value) {
+            e.preventDefault();
+
+            if (this._isOpen && this._activeIndex >= 0) {
+                // Select from dropdown
+                this._selectOption(this._activeIndex);
+            } else if (this.options.creatable) {
+                // Create new pill
+                this._createPill(value);
+            }
+            return;
+        }
+
+        // Arrow navigation in dropdown
+        if (this._isOpen) {
+            const options = this._optionsList.querySelectorAll('.dm-pillbox-option');
+
+            switch (e.key) {
+                case 'ArrowDown':
+                    e.preventDefault();
+                    this._activeIndex = Math.min(this._activeIndex + 1, options.length - 1);
+                    this._updateActive();
+                    break;
+
+                case 'ArrowUp':
+                    e.preventDefault();
+                    this._activeIndex = Math.max(this._activeIndex - 1, -1);
+                    this._updateActive();
+                    break;
+
+                case 'Escape':
+                    e.preventDefault();
+                    this.close();
+                    break;
+
+                case 'Tab':
+                    this.close();
+                    break;
+            }
+        }
+    }
+
+    _filterOptions(query) {
+        const queryLower = query.toLowerCase();
+
+        // Filter available options (excluding already selected)
+        const selectedValues = this._pills.map(p => p.value);
+        this._filteredData = this.options.data.filter(item => {
+            const itemValue = typeof item === 'string' ? item : item.value;
+            const itemLabel = typeof item === 'string' ? item : item.label || item.value;
+
+            // Exclude selected
+            if (selectedValues.includes(itemValue)) {
+                return false;
+            }
+
+            // Check disabled
+            if (item.disabled) {
+                return false;
+            }
+
+            // Filter by query
+            return itemLabel.toLowerCase().includes(queryLower);
+        });
+
+        this._renderOptions();
+    }
+
+    _renderOptions() {
+        this._optionsList.innerHTML = '';
+        this._activeIndex = -1;
+
+        const emptyEl = this._dropdown.querySelector('.dm-pillbox-empty');
+
+        if (this._filteredData.length === 0) {
+            emptyEl.style.display = 'block';
+            this._optionsList.style.display = 'none';
+            this.open();
+            return;
+        }
+
+        emptyEl.style.display = 'none';
+        this._optionsList.style.display = 'block';
+
+        this._filteredData.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.className = 'dm-pillbox-option';
+            li.setAttribute('data-index', index);
+
+            if (this.options.renderOption) {
+                const rendered = this.options.renderOption(item);
+                li.innerHTML = typeof rendered === 'string' ? rendered : '';
+                if (typeof rendered !== 'string') {
+                    li.appendChild(rendered);
+                }
+            } else {
+                const label = typeof item === 'string' ? item : item.label || item.value;
+                li.textContent = label;
+            }
+
+            li.addEventListener('click', () => {
+                this._selectOption(index);
+            });
+
+            li.addEventListener('mouseenter', () => {
+                this._activeIndex = index;
+                this._updateActive();
+            });
+
+            this._optionsList.appendChild(li);
+        });
+
+        this.open();
+    }
+
+    _updateActive() {
+        const options = this._optionsList.querySelectorAll('.dm-pillbox-option');
+        options.forEach((opt, index) => {
+            if (index === this._activeIndex) {
+                opt.classList.add('active');
+                opt.scrollIntoView({block: 'nearest'});
+            } else {
+                opt.classList.remove('active');
+            }
+        });
+    }
+
+    _selectOption(index) {
+        const item = this._filteredData[index];
+        if (!item) return;
+
+        const value = typeof item === 'string' ? item : item.value;
+        const label = typeof item === 'string' ? item : item.label || item.value;
+
+        this._addPill(value, label);
+        this._input.value = '';
+        this.close();
+        this._input.focus();
+    }
+
+    _createPill(text) {
+        if (!text.trim()) return;
+
+        // Validate
+        const error = this._validate(text);
+        if (error) {
+            if (this.options.onValidationError) {
+                this.options.onValidationError(error, text);
+            }
+            return;
+        }
+
+        this._addPill(text, text);
+        this._input.value = '';
+
+        if (this.options.onCreate) {
+            this.options.onCreate(text);
+        }
+    }
+
+    _addPill(value, label) {
+        // Validate
+        const error = this._validate(value);
+        if (error) {
+            if (this.options.onValidationError) {
+                this.options.onValidationError(error, value);
+            }
+            return;
+        }
+
+        // Create pill element
+        const pill = document.createElement('div');
+        pill.className = 'dm-pill';
+        pill.setAttribute('data-value', value);
+
+        if (this.options.renderPill) {
+            const rendered = this.options.renderPill({value, label});
+            pill.innerHTML = typeof rendered === 'string' ? rendered : '';
+            if (typeof rendered !== 'string') {
+                pill.appendChild(rendered);
+            }
+        } else {
+            const template = this.options.pillTemplate.replace('{label}', label);
+            pill.innerHTML = template;
+        }
+
+        // Add remove button
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'dm-pill-remove';
+        removeBtn.innerHTML = '&times;';
+        removeBtn.title = `Remove ${label}`;
+        removeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this._removePill(pill);
+        });
+        pill.appendChild(removeBtn);
+
+        // Insert before input
+        this._container.insertBefore(pill, this._input);
+
+        // Track internally
+        this._pills.push({value, label, element: pill});
+
+        // Update hidden input value
+        this._updateHiddenInput();
+
+        // Show clear button
+        if (this._clearBtn) {
+            this._clearBtn.style.display = 'block';
+        }
+
+        // Trigger onAdd
+        if (this.options.onAdd) {
+            this.options.onAdd(value, pill);
+        }
+
+        // Trigger onChange
+        this._triggerChange();
+    }
+
+    _removePill(pillElement) {
+        const value = pillElement.getAttribute('data-value');
+        const index = this._pills.findIndex(p => p.value === value);
+
+        if (index === -1) return;
+
+        const pill = this._pills[index];
+
+        // Remove from DOM
+        pillElement.remove();
+
+        // Remove from array
+        this._pills.splice(index, 1);
+
+        // Update hidden input
+        this._updateHiddenInput();
+
+        // Hide clear button if empty
+        if (this._pills.length === 0 && this._clearBtn) {
+            this._clearBtn.style.display = 'none';
+        }
+
+        // Trigger onRemove
+        if (this.options.onRemove) {
+            this.options.onRemove(value, pillElement);
+        }
+
+        // Trigger onChange
+        this._triggerChange();
+    }
+
+    _validate(value) {
+        // Check max items
+        if (this.options.maxItems && this._pills.length >= this.options.maxItems) {
+            if (this.options.onMaxReached) {
+                this.options.onMaxReached();
+            }
+            return this.options.maxItemsMessage.replace('{max}', this.options.maxItems);
+        }
+
+        // Check duplicates
+        if (!this.options.duplicates && this._pills.some(p => p.value === value)) {
+            return this.options.duplicateMessage;
+        }
+
+        // Custom validation
+        if (this.options.validatePill) {
+            const result = this.options.validatePill(value);
+            if (result !== true && result !== undefined) {
+                return typeof result === 'string' ? result : 'Invalid value';
+            }
+        }
+
+        return null;
+    }
+
+    _findItemByValue(value) {
+        return this.options.data.find(item => {
+            const itemValue = typeof item === 'string' ? item : item.value;
+            return itemValue === value;
+        });
+    }
+
+    _updateHiddenInput() {
+        const values = this._pills.map(p => p.value);
+        this.element.value = JSON.stringify(values);
+    }
+
+    _triggerChange() {
+        const values = this.getValue();
+
+        // Sync to model
+        if (this.model && this.modelKey) {
+            this.model.set(this.modelKey, values);
+        }
+
+        // Trigger onChange callback
+        if (this.options.onChange) {
+            this.options.onChange(values);
+        }
+    }
+
+    // Public methods
+
+    open() {
+        if (!this._dropdown || this._isOpen) return this;
+
+        this._isOpen = true;
+        this._dropdown.style.display = 'block';
+        this._input.setAttribute('aria-expanded', 'true');
+
+        return this;
+    }
+
+    close() {
+        if (!this._dropdown || !this._isOpen) return this;
+
+        this._isOpen = false;
+        this._dropdown.style.display = 'none';
+        this._input.setAttribute('aria-expanded', 'false');
+        this._activeIndex = -1;
+
+        return this;
+    }
+
+    isOpen() {
+        return this._isOpen;
+    }
+
+    getValue() {
+        return this._pills.map(p => p.value);
+    }
+
+    setValue(values) {
+        this.clear();
+
+        if (Array.isArray(values)) {
+            values.forEach(val => {
+                const item = this._findItemByValue(val);
+                if (item) {
+                    const label = typeof item === 'string' ? item : item.label || item.value;
+                    this._addPill(val, label);
+                } else if (typeof val === 'string') {
+                    this._addPill(val, val);
+                }
+            });
+        }
+
+        return this;
+    }
+
+    addPill(value, label) {
+        label = label || value;
+        this._addPill(value, label);
+        return this;
+    }
+
+    removePill(value) {
+        const pill = this._container.querySelector(`.dm-pill[data-value="${value}"]`);
+        if (pill) {
+            this._removePill(pill);
+        }
+        return this;
+    }
+
+    removePillAt(index) {
+        if (index >= 0 && index < this._pills.length) {
+            this._removePill(this._pills[index].element);
+        }
+        return this;
+    }
+
+    clear() {
+        // Remove all pills
+        [...this._pills].forEach(pill => {
+            this._removePill(pill.element);
+        });
+        return this;
+    }
+
+    getCount() {
+        return this._pills.length;
+    }
+
+    setData(data) {
+        this.options.data = data;
+        return this;
+    }
+
+    focus() {
+        this._input.focus();
+        return this;
+    }
+
+    enable() {
+        this._input.disabled = false;
+        this._wrapper.classList.remove('disabled');
+        return this;
+    }
+
+    disable() {
+        this._input.disabled = true;
+        this._wrapper.classList.add('disabled');
+        this.close();
+        return this;
+    }
+
+    destroy() {
+        this.close();
+        if (this._wrapper && this._wrapper.parentNode) {
+            this._wrapper.parentNode.removeChild(this._wrapper);
+        }
+        this.element.style.display = '';
+        // Unsubscribe from model
+        if (this._modelUnsubscribe) {
+            this._modelUnsubscribe();
+        }
+        super.destroy();
+    }
+}
+
+// ============================================
 // Elements Module Export
 // ============================================
 
@@ -3578,7 +5855,57 @@ export const elements = {
         return instance;
     },
 
-    toast: Toast,
+    notification(options = {}) {
+        return new DesktopNotification(options);
+    },
+
+    // Convenience method for quick notifications
+    notify(title, options = {}) {
+        return DesktopNotification.notify(title, options);
+    },
+
+    timer(selector, options = {}) {
+        const instance = new Timer(selector, options);
+        // Only track in instances if attached to element
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
+    alarm(options = {}) {
+        // Singleton - always returns same instance
+        return new Alarm(options);
+    },
+
+    autocomplete(selector, options = {}) {
+        const instance = new Autocomplete(selector, options);
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
+    pillbox(selector, options = {}) {
+        const instance = new Pillbox(selector, options);
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
+    // Toast wrapper - callable as function or use static methods
+    toast: Object.assign(
+        (message, options = {}) => Toast.show(message, options),
+        {
+            show: Toast.show.bind(Toast),
+            success: Toast.success.bind(Toast),
+            error: Toast.error.bind(Toast),
+            warning: Toast.warning.bind(Toast),
+            info: Toast.info.bind(Toast),
+            closeAll: Toast.closeAll.bind(Toast)
+        }
+    ),
 
     dialog: Dialog,
 
@@ -3630,3 +5957,6 @@ export const elements = {
         throw new Error(`Unknown component: ${name}`);
     }
 };
+
+// Export DesktopNotification class for direct access to static methods
+export {DesktopNotification};

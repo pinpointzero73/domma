@@ -811,7 +811,7 @@ document.getElementById('open-simple-modal').addEventListener('click', () =&gt; 
 <script>
     // Quick Start
     const quickStartModal = Domma.elements.modal('#quick-start-modal');
-    document.getElementById('quick-start-btn').addEventListener('click', () => {
+    $('#quick-start-btn').on('click', () => {
         quickStartModal.open();
     });
 
@@ -824,47 +824,45 @@ document.getElementById('open-simple-modal').addEventListener('click', () =&gt; 
         onClosed: () => console.log('Tutorial modal closed')
     });
 
-    document.getElementById('tutorial-delete-btn').addEventListener('click', () => {
+    $('#tutorial-delete-btn').on('click', () => {
         tutorialModal.open();
     });
 
-    document.getElementById('tutorial-confirm').addEventListener('click', () => {
-        const result = document.getElementById('tutorial-result');
-        result.style.display = 'block';
-        result.innerHTML = '<span style="color: var(--dm-success);">✓ Item deleted successfully at ' + new Date().toLocaleTimeString() + '</span>';
+    $('#tutorial-confirm').on('click', () => {
+        $('#tutorial-result').css('display', 'block').html('<span style="color: var(--dm-success);">✓ Item deleted successfully at ' + new Date().toLocaleTimeString() + '</span>');
         tutorialModal.close();
     });
 
     // Examples
     const smallModal = Domma.elements.modal('#small-modal');
-    document.getElementById('open-small').addEventListener('click', () => smallModal.open());
+    $('#open-small').on('click', () => smallModal.open());
 
     const largeModal = Domma.elements.modal('#large-modal');
-    document.getElementById('open-large').addEventListener('click', () => largeModal.open());
+    $('#open-large').on('click', () => largeModal.open());
 
     const noBackdropModal = Domma.elements.modal('#no-backdrop-modal', {
         backdropClose: false,
         keyboard: false
     });
-    document.getElementById('open-no-backdrop').addEventListener('click', () => noBackdropModal.open());
+    $('#open-no-backdrop').on('click', () => noBackdropModal.open());
 
     const successModal = Domma.elements.modal('#success-modal');
-    document.getElementById('open-success').addEventListener('click', () => successModal.open());
+    $('#open-success').on('click', () => successModal.open());
 
     const scrollModal = Domma.elements.modal('#scroll-modal');
-    document.getElementById('open-scroll').addEventListener('click', () => scrollModal.open());
+    $('#open-scroll').on('click', () => scrollModal.open());
 
     // Nested modals
     const parentModal = Domma.elements.modal('#parent-modal');
     const childModal = Domma.elements.modal('#child-modal');
 
-    document.getElementById('open-parent').addEventListener('click', () => parentModal.open());
-    document.getElementById('open-child').addEventListener('click', () => childModal.open());
+    $('#open-parent').on('click', () => parentModal.open());
+    $('#open-child').on('click', () => childModal.open());
 
     // Auto-wire all modal-close-btn buttons
-    document.querySelectorAll('.modal-close-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const modal = this.closest('.modal');
+    $('.modal-close-btn').each(function () {
+        $(this).on('click', function () {
+            const modal = $(this).closest('.modal').get(0);
             if (modal && modal.id) {
                 // Find and close the corresponding modal instance
                 const instances = [quickStartModal, tutorialModal, smallModal, largeModal,

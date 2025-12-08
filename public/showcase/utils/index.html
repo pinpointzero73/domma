@@ -758,6 +758,336 @@ _.random(1.5, 5.5, true) // Random float</pre>
         </div>
     </section>
 
+    <!-- Real-World Patterns -->
+    <section class="card mb-6" data-section="Real-World Patterns">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Real-World Patterns & Config Integration</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Combine utility functions with Domma's config engine for cleaner, more maintainable code in real-world
+                scenarios.
+            </p>
+
+            <h4 class="font-semibold mb-3">Data Transformation Pipeline</h4>
+            <pre class="code-block">// Transform API data for display using utility pipeline
+const transformUserData = _.flow([
+    // 1. Filter active users only
+    (users) => _.filter(users, { status: 'active' }),
+
+    // 2. Sort by name
+    (users) => _.sortBy(users, 'name'),
+
+    // 3. Group by department
+    (users) => _.groupBy(users, 'department'),
+
+    // 4. Map to summary objects
+    (grouped) => _.mapValues(grouped, (users, dept) => ({
+        department: dept,
+        count: users.length,
+        users: _.map(users, u => _.pick(u, ['id', 'name', 'email']))
+    }))
+]);
+
+// Usage with $.setup()
+$.setup({
+    '#user-dashboard': {
+        events: {
+            ready: async (e, $el) => {
+                const rawUsers = await Domma.http.get('/api/users');
+                const transformed = transformUserData(rawUsers);
+
+                // Render grouped data
+                _.forEach(transformed, (group, dept) => {
+                    $el.append(`
+                        <div class="dept-section">
+                            <h3>${dept} (${group.count})</h3>
+                            ${_.map(group.users, u => `<div>${u.name}</div>`).join('')}
+                        </div>
+                    `);
+                });
+            }
+        }
+    }
+});</pre>
+
+            <h4 class="font-semibold mb-3 mt-4">Form Validation & Data Processing</h4>
+            <pre class="code-block">// Centralized form validation with utils
+const validators = {
+    email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+    required: (value) => !_.isEmpty(_.trim(value)),
+    minLength: (min) => (value) => _.trim(value).length >= min,
+    alphanumeric: (value) => /^[a-zA-Z0-9]+$/.test(value)
+};
+
+$.setup({
+    '#signup-form': {
+        initial: {
+            data: { errors: {} }
+        },
+        events: {
+            submit: (e, $el) => {
+                e.preventDefault();
+
+                // Get form data
+                const formData = {
+                    username: $el.find('[name="username"]').val(),
+                    email: $el.find('[name="email"]').val(),
+                    password: $el.find('[name="password"]').val()
+                };
+
+                // Validate with utils
+                const errors = {};
+
+                if (!validators.required(formData.username)) {
+                    errors.username = 'Username is required';
+                } else if (!validators.alphanumeric(formData.username)) {
+                    errors.username = 'Username must be alphanumeric';
+                }
+
+                if (!validators.required(formData.email)) {
+                    errors.email = 'Email is required';
+                } else if (!validators.email(formData.email)) {
+                    errors.email = 'Invalid email address';
+                }
+
+                if (!validators.minLength(8)(formData.password)) {
+                    errors.password = 'Password must be at least 8 characters';
+                }
+
+                // Store errors
+                $el.data('errors', errors);
+
+                if (_.isEmpty(errors)) {
+                    // Clean data before submission
+                    const cleanData = _.mapValues(formData, _.trim);
+                    console.log('Valid:', cleanData);
+                    Domma.elements.toast.success('Form submitted!');
+                } else {
+                    // Display errors
+                    _.forEach(errors, (msg, field) => {
+                        $el.find(`[name="${field}"]`)
+                            .addClass('error')
+                            .next('.error-msg').text(msg);
+                    });
+                    Domma.elements.toast.error(`${_.size(errors)} validation errors`);
+                }
+            },
+
+            'blur input': _.debounce((e, $el) => {
+                // Validate on blur (debounced)
+                const field = $(e.target).attr('name');
+                const value = $(e.target).val();
+
+                // Field-specific validation
+                let isValid = true;
+                if (field === 'email') {
+                    isValid = validators.email(value);
+                } else if (field === 'username') {
+                    isValid = validators.alphanumeric(value);
+                }
+
+                $(e.target).toggleClass('error', !isValid);
+            }, 300)
+        }
+    }
+});</pre>
+
+            <h4 class="font-semibold mb-3 mt-4">Smart Search with Debounce & Filtering</h4>
+            <pre class="code-block">// Search implementation with utils
+$.setup({
+    '#product-search': {
+        initial: {
+            data: {
+                products: [],
+                filteredProducts: [],
+                filters: { category: null, minPrice: 0, maxPrice: Infinity }
+            }
+        },
+        events: {
+            ready: async (e, $el) => {
+                // Load products
+                const products = await Domma.http.get('/api/products');
+                $el.data('products', products);
+                $el.data('filteredProducts', products);
+                renderProducts($el, products);
+            },
+
+            'input #search-box': _.debounce((e, $el) => {
+                const query = $(e.target).val().toLowerCase();
+                const products = $el.data('products');
+                const filters = $el.data('filters');
+
+                // Multi-criteria search with utils
+                const filtered = _.flow([
+                    // Text search
+                    (items) => query ? _.filter(items, item =>
+                        _.toLower(item.name).includes(query) ||
+                        _.toLower(item.description).includes(query)
+                    ) : items,
+
+                    // Category filter
+                    (items) => filters.category
+                        ? _.filter(items, { category: filters.category })
+                        : items,
+
+                    // Price range
+                    (items) => _.filter(items, item =>
+                        item.price >= filters.minPrice &&
+                        item.price <= filters.maxPrice
+                    ),
+
+                    // Sort by relevance (name match first)
+                    (items) => _.sortBy(items, [
+                        item => !_.toLower(item.name).includes(query),
+                        'price'
+                    ])
+                ])(products);
+
+                $el.data('filteredProducts', filtered);
+                renderProducts($el, filtered);
+
+                // Show count
+                $('#result-count').text(`${filtered.length} results`);
+            }, 300),
+
+            'change [name="category"]': (e, $el) => {
+                const category = $(e.target).val();
+                const filters = $el.data('filters');
+                filters.category = category || null;
+                $el.find('#search-box').trigger('input');
+            }
+        }
+    }
+});
+
+function renderProducts($container, products) {
+    const html = _.map(products, product => `
+        <div class="product-card">
+            <h4>${_.escape(product.name)}</h4>
+            <p>${_.truncate(product.description, { length: 100 })}</p>
+            <span class="price">$${_.round(product.price, 2)}</span>
+        </div>
+    `).join('');
+
+    $container.find('#results').html(html || '<p>No products found</p>');
+}</pre>
+
+            <h4 class="font-semibold mb-3 mt-4">Data Aggregation Dashboard</h4>
+            <pre class="code-block">// Analytics dashboard with util aggregations
+$.setup({
+    '#analytics-dashboard': {
+        events: {
+            ready: async (e, $el) => {
+                const sales = await Domma.http.get('/api/sales');
+
+                // Aggregate data with utils
+                const stats = {
+                    // Total revenue
+                    totalRevenue: _.sumBy(sales, 'amount'),
+
+                    // Average order value
+                    avgOrderValue: _.meanBy(sales, 'amount'),
+
+                    // Sales by product
+                    byProduct: _.chain(sales)
+                        .groupBy('product')
+                        .mapValues(items => ({
+                            count: items.length,
+                            revenue: _.sumBy(items, 'amount')
+                        }))
+                        .value(),
+
+                    // Top 5 products
+                    topProducts: _.chain(sales)
+                        .groupBy('product')
+                        .map((items, product) => ({
+                            product,
+                            revenue: _.sumBy(items, 'amount')
+                        }))
+                        .orderBy(['revenue'], ['desc'])
+                        .take(5)
+                        .value(),
+
+                    // Sales by date
+                    dailySales: _.chain(sales)
+                        .groupBy(sale => D(sale.date).format('YYYY-MM-DD'))
+                        .mapValues(items => _.sumBy(items, 'amount'))
+                        .toPairs()
+                        .orderBy([0], ['desc'])
+                        .value()
+                };
+
+                // Render stats
+                $el.find('#total-revenue').text(`$${_.round(stats.totalRevenue, 2)}`);
+                $el.find('#avg-order').text(`$${_.round(stats.avgOrderValue, 2)}`);
+
+                // Render top products
+                const productsHTML = _.map(stats.topProducts, (item, index) => `
+                    <li>#${index + 1}: ${item.product} - $${_.round(item.revenue, 2)}</li>
+                `).join('');
+                $el.find('#top-products').html(productsHTML);
+            }
+        }
+    }
+});</pre>
+
+            <h4 class="font-semibold mb-3 mt-4">Benefits of Utils + Config Pattern</h4>
+            <ul class="mb-4">
+                <li><strong>Declarative</strong> - Clear intent with functional transformations</li>
+                <li><strong>Composable</strong> - Chain utilities for complex operations</li>
+                <li><strong>Testable</strong> - Pure functions easy to unit test</li>
+                <li><strong>Performant</strong> - Debounce, memoize, and optimize expensive operations</li>
+                <li><strong>Maintainable</strong> - Centralized logic with $.setup()</li>
+            </ul>
+
+            <h4 class="font-semibold mb-3 mt-4">Imperative vs Functional Utils Pattern</h4>
+            <div class="grid grid-cols-1 grid-cols-md-2 gap-4">
+                <div>
+                    <p class="font-semibold mb-2">Imperative (Verbose)</p>
+                    <pre class="code-block" style="font-size: 0.85em;">// Filter, sort, group manually
+const active = [];
+for (const user of users) {
+    if (user.status === 'active') {
+        active.push(user);
+    }
+}
+
+active.sort((a, b) =>
+    a.name.localeCompare(b.name)
+);
+
+const byDept = {};
+for (const user of active) {
+    if (!byDept[user.dept]) {
+        byDept[user.dept] = [];
+    }
+    byDept[user.dept].push(user);
+}
+
+// Hard to read, error-prone
+// Mutable operations</pre>
+                </div>
+                <div>
+                    <p class="font-semibold mb-2">Functional with Utils (Clean)</p>
+                    <pre class="code-block" style="font-size: 0.85em;">// Pipeline with utils
+const byDept = _.flow([
+    users => _.filter(users, {
+        status: 'active'
+    }),
+    users => _.sortBy(users, 'name'),
+    users => _.groupBy(users, 'dept')
+])(users);
+
+// Clear transformation steps
+// Immutable operations
+// Chainable and composable
+// Easy to test each step</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Utility Methods -->
     <section class="card" data-section="Utility Methods">
         <div class="card-header">

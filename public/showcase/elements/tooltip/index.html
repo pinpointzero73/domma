@@ -313,9 +313,9 @@ Domma.elements.tooltip('#password-help', {
         position: 'top'
     });
 
-    document.getElementById('dynamic-tooltip').addEventListener('mouseenter', () => {
+    $('#dynamic-tooltip').on('mouseenter', () => {
         hoverCount++;
-        document.getElementById('hover-count').textContent = hoverCount;
+        $('#hover-count').text(hoverCount);
         dynamicTip.setContent(`Hover count: ${hoverCount}`);
     });
 </script>

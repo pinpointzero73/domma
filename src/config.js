@@ -147,7 +147,12 @@ export const configEngine = {
             buttonGroup: elements.buttonGroup,
             loader: elements.loader,
             breadcrumbs: elements.breadcrumbs,
-            navbar: elements.navbar
+            navbar: elements.navbar,
+            notification: elements.notification,
+            timer: elements.timer,
+            alarm: elements.alarm,
+            autocomplete: elements.autocomplete,
+            pillbox: elements.pillbox
         };
 
         const factory = componentMap[componentType];

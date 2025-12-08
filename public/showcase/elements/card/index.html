@@ -532,73 +532,250 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
     </section>
 
     <!-- SECTION 7: Config Engine Integration -->
-    <section class="card mb-6" data-section="Config Engine">
+    <section class="card mb-6" data-section="Hybrid CSS + JavaScript">
         <div class="card-header">
-            <h2 class="text-xl font-semibold m-0">Config Engine Integration</h2>
+            <h2 class="text-xl font-semibold m-0">Hybrid CSS + JavaScript</h2>
         </div>
         <div class="card-body">
             <p class="mb-4">
-                Use the Domma Config Engine to declaratively initialise multiple cards at once.
+                Cards work beautifully with pure CSS, but you can enhance them with JavaScript for dynamic content
+                loading, filtering, sorting, animations, and interactive features using Domma's declarative
+                configuration.
             </p>
 
-            <h4 class="category-title">Single Card Setup</h4>
+            <h4 class="category-title">Dynamic Content Loading</h4>
             <pre class="code-block">$.setup({
-    '#product-card': {
-        component: 'card',
-        options: {
-            hover: true,
-            clickable: true
-        },
+    '#product-grid': {
         events: {
-            click: (e) => {
-                console.log('Product card clicked');
+            ready: async (e, $container) => {
+                // Load products from API
+                const products = await Domma.http.get('/api/products');
+
+                // Render cards
+                const html = _.map(products, product => `
+                    <div class="card card-hover">
+                        <img src="${product.image}" alt="${product.name}" class="card-img-top">
+                        <div class="card-body">
+                            <h4 class="card-title">${product.name}</h4>
+                            <p class="card-text">${_.truncate(product.description, { length: 100 })}</p>
+                            <div class="card-footer">
+                                <span class="price">$${product.price}</span>
+                                <button class="btn btn-primary btn-sm"
+                                        data-id="${product.id}">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                $container.html(html);
+            },
+
+            'click [data-id]': (e) => {
+                const productId = $(e.currentTarget).attr('data-id');
+                // Add to cart logic
+                Domma.elements.toast.success('Added to cart!');
             }
         }
     }
 });</pre>
 
-            <h4 class="category-title mt-4">Multiple Cards</h4>
+            <h4 class="category-title">Filterable Card Grid</h4>
             <pre class="code-block">$.setup({
-    '.feature-card': {
-        component: 'card',
-        options: {
-            hover: true
-        }
-    },
-    '#cta-card': {
-        component: 'card',
-        options: {
-            hover: true,
-            clickable: true
+    '#blog-grid': {
+        initial: {
+            data: { posts: [], filteredPosts: [], activeCategory: 'all' }
         },
         events: {
-            click: () => window.location.href = '/signup'
+            ready: async (e, $el) => {
+                const posts = await Domma.http.get('/api/posts');
+                $el.data('posts', posts);
+                $el.data('filteredPosts', posts);
+                renderCards($el, posts);
+            },
+
+            'click [data-category]': (e, $el) => {
+                const category = $(e.currentTarget).attr('data-category');
+                const allPosts = $el.data('posts');
+
+                // Filter posts
+                const filtered = category === 'all'
+                    ? allPosts
+                    : _.filter(allPosts, { category });
+
+                $el.data('activeCategory', category);
+                $el.data('filteredPosts', filtered);
+
+                // Update UI
+                $('.category-filter').removeClass('active');
+                $(e.currentTarget).addClass('active');
+
+                // Render with animation
+                $('.cards-container').fadeOut(200, function() {
+                    renderCards($el, filtered);
+                    $(this).fadeIn(200);
+                });
+            }
+        }
+    }
+});
+
+function renderCards($container, posts) {
+    const html = _.map(posts, post => `
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">${post.title}</h4>
+                <p class="card-text">${_.truncate(post.excerpt, { length: 120 })}</p>
+                <a href="/post/${post.slug}" class="btn btn-outline">Read More</a>
+            </div>
+        </div>
+    `).join('');
+
+    $container.find('.cards-container').html(html);
+}</pre>
+
+            <h4 class="category-title">Sortable Cards</h4>
+            <pre class="code-block">$.setup({
+    '#team-grid': {
+        initial: {
+            data: { members: [] }
+        },
+        events: {
+            ready: async (e, $el) => {
+                const members = await Domma.http.get('/api/team');
+                $el.data('members', members);
+                renderTeam($el, members);
+            },
+
+            'change #sort-by': (e, $el) => {
+                const sortBy = $(e.target).val();
+                const members = $el.data('members');
+
+                // Sort with utils
+                const sorted = sortBy === 'name'
+                    ? _.sortBy(members, 'name')
+                    : _.orderBy(members, ['role', 'name'], ['asc', 'asc']);
+
+                renderTeam($el, sorted);
+            }
+        }
+    }
+});
+
+function renderTeam($container, members) {
+    const html = _.map(members, member => `
+        <div class="card text-center">
+            <img src="${member.avatar}" alt="${member.name}"
+                 class="card-img-top" style="border-radius: 50%; width: 100px; margin: 1rem auto;">
+            <div class="card-body">
+                <h4 class="card-title">${member.name}</h4>
+                <p class="card-text">${member.role}</p>
+            </div>
+        </div>
+    `).join('');
+
+    $container.find('.team-container').html(html);
+}</pre>
+
+            <h4 class="category-title">Interactive Card Actions</h4>
+            <pre class="code-block">$.setup({
+    '.product-card': {
+        component: 'card',
+        options: { hover: true, clickable: true },
+        events: {
+            click: (e, $card) => {
+                const productId = $card.attr('data-product');
+                window.location.href = `/product/${productId}`;
+            },
+
+            'click .btn-favorite': (e) => {
+                e.stopPropagation(); // Don't trigger card click
+
+                const $btn = $(e.currentTarget);
+                const $card = $btn.closest('.card');
+                const productId = $card.attr('data-product');
+
+                // Toggle favorite
+                $btn.toggleClass('active');
+                const isFavorite = $btn.hasClass('active');
+
+                Domma.http.post('/api/favorites', { productId, favorite: isFavorite })
+                    .then(() => {
+                        Domma.elements.toast.success(
+                            isFavorite ? 'Added to favorites' : 'Removed from favorites'
+                        );
+                    });
+            },
+
+            'mouseenter': (e, $card) => {
+                $card.find('.quick-actions').fadeIn(200);
+            },
+
+            'mouseleave': (e, $card) => {
+                $card.find('.quick-actions').fadeOut(200);
+            }
         }
     }
 });</pre>
 
-            <h4 class="category-title mt-4">Demo</h4>
-            <div class="demo-area">
-                <div class="grid grid-cols-1"
-                     style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--dm-space-4);">
-                    <div class="config-demo-card card">
-                        <div class="card-body">
-                            <h4 class="card-title">Config Card 1</h4>
-                            <p class="card-text">Hover enabled</p>
-                        </div>
+            <h4 class="category-title">Benefits of Hybrid Approach</h4>
+            <ul class="mb-4">
+                <li><strong>Performance</strong> - CSS handles layout instantly, JS loads dynamic content</li>
+                <li><strong>Flexibility</strong> - Static cards + dynamic data = powerful combination</li>
+                <li><strong>Interactivity</strong> - Filtering, sorting, actions enhance UX</li>
+                <li><strong>Maintainability</strong> - Centralized logic with $.setup()</li>
+            </ul>
+
+            <h4 class="category-title">CSS-Only vs CSS+JS Hybrid</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <p class="font-semibold mb-2">CSS-Only (Static)</p>
+                    <pre class="code-block" style="font-size: 0.85em;">&lt;div class="card"&gt;
+    &lt;img src="image.jpg"
+         class="card-img-top"
+         alt="Product"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h4 class="card-title"&gt;
+            Static Product
+        &lt;/h4&gt;
+        &lt;p class="card-text"&gt;
+            Fixed content
+        &lt;/p&gt;
+        &lt;a href="#" class="btn"&gt;
+            View
+        &lt;/a&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- No dynamic content --&gt;</pre>
+                </div>
+                <div>
+                    <p class="font-semibold mb-2">CSS+JS Hybrid (Dynamic)</p>
+                    <pre class="code-block" style="font-size: 0.85em;">&lt;div id="products"&gt;
+    &lt;!-- Cards loaded via JS --&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+$.setup({
+    '#products': {
+        events: {
+            ready: async (e, $el) => {
+                const products = await
+                    Domma.http.get('/api/products');
+
+                const html = _.map(products, p => `
+                    <div class="card">
+                        ...
                     </div>
-                    <div class="config-demo-card card">
-                        <div class="card-body">
-                            <h4 class="card-title">Config Card 2</h4>
-                            <p class="card-text">Hover enabled</p>
-                        </div>
-                    </div>
-                    <div class="config-demo-card card">
-                        <div class="card-body">
-                            <h4 class="card-title">Config Card 3</h4>
-                            <p class="card-text">Hover enabled</p>
-                        </div>
-                    </div>
+                `).join('');
+
+                $el.html(html);
+            }
+        }
+    }
+});
+&lt;/script&gt;</pre>
                 </div>
             </div>
         </div>

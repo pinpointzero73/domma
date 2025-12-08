@@ -378,6 +378,325 @@ const xml = await Domma.http.post('/api/xml', xmlData, {
         </div>
     </section>
 
+    <!-- Service Layer Pattern -->
+    <section class="card mb-6" data-section="Service Layer Pattern">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Service Layer & Configuration Patterns</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Organize API requests using service layer classes and centralized configuration for better
+                maintainability and testability.
+            </p>
+
+            <h4 class="font-semibold mb-3">API Service Class</h4>
+            <pre class="code-block">// Create a service class for your API
+class UserService {
+    constructor(baseURL = '/api') {
+        this.baseURL = baseURL;
+    }
+
+    async getAll() {
+        return Domma.http.get(`${this.baseURL}/users`);
+    }
+
+    async getById(id) {
+        return Domma.http.get(`${this.baseURL}/users/${id}`);
+    }
+
+    async create(userData) {
+        return Domma.http.post(`${this.baseURL}/users`, userData);
+    }
+
+    async update(id, userData) {
+        return Domma.http.put(`${this.baseURL}/users/${id}`, userData);
+    }
+
+    async delete(id) {
+        return Domma.http.delete(`${this.baseURL}/users/${id}`);
+    }
+
+    async search(query) {
+        return Domma.http.get(`${this.baseURL}/users/search?q=${encodeURIComponent(query)}`);
+    }
+}
+
+// Usage
+const userService = new UserService();
+const users = await userService.getAll();
+const user = await userService.getById(123);</pre>
+
+            <h4 class="font-semibold mb-3 mt-4">Centralized API Configuration</h4>
+            <pre class="code-block">// Define all API endpoints in config
+const apiConfig = {
+    baseURL: 'https://api.example.com',
+    endpoints: {
+        users: {
+            list: '/users',
+            get: '/users/:id',
+            create: '/users',
+            update: '/users/:id',
+            delete: '/users/:id'
+        },
+        posts: {
+            list: '/posts',
+            get: '/posts/:id',
+            byUser: '/users/:userId/posts'
+        }
+    },
+    headers: {
+        'Authorization': 'Bearer token123',
+        'X-App-Version': '1.0.0'
+    }
+};
+
+// Generic API client
+class APIClient {
+    constructor(config) {
+        this.config = config;
+    }
+
+    buildURL(endpoint, params = {}) {
+        let url = this.config.baseURL + endpoint;
+        // Replace :param placeholders
+        Object.entries(params).forEach(([key, value]) => {
+            url = url.replace(`:${key}`, value);
+        });
+        return url;
+    }
+
+    async request(method, endpoint, data = null, params = {}) {
+        const url = this.buildURL(endpoint, params);
+        const options = { headers: this.config.headers };
+
+        if (method === 'GET') {
+            return Domma.http.get(url, options);
+        } else if (method === 'POST') {
+            return Domma.http.post(url, data, options);
+        } else if (method === 'PUT') {
+            return Domma.http.put(url, data, options);
+        } else if (method === 'DELETE') {
+            return Domma.http.delete(url, options);
+        }
+    }
+}
+
+// Usage
+const api = new APIClient(apiConfig);
+
+// Get user by ID
+const user = await api.request('GET', apiConfig.endpoints.users.get, null, { id: 123 });
+
+// Create new user
+const newUser = await api.request('POST', apiConfig.endpoints.users.create, {
+    name: 'Alice',
+    email: 'alice@example.com'
+});</pre>
+
+            <h4 class="font-semibold mb-3 mt-4">Using $.setup() for API Interactions</h4>
+            <pre class="code-block">// Declaratively handle API-driven UI interactions
+$.setup({
+    '#user-list': {
+        events: {
+            ready: async (e, $el) => {
+                // Load users when component ready
+                const users = await userService.getAll();
+                const html = users.map(u => `
+                    <div class="user-card" data-id="${u.id}">
+                        <h3>${u.name}</h3>
+                        <p>${u.email}</p>
+                        <button class="btn-edit">Edit</button>
+                        <button class="btn-delete">Delete</button>
+                    </div>
+                `).join('');
+                $el.html(html);
+            }
+        }
+    },
+
+    '#user-form': {
+        events: {
+            submit: async (e, $el) => {
+                e.preventDefault();
+
+                const formData = {
+                    name: $el.find('[name="name"]').val(),
+                    email: $el.find('[name="email"]').val()
+                };
+
+                try {
+                    const user = await userService.create(formData);
+                    Domma.elements.toast.success('User created!');
+                    $('#user-list').trigger('reload');
+                } catch (err) {
+                    Domma.elements.toast.error('Failed: ' + err.message);
+                }
+            }
+        }
+    },
+
+    '#search-users': {
+        events: {
+            input: _.debounce(async (e, $el) => {
+                const query = $el.val();
+                if (query.length < 3) return;
+
+                const results = await userService.search(query);
+                $('#search-results').html(
+                    results.map(u => `<div>${u.name}</div>`).join('')
+                );
+            }, 300)
+        }
+    }
+});</pre>
+
+            <h4 class="font-semibold mb-3 mt-4">Request/Response Interceptor Pattern</h4>
+            <pre class="code-block">// Wrap Domma.http with interceptors
+class HTTPClient {
+    constructor() {
+        this.requestInterceptors = [];
+        this.responseInterceptors = [];
+        this.errorInterceptors = [];
+    }
+
+    addRequestInterceptor(fn) {
+        this.requestInterceptors.push(fn);
+    }
+
+    addResponseInterceptor(fn) {
+        this.responseInterceptors.push(fn);
+    }
+
+    addErrorInterceptor(fn) {
+        this.errorInterceptors.push(fn);
+    }
+
+    async request(method, url, data = null, config = {}) {
+        // Run request interceptors
+        for (const interceptor of this.requestInterceptors) {
+            config = await interceptor(config);
+        }
+
+        try {
+            // Make request
+            let response;
+            if (method === 'GET') {
+                response = await Domma.http.get(url, config);
+            } else if (method === 'POST') {
+                response = await Domma.http.post(url, data, config);
+            } else if (method === 'PUT') {
+                response = await Domma.http.put(url, data, config);
+            } else if (method === 'DELETE') {
+                response = await Domma.http.delete(url, config);
+            }
+
+            // Run response interceptors
+            for (const interceptor of this.responseInterceptors) {
+                response = await interceptor(response);
+            }
+
+            return response;
+        } catch (error) {
+            // Run error interceptors
+            for (const interceptor of this.errorInterceptors) {
+                error = await interceptor(error);
+            }
+            throw error;
+        }
+    }
+}
+
+// Usage
+const client = new HTTPClient();
+
+// Add auth header to all requests
+client.addRequestInterceptor(async (config) => {
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+        config.headers = config.headers || {};
+        config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+});
+
+// Log all responses
+client.addResponseInterceptor(async (response) => {
+    console.log('API Response:', response);
+    return response;
+});
+
+// Handle 401 errors globally
+client.addErrorInterceptor(async (error) => {
+    if (error.status === 401) {
+        // Redirect to login
+        window.location = '/login';
+    }
+    return error;
+});</pre>
+
+            <h4 class="font-semibold mb-3 mt-4">Benefits of Service Layer Pattern</h4>
+            <ul class="mb-4">
+                <li><strong>Centralization</strong> - All API logic in dedicated service classes</li>
+                <li><strong>Reusability</strong> - Share endpoints across components</li>
+                <li><strong>Testability</strong> - Easy to mock services for unit tests</li>
+                <li><strong>Type Safety</strong> - Define interfaces for API responses</li>
+                <li><strong>Maintainability</strong> - Change endpoint URLs in one place</li>
+                <li><strong>Consistency</strong> - Uniform error handling and headers</li>
+            </ul>
+
+            <h4 class="font-semibold mb-3 mt-4">Scattered Requests vs Service Layer</h4>
+            <div class="grid grid-cols-1 grid-cols-md-2 gap-4">
+                <div>
+                    <p class="font-semibold mb-2">Scattered (Hard to Maintain)</p>
+                    <pre class="code-block" style="font-size: 0.85em;">// Component 1
+const users = await Domma.http.get(
+    'https://api.example.com/users'
+);
+
+// Component 2 - different file
+const user = await Domma.http.get(
+    'https://api.example.com/users/' + id
+);
+
+// Component 3 - another file
+await Domma.http.post(
+    'https://api.example.com/users',
+    userData
+);
+
+// URL repeated 3 times
+// Hard to change base URL
+// No consistent error handling</pre>
+                </div>
+                <div>
+                    <p class="font-semibold mb-2">Service Layer (Centralized)</p>
+                    <pre class="code-block" style="font-size: 0.85em;">// services/user.js
+class UserService {
+    baseURL = 'https://api.example.com';
+
+    getAll() {
+        return Domma.http.get(`${this.baseURL}/users`);
+    }
+
+    getById(id) {
+        return Domma.http.get(`${this.baseURL}/users/${id}`);
+    }
+
+    create(data) {
+        return Domma.http.post(`${this.baseURL}/users`, data);
+    }
+}
+
+// Usage anywhere
+const userService = new UserService();
+const users = await userService.getAll();
+const user = await userService.getById(id);
+await userService.create(userData);</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Quick Reference -->
     <section class="card" data-section="Quick Reference">
         <div class="card-header">

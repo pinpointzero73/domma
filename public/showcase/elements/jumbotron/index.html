@@ -221,7 +221,192 @@
     </div>
 </section>
 
-<section class="card mb-6" data-section="Related">
+    <section class="card mb-6" data-section="Hybrid CSS + JavaScript">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Hybrid CSS + JavaScript</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                While jumbotrons work perfectly as CSS-only components, you can enhance them with JavaScript for dynamic
+                content, animations, and interactivity using Domma's declarative configuration.
+            </p>
+
+            <h4 class="category-title">Dynamic Content Updates</h4>
+            <pre class="code-block">// Rotate through multiple messages
+$.setup({
+    '#hero-jumbotron': {
+        initial: {
+            data: {
+                messages: [
+                    { title: 'Launch Your Project', subtitle: 'Build amazing apps with Domma' },
+                    { title: 'Ship Faster', subtitle: 'Zero dependencies, maximum productivity' },
+                    { title: 'Scale Confidently', subtitle: 'Lightweight and performant' }
+                ],
+                currentIndex: 0
+            }
+        },
+        events: {
+            ready: (e, $el) => {
+                const data = $el.data();
+                setInterval(() => {
+                    data.currentIndex = (data.currentIndex + 1) % data.messages.length;
+                    const msg = data.messages[data.currentIndex];
+
+                    $el.find('.jumbotron-title').fadeOut(300, function() {
+                        $(this).text(msg.title).fadeIn(300);
+                    });
+                    $el.find('.jumbotron-subtitle').fadeOut(300, function() {
+                        $(this).text(msg.subtitle).fadeIn(300);
+                    });
+                }, 4000);
+            }
+        }
+    }
+});</pre>
+
+            <h4 class="category-title">Scroll-Based Animations</h4>
+            <pre class="code-block">// Animate jumbotron on scroll into view
+$.setup({
+    '.jumbotron': {
+        initial: {
+            css: { opacity: 0, transform: 'translateY(30px)' }
+        },
+        events: {
+            ready: (e, $el) => {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            $el.animate({
+                                opacity: 1,
+                                transform: 'translateY(0)'
+                            }, 800);
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                });
+                observer.observe($el.get(0));
+            }
+        }
+    }
+});</pre>
+
+            <h4 class="category-title">Interactive CTA Tracking</h4>
+            <pre class="code-block">// Track user interactions with analytics
+$.setup({
+    '#marketing-hero': {
+        events: {
+            'click .btn-primary': (e, $el) => {
+                const title = $el.find('.jumbotron-title').text();
+
+                // Track with analytics
+                if (typeof analytics !== 'undefined') {
+                    analytics.track('Jumbotron CTA Clicked', {
+                        hero: title,
+                        button: $(e.target).text()
+                    });
+                }
+
+                // Show feedback
+                Domma.elements.toast.success('Thanks for your interest!');
+            },
+            'mouseenter': (e, $el) => {
+                $el.find('.jumbotron-actions .btn').addClass('pulse');
+            },
+            'mouseleave': (e, $el) => {
+                $el.find('.jumbotron-actions .btn').removeClass('pulse');
+            }
+        }
+    }
+});</pre>
+
+            <h4 class="category-title">Personalised Content</h4>
+            <pre class="code-block">// Customise jumbotron based on user data
+const user = { name: 'Alice', plan: 'Pro' };
+
+$.setup({
+    '#dashboard-hero': {
+        initial: {
+            html: (el) => {
+                const $content = $(el).find('.jumbotron-content');
+                $content.find('.jumbotron-title').text(`Welcome back, ${user.name}!`);
+                $content.find('.jumbotron-subtitle').text(`You're on the ${user.plan} plan`);
+
+                if (user.plan === 'Free') {
+                    $content.find('.jumbotron-actions').html(`
+                        <button class="btn btn-primary btn-lg">Upgrade to Pro</button>
+                    `);
+                }
+            }
+        }
+    }
+});</pre>
+
+            <h4 class="category-title">Benefits of Hybrid Approach</h4>
+            <ul class="mb-4">
+                <li><strong>Performance</strong> - CSS handles layout/styling instantly, JS adds interactivity only when
+                    needed
+                </li>
+                <li><strong>Progressive Enhancement</strong> - Works without JS, enhanced with JS</li>
+                <li><strong>Maintainability</strong> - Centralised configuration for all dynamic behaviour</li>
+                <li><strong>Flexibility</strong> - Mix static and dynamic content as needed</li>
+            </ul>
+
+            <h4 class="category-title">CSS-Only vs CSS+JS Hybrid</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <p class="font-semibold mb-2">CSS-Only (Default)</p>
+                    <pre class="code-block" style="font-size: 0.85em;">&lt;div class="jumbotron jumbotron-primary"&gt;
+    &lt;div class="jumbotron-content"&gt;
+        &lt;h1 class="jumbotron-title"&gt;
+            Static Title
+        &lt;/h1&gt;
+        &lt;p class="jumbotron-subtitle"&gt;
+            Static subtitle
+        &lt;/p&gt;
+        &lt;div class="jumbotron-actions"&gt;
+            &lt;button class="btn btn-lg"&gt;
+                Click Me
+            &lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- No JavaScript needed --&gt;</pre>
+                </div>
+                <div>
+                    <p class="font-semibold mb-2">CSS+JS Hybrid (Enhanced)</p>
+                    <pre class="code-block" style="font-size: 0.85em;">&lt;div id="hero"
+     class="jumbotron jumbotron-primary"&gt;
+    &lt;div class="jumbotron-content"&gt;
+        &lt;h1 class="jumbotron-title"&gt;
+            Dynamic Title
+        &lt;/h1&gt;
+        &lt;p class="jumbotron-subtitle"&gt;
+            Dynamic subtitle
+        &lt;/p&gt;
+        &lt;div class="jumbotron-actions"&gt;
+            &lt;button class="btn btn-lg"&gt;
+                Click Me
+            &lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+$.setup({
+    '#hero': {
+        events: {
+            'click .btn': () => {
+                // Analytics, animations, etc.
+            }
+        }
+    }
+});
+&lt;/script&gt;</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Related">
     <div class="card-header">
         <h2 class="text-xl font-semibold m-0">Related Elements</h2>
     </div>

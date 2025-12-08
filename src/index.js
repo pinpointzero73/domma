@@ -3,7 +3,7 @@ import {http} from './http.js';
 import {utils} from './utils.js';
 import {configEngine} from './config.js';
 import {models} from './models.js';
-import {elements} from './elements.js';
+import {DesktopNotification, elements} from './elements.js';
 import {dates} from './dates.js';
 import {tables} from './tables.js';
 import {theme} from './theme.js';
@@ -64,6 +64,9 @@ Domma.tables = tables;
 Domma.theme = theme;
 Domma.icons = icons;
 Domma.storage = storage;
+
+// Expose DesktopNotification class for static method access
+Domma.DesktopNotification = DesktopNotification;
 
 // Short aliases
 const $ = Domma;

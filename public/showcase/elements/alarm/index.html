@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alarm - Domma Elements</title>
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <style>
+        .alarm-list {
+            margin-top: 1rem;
+        }
+
+        .alarm-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: var(--dm-surface);
+            border: 1px solid var(--dm-border);
+            border-radius: 6px;
+        }
+
+        .alarm-item.disabled {
+            opacity: 0.6;
+        }
+
+        .alarm-info {
+            flex: 1;
+        }
+
+        .alarm-time {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dm-primary);
+            font-family: 'Courier New', monospace;
+        }
+
+        .alarm-label {
+            color: var(--dm-text-muted);
+            font-size: 0.9rem;
+        }
+
+        .alarm-repeat {
+            font-size: 0.8rem;
+            color: var(--dm-text-muted);
+            font-style: italic;
+        }
+
+        .alarm-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .alarm-controls .btn {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body class="dm-theme-light">
+
+<main class="container py-8">
+
+    <!-- SECTION 1: Overview -->
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Alarm</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Alarm is a scheduled time-based alert system with localStorage persistence. Set alarms for specific
+                times with repeat patterns, and they'll trigger even after page refresh or browser restart.
+            </p>
+
+            <h4 class="category-title">Key Features</h4>
+            <ul class="mb-4">
+                <li>localStorage persistence - survives page reloads and browser restarts</li>
+                <li>Singleton pattern - one instance manages all alarms globally</li>
+                <li>Flexible repeat patterns: daily, weekdays, weekends, custom days, one-time</li>
+                <li>Desktop notification integration when alarms trigger</li>
+                <li>Optional sound playback on alarm trigger</li>
+                <li>Snooze functionality with configurable duration</li>
+                <li>Enable/disable individual alarms without deletion</li>
+                <li>Automatic one-time alarm disabling after trigger</li>
+                <li>Next alarm calculation and scheduling</li>
+            </ul>
+
+            <h4 class="category-title">When to Use Alarms</h4>
+            <ul class="mb-4">
+                <li><strong>Daily Routines</strong>: Morning routine, meal times, medication reminders</li>
+                <li><strong>Work Schedule</strong>: Meeting reminders, break times, end of day alerts</li>
+                <li><strong>Time Management</strong>: Task deadlines, time blocking, focus periods</li>
+                <li><strong>Fitness & Health</strong>: Workout times, water intake, posture checks</li>
+                <li><strong>Recurring Events</strong>: Weekly team calls, monthly reports, quarterly reviews</li>
+            </ul>
+
+            <h4 class="category-title">Basic Usage</h4>
+            <pre class="code-block">// Create alarm manager (singleton)
+const alarms = Domma.elements.alarm({
+    onTrigger: (alarm) => {
+        console.log('Alarm triggered:', alarm);
+    }
+});
+
+// Add an alarm
+alarms.add({
+    time: '09:00',              // 24-hour format
+    label: 'Morning Standup',
+    repeat: 'weekdays',         // Monday-Friday
+    notification: true
+});
+
+// Alarms persist automatically to localStorage
+// They'll trigger even after browser restart!</pre>
+        </div>
+    </section>
+
+    <!-- SECTION 2: Quick Start -->
+    <section class="card mb-6" data-section="Quick Start">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Quick Start</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Set your first alarm in seconds. Alarms persist automatically.
+            </p>
+
+            <h4 class="category-title">Simplest One-Time Alarm</h4>
+            <pre class="code-block">// Create alarm manager
+const alarms = Domma.elements.alarm();
+
+// Add one-time alarm (1 minute from now)
+const now = new Date();
+now.setMinutes(now.getMinutes() + 1);
+const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+alarms.add({
+    time: time,
+    label: 'Quick Reminder',
+    notification: true
+});</pre>
+
+            <div class="demo-area">
+                <button class="btn btn-primary" id="quick-alarm">Set 1-Minute Alarm</button>
+                <p id="quick-status" class="mt-2"></p>
+            </div>
+
+            <h4 class="category-title">Simplest Daily Alarm</h4>
+            <pre class="code-block">// Daily morning alarm
+alarms.add({
+    time: '08:00',
+    label: 'Morning Routine',
+    repeat: 'daily',
+    notification: true
+});</pre>
+
+            <div class="demo-area">
+                <button class="btn btn-primary" id="quick-daily">Set Daily 8 AM Alarm</button>
+                <p id="daily-status" class="mt-2"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: Tutorial -->
+    <section class="card mb-6" data-section="Tutorial">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Step-by-Step Tutorial</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Build a complete alarm system with multiple alarms, notifications, and management UI.
+            </p>
+
+            <h4 class="category-title">Step 1: Initialize Alarm Manager</h4>
+            <pre class="code-block">const alarmManager = Domma.elements.alarm({
+    storageKey: 'my-app-alarms',  // Custom storage key
+    checkInterval: 30000,          // Check every 30 seconds
+    onTrigger: (alarm) => {
+        console.log('Alarm triggered:', alarm);
+        // Show visual feedback
+        showAlarmModal(alarm);
+    },
+    onAlarmAdd: (alarm) => {
+        console.log('Alarm added:', alarm);
+        updateAlarmList();
+    },
+    onAlarmRemove: (alarm) => {
+        console.log('Alarm removed:', alarm);
+        updateAlarmList();
+    }
+});</pre>
+
+            <h4 class="category-title">Step 2: Add Multiple Alarms</h4>
+            <pre class="code-block">// Morning routine
+alarmManager.add({
+    time: '07:00',
+    label: 'Wake Up',
+    repeat: 'weekdays',
+    notification: true,
+    notificationOptions: {
+        title: 'Good Morning!',
+        body: 'Time to start your day',
+        requireInteraction: true
+    }
+});
+
+// Lunch break
+alarmManager.add({
+    time: '12:30',
+    label: 'Lunch Break',
+    repeat: 'weekdays',
+    notification: true
+});
+
+// End of work
+alarmManager.add({
+    time: '17:00',
+    label: 'End of Workday',
+    repeat: 'weekdays',
+    notification: true
+});</pre>
+
+            <h4 class="category-title">Step 3: Display and Manage Alarms</h4>
+            <pre class="code-block">function updateAlarmList() {
+    const alarms = alarmManager.getAlarms();
+    const listEl = document.getElementById('alarm-list');
+
+    listEl.innerHTML = alarms.map(alarm => `
+        <div class="alarm-item ${alarm.enabled ? '' : 'disabled'}">
+            <div class="alarm-info">
+                <div class="alarm-time">${alarm.time}</div>
+                <div class="alarm-label">${alarm.label}</div>
+                <div class="alarm-repeat">${getRepeatText(alarm.repeat)}</div>
+            </div>
+            <div class="alarm-controls">
+                <button onclick="toggleAlarm('${alarm.id}')">
+                    ${alarm.enabled ? 'Disable' : 'Enable'}
+                </button>
+                <button onclick="deleteAlarm('${alarm.id}')">Delete</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function toggleAlarm(id) {
+    alarmManager.toggle(id);
+    updateAlarmList();
+}
+
+function deleteAlarm(id) {
+    alarmManager.remove(id);
+    updateAlarmList();
+}</pre>
+
+            <div class="demo-area">
+                <h4>Tutorial Demo: Alarm Manager</h4>
+                <button class="btn btn-primary" id="tutorial-add-morning">Add Morning Alarm</button>
+                <button class="btn btn-primary" id="tutorial-add-lunch">Add Lunch Alarm</button>
+                <button class="btn btn-primary" id="tutorial-add-evening">Add Evening Alarm</button>
+                <div id="tutorial-alarm-list" class="alarm-list"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: Examples -->
+    <section class="card mb-6" data-section="Examples">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Real-World Examples</h2>
+        </div>
+        <div class="card-body">
+
+            <h4 class="category-title">1. Workday Schedule</h4>
+            <pre class="code-block">const workdayAlarms = [
+    { time: '09:00', label: 'Morning Standup', repeat: 'weekdays' },
+    { time: '10:30', label: 'Focus Time Starts', repeat: 'weekdays' },
+    { time: '12:00', label: 'Lunch Break', repeat: 'weekdays' },
+    { time: '15:00', label: 'Afternoon Check-in', repeat: 'weekdays' },
+    { time: '17:00', label: 'End of Day', repeat: 'weekdays' }
+];
+
+const alarms = Domma.elements.alarm();
+workdayAlarms.forEach(alarm => {
+    alarms.add({
+        ...alarm,
+        notification: true,
+        notificationOptions: {
+            requireInteraction: true
+        }
+    });
+});</pre>
+
+            <div class="demo-area">
+                <button class="btn btn-primary" id="example-workday">Setup Workday Alarms</button>
+                <div id="example-workday-list" class="alarm-list"></div>
+            </div>
+
+            <h4 class="category-title">2. Fitness Reminders</h4>
+            <pre class="code-block">// Custom workout schedule
+alarms.add({
+    time: '06:30',
+    label: 'Morning Workout',
+    repeat: ['mon', 'wed', 'fri'],  // Custom days
+    notification: true,
+    sound: true,
+    soundUrl: '/sounds/workout-bell.mp3'
+});
+
+alarms.add({
+    time: '12:00',
+    label: 'Lunchtime Walk',
+    repeat: 'weekdays',
+    notification: true
+});
+
+alarms.add({
+    time: '15:00',
+    label: 'Posture Check',
+    repeat: 'daily',
+    notification: true
+});</pre>
+
+            <div class="demo-area">
+                <button class="btn btn-primary" id="example-fitness">Setup Fitness Alarms</button>
+                <div id="example-fitness-list" class="alarm-list"></div>
+            </div>
+
+            <h4 class="category-title">3. Medication Reminders</h4>
+            <pre class="code-block">const medications = [
+    { time: '08:00', label: 'Morning Medication', repeat: 'daily' },
+    { time: '20:00', label: 'Evening Medication', repeat: 'daily' }
+];
+
+medications.forEach(med => {
+    alarms.add({
+        ...med,
+        notification: true,
+        notificationOptions: {
+            title: 'Medication Reminder',
+            body: med.label,
+            requireInteraction: true,  // Must be acknowledged
+            icon: '/icons/medical.png'
+        }
+    });
+});</pre>
+
+            <div class="demo-area">
+                <button class="btn btn-primary" id="example-medication">Setup Medication Reminders</button>
+                <div id="example-medication-list" class="alarm-list"></div>
+            </div>
+
+            <h4 class="category-title">4. Snooze Functionality</h4>
+            <pre class="code-block">const alarms = Domma.elements.alarm({
+    onTrigger: async (alarm) => {
+        // Show modal with snooze option
+        const result = await Domma.elements.confirm(
+            `Alarm: ${alarm.label}\nSnooze for 10 minutes?`,
+            {
+                title: 'Alarm Triggered',
+                confirmText: 'Snooze',
+                cancelText: 'Dismiss'
+            }
+        );
+
+        if (result) {
+            // Snooze for 10 minutes
+            alarms.snooze(alarm.id, 600000);
+            console.log('Alarm snoozed');
+        } else {
+            // User dismissed - alarm will re-trigger based on repeat
+            console.log('Alarm dismissed');
+        }
+    }
+});</pre>
+
+            <div class="demo-area">
+                <button class="btn btn-primary" id="example-snooze">Test Snooze (1 min alarm)</button>
+                <p id="snooze-status" class="mt-2"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: Best Practices -->
+    <section class="card mb-6" data-section="Best Practices">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Best Practices</h2>
+        </div>
+        <div class="card-body">
+
+            <h4 class="category-title">✅ Do's</h4>
+            <ul class="mb-4">
+                <li><strong>Use 24-hour time format</strong> - Alarms use HH:MM format (00:00 to 23:59)</li>
+                <li><strong>Provide descriptive labels</strong> - Help users identify alarms in the list</li>
+                <li><strong>Use appropriate repeat patterns</strong> - weekdays for work, daily for habits, custom for
+                    flexible schedules
+                </li>
+                <li><strong>Enable requireInteraction for important alarms</strong> - Medication, meetings, critical
+                    tasks
+                </li>
+                <li><strong>Implement snooze for user convenience</strong> - Give users option to delay alarms</li>
+                <li><strong>Show next alarm prominently</strong> - Use getNextAlarm() to display upcoming alert</li>
+                <li><strong>Provide alarm management UI</strong> - List, enable/disable, delete options</li>
+                <li><strong>Test alarm timing</strong> - Set test alarms 1-2 minutes ahead to verify functionality</li>
+            </ul>
+
+            <h4 class="category-title">❌ Don'ts</h4>
+            <ul class="mb-4">
+                <li><strong>Don't set too many alarms</strong> - Users will experience alarm fatigue</li>
+                <li><strong>Don't use 12-hour time</strong> - Always convert to 24-hour format (14:30 not 2:30 PM)</li>
+                <li><strong>Don't forget to disable one-time alarms</strong> - System auto-disables after trigger</li>
+                <li><strong>Don't rely solely on alarms for critical timing</strong> - Consider server-side scheduling
+                </li>
+                <li><strong>Don't use very short check intervals</strong> - 30-60 seconds is sufficient, 5s wastes CPU
+                </li>
+                <li><strong>Don't override user's alarm preferences</strong> - Let users manage their own alarms</li>
+            </ul>
+
+            <h4 class="category-title">Persistence Pattern</h4>
+            <pre class="code-block">// Alarms automatically persist, but good to verify
+function setupAlarms() {
+    const alarms = Domma.elements.alarm();
+
+    // Check if alarms already exist (from previous session)
+    const existing = alarms.getAlarms();
+
+    if (existing.length === 0) {
+        // First time setup
+        setupDefaultAlarms(alarms);
+    } else {
+        // Alarms loaded from localStorage
+        console.log(`Loaded ${existing.length} alarms from storage`);
+        displayAlarms(existing);
+    }
+}</pre>
+
+            <h4 class="category-title">Next Alarm Display Pattern</h4>
+            <pre class="code-block">function showNextAlarm() {
+    const alarms = Domma.elements.alarm();
+    const next = alarms.getNextAlarm();
+
+    if (next) {
+        const triggerDate = new Date(next.nextTrigger);
+        const timeUntil = triggerDate - new Date();
+        const hours = Math.floor(timeUntil / 3600000);
+        const minutes = Math.floor((timeUntil % 3600000) / 60000);
+
+        document.getElementById('next-alarm').innerHTML = `
+            <strong>Next Alarm:</strong> ${next.label}<br>
+            <em>In ${hours}h ${minutes}m (${next.time})</em>
+        `;
+    } else {
+        document.getElementById('next-alarm').textContent = 'No alarms set';
+    }
+}
+
+// Update every minute
+setInterval(showNextAlarm, 60000);
+showNextAlarm();</pre>
+        </div>
+    </section>
+
+    <!-- SECTION 6: API Reference -->
+    <section class="card mb-6" data-section="API Reference">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Complete API Reference</h2>
+        </div>
+        <div class="card-body">
+
+            <h4 class="category-title">Factory Method</h4>
+            <pre class="code-block">// Singleton - always returns same instance
+elements.alarm(options)</pre>
+
+            <h4 class="category-title">Options</h4>
+            <table class="options-table">
+                <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>alarms</code></td>
+                    <td>array</td>
+                    <td>[]</td>
+                    <td>Initial alarms to add (if not in storage)</td>
+                </tr>
+                <tr>
+                    <td><code>timezone</code></td>
+                    <td>string</td>
+                    <td>'local'</td>
+                    <td>Timezone for alarm calculations</td>
+                </tr>
+                <tr>
+                    <td><code>checkInterval</code></td>
+                    <td>number</td>
+                    <td>30000</td>
+                    <td>Check frequency in milliseconds</td>
+                </tr>
+                <tr>
+                    <td><code>storageKey</code></td>
+                    <td>string</td>
+                    <td>'domma-alarms'</td>
+                    <td>localStorage key for persistence</td>
+                </tr>
+                <tr>
+                    <td><code>onTrigger</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Callback when alarm triggers (alarm)</td>
+                </tr>
+                <tr>
+                    <td><code>onSnooze</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Callback when alarm snoozed (alarm, duration)</td>
+                </tr>
+                <tr>
+                    <td><code>onAlarmAdd</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Callback when alarm added (alarm)</td>
+                </tr>
+                <tr>
+                    <td><code>onAlarmRemove</code></td>
+                    <td>function</td>
+                    <td>null</td>
+                    <td>Callback when alarm removed (alarm)</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h4 class="category-title">Alarm Object Structure</h4>
+            <pre class="code-block">{
+    id: 'alarm-1',              // Auto-generated
+    time: '14:30',              // HH:MM format (24-hour)
+    label: 'Meeting',           // Alarm description
+    enabled: true,              // Active state
+    repeat: 'weekdays',         // Repeat pattern (see below)
+    notification: true,         // Show desktop notification
+    notificationOptions: {},    // Notification API options
+    sound: false,               // Play sound on trigger
+    soundUrl: null,             // URL to sound file
+    lastTriggered: 1234567890,  // Timestamp of last trigger
+    snoozedUntil: null          // Snooze expiration timestamp
+}</pre>
+
+            <h4 class="category-title">Repeat Patterns</h4>
+            <pre class="code-block">// String patterns
+'daily'           // Every day
+'weekdays'        // Monday-Friday
+'weekends'        // Saturday-Sunday
+
+// Array of days (lowercase, 3-letter)
+['mon', 'wed', 'fri']  // Custom days
+['tue', 'thu']         // Tuesday and Thursday
+
+// One-time alarm
+null              // No repeat (auto-disables after trigger)</pre>
+
+            <h4 class="category-title">Instance Methods</h4>
+            <pre class="code-block">// Add/Remove alarms
+alarms.add(alarm)           // Returns alarm with id
+alarms.remove(id)           // Returns boolean
+alarms.update(id, changes)  // Returns updated alarm or null
+
+// Enable/Disable
+alarms.enable(id)           // Returns boolean
+alarms.disable(id)          // Returns boolean
+alarms.toggle(id)           // Returns new enabled state
+
+// Snooze
+alarms.snooze(id, duration) // Duration in ms, default 300000 (5 min)
+
+// Query
+alarms.getAlarms()          // Returns array of all alarms
+alarms.getAlarm(id)         // Returns alarm or null
+alarms.getNextAlarm()       // Returns next alarm with nextTrigger date
+
+// Management
+alarms.clearAll()           // Remove all alarms
+alarms.destroy()            // Stop checking and cleanup</pre>
+        </div>
+    </section>
+
+    <!-- SECTION 7: Config Engine -->
+    <section class="card mb-6" data-section="Config Engine">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Declarative Configuration</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                While alarms are typically managed programmatically, you can initialize the alarm system via config.
+            </p>
+
+            <h4 class="category-title">Initialize with Default Alarms</h4>
+            <pre class="code-block">$.setup({
+    body: {
+        // No selector needed - alarm is singleton
+    }
+});
+
+// Then use programmatically
+const alarms = Domma.elements.alarm({
+    alarms: [
+        { time: '09:00', label: 'Daily Standup', repeat: 'weekdays' },
+        { time: '17:00', label: 'End of Day', repeat: 'weekdays' }
+    ],
+    onTrigger: (alarm) => {
+        Domma.elements.notify(alarm.label, {
+            body: `Alarm at ${alarm.time}`,
+            requireInteraction: true
+        });
+    }
+});</pre>
+        </div>
+    </section>
+
+    <!-- SECTION 8: Related Elements -->
+    <section class="card mb-6" data-section="Related Elements">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Related Components</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Alarm works seamlessly with other Domma components for complete scheduling solutions.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="related-card">
+                    <h4>DesktopNotification</h4>
+                    <p>Desktop alerts when alarms trigger</p>
+                    <a href="../notification/" class="btn btn-sm btn-outline">View Notification →</a>
+                </div>
+
+                <div class="related-card">
+                    <h4>Timer</h4>
+                    <p>Countdown timers for immediate timing needs</p>
+                    <a href="../timer/" class="btn btn-sm btn-outline">View Timer →</a>
+                </div>
+
+                <div class="related-card">
+                    <h4>Modal</h4>
+                    <p>Display alarm details and snooze options</p>
+                    <a href="../modal/" class="btn btn-sm btn-outline">View Modal →</a>
+                </div>
+
+                <div class="related-card">
+                    <h4>Form Elements</h4>
+                    <p>Time pickers for setting alarm times</p>
+                    <a href="../forms/" class="btn btn-sm btn-outline">View Forms →</a>
+                </div>
+            </div>
+
+            <h4 class="category-title mt-6">When to Use Each</h4>
+            <ul>
+                <li><strong>Alarm</strong>: Scheduled events at specific times of day (09:00, 14:30, etc.)</li>
+                <li><strong>Timer</strong>: Countdown from current time (5 minutes from now, 1 hour, etc.)</li>
+                <li><strong>Notification</strong>: Immediate desktop alerts for any event</li>
+            </ul>
+        </div>
+    </section>
+
+</main>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    // Initialize alarm manager
+    const alarmManager = Domma.elements.alarm({
+        onTrigger: async (alarm) => {
+            console.log('Alarm triggered:', alarm);
+            await Domma.elements.alert(
+                `Alarm: ${alarm.label}\nTime: ${alarm.time}`,
+                {title: 'Alarm Triggered'}
+            );
+        },
+        onAlarmAdd: () => updateAllLists(),
+        onAlarmRemove: () => updateAllLists()
+    });
+
+    // Helper to format alarm time (next minute)
+    function getNextMinuteTime(minutesAhead = 1) {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() + minutesAhead);
+        return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    }
+
+    // Helper to render alarm list
+    function renderAlarmList(containerId, alarms) {
+        const $container = $('#' + containerId);
+        if (!alarms || alarms.length === 0) {
+            $container.html('<p class="text-muted">No alarms set</p>');
+            return;
+        }
+
+        $container.html(alarms.map(alarm => `
+            <div class="alarm-item ${alarm.enabled ? '' : 'disabled'}">
+                <div class="alarm-info">
+                    <div class="alarm-time">${alarm.time}</div>
+                    <div class="alarm-label">${alarm.label}</div>
+                    <div class="alarm-repeat">${getRepeatText(alarm.repeat)}</div>
+                </div>
+                <div class="alarm-controls">
+                    <button class="btn btn-sm btn-secondary" onclick="toggleAlarm('${alarm.id}')">
+                        ${alarm.enabled ? 'Disable' : 'Enable'}
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteAlarm('${alarm.id}')">Delete</button>
+                </div>
+            </div>
+        `).join(''));
+    }
+
+    function getRepeatText(repeat) {
+        if (!repeat) return 'One-time';
+        if (repeat === 'daily') return 'Daily';
+        if (repeat === 'weekdays') return 'Weekdays';
+        if (repeat === 'weekends') return 'Weekends';
+        if (Array.isArray(repeat)) return repeat.join(', ');
+        return repeat;
+    }
+
+    window.toggleAlarm = function (id) {
+        alarmManager.toggle(id);
+        updateAllLists();
+    };
+
+    window.deleteAlarm = function (id) {
+        alarmManager.remove(id);
+        updateAllLists();
+    };
+
+    function updateAllLists() {
+        const allAlarms = alarmManager.getAlarms();
+        ['tutorial-alarm-list', 'example-workday-list', 'example-fitness-list', 'example-medication-list'].forEach(id => {
+            if ($('#' + id).length) renderAlarmList(id, allAlarms);
+        });
+    }
+
+    // Quick Start demos
+    $('#quick-alarm').on('click', () => {
+        const time = getNextMinuteTime(1);
+        alarmManager.add({
+            time: time,
+            label: 'Quick Reminder',
+            notification: true
+        });
+        $('#quick-status').text(`✓ Alarm set for ${time}`).removeClass().addClass('mt-2 text-success');
+    });
+
+    $('#quick-daily').on('click', () => {
+        alarmManager.add({
+            time: '08:00',
+            label: 'Morning Routine',
+            repeat: 'daily',
+            notification: true
+        });
+        $('#daily-status').text('✓ Daily alarm set for 08:00').removeClass().addClass('mt-2 text-success');
+    });
+
+    // Tutorial demos
+    $('#tutorial-add-morning').on('click', () => {
+        alarmManager.add({
+            time: '07:00',
+            label: 'Morning Alarm',
+            repeat: 'weekdays',
+            notification: true
+        });
+    });
+
+    $('#tutorial-add-lunch').on('click', () => {
+        alarmManager.add({
+            time: '12:30',
+            label: 'Lunch Break',
+            repeat: 'weekdays',
+            notification: true
+        });
+    });
+
+    $('#tutorial-add-evening').on('click', () => {
+        alarmManager.add({
+            time: '17:00',
+            label: 'End of Day',
+            repeat: 'weekdays',
+            notification: true
+        });
+    });
+
+    // Example demos
+    $('#example-workday').on('click', () => {
+        ['09:00', '12:00', '15:00', '17:00'].forEach((time, i) => {
+            const labels = ['Standup', 'Lunch', 'Break', 'End of Day'];
+            alarmManager.add({
+                time: time,
+                label: labels[i],
+                repeat: 'weekdays',
+                notification: true
+            });
+        });
+    });
+
+    $('#example-fitness').on('click', () => {
+        alarmManager.add({time: '06:30', label: 'Workout', repeat: ['mon', 'wed', 'fri'], notification: true});
+        alarmManager.add({time: '12:00', label: 'Walk', repeat: 'weekdays', notification: true});
+    });
+
+    $('#example-medication').on('click', () => {
+        alarmManager.add({time: '08:00', label: 'Morning Meds', repeat: 'daily', notification: true});
+        alarmManager.add({time: '20:00', label: 'Evening Meds', repeat: 'daily', notification: true});
+    });
+
+    $('#example-snooze').on('click', () => {
+        const time = getNextMinuteTime(1);
+        const alarm = alarmManager.add({
+            time: time,
+            label: 'Snooze Test',
+            notification: true
+        });
+
+        $('#snooze-status').text(`Test alarm set for ${time}. Will trigger with snooze option.`).removeClass().addClass('mt-2 text-info');
+    });
+
+    // Initial load
+    updateAllLists();
+</script>
+
+</body>
+</html>

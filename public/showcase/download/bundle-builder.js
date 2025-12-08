@@ -1,6 +1,7 @@
 /**
  * Bundle Builder Interactive Component
  * Handles module selection, dependency resolution, and bundle generation
+ * REFACTORED: Now uses Domma APIs throughout
  */
 
 class BundleBuilder {
@@ -58,123 +59,102 @@ class BundleBuilder {
             }
         };
 
-        // Find tier containers
-        const tierContainers = document.querySelectorAll('.module-tier .grid');
-        tiers[1].container = tierContainers[0];
-        tiers[2].container = tierContainers[1];
-        tiers[3].container = tierContainers[2];
+        // Find tier containers using Domma
+        const tierContainers = $('.module-tier .grid');
+        tiers[1].container = tierContainers.get(0);
+        tiers[2].container = tierContainers.get(1);
+        tiers[3].container = tierContainers.get(2);
 
-        // Group modules by tier
-        Object.entries(this.metadata.modules).forEach(([key, module]) => {
+        // Group modules by tier using Domma utils
+        _.forEach(this.metadata.modules, (module, key) => {
             tiers[module.tier].modules.push({key, module});
         });
 
-        // Render each tier
-        Object.values(tiers).forEach(tier => {
+        // Render each tier using Domma utils
+        _.forEach(tiers, tier => {
             if (!tier.container) return;
 
             tier.modules.forEach(({key, module}) => {
                 const checkbox = this.createModuleCheckbox(key, module);
-                tier.container.appendChild(checkbox);
+                $(tier.container).append(checkbox);
             });
         });
     }
 
     createModuleCheckbox(key, module) {
-        const div = document.createElement('div');
-        div.className = 'module-checkbox';
-        div.dataset.module = key;
-
-        if (module.dependencies.length > 0) {
-            div.classList.add('has-dependencies');
-        }
-
         const hasAlias = module.aliases && module.aliases.length > 0;
         const aliasText = hasAlias ? ` (${module.aliases.join(', ')})` : '';
 
-        div.innerHTML = `
-            <input type="checkbox" id="module-${key}" value="${key}">
-            <div class="module-info">
-                <div class="module-name">
-                    ${module.name}${hasAlias ? `<span class="module-alias">${aliasText}</span>` : ''}
-                </div>
-                <div class="module-description">${module.description}</div>
-                <div class="module-meta">
-                    <span class="module-size">~${module.size}KB</span>
-                    ${module.dependencies.length > 0
+        const html = `
+            <div class="module-checkbox${module.dependencies.length > 0 ? ' has-dependencies' : ''}" data-module="${key}">
+                <input type="checkbox" id="module-${key}" value="${key}">
+                <div class="module-info">
+                    <div class="module-name">
+                        ${module.name}${hasAlias ? `<span class="module-alias">${aliasText}</span>` : ''}
+                    </div>
+                    <div class="module-description">${module.description}</div>
+                    <div class="module-meta">
+                        <span class="module-size">~${module.size}KB</span>
+                        ${module.dependencies.length > 0
             ? `<span class="module-dependencies">Requires: ${module.dependencies.join(', ')}</span>`
             : '<span class="module-dependencies">No dependencies</span>'}
+                    </div>
                 </div>
             </div>
         `;
 
-        const checkbox = div.querySelector('input');
-        checkbox.addEventListener('change', () => this.handleModuleToggle(key));
+        const $div = $(html);
+        $div.find('input').on('change', () => this.handleModuleToggle(key));
 
-        return div;
+        return $div.get(0);
     }
 
     attachEventListeners() {
-        // Preset buttons
-        document.querySelectorAll('.preset-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const preset = btn.dataset.preset;
-                this.applyPreset(preset);
+        // Preset buttons using Domma
+        $('.preset-btn').on('click', (e) => {
+            const $btn = $(e.currentTarget);
+            const preset = $btn.attr('data-preset');
+            this.applyPreset(preset);
 
-                // Visual feedback
-                document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
+            // Visual feedback
+            $('.preset-btn').removeClass('active');
+            $btn.addClass('active');
         });
 
-        // Reset button
-        const resetBtn = document.getElementById('reset-selection');
-        if (resetBtn) {
-            resetBtn.addEventListener('click', () => {
-                this.resetSelection();
-            });
-        }
-
-        // Download button
-        const downloadBtn = document.getElementById('download-bundle');
-        if (downloadBtn) {
-            downloadBtn.addEventListener('click', () => {
-                this.downloadBundle();
-            });
-        }
-
-        // Instructions toggle
-        const instructionsBtn = document.getElementById('view-instructions');
-        if (instructionsBtn) {
-            instructionsBtn.addEventListener('click', () => {
-                this.toggleInstructions();
-            });
-        }
-
-        // Accordion functionality
-        document.querySelectorAll('.accordion-header').forEach(header => {
-            header.addEventListener('click', () => {
-                const item = header.closest('.accordion-item');
-                item.classList.toggle('active');
-            });
+        // Reset button using Domma
+        $('#reset-selection').on('click', () => {
+            this.resetSelection();
         });
 
-        // Copy buttons
-        document.querySelectorAll('[data-copy]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const targetId = btn.dataset.copy;
-                const code = document.getElementById(targetId)?.textContent;
-                if (code) {
-                    this.copyToClipboard(code);
-                }
-            });
+        // Download button using Domma
+        $('#download-bundle').on('click', () => {
+            this.downloadBundle();
+        });
+
+        // Instructions toggle using Domma
+        $('#view-instructions').on('click', () => {
+            this.toggleInstructions();
+        });
+
+        // Accordion functionality using Domma
+        $('.accordion-header').on('click', (e) => {
+            $(e.currentTarget).closest('.accordion-item').toggleClass('active');
+        });
+
+        // Copy buttons using Domma
+        $('[data-copy]').on('click', (e) => {
+            const targetId = $(e.currentTarget).attr('data-copy');
+            const code = $(`#${targetId}`).text();
+            if (code) {
+                this.copyToClipboard(code);
+            }
         });
     }
 
     handleModuleToggle(moduleKey) {
-        const checkbox = document.getElementById(`module-${moduleKey}`);
+        const $checkbox = $(`#module-${moduleKey}`);
 
-        if (checkbox.checked) {
+        if ($checkbox.prop('checked')) {
             this.selectModule(moduleKey);
         } else {
             this.deselectModule(moduleKey);
@@ -192,11 +172,11 @@ class BundleBuilder {
             this.requiredModules.add(dep);
             this.selectedModules.add(dep);
 
-            const depCheckbox = document.getElementById(`module-${dep}`);
-            if (depCheckbox) {
-                depCheckbox.checked = true;
-                depCheckbox.disabled = true;
-                depCheckbox.closest('.module-checkbox').classList.add('required');
+            const $depCheckbox = $(`#module-${dep}`);
+            if ($depCheckbox.length) {
+                $depCheckbox.prop('checked', true)
+                    .prop('disabled', true)
+                    .closest('.module-checkbox').addClass('required');
             }
         });
     }
@@ -211,10 +191,10 @@ class BundleBuilder {
 
         if (!stillRequired) {
             this.requiredModules.delete(moduleKey);
-            const checkbox = document.getElementById(`module-${moduleKey}`);
-            if (checkbox) {
-                checkbox.disabled = false;
-                checkbox.closest('.module-checkbox').classList.remove('required');
+            const $checkbox = $(`#module-${moduleKey}`);
+            if ($checkbox.length) {
+                $checkbox.prop('disabled', false)
+                    .closest('.module-checkbox').removeClass('required');
             }
         }
     }
@@ -226,9 +206,9 @@ class BundleBuilder {
         if (!preset) return;
 
         preset.modules.forEach(moduleKey => {
-            const checkbox = document.getElementById(`module-${moduleKey}`);
-            if (checkbox) {
-                checkbox.checked = true;
+            const $checkbox = $(`#module-${moduleKey}`);
+            if ($checkbox.length) {
+                $checkbox.prop('checked', true);
                 this.selectModule(moduleKey);
             }
         });
@@ -240,42 +220,32 @@ class BundleBuilder {
         this.selectedModules.clear();
         this.requiredModules.clear();
 
-        document.querySelectorAll('[id^="module-"]').forEach(checkbox => {
-            checkbox.checked = false;
-            checkbox.disabled = false;
-            checkbox.closest('.module-checkbox')?.classList.remove('required');
+        // Reset all checkboxes using Domma
+        $('[id^="module-"]').each(function () {
+            $(this).prop('checked', false)
+                .prop('disabled', false)
+                .closest('.module-checkbox').removeClass('required');
         });
 
-        document.querySelectorAll('.preset-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
+        $('.preset-btn').removeClass('active');
 
         this.updateUI();
     }
 
     updateUI() {
-        // Update count
+        // Update count using Domma
         const count = this.selectedModules.size;
-        const countEl = document.getElementById('selected-count');
-        if (countEl) {
-            countEl.textContent = `${count} module${count !== 1 ? 's' : ''} selected`;
-        }
+        $('#selected-count').text(`${count} module${count !== 1 ? 's' : ''} selected`);
 
-        // Calculate size
-        const totalSize = Array.from(this.selectedModules).reduce((sum, key) => {
-            return sum + (this.metadata.modules[key]?.size || 0);
-        }, 0);
+        // Calculate size using Domma utils
+        const totalSize = _.sumBy(Array.from(this.selectedModules), key =>
+            this.metadata.modules[key]?.size || 0
+        );
 
-        const sizeEl = document.getElementById('bundle-size');
-        if (sizeEl) {
-            sizeEl.textContent = `${totalSize} KB`;
-        }
+        $('#bundle-size').text(`${totalSize} KB`);
 
-        // Enable/disable download button
-        const downloadBtn = document.getElementById('download-bundle');
-        if (downloadBtn) {
-            downloadBtn.disabled = count === 0;
-        }
+        // Enable/disable download button using Domma
+        $('#download-bundle').prop('disabled', count === 0);
 
         // Check if selection matches a preset
         this.checkPresetMatch();
@@ -284,15 +254,13 @@ class BundleBuilder {
     checkPresetMatch() {
         const selectedArray = Array.from(this.selectedModules).sort();
 
-        Object.entries(this.metadata.presets).forEach(([key, preset]) => {
+        _.forEach(this.metadata.presets, (preset, key) => {
             const presetArray = preset.modules.slice().sort();
             const matches = JSON.stringify(selectedArray) === JSON.stringify(presetArray);
 
-            const btn = document.querySelector(`[data-preset="${key}"]`);
-            if (btn) {
-                if (matches) {
-                    btn.classList.add('active');
-                }
+            const $btn = $(`[data-preset="${key}"]`);
+            if ($btn.length && matches) {
+                $btn.addClass('active');
             }
         });
     }
@@ -329,7 +297,7 @@ class BundleBuilder {
         this.toggleInstructions(true);
         this.generateBuildCode();
 
-        // Show toast notification
+        // Show toast notification using Domma
         if (typeof Domma !== 'undefined' && Domma.elements && Domma.elements.toast) {
             Domma.elements.toast.info('Custom bundle requires manual build. See instructions below.', {
                 position: 'bottom-center',
@@ -339,36 +307,29 @@ class BundleBuilder {
     }
 
     toggleInstructions(forceShow = false) {
-        const instructions = document.getElementById('build-instructions');
-        if (!instructions) return;
+        const $instructions = $('#build-instructions');
+        if (!$instructions.length) return;
 
         if (forceShow) {
-            instructions.style.display = 'block';
+            $instructions.show();
         } else {
-            instructions.style.display =
-                instructions.style.display === 'none' ? 'block' : 'none';
+            $instructions.toggle();
         }
 
-        if (instructions.style.display === 'block') {
+        if ($instructions.is(':visible')) {
             this.generateBuildCode();
-            instructions.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+            $instructions.get(0).scrollIntoView({behavior: 'smooth', block: 'nearest'});
         }
     }
 
     generateBuildCode() {
         // Generate entry point code
         const entryPointCode = this.generateEntryPointCode();
-        const entryPointEl = document.getElementById('entry-point-code');
-        if (entryPointEl) {
-            entryPointEl.textContent = entryPointCode;
-        }
+        $('#entry-point-code').text(entryPointCode);
 
         // Generate Rollup config code
         const rollupCode = this.generateRollupCode();
-        const rollupEl = document.getElementById('rollup-config-code');
-        if (rollupEl) {
-            rollupEl.textContent = rollupCode;
-        }
+        $('#rollup-config-code').text(rollupCode);
     }
 
     generateEntryPointCode() {
@@ -462,8 +423,11 @@ export {Domma${aliasNames.length > 0 ? ', ' + aliasNames.join(', ') : ''}};
 
     async copyToClipboard(text) {
         try {
-            // Try modern clipboard API
-            if (navigator.clipboard && navigator.clipboard.writeText) {
+            // Use Domma utility if available
+            if (typeof Domma !== 'undefined' && Domma.utils && Domma.utils.copyToClipboard) {
+                await Domma.utils.copyToClipboard(text);
+            } else if (navigator.clipboard && navigator.clipboard.writeText) {
+                // Fallback to modern clipboard API
                 await navigator.clipboard.writeText(text);
             } else {
                 // Fallback for older browsers
@@ -477,7 +441,7 @@ export {Domma${aliasNames.length > 0 ? ', ' + aliasNames.join(', ') : ''}};
                 document.body.removeChild(textArea);
             }
 
-            // Show success feedback
+            // Show success feedback using Domma
             if (typeof Domma !== 'undefined' && Domma.elements && Domma.elements.toast) {
                 Domma.elements.toast.success('Code copied to clipboard!', {
                     position: 'bottom-center',
@@ -496,9 +460,7 @@ export {Domma${aliasNames.length > 0 ? ', ' + aliasNames.join(', ') : ''}};
     }
 }
 
-// Initialize when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new BundleBuilder());
-} else {
+// Initialize when DOM is ready using Domma
+$(() => {
     new BundleBuilder();
-}
+});
