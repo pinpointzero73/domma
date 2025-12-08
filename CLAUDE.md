@@ -196,6 +196,18 @@ $.setup({
 });
 ```
 
+**Supported Components (13 total):**
+
+- `card`, `modal`, `tabs`, `accordion`, `tooltip`, `carousel`, `dropdown`
+- `badge`, `backToTop`, `buttonGroup`, `loader`, `breadcrumbs`, `navbar`
+
+**Not Supported via Config Engine:**
+
+- `toast` - Use static methods: `Domma.elements.showToast()` or instance methods
+- `dialog` - Use static methods: `Domma.elements.alert()`, `.confirm()`, `.prompt()`
+- `jumbotron` - CSS-only component (no JavaScript)
+- `forms` - Documentation only (native HTML forms)
+
 **Mutable Configuration** - update, retrieve, or reset configuration after setup:
 
 ```javascript

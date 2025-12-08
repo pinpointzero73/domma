@@ -32,12 +32,22 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block">
-            <pre><code>const dropdown = Domma.elements.dropdown('#my-dropdown', {
+            <pre><code>// Attach to a button element
+const dropdown = Domma.elements.dropdown('#my-button', {
+    items: [
+        { text: 'Edit', value: 'edit' },
+        { text: 'Delete', value: 'delete' }
+    ],
     trigger: 'click',
     position: 'bottom-start',
-    closeOnClick: true
+    onSelect: (item) => console.log(item.value)
 });</code></pre>
         </div>
+        <p class="text-sm text-muted mt-2">
+            <strong>Note:</strong> The dropdown component creates menus programmatically from the <code>items</code>
+            array.
+            It doesn't use static HTML menu structures.
+        </p>
     </div>
 </section>
 
@@ -48,27 +58,21 @@
     <div class="card-body">
         <h3 class="category-title">Simple Dropdown</h3>
         <div class="demo-area mb-4 text-center">
-            <div class="dropdown" id="quick-dropdown">
-                <button class="btn btn-primary dropdown-toggle">Actions</button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Edit</a>
-                    <a href="#" class="dropdown-item">Duplicate</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item text-danger">Delete</a>
-                </div>
-            </div>
+            <button class="btn btn-primary" id="quick-dropdown">Actions</button>
         </div>
         <div class="code-block">
-            <pre><code>&lt;div class="dropdown" id="my-dropdown"&gt;
-    &lt;button class="btn btn-primary dropdown-toggle"&gt;Actions&lt;/button&gt;
-    &lt;div class="dropdown-menu"&gt;
-        &lt;a href="#" class="dropdown-item"&gt;Edit&lt;/a&gt;
-        &lt;a href="#" class="dropdown-item"&gt;Delete&lt;/a&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+            <pre><code>&lt;button class="btn btn-primary" id="my-dropdown"&gt;Actions&lt;/button&gt;
 
 &lt;script&gt;
-Domma.elements.dropdown('#my-dropdown');
+Domma.elements.dropdown('#my-dropdown', {
+    items: [
+        { text: 'Edit', value: 'edit' },
+        { text: 'Duplicate', value: 'duplicate' },
+        { divider: true },
+        { text: 'Delete', value: 'delete', class: 'text-danger' }
+    ],
+    onSelect: (item) => console.log('Selected:', item)
+});
 &lt;/script&gt;</code></pre>
         </div>
     </div>
@@ -82,20 +86,9 @@ Domma.elements.dropdown('#my-dropdown');
         <p class="mb-4">Build a user profile dropdown with event handling.</p>
 
         <div class="demo-area mb-4 text-center">
-            <div class="dropdown" id="tutorial-dropdown">
-                <button class="btn btn-secondary dropdown-toggle">
-                    <span>👤</span> User Menu
-                </button>
-                <div class="dropdown-menu">
-                    <div class="dropdown-header">Signed in as <strong>user@example.com</strong></div>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item" data-action="profile">Profile</a>
-                    <a href="#" class="dropdown-item" data-action="settings">Settings</a>
-                    <a href="#" class="dropdown-item" data-action="billing">Billing</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item" data-action="logout">Sign Out</a>
-                </div>
-            </div>
+            <button class="btn btn-secondary" id="tutorial-dropdown">
+                <span>👤</span> User Menu
+            </button>
             <div id="tutorial-result" class="mt-4 p-3 bg-surface rounded">
                 <p class="text-muted text-sm">Select an option from the dropdown</p>
             </div>
@@ -103,19 +96,20 @@ Domma.elements.dropdown('#my-dropdown');
 
         <div class="code-block">
             <pre><code>const dropdown = Domma.elements.dropdown('#user-dropdown', {
-    trigger: 'click',
-    closeOnClick: true,
+    items: [
+        { header: 'Signed in as user@example.com' },
+        { divider: true },
+        { text: 'Profile', value: 'profile' },
+        { text: 'Settings', value: 'settings' },
+        { text: 'Billing', value: 'billing' },
+        { divider: true },
+        { text: 'Sign Out', value: 'logout' }
+    ],
     onOpen: () => console.log('Dropdown opened'),
-    onClose: () => console.log('Dropdown closed')
-});
-
-// Handle item clicks
-document.querySelectorAll('.dropdown-item').forEach(item => {
-    item.addEventListener('click', (e) => {
-        e.preventDefault();
-        const action = e.target.dataset.action;
-        console.log(`Action selected: ${action}`);
-    });
+    onClose: () => console.log('Dropdown closed'),
+    onSelect: (item) => {
+        console.log(`Action selected: ${item.value}`);
+    }
 });</code></pre>
         </div>
     </div>
@@ -129,78 +123,27 @@ document.querySelectorAll('.dropdown-item').forEach(item => {
 
         <h3 class="category-title">Hover Trigger</h3>
         <div class="demo-area mb-4 text-center">
-            <div class="dropdown" id="hover-dropdown">
-                <button class="btn btn-outline dropdown-toggle">Hover Me</button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Option 1</a>
-                    <a href="#" class="dropdown-item">Option 2</a>
-                    <a href="#" class="dropdown-item">Option 3</a>
-                </div>
-            </div>
+            <button class="btn btn-outline" id="hover-dropdown">Hover Me</button>
         </div>
 
         <h3 class="category-title">Positioning</h3>
         <div class="demo-area mb-4">
             <div class="flex gap-4 justify-center flex-wrap">
-                <div class="dropdown" id="pos-bottom">
-                    <button class="btn btn-outline dropdown-toggle">Bottom</button>
-                    <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item">Bottom Start</a>
-                        <a href="#" class="dropdown-item">Default Position</a>
-                    </div>
-                </div>
-                <div class="dropdown" id="pos-top">
-                    <button class="btn btn-outline dropdown-toggle">Top</button>
-                    <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item">Top Start</a>
-                        <a href="#" class="dropdown-item">Upward Position</a>
-                    </div>
-                </div>
-                <div class="dropdown" id="pos-left">
-                    <button class="btn btn-outline dropdown-toggle">Left</button>
-                    <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item">Left Start</a>
-                        <a href="#" class="dropdown-item">Leftward</a>
-                    </div>
-                </div>
-                <div class="dropdown" id="pos-right">
-                    <button class="btn btn-outline dropdown-toggle">Right</button>
-                    <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item">Right Start</a>
-                        <a href="#" class="dropdown-item">Rightward</a>
-                    </div>
-                </div>
+                <button class="btn btn-outline" id="pos-bottom">Bottom</button>
+                <button class="btn btn-outline" id="pos-top">Top</button>
+                <button class="btn btn-outline" id="pos-left">Left</button>
+                <button class="btn btn-outline" id="pos-right">Right</button>
             </div>
         </div>
 
         <h3 class="category-title">With Dividers and Headers</h3>
         <div class="demo-area mb-4 text-center">
-            <div class="dropdown" id="structured-dropdown">
-                <button class="btn btn-primary dropdown-toggle">Menu</button>
-                <div class="dropdown-menu">
-                    <div class="dropdown-header">Navigation</div>
-                    <a href="#" class="dropdown-item">Home</a>
-                    <a href="#" class="dropdown-item">Dashboard</a>
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-header">Actions</div>
-                    <a href="#" class="dropdown-item">New Project</a>
-                    <a href="#" class="dropdown-item">Import</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item text-danger">Delete All</a>
-                </div>
-            </div>
+            <button class="btn btn-primary" id="structured-dropdown">Menu</button>
         </div>
 
         <h3 class="category-title">Programmatic Control</h3>
         <div class="demo-area text-center">
-            <div class="dropdown" id="programmatic-dropdown">
-                <button class="btn btn-secondary dropdown-toggle">Controlled Dropdown</button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Item 1</a>
-                    <a href="#" class="dropdown-item">Item 2</a>
-                    <a href="#" class="dropdown-item">Item 3</a>
-                </div>
-            </div>
+            <button class="btn btn-secondary" id="programmatic-dropdown">Controlled Dropdown</button>
             <div class="flex gap-2 justify-center mt-3">
                 <button id="prog-open" class="btn btn-outline btn-sm">Open</button>
                 <button id="prog-close" class="btn btn-outline btn-sm">Close</button>
@@ -260,6 +203,13 @@ document.querySelectorAll('.dropdown-item').forEach(item => {
                 </thead>
                 <tbody>
                 <tr>
+                    <td><code>items</code></td>
+                    <td>Array</td>
+                    <td><code>[]</code></td>
+                    <td>Menu items array. Each item: <code>{ text, value, class }</code> or <code>{ header }</code> or
+                        <code>{ divider: true }</code></td>
+                </tr>
+                <tr>
                     <td><code>trigger</code></td>
                     <td>String</td>
                     <td><code>'click'</code></td>
@@ -306,6 +256,12 @@ document.querySelectorAll('.dropdown-item').forEach(item => {
                     <td>Function</td>
                     <td><code>null</code></td>
                     <td>Close callback</td>
+                </tr>
+                <tr>
+                    <td><code>onSelect</code></td>
+                    <td>Function</td>
+                    <td><code>null</code></td>
+                    <td>Item selection callback - receives selected item object</td>
                 </tr>
                 </tbody>
             </table>
@@ -441,39 +397,102 @@ document.querySelectorAll('.dropdown-item').forEach(item => {
 <script src="../../js/layout.js"></script>
 <script>
     // Quick Start
-    Domma.elements.dropdown('#quick-dropdown');
+    Domma.elements.dropdown('#quick-dropdown', {
+        items: [
+            {text: 'Edit', value: 'edit'},
+            {text: 'Duplicate', value: 'duplicate'},
+            {divider: true},
+            {text: 'Delete', value: 'delete', class: 'text-danger'}
+        ],
+        onSelect: (item) => console.log('Selected:', item)
+    });
 
     // Tutorial
     const tutorialDropdown = Domma.elements.dropdown('#tutorial-dropdown', {
+        items: [
+            {header: 'Signed in as user@example.com'},
+            {divider: true},
+            {text: 'Profile', value: 'profile'},
+            {text: 'Settings', value: 'settings'},
+            {text: 'Billing', value: 'billing'},
+            {divider: true},
+            {text: 'Sign Out', value: 'logout'}
+        ],
         onOpen: () => console.log('User menu opened'),
-        onClose: () => console.log('User menu closed')
-    });
-
-    document.querySelectorAll('#tutorial-dropdown .dropdown-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            const action = e.target.dataset.action;
+        onClose: () => console.log('User menu closed'),
+        onSelect: (item) => {
             const resultDiv = document.getElementById('tutorial-result');
-            resultDiv.innerHTML = `<p class="text-primary text-sm">✓ Action selected: <strong>${action}</strong></p>`;
-        });
+            resultDiv.innerHTML = `<p class="text-primary text-sm">✓ Action selected: <strong>${item.value}</strong></p>`;
+        }
     });
 
     // Hover Trigger
     Domma.elements.dropdown('#hover-dropdown', {
-        trigger: 'hover'
+        trigger: 'hover',
+        items: [
+            {text: 'Option 1', value: 'opt1'},
+            {text: 'Option 2', value: 'opt2'},
+            {text: 'Option 3', value: 'opt3'}
+        ]
     });
 
     // Positioning
-    Domma.elements.dropdown('#pos-bottom', {position: 'bottom-start'});
-    Domma.elements.dropdown('#pos-top', {position: 'top-start'});
-    Domma.elements.dropdown('#pos-left', {position: 'left-start'});
-    Domma.elements.dropdown('#pos-right', {position: 'right-start'});
+    Domma.elements.dropdown('#pos-bottom', {
+        position: 'bottom-start',
+        items: [
+            {text: 'Bottom Start', value: 'b1'},
+            {text: 'Default Position', value: 'b2'}
+        ]
+    });
 
-    // Structured
-    Domma.elements.dropdown('#structured-dropdown');
+    Domma.elements.dropdown('#pos-top', {
+        position: 'top-start',
+        items: [
+            {text: 'Top Start', value: 't1'},
+            {text: 'Upward Position', value: 't2'}
+        ]
+    });
 
-    // Programmatic
-    const programmaticDropdown = Domma.elements.dropdown('#programmatic-dropdown');
+    Domma.elements.dropdown('#pos-left', {
+        position: 'left-start',
+        items: [
+            {text: 'Left Start', value: 'l1'},
+            {text: 'Leftward', value: 'l2'}
+        ]
+    });
+
+    Domma.elements.dropdown('#pos-right', {
+        position: 'right-start',
+        items: [
+            {text: 'Right Start', value: 'r1'},
+            {text: 'Rightward', value: 'r2'}
+        ]
+    });
+
+    // Structured with headers and dividers
+    Domma.elements.dropdown('#structured-dropdown', {
+        items: [
+            {header: 'Navigation'},
+            {text: 'Home', value: 'home'},
+            {text: 'Dashboard', value: 'dashboard'},
+            {divider: true},
+            {header: 'Actions'},
+            {text: 'New Project', value: 'new'},
+            {text: 'Import', value: 'import'},
+            {divider: true},
+            {text: 'Delete All', value: 'delete-all', class: 'text-danger'}
+        ]
+    });
+
+    // Programmatic Control
+    const programmaticDropdown = Domma.elements.dropdown('#programmatic-dropdown', {
+        items: [
+            {text: 'Item 1', value: '1'},
+            {text: 'Item 2', value: '2'},
+            {text: 'Item 3', value: '3'}
+        ]
+    });
+
     document.getElementById('prog-open').addEventListener('click', () => programmaticDropdown.open());
     document.getElementById('prog-close').addEventListener('click', () => programmaticDropdown.close());
     document.getElementById('prog-toggle').addEventListener('click', () => programmaticDropdown.toggle());

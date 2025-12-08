@@ -141,7 +141,13 @@ export const configEngine = {
             accordion: elements.accordion,
             tooltip: elements.tooltip,
             carousel: elements.carousel,
-            dropdown: elements.dropdown
+            dropdown: elements.dropdown,
+            badge: elements.badge,
+            backToTop: elements.backToTop,
+            buttonGroup: elements.buttonGroup,
+            loader: elements.loader,
+            breadcrumbs: elements.breadcrumbs,
+            navbar: elements.navbar
         };
 
         const factory = componentMap[componentType];
