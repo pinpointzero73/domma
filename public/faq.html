@@ -65,23 +65,42 @@
         <h2>Getting Started</h2>
         <div id="faq-getting-started" class="accordion">
             <div class="accordion-item">
-                <div class="accordion-header">What is Domma?</div>
-                <div class="accordion-content">
-                    <p>Domma (Dynamic Object Manipulation & Modeling API) is a lightweight, zero-dependency JavaScript framework that combines jQuery-style DOM manipulation, Lodash utilities, Moment.js-style date handling, and modern UI components into a single ~260KB bundle.</p>
+                <div class="accordion-header">
+                    <span>What is Domma?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>Domma (Dynamic Object Manipulation & Modeling API) is a lightweight, zero-dependency
+                            JavaScript framework that combines jQuery-style DOM manipulation, Lodash utilities,
+                            Moment.js-style date handling, and modern UI components into a single ~260KB bundle.</p>
+                    </div>
                 </div>
             </div>
             <div class="accordion-item">
-                <div class="accordion-header">How do I install Domma?</div>
-                <div class="accordion-content">
-                    <p>Simply include the script tag in your HTML:</p>
-                    <pre><code>&lt;script src="domma.min.js"&gt;&lt;/script&gt;</code></pre>
-                    <p>That's it! No npm install, no build step required. You can also use ES modules if preferred.</p>
+                <div class="accordion-header">
+                    <span>How do I install Domma?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>Simply include the script tag in your HTML:</p>
+                        <pre><code>&lt;script src="domma.min.js"&gt;&lt;/script&gt;</code></pre>
+                        <p>That's it! No npm install, no build step required. You can also use ES modules if
+                            preferred.</p>
+                    </div>
                 </div>
             </div>
             <div class="accordion-item">
-                <div class="accordion-header">Does Domma require any dependencies?</div>
-                <div class="accordion-content">
-                    <p>No. Domma is completely self-contained with zero external dependencies. Everything you need is included in a single file.</p>
+                <div class="accordion-header">
+                    <span>Does Domma require any dependencies?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>No. Domma is completely self-contained with zero external dependencies. Everything you need
+                            is included in a single file.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,28 +110,54 @@
         <h2>Features & Compatibility</h2>
         <div id="faq-features" class="accordion">
             <div class="accordion-item">
-                <div class="accordion-header">Can I use Domma with my existing CSS framework?</div>
-                <div class="accordion-content">
-                    <p>Absolutely! Domma's JavaScript functionality works independently of its CSS. You can disable Domma's theming entirely with <code>$.setup({ noStyles: true })</code> and use Bootstrap, Tailwind, or your own custom styles.</p>
+                <div class="accordion-header">
+                    <span>Can I use Domma with my existing CSS framework?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>Absolutely! Domma's JavaScript functionality works independently of its CSS. You can disable
+                            Domma's theming entirely with <code>$.setup({ noStyles: true })</code> and use Bootstrap,
+                            Tailwind, or your own custom styles.</p>
+                    </div>
                 </div>
             </div>
             <div class="accordion-item">
-                <div class="accordion-header">Is Domma compatible with jQuery?</div>
-                <div class="accordion-content">
-                    <p>Domma uses the same <code>$()</code> syntax as jQuery, so if you're familiar with jQuery, you'll feel right at home. However, Domma is not a jQuery drop-in replacement &mdash; it's a separate library with its own implementation.</p>
+                <div class="accordion-header">
+                    <span>Is Domma compatible with jQuery?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>Domma uses the same <code>$()</code> syntax as jQuery, so if you're familiar with jQuery,
+                            you'll feel right at home. However, Domma is not a jQuery drop-in replacement &mdash; it's a
+                            separate library with its own implementation.</p>
+                    </div>
                 </div>
             </div>
             <div class="accordion-item">
-                <div class="accordion-header">What browsers does Domma support?</div>
-                <div class="accordion-content">
-                    <p>Domma supports all modern browsers including Chrome, Firefox, Safari, and Edge. It uses standard ES6+ features and the Fetch API.</p>
+                <div class="accordion-header">
+                    <span>What browsers does Domma support?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>Domma supports all modern browsers including Chrome, Firefox, Safari, and Edge. It uses
+                            standard ES6+ features and the Fetch API.</p>
+                    </div>
                 </div>
             </div>
             <div class="accordion-item">
-                <div class="accordion-header">Can I use ES modules?</div>
-                <div class="accordion-content">
-                    <p>Yes! Domma is available as both UMD and ESM bundles. You can import specific modules if you prefer:</p>
-                    <pre><code>import { Domma, utils, dates } from './domma.esm.js';</code></pre>
+                <div class="accordion-header">
+                    <span>Can I use ES modules?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>Yes! Domma is available as both UMD and ESM bundles. You can import specific modules if you
+                            prefer:</p>
+                        <pre><code>import { Domma, utils, dates } from './domma.esm.js';</code></pre>
+                    </div>
                 </div>
             </div>
         </div>
@@ -122,23 +167,32 @@
         <h2>Usage & Best Practices</h2>
         <div id="faq-usage" class="accordion">
             <div class="accordion-item">
-                <div class="accordion-header">What are the global aliases?</div>
-                <div class="accordion-content">
-                    <p>Domma provides convenient aliases for common operations:</p>
-                    <ul>
-                        <li><code>$</code> - DOM manipulation (like jQuery)</li>
-                        <li><code>_</code> - Utility functions (like Lodash)</li>
-                        <li><code>D()</code> - Date handling (like Moment.js)</li>
-                        <li><code>M</code> - Reactive models</li>
-                        <li><code>S</code> - Storage wrapper</li>
-                    </ul>
+                <div class="accordion-header">
+                    <span>What are the global aliases?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>Domma provides convenient aliases for common operations:</p>
+                        <ul>
+                            <li><code>$</code> - DOM manipulation (like jQuery)</li>
+                            <li><code>_</code> - Utility functions (like Lodash)</li>
+                            <li><code>D()</code> - Date handling (like Moment.js)</li>
+                            <li><code>M</code> - Reactive models</li>
+                            <li><code>S</code> - Storage wrapper</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="accordion-item">
-                <div class="accordion-header">How do I handle events?</div>
-                <div class="accordion-content">
-                    <p>Domma uses a jQuery-like event system:</p>
-                    <pre><code>$('.button').on('click', (e) => {
+                <div class="accordion-header">
+                    <span>How do I handle events?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>Domma uses a jQuery-like event system:</p>
+                        <pre><code>$('.button').on('click', (e) => {
     console.log('Clicked!');
 });
 
@@ -146,19 +200,26 @@
 $('.container').on('click', '.item', (e) => {
     console.log('Item clicked');
 });</code></pre>
+                    </div>
                 </div>
             </div>
             <div class="accordion-item">
-                <div class="accordion-header">How does the reactive model system work?</div>
-                <div class="accordion-content">
-                    <p>Domma's model system allows you to create reactive data objects with validation and DOM binding:</p>
-                    <pre><code>const user = M.create({
+                <div class="accordion-header">
+                    <span>How does the reactive model system work?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>Domma's model system allows you to create reactive data objects with validation and DOM
+                            binding:</p>
+                        <pre><code>const user = M.create({
     name: { type: M.types.string, required: true },
     age: { type: M.types.number }
 });
 
 M.bind(user, 'name', '#name-input', { twoWay: true });
 user.onChange('name', (val) => console.log(val));</code></pre>
+                    </div>
                 </div>
             </div>
         </div>
@@ -168,15 +229,28 @@ user.onChange('name', (val) => console.log(val));</code></pre>
         <h2>Support</h2>
         <div id="faq-support" class="accordion">
             <div class="accordion-item">
-                <div class="accordion-header">Where can I find documentation?</div>
-                <div class="accordion-content">
-                    <p>Check out the <a href="showcase/index.html">Showcase</a> for interactive examples of all features, or start with the <a href="quickstart/index.html">Quickstart</a> guide for a hands-on tutorial.</p>
+                <div class="accordion-header">
+                    <span>Where can I find documentation?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>Check out the <a href="showcase/index.html">Showcase</a> for interactive examples of all
+                            features, or start with the <a href="quickstart/index.html">Quickstart</a> guide for a
+                            hands-on tutorial.</p>
+                    </div>
                 </div>
             </div>
             <div class="accordion-item">
-                <div class="accordion-header">How do I report bugs or request features?</div>
-                <div class="accordion-content">
-                    <p>Please open an issue on our GitHub repository with as much detail as possible, including browser version, code samples, and expected vs actual behaviour.</p>
+                <div class="accordion-header">
+                    <span>How do I report bugs or request features?</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>Please open an issue on our GitHub repository with as much detail as possible, including
+                            browser version, code samples, and expected vs actual behaviour.</p>
+                    </div>
                 </div>
             </div>
         </div>
