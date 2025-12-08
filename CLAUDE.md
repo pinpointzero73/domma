@@ -59,7 +59,8 @@ Accessed via `Domma.utils` or `_`:
   `intersection()`, `union()`, etc.
 - **Collection** (20+): `each()`, `filter()`, `find()`, `groupBy()`, `keyBy()`, `map()`, `orderBy()`, `sortBy()`,
   `reduce()`, `partition()`, etc.
-- **Function** (18): `debounce()`, `throttle()`, `memoize()`, `once()`, `curry()`, `partial()`, `flow()`, etc.
+- **Function** (20): `debounce()`, `throttle()`, `memoize()`, `once()`, `curry()`, `partial()`, `flow()`, `compose()`,
+  `chain()`, etc.
 - **Object** (30+): `get()`, `set()`, `has()`, `pick()`, `omit()`, `merge()`, `cloneDeep()`, `mapKeys()`, `mapValues()`,
   etc.
 - **Lang** (18): `isArray()`, `isObject()`, `isPlainObject()`, `isFunction()`, `isEmpty()`, `isEqual()`, etc.
@@ -71,6 +72,41 @@ Accessed via `Domma.utils` or `_`:
   `{{#each}}`,
   `{{#with}}`, `{{> partial}}`, `{{{raw}}}`
 - **Browser** (1): `copyToClipboard(text)` - async clipboard copy with fallback for older browsers
+- **Chaining** (1): `chain(value)` - Lodash-style wrapper for explicit method chaining
+
+**Function Composition:**
+
+```javascript
+// flow() - Execute functions left to right
+const calculate = _.flow(
+        x => x * 2,
+        x => x + 10,
+        x => x / 3
+);
+calculate(5); // ((5 * 2) + 10) / 3 = 6.67
+
+// compose() - Execute functions right to left (traditional functional composition)
+const calculate = _.compose(
+        x => x / 3,
+        x => x + 10,
+        x => x * 2
+);
+calculate(5); // ((5 * 2) + 10) / 3 = 6.67
+
+// chain() - Explicit chaining with .value() to extract result
+_.chain([1, 2, 3, 4, 5])
+        .map(x => x * 2)
+        .filter(x => x > 4)
+        .sum()
+        .value(); // 30 (6 + 8 + 10)
+
+// More complex chaining example
+_.chain({a: 1, b: 2, c: 3})
+        .values()           // [1, 2, 3]
+        .map(x => x * 2)    // [2, 4, 6]
+        .sum()              // 12
+        .value();           // 12
+```
 
 ### dates.js - Moment.js-style date manipulation
 
@@ -154,6 +190,49 @@ Accessed via `Domma.elements`:
     - Items: Support nested arrays for dropdowns
     - Variants: `'light'`, `'dark'`, `'transparent'`
     - Position: `'static'`, `'fixed'`, `'sticky'`
+- **DesktopNotification**: Browser native notifications wrapper
+  -
+  `elements.notification({ title, body, icon, badge, tag, requireInteraction, silent, data, onClick, onClose, onError, onShow })` →
+  `show()`, `close()`, `isShown()`
+  - `elements.notify(title, options)` - Convenience method for quick notifications
+  - Static: `DesktopNotification.requestPermission()`, `DesktopNotification.closeAll()`
+  - Permission handling: Auto-requests permission on first use
+- **Timer**: Countdown timer with optional visual display
+  -
+  `elements.timer(selector, { duration, autoStart, format, showControls, updateInterval, notification, notificationOptions, sound, soundUrl, onTick, onComplete, onStart, onPause, onReset })` →
+  `start()`, `pause()`, `reset()`, `stop()`, `add(ms)`, `subtract(ms)`, `setDuration(ms)`, `isRunning()`,
+  `getRemaining()`, `getElapsed()`, `destroy()`
+  - Format: `'hh:mm:ss'`, `'mm:ss'`, `'ss'`
+  - Works in visual mode (with selector) or headless mode (selector = null)
+  - Integrates with DesktopNotification for completion alerts
+- **Alarm**: Scheduled time-based alerts with localStorage persistence
+  -
+  `elements.alarm({ alarms, timezone, checkInterval, storageKey, onTrigger, onSnooze, onDismiss, onAlarmAdd, onAlarmRemove })` →
+  `add(alarm)`, `remove(id)`, `update(id, changes)`, `enable(id)`, `disable(id)`, `toggle(id)`, `snooze(id, duration)`,
+  `getAlarms()`, `getAlarm(id)`, `getNextAlarm()`, `clearAll()`, `destroy()`
+  - Singleton pattern - same instance manages all alarms
+  - Alarm structure: `{ time: 'HH:MM', label, enabled, repeat, notification, notificationOptions, sound, soundUrl }`
+  - Repeat patterns: `'daily'`, `'weekdays'`, `'weekends'`, `['mon', 'wed', 'fri']`, or `null` (one-time)
+  - Persists to localStorage automatically
+  - Integrates with DesktopNotification for alarm triggers
+- **Autocomplete**: Text input with intelligent suggestion dropdown
+  -
+  `elements.autocomplete(selector, { data, dataSource, minChars, maxResults, debounce, filterFn, renderItem, highlightMatches, position, placeholder, emptyMessage, loadingMessage, caseSensitive, selectOnEnter, clearOnSelect, model, modelKey, onSelect, onChange, onOpen, onClose, onFilter })` →
+  `open()`, `close()`, `toggle()`, `isOpen()`, `setValue()`, `getValue()`, `setData()`, `refresh()`, `clearValue()`,
+  `focus()`, `destroy()`
+  - Data Sources: Static arrays or async functions (promises)
+  - Position: `'auto'`, `'above'`, `'below'` with collision detection
+  - Features: Match highlighting, keyboard navigation (arrows, Enter, Escape, Tab), debouncing, loading states
+  - Model Integration: Supports two-way binding with `model` and `modelKey` options for reactive synchronisation
+- **Pillbox**: Multi-select tag input with removable pills
+  -
+  `elements.pillbox(selector, { data, value, placeholder, searchable, creatable, maxItems, duplicates, clearable, size, renderPill, renderOption, pillTemplate, validatePill, maxItemsMessage, duplicateMessage, noResultsMessage, model, modelKey, onAdd, onRemove, onChange, onCreate, onMaxReached, onValidationError })` →
+  `getValue()`, `setValue()`, `addPill()`, `removePill()`, `removePillAt()`, `clear()`, `getCount()`, `setData()`,
+  `open()`, `close()`, `isOpen()`, `focus()`, `enable()`, `disable()`, `destroy()`
+  - Modes: Select-only or creatable (allow custom tags)
+  - Sizes: `'small'`, `'medium'`, `'large'`
+  - Features: Searchable dropdown, validation (max items, duplicates, custom), keyboard support (Backspace to remove)
+  - Model Integration: Supports two-way binding with `model` and `modelKey` options for reactive array synchronisation
 
 ### tables.js - DataTable-like functionality
 
@@ -196,10 +275,11 @@ $.setup({
 });
 ```
 
-**Supported Components (13 total):**
+**Supported Components (16 total):**
 
 - `card`, `modal`, `tabs`, `accordion`, `tooltip`, `carousel`, `dropdown`
 - `badge`, `backToTop`, `buttonGroup`, `loader`, `breadcrumbs`, `navbar`
+- `notification`, `timer`, `alarm`
 
 **Not Supported via Config Engine:**
 
