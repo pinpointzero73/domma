@@ -4,6 +4,17 @@
  */
 
 export default {
+    // Code
+    'code': {
+        viewBox: '0 0 24 24',
+        path: 'M16 18l6-6-6-6M8 6l-6 6 6 6',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+
     // Text Formatting
     'bold': {
         viewBox: '0 0 24 24',

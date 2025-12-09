@@ -1164,3 +1164,4 @@ Page Roller automatically migrates v1 documents to v2:
 - When making changes to the namespaces/modules ensure that we update the PHPStorm code intelligence files
   @assets/ide/phpstorm
 - Do not run a server as I am running one
+- Audit your own work and reiterate where possible

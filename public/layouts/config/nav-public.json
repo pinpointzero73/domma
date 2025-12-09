@@ -12,6 +12,11 @@
       "page": "quickstart"
     },
     {
+      "text": "Examples",
+      "url": "examples/index.html",
+      "page": "examples"
+    },
+    {
       "text": "About Us",
       "url": "about.html",
       "page": "about"

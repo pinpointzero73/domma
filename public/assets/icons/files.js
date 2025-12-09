@@ -237,6 +237,33 @@ export const files = {
         strokeWidth: 2,
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
+    },
+    'file-text': {
+        viewBox: '0 0 24 24',
+        path: 'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zM14 2v6h6M16 13H8M16 17H8M10 9H8',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'book-open': {
+        viewBox: '0 0 24 24',
+        path: 'M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2V3zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7V3z',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'book-closed': {
+        viewBox: '0 0 24 24',
+        path: 'M4 19.5A2.5 2.5 0 016.5 17H20M4 19.5A2.5 2.5 0 006.5 22H20v-5M6 3h14v16H6a2 2 0 01-2-2V5a2 2 0 012-2z',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
     }
 };
 

@@ -50,6 +50,33 @@ export const utils = {
     },
 
     /**
+     * Like `difference`, but accepts an iteratee which is invoked for each element of array and values to generate the criterion by which they're compared.
+     * @param {Array} array
+     * @param {Array} values
+     * @param {Function} iteratee
+     * @returns {Array}
+     */
+    differenceBy(array, values, iteratee) {
+        if (!array) return [];
+        const exclude = new Set(values.map(iteratee));
+        return array.filter(item => !exclude.has(iteratee(item)));
+    },
+
+    /**
+     * Like `difference`, but accepts a comparator which is invoked to compare elements of array to values.
+     * @param {Array} array
+     * @param {Array} values
+     * @param {Function} comparator
+     * @returns {Array}
+     */
+    differenceWith(array, values, comparator) {
+        if (!array) return [];
+        return array.filter(item1 =>
+            !values.some(item2 => comparator(item1, item2))
+        );
+    },
+
+    /**
      * Creates a slice of array with n elements dropped from the beginning.
      * @param {Array} array
      * @param {number} n
@@ -69,6 +96,45 @@ export const utils = {
         if (!array) return [];
         const length = array.length - n;
         return length > 0 ? array.slice(0, length) : [];
+    },
+
+    /**
+     * Creates a slice of array excluding elements dropped from the end.
+     * @param {Array} array
+     * @param {Function} predicate
+     * @returns {Array}
+     */
+    dropRightWhile(array, predicate) {
+        if (!array) return [];
+        let i = array.length;
+        while (i-- && predicate(array[i], i, array)) {
+        }
+        return array.slice(0, i + 1);
+    },
+
+    /**
+     * Creates a slice of array excluding elements dropped from the beginning.
+     * @param {Array} array
+     * @param {Function} predicate
+     * @returns {Array}
+     */
+    dropWhile(array, predicate) {
+        if (!array) return [];
+        let i = 0;
+        while (i < array.length && predicate(array[i], i, array)) {
+            i++;
+        }
+        return array.slice(i);
+    },
+
+    /**
+     * Performs a Same-value-zero comparison between two values to determine if they are equivalent.
+     * @param {*} value
+     * @param {*} other
+     * @returns {boolean}
+     */
+    eq(value, other) {
+        return value === other || (value !== value && other !== other);
     },
 
     /**
@@ -989,7 +1055,7 @@ export const utils = {
     curryRight(func, arity = func.length) {
         return function curried(...args) {
             if (args.length >= arity) {
-                return func.apply(this, args.reverse());
+                return func.apply(this, args);
             }
             return function(...nextArgs) {
                 return curried.apply(this, [...nextArgs, ...args]);
@@ -2035,7 +2101,10 @@ export const utils = {
      * @param {number} [radix=10] - The radix to interpret the value
      * @returns {number} The converted integer
      */
-    parseInt(string, radix = 10) {
+    parseInt(string, radix) {
+        if (radix === undefined) {
+            radix = /^0x/i.test(string) ? 16 : 10;
+        }
         if (string == null) return NaN;
         if (typeof string === 'number') return Math.trunc(string);
         string = String(string).trim();
@@ -2484,10 +2553,7 @@ export const utils = {
      */
     lowerCase(string) {
         if (!string) return '';
-        return string
-            .replace(/([a-z])([A-Z])/g, '$1 $2')
-            .replace(/[_-]+/g, ' ')
-            .toLowerCase();
+        return this.words(string).join(' ').toLowerCase();
     },
 
     /**
@@ -2574,10 +2640,7 @@ export const utils = {
      */
     snakeCase(string) {
         if (!string) return '';
-        return string
-            .replace(/([a-z])([A-Z])/g, '$1_$2')
-            .replace(/[\s-]+/g, '_')
-            .toLowerCase();
+        return this.words(string).join('_').toLowerCase();
     },
 
     /**
@@ -2598,10 +2661,9 @@ export const utils = {
      */
     startCase(string) {
         if (!string) return '';
-        return string
-            .replace(/([a-z])([A-Z])/g, '$1 $2')
-            .replace(/[_-]+/g, ' ')
-            .replace(/\b\w/g, char => char.toUpperCase());
+        return this.words(string)
+            .map(word => this.capitalize(word))
+            .join(' ');
     },
 
     /**
@@ -2724,10 +2786,7 @@ export const utils = {
      */
     upperCase(string) {
         if (!string) return '';
-        return string
-            .replace(/([a-z])([A-Z])/g, '$1 $2')
-            .replace(/[_-]+/g, ' ')
-            .toUpperCase();
+        return this.words(string).join(' ').toUpperCase();
     },
 
     /**
@@ -2750,6 +2809,8 @@ export const utils = {
         if (pattern) {
             return string.match(pattern) || [];
         }
+        // Add camelCase splitting
+        string = string.replace(/([a-z])([A-Z])/g, '$1 $2');
         return string.match(/[a-zA-Z0-9]+/g) || [];
     },
 

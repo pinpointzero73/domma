@@ -391,6 +391,15 @@ export const ui = {
         strokeWidth: 2,
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
+    },
+    'feather': {
+        viewBox: '0 0 24 24',
+        path: 'M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5zM16 8L2 22M17.5 15H9',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
     }
 };
 

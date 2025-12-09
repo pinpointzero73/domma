@@ -7,6 +7,7 @@ import {LayoutDetector} from './modules/detector.js';
 import {PathResolver} from './modules/path-resolver.js';
 import {TemplateLoader} from './modules/template-loader.js';
 import {FeaturesModule} from './modules/features.js';
+import {SidebarModule} from './modules/sidebar.js';
 
 (async function () {
     // Wait for DOM
@@ -89,6 +90,11 @@ import {FeaturesModule} from './modules/features.js';
         // Render footer
         if (presetConfig.footer) {
             await renderFooter(presetConfig.footer, data, configBase);
+        }
+
+        // Initialize sidebar
+        if (presetConfig.sidebar) {
+            SidebarModule.init(presetConfig.sidebar);
         }
 
         // Initialize features
