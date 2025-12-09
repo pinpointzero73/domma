@@ -192,7 +192,7 @@
 
             <div class="demo-grid">
                 <div>
-                    <pre class="code-block mb-4">// Fetch a single post
+                    <pre class="code-block language-javascript mb-4">// Fetch a single post
 const post = await Domma.http.get(
     'https://jsonplaceholder.typicode.com/posts/1'
 );
@@ -236,7 +236,7 @@ const posts = await Domma.http.get(
                         <label class="form-label">Body</label>
                         <textarea class="form-textarea" id="post-body" rows="2">This is the post content.</textarea>
                     </div>
-                    <pre class="code-block mb-4">const newPost = await Domma.http.post(
+                    <pre class="code-block language-javascript mb-4">const newPost = await Domma.http.post(
     'https://jsonplaceholder.typicode.com/posts',
     {
         title: 'My New Post',
@@ -270,7 +270,7 @@ const posts = await Domma.http.get(
 
             <div class="demo-grid">
                 <div>
-                    <pre class="code-block mb-4">const updated = await Domma.http.put(
+                    <pre class="code-block language-javascript mb-4">const updated = await Domma.http.put(
     'https://jsonplaceholder.typicode.com/posts/1',
     {
         id: 1,
@@ -305,7 +305,7 @@ const posts = await Domma.http.get(
 
             <div class="demo-grid">
                 <div>
-                    <pre class="code-block mb-4">await Domma.http.delete(
+                    <pre class="code-block language-javascript mb-4">await Domma.http.delete(
     'https://jsonplaceholder.typicode.com/posts/1'
 );
 // Returns empty object {} on success</pre>
@@ -332,7 +332,7 @@ const posts = await Domma.http.get(
 
             <div class="demo-grid">
                 <div>
-                    <pre class="code-block mb-4">try {
+                    <pre class="code-block language-javascript mb-4">try {
     const data = await Domma.http.get(
         'https://jsonplaceholder.typicode.com/posts/999'
     );

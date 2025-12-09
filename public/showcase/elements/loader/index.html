@@ -79,7 +79,7 @@ loader.toggle();
         <div class="demo-area mb-4" style="min-height: 120px; position: relative;" id="quick-start-demo">
             <!-- Loader will be inserted here -->
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>&lt;div id="my-loader-container" style="min-height: 120px; position: relative;"&gt;
     &lt;!-- Loader appears here --&gt;
 &lt;/div&gt;
@@ -121,7 +121,7 @@ setTimeout(() => fsLoader.destroy(), 2000);</code></pre>
 
         <h3 class="category-title">Step 1: Create the HTML Structure</h3>
         <p class="text-muted mb-2">Create a container with a button to trigger loading:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>&lt;button id="load-data-btn" class="btn btn-primary"&gt;Load Data&lt;/button&gt;
 
 &lt;div id="data-container" class="demo-area mt-4"
@@ -135,7 +135,7 @@ setTimeout(() => fsLoader.destroy(), 2000);</code></pre>
 
         <h3 class="category-title">Step 2: Create the Loader Instance</h3>
         <p class="text-muted mb-2">Initialise a loader with overlay to block interaction:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>const dataLoader = Domma.elements.loader('#data-container', {
     type: 'spinner',
     size: 'large',
@@ -147,7 +147,7 @@ setTimeout(() => fsLoader.destroy(), 2000);</code></pre>
 
         <h3 class="category-title">Step 3: Show Loader During Async Operation</h3>
         <p class="text-muted mb-2">Display the loader whilst fetching data:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>async function loadData() {
     // Hide placeholder
     document.getElementById('placeholder-text').style.display = 'none';
@@ -169,7 +169,7 @@ setTimeout(() => fsLoader.destroy(), 2000);</code></pre>
 
         <h3 class="category-title">Step 4: Hide Loader and Display Results</h3>
         <p class="text-muted mb-2">Hide the loader and show fetched data:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>async function loadData() {
     document.getElementById('placeholder-text').style.display = 'none';
     dataLoader.show();
@@ -194,7 +194,7 @@ setTimeout(() => fsLoader.destroy(), 2000);</code></pre>
 
         <h3 class="category-title">Step 5: Update Loader Text Dynamically</h3>
         <p class="text-muted mb-2">Change the loading message based on progress:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>async function loadMultipleResources() {
     dataLoader.setText('Loading users...');
     dataLoader.show();
@@ -257,7 +257,7 @@ setTimeout(() => fsLoader.destroy(), 2000);</code></pre>
                 </div>
             </div>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>// Spinner (default)
 Domma.elements.loader('#spinner-container', { type: 'spinner' }).show();
 
@@ -285,7 +285,7 @@ Domma.elements.loader('#bars-container', { type: 'bars' }).show();</code></pre>
             <p class="text-center text-sm text-muted mt-2">Small (24px) | Medium (40px) | Large (64px) | Custom
                 (80px)</p>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>// Small (24px)
 Domma.elements.loader('#container', { size: 'small' }).show();
 
@@ -320,7 +320,7 @@ Domma.elements.loader('#container', { size: 80 }).show();</code></pre>
             <p class="text-center text-sm text-muted mt-2">Primary | Success | Danger | Warning | Dark | Custom
                 (#9b59b6)</p>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>// Theme colours
 Domma.elements.loader('#container', { color: 'primary' }).show();
 Domma.elements.loader('#container', { color: 'success' }).show();
@@ -342,7 +342,7 @@ Domma.elements.loader('#container', { color: '#9b59b6' }).show();</code></pre>
                 <button id="show-overlay-btn" class="btn btn-primary">Show Overlay Loader</button>
             </div>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>const overlayLoader = Domma.elements.loader('#container', {
     type: 'spinner',
     size: 'large',
@@ -365,7 +365,7 @@ setTimeout(() => overlayLoader.hide(), 2000);</code></pre>
                 <!-- Loader with text will appear here -->
             </div>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>const textLoader = Domma.elements.loader('#container', {
     type: 'dots',
     size: 'medium',
@@ -392,7 +392,7 @@ setTimeout(() => textLoader.setText('Almost there...'), 1500);</code></pre>
                 <p class="text-center text-muted">Click "Show Loader" to display</p>
             </div>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>// Quick show (creates loader if needed)
 Domma.elements.showLoader('#container');
 
@@ -413,7 +413,7 @@ setTimeout(() => fs.destroy(), 2000);</code></pre>
                 Submit Form
             </button>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>const submitBtn = document.getElementById('submit-btn');
 let btnLoader = null;
 
@@ -828,7 +828,7 @@ async function fetchData() {
             </table>
         </div>
 
-        <div class="code-block mt-4">
+        <div class="code-block language-javascript mt-4">
             <pre><code>// Complete API Example
 const loader = Domma.elements.loader('#my-container', {
     type: 'spinner',
@@ -869,7 +869,7 @@ setTimeout(() => fs.destroy(), 2000);     // Remove after 2s</code></pre>
         </p>
 
         <h3 class="category-title">Pre-Configure Loader</h3>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>// Pre-configure loader, then control manually
 let dataLoader;
 
@@ -900,7 +900,7 @@ async function fetchData() {
         </div>
 
         <h3 class="category-title">Event-Triggered Loader</h3>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>// Show loader on button click, hide after delay
 $.setup({
     '#overlay-container': {

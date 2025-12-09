@@ -78,7 +78,7 @@ const breadcrumbs = Domma.elements.breadcrumbs('#breadcrumb-nav', {
         <div class="demo-area mb-4">
             <nav id="quick-start-breadcrumb"></nav>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>&lt;nav id="breadcrumb-nav"&gt;&lt;/nav&gt;
 
 &lt;script&gt;
@@ -122,7 +122,7 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
 
         <h3 class="category-title">Step 1: Create the HTML Structure</h3>
         <p class="text-muted mb-2">Set up a container for breadcrumbs and a category list:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>&lt;nav id="product-breadcrumbs" aria-label="Breadcrumb navigation"&gt;&lt;/nav&gt;
 
 &lt;div class="mt-4"&gt;
@@ -137,7 +137,7 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
 
         <h3 class="category-title">Step 2: Initialise Breadcrumbs</h3>
         <p class="text-muted mb-2">Create breadcrumbs with initial home item:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>const productBreadcrumbs = Domma.elements.breadcrumbs('#product-breadcrumbs', {
     items: [
         { text: 'Home', url: '#' }
@@ -150,7 +150,7 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
 
         <h3 class="category-title">Step 3: Handle Category Navigation</h3>
         <p class="text-muted mb-2">Update breadcrumbs when user clicks a category:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>document.querySelectorAll('[data-category]').forEach(btn =&gt; {
     btn.addEventListener('click', (e) =&gt; {
         const category = e.target.dataset.category;
@@ -167,7 +167,7 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
 
         <h3 class="category-title">Step 4: Enable Breadcrumb Navigation</h3>
         <p class="text-muted mb-2">Handle clicks on breadcrumbs to navigate back:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>const productBreadcrumbs = Domma.elements.breadcrumbs('#product-breadcrumbs', {
     items: [{ text: 'Home', url: '#' }],
     separator: 'chevron',
@@ -191,7 +191,7 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
 
         <h3 class="category-title">Step 5: Add Subcategory Navigation</h3>
         <p class="text-muted mb-2">Handle deeper navigation levels:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>const subcategories = {
     electronics: ['Phones', 'Laptops', 'Tablets'],
     clothing: ['Shirts', 'Trousers', 'Shoes'],
@@ -260,7 +260,7 @@ function showSubcategories(category) {
                 <nav id="separator-custom"></nav>
             </div>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>// Slash separator (default)
 Domma.elements.breadcrumbs('#nav', {
     items: [...],
@@ -298,7 +298,7 @@ Domma.elements.breadcrumbs('#nav', {
         <div class="demo-area mb-4">
             <nav id="home-icon-example"></nav>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>Domma.elements.breadcrumbs('#nav', {
     items: [
         { text: 'Home', url: '/' },
@@ -316,7 +316,7 @@ Domma.elements.breadcrumbs('#nav', {
             <nav id="responsive-example"></nav>
             <p class="text-sm text-muted mt-2">Resize browser below 576px to see collapse effect</p>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>Domma.elements.breadcrumbs('#nav', {
     items: [
         { text: 'Home', url: '/' },
@@ -341,7 +341,7 @@ Domma.elements.breadcrumbs('#nav', {
                 <span id="click-result" class="text-muted">None</span>
             </div>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>Domma.elements.breadcrumbs('#nav', {
     items: [
         { text: 'Level 1', url: '#' },
@@ -369,7 +369,7 @@ Domma.elements.breadcrumbs('#nav', {
                 <button id="dynamic-reset" class="btn btn-sm btn-secondary">Reset</button>
             </div>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>const crumbs = Domma.elements.breadcrumbs('#nav', {
     items: [{ text: 'Home', url: '#' }]
 });
@@ -396,7 +396,7 @@ const items = crumbs.getItems();</code></pre>
         <div class="demo-area mb-4">
             <nav id="url-example"></nav>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>// Generate breadcrumbs from URL path
 function generateBreadcrumbsFromURL() {
     const path = window.location.pathname;
@@ -429,7 +429,7 @@ function generateBreadcrumbsFromURL() {
         <div class="demo-area mb-4">
             <nav id="styled-example" style="font-size: 1rem; color: #6495ED;"></nav>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>&lt;nav id="breadcrumb-nav" style="font-size: 1rem; color: #6495ED;"&gt;&lt;/nav&gt;
 
 &lt;script&gt;
@@ -799,7 +799,7 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
             </table>
         </div>
 
-        <div class="code-block mt-4">
+        <div class="code-block language-javascript mt-4">
             <pre><code>// Complete API Example
 const breadcrumbs = Domma.elements.breadcrumbs('#nav', {
     items: [
@@ -841,7 +841,7 @@ breadcrumbs.destroy();</code></pre>
         </p>
 
         <h3 class="category-title">Basic Setup</h3>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>$.setup({
     '#page-breadcrumbs': {
         component: 'breadcrumbs',
@@ -859,7 +859,7 @@ breadcrumbs.destroy();</code></pre>
         </div>
 
         <h3 class="category-title">Multiple Breadcrumb Instances</h3>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>$.setup({
     // Main page breadcrumbs
     '#main-breadcrumbs': {

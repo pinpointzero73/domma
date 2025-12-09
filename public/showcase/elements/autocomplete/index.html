@@ -109,12 +109,12 @@ Domma.elements.autocomplete('#fruit-search', {
             <p class="mb-4">Let's build a country selector with flag emojis and match highlighting.</p>
 
             <h4 class="text-lg font-medium mb-3">Step 1: Create the Input</h4>
-            <div class="code-block mb-4">
+            <div class="code-block language-javascript mb-4">
                 <pre><code>&lt;input type="text" id="country-search" placeholder="Search countries..."&gt;</code></pre>
             </div>
 
             <h4 class="text-lg font-medium mb-3">Step 2: Prepare Data with Labels and Values</h4>
-            <div class="code-block mb-4">
+            <div class="code-block language-javascript mb-4">
             <pre><code>const countries = [
     { value: 'us', label: '\ud83c\uddfa\ud83c\uddf8 United States' },
     { value: 'uk', label: '\ud83c\uddec\ud83c\udde7 United Kingdom' },
@@ -129,7 +129,7 @@ Domma.elements.autocomplete('#fruit-search', {
             </div>
 
             <h4 class="text-lg font-medium mb-3">Step 3: Initialize Autocomplete</h4>
-            <div class="code-block mb-4">
+            <div class="code-block language-javascript mb-4">
             <pre><code>const countryPicker = Domma.elements.autocomplete('#country-search', {
     data: countries,
     minChars: 1,
@@ -603,7 +603,7 @@ function renderTags() {
             </p>
 
             <h3 class="category-title">Basic Configuration</h3>
-            <div class="code-block mb-4">
+            <div class="code-block language-javascript mb-4">
             <pre><code>$.setup({
     '#product-search': {
         component: 'autocomplete',
@@ -617,7 +617,7 @@ function renderTags() {
             </div>
 
             <h3 class="category-title">With Callbacks</h3>
-            <div class="code-block mb-4">
+            <div class="code-block language-javascript mb-4">
             <pre><code>$.setup({
     '#search-input': {
         component: 'autocomplete',
@@ -676,7 +676,7 @@ function renderTags() {
                     <strong>Model Value:</strong> <span id="model-display">""</span>
                 </div>
             </div>
-            <div class="code-block mb-4">
+            <div class="code-block language-javascript mb-4">
             <pre><code>// Create a model with a search field
 const searchModel = M.create({
     query: { type: 'string', default: '' }
@@ -698,7 +698,7 @@ M.bind(searchModel, 'query', '#model-display');</code></pre>
             </div>
 
             <h3 class="category-title">With Config Engine</h3>
-            <div class="code-block mb-4">
+            <div class="code-block language-javascript mb-4">
             <pre><code>const userModel = M.create({
     searchTerm: { type: 'string', default: '' }
 });

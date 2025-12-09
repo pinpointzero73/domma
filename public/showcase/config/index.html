@@ -154,7 +154,7 @@
         <div class="card-body">
             <p class="mb-4">Initialise multiple components at once with a single configuration object.</p>
 
-            <pre class="code-block mb-4">// Initialise components declaratively
+            <pre class="code-block language-javascript mb-4">// Initialise components declaratively
 $.setup({
     // Selector: configuration
     '#my-modal': {
@@ -194,7 +194,7 @@ $.setup({
         <div class="card-body">
             <p class="mb-4">Bind event handlers directly in configuration using inline functions or action objects.</p>
 
-            <pre class="code-block mb-4">$.setup({
+            <pre class="code-block language-javascript mb-4">$.setup({
     // Inline function handler
     '#submit-btn': {
         events: {
@@ -243,7 +243,7 @@ $.setup({
         <div class="card-body">
             <p class="mb-4">Set initial properties like CSS, text, HTML, classes, and attributes.</p>
 
-            <pre class="code-block mb-4">$.setup({
+            <pre class="code-block language-javascript mb-4">$.setup({
     '#welcome-message': {
         initial: {
             text: 'Welcome to Domma!',
@@ -322,7 +322,7 @@ $.setup({
             <p class="mb-4">Modify configuration after initialisation with <code>$.update()</code>. Changes are
                 deep-merged.</p>
 
-            <pre class="code-block mb-4">// Initial setup
+            <pre class="code-block language-javascript mb-4">// Initial setup
 $.setup({
     '#my-modal': {
         component: 'modal',
@@ -375,7 +375,7 @@ $.update('#status', {
         <div class="card-body">
             <p class="mb-4">Retrieve current configuration for debugging or dynamic adjustments.</p>
 
-            <pre class="code-block mb-4">// Get config for specific selector
+            <pre class="code-block language-javascript mb-4">// Get config for specific selector
 const modalConfig = $.config('#my-modal');
 console.log(modalConfig);
 // { component: 'modal', options: { backdrop: true, keyboard: true } }
@@ -401,7 +401,7 @@ console.log(allConfigs);
         <div class="card-body">
             <p class="mb-4">Reset configuration, destroy components, and unbind events with <code>$.reset()</code>.</p>
 
-            <pre class="code-block mb-4">// Reset specific selector
+            <pre class="code-block language-javascript mb-4">// Reset specific selector
 $.reset('#my-modal');
 // - Destroys the modal component
 // - Unbinds all event handlers
@@ -426,7 +426,7 @@ $.reset();
         <div class="card-body">
             <p class="mb-4">A complete form with validation, dynamic UI, and component integration.</p>
 
-            <pre class="code-block mb-4">$.setup({
+            <pre class="code-block language-javascript mb-4">$.setup({
     // Form validation
     '#contact-form': {
         events: {

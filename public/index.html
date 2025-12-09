@@ -248,6 +248,40 @@
             font-size: 0.8rem;
         }
 
+        /* Footer styles */
+        .footer {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-300);
+            border-top: 1px solid var(--dm-gray-800);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-version {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 576px) {
+            .footer-content {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+                padding: 1rem;
+            }
+        }
+
     </style>
 </head>
 <body class="dm-theme-light">
@@ -333,8 +367,8 @@
                         bundle.
                     </p>
                     <pre class="code-block">
-                        &lt;script src="domma.min.js"&gt;&lt;/script&gt;<br>
-                        <span class="comment">// That's it. You're ready to go!</span>
+&lt;script src="domma.min.js"&gt;&lt;/script&gt;<br>
+<span class="comment">// That's it. You're ready to go!</span>
                     </pre>
                 </div>
 
@@ -346,9 +380,9 @@
                         Familiar $() syntax with 90+ chainable methods for traversal, manipulation, events, and effects.
                     </p>
                     <pre class="code-block">
-                        $('.card').addClass('active')<br>
-                        &nbsp;&nbsp;.fadeIn(300)<br>
-                        &nbsp;&nbsp;.on('click', handler);
+$('.card').addClass('active')<br>
+&nbsp;&nbsp;.fadeIn(300)<br>
+&nbsp;&nbsp;.on('click', handler);
                     </pre>
                 </div>
 
@@ -360,10 +394,10 @@
                         Mustache-style templates with loops, conditionals, partials, and auto-escaping built in.
                     </p>
                     <pre class="code-block">
-                        const tmpl = _.template('Hello {{name}}!');<br>
-                        tmpl({ name: 'World' }); <span class="comment">// "Hello World!"</span><br>
-                        _.render('{{#each items}}{{.}}{{/each}}', data);
-                    </pre>
+    const tmpl = _.template('Hello {{name}}!');<br>
+    tmpl({ name: 'World' }); <span class="comment">// "Hello World!"</span><br>
+    _.render('{{#each items}}{{.}}{{/each}}', data);
+</pre>
                 </div>
 
                 <!-- 4. Lodash Utils -->
@@ -374,10 +408,10 @@
                         120+ utility functions for arrays, objects, strings, and functions &mdash; all via the _ alias.
                     </p>
                     <pre class="code-block">
-                        const grouped = _.groupBy(users, 'role');<br>
-                        const unique = _.uniqBy(items, 'id');<br>
-                        const result = _.flow([fn1, fn2])(data);
-                    </pre>
+    const grouped = _.groupBy(users, 'role');<br>
+    const unique = _.uniqBy(items, 'id');<br>
+    const result = _.flow([fn1, fn2])(data);
+</pre>
                 </div>
 
                 <!-- 5. Moment-Style Dates -->
@@ -388,10 +422,10 @@
                         Chainable date manipulation with formatting, parsing, comparison, and relative time.
                     </p>
                     <pre class="code-block">
-                        D().add(7, 'days').format('MMM D, YYYY');<br>
-                        D('2025-01-01').fromNow();<br>
-                        D().startOf('month').isBefore(D());
-                    </pre>
+    D().add(7, 'days').format('MMM D, YYYY');<br>
+    D('2025-01-01').fromNow();<br>
+    D().startOf('month').isBefore(D());
+</pre>
                 </div>
 
                 <!-- 6. Reactive Models -->
@@ -402,10 +436,10 @@
                         Pub/sub events, schema validation, and two-way DOM binding for reactive data.
                     </p>
                     <pre class="code-block">
-                        const user = M.create({ name: M.types.string });<br>
-                        M.bind(user, 'name', '#input', { twoWay: true });<br>
-                        user.onChange('name', val =&gt; console.log(val));
-                    </pre>
+    const user = M.create({ name: M.types.string });<br>
+    M.bind(user, 'name', '#input', { twoWay: true });<br>
+    user.onChange('name', val =&gt; console.log(val));
+</pre>
                 </div>
 
                 <!-- 7. UI Components -->
@@ -416,10 +450,10 @@
                         Ready-to-use modals, tabs, accordions, carousels, tooltips, and toasts.
                     </p>
                     <pre class="code-block">
-                        const modal = Domma.elements.modal('#dialog');<br>
-                        modal.open();<br>
-                        Domma.elements.toast.success('Saved!');
-                    </pre>
+    const modal = Domma.elements.modal('#dialog');<br>
+    modal.open();<br>
+    Domma.elements.toast.success('Saved!');
+</pre>
                 </div>
 
                 <!-- 8. DataTable-Like Tables -->
@@ -430,11 +464,11 @@
                         Sorting, filtering, pagination, row selection, and CSV/JSON export built in.
                     </p>
                     <pre class="code-block">
-                        const table = Domma.tables.create('#grid', {<br>
-                        &nbsp;&nbsp;data, columns, pagination: true<br>
-                        });<br>
-                        table.search('query').toCSV();
-                    </pre>
+    const table = Domma.tables.create('#grid', {<br>
+    &nbsp;&nbsp;data, columns, pagination: true<br>
+    });<br>
+    table.search('query').toCSV();
+</pre>
                 </div>
 
                 <!-- 9. Mutable Configuration -->
@@ -445,10 +479,10 @@
                         Setup once, update anytime. Inspect and reset configuration at runtime.
                     </p>
                     <pre class="code-block">
-                        $.setup({ '#modal': { component: 'modal' } });<br>
-                        $.update('#modal', { options: { backdrop: false } });<br>
-                        $.config('#modal'); $.reset('#modal');
-                    </pre>
+    $.setup({ '#modal': { component: 'modal' } });<br>
+    $.update('#modal', { options: { backdrop: false } });<br>
+    $.config('#modal'); $.reset('#modal');
+</pre>
                 </div>
 
                 <!-- 10. 100+ SVG Icons -->
@@ -459,10 +493,10 @@
                         Built-in icon library with render, inject, and scan modes. Customisable size and colour.
                     </p>
                     <pre class="code-block">
-                        Domma.icons.render('search', { size: 24 });<br>
-                        Domma.icons.inject('#icon-container', 'check');<br>
-                        &lt;i data-icon="heart"&gt;&lt;/i&gt; <span class="comment">// Auto-scanned</span>
-                    </pre>
+    Domma.icons.render('search', { size: 24 });<br>
+    Domma.icons.inject('#icon-container', 'check');<br>
+    &lt;i data-icon="heart"&gt;&lt;/i&gt; <span class="comment">// Auto-scanned</span>
+</pre>
                 </div>
 
                 <!-- 11. Theme System -->
@@ -473,10 +507,10 @@
                         Light/dark modes with 8 colour variants. Auto-detects system preference and persists choices.
                     </p>
                     <pre class="code-block">
-                        Domma.theme.init({ autoDetect: true });<br>
-                        Domma.theme.set('dark');<br>
-                        Domma.theme.setVariant('ocean');
-                    </pre>
+    Domma.theme.init({ autoDetect: true });<br>
+    Domma.theme.set('dark');<br>
+    Domma.theme.setVariant('ocean');
+</pre>
                 </div>
 
                 <!-- 12. HTTP Client -->
@@ -487,10 +521,10 @@
                         Fetch-based HTTP client with promise API. GET, POST, PUT, DELETE with automatic JSON handling.
                     </p>
                     <pre class="code-block">
-                        const users = await Domma.http.get('/api/users');<br>
-                        await Domma.http.post('/api/users', { name: 'Alice' });<br>
-                        await Domma.http.delete('/api/users/1');
-                    </pre>
+    const users = await Domma.http.get('/api/users');<br>
+    await Domma.http.post('/api/users', { name: 'Alice' });<br>
+    await Domma.http.delete('/api/users/1');
+</pre>
                 </div>
 
                 <!-- 13. Storage Wrapper -->
@@ -501,10 +535,10 @@
                         localStorage wrapper with auto JSON serialisation, namespaced keys, and graceful fallbacks.
                     </p>
                     <pre class="code-block">
-                        S.set('user', { name: 'Alice', role: 'admin' });<br>
-                        const user = S.get('user'); <span class="comment">// Auto-parsed</span><br>
-                        S.keys(); S.has('user'); S.clear();
-                    </pre>
+    S.set('user', { name: 'Alice', role: 'admin' });<br>
+    const user = S.get('user'); <span class="comment">// Auto-parsed</span><br>
+    S.keys(); S.has('user'); S.clear();
+</pre>
                 </div>
 
                 <!-- 14. Model Persistence -->
@@ -515,11 +549,11 @@
                         Models auto-save to localStorage. Load state on page refresh, reset to defaults anytime.
                     </p>
                     <pre class="code-block">
-                        const settings = M.create(schema, data, {<br>
-                        &nbsp;&nbsp;persist: 'app-settings' <span class="comment">// Auto-save key</span><br>
-                        });<br>
-                        settings.reset(true); <span class="comment">// Clear storage too</span>
-                    </pre>
+    const settings = M.create(schema, data, {<br>
+    &nbsp;&nbsp;persist: 'app-settings' <span class="comment">// Auto-save key</span><br>
+    });<br>
+    settings.reset(true); <span class="comment">// Clear storage too</span>
+</pre>
                 </div>
 
                 <!-- 15. Comprehensive Tests -->
@@ -531,10 +565,10 @@
                         elements, and more.
                     </p>
                     <pre class="code-block">
-                        <span class="comment">// Run tests in browser</span><br>
-                        open tests/test.html<br>
-                        <span class="comment">// DOM, Utils, Dates, Models, Storage...</span>
-                    </pre>
+    <span class="comment">// Run tests in browser</span><br>
+    open tests/test.html<br>
+    <span class="comment">// DOM, Utils, Dates, Models, Storage...</span>
+</pre>
                 </div>
 
                 <!-- 16. CSS Grid System -->
@@ -546,11 +580,11 @@
                         breakpoints.
                     </p>
                     <pre class="code-block">
-                        &lt;div class="row"&gt;<br>
-                        &nbsp;&nbsp;&lt;div class="col-6"&gt;Half&lt;/div&gt;<br>
-                        &nbsp;&nbsp;&lt;div class="col-6"&gt;Half&lt;/div&gt;<br>
-                        &lt;/div&gt;
-                    </pre>
+    &lt;div class="row"&gt;<br>
+    &nbsp;&nbsp;&lt;div class="col-6"&gt;Half&lt;/div&gt;<br>
+    &nbsp;&nbsp;&lt;div class="col-6"&gt;Half&lt;/div&gt;<br>
+    &lt;/div&gt;
+</pre>
                 </div>
 
                 <!-- 17. BYOS - Bring Your Own Styles -->
@@ -562,10 +596,10 @@
                         custom styles.
                     </p>
                     <pre class="code-block">
-                        $.setup({ noStyles: true });<br>
-                        <span class="comment">// All JS features work without Domma CSS</span><br>
-                        $('.tailwind-class').fadeIn().on('click', fn);
-                    </pre>
+    $.setup({ noStyles: true });<br>
+    <span class="comment">// All JS features work without Domma CSS</span><br>
+    $('.tailwind-class').fadeIn().on('click', fn);
+</pre>
                 </div>
             </div>
         </div>
@@ -615,5 +649,6 @@
     // Scan for data-icon attributes
     Domma.icons.scan();
 </script>
+
 </body>
 </html>

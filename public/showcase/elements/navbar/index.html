@@ -82,7 +82,7 @@ const navbar = Domma.elements.navbar('#main-nav', {
         <div class="demo-area mb-4">
             <nav id="quick-start-navbar"></nav>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>&lt;nav id="navbar"&gt;&lt;/nav&gt;
 
 &lt;script&gt;
@@ -130,13 +130,13 @@ Domma.elements.navbar('#navbar', {
 
         <h3 class="category-title">Step 1: Create the HTML Container</h3>
         <p class="text-muted mb-2">Start with a nav element:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>&lt;nav id="app-navbar"&gt;&lt;/nav&gt;</code></pre>
         </div>
 
         <h3 class="category-title">Step 2: Add Brand and Basic Links</h3>
         <p class="text-muted mb-2">Initialise with brand and navigation items:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>const appNav = Domma.elements.navbar('#app-navbar', {
     brand: {
         text: 'My SaaS App',
@@ -153,7 +153,7 @@ Domma.elements.navbar('#navbar', {
 
         <h3 class="category-title">Step 3: Add a Dropdown Menu</h3>
         <p class="text-muted mb-2">Create a nested dropdown for related items:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>const appNav = Domma.elements.navbar('#app-navbar', {
     brand: { text: 'My SaaS App', url: '/' },
     items: [
@@ -174,7 +174,7 @@ Domma.elements.navbar('#navbar', {
 
         <h3 class="category-title">Step 4: Add Action Buttons</h3>
         <p class="text-muted mb-2">Include call-to-action buttons on the right side:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>const appNav = Domma.elements.navbar('#app-navbar', {
     brand: { text: 'My SaaS App', url: '/' },
     items: [...],
@@ -187,7 +187,7 @@ Domma.elements.navbar('#navbar', {
 
         <h3 class="category-title">Step 5: Handle Navigation Clicks</h3>
         <p class="text-muted mb-2">Add click callback to handle navigation:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>const appNav = Domma.elements.navbar('#app-navbar', {
     brand: { text: 'My SaaS App', url: '/' },
     items: [...],
@@ -241,7 +241,7 @@ Domma.elements.navbar('#navbar', {
                 <nav id="variant-transparent"></nav>
             </div>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>// Light variant (default)
 Domma.elements.navbar('#nav', {
     variant: 'light',
@@ -270,7 +270,7 @@ Domma.elements.navbar('#nav', {
         <div class="demo-area mb-4">
             <nav id="logo-example"></nav>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>Domma.elements.navbar('#nav', {
     brand: {
         logo: 'https://via.placeholder.com/32x32/6495ED/ffffff?text=D',
@@ -290,7 +290,7 @@ Domma.elements.navbar('#nav', {
         <div class="demo-area mb-4">
             <nav id="dropdown-example"></nav>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>Domma.elements.navbar('#nav', {
     brand: { text: 'App' },
     items: [
@@ -321,7 +321,7 @@ Domma.elements.navbar('#nav', {
         <div class="demo-area mb-4">
             <nav id="actions-example"></nav>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>Domma.elements.navbar('#nav', {
     brand: { text: 'SaaS App' },
     items: [
@@ -340,7 +340,7 @@ Domma.elements.navbar('#nav', {
         <p class="text-muted mb-2">Keep navbar visible while scrolling:</p>
         <div class="demo-area mb-4">
             <p class="text-sm text-muted mb-2">Fixed (stays at top even when scrolling):</p>
-            <div class="code-block mb-3">
+            <div class="code-block language-javascript mb-3">
                 <pre><code>Domma.elements.navbar('#nav', {
     position: 'fixed',  // Always at top of viewport
     brand: { text: 'App' },
@@ -364,7 +364,7 @@ Domma.elements.navbar('#nav', {
             <nav id="mobile-example"></nav>
             <p class="text-sm text-muted mt-3">Resize browser width below 768px to see hamburger menu</p>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>Domma.elements.navbar('#nav', {
     brand: { text: 'Responsive App' },
     items: [
@@ -390,7 +390,7 @@ Domma.elements.navbar('#nav', {
                 <button id="prog-collapse" class="btn btn-sm btn-secondary">Collapse Menu</button>
             </div>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>const navbar = Domma.elements.navbar('#nav', {
     brand: { text: 'App' },
     items: [
@@ -855,7 +855,7 @@ Domma.elements.navbar('#main-nav', {
             </table>
         </div>
 
-        <div class="code-block mt-4">
+        <div class="code-block language-javascript mt-4">
             <pre><code>// Complete API Example
 const navbar = Domma.elements.navbar('#nav', {
     brand: {
@@ -910,7 +910,7 @@ navbar.destroy();                   // Clean up</code></pre>
         </p>
 
         <h3 class="category-title">Basic Setup</h3>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>$.setup({
     '#main-nav': {
         component: 'navbar',
@@ -927,7 +927,7 @@ navbar.destroy();                   // Clean up</code></pre>
         </div>
 
         <h3 class="category-title">Complete Configuration</h3>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>$.setup({
     '#app-navbar': {
         component: 'navbar',

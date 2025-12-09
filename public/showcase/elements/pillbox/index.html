@@ -108,13 +108,13 @@ Domma.elements.pillbox('#tech-stack', {
             <p class="mb-4">Let's build an email recipient field with validation and custom rendering.</p>
 
             <h4 class="text-lg font-medium mb-3">Step 1: Create the Input</h4>
-            <div class="code-block mb-4">
+            <div class="code-block language-javascript mb-4">
             <pre><code>&lt;input type="text" id="recipients-input" placeholder="Add recipients..."&gt;
 &lt;div id="recipient-count"&gt;&lt;/div&gt;</code></pre>
             </div>
 
             <h4 class="text-lg font-medium mb-3">Step 2: Prepare Contact Data</h4>
-            <div class="code-block mb-4">
+            <div class="code-block language-javascript mb-4">
             <pre><code>const contacts = [
     { value: 'alice@company.com', label: 'Alice Johnson' },
     { value: 'bob@company.com', label: 'Bob Smith' },
@@ -124,7 +124,7 @@ Domma.elements.pillbox('#tech-stack', {
             </div>
 
             <h4 class="text-lg font-medium mb-3">Step 3: Initialize with Validation</h4>
-            <div class="code-block mb-4">
+            <div class="code-block language-javascript mb-4">
             <pre><code>const recipientPillbox = Domma.elements.pillbox('#recipients-input', {
     data: contacts,
     creatable: true,  // Allow adding custom emails
@@ -676,7 +676,7 @@ pillbox.setValue(['Delta', 'Epsilon']);</code></pre>
             </p>
 
             <h3 class="category-title">Basic Configuration</h3>
-            <div class="code-block mb-4">
+            <div class="code-block language-javascript mb-4">
             <pre><code>$.setup({
     '#skills-input': {
         component: 'pillbox',
@@ -690,7 +690,7 @@ pillbox.setValue(['Delta', 'Epsilon']);</code></pre>
             </div>
 
             <h3 class="category-title">With Creatable Mode</h3>
-            <div class="code-block mb-4">
+            <div class="code-block language-javascript mb-4">
             <pre><code>$.setup({
     '#tags-input': {
         component: 'pillbox',

@@ -81,7 +81,7 @@ const group = Domma.elements.buttonGroup('#my-group', {
                 <button class="btn btn-primary">Right</button>
             </div>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>&lt;div class="btn-group"&gt;
     &lt;button class="btn btn-primary"&gt;Left&lt;/button&gt;
     &lt;button class="btn btn-primary"&gt;Middle&lt;/button&gt;
@@ -131,7 +131,7 @@ const viewToggle = Domma.elements.buttonGroup('#view-toggle', {
 
         <h3 class="category-title">Step 1: Create the HTML Structure</h3>
         <p class="text-muted mb-2">Start with a container and buttons. Add the <code>.btn-group</code> class:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>&lt;div class="btn-group" id="format-toolbar"&gt;
     &lt;button class="btn btn-outline"&gt;Bold&lt;/button&gt;
     &lt;button class="btn btn-outline"&gt;Italic&lt;/button&gt;
@@ -142,7 +142,7 @@ const viewToggle = Domma.elements.buttonGroup('#view-toggle', {
 
         <h3 class="category-title">Step 2: Initialise with Multiple Mode</h3>
         <p class="text-muted mb-2">Enable checkbox behaviour by setting <code>mode: 'multiple'</code>:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>const toolbar = Domma.elements.buttonGroup('#format-toolbar', {
     mode: 'multiple'
 });</code></pre>
@@ -150,7 +150,7 @@ const viewToggle = Domma.elements.buttonGroup('#view-toggle', {
 
         <h3 class="category-title">Step 3: Add Change Callback</h3>
         <p class="text-muted mb-2">React to selection changes. The callback receives an array of active indices:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>const toolbar = Domma.elements.buttonGroup('#format-toolbar', {
     mode: 'multiple',
     onChange: (values) =&gt; {
@@ -164,7 +164,7 @@ const viewToggle = Domma.elements.buttonGroup('#view-toggle', {
 
         <h3 class="category-title">Step 4: Add Control Buttons</h3>
         <p class="text-muted mb-2">Provide programmatic control with select all and clear all:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>&lt;button id="select-all" class="btn btn-sm btn-secondary"&gt;Select All&lt;/button&gt;
 &lt;button id="clear-all" class="btn btn-sm btn-secondary"&gt;Clear All&lt;/button&gt;
 
@@ -181,7 +181,7 @@ document.getElementById('clear-all').addEventListener('click', () =&gt; {
 
         <h3 class="category-title">Step 5: Add Visual Feedback</h3>
         <p class="text-muted mb-2">Apply styles based on the selected formatting:</p>
-        <div class="code-block mb-4">
+        <div class="code-block language-javascript mb-4">
             <pre><code>const toolbar = Domma.elements.buttonGroup('#format-toolbar', {
     mode: 'multiple',
     onChange: (values) =&gt; {
@@ -237,7 +237,7 @@ document.getElementById('clear-all').addEventListener('click', () =&gt; {
             </div>
             <p class="text-sm text-muted mt-2">Selected: <strong id="view-value">Day</strong></p>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>const viewToggle = Domma.elements.buttonGroup('#view-toggle', {
     mode: 'single',
     onChange: (value) =&gt; {
@@ -258,7 +258,7 @@ document.getElementById('clear-all').addEventListener('click', () =&gt; {
             </div>
             <p class="text-sm text-muted mt-2">Active: <strong id="format-value">None</strong></p>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>const formatToggle = Domma.elements.buttonGroup('#format-toggle', {
     mode: 'multiple',
     onChange: (values) =&gt; {
@@ -279,7 +279,7 @@ document.getElementById('clear-all').addEventListener('click', () =&gt; {
                 <button class="btn btn-secondary">Bottom</button>
             </div>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>&lt;div class="btn-group-vertical" id="vertical-group"&gt;
     &lt;button class="btn btn-secondary active"&gt;Top&lt;/button&gt;
     &lt;button class="btn btn-secondary"&gt;Middle&lt;/button&gt;
@@ -312,7 +312,7 @@ Domma.elements.buttonGroup('#vertical-group', {
                 </div>
             </div>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>&lt;!-- Small --&gt;
 &lt;div class="btn-group"&gt;
     &lt;button class="btn btn-primary btn-sm"&gt;Small&lt;/button&gt;
@@ -343,7 +343,7 @@ Domma.elements.buttonGroup('#vertical-group', {
             </div>
             <p class="text-sm text-muted mt-2">Selected: <strong id="optional-value">None</strong></p>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>const optionalGroup = Domma.elements.buttonGroup('#optional-group', {
     mode: 'single',
     allowEmpty: true,  // Allow no selection
@@ -372,7 +372,7 @@ Domma.elements.buttonGroup('#vertical-group', {
             </div>
             <p class="text-sm text-muted mt-2">Current value: <strong id="prog-value">[]</strong></p>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>const group = Domma.elements.buttonGroup('#programmatic-group', {
     mode: 'multiple',
     onChange: (values) =&gt; {
@@ -420,7 +420,7 @@ document.getElementById('prog-clear').addEventListener('click', () =&gt; {
                 </button>
             </div>
         </div>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>&lt;div class="btn-group" id="icon-group"&gt;
     &lt;button class="btn btn-outline active" title="Left Align"&gt;
         &lt;svg width="16" height="16"&gt;...&lt;/svg&gt;
@@ -823,7 +823,7 @@ const group = Domma.elements.buttonGroup('.btn-group', {
             </table>
         </div>
 
-        <div class="code-block mt-4">
+        <div class="code-block language-javascript mt-4">
             <pre><code>// Complete API Example
 const group = Domma.elements.buttonGroup('#my-group', {
     mode: 'multiple',
@@ -859,7 +859,7 @@ group.destroy();                  // Clean up when done</code></pre>
         </p>
 
         <h3 class="category-title">Basic Setup</h3>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>$.setup({
     '#view-toggle': {
         component: 'buttonGroup',
@@ -874,7 +874,7 @@ group.destroy();                  // Clean up when done</code></pre>
         </div>
 
         <h3 class="category-title">Multiple Button Groups</h3>
-        <div class="code-block mb-6">
+        <div class="code-block language-javascript mb-6">
             <pre><code>$.setup({
     // View selector (single mode)
     '#view-selector': {

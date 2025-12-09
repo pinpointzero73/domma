@@ -956,7 +956,7 @@
         $('head').append(themeStyles);
 
         // Choose footer based on page type
-        const footerToUse = (isPublicPage || isSplashPage) ? publicFooter : footer;
+        const footerToUse = isPublicPage ? publicFooter : footer;
 
         // Inject navbar container at the start of body
         $body.prepend('<nav id="main-navbar"></nav>');
