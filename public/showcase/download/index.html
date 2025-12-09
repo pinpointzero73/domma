@@ -322,14 +322,12 @@
                 <div class="card-body">
                     <div class="download-icon" data-icon="file-text" data-icon-size="48"></div>
                     <h3 class="text-xl font-semibold mb-2">domma.min.js</h3>
-                    <script src="../../dist/domma-syntax.min.js"></script>
                     <p class="download-description">
-                        UMD bundle for use with <code><script></code> tags.
+                        UMD bundle for use with <code>&lt;script&gt;</code> tags.
                         Works in browsers and with AMD/CommonJS loaders.
                     </p>
                     <p class="download-size" id="umd-size">~183 KB minified</p>
                     <a href="../../dist/domma.min.js" download class="btn btn-primary btn-block mt-auto">
-                        <script src="../../dist/domma-syntax.min.js"></script>
                         <span data-icon="download" data-icon-size="16"></span>
                         Download UMD
                     </a>
@@ -576,17 +574,16 @@
         <div class="card-body">
             <p class="mb-4">Include Domma directly in your HTML without downloading:</p>
             <div class="cdn-code">
-                <span class="comment"><!-- CSS --></span><br>
-                <link rel="stylesheet" href="path/to/domma.css"><br>
-                <link rel="stylesheet" href="path/to/domma-themes.css"><br><br>
-                <span class="comment"><!-- JavaScript --></span><br>
-                <script src="path/to/domma.min.js"></script><br><br>
-                <script src="../../dist/domma-syntax.min.js"></script>
-                <span class="comment"><!-- Ready to use! --></span><br>
-                <script><br>
-                &nbsp;&nbsp;$('.btn').on('click', () => console.log('Clicked!'));<br>
+                <span class="comment">&lt;!-- CSS --&gt;</span><br>
+                &lt;link rel="stylesheet" href="path/to/domma.css"&gt;<br>
+                &lt;link rel="stylesheet" href="path/to/domma-themes.css"&gt;<br><br>
+                <span class="comment">&lt;!-- JavaScript --&gt;</span><br>
+                &lt;script src="path/to/domma.min.js"&gt;&lt;/script&gt;<br><br>
+                <span class="comment">&lt;!-- Ready to use! --&gt;</span><br>
+                &lt;script&gt;<br>
+                &nbsp;&nbsp;$('.btn').on('click', () =&gt; console.log('Clicked!'));<br>
                 &nbsp;&nbsp;Domma.theme.init({ autoDetect: true });<br>
-                </script>
+                &lt;/script&gt;
             </div>
         </div>
     </section>
