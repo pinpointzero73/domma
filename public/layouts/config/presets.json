@@ -5,7 +5,7 @@
       "brand": {
         "text": "Domma",
         "url": "index.html",
-        "showVersion": false
+        "showVersion": true
       },
       "items": "nav-public",
       "variant": "dark",
@@ -17,7 +17,7 @@
         }
       ]
     },
-    "footer": "footer-public",
+    "footer": "footer-showcase",
     "sidebar": {
       "enabled": false
     },
@@ -149,13 +149,13 @@
       "brand": {
         "text": "Domma",
         "url": "index.html",
-        "showVersion": false
+        "showVersion": true
       },
       "items": "nav-public",
       "variant": "dark",
       "actions": []
     },
-    "footer": "footer-public",
+    "footer": "footer-showcase",
     "sidebar": {
       "enabled": false
     },
@@ -174,13 +174,13 @@
       "brand": {
         "text": "Domma",
         "url": "../index.html",
-        "showVersion": false
+        "showVersion": true
       },
       "items": "nav-public",
       "variant": "dark",
       "actions": []
     },
-    "footer": "footer-public",
+    "footer": "footer-showcase",
     "sidebar": {
       "enabled": false
     },

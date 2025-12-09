@@ -312,10 +312,19 @@ import {FeaturesModule} from './modules/features.js';
           color: white;
           font-family: inherit;
         }
+        #main-navbar .dm-navbar-brand-link {
+          text-decoration: none;
+          color: inherit;
+        }
         #main-navbar .dm-navbar-logo {
           vertical-align: middle;
           margin-right: 0.35rem;
           color: white;
+        }
+        #main-navbar .dm-navbar-link,
+        #main-navbar .dm-navbar-dropdown-toggle,
+        #main-navbar .dm-navbar-dropdown-item {
+          text-decoration: none;
         }
         #main-navbar .dm-navbar-action {
           border-radius: 9999px;
@@ -355,12 +364,63 @@ import {FeaturesModule} from './modules/features.js';
           background: rgba(255, 255, 255, 0.25);
         }
 
+        /* Public page header styles */
+        .page-header {
+          background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
+          color: white;
+          padding: 4rem 2rem;
+          text-align: center;
+        }
+        .page-header h1 {
+          font-size: 2.5rem;
+          margin: 0 0 1rem;
+        }
+        .page-header p {
+          font-size: 1.1rem;
+          opacity: 0.9;
+          max-width: 600px;
+          margin: 0 auto;
+        }
+
+        /* Public page footer styles */
+        .page-footer {
+          background: var(--dm-gray-900);
+          color: var(--dm-gray-400);
+          padding: 1.5rem 2rem;
+        }
+        .page-footer a {
+          color: var(--dm-primary-light);
+          text-decoration: none;
+        }
+        .page-footer a:hover {
+          text-decoration: underline;
+        }
+        .page-footer-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+        .page-footer-nav {
+          display: flex;
+          gap: 1.5rem;
+        }
+        .page-footer-nav a {
+          font-size: 0.9rem;
+        }
+
         @media (max-width: 576px) {
           .footer-content {
             flex-direction: column;
             gap: 0.5rem;
             text-align: center;
             padding: 1rem;
+          }
+          .page-footer-content {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
           }
         }
       </style>
@@ -472,16 +532,34 @@ import {FeaturesModule} from './modules/features.js';
             const response = await fetch(configBase + configName + '.json');
             const config = await response.json();
 
-            const template = await TemplateLoader.load('footer');
+            let html;
 
-            // Process template strings in config
-            const processedData = {
-                ...config,
-                left: processTemplate(config.content.left, data),
-                right: processTemplate(config.content.right, data)
-            };
+            // Handle different footer layouts
+            if (config.layout === 'nav') {
+                // Public footer with navigation
+                const navLinks = config.content.nav.map(item =>
+                    `<a href="${item.url}">${item.text}</a>`
+                ).join('\n        ');
 
-            const html = template(processedData);
+                html = `
+<footer class="${config.class}">
+  <div class="page-footer-content">
+    <span>${processTemplate(config.content.left, data)}</span>
+    <nav class="page-footer-nav">
+      ${navLinks}
+    </nav>
+  </div>
+</footer>`;
+            } else {
+                // Simple footer with left/right content
+                const template = await TemplateLoader.load('footer');
+                const processedData = {
+                    ...config,
+                    left: processTemplate(config.content.left, data),
+                    right: processTemplate(config.content.right, data)
+                };
+                html = template(processedData);
+            }
 
             // Inject into page
             document.body.insertAdjacentHTML('beforeend', html);
@@ -644,6 +722,7 @@ import {FeaturesModule} from './modules/features.js';
      * Process template string
      */
     function processTemplate(template, data) {
+        if (!template) return '';
         return template.replace(/\{\{(\w+)\}\}/g, (match, key) => data[key] || match);
     }
 

@@ -38,7 +38,7 @@
         }
     </style>
 </head>
-<body class="dm-theme-light">
+<body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
 <main class="container py-8">
 
@@ -549,7 +549,7 @@ editor.save();
 <script src="../../../dist/domma.min.js"></script>
 <script src="../../dist/domma-syntax.min.js"></script>
 <script src="../../../dist/domma-tools.min.js"></script>
-<script src="../../js/layout.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
 <script>
     // Text Mode Demo
     const textEditor = Domma.elements.editor('#text-editor', {

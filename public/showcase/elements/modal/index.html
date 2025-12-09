@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../css/domma.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
-<body class="dm-theme-light">
+<body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
 <main class="container py-8">
 
@@ -808,7 +808,7 @@ document.getElementById('open-simple-modal').addEventListener('click', () =&gt; 
 
 <script src="../../../dist/domma.min.js"></script>
 <script src="../../dist/domma-syntax.min.js"></script>
-<script src="../../js/layout.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
 <script>
     // Quick Start
     const quickStartModal = Domma.elements.modal('#quick-start-modal');
