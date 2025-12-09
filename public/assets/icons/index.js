@@ -19,6 +19,7 @@ import {health} from './health.js';
 import {sport} from './sport.js';
 import {buildings} from './buildings.js';
 import {emojis} from './emojis.js';
+import code from './code.js';
 
 // Merge all icon categories
 export const icons = {
@@ -37,7 +38,8 @@ export const icons = {
     ...health,
     ...sport,
     ...buildings,
-    ...emojis
+    ...emojis,
+    ...code
 };
 
 // Export categories for selective imports
@@ -57,7 +59,8 @@ export {
     health,
     sport,
     buildings,
-    emojis
+    emojis,
+    code
 };
 
 // Category metadata for icon gallery
@@ -141,6 +144,11 @@ export const categories = {
         name: 'Emojis',
         description: 'Emoji expressions and faces',
         icons: Object.keys(emojis)
+    },
+    code: {
+        name: 'Code & Editor',
+        description: 'Text editing, formatting, and code icons',
+        icons: Object.keys(code)
     }
 };
 
