@@ -364,12 +364,13 @@ public/dist/         # Built bundles (UMD + ESM)
 
 ## Bundles
 
-Domma is split into two bundles:
+Domma is split into multiple bundles:
 
-| Bundle               | Size   | Contents                                                                                          |
-|----------------------|--------|---------------------------------------------------------------------------------------------------|
-| `domma.min.js`       | ~258KB | Core framework (DOM, utils, dates, models, elements, tables, config, http, storage, theme, icons) |
-| `domma-tools.min.js` | ~78KB  | Developer tools (Theme Roller, Quick Roller, Editor)                                              |
+| Bundle                | Size   | Contents                                                                                          |
+|-----------------------|--------|---------------------------------------------------------------------------------------------------|
+| `domma.min.js`        | ~258KB | Core framework (DOM, utils, dates, models, elements, tables, config, http, storage, theme, icons) |
+| `domma-tools.min.js`  | ~78KB  | Developer tools (Theme Roller, Quick Roller, Editor)                                              |
+| `domma-syntax.min.js` | ~4KB   | Syntax highlighting addon (JavaScript, HTML, CSS)                                                 |
 
 **Usage:**
 
@@ -380,6 +381,10 @@ Domma is split into two bundles:
 <!-- With developer tools -->
 <script src="dist/domma.min.js"></script>
 <script src="dist/domma-tools.min.js"></script>
+
+<!-- With syntax highlighting -->
+<script src="dist/domma.min.js"></script>
+<script src="dist/domma-syntax.min.js"></script>
 ```
 
 The tools bundle attaches to `Domma.elements` automatically when loaded:
@@ -391,7 +396,90 @@ Domma.elements.quickRoller('#container', options);
 Domma.elements.editor('#editor', options);
 ```
 
+The syntax highlighter attaches to `Domma.syntax` and `window.DommaSyntax`:
+
+```javascript
+// Available after loading domma-syntax.min.js
+Domma.syntax.highlight(element, 'javascript');
+Domma.syntax.scan();  // Auto-highlight all code blocks
+```
+
 Zero external dependencies.
+
+### Syntax Highlighting Addon
+
+Lightweight syntax highlighter for code blocks. Zero dependencies, ~4KB minified.
+
+**Supported languages:** JavaScript, HTML, CSS
+
+**Usage:**
+
+```html
+<script src="dist/domma.min.js"></script>
+<script src="dist/domma-syntax.min.js"></script>
+
+<pre class="code-block language-javascript">
+const hello = "world";
+console.log(hello);
+</pre>
+```
+
+The highlighter automatically scans and highlights all `.code-block` elements on page load. Language is detected from
+class names (e.g., `language-javascript`, `language-html`, `language-css`).
+
+**API:**
+
+```javascript
+// Highlight specific element
+const element = document.querySelector('.code-block');
+Domma.syntax.highlight(element, 'javascript');
+
+// Scan and highlight all code blocks
+const count = Domma.syntax.scan();
+console.log(`Highlighted ${count} code blocks`);
+
+// Scan with custom selector
+Domma.syntax.scan({ selector: '.my-code' });
+
+// Configure options
+Domma.syntax.configure({
+    autoDetect: true,           // Detect language from class names
+    preserveOriginal: true,     // Store original text in data-original-code
+    selector: '.code-block',    // Default selector for scan()
+    showLanguageBadge: false,   // Show language indicator badge
+    languagePrefix: 'language-' // Prefix for language class names
+});
+
+// Get current configuration
+const config = Domma.syntax.configure();
+
+// Register custom language
+Domma.syntax.register('json', [
+    { type: 'string', pattern: /"(?:\\.|[^"\\])*"/g },
+    { type: 'number', pattern: /\b\d+\.?\d*\b/g },
+    { type: 'boolean', pattern: /\b(true|false|null)\b/g },
+    { type: 'punctuation', pattern: /[{}[\]:,]/g }
+]);
+
+// Check supported languages
+const languages = Domma.syntax.getLanguages();
+const isSupported = Domma.syntax.isLanguageSupported('javascript');
+```
+
+**Features:**
+
+- **Zero dependencies** - No external libraries required
+- **Lightweight** - Only 4.3KB minified
+- **Fast** - Regex-based tokenisation
+- **Theme-aware** - Automatic light/dark theme support
+- **Copy-friendly** - Preserves original text for clipboard operations
+- **Auto-initialisation** - Scans on DOMContentLoaded
+- **Extensible** - Register custom languages
+
+**Theme integration:**
+
+The syntax highlighter uses theme-aware CSS variables and automatically adjusts colours for light and dark themes. No
+additional configuration needed - just toggle your theme and the syntax highlighting adapts.
 
 ## Custom Bundles
 
