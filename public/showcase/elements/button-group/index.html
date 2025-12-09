@@ -44,22 +44,22 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block language-javascript">
-            <pre><code>&lt;!-- HTML Structure --&gt;
-&lt;div class="btn-group" id="my-group"&gt;
-    &lt;button class="btn btn-outline active"&gt;Option 1&lt;/button&gt;
-    &lt;button class="btn btn-outline"&gt;Option 2&lt;/button&gt;
-    &lt;button class="btn btn-outline"&gt;Option 3&lt;/button&gt;
-&lt;/div&gt;
+            <pre><code><!-- HTML Structure -->
+<div class="btn-group" id="my-group">
+    <button class="btn btn-outline active">Option 1</button>
+    <button class="btn btn-outline">Option 2</button>
+    <button class="btn btn-outline">Option 3</button>
+</div>
 
-&lt;!-- JavaScript Initialisation --&gt;
-&lt;script&gt;
+<!-- JavaScript Initialisation -->
+<script>
 const group = Domma.elements.buttonGroup('#my-group', {
     mode: 'single',
-    onChange: (value) =&gt; {
+    onChange: (value) => {
         console.log('Selected index:', value);
     }
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
         </div>
     </div>
 </section>
@@ -82,11 +82,11 @@ const group = Domma.elements.buttonGroup('#my-group', {
             </div>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>&lt;div class="btn-group"&gt;
-    &lt;button class="btn btn-primary"&gt;Left&lt;/button&gt;
-    &lt;button class="btn btn-primary"&gt;Middle&lt;/button&gt;
-    &lt;button class="btn btn-primary"&gt;Right&lt;/button&gt;
-&lt;/div&gt;</code></pre>
+            <pre><code><div class="btn-group">
+    <button class="btn btn-primary">Left</button>
+    <button class="btn btn-primary">Middle</button>
+    <button class="btn btn-primary">Right</button>
+</div></code></pre>
         </div>
 
         <h3 class="category-title">Interactive Toggle Group (Single Selection)</h3>
@@ -100,21 +100,21 @@ const group = Domma.elements.buttonGroup('#my-group', {
             <p class="text-sm text-muted mt-2">Selected: <strong id="quick-start-value">Day</strong></p>
         </div>
         <div class="code-block language-javascript">
-            <pre><code>&lt;div class="btn-group" id="view-toggle"&gt;
-    &lt;button class="btn btn-outline active"&gt;Day&lt;/button&gt;
-    &lt;button class="btn btn-outline"&gt;Week&lt;/button&gt;
-    &lt;button class="btn btn-outline"&gt;Month&lt;/button&gt;
-&lt;/div&gt;
+            <pre><code><div class="btn-group" id="view-toggle">
+    <button class="btn btn-outline active">Day</button>
+    <button class="btn btn-outline">Week</button>
+    <button class="btn btn-outline">Month</button>
+</div>
 
-&lt;script&gt;
+<script>
 const viewToggle = Domma.elements.buttonGroup('#view-toggle', {
     mode: 'single',
-    onChange: (value) =&gt; {
+    onChange: (value) => {
         const labels = ['Day', 'Week', 'Month'];
         console.log('Selected:', labels[value]);
     }
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
         </div>
     </div>
 </section>
@@ -132,12 +132,12 @@ const viewToggle = Domma.elements.buttonGroup('#view-toggle', {
         <h3 class="category-title">Step 1: Create the HTML Structure</h3>
         <p class="text-muted mb-2">Start with a container and buttons. Add the <code>.btn-group</code> class:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code>&lt;div class="btn-group" id="format-toolbar"&gt;
-    &lt;button class="btn btn-outline"&gt;Bold&lt;/button&gt;
-    &lt;button class="btn btn-outline"&gt;Italic&lt;/button&gt;
-    &lt;button class="btn btn-outline"&gt;Underline&lt;/button&gt;
-&lt;/div&gt;
-&lt;div id="format-result" class="mt-4"&gt;&lt;/div&gt;</code></pre>
+            <pre><code><div class="btn-group" id="format-toolbar">
+    <button class="btn btn-outline">Bold</button>
+    <button class="btn btn-outline">Italic</button>
+    <button class="btn btn-outline">Underline</button>
+</div>
+<div id="format-result" class="mt-4"></div></code></pre>
         </div>
 
         <h3 class="category-title">Step 2: Initialise with Multiple Mode</h3>
@@ -153,9 +153,9 @@ const viewToggle = Domma.elements.buttonGroup('#view-toggle', {
         <div class="code-block language-javascript mb-4">
             <pre><code>const toolbar = Domma.elements.buttonGroup('#format-toolbar', {
     mode: 'multiple',
-    onChange: (values) =&gt; {
+    onChange: (values) => {
         const labels = ['Bold', 'Italic', 'Underline'];
-        const active = values.map(i =&gt; labels[i]).join(', ');
+        const active = values.map(i => labels[i]).join(', ');
         document.getElementById('format-result').textContent =
             active || 'No formatting selected';
     }
@@ -165,18 +165,18 @@ const viewToggle = Domma.elements.buttonGroup('#view-toggle', {
         <h3 class="category-title">Step 4: Add Control Buttons</h3>
         <p class="text-muted mb-2">Provide programmatic control with select all and clear all:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code>&lt;button id="select-all" class="btn btn-sm btn-secondary"&gt;Select All&lt;/button&gt;
-&lt;button id="clear-all" class="btn btn-sm btn-secondary"&gt;Clear All&lt;/button&gt;
+            <pre><code><button id="select-all" class="btn btn-sm btn-secondary">Select All</button>
+<button id="clear-all" class="btn btn-sm btn-secondary">Clear All</button>
 
-&lt;script&gt;
-document.getElementById('select-all').addEventListener('click', () =&gt; {
+<script>
+document.getElementById('select-all').addEventListener('click', () => {
     toolbar.selectAll();
 });
 
-document.getElementById('clear-all').addEventListener('click', () =&gt; {
+document.getElementById('clear-all').addEventListener('click', () => {
     toolbar.deselectAll();
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
         </div>
 
         <h3 class="category-title">Step 5: Add Visual Feedback</h3>
@@ -184,12 +184,12 @@ document.getElementById('clear-all').addEventListener('click', () =&gt; {
         <div class="code-block language-javascript mb-4">
             <pre><code>const toolbar = Domma.elements.buttonGroup('#format-toolbar', {
     mode: 'multiple',
-    onChange: (values) =&gt; {
+    onChange: (values) => {
         const result = document.getElementById('format-result');
         const labels = ['Bold', 'Italic', 'Underline'];
 
         // Update text
-        const active = values.map(i =&gt; labels[i]).join(', ');
+        const active = values.map(i => labels[i]).join(', ');
         result.textContent = active || 'No formatting selected';
 
         // Apply CSS styles
@@ -240,7 +240,7 @@ document.getElementById('clear-all').addEventListener('click', () =&gt; {
         <div class="code-block language-javascript mb-6">
             <pre><code>const viewToggle = Domma.elements.buttonGroup('#view-toggle', {
     mode: 'single',
-    onChange: (value) =&gt; {
+    onChange: (value) => {
         const labels = ['Day', 'Week', 'Month'];
         document.getElementById('view-value').textContent = labels[value];
     }
@@ -261,9 +261,9 @@ document.getElementById('clear-all').addEventListener('click', () =&gt; {
         <div class="code-block language-javascript mb-6">
             <pre><code>const formatToggle = Domma.elements.buttonGroup('#format-toggle', {
     mode: 'multiple',
-    onChange: (values) =&gt; {
+    onChange: (values) => {
         const labels = ['Bold', 'Italic', 'Underline'];
-        const active = values.map(i =&gt; labels[i]).join(', ');
+        const active = values.map(i => labels[i]).join(', ');
         document.getElementById('format-value').textContent = active || 'None';
     }
 });</code></pre>
@@ -280,17 +280,17 @@ document.getElementById('clear-all').addEventListener('click', () =&gt; {
             </div>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>&lt;div class="btn-group-vertical" id="vertical-group"&gt;
-    &lt;button class="btn btn-secondary active"&gt;Top&lt;/button&gt;
-    &lt;button class="btn btn-secondary"&gt;Middle&lt;/button&gt;
-    &lt;button class="btn btn-secondary"&gt;Bottom&lt;/button&gt;
-&lt;/div&gt;
+            <pre><code><div class="btn-group-vertical" id="vertical-group">
+    <button class="btn btn-secondary active">Top</button>
+    <button class="btn btn-secondary">Middle</button>
+    <button class="btn btn-secondary">Bottom</button>
+</div>
 
-&lt;script&gt;
+<script>
 Domma.elements.buttonGroup('#vertical-group', {
     mode: 'single'
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
         </div>
 
         <!-- Example 4: Size Variants -->
@@ -313,23 +313,23 @@ Domma.elements.buttonGroup('#vertical-group', {
             </div>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>&lt;!-- Small --&gt;
-&lt;div class="btn-group"&gt;
-    &lt;button class="btn btn-primary btn-sm"&gt;Small&lt;/button&gt;
-    &lt;button class="btn btn-primary btn-sm"&gt;Group&lt;/button&gt;
-&lt;/div&gt;
+            <pre><code><!-- Small -->
+<div class="btn-group">
+    <button class="btn btn-primary btn-sm">Small</button>
+    <button class="btn btn-primary btn-sm">Group</button>
+</div>
 
-&lt;!-- Default --&gt;
-&lt;div class="btn-group"&gt;
-    &lt;button class="btn btn-primary"&gt;Default&lt;/button&gt;
-    &lt;button class="btn btn-primary"&gt;Group&lt;/button&gt;
-&lt;/div&gt;
+<!-- Default -->
+<div class="btn-group">
+    <button class="btn btn-primary">Default</button>
+    <button class="btn btn-primary">Group</button>
+</div>
 
-&lt;!-- Large --&gt;
-&lt;div class="btn-group"&gt;
-    &lt;button class="btn btn-primary btn-lg"&gt;Large&lt;/button&gt;
-    &lt;button class="btn btn-primary btn-lg"&gt;Group&lt;/button&gt;
-&lt;/div&gt;</code></pre>
+<!-- Large -->
+<div class="btn-group">
+    <button class="btn btn-primary btn-lg">Large</button>
+    <button class="btn btn-primary btn-lg">Group</button>
+</div></code></pre>
         </div>
 
         <!-- Example 5: Allow Empty Selection -->
@@ -347,7 +347,7 @@ Domma.elements.buttonGroup('#vertical-group', {
             <pre><code>const optionalGroup = Domma.elements.buttonGroup('#optional-group', {
     mode: 'single',
     allowEmpty: true,  // Allow no selection
-    onChange: (value) =&gt; {
+    onChange: (value) => {
         const labels = ['Option A', 'Option B', 'Option C'];
         document.getElementById('optional-value').textContent =
             value !== null ? labels[value] : 'None';
@@ -375,25 +375,25 @@ Domma.elements.buttonGroup('#vertical-group', {
         <div class="code-block language-javascript mb-6">
             <pre><code>const group = Domma.elements.buttonGroup('#programmatic-group', {
     mode: 'multiple',
-    onChange: (values) =&gt; {
+    onChange: (values) => {
         document.getElementById('prog-value').textContent = JSON.stringify(values);
     }
 });
 
 // Programmatic methods
-document.getElementById('prog-set-0').addEventListener('click', () =&gt; {
+document.getElementById('prog-set-0').addEventListener('click', () => {
     group.setValue([0]);  // Set active buttons by index
 });
 
-document.getElementById('prog-set-1').addEventListener('click', () =&gt; {
+document.getElementById('prog-set-1').addEventListener('click', () => {
     group.setValue([1]);
 });
 
-document.getElementById('prog-toggle-2').addEventListener('click', () =&gt; {
+document.getElementById('prog-toggle-2').addEventListener('click', () => {
     group.toggle(2);  // Toggle specific button
 });
 
-document.getElementById('prog-clear').addEventListener('click', () =&gt; {
+document.getElementById('prog-clear').addEventListener('click', () => {
     group.deselectAll();  // Clear all selections
 });</code></pre>
         </div>
@@ -421,23 +421,23 @@ document.getElementById('prog-clear').addEventListener('click', () =&gt; {
             </div>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>&lt;div class="btn-group" id="icon-group"&gt;
-    &lt;button class="btn btn-outline active" title="Left Align"&gt;
-        &lt;svg width="16" height="16"&gt;...&lt;/svg&gt;
-    &lt;/button&gt;
-    &lt;button class="btn btn-outline" title="Centre Align"&gt;
-        &lt;svg width="16" height="16"&gt;...&lt;/svg&gt;
-    &lt;/button&gt;
-    &lt;button class="btn btn-outline" title="Right Align"&gt;
-        &lt;svg width="16" height="16"&gt;...&lt;/svg&gt;
-    &lt;/button&gt;
-&lt;/div&gt;
+            <pre><code><div class="btn-group" id="icon-group">
+    <button class="btn btn-outline active" title="Left Align">
+        <svg width="16" height="16">...</svg>
+    </button>
+    <button class="btn btn-outline" title="Centre Align">
+        <svg width="16" height="16">...</svg>
+    </button>
+    <button class="btn btn-outline" title="Right Align">
+        <svg width="16" height="16">...</svg>
+    </button>
+</div>
 
-&lt;script&gt;
+<script>
 Domma.elements.buttonGroup('#icon-group', {
     mode: 'single'
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
         </div>
 
         <!-- Example 8: Filter Panel -->
@@ -509,8 +509,8 @@ function updateFilters() {
 
         <h3 class="category-title">Accessibility</h3>
         <ul class="mb-4">
-            <li><strong>Use Semantic Buttons</strong> - Always use <code>&lt;button&gt;</code> elements, not <code>&lt;div&gt;</code>
-                or <code>&lt;a&gt;</code> tags
+            <li><strong>Use Semantic Buttons</strong> - Always use <code><button></code> elements, not <code><div></code>
+                or <code><a></code> tags
             </li>
             <li><strong>ARIA Labels</strong> - Add <code>role="group"</code> and <code>aria-label</code> to the
                 container for screen readers
@@ -549,14 +549,14 @@ function updateFilters() {
                 <strong>Issue:</strong> onChange callback not firing<br>
                 <strong>Solution:</strong> Ensure buttons have class <code>.btn</code> - component only tracks elements
                 with this class<br>
-                <strong>Example:</strong> <code>&lt;button class="btn btn-outline"&gt;Click&lt;/button&gt;</code>
+                <strong>Example:</strong> <code><button class="btn btn-outline">Click</button></code>
             </li>
             <li>
                 <strong>Issue:</strong> getValue() returns null in single mode<br>
                 <strong>Solution:</strong> No button is active. Either set initial active button in HTML or use <code>allowEmpty:
                 false</code><br>
-                <strong>Example:</strong> <code>&lt;button class="btn btn-outline
-                active"&gt;Default&lt;/button&gt;</code>
+                <strong>Example:</strong> <code><button class="btn btn-outline
+                active">Default</button></code>
             </li>
             <li>
                 <strong>Issue:</strong> selectAll() doesn't work<br>
@@ -566,7 +566,7 @@ function updateFilters() {
             <li>
                 <strong>Issue:</strong> Buttons visually separate instead of connected<br>
                 <strong>Solution:</strong> Missing <code>.btn-group</code> class on container<br>
-                <strong>Example:</strong> <code>&lt;div class="btn-group"&gt;</code>
+                <strong>Example:</strong> <code><div class="btn-group"></code>
             </li>
             <li>
                 <strong>Issue:</strong> Active class not changing<br>
@@ -596,30 +596,30 @@ function updateFilters() {
         </ul>
 
         <div class="code-block language-javascript">
-            <pre><code>&lt;!-- Accessible Button Group --&gt;
-&lt;div class="btn-group" role="group" aria-label="Text alignment"&gt;
-    &lt;button class="btn btn-outline" aria-pressed="false" aria-label="Align left"&gt;
-        &lt;svg&gt;...&lt;/svg&gt;
-    &lt;/button&gt;
-    &lt;button class="btn btn-outline active" aria-pressed="true" aria-label="Align centre"&gt;
-        &lt;svg&gt;...&lt;/svg&gt;
-    &lt;/button&gt;
-    &lt;button class="btn btn-outline" aria-pressed="false" aria-label="Align right"&gt;
-        &lt;svg&gt;...&lt;/svg&gt;
-    &lt;/button&gt;
-&lt;/div&gt;
+            <pre><code><!-- Accessible Button Group -->
+<div class="btn-group" role="group" aria-label="Text alignment">
+    <button class="btn btn-outline" aria-pressed="false" aria-label="Align left">
+        <svg>...</svg>
+    </button>
+    <button class="btn btn-outline active" aria-pressed="true" aria-label="Align centre">
+        <svg>...</svg>
+    </button>
+    <button class="btn btn-outline" aria-pressed="false" aria-label="Align right">
+        <svg>...</svg>
+    </button>
+</div>
 
-&lt;script&gt;
+<script>
 const group = Domma.elements.buttonGroup('.btn-group', {
     mode: 'single',
-    onChange: (value, index, button) =&gt; {
+    onChange: (value, index, button) => {
         // Update ARIA states
-        group.buttons.forEach((btn, i) =&gt; {
+        group.buttons.forEach((btn, i) => {
             btn.setAttribute('aria-pressed', i === value);
         });
     }
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
         </div>
     </div>
 </section>
@@ -829,7 +829,7 @@ const group = Domma.elements.buttonGroup('#my-group', {
     mode: 'multiple',
     activeClass: 'selected',
     allowEmpty: true,
-    onChange: (value, index, button) =&gt; {
+    onChange: (value, index, button) => {
         console.log('Selection changed:', value);
         console.log('Triggered by button at index:', index);
     }
@@ -865,7 +865,7 @@ group.destroy();                  // Clean up when done</code></pre>
         component: 'buttonGroup',
         options: {
             mode: 'single',
-            onChange: (value) =&gt; {
+            onChange: (value) => {
                 console.log('Selected:', value);
             }
         }
@@ -882,7 +882,7 @@ group.destroy();                  // Clean up when done</code></pre>
         options: {
             mode: 'single',
             allowEmpty: false,
-            onChange: (value) =&gt; {
+            onChange: (value) => {
                 updateView(['day', 'week', 'month'][value]);
             }
         }
@@ -893,7 +893,7 @@ group.destroy();                  // Clean up when done</code></pre>
         component: 'buttonGroup',
         options: {
             mode: 'multiple',
-            onChange: (values) =&gt; {
+            onChange: (values) => {
                 applyFormatting(values);
             }
         }
@@ -928,7 +928,7 @@ $.setup({
         component: 'buttonGroup',
         options: {
             mode: 'single',
-            onChange: (value) =&gt; {
+            onChange: (value) => {
                 const labels = ['Option 1', 'Option 2', 'Option 3'];
                 $('#config-demo-value').text(labels[value]);
             }

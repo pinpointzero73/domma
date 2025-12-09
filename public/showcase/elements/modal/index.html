@@ -48,19 +48,19 @@
 
             <h4 class="category-title">Basic Usage</h4>
             <pre class="code-block language-javascript">// HTML structure
-&lt;div id="my-modal" class="modal"&gt;
-    &lt;div class="modal-header"&gt;
-        &lt;h5 class="modal-title"&gt;Modal Title&lt;/h5&gt;
-        &lt;button class="modal-close"&gt;&amp;times;&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div class="modal-body"&gt;
+<div id="my-modal" class="modal">
+    <div class="modal-header">
+        <h5 class="modal-title">Modal Title</h5>
+        <button class="modal-close">&times;</button>
+    </div>
+    <div class="modal-body">
         Modal content goes here.
-    &lt;/div&gt;
-    &lt;div class="modal-footer"&gt;
-        &lt;button class="btn btn-secondary modal-close-btn"&gt;Close&lt;/button&gt;
-        &lt;button class="btn btn-primary"&gt;Save&lt;/button&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary modal-close-btn">Close</button>
+        <button class="btn btn-primary">Save</button>
+    </div>
+</div>
 
 // JavaScript
 const modal = Domma.elements.modal('#my-modal', {
@@ -89,25 +89,25 @@ modal.toggle(); // Toggles open/close</pre>
 
             <h4 class="category-title">Simplest Modal</h4>
             <pre class="code-block language-javascript">// HTML
-&lt;button class="btn btn-primary" id="open-simple-modal"&gt;Open Modal&lt;/button&gt;
+<button class="btn btn-primary" id="open-simple-modal">Open Modal</button>
 
-&lt;div id="simple-modal" class="modal"&gt;
-    &lt;div class="modal-header"&gt;
-        &lt;h5 class="modal-title"&gt;Welcome!&lt;/h5&gt;
-        &lt;button class="modal-close"&gt;&amp;times;&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div class="modal-body"&gt;
-        &lt;p&gt;This is a simple modal dialog.&lt;/p&gt;
-    &lt;/div&gt;
-    &lt;div class="modal-footer"&gt;
-        &lt;button class="btn btn-primary modal-close-btn"&gt;Got It&lt;/button&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+<div id="simple-modal" class="modal">
+    <div class="modal-header">
+        <h5 class="modal-title">Welcome!</h5>
+        <button class="modal-close">&times;</button>
+    </div>
+    <div class="modal-body">
+        <p>This is a simple modal dialog.</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary modal-close-btn">Got It</button>
+    </div>
+</div>
 
 // JavaScript
 const modal = Domma.elements.modal('#simple-modal');
 
-document.getElementById('open-simple-modal').addEventListener('click', () =&gt; {
+document.getElementById('open-simple-modal').addEventListener('click', () => {
     modal.open();
 });</pre>
 
@@ -143,21 +143,21 @@ document.getElementById('open-simple-modal').addEventListener('click', () =&gt; 
 
             <h4 class="category-title">Step 1: Create the HTML Structure</h4>
             <p class="mb-2">Start with the modal markup and trigger button:</p>
-            <pre class="code-block language-javascript">&lt;button class="btn btn-danger" id="delete-btn"&gt;Delete Item&lt;/button&gt;
+            <pre class="code-block language-javascript"><button class="btn btn-danger" id="delete-btn">Delete Item</button>
 
-&lt;div id="confirm-modal" class="modal"&gt;
-    &lt;div class="modal-header"&gt;
-        &lt;h5 class="modal-title"&gt;Confirm Deletion&lt;/h5&gt;
-        &lt;button class="modal-close"&gt;&amp;times;&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div class="modal-body"&gt;
-        &lt;p&gt;Are you sure you want to delete this item?&lt;/p&gt;
-    &lt;/div&gt;
-    &lt;div class="modal-footer"&gt;
-        &lt;button class="btn btn-secondary modal-close-btn"&gt;Cancel&lt;/button&gt;
-        &lt;button class="btn btn-danger" id="confirm-delete"&gt;Delete&lt;/button&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</pre>
+<div id="confirm-modal" class="modal">
+    <div class="modal-header">
+        <h5 class="modal-title">Confirm Deletion</h5>
+        <button class="modal-close">&times;</button>
+    </div>
+    <div class="modal-body">
+        <p>Are you sure you want to delete this item?</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary modal-close-btn">Cancel</button>
+        <button class="btn btn-danger" id="confirm-delete">Delete</button>
+    </div>
+</div></pre>
 
             <h4 class="category-title mt-4">Step 2: Initialise the Modal</h4>
             <p class="mb-2">Create modal instance with default options:</p>
@@ -169,13 +169,13 @@ document.getElementById('open-simple-modal').addEventListener('click', () =&gt; 
 
             <h4 class="category-title mt-4">Step 3: Add Open Trigger</h4>
             <p class="mb-2">Make the delete button open the modal:</p>
-            <pre class="code-block language-javascript">document.getElementById('delete-btn').addEventListener('click', () =&gt; {
+            <pre class="code-block language-javascript">document.getElementById('delete-btn').addEventListener('click', () => {
     confirmModal.open();
 });</pre>
 
             <h4 class="category-title mt-4">Step 4: Handle Confirmation</h4>
             <p class="mb-2">Add logic when user confirms deletion:</p>
-            <pre class="code-block language-javascript">document.getElementById('confirm-delete').addEventListener('click', () =&gt; {
+            <pre class="code-block language-javascript">document.getElementById('confirm-delete').addEventListener('click', () => {
     // Perform deletion
     console.log('Item deleted');
 

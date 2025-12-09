@@ -201,16 +201,16 @@ modal.toggle();
 modal.isOpen();  // Returns boolean
 
 // HTML structure
-&lt;div id="my-modal" class="modal"&gt;
-    &lt;div class="modal-header"&gt;
-        &lt;h5 class="modal-title"&gt;Title&lt;/h5&gt;
-        &lt;button class="modal-close"&gt;&amp;times;&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div class="modal-body"&gt;Content&lt;/div&gt;
-    &lt;div class="modal-footer"&gt;
-        &lt;button class="btn"&gt;Close&lt;/button&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</pre>
+<div id="my-modal" class="modal">
+    <div class="modal-header">
+        <h5 class="modal-title">Title</h5>
+        <button class="modal-close">&times;</button>
+    </div>
+    <div class="modal-body">Content</div>
+    <div class="modal-footer">
+        <button class="btn">Close</button>
+    </div>
+</div></pre>
 
             <h4 class="category-title">Options</h4>
             <table class="option-table mb-4">
@@ -458,16 +458,16 @@ tabs.next();               // Go to next tab
 tabs.prev();               // Go to previous tab
 
 // HTML structure
-&lt;div id="my-tabs" class="tabs"&gt;
-    &lt;ul class="tab-list"&gt;
-        &lt;li class="tab-item active"&gt;Tab 1&lt;/li&gt;
-        &lt;li class="tab-item"&gt;Tab 2&lt;/li&gt;
-    &lt;/ul&gt;
-    &lt;div class="tab-content"&gt;
-        &lt;div class="tab-panel active"&gt;Content 1&lt;/div&gt;
-        &lt;div class="tab-panel"&gt;Content 2&lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</pre>
+<div id="my-tabs" class="tabs">
+    <ul class="tab-list">
+        <li class="tab-item active">Tab 1</li>
+        <li class="tab-item">Tab 2</li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-panel active">Content 1</div>
+        <div class="tab-panel">Content 2</div>
+    </div>
+</div></pre>
 
             <h4 class="category-title">Options</h4>
             <table class="option-table mb-4">
@@ -581,17 +581,17 @@ accordion.openAll();
 accordion.closeAll();
 
 // HTML structure
-&lt;div id="my-accordion" class="accordion"&gt;
-    &lt;div class="accordion-item"&gt;
-        &lt;div class="accordion-header"&gt;
+<div id="my-accordion" class="accordion">
+    <div class="accordion-item">
+        <div class="accordion-header">
             Section 1
-            &lt;span class="accordion-icon"&gt;&#9660;&lt;/span&gt;
-        &lt;/div&gt;
-        &lt;div class="accordion-body"&gt;
-            &lt;div class="accordion-content"&gt;Content&lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</pre>
+            <span class="accordion-icon">&#9660;</span>
+        </div>
+        <div class="accordion-body">
+            <div class="accordion-content">Content</div>
+        </div>
+    </div>
+</div></pre>
 
             <h4 class="category-title">Options</h4>
             <table class="option-table mb-4">
@@ -738,9 +738,9 @@ tooltip.setContent('New text');
 tooltip.destroy();
 
 // Using data attributes
-&lt;button data-tooltip="Click me!" data-tooltip-position="bottom"&gt;
+<button data-tooltip="Click me!" data-tooltip-position="bottom">
     Button
-&lt;/button&gt;</pre>
+</button></pre>
 
             <h4 class="category-title">Options</h4>
             <table class="option-table mb-4">
@@ -833,21 +833,21 @@ tooltip.destroy();
             <p class="mb-4">Large hero sections for showcasing key content.</p>
 
             <pre class="code-block">// Jumbotron is primarily CSS-based
-&lt;div class="jumbotron jumbotron-primary jumbotron-center"&gt;
-    &lt;div class="jumbotron-content"&gt;
-        &lt;h1 class="jumbotron-title"&gt;Welcome&lt;/h1&gt;
-        &lt;p class="jumbotron-subtitle"&gt;A tagline here&lt;/p&gt;
-        &lt;div class="jumbotron-actions"&gt;
-            &lt;button class="btn btn-lg"&gt;Get Started&lt;/button&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+<div class="jumbotron jumbotron-primary jumbotron-center">
+    <div class="jumbotron-content">
+        <h1 class="jumbotron-title">Welcome</h1>
+        <p class="jumbotron-subtitle">A tagline here</p>
+        <div class="jumbotron-actions">
+            <button class="btn btn-lg">Get Started</button>
+        </div>
+    </div>
+</div>
 
 // With background image
-&lt;div class="jumbotron jumbotron-cover jumbotron-overlay"
-     style="background-image: url('hero.jpg')"&gt;
+<div class="jumbotron jumbotron-cover jumbotron-overlay"
+     style="background-image: url('hero.jpg')">
     ...
-&lt;/div&gt;</pre>
+</div></pre>
 
             <h4 class="category-title">CSS Classes</h4>
             <table class="option-table mb-4">
@@ -962,16 +962,16 @@ carousel.pause();          // Pause autoplay
 carousel.getIndex();       // Get current index
 
 // HTML structure
-&lt;div id="my-carousel" class="carousel"&gt;
-    &lt;div class="carousel-track"&gt;
-        &lt;div class="carousel-slide"&gt;
-            &lt;img src="slide1.jpg" alt="Slide 1"&gt;
-        &lt;/div&gt;
-        &lt;div class="carousel-slide"&gt;
-            &lt;img src="slide2.jpg" alt="Slide 2"&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</pre>
+<div id="my-carousel" class="carousel">
+    <div class="carousel-track">
+        <div class="carousel-slide">
+            <img src="slide1.jpg" alt="Slide 1">
+        </div>
+        <div class="carousel-slide">
+            <img src="slide2.jpg" alt="Slide 2">
+        </div>
+    </div>
+</div></pre>
 
             <h4 class="category-title">Options</h4>
             <table class="option-table mb-4">
@@ -1333,34 +1333,34 @@ carousel.getIndex();       // Get current index
 
             <!-- Code Example -->
             <h4 class="category-title">Usage</h4>
-            <pre class="code-block">&lt;!-- Custom Checkbox --&gt;
-&lt;label class="form-check"&gt;
-    &lt;input type="checkbox" class="form-check-input"&gt;
-    &lt;span class="form-check-label"&gt;Accept terms&lt;/span&gt;
-&lt;/label&gt;
+            <pre class="code-block"><!-- Custom Checkbox -->
+<label class="form-check">
+    <input type="checkbox" class="form-check-input">
+    <span class="form-check-label">Accept terms</span>
+</label>
 
-&lt;!-- Toggle Switch --&gt;
-&lt;label class="form-switch"&gt;
-    &lt;input type="checkbox" class="form-switch-input"&gt;
-    &lt;span class="form-switch-label"&gt;Dark mode&lt;/span&gt;
-&lt;/label&gt;
+<!-- Toggle Switch -->
+<label class="form-switch">
+    <input type="checkbox" class="form-switch-input">
+    <span class="form-switch-label">Dark mode</span>
+</label>
 
-&lt;!-- Input Group --&gt;
-&lt;div class="input-group"&gt;
-    &lt;span class="input-group-text"&gt;@&lt;/span&gt;
-    &lt;input type="text" class="form-input" placeholder="Username"&gt;
-&lt;/div&gt;
+<!-- Input Group -->
+<div class="input-group">
+    <span class="input-group-text">@</span>
+    <input type="text" class="form-input" placeholder="Username">
+</div>
 
-&lt;!-- Validation --&gt;
-&lt;input type="text" class="form-input success"&gt;
-&lt;input type="text" class="form-input warning"&gt;
-&lt;input type="text" class="form-input error"&gt;
+<!-- Validation -->
+<input type="text" class="form-input success">
+<input type="text" class="form-input warning">
+<input type="text" class="form-input error">
 
-&lt;!-- Floating Label --&gt;
-&lt;div class="form-floating"&gt;
-    &lt;input type="text" class="form-input" placeholder=" "&gt;
-    &lt;label class="form-label"&gt;Label&lt;/label&gt;
-&lt;/div&gt;</pre>
+<!-- Floating Label -->
+<div class="form-floating">
+    <input type="text" class="form-input" placeholder=" ">
+    <label class="form-label">Label</label>
+</div></pre>
         </div>
     </section>
 

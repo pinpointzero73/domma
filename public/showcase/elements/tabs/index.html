@@ -47,18 +47,18 @@
 
             <h4 class="category-title">Basic Usage</h4>
             <pre class="code-block language-javascript">// HTML structure
-&lt;div id="my-tabs" class="tabs"&gt;
-    &lt;ul class="tab-list"&gt;
-        &lt;li class="tab-item active"&gt;Tab 1&lt;/li&gt;
-        &lt;li class="tab-item"&gt;Tab 2&lt;/li&gt;
-        &lt;li class="tab-item"&gt;Tab 3&lt;/li&gt;
-    &lt;/ul&gt;
-    &lt;div class="tab-content"&gt;
-        &lt;div class="tab-panel active"&gt;Panel 1 content&lt;/div&gt;
-        &lt;div class="tab-panel"&gt;Panel 2 content&lt;/div&gt;
-        &lt;div class="tab-panel"&gt;Panel 3 content&lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+<div id="my-tabs" class="tabs">
+    <ul class="tab-list">
+        <li class="tab-item active">Tab 1</li>
+        <li class="tab-item">Tab 2</li>
+        <li class="tab-item">Tab 3</li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-panel active">Panel 1 content</div>
+        <div class="tab-panel">Panel 2 content</div>
+        <div class="tab-panel">Panel 3 content</div>
+    </div>
+</div>
 
 // JavaScript
 const tabs = Domma.elements.tabs('#my-tabs', {
@@ -86,27 +86,27 @@ tabs.getActive(); // Returns active index</pre>
 
             <h4 class="category-title">Simple Tabs</h4>
             <pre class="code-block language-javascript">// HTML
-&lt;div id="quick-tabs" class="tabs"&gt;
-    &lt;ul class="tab-list"&gt;
-        &lt;li class="tab-item active"&gt;Home&lt;/li&gt;
-        &lt;li class="tab-item"&gt;Profile&lt;/li&gt;
-        &lt;li class="tab-item"&gt;Messages&lt;/li&gt;
-    &lt;/ul&gt;
-    &lt;div class="tab-content"&gt;
-        &lt;div class="tab-panel active"&gt;
-            &lt;h3&gt;Home&lt;/h3&gt;
-            &lt;p&gt;Welcome to your dashboard.&lt;/p&gt;
-        &lt;/div&gt;
-        &lt;div class="tab-panel"&gt;
-            &lt;h3&gt;Profile&lt;/h3&gt;
-            &lt;p&gt;Your profile information.&lt;/p&gt;
-        &lt;/div&gt;
-        &lt;div class="tab-panel"&gt;
-            &lt;h3&gt;Messages&lt;/h3&gt;
-            &lt;p&gt;You have 3 new messages.&lt;/p&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+<div id="quick-tabs" class="tabs">
+    <ul class="tab-list">
+        <li class="tab-item active">Home</li>
+        <li class="tab-item">Profile</li>
+        <li class="tab-item">Messages</li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-panel active">
+            <h3>Home</h3>
+            <p>Welcome to your dashboard.</p>
+        </div>
+        <div class="tab-panel">
+            <h3>Profile</h3>
+            <p>Your profile information.</p>
+        </div>
+        <div class="tab-panel">
+            <h3>Messages</h3>
+            <p>You have 3 new messages.</p>
+        </div>
+    </div>
+</div>
 
 // JavaScript
 Domma.elements.tabs('#quick-tabs');</pre>
@@ -149,36 +149,36 @@ Domma.elements.tabs('#quick-tabs');</pre>
 
             <h4 class="category-title">Step 1: Create Tab Headers</h4>
             <p class="mb-2">Start with the tab list structure:</p>
-            <pre class="code-block language-javascript">&lt;div id="product-tabs" class="tabs"&gt;
-    &lt;ul class="tab-list"&gt;
-        &lt;li class="tab-item active"&gt;Overview&lt;/li&gt;
-        &lt;li class="tab-item"&gt;Features&lt;/li&gt;
-        &lt;li class="tab-item"&gt;Reviews&lt;/li&gt;
-    &lt;/ul&gt;
-&lt;/div&gt;</pre>
+            <pre class="code-block language-javascript"><div id="product-tabs" class="tabs">
+    <ul class="tab-list">
+        <li class="tab-item active">Overview</li>
+        <li class="tab-item">Features</li>
+        <li class="tab-item">Reviews</li>
+    </ul>
+</div></pre>
 
             <h4 class="category-title mt-4">Step 2: Add Tab Panels</h4>
             <p class="mb-2">Add corresponding content panels (same order as tabs):</p>
-            <pre class="code-block language-javascript">&lt;div id="product-tabs" class="tabs"&gt;
-    &lt;ul class="tab-list"&gt;...&lt;/ul&gt;
-    &lt;div class="tab-content"&gt;
-        &lt;div class="tab-panel active"&gt;
-            &lt;h3&gt;Product Overview&lt;/h3&gt;
-            &lt;p&gt;Description of the product...&lt;/p&gt;
-        &lt;/div&gt;
-        &lt;div class="tab-panel"&gt;
-            &lt;h3&gt;Key Features&lt;/h3&gt;
-            &lt;ul&gt;
-                &lt;li&gt;Feature 1&lt;/li&gt;
-                &lt;li&gt;Feature 2&lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/div&gt;
-        &lt;div class="tab-panel"&gt;
-            &lt;h3&gt;Customer Reviews&lt;/h3&gt;
-            &lt;p&gt;⭐⭐⭐⭐⭐ (4.8/5)&lt;/p&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</pre>
+            <pre class="code-block language-javascript"><div id="product-tabs" class="tabs">
+    <ul class="tab-list">...</ul>
+    <div class="tab-content">
+        <div class="tab-panel active">
+            <h3>Product Overview</h3>
+            <p>Description of the product...</p>
+        </div>
+        <div class="tab-panel">
+            <h3>Key Features</h3>
+            <ul>
+                <li>Feature 1</li>
+                <li>Feature 2</li>
+            </ul>
+        </div>
+        <div class="tab-panel">
+            <h3>Customer Reviews</h3>
+            <p>⭐⭐⭐⭐⭐ (4.8/5)</p>
+        </div>
+    </div>
+</div></pre>
 
             <h4 class="category-title mt-4">Step 3: Initialise with Animation</h4>
             <p class="mb-2">Add smooth transitions between tabs:</p>
@@ -200,8 +200,8 @@ Domma.elements.tabs('#quick-tabs');</pre>
 
             <h4 class="category-title mt-4">Step 5: Add Next/Previous Buttons</h4>
             <p class="mb-2">Navigate programmatically with buttons:</p>
-            <pre class="code-block language-javascript">&lt;button id="prev-tab"&gt;← Previous&lt;/button&gt;
-&lt;button id="next-tab"&gt;Next →&lt;/button&gt;
+            <pre class="code-block language-javascript"><button id="prev-tab">← Previous</button>
+<button id="next-tab">Next →</button>
 
 document.getElementById('prev-tab').addEventListener('click', () => {
     productTabs.prev();

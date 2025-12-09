@@ -61,9 +61,9 @@ const dropdown = Domma.elements.dropdown('#my-button', {
             <button class="btn btn-primary" id="quick-dropdown">Actions</button>
         </div>
         <div class="code-block language-javascript">
-            <pre><code>&lt;button class="btn btn-primary" id="my-dropdown"&gt;Actions&lt;/button&gt;
+            <pre><code><button class="btn btn-primary" id="my-dropdown">Actions</button>
 
-&lt;script&gt;
+<script>
 Domma.elements.dropdown('#my-dropdown', {
     items: [
         { text: 'Edit', value: 'edit' },
@@ -73,7 +73,7 @@ Domma.elements.dropdown('#my-dropdown', {
     ],
     onSelect: (item) => console.log('Selected:', item)
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
         </div>
     </div>
 </section>
@@ -167,7 +167,7 @@ Domma.elements.dropdown('#my-dropdown', {
                 to toggle button
             </li>
             <li><strong>Focus Management</strong> - Focus moves to first item when opened</li>
-            <li><strong>Screen Readers</strong> - Use semantic <code>&lt;button&gt;</code> elements for triggers</li>
+            <li><strong>Screen Readers</strong> - Use semantic <code><button></code> elements for triggers</li>
         </ul>
 
         <h3 class="category-title">UX Guidelines</h3>

@@ -216,7 +216,7 @@ class Editor extends Component {
             bold: '<strong>B</strong>', italic: '<em>I</em>', underline: '<u>U</u>',
             strikethrough: '<s>S</s>', h1: 'H1', h2: 'H2', h3: 'H3',
             ul: '•', ol: '1.', blockquote: '"',
-            link: '⚓', image: '🖼', code: '&lt;/&gt;',
+            link: '⚓', image: '🖼', code: '</>',
             codeblock: '{ }', embed: '▶', undo: '↶', redo: '↷',
             clear: '✕', format: '✨'
         };

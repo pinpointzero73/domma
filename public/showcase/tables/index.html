@@ -156,7 +156,7 @@ const table = Domma.tables.create('#my-table', {
         {
             key: 'actions',
             title: '',
-            render: (val, row) => `&lt;button data-id="${row.id}"&gt;Edit&lt;/button&gt;`
+            render: (val, row) => `<button data-id="${row.id}">Edit</button>`
         }
     ],
     pagination: true,
@@ -165,7 +165,7 @@ const table = Domma.tables.create('#my-table', {
 });
 
 // HTML
-&lt;table id="my-table" class="table"&gt;&lt;/table&gt;</pre>
+<table id="my-table" class="table"></table></pre>
 
             <h4 class="category-title">Column Options</h4>
             <table class="option-table mb-4">
@@ -221,14 +221,14 @@ const table = Domma.tables.create('#my-table', {
 {
     key: 'status',
     title: 'Status',
-    render: (val) => `&lt;span class="badge ${val === 'Active' ? 'badge-success' : 'badge-secondary'}"&gt;${val}&lt;/span&gt;`
+    render: (val) => `<span class="badge ${val === 'Active' ? 'badge-success' : 'badge-secondary'}">${val}</span>`
 }
 
 // Action buttons with row data
 {
     key: 'actions',
     title: '',
-    render: (val, row) => `&lt;button data-id="${row.id}"&gt;Edit ${row.name}&lt;/button&gt;`
+    render: (val, row) => `<button data-id="${row.id}">Edit ${row.name}</button>`
 }</pre>
 
             <p class="text-sm text-muted mb-4"><strong>Tip:</strong> Use <code>width: '100px'</code> or <code>width:

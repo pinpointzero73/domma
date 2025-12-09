@@ -45,11 +45,11 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block language-javascript">
-            <pre><code>&lt;!-- HTML Container --&gt;
-&lt;nav id="main-nav"&gt;&lt;/nav&gt;
+            <pre><code><!-- HTML Container -->
+<nav id="main-nav"></nav>
 
-&lt;!-- JavaScript Initialisation --&gt;
-&lt;script&gt;
+<!-- JavaScript Initialisation -->
+<script>
 const navbar = Domma.elements.navbar('#main-nav', {
     brand: {
         text: 'My App',
@@ -64,7 +64,7 @@ const navbar = Domma.elements.navbar('#main-nav', {
     variant: 'light',
     collapsible: true
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
         </div>
     </div>
 </section>
@@ -83,9 +83,9 @@ const navbar = Domma.elements.navbar('#main-nav', {
             <nav id="quick-start-navbar"></nav>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>&lt;nav id="navbar"&gt;&lt;/nav&gt;
+            <pre><code><nav id="navbar"></nav>
 
-&lt;script&gt;
+<script>
 Domma.elements.navbar('#navbar', {
     brand: { text: 'Domma' },
     items: [
@@ -94,7 +94,7 @@ Domma.elements.navbar('#navbar', {
         { text: 'Pricing', url: '#' }
     ]
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
         </div>
 
         <h3 class="category-title">With Action Button</h3>
@@ -131,7 +131,7 @@ Domma.elements.navbar('#navbar', {
         <h3 class="category-title">Step 1: Create the HTML Container</h3>
         <p class="text-muted mb-2">Start with a nav element:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code>&lt;nav id="app-navbar"&gt;&lt;/nav&gt;</code></pre>
+            <pre><code><nav id="app-navbar"></nav></code></pre>
         </div>
 
         <h3 class="category-title">Step 2: Add Brand and Basic Links</h3>
@@ -192,7 +192,7 @@ Domma.elements.navbar('#navbar', {
     brand: { text: 'My SaaS App', url: '/' },
     items: [...],
     actions: [...],
-    onItemClick: (item, index, event) =&gt; {
+    onItemClick: (item, index, event) => {
         event.preventDefault();
         console.log('Navigate to:', item.text, item.url);
 
@@ -454,7 +454,7 @@ navbar.isCollapsed();    // Check state → true/false</code></pre>
     ],
     variant: 'light',
     position: 'sticky',
-    onItemClick: (item, index, event) =&gt; {
+    onItemClick: (item, index, event) => {
         event.preventDefault();
         console.log('Navigate to:', item.url);
     }
@@ -472,7 +472,7 @@ navbar.isCollapsed();    // Check state → true/false</code></pre>
 
         <h3 class="category-title">Accessibility</h3>
         <ul class="mb-4">
-            <li><strong>Semantic HTML</strong> - Navbar automatically uses <code>&lt;nav&gt;</code> element with <code>role="navigation"</code>
+            <li><strong>Semantic HTML</strong> - Navbar automatically uses <code><nav></code> element with <code>role="navigation"</code>
             </li>
             <li><strong>ARIA Expanded</strong> - Mobile toggle button includes <code>aria-expanded</code> state for
                 screen readers
@@ -503,7 +503,7 @@ navbar.isCollapsed();    // Check state → true/false</code></pre>
         <ul class="mb-4">
             <li>
                 <strong>Issue:</strong> Fixed navbar covers page content<br>
-                <strong>Solution:</strong> Add <code>padding-top</code> to <code>&lt;body&gt;</code> equal to navbar
+                <strong>Solution:</strong> Add <code>padding-top</code> to <code><body></code> equal to navbar
                 height (~60px)<br>
                 <strong>Example:</strong> <code>body { padding-top: 60px; }</code>
             </li>
@@ -545,14 +545,14 @@ navbar.isCollapsed();    // Check state → true/false</code></pre>
         </ul>
 
         <div class="code-block language-javascript">
-            <pre><code>&lt;!-- Accessible Navbar with Skip Link --&gt;
-&lt;a href="#main-content" class="skip-link"&gt;Skip to main content&lt;/a&gt;
-&lt;nav id="main-nav"&gt;&lt;/nav&gt;
-&lt;main id="main-content"&gt;
-    &lt;!-- Page content --&gt;
-&lt;/main&gt;
+            <pre><code><!-- Accessible Navbar with Skip Link -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<nav id="main-nav"></nav>
+<main id="main-content">
+    <!-- Page content -->
+</main>
 
-&lt;style&gt;
+<style>
 /* Skip link (hidden until focused) */
 .skip-link {
     position: absolute;
@@ -572,9 +572,9 @@ navbar.isCollapsed();    // Check state → true/false</code></pre>
 body {
     padding-top: 60px;
 }
-&lt;/style&gt;
+</style>
 
-&lt;script&gt;
+<script>
 Domma.elements.navbar('#main-nav', {
     brand: {
         logo: '/logo.svg',
@@ -597,13 +597,13 @@ Domma.elements.navbar('#main-nav', {
     ],
     variant: 'light',
     position: 'fixed',
-    onItemClick: (item, index, event) =&gt; {
+    onItemClick: (item, index, event) => {
         event.preventDefault();
         // Handle navigation with proper focus management
         navigateToPage(item.url);
     }
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
         </div>
     </div>
 </section>
@@ -881,7 +881,7 @@ const navbar = Domma.elements.navbar('#nav', {
     position: 'sticky',
     collapsible: true,
     collapseAt: 768,
-    onItemClick: (item, index, event) =&gt; {
+    onItemClick: (item, index, event) => {
         event.preventDefault();
         console.log('Clicked:', item.text);
     }
@@ -954,7 +954,7 @@ navbar.destroy();                   // Clean up</code></pre>
             ],
             variant: 'dark',
             position: 'sticky',
-            onItemClick: (item, index, event) =&gt; {
+            onItemClick: (item, index, event) => {
                 event.preventDefault();
                 navigateToPage(item.url);
             }

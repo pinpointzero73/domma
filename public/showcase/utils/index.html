@@ -476,11 +476,11 @@ _.padEnd('5', 3, '0')         // '500'
 _.truncate('Hello World', { length: 8 })  // 'Hello...'
 
 // Template
-const tpl = _.template('Hello, &lt;%= name %&gt;!');
+const tpl = _.template('Hello, <%= name %>!');
 tpl({ name: 'Alice' })        // 'Hello, Alice!'
 
 // Escape HTML
-_.escape('&lt;div&gt;')            // '&amp;lt;div&amp;gt;'
+_.escape('<div>')            // '&lt;div&gt;'
 
 // Words
 _.words('fred, barney, & pebbles')  // ['fred', 'barney', 'pebbles']</pre>
@@ -524,12 +524,12 @@ _.render('Welcome, {{user.name}}!', { user: { name: 'Alice' } });
 // 'Welcome, Alice!'
 
 // HTML is escaped by default
-_.render('&lt;p&gt;{{content}}&lt;/p&gt;', { content: '&lt;script&gt;' });
-// '&lt;p&gt;&amp;lt;script&amp;gt;&lt;/p&gt;'
+_.render('<p>{{content}}</p>', { content: '<script>' });
+// '<p>&lt;script&gt;</p>'
 
 // Use triple braces for raw output
-_.render('{{{html}}}', { html: '&lt;strong&gt;Bold&lt;/strong&gt;' });
-// '&lt;strong&gt;Bold&lt;/strong&gt;'</pre>
+_.render('{{{html}}}', { html: '<strong>Bold</strong>' });
+// '<strong>Bold</strong>'</pre>
 
             <h4 class="category-title">Conditionals</h4>
             <pre class="code-block language-javascript">// {{#if}}...{{/if}}
@@ -546,10 +546,10 @@ _.render('{{#unless verified}}Please verify{{/unless}}', { verified: false });
 
             <h4 class="category-title">Loops</h4>
             <pre class="code-block language-javascript">// {{#each}}...{{/each}}
-_.render('{{#each items}}&lt;li&gt;{{name}}&lt;/li&gt;{{/each}}', {
+_.render('{{#each items}}<li>{{name}}</li>{{/each}}', {
     items: [{ name: 'Apple' }, { name: 'Banana' }]
 });
-// '&lt;li&gt;Apple&lt;/li&gt;&lt;li&gt;Banana&lt;/li&gt;'
+// '<li>Apple</li><li>Banana</li>'
 
 // Primitive arrays use {{.}}
 _.render('{{#each tags}}#{{.}} {{/each}}', { tags: ['js', 'css', 'html'] });
@@ -567,9 +567,9 @@ _.render('{{#with user}}{{firstName}} {{lastName}}{{/with}}', {
 // 'John Doe'
 
 // {{> partial}} - include named partials
-const opts = { partials: { header: '&lt;h1&gt;{{title}}&lt;/h1&gt;' } };
+const opts = { partials: { header: '<h1>{{title}}</h1>' } };
 _.render('{{> header}}', { title: 'Welcome' }, opts);
-// '&lt;h1&gt;Welcome&lt;/h1&gt;'</pre>
+// '<h1>Welcome</h1>'</pre>
 
             <div class="try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>

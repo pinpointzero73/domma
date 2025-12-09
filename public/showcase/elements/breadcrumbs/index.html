@@ -44,11 +44,11 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block language-javascript">
-            <pre><code>&lt;!-- HTML Container --&gt;
-&lt;nav id="breadcrumb-nav"&gt;&lt;/nav&gt;
+            <pre><code><!-- HTML Container -->
+<nav id="breadcrumb-nav"></nav>
 
-&lt;!-- JavaScript Initialisation --&gt;
-&lt;script&gt;
+<!-- JavaScript Initialisation -->
+<script>
 const breadcrumbs = Domma.elements.breadcrumbs('#breadcrumb-nav', {
     items: [
         { text: 'Home', url: '/' },
@@ -60,7 +60,7 @@ const breadcrumbs = Domma.elements.breadcrumbs('#breadcrumb-nav', {
     homeIcon: false,
     responsive: true
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
         </div>
     </div>
 </section>
@@ -79,9 +79,9 @@ const breadcrumbs = Domma.elements.breadcrumbs('#breadcrumb-nav', {
             <nav id="quick-start-breadcrumb"></nav>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>&lt;nav id="breadcrumb-nav"&gt;&lt;/nav&gt;
+            <pre><code><nav id="breadcrumb-nav"></nav>
 
-&lt;script&gt;
+<script>
 Domma.elements.breadcrumbs('#breadcrumb-nav', {
     items: [
         { text: 'Home', url: '#' },
@@ -89,7 +89,7 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
         { text: 'Widget', active: true }
     ]
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
         </div>
 
         <h3 class="category-title">With Home Icon</h3>
@@ -123,16 +123,16 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
         <h3 class="category-title">Step 1: Create the HTML Structure</h3>
         <p class="text-muted mb-2">Set up a container for breadcrumbs and a category list:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code>&lt;nav id="product-breadcrumbs" aria-label="Breadcrumb navigation"&gt;&lt;/nav&gt;
+            <pre><code><nav id="product-breadcrumbs" aria-label="Breadcrumb navigation"></nav>
 
-&lt;div class="mt-4"&gt;
-    &lt;h4&gt;Browse Categories:&lt;/h4&gt;
-    &lt;div id="category-list" class="flex gap-2"&gt;
-        &lt;button class="btn btn-sm btn-outline" data-category="electronics"&gt;Electronics&lt;/button&gt;
-        &lt;button class="btn btn-sm btn-outline" data-category="clothing"&gt;Clothing&lt;/button&gt;
-        &lt;button class="btn btn-sm btn-outline" data-category="books"&gt;Books&lt;/button&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</code></pre>
+<div class="mt-4">
+    <h4>Browse Categories:</h4>
+    <div id="category-list" class="flex gap-2">
+        <button class="btn btn-sm btn-outline" data-category="electronics">Electronics</button>
+        <button class="btn btn-sm btn-outline" data-category="clothing">Clothing</button>
+        <button class="btn btn-sm btn-outline" data-category="books">Books</button>
+    </div>
+</div></code></pre>
         </div>
 
         <h3 class="category-title">Step 2: Initialise Breadcrumbs</h3>
@@ -151,8 +151,8 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
         <h3 class="category-title">Step 3: Handle Category Navigation</h3>
         <p class="text-muted mb-2">Update breadcrumbs when user clicks a category:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code>document.querySelectorAll('[data-category]').forEach(btn =&gt; {
-    btn.addEventListener('click', (e) =&gt; {
+            <pre><code>document.querySelectorAll('[data-category]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
         const category = e.target.dataset.category;
         const categoryName = e.target.textContent;
 
@@ -172,7 +172,7 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
     items: [{ text: 'Home', url: '#' }],
     separator: 'chevron',
     homeIcon: true,
-    onChange: (item, index) =&gt; {
+    onChange: (item, index) => {
         console.log('Navigate to:', item.text);
 
         // Remove items after clicked breadcrumb
@@ -180,7 +180,7 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
         const newItems = items.slice(0, index + 1);
 
         // Mark last item as active
-        if (newItems.length &gt; 0) {
+        if (newItems.length > 0) {
             newItems[newItems.length - 1].active = true;
         }
 
@@ -201,15 +201,15 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
 // Show subcategories when category selected
 function showSubcategories(category) {
     const subs = subcategories[category];
-    const html = subs.map(sub =&gt;
-        `&lt;button class="btn btn-sm btn-secondary" data-subcategory="${sub}"&gt;${sub}&lt;/button&gt;`
+    const html = subs.map(sub =>
+        `<button class="btn btn-sm btn-secondary" data-subcategory="${sub}">${sub}</button>`
     ).join('');
 
     document.getElementById('subcategory-list').innerHTML = html;
 
     // Add event listeners
-    document.querySelectorAll('[data-subcategory]').forEach(btn =&gt; {
-        btn.addEventListener('click', (e) =&gt; {
+    document.querySelectorAll('[data-subcategory]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
             productBreadcrumbs.addItem({
                 text: e.target.textContent,
                 active: true
@@ -288,7 +288,7 @@ Domma.elements.breadcrumbs('#nav', {
 // Custom HTML
 Domma.elements.breadcrumbs('#nav', {
     items: [...],
-    separator: '&lt;span style="color: #6495ED;"&gt;•&lt;/span&gt;'
+    separator: '<span style="color: #6495ED;">•</span>'
 });</code></pre>
         </div>
 
@@ -328,7 +328,7 @@ Domma.elements.breadcrumbs('#nav', {
     responsive: true  // Enable mobile collapse (default)
 });
 
-// On mobile (&lt;576px), displays: Home &gt; ... &gt; iPhone 15</code></pre>
+// On mobile (<576px), displays: Home > ... > iPhone 15</code></pre>
         </div>
 
         <!-- Example 4: Click Handling -->
@@ -348,7 +348,7 @@ Domma.elements.breadcrumbs('#nav', {
         { text: 'Level 2', url: '#' },
         { text: 'Level 3', active: true }
     ],
-    onChange: (item, index, event) =&gt; {
+    onChange: (item, index, event) => {
         event.preventDefault();  // Prevent default navigation
         console.log('Clicked:', item.text, 'at index:', index);
 
@@ -400,11 +400,11 @@ const items = crumbs.getItems();</code></pre>
             <pre><code>// Generate breadcrumbs from URL path
 function generateBreadcrumbsFromURL() {
     const path = window.location.pathname;
-    const segments = path.split('/').filter(s =&gt; s);
+    const segments = path.split('/').filter(s => s);
 
     const items = [{ text: 'Home', url: '/' }];
 
-    segments.forEach((segment, index) =&gt; {
+    segments.forEach((segment, index) => {
         const text = segment.charAt(0).toUpperCase() + segment.slice(1);
         const url = '/' + segments.slice(0, index + 1).join('/');
         const active = index === segments.length - 1;
@@ -420,7 +420,7 @@ function generateBreadcrumbsFromURL() {
 }
 
 // Example: /products/electronics/phones
-// Generates: Home &gt; Products &gt; Electronics &gt; Phones</code></pre>
+// Generates: Home > Products > Electronics > Phones</code></pre>
         </div>
 
         <!-- Example 7: Styled Breadcrumbs -->
@@ -430,9 +430,9 @@ function generateBreadcrumbsFromURL() {
             <nav id="styled-example" style="font-size: 1rem; color: #6495ED;"></nav>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>&lt;nav id="breadcrumb-nav" style="font-size: 1rem; color: #6495ED;"&gt;&lt;/nav&gt;
+            <pre><code><nav id="breadcrumb-nav" style="font-size: 1rem; color: #6495ED;"></nav>
 
-&lt;script&gt;
+<script>
 Domma.elements.breadcrumbs('#breadcrumb-nav', {
     items: [
         { text: 'Styled', url: '#' },
@@ -440,15 +440,15 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
     ],
     separator: 'chevron'
 });
-&lt;/script&gt;
+</script>
 
-&lt;!-- Custom CSS --&gt;
-&lt;style&gt;
+<!-- Custom CSS -->
+<style>
 #breadcrumb-nav {
     font-size: 1rem;
     color: #6495ED;
 }
-&lt;/style&gt;</code></pre>
+</style></code></pre>
         </div>
 
         <!-- Example 8: Real-World Example -->
@@ -481,7 +481,7 @@ const docsBreadcrumbs = Domma.elements.breadcrumbs('#docs-breadcrumbs', {
     ],
     separator: 'chevron',
     homeIcon: true,
-    onChange: (item, index) =&gt; {
+    onChange: (item, index) => {
         // Navigate to clicked section
         const items = docsBreadcrumbs.getItems();
         const newItems = items.slice(0, index + 1);
@@ -498,8 +498,8 @@ const docsBreadcrumbs = Domma.elements.breadcrumbs('#docs-breadcrumbs', {
 
 function updateDocsContent(section) {
     document.getElementById('docs-content').innerHTML =
-        `&lt;h5&gt;Current Section: ${section}&lt;/h5&gt;
-         &lt;p class="text-sm"&gt;Documentation for ${section}...&lt;/p&gt;`;
+        `<h5>Current Section: ${section}</h5>
+         <p class="text-sm">Documentation for ${section}...</p>`;
 }</code></pre>
         </div>
     </div>
@@ -514,7 +514,7 @@ function updateDocsContent(section) {
 
         <h3 class="category-title">Accessibility</h3>
         <ul class="mb-4">
-            <li><strong>Semantic HTML</strong> - Use <code>&lt;nav&gt;</code> element with
+            <li><strong>Semantic HTML</strong> - Use <code><nav></code> element with
                 <code>aria-label="Breadcrumb"</code> (automatically added)
             </li>
             <li><strong>Current Page</strong> - Last breadcrumb has <code>aria-current="page"</code> for screen readers
@@ -561,12 +561,12 @@ function updateDocsContent(section) {
             <li>
                 <strong>Issue:</strong> Custom separator not rendering<br>
                 <strong>Solution:</strong> Use HTML string, not plain text with special chars<br>
-                <strong>Example:</strong> <code>separator: '&lt;span class="dot"&gt;•&lt;/span&gt;'</code>
+                <strong>Example:</strong> <code>separator: '<span class="dot">•</span>'</code>
             </li>
             <li>
                 <strong>Issue:</strong> Responsive collapse not working<br>
                 <strong>Solution:</strong> Ensure viewport meta tag is present and <code>responsive: true</code><br>
-                <strong>Example:</strong> <code>&lt;meta name="viewport" content="width=device-width"&gt;</code>
+                <strong>Example:</strong> <code><meta name="viewport" content="width=device-width"></code>
             </li>
         </ul>
 
@@ -583,10 +583,10 @@ function updateDocsContent(section) {
         </ul>
 
         <div class="code-block language-javascript">
-            <pre><code>&lt;!-- Accessible Breadcrumbs with Schema Markup --&gt;
-&lt;nav id="breadcrumb-nav" aria-label="Breadcrumb navigation"&gt;&lt;/nav&gt;
+            <pre><code><!-- Accessible Breadcrumbs with Schema Markup -->
+<nav id="breadcrumb-nav" aria-label="Breadcrumb navigation"></nav>
 
-&lt;script type="application/ld+json"&gt;
+<script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
@@ -610,9 +610,9 @@ function updateDocsContent(section) {
     }
   ]
 }
-&lt;/script&gt;
+</script>
 
-&lt;script&gt;
+<script>
 Domma.elements.breadcrumbs('#breadcrumb-nav', {
     items: [
         { text: 'Home', url: 'https://example.com/' },
@@ -623,7 +623,7 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
     homeIcon: true,
     responsive: true
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
         </div>
     </div>
 </section>
@@ -673,7 +673,7 @@ Domma.elements.breadcrumbs('#breadcrumb-nav', {
                     <td><code>responsive</code></td>
                     <td>Boolean</td>
                     <td><code>true</code></td>
-                    <td>Collapse middle items on mobile (&lt;576px). Shows: First ... Last</td>
+                    <td>Collapse middle items on mobile (<576px). Shows: First ... Last</td>
                 </tr>
                 <tr>
                     <td><code>onChange</code></td>
@@ -810,7 +810,7 @@ const breadcrumbs = Domma.elements.breadcrumbs('#nav', {
     separator: 'chevron',
     homeIcon: true,
     responsive: true,
-    onChange: (item, index, event) =&gt; {
+    onChange: (item, index, event) => {
         event.preventDefault();
         console.log('Navigate to:', item.text);
     }
@@ -871,7 +871,7 @@ breadcrumbs.destroy();</code></pre>
             ],
             separator: 'chevron',
             homeIcon: true,
-            onChange: (item) =&gt; {
+            onChange: (item) => {
                 window.location.href = item.url;
             }
         }

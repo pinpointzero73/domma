@@ -33,10 +33,10 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block language-javascript">
-            <pre><code>&lt;div class="form-group"&gt;
-    &lt;label&gt;Email&lt;/label&gt;
-    &lt;input type="email" class="form-input" placeholder="you@example.com"&gt;
-&lt;/div&gt;</code></pre>
+            <pre><code><div class="form-group">
+    <label>Email</label>
+    <input type="email" class="form-input" placeholder="you@example.com">
+</div></code></pre>
         </div>
     </div>
 </section>
@@ -61,17 +61,17 @@
             </form>
         </div>
         <div class="code-block language-javascript">
-            <pre><code>&lt;form&gt;
-    &lt;div class="form-group"&gt;
-        &lt;label&gt;Email&lt;/label&gt;
-        &lt;input type="email" class="form-input" placeholder="you@example.com"&gt;
-    &lt;/div&gt;
-    &lt;div class="form-group"&gt;
-        &lt;label&gt;Password&lt;/label&gt;
-        &lt;input type="password" class="form-input"&gt;
-    &lt;/div&gt;
-    &lt;button type="submit" class="btn btn-primary"&gt;Sign In&lt;/button&gt;
-&lt;/form&gt;</code></pre>
+            <pre><code><form>
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" class="form-input" placeholder="you@example.com">
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" class="form-input">
+    </div>
+    <button type="submit" class="btn btn-primary">Sign In</button>
+</form></code></pre>
         </div>
     </div>
 </section>
@@ -336,7 +336,7 @@
     <div class="card-body">
         <h3 class="category-title">Accessibility</h3>
         <ul class="mb-4">
-            <li><strong>Labels</strong> - Always provide <code>&lt;label&gt;</code> elements for inputs</li>
+            <li><strong>Labels</strong> - Always provide <code><label></code> elements for inputs</li>
             <li><strong>ARIA Attributes</strong> - Use <code>aria-required</code>, <code>aria-invalid</code> for
                 validation
             </li>
@@ -643,41 +643,41 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <p class="font-semibold mb-2">CSS-Only (Default)</p>
-                <pre class="code-block language-javascript" style="font-size: 0.85em;">&lt;form action="/submit" method="POST"&gt;
-    &lt;div class="form-group"&gt;
-        &lt;label&gt;Email&lt;/label&gt;
-        &lt;input type="email"
+                <pre class="code-block language-javascript" style="font-size: 0.85em;"><form action="/submit" method="POST">
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email"
                class="form-input"
                name="email"
-               required&gt;
-    &lt;/div&gt;
+               required>
+    </div>
 
-    &lt;button type="submit"
-            class="btn btn-primary"&gt;
+    <button type="submit"
+            class="btn btn-primary">
         Submit
-    &lt;/button&gt;
-&lt;/form&gt;
+    </button>
+</form>
 
-&lt;!-- Works with native validation --&gt;</pre>
+<!-- Works with native validation --></pre>
             </div>
             <div>
                 <p class="font-semibold mb-2">CSS+JS Hybrid (Enhanced)</p>
-                <pre class="code-block language-javascript" style="font-size: 0.85em;">&lt;form id="enhanced-form"&gt;
-    &lt;div class="form-group"&gt;
-        &lt;label&gt;Email&lt;/label&gt;
-        &lt;input type="email"
+                <pre class="code-block language-javascript" style="font-size: 0.85em;"><form id="enhanced-form">
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email"
                class="form-input"
-               name="email"&gt;
-        &lt;span class="error-message"&gt;&lt;/span&gt;
-    &lt;/div&gt;
+               name="email">
+        <span class="error-message"></span>
+    </div>
 
-    &lt;button type="submit"
-            class="btn btn-primary"&gt;
+    <button type="submit"
+            class="btn btn-primary">
         Submit
-    &lt;/button&gt;
-&lt;/form&gt;
+    </button>
+</form>
 
-&lt;script&gt;
+<script>
 $.setup({
     '#enhanced-form': {
         events: {
@@ -686,7 +686,7 @@ $.setup({
         }
     }
 });
-&lt;/script&gt;</pre>
+</script></pre>
             </div>
         </div>
     </div>

@@ -1978,7 +1978,7 @@ class PageRoller {
                         <label class="qr-field-label">${field.label}</label>
 
                         <div class="qr-responsive-section" style="margin-bottom: 0.75rem;">
-                            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem;">Mobile (&lt;576px)</label>
+                            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem;">Mobile (<576px)</label>
                             <select data-field="responsive.mobile" class="qr-select">
                                 <option value="stack" ${value.mobile === 'stack' ? 'selected' : ''}>Stack</option>
                                 <option value="keep" ${value.mobile === 'keep' ? 'selected' : ''}>Keep Layout</option>
@@ -1996,7 +1996,7 @@ class PageRoller {
                         </div>
 
                         <div class="qr-responsive-section">
-                            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem;">Desktop (&gt;768px)</label>
+                            <label style="display: block; font-size: 0.875rem; margin-bottom: 0.25rem;">Desktop (>768px)</label>
                             <select data-field="responsive.desktop" class="qr-select">
                                 <option value="keep" ${value.desktop === 'keep' ? 'selected' : ''}>Keep Layout</option>
                                 <option value="hide" ${value.desktop === 'hide' ? 'selected' : ''}>Hide</option>

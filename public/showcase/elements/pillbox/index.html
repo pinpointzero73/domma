@@ -75,9 +75,9 @@ Domma.elements.pillbox('#custom-tags', {
                 <input type="text" id="quick-pillbox" style="max-width: 600px;">
             </div>
             <div class="code-block language-javascript">
-            <pre><code>&lt;input type="text" id="tech-stack"&gt;
+            <pre><code><input type="text" id="tech-stack">
 
-&lt;script&gt;
+<script>
 const languages = [
     { value: 'js', label: 'JavaScript' },
     { value: 'ts', label: 'TypeScript' },
@@ -95,7 +95,7 @@ Domma.elements.pillbox('#tech-stack', {
         console.log('Selected languages:', values);
     }
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
             </div>
         </div>
     </section>
@@ -109,8 +109,8 @@ Domma.elements.pillbox('#tech-stack', {
 
             <h4 class="text-lg font-medium mb-3">Step 1: Create the Input</h4>
             <div class="code-block language-javascript mb-4">
-            <pre><code>&lt;input type="text" id="recipients-input" placeholder="Add recipients..."&gt;
-&lt;div id="recipient-count"&gt;&lt;/div&gt;</code></pre>
+            <pre><code><input type="text" id="recipients-input" placeholder="Add recipients...">
+<div id="recipient-count"></div></code></pre>
             </div>
 
             <h4 class="text-lg font-medium mb-3">Step 2: Prepare Contact Data</h4>
@@ -426,25 +426,25 @@ pillbox.setValue(['Delta', 'Epsilon']);</code></pre>
                         <td><code>renderPill</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Custom pill renderer: (item) =&gt; HTML</td>
+                        <td>Custom pill renderer: (item) => HTML</td>
                     </tr>
                     <tr>
                         <td><code>renderOption</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Custom option renderer: (item) =&gt; HTML</td>
+                        <td>Custom option renderer: (item) => HTML</td>
                     </tr>
                     <tr>
                         <td><code>pillTemplate</code></td>
                         <td>String</td>
-                        <td><code>'&lt;span&gt;{label}&lt;/span&gt;'</code></td>
+                        <td><code>'<span>{label}</span>'</code></td>
                         <td>Default pill HTML template</td>
                     </tr>
                     <tr>
                         <td><code>validatePill</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Validator: (value) =&gt; true | string (error message)</td>
+                        <td>Validator: (value) => true | string (error message)</td>
                     </tr>
                     <tr>
                         <td><code>maxItemsMessage</code></td>
@@ -468,37 +468,37 @@ pillbox.setValue(['Delta', 'Epsilon']);</code></pre>
                         <td><code>onAdd</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Callback when pill added: (value, element) =&gt; {}</td>
+                        <td>Callback when pill added: (value, element) => {}</td>
                     </tr>
                     <tr>
                         <td><code>onRemove</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Callback when pill removed: (value, element) =&gt; {}</td>
+                        <td>Callback when pill removed: (value, element) => {}</td>
                     </tr>
                     <tr>
                         <td><code>onChange</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Callback on value change: (values) =&gt; {}</td>
+                        <td>Callback on value change: (values) => {}</td>
                     </tr>
                     <tr>
                         <td><code>onCreate</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Callback when custom pill created: (value) =&gt; {}</td>
+                        <td>Callback when custom pill created: (value) => {}</td>
                     </tr>
                     <tr>
                         <td><code>onMaxReached</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Callback when max items reached: () =&gt; {}</td>
+                        <td>Callback when max items reached: () => {}</td>
                     </tr>
                     <tr>
                         <td><code>onValidationError</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Callback on validation error: (error, value) =&gt; {}</td>
+                        <td>Callback on validation error: (error, value) => {}</td>
                     </tr>
                     </tbody>
                 </table>

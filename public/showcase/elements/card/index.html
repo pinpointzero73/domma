@@ -45,14 +45,14 @@
 
             <h4 class="category-title">Basic Usage</h4>
             <pre class="code-block language-javascript">// HTML structure
-&lt;div id="my-card" class="card"&gt;
-    &lt;div class="card-header"&gt;Card Header&lt;/div&gt;
-    &lt;div class="card-body"&gt;
-        &lt;h3 class="card-title"&gt;Card Title&lt;/h3&gt;
-        &lt;p class="card-text"&gt;Card content goes here.&lt;/p&gt;
-    &lt;/div&gt;
-    &lt;div class="card-footer"&gt;Card Footer&lt;/div&gt;
-&lt;/div&gt;
+<div id="my-card" class="card">
+    <div class="card-header">Card Header</div>
+    <div class="card-body">
+        <h3 class="card-title">Card Title</h3>
+        <p class="card-text">Card content goes here.</p>
+    </div>
+    <div class="card-footer">Card Footer</div>
+</div>
 
 // JavaScript (optional - for hover/click effects)
 const card = Domma.elements.card('#my-card', {
@@ -74,12 +74,12 @@ const card = Domma.elements.card('#my-card', {
             </p>
 
             <h4 class="category-title">CSS-Only Card (No JavaScript)</h4>
-            <pre class="code-block language-javascript">&lt;div class="card"&gt;
-    &lt;div class="card-body"&gt;
-        &lt;h3 class="card-title"&gt;Simple Card&lt;/h3&gt;
-        &lt;p class="card-text"&gt;This card requires no JavaScript.&lt;/p&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</pre>
+            <pre class="code-block language-javascript"><div class="card">
+    <div class="card-body">
+        <h3 class="card-title">Simple Card</h3>
+        <p class="card-text">This card requires no JavaScript.</p>
+    </div>
+</div></pre>
 
             <div class="demo-area mb-4">
                 <div class="card" style="max-width: 400px;">
@@ -92,12 +92,12 @@ const card = Domma.elements.card('#my-card', {
 
             <h4 class="category-title">Card with Hover Effect (JavaScript)</h4>
             <pre class="code-block language-javascript">// HTML
-&lt;div id="hover-card" class="card"&gt;
-    &lt;div class="card-body"&gt;
-        &lt;h3 class="card-title"&gt;Hover Me&lt;/h3&gt;
-        &lt;p class="card-text"&gt;Move your cursor over this card.&lt;/p&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+<div id="hover-card" class="card">
+    <div class="card-body">
+        <h3 class="card-title">Hover Me</h3>
+        <p class="card-text">Move your cursor over this card.</p>
+    </div>
+</div>
 
 // JavaScript
 Domma.elements.card('#hover-card', { hover: true });</pre>
@@ -125,28 +125,28 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
 
             <h4 class="category-title">Step 1: HTML Structure</h4>
             <p class="mb-2">Start with the basic card structure using semantic class names:</p>
-            <pre class="code-block language-javascript">&lt;div id="product-card" class="card"&gt;
-    &lt;div class="card-body"&gt;
-        &lt;h3 class="card-title"&gt;Product Name&lt;/h3&gt;
-        &lt;p class="card-text"&gt;Brief description of the product.&lt;/p&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</pre>
+            <pre class="code-block language-javascript"><div id="product-card" class="card">
+    <div class="card-body">
+        <h3 class="card-title">Product Name</h3>
+        <p class="card-text">Brief description of the product.</p>
+    </div>
+</div></pre>
 
             <h4 class="category-title mt-4">Step 2: Add Header and Footer</h4>
             <p class="mb-2">Expand the structure with a header (for images or badges) and footer (for actions):</p>
-            <pre class="code-block language-javascript">&lt;div id="product-card" class="card"&gt;
-    &lt;div class="card-header"&gt;
-        &lt;span class="badge badge-primary"&gt;New&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div class="card-body"&gt;
-        &lt;h3 class="card-title"&gt;Premium Headphones&lt;/h3&gt;
-        &lt;p class="card-text"&gt;High-quality wireless headphones with noise cancellation.&lt;/p&gt;
-        &lt;p class="card-text"&gt;&lt;strong&gt;£149.99&lt;/strong&gt;&lt;/p&gt;
-    &lt;/div&gt;
-    &lt;div class="card-footer"&gt;
-        &lt;button class="btn btn-primary"&gt;Add to Cart&lt;/button&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</pre>
+            <pre class="code-block language-javascript"><div id="product-card" class="card">
+    <div class="card-header">
+        <span class="badge badge-primary">New</span>
+    </div>
+    <div class="card-body">
+        <h3 class="card-title">Premium Headphones</h3>
+        <p class="card-text">High-quality wireless headphones with noise cancellation.</p>
+        <p class="card-text"><strong>£149.99</strong></p>
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-primary">Add to Cart</button>
+    </div>
+</div></pre>
 
             <h4 class="category-title mt-4">Step 3: Enable Hover Effect</h4>
             <p class="mb-2">Add the hover effect to make the card interactive:</p>
@@ -159,7 +159,7 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
             <pre class="code-block language-javascript">const productCard = Domma.elements.card('#product-card', {
     hover: true,
     clickable: true,
-    onClick: (event) =&gt; {
+    onClick: (event) => {
         console.log('Card clicked!');
         window.location.href = '/product/premium-headphones';
     }
@@ -339,7 +339,7 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
             <ul class="mb-4">
                 <li><strong>Semantic Structure</strong>: Use proper heading hierarchy (h1-h6) within card content</li>
                 <li><strong>Clickable Cards</strong>: If the entire card is clickable, add <code>role="button"</code> or
-                    wrap in an <code>&lt;a&gt;</code> tag with meaningful <code>aria-label</code></li>
+                    wrap in an <code><a></code> tag with meaningful <code>aria-label</code></li>
                 <li><strong>Keyboard Navigation</strong>: Ensure clickable cards are focusable with Tab and activatable
                     with Enter/Space
                 </li>
@@ -397,7 +397,7 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
                 <tr>
                     <td>Theme colours not applying</td>
                     <td>Ensure <code>domma-themes.css</code> is loaded and a theme class (e.g.,
-                        <code>.dm-theme-light</code>) is on <code>&lt;body&gt;</code>.
+                        <code>.dm-theme-light</code>) is on <code><body></code>.
                     </td>
                 </tr>
             </table>
@@ -731,32 +731,32 @@ function renderTeam($container, members) {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">CSS-Only (Static)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;">&lt;div class="card"&gt;
-    &lt;img src="image.jpg"
+                    <pre class="code-block language-javascript" style="font-size: 0.85em;"><div class="card">
+    <img src="image.jpg"
          class="card-img-top"
-         alt="Product"&gt;
-    &lt;div class="card-body"&gt;
-        &lt;h4 class="card-title"&gt;
+         alt="Product">
+    <div class="card-body">
+        <h4 class="card-title">
             Static Product
-        &lt;/h4&gt;
-        &lt;p class="card-text"&gt;
+        </h4>
+        <p class="card-text">
             Fixed content
-        &lt;/p&gt;
-        &lt;a href="#" class="btn"&gt;
+        </p>
+        <a href="#" class="btn">
             View
-        &lt;/a&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+        </a>
+    </div>
+</div>
 
-&lt;!-- No dynamic content --&gt;</pre>
+<!-- No dynamic content --></pre>
                 </div>
                 <div>
                     <p class="font-semibold mb-2">CSS+JS Hybrid (Dynamic)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;">&lt;div id="products"&gt;
-    &lt;!-- Cards loaded via JS --&gt;
-&lt;/div&gt;
+                    <pre class="code-block language-javascript" style="font-size: 0.85em;"><div id="products">
+    <!-- Cards loaded via JS -->
+</div>
 
-&lt;script&gt;
+<script>
 $.setup({
     '#products': {
         events: {
@@ -775,7 +775,7 @@ $.setup({
         }
     }
 });
-&lt;/script&gt;</pre>
+</script></pre>
                 </div>
             </div>
         </div>

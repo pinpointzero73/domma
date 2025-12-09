@@ -342,12 +342,12 @@
 
         <div class="quick-start">
             <p class="mb-4"><strong>1. Include Domma</strong></p>
-            <pre class="code-block language-javascript mb-6">&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</pre>
+            <pre class="code-block language-javascript mb-6"><script src="dist/domma.min.js"></script></pre>
             <script src="../../dist/domma-syntax.min.js"></script>
 
             <p class="mb-4"><strong>2. Use the short aliases</strong></p>
             <pre class="code-block language-javascript mb-6">// DOM manipulation (jQuery-style)
-$('.btn').on('click', () =&gt; alert('Clicked!'));
+$('.btn').on('click', () => alert('Clicked!'));
 
 // Utilities (Lodash-style)
 const grouped = _.groupBy(users, 'department');
@@ -371,7 +371,7 @@ S.get('prefs');  // { theme: 'dark' }</pre>
     },
     '#submit': {
         events: {
-            click: (e, $el) =&gt; $el.text('Submitted!')
+            click: (e, $el) => $el.text('Submitted!')
         }
     }
 });</pre>

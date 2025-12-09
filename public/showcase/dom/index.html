@@ -115,7 +115,7 @@ $(document.body)
 $(element)
 
 // HTML string
-$('&lt;div class="new"&gt;Content&lt;/div&gt;')
+$('<div class="new">Content</div>')
 
 // Collection from NodeList
 $(document.querySelectorAll('p'))</pre>
@@ -228,7 +228,7 @@ $('.items').last()</pre>
 
             <pre class="code-block language-javascript">// Get/set HTML content
 $('#box').html()              // Get
-$('#box').html('&lt;b&gt;New&lt;/b&gt;')  // Set
+$('#box').html('<b>New</b>')  // Set
 
 // Get/set text content
 $('#box').text()
@@ -339,16 +339,16 @@ $('#box').toggle()</pre>
             </div>
 
             <pre class="code-block language-javascript">// Inserting content
-$('#list').append('&lt;li&gt;New item&lt;/li&gt;')
-$('#list').prepend('&lt;li&gt;First item&lt;/li&gt;')
-$('#item').after('&lt;li&gt;After&lt;/li&gt;')
-$('#item').before('&lt;li&gt;Before&lt;/li&gt;')
+$('#list').append('<li>New item</li>')
+$('#list').prepend('<li>First item</li>')
+$('#item').after('<li>After</li>')
+$('#item').before('<li>Before</li>')
 
 // Moving elements
-$('&lt;li&gt;New&lt;/li&gt;').appendTo('#list')
+$('<li>New</li>').appendTo('#list')
 
 // Wrapping
-$('.item').wrap('&lt;div class="wrapper"&gt;&lt;/div&gt;')
+$('.item').wrap('<div class="wrapper"></div>')
 $('.item').unwrap()
 
 // Removing

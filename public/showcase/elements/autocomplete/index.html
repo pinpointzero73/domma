@@ -77,9 +77,9 @@ Domma.elements.autocomplete('#city', {
                 <input type="text" id="quick-autocomplete" placeholder="Type a fruit name..." style="max-width: 400px;">
             </div>
             <div class="code-block language-javascript">
-            <pre><code>&lt;input type="text" id="fruit-search" placeholder="Type a fruit name..."&gt;
+            <pre><code><input type="text" id="fruit-search" placeholder="Type a fruit name...">
 
-&lt;script&gt;
+<script>
 const fruits = [
     'Apple', 'Apricot', 'Avocado', 'Banana', 'Blackberry', 'Blueberry',
     'Cherry', 'Coconut', 'Date', 'Dragonfruit', 'Elderberry', 'Fig',
@@ -96,7 +96,7 @@ Domma.elements.autocomplete('#fruit-search', {
         console.log('Selected fruit:', value);
     }
 });
-&lt;/script&gt;</code></pre>
+</script></code></pre>
             </div>
         </div>
     </section>
@@ -110,7 +110,7 @@ Domma.elements.autocomplete('#fruit-search', {
 
             <h4 class="text-lg font-medium mb-3">Step 1: Create the Input</h4>
             <div class="code-block language-javascript mb-4">
-                <pre><code>&lt;input type="text" id="country-search" placeholder="Search countries..."&gt;</code></pre>
+                <pre><code><input type="text" id="country-search" placeholder="Search countries..."></code></pre>
             </div>
 
             <h4 class="text-lg font-medium mb-3">Step 2: Prepare Data with Labels and Values</h4>
@@ -209,11 +209,11 @@ Domma.elements.autocomplete('#user-search', {
     data: users,
     renderItem: (user, query) => {
         return `
-            &lt;div style="display: flex; flex-direction: column;"&gt;
-                &lt;strong&gt;${user.name}&lt;/strong&gt;
-                &lt;span style="font-size: 0.875rem; color: #666;"&gt;${user.email}&lt;/span&gt;
-                &lt;span style="font-size: 0.75rem; color: #999;"&gt;Role: ${user.role}&lt;/span&gt;
-            &lt;/div&gt;
+            <div style="display: flex; flex-direction: column;">
+                <strong>${user.name}</strong>
+                <span style="font-size: 0.875rem; color: #666;">${user.email}</span>
+                <span style="font-size: 0.75rem; color: #999;">Role: ${user.role}</span>
+            </div>
         `;
     },
     onSelect: (user) => console.log('Selected user:', user.name)
@@ -270,7 +270,7 @@ Domma.elements.autocomplete('#tag-input', {
 function renderTags() {
     document.getElementById('tag-container').innerHTML =
         selectedTags.map(tag =>
-            `&lt;span class="badge"&gt;${tag}&lt;/span&gt;`
+            `<span class="badge">${tag}</span>`
         ).join('');
 }</code></pre>
             </div>
@@ -292,7 +292,7 @@ function renderTags() {
                     Escape)
                 </li>
                 <li><strong>Screen Readers:</strong> Results are announced as users navigate with arrow keys</li>
-                <li><strong>Label Elements:</strong> Always use <code>&lt;label&gt;</code> elements for inputs</li>
+                <li><strong>Label Elements:</strong> Always use <code><label></code> elements for inputs</li>
             </ul>
 
             <h3 class="category-title">Performance</h3>
@@ -323,8 +323,8 @@ function renderTags() {
             <ul class="feature-list mb-4">
                 <li><strong>Avoid:</strong> Setting <code>minChars: 0</code> - this can show entire dataset on focus
                 </li>
-                <li><strong>Avoid:</strong> Very short debounce times (&lt;100ms) - causes excessive API calls</li>
-                <li><strong>Avoid:</strong> Very long debounce times (&gt;800ms) - feels sluggish to users</li>
+                <li><strong>Avoid:</strong> Very short debounce times (<100ms) - causes excessive API calls</li>
+                <li><strong>Avoid:</strong> Very long debounce times (>800ms) - feels sluggish to users</li>
                 <li><strong>Avoid:</strong> Not handling errors in async data sources - always use try/catch</li>
             </ul>
         </div>
@@ -357,7 +357,7 @@ function renderTags() {
                         <td><code>dataSource</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Async function that returns Promise&lt;Array&gt;</td>
+                        <td>Async function that returns Promise<Array></td>
                     </tr>
                     <tr>
                         <td><code>minChars</code></td>
@@ -381,13 +381,13 @@ function renderTags() {
                         <td><code>filterFn</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Custom filter function (item, query) =&gt; boolean</td>
+                        <td>Custom filter function (item, query) => boolean</td>
                     </tr>
                     <tr>
                         <td><code>renderItem</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Custom item renderer (item, query) =&gt; HTML string or Element</td>
+                        <td>Custom item renderer (item, query) => HTML string or Element</td>
                     </tr>
                     <tr>
                         <td><code>highlightMatches</code></td>
@@ -441,31 +441,31 @@ function renderTags() {
                         <td><code>onSelect</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Callback when item selected: (value, event) =&gt; {}</td>
+                        <td>Callback when item selected: (value, event) => {}</td>
                     </tr>
                     <tr>
                         <td><code>onChange</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Callback on input change: (value, event) =&gt; {}</td>
+                        <td>Callback on input change: (value, event) => {}</td>
                     </tr>
                     <tr>
                         <td><code>onOpen</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Callback when dropdown opens: () =&gt; {}</td>
+                        <td>Callback when dropdown opens: () => {}</td>
                     </tr>
                     <tr>
                         <td><code>onClose</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Callback when dropdown closes: () =&gt; {}</td>
+                        <td>Callback when dropdown closes: () => {}</td>
                     </tr>
                     <tr>
                         <td><code>onFilter</code></td>
                         <td>Function</td>
                         <td><code>null</code></td>
-                        <td>Transform filtered results: (results, query) =&gt; results</td>
+                        <td>Transform filtered results: (results, query) => results</td>
                     </tr>
                     </tbody>
                 </table>
