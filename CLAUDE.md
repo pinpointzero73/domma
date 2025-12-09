@@ -341,7 +341,7 @@ S.clear();                                         // Clear only Domma keys
 ```
 src/
 ├── index.js         # Main entry, exports Domma + aliases
-├── tools.js         # Tools bundle entry (Theme Roller, Quick Roller)
+├── tools.js         # Tools bundle entry (Theme Roller, Quick Roller, Editor)
 ├── dom.js           # jQuery-compatible DOM API
 ├── utils.js         # Lodash-compatible utilities
 ├── dates.js         # Moment-style date manipulation
@@ -354,7 +354,8 @@ src/
 ├── theme.js         # Theme management
 ├── icons.js         # SVG icon system
 ├── theme-roller.js  # Theme customisation tool (tools bundle)
-└── page-roller.js   # Page builder tool (tools bundle)
+├── quick-roller.js  # Page builder tool (tools bundle)
+└── editor.js        # Content editor tool (tools bundle)
 
 showcase/            # Comprehensive demos for each namespace
 quickstart/          # Getting started blueprint
@@ -368,7 +369,7 @@ Domma is split into two bundles:
 | Bundle               | Size   | Contents                                                                                          |
 |----------------------|--------|---------------------------------------------------------------------------------------------------|
 | `domma.min.js`       | ~258KB | Core framework (DOM, utils, dates, models, elements, tables, config, http, storage, theme, icons) |
-| `domma-tools.min.js` | ~141KB | Developer tools (Theme Roller, Page Roller)                                                       |
+| `domma-tools.min.js` | ~78KB  | Developer tools (Theme Roller, Quick Roller, Editor)                                              |
 
 **Usage:**
 
@@ -386,7 +387,8 @@ The tools bundle attaches to `Domma.elements` automatically when loaded:
 ```javascript
 // Available after loading domma-tools.min.js
 Domma.elements.themeRoller('#container', options);
-Domma.elements.pageRoller('#container', options);
+Domma.elements.quickRoller('#container', options);
+Domma.elements.editor('#editor', options);
 ```
 
 Zero external dependencies.
@@ -598,7 +600,232 @@ const table = Domma.tables.create('#my-table', {
 });
 ```
 
-## Page Roller (Developer Tool)
+## Editor (Developer Tool)
+
+**Editor** is a universal content editor included in `domma-tools.min.js` (requires core framework). It provides three
+editing modes (text, rich, code) with features like autosave, undo/redo, model integration, and localStorage
+persistence.
+
+### Initialisation
+
+```javascript
+// Requires both domma.min.js and domma-tools.min.js
+const editor = Domma.elements.editor('#editor', {
+    mode: 'rich',               // 'text', 'rich', or 'code'
+    placeholder: 'Start writing...',
+    autosave: true,
+    storage: 'my-document',
+    onChange: (content) => console.log('Content changed', content),
+    onSave: (content) => console.log('Saved', content)
+});
+```
+
+### Features
+
+- **Three Modes**
+  - **Text Mode**: Enhanced textarea with character/word count
+  - **Rich Mode**: WYSIWYG editor with formatting toolbar
+  - **Code Mode**: Syntax highlighting, line numbers, tab indentation
+
+- **Toolbar Actions** (Rich Mode)
+  - Text formatting: Bold, italic, underline, strikethrough
+  - Headings: H1, H2, H3
+  - Lists: Bullet, numbered
+  - Blocks: Quote, code inline, code block
+  - Media: Links, images
+  - History: Undo, redo
+  - Alignment: Left, centre, right
+  - Indentation: Indent, outdent
+  - Other: Embed, clear formatting
+
+- **Model Integration**
+  - Two-way binding with reactive models
+  - Auto-sync content changes to model
+  - Model changes update editor content
+
+- **Persistence**
+  - Autosave to localStorage with configurable interval
+  - Manual save/load via API methods
+  - Storage key customisation
+
+- **Image Handling**
+  - Paste images directly (Rich Mode)
+  - Base64 encoding or custom upload handler
+  - `imageMode: 'base64'` (default) or `'upload'`
+
+- **Keyboard Shortcuts**
+  - Ctrl+B: Bold
+  - Ctrl+I: Italic
+  - Ctrl+U: Underline
+  - Ctrl+Z: Undo
+  - Ctrl+Y: Redo
+  - Tab: Indent (Code Mode)
+
+### Options
+
+```javascript
+Domma.elements.editor(selector, {
+    mode: 'rich',                    // 'text', 'rich', 'code'
+    model: null,                     // Model instance
+    modelKey: null,                  // Model field to bind
+    autosave: false,                 // Enable autosave
+    autosaveInterval: 3000,          // Autosave interval (ms)
+    storage: null,                   // localStorage key
+    toolbar: [...],                  // Custom toolbar actions
+    showToolbar: true,               // Show/hide toolbar
+    imagePaste: true,                // Enable image paste
+    imageMode: 'base64',             // 'base64' or 'upload'
+    imageUpload: null,               // Custom upload handler
+    language: 'javascript',          // Code mode language
+    lineNumbers: true,               // Show line numbers (code)
+    theme: 'light',                  // Editor theme
+    placeholder: '',                 // Placeholder text
+    minHeight: 200,                  // Minimum height (px)
+    maxHeight: null,                 // Maximum height (px)
+    characterCount: false,           // Show character count
+    wordCount: false,                // Show word count
+    onChange: null,                  // Content change callback
+    onSave: null,                    // Save callback
+    onImagePaste: null               // Image paste callback
+});
+```
+
+### API Methods
+
+```javascript
+// Content
+editor.getValue();              // Get editor content (HTML or text)
+editor.setValue(content);       // Set editor content
+editor.getText();               // Get plain text (no HTML)
+editor.clear();                 // Clear content
+
+// History
+editor.undo();                  // Undo last change
+editor.redo();                  // Redo last undone change
+
+// Persistence
+editor.save();                  // Manual save to localStorage
+
+// Mode
+editor.setMode('rich');         // Switch mode ('text', 'rich', 'code')
+
+// Focus
+editor.focus();                 // Focus editor
+
+// Cleanup
+editor.destroy();               // Remove editor, unbind events
+```
+
+### Model Integration
+
+```javascript
+// Create model with content field
+const docModel = M.create({
+    content: { type: 'string', default: '' }
+});
+
+// Bind editor to model
+const editor = Domma.elements.editor('#editor', {
+    mode: 'rich',
+    model: docModel,
+    modelKey: 'content'
+});
+
+// Model changes update editor
+docModel.set('content', '<p>Hello World</p>');
+
+// Typing updates model
+// User types → onChange → model.set() → other bindings update
+
+// Display content elsewhere
+M.bind(docModel, 'content', '#preview', {
+    format: (html) => html,
+    twoWay: false
+});
+```
+
+### Autosave with Persistence
+
+```javascript
+const editor = Domma.elements.editor('#editor', {
+    mode: 'rich',
+    autosave: true,
+    autosaveInterval: 5000,         // Save every 5 seconds
+    storage: 'blog-post-draft',
+    onSave: (content) => {
+        console.log('Autosaved', content.length, 'characters');
+    }
+});
+
+// Content is automatically loaded from localStorage on initialisation
+// Content is automatically saved every 5 seconds when changed
+```
+
+### Custom Image Upload
+
+```javascript
+const editor = Domma.elements.editor('#editor', {
+    mode: 'rich',
+    imageMode: 'upload',
+    imageUpload: async (file) => {
+        // Upload to server
+        const formData = new FormData();
+        formData.append('image', file);
+
+        const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        // Return URL to inserted into editor
+        return data.url;
+    },
+    onImagePaste: (file, url) => {
+        console.log('Image pasted:', file.name, url);
+    }
+});
+```
+
+### Code Mode with Line Numbers
+
+```javascript
+const editor = Domma.elements.editor('#code-editor', {
+    mode: 'code',
+    language: 'javascript',
+    lineNumbers: true,
+    theme: 'dark',
+    minHeight: 400,
+    placeholder: '// Start coding...',
+    onChange: (code) => {
+        // Live preview or validation
+        console.log('Code changed:', code);
+    }
+});
+```
+
+### Rich Mode with Custom Toolbar
+
+```javascript
+const editor = Domma.elements.editor('#editor', {
+    mode: 'rich',
+    toolbar: [
+        'bold', 'italic', 'underline',
+        '|',  // Separator
+        'h1', 'h2',
+        '|',
+        'ul', 'ol',
+        '|',
+        'link', 'image',
+        '|',
+        'undo', 'redo'
+    ],
+    showToolbar: true
+});
+```
+
+## Quick Roller (Developer Tool)
 
 **Page Roller** is a visual page builder included in `domma-tools.min.js`. Build complete web pages with drag-and-drop
 sections, configure layouts with Divi-style row/column system, and export production-ready HTML.
