@@ -1,6 +1,6 @@
 /**
  * Domma Tools Bundle
- * Developer tools for theme customisation and page building
+ * Developer tools for theme customisation, page building, and content editing
  *
  * Load after domma.min.js:
  * <script src="domma.min.js"></script>
@@ -9,6 +9,7 @@
 
 import {ThemeRoller} from './theme-roller.js';
 import {PageRoller} from './page-roller.js';
+import Editor from './editor.js';
 
 // Factory functions
 const tools = {
@@ -26,6 +27,14 @@ const tools = {
             Domma.elements._instances.set(instance.element, instance);
         }
         return instance;
+    },
+
+    editor(selector, options = {}) {
+        const instance = new Editor(selector, options);
+        if (instance.element && typeof Domma !== 'undefined') {
+            Domma.elements._instances.set(instance.element, instance);
+        }
+        return instance;
     }
 };
 
@@ -33,6 +42,7 @@ const tools = {
 if (typeof Domma !== 'undefined' && Domma.elements) {
     Domma.elements.themeRoller = tools.themeRoller;
     Domma.elements.pageRoller = tools.pageRoller;
+    Domma.elements.editor = tools.editor;
 }
 
 // Also expose as DommaTools for direct access
@@ -40,5 +50,5 @@ if (typeof window !== 'undefined') {
     window.DommaTools = tools;
 }
 
-export {tools, ThemeRoller, PageRoller};
+export {tools, ThemeRoller, PageRoller, Editor};
 export default tools;

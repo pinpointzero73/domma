@@ -3026,7 +3026,7 @@ export const utils = {
             try {
                 await navigator.clipboard.writeText(text);
                 return true;
-            } catch {
+            } catch (err) {
                 // Fall through to fallback
             }
         }
@@ -3037,8 +3037,10 @@ export const utils = {
         document.body.appendChild(textarea);
         textarea.select();
         try {
-            document.execCommand('copy');
-            return true;
+            const success = document.execCommand('copy');
+            return success;
+        } catch (err) {
+            return false;
         } finally {
             document.body.removeChild(textarea);
         }
@@ -3118,3 +3120,5 @@ export const utils = {
         return wrapper;
     }
 };
+
+export default utils;
