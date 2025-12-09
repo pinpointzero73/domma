@@ -331,12 +331,17 @@ ${htmlSource}
 ${jsSource}`;
 
             const $code = $('#source-code');
-            $code.get(0).removeAttribute('data-syntax-highlighted');
+            const codeElement = $code.get(0);
+
+            // Clear previous highlighting
+            codeElement.removeAttribute('data-syntax-highlighted');
             $code.removeClass('syntax-highlighted');
-            $code.text(combinedSource);
+
+            // Set content as HTML (not text) to preserve characters
+            codeElement.textContent = combinedSource;
 
             if (Domma.syntax) {
-                Domma.syntax.highlight($code.get(0), 'html');
+                Domma.syntax.highlight(codeElement, 'html');
             }
         } catch (error) {
             console.error('[Todo] Error loading source code:', error);

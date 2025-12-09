@@ -73,22 +73,33 @@ function tokenize(code, language) {
         return escapeHtml(code);
     }
 
-    let html = escapeHtml(code);
+    // IMPORTANT: Always tokenize RAW code first, then escape within tokens
+    // This prevents operators like < > from being escaped before pattern matching
+    let html = code;  // Don't escape yet
     const placeholders = [];
     let index = 0;
 
     // Sequential replacement: match tokens and replace with placeholders
     for (const {type, pattern} of tokens) {
+        // Skip entity highlighting for HTML (entities come from escaping, not source)
+        if (language === 'html' && type === 'entity') {
+            continue;
+        }
+
         html = html.replace(pattern, (match) => {
             const placeholder = `__TOKEN_${index}__`;
+            const escapedMatch = escapeHtml(match);  // Always escape the token
             placeholders.push({
                 placeholder,
-                html: `<span class="syntax-${type}">${match}</span>`
+                html: `<span class="syntax-${type}">${escapedMatch}</span>`
             });
             index++;
             return placeholder;
         });
     }
+
+    // Escape remaining non-tokenized content
+    html = escapeHtml(html);
 
     // Replace all placeholders with actual HTML
     for (const {placeholder, html: tokenHtml} of placeholders) {
