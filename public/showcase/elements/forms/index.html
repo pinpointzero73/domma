@@ -32,7 +32,7 @@
         </ul>
 
         <h3 class="category-title">Basic Usage</h3>
-        <div class="code-block">
+        <div class="code-block language-javascript">
             <pre><code>&lt;div class="form-group"&gt;
     &lt;label&gt;Email&lt;/label&gt;
     &lt;input type="email" class="form-input" placeholder="you@example.com"&gt;
@@ -60,7 +60,7 @@
                 <button type="submit" class="btn btn-primary w-full">Sign In</button>
             </form>
         </div>
-        <div class="code-block">
+        <div class="code-block language-javascript">
             <pre><code>&lt;form&gt;
     &lt;div class="form-group"&gt;
         &lt;label&gt;Email&lt;/label&gt;
@@ -454,7 +454,7 @@
         </p>
 
         <h4 class="category-title">Form Validation with $.setup()</h4>
-        <pre class="code-block">$.setup({
+        <pre class="code-block language-javascript">$.setup({
     '#registration-form': {
         initial: {
             data: { touched: {}, errors: {} }
@@ -534,7 +534,7 @@
 });</pre>
 
         <h4 class="category-title">Auto-Save Draft</h4>
-        <pre class="code-block">$.setup({
+        <pre class="code-block language-javascript">$.setup({
     '#article-form': {
         initial: {
             data: { saveTimer: null, lastSaved: null }
@@ -560,7 +560,7 @@
 });</pre>
 
         <h4 class="category-title">Dynamic Form Fields</h4>
-        <pre class="code-block">$.setup({
+        <pre class="code-block language-javascript">$.setup({
     '#contact-form': {
         events: {
             'click #add-phone': (e, $form) => {
@@ -588,7 +588,7 @@
 });</pre>
 
         <h4 class="category-title">Multi-Step Form</h4>
-        <pre class="code-block">$.setup({
+        <pre class="code-block language-javascript">$.setup({
     '#wizard-form': {
         initial: {
             data: { currentStep: 1, totalSteps: 3, formData: {} }
@@ -643,7 +643,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <p class="font-semibold mb-2">CSS-Only (Default)</p>
-                <pre class="code-block" style="font-size: 0.85em;">&lt;form action="/submit" method="POST"&gt;
+                <pre class="code-block language-javascript" style="font-size: 0.85em;">&lt;form action="/submit" method="POST"&gt;
     &lt;div class="form-group"&gt;
         &lt;label&gt;Email&lt;/label&gt;
         &lt;input type="email"
@@ -662,7 +662,7 @@
             </div>
             <div>
                 <p class="font-semibold mb-2">CSS+JS Hybrid (Enhanced)</p>
-                <pre class="code-block" style="font-size: 0.85em;">&lt;form id="enhanced-form"&gt;
+                <pre class="code-block language-javascript" style="font-size: 0.85em;">&lt;form id="enhanced-form"&gt;
     &lt;div class="form-group"&gt;
         &lt;label&gt;Email&lt;/label&gt;
         &lt;input type="email"
@@ -723,6 +723,7 @@ $.setup({
 </main>
 
 <script src="../../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../../js/layout.js"></script>
 <script>
     // Tutorial form

@@ -105,7 +105,7 @@
         </div>
         <div class="card-body">
             <p class="mb-4">Select elements using CSS selectors, DOM elements, or HTML strings.</p>
-            <pre class="code-block">// CSS selector
+            <pre class="code-block language-javascript">// CSS selector
 $('.class')
 $('#id')
 $('div.container > p')
@@ -167,7 +167,7 @@ $(document.querySelectorAll('p'))</pre>
                 <span class="method-item">offsetParent()</span>
             </div>
 
-            <pre class="code-block">// Find descendants
+            <pre class="code-block language-javascript">// Find descendants
 $('#container').find('.item')
 
 // Navigate up
@@ -226,7 +226,7 @@ $('.items').last()</pre>
                 <span class="method-item">removeData()</span>
             </div>
 
-            <pre class="code-block">// Get/set HTML content
+            <pre class="code-block language-javascript">// Get/set HTML content
 $('#box').html()              // Get
 $('#box').html('&lt;b&gt;New&lt;/b&gt;')  // Set
 
@@ -280,7 +280,7 @@ $('#el').data('id', '123')</pre>
                 <span class="method-item">toggle()</span>
             </div>
 
-            <pre class="code-block">// Get/set CSS
+            <pre class="code-block language-javascript">// Get/set CSS
 $('#box').css('color')
 $('#box').css('color', 'red')
 $('#box').css({ color: 'red', fontSize: '16px' })
@@ -338,7 +338,7 @@ $('#box').toggle()</pre>
                 <span class="method-item">replaceAll()</span>
             </div>
 
-            <pre class="code-block">// Inserting content
+            <pre class="code-block language-javascript">// Inserting content
 $('#list').append('&lt;li&gt;New item&lt;/li&gt;')
 $('#list').prepend('&lt;li&gt;First item&lt;/li&gt;')
 $('#item').after('&lt;li&gt;After&lt;/li&gt;')
@@ -408,7 +408,7 @@ $('#item').clone()</pre>
                 <span class="method-item">load()</span>
             </div>
 
-            <pre class="code-block">// Basic event binding
+            <pre class="code-block language-javascript">// Basic event binding
 $('#btn').on('click', function(e) {
     console.log('Clicked!', this);
 });
@@ -465,7 +465,7 @@ $('#box').hover(enterFn, leaveFn);</pre>
                 <span class="method-item">delay()</span>
             </div>
 
-            <pre class="code-block">// Fade effects
+            <pre class="code-block language-javascript">// Fade effects
 $('#box').fadeIn(400)
 $('#box').fadeOut(400)
 $('#box').fadeToggle()
@@ -521,7 +521,7 @@ $('#box')
                 <span class="method-item">scrollLeft()</span>
             </div>
 
-            <pre class="code-block">// Dimensions
+            <pre class="code-block language-javascript">// Dimensions
 $('#box').width()              // Content width
 $('#box').width(200)           // Set width
 $('#box').height()
@@ -566,7 +566,7 @@ $('#box').scrollLeft()</pre>
                 <span class="method-item">length</span>
             </div>
 
-            <pre class="code-block">// Iterate
+            <pre class="code-block language-javascript">// Iterate
 $('.items').each(function(index, element) {
     console.log(index, $(this).text());
 });
@@ -746,6 +746,7 @@ $('.items').length    // Number of elements</pre>
 </div>
 
 <script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../js/layout.js"></script>
 <script>
     // Selector demo

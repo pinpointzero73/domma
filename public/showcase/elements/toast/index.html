@@ -31,7 +31,7 @@
         </ul>
 
         <h3 class="category-title">Basic Usage</h3>
-        <div class="code-block">
+        <div class="code-block language-javascript">
             <pre><code>Domma.elements.toast('Operation successful!', {
     type: 'success',
     duration: 3000,
@@ -50,7 +50,7 @@
         <div class="demo-area mb-4 text-center">
             <button id="quick-toast" class="btn btn-primary">Show Toast</button>
         </div>
-        <div class="code-block">
+        <div class="code-block language-javascript">
             <pre><code>document.getElementById('btn').addEventListener('click', () => {
     Domma.elements.toast('Hello, World!', {
         type: 'info',
@@ -304,7 +304,7 @@
     </div>
     <div class="card-body">
         <p class="mb-4">Attach toasts to button clicks using the config engine:</p>
-        <div class="code-block">
+        <div class="code-block language-javascript">
             <pre><code>$.setup({
     '#save-btn': {
         events: {
@@ -356,6 +356,7 @@
 </main>
 
 <script src="../../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../../js/layout.js"></script>
 <script>
     // Quick Start

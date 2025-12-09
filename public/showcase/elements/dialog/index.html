@@ -32,7 +32,7 @@
         </ul>
 
         <h3 class="category-title">Basic Usage</h3>
-        <div class="code-block">
+        <div class="code-block language-javascript">
             <pre><code>// Alert
 await Domma.elements.alert('Operation successful!');
 
@@ -54,7 +54,7 @@ const name = await Domma.elements.prompt('Enter your name:');</code></pre>
         <div class="demo-area mb-4 text-center">
             <button id="quick-alert" class="btn btn-primary">Show Alert</button>
         </div>
-        <div class="code-block">
+        <div class="code-block language-javascript">
             <pre><code>document.getElementById('btn').addEventListener('click', async () => {
     await Domma.elements.alert('This is an alert message!');
     console.log('Alert closed');
@@ -79,7 +79,7 @@ const name = await Domma.elements.prompt('Enter your name:');</code></pre>
             </div>
         </div>
 
-        <div class="code-block">
+        <div class="code-block language-javascript">
             <pre><code>document.getElementById('delete-btn').addEventListener('click', async () => {
     // Step 1: Confirm deletion
     const confirmed = await Domma.elements.confirm(
@@ -288,7 +288,7 @@ const name = await Domma.elements.prompt('Enter your name:');</code></pre>
     </div>
     <div class="card-body">
         <p class="mb-4">Dialogs are typically called programmatically, but you can attach them to buttons:</p>
-        <div class="code-block">
+        <div class="code-block language-javascript">
             <pre><code>$.setup({
     '#delete-btn': {
         events: {
@@ -333,6 +333,7 @@ const name = await Domma.elements.prompt('Enter your name:');</code></pre>
 </main>
 
 <script src="../../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../../js/layout.js"></script>
 <script>
     // Quick Start

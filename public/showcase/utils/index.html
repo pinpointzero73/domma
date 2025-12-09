@@ -139,7 +139,7 @@
                 <span class="method-item">zipObject()</span>
             </div>
 
-            <pre class="code-block">// Chunk array into groups
+            <pre class="code-block language-javascript">// Chunk array into groups
 _.chunk([1, 2, 3, 4, 5], 2)  // [[1, 2], [3, 4], [5]]
 
 // Remove falsy values
@@ -213,7 +213,7 @@ _.fromPairs([['a', 1], ['b', 2]])  // {a: 1, b: 2}</pre>
                 <span class="method-item">sortBy()</span>
             </div>
 
-            <pre class="code-block">const users = [
+            <pre class="code-block language-javascript">const users = [
     { name: 'Alice', age: 25, dept: 'Engineering' },
     { name: 'Bob', age: 30, dept: 'Sales' },
     { name: 'Carol', age: 25, dept: 'Engineering' }
@@ -297,7 +297,7 @@ _.countBy(users, 'dept')
                 <span class="method-item">values()</span>
             </div>
 
-            <pre class="code-block">const obj = {
+            <pre class="code-block language-javascript">const obj = {
     user: { name: 'Alice', address: { city: 'NYC' } },
     settings: { theme: 'dark' }
 };
@@ -374,7 +374,7 @@ _.invert({a: 1, b: 2})  // {1: 'a', 2: 'b'}</pre>
                 <span class="method-item">wrap()</span>
             </div>
 
-            <pre class="code-block">// Debounce - wait for pause in calls
+            <pre class="code-block language-javascript">// Debounce - wait for pause in calls
 const search = _.debounce((query) => {
     console.log('Searching:', query);
 }, 300);
@@ -456,7 +456,7 @@ add(1)(2, 3);  // 6</pre>
                 <span class="method-item">words()</span>
             </div>
 
-            <pre class="code-block">// Case conversion
+            <pre class="code-block language-javascript">// Case conversion
 _.camelCase('hello world')    // 'helloWorld'
 _.kebabCase('helloWorld')     // 'hello-world'
 _.snakeCase('Hello World')    // 'hello_world'
@@ -515,7 +515,7 @@ _.words('fred, barney, & pebbles')  // ['fred', 'barney', 'pebbles']</pre>
             </div>
 
             <h4 class="category-title">Basic Usage</h4>
-            <pre class="code-block">// Compile and reuse
+            <pre class="code-block language-javascript">// Compile and reuse
 const tmpl = _.template('Hello {{name}}!');
 tmpl({ name: 'World' });  // 'Hello World!'
 
@@ -532,7 +532,7 @@ _.render('{{{html}}}', { html: '&lt;strong&gt;Bold&lt;/strong&gt;' });
 // '&lt;strong&gt;Bold&lt;/strong&gt;'</pre>
 
             <h4 class="category-title">Conditionals</h4>
-            <pre class="code-block">// {{#if}}...{{/if}}
+            <pre class="code-block language-javascript">// {{#if}}...{{/if}}
 _.render('{{#if active}}Online{{/if}}', { active: true });
 // 'Online'
 
@@ -545,7 +545,7 @@ _.render('{{#unless verified}}Please verify{{/unless}}', { verified: false });
 // 'Please verify'</pre>
 
             <h4 class="category-title">Loops</h4>
-            <pre class="code-block">// {{#each}}...{{/each}}
+            <pre class="code-block language-javascript">// {{#each}}...{{/each}}
 _.render('{{#each items}}&lt;li&gt;{{name}}&lt;/li&gt;{{/each}}', {
     items: [{ name: 'Apple' }, { name: 'Banana' }]
 });
@@ -560,7 +560,7 @@ _.render('{{#each items}}{{@index}}: {{name}}{{/each}}', { items: [...] });
 // '0: Apple1: Banana'</pre>
 
             <h4 class="category-title">Context & Partials</h4>
-            <pre class="code-block">// {{#with}}...{{/with}} - shift context
+            <pre class="code-block language-javascript">// {{#with}}...{{/with}} - shift context
 _.render('{{#with user}}{{firstName}} {{lastName}}{{/with}}', {
     user: { firstName: 'John', lastName: 'Doe' }
 });
@@ -636,7 +636,7 @@ _.render('{{> header}}', { title: 'Welcome' }, opts);
                 <span class="method-item">toString()</span>
             </div>
 
-            <pre class="code-block">// Type checking
+            <pre class="code-block language-javascript">// Type checking
 _.isArray([1, 2])        // true
 _.isObject({})           // true
 _.isPlainObject({})      // true
@@ -715,7 +715,7 @@ _.castArray([1])         // [1]</pre>
                 <span class="method-item">random()</span>
             </div>
 
-            <pre class="code-block">// Basic maths
+            <pre class="code-block language-javascript">// Basic maths
 _.add(6, 4)              // 10
 _.subtract(6, 4)         // 2
 _.multiply(6, 4)         // 24
@@ -770,7 +770,7 @@ _.random(1.5, 5.5, true) // Random float</pre>
             </p>
 
             <h4 class="font-semibold mb-3">Data Transformation Pipeline</h4>
-            <pre class="code-block">// Transform API data for display using utility pipeline
+            <pre class="code-block language-javascript">// Transform API data for display using utility pipeline
 const transformUserData = _.flow([
     // 1. Filter active users only
     (users) => _.filter(users, { status: 'active' }),
@@ -812,7 +812,7 @@ $.setup({
 });</pre>
 
             <h4 class="font-semibold mb-3 mt-4">Form Validation & Data Processing</h4>
-            <pre class="code-block">// Centralized form validation with utils
+            <pre class="code-block language-javascript">// Centralized form validation with utils
 const validators = {
     email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
     required: (value) => !_.isEmpty(_.trim(value)),
@@ -894,7 +894,7 @@ $.setup({
 });</pre>
 
             <h4 class="font-semibold mb-3 mt-4">Smart Search with Debounce & Filtering</h4>
-            <pre class="code-block">// Search implementation with utils
+            <pre class="code-block language-javascript">// Search implementation with utils
 $.setup({
     '#product-search': {
         initial: {
@@ -974,7 +974,7 @@ function renderProducts($container, products) {
 }</pre>
 
             <h4 class="font-semibold mb-3 mt-4">Data Aggregation Dashboard</h4>
-            <pre class="code-block">// Analytics dashboard with util aggregations
+            <pre class="code-block language-javascript">// Analytics dashboard with util aggregations
 $.setup({
     '#analytics-dashboard': {
         events: {
@@ -1045,7 +1045,7 @@ $.setup({
             <div class="grid grid-cols-1 grid-cols-md-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">Imperative (Verbose)</p>
-                    <pre class="code-block" style="font-size: 0.85em;">// Filter, sort, group manually
+                    <pre class="code-block language-javascript" style="font-size: 0.85em;">// Filter, sort, group manually
 const active = [];
 for (const user of users) {
     if (user.status === 'active') {
@@ -1070,7 +1070,7 @@ for (const user of active) {
                 </div>
                 <div>
                     <p class="font-semibold mb-2">Functional with Utils (Clean)</p>
-                    <pre class="code-block" style="font-size: 0.85em;">// Pipeline with utils
+                    <pre class="code-block language-javascript" style="font-size: 0.85em;">// Pipeline with utils
 const byDept = _.flow([
     users => _.filter(users, {
         status: 'active'
@@ -1129,7 +1129,7 @@ const byDept = _.flow([
                 <span class="method-item">uniqueId()</span>
             </div>
 
-            <pre class="code-block">// Generate ranges
+            <pre class="code-block language-javascript">// Generate ranges
 _.range(5)               // [0, 1, 2, 3, 4]
 _.range(1, 5)            // [1, 2, 3, 4]
 _.range(0, 10, 2)        // [0, 2, 4, 6, 8]
@@ -1175,6 +1175,7 @@ _.noop()                 // undefined (do nothing)</pre>
 </div>
 
 <script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../js/layout.js"></script>
 <script>
     // Sample data for demos

@@ -341,7 +341,7 @@
         <div class="usage-grid">
             <div class="usage-card">
                 <h3>HTML Data Attributes</h3>
-                <div class="code-block">
+                <div class="code-block language-javascript">
                     <span class="comment">&lt;!-- Basic usage --&gt;</span>
                     &lt;span <span class="string">data-icon="check"</span>&gt;&lt;/span&gt;
 
@@ -356,7 +356,7 @@
 
             <div class="usage-card">
                 <h3>JavaScript API</h3>
-                <div class="code-block">
+                <div class="code-block language-javascript">
                     <span class="comment">// Render to element</span>
                     Domma.icons.<span class="function">render</span>(<span class="string">'heart'</span>, element);
 
@@ -375,6 +375,7 @@
 </main>
 
 <script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../js/layout.js"></script>
 <script>
     // Initialise theme
@@ -385,22 +386,23 @@
 
     // Category data
     const categoryMeta = {
-        ui: {name: 'UI', description: 'Core user interface elements - buttons, menus, controls'},
-        communication: {name: 'Communication', description: 'Messaging, email, and notification icons'},
-        media: {name: 'Media', description: 'Audio, video, images, and playback controls'},
-        files: {name: 'Files', description: 'Documents, folders, and file operations'},
-        social: {name: 'Social', description: 'Social media, sharing, and user interactions'},
+        buildings: {name: 'Buildings', description: 'Architecture, structures, landmarks, and facilities'},
+        code: {name: 'Code', description: 'Code, and code operations'},
         commerce: {name: 'Commerce', description: 'Shopping, payments, and e-commerce'},
-        status: {name: 'Status', description: 'Indicators, alerts, and state icons'},
-        navigation: {name: 'Navigation', description: 'Arrows, directions, and navigation elements'},
-        seasonal: {name: 'Seasonal', description: '\'Tis the season to be jolly'},
-        weather: {name: 'Weather', description: 'Weather conditions, sun, clouds, rain, and meteorology'},
+        communication: {name: 'Communication', description: 'Messaging, email, and notification icons'},
         devices: {name: 'Devices', description: 'Electronic devices, phones, computers, and hardware'},
+        emojis: {name: 'Emojis', description: 'Expressive emoji faces and emotional reactions'},
+        files: {name: 'Files', description: 'Documents, folders, and file operations'},
         finance: {name: 'Finance', description: 'Charts, currency, banking, and business icons'},
         health: {name: 'Health', description: 'Medical, wellness, pills, and healthcare symbols'},
+        media: {name: 'Media', description: 'Audio, video, images, and playback controls'},
+        navigation: {name: 'Navigation', description: 'Arrows, directions, and navigation elements'},
+        seasonal: {name: 'Seasonal', description: '\'Tis the season to be jolly'},
+        social: {name: 'Social', description: 'Social media, sharing, and user interactions'},
         sport: {name: 'Sport', description: 'Sports, fitness, awards, and athletic equipment'},
-        buildings: {name: 'Buildings', description: 'Architecture, structures, landmarks, and facilities'},
-        emojis: {name: 'Emojis', description: 'Expressive emoji faces and emotional reactions'}
+        status: {name: 'Status', description: 'Indicators, alerts, and state icons'},
+        ui: {name: 'UI', description: 'Core user interface elements - buttons, menus, controls'},
+        weather: {name: 'Weather', description: 'Weather conditions, sun, clouds, rain, and meteorology'}
     };
 
     // Track tabs instance

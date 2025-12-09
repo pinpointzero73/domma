@@ -46,7 +46,7 @@
             </ul>
 
             <h4 class="category-title">Basic Usage</h4>
-            <pre class="code-block">// HTML structure
+            <pre class="code-block language-javascript">// HTML structure
 &lt;div id="my-tabs" class="tabs"&gt;
     &lt;ul class="tab-list"&gt;
         &lt;li class="tab-item active"&gt;Tab 1&lt;/li&gt;
@@ -85,7 +85,7 @@ tabs.getActive(); // Returns active index</pre>
             </p>
 
             <h4 class="category-title">Simple Tabs</h4>
-            <pre class="code-block">// HTML
+            <pre class="code-block language-javascript">// HTML
 &lt;div id="quick-tabs" class="tabs"&gt;
     &lt;ul class="tab-list"&gt;
         &lt;li class="tab-item active"&gt;Home&lt;/li&gt;
@@ -149,7 +149,7 @@ Domma.elements.tabs('#quick-tabs');</pre>
 
             <h4 class="category-title">Step 1: Create Tab Headers</h4>
             <p class="mb-2">Start with the tab list structure:</p>
-            <pre class="code-block">&lt;div id="product-tabs" class="tabs"&gt;
+            <pre class="code-block language-javascript">&lt;div id="product-tabs" class="tabs"&gt;
     &lt;ul class="tab-list"&gt;
         &lt;li class="tab-item active"&gt;Overview&lt;/li&gt;
         &lt;li class="tab-item"&gt;Features&lt;/li&gt;
@@ -159,7 +159,7 @@ Domma.elements.tabs('#quick-tabs');</pre>
 
             <h4 class="category-title mt-4">Step 2: Add Tab Panels</h4>
             <p class="mb-2">Add corresponding content panels (same order as tabs):</p>
-            <pre class="code-block">&lt;div id="product-tabs" class="tabs"&gt;
+            <pre class="code-block language-javascript">&lt;div id="product-tabs" class="tabs"&gt;
     &lt;ul class="tab-list"&gt;...&lt;/ul&gt;
     &lt;div class="tab-content"&gt;
         &lt;div class="tab-panel active"&gt;
@@ -182,14 +182,14 @@ Domma.elements.tabs('#quick-tabs');</pre>
 
             <h4 class="category-title mt-4">Step 3: Initialise with Animation</h4>
             <p class="mb-2">Add smooth transitions between tabs:</p>
-            <pre class="code-block">const productTabs = Domma.elements.tabs('#product-tabs', {
+            <pre class="code-block language-javascript">const productTabs = Domma.elements.tabs('#product-tabs', {
     activeIndex: 0,    // Start with first tab
     animation: true    // Enable smooth transitions
 });</pre>
 
             <h4 class="category-title mt-4">Step 4: Add Change Callback</h4>
             <p class="mb-2">Track which tab users view:</p>
-            <pre class="code-block">const productTabs = Domma.elements.tabs('#product-tabs', {
+            <pre class="code-block language-javascript">const productTabs = Domma.elements.tabs('#product-tabs', {
     activeIndex: 0,
     animation: true,
     onChange: (index, panel) => {
@@ -200,7 +200,7 @@ Domma.elements.tabs('#quick-tabs');</pre>
 
             <h4 class="category-title mt-4">Step 5: Add Next/Previous Buttons</h4>
             <p class="mb-2">Navigate programmatically with buttons:</p>
-            <pre class="code-block">&lt;button id="prev-tab"&gt;← Previous&lt;/button&gt;
+            <pre class="code-block language-javascript">&lt;button id="prev-tab"&gt;← Previous&lt;/button&gt;
 &lt;button id="next-tab"&gt;Next →&lt;/button&gt;
 
 document.getElementById('prev-tab').addEventListener('click', () => {
@@ -637,7 +637,7 @@ document.getElementById('next-tab').addEventListener('click', () => {
             </p>
 
             <h4 class="category-title">Basic Setup</h4>
-            <pre class="code-block">$.setup({
+            <pre class="code-block language-javascript">$.setup({
     '#product-tabs': {
         component: 'tabs',
         options: {
@@ -648,7 +648,7 @@ document.getElementById('next-tab').addEventListener('click', () => {
 });</pre>
 
             <h4 class="category-title mt-4">With Change Tracking</h4>
-            <pre class="code-block">$.setup({
+            <pre class="code-block language-javascript">$.setup({
     '#analytics-tabs': {
         component: 'tabs',
         options: {
@@ -664,7 +664,7 @@ document.getElementById('next-tab').addEventListener('click', () => {
 });</pre>
 
             <h4 class="category-title mt-4">Multiple Tab Sets</h4>
-            <pre class="code-block">$.setup({
+            <pre class="code-block language-javascript">$.setup({
     '.product-tabs': {
         component: 'tabs',
         options: {
@@ -745,6 +745,7 @@ document.getElementById('next-tab').addEventListener('click', () => {
 </main>
 
 <script src="../../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../../js/layout.js"></script>
 <script>
     // Quick Start

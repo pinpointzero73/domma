@@ -98,7 +98,7 @@
             </ul>
 
             <h4 class="category-title">Basic Usage</h4>
-            <pre class="code-block">// Create alarm manager (singleton)
+            <pre class="code-block language-javascript">// Create alarm manager (singleton)
 const alarms = Domma.elements.alarm({
     onTrigger: (alarm) => {
         console.log('Alarm triggered:', alarm);
@@ -129,7 +129,7 @@ alarms.add({
             </p>
 
             <h4 class="category-title">Simplest One-Time Alarm</h4>
-            <pre class="code-block">// Create alarm manager
+            <pre class="code-block language-javascript">// Create alarm manager
 const alarms = Domma.elements.alarm();
 
 // Add one-time alarm (1 minute from now)
@@ -149,7 +149,7 @@ alarms.add({
             </div>
 
             <h4 class="category-title">Simplest Daily Alarm</h4>
-            <pre class="code-block">// Daily morning alarm
+            <pre class="code-block language-javascript">// Daily morning alarm
 alarms.add({
     time: '08:00',
     label: 'Morning Routine',
@@ -175,7 +175,7 @@ alarms.add({
             </p>
 
             <h4 class="category-title">Step 1: Initialize Alarm Manager</h4>
-            <pre class="code-block">const alarmManager = Domma.elements.alarm({
+            <pre class="code-block language-javascript">const alarmManager = Domma.elements.alarm({
     storageKey: 'my-app-alarms',  // Custom storage key
     checkInterval: 30000,          // Check every 30 seconds
     onTrigger: (alarm) => {
@@ -194,7 +194,7 @@ alarms.add({
 });</pre>
 
             <h4 class="category-title">Step 2: Add Multiple Alarms</h4>
-            <pre class="code-block">// Morning routine
+            <pre class="code-block language-javascript">// Morning routine
 alarmManager.add({
     time: '07:00',
     label: 'Wake Up',
@@ -224,7 +224,7 @@ alarmManager.add({
 });</pre>
 
             <h4 class="category-title">Step 3: Display and Manage Alarms</h4>
-            <pre class="code-block">function updateAlarmList() {
+            <pre class="code-block language-javascript">function updateAlarmList() {
     const alarms = alarmManager.getAlarms();
     const listEl = document.getElementById('alarm-list');
 
@@ -273,7 +273,7 @@ function deleteAlarm(id) {
         <div class="card-body">
 
             <h4 class="category-title">1. Workday Schedule</h4>
-            <pre class="code-block">const workdayAlarms = [
+            <pre class="code-block language-javascript">const workdayAlarms = [
     { time: '09:00', label: 'Morning Standup', repeat: 'weekdays' },
     { time: '10:30', label: 'Focus Time Starts', repeat: 'weekdays' },
     { time: '12:00', label: 'Lunch Break', repeat: 'weekdays' },
@@ -298,7 +298,7 @@ workdayAlarms.forEach(alarm => {
             </div>
 
             <h4 class="category-title">2. Fitness Reminders</h4>
-            <pre class="code-block">// Custom workout schedule
+            <pre class="code-block language-javascript">// Custom workout schedule
 alarms.add({
     time: '06:30',
     label: 'Morning Workout',
@@ -328,7 +328,7 @@ alarms.add({
             </div>
 
             <h4 class="category-title">3. Medication Reminders</h4>
-            <pre class="code-block">const medications = [
+            <pre class="code-block language-javascript">const medications = [
     { time: '08:00', label: 'Morning Medication', repeat: 'daily' },
     { time: '20:00', label: 'Evening Medication', repeat: 'daily' }
 ];
@@ -352,7 +352,7 @@ medications.forEach(med => {
             </div>
 
             <h4 class="category-title">4. Snooze Functionality</h4>
-            <pre class="code-block">const alarms = Domma.elements.alarm({
+            <pre class="code-block language-javascript">const alarms = Domma.elements.alarm({
     onTrigger: async (alarm) => {
         // Show modal with snooze option
         const result = await Domma.elements.confirm(
@@ -418,7 +418,7 @@ medications.forEach(med => {
             </ul>
 
             <h4 class="category-title">Persistence Pattern</h4>
-            <pre class="code-block">// Alarms automatically persist, but good to verify
+            <pre class="code-block language-javascript">// Alarms automatically persist, but good to verify
 function setupAlarms() {
     const alarms = Domma.elements.alarm();
 
@@ -436,7 +436,7 @@ function setupAlarms() {
 }</pre>
 
             <h4 class="category-title">Next Alarm Display Pattern</h4>
-            <pre class="code-block">function showNextAlarm() {
+            <pre class="code-block language-javascript">function showNextAlarm() {
     const alarms = Domma.elements.alarm();
     const next = alarms.getNextAlarm();
 
@@ -469,7 +469,7 @@ showNextAlarm();</pre>
         <div class="card-body">
 
             <h4 class="category-title">Factory Method</h4>
-            <pre class="code-block">// Singleton - always returns same instance
+            <pre class="code-block language-javascript">// Singleton - always returns same instance
 elements.alarm(options)</pre>
 
             <h4 class="category-title">Options</h4>
@@ -535,7 +535,7 @@ elements.alarm(options)</pre>
             </table>
 
             <h4 class="category-title">Alarm Object Structure</h4>
-            <pre class="code-block">{
+            <pre class="code-block language-javascript">{
     id: 'alarm-1',              // Auto-generated
     time: '14:30',              // HH:MM format (24-hour)
     label: 'Meeting',           // Alarm description
@@ -550,7 +550,7 @@ elements.alarm(options)</pre>
 }</pre>
 
             <h4 class="category-title">Repeat Patterns</h4>
-            <pre class="code-block">// String patterns
+            <pre class="code-block language-javascript">// String patterns
 'daily'           // Every day
 'weekdays'        // Monday-Friday
 'weekends'        // Saturday-Sunday
@@ -563,7 +563,7 @@ elements.alarm(options)</pre>
 null              // No repeat (auto-disables after trigger)</pre>
 
             <h4 class="category-title">Instance Methods</h4>
-            <pre class="code-block">// Add/Remove alarms
+            <pre class="code-block language-javascript">// Add/Remove alarms
 alarms.add(alarm)           // Returns alarm with id
 alarms.remove(id)           // Returns boolean
 alarms.update(id, changes)  // Returns updated alarm or null
@@ -598,7 +598,7 @@ alarms.destroy()            // Stop checking and cleanup</pre>
             </p>
 
             <h4 class="category-title">Initialize with Default Alarms</h4>
-            <pre class="code-block">$.setup({
+            <pre class="code-block language-javascript">$.setup({
     body: {
         // No selector needed - alarm is singleton
     }
@@ -668,6 +668,7 @@ const alarms = Domma.elements.alarm({
 </main>
 
 <script src="../../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../../js/layout.js"></script>
 <script>
     // Initialize alarm manager

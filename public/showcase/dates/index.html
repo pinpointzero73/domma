@@ -128,7 +128,7 @@
         <div class="card-body">
             <p class="mb-4">Create DommaDate instances from various inputs.</p>
 
-            <pre class="code-block">// Current date/time
+            <pre class="code-block language-javascript">// Current date/time
 D()
 D(new Date())
 
@@ -196,7 +196,7 @@ Domma.dates.now()  // Returns timestamp number</pre>
                 <div class="format-token">a <span>pm</span></div>
             </div>
 
-            <pre class="code-block">D().format('YYYY-MM-DD')           // '2025-12-03'
+            <pre class="code-block language-javascript">D().format('YYYY-MM-DD')           // '2025-12-03'
 D().format('MMMM D, YYYY')          // 'December 3, 2025'
 D().format('dddd, MMMM Do YYYY')    // 'Wednesday, December 3rd 2025'
 D().format('h:mm A')                // '2:30 PM'
@@ -242,7 +242,7 @@ D().unix()                          // 1733236245</pre>
                 <span class="method-item">clone()</span>
             </div>
 
-            <pre class="code-block">// Add time
+            <pre class="code-block language-javascript">// Add time
 D().add(7, 'days').format('MMM D')
 D().add(1, 'month').format('MMM D')
 D().add(2, 'hours').format('h:mm A')
@@ -313,7 +313,7 @@ const nextMonth = date.clone().add(1, 'month');</pre>
                 <span class="method-item">quarter()</span>
             </div>
 
-            <pre class="code-block">const d = D('2025-12-25T14:30:45');
+            <pre class="code-block language-javascript">const d = D('2025-12-25T14:30:45');
 
 // Getters (no argument)
 d.year()        // 2025
@@ -364,7 +364,7 @@ d.toObject()
                 <span class="method-item">to()</span>
             </div>
 
-            <pre class="code-block">// Time from now
+            <pre class="code-block language-javascript">// Time from now
 D().subtract(5, 'minutes').fromNow()  // 'a few minutes ago'
 D().subtract(2, 'hours').fromNow()    // '2 hours ago'
 D().subtract(3, 'days').fromNow()     // '3 days ago'
@@ -414,7 +414,7 @@ past.to(future)                        // 'in 12 months'</pre>
                 <span class="method-item">diff()</span>
             </div>
 
-            <pre class="code-block">const jan = D('2025-01-15');
+            <pre class="code-block language-javascript">const jan = D('2025-01-15');
 const dec = D('2025-12-25');
 
 // Comparison
@@ -474,7 +474,7 @@ dec.diff(jan, 'months', true)        // 11.33...</pre>
                 <span class="method-item">dates.max()</span>
             </div>
 
-            <pre class="code-block">// Instance validation
+            <pre class="code-block language-javascript">// Instance validation
 D('2025-12-25').isValid()            // true
 D('invalid').isValid()               // false
 
@@ -570,6 +570,7 @@ Domma.dates.max(dates).format('MMM D')  // 'Jun 20'</pre>
 </div>
 
 <script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../js/layout.js"></script>
 <script>
     // Live clock

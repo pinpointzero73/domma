@@ -322,12 +322,14 @@
                 <div class="card-body">
                     <div class="download-icon" data-icon="file-text" data-icon-size="48"></div>
                     <h3 class="text-xl font-semibold mb-2">domma.min.js</h3>
+                    <script src="../../dist/domma-syntax.min.js"></script>
                     <p class="download-description">
                         UMD bundle for use with <code>&lt;script&gt;</code> tags.
                         Works in browsers and with AMD/CommonJS loaders.
                     </p>
                     <p class="download-size" id="umd-size">~183 KB minified</p>
                     <a href="../../dist/domma.min.js" download class="btn btn-primary btn-block mt-auto">
+                        <script src="../../dist/domma-syntax.min.js"></script>
                         <span data-icon="download" data-icon-size="16"></span>
                         Download UMD
                     </a>
@@ -524,7 +526,7 @@
                             </div>
                             <div class="accordion-content">
                                 <p class="mb-2">Create <code>src/bundles/custom.js</code>:</p>
-                                <pre class="code-block" id="entry-point-code">// Code will be generated based on your selection</pre>
+                                <pre class="code-block language-javascript" id="entry-point-code">// Code will be generated based on your selection</pre>
                                 <button class="btn btn-sm btn-outline mt-2" data-copy="entry-point-code">
                                     <span data-icon="copy" data-icon-size="14"></span>
                                     Copy Code
@@ -539,7 +541,7 @@
                             </div>
                             <div class="accordion-content">
                                 <p class="mb-2">Add to <code>rollup.config.js</code>:</p>
-                                <pre class="code-block" id="rollup-config-code">// Configuration will be generated</pre>
+                                <pre class="code-block language-javascript" id="rollup-config-code">// Configuration will be generated</pre>
                                 <button class="btn btn-sm btn-outline mt-2" data-copy="rollup-config-code">
                                     <span data-icon="copy" data-icon-size="14"></span>
                                     Copy Code
@@ -554,7 +556,7 @@
                             </div>
                             <div class="accordion-content">
                                 <p class="mb-2">Run the build command:</p>
-                                <pre class="code-block">npm run build</pre>
+                                <pre class="code-block language-javascript">npm run build</pre>
                                 <p class="mt-3">Your custom bundle will be in
                                     <code>public/dist/domma-custom.min.js</code>
                                 </p>
@@ -579,6 +581,7 @@
                 &lt;link rel="stylesheet" href="path/to/domma-themes.css"&gt;<br><br>
                 <span class="comment">&lt;!-- JavaScript --&gt;</span><br>
                 &lt;script src="path/to/domma.min.js"&gt;&lt;/script&gt;<br><br>
+                <script src="../../dist/domma-syntax.min.js"></script>
                 <span class="comment">&lt;!-- Ready to use! --&gt;</span><br>
                 &lt;script&gt;<br>
                 &nbsp;&nbsp;$('.btn').on('click', () =&gt; console.log('Clicked!'));<br>
@@ -735,6 +738,7 @@
 </main>
 
 <script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../js/layout.js"></script>
 <script src="bundle-builder.js"></script>
 <script>

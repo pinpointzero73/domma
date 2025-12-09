@@ -168,7 +168,7 @@
             <p class="mb-3">The <code>config</code> parameter accepts any valid <a
                     href="https://developer.mozilla.org/en-US/docs/Web/API/fetch#options" target="_blank"
                     class="text-primary">fetch options</a>:</p>
-            <pre class="code-block">{
+            <pre class="code-block language-javascript">{
     headers: {
         'Authorization': 'Bearer token123',
         'X-Custom-Header': 'value'
@@ -361,7 +361,7 @@ const posts = await Domma.http.get(
         <div class="card-body">
             <p class="mb-4">Add custom headers to your requests:</p>
 
-            <pre class="code-block">// Add authorization header
+            <pre class="code-block language-javascript">// Add authorization header
 const data = await Domma.http.get('/api/protected', {
     headers: {
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIs...',
@@ -390,7 +390,7 @@ const xml = await Domma.http.post('/api/xml', xmlData, {
             </p>
 
             <h4 class="font-semibold mb-3">API Service Class</h4>
-            <pre class="code-block">// Create a service class for your API
+            <pre class="code-block language-javascript">// Create a service class for your API
 class UserService {
     constructor(baseURL = '/api') {
         this.baseURL = baseURL;
@@ -427,7 +427,7 @@ const users = await userService.getAll();
 const user = await userService.getById(123);</pre>
 
             <h4 class="font-semibold mb-3 mt-4">Centralized API Configuration</h4>
-            <pre class="code-block">// Define all API endpoints in config
+            <pre class="code-block language-javascript">// Define all API endpoints in config
 const apiConfig = {
     baseURL: 'https://api.example.com',
     endpoints: {
@@ -494,7 +494,7 @@ const newUser = await api.request('POST', apiConfig.endpoints.users.create, {
 });</pre>
 
             <h4 class="font-semibold mb-3 mt-4">Using $.setup() for API Interactions</h4>
-            <pre class="code-block">// Declaratively handle API-driven UI interactions
+            <pre class="code-block language-javascript">// Declaratively handle API-driven UI interactions
 $.setup({
     '#user-list': {
         events: {
@@ -551,7 +551,7 @@ $.setup({
 });</pre>
 
             <h4 class="font-semibold mb-3 mt-4">Request/Response Interceptor Pattern</h4>
-            <pre class="code-block">// Wrap Domma.http with interceptors
+            <pre class="code-block language-javascript">// Wrap Domma.http with interceptors
 class HTTPClient {
     constructor() {
         this.requestInterceptors = [];
@@ -648,7 +648,7 @@ client.addErrorInterceptor(async (error) => {
             <div class="grid grid-cols-1 grid-cols-md-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">Scattered (Hard to Maintain)</p>
-                    <pre class="code-block" style="font-size: 0.85em;">// Component 1
+                    <pre class="code-block language-javascript" style="font-size: 0.85em;">// Component 1
 const users = await Domma.http.get(
     'https://api.example.com/users'
 );
@@ -670,7 +670,7 @@ await Domma.http.post(
                 </div>
                 <div>
                     <p class="font-semibold mb-2">Service Layer (Centralized)</p>
-                    <pre class="code-block" style="font-size: 0.85em;">// services/user.js
+                    <pre class="code-block language-javascript" style="font-size: 0.85em;">// services/user.js
 class UserService {
     baseURL = 'https://api.example.com';
 
@@ -706,7 +706,7 @@ await userService.create(userData);</pre>
             <div class="grid grid-cols-1 grid-cols-md-2 gap-4">
                 <div>
                     <h4 class="font-semibold mb-2">Basic Usage</h4>
-                    <pre class="code-block">// GET
+                    <pre class="code-block language-javascript">// GET
 const users = await Domma.http.get('/api/users');
 
 // POST
@@ -723,7 +723,7 @@ await Domma.http.delete('/api/users/1');</pre>
                 </div>
                 <div>
                     <h4 class="font-semibold mb-2">With async/await</h4>
-                    <pre class="code-block">async function fetchData() {
+                    <pre class="code-block language-javascript">async function fetchData() {
     try {
         const data = await Domma.http.get('/api/data');
         console.log(data);
@@ -743,6 +743,7 @@ Domma.http.get('/api/data')
 </div>
 
 <script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../js/layout.js"></script>
 <script>
     // Scan icons

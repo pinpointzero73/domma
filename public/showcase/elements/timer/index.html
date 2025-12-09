@@ -90,7 +90,7 @@
             </ul>
 
             <h4 class="category-title">Basic Usage</h4>
-            <pre class="code-block">// Visual timer with controls
+            <pre class="code-block language-javascript">// Visual timer with controls
 const timer = Domma.elements.timer('#timer', {
     duration: 60000,  // 1 minute in milliseconds
     format: 'mm:ss',
@@ -123,7 +123,7 @@ backgroundTimer.start();</pre>
             </p>
 
             <h4 class="category-title">Simplest Visual Timer</h4>
-            <pre class="code-block">// HTML: Just an empty div
+            <pre class="code-block language-javascript">// HTML: Just an empty div
 &lt;div id="my-timer"&gt;&lt;/div&gt;
 
 // JavaScript: Timer with controls
@@ -138,7 +138,7 @@ const timer = Domma.elements.timer('#my-timer', {
             </div>
 
             <h4 class="category-title">Simplest Headless Timer</h4>
-            <pre class="code-block">// No HTML needed - pure JavaScript
+            <pre class="code-block language-javascript">// No HTML needed - pure JavaScript
 const timer = Domma.elements.timer(null, {
     duration: 10000,  // 10 seconds
     onComplete: () => Domma.elements.alert('Done!')
@@ -164,7 +164,7 @@ timer.start();  // Go!</pre>
             </p>
 
             <h4 class="category-title">Step 1: Create Work Timer</h4>
-            <pre class="code-block">const workTimer = Domma.elements.timer('#work-timer', {
+            <pre class="code-block language-javascript">const workTimer = Domma.elements.timer('#work-timer', {
     duration: 1500000,  // 25 minutes (Pomodoro work period)
     format: 'mm:ss',
     showControls: true,
@@ -182,7 +182,7 @@ timer.start();  // Go!</pre>
 });</pre>
 
             <h4 class="category-title">Step 2: Create Break Timer</h4>
-            <pre class="code-block">const breakTimer = Domma.elements.timer('#break-timer', {
+            <pre class="code-block language-javascript">const breakTimer = Domma.elements.timer('#break-timer', {
     duration: 300000,  // 5 minutes
     format: 'mm:ss',
     showControls: true,
@@ -198,7 +198,7 @@ timer.start();  // Go!</pre>
 });</pre>
 
             <h4 class="category-title">Step 3: Add Controls</h4>
-            <pre class="code-block">// Manual control buttons
+            <pre class="code-block language-javascript">// Manual control buttons
 document.getElementById('start-work').addEventListener('click', () => {
     workTimer.start();
 });
@@ -236,7 +236,7 @@ document.getElementById('pause').addEventListener('click', () => {
         <div class="card-body">
 
             <h4 class="category-title">1. Cooking Timer</h4>
-            <pre class="code-block">const cookingTimer = Domma.elements.timer('#cooking-timer', {
+            <pre class="code-block language-javascript">const cookingTimer = Domma.elements.timer('#cooking-timer', {
     duration: 600000,  // 10 minutes
     format: 'mm:ss',
     showControls: true,
@@ -255,7 +255,7 @@ document.getElementById('pause').addEventListener('click', () => {
             </div>
 
             <h4 class="category-title">2. HIIT Workout Timer</h4>
-            <pre class="code-block">let currentRound = 1;
+            <pre class="code-block language-javascript">let currentRound = 1;
 const totalRounds = 8;
 
 const workoutTimer = Domma.elements.timer('#workout', {
@@ -286,7 +286,7 @@ const restTimer = Domma.elements.timer(null, {
             </div>
 
             <h4 class="category-title">3. Presentation Timer</h4>
-            <pre class="code-block">const presentationTimer = Domma.elements.timer('#presentation', {
+            <pre class="code-block language-javascript">const presentationTimer = Domma.elements.timer('#presentation', {
     duration: 600000,  // 10 minutes
     format: 'mm:ss',
     showControls: true,
@@ -305,7 +305,7 @@ const restTimer = Domma.elements.timer(null, {
             </div>
 
             <h4 class="category-title">4. Multiple Timers</h4>
-            <pre class="code-block">// Manage multiple cooking tasks
+            <pre class="code-block language-javascript">// Manage multiple cooking tasks
 const timers = {
     pasta: Domma.elements.timer('#pasta-timer', {
         duration: 480000,  // 8 minutes
@@ -383,7 +383,7 @@ Object.values(timers).forEach(timer => timer.start());</pre>
             </ul>
 
             <h4 class="category-title">Performance Pattern</h4>
-            <pre class="code-block">// Good: Reuse timer for repeated countdowns
+            <pre class="code-block language-javascript">// Good: Reuse timer for repeated countdowns
 const reusableTimer = Domma.elements.timer('#timer', {
     duration: 60000,
     showControls: true,
@@ -407,7 +407,7 @@ function startNewTimer() {
 }</pre>
 
             <h4 class="category-title">Cleanup Pattern</h4>
-            <pre class="code-block">// Store reference for cleanup
+            <pre class="code-block language-javascript">// Store reference for cleanup
 let currentTimer = null;
 
 function setupTimer() {
@@ -440,7 +440,7 @@ window.addEventListener('beforeunload', () => {
         <div class="card-body">
 
             <h4 class="category-title">Factory Method</h4>
-            <pre class="code-block">// Visual mode (with DOM element)
+            <pre class="code-block language-javascript">// Visual mode (with DOM element)
 elements.timer(selector, options)
 
 // Headless mode (no DOM element)
@@ -545,7 +545,7 @@ elements.timer(null, options)</pre>
             </table>
 
             <h4 class="category-title">Instance Methods</h4>
-            <pre class="code-block">// Control methods
+            <pre class="code-block language-javascript">// Control methods
 timer.start()          // Start or resume timer
 timer.pause()          // Pause timer
 timer.reset()          // Reset to initial duration
@@ -577,7 +577,7 @@ timer.destroy()        // Stop timer and clean up</pre>
             </p>
 
             <h4 class="category-title">Basic Timer Setup</h4>
-            <pre class="code-block">$.setup({
+            <pre class="code-block language-javascript">$.setup({
     '#my-timer': {
         component: 'timer',
         options: {
@@ -594,7 +594,7 @@ timer.destroy()        // Stop timer and clean up</pre>
             </div>
 
             <h4 class="category-title">Multiple Timers</h4>
-            <pre class="code-block">$.setup({
+            <pre class="code-block language-javascript">$.setup({
     '#quick-timer': {
         component: 'timer',
         options: {
@@ -656,6 +656,7 @@ timer.destroy()        // Stop timer and clean up</pre>
 </main>
 
 <script src="../../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../../js/layout.js"></script>
 <script>
     // Quick Start: Visual Timer

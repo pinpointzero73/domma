@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor - Domma Showcase</title>
+    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <style>
+        .mode-switcher {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .mode-switcher button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .mode-switcher button.active {
+            background: var(--dm-primary);
+            color: white;
+            border-color: var(--dm-primary);
+        }
+
+        .editor-demo {
+            margin-bottom: 2rem;
+        }
+
+        .storage-info {
+            font-size: 0.875rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body class="dm-theme-light">
+
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Editor</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                The Universal Editor is a flexible, mode-switchable editing component that adapts to your needs.
+                Use it as a plain text editor, rich text (WYSIWYG) editor, or code editor - all from one component
+                with seamless mode switching, Model integration, autosave, and localStorage persistence.
+            </p>
+
+            <h3 class="category-title">Three Modes, One Component</h3>
+            <ul class="feature-list mb-4">
+                <li><strong>Text Mode</strong> - Enhanced textarea with auto-resize, character/word count</li>
+                <li><strong>Rich Mode</strong> - WYSIWYG editor with toolbar, formatting, images, code blocks, embeds
+                </li>
+                <li><strong>Code Mode</strong> - Syntax highlighting, line numbers, tab indentation</li>
+            </ul>
+
+            <h3 class="category-title">Key Features</h3>
+            <ul class="feature-list mb-4">
+                <li><strong>Model Integration</strong> - Two-way reactive data binding</li>
+                <li><strong>Autosave</strong> - Automatic saving with configurable intervals</li>
+                <li><strong>localStorage</strong> - Persistent storage with automatic save/load</li>
+                <li><strong>Image Paste</strong> - Paste images directly from clipboard (base64 or upload)</li>
+                <li><strong>Code Blocks</strong> - Syntax-highlighted code blocks in rich mode</li>
+                <li><strong>Embeds</strong> - YouTube, Twitter, CodePen auto-embedding</li>
+                <li><strong>Undo/Redo</strong> - Built-in history management</li>
+                <li><strong>Customizable Toolbar</strong> - Configure which buttons appear</li>
+            </ul>
+
+            <h3 class="category-title">Basic Usage</h3>
+            <div class="code-block language-javascript">
+<pre><code>// Text mode
+Domma.elements.editor('#editor', {
+    mode: 'text',
+    characterCount: true,
+    autosave: true,
+    storage: 'my-notes'
+});
+
+// Rich text mode
+Domma.elements.editor('#editor', {
+    mode: 'rich',
+    toolbar: [['bold', 'italic'], ['link', 'image']],
+    imagePaste: true,
+    autosave: true
+});
+
+// Code mode
+Domma.elements.editor('#editor', {
+    mode: 'code',
+    language: 'javascript',
+    lineNumbers: true,
+    model: codeModel,
+    modelKey: 'sourceCode'
+});</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Text Mode">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Text Mode</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Enhanced textarea with auto-resize, character counting, and autosave.</p>
+
+            <div class="editor-demo">
+                <label class="form-label">Try it out:</label>
+                <textarea id="text-editor"></textarea>
+                <div class="storage-info">💾 Auto-saves to localStorage every 3 seconds</div>
+            </div>
+
+            <div class="code-block language-javascript">
+<pre><code>Domma.elements.editor('#editor', {
+    mode: 'text',
+    placeholder: 'Start typing...',
+    characterCount: true,
+    wordCount: true,
+    autosave: true,
+    autosaveInterval: 3000,
+    storage: 'text-draft',
+    onChange: (content) => console.log('Content changed')
+});</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Rich Text Mode">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Rich Text Mode (WYSIWYG)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Full-featured WYSIWYG editor with formatting toolbar, images, links, code blocks, and embeds.
+                Try pasting an image from your clipboard!
+            </p>
+
+            <div class="editor-demo">
+                <label class="form-label">Rich Text Editor:</label>
+                <div id="rich-editor"></div>
+                <p class="text-sm text-muted mt-2">
+                    <strong>Tips:</strong> Use Ctrl+B for bold, Ctrl+I for italic, Ctrl+U for underline.
+                    Paste images directly from clipboard.
+                </p>
+            </div>
+
+            <div class="code-block language-javascript">
+<pre><code>Domma.elements.editor('#editor', {
+    mode: 'rich',
+    placeholder: 'Start writing...',
+    toolbar: [
+        ['bold', 'italic', 'underline', 'strikethrough'],
+        ['h1', 'h2', 'h3'],
+        ['ul', 'ol', 'blockquote'],
+        ['link', 'image', 'code'],
+        ['codeblock', 'embed'],
+        ['undo', 'redo', 'clear']
+    ],
+    imagePaste: true,
+    imageMode: 'base64',  // or provide custom imageUpload function
+    autosave: true,
+    storage: 'rich-draft'
+});</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Code Mode">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Code Mode</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Code editor with line numbers, tab indentation, and syntax highlighting markers.</p>
+
+            <div class="editor-demo">
+                <label class="form-label">JavaScript Code Editor:</label>
+                <textarea id="code-editor"></textarea>
+                <p class="text-sm text-muted mt-2">
+                    <strong>Tip:</strong> Press Tab for 4-space indentation
+                </p>
+            </div>
+
+            <div class="code-block language-javascript">
+<pre><code>Domma.elements.editor('#editor', {
+    mode: 'code',
+    language: 'javascript',
+    lineNumbers: true,
+    theme: 'light',
+    autosave: true,
+    storage: 'code-draft'
+});</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Mode Switching">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Dynamic Mode Switching</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Switch between modes dynamically while preserving content:</p>
+
+            <div class="editor-demo">
+                <div class="mode-switcher">
+                    <button onclick="switchMode('text')" class="active" data-mode="text">Text</button>
+                    <button onclick="switchMode('rich')" data-mode="rich">Rich</button>
+                    <button onclick="switchMode('code')" data-mode="code">Code</button>
+                </div>
+                <textarea id="switchable-editor"></textarea>
+            </div>
+
+            <div class="code-block language-javascript">
+<pre><code>const editor = Domma.elements.editor('#editor', {
+    mode: 'text'
+});
+
+// Switch modes dynamically
+editor.setMode('rich');  // Switch to rich text
+editor.setMode('code');  // Switch to code
+editor.setMode('text');  // Back to text
+
+// Get current mode
+console.log(editor.getMode());  // 'text', 'rich', or 'code'</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Model Integration">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Model Integration</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Two-way reactive binding with Domma's Model system:</p>
+
+            <div class="editor-demo">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="form-label">Editor (bound to model):</label>
+                        <textarea id="model-editor"></textarea>
+                    </div>
+                    <div>
+                        <label class="form-label">Model Value Display:</label>
+                        <div id="model-display" class="p-4 bg-surface rounded"
+                             style="min-height: 200px; font-family: monospace; white-space: pre-wrap;"></div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-primary btn-sm" onclick="updateModel()">Set Model to "Hello from Model!"
+                    </button>
+                    <button class="btn btn-secondary btn-sm" onclick="clearModel()">Clear Model</button>
+                </div>
+            </div>
+
+            <div class="code-block language-javascript">
+<pre><code>const contentModel = M.create({
+    text: { type: 'string', default: '' }
+});
+
+Domma.elements.editor('#editor', {
+    mode: 'text',
+    model: contentModel,
+    modelKey: 'text'
+});
+
+// Model changes update editor
+contentModel.set('text', 'New content');
+
+// Editor changes update model
+// (happens automatically on input)</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Autosave & Storage">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Autosave & localStorage</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Automatic saving to localStorage with configurable intervals:</p>
+
+            <div class="editor-demo">
+                <label class="form-label">Autosave Demo (saves every 2 seconds):</label>
+                <textarea id="autosave-editor"></textarea>
+                <div class="storage-info">
+                    Last saved: <span id="last-saved">Never</span> •
+                    <button class="btn btn-sm" onclick="manualSave()">Save Now</button>
+                    <button class="btn btn-sm" onclick="clearStorage()">Clear Storage</button>
+                </div>
+            </div>
+
+            <div class="code-block language-javascript">
+<pre><code>const editor = Domma.elements.editor('#editor', {
+    mode: 'text',
+    autosave: true,
+    autosaveInterval: 2000,  // 2 seconds
+    storage: 'my-document',
+    onSave: (content) => {
+        console.log('Saved!', content.length, 'characters');
+    }
+});
+
+// Manual save
+editor.save();
+
+// Content auto-loads from storage on init
+// if storage key exists</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="API Reference">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">API Reference</h2>
+        </div>
+        <div class="card-body">
+            <h3 class="category-title">Options</h3>
+            <div class="api-table mb-4">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><code>mode</code></td>
+                        <td>String</td>
+                        <td><code>'text'</code></td>
+                        <td>Editor mode: 'text', 'rich', or 'code'</td>
+                    </tr>
+                    <tr>
+                        <td><code>model</code></td>
+                        <td>Object</td>
+                        <td><code>null</code></td>
+                        <td>Domma Model instance for binding</td>
+                    </tr>
+                    <tr>
+                        <td><code>modelKey</code></td>
+                        <td>String</td>
+                        <td><code>null</code></td>
+                        <td>Model field to bind to</td>
+                    </tr>
+                    <tr>
+                        <td><code>autosave</code></td>
+                        <td>Boolean</td>
+                        <td><code>false</code></td>
+                        <td>Enable automatic saving</td>
+                    </tr>
+                    <tr>
+                        <td><code>autosaveInterval</code></td>
+                        <td>Number</td>
+                        <td><code>3000</code></td>
+                        <td>Autosave delay in milliseconds</td>
+                    </tr>
+                    <tr>
+                        <td><code>storage</code></td>
+                        <td>String</td>
+                        <td><code>null</code></td>
+                        <td>localStorage key for persistence</td>
+                    </tr>
+                    <tr>
+                        <td><code>toolbar</code></td>
+                        <td>Array</td>
+                        <td>Default</td>
+                        <td>Toolbar button groups (rich/code mode)</td>
+                    </tr>
+                    <tr>
+                        <td><code>showToolbar</code></td>
+                        <td>Boolean</td>
+                        <td><code>true</code></td>
+                        <td>Show/hide toolbar</td>
+                    </tr>
+                    <tr>
+                        <td><code>imagePaste</code></td>
+                        <td>Boolean</td>
+                        <td><code>true</code></td>
+                        <td>Enable image pasting (rich mode)</td>
+                    </tr>
+                    <tr>
+                        <td><code>imageMode</code></td>
+                        <td>String</td>
+                        <td><code>'base64'</code></td>
+                        <td>'base64' or 'upload'</td>
+                    </tr>
+                    <tr>
+                        <td><code>imageUpload</code></td>
+                        <td>Function</td>
+                        <td><code>null</code></td>
+                        <td>Custom upload handler (file) => url</td>
+                    </tr>
+                    <tr>
+                        <td><code>language</code></td>
+                        <td>String</td>
+                        <td><code>'javascript'</code></td>
+                        <td>Code language (code mode)</td>
+                    </tr>
+                    <tr>
+                        <td><code>lineNumbers</code></td>
+                        <td>Boolean</td>
+                        <td><code>true</code></td>
+                        <td>Show line numbers (code mode)</td>
+                    </tr>
+                    <tr>
+                        <td><code>theme</code></td>
+                        <td>String</td>
+                        <td><code>'light'</code></td>
+                        <td>Editor theme</td>
+                    </tr>
+                    <tr>
+                        <td><code>placeholder</code></td>
+                        <td>String</td>
+                        <td><code>''</code></td>
+                        <td>Placeholder text</td>
+                    </tr>
+                    <tr>
+                        <td><code>minHeight</code></td>
+                        <td>Number</td>
+                        <td><code>200</code></td>
+                        <td>Minimum height in pixels</td>
+                    </tr>
+                    <tr>
+                        <td><code>maxHeight</code></td>
+                        <td>Number</td>
+                        <td><code>null</code></td>
+                        <td>Maximum height in pixels</td>
+                    </tr>
+                    <tr>
+                        <td><code>characterCount</code></td>
+                        <td>Boolean</td>
+                        <td><code>false</code></td>
+                        <td>Show character count</td>
+                    </tr>
+                    <tr>
+                        <td><code>wordCount</code></td>
+                        <td>Boolean</td>
+                        <td><code>false</code></td>
+                        <td>Show word count</td>
+                    </tr>
+                    <tr>
+                        <td><code>onChange</code></td>
+                        <td>Function</td>
+                        <td><code>null</code></td>
+                        <td>Callback on content change</td>
+                    </tr>
+                    <tr>
+                        <td><code>onSave</code></td>
+                        <td>Function</td>
+                        <td><code>null</code></td>
+                        <td>Callback on save</td>
+                    </tr>
+                    <tr>
+                        <td><code>onImagePaste</code></td>
+                        <td>Function</td>
+                        <td><code>null</code></td>
+                        <td>Callback on image paste</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="category-title">Methods</h3>
+            <div class="api-table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Returns</th>
+                        <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><code>getValue()</code></td>
+                        <td>String</td>
+                        <td>Get editor content (HTML for rich mode)</td>
+                    </tr>
+                    <tr>
+                        <td><code>setValue(content)</code></td>
+                        <td>this</td>
+                        <td>Set editor content</td>
+                    </tr>
+                    <tr>
+                        <td><code>getText()</code></td>
+                        <td>String</td>
+                        <td>Get plain text (strips HTML in rich mode)</td>
+                    </tr>
+                    <tr>
+                        <td><code>clear()</code></td>
+                        <td>this</td>
+                        <td>Clear all content</td>
+                    </tr>
+                    <tr>
+                        <td><code>focus()</code></td>
+                        <td>this</td>
+                        <td>Focus the editor</td>
+                    </tr>
+                    <tr>
+                        <td><code>blur()</code></td>
+                        <td>this</td>
+                        <td>Blur the editor</td>
+                    </tr>
+                    <tr>
+                        <td><code>undo()</code></td>
+                        <td>this</td>
+                        <td>Undo last change</td>
+                    </tr>
+                    <tr>
+                        <td><code>redo()</code></td>
+                        <td>this</td>
+                        <td>Redo last undo</td>
+                    </tr>
+                    <tr>
+                        <td><code>save()</code></td>
+                        <td>this</td>
+                        <td>Manually save to storage</td>
+                    </tr>
+                    <tr>
+                        <td><code>setMode(mode)</code></td>
+                        <td>this</td>
+                        <td>Switch editor mode</td>
+                    </tr>
+                    <tr>
+                        <td><code>getMode()</code></td>
+                        <td>String</td>
+                        <td>Get current mode</td>
+                    </tr>
+                    <tr>
+                        <td><code>destroy()</code></td>
+                        <td>void</td>
+                        <td>Remove editor and cleanup</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script src="../../../dist/domma-tools.min.js"></script>
+<script src="../../js/layout.js"></script>
+<script>
+    // Text Mode Demo
+    const textEditor = Domma.elements.editor('#text-editor', {
+        mode: 'text',
+        placeholder: 'Start typing your notes...',
+        characterCount: true,
+        wordCount: true,
+        autosave: true,
+        autosaveInterval: 3000,
+        storage: 'domma-text-demo',
+        minHeight: 150
+    });
+
+    // Rich Text Mode Demo
+    const richEditor = Domma.elements.editor('#rich-editor', {
+        mode: 'rich',
+        placeholder: 'Start writing...',
+        autosave: true,
+        storage: 'domma-rich-demo',
+        minHeight: 250,
+        imagePaste: true,
+        imageMode: 'base64'
+    });
+
+    // Code Mode Demo
+    const codeEditor = Domma.elements.editor('#code-editor', {
+        mode: 'code',
+        language: 'javascript',
+        placeholder: '// Write your code here...',
+        lineNumbers: true,
+        autosave: true,
+        storage: 'domma-code-demo',
+        minHeight: 200
+    });
+
+    // Switchable Editor Demo
+    let switchableEditor = Domma.elements.editor('#switchable-editor', {
+        mode: 'text',
+        placeholder: 'Try switching modes...',
+        minHeight: 200
+    });
+
+    window.switchMode = function (mode) {
+        switchableEditor.setMode(mode);
+
+        // Update button states
+        document.querySelectorAll('.mode-switcher button').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
+        });
+    };
+
+    // Model Integration Demo
+    const contentModel = M.create({
+        text: {type: 'string', default: ''}
+    });
+
+    const modelEditor = Domma.elements.editor('#model-editor', {
+        mode: 'text',
+        model: contentModel,
+        modelKey: 'text',
+        placeholder: 'Type here to update the model...',
+        minHeight: 200
+    });
+
+    // Bind model to display
+    M.bind(contentModel, 'text', '#model-display', {
+        format: (val) => val || '(empty)'
+    });
+
+    window.updateModel = function () {
+        contentModel.set('text', 'Hello from Model!\n\nThis text was set programmatically via model.set()');
+    };
+
+    window.clearModel = function () {
+        contentModel.set('text', '');
+    };
+
+    // Autosave Demo
+    const autosaveEditor = Domma.elements.editor('#autosave-editor', {
+        mode: 'text',
+        autosave: true,
+        autosaveInterval: 2000,
+        storage: 'domma-autosave-demo',
+        placeholder: 'Type something... it will save automatically every 2 seconds',
+        minHeight: 150,
+        onSave: (content) => {
+            document.getElementById('last-saved').textContent = new Date().toLocaleTimeString();
+        }
+    });
+
+    window.manualSave = function () {
+        autosaveEditor.save();
+    };
+
+    window.clearStorage = function () {
+        localStorage.removeItem('domma:editor:domma-autosave-demo');
+        autosaveEditor.clear();
+        document.getElementById('last-saved').textContent = 'Never';
+        alert('Storage cleared!');
+    };
+</script>
+
+</body>
+</html>

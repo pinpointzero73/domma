@@ -141,7 +141,7 @@
         <div class="card-body">
             <p class="mb-4">Transform a table element into an interactive data grid.</p>
 
-            <pre class="code-block">// Create a table instance
+            <pre class="code-block language-javascript">// Create a table instance
 const table = Domma.tables.create('#my-table', {
     data: [
         { id: 1, name: 'Alice', email: 'alice@example.com', role: 'Admin' },
@@ -331,7 +331,7 @@ const table = Domma.tables.create('#my-table', {
         <div class="card-body">
             <p class="mb-4">Sort data by one or multiple columns.</p>
 
-            <pre class="code-block">// Single column sort
+            <pre class="code-block language-javascript">// Single column sort
 table.sort('name', 'asc');
 table.sort('age', 'desc');
 
@@ -374,7 +374,7 @@ table.on('sort', (column, direction) => {
         <div class="card-body">
             <p class="mb-4">Filter data with text search or column-specific filters.</p>
 
-            <pre class="code-block">// Global text search
+            <pre class="code-block language-javascript">// Global text search
 table.search('alice');
 
 // Column filter
@@ -410,7 +410,7 @@ table.on('filter', (filters) => {
         <div class="card-body">
             <p class="mb-4">Navigate through large datasets with pagination controls.</p>
 
-            <pre class="code-block">// Create table with pagination
+            <pre class="code-block language-javascript">// Create table with pagination
 const table = Domma.tables.create('#table', {
     data: largeDataset,
     pagination: true,
@@ -469,7 +469,7 @@ table.on('page', (page, pageSize) => {
         <div class="card-body">
             <p class="mb-4">Select single or multiple rows for bulk operations.</p>
 
-            <pre class="code-block">// Enable selection
+            <pre class="code-block language-javascript">// Enable selection
 const table = Domma.tables.create('#table', {
     data: data,
     selectable: true,
@@ -516,7 +516,7 @@ table.on('select', (selectedRows, selectedIndices) => {
         <div class="card-body">
             <p class="mb-4">Add, update, and remove data dynamically.</p>
 
-            <pre class="code-block">// Set all data
+            <pre class="code-block language-javascript">// Set all data
 table.setData(newDataArray);
 
 // Get all data (filtered/sorted state)
@@ -561,7 +561,7 @@ table.refresh();</pre>
         <div class="card-body">
             <p class="mb-4">Enable a built-in export toolbar with Copy/Download toggle and format buttons.</p>
 
-            <pre class="code-block">// Enable export panel
+            <pre class="code-block language-javascript">// Enable export panel
 const table = Domma.tables.create('#my-table', {
     data: myData,
     columns: [...],
@@ -617,7 +617,7 @@ const table = Domma.tables.create('#my-table', {
             <p class="mb-4">Enable a dropdown to show/hide columns dynamically. Users can toggle column visibility
                 without reloading the table.</p>
 
-            <pre class="code-block">// Enable column toggle dropdown
+            <pre class="code-block language-javascript">// Enable column toggle dropdown
 const table = Domma.tables.create('#my-table', {
     data: myData,
     columns: [
@@ -682,7 +682,7 @@ table.getColumns();             // All columns</pre>
         <div class="card-body">
             <p class="mb-4">Customise row stripe and hover colours using named variants or custom hex/RGB values.</p>
 
-            <pre class="code-block">// Named variants (uses CSS variables)
+            <pre class="code-block language-javascript">// Named variants (uses CSS variables)
 const table1 = Domma.tables.create('#table', {
     data: data,
     striped: true,
@@ -773,7 +773,7 @@ const table3 = Domma.tables.create('#table', {
         <div class="card-body">
             <p class="mb-4">Programmatically export data in various formats.</p>
 
-            <pre class="code-block">// Copy to clipboard
+            <pre class="code-block language-javascript">// Copy to clipboard
 table.copyToClipboard();        // Tab-separated (paste into Excel)
 table.copyToClipboard('csv');   // CSV format
 table.copyToClipboard('json');  // JSON format
@@ -814,7 +814,7 @@ table.on('export', (info) => {
         <div class="card-body">
             <p class="mb-4">Listen to table events for custom behavior.</p>
 
-            <pre class="code-block">// Available events
+            <pre class="code-block language-javascript">// Available events
 table.on('sort', (column, direction) => { });
 table.on('filter', (activeFilters) => { });
 table.on('search', (query) => { });
@@ -846,7 +846,7 @@ table.once('render', () => {
             </p>
 
             <h4 class="category-title">Centralized Table Config</h4>
-            <pre class="code-block">// Define all table configurations in one place
+            <pre class="code-block language-javascript">// Define all table configurations in one place
 const tableConfigs = {
     users: {
         selector: '#users-table',
@@ -902,7 +902,7 @@ Object.values(tableConfigs).forEach(config => {
 });</pre>
 
             <h4 class="category-title">Using $.setup() for Table Containers</h4>
-            <pre class="code-block">// Enhance table containers with config engine
+            <pre class="code-block language-javascript">// Enhance table containers with config engine
 $.setup({
     '.table-container': {
         initial: {
@@ -942,7 +942,7 @@ $.setup({
 });</pre>
 
             <h4 class="category-title">Dynamic Table Factory</h4>
-            <pre class="code-block">// Create a reusable table factory with config
+            <pre class="code-block language-javascript">// Create a reusable table factory with config
 class TableFactory {
     static presets = {
         users: {
@@ -989,7 +989,7 @@ const productsTable = TableFactory.create('#products', 'products', productData, 
 });</pre>
 
             <h4 class="category-title">State-Driven Table Management</h4>
-            <pre class="code-block">// Use Domma models for reactive table state
+            <pre class="code-block language-javascript">// Use Domma models for reactive table state
 const tableState = M.create({
     data: { type: 'array', default: [] },
     sortColumn: { type: 'string', default: '' },
@@ -1041,7 +1041,7 @@ tableState.onChange('selectedRows', (rows) => {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">Imperative (Scattered)</p>
-                    <pre class="code-block" style="font-size: 0.85em;">// Table 1
+                    <pre class="code-block language-javascript" style="font-size: 0.85em;">// Table 1
 const table1 = Domma.tables.create('#t1', {
     data: data1,
     columns: [/*...*/],
@@ -1063,7 +1063,7 @@ const table2 = Domma.tables.create('#t2', {
                 </div>
                 <div>
                     <p class="font-semibold mb-2">Configuration-Driven (Centralized)</p>
-                    <pre class="code-block" style="font-size: 0.85em;">// One config object
+                    <pre class="code-block language-javascript" style="font-size: 0.85em;">// One config object
 const config = {
     table1: {
         selector: '#t1',
@@ -1184,6 +1184,7 @@ initTables(config);</pre>
 </div>
 
 <script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../js/layout.js"></script>
 <script>
     // Sample data
@@ -1408,8 +1409,8 @@ initTables(config);</pre>
     $('#export-csv').on('click', () => table.download('csv', 'users.csv'));
     $('#export-excel').on('click', () => table.download('excel', 'users.xls'));
     $('#export-json').on('click', () => table.download('json', 'users.json'));
-    $('#copy-clipboard').on('click', function () {
-        table.copyToClipboard();
+    $('#copy-clipboard').on('click', async function () {
+        await table.copyToClipboard();
         $(this).text('Copied!').addClass('btn-success').removeClass('btn-outline');
         setTimeout(() => {
             $(this).text('Copy to Clipboard').removeClass('btn-success').addClass('btn-outline');

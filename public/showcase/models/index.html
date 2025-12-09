@@ -214,7 +214,7 @@
                 <span class="method-item">emit()</span>
             </div>
 
-            <pre class="code-block">// Subscribe to an event
+            <pre class="code-block language-javascript">// Subscribe to an event
 M.subscribe('user:login', (data) => {
     console.log('User logged in:', data.username);
 });
@@ -277,7 +277,7 @@ M.on('cart:clear', handler);</pre>
         <div class="card-body">
             <p class="mb-4">Create reactive data models with schema validation and change detection.</p>
 
-            <pre class="code-block">// Create a model with schema
+            <pre class="code-block language-javascript">// Create a model with schema
 const user = M.create({
     name: { type: 'string', required: true },
     email: {
@@ -392,7 +392,7 @@ const result = user.validate();
         <div class="card-body">
             <p class="mb-4">Built-in type validators for common data types.</p>
 
-            <pre class="code-block">// Available types
+            <pre class="code-block language-javascript">// Available types
 M.types.string    // String values
 M.types.number    // Numeric values
 M.types.boolean   // true/false
@@ -450,7 +450,7 @@ const schema = {
         <div class="card-body">
             <p class="mb-4">Automatically sync model data with DOM elements.</p>
 
-            <pre class="code-block">const user = M.create({
+            <pre class="code-block language-javascript">const user = M.create({
     name: { type: 'string' },
     email: { type: 'string' }
 }, { name: 'Alice' });
@@ -511,7 +511,7 @@ M.unbind(user, 'name', '#name-display');</pre>
         <div class="card-body">
             <p class="mb-4">A complete example using pub/sub and reactive models together.</p>
 
-            <pre class="code-block">// Cart model
+            <pre class="code-block language-javascript">// Cart model
 const cart = M.create({
     items: { type: 'array', default: [] },
     total: { type: 'number', default: 0 }
@@ -608,7 +608,7 @@ $('.add-to-cart').on('click', function() {
         <div class="card-body">
             <p class="mb-4">A complete CRUD example with model-based form validation and clipboard export.</p>
 
-            <pre class="code-block">// Users collection model
+            <pre class="code-block language-javascript">// Users collection model
 const usersModel = M.create({
     users: { type: 'array', default: [] }
 });
@@ -756,6 +756,7 @@ navigator.clipboard.writeText(JSON.stringify(usersModel.get('users'), null, 2));
 </div>
 
 <script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../js/layout.js"></script>
 <script>
     // Pub/Sub Demo

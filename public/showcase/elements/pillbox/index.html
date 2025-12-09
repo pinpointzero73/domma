@@ -45,7 +45,7 @@
             </ul>
 
             <h3 class="category-title">Basic Usage</h3>
-            <div class="code-block">
+            <div class="code-block language-javascript">
             <pre><code>// Select from predefined options
 const pillbox = Domma.elements.pillbox('#tags', {
     data: ['React', 'Vue', 'Angular', 'Svelte'],
@@ -74,7 +74,7 @@ Domma.elements.pillbox('#custom-tags', {
             <div class="demo-area mb-4">
                 <input type="text" id="quick-pillbox" style="max-width: 600px;">
             </div>
-            <div class="code-block">
+            <div class="code-block language-javascript">
             <pre><code>&lt;input type="text" id="tech-stack"&gt;
 
 &lt;script&gt;
@@ -176,7 +176,7 @@ Domma.elements.pillbox('#tech-stack', {
                        style="max-width: 600px;">
                 <p class="text-xs text-muted mt-2">Type any skill and press Enter to add it</p>
             </div>
-            <div class="code-block">
+            <div class="code-block language-javascript">
             <pre><code>Domma.elements.pillbox('#skills-input', {
     data: ['JavaScript', 'React', 'Node.js', 'MongoDB'],
     creatable: true,
@@ -204,7 +204,7 @@ Domma.elements.pillbox('#tech-stack', {
                     <input type="text" id="size-large" placeholder="Large pills..." style="max-width: 400px;">
                 </div>
             </div>
-            <div class="code-block">
+            <div class="code-block language-javascript">
             <pre><code>// Small
 Domma.elements.pillbox('#small', {
     data: items,
@@ -224,7 +224,7 @@ Domma.elements.pillbox('#large', {
                 <input type="text" id="max-items-pillbox" placeholder="Max 3 items..." style="max-width: 600px;">
                 <p id="max-items-status" class="text-xs mt-2"></p>
             </div>
-            <div class="code-block">
+            <div class="code-block language-javascript">
             <pre><code>Domma.elements.pillbox('#limited-input', {
     data: ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5'],
     maxItems: 3,
@@ -241,7 +241,7 @@ Domma.elements.pillbox('#large', {
                 <input type="text" id="custom-render-pillbox" placeholder="Select team members..."
                        style="max-width: 600px;">
             </div>
-            <div class="code-block">
+            <div class="code-block language-javascript">
             <pre><code>const team = [
     { value: '1', label: 'Alice', role: 'Admin' },
     { value: '2', label: 'Bob', role: 'Developer' },
@@ -282,7 +282,7 @@ Domma.elements.pillbox('#team-select', {
                     <button class="btn btn-sm" onclick="showValues()">Show Values</button>
                 </div>
             </div>
-            <div class="code-block">
+            <div class="code-block language-javascript">
             <pre><code>const pillbox = Domma.elements.pillbox('#controlled-pillbox', {
     data: ['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon']
 });
@@ -707,7 +707,7 @@ pillbox.setValue(['Delta', 'Epsilon']);</code></pre>
             </div>
 
             <h3 class="category-title">Multiple Instances</h3>
-            <div class="code-block">
+            <div class="code-block language-javascript">
             <pre><code>$.setup({
     '#skills': {
         component: 'pillbox',
@@ -751,7 +751,7 @@ pillbox.setValue(['Delta', 'Epsilon']);</code></pre>
                     <strong>Current Model Value:</strong> <span id="model-display">[]</span>
                 </div>
             </div>
-            <div class="code-block">
+            <div class="code-block language-javascript">
             <pre><code>// Create a model with an array field
 const tagsModel = M.create({
     selectedTags: { type: 'array', default: [] }
@@ -774,7 +774,7 @@ M.bind(tagsModel, 'selectedTags', '#tag-display', {
             <p class="mb-3">
                 Changes to the model automatically update the pillbox, and vice versa:
             </p>
-            <div class="code-block">
+            <div class="code-block language-javascript">
             <pre><code>// Model changes update the pillbox
 tagsModel.set('selectedTags', ['React', 'Vue']);  // Pills appear
 
@@ -783,7 +783,7 @@ tagsModel.set('selectedTags', ['React', 'Vue']);  // Pills appear
             </div>
 
             <h3 class="category-title">Config Engine Integration</h3>
-            <div class="code-block">
+            <div class="code-block language-javascript">
             <pre><code>const userModel = M.create({
     skills: { type: 'array', default: [] }
 });
@@ -804,7 +804,7 @@ $.setup({
             <p class="mb-3">
                 Multiple elements can bind to the same model field for synchronised updates:
             </p>
-            <div class="code-block">
+            <div class="code-block language-javascript">
             <pre><code>const formModel = M.create({
     tags: { type: 'array', default: [] }
 });
@@ -855,6 +855,7 @@ M.bind(formModel, 'tags', '#tags-json', {
 </main>
 
 <script src="../../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
 <script src="../../js/layout.js"></script>
 <script>
     // Sample data
