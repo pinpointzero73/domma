@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examples - Domma</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/logo/domma-icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="../showcase/css/domma.css">
+    <link rel="stylesheet" href="../dist/themes/domma-themes.css">
+    <style>
+        .examples-section {
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .examples-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+        }
+
+        .examples-intro h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 1rem;
+            color: var(--dm-text);
+        }
+
+        .examples-intro p {
+            font-size: 1.125rem;
+            color: var(--dm-gray-600);
+            line-height: 1.7;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .example-card {
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .example-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            border-color: var(--dm-primary);
+        }
+
+        .example-card-header {
+            background: linear-gradient(135deg, var(--dm-primary-light) 0%, var(--dm-primary) 100%);
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 140px;
+        }
+
+        .example-card-header [data-icon] {
+            color: white;
+        }
+
+        .example-card-body {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .example-card-body h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0 0 0.75rem;
+            color: var(--dm-text);
+        }
+
+        .example-card-body p {
+            font-size: 1rem;
+            color: var(--dm-gray-600);
+            line-height: 1.6;
+            margin: 0 0 1.5rem;
+            flex: 1;
+        }
+
+        .example-card-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .example-tag {
+            background: var(--dm-gray-100);
+            color: var(--dm-gray-700);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
+
+        .example-card-footer {
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .example-card.coming-soon {
+            opacity: 0.6;
+        }
+
+        .example-card.coming-soon:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: var(--dm-border);
+        }
+
+        .example-card.coming-soon .example-card-header {
+            background: linear-gradient(135deg, var(--dm-gray-300) 0%, var(--dm-gray-400) 100%);
+        }
+
+        /* Footer positioning */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body > *:not(footer) {
+            flex-shrink: 0;
+        }
+
+        body > footer {
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body data-layout="showcase" data-layout-variant="subpage">
+
+<header class="page-header">
+    <h1>Examples</h1>
+    <p>Real-world applications built with Domma framework</p>
+</header>
+
+<section class="examples-section">
+    <div class="examples-intro">
+        <h2>Learn by Example</h2>
+        <p>Explore practical applications that demonstrate how to build real-world projects using Domma. Each example
+            showcases different features of the framework with complete, well-commented source code that you can study
+            and adapt for your own projects.</p>
+    </div>
+
+    <div class="examples-grid">
+        <!-- To-Do List Example -->
+        <article class="example-card">
+            <div class="example-card-header">
+                <span data-icon="check-square" data-icon-size="64"></span>
+            </div>
+            <div class="example-card-body">
+                <h3>To-Do List</h3>
+                <p>A fully functional task manager demonstrating Storage API, DOM manipulation, event handling, and
+                    persistent data.</p>
+                <div class="example-card-tags">
+                    <span class="example-tag">Storage</span>
+                    <span class="example-tag">DOM</span>
+                    <span class="example-tag">Events</span>
+                    <span class="example-tag">Persistence</span>
+                </div>
+            </div>
+            <div class="example-card-footer">
+                <a href="todo/index.html" class="btn btn-primary btn-block">View Example</a>
+            </div>
+        </article>
+
+        <!-- Coming Soon Placeholders -->
+        <article class="example-card coming-soon">
+            <div class="example-card-header">
+                <span data-icon="calculator" data-icon-size="64"></span>
+            </div>
+            <div class="example-card-body">
+                <h3>Calculator</h3>
+                <p>A responsive calculator demonstrating DOM manipulation, event handling, and custom styling.</p>
+                <div class="example-card-tags">
+                    <span class="example-tag">DOM</span>
+                    <span class="example-tag">Events</span>
+                    <span class="example-tag">UI</span>
+                </div>
+            </div>
+            <div class="example-card-footer">
+                <button class="btn btn-secondary btn-block" disabled>Coming Soon</button>
+            </div>
+        </article>
+
+        <article class="example-card coming-soon">
+            <div class="example-card-header">
+                <span data-icon="cloud" data-icon-size="64"></span>
+            </div>
+            <div class="example-card-body">
+                <h3>Weather App</h3>
+                <p>A weather application showcasing HTTP requests, async/await, data formatting, and API
+                    integration.</p>
+                <div class="example-card-tags">
+                    <span class="example-tag">HTTP</span>
+                    <span class="example-tag">Async</span>
+                    <span class="example-tag">API</span>
+                </div>
+            </div>
+            <div class="example-card-footer">
+                <button class="btn btn-secondary btn-block" disabled>Coming Soon</button>
+            </div>
+        </article>
+
+        <article class="example-card coming-soon">
+            <div class="example-card-header">
+                <span data-icon="file-text" data-icon-size="64"></span>
+            </div>
+            <div class="example-card-body">
+                <h3>Note Taking</h3>
+                <p>A rich note-taking app with Storage persistence, search functionality, and text formatting.</p>
+                <div class="example-card-tags">
+                    <span class="example-tag">Storage</span>
+                    <span class="example-tag">Search</span>
+                    <span class="example-tag">Utils</span>
+                </div>
+            </div>
+            <div class="example-card-footer">
+                <button class="btn btn-secondary btn-block" disabled>Coming Soon</button>
+            </div>
+        </article>
+
+        <article class="example-card coming-soon">
+            <div class="example-card-header">
+                <span data-icon="image" data-icon-size="64"></span>
+            </div>
+            <div class="example-card-body">
+                <h3>Image Gallery</h3>
+                <p>An interactive image gallery featuring carousels, modals, lazy loading, and smooth animations.</p>
+                <div class="example-card-tags">
+                    <span class="example-tag">Carousel</span>
+                    <span class="example-tag">Modal</span>
+                    <span class="example-tag">Elements</span>
+                </div>
+            </div>
+            <div class="example-card-footer">
+                <button class="btn btn-secondary btn-block" disabled>Coming Soon</button>
+            </div>
+        </article>
+
+        <article class="example-card coming-soon">
+            <div class="example-card-header">
+                <span data-icon="edit" data-icon-size="64"></span>
+            </div>
+            <div class="example-card-body">
+                <h3>Markdown Editor</h3>
+                <p>A live markdown editor with real-time preview, Storage persistence, and syntax highlighting.</p>
+                <div class="example-card-tags">
+                    <span class="example-tag">Utils</span>
+                    <span class="example-tag">Storage</span>
+                    <span class="example-tag">Templates</span>
+                </div>
+            </div>
+            <div class="example-card-footer">
+                <button class="btn btn-secondary btn-block" disabled>Coming Soon</button>
+            </div>
+        </article>
+    </div>
+</section>
+
+<script src="../dist/domma.min.js"></script>
+<script type="module" src="../layouts/js/layout.js"></script>
+<script>
+    // Scan for icons after page load
+    Domma.icons.scan();
+</script>
+
+</body>
+</html>
