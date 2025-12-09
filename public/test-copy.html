@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Copy Test</title>
+    <script src="dist/domma.min.js"></script>
+</head>
+<body>
+<h1>copyToClipboard Test</h1>
+<button id="testBtn">Test Copy</button>
+<div id="output"></div>
+
+<script>
+    const output = document.getElementById('output');
+
+    // Check if function exists
+    output.innerHTML += '<p>Domma defined: ' + (typeof Domma !== 'undefined') + '</p>';
+    output.innerHTML += '<p>Domma.utils defined: ' + (typeof Domma?.utils !== 'undefined') + '</p>';
+    output.innerHTML += '<p>copyToClipboard defined: ' + (typeof Domma?.utils?.copyToClipboard !== 'undefined') + '</p>';
+    output.innerHTML += '<p>copyToClipboard is function: ' + (typeof Domma?.utils?.copyToClipboard === 'function') + '</p>';
+
+    // Test the function
+    document.getElementById('testBtn').addEventListener('click', async function () {
+        try {
+            if (Domma?.utils?.copyToClipboard) {
+                const result = await Domma.utils.copyToClipboard('Test text copied!');
+                output.innerHTML += '<p style="color:green">✓ Copy succeeded! Result: ' + result + '</p>';
+            } else {
+                output.innerHTML += '<p style="color:red">✗ Domma.utils.copyToClipboard not found</p>';
+            }
+        } catch (err) {
+            output.innerHTML += '<p style="color:red">✗ Copy failed: ' + err.message + '</p>';
+        }
+    });
+</script>
+</body>
+</html>

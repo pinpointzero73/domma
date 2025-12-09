@@ -46,6 +46,14 @@ const toolsBanner = `/*!
  * Requires: domma.min.js
  */`;
 
+const syntaxBanner = `/*!
+ * Domma Syntax Highlighter v${pkg.version}
+ * Lightweight code syntax highlighting for JavaScript, HTML, and CSS
+ * (c) ${new Date().getFullYear()} Darryl Waterhouse & DCBW-IT
+ * Built: ${new Date().toISOString()}
+ * Commit: ${getGitCommit()}
+ */`;
+
 const obfuscatorOptions = {
     compact: true,
     controlFlowFlattening: true,
@@ -149,6 +157,26 @@ export default [
                 format: 'es',
                 sourcemap: false,
                 banner: toolsBanner
+            }
+        ],
+        plugins: commonPlugins
+    },
+    // Syntax highlighter bundle
+    {
+        input: 'src/syntax.js',
+        output: [
+            {
+                file: 'public/dist/domma-syntax.min.js',
+                format: 'umd',
+                name: 'DommaSyntax',
+                sourcemap: false,
+                banner: syntaxBanner
+            },
+            {
+                file: 'public/dist/domma-syntax.esm.js',
+                format: 'es',
+                sourcemap: false,
+                banner: syntaxBanner
             }
         ],
         plugins: commonPlugins

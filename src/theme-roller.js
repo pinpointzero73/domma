@@ -953,7 +953,7 @@ class ThemeRoller {
 
         // Action buttons
         this.element.querySelectorAll('[data-action]').forEach(btn => {
-            this._addEventListener(btn, 'click', () => {
+            this._addEventListener(btn, 'click', async () => {
                 const action = btn.dataset.action;
                 switch (action) {
                     case 'reset':
@@ -963,7 +963,7 @@ class ThemeRoller {
                         this.saveToStorage();
                         break;
                     case 'copy':
-                        this.copyToClipboard();
+                        await this.copyToClipboard();
                         break;
                     case 'download':
                         this.download();

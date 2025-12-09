@@ -1433,7 +1433,7 @@ class PageRoller {
      * Handle toolbar actions
      * @private
      */
-    _handleAction(action) {
+    async _handleAction(action) {
         switch (action) {
             case 'new':
                 this.newPage();
@@ -1445,7 +1445,7 @@ class PageRoller {
                 this._toggleTemplatesMenu();
                 break;
             case 'copy':
-                this.copyToClipboard();
+                await this.copyToClipboard();
                 break;
             case 'download':
                 this.download();

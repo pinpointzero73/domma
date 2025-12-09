@@ -142,11 +142,11 @@ class BundleBuilder {
         });
 
         // Copy buttons using Domma
-        $('[data-copy]').on('click', (e) => {
+        $('[data-copy]').on('click', async (e) => {
             const targetId = $(e.currentTarget).attr('data-copy');
             const code = $(`#${targetId}`).text();
             if (code) {
-                this.copyToClipboard(code);
+                await this.copyToClipboard(code);
             }
         });
     }

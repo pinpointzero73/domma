@@ -2,63 +2,10 @@
  * Domma Elements Module
  * UI Components: Cards, Modals, Tabs, Accordions, Tooltips, BackToTop
  *
- * Note: ThemeRoller and PageRoller are in the separate tools bundle (domma-tools.min.js)
+ * Note: ThemeRoller, QuickRoller, and Editor are in the separate tools bundle (domma-tools.min.js)
  */
 
-// ============================================
-// Base Component Class
-// ============================================
-
-class Component {
-    constructor(selector, options = {}) {
-        this.element = typeof selector === 'string'
-            ? document.querySelector(selector)
-            : selector;
-        this.options = {...this.constructor.defaults, ...options};
-        this._eventHandlers = [];
-
-        if (this.element) {
-            this.element._dommaComponent = this;
-        }
-    }
-
-    on(event, handler) {
-        if (this.options[event] && typeof this.options[event] === 'function') {
-            this.options[event](handler);
-        }
-    }
-
-    /**
-     * Update component options at runtime
-     * @param {Object} newOptions - New options to merge
-     * @returns {this} The component instance for chaining
-     */
-    setOptions(newOptions) {
-        this.options = {...this.options, ...newOptions};
-
-        // Call _applyOptions if the subclass implements it
-        if (typeof this._applyOptions === 'function') {
-            this._applyOptions();
-        }
-
-        return this;
-    }
-
-    _addEventListener(element, event, handler) {
-        element.addEventListener(event, handler);
-        this._eventHandlers.push({element, event, handler});
-    }
-
-    destroy() {
-        for (const {element, event, handler} of this._eventHandlers) {
-            element.removeEventListener(event, handler);
-        }
-        this._eventHandlers = [];
-        if (this.element) {
-            delete this.element._dommaComponent;
-        }
-    }
-}
+import Component from './component.js';
 
 // ============================================
 // Card Component
@@ -5713,6 +5660,16 @@ class Pillbox extends Component {
         super.destroy();
     }
 }
+
+// ============================================
+// Editor Component
+// ============================================
+
+/**
+ * Universal Editor Component
+ * Supports three modes: text, rich (WYSIWYG), and code
+ * Features: Model integration, autosave, image paste, code blocks, embeds
+ */
 
 // ============================================
 // Elements Module Export

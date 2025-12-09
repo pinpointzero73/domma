@@ -134,7 +134,8 @@
                 text: 'Tools',
                 items: [
                     {text: 'Theme Roller', url: `${base}theme-roller/index.html`},
-                    {text: 'Page Roller', url: `${base}page-roller/index.html`}
+                    {text: 'Page Roller', url: `${base}page-roller/index.html`},
+                    {text: 'Editor', url: `${base}elements/editor/index.html`}
                 ]
             }
         ];
@@ -1141,43 +1142,54 @@
                     }
                 }
 
-                // Handle click using Domma
-                $copyBtn.on('click', async function () {
-                    const code = $codeBlock.text();
+                // Store reference to code block for the handler
+                $copyBtn.data('codeBlock', $codeBlock);
+            });
 
-                    try {
-                        // Use Domma utility
-                        if (Domma?.utils?.copyToClipboard) {
-                            await Domma.utils.copyToClipboard(code);
-                        } else {
-                            await navigator.clipboard.writeText(code);
-                        }
+            // Use event delegation with native JavaScript for better SVG child element handling
+            document.addEventListener('click', async function (e) {
+                const copyBtn = e.target.closest('.code-block-copy');
+                if (!copyBtn) return;
 
-                        // Show success state using Domma
-                        $copyBtn.addClass('copied').html(checkIcon);
+                // Get the code block
+                const $copyBtn = $(copyBtn);
+                const $codeBlock = $copyBtn.data('codeBlock') || $copyBtn.parent().find('.code-block');
 
-                        // Show toast if available
-                        if (Domma?.elements?.toast) {
-                            Domma.elements.toast.success('Code copied!', {
-                                position: 'bottom-center',
-                                duration: 2000
-                            });
-                        }
-                    } catch (err) {
-                        console.error('Copy failed:', err);
-                        if (Domma?.elements?.toast) {
-                            Domma.elements.toast.error('Copy failed', {
-                                position: 'bottom-center',
-                                duration: 2000
-                            });
-                        }
+                // Get original code (before syntax highlighting) or extract from HTML
+                const code = $codeBlock.get(0).getAttribute('data-original-code') || $codeBlock.text();
+
+                try {
+                    // Use Domma utility
+                    if (Domma?.utils?.copyToClipboard) {
+                        await Domma.utils.copyToClipboard(code);
+                    } else {
+                        await navigator.clipboard.writeText(code);
                     }
 
-                    // Reset after delay using Domma
-                    setTimeout(() => {
-                        $copyBtn.removeClass('copied').html(copyIcon);
-                    }, 2000);
-                });
+                    // Show success state
+                    $copyBtn.addClass('copied').html(checkIcon);
+
+                    // Show toast if available
+                    if (Domma?.elements?.toast) {
+                        Domma.elements.toast.success('Code copied!', {
+                            position: 'bottom-center',
+                            duration: 2000
+                        });
+                    }
+                } catch (err) {
+                    console.error('Copy failed:', err);
+                    if (Domma?.elements?.toast) {
+                        Domma.elements.toast.error('Copy failed', {
+                            position: 'bottom-center',
+                            duration: 2000
+                        });
+                    }
+                }
+
+                // Reset after delay
+                setTimeout(() => {
+                    $copyBtn.removeClass('copied').html(copyIcon);
+                }, 2000);
             });
         }
 
