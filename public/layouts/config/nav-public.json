@@ -1,0 +1,30 @@
+{
+  "type": "flat",
+  "items": [
+    {
+      "text": "Showcase",
+      "url": "showcase/index.html",
+      "page": "showcase"
+    },
+    {
+      "text": "Quickstart",
+      "url": "quickstart/index.html",
+      "page": "quickstart"
+    },
+    {
+      "text": "About Us",
+      "url": "about.html",
+      "page": "about"
+    },
+    {
+      "text": "FAQs",
+      "url": "faq.html",
+      "page": "faq"
+    },
+    {
+      "text": "Blog",
+      "url": "blog/index.html",
+      "page": "blog"
+    }
+  ]
+}

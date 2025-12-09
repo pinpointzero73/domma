@@ -1,0 +1,21 @@
+{
+  "class": "page-footer",
+  "layout": "nav",
+  "content": {
+    "left": "© DCBW-IT ({{year}})",
+    "nav": [
+      {
+        "text": "About Us",
+        "url": "about.html"
+      },
+      {
+        "text": "FAQs",
+        "url": "faq.html"
+      },
+      {
+        "text": "Blog",
+        "url": "blog/index.html"
+      }
+    ]
+  }
+}

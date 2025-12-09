@@ -114,7 +114,7 @@
         }
     </style>
 </head>
-<body class="dm-theme-light">
+<body class="dm-theme-light" data-layout="showcase" data-layout-variant="index">
 
 <section class="hero">
     <h1 class="hero-title">Domma</h1>
@@ -405,7 +405,9 @@ S.get('prefs');  // { theme: 'dark' }</pre>
 
 <script src="../dist/domma.min.js"></script>
 <script src="../dist/domma-syntax.min.js"></script>
-<script src="js/layout.js"></script>
+<!-- OLD: <script src="js/layout.js"></script> -->
+<!-- NEW: Preset-based layout system -->
+<script type="module" src="../layouts/js/layout.js"></script>
 <script>
     // Scan and inject icons
     Domma.icons.scan();

@@ -1,0 +1,210 @@
+{
+  "splash": {
+    "navbar": {
+      "type": "flat",
+      "brand": {
+        "text": "Domma",
+        "url": "index.html",
+        "showVersion": false
+      },
+      "items": "nav-public",
+      "variant": "dark",
+      "actions": [
+        {
+          "text": "Download",
+          "url": "showcase/download/index.html",
+          "class": "pill pill-light"
+        }
+      ]
+    },
+    "footer": "footer-public",
+    "sidebar": {
+      "enabled": false
+    },
+    "theme": {
+      "toggle": true,
+      "variantSelector": true,
+      "position": "fixed-right"
+    },
+    "features": [
+      "back-to-top",
+      "code-copy",
+      "icon-scan"
+    ]
+  },
+  "showcase": {
+    "variants": {
+      "index": {
+        "navbar": {
+          "type": "dropdowns",
+          "brand": {
+            "text": "Domma",
+            "url": "../index.html",
+            "showVersion": true
+          },
+          "items": "nav-showcase",
+          "variant": "dark",
+          "actions": [
+            {
+              "text": "Download",
+              "url": "download/index.html",
+              "class": "pill pill-light"
+            }
+          ]
+        },
+        "footer": "footer-showcase",
+        "sidebar": {
+          "enabled": false
+        },
+        "theme": {
+          "toggle": true,
+          "variantSelector": true,
+          "position": "fixed-right"
+        },
+        "features": [
+          "back-to-top",
+          "code-copy",
+          "icon-scan"
+        ]
+      },
+      "subpage": {
+        "navbar": {
+          "type": "dropdowns",
+          "brand": {
+            "text": "Domma",
+            "url": "../../index.html",
+            "showVersion": true
+          },
+          "items": "nav-showcase",
+          "variant": "dark",
+          "actions": [
+            {
+              "text": "Download",
+              "url": "../download/index.html",
+              "class": "pill pill-light"
+            }
+          ]
+        },
+        "footer": "footer-showcase",
+        "sidebar": {
+          "enabled": true,
+          "autoGenerate": true,
+          "selector": "[data-section]",
+          "fallbackSelector": ".card-header h2, .card-header h3"
+        },
+        "theme": {
+          "toggle": true,
+          "variantSelector": true,
+          "position": "fixed-right"
+        },
+        "features": [
+          "back-to-top",
+          "code-copy",
+          "icon-scan",
+          "scroll-spy"
+        ]
+      },
+      "element": {
+        "navbar": {
+          "type": "dropdowns",
+          "brand": {
+            "text": "Domma",
+            "url": "../../../index.html",
+            "showVersion": true
+          },
+          "items": "nav-showcase",
+          "variant": "dark",
+          "actions": [
+            {
+              "text": "Download",
+              "url": "../../download/index.html",
+              "class": "pill pill-light"
+            }
+          ]
+        },
+        "footer": "footer-showcase",
+        "sidebar": {
+          "enabled": true,
+          "autoGenerate": true,
+          "prependNav": "nav-elements",
+          "selector": "[data-section]"
+        },
+        "theme": {
+          "toggle": true,
+          "variantSelector": true,
+          "position": "fixed-right"
+        },
+        "features": [
+          "back-to-top",
+          "code-copy",
+          "icon-scan",
+          "scroll-spy"
+        ]
+      }
+    }
+  },
+  "public": {
+    "navbar": {
+      "type": "flat",
+      "brand": {
+        "text": "Domma",
+        "url": "index.html",
+        "showVersion": false
+      },
+      "items": "nav-public",
+      "variant": "dark",
+      "actions": []
+    },
+    "footer": "footer-public",
+    "sidebar": {
+      "enabled": false
+    },
+    "theme": {
+      "toggle": true,
+      "variantSelector": true,
+      "position": "fixed-right"
+    },
+    "features": [
+      "back-to-top"
+    ]
+  },
+  "quickstart": {
+    "navbar": {
+      "type": "flat",
+      "brand": {
+        "text": "Domma",
+        "url": "../index.html",
+        "showVersion": false
+      },
+      "items": "nav-public",
+      "variant": "dark",
+      "actions": []
+    },
+    "footer": "footer-public",
+    "sidebar": {
+      "enabled": false
+    },
+    "theme": {
+      "toggle": true,
+      "variantSelector": true,
+      "position": "fixed-right"
+    },
+    "features": [
+      "back-to-top",
+      "code-copy",
+      "icon-scan"
+    ]
+  },
+  "minimal": {
+    "navbar": null,
+    "footer": null,
+    "sidebar": {
+      "enabled": false
+    },
+    "theme": {
+      "toggle": false,
+      "variantSelector": false
+    },
+    "features": []
+  }
+}

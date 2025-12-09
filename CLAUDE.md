@@ -1163,3 +1163,4 @@ Page Roller automatically migrates v1 documents to v2:
 - Where and whenever possible use Domma in the showcase, documentation and tutorials
 - When making changes to the namespaces/modules ensure that we update the PHPStorm code intelligence files
   @assets/ide/phpstorm
+- Do not run a server as I am running one

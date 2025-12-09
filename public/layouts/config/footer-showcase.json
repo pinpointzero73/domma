@@ -1,0 +1,8 @@
+{
+  "class": "footer footer-dark",
+  "layout": "simple",
+  "content": {
+    "left": "v{{version}} · {{buildDate}}",
+    "right": "© Darryl Waterhouse & DCBW-IT {{year}}"
+  }
+}
