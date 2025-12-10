@@ -13,18 +13,27 @@ class BundleBuilder {
     }
 
     async init() {
-        // Load bundle metadata
-        await this.loadMetadata();
+        try {
+            // Load bundle metadata
+            await this.loadMetadata();
 
-        // Render module checkboxes
-        this.renderModules();
+            if (!this.metadata || !this.metadata.modules) {
+                console.error('Bundle metadata is missing or invalid');
+                return;
+            }
 
-        // Attach event listeners
-        this.attachEventListeners();
+            // Render module checkboxes
+            this.renderModules();
 
-        // Initialize icons if available
-        if (typeof Domma !== 'undefined' && Domma.icons) {
-            Domma.icons.scan();
+            // Attach event listeners
+            this.attachEventListeners();
+
+            // Initialize icons if available
+            if (typeof Domma !== 'undefined' && Domma.icons) {
+                Domma.icons.scan();
+            }
+        } catch (error) {
+            console.error('BundleBuilder initialization failed:', error);
         }
     }
 
@@ -460,7 +469,11 @@ export {Domma${aliasNames.length > 0 ? ', ' + aliasNames.join(', ') : ''}};
     }
 }
 
-// Initialize when DOM is ready using Domma
-$(() => {
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        new BundleBuilder();
+    });
+} else {
     new BundleBuilder();
-});
+}
