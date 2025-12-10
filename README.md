@@ -291,6 +291,34 @@ npm run demo
 npm run showcase
 ```
 
+## Documentation
+
+### For Claude Code Development
+
+Domma uses distributed CLAUDE.md files for focused, context-specific guidance:
+
+- [`CLAUDE.md`](./CLAUDE.md) - Main meta-file with project overview
+- [`src/CLAUDE.md`](./src/CLAUDE.md) - Core modules development guide
+- [`src/bundles/CLAUDE.md`](./src/bundles/CLAUDE.md) - Custom bundle creation
+- Showcase-specific guides in `/public/showcase/*/CLAUDE.md`:
+  - [Showcase Meta Guide](./public/showcase/CLAUDE.md)
+  - [DOM](./public/showcase/dom/CLAUDE.md), [Utils](./public/showcase/utils/CLAUDE.md), [Dates](./public/showcase/dates/CLAUDE.md), [Models](./public/showcase/models/CLAUDE.md)
+  - [Tables](./public/showcase/tables/CLAUDE.md), [Elements](./public/showcase/elements/CLAUDE.md), [Config](./public/showcase/config/CLAUDE.md)
+  - [HTTP](./public/showcase/http/CLAUDE.md), [Storage](./public/showcase/storage/CLAUDE.md), [Developer Tools](./public/showcase/theme-roller/CLAUDE.md)
+
+### For Users
+
+- [`docs/GettingStarted.md`](./docs/GettingStarted.md) - Quick start guide
+- [`docs/API.md`](./docs/API.md) - Complete API reference
+- [`docs/DommaDocumentation.md`](./docs/DommaDocumentation.md) - Comprehensive documentation
+- [Showcase](./public/showcase/index.html) - 40+ interactive examples
+
+### For Contributors
+
+- Build system: See `npm run build` and `rollup.config.js`
+- Testing: Open `tests/test.html` in browser or run `npm test`
+- Custom bundles: See [`src/bundles/CLAUDE.md`](./src/bundles/CLAUDE.md)
+
 ## Development
 
 ```bash
