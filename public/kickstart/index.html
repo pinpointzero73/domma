@@ -173,6 +173,23 @@
             gap: 1rem;
         }
 
+        .page-footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .page-footer-logo {
+            width: 28px;
+            height: 28px;
+            color: var(--dm-gray-400);
+            transition: color 0.2s ease;
+        }
+
+        .page-footer-brand:hover .page-footer-logo {
+            color: var(--dm-primary-light);
+        }
+
         .page-footer-nav {
             display: flex;
             gap: 1.5rem;
@@ -427,7 +444,10 @@
      ============================================ -->
 <footer class="page-footer">
     <div class="page-footer-content">
-        <span>© Your Company Name (2025)</span>
+        <div class="page-footer-brand">
+            <img src="../assets/logo/dcbw-it-icon.svg" alt="DCBW-IT Logo" class="page-footer-logo">
+            <span>© DCBW-IT (2025)</span>
+        </div>
         <nav class="page-footer-nav">
             <a href="#">About</a>
             <a href="#">Contact</a>
