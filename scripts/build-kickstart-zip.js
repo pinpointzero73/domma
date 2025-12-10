@@ -24,9 +24,9 @@ const rootDir = join(__dirname, '..');
 const kickstartDir = join(rootDir, 'public/kickstart');
 const tempDir = join(rootDir, 'temp-kickstart');
 const tempContentDir = join(tempDir, 'kickstart-starter');
-const outputZip = join(rootDir, 'public/dist/kickstart.zip');
+const outputZip = join(rootDir, 'public/dist/kickstart.tar.gz');
 
-console.log('[Kickstart Zip] Building kickstart.zip...\n');
+console.log('[Kickstart Archive] Building kickstart.tar.gz...\n');
 
 // Cleanup and create temp directory
 if (existsSync(tempDir)) {
@@ -116,8 +116,8 @@ const zipSizeKB = Math.round(zipStats.size / 1024);
 // 7. Cleanup temp directory
 rmSync(tempDir, {recursive: true});
 
-console.log('\n✓ Generated kickstart.zip (tar.gz format)');
-console.log(`  Location: public/dist/kickstart.zip`);
+console.log('\n✓ Generated kickstart.tar.gz');
+console.log(`  Location: public/dist/kickstart.tar.gz`);
 console.log(`  Size: ${zipSizeKB} KB`);
 console.log('\n  Contents:');
 console.log('    kickstart-starter/');

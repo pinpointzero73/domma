@@ -361,7 +361,7 @@
                         Extract and start building immediately.
                     </p>
                     <p class="download-size" id="kickstart-size">~260 KB</p>
-                    <a href="../../dist/kickstart.zip" download class="btn btn-success btn-block mt-auto">
+                    <a href="../../dist/kickstart.tar.gz" download class="btn btn-success btn-block mt-auto">
                         <span data-icon="download" data-icon-size="16"></span>
                         Download Kickstart
                     </a>
@@ -792,8 +792,8 @@
             console.warn('Could not load build info:', err);
         });
 
-    // Load and display kickstart.zip size
-    fetch('../../dist/kickstart.zip')
+    // Load and display kickstart.tar.gz size
+    fetch('../../dist/kickstart.tar.gz')
         .then(r => r.blob())
         .then(blob => {
             const sizeKB = Math.round(blob.size / 1024);
@@ -803,7 +803,7 @@
             }
         })
         .catch(err => {
-            console.warn('Could not load kickstart.zip size:', err);
+            console.warn('Could not load kickstart.tar.gz size:', err);
         });
 </script>
 </body>
