@@ -22,7 +22,7 @@ export const SidebarModule = {
             // Render sidebar
             this.renderSidebar(items, config);
 
-            // Initialize scroll spy if enabled
+            // Initialise scroll spy if enabled
             if (config.scrollSpy !== false) {
                 this.initScrollSpy(items);
             }
@@ -41,7 +41,7 @@ export const SidebarModule = {
     generateItems(config) {
         const items = [];
 
-        // Try primary selector first
+        // Try the primary selector first
         const selector = config.selector || '[data-section]';
         let elements = document.querySelectorAll(selector);
 
