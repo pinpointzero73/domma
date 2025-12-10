@@ -8,11 +8,12 @@
   "type": "module",
   "scripts": {
     "dev": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run build:css && live-server public --port=3000 --open=/index.html",
-    "build": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run build:css",
+    "build": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run build:css && npm run build:kickstart",
     "build:js": "rollup -c",
     "build:css": "node scripts/build-css.js",
     "build:info": "node scripts/build-info.js",
     "build:metadata": "node scripts/copy-metadata.js",
+    "build:kickstart": "node scripts/build-kickstart-zip.js",
     "generate:bundles": "node scripts/generate-bundles.js",
     "test": "node -r ./tests/setup-globals.js tests/test.js",
     "showcase": "live-server public --port=3000 --open=/showcase/index.html"

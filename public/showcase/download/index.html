@@ -316,7 +316,7 @@
     <!-- Download Cards -->
     <section class="mb-8">
         <h2 class="text-2xl font-semibold mb-6 text-center">Core Library</h2>
-        <div class="grid grid-cols-2 grid-cols-md-2 gap-6">
+        <div class="grid grid-cols-3 grid-cols-md-3 gap-6">
             <!-- UMD Bundle -->
             <div class="card download-card">
                 <div class="card-body">
@@ -347,6 +347,23 @@
                     <a href="../../dist/domma.esm.js" download class="btn btn-outline btn-block mt-auto">
                         <span data-icon="download" data-icon-size="16"></span>
                         Download ESM
+                    </a>
+                </div>
+            </div>
+
+            <!-- Kickstart Starter Kit -->
+            <div class="card download-card">
+                <div class="card-body">
+                    <div class="download-icon" data-icon="zap" data-icon-size="48"></div>
+                    <h3 class="text-xl font-semibold mb-2">Kickstart Starter</h3>
+                    <p class="download-description">
+                        Complete starter kit with Domma, themes, CSS, and a ready-to-use template.
+                        Extract and start building immediately.
+                    </p>
+                    <p class="download-size" id="kickstart-size">~260 KB</p>
+                    <a href="../../dist/kickstart.zip" download class="btn btn-success btn-block mt-auto">
+                        <span data-icon="download" data-icon-size="16"></span>
+                        Download Kickstart
                     </a>
                 </div>
             </div>
@@ -773,6 +790,20 @@
         })
         .catch(err => {
             console.warn('Could not load build info:', err);
+        });
+
+    // Load and display kickstart.zip size
+    fetch('../../dist/kickstart.zip')
+        .then(r => r.blob())
+        .then(blob => {
+            const sizeKB = Math.round(blob.size / 1024);
+            const sizeEl = document.getElementById('kickstart-size');
+            if (sizeEl) {
+                sizeEl.textContent = `~${sizeKB} KB`;
+            }
+        })
+        .catch(err => {
+            console.warn('Could not load kickstart.zip size:', err);
         });
 </script>
 </body>
