@@ -278,8 +278,8 @@
             saveTodos(todos);
             renderTodos();
 
-            Domma.elements.toast('info', `Status updated to ${formatStatus(status)}`, {
-                position: 'top-center',
+            Domma.elements.toast('success', `Status updated to ${formatStatus(status)}`, {
+                position: 'bottom-center',
                 duration: 2000
             });
         }
@@ -295,57 +295,10 @@
             saveTodos(todos);
             renderTodos();
 
-            Domma.elements.toast('info', `Priority set to ${formatPriority(priority)}`, {
-                position: 'top-center',
+            Domma.elements.toast('success', `Priority set to ${formatPriority(priority)}`, {
+                position: 'bottom-center',
                 duration: 2000
             });
-        }
-    }
-
-    // ========================================
-    // Code Display
-    // ========================================
-
-    async function displaySourceCode() {
-        try {
-            // Fetch both HTML and JavaScript files
-            const [htmlResponse, jsResponse] = await Promise.all([
-                fetch(window.location.href),
-                fetch('index.js')
-            ]);
-
-            const htmlSource = await htmlResponse.text();
-            const jsSource = await jsResponse.text();
-
-            // Combine both sources with clear separation
-            const combinedSource = `<!-- ============================================ -->
-<!-- index.html -->
-<!-- ============================================ -->
-
-${htmlSource}
-
-<!-- ============================================ -->
-<!-- index.js -->
-<!-- ============================================ -->
-
-${jsSource}`;
-
-            const $code = $('#source-code');
-            const codeElement = $code.get(0);
-
-            // Clear previous highlighting
-            codeElement.removeAttribute('data-syntax-highlighted');
-            $code.removeClass('syntax-highlighted');
-
-            // Set content as HTML (not text) to preserve characters
-            codeElement.textContent = combinedSource;
-
-            if (Domma.syntax) {
-                Domma.syntax.highlight(codeElement, 'html');
-            }
-        } catch (error) {
-            console.error('[Todo] Error loading source code:', error);
-            $('#source-code').text('Error: ' + error.message);
         }
     }
 
@@ -394,15 +347,7 @@ ${jsSource}`;
     function init() {
         renderTodos();
         initEventHandlers();
-
-        Domma.elements.tabs('#todo-tabs', {
-            onChange: (index) => {
-                if (index === 1) {
-                    displaySourceCode();
-                }
-            }
-        });
-
+        Domma.elements.tabs('#todo-tabs');
         Domma.icons.scan();
     }
 

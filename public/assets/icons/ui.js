@@ -400,6 +400,47 @@ export const ui = {
         strokeWidth: 2,
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
+    },
+    'palette': {
+        viewBox: '0 0 24 24',
+        path: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.93 0 1.68-.75 1.68-1.68 0-.43-.16-.84-.44-1.13-.27-.29-.43-.7-.43-1.13 0-.93.76-1.69 1.69-1.69h1.98c3.03 0 5.52-2.49 5.52-5.52C22 6.48 17.52 2 12 2zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 8 6.5 8 8 8.67 8 9.5 7.33 11 6.5 11zm3-4C8.67 7 8 6.33 8 5.5S8.67 4 9.5 4s1.5.67 1.5 1.5S10.33 7 9.5 7zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 4 14.5 4s1.5.67 1.5 1.5S15.33 7 14.5 7zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 8 17.5 8s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z',
+        fill: 'currentColor'
+    },
+    'type': {
+        viewBox: '0 0 24 24',
+        path: 'M4 7V4h16v3M9 20h6M12 4v16',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'square': {
+        viewBox: '0 0 24 24',
+        path: 'M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'mouse-pointer': {
+        viewBox: '0 0 24 24',
+        path: 'M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z M13 13l6 6',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'refresh-cw': {
+        viewBox: '0 0 24 24',
+        path: 'M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
     }
 };
 
