@@ -101,6 +101,65 @@ quickstart/          # Getting started blueprint
 public/dist/         # Built bundles (UMD + ESM)
 ```
 
+## Public Folder Structure
+
+The `/public` directory contains the user-facing website, documentation, and examples:
+
+```
+public/
+├── index.html           # Landing page (root level only)
+├── about/               # About page
+│   └── index.html
+├── faq/                 # FAQ page
+│   └── index.html
+├── blog/                # Blog section
+│   └── index.html
+├── quickstart/          # Getting started guide
+│   └── index.html
+├── showcase/            # Feature demonstrations (40+ examples)
+│   ├── index.html
+│   ├── dom/
+│   ├── utils/
+│   ├── dates/
+│   ├── models/
+│   ├── elements/
+│   ├── tables/
+│   ├── config/
+│   ├── http/
+│   ├── storage/
+│   ├── icons/
+│   ├── themes/
+│   ├── grid/
+│   ├── theme-roller/
+│   ├── page-roller/
+│   └── download/
+├── examples/            # Working example applications
+│   └── todo/
+├── kickstart/           # Template for quick project setup
+│   └── index.html
+├── layouts/             # Layout system (presets, modules, config)
+│   ├── css/
+│   ├── js/
+│   └── config/
+├── assets/              # Static resources
+│   ├── icons/
+│   ├── logo/
+│   ├── themes/
+│   └── ide/
+└── dist/                # Built JavaScript bundles
+    ├── domma.min.js
+    ├── domma.esm.js
+    ├── domma-tools.min.js
+    └── themes/
+```
+
+**Important Notes:**
+
+- All production pages use folder structure (e.g., `/about/index.html`, `/faq/index.html`)
+- Only `index.html` exists at root level - everything else is in subdirectories
+- This structure ensures clean, consistent URLs (`/about/`, `/faq/`, etc.)
+- Test files and backups are not stored in the public directory
+
 ## Project Guidelines
 
 - When updating features or adding new ones, the documentation and showcase should be updated in-line
