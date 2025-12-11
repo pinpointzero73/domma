@@ -524,7 +524,7 @@ _.render('Welcome, {{user.name}}!', { user: { name: 'Alice' } });
 // 'Welcome, Alice!'
 
 // HTML is escaped by default
-_.render('<p>{{content}}</p>', { content: '<script>' });
+_.render('<p>{{content}}</p>', { content: '<scr' + 'ipt>' });
 // '<p>&lt;script&gt;</p>'
 
 // Use triple braces for raw output

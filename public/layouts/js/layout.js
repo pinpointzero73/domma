@@ -635,8 +635,9 @@ import {SidebarModule} from './modules/sidebar.js';
             const sunIcon = document.getElementById('theme-icon-sun');
             const moonIcon = document.getElementById('theme-icon-moon');
 
-            if (sunIcon) sunIcon.style.display = isDark ? 'block' : 'none';
-            if (moonIcon) moonIcon.style.display = isDark ? 'none' : 'block';
+            // Show icon for CURRENT state (moon in dark, sun in light)
+            if (moonIcon) moonIcon.style.display = isDark ? 'block' : 'none';
+            if (sunIcon) sunIcon.style.display = isDark ? 'none' : 'block';
             toggleBtn.setAttribute('data-tooltip', isDark ? 'Switch to light mode' : 'Switch to dark mode');
         }
 
@@ -652,11 +653,6 @@ import {SidebarModule} from './modules/sidebar.js';
             }
 
             updateThemeIcon();
-
-            // Sync with Domma.theme if available
-            if (typeof Domma !== 'undefined' && Domma.theme) {
-                Domma.theme.set(isDark ? 'light' : 'dark');
-            }
         }
 
         toggleBtn.addEventListener('click', toggleTheme);

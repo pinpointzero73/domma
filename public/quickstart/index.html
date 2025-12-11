@@ -60,20 +60,53 @@
             border-radius: var(--dm-radius-md);
         }
 
-        .code-block .comment {
+        .code-block .syntax-comment {
             color: #6b7280;
         }
 
-        .code-block .keyword {
+        .code-block .syntax-keyword {
             color: #c084fc;
         }
 
-        .code-block .string {
+        .code-block .syntax-string {
             color: #34d399;
         }
 
-        .code-block .function {
+        .code-block .syntax-function {
             color: #60a5fa;
+        }
+
+        .code-block .syntax-number {
+            color: #f59e0b;
+        }
+
+        .code-block .syntax-punctuation {
+            color: #9ca3af;
+        }
+
+        /* Dark theme syntax highlighting */
+        .dm-theme-dark .code-block .syntax-comment {
+            color: #9ca3af;
+        }
+
+        .dm-theme-dark .code-block .syntax-keyword {
+            color: #a78bfa;
+        }
+
+        .dm-theme-dark .code-block .syntax-string {
+            color: #34d399;
+        }
+
+        .dm-theme-dark .code-block .syntax-function {
+            color: #60a5fa;
+        }
+
+        .dm-theme-dark .code-block .syntax-number {
+            color: #fbbf24;
+        }
+
+        .dm-theme-dark .code-block .syntax-punctuation {
+            color: #d1d5db;
         }
 
         .section-header {
@@ -495,21 +528,38 @@ _.<span class="function">debounce</span>(fn, 300);</pre>
         }
     });
 
+    // Initialize syntax highlighting
+    if (typeof Domma !== 'undefined' && Domma.syntax) {
+        Domma.syntax.scan();
+    }
+
     // ============================================
     // Modal Controls
     // ============================================
 
+    // Modal handlers - use direct API instead of config instance
+    let demoModal = null;
     $('#open-modal').on('click', () => {
-        $.config('#demo-modal').instance.open();
+        if (!demoModal) {
+            demoModal = Domma.elements.modal('#demo-modal', {
+                backdrop: true,
+                keyboard: true
+            });
+        }
+        demoModal.open();
     });
 
     $('#modal-close-btn').on('click', () => {
-        $.config('#demo-modal').instance.close();
+        if (demoModal) {
+            demoModal.close();
+        }
     });
 
     $('#modal-confirm-btn').on('click', () => {
         Domma.elements.toast.success('Confirmed!');
-        $.config('#demo-modal').instance.close();
+        if (demoModal) {
+            demoModal.close();
+        }
     });
 
     // ============================================

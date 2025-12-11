@@ -2721,19 +2721,23 @@ code {
 /* Code block wrapper with copy button */
 .code-block-wrapper {
     position: relative;
+    overflow: hidden;
+    border-radius: var(--dm-radius-md);
 }
 
 .code-block-copy {
     position: absolute;
-    top: var(--dm-space-2);
-    right: var(--dm-space-2);
+    top: var(--dm-space-4);
+    right: var(--dm-space-4);
+    width: 32px;
+    height: 32px;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--dm-radius-sm);
     color: var(--dm-gray-400);
-    padding: var(--dm-space-1) var(--dm-space-2);
+    padding: 0;
     cursor: pointer;
-    opacity: 0;
+    opacity: 0.3;
     transition: opacity 0.2s, background-color 0.2s, color 0.2s;
     display: flex;
     align-items: center;

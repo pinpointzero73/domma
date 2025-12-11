@@ -8,7 +8,7 @@
         "showVersion": true
       },
       "items": "nav-public",
-      "variant": "dark",
+      "variant": null,
       "actions": [
         {
           "text": "Download",
@@ -43,7 +43,7 @@
             "showVersion": true
           },
           "items": "nav-showcase",
-          "variant": "dark",
+          "variant": null,
           "actions": [
             {
               "text": "Download",
@@ -76,7 +76,7 @@
             "showVersion": true
           },
           "items": "nav-showcase",
-          "variant": "dark",
+          "variant": null,
           "actions": [
             {
               "text": "Download",
@@ -113,7 +113,7 @@
             "showVersion": true
           },
           "items": "nav-showcase",
-          "variant": "dark",
+          "variant": null,
           "actions": [
             {
               "text": "Download",
@@ -152,7 +152,7 @@
         "showVersion": true
       },
       "items": "nav-public",
-      "variant": "dark",
+      "variant": null,
       "actions": []
     },
     "footer": "footer-showcase",
@@ -177,7 +177,7 @@
         "showVersion": true
       },
       "items": "nav-public",
-      "variant": "dark",
+      "variant": null,
       "actions": []
     },
     "footer": "footer-showcase",
