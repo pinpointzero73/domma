@@ -65,11 +65,19 @@ cpSync(
 );
 
 // 4. Copy CSS
-console.log('  → Copying component CSS...');
+console.log('  → Copying CSS files...');
 mkdirSync(join(tempContentDir, 'css'), {recursive: true});
 cpSync(
     join(rootDir, 'public/showcase/css/domma.css'),
     join(tempContentDir, 'css/domma.css')
+);
+cpSync(
+    join(rootDir, 'public/showcase/css/grid.css'),
+    join(tempContentDir, 'css/grid.css')
+);
+cpSync(
+    join(rootDir, 'public/showcase/css/elements.css'),
+    join(tempContentDir, 'css/elements.css')
 );
 
 // 5. Copy logos
@@ -126,5 +134,7 @@ console.log('    ├── js/index.js');
 console.log('    ├── dist/domma.min.js');
 console.log('    ├── dist/themes/domma-themes.css');
 console.log('    ├── css/domma.css');
+console.log('    ├── css/grid.css');
+console.log('    ├── css/elements.css');
 console.log('    └── assets/logo/ (2 SVG files)');
 console.log('');

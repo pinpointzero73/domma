@@ -1,18 +1,16 @@
-/**
- * Domma CSS - Base Styles & Utilities
- * 
- * This file contains base styles, typography, and utility classes.
- * UI components have been moved to elements.css for better organization.
- * 
- * Load order:
- * 1. domma.css (this file - base styles, typography, utilities)
- * 2. grid.css (grid system)
- * 3. elements.css (UI components - buttons, cards, modals, etc.)
- * 4. domma-themes.css (theming/colors)
- * 
- * For a complete list of UI components, see elements.css
+/* Domma CSS Framework
+ * Component styles + utility classes
  */
 
+/* Google Fonts - Roboto */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap');
+
+/* Grid System */
+@import './grid.css';
+
+/* ============================================
+   CSS Variables / Design Tokens
+   ============================================ */
 :root {
     /* Colors */
     --dm-primary: #6495ED;
@@ -1348,16 +1346,64 @@ code, pre {
    COMPONENT: Table
    ============================================ */
 
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 8px;
-    height: 8px;
-    background-color: var(--dm-white);
-    border-radius: 50%;
-    border: none;
-    transform: translate(-50%, -50%);
+content:
+
+''
+;
+position: absolute
+
+;
+left:
+
+50
+%
+;
+top:
+
+50
+%
+;
+width:
+
+8
+px
+
+;
+height:
+
+8
+px
+
+;
+background-color:
+
+var
+(
+--dm-white
+
+)
+;
+border-radius:
+
+50
+%
+;
+border: none
+
+;
+transform:
+
+translate
+(
+-
+50
+%
+,
+-
+50
+%
+)
+;
 }
 
 /* Toggle Switch */
@@ -2167,29 +2213,63 @@ code, pre {
     display: block;
 }
 
-        border-radius: 0;
-        transform: translateX(-100%);
-        z-index: 1000;
-        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
-    }
+border-radius:
 
-    .sidebar.open {
-        display: block;
-        transform: translateX(0);
-    }
+0
+;
+transform:
 
-    .sidebar-toggle {
-        display: flex;
-    }
+translateX
+(
+-
+100
+%
+)
+;
+z-index:
 
-    .sidebar-overlay {
-        display: block;
-        pointer-events: none;
-    }
+1000
+;
+box-shadow:
 
-    .sidebar-overlay.active {
-        pointer-events: auto;
-    }
+4
+px
+
+0
+20
+px
+
+rgba
+(
+0
+,
+0
+,
+0
+,
+0.15
+)
+;
+}
+
+.sidebar.open {
+    display: block;
+    transform: translateX(0);
+}
+
+.sidebar-toggle {
+    display: flex;
+}
+
+.sidebar-overlay {
+    display: block;
+    pointer-events: none;
+}
+
+.sidebar-overlay.active {
+    pointer-events: auto;
+}
+
 }
 
 /* Dark theme support */

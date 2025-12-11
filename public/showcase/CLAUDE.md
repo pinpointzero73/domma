@@ -49,7 +49,11 @@ Each showcase example should follow this structure:
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Module Name - Domma Showcase</title>
-    <link rel="stylesheet" href="../../dist/domma-theme.css">
+    <!-- CSS Load Order -->
+    <link rel="stylesheet" href="../css/domma.css">      <!-- 1. Base + utilities -->
+    <link rel="stylesheet" href="../css/grid.css">       <!-- 2. Grid system (optional) -->
+    <link rel="stylesheet" href="../css/elements.css">   <!-- 3. UI components -->
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css"> <!-- 4. Theming -->
     <style>
         /* Example-specific styles */
     </style>
@@ -224,16 +228,21 @@ When adding a new showcase:
 
 ## File Paths
 
-All showcase files should use relative paths:
+All showcase files should use relative paths in this order:
 
 ```html
-<!-- CSS -->
-<link rel="stylesheet" href="../../dist/domma-theme.css">
+<!-- CSS (Load in this specific order) -->
+<link rel="stylesheet" href="../css/domma.css">           <!-- 1. Base -->
+<link rel="stylesheet" href="../css/grid.css">            <!-- 2. Grid (optional) -->
+<link rel="stylesheet" href="../css/elements.css">        <!-- 3. Components -->
+<link rel="stylesheet" href="../../dist/themes/domma-themes.css"> <!-- 4. Theme -->
 
 <!-- JavaScript -->
 <script src="../../dist/domma.min.js"></script>
 <script src="../../dist/domma-tools.min.js"></script> <!-- If needed -->
 ```
+
+**Note:** Always load `elements.css` for UI components (buttons, cards, modals, etc.)
 
 ## PHPStorm Integration
 

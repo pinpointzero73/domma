@@ -11,6 +11,7 @@
           rel="stylesheet">
     <link rel="stylesheet" href="../../showcase/css/domma.css">
     <link rel="stylesheet" href="../../showcase/css/grid.css">
+    <link rel="stylesheet" href="../../showcase/css/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <style>
         /* Page layout */
@@ -26,55 +27,6 @@
 
         body > footer {
             margin-top: auto;
-        }
-
-        /* Jumbotron */
-        .jumbotron {
-            background: var(--dm-card-bg);
-            border: 1px solid var(--dm-border);
-            padding: 2rem;
-            margin: 0 0 2rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            text-align: center;
-        }
-
-        .jumbotron-content h2 {
-            margin: 0 0 0.75rem;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--dm-text);
-        }
-
-        .jumbotron-content p {
-            margin: 0 0 1.5rem;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--dm-text-muted);
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .jumbotron-actions {
-            display: flex;
-            gap: 0.75rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-
-        .jumbotron-actions .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.25rem;
-        }
-
-        .jumbotron-note {
-            font-size: 0.85rem;
-            margin: 0;
-            color: var(--dm-text-muted);
         }
 
         /* Note card hover */
@@ -271,12 +223,13 @@
 
 <div class="container">
     <!-- Jumbotron -->
-    <div class="jumbotron">
+    <div class="jumbotron jumbotron-center">
         <div class="jumbotron-content">
-            <h2>Interactive Note Taking App</h2>
-            <p>A feature-rich note manager demonstrating Domma's storage, DOM manipulation, rich text handling, and UI
-                components. Create notes, organize with categories, search content, and persist data across
-                sessions.</p>
+            <div class="jumbotron-title">Interactive Note Taking App</div>
+            <div class="jumbotron-subtitle">A feature-rich note manager demonstrating Domma's storage, DOM manipulation,
+                rich text handling, and UI components. Create notes, organize with categories, search content, and
+                persist data across sessions.
+            </div>
             <div class="jumbotron-actions">
                 <a href="index.html" download="notes-example.html" class="btn btn-primary">
                     <span data-icon="download" data-icon-size="18"></span>

@@ -6,6 +6,7 @@
     <title>Download - Domma</title>
     <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
     <link rel="stylesheet" href="../css/domma.css">
+    <link rel="stylesheet" href="../css/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <style>
         .download-hero {
@@ -413,12 +414,44 @@
                     <div class="download-icon" data-icon="layout" data-icon-size="48"></div>
                     <h3 class="text-xl font-semibold mb-2">domma.css</h3>
                     <p class="download-description">
-                        Core CSS framework with grid, typography, forms, buttons, cards, and all UI component styles.
+                        Base styles, typography, and utility classes. Load this first.
                     </p>
-                    <p class="download-size" id="css-size">~58 KB</p>
+                    <p class="download-size" id="css-size">~48 KB</p>
                     <a href="../css/domma.css" download class="btn btn-outline btn-block mt-auto">
                         <span data-icon="download" data-icon-size="16"></span>
                         Download CSS
+                    </a>
+                </div>
+            </div>
+
+            <!-- Grid CSS -->
+            <div class="card download-card">
+                <div class="card-body">
+                    <div class="download-icon" data-icon="grid" data-icon-size="48"></div>
+                    <h3 class="text-xl font-semibold mb-2">grid.css</h3>
+                    <p class="download-description">
+                        Bootstrap-style grid and CSS Grid utilities. Optional but recommended.
+                    </p>
+                    <p class="download-size" id="grid-size">~12 KB</p>
+                    <a href="../css/grid.css" download class="btn btn-outline btn-block mt-auto">
+                        <span data-icon="download" data-icon-size="16"></span>
+                        Download Grid
+                    </a>
+                </div>
+            </div>
+
+            <!-- Elements CSS -->
+            <div class="card download-card">
+                <div class="card-body">
+                    <div class="download-icon" data-icon="box" data-icon-size="48"></div>
+                    <h3 class="text-xl font-semibold mb-2">elements.css</h3>
+                    <p class="download-description">
+                        19 UI components: buttons, cards, modals, tabs, jumbotron, carousel, and more.
+                    </p>
+                    <p class="download-size" id="elements-size">~28 KB</p>
+                    <a href="../css/elements.css" download class="btn btn-outline btn-block mt-auto">
+                        <span data-icon="download" data-icon-size="16"></span>
+                        Download Elements
                     </a>
                 </div>
             </div>
@@ -589,10 +622,12 @@
             <h2 class="text-xl font-semibold">Quick Start via CDN</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">Include Domma directly in your HTML without downloading:</p>
+            <p class="mb-4">Include Domma directly in your HTML:</p>
             <div class="cdn-code">
-                <span class="comment">&lt;!-- CSS --&gt;</span><br>
+                <span class="comment">&lt;!-- CSS (in this order) --&gt;</span><br>
                 &lt;link rel="stylesheet" href="path/to/domma.css"&gt;<br>
+                &lt;link rel="stylesheet" href="path/to/grid.css"&gt;<br>
+                &lt;link rel="stylesheet" href="path/to/elements.css"&gt;<br>
                 &lt;link rel="stylesheet" href="path/to/domma-themes.css"&gt;<br><br>
                 <span class="comment">&lt;!-- JavaScript --&gt;</span><br>
                 &lt;script src="path/to/domma.min.js"&gt;&lt;/script&gt;<br><br>

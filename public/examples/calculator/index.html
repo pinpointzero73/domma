@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="../../showcase/css/domma.css">
+    <link rel="stylesheet" href="../../showcase/css/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <style>
         /* Page layout */
@@ -32,52 +33,6 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
-        }
-
-        /* Download card (matches Todo template) */
-        .jumbotron {
-            background: var(--dm-card-bg);
-            border: 1px solid var(--dm-border);
-            padding: 2rem;
-            margin: 0 0 2rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            text-align: center;
-        }
-
-        .jumbotron-content h2 {
-            margin: 0 0 0.75rem;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--dm-text);
-        }
-
-        .jumbotron-content p {
-            margin: 0 0 1.5rem;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--dm-text-muted);
-        }
-
-        .jumbotron-actions {
-            display: flex;
-            gap: 0.75rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-
-        .jumbotron-actions .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.25rem;
-        }
-
-        .jumbotron-note {
-            font-size: 0.85rem;
-            margin: 0;
-            color: var(--dm-text-muted);
         }
 
         /* Calculator specific styles */
@@ -359,11 +314,12 @@
 
 <div class="calculator-container">
     <!-- Download card -->
-    <div class="jumbotron">
+    <div class="jumbotron jumbotron-center">
         <div class="jumbotron-content">
-            <h2>Interactive Calculator Example</h2>
-            <p>A fully functional calculator demonstrating Domma's DOM querying, event handling, and dynamic updates.
-                Supports keyboard input and basic arithmetic operations.</p>
+            <div class="jumbotron-title">Interactive Calculator Example</div>
+            <div class="jumbotron-subtitle">A fully functional calculator demonstrating Domma's DOM querying, event
+                handling, and dynamic updates. Supports keyboard input and basic arithmetic operations.
+            </div>
             <div class="jumbotron-actions">
                 <a href="index.html" download="calculator-example.html" class="btn btn-primary">
                     <span data-icon="download" data-icon-size="18"></span>

@@ -75,6 +75,61 @@ consult that folder's CLAUDE.md for detailed information.
 | `Domma.dates()` | `D()` | `window.D` | Date manipulation          |
 | `Domma.storage` | `S`   | `window.S` | localStorage wrapper       |
 
+## CSS Architecture
+
+Domma's CSS is split into focused, modular files for better organization and maintainability:
+
+```
+public/showcase/css/
+├── domma.css           # Base styles, typography, utilities (~3,100 lines)
+├── grid.css            # Grid system (Bootstrap + CSS Grid)
+├── elements.css        # UI components - 19 components (~1,800 lines)
+└── ../dist/themes/
+    └── domma-themes.css # Theming/colors
+```
+
+**Load order:**
+
+```html
+<link rel="stylesheet" href="path/to/domma.css">       <!-- 1. Base + utilities -->
+<link rel="stylesheet" href="path/to/grid.css">        <!-- 2. Grid system -->
+<link rel="stylesheet" href="path/to/elements.css">    <!-- 3. UI components -->
+<link rel="stylesheet" href="path/to/domma-themes.css"> <!-- 4. Theming -->
+```
+
+**What's in each file:**
+
+- **domma.css** - Foundation
+  - CSS variables (design tokens)
+  - Reset/normalize styles
+  - Base typography
+  - Utility classes (spacing, display, colors)
+  - Form controls (inputs, selects, textareas)
+
+- **grid.css** - Layout systems
+  - Bootstrap-style row/column grid (12 columns)
+  - CSS Grid utilities (Tailwind-style)
+  - Responsive containers
+  - Flexbox utilities
+
+- **elements.css** - UI components (19 total)
+  - Buttons, Cards, Modals, Tabs, Accordion
+  - Tooltip, Table, Form elements, Badges, Pills
+  - Alert, Code blocks, Pagination, Navbar, Footer
+  - Jumbotron, Carousel, Dialog, Sidebar
+
+- **domma-themes.css** - Visual styling
+  - Theme color definitions
+  - Light/dark theme variants
+  - Component theming
+
+**Why this architecture?**
+
+1. **Modularity** - Load only what you need
+2. **Clarity** - Clear separation of concerns
+3. **Maintainability** - Easy to find and update styles
+4. **Performance** - Can cache base styles separately from components
+
 ## File Structure
 
 ```
