@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator - Domma Examples</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="../../showcase/css/domma.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <style>
+        /* Page layout */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body > *:not(footer) {
+            flex-shrink: 0;
+        }
+
+        body > footer {
+            margin-top: auto;
+        }
+
+        /* Container (1400px like Todo) */
+        .calculator-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Download card (matches Todo template) */
+        .jumbotron {
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            padding: 2rem;
+            margin: 0 0 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .jumbotron-content h2 {
+            margin: 0 0 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dm-text);
+        }
+
+        .jumbotron-content p {
+            margin: 0 0 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--dm-text-muted);
+        }
+
+        .jumbotron-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .jumbotron-actions .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+        }
+
+        .jumbotron-note {
+            font-size: 0.85rem;
+            margin: 0;
+            color: var(--dm-text-muted);
+        }
+
+        /* Calculator specific styles */
+        .calculator-wrapper {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .calculator-card {
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator-display {
+            background: var(--dm-surface);
+            border: 2px solid var(--dm-border);
+            border-radius: 8px;
+            padding: 1.5rem 1rem;
+            margin-bottom: 1rem;
+            text-align: right;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .calculator-previous {
+            font-size: 0.875rem;
+            color: var(--dm-text-muted);
+            min-height: 1.25rem;
+        }
+
+        .calculator-current {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--dm-text);
+            overflow-wrap: break-word;
+        }
+
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calc-btn {
+            padding: 1.25rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            border: 1px solid var(--dm-border);
+            border-radius: 8px;
+            background: var(--dm-card-bg);
+            color: var(--dm-text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .calc-btn:hover {
+            background: var(--dm-hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .calc-btn:active {
+            transform: translateY(0);
+        }
+
+        .calc-btn-operator {
+            background: var(--dm-primary-light);
+            color: var(--dm-primary-dark);
+            font-weight: 700;
+        }
+
+        .calc-btn-operator:hover {
+            background: var(--dm-primary);
+            color: white;
+        }
+
+        .calc-btn-equals {
+            background: var(--dm-success);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .calc-btn-equals:hover {
+            background: var(--dm-success-dark);
+        }
+
+        .calc-btn-clear {
+            background: var(--dm-danger-light);
+            color: var(--dm-danger-dark);
+        }
+
+        .calc-btn-clear:hover {
+            background: var(--dm-danger);
+            color: white;
+        }
+
+        /* Mode toggle */
+        .calculator-mode-toggle {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .mode-btn {
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--dm-border);
+            border-radius: 8px;
+            background: var(--dm-card-bg);
+            color: var(--dm-text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .mode-btn.active {
+            background: var(--dm-primary);
+            color: white;
+            border-color: var(--dm-primary);
+        }
+
+        .mode-btn:hover:not(.active) {
+            background: var(--dm-hover-bg);
+        }
+
+        /* Angle mode toggle */
+        .angle-mode-toggle {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .angle-btn {
+            flex: 1;
+            padding: 0.35rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid var(--dm-border);
+            border-radius: 4px;
+            background: var(--dm-surface);
+            color: var(--dm-text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .angle-btn.active {
+            background: var(--dm-info);
+            color: white;
+            border-color: var(--dm-info);
+        }
+
+        .angle-btn:hover:not(.active) {
+            background: var(--dm-hover-bg);
+        }
+
+        /* Scientific buttons grid (8 columns) */
+        .calculator-buttons-scientific {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 0.35rem;
+        }
+
+        .calculator-buttons-scientific .calc-btn {
+            padding: 0.9rem 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Scientific mode - wider calculator */
+        .calculator-wrapper.scientific-mode {
+            max-width: 650px;
+            transition: max-width 0.3s ease;
+        }
+
+        /* Function buttons */
+        .calc-btn-function {
+            background: var(--dm-info-light);
+            color: var(--dm-info-dark);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .calc-btn-function:hover {
+            background: var(--dm-info);
+            color: white;
+        }
+
+        /* Memory buttons */
+        .calc-btn-memory {
+            background: var(--dm-warning-light);
+            color: var(--dm-warning-dark);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .calc-btn-memory:hover {
+            background: var(--dm-warning);
+            color: white;
+        }
+
+        /* Constant buttons */
+        .calc-btn-constant {
+            background: var(--dm-success-light);
+            color: var(--dm-success-dark);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .calc-btn-constant:hover {
+            background: var(--dm-success);
+            color: white;
+        }
+
+        /* Memory indicator */
+        .memory-indicator {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--dm-warning);
+            background: var(--dm-warning-light);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .calculator-display {
+            position: relative;
+        }
+
+        /* Toast notification */
+        .calc-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--dm-danger);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            font-size: 0.95rem;
+            font-weight: 500;
+            z-index: 10000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .calc-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .calculator-container {
+                padding: 1rem;
+            }
+
+            .calculator-wrapper {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body data-layout="showcase" data-layout-variant="subpage">
+
+<header class="page-header">
+    <h1>Calculator</h1>
+    <p>A functional calculator demonstrating Domma's DOM manipulation and event handling</p>
+</header>
+
+<div class="calculator-container">
+    <!-- Download card -->
+    <div class="jumbotron">
+        <div class="jumbotron-content">
+            <h2>Interactive Calculator Example</h2>
+            <p>A fully functional calculator demonstrating Domma's DOM querying, event handling, and dynamic updates.
+                Supports keyboard input and basic arithmetic operations.</p>
+            <div class="jumbotron-actions">
+                <a href="index.html" download="calculator-example.html" class="btn btn-primary">
+                    <span data-icon="download" data-icon-size="18"></span>
+                    Download HTML
+                </a>
+                <a href="index.js" download="calculator-example.js" class="btn btn-primary">
+                    <span data-icon="download" data-icon-size="18"></span>
+                    Download JavaScript
+                </a>
+            </div>
+            <p class="jumbotron-note">Both files are required for the example to work</p>
+        </div>
+    </div>
+
+    <!-- Calculator -->
+    <div class="calculator-wrapper">
+        <!-- Mode Toggle -->
+        <div class="calculator-mode-toggle">
+            <button class="mode-btn active" data-mode="basic">Basic</button>
+            <button class="mode-btn" data-mode="scientific">Scientific</button>
+        </div>
+
+        <div class="calculator-card">
+            <!-- Angle Mode Toggle (hidden by default) -->
+            <div class="angle-mode-toggle" id="angle-mode-toggle" style="display: none;">
+                <button class="angle-btn active" data-angle="deg">DEG</button>
+                <button class="angle-btn" data-angle="rad">RAD</button>
+            </div>
+
+            <div class="calculator-display">
+                <div id="previous-operation" class="calculator-previous"></div>
+                <div id="current-input" class="calculator-current">0</div>
+            </div>
+
+            <!-- Basic Mode Buttons -->
+            <div class="calculator-buttons" id="basic-buttons">
+                <!-- Row 1 -->
+                <button class="calc-btn calc-btn-clear" data-action="clear">C</button>
+                <button class="calc-btn calc-btn-clear" data-action="all-clear">AC</button>
+                <button class="calc-btn calc-btn-operator" data-action="percent">%</button>
+                <button class="calc-btn calc-btn-operator" data-action="divide">÷</button>
+
+                <!-- Row 2 -->
+                <button class="calc-btn" data-number="7">7</button>
+                <button class="calc-btn" data-number="8">8</button>
+                <button class="calc-btn" data-number="9">9</button>
+                <button class="calc-btn calc-btn-operator" data-action="multiply">×</button>
+
+                <!-- Row 3 -->
+                <button class="calc-btn" data-number="4">4</button>
+                <button class="calc-btn" data-number="5">5</button>
+                <button class="calc-btn" data-number="6">6</button>
+                <button class="calc-btn calc-btn-operator" data-action="subtract">−</button>
+
+                <!-- Row 4 -->
+                <button class="calc-btn" data-number="1">1</button>
+                <button class="calc-btn" data-number="2">2</button>
+                <button class="calc-btn" data-number="3">3</button>
+                <button class="calc-btn calc-btn-operator" data-action="add">+</button>
+
+                <!-- Row 5 -->
+                <button class="calc-btn" data-number="0">0</button>
+                <button class="calc-btn" data-action="decimal">.</button>
+                <button class="calc-btn calc-btn-equals" data-action="equals">=</button>
+            </div>
+
+            <!-- Scientific Mode Buttons -->
+            <div class="calculator-buttons-scientific" id="scientific-buttons" style="display: none;">
+                <!-- Row 1: Angle Mode & Memory & Clear -->
+                <button class="calc-btn calc-btn-function" data-action="angle-toggle">DEG</button>
+                <button class="calc-btn calc-btn-memory" data-action="mc">MC</button>
+                <button class="calc-btn calc-btn-memory" data-action="mr">MR</button>
+                <button class="calc-btn calc-btn-memory" data-action="m-minus">M−</button>
+                <button class="calc-btn calc-btn-memory" data-action="m-plus">M+</button>
+                <button class="calc-btn calc-btn-clear" data-action="clear">C</button>
+                <button class="calc-btn calc-btn-clear" data-action="all-clear">AC</button>
+                <button class="calc-btn calc-btn-operator" data-action="percent">%</button>
+
+                <!-- Row 2: Parentheses & Constants & Numbers -->
+                <button class="calc-btn calc-btn-function" data-action="paren-open">(</button>
+                <button class="calc-btn calc-btn-function" data-action="paren-close">)</button>
+                <button class="calc-btn calc-btn-constant" data-action="pi">π</button>
+                <button class="calc-btn calc-btn-constant" data-action="e">e</button>
+                <button class="calc-btn calc-btn-operator" data-action="divide">÷</button>
+                <button class="calc-btn" data-number="7">7</button>
+                <button class="calc-btn" data-number="8">8</button>
+                <button class="calc-btn" data-number="9">9</button>
+
+                <!-- Row 3: Trig & Numbers -->
+                <button class="calc-btn calc-btn-function" data-action="sin">sin</button>
+                <button class="calc-btn calc-btn-function" data-action="cos">cos</button>
+                <button class="calc-btn calc-btn-function" data-action="tan">tan</button>
+                <button class="calc-btn calc-btn-function" data-action="sqrt">√</button>
+                <button class="calc-btn calc-btn-operator" data-action="multiply">×</button>
+                <button class="calc-btn" data-number="4">4</button>
+                <button class="calc-btn" data-number="5">5</button>
+                <button class="calc-btn" data-number="6">6</button>
+
+                <!-- Row 4: Inverse Trig & Numbers -->
+                <button class="calc-btn calc-btn-function" data-action="asin">asin</button>
+                <button class="calc-btn calc-btn-function" data-action="acos">acos</button>
+                <button class="calc-btn calc-btn-function" data-action="atan">atan</button>
+                <button class="calc-btn calc-btn-function" data-action="square">x²</button>
+                <button class="calc-btn calc-btn-operator" data-action="subtract">−</button>
+                <button class="calc-btn" data-number="1">1</button>
+                <button class="calc-btn" data-number="2">2</button>
+                <button class="calc-btn" data-number="3">3</button>
+
+                <!-- Row 5: Logs & Power & Numbers -->
+                <button class="calc-btn calc-btn-function" data-action="ln">ln</button>
+                <button class="calc-btn calc-btn-function" data-action="log">log</button>
+                <button class="calc-btn calc-btn-function" data-action="power">xʸ</button>
+                <button class="calc-btn calc-btn-function" data-action="reciprocal">1/x</button>
+                <button class="calc-btn calc-btn-operator" data-action="add">+</button>
+                <button class="calc-btn" data-number="0" style="grid-column: span 2;">0</button>
+                <button class="calc-btn" data-action="decimal">.</button>
+
+                <!-- Row 6: Equals -->
+                <button class="calc-btn calc-btn-equals" data-action="equals" style="grid-column: span 8;">=</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Load Domma framework -->
+<script src="../../dist/domma.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
