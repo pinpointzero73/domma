@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes - Domma Examples</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="../../showcase/css/domma.css">
+    <link rel="stylesheet" href="../../showcase/css/grid.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <style>
+        /* Page layout */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body > *:not(footer) {
+            flex-shrink: 0;
+        }
+
+        body > footer {
+            margin-top: auto;
+        }
+
+        /* Jumbotron */
+        .jumbotron {
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            padding: 2rem;
+            margin: 0 0 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .jumbotron-content h2 {
+            margin: 0 0 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dm-text);
+        }
+
+        .jumbotron-content p {
+            margin: 0 0 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--dm-text-muted);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .jumbotron-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .jumbotron-actions .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+        }
+
+        .jumbotron-note {
+            font-size: 0.85rem;
+            margin: 0;
+            color: var(--dm-text-muted);
+        }
+
+        /* Note card hover */
+        .note-card {
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+        .note-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .note-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--dm-text);
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            color: var(--dm-text-muted);
+            transition: color 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            color: var(--dm-primary);
+        }
+
+        .note-preview {
+            color: var(--dm-text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .note-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--dm-text-muted);
+        }
+
+        .note-categories {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .category-tag {
+            background: var(--dm-primary-light);
+            color: var(--dm-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Editor modal */
+        .note-editor-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .note-editor-content {
+            background: var(--dm-card-bg);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--dm-border);
+        }
+
+        .editor-header input {
+            flex: 1;
+            margin-right: 1rem;
+            padding: 0.75rem;
+            border: 1px solid var(--dm-border);
+            border-radius: 8px;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--dm-border);
+            background: var(--dm-surface);
+        }
+
+        .editor-toolbar button {
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .editor-toolbar button:hover {
+            background: var(--dm-hover-bg);
+        }
+
+        #note-content {
+            width: 100%;
+            min-height: 300px;
+            padding: 1.5rem;
+            border: none;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            font-family: inherit;
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        .editor-footer {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-top: 1px solid var(--dm-border);
+        }
+
+        .editor-footer input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--dm-border);
+            border-radius: 8px;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--dm-text-muted);
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dm-text);
+        }
+    </style>
+</head>
+<body data-layout="showcase" data-layout-variant="subpage">
+
+<header class="page-header">
+    <h1>Notes</h1>
+    <p>Rich note-taking with categories and search</p>
+</header>
+
+<div class="container">
+    <!-- Jumbotron -->
+    <div class="jumbotron">
+        <div class="jumbotron-content">
+            <h2>Interactive Note Taking App</h2>
+            <p>A feature-rich note manager demonstrating Domma's storage, DOM manipulation, rich text handling, and UI
+                components. Create notes, organize with categories, search content, and persist data across
+                sessions.</p>
+            <div class="jumbotron-actions">
+                <a href="index.html" download="notes-example.html" class="btn btn-primary">
+                    <span data-icon="download" data-icon-size="18"></span>
+                    Download HTML
+                </a>
+                <a href="index.js" download="notes-example.js" class="btn btn-primary">
+                    <span data-icon="download" data-icon-size="18"></span>
+                    Download JavaScript
+                </a>
+            </div>
+            <p class="jumbotron-note">Both files are required for the example to work</p>
+        </div>
+    </div>
+
+    <!-- Main app -->
+    <section class="notes-main">
+        <!-- Toolbar -->
+        <div class="flex gap-3 mb-4 flex-wrap">
+            <button class="btn btn-primary" id="new-note-btn">
+                <span data-icon="plus" data-icon-size="18"></span>
+                New Note
+            </button>
+            <input type="text" id="search-input" placeholder="Search notes..." class="flex-1"
+                   style="padding: 0.75rem; border: 1px solid var(--dm-border); border-radius: 8px; background: var(--dm-surface); color: var(--dm-text);">
+        </div>
+
+        <!-- Notes Grid -->
+        <div id="notes-grid" class="grid grid-cols-3 gap-4">
+            <!-- Notes will be rendered here -->
+        </div>
+
+        <!-- Empty state -->
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <span data-icon="file-text" data-icon-size="64"></span>
+            <h3>No notes yet</h3>
+            <p>Click "New Note" to create your first note</p>
+        </div>
+    </section>
+</div>
+
+<!-- Editor Modal -->
+<div id="note-editor" class="note-editor-modal" style="display: none;">
+    <div class="note-editor-content">
+        <div class="editor-header">
+            <input type="text" id="note-title" placeholder="Note title">
+            <button class="btn btn-secondary btn-sm" id="close-editor">Close</button>
+        </div>
+        <div class="editor-toolbar">
+            <button data-format="bold" title="Bold"><b>B</b></button>
+            <button data-format="italic" title="Italic"><i>I</i></button>
+            <button data-format="underline" title="Underline"><u>U</u></button>
+            <button data-format="h1" title="Heading">H1</button>
+            <button data-format="ul" title="Bullet List">• List</button>
+        </div>
+        <textarea id="note-content" placeholder="Start writing..."></textarea>
+        <div class="editor-footer">
+            <input type="text" id="note-categories" placeholder="Add categories (comma-separated)">
+            <button class="btn btn-primary" id="save-note">Save Note</button>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
