@@ -6,11 +6,11 @@
     "nav": [
       {
         "text": "About Us",
-        "url": "about.html"
+        "url": "about/index.html"
       },
       {
         "text": "FAQs",
-        "url": "faq.html"
+        "url": "faq/index.html"
       },
       {
         "text": "Blog",

@@ -18,12 +18,12 @@
     },
     {
       "text": "About Us",
-      "url": "about.html",
+      "url": "about/index.html",
       "page": "about"
     },
     {
       "text": "FAQs",
-      "url": "faq.html",
+      "url": "faq/index.html",
       "page": "faq"
     },
     {

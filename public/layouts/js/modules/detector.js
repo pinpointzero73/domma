@@ -93,8 +93,10 @@ export const LayoutDetector = {
     isPublicPage(path) {
         return path.endsWith('/about.html') ||
             path.endsWith('/about') ||
+            path.includes('/about/') ||
             path.endsWith('/faq.html') ||
             path.endsWith('/faq') ||
+            path.includes('/faq/') ||
             path.includes('/blog/');
     },
 
