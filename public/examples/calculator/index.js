@@ -156,9 +156,21 @@
     }
 
     function handlePercent() {
-        const current = parseFloat(currentInput);
-        currentInput = String(current / 100);
-        updateDisplay();
+        if (mode === 'scientific') {
+            // In scientific mode, use expression mode for percentage
+            if (!useExpression) {
+                expression = currentInput === '0' ? '' : currentInput;
+                useExpression = true;
+            }
+            expression += '/100';
+            currentInput = expression;
+            updateDisplay();
+        } else {
+            // In basic mode, simple percentage conversion
+            const current = parseFloat(currentInput);
+            currentInput = String(current / 100);
+            updateDisplay();
+        }
     }
 
     function showError(message) {
@@ -357,11 +369,17 @@
     }
 
     function handleConstant(constant) {
+        const symbol = constant === 'pi' ? 'π' : 'e';
         const value = constant === 'pi' ? Math.PI : Math.E;
         const valueStr = String(Math.round(value * 100000000) / 100000000);
 
-        if (useExpression) {
-            expression += valueStr;
+        // In scientific mode, always use symbols and expression mode
+        if (mode === 'scientific') {
+            if (!useExpression) {
+                expression = currentInput === '0' ? '' : currentInput;
+                useExpression = true;
+            }
+            expression += symbol;
             currentInput = expression;
         } else if (shouldResetScreen) {
             currentInput = valueStr;
