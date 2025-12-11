@@ -158,49 +158,85 @@
 
     async function fetchCurrentWeather(city) {
         const url = `${API_BASE}/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
-        const response = await fetch(url);
 
-        if (!response.ok) {
-            if (response.status === 404) {
-                throw new Error('City not found');
+        try {
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error('City not found');
+                }
+                throw new Error('Failed to fetch weather data');
             }
-            throw new Error('Failed to fetch weather data');
-        }
 
-        return await response.json();
+            return await response.json();
+        } catch (error) {
+            if (error.message === 'City not found') {
+                throw error;
+            }
+            // Handle SSL/network errors
+            if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
+                throw new Error('Network error: Please ensure you\'re accessing this page via HTTP/HTTPS (not file://), and check your internet connection.');
+            }
+            throw error;
+        }
     }
 
     async function fetchCurrentWeatherByCoords(lat, lon) {
         const url = `${API_BASE}/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
-        const response = await fetch(url);
 
-        if (!response.ok) {
-            throw new Error('Failed to fetch weather data');
+        try {
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch weather data');
+            }
+
+            return await response.json();
+        } catch (error) {
+            if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
+                throw new Error('Network error: Please ensure you\'re accessing this page via HTTP/HTTPS (not file://), and check your internet connection.');
+            }
+            throw error;
         }
-
-        return await response.json();
     }
 
     async function fetchForecast(city) {
         const url = `${API_BASE}/forecast?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
-        const response = await fetch(url);
 
-        if (!response.ok) {
-            throw new Error('Failed to fetch forecast data');
+        try {
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch forecast data');
+            }
+
+            return await response.json();
+        } catch (error) {
+            if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
+                throw new Error('Network error: Please ensure you\'re accessing this page via HTTP/HTTPS (not file://), and check your internet connection.');
+            }
+            throw error;
         }
-
-        return await response.json();
     }
 
     async function fetchForecastByCoords(lat, lon) {
         const url = `${API_BASE}/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
-        const response = await fetch(url);
 
-        if (!response.ok) {
-            throw new Error('Failed to fetch forecast data');
+        try {
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch forecast data');
+            }
+
+            return await response.json();
+        } catch (error) {
+            if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
+                throw new Error('Network error: Please ensure you\'re accessing this page via HTTP/HTTPS (not file://), and check your internet connection.');
+            }
+            throw error;
         }
-
-        return await response.json();
     }
 
     // ========================================

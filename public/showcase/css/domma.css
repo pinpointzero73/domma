@@ -3317,6 +3317,8 @@ code {
 
 .jumbotron-content {
     max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .jumbotron-center {

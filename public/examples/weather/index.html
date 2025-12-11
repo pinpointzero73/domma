@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="../../showcase/css/domma.css">
+    <link rel="stylesheet" href="../../showcase/css/grid.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <style>
         /* Page layout */
@@ -57,6 +58,9 @@
             font-size: 0.95rem;
             line-height: 1.6;
             color: var(--dm-text-muted);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .jumbotron-actions {
@@ -139,12 +143,6 @@
             font-size: 0.85rem;
             color: var(--dm-text-muted);
         }
-
-        .api-key-manage {
-            text-align: right;
-            margin-bottom: 1rem;
-        }
-
         /* Search Section */
         .weather-search {
             background: var(--dm-card-bg);
@@ -153,33 +151,7 @@
             margin: 0 0 2rem;
             border-radius: 12px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .search-group {
-            display: grid;
-            grid-template-columns: 1fr auto auto;
-            gap: 0.75rem;
-        }
-
-        .search-group input {
-            padding: 0.875rem 1rem;
-            border: 2px solid var(--dm-border);
-            border-radius: 8px;
-            font-size: 1rem;
-            background: var(--dm-surface);
-            color: var(--dm-text);
-            transition: border-color 0.2s ease;
-        }
-
-        .search-group input:focus {
-            outline: none;
-            border-color: var(--dm-primary);
-        }
-
-        .search-group .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
+            width: 100%;
         }
 
         /* Weather Card */
@@ -236,12 +208,12 @@
         }
 
         .weather-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            display: flex;
+            gap: 2rem;
             margin-top: 2rem;
             padding-top: 2rem;
             border-top: 1px solid var(--dm-border);
+            flex-wrap: wrap;
         }
 
         .detail-item {
@@ -270,7 +242,7 @@
 
         .forecast-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(5, 1fr);
             gap: 1rem;
         }
 
@@ -392,10 +364,6 @@
                 justify-content: center;
                 text-align: center;
             }
-
-            .search-group {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -433,7 +401,8 @@
         <!-- API Key Setup (shown if no key) -->
         <div id="api-key-setup" class="api-key-card" style="display: none;">
             <h3>🔑 API Key Required</h3>
-            <p>Get a free API key from <a href="https://openweathermap.org/api" target="_blank">OpenWeatherMap</a></p>
+            <p>Get a free API key from <a href="https://openweathermap.org/api" target="_blank">OpenWeatherMap</a>
+            </p>
             <p>Free tier: 1000 calls/day, no credit card required</p>
             <div class="api-key-input-group">
                 <input type="text" id="api-key-input" placeholder="Enter your API key"/>
@@ -442,22 +411,28 @@
             <p class="api-key-note">Your key is stored locally and never sent anywhere except OpenWeatherMap</p>
         </div>
 
-        <!-- API Key Management (shown if key exists) -->
-        <div id="api-key-manage" class="api-key-manage" style="display: none;">
-            <button class="btn btn-secondary btn-sm" id="change-api-key">
-                <span data-icon="settings" data-icon-size="16"></span>
-                Change API Key
-            </button>
-        </div>
-
         <!-- Search Section -->
         <div id="weather-search" class="weather-search" style="display: none;">
-            <div class="search-group">
-                <input type="text" id="city-search" placeholder="Enter city name (e.g., London, Tokyo)"/>
+            <!-- Row 1: API Key button (right aligned) -->
+            <div id="api-key-manage" class="text-right mb-3" style="display: none;">
+                <button class="btn btn-secondary btn-sm" id="change-api-key">
+                    <span data-icon="settings" data-icon-size="16"></span>
+                    Change API Key
+                </button>
+            </div>
+
+            <!-- Row 2: Search input and Search button -->
+            <div class="flex gap-3 mb-3">
+                <input type="text" id="city-search" placeholder="Enter city name (e.g., London, Tokyo)" class="flex-1"
+                       style="padding: 0.75rem; border: 1px solid var(--dm-border); border-radius: 8px; background: var(--dm-surface); color: var(--dm-text);"/>
                 <button class="btn btn-primary" id="search-btn">
                     <span data-icon="search" data-icon-size="18"></span>
                     Search
                 </button>
+            </div>
+
+            <!-- Row 3: Use My Location button (centered) -->
+            <div class="flex justify-center">
                 <button class="btn btn-secondary" id="location-btn">
                     <span data-icon="map-pin" data-icon-size="18"></span>
                     Use My Location
