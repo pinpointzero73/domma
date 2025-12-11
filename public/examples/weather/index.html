@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App - Domma Examples</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="../../showcase/css/domma.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <style>
+        /* Page layout */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body > *:not(footer) {
+            flex-shrink: 0;
+        }
+
+        body > footer {
+            margin-top: auto;
+        }
+
+        /* Weather container */
+        .weather-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Download card */
+        .jumbotron {
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            padding: 2rem;
+            margin: 0 0 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .jumbotron-content h2 {
+            margin: 0 0 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dm-text);
+        }
+
+        .jumbotron-content p {
+            margin: 0 0 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--dm-text-muted);
+        }
+
+        .jumbotron-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .jumbotron-actions .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+        }
+
+        .jumbotron-note {
+            font-size: 0.85rem;
+            margin: 0;
+            color: var(--dm-text-muted);
+        }
+
+        /* API Key Card */
+        .api-key-card {
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            padding: 2rem;
+            margin: 0 0 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .api-key-card h3 {
+            margin: 0 0 1rem;
+            font-size: 1.5rem;
+            color: var(--dm-text);
+        }
+
+        .api-key-card p {
+            margin: 0.5rem 0;
+            color: var(--dm-text-muted);
+        }
+
+        .api-key-card a {
+            color: var(--dm-primary);
+            text-decoration: none;
+        }
+
+        .api-key-card a:hover {
+            text-decoration: underline;
+        }
+
+        .api-key-input-group {
+            display: flex;
+            gap: 0.5rem;
+            max-width: 500px;
+            margin: 1rem auto;
+        }
+
+        .api-key-input-group input {
+            flex: 1;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--dm-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            transition: border-color 0.2s ease;
+        }
+
+        .api-key-input-group input:focus {
+            outline: none;
+            border-color: var(--dm-primary);
+        }
+
+        .api-key-note {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--dm-text-muted);
+        }
+
+        .api-key-manage {
+            text-align: right;
+            margin-bottom: 1rem;
+        }
+
+        /* Search Section */
+        .weather-search {
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            padding: 1.5rem;
+            margin: 0 0 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-group {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 0.75rem;
+        }
+
+        .search-group input {
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--dm-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            transition: border-color 0.2s ease;
+        }
+
+        .search-group input:focus {
+            outline: none;
+            border-color: var(--dm-primary);
+        }
+
+        .search-group .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Weather Card */
+        .weather-card {
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .weather-header {
+            margin-bottom: 1rem;
+        }
+
+        .weather-header h2 {
+            margin: 0 0 0.25rem;
+            font-size: 2rem;
+            color: var(--dm-text);
+        }
+
+        .weather-header p {
+            margin: 0;
+            color: var(--dm-text-muted);
+            font-size: 0.9rem;
+        }
+
+        .weather-main {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .weather-main img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .weather-temp {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--dm-primary);
+            line-height: 1;
+        }
+
+        .weather-description {
+            font-size: 1.25rem;
+            color: var(--dm-text);
+            text-transform: capitalize;
+            margin: 0.5rem 0;
+        }
+
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--dm-border);
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            color: var(--dm-text);
+        }
+
+        .detail-item svg,
+        .detail-item [data-icon] {
+            color: var(--dm-primary);
+        }
+
+        /* Forecast Section */
+        .forecast-section {
+            margin-top: 2rem;
+        }
+
+        .forecast-section h3 {
+            margin: 0 0 1rem;
+            font-size: 1.5rem;
+            color: var(--dm-text);
+        }
+
+        .forecast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .forecast-card {
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .forecast-card h4 {
+            margin: 0 0 0.5rem;
+            font-size: 1rem;
+            color: var(--dm-text);
+        }
+
+        .forecast-card img {
+            width: 50px;
+            height: 50px;
+            margin: 0.5rem 0;
+        }
+
+        .forecast-temp {
+            margin: 0.5rem 0;
+            font-size: 1rem;
+            color: var(--dm-text);
+        }
+
+        .forecast-temp strong {
+            color: var(--dm-primary);
+        }
+
+        .forecast-desc {
+            margin: 0.25rem 0 0;
+            font-size: 0.85rem;
+            color: var(--dm-text-muted);
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--dm-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-overlay p {
+            margin-top: 1rem;
+            color: white;
+            font-size: 1rem;
+        }
+
+        /* Toast Notifications */
+        .weather-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 0.95rem;
+            z-index: 10000;
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .weather-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .weather-toast.error {
+            background: var(--dm-danger);
+        }
+
+        .weather-toast.success {
+            background: var(--dm-success);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .weather-container {
+                padding: 1rem;
+            }
+
+            .weather-temp {
+                font-size: 3rem;
+            }
+
+            .weather-main {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .search-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body data-layout="showcase" data-layout-variant="subpage">
+
+<header class="page-header">
+    <h1>Weather App</h1>
+    <p>Real-time weather data with 5-day forecast</p>
+</header>
+
+<div class="weather-container">
+    <!-- Jumbotron with download links -->
+    <div class="jumbotron">
+        <div class="jumbotron-content">
+            <h2>Interactive Weather App Example</h2>
+            <p>A comprehensive weather application demonstrating HTTP requests, API integration, storage management, and
+                geolocation. Search any city worldwide or use your current location to get real-time weather data and
+                forecasts.</p>
+            <div class="jumbotron-actions">
+                <a href="index.html" download="weather-example.html" class="btn btn-primary">
+                    <span data-icon="download" data-icon-size="18"></span>
+                    Download HTML
+                </a>
+                <a href="index.js" download="weather-example.js" class="btn btn-primary">
+                    <span data-icon="download" data-icon-size="18"></span>
+                    Download JavaScript
+                </a>
+            </div>
+            <p class="jumbotron-note">Both files are required for the example to work</p>
+        </div>
+    </div>
+
+    <!-- Weather app main section -->
+    <section class="weather-main">
+        <!-- API Key Setup (shown if no key) -->
+        <div id="api-key-setup" class="api-key-card" style="display: none;">
+            <h3>🔑 API Key Required</h3>
+            <p>Get a free API key from <a href="https://openweathermap.org/api" target="_blank">OpenWeatherMap</a></p>
+            <p>Free tier: 1000 calls/day, no credit card required</p>
+            <div class="api-key-input-group">
+                <input type="text" id="api-key-input" placeholder="Enter your API key"/>
+                <button class="btn btn-primary" id="save-api-key">Save Key</button>
+            </div>
+            <p class="api-key-note">Your key is stored locally and never sent anywhere except OpenWeatherMap</p>
+        </div>
+
+        <!-- API Key Management (shown if key exists) -->
+        <div id="api-key-manage" class="api-key-manage" style="display: none;">
+            <button class="btn btn-secondary btn-sm" id="change-api-key">
+                <span data-icon="settings" data-icon-size="16"></span>
+                Change API Key
+            </button>
+        </div>
+
+        <!-- Search Section -->
+        <div id="weather-search" class="weather-search" style="display: none;">
+            <div class="search-group">
+                <input type="text" id="city-search" placeholder="Enter city name (e.g., London, Tokyo)"/>
+                <button class="btn btn-primary" id="search-btn">
+                    <span data-icon="search" data-icon-size="18"></span>
+                    Search
+                </button>
+                <button class="btn btn-secondary" id="location-btn">
+                    <span data-icon="map-pin" data-icon-size="18"></span>
+                    Use My Location
+                </button>
+            </div>
+        </div>
+
+        <!-- Current Weather Card -->
+        <div id="current-weather" class="weather-card" style="display: none;">
+            <div class="weather-header">
+                <h2 id="city-name">--</h2>
+                <p id="weather-date">--</p>
+            </div>
+            <div class="weather-main">
+                <img id="weather-icon" src="" alt="Weather icon"/>
+                <div>
+                    <div class="weather-temp">
+                        <span id="temperature">--</span>°C
+                    </div>
+                    <p class="weather-description" id="weather-description">--</p>
+                </div>
+            </div>
+            <div class="weather-details">
+                <div class="detail-item">
+                    <span data-icon="droplet" data-icon-size="20"></span>
+                    <span><span id="humidity">--</span>% Humidity</span>
+                </div>
+                <div class="detail-item">
+                    <span data-icon="wind" data-icon-size="20"></span>
+                    <span><span id="wind-speed">--</span> km/h Wind</span>
+                </div>
+                <div class="detail-item">
+                    <span data-icon="gauge" data-icon-size="20"></span>
+                    <span><span id="pressure">--</span> hPa</span>
+                </div>
+                <div class="detail-item">
+                    <span>Feels like: <span id="feels-like">--</span>°C</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5-Day Forecast -->
+        <div id="forecast-section" class="forecast-section" style="display: none;">
+            <h3>5-Day Forecast</h3>
+            <div id="forecast-cards" class="forecast-grid">
+                <!-- Dynamically generated forecast cards -->
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Load Domma framework -->
+<script src="../../dist/domma.min.js"></script>
+<!-- Load layout system -->
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
