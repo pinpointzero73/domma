@@ -347,7 +347,6 @@
     function init() {
         renderTodos();
         initEventHandlers();
-        Domma.elements.tabs('#todo-tabs');
         Domma.icons.scan();
     }
 

@@ -29,9 +29,55 @@
 
         /* Todo container */
         .todo-container {
-            max-width: 1000px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+        }
+
+        /* Download card */
+        .jumbotron {
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            padding: 2rem;
+            margin: 0 0 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .jumbotron-content h2 {
+            margin: 0 0 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dm-text);
+        }
+
+        .jumbotron-content p {
+            margin: 0 0 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--dm-text-muted);
+        }
+
+        .jumbotron-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .jumbotron-actions .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+        }
+
+        .jumbotron-note {
+            font-size: 0.85rem;
+            margin: 0;
+            color: var(--dm-text-muted);
         }
 
         /* Input area */
@@ -276,72 +322,59 @@
 </header>
 
 <div class="todo-container">
-    <!-- Tabs -->
-    <div id="todo-tabs" class="tabs">
-        <ul class="tab-list">
-            <li class="tab-item active" data-tab="app">Application</li>
-            <li class="tab-item" data-tab="code">Source Code</li>
-        </ul>
-
-        <div class="tab-content">
-            <!-- Tab 1: App -->
-            <div class="tab-panel active" data-panel="app">
-                <div class="todo-input-container">
-                    <input type="text" id="todo-input" class="todo-input" placeholder="What needs to be done?"
-                           autocomplete="off">
-                    <select id="status-input" class="create-select">
-                        <option value="not-started">Not Started</option>
-                        <option value="in-progress">In Progress</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                    <select id="priority-input" class="create-select">
-                        <option value="highest">Highest</option>
-                        <option value="high">High</option>
-                        <option value="medium" selected>Medium</option>
-                        <option value="low">Low</option>
-                        <option value="lowest">Lowest</option>
-                    </select>
-                    <button id="add-todo-btn" class="btn btn-primary">
-                        <span data-icon="plus" data-icon-size="16"></span>
-                        Add Task
-                    </button>
-                </div>
-
-                <ul id="todo-list" class="todo-list">
-                    <!-- Tasks will be rendered here -->
-                </ul>
-
-                <div id="empty-state" class="todo-empty" style="display: none;">
-                    <span data-icon="check-circle" data-icon-size="64"></span>
-                    <h3>No tasks yet</h3>
-                    <p>Add a task above to get started</p>
-                </div>
+    <!-- Jumbotron with download links -->
+    <div class="jumbotron">
+        <div class="jumbotron-content">
+            <h2>Interactive To-Do List Example</h2>
+            <p>A feature-rich task manager demonstrating Domma's DOM manipulation, storage, models, and UI components.
+                Add tasks, set priorities, track status, and persist data across sessions.</p>
+            <div class="jumbotron-actions">
+                <a href="index.html" download="todo-example.html" class="btn btn-primary">
+                    <span data-icon="download" data-icon-size="18"></span>
+                    Download HTML
+                </a>
+                <a href="index.js" download="todo-example.js" class="btn btn-primary">
+                    <span data-icon="download" data-icon-size="18"></span>
+                    Download JavaScript
+                </a>
             </div>
-
-            <!-- Tab 2: Code -->
-            <div class="tab-panel" data-panel="code">
-                <div style="padding: 2rem; text-align: center;">
-                    <h3 style="margin-bottom: 1.5rem;">Download Source Files</h3>
-                    <p style="margin-bottom: 2rem; color: var(--dm-text-muted);">
-                        Get the complete source code for this To-Do List example
-                    </p>
-                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                        <a href="index.html" download="todo-example.html" class="btn btn-primary">
-                            <span data-icon="download" data-icon-size="16"></span>
-                            Download HTML
-                        </a>
-                        <a href="index.js" download="todo-example.js" class="btn btn-primary">
-                            <span data-icon="download" data-icon-size="16"></span>
-                            Download JavaScript
-                        </a>
-                    </div>
-                    <p style="margin-top: 2rem; color: var(--dm-text-muted); font-size: 0.875rem;">
-                        Both files are required for the example to work
-                    </p>
-                </div>
-            </div>
+            <p class="jumbotron-note">Both files are required for the example to work</p>
         </div>
     </div>
+
+    <!-- Todo app main section -->
+    <section class="todo-main">
+        <div class="todo-input-container">
+            <input type="text" id="todo-input" class="todo-input" placeholder="What needs to be done?"
+                   autocomplete="off">
+            <select id="status-input" class="create-select">
+                <option value="not-started">Not Started</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+            </select>
+            <select id="priority-input" class="create-select">
+                <option value="highest">Highest</option>
+                <option value="high">High</option>
+                <option value="medium" selected>Medium</option>
+                <option value="low">Low</option>
+                <option value="lowest">Lowest</option>
+            </select>
+            <button id="add-todo-btn" class="btn btn-primary">
+                <span data-icon="plus" data-icon-size="16"></span>
+                Add Task
+            </button>
+        </div>
+
+        <ul id="todo-list" class="todo-list">
+            <!-- Tasks will be rendered here -->
+        </ul>
+
+        <div id="empty-state" class="todo-empty" style="display: none;">
+            <span data-icon="check-circle" data-icon-size="64"></span>
+            <h3>No tasks yet</h3>
+            <p>Add a task above to get started</p>
+        </div>
+    </section>
 </div>
 
 <!-- Load Domma framework -->
