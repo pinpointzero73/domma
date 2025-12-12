@@ -1,6 +1,6 @@
 /**
  * CSS Build Script
- * Concatenates theme CSS files and prepends version banner
+ * Builds all CSS files to dist/ with version banners
  */
 
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'fs';
@@ -67,11 +67,45 @@ if (!existsSync(outputDir)) {
     mkdirSync(outputDir, {recursive: true});
 }
 
-// Write output
-const outputPath = join(outputDir, 'domma-themes.css');
-writeFileSync(outputPath, css);
+// Write themes output
+const themesOutputPath = join(outputDir, 'domma-themes.css');
+writeFileSync(themesOutputPath, css);
 
-console.log(`✓ Built ${outputPath}`);
+console.log(`✓ Built ${themesOutputPath}`);
 console.log(`  Version: ${pkg.version}`);
 console.log(`  Commit: ${getGitCommit()}`);
 console.log(`  Size: ${(css.length / 1024).toFixed(1)}KB`);
+
+// Build core CSS files to dist/
+const coreCSSFiles = [
+    {src: 'src/css/domma.css', dest: 'public/dist/domma.css', name: 'Domma Core CSS'},
+    {src: 'src/css/grid.css', dest: 'public/dist/grid.css', name: 'Domma Grid CSS'},
+    {src: 'src/css/elements.css', dest: 'public/dist/elements.css', name: 'Domma Elements CSS'},
+    {src: 'src/css/syntax.css', dest: 'public/dist/syntax.css', name: 'Domma Syntax Highlighting CSS'}
+];
+
+const cssBanner = (name) => `/*!
+ * ${name} v${pkg.version}
+ * Dynamic Object Manipulation & Modeling API
+ * (c) ${new Date().getFullYear()} Darryl Waterhouse & DCBW-IT
+ * Built: ${new Date().toISOString()}
+ * Commit: ${getGitCommit()}
+ */
+
+`;
+
+for (const {src, dest, name} of coreCSSFiles) {
+    const srcPath = join(rootDir, src);
+    const destPath = join(rootDir, dest);
+
+    if (existsSync(srcPath)) {
+        const content = readFileSync(srcPath, 'utf8');
+        const withBanner = cssBanner(name) + content;
+        writeFileSync(destPath, withBanner);
+
+        console.log(`✓ Built ${destPath}`);
+        console.log(`  Size: ${(withBanner.length / 1024).toFixed(1)}KB`);
+    } else {
+        console.warn(`Warning: ${src} not found`);
+    }
+}

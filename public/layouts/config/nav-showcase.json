@@ -95,6 +95,41 @@
           "section": "editor"
         }
       ]
+    },
+    {
+      "text": "Examples",
+      "items": [
+        {
+          "text": "Todo List",
+          "url": "examples/todo/index.html",
+          "section": "todo"
+        },
+        {
+          "text": "Weather App",
+          "url": "examples/weather/index.html",
+          "section": "weather"
+        },
+        {
+          "text": "Notes App",
+          "url": "examples/notes/index.html",
+          "section": "notes"
+        },
+        {
+          "text": "Calculator",
+          "url": "examples/calculator/index.html",
+          "section": "calculator"
+        },
+        {
+          "text": "Image Gallery",
+          "url": "examples/gallery/index.html",
+          "section": "gallery"
+        },
+        {
+          "text": "Markdown Editor",
+          "url": "examples/markdown/index.html",
+          "section": "markdown"
+        }
+      ]
     }
   ]
 }

@@ -14,15 +14,72 @@
  */
 
 :root {
-    /* Colors */
+    /* ================================================
+       SEMANTIC COLORS (Light Theme Defaults)
+       These provide baseline values that work without any theme class.
+       Theme classes (.dm-theme-dark, variants) will override these.
+       ================================================ */
+
+    /* Backgrounds */
+    --dm-background: #ffffff;
+    --dm-background-alt: #f8f9fa;
+    --dm-surface: #ffffff;
+    --dm-surface-raised: #f1f3f5;
+    --dm-surface-overlay: #f8f9fa;
+
+    /* Text */
+    --dm-text: #212529;
+    --dm-text-secondary: #495057;
+    --dm-text-muted: #6c757d;
+    --dm-text-disabled: #adb5bd;
+    --dm-text-inverse: #ffffff;
+
+    /* Borders */
+    --dm-border: #dee2e6;
+    --dm-border-light: #e9ecef;
+    --dm-border-dark: #ced4da;
+    --dm-border-focus: #6495ED;
+
+    /* Interactive States */
+    --dm-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-active-bg: rgba(0, 0, 0, 0.08);
+    --dm-selected-bg: rgba(100, 149, 237, 0.12);
+    --dm-disabled-opacity: 0.65;
+
+    /* ================================================
+       BRAND COLORS
+       ================================================ */
     --dm-primary: #6495ED;
     --dm-primary-dark: #4169E1;
     --dm-primary-light: #87CEEB;
+    --dm-primary-hover: #5280d8;
+    --dm-primary-active: #4169c0;
+
     --dm-secondary: #6c757d;
+    --dm-secondary-hover: #5c636a;
+    --dm-secondary-active: #565e64;
+
+    /* ================================================
+       STATUS COLORS
+       ================================================ */
     --dm-success: #28a745;
+    --dm-success-hover: #157347;
+    --dm-success-active: #146c43;
+
     --dm-danger: #dc3545;
+    --dm-danger-hover: #bb2d3b;
+    --dm-danger-active: #b02a37;
+
     --dm-warning: #ffc107;
+    --dm-warning-hover: #ffca2c;
+    --dm-warning-active: #ffcd39;
+    --dm-warning-text: #664d03;
+
     --dm-info: #17a2b8;
+    --dm-info-hover: #31d2f2;
+    --dm-info-active: #3dd5f3;
+
+    /* Legacy color names (kept for backwards compatibility) */
     --dm-light: #f8f9fa;
     --dm-dark: #343a40;
     --dm-white: #ffffff;
@@ -50,6 +107,7 @@
     --dm-font-size-2xl: 1.5rem;
     --dm-font-size-3xl: 1.875rem;
     --dm-font-size-4xl: 2.25rem;
+    --dm-font-size-5xl: 3rem;
 
     /* Spacing */
     --dm-space-0: 0;
@@ -77,7 +135,56 @@
     --dm-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --dm-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --dm-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --dm-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --dm-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+    /* ================================================
+       COMPONENT-SPECIFIC VARIABLES
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-sm);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #e9ecef;
+
+    /* Tables */
+    --dm-table-border: var(--dm-border);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-stripe-bg: rgba(0, 0, 0, 0.02);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Dropdown */
+    --dm-dropdown-bg: var(--dm-surface);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+    --dm-tab-active-border: var(--dm-primary);
+    --dm-tab-active-text: var(--dm-primary);
+
+    /* Accordion */
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
 
     /* Transitions */
     --dm-transition-fast: 150ms ease;
@@ -1348,16 +1455,64 @@ code, pre {
    COMPONENT: Table
    ============================================ */
 
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 8px;
-    height: 8px;
-    background-color: var(--dm-white);
-    border-radius: 50%;
-    border: none;
-    transform: translate(-50%, -50%);
+content:
+
+''
+;
+position: absolute
+
+;
+left:
+
+50
+%
+;
+top:
+
+50
+%
+;
+width:
+
+8
+px
+
+;
+height:
+
+8
+px
+
+;
+background-color:
+
+var
+(
+--dm-white
+
+)
+;
+border-radius:
+
+50
+%
+;
+border: none
+
+;
+transform:
+
+translate
+(
+-
+50
+%
+,
+-
+50
+%
+)
+;
 }
 
 /* Toggle Switch */
@@ -2167,29 +2322,63 @@ code, pre {
     display: block;
 }
 
-        border-radius: 0;
-        transform: translateX(-100%);
-        z-index: 1000;
-        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
-    }
+border-radius:
 
-    .sidebar.open {
-        display: block;
-        transform: translateX(0);
-    }
+0
+;
+transform:
 
-    .sidebar-toggle {
-        display: flex;
-    }
+translateX
+(
+-
+100
+%
+)
+;
+z-index:
 
-    .sidebar-overlay {
-        display: block;
-        pointer-events: none;
-    }
+1000
+;
+box-shadow:
 
-    .sidebar-overlay.active {
-        pointer-events: auto;
-    }
+4
+px
+
+0
+20
+px
+
+rgba
+(
+0
+,
+0
+,
+0
+,
+0.15
+)
+;
+}
+
+.sidebar.open {
+    display: block;
+    transform: translateX(0);
+}
+
+.sidebar-toggle {
+    display: flex;
+}
+
+.sidebar-overlay {
+    display: block;
+    pointer-events: none;
+}
+
+.sidebar-overlay.active {
+    pointer-events: auto;
+}
+
 }
 
 /* Dark theme support */

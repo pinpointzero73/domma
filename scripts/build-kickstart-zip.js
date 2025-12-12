@@ -68,15 +68,15 @@ cpSync(
 console.log('  → Copying CSS files...');
 mkdirSync(join(tempContentDir, 'css'), {recursive: true});
 cpSync(
-    join(rootDir, 'public/showcase/css/domma.css'),
+    join(rootDir, 'public/dist/domma.css'),
     join(tempContentDir, 'css/domma.css')
 );
 cpSync(
-    join(rootDir, 'public/showcase/css/grid.css'),
+    join(rootDir, 'public/dist/grid.css'),
     join(tempContentDir, 'css/grid.css')
 );
 cpSync(
-    join(rootDir, 'public/showcase/css/elements.css'),
+    join(rootDir, 'public/dist/elements.css'),
     join(tempContentDir, 'css/elements.css')
 );
 

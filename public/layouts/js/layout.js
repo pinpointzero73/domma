@@ -471,7 +471,7 @@ import {SidebarModule} from './modules/sidebar.js';
                     collapseAt: 992
                 });
 
-                // Customize brand section with logo + version + download button
+                // Customise brand section with logo + version + download button
                 const $brandLink = $('#main-navbar .dm-navbar-brand-link');
                 const $brandContainer = $('#main-navbar .dm-navbar-brand');
 

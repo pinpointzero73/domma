@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Editor - Domma Examples</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <style>
+
+        /* Toolbar */
+        .editor-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .toolbar-group {
+            display: flex;
+            gap: 0.25rem;
+            padding-right: 0.5rem;
+            border-right: 1px solid var(--dm-border);
+        }
+
+        .toolbar-group:last-child {
+            border-right: none;
+        }
+
+        .toolbar-btn {
+            padding: 0.5rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+            color: var(--dm-text);
+        }
+
+        .toolbar-btn:hover {
+            background: var(--dm-hover-bg);
+        }
+
+        .toolbar-btn.active {
+            background: var(--dm-primary);
+            color: white;
+        }
+
+        /* Split pane layout */
+        .split-pane {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            min-height: 500px;
+        }
+
+        .pane {
+            border: 1px solid var(--dm-border);
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pane-header {
+            padding: 0.75rem 1rem;
+            background: var(--dm-gray-100);
+            border-bottom: 1px solid var(--dm-border);
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pane-content {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: var(--dm-card-bg);
+        }
+
+        /* Editor textarea */
+        #markdown-input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            resize: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            background: transparent;
+            color: var(--dm-text);
+            padding: 0;
+        }
+
+        /* Preview styles */
+        #preview-content h1 {
+            font-size: 2rem;
+            margin: 0 0 1rem;
+            border-bottom: 2px solid var(--dm-border);
+            padding-bottom: 0.5rem;
+        }
+
+        #preview-content h2 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+        }
+
+        #preview-content h3 {
+            font-size: 1.25rem;
+            margin: 1.25rem 0 0.75rem;
+        }
+
+        #preview-content p {
+            margin: 0 0 1rem;
+            line-height: 1.7;
+        }
+
+        #preview-content ul, #preview-content ol {
+            margin: 0 0 1rem;
+            padding-left: 2rem;
+        }
+
+        #preview-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        #preview-content code {
+            background: var(--dm-gray-100);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+
+        #preview-content pre {
+            background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 0 0 1rem;
+        }
+
+        #preview-content pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        #preview-content blockquote {
+            border-left: 4px solid var(--dm-primary);
+            padding-left: 1rem;
+            margin: 0 0 1rem;
+            color: var(--dm-text-muted);
+            font-style: italic;
+        }
+
+        #preview-content a {
+            color: var(--dm-primary);
+            text-decoration: none;
+        }
+
+        #preview-content a:hover {
+            text-decoration: underline;
+        }
+
+        #preview-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        #preview-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 0 1rem;
+        }
+
+        #preview-content th, #preview-content td {
+            border: 1px solid var(--dm-border);
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        #preview-content th {
+            background: var(--dm-gray-100);
+            font-weight: 600;
+        }
+
+        #preview-content hr {
+            border: none;
+            border-top: 2px solid var(--dm-border);
+            margin: 2rem 0;
+        }
+
+        /* Stats */
+        .stats-bar {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1rem;
+            background: var(--dm-gray-100);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-size: 0.875rem;
+            color: var(--dm-text-muted);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: var(--dm-text);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .split-pane {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar-group {
+                border-right: none;
+            }
+        }
+    </style>
+</head>
+<body class="dm-theme-light" data-layout="showcase" data-layout-variant="subpage">
+
+<header class="page-header">
+    <h1>Markdown Editor</h1>
+    <p>Live preview with real-time rendering</p>
+</header>
+
+<div class="container">
+    <!-- Jumbotron -->
+    <div class="jumbotron jumbotron-center">
+        <div class="jumbotron-content">
+            <div class="jumbotron-title">Markdown Editor Example</div>
+            <div class="jumbotron-subtitle">A real-time markdown editor with live preview, Storage persistence, and
+                syntax helpers using Domma's Utils, Storage, and DOM manipulation.
+            </div>
+            <div class="jumbotron-actions">
+                <a href="index.html" download="markdown-example.html" class="btn btn-primary">
+                    <span data-icon="download" data-icon-size="18"></span>
+                    Download HTML
+                </a>
+                <a href="index.js" download="markdown-example.js" class="btn btn-primary">
+                    <span data-icon="download" data-icon-size="18"></span>
+                    Download JavaScript
+                </a>
+            </div>
+            <p class="jumbotron-note">Both files are required for the example to work</p>
+        </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span data-icon="file-text" data-icon-size="16"></span>
+            <span>Words: <span class="stat-value" id="word-count">0</span></span>
+        </div>
+        <div class="stat-item">
+            <span data-icon="type" data-icon-size="16"></span>
+            <span>Characters: <span class="stat-value" id="char-count">0</span></span>
+        </div>
+        <div class="stat-item">
+            <span data-icon="clock" data-icon-size="16"></span>
+            <span>Last saved: <span class="stat-value" id="last-saved">Never</span></span>
+        </div>
+        <div class="stat-item" style="margin-left: auto;">
+            <button class="btn btn-sm btn-primary" id="save-btn">
+                <span data-icon="save" data-icon-size="16"></span>
+                Save
+            </button>
+        </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="editor-toolbar">
+        <div class="toolbar-group">
+            <button class="toolbar-btn" data-action="bold" title="Bold (Ctrl+B)">
+                <span data-icon="bold" data-icon-size="18"></span>
+            </button>
+            <button class="toolbar-btn" data-action="italic" title="Italic (Ctrl+I)">
+                <span data-icon="italic" data-icon-size="18"></span>
+            </button>
+        </div>
+        <div class="toolbar-group">
+            <button class="toolbar-btn" data-action="heading" title="Heading">
+                <span data-icon="type" data-icon-size="18"></span>
+            </button>
+            <button class="toolbar-btn" data-action="quote" title="Quote">
+                <span data-icon="message-square" data-icon-size="18"></span>
+            </button>
+        </div>
+        <div class="toolbar-group">
+            <button class="toolbar-btn" data-action="list" title="Bullet List">
+                <span data-icon="list" data-icon-size="18"></span>
+            </button>
+            <button class="toolbar-btn" data-action="link" title="Link">
+                <span data-icon="link" data-icon-size="18"></span>
+            </button>
+            <button class="toolbar-btn" data-action="image" title="Image">
+                <span data-icon="image" data-icon-size="18"></span>
+            </button>
+        </div>
+        <div class="toolbar-group">
+            <button class="toolbar-btn" data-action="code" title="Code">
+                <span data-icon="code" data-icon-size="18"></span>
+            </button>
+        </div>
+        <div class="toolbar-group">
+            <button class="toolbar-btn" data-action="clear" title="Clear All">
+                <span data-icon="trash" data-icon-size="18"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Split Pane Editor -->
+    <div class="split-pane">
+        <div class="pane">
+            <div class="pane-header">
+                <span>Markdown</span>
+                <span style="font-size: 0.75rem; font-weight: normal; color: var(--dm-text-muted);">Type your markdown here...</span>
+            </div>
+            <div class="pane-content">
+                <textarea id="markdown-input" placeholder="# Hello Markdown!
+
+Start typing your markdown here...
+
+## Features
+- **Bold** and *italic* text
+- Lists and quotes
+- Links and images
+- Code blocks
+- And more!"></textarea>
+            </div>
+        </div>
+
+        <div class="pane">
+            <div class="pane-header">
+                <span>Preview</span>
+                <span style="font-size: 0.75rem; font-weight: normal; color: var(--dm-text-muted);">Live preview</span>
+            </div>
+            <div class="pane-content" id="preview-content">
+                <p style="color: var(--dm-text-muted); text-align: center; padding: 3rem 0;">Start typing to see the
+                    preview...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="../../dist/domma.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script src="index.js"></script>
+</body>
+</html>

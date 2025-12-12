@@ -77,24 +77,40 @@ consult that folder's CLAUDE.md for detailed information.
 
 ## CSS Architecture
 
-Domma's CSS is split into focused, modular files for better organization and maintainability:
+Domma's CSS follows a proper build process with single source of truth:
 
+**Source Files (edit these):**
 ```
-public/showcase/css/
-├── domma.css           # Base styles, typography, utilities (~3,100 lines)
+src/css/
+├── domma.css           # Base styles, typography, utilities
 ├── grid.css            # Grid system (Bootstrap + CSS Grid)
-├── elements.css        # UI components - 19 components (~1,800 lines)
-└── ../dist/themes/
-    └── domma-themes.css # Theming/colors
+└── elements.css        # UI components - 19 components
 ```
 
-**Load order:**
+**Production Files (built):**
 
+```
+public/dist/
+├── domma.css           # Built from src/css/domma.css (~61KB)
+├── grid.css            # Built from src/css/grid.css (~5KB)
+├── elements.css        # Built from src/css/elements.css (~41KB)
+└── themes/
+    └── domma-themes.css # Built from public/assets/themes/* (~43KB)
+```
+
+**Build Process:**
+
+```bash
+npm run build:css  # Builds src/css/* → public/dist/*
+```
+
+**Load Order:**
 ```html
-<link rel="stylesheet" href="path/to/domma.css">       <!-- 1. Base + utilities -->
-<link rel="stylesheet" href="path/to/grid.css">        <!-- 2. Grid system -->
-<link rel="stylesheet" href="path/to/elements.css">    <!-- 3. UI components -->
-<link rel="stylesheet" href="path/to/domma-themes.css"> <!-- 4. Theming -->
+
+<link rel="stylesheet" href="dist/domma.css">       <!-- 1. Base + utilities -->
+<link rel="stylesheet" href="dist/grid.css">        <!-- 2. Grid system -->
+<link rel="stylesheet" href="dist/elements.css">    <!-- 3. UI components -->
+<link rel="stylesheet" href="dist/themes/domma-themes.css"> <!-- 4. Theming -->
 ```
 
 **What's in each file:**
