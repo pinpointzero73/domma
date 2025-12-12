@@ -4055,34 +4055,33 @@ class Navbar extends Component {
         if (!this.element) return;
         this._render();
         this._bindEvents();
-        this._injectStyles();
     }
 
     _render() {
         const {brand, items, position, variant, collapsible, actions} = this.options;
 
         // Set up navbar element
-        this.element.className = 'dm-navbar';
-        this.element.classList.add(`dm-navbar-${variant}`);
+        this.element.className = 'navbar';
+        this.element.classList.add(`navbar-${variant}`);
         if (position !== 'static') {
-            this.element.classList.add(`dm-navbar-${position}`);
+            this.element.classList.add(`navbar-${position}`);
         }
 
         this.element.setAttribute('role', 'navigation');
 
-        let html = '<div class="dm-navbar-container">';
+        let html = '<div class="navbar-container">';
 
         // Brand section
         if (brand) {
-            html += '<div class="dm-navbar-brand">';
+            html += '<div class="navbar-brand">';
             if (brand.url) {
-                html += `<a href="${brand.url}" class="dm-navbar-brand-link">`;
+                html += `<a href="${brand.url}" class="navbar-brand-link">`;
             }
             if (brand.logo) {
-                html += `<img src="${brand.logo}" alt="${brand.text || ''}" class="dm-navbar-logo">`;
+                html += `<img src="${brand.logo}" alt="${brand.text || ''}" class="navbar-logo">`;
             }
             if (brand.text) {
-                html += `<span class="dm-navbar-brand-text">${brand.text}</span>`;
+                html += `<span class="navbar-brand-text">${brand.text}</span>`;
             }
             if (brand.url) {
                 html += '</a>';
@@ -4093,36 +4092,36 @@ class Navbar extends Component {
         // Mobile toggle button
         if (collapsible) {
             html += `
-                <button class="dm-navbar-toggle" aria-label="Toggle navigation" aria-expanded="false">
-                    <span class="dm-navbar-toggle-icon"></span>
+                <button class="navbar-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                    <span class="navbar-toggle-icon"></span>
                 </button>
             `;
         }
 
         // Nav items container
-        html += '<div class="dm-navbar-collapse">';
-        html += '<ul class="dm-navbar-nav">';
+        html += '<div class="navbar-collapse">';
+        html += '<ul class="navbar-nav">';
 
         items.forEach((item, index) => {
             if (item.items && item.items.length > 0) {
                 // Dropdown
-                html += `<li class="dm-navbar-item dm-navbar-dropdown">`;
-                html += `<button class="dm-navbar-link dm-navbar-dropdown-toggle" data-index="${index}">
+                html += `<li class="navbar-item navbar-dropdown">`;
+                html += `<button class="navbar-link navbar-dropdown-toggle" data-index="${index}">
                     ${item.text}
-                    <svg class="dm-navbar-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg class="navbar-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M6 9l6 6 6-6"/>
                     </svg>
                 </button>`;
-                html += '<ul class="dm-navbar-dropdown-menu">';
+                html += '<ul class="navbar-dropdown-menu">';
                 item.items.forEach((subItem, subIndex) => {
-                    html += `<li><a href="${subItem.url || '#'}" class="dm-navbar-dropdown-item" data-index="${index}" data-subindex="${subIndex}">${subItem.text}</a></li>`;
+                    html += `<li><a href="${subItem.url || '#'}" class="navbar-dropdown-item" data-index="${index}" data-subindex="${subIndex}">${subItem.text}</a></li>`;
                 });
                 html += '</ul>';
                 html += '</li>';
             } else {
                 // Regular item
-                html += `<li class="dm-navbar-item">`;
-                html += `<a href="${item.url || '#'}" class="dm-navbar-link${item.active ? ' active' : ''}" data-index="${index}">${item.text}</a>`;
+                html += `<li class="navbar-item">`;
+                html += `<a href="${item.url || '#'}" class="navbar-link${item.active ? ' active' : ''}" data-index="${index}">${item.text}</a>`;
                 html += '</li>';
             }
         });
@@ -4131,22 +4130,22 @@ class Navbar extends Component {
 
         // Actions section
         if (actions && actions.length > 0) {
-            html += '<div class="dm-navbar-actions">';
+            html += '<div class="navbar-actions">';
             actions.forEach((action, index) => {
                 const variant = action.variant || 'primary';
-                html += `<a href="${action.url || '#'}" class="dm-navbar-action dm-btn dm-btn-${variant}" data-action="${index}">${action.text}</a>`;
+                html += `<a href="${action.url || '#'}" class="navbar-action dm-btn dm-btn-${variant}" data-action="${index}">${action.text}</a>`;
             });
             html += '</div>';
         }
 
-        html += '</div>'; // .dm-navbar-collapse
-        html += '</div>'; // .dm-navbar-container
+        html += '</div>'; // .navbar-collapse
+        html += '</div>'; // .navbar-container
 
         this.element.innerHTML = html;
 
         // Store references
-        this._toggle = this.element.querySelector('.dm-navbar-toggle');
-        this._collapse = this.element.querySelector('.dm-navbar-collapse');
+        this._toggle = this.element.querySelector('.navbar-toggle');
+        this._collapse = this.element.querySelector('.navbar-collapse');
     }
 
     _bindEvents() {
@@ -4159,7 +4158,7 @@ class Navbar extends Component {
 
         // Nav link clicks
         this._addEventListener(this.element, 'click', (e) => {
-            const link = e.target.closest('.dm-navbar-link:not(.dm-navbar-dropdown-toggle)');
+            const link = e.target.closest('.navbar-link:not(.navbar-dropdown-toggle)');
             if (link) {
                 const index = parseInt(link.dataset.index, 10);
                 if (this.options.onItemClick) {
@@ -4173,7 +4172,7 @@ class Navbar extends Component {
             }
 
             // Dropdown item clicks
-            const dropdownItem = e.target.closest('.dm-navbar-dropdown-item');
+            const dropdownItem = e.target.closest('.navbar-dropdown-item');
             if (dropdownItem) {
                 const index = parseInt(dropdownItem.dataset.index, 10);
                 const subIndex = parseInt(dropdownItem.dataset.subindex, 10);
@@ -4187,17 +4186,17 @@ class Navbar extends Component {
 
         // Dropdown toggle
         this._addEventListener(this.element, 'click', (e) => {
-            const toggle = e.target.closest('.dm-navbar-dropdown-toggle');
+            const toggle = e.target.closest('.navbar-dropdown-toggle');
             if (toggle) {
-                const dropdown = toggle.closest('.dm-navbar-dropdown');
+                const dropdown = toggle.closest('.navbar-dropdown');
                 dropdown.classList.toggle('open');
             }
         });
 
         // Close dropdowns on outside click
         this._addEventListener(document, 'click', (e) => {
-            if (!e.target.closest('.dm-navbar-dropdown')) {
-                this.element.querySelectorAll('.dm-navbar-dropdown.open').forEach(dd => {
+            if (!e.target.closest('.navbar-dropdown')) {
+                this.element.querySelectorAll('.navbar-dropdown.open').forEach(dd => {
                     dd.classList.remove('open');
                 });
             }
@@ -4213,266 +4212,6 @@ class Navbar extends Component {
                 }
             }
         });
-    }
-
-    _injectStyles() {
-        if (document.getElementById('dm-navbar-styles')) return;
-
-        const style = document.createElement('style');
-        style.id = 'dm-navbar-styles';
-        style.textContent = `
-            .dm-navbar {
-                display: flex;
-                padding: 0.75rem 1rem;
-                background: var(--dm-surface, #fff);
-                border-bottom: 1px solid var(--dm-border, #dee2e6);
-            }
-            .dm-navbar-container {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                width: 100%;
-                max-width: 1200px;
-                margin: 0 auto;
-                flex-wrap: wrap;
-            }
-            .dm-navbar-brand {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
-            .dm-navbar-brand-link {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                text-decoration: none;
-                color: inherit;
-            }
-            .dm-navbar-logo {
-                height: 32px;
-                width: auto;
-            }
-            .dm-navbar-brand-text {
-                font-weight: 600;
-                font-size: 1.25rem;
-                color: var(--dm-text, #212529);
-            }
-            .dm-navbar-toggle {
-                display: none;
-                padding: 0.5rem;
-                background: none;
-                border: 1px solid var(--dm-border, #dee2e6);
-                border-radius: var(--dm-radius-md, 0.25rem);
-                cursor: pointer;
-            }
-            .dm-navbar-toggle-icon {
-                display: block;
-                width: 24px;
-                height: 2px;
-                background: var(--dm-text, #212529);
-                position: relative;
-            }
-            .dm-navbar-toggle-icon::before,
-            .dm-navbar-toggle-icon::after {
-                content: '';
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                background: inherit;
-                left: 0;
-            }
-            .dm-navbar-toggle-icon::before { top: -6px; }
-            .dm-navbar-toggle-icon::after { top: 6px; }
-            .dm-navbar-collapse {
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-            }
-            .dm-navbar-nav {
-                display: flex;
-                align-items: center;
-                gap: 0.25rem;
-                list-style: none;
-                margin: 0;
-                padding: 0;
-            }
-            .dm-navbar-item {
-                position: relative;
-            }
-            .dm-navbar-link {
-                display: flex;
-                align-items: center;
-                gap: 0.25rem;
-                padding: 0.5rem 0.75rem;
-                color: var(--dm-text-muted, #6c757d);
-                text-decoration: none;
-                border-radius: var(--dm-radius-md, 0.25rem);
-                background: none;
-                border: none;
-                font: inherit;
-                cursor: pointer;
-                transition: color 0.15s ease, background 0.15s ease;
-            }
-            .dm-navbar-link:hover {
-                color: var(--dm-text, #212529);
-                background: var(--dm-hover-bg, rgba(0,0,0,0.05));
-            }
-            .dm-navbar-link.active {
-                color: var(--dm-primary, #6495ED);
-                font-weight: 500;
-            }
-            .dm-navbar-caret {
-                transition: transform 0.2s ease;
-            }
-            .dm-navbar-dropdown.open .dm-navbar-caret {
-                transform: rotate(180deg);
-            }
-            .dm-navbar-dropdown-menu {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                min-width: 180px;
-                background: var(--dm-surface, #fff);
-                border: 1px solid var(--dm-border, #dee2e6);
-                border-radius: var(--dm-radius-md, 0.25rem);
-                box-shadow: var(--dm-shadow-md);
-                list-style: none;
-                margin: 0.25rem 0 0;
-                padding: 0.5rem 0;
-                display: none;
-                z-index: var(--dm-z-dropdown, 1000);
-            }
-            .dm-navbar-dropdown.open .dm-navbar-dropdown-menu {
-                display: block;
-            }
-            .dm-navbar-dropdown-item {
-                display: block;
-                padding: 0.5rem 1rem;
-                color: var(--dm-text, #212529);
-                text-decoration: none;
-                transition: background 0.15s ease;
-            }
-            .dm-navbar-dropdown-item:hover {
-                background: var(--dm-hover-bg, rgba(0,0,0,0.05));
-            }
-            .dm-navbar-actions {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
-            .dm-navbar-action {
-                display: inline-flex;
-                align-items: center;
-                padding: 0.5rem 1rem;
-                border-radius: var(--dm-radius-md, 0.25rem);
-                text-decoration: none;
-                font-weight: 500;
-                font-size: var(--dm-text-sm, 0.875rem);
-                transition: all 0.15s ease;
-            }
-            .dm-btn-primary {
-                background: var(--dm-primary, #6495ED);
-                color: white;
-            }
-            .dm-btn-primary:hover {
-                background: var(--dm-primary-hover, #5280d8);
-            }
-            .dm-btn-secondary {
-                background: var(--dm-secondary, #6c757d);
-                color: white;
-            }
-            .dm-btn-outline {
-                background: transparent;
-                border: 1px solid var(--dm-border, #dee2e6);
-                color: var(--dm-text, #212529);
-            }
-            .dm-btn-outline:hover {
-                background: var(--dm-hover-bg, rgba(0,0,0,0.05));
-            }
-
-            /* Dark variant */
-            .dm-navbar-dark {
-                background: var(--dm-gray-800, #343a40);
-                border-color: var(--dm-gray-700, #495057);
-            }
-            .dm-navbar-dark .dm-navbar-brand-text,
-            .dm-navbar-dark .dm-navbar-link {
-                color: rgba(255,255,255,0.75);
-            }
-            .dm-navbar-dark .dm-navbar-link:hover,
-            .dm-navbar-dark .dm-navbar-link.active {
-                color: #fff;
-            }
-            .dm-navbar-dark .dm-navbar-toggle {
-                border-color: rgba(255,255,255,0.2);
-            }
-            .dm-navbar-dark .dm-navbar-toggle-icon,
-            .dm-navbar-dark .dm-navbar-toggle-icon::before,
-            .dm-navbar-dark .dm-navbar-toggle-icon::after {
-                background: #fff;
-            }
-
-            /* Transparent variant */
-            .dm-navbar-transparent {
-                background: transparent;
-                border: none;
-            }
-
-            /* Fixed/Sticky position */
-            .dm-navbar-fixed {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                z-index: var(--dm-z-fixed, 1030);
-            }
-            .dm-navbar-sticky {
-                position: sticky;
-                top: 0;
-                z-index: var(--dm-z-sticky, 1020);
-            }
-
-            /* Mobile responsive */
-            @media (max-width: 768px) {
-                .dm-navbar-toggle {
-                    display: block;
-                }
-                .dm-navbar-collapse {
-                    display: none;
-                    flex-basis: 100%;
-                    flex-direction: column;
-                    align-items: stretch;
-                    padding-top: 1rem;
-                }
-                .dm-navbar-collapse.show {
-                    display: flex;
-                }
-                .dm-navbar-nav {
-                    flex-direction: column;
-                    align-items: stretch;
-                }
-                .dm-navbar-link {
-                    padding: 0.75rem 0;
-                }
-                .dm-navbar-dropdown-menu {
-                    position: static;
-                    border: none;
-                    box-shadow: none;
-                    padding-left: 1rem;
-                }
-                .dm-navbar-actions {
-                    flex-direction: column;
-                    align-items: stretch;
-                    padding-top: 0.5rem;
-                    border-top: 1px solid var(--dm-border, #dee2e6);
-                    margin-top: 0.5rem;
-                }
-                .dm-navbar-action {
-                    justify-content: center;
-                }
-            }
-        `;
-        document.head.appendChild(style);
     }
 
     setActive(index) {

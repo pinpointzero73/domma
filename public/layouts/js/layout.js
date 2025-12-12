@@ -298,78 +298,6 @@ import {SidebarModule} from './modules/sidebar.js';
           font-size: 0.85rem;
         }
 
-        /* Navbar customizations */
-        #main-navbar {
-          font-family: var(--dm-font-sans);
-        }
-        #main-navbar.dm-navbar-dark {
-          background: var(--dm-gray-900);
-          border-bottom: none;
-        }
-        #main-navbar .dm-navbar-brand {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-        }
-        #main-navbar .dm-navbar-brand-text {
-          display: inline-flex;
-          flex-direction: column;
-          line-height: 1.2;
-          color: white;
-          font-family: inherit;
-        }
-        #main-navbar .dm-navbar-brand-link {
-          text-decoration: none;
-          color: inherit;
-        }
-        #main-navbar .dm-navbar-logo {
-          vertical-align: middle;
-          margin-right: 0.35rem;
-          color: white;
-        }
-        #main-navbar .dm-navbar-link,
-        #main-navbar .dm-navbar-dropdown-toggle,
-        #main-navbar .dm-navbar-dropdown-item {
-          text-decoration: none;
-        }
-        #main-navbar .dm-navbar-action {
-          border-radius: 9999px;
-          padding: 0.35rem 0.75rem;
-          font-size: 0.75rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-        #main-navbar .dm-navbar-dropdown-toggle.active {
-          color: var(--dm-primary-light);
-        }
-        #main-navbar .dm-navbar-container {
-          max-width: none;
-          padding: 0 1rem;
-        }
-
-        /* Pill button styles */
-        .pill {
-          display: inline-block;
-          padding: 0.35rem 0.75rem;
-          font-size: 0.75rem;
-          font-weight: 600;
-          text-decoration: none;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          border-radius: 9999px;
-          border: 1px solid transparent;
-          transition: background 0.2s ease, transform 0.15s ease;
-          cursor: pointer;
-        }
-        .pill-light {
-          background: rgba(255, 255, 255, 0.15);
-          border-color: rgba(255, 255, 255, 0.3);
-          color: white;
-        }
-        .pill-light:hover {
-          background: rgba(255, 255, 255, 0.25);
-        }
-
         /* Public page header styles */
         .page-header {
           background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
@@ -451,7 +379,7 @@ import {SidebarModule} from './modules/sidebar.js';
             body.insertBefore(tempDiv.firstElementChild, body.firstChild);
 
             // Logo SVG
-            const logoSvg = `<svg class="dm-navbar-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+            const logoSvg = `<svg class="navbar-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
         <path d="M12 8 L12 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
         <path d="M12 8 L24 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
         <path d="M12 40 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
@@ -472,13 +400,13 @@ import {SidebarModule} from './modules/sidebar.js';
                 });
 
                 // Customise brand section with logo + version + download button
-                const $brandLink = $('#main-navbar .dm-navbar-brand-link');
-                const $brandContainer = $('#main-navbar .dm-navbar-brand');
+                const $brandLink = $('#main-navbar .navbar-brand-link');
+                const $brandContainer = $('#main-navbar .navbar-brand');
 
                 if ($brandLink.length) {
                     $brandLink.html(`
             ${logoSvg}
-            <span class="dm-navbar-brand-text">
+            <span class="navbar-brand-text">
               ${config.brand?.text || 'Domma'}
               ${config.brand?.showVersion ? `<span class="header-version">v${data.version}</span>` : ''}
             </span>
@@ -512,9 +440,9 @@ import {SidebarModule} from './modules/sidebar.js';
         const currentSection = currentPath.split('/').filter(Boolean).pop()?.replace('.html', '') ||
             currentPath.split('/').slice(-2, -1)[0];
 
-        const dropdowns = document.querySelectorAll('#main-navbar .dm-navbar-dropdown');
+        const dropdowns = document.querySelectorAll('#main-navbar .navbar-dropdown');
         dropdowns.forEach(dd => {
-            const links = dd.querySelectorAll('.dm-navbar-dropdown-item');
+            const links = dd.querySelectorAll('.navbar-dropdown-item');
             const isActive = Array.from(links).some(link => {
                 const href = link.getAttribute('href');
                 if (!href) return false;
@@ -523,7 +451,7 @@ import {SidebarModule} from './modules/sidebar.js';
             });
 
             if (isActive) {
-                const toggle = dd.querySelector('.dm-navbar-dropdown-toggle');
+                const toggle = dd.querySelector('.navbar-dropdown-toggle');
                 if (toggle) toggle.classList.add('active');
             }
         });

@@ -1174,7 +1174,7 @@ code {
     display: block;
     padding: var(--dm-space-2) var(--dm-space-3);
     color: var(--dm-navbar-text);
-    text-decoration: none;
+    text-decoration: #0dcaf0;
     border-radius: var(--dm-radius-md);
     transition: all var(--dm-transition-fast);
     font-size: var(--dm-font-size-sm);
@@ -1183,8 +1183,8 @@ code {
 
 .navbar-link:hover {
     color: var(--dm-text);
-    background-color: var(--dm-surface-raised);
-    text-decoration: none;
+    /*background-color: var(--dm-surface-raised);*/
+    background-color: var(--dm-gray-800);
 }
 
 .navbar-link.active {
@@ -1218,13 +1218,13 @@ code {
 }
 
 .navbar-dark .navbar-link:hover {
-    color: var(--dm-white);
     background-color: var(--dm-gray-800);
+    color: var(--dm-white);
 }
 
 .navbar-dark .navbar-link.active {
-    color: var(--dm-white);
     background-color: var(--dm-gray-800);
+    color: var(--dm-white);
 }
 
 /* Responsive navbar - tablet */
@@ -1290,6 +1290,167 @@ code {
         display: none;
         color: #eee;
     }
+}
+
+/* ============================================
+   NAVBAR CUSTOMIZATIONS
+   ============================================ */
+
+/* Main navbar container */
+#main-navbar {
+    font-family: var(--dm-font-sans);
+}
+
+#main-navbar.navbar-dark {
+    background: var(--dm-gray-900);
+    border-bottom: none;
+}
+
+#main-navbar .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+#main-navbar .navbar-brand-text {
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1.2;
+    color: white;
+    font-family: inherit;
+}
+
+#main-navbar .navbar-brand-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+#main-navbar .navbar-logo {
+    vertical-align: middle;
+    margin-right: 0.35rem;
+    color: white;
+}
+
+#main-navbar .navbar-link,
+#main-navbar .navbar-dropdown-toggle,
+#main-navbar .navbar-dropdown-item {
+    text-decoration: none;
+}
+
+#main-navbar .navbar-action {
+    border-radius: 9999px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+#main-navbar .navbar-dropdown-toggle.active {
+    color: var(--dm-primary-light);
+}
+
+#main-navbar .navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: none;
+    padding: 0 1rem;
+}
+
+/* Navbar dropdown menus */
+.navbar-dropdown {
+    position: relative;
+}
+
+.navbar-dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+}
+
+.navbar-caret {
+    transition: transform 0.2s ease;
+}
+
+.navbar-dropdown.open .navbar-caret {
+    transform: rotate(180deg);
+}
+
+.navbar-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 180px;
+    background: var(--dm-surface, #fff);
+    border: 1px solid var(--dm-border, #dee2e6);
+    border-radius: var(--dm-radius-md, 0.25rem);
+    box-shadow: var(--dm-shadow-md);
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0.5rem 0;
+    display: none;
+    z-index: var(--dm-z-dropdown, 1000);
+}
+
+.navbar-dropdown.open .navbar-dropdown-menu {
+    display: block;
+}
+
+.navbar-dropdown-item {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: var(--dm-text, #212529);
+    text-decoration: none;
+    transition: background 0.15s ease;
+}
+
+.navbar-dropdown-item:hover {
+    background: var(--dm-hover-bg, rgba(0, 0, 0, 0.05));
+}
+
+/* Dark navbar dropdown styles */
+.navbar-dark .navbar-dropdown-menu {
+    background: var(--dm-gray-800);
+    border-color: var(--dm-gray-700);
+}
+
+.navbar-dark .navbar-dropdown-item {
+    color: var(--dm-gray-400);
+}
+
+.navbar-dark .navbar-dropdown-item:hover {
+    background: var(--dm-gray-700);
+    color: var(--dm-white);
+}
+
+/* Pill button styles (for Download button) */
+.pill {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    transition: background 0.2s ease, transform 0.15s ease;
+    cursor: pointer;
+}
+
+.pill-light {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.pill-light:hover {
+    background: rgba(255, 255, 255, 0.25);
 }
 
 /* ============================================
