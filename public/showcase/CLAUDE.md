@@ -32,8 +32,7 @@ public/showcase/
 ├── examples/               # Complete examples
 ├── layouts/                # Layout templates
 ├── blog/                   # Blog example
-├── kickstart/              # Quick start template
-└── quickstart/             # Getting started
+└── kickstart/              # Quick start template
 ```
 
 ## Creating New Showcase Examples

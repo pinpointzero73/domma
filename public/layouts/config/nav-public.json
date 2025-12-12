@@ -7,11 +7,6 @@
       "page": "showcase"
     },
     {
-      "text": "Quickstart",
-      "url": "quickstart/index.html",
-      "page": "quickstart"
-    },
-    {
       "text": "Examples",
       "url": "examples/index.html",
       "page": "examples"

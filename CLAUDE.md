@@ -168,7 +168,6 @@ src/
 └── editor.js        # Content editor tool (tools bundle)
 
 showcase/            # Comprehensive demos for each namespace
-quickstart/          # Getting started blueprint
 public/dist/         # Built bundles (UMD + ESM)
 ```
 
@@ -184,8 +183,6 @@ public/
 ├── faq/                 # FAQ page
 │   └── index.html
 ├── blog/                # Blog section
-│   └── index.html
-├── quickstart/          # Getting started guide
 │   └── index.html
 ├── showcase/            # Feature demonstrations (40+ examples)
 │   ├── index.html

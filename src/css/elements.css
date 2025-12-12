@@ -2121,7 +2121,8 @@ code {
 }
 
 .dm-theme-light .code-block-copy {
-    background: rgba(0, 0, 0, 0.05);
+    background: var(--dm-gray-100);
+    /*background: rgba(1, 1, 1, 0.125);*/
     border-color: var(--dm-border);
     color: var(--dm-gray-700);
 }

@@ -48,11 +48,6 @@ export const LayoutDetector = {
             return {preset: 'public', variant: null};
         }
 
-        // Quickstart
-        if (path.includes('/quickstart/')) {
-            return {preset: 'quickstart', variant: null};
-        }
-
         // Showcase variants
         if (path.includes('/showcase/')) {
             // Element detail pages (e.g., /showcase/elements/card/)
@@ -81,7 +76,6 @@ export const LayoutDetector = {
                 path.endsWith('/index.html') ||
                 path.endsWith('/public/')) &&
             !path.includes('/showcase/') &&
-            !path.includes('/quickstart/') &&
             !path.includes('/blog/');
     },
 

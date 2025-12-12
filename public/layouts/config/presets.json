@@ -168,33 +168,6 @@
       "back-to-top"
     ]
   },
-  "quickstart": {
-    "navbar": {
-      "type": "flat",
-      "brand": {
-        "text": "Domma",
-        "url": "../index.html",
-        "showVersion": true
-      },
-      "items": "nav-public",
-      "variant": null,
-      "actions": []
-    },
-    "footer": "footer-showcase",
-    "sidebar": {
-      "enabled": false
-    },
-    "theme": {
-      "toggle": true,
-      "variantSelector": true,
-      "position": "fixed-right"
-    },
-    "features": [
-      "back-to-top",
-      "code-copy",
-      "icon-scan"
-    ]
-  },
   "minimal": {
     "navbar": null,
     "footer": null,

@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="dist/domma.css">
     <link rel="stylesheet" href="dist/grid.css">
     <link rel="stylesheet" href="dist/elements.css">
+    <link rel="stylesheet" href="dist/syntax.css">
     <link rel="stylesheet" href="dist/themes/domma-themes.css">
     <style>
         .splash-hero {
@@ -153,7 +154,7 @@
         }
 
         .splash-carousel .code-block {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(1, 1, 1, 0.0125);
             border-radius: 8px;
             padding: 1rem 1.25rem;
             font-family: var(--dm-font-mono);
@@ -252,29 +253,29 @@
         }
 
         /* Footer styles */
-        .footer {
-            background: var(--dm-gray-900);
-            color: var(--dm-gray-300);
-            border-top: 1px solid var(--dm-gray-800);
-        }
+        /*.footer {*/
+        /*    background: var(--dm-gray-900);*/
+        /*    color: var(--dm-gray-300);*/
+        /*    border-top: 1px solid var(--dm-gray-800);*/
+        /*}*/
 
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        /*.footer-content {*/
+        /*    display: flex;*/
+        /*    justify-content: space-between;*/
+        /*    align-items: center;*/
+        /*    padding: 1rem 2rem;*/
+        /*    max-width: 1200px;*/
+        /*    margin: 0 auto;*/
+        /*}*/
 
-        .footer-version {
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
+        /*.footer-version {*/
+        /*    font-size: 0.8rem;*/
+        /*    opacity: 0.7;*/
+        /*}*/
 
-        .footer-copyright {
-            font-size: 0.85rem;
-        }
+        /*.footer-copyright {*/
+        /*    font-size: 0.85rem;*/
+        /*}*/
 
         @media (max-width: 576px) {
             .footer-content {
@@ -369,10 +370,8 @@
                         No external libraries required. Everything is self-contained in a single <span data-build-size>~250KB</span>
                         bundle.
                     </p>
-                    <pre class="code-block">
-&lt;script src="domma.min.js"&gt;&lt;/script&gt;<br>
-<span class="comment">// That's it. You're ready to go!</span>
-                    </pre>
+                    <pre class="code-block language-html">&lt;script src="domma.min.js"&gt;&lt;/script&gt;
+// That's it. You're ready to go!</pre>
                 </div>
 
                 <!-- 2. jQuery-Style DOM -->
@@ -382,11 +381,9 @@
                     <p class="slide-description">
                         Familiar $() syntax with 90+ chainable methods for traversal, manipulation, events, and effects.
                     </p>
-                    <pre class="code-block">
-$('.card').addClass('active')<br>
-&nbsp;&nbsp;.fadeIn(300)<br>
-&nbsp;&nbsp;.on('click', handler);
-                    </pre>
+                    <pre class="code-block language-javascript">$('.card').addClass('active')
+  .fadeIn(300)
+  .on('click', handler);</pre>
                 </div>
 
                 <!-- 3. Template Engine -->
@@ -396,11 +393,9 @@ $('.card').addClass('active')<br>
                     <p class="slide-description">
                         Mustache-style templates with loops, conditionals, partials, and auto-escaping built in.
                     </p>
-                    <pre class="code-block">
-    const tmpl = _.template('Hello {{name}}!');<br>
-    tmpl({ name: 'World' }); <span class="comment">// "Hello World!"</span><br>
-    _.render('{{#each items}}{{.}}{{/each}}', data);
-</pre>
+                    <pre class="code-block language-javascript">const tmpl = _.template('Hello {{name}}!');
+tmpl({ name: 'World' }); // "Hello World!"
+_.render('{{#each items}}{{.}}{{/each}}', data);</pre>
                 </div>
 
                 <!-- 4. Lodash Utils -->
@@ -410,11 +405,9 @@ $('.card').addClass('active')<br>
                     <p class="slide-description">
                         120+ utility functions for arrays, objects, strings, and functions &mdash; all via the _ alias.
                     </p>
-                    <pre class="code-block">
-    const grouped = _.groupBy(users, 'role');<br>
-    const unique = _.uniqBy(items, 'id');<br>
-    const result = _.flow([fn1, fn2])(data);
-</pre>
+                    <pre class="code-block language-javascript">const grouped = _.groupBy(users, 'role');
+const unique = _.uniqBy(items, 'id');
+const result = _.flow([fn1, fn2])(data);</pre>
                 </div>
 
                 <!-- 5. Moment-Style Dates -->
@@ -424,11 +417,9 @@ $('.card').addClass('active')<br>
                     <p class="slide-description">
                         Chainable date manipulation with formatting, parsing, comparison, and relative time.
                     </p>
-                    <pre class="code-block">
-    D().add(7, 'days').format('MMM D, YYYY');<br>
-    D('2025-01-01').fromNow();<br>
-    D().startOf('month').isBefore(D());
-</pre>
+                    <pre class="code-block language-javascript">D().add(7, 'days').format('MMM D, YYYY');
+D('2025-01-01').fromNow();
+D().startOf('month').isBefore(D());</pre>
                 </div>
 
                 <!-- 6. Reactive Models -->
@@ -438,11 +429,9 @@ $('.card').addClass('active')<br>
                     <p class="slide-description">
                         Pub/sub events, schema validation, and two-way DOM binding for reactive data.
                     </p>
-                    <pre class="code-block">
-    const user = M.create({ name: M.types.string });<br>
-    M.bind(user, 'name', '#input', { twoWay: true });<br>
-    user.onChange('name', val =&gt; console.log(val));
-</pre>
+                    <pre class="code-block language-javascript">const user = M.create({ name: M.types.string });
+M.bind(user, 'name', '#input', { twoWay: true });
+user.onChange('name', val => console.log(val));</pre>
                 </div>
 
                 <!-- 7. UI Components -->
@@ -452,11 +441,9 @@ $('.card').addClass('active')<br>
                     <p class="slide-description">
                         Ready-to-use modals, tabs, accordions, carousels, tooltips, and toasts.
                     </p>
-                    <pre class="code-block">
-    const modal = Domma.elements.modal('#dialog');<br>
-    modal.open();<br>
-    Domma.elements.toast.success('Saved!');
-</pre>
+                    <pre class="code-block language-javascript">const modal = Domma.elements.modal('#dialog');
+modal.open();
+Domma.elements.toast.success('Saved!');</pre>
                 </div>
 
                 <!-- 8. DataTable-Like Tables -->
@@ -466,12 +453,10 @@ $('.card').addClass('active')<br>
                     <p class="slide-description">
                         Sorting, filtering, pagination, row selection, and CSV/JSON export built in.
                     </p>
-                    <pre class="code-block">
-    const table = Domma.tables.create('#grid', {<br>
-    &nbsp;&nbsp;data, columns, pagination: true<br>
-    });<br>
-    table.search('query').toCSV();
-</pre>
+                    <pre class="code-block language-javascript">const table = Domma.tables.create('#grid', {
+  data, columns, pagination: true
+});
+table.search('query').toCSV();</pre>
                 </div>
 
                 <!-- 9. Mutable Configuration -->
@@ -481,11 +466,9 @@ $('.card').addClass('active')<br>
                     <p class="slide-description">
                         Setup once, update anytime. Inspect and reset configuration at runtime.
                     </p>
-                    <pre class="code-block">
-    $.setup({ '#modal': { component: 'modal' } });<br>
-    $.update('#modal', { options: { backdrop: false } });<br>
-    $.config('#modal'); $.reset('#modal');
-</pre>
+                    <pre class="code-block language-javascript">$.setup({ '#modal': { component: 'modal' } });
+$.update('#modal', { options: { backdrop: false } });
+$.config('#modal'); $.reset('#modal');</pre>
                 </div>
 
                 <!-- 10. 100+ SVG Icons -->
@@ -495,11 +478,9 @@ $('.card').addClass('active')<br>
                     <p class="slide-description">
                         Built-in icon library with render, inject, and scan modes. Customisable size and colour.
                     </p>
-                    <pre class="code-block">
-    Domma.icons.render('search', { size: 24 });<br>
-    Domma.icons.inject('#icon-container', 'check');<br>
-    &lt;i data-icon="heart"&gt;&lt;/i&gt; <span class="comment">// Auto-scanned</span>
-</pre>
+                    <pre class="code-block language-javascript">Domma.icons.render('search', { size: 24 });
+Domma.icons.inject('#icon-container', 'check');
+&lt;i data-icon="heart"&gt;&lt;/i&gt; // Auto-scanned</pre>
                 </div>
 
                 <!-- 11. Theme System -->
@@ -509,11 +490,9 @@ $('.card').addClass('active')<br>
                     <p class="slide-description">
                         Light/dark modes with 8 colour variants. Auto-detects system preference and persists choices.
                     </p>
-                    <pre class="code-block">
-    Domma.theme.init({ autoDetect: true });<br>
-    Domma.theme.set('dark');<br>
-    Domma.theme.setVariant('ocean');
-</pre>
+                    <pre class="code-block language-javascript">Domma.theme.init({ autoDetect: true });
+Domma.theme.set('dark');
+Domma.theme.setVariant('ocean');</pre>
                 </div>
 
                 <!-- 12. HTTP Client -->
@@ -523,11 +502,9 @@ $('.card').addClass('active')<br>
                     <p class="slide-description">
                         Fetch-based HTTP client with promise API. GET, POST, PUT, DELETE with automatic JSON handling.
                     </p>
-                    <pre class="code-block">
-    const users = await Domma.http.get('/api/users');<br>
-    await Domma.http.post('/api/users', { name: 'Alice' });<br>
-    await Domma.http.delete('/api/users/1');
-</pre>
+                    <pre class="code-block language-javascript">const users = await Domma.http.get('/api/users');
+await Domma.http.post('/api/users', { name: 'Alice' });
+await Domma.http.delete('/api/users/1');</pre>
                 </div>
 
                 <!-- 13. Storage Wrapper -->
@@ -537,11 +514,9 @@ $('.card').addClass('active')<br>
                     <p class="slide-description">
                         localStorage wrapper with auto JSON serialisation, namespaced keys, and graceful fallbacks.
                     </p>
-                    <pre class="code-block">
-    S.set('user', { name: 'Alice', role: 'admin' });<br>
-    const user = S.get('user'); <span class="comment">// Auto-parsed</span><br>
-    S.keys(); S.has('user'); S.clear();
-</pre>
+                    <pre class="code-block language-javascript">S.set('user', { name: 'Alice', role: 'admin' });
+const user = S.get('user'); // Auto-parsed
+S.keys(); S.has('user'); S.clear();</pre>
                 </div>
 
                 <!-- 14. Model Persistence -->
@@ -551,12 +526,10 @@ $('.card').addClass('active')<br>
                     <p class="slide-description">
                         Models auto-save to localStorage. Load state on page refresh, reset to defaults anytime.
                     </p>
-                    <pre class="code-block">
-    const settings = M.create(schema, data, {<br>
-    &nbsp;&nbsp;persist: 'app-settings' <span class="comment">// Auto-save key</span><br>
-    });<br>
-    settings.reset(true); <span class="comment">// Clear storage too</span>
-</pre>
+                    <pre class="code-block language-javascript">const settings = M.create(schema, data, {
+  persist: 'app-settings' // Auto-save key
+});
+settings.reset(true); // Clear storage too</pre>
                 </div>
 
                 <!-- 15. Comprehensive Tests -->
@@ -567,11 +540,9 @@ $('.card').addClass('active')<br>
                         Comprehensive test suite covering all modules: DOM, utils, dates, models, storage, tables,
                         elements, and more.
                     </p>
-                    <pre class="code-block">
-    <span class="comment">// Run tests in browser</span><br>
-    open tests/test.html<br>
-    <span class="comment">// DOM, Utils, Dates, Models, Storage...</span>
-</pre>
+                    <pre class="code-block language-bash"># Run tests in browser
+open tests/test.html
+# DOM, Utils, Dates, Models, Storage...</pre>
                 </div>
 
                 <!-- 16. CSS Grid System -->
@@ -582,12 +553,10 @@ $('.card').addClass('active')<br>
                         Bootstrap-style 12-column grid plus modern CSS Grid utilities. Mobile-first, responsive
                         breakpoints.
                     </p>
-                    <pre class="code-block">
-    &lt;div class="row"&gt;<br>
-    &nbsp;&nbsp;&lt;div class="col-6"&gt;Half&lt;/div&gt;<br>
-    &nbsp;&nbsp;&lt;div class="col-6"&gt;Half&lt;/div&gt;<br>
-    &lt;/div&gt;
-</pre>
+                    <pre class="code-block language-html">&lt;div class="row"&gt;
+  &lt;div class="col-6"&gt;Half&lt;/div&gt;
+  &lt;div class="col-6"&gt;Half&lt;/div&gt;
+&lt;/div&gt;</pre>
                 </div>
 
                 <!-- 17. BYOS - Bring Your Own Styles -->
@@ -598,11 +567,9 @@ $('.card').addClass('active')<br>
                         Use Domma's JS with your own CSS framework. Disable theming entirely for Bootstrap, Tailwind, or
                         custom styles.
                     </p>
-                    <pre class="code-block">
-    $.setup({ noStyles: true });<br>
-    <span class="comment">// All JS features work without Domma CSS</span><br>
-    $('.tailwind-class').fadeIn().on('click', fn);
-</pre>
+                    <pre class="code-block language-javascript">$.setup({ noStyles: true });
+// All JS features work without Domma CSS
+$('.tailwind-class').fadeIn().on('click', fn);</pre>
                 </div>
             </div>
         </div>
@@ -612,9 +579,6 @@ $('.card').addClass('active')<br>
         <a href="showcase/index.html" class="cta">
             Explore the Showcase
             <span class="cta-arrow">&rarr;</span>
-        </a>
-        <a href="quickstart/index.html" class="cta cta-secondary">
-            Quickstart
         </a>
         <a href="showcase/download/index.html" class="cta cta-secondary">
             <span data-icon="download" data-icon-size="18"></span>
@@ -631,6 +595,7 @@ $('.card').addClass('active')<br>
 </section>
 
 <script src="dist/domma.min.js"></script>
+<script src="dist/domma-syntax.min.js"></script>
 <script type="module" src="layouts/js/layout.js"></script>
 <script>
     // Declarative setup for components
@@ -651,6 +616,11 @@ $('.card').addClass('active')<br>
 
     // Scan for data-icon attributes
     Domma.icons.scan();
+
+    // Scan and highlight code blocks
+    if (typeof Domma !== 'undefined' && Domma.syntax) {
+        Domma.syntax.scan();
+    }
 </script>
 
 </body>
