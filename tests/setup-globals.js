@@ -36,3 +36,30 @@ global.window = dom.window;
 global.document = dom.window.document;
 global.HTMLElement = dom.window.HTMLElement;
 global.NodeList = dom.window.NodeList;
+
+// Mock localStorage
+const localStorageMock = (function () {
+    let store = {};
+    return {
+        getItem: function (key) {
+            return store[key] || null;
+        },
+        setItem: function (key, value) {
+            store[key] = value.toString();
+        },
+        removeItem: function (key) {
+            delete store[key];
+        },
+        clear: function () {
+            store = {};
+        },
+        key: function (i) {
+            return Object.keys(store)[i] || null;
+        },
+        get length() {
+            return Object.keys(store).length;
+        }
+    };
+})();
+
+global.localStorage = localStorageMock;

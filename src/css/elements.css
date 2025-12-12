@@ -984,7 +984,7 @@ select:not([class]):hover:not(:disabled) {
     padding: var(--dm-space-4);
     border-radius: var(--dm-radius-md);
     overflow-x: auto;
-    font-family: var(--dm-font-mono);
+    font-family: var(--dm-font-mono, monospace);
     font-size: var(--dm-font-size-sm);
     line-height: 1.6;
     white-space: pre;
@@ -1174,7 +1174,7 @@ code {
     display: block;
     padding: var(--dm-space-2) var(--dm-space-3);
     color: var(--dm-navbar-text);
-    text-decoration: #0dcaf0;
+    text-decoration: none;
     border-radius: var(--dm-radius-md);
     transition: all var(--dm-transition-fast);
     font-size: var(--dm-font-size-sm);
@@ -1298,7 +1298,7 @@ code {
 
 /* Main navbar container */
 #main-navbar {
-    font-family: var(--dm-font-sans);
+    font-family: var(--dm-font-sans, sans-serif);
 }
 
 #main-navbar.navbar-dark {

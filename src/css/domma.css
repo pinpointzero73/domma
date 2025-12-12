@@ -33,12 +33,18 @@
     --dm-text-muted: #6c757d;
     --dm-text-disabled: #adb5bd;
     --dm-text-inverse: #ffffff;
+    --dm-text-xs: 0.605rem;
+    --dm-text-sm: 0.75rem;
+    --dm-text-base: 0.85rem;
+    --dm-text-lg: 1.125rem;
+    --dm-text-xl: 1.25rem;
 
     /* Borders */
     --dm-border: #dee2e6;
     --dm-border-light: #e9ecef;
     --dm-border-dark: #ced4da;
     --dm-border-focus: #6495ED;
+    --dm-focus-ring: rgba(100, 149, 237, 0.25);
 
     /* Interactive States */
     --dm-hover-bg: rgba(0, 0, 0, 0.04);
@@ -65,19 +71,27 @@
     --dm-success: #28a745;
     --dm-success-hover: #157347;
     --dm-success-active: #146c43;
+    --dm-success-light: #d1e7dd;
+    --dm-success-dark: #0f5132;
 
     --dm-danger: #dc3545;
     --dm-danger-hover: #bb2d3b;
     --dm-danger-active: #b02a37;
+    --dm-danger-light: #f8d7da;
+    --dm-danger-dark: #842029;
 
     --dm-warning: #ffc107;
     --dm-warning-hover: #ffca2c;
     --dm-warning-active: #ffcd39;
     --dm-warning-text: #664d03;
+    --dm-warning-light: #fff3cd;
+    --dm-warning-dark: #997404;
 
     --dm-info: #17a2b8;
     --dm-info-hover: #31d2f2;
     --dm-info-active: #3dd5f3;
+    --dm-info-light: #cff4fc;
+    --dm-info-dark: #055160;
 
     /* Legacy color names (kept for backwards compatibility) */
     --dm-light: #f8f9fa;
@@ -86,6 +100,7 @@
     --dm-black: #000000;
 
     /* Grays */
+    --dm-gray-50: #f9fafb;
     --dm-gray-100: #f8f9fa;
     --dm-gray-200: #e9ecef;
     --dm-gray-300: #dee2e6;
@@ -95,6 +110,7 @@
     --dm-gray-700: #495057;
     --dm-gray-800: #343a40;
     --dm-gray-900: #212529;
+    --dm-gray-950: #0d1117;
 
     /* Typography */
     --dm-font-sans: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
@@ -176,6 +192,21 @@
     --dm-sidebar-item-hover: var(--dm-hover-bg);
     --dm-sidebar-item-active: var(--dm-selected-bg);
 
+    /* Autocomplete */
+    --dm-autocomplete-bg: var(--dm-surface);
+    --dm-autocomplete-border: var(--dm-border);
+    --dm-autocomplete-shadow: var(--dm-shadow-md);
+    --dm-autocomplete-item-hover: var(--dm-hover-bg);
+    --dm-autocomplete-item-active: var(--dm-selected-bg);
+    --dm-autocomplete-highlight: var(--dm-primary-light);
+
+    /* Pillbox */
+    --dm-pillbox-bg: var(--dm-surface);
+    --dm-pillbox-border: var(--dm-border);
+    --dm-pill-bg: var(--dm-gray-200);
+    --dm-pill-color: var(--dm-text);
+    --dm-pill-hover-bg: var(--dm-gray-300);
+
     /* Tabs */
     --dm-tab-border: var(--dm-border);
     --dm-tab-hover-bg: var(--dm-hover-bg);
@@ -201,7 +232,7 @@
 
 body {
     margin: 0;
-    font-family: var(--dm-font-sans);
+    font-family: var(--dm-font-sans, sans-serif);
     font-size: var(--dm-font-size-base);
     line-height: 1.5;
     color: var(--dm-text);
@@ -221,7 +252,7 @@ a:hover {
 }
 
 code, pre {
-    font-family: var(--dm-font-mono);
+    font-family: var(--dm-font-mono, monospace);
 }
 
 /* ============================================
@@ -297,7 +328,7 @@ code, pre {
 }
 
 .flex-1 {
-    flex: 1 1 0%;
+    flex: 1 1 0;
 }
 
 .flex-auto {
@@ -1455,65 +1486,6 @@ code, pre {
    COMPONENT: Table
    ============================================ */
 
-content:
-
-''
-;
-position: absolute
-
-;
-left:
-
-50
-%
-;
-top:
-
-50
-%
-;
-width:
-
-8
-px
-
-;
-height:
-
-8
-px
-
-;
-background-color:
-
-var
-(
---dm-white
-
-)
-;
-border-radius:
-
-50
-%
-;
-border: none
-
-;
-transform:
-
-translate
-(
--
-50
-%
-,
--
-50
-%
-)
-;
-}
 
 /* Toggle Switch */
 .form-switch {
@@ -2322,45 +2294,6 @@ translate
     display: block;
 }
 
-border-radius:
-
-0
-;
-transform:
-
-translateX
-(
--
-100
-%
-)
-;
-z-index:
-
-1000
-;
-box-shadow:
-
-4
-px
-
-0
-20
-px
-
-rgba
-(
-0
-,
-0
-,
-0
-,
-0.15
-)
-;
-}
-
 .sidebar.open {
     display: block;
     transform: translateX(0);
@@ -2377,8 +2310,6 @@ rgba
 
 .sidebar-overlay.active {
     pointer-events: auto;
-}
-
 }
 
 /* Dark theme support */
@@ -2954,7 +2885,7 @@ html {
     padding: var(--dm-space-3);
     border: none;
     outline: none;
-    font-family: var(--dm-font-sans);
+    font-family: var(--dm-font-sans, sans-serif);
     font-size: var(--dm-font-size-base);
     line-height: 1.6;
     color: var(--dm-text, var(--dm-gray-900));
@@ -2971,7 +2902,7 @@ html {
     min-height: 200px;
     padding: var(--dm-space-3);
     outline: none;
-    font-family: var(--dm-font-sans);
+    font-family: var(--dm-font-sans, sans-serif);
     font-size: var(--dm-font-size-base);
     line-height: 1.6;
     color: var(--dm-text, var(--dm-gray-900));
@@ -3062,7 +2993,7 @@ html {
     padding: 0.125rem 0.375rem;
     background-color: var(--dm-gray-100);
     border-radius: var(--dm-radius-sm);
-    font-family: var(--dm-font-mono);
+    font-family: var(--dm-font-mono, monospace);
     font-size: 0.875em;
 }
 
@@ -3098,7 +3029,7 @@ html {
     background-color: var(--dm-gray-50);
     border-right: 1px solid var(--dm-border, var(--dm-gray-300));
     color: var(--dm-gray-500);
-    font-family: var(--dm-font-mono);
+    font-family: var(--dm-font-mono, monospace);
     font-size: var(--dm-font-size-sm);
     line-height: 1.6;
     text-align: right;
@@ -3113,7 +3044,7 @@ html {
     padding: var(--dm-space-3);
     border: none;
     outline: none;
-    font-family: var(--dm-font-mono);
+    font-family: var(--dm-font-mono, monospace);
     font-size: var(--dm-font-size-sm);
     line-height: 1.6;
     color: var(--dm-text, var(--dm-gray-900));

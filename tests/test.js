@@ -1328,6 +1328,68 @@ test('utils.chain()', () => {
 });
 
 
+// Storage Utilities
+test('storage.isAvailable()', () => {
+    assert(Domma.storage.isAvailable() === true, 'should confirm that localStorage is available');
+});
+
+test('storage.set() and storage.get()', () => {
+    Domma.storage.set('foo', 'bar');
+    assert(Domma.storage.get('foo') === 'bar', 'should set and get a string value');
+    Domma.storage.set('baz', {a: 1});
+    assert(Domma.storage.get('baz').a === 1, 'should set and get an object value');
+    assert(Domma.storage.get('nonexistent', 'default') === 'default', 'should return the default value for a nonexistent key');
+});
+
+test('storage.remove()', () => {
+    Domma.storage.set('foo', 'bar');
+    Domma.storage.remove('foo');
+    assert(Domma.storage.get('foo') === null, 'should remove a value from storage');
+});
+
+test('storage.has()', () => {
+    Domma.storage.set('foo', 'bar');
+    assert(Domma.storage.has('foo') === true, 'should return true for an existing key');
+    assert(Domma.storage.has('nonexistent') === false, 'should return false for a nonexistent key');
+});
+
+test('storage.clear()', () => {
+    Domma.storage.set('foo', 'bar');
+    Domma.storage.set('baz', 'qux');
+    Domma.storage.clear();
+    assert(Domma.storage.keys().length === 0, 'should clear all domma-prefixed keys');
+});
+
+test('storage.keys()', () => {
+    Domma.storage.set('foo', 'bar');
+    Domma.storage.set('baz', 'qux');
+    const keys = Domma.storage.keys();
+    assert(keys.length === 2 && keys.includes('foo') && keys.includes('baz'), 'should return an array of all domma-prefixed keys');
+});
+
+test('storage.size()', () => {
+    Domma.storage.set('foo', 'bar');
+    assert(Domma.storage.size('foo') > 0, 'should return the size of the stored data for a key');
+});
+
+test('storage.totalSize()', () => {
+    Domma.storage.set('foo', 'bar');
+    Domma.storage.set('baz', 'qux');
+    assert(Domma.storage.totalSize() > 0, 'should return the total size of all domma storage');
+});
+
+test('storage.getAll()', () => {
+    Domma.storage.set('foo', 'bar');
+    Domma.storage.set('baz', 'qux');
+    const all = Domma.storage.getAll();
+    assert(all.foo === 'bar' && all.baz === 'qux', 'should return all stored data as an object');
+});
+
+test('storage.setAll()', () => {
+    Domma.storage.setAll({'foo': 'bar', 'baz': 'qux'});
+    assert(Domma.storage.get('foo') === 'bar' && Domma.storage.get('baz') === 'qux', 'should set multiple values at once');
+});
+
 // Run Tests
 async function run() {
     console.log(`Running ${tests.length} tests...`);
