@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jumbotron - Elements - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -36,15 +36,17 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block language-javascript">
-            <pre><code><div class="jumbotron">
-    <div class="jumbotron-content">
-        <h1 class="jumbotron-title">Welcome</h1>
-        <p class="jumbotron-subtitle">Subtitle text</p>
-        <div class="jumbotron-actions">
-            <button class="btn btn-primary btn-lg">Get Started</button>
-        </div>
-    </div>
-</div></code></pre>
+            <pre><code>
+&lt;div class="jumbotron"&gt;
+    &lt;div class="jumbotron-content"&gt;
+        &lt;h1 class="jumbotron-title"&gt;Welcome&lt;/h1&gt;
+        &lt;p class="jumbotron-subtitle"&gt;Subtitle text&lt;/p&gt;
+        &lt;div class="jumbotron-actions"&gt;
+            &lt;button class="btn btn-primary btn-lg"&gt;Get Started&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
         </div>
     </div>
 </section>
@@ -231,7 +233,8 @@
             </p>
 
             <h4 class="category-title">Dynamic Content Updates</h4>
-            <pre class="code-block language-javascript">// Rotate through multiple messages
+            <pre class="code-block language-javascript">
+// Rotate through multiple messages
 $.setup({
     '#hero-jumbotron': {
         initial: {
@@ -245,9 +248,9 @@ $.setup({
             }
         },
         events: {
-            ready: (e, $el) => {
+            ready: (e, $el) =&gt; {
                 const data = $el.data();
-                setInterval(() => {
+                setInterval(() =&gt; {
                     data.currentIndex = (data.currentIndex + 1) % data.messages.length;
                     const msg = data.messages[data.currentIndex];
 
@@ -261,19 +264,21 @@ $.setup({
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Scroll-Based Animations</h4>
-            <pre class="code-block language-javascript">// Animate jumbotron on scroll into view
+            <pre class="code-block language-javascript">
+// Animate jumbotron on scroll into view
 $.setup({
     '.jumbotron': {
         initial: {
             css: { opacity: 0, transform: 'translateY(30px)' }
         },
         events: {
-            ready: (e, $el) => {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
+            ready: (e, $el) =&gt; {
+                const observer = new IntersectionObserver((entries) =&gt; {
+                    entries.forEach(entry =&gt; {
                         if (entry.isIntersecting) {
                             $el.animate({
                                 opacity: 1,
@@ -287,14 +292,16 @@ $.setup({
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Interactive CTA Tracking</h4>
-            <pre class="code-block language-javascript">// Track user interactions with analytics
+            <pre class="code-block language-javascript">
+// Track user interactions with analytics
 $.setup({
     '#marketing-hero': {
         events: {
-            'click .btn-primary': (e, $el) => {
+            'click .btn-primary': (e, $el) =&gt; {
                 const title = $el.find('.jumbotron-title').text();
 
                 // Track with analytics
@@ -308,37 +315,40 @@ $.setup({
                 // Show feedback
                 Domma.elements.toast.success('Thanks for your interest!');
             },
-            'mouseenter': (e, $el) => {
+            'mouseenter': (e, $el) =&gt; {
                 $el.find('.jumbotron-actions .btn').addClass('pulse');
             },
-            'mouseleave': (e, $el) => {
+            'mouseleave': (e, $el) =&gt; {
                 $el.find('.jumbotron-actions .btn').removeClass('pulse');
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Personalised Content</h4>
-            <pre class="code-block language-javascript">// Customise jumbotron based on user data
+            <pre class="code-block language-javascript">
+// Customise jumbotron based on user data
 const user = { name: 'Alice', plan: 'Pro' };
 
 $.setup({
     '#dashboard-hero': {
         initial: {
-            html: (el) => {
+            html: (el) =&gt; {
                 const $content = $(el).find('.jumbotron-content');
                 $content.find('.jumbotron-title').text(`Welcome back, ${user.name}!`);
                 $content.find('.jumbotron-subtitle').text(`You're on the ${user.plan} plan`);
 
                 if (user.plan === 'Free') {
                     $content.find('.jumbotron-actions').html(`
-                        <button class="btn btn-primary btn-lg">Upgrade to Pro</button>
+                        &lt;button class="btn btn-primary btn-lg"&gt;Upgrade to Pro&lt;/button&gt;
                     `);
                 }
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Benefits of Hybrid Approach</h4>
             <ul class="mb-4">
@@ -431,9 +441,9 @@ $.setup({
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 
 </body>
 </html>

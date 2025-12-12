@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modal - Domma Elements</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -48,20 +48,21 @@
             </ul>
 
             <h4 class="category-title">Basic Usage</h4>
-            <pre class="code-block language-javascript">// HTML structure
-<div id="my-modal" class="modal">
-    <div class="modal-header">
-        <h5 class="modal-title">Modal Title</h5>
-        <button class="modal-close">&times;</button>
-    </div>
-    <div class="modal-body">
+            <pre class="code-block language-javascript">
+// HTML structure
+&lt;div id="my-modal" class="modal"&gt;
+    &lt;div class="modal-header"&gt;
+        &lt;h5 class="modal-title"&gt;Modal Title&lt;/h5&gt;
+        &lt;button class="modal-close"&gt;&times;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="modal-body"&gt;
         Modal content goes here.
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-secondary modal-close-btn">Close</button>
-        <button class="btn btn-primary">Save</button>
-    </div>
-</div>
+    &lt;/div&gt;
+    &lt;div class="modal-footer"&gt;
+        &lt;button class="btn btn-secondary modal-close-btn"&gt;Close&lt;/button&gt;
+        &lt;button class="btn btn-primary"&gt;Save&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
 
 // JavaScript
 const modal = Domma.elements.modal('#my-modal', {
@@ -73,7 +74,8 @@ const modal = Domma.elements.modal('#my-modal', {
 // Control the modal
 modal.open();   // Opens the modal
 modal.close();  // Closes the modal
-modal.toggle(); // Toggles open/close</pre>
+modal.toggle(); // Toggles open/close
+</pre>
         </div>
     </section>
 
@@ -89,28 +91,30 @@ modal.toggle(); // Toggles open/close</pre>
             </p>
 
             <h4 class="category-title">Simplest Modal</h4>
-            <pre class="code-block language-javascript">// HTML
-<button class="btn btn-primary" id="open-simple-modal">Open Modal</button>
+            <pre class="code-block language-javascript">
+// HTML
+&lt;button class="btn btn-primary" id="open-simple-modal"&gt;Open Modal&lt;/button&gt;
 
-<div id="simple-modal" class="modal">
-    <div class="modal-header">
-        <h5 class="modal-title">Welcome!</h5>
-        <button class="modal-close">&times;</button>
-    </div>
-    <div class="modal-body">
-        <p>This is a simple modal dialog.</p>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary modal-close-btn">Got It</button>
-    </div>
-</div>
+&lt;div id="simple-modal" class="modal"&gt;
+    &lt;div class="modal-header"&gt;
+        &lt;h5 class="modal-title"&gt;Welcome!&lt;/h5&gt;
+        &lt;button class="modal-close"&gt;&times;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="modal-body"&gt;
+        &lt;p&gt;This is a simple modal dialog.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="modal-footer"&gt;
+        &lt;button class="btn btn-primary modal-close-btn"&gt;Got It&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
 
 // JavaScript
 const modal = Domma.elements.modal('#simple-modal');
 
-document.getElementById('open-simple-modal').addEventListener('click', () => {
+document.getElementById('open-simple-modal').addEventListener('click', () =&gt; {
     modal.open();
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-primary" id="quick-start-btn">Try It - Open Modal</button>
@@ -144,39 +148,46 @@ document.getElementById('open-simple-modal').addEventListener('click', () => {
 
             <h4 class="category-title">Step 1: Create the HTML Structure</h4>
             <p class="mb-2">Start with the modal markup and trigger button:</p>
-            <pre class="code-block language-javascript"><button class="btn btn-danger" id="delete-btn">Delete Item</button>
+            <pre class="code-block language-javascript">
+&lt;button class="btn btn-danger" id="delete-btn"&gt;Delete Item&lt;/button&gt;
 
-<div id="confirm-modal" class="modal">
-    <div class="modal-header">
-        <h5 class="modal-title">Confirm Deletion</h5>
-        <button class="modal-close">&times;</button>
-    </div>
-    <div class="modal-body">
-        <p>Are you sure you want to delete this item?</p>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-secondary modal-close-btn">Cancel</button>
-        <button class="btn btn-danger" id="confirm-delete">Delete</button>
-    </div>
-</div></pre>
+&lt;div id="confirm-modal" class="modal"&gt;
+    &lt;div class="modal-header"&gt;
+        &lt;h5 class="modal-title"&gt;Confirm Deletion&lt;/h5&gt;
+        &lt;button class="modal-close"&gt;&times;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="modal-body"&gt;
+        &lt;p&gt;Are you sure you want to delete this item?&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="modal-footer"&gt;
+        &lt;button class="btn btn-secondary modal-close-btn"&gt;Cancel&lt;/button&gt;
+        &lt;button class="btn btn-danger" id="confirm-delete"&gt;Delete&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
 
             <h4 class="category-title mt-4">Step 2: Initialise the Modal</h4>
             <p class="mb-2">Create modal instance with default options:</p>
-            <pre class="code-block language-javascript">const confirmModal = Domma.elements.modal('#confirm-modal', {
+            <pre class="code-block language-javascript">
+const confirmModal = Domma.elements.modal('#confirm-modal', {
     backdrop: true,      // Show backdrop
     backdropClose: true, // Allow closing by clicking backdrop
     keyboard: true       // Allow closing with Escape key
-});</pre>
+});
+</pre>
 
             <h4 class="category-title mt-4">Step 3: Add Open Trigger</h4>
             <p class="mb-2">Make the delete button open the modal:</p>
-            <pre class="code-block language-javascript">document.getElementById('delete-btn').addEventListener('click', () => {
+            <pre class="code-block language-javascript">
+document.getElementById('delete-btn').addEventListener('click', () =&gt; {
     confirmModal.open();
-});</pre>
+});
+</pre>
 
             <h4 class="category-title mt-4">Step 4: Handle Confirmation</h4>
             <p class="mb-2">Add logic when user confirms deletion:</p>
-            <pre class="code-block language-javascript">document.getElementById('confirm-delete').addEventListener('click', () => {
+            <pre class="code-block language-javascript">
+document.getElementById('confirm-delete').addEventListener('click', () =&gt; {
     // Perform deletion
     console.log('Item deleted');
 
@@ -185,26 +196,29 @@ document.getElementById('open-simple-modal').addEventListener('click', () => {
 
     // Show success message (could use Toast component)
     alert('Item deleted successfully');
-});</pre>
+});
+</pre>
 
             <h4 class="category-title mt-4">Step 5: Add Event Callbacks (Optional)</h4>
             <p class="mb-2">Track modal lifecycle with callbacks:</p>
-            <pre class="code-block language-javascript">const confirmModal = Domma.elements.modal('#confirm-modal', {
+            <pre class="code-block language-javascript">
+const confirmModal = Domma.elements.modal('#confirm-modal', {
     backdrop: true,
     backdropClose: true,
     keyboard: true,
-    onOpen: () => {
+    onOpen: () =&gt; {
         console.log('Modal opened');
         // Could disable page actions
     },
-    onClose: () => {
+    onClose: () =&gt; {
         console.log('Modal closing');
     },
-    onClosed: () => {
+    onClosed: () =&gt; {
         console.log('Modal fully closed');
         // Could re-enable page actions
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title mt-4">Step 6: Complete Working Demo</h4>
             <div class="demo-area">
@@ -700,22 +714,25 @@ document.getElementById('open-simple-modal').addEventListener('click', () => {
             </p>
 
             <h4 class="category-title">Single Modal</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#login-modal': {
         component: 'modal',
         options: {
             backdrop: true,
             backdropClose: false,  // Require explicit action
             keyboard: true,
-            onOpen: () => {
+            onOpen: () =&gt; {
                 console.log('Login modal opened');
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title mt-4">Multiple Modals</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#info-modal': {
         component: 'modal',
         options: {
@@ -728,30 +745,32 @@ document.getElementById('open-simple-modal').addEventListener('click', () => {
         options: {
             backdropClose: false,
             keyboard: false,
-            onClose: () => {
+            onClose: () =&gt; {
                 console.log('User made a choice');
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title mt-4">With Event Handlers</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#contact-modal': {
         component: 'modal',
         options: {
             backdrop: true,
-            onOpen: () => {
+            onOpen: () =&gt; {
                 // Clear form fields
                 $('#contact-modal form')[0].reset();
             },
-            onClosed: () => {
+            onClosed: () =&gt; {
                 // Reset any state
                 console.log('Contact modal closed');
             }
         },
         events: {
-            submit: (e) => {
+            submit: (e) =&gt; {
                 e.preventDefault();
                 // Handle form submission
                 const formData = new FormData(e.target);
@@ -759,7 +778,8 @@ document.getElementById('open-simple-modal').addEventListener('click', () => {
             }
         }
     }
-});</pre>
+});
+</pre>
         </div>
     </section>
 
@@ -807,9 +827,9 @@ document.getElementById('open-simple-modal').addEventListener('click', () => {
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Quick Start
     const quickStartModal = Domma.elements.modal('#quick-start-modal');

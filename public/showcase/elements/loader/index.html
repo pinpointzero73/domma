@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loader - Elements - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -45,13 +45,14 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block language-javascript">
-            <pre><code><!-- HTML Container -->
-<div id="my-container" style="min-height: 120px; position: relative;">
-    <!-- Loader will be inserted here -->
-</div>
+            <pre><code>
+&lt;!-- HTML Container --&gt;
+&lt;div id="my-container" style="min-height: 120px; position: relative;"&gt;
+    &lt;!-- Loader will be inserted here --&gt;
+&lt;/div&gt;
 
-<!-- JavaScript Initialisation -->
-<script>
+&lt;!-- JavaScript Initialisation --&gt;
+&lt;script&gt;
 const loader = Domma.elements.loader('#my-container', {
     type: 'spinner',      // 'spinner', 'dots', 'pulse', 'bars'
     size: 'medium',       // 'small', 'medium', 'large', or number (px)
@@ -62,7 +63,8 @@ const loader = Domma.elements.loader('#my-container', {
 loader.show();
 loader.hide();
 loader.toggle();
-</script></code></pre>
+&lt;/script&gt;
+</code></pre>
         </div>
     </div>
 </section>
@@ -81,11 +83,12 @@ loader.toggle();
             <!-- Loader will be inserted here -->
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code><div id="my-loader-container" style="min-height: 120px; position: relative;">
-    <!-- Loader appears here -->
-</div>
+            <pre><code>
+&lt;div id="my-loader-container" style="min-height: 120px; position: relative;"&gt;
+    &lt;!-- Loader appears here --&gt;
+&lt;/div&gt;
 
-<script>
+&lt;script&gt;
 const loader = Domma.elements.loader('#my-loader-container', {
     type: 'spinner',
     size: 'medium',
@@ -93,7 +96,8 @@ const loader = Domma.elements.loader('#my-loader-container', {
 });
 
 loader.show();  // Display the loader
-</script></code></pre>
+&lt;/script&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title">Static Fullscreen Loader</h3>
@@ -102,9 +106,11 @@ loader.show();  // Display the loader
             <button id="quick-fullscreen-btn" class="btn btn-primary">Show Fullscreen Loader</button>
         </div>
         <div class="code-block language-javascript">
-            <pre><code>// Show fullscreen loader for 2 seconds
+            <pre><code>
+// Show fullscreen loader for 2 seconds
 const fsLoader = Domma.elements.fullscreenLoader('Loading content...');
-setTimeout(() => fsLoader.destroy(), 2000);</code></pre>
+setTimeout(() =&gt; fsLoader.destroy(), 2000);
+</code></pre>
         </div>
     </div>
 </section>
@@ -123,33 +129,38 @@ setTimeout(() => fsLoader.destroy(), 2000);</code></pre>
         <h3 class="category-title">Step 1: Create the HTML Structure</h3>
         <p class="text-muted mb-2">Create a container with a button to trigger loading:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code><button id="load-data-btn" class="btn btn-primary">Load Data</button>
+            <pre><code>
+&lt;button id="load-data-btn" class="btn btn-primary"&gt;Load Data&lt;/button&gt;
 
-<div id="data-container" class="demo-area mt-4"
-     style="min-height: 200px; position: relative;">
-    <p class="text-center text-muted" id="placeholder-text">
+&lt;div id="data-container" class="demo-area mt-4"
+     style="min-height: 200px; position: relative;"&gt;
+    &lt;p class="text-center text-muted" id="placeholder-text"&gt;
         Click "Load Data" to fetch content
-    </p>
-    <div id="data-result" style="display: none;"></div>
-</div></code></pre>
+    &lt;/p&gt;
+    &lt;div id="data-result" style="display: none;"&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title">Step 2: Create the Loader Instance</h3>
         <p class="text-muted mb-2">Initialise a loader with overlay to block interaction:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code>const dataLoader = Domma.elements.loader('#data-container', {
+            <pre><code>
+const dataLoader = Domma.elements.loader('#data-container', {
     type: 'spinner',
     size: 'large',
     color: 'white',
     overlay: true,           // Semi-transparent backdrop
     text: 'Loading data...'  // Text below spinner
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <h3 class="category-title">Step 3: Show Loader During Async Operation</h3>
         <p class="text-muted mb-2">Display the loader whilst fetching data:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code>async function loadData() {
+            <pre><code>
+async function loadData() {
     // Hide placeholder
     document.getElementById('placeholder-text').style.display = 'none';
 
@@ -165,13 +176,15 @@ setTimeout(() => fsLoader.destroy(), 2000);</code></pre>
     } catch (error) {
         console.error('Failed to load data:', error);
     }
-}</code></pre>
+}
+</code></pre>
         </div>
 
         <h3 class="category-title">Step 4: Hide Loader and Display Results</h3>
         <p class="text-muted mb-2">Hide the loader and show fetched data:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code>async function loadData() {
+            <pre><code>
+async function loadData() {
     document.getElementById('placeholder-text').style.display = 'none';
     dataLoader.show();
 
@@ -184,33 +197,36 @@ setTimeout(() => fsLoader.destroy(), 2000);</code></pre>
 
         // Display results
         const resultEl = document.getElementById('data-result');
-        resultEl.innerHTML = `<h4>Data Loaded!</h4><pre>${JSON.stringify(data, null, 2)}</pre>`;
+        resultEl.innerHTML = `&lt;h4&gt;Data Loaded!&lt;/h4&gt;&lt;pre&gt;${JSON.stringify(data, null, 2)}&lt;/pre&gt;`;
         resultEl.style.display = 'block';
     } catch (error) {
         dataLoader.hide();
         alert('Failed to load data');
     }
-}</code></pre>
+}
+</code></pre>
         </div>
 
         <h3 class="category-title">Step 5: Update Loader Text Dynamically</h3>
         <p class="text-muted mb-2">Change the loading message based on progress:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code>async function loadMultipleResources() {
+            <pre><code>
+async function loadMultipleResources() {
     dataLoader.setText('Loading users...');
     dataLoader.show();
 
-    const users = await fetch('/api/users').then(r => r.json());
+    const users = await fetch('/api/users').then(r =&gt; r.json());
 
     dataLoader.setText('Loading posts...');
-    const posts = await fetch('/api/posts').then(r => r.json());
+    const posts = await fetch('/api/posts').then(r =&gt; r.json());
 
     dataLoader.setText('Loading comments...');
-    const comments = await fetch('/api/comments').then(r => r.json());
+    const comments = await fetch('/api/comments').then(r =&gt; r.json());
 
     dataLoader.hide();
     // Display all data...
-}</code></pre>
+}
+</code></pre>
         </div>
 
         <h3 class="category-title">Step 6: Complete Working Demo</h3>
@@ -259,7 +275,8 @@ setTimeout(() => fsLoader.destroy(), 2000);</code></pre>
             </div>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>// Spinner (default)
+            <pre><code>
+// Spinner (default)
 Domma.elements.loader('#spinner-container', { type: 'spinner' }).show();
 
 // Animated dots
@@ -269,7 +286,8 @@ Domma.elements.loader('#dots-container', { type: 'dots' }).show();
 Domma.elements.loader('#pulse-container', { type: 'pulse' }).show();
 
 // Vertical bars
-Domma.elements.loader('#bars-container', { type: 'bars' }).show();</code></pre>
+Domma.elements.loader('#bars-container', { type: 'bars' }).show();
+</code></pre>
         </div>
 
         <!-- Example 2: Size Variants -->
@@ -287,7 +305,8 @@ Domma.elements.loader('#bars-container', { type: 'bars' }).show();</code></pre>
                 (80px)</p>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>// Small (24px)
+            <pre><code>
+// Small (24px)
 Domma.elements.loader('#container', { size: 'small' }).show();
 
 // Medium (40px - default)
@@ -297,7 +316,8 @@ Domma.elements.loader('#container', { size: 'medium' }).show();
 Domma.elements.loader('#container', { size: 'large' }).show();
 
 // Custom pixel size
-Domma.elements.loader('#container', { size: 80 }).show();</code></pre>
+Domma.elements.loader('#container', { size: 80 }).show();
+</code></pre>
         </div>
 
         <!-- Example 3: Colour Variants -->
@@ -322,14 +342,16 @@ Domma.elements.loader('#container', { size: 80 }).show();</code></pre>
                 (#9b59b6)</p>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>// Theme colours
+            <pre><code>
+// Theme colours
 Domma.elements.loader('#container', { color: 'primary' }).show();
 Domma.elements.loader('#container', { color: 'success' }).show();
 Domma.elements.loader('#container', { color: 'danger' }).show();
 Domma.elements.loader('#container', { color: 'warning' }).show();
 
 // Custom hex colour
-Domma.elements.loader('#container', { color: '#9b59b6' }).show();</code></pre>
+Domma.elements.loader('#container', { color: '#9b59b6' }).show();
+</code></pre>
         </div>
 
         <!-- Example 4: Overlay Mode -->
@@ -344,7 +366,8 @@ Domma.elements.loader('#container', { color: '#9b59b6' }).show();</code></pre>
             </div>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>const overlayLoader = Domma.elements.loader('#container', {
+            <pre><code>
+const overlayLoader = Domma.elements.loader('#container', {
     type: 'spinner',
     size: 'large',
     color: 'white',
@@ -354,7 +377,8 @@ Domma.elements.loader('#container', { color: '#9b59b6' }).show();</code></pre>
 
 // Show for 2 seconds
 overlayLoader.show();
-setTimeout(() => overlayLoader.hide(), 2000);</code></pre>
+setTimeout(() =&gt; overlayLoader.hide(), 2000);
+</code></pre>
         </div>
 
         <!-- Example 5: With Loading Text -->
@@ -367,7 +391,8 @@ setTimeout(() => overlayLoader.hide(), 2000);</code></pre>
             </div>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>const textLoader = Domma.elements.loader('#container', {
+            <pre><code>
+const textLoader = Domma.elements.loader('#container', {
     type: 'dots',
     size: 'medium',
     color: 'primary',
@@ -377,7 +402,8 @@ setTimeout(() => overlayLoader.hide(), 2000);</code></pre>
 textLoader.show();
 
 // Update text dynamically
-setTimeout(() => textLoader.setText('Almost there...'), 1500);</code></pre>
+setTimeout(() =&gt; textLoader.setText('Almost there...'), 1500);
+</code></pre>
         </div>
 
         <!-- Example 6: Static Helper Methods -->
@@ -394,7 +420,8 @@ setTimeout(() => textLoader.setText('Almost there...'), 1500);</code></pre>
             </div>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>// Quick show (creates loader if needed)
+            <pre><code>
+// Quick show (creates loader if needed)
 Domma.elements.showLoader('#container');
 
 // Quick hide
@@ -402,7 +429,8 @@ Domma.elements.hideLoader('#container');
 
 // Fullscreen loader
 const fs = Domma.elements.fullscreenLoader('Processing...');
-setTimeout(() => fs.destroy(), 2000);</code></pre>
+setTimeout(() =&gt; fs.destroy(), 2000);
+</code></pre>
         </div>
 
         <!-- Example 7: Button Loading State -->
@@ -415,10 +443,11 @@ setTimeout(() => fs.destroy(), 2000);</code></pre>
             </button>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>const submitBtn = document.getElementById('submit-btn');
+            <pre><code>
+const submitBtn = document.getElementById('submit-btn');
 let btnLoader = null;
 
-submitBtn.addEventListener('click', async () => {
+submitBtn.addEventListener('click', async () =&gt; {
     // Disable button and show loader
     submitBtn.disabled = true;
     submitBtn.textContent = '';
@@ -432,13 +461,14 @@ submitBtn.addEventListener('click', async () => {
     btnLoader.show();
 
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve =&gt; setTimeout(resolve, 2000));
 
     // Re-enable button
     btnLoader.destroy();
     submitBtn.disabled = false;
     submitBtn.textContent = 'Submit Form';
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <!-- Example 8: Real-World Example -->
@@ -451,7 +481,8 @@ submitBtn.addEventListener('click', async () => {
             </div>
         </div>
         <div class="code-block language-javascript">
-            <pre><code>const galleryContainer = document.getElementById('gallery-container');
+            <pre><code>
+const galleryContainer = document.getElementById('gallery-container');
 const galleryLoader = Domma.elements.loader(galleryContainer, {
     type: 'pulse',
     size: 'large',
@@ -472,10 +503,10 @@ async function loadGallery() {
         galleryLoader.setText(`Loading ${images.length} images...`);
 
         // Load images
-        const imgPromises = images.map(url => {
-            return new Promise((resolve) => {
+        const imgPromises = images.map(url =&gt; {
+            return new Promise((resolve) =&gt; {
                 const img = new Image();
-                img.onload = () => resolve(img);
+                img.onload = () =&gt; resolve(img);
                 img.src = url;
             });
         });
@@ -484,7 +515,7 @@ async function loadGallery() {
 
         // Hide loader and display images
         galleryLoader.hide();
-        images.forEach(url => {
+        images.forEach(url =&gt; {
             const imgEl = document.createElement('img');
             imgEl.src = url;
             imgEl.className = 'w-full h-auto rounded';
@@ -494,7 +525,8 @@ async function loadGallery() {
         galleryLoader.hide();
         alert('Failed to load gallery');
     }
-}</code></pre>
+}
+</code></pre>
         </div>
     </div>
 </section>
@@ -599,15 +631,16 @@ async function loadGallery() {
         </ul>
 
         <div class="code-block language-javascript">
-            <pre><code><!-- Accessible Loader with Proper Container -->
-<div id="data-container"
+            <pre><code>
+&lt;!-- Accessible Loader with Proper Container --&gt;
+&lt;div id="data-container"
      role="region"
      aria-label="Data content"
-     style="position: relative; min-height: 200px;">
-    <!-- Content -->
-</div>
+     style="position: relative; min-height: 200px;"&gt;
+    &lt;!-- Content --&gt;
+&lt;/div&gt;
 
-<script>
+&lt;script&gt;
 const loader = Domma.elements.loader('#data-container', {
     type: 'spinner',
     size: 'medium',
@@ -620,10 +653,10 @@ async function fetchData() {
     loader.show();
 
     try {
-        const data = await fetch('/api/data').then(r => r.json());
+        const data = await fetch('/api/data').then(r =&gt; r.json());
 
         // Ensure minimum display time
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve =&gt; setTimeout(resolve, 500));
 
         // Process data...
     } catch (error) {
@@ -634,7 +667,8 @@ async function fetchData() {
         loader.hide();
     }
 }
-</script></code></pre>
+&lt;/script&gt;
+</code></pre>
         </div>
     </div>
 </section>
@@ -830,7 +864,8 @@ async function fetchData() {
         </div>
 
         <div class="code-block language-javascript mt-4">
-            <pre><code>// Complete API Example
+            <pre><code>
+// Complete API Example
 const loader = Domma.elements.loader('#my-container', {
     type: 'spinner',
     size: 'large',
@@ -853,7 +888,8 @@ Domma.elements.showLoader('#container');  // Quick show
 Domma.elements.hideLoader('#container');  // Quick hide
 
 const fs = Domma.elements.fullscreenLoader('Processing...');
-setTimeout(() => fs.destroy(), 2000);     // Remove after 2s</code></pre>
+setTimeout(() =&gt; fs.destroy(), 2000);     // Remove after 2s
+</code></pre>
         </div>
     </div>
 </section>
@@ -871,7 +907,8 @@ setTimeout(() => fs.destroy(), 2000);     // Remove after 2s</code></pre>
 
         <h3 class="category-title">Pre-Configure Loader</h3>
         <div class="code-block language-javascript mb-6">
-            <pre><code>// Pre-configure loader, then control manually
+            <pre><code>
+// Pre-configure loader, then control manually
 let dataLoader;
 
 $.setup({
@@ -895,14 +932,16 @@ dataLoader = Domma.elements.get('#data-container');
 
 async function fetchData() {
     dataLoader.show();
-    const data = await fetch('/api/data').then(r => r.json());
+    const data = await fetch('/api/data').then(r =&gt; r.json());
     dataLoader.hide();
-}</code></pre>
+}
+</code></pre>
         </div>
 
         <h3 class="category-title">Event-Triggered Loader</h3>
         <div class="code-block language-javascript mb-6">
-            <pre><code>// Show loader on button click, hide after delay
+            <pre><code>
+// Show loader on button click, hide after delay
 $.setup({
     '#overlay-container': {
         component: 'loader',
@@ -917,22 +956,23 @@ $.setup({
 
     '#load-btn': {
         events: {
-            click: (e, $el) => {
+            click: (e, $el) =&gt; {
                 const loader = Domma.elements.get('#overlay-container');
                 loader.show();
 
                 // Simulate async operation
-                setTimeout(() => {
+                setTimeout(() =&gt; {
                     loader.setText('Almost done...');
                 }, 1000);
 
-                setTimeout(() => {
+                setTimeout(() =&gt; {
                     loader.hide();
                 }, 2000);
             }
         }
     }
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <h3 class="category-title">Live Demo</h3>
@@ -945,7 +985,8 @@ $.setup({
             </div>
         </div>
         <div class="code-block language-javascript">
-            <pre><code>// Configuration
+            <pre><code>
+// Configuration
 $.setup({
     '#config-demo-container': {
         component: 'loader',
@@ -960,14 +1001,15 @@ $.setup({
 
     '#config-trigger-btn': {
         events: {
-            click: () => {
+            click: () =&gt; {
                 const loader = Domma.elements.get('#config-demo-container');
                 loader.show();
-                setTimeout(() => loader.hide(), 2000);
+                setTimeout(() =&gt; loader.hide(), 2000);
             }
         }
     }
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -1016,9 +1058,9 @@ $.setup({
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Quick Start Demo
     const quickStartLoader = Domma.elements.loader('#quick-start-demo', {
@@ -1059,11 +1101,13 @@ $.setup({
         $('#tutorial-result').html(`
             <h4>Data Loaded Successfully!</h4>
             <p class="text-muted">Fetched at: ${new Date().toLocaleTimeString()}</p>
-            <pre class="mt-2 p-3 bg-dark text-white rounded">{
+            <pre class="mt-2 p-3 bg-dark text-white rounded">
+{
   "users": 42,
   "posts": 128,
   "comments": 356
-}</pre>
+}
+</pre>
         `).show();
     });
 

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carousel - Elements - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -26,11 +26,13 @@
             <li><strong>Loop Mode</strong> - Continuous cycling through slides</li>
         </ul>
         <div class="code-block language-javascript">
-            <pre><code>const carousel = Domma.elements.carousel('#carousel', {
+            <pre><code>
+const carousel = Domma.elements.carousel('#carousel', {
     autoplay: true,
     interval: 5000,
     loop: true
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -180,7 +182,8 @@
             </p>
 
             <h4 class="category-title">Basic Carousel Setup</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#hero-carousel': {
         component: 'carousel',
         options: {
@@ -190,17 +193,19 @@
             animation: 'slide'
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Product Gallery with Events</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '.product-gallery': {
         component: 'carousel',
         options: {
             showArrows: true,
             showIndicators: true,
             pauseOnHover: true,
-            onChange: (index, instance) => {
+            onChange: (index, instance) =&gt; {
                 // Update product URL
                 history.replaceState(null, '', `?slide=${index}`);
 
@@ -211,7 +216,8 @@
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Side-by-Side: Programmatic vs Declarative</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -259,9 +265,9 @@ carousel.play();</pre>
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     Domma.elements.carousel('#quick-carousel', {autoplay: false, showArrows: true, showIndicators: true});
     Domma.elements.carousel('#autoplay-carousel', {autoplay: true, interval: 3000, pauseOnHover: true});

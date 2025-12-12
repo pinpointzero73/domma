@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dropdown - Elements - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -33,7 +33,8 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block language-javascript">
-            <pre><code>// Attach to a button element
+            <pre><code>
+// Attach to a button element
 const dropdown = Domma.elements.dropdown('#my-button', {
     items: [
         { text: 'Edit', value: 'edit' },
@@ -41,8 +42,9 @@ const dropdown = Domma.elements.dropdown('#my-button', {
     ],
     trigger: 'click',
     position: 'bottom-start',
-    onSelect: (item) => console.log(item.value)
-});</code></pre>
+    onSelect: (item) =&gt; console.log(item.value)
+});
+</code></pre>
         </div>
         <p class="text-sm text-muted mt-2">
             <strong>Note:</strong> The dropdown component creates menus programmatically from the <code>items</code>
@@ -62,9 +64,10 @@ const dropdown = Domma.elements.dropdown('#my-button', {
             <button class="btn btn-primary" id="quick-dropdown">Actions</button>
         </div>
         <div class="code-block language-javascript">
-            <pre><code><button class="btn btn-primary" id="my-dropdown">Actions</button>
+            <pre><code>
+&lt;button class="btn btn-primary" id="my-dropdown"&gt;Actions&lt;/button&gt;
 
-<script>
+&lt;script&gt;
 Domma.elements.dropdown('#my-dropdown', {
     items: [
         { text: 'Edit', value: 'edit' },
@@ -72,9 +75,10 @@ Domma.elements.dropdown('#my-dropdown', {
         { divider: true },
         { text: 'Delete', value: 'delete', class: 'text-danger' }
     ],
-    onSelect: (item) => console.log('Selected:', item)
+    onSelect: (item) =&gt; console.log('Selected:', item)
 });
-</script></code></pre>
+&lt;/script&gt;
+</code></pre>
         </div>
     </div>
 </section>
@@ -96,7 +100,8 @@ Domma.elements.dropdown('#my-dropdown', {
         </div>
 
         <div class="code-block language-javascript">
-            <pre><code>const dropdown = Domma.elements.dropdown('#user-dropdown', {
+            <pre><code>
+const dropdown = Domma.elements.dropdown('#user-dropdown', {
     items: [
         { header: 'Signed in as user@example.com' },
         { divider: true },
@@ -106,12 +111,13 @@ Domma.elements.dropdown('#my-dropdown', {
         { divider: true },
         { text: 'Sign Out', value: 'logout' }
     ],
-    onOpen: () => console.log('Dropdown opened'),
-    onClose: () => console.log('Dropdown closed'),
-    onSelect: (item) => {
+    onOpen: () =&gt; console.log('Dropdown opened'),
+    onClose: () =&gt; console.log('Dropdown closed'),
+    onSelect: (item) =&gt; {
         console.log(`Action selected: ${item.value}`);
     }
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -348,14 +354,15 @@ Domma.elements.dropdown('#my-dropdown', {
     </div>
     <div class="card-body">
         <div class="code-block language-javascript">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#user-menu': {
         component: 'dropdown',
         options: {
             trigger: 'click',
             position: 'bottom-end',
             closeOnClick: true,
-            onOpen: () => console.log('Menu opened')
+            onOpen: () =&gt; console.log('Menu opened')
         }
     },
     '#hover-menu': {
@@ -365,7 +372,8 @@ Domma.elements.dropdown('#my-dropdown', {
             position: 'bottom-start'
         }
     }
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -394,9 +402,9 @@ Domma.elements.dropdown('#my-dropdown', {
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Quick Start
     Domma.elements.dropdown('#quick-dropdown', {

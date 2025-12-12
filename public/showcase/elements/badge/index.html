@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Badge - Elements - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -34,9 +34,11 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block language-javascript">
-            <pre><code><span class="badge">Default</span>
-<span class="badge badge-primary">Primary</span>
-<span class="badge badge-success">Success</span></code></pre>
+            <pre><code>
+&lt;span class="badge"&gt;Default&lt;/span&gt;
+&lt;span class="badge badge-primary"&gt;Primary&lt;/span&gt;
+&lt;span class="badge badge-success"&gt;Success&lt;/span&gt;
+</code></pre>
         </div>
     </div>
 </section>
@@ -53,9 +55,11 @@
             <span class="badge badge-danger">Urgent</span>
         </div>
         <div class="code-block language-javascript">
-            <pre><code><span class="badge badge-primary">New</span>
-<span class="badge badge-success">Active</span>
-<span class="badge badge-danger">Urgent</span></code></pre>
+            <pre><code>
+&lt;span class="badge badge-primary"&gt;New&lt;/span&gt;
+&lt;span class="badge badge-success"&gt;Active&lt;/span&gt;
+&lt;span class="badge badge-danger"&gt;Urgent&lt;/span&gt;
+</code></pre>
         </div>
     </div>
 </section>
@@ -104,23 +108,25 @@
         </div>
 
         <div class="code-block language-javascript">
-            <pre><code><div class="flex items-center justify-between">
-    <h3>Notifications</h3>
-    <span class="badge badge-danger">3</span>
-</div>
+            <pre><code>
+&lt;div class="flex items-center justify-between"&gt;
+    &lt;h3&gt;Notifications&lt;/h3&gt;
+    &lt;span class="badge badge-danger"&gt;3&lt;/span&gt;
+&lt;/div&gt;
 
-<script>
+&lt;script&gt;
 const badge = document.querySelector('.badge');
 let count = 3;
 
-document.getElementById('clear-btn').addEventListener('click', () => {
+document.getElementById('clear-btn').addEventListener('click', () =&gt; {
     count = 0;
     badge.textContent = count;
     if (count === 0) {
         badge.style.display = 'none';
     }
 });
-</script></code></pre>
+&lt;/script&gt;
+</code></pre>
         </div>
     </div>
 </section>
@@ -320,7 +326,8 @@ document.getElementById('clear-btn').addEventListener('click', () => {
     <div class="card-body">
         <p class="mb-4">Badges are CSS-only, but you can dynamically update them:</p>
         <div class="code-block language-javascript">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#notification-badge': {
         initial: {
             text: '0',
@@ -336,8 +343,9 @@ document.getElementById('clear-btn').addEventListener('click', () => {
 function updateBadge(count) {
     const $badge = $('#notification-badge');
     $badge.text(count);
-    $badge.css('display', count > 0 ? 'inline-block' : 'none');
-}</code></pre>
+    $badge.css('display', count &gt; 0 ? 'inline-block' : 'none');
+}
+</code></pre>
         </div>
     </div>
 </section>
@@ -366,9 +374,9 @@ function updateBadge(count) {
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Tutorial
     document.getElementById('clear-notifications').addEventListener('click', () => {

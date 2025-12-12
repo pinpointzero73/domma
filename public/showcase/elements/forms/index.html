@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forms - Elements - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -34,10 +34,12 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block language-javascript">
-            <pre><code><div class="form-group">
-    <label>Email</label>
-    <input type="email" class="form-input" placeholder="you@example.com">
-</div></code></pre>
+            <pre><code>
+&lt;div class="form-group"&gt;
+    &lt;label&gt;Email&lt;/label&gt;
+    &lt;input type="email" class="form-input" placeholder="you@example.com"&gt;
+&lt;/div&gt;
+</code></pre>
         </div>
     </div>
 </section>
@@ -62,17 +64,19 @@
             </form>
         </div>
         <div class="code-block language-javascript">
-            <pre><code><form>
-    <div class="form-group">
-        <label>Email</label>
-        <input type="email" class="form-input" placeholder="you@example.com">
-    </div>
-    <div class="form-group">
-        <label>Password</label>
-        <input type="password" class="form-input">
-    </div>
-    <button type="submit" class="btn btn-primary">Sign In</button>
-</form></code></pre>
+            <pre><code>
+&lt;form&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Email&lt;/label&gt;
+        &lt;input type="email" class="form-input" placeholder="you@example.com"&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Password&lt;/label&gt;
+        &lt;input type="password" class="form-input"&gt;
+    &lt;/div&gt;
+    &lt;button type="submit" class="btn btn-primary"&gt;Sign In&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
         </div>
     </div>
 </section>
@@ -129,17 +133,18 @@
         </div>
 
         <div class="code-block language-javascript mt-4">
-            <pre><code>document.getElementById('form').addEventListener('submit', (e) => {
+            <pre><code>
+document.getElementById('form').addEventListener('submit', (e) =&gt; {
     e.preventDefault();
 
     // Clear previous validation
-    document.querySelectorAll('.form-group').forEach(group => {
+    document.querySelectorAll('.form-group').forEach(group =&gt; {
         group.classList.remove('has-error', 'has-success');
     });
 
     // Validate name
     const name = document.getElementById('name');
-    if (name.value.length < 2) {
+    if (name.value.length &lt; 2) {
         name.closest('.form-group').classList.add('has-error');
         return;
     }
@@ -155,7 +160,8 @@
 
     // Form is valid
     console.log('Form submitted successfully!');
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -455,13 +461,14 @@
         </p>
 
         <h4 class="category-title">Form Validation with $.setup()</h4>
-        <pre class="code-block language-javascript">$.setup({
+        <pre class="code-block language-javascript">
+$.setup({
     '#registration-form': {
         initial: {
             data: { touched: {}, errors: {} }
         },
         events: {
-            submit: (e, $form) => {
+            submit: (e, $form) =&gt; {
                 e.preventDefault();
 
                 // Collect form data
@@ -479,7 +486,7 @@
                 if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
                     errors.email = 'Invalid email';
                 }
-                if (formData.password.length < 8) {
+                if (formData.password.length &lt; 8) {
                     errors.password = 'Password must be 8+ characters';
                 }
 
@@ -488,16 +495,16 @@
                 if (_.isEmpty(errors)) {
                     // Submit
                     Domma.http.post('/api/register', formData)
-                        .then(() => {
+                        .then(() =&gt; {
                             Domma.elements.toast.success('Registered successfully!');
                             window.location = '/dashboard';
                         })
-                        .catch(err => {
+                        .catch(err =&gt; {
                             Domma.elements.toast.error(err.message);
                         });
                 } else {
                     // Show errors
-                    _.forEach(errors, (msg, field) => {
+                    _.forEach(errors, (msg, field) =&gt; {
                         $form.find(`[name="${field}"]`)
                             .closest('.form-group')
                             .addClass('has-error')
@@ -506,7 +513,7 @@
                 }
             },
 
-            'blur .form-input': _.debounce((e, $form) => {
+            'blur .form-input': _.debounce((e, $form) =&gt; {
                 const $input = $(e.target);
                 const field = $input.attr('name');
                 const value = $input.val();
@@ -522,7 +529,7 @@
                 if (field === 'email') {
                     isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
                 } else if (field === 'password') {
-                    isValid = value.length >= 8;
+                    isValid = value.length &gt;= 8;
                 } else {
                     isValid = !_.isEmpty(_.trim(value));
                 }
@@ -532,16 +539,18 @@
             }, 300)
         }
     }
-});</pre>
+});
+</pre>
 
         <h4 class="category-title">Auto-Save Draft</h4>
-        <pre class="code-block language-javascript">$.setup({
+        <pre class="code-block language-javascript">
+$.setup({
     '#article-form': {
         initial: {
             data: { saveTimer: null, lastSaved: null }
         },
         events: {
-            'input .form-input, change select': _.debounce((e, $form) => {
+            'input .form-input, change select': _.debounce((e, $form) =&gt; {
                 // Collect current state
                 const data = {
                     title: $form.find('[name="title"]').val(),
@@ -551,32 +560,34 @@
 
                 // Save draft
                 Domma.http.post('/api/drafts/auto-save', data)
-                    .then(() => {
+                    .then(() =&gt; {
                         $form.data('lastSaved', new Date());
                         $('#save-status').text('Draft saved ' + D().format('HH:mm:ss'));
                     });
             }, 2000)
         }
     }
-});</pre>
+});
+</pre>
 
         <h4 class="category-title">Dynamic Form Fields</h4>
-        <pre class="code-block language-javascript">$.setup({
+        <pre class="code-block language-javascript">
+$.setup({
     '#contact-form': {
         events: {
-            'click #add-phone': (e, $form) => {
+            'click #add-phone': (e, $form) =&gt; {
                 const phoneCount = $form.find('.phone-input').length;
                 const html = `
-                    <div class="form-group">
-                        <input type="tel" name="phone_${phoneCount}"
+                    &lt;div class="form-group"&gt;
+                        &lt;input type="tel" name="phone_${phoneCount}"
                                class="form-input phone-input"
-                               placeholder="Phone ${phoneCount + 1}">
-                    </div>
+                               placeholder="Phone ${phoneCount + 1}"&gt;
+                    &lt;/div&gt;
                 `;
                 $form.find('#phone-inputs').append(html);
             },
 
-            'change [name="contact-method"]': (e, $form) => {
+            'change [name="contact-method"]': (e, $form) =&gt; {
                 const method = $(e.target).val();
 
                 // Show/hide relevant fields
@@ -586,18 +597,20 @@
             }
         }
     }
-});</pre>
+});
+</pre>
 
         <h4 class="category-title">Multi-Step Form</h4>
-        <pre class="code-block language-javascript">$.setup({
+        <pre class="code-block language-javascript">
+$.setup({
     '#wizard-form': {
         initial: {
             data: { currentStep: 1, totalSteps: 3, formData: {} }
         },
         events: {
-            'click .next-step': (e, $form) => {
+            'click .next-step': (e, $form) =&gt; {
                 const data = $form.data();
-                if (data.currentStep < data.totalSteps) {
+                if (data.currentStep &lt; data.totalSteps) {
                     // Collect current step data
                     $form.find(`.step-${data.currentStep} .form-input`).each(function() {
                         const $input = $(this);
@@ -616,9 +629,9 @@
                 }
             },
 
-            'click .prev-step': (e, $form) => {
+            'click .prev-step': (e, $form) =&gt; {
                 const data = $form.data();
-                if (data.currentStep > 1) {
+                if (data.currentStep &gt; 1) {
                     data.currentStep--;
                     $form.data(data);
 
@@ -630,7 +643,8 @@
             }
         }
     }
-});</pre>
+});
+</pre>
 
         <h4 class="category-title">Benefits of Hybrid Approach</h4>
         <ul class="mb-4">
@@ -723,9 +737,9 @@ $.setup({
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Tutorial form
     $('#tutorial-form').on('submit', (e) => {

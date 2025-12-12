@@ -53,6 +53,37 @@ global.HTMLCollection = dom.window.HTMLCollection;
 global.Event = dom.window.Event;
 global.CustomEvent = dom.window.CustomEvent;
 
+// Mock fetch API
+global.fetch = async (url, options) => {
+    // Basic mock implementation
+    if (url === '/api/data' && options.method === 'GET') {
+        return {
+            ok: true,
+            status: 200,
+            json: async () => ({message: 'Success'})
+        };
+    }
+    if (url === '/api/post' && options.method === 'POST') {
+        const body = JSON.parse(options.body);
+        if (body.test === 'data') {
+            return {
+                ok: true,
+                status: 200,
+                json: async () => ({received: body})
+            };
+        }
+    }
+    if (url === '/api/error') {
+        return {
+            ok: false,
+            status: 404,
+            json: async () => ({error: 'Not Found'})
+        };
+    }
+    throw new Error(`Unhandled fetch request: ${options.method} ${url}`);
+};
+
+
 // Mock localStorage
 const localStorageMock = (function () {
     let store = {};

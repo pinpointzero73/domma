@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accordion - Elements - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -25,10 +25,12 @@
             <li><strong>Programmatic Control</strong> - Open, close, toggle panels via API</li>
         </ul>
         <div class="code-block language-javascript">
-            <pre><code>const accordion = Domma.elements.accordion('#accordion', {
+            <pre><code>
+const accordion = Domma.elements.accordion('#accordion', {
     multiExpand: false,
     activeIndex: 0
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -213,7 +215,8 @@
             </p>
 
             <h4 class="category-title">Single Accordion Setup</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#my-accordion': {
         component: 'accordion',
         options: {
@@ -222,10 +225,12 @@
             animation: 'slide'
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Multiple Accordions at Once</h4>
-            <pre class="code-block language-javascript">// Configure all FAQ accordions site-wide
+            <pre class="code-block language-javascript">
+// Configure all FAQ accordions site-wide
 $.setup({
     '.faq-accordion': {
         component: 'accordion',
@@ -235,7 +240,7 @@ $.setup({
         },
         events: {
             // Add click tracking
-            change: (index, $item, instance) => {
+            change: (index, $item, instance) =&gt; {
                 console.log(`FAQ ${index + 1} opened`);
             }
         }
@@ -246,15 +251,17 @@ $.setup({
             multiExpand: true  // Allow multiple sections open
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">With Initial State & Events</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#product-details': {
         component: 'accordion',
         options: {
             activeIndex: 0,
-            onChange: (index) => {
+            onChange: (index) =&gt; {
                 // Track which section users view
                 analytics.track('Product Section Viewed', {
                     section: ['specs', 'reviews', 'shipping'][index]
@@ -269,7 +276,8 @@ $.setup({
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Benefits of Declarative Config</h4>
             <ul class="mb-4">
@@ -329,9 +337,9 @@ $.setup({
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     Domma.elements.accordion('#quick-accordion', {multiExpand: false, activeIndex: 0});
     Domma.elements.accordion('#faq-accordion', {multiExpand: false, activeIndex: 0});

@@ -1,5 +1,3 @@
-import { utils } from './utils.js';
-
 class DommaCollection {
     constructor(selector, context) {
         if (typeof selector === 'string') {
@@ -989,7 +987,9 @@ class DommaCollection {
     }
 
     // Event shortcuts
-    click(handler) { return handler ? this.on('click', handler) : this.trigger('click'); }
+    click(handler) {
+        return handler ? this.on('click', handler) : this.triggerNative('click');
+    }
     dblclick(handler) { return handler ? this.on('dblclick', handler) : this.trigger('dblclick'); }
     mousedown(handler) { return handler ? this.on('mousedown', handler) : this.trigger('mousedown'); }
     mouseup(handler) { return handler ? this.on('mouseup', handler) : this.trigger('mouseup'); }

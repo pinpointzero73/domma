@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autocomplete - Elements - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -48,21 +48,23 @@
 
             <h3 class="category-title">Basic Usage</h3>
             <div class="code-block language-javascript">
-            <pre><code>// Static data source
+            <pre><code>
+// Static data source
 const autocomplete = Domma.elements.autocomplete('#search', {
     data: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'],
     minChars: 1,
-    onSelect: (value) => console.log('Selected:', value)
+    onSelect: (value) =&gt; console.log('Selected:', value)
 });
 
 // Async data source
 Domma.elements.autocomplete('#city', {
-    dataSource: async (query) => {
+    dataSource: async (query) =&gt; {
         const res = await fetch(`/api/cities?q=${query}`);
         return res.json();
     },
     debounce: 300
-});</code></pre>
+});
+</code></pre>
             </div>
         </div>
     </section>
@@ -78,9 +80,10 @@ Domma.elements.autocomplete('#city', {
                 <input type="text" id="quick-autocomplete" placeholder="Type a fruit name..." style="max-width: 400px;">
             </div>
             <div class="code-block language-javascript">
-            <pre><code><input type="text" id="fruit-search" placeholder="Type a fruit name...">
+            <pre><code>
+&lt;input type="text" id="fruit-search" placeholder="Type a fruit name..."&gt;
 
-<script>
+&lt;script&gt;
 const fruits = [
     'Apple', 'Apricot', 'Avocado', 'Banana', 'Blackberry', 'Blueberry',
     'Cherry', 'Coconut', 'Date', 'Dragonfruit', 'Elderberry', 'Fig',
@@ -93,11 +96,12 @@ Domma.elements.autocomplete('#fruit-search', {
     data: fruits,
     minChars: 1,
     maxResults: 8,
-    onSelect: (value) => {
+    onSelect: (value) =&gt; {
         console.log('Selected fruit:', value);
     }
 });
-</script></code></pre>
+&lt;/script&gt;
+</code></pre>
             </div>
         </div>
     </section>
@@ -111,12 +115,15 @@ Domma.elements.autocomplete('#fruit-search', {
 
             <h4 class="text-lg font-medium mb-3">Step 1: Create the Input</h4>
             <div class="code-block language-javascript mb-4">
-                <pre><code><input type="text" id="country-search" placeholder="Search countries..."></code></pre>
+                <pre><code>
+&lt;input type="text" id="country-search" placeholder="Search countries..."&gt;
+</code></pre>
             </div>
 
             <h4 class="text-lg font-medium mb-3">Step 2: Prepare Data with Labels and Values</h4>
             <div class="code-block language-javascript mb-4">
-            <pre><code>const countries = [
+            <pre><code>
+const countries = [
     { value: 'us', label: '\ud83c\uddfa\ud83c\uddf8 United States' },
     { value: 'uk', label: '\ud83c\uddec\ud83c\udde7 United Kingdom' },
     { value: 'ca', label: '\ud83c\udde8\ud83c\udde6 Canada' },
@@ -126,20 +133,23 @@ Domma.elements.autocomplete('#fruit-search', {
     { value: 'jp', label: '\ud83c\uddef\ud83c\uddf5 Japan' },
     { value: 'cn', label: '\ud83c\udde8\ud83c\uddf3 China' }
     // ... more countries
-];</code></pre>
+];
+</code></pre>
             </div>
 
             <h4 class="text-lg font-medium mb-3">Step 3: Initialize Autocomplete</h4>
             <div class="code-block language-javascript mb-4">
-            <pre><code>const countryPicker = Domma.elements.autocomplete('#country-search', {
+            <pre><code>
+const countryPicker = Domma.elements.autocomplete('#country-search', {
     data: countries,
     minChars: 1,
     highlightMatches: true,
-    onSelect: (country) => {
+    onSelect: (country) =&gt; {
         console.log('Selected:', country.label);
         console.log('Country code:', country.value);
     }
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h4 class="text-lg font-medium mb-3">Step 4: Try It Out</h4>
@@ -173,24 +183,26 @@ Domma.elements.autocomplete('#fruit-search', {
                 <p class="text-xs text-muted mt-2">Notice the loading indicator while fetching results</p>
             </div>
             <div class="code-block language-javascript">
-            <pre><code>Domma.elements.autocomplete('#language-search', {
-    dataSource: async (query) => {
+            <pre><code>
+Domma.elements.autocomplete('#language-search', {
+    dataSource: async (query) =&gt; {
         // Simulate API call with delay
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve =&gt; setTimeout(resolve, 500));
 
         const languages = [
             'JavaScript', 'TypeScript', 'Python', 'Java', 'C++', 'C#',
             'Ruby', 'Go', 'Rust', 'PHP', 'Swift', 'Kotlin'
         ];
 
-        return languages.filter(lang =>
+        return languages.filter(lang =&gt;
             lang.toLowerCase().includes(query.toLowerCase())
         );
     },
     debounce: 300,
     minChars: 2,
     loadingMessage: 'Searching languages...'
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h3 class="category-title">Example 2: Custom Rendering</h3>
@@ -200,7 +212,8 @@ Domma.elements.autocomplete('#fruit-search', {
                        style="max-width: 400px;">
             </div>
             <div class="code-block language-javascript">
-            <pre><code>const users = [
+            <pre><code>
+const users = [
     { name: 'Alice Johnson', email: 'alice@example.com', role: 'Admin' },
     { name: 'Bob Smith', email: 'bob@example.com', role: 'User' },
     { name: 'Carol White', email: 'carol@example.com', role: 'Editor' }
@@ -208,17 +221,18 @@ Domma.elements.autocomplete('#fruit-search', {
 
 Domma.elements.autocomplete('#user-search', {
     data: users,
-    renderItem: (user, query) => {
+    renderItem: (user, query) =&gt; {
         return `
-            <div style="display: flex; flex-direction: column;">
-                <strong>${user.name}</strong>
-                <span style="font-size: 0.875rem; color: #666;">${user.email}</span>
-                <span style="font-size: 0.75rem; color: #999;">Role: ${user.role}</span>
-            </div>
+            &lt;div style="display: flex; flex-direction: column;"&gt;
+                &lt;strong&gt;${user.name}&lt;/strong&gt;
+                &lt;span style="font-size: 0.875rem; color: #666;"&gt;${user.email}&lt;/span&gt;
+                &lt;span style="font-size: 0.75rem; color: #999;"&gt;Role: ${user.role}&lt;/span&gt;
+            &lt;/div&gt;
         `;
     },
-    onSelect: (user) => console.log('Selected user:', user.name)
-});</code></pre>
+    onSelect: (user) =&gt; console.log('Selected user:', user.name)
+});
+</code></pre>
             </div>
 
             <h3 class="category-title">Example 3: Position Control</h3>
@@ -234,7 +248,8 @@ Domma.elements.autocomplete('#user-search', {
                 <input type="text" id="position-auto" placeholder="Dropdown auto-adjusts..." style="max-width: 400px;">
             </div>
             <div class="code-block language-javascript">
-            <pre><code>// Force above
+            <pre><code>
+// Force above
 Domma.elements.autocomplete('#input-above', {
     data: items,
     position: 'above'
@@ -244,7 +259,8 @@ Domma.elements.autocomplete('#input-above', {
 Domma.elements.autocomplete('#input-auto', {
     data: items,
     position: 'auto'  // Default - chooses best position
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h3 class="category-title">Example 4: Clear on Select</h3>
@@ -254,13 +270,14 @@ Domma.elements.autocomplete('#input-auto', {
                 <div id="selected-tags" class="mt-3 flex flex-wrap gap-2"></div>
             </div>
             <div class="code-block language-javascript">
-            <pre><code>const tags = ['React', 'Vue', 'Angular', 'Svelte', 'Next.js', 'Nuxt.js'];
+            <pre><code>
+const tags = ['React', 'Vue', 'Angular', 'Svelte', 'Next.js', 'Nuxt.js'];
 const selectedTags = [];
 
 Domma.elements.autocomplete('#tag-input', {
     data: tags,
     clearOnSelect: true,
-    onSelect: (tag) => {
+    onSelect: (tag) =&gt; {
         if (!selectedTags.includes(tag)) {
             selectedTags.push(tag);
             renderTags();
@@ -270,10 +287,11 @@ Domma.elements.autocomplete('#tag-input', {
 
 function renderTags() {
     document.getElementById('tag-container').innerHTML =
-        selectedTags.map(tag =>
-            `<span class="badge">${tag}</span>`
+        selectedTags.map(tag =&gt;
+            `&lt;span class="badge"&gt;${tag}&lt;/span&gt;`
         ).join('');
-}</code></pre>
+}
+</code></pre>
             </div>
 
         </div>
@@ -605,7 +623,8 @@ function renderTags() {
 
             <h3 class="category-title">Basic Configuration</h3>
             <div class="code-block language-javascript mb-4">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#product-search': {
         component: 'autocomplete',
         options: {
@@ -614,31 +633,35 @@ function renderTags() {
             highlightMatches: true
         }
     }
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h3 class="category-title">With Callbacks</h3>
             <div class="code-block language-javascript mb-4">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#search-input': {
         component: 'autocomplete',
         options: {
-            dataSource: async (query) => {
+            dataSource: async (query) =&gt; {
                 const response = await fetch(`/api/search?q=${query}`);
                 return response.json();
             },
             debounce: 400,
-            onSelect: (item) => {
+            onSelect: (item) =&gt; {
                 console.log('User selected:', item);
             }
         }
     }
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h3 class="category-title">Multiple Instances</h3>
             <div class="code-block language-javascript">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#fruit-search': {
         component: 'autocomplete',
         options: {
@@ -654,7 +677,8 @@ function renderTags() {
             clearOnSelect: true
         }
     }
-});</code></pre>
+});
+</code></pre>
             </div>
         </div>
     </section>
@@ -678,7 +702,8 @@ function renderTags() {
                 </div>
             </div>
             <div class="code-block language-javascript mb-4">
-            <pre><code>// Create a model with a search field
+            <pre><code>
+// Create a model with a search field
 const searchModel = M.create({
     query: { type: 'string', default: '' }
 });
@@ -695,12 +720,14 @@ searchModel.set('query', 'App');  // Input shows "App"
 
 // Typing updates the model automatically
 // Display model value elsewhere using M.bind()
-M.bind(searchModel, 'query', '#model-display');</code></pre>
+M.bind(searchModel, 'query', '#model-display');
+</code></pre>
             </div>
 
             <h3 class="category-title">With Config Engine</h3>
             <div class="code-block language-javascript mb-4">
-            <pre><code>const userModel = M.create({
+            <pre><code>
+const userModel = M.create({
     searchTerm: { type: 'string', default: '' }
 });
 
@@ -713,7 +740,8 @@ $.setup({
             modelKey: 'searchTerm'
         }
     }
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h3 class="category-title">Multiple Bindings</h3>
@@ -721,7 +749,8 @@ $.setup({
                 When multiple elements bind to the same model field, they all stay in sync automatically:
             </p>
             <div class="code-block language-javascript">
-            <pre><code>const model = M.create({
+            <pre><code>
+const model = M.create({
     query: { type: 'string', default: '' }
 });
 
@@ -738,7 +767,8 @@ M.bind(model, 'query', '#search-display');
 // Another input also bound to same field
 M.bind(model, 'query', '#search-mirror', { twoWay: true });
 
-// All three stay synchronized!</code></pre>
+// All three stay synchronized!
+</code></pre>
             </div>
         </div>
     </section>
@@ -771,9 +801,9 @@ M.bind(model, 'query', '#search-mirror', { twoWay: true });
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Sample data
     const fruits = [

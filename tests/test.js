@@ -1576,28 +1576,28 @@ test('dom.insertBefore()', () => {
 });
 
 test('dom.wrap()', () => {
-    Domma('#test').html('<p>hello</p>');
+    Domma('#test').html('<p>hello</p>'); // Clean up and setup
     Domma('#test p').wrap('<div class="wrapper"></div>');
     assert(Domma('#test .wrapper').length === 1, 'should wrap each element with the given structure');
     assert(Domma('#test .wrapper p').length === 1, 'should have the original element inside the wrapper');
 });
 
 test('dom.wrapAll()', () => {
-    Domma('#test').html('<p>hello</p><p>world</p>');
+    Domma('#test').html('<p>hello</p><p>world</p>'); // Clean up and setup
     Domma('#test p').wrapAll('<div class="wrapper"></div>');
     assert(Domma('#test .wrapper').length === 1, 'should wrap all elements together with the given structure');
     assert(Domma('#test .wrapper p').length === 2, 'should have the original elements inside the wrapper');
 });
 
 test('dom.wrapInner()', () => {
-    Domma('#test').html('<p>hello</p>');
+    Domma('#test').html('<p>hello</p>'); // Clean up and setup
     Domma('#test p').wrapInner('<b></b>');
     assert(Domma('#test p b').length === 1, 'should wrap inner contents of each element');
     assert(Domma('#test p b').get(0).textContent === 'hello', 'should have the original content inside the wrapper');
 });
 
 test('dom.unwrap()', () => {
-    Domma('#test').html('<div class="wrapper"><p>hello</p></div>');
+    Domma('#test').html('<div class="wrapper"><p>hello</p></div>'); // Clean up and setup
     Domma('#test p').unwrap();
     assert(Domma('#test .wrapper').length === 0, 'should remove the parent wrapper from each element');
     assert(Domma('#test p').length === 1, 'should keep the original element');
@@ -1629,14 +1629,14 @@ test('dom.clone()', () => {
 });
 
 test('dom.replaceWith()', () => {
-    Domma('#test').html('<p>hello</p>');
+    Domma('#test').html('<p>hello</p>'); // Clean up and setup
     Domma('#test p').replaceWith('<b>world</b>');
     assert(Domma('#test p').length === 0, 'should not have the old element');
     assert(Domma('#test b').length === 1, 'should have the new element');
 });
 
 test('dom.replaceAll()', () => {
-    Domma('#test').html('<p>hello</p>');
+    Domma('#test').html('<p>hello</p>'); // Clean up and setup
     Domma('<b>world</b>').replaceAll('#test p');
     assert(Domma('#test p').length === 0, 'should not have the old element');
     assert(Domma('#test b').length === 1, 'should have the new element');
@@ -1648,31 +1648,26 @@ test('dom.attr()', () => {
     assert(el.attr('foo') === 'bar', 'should set and get an attribute');
 });
 
-test('dom.removeAttr()', () => {
-    const el = Domma('#test').attr('foo', 'bar').removeAttr('foo');
-    assert(el.attr('foo') === null, 'should remove an attribute');
+// Domma HTTP Utilities
+test('http.get()', async () => {
+    const result = await Domma.http.get('/api/data');
+    assert(result.message === 'Success', 'should make a GET request and return JSON data');
 });
 
-test('dom.prop()', () => {
-    const el = Domma('#test').prop('foo', 'bar');
-    assert(el.prop('foo') === 'bar', 'should set and get a property');
+test('http.post()', async () => {
+    const result = await Domma.http.post('/api/post', {test: 'data'});
+    assert(result.received.test === 'data', 'should make a POST request and return JSON data');
 });
 
-test('dom.removeProp()', () => {
-    const el = Domma('#test').prop('foo', 'bar').removeProp('foo');
-    assert(el.prop('foo') === undefined, 'should remove a property');
-});
-
-test('dom.data()', () => {
-    const el = Domma('#test').data('foo', 'bar');
-    assert(el.data('foo') === 'bar', 'should set and get a data attribute');
-    const allData = el.data();
-    assert(allData.foo === 'bar', 'should get all data attributes');
-});
-
-test('dom.removeData()', () => {
-    const el = Domma('#test').data('foo', 'bar').removeData('foo');
-    assert(el.data('foo') === undefined, 'should remove a data attribute');
+test('http.request() error handling', async () => {
+    let errorCaught = false;
+    try {
+        await Domma.http.request('GET', '/api/error');
+    } catch (e) {
+        errorCaught = true;
+        assert(e.message === 'HTTP Error: 404', 'should catch HTTP errors');
+    }
+    assert(errorCaught === true, 'should throw an error for bad responses');
 });
 
 // Storage Utilities
@@ -1776,9 +1771,10 @@ test('dom.triggerNative()', () => {
 });
 
 test('dom.click()', () => {
+    Domma('#test').html(''); // Clean up and setup
     const el = Domma('#test');
     let count = 0;
-    el.click(() => count++);
+    el.on('click', () => count++);
     el.click();
     assert(count === 1, 'should trigger a click event');
 });

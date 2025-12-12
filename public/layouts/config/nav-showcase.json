@@ -52,13 +52,128 @@
       ]
     },
     {
-      "text": "UI",
+      "text": "Elements",
       "items": [
         {
-          "text": "Elements",
-          "url": "showcase/elements/index.html",
-          "section": "elements"
+          "text": "Accordion",
+          "url": "showcase/elements/accordion/index.html",
+          "section": "accordion"
         },
+        {
+          "text": "Alarm",
+          "url": "showcase/elements/alarm/index.html",
+          "section": "alarm"
+        },
+        {
+          "text": "Autocomplete",
+          "url": "showcase/elements/autocomplete/index.html",
+          "section": "autocomplete"
+        },
+        {
+          "text": "Back to Top",
+          "url": "showcase/elements/back-to-top/index.html",
+          "section": "back-to-top"
+        },
+        {
+          "text": "Badge",
+          "url": "showcase/elements/badge/index.html",
+          "section": "badge"
+        },
+        {
+          "text": "Breadcrumbs",
+          "url": "showcase/elements/breadcrumbs/index.html",
+          "section": "breadcrumbs"
+        },
+        {
+          "text": "Button Group",
+          "url": "showcase/elements/button-group/index.html",
+          "section": "button-group"
+        },
+        {
+          "text": "Card",
+          "url": "showcase/elements/card/index.html",
+          "section": "card"
+        },
+        {
+          "text": "Carousel",
+          "url": "showcase/elements/carousel/index.html",
+          "section": "carousel"
+        },
+        {
+          "text": "Dialog",
+          "url": "showcase/elements/dialog/index.html",
+          "section": "dialog"
+        },
+        {
+          "text": "Dropdown",
+          "url": "showcase/elements/dropdown/index.html",
+          "section": "dropdown"
+        },
+        {
+          "text": "Editor",
+          "url": "showcase/elements/editor/index.html",
+          "section": "editor"
+        },
+        {
+          "text": "Forms",
+          "url": "showcase/elements/forms/index.html",
+          "section": "forms"
+        },
+        {
+          "text": "Jumbotron",
+          "url": "showcase/elements/jumbotron/index.html",
+          "section": "jumbotron"
+        },
+        {
+          "text": "Loader",
+          "url": "showcase/elements/loader/index.html",
+          "section": "loader"
+        },
+        {
+          "text": "Modal",
+          "url": "showcase/elements/modal/index.html",
+          "section": "modal"
+        },
+        {
+          "text": "Navbar",
+          "url": "showcase/elements/navbar/index.html",
+          "section": "navbar"
+        },
+        {
+          "text": "Notification",
+          "url": "showcase/elements/notification/index.html",
+          "section": "notification"
+        },
+        {
+          "text": "Pillbox",
+          "url": "showcase/elements/pillbox/index.html",
+          "section": "pillbox"
+        },
+        {
+          "text": "Tabs",
+          "url": "showcase/elements/tabs/index.html",
+          "section": "tabs"
+        },
+        {
+          "text": "Timer",
+          "url": "showcase/elements/timer/index.html",
+          "section": "timer"
+        },
+        {
+          "text": "Toast",
+          "url": "showcase/elements/toast/index.html",
+          "section": "toast"
+        },
+        {
+          "text": "Tooltip",
+          "url": "showcase/elements/tooltip/index.html",
+          "section": "tooltip"
+        }
+      ]
+    },
+    {
+      "text": "UI",
+      "items": [
         {
           "text": "Grid",
           "url": "showcase/grid/index.html",

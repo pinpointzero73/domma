@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Card - Domma Elements</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -45,21 +45,23 @@
             </ul>
 
             <h4 class="category-title">Basic Usage</h4>
-            <pre class="code-block language-javascript">// HTML structure
-<div id="my-card" class="card">
-    <div class="card-header">Card Header</div>
-    <div class="card-body">
-        <h3 class="card-title">Card Title</h3>
-        <p class="card-text">Card content goes here.</p>
-    </div>
-    <div class="card-footer">Card Footer</div>
-</div>
+            <pre class="code-block language-javascript">
+// HTML structure
+&lt;div id="my-card" class="card"&gt;
+    &lt;div class="card-header"&gt;Card Header&lt;/div&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h3 class="card-title"&gt;Card Title&lt;/h3&gt;
+        &lt;p class="card-text"&gt;Card content goes here.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="card-footer"&gt;Card Footer&lt;/div&gt;
+&lt;/div&gt;
 
 // JavaScript (optional - for hover/click effects)
 const card = Domma.elements.card('#my-card', {
     hover: true,
     clickable: false
-});</pre>
+});
+</pre>
         </div>
     </section>
 
@@ -75,12 +77,14 @@ const card = Domma.elements.card('#my-card', {
             </p>
 
             <h4 class="category-title">CSS-Only Card (No JavaScript)</h4>
-            <pre class="code-block language-javascript"><div class="card">
-    <div class="card-body">
-        <h3 class="card-title">Simple Card</h3>
-        <p class="card-text">This card requires no JavaScript.</p>
-    </div>
-</div></pre>
+            <pre class="code-block language-javascript">
+&lt;div class="card"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h3 class="card-title"&gt;Simple Card&lt;/h3&gt;
+        &lt;p class="card-text"&gt;This card requires no JavaScript.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
 
             <div class="demo-area mb-4">
                 <div class="card" style="max-width: 400px;">
@@ -92,16 +96,18 @@ const card = Domma.elements.card('#my-card', {
             </div>
 
             <h4 class="category-title">Card with Hover Effect (JavaScript)</h4>
-            <pre class="code-block language-javascript">// HTML
-<div id="hover-card" class="card">
-    <div class="card-body">
-        <h3 class="card-title">Hover Me</h3>
-        <p class="card-text">Move your cursor over this card.</p>
-    </div>
-</div>
+            <pre class="code-block language-javascript">
+// HTML
+&lt;div id="hover-card" class="card"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h3 class="card-title"&gt;Hover Me&lt;/h3&gt;
+        &lt;p class="card-text"&gt;Move your cursor over this card.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
 
 // JavaScript
-Domma.elements.card('#hover-card', { hover: true });</pre>
+Domma.elements.card('#hover-card', { hover: true });
+</pre>
 
             <div class="demo-area">
                 <div id="quick-hover-card" class="card" style="max-width: 400px;">
@@ -126,45 +132,53 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
 
             <h4 class="category-title">Step 1: HTML Structure</h4>
             <p class="mb-2">Start with the basic card structure using semantic class names:</p>
-            <pre class="code-block language-javascript"><div id="product-card" class="card">
-    <div class="card-body">
-        <h3 class="card-title">Product Name</h3>
-        <p class="card-text">Brief description of the product.</p>
-    </div>
-</div></pre>
+            <pre class="code-block language-javascript">
+&lt;div id="product-card" class="card"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h3 class="card-title"&gt;Product Name&lt;/h3&gt;
+        &lt;p class="card-text"&gt;Brief description of the product.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
 
             <h4 class="category-title mt-4">Step 2: Add Header and Footer</h4>
             <p class="mb-2">Expand the structure with a header (for images or badges) and footer (for actions):</p>
-            <pre class="code-block language-javascript"><div id="product-card" class="card">
-    <div class="card-header">
-        <span class="badge badge-primary">New</span>
-    </div>
-    <div class="card-body">
-        <h3 class="card-title">Premium Headphones</h3>
-        <p class="card-text">High-quality wireless headphones with noise cancellation.</p>
-        <p class="card-text"><strong>£149.99</strong></p>
-    </div>
-    <div class="card-footer">
-        <button class="btn btn-primary">Add to Cart</button>
-    </div>
-</div></pre>
+            <pre class="code-block language-javascript">
+&lt;div id="product-card" class="card"&gt;
+    &lt;div class="card-header"&gt;
+        &lt;span class="badge badge-primary"&gt;New&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h3 class="card-title"&gt;Premium Headphones&lt;/h3&gt;
+        &lt;p class="card-text"&gt;High-quality wireless headphones with noise cancellation.&lt;/p&gt;
+        &lt;p class="card-text"&gt;&lt;strong&gt;£149.99&lt;/strong&gt;&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="card-footer"&gt;
+        &lt;button class="btn btn-primary"&gt;Add to Cart&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
 
             <h4 class="category-title mt-4">Step 3: Enable Hover Effect</h4>
             <p class="mb-2">Add the hover effect to make the card interactive:</p>
-            <pre class="code-block language-javascript">const productCard = Domma.elements.card('#product-card', {
+            <pre class="code-block language-javascript">
+const productCard = Domma.elements.card('#product-card', {
     hover: true  // Enables lift animation on hover
-});</pre>
+});
+</pre>
 
             <h4 class="category-title mt-4">Step 4: Make It Clickable</h4>
             <p class="mb-2">Turn the entire card into a clickable link:</p>
-            <pre class="code-block language-javascript">const productCard = Domma.elements.card('#product-card', {
+            <pre class="code-block language-javascript">
+const productCard = Domma.elements.card('#product-card', {
     hover: true,
     clickable: true,
-    onClick: (event) => {
+    onClick: (event) =&gt; {
         console.log('Card clicked!');
         window.location.href = '/product/premium-headphones';
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title mt-4">Step 5: Complete Working Demo</h4>
             <p class="mb-2">Here's the finished interactive product card:</p>
@@ -545,58 +559,61 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
             </p>
 
             <h4 class="category-title">Dynamic Content Loading</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#product-grid': {
         events: {
-            ready: async (e, $container) => {
+            ready: async (e, $container) =&gt; {
                 // Load products from API
                 const products = await Domma.http.get('/api/products');
 
                 // Render cards
-                const html = _.map(products, product => `
-                    <div class="card card-hover">
-                        <img src="${product.image}" alt="${product.name}" class="card-img-top">
-                        <div class="card-body">
-                            <h4 class="card-title">${product.name}</h4>
-                            <p class="card-text">${_.truncate(product.description, { length: 100 })}</p>
-                            <div class="card-footer">
-                                <span class="price">$${product.price}</span>
-                                <button class="btn btn-primary btn-sm"
-                                        data-id="${product.id}">
+                const html = _.map(products, product =&gt; `
+                    &lt;div class="card card-hover"&gt;
+                        &lt;img src="${product.image}" alt="${product.name}" class="card-img-top"&gt;
+                        &lt;div class="card-body"&gt;
+                            &lt;h4 class="card-title"&gt;${product.name}&lt;/h4&gt;
+                            &lt;p class="card-text"&gt;${_.truncate(product.description, { length: 100 })}&lt;/p&gt;
+                            &lt;div class="card-footer"&gt;
+                                &lt;span class="price"&gt;$${product.price}&lt;/span&gt;
+                                &lt;button class="btn btn-primary btn-sm"
+                                        data-id="${product.id}"&gt;
                                     Add to Cart
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                                &lt;/button&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
                 `).join('');
 
                 $container.html(html);
             },
 
-            'click [data-id]': (e) => {
+            'click [data-id]': (e) =&gt; {
                 const productId = $(e.currentTarget).attr('data-id');
                 // Add to cart logic
                 Domma.elements.toast.success('Added to cart!');
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Filterable Card Grid</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#blog-grid': {
         initial: {
             data: { posts: [], filteredPosts: [], activeCategory: 'all' }
         },
         events: {
-            ready: async (e, $el) => {
+            ready: async (e, $el) =&gt; {
                 const posts = await Domma.http.get('/api/posts');
                 $el.data('posts', posts);
                 $el.data('filteredPosts', posts);
                 renderCards($el, posts);
             },
 
-            'click [data-category]': (e, $el) => {
+            'click [data-category]': (e, $el) =&gt; {
                 const category = $(e.currentTarget).attr('data-category');
                 const allPosts = $el.data('posts');
 
@@ -623,33 +640,35 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
 });
 
 function renderCards($container, posts) {
-    const html = _.map(posts, post => `
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">${post.title}</h4>
-                <p class="card-text">${_.truncate(post.excerpt, { length: 120 })}</p>
-                <a href="/post/${post.slug}" class="btn btn-outline">Read More</a>
-            </div>
-        </div>
+    const html = _.map(posts, post =&gt; `
+        &lt;div class="card"&gt;
+            &lt;div class="card-body"&gt;
+                &lt;h4 class="card-title"&gt;${post.title}&lt;/h4&gt;
+                &lt;p class="card-text"&gt;${_.truncate(post.excerpt, { length: 120 })}&lt;/p&gt;
+                &lt;a href="/post/${post.slug}" class="btn btn-outline"&gt;Read More&lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
     `).join('');
 
     $container.find('.cards-container').html(html);
-}</pre>
+}
+</pre>
 
             <h4 class="category-title">Sortable Cards</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#team-grid': {
         initial: {
             data: { members: [] }
         },
         events: {
-            ready: async (e, $el) => {
+            ready: async (e, $el) =&gt; {
                 const members = await Domma.http.get('/api/team');
                 $el.data('members', members);
                 renderTeam($el, members);
             },
 
-            'change #sort-by': (e, $el) => {
+            'change #sort-by': (e, $el) =&gt; {
                 const sortBy = $(e.target).val();
                 const members = $el.data('members');
 
@@ -665,32 +684,34 @@ function renderCards($container, posts) {
 });
 
 function renderTeam($container, members) {
-    const html = _.map(members, member => `
-        <div class="card text-center">
-            <img src="${member.avatar}" alt="${member.name}"
-                 class="card-img-top" style="border-radius: 50%; width: 100px; margin: 1rem auto;">
-            <div class="card-body">
-                <h4 class="card-title">${member.name}</h4>
-                <p class="card-text">${member.role}</p>
-            </div>
-        </div>
+    const html = _.map(members, member =&gt; `
+        &lt;div class="card text-center"&gt;
+            &lt;img src="${member.avatar}" alt="${member.name}"
+                 class="card-img-top" style="border-radius: 50%; width: 100px; margin: 1rem auto;"&gt;
+            &lt;div class="card-body"&gt;
+                &lt;h4 class="card-title"&gt;${member.name}&lt;/h4&gt;
+                &lt;p class="card-text"&gt;${member.role}&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
     `).join('');
 
     $container.find('.team-container').html(html);
-}</pre>
+}
+</pre>
 
             <h4 class="category-title">Interactive Card Actions</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '.product-card': {
         component: 'card',
         options: { hover: true, clickable: true },
         events: {
-            click: (e, $card) => {
+            click: (e, $card) =&gt; {
                 const productId = $card.attr('data-product');
                 window.location.href = `/product/${productId}`;
             },
 
-            'click .btn-favorite': (e) => {
+            'click .btn-favorite': (e) =&gt; {
                 e.stopPropagation(); // Don't trigger card click
 
                 const $btn = $(e.currentTarget);
@@ -702,23 +723,24 @@ function renderTeam($container, members) {
                 const isFavorite = $btn.hasClass('active');
 
                 Domma.http.post('/api/favorites', { productId, favorite: isFavorite })
-                    .then(() => {
+                    .then(() =&gt; {
                         Domma.elements.toast.success(
                             isFavorite ? 'Added to favorites' : 'Removed from favorites'
                         );
                     });
             },
 
-            'mouseenter': (e, $card) => {
+            'mouseenter': (e, $card) =&gt; {
                 $card.find('.quick-actions').fadeIn(200);
             },
 
-            'mouseleave': (e, $card) => {
+            'mouseleave': (e, $card) =&gt; {
                 $card.find('.quick-actions').fadeOut(200);
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Benefits of Hybrid Approach</h4>
             <ul class="mb-4">
@@ -826,9 +848,9 @@ $.setup({
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Quick Start examples
     Domma.elements.card('#quick-hover-card', {hover: true});

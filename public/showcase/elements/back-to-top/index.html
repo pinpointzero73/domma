@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Back to Top - Elements - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -33,11 +33,13 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block language-javascript">
-            <pre><code>const backToTop = Domma.elements.backToTop('#back-to-top', {
+            <pre><code>
+const backToTop = Domma.elements.backToTop('#back-to-top', {
     showAfter: 300,
     duration: 600,
     position: 'bottom-right'
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -62,14 +64,16 @@
             </div>
         </div>
         <div class="code-block language-javascript">
-            <pre><code><button id="back-to-top" class="back-to-top-btn">↑</button>
+            <pre><code>
+&lt;button id="back-to-top" class="back-to-top-btn"&gt;↑&lt;/button&gt;
 
-<script>
+&lt;script&gt;
 Domma.elements.backToTop('#back-to-top', {
     showAfter: 200,
     duration: 500
 });
-</script></code></pre>
+&lt;/script&gt;
+</code></pre>
         </div>
     </div>
 </section>
@@ -115,21 +119,23 @@ Domma.elements.backToTop('#back-to-top', {
         </div>
 
         <div class="code-block language-javascript mt-4">
-            <pre><code>const backToTop = Domma.elements.backToTop('#back-to-top', {
+            <pre><code>
+const backToTop = Domma.elements.backToTop('#back-to-top', {
     showAfter: 300,
     duration: 600,
     position: 'bottom-right',
     offset: { bottom: 20, right: 20 },
     target: '#scrollable-container',
-    onShow: () => {
+    onShow: () =&gt; {
         console.log('Button shown');
         document.getElementById('status').textContent = 'Visible';
     },
-    onHide: () => {
+    onHide: () =&gt; {
         console.log('Button hidden');
         document.getElementById('status').textContent = 'Hidden';
     }
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -347,18 +353,20 @@ Domma.elements.backToTop('#back-to-top', {
     </div>
     <div class="card-body">
         <div class="code-block language-javascript">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#back-to-top': {
         component: 'backToTop',
         options: {
             showAfter: 400,
             duration: 600,
             position: 'bottom-right',
-            onShow: () => console.log('Button appeared'),
-            onHide: () => console.log('Button hidden')
+            onShow: () =&gt; console.log('Button appeared'),
+            onHide: () =&gt; console.log('Button hidden')
         }
     }
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -387,9 +395,9 @@ Domma.elements.backToTop('#back-to-top', {
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Quick Start
     const quickBtn = Domma.elements.backToTop('#quick-back-to-top', {

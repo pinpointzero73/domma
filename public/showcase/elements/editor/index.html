@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editor - Domma Showcase</title>
-    <link rel="stylesheet" href="../../css/domma.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../css/grid.css">
     <link rel="stylesheet" href="../../css/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
@@ -77,7 +77,8 @@
 
             <h3 class="category-title">Basic Usage</h3>
             <div class="code-block language-javascript">
-<pre><code>// Text mode
+<pre><code>
+// Text mode
 Domma.elements.editor('#editor', {
     mode: 'text',
     characterCount: true,
@@ -100,7 +101,8 @@ Domma.elements.editor('#editor', {
     lineNumbers: true,
     model: codeModel,
     modelKey: 'sourceCode'
-});</code></pre>
+});
+</code></pre>
             </div>
         </div>
     </section>
@@ -119,7 +121,8 @@ Domma.elements.editor('#editor', {
             </div>
 
             <div class="code-block language-javascript">
-<pre><code>Domma.elements.editor('#editor', {
+<pre><code>
+Domma.elements.editor('#editor', {
     mode: 'text',
     placeholder: 'Start typing...',
     characterCount: true,
@@ -127,8 +130,9 @@ Domma.elements.editor('#editor', {
     autosave: true,
     autosaveInterval: 3000,
     storage: 'text-draft',
-    onChange: (content) => console.log('Content changed')
-});</code></pre>
+    onChange: (content) =&gt; console.log('Content changed')
+});
+</code></pre>
             </div>
         </div>
     </section>
@@ -153,7 +157,8 @@ Domma.elements.editor('#editor', {
             </div>
 
             <div class="code-block language-javascript">
-<pre><code>Domma.elements.editor('#editor', {
+<pre><code>
+Domma.elements.editor('#editor', {
     mode: 'rich',
     placeholder: 'Start writing...',
     toolbar: [
@@ -168,7 +173,8 @@ Domma.elements.editor('#editor', {
     imageMode: 'base64',  // or provide custom imageUpload function
     autosave: true,
     storage: 'rich-draft'
-});</code></pre>
+});
+</code></pre>
             </div>
         </div>
     </section>
@@ -189,14 +195,16 @@ Domma.elements.editor('#editor', {
             </div>
 
             <div class="code-block language-javascript">
-<pre><code>Domma.elements.editor('#editor', {
+<pre><code>
+Domma.elements.editor('#editor', {
     mode: 'code',
     language: 'javascript',
     lineNumbers: true,
     theme: 'light',
     autosave: true,
     storage: 'code-draft'
-});</code></pre>
+});
+</code></pre>
             </div>
         </div>
     </section>
@@ -218,7 +226,8 @@ Domma.elements.editor('#editor', {
             </div>
 
             <div class="code-block language-javascript">
-<pre><code>const editor = Domma.elements.editor('#editor', {
+<pre><code>
+const editor = Domma.elements.editor('#editor', {
     mode: 'text'
 });
 
@@ -228,7 +237,8 @@ editor.setMode('code');  // Switch to code
 editor.setMode('text');  // Back to text
 
 // Get current mode
-console.log(editor.getMode());  // 'text', 'rich', or 'code'</code></pre>
+console.log(editor.getMode());  // 'text', 'rich', or 'code'
+</code></pre>
             </div>
         </div>
     </section>
@@ -260,7 +270,8 @@ console.log(editor.getMode());  // 'text', 'rich', or 'code'</code></pre>
             </div>
 
             <div class="code-block language-javascript">
-<pre><code>const contentModel = M.create({
+<pre><code>
+const contentModel = M.create({
     text: { type: 'string', default: '' }
 });
 
@@ -274,7 +285,8 @@ Domma.elements.editor('#editor', {
 contentModel.set('text', 'New content');
 
 // Editor changes update model
-// (happens automatically on input)</code></pre>
+// (happens automatically on input)
+</code></pre>
             </div>
         </div>
     </section>
@@ -297,12 +309,13 @@ contentModel.set('text', 'New content');
             </div>
 
             <div class="code-block language-javascript">
-<pre><code>const editor = Domma.elements.editor('#editor', {
+<pre><code>
+const editor = Domma.elements.editor('#editor', {
     mode: 'text',
     autosave: true,
     autosaveInterval: 2000,  // 2 seconds
     storage: 'my-document',
-    onSave: (content) => {
+    onSave: (content) =&gt; {
         console.log('Saved!', content.length, 'characters');
     }
 });
@@ -311,7 +324,8 @@ contentModel.set('text', 'New content');
 editor.save();
 
 // Content auto-loads from storage on init
-// if storage key exists</code></pre>
+// if storage key exists
+</code></pre>
             </div>
         </div>
     </section>
@@ -548,10 +562,10 @@ editor.save();
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
 <script src="../../../dist/domma-tools.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Text Mode Demo
     const textEditor = Domma.elements.editor('#text-editor', {

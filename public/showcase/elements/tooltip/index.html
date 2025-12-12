@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tooltip - Elements - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -35,12 +35,14 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block language-javascript">
-            <pre><code>const tooltip = Domma.elements.tooltip('#my-button', {
+            <pre><code>
+const tooltip = Domma.elements.tooltip('#my-button', {
     content: 'Helpful information here',
     position: 'top',
     trigger: 'hover',
     delay: 200
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -55,10 +57,12 @@
             <button id="quick-hover" class="btn btn-primary">Hover Me</button>
         </div>
         <div class="code-block language-javascript">
-            <pre><code>Domma.elements.tooltip('#button', {
+            <pre><code>
+Domma.elements.tooltip('#button', {
     content: 'This appears on hover',
     position: 'top'
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -82,7 +86,8 @@
         </div>
 
         <div class="code-block language-javascript mt-4">
-            <pre><code>Domma.elements.tooltip('#username-help', {
+            <pre><code>
+Domma.elements.tooltip('#username-help', {
     content: 'Username must be 3-20 characters',
     position: 'right',
     trigger: 'hover'
@@ -92,7 +97,8 @@ Domma.elements.tooltip('#password-help', {
     content: 'Password must be at least 8 characters',
     position: 'right',
     trigger: 'hover'
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -243,7 +249,8 @@ Domma.elements.tooltip('#password-help', {
     </div>
     <div class="card-body">
         <div class="code-block language-javascript">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#help-icon': {
         component: 'tooltip',
         options: {
@@ -252,7 +259,8 @@ Domma.elements.tooltip('#password-help', {
             trigger: 'hover'
         }
     }
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -281,9 +289,9 @@ Domma.elements.tooltip('#password-help', {
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     Domma.elements.tooltip('#quick-hover', {
         content: 'This appears on hover',

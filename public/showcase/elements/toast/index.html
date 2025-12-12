@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toast - Elements - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -33,11 +33,13 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block language-javascript">
-            <pre><code>Domma.elements.toast('Operation successful!', {
+            <pre><code>
+Domma.elements.toast('Operation successful!', {
     type: 'success',
     duration: 3000,
     position: 'top-right'
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -52,12 +54,14 @@
             <button id="quick-toast" class="btn btn-primary">Show Toast</button>
         </div>
         <div class="code-block language-javascript">
-            <pre><code>document.getElementById('btn').addEventListener('click', () => {
+            <pre><code>
+document.getElementById('btn').addEventListener('click', () =&gt; {
     Domma.elements.toast('Hello, World!', {
         type: 'info',
         duration: 3000
     });
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -84,7 +88,8 @@
         </div>
 
         <div class="code-block language-javascript mt-4">
-            <pre><code>document.getElementById('submit-btn').addEventListener('click', () => {
+            <pre><code>
+document.getElementById('submit-btn').addEventListener('click', () =&gt; {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
@@ -97,7 +102,7 @@
         return;
     }
 
-    if (password.length < 8) {
+    if (password.length &lt; 8) {
         Domma.elements.toast('Password must be at least 8 characters', {
             type: 'warning',
             duration: 4000
@@ -110,7 +115,8 @@
         type: 'success',
         duration: 5000
     });
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -306,10 +312,11 @@
     <div class="card-body">
         <p class="mb-4">Attach toasts to button clicks using the config engine:</p>
         <div class="code-block language-javascript">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#save-btn': {
         events: {
-            click: (e, $el) => {
+            click: (e, $el) =&gt; {
                 Domma.elements.toast('Changes saved successfully!', {
                     type: 'success',
                     duration: 3000
@@ -319,7 +326,7 @@
     },
     '#delete-btn': {
         events: {
-            click: (e, $el) => {
+            click: (e, $el) =&gt; {
                 Domma.elements.toast('Item deleted', {
                     type: 'error',
                     duration: 4000
@@ -327,7 +334,8 @@
             }
         }
     }
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -356,9 +364,9 @@
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Quick Start
     document.getElementById('quick-toast').addEventListener('click', () => {

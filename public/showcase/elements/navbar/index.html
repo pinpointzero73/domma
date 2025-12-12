@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Navbar - Elements - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -46,11 +46,12 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block language-javascript">
-            <pre><code><!-- HTML Container -->
-<nav id="main-nav"></nav>
+            <pre><code>
+&lt;!-- HTML Container --&gt;
+&lt;nav id="main-nav"&gt;&lt;/nav&gt;
 
-<!-- JavaScript Initialisation -->
-<script>
+&lt;!-- JavaScript Initialisation --&gt;
+&lt;script&gt;
 const navbar = Domma.elements.navbar('#main-nav', {
     brand: {
         text: 'My App',
@@ -65,7 +66,8 @@ const navbar = Domma.elements.navbar('#main-nav', {
     variant: 'light',
     collapsible: true
 });
-</script></code></pre>
+&lt;/script&gt;
+</code></pre>
         </div>
     </div>
 </section>
@@ -84,9 +86,10 @@ const navbar = Domma.elements.navbar('#main-nav', {
             <nav id="quick-start-navbar"></nav>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code><nav id="navbar"></nav>
+            <pre><code>
+&lt;nav id="navbar"&gt;&lt;/nav&gt;
 
-<script>
+&lt;script&gt;
 Domma.elements.navbar('#navbar', {
     brand: { text: 'Domma' },
     items: [
@@ -95,7 +98,8 @@ Domma.elements.navbar('#navbar', {
         { text: 'Pricing', url: '#' }
     ]
 });
-</script></code></pre>
+&lt;/script&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title">With Action Button</h3>
@@ -104,7 +108,8 @@ Domma.elements.navbar('#navbar', {
             <nav id="quick-start-action"></nav>
         </div>
         <div class="code-block language-javascript">
-            <pre><code>Domma.elements.navbar('#navbar', {
+            <pre><code>
+Domma.elements.navbar('#navbar', {
     brand: { text: 'Domma' },
     items: [
         { text: 'Home', url: '#' },
@@ -113,7 +118,8 @@ Domma.elements.navbar('#navbar', {
     actions: [
         { text: 'Sign Up', variant: 'primary', url: '#' }
     ]
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -132,13 +138,16 @@ Domma.elements.navbar('#navbar', {
         <h3 class="category-title">Step 1: Create the HTML Container</h3>
         <p class="text-muted mb-2">Start with a nav element:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code><nav id="app-navbar"></nav></code></pre>
+            <pre><code>
+&lt;nav id="app-navbar"&gt;&lt;/nav&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title">Step 2: Add Brand and Basic Links</h3>
         <p class="text-muted mb-2">Initialise with brand and navigation items:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code>const appNav = Domma.elements.navbar('#app-navbar', {
+            <pre><code>
+const appNav = Domma.elements.navbar('#app-navbar', {
     brand: {
         text: 'My SaaS App',
         logo: '/assets/logo.svg',
@@ -149,13 +158,15 @@ Domma.elements.navbar('#navbar', {
         { text: 'Analytics', url: '/analytics' },
         { text: 'Settings', url: '/settings' }
     ]
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <h3 class="category-title">Step 3: Add a Dropdown Menu</h3>
         <p class="text-muted mb-2">Create a nested dropdown for related items:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code>const appNav = Domma.elements.navbar('#app-navbar', {
+            <pre><code>
+const appNav = Domma.elements.navbar('#app-navbar', {
     brand: { text: 'My SaaS App', url: '/' },
     items: [
         { text: 'Dashboard', url: '/dashboard', active: true },
@@ -170,30 +181,34 @@ Domma.elements.navbar('#navbar', {
         },
         { text: 'Settings', url: '/settings' }
     ]
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <h3 class="category-title">Step 4: Add Action Buttons</h3>
         <p class="text-muted mb-2">Include call-to-action buttons on the right side:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code>const appNav = Domma.elements.navbar('#app-navbar', {
+            <pre><code>
+const appNav = Domma.elements.navbar('#app-navbar', {
     brand: { text: 'My SaaS App', url: '/' },
     items: [...],
     actions: [
         { text: 'Upgrade', variant: 'outline', url: '/upgrade' },
         { text: 'Account', variant: 'primary', url: '/account' }
     ]
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <h3 class="category-title">Step 5: Handle Navigation Clicks</h3>
         <p class="text-muted mb-2">Add click callback to handle navigation:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code>const appNav = Domma.elements.navbar('#app-navbar', {
+            <pre><code>
+const appNav = Domma.elements.navbar('#app-navbar', {
     brand: { text: 'My SaaS App', url: '/' },
     items: [...],
     actions: [...],
-    onItemClick: (item, index, event) => {
+    onItemClick: (item, index, event) =&gt; {
         event.preventDefault();
         console.log('Navigate to:', item.text, item.url);
 
@@ -203,7 +218,8 @@ Domma.elements.navbar('#navbar', {
         // Custom navigation logic
         navigateToPage(item.url);
     }
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <h3 class="category-title">Step 6: Complete Working Demo</h3>
@@ -243,7 +259,8 @@ Domma.elements.navbar('#navbar', {
             </div>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>// Light variant (default)
+            <pre><code>
+// Light variant (default)
 Domma.elements.navbar('#nav', {
     variant: 'light',
     brand: { text: 'App' },
@@ -262,7 +279,8 @@ Domma.elements.navbar('#nav', {
     variant: 'transparent',
     brand: { text: 'App' },
     items: [...]
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <!-- Example 2: With Logo -->
@@ -272,7 +290,8 @@ Domma.elements.navbar('#nav', {
             <nav id="logo-example"></nav>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>Domma.elements.navbar('#nav', {
+            <pre><code>
+Domma.elements.navbar('#nav', {
     brand: {
         logo: 'https://via.placeholder.com/32x32/6495ED/ffffff?text=D',
         text: 'Domma',
@@ -282,7 +301,8 @@ Domma.elements.navbar('#nav', {
         { text: 'Home', url: '#' },
         { text: 'About', url: '#' }
     ]
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <!-- Example 3: Dropdown Menus -->
@@ -292,7 +312,8 @@ Domma.elements.navbar('#nav', {
             <nav id="dropdown-example"></nav>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>Domma.elements.navbar('#nav', {
+            <pre><code>
+Domma.elements.navbar('#nav', {
     brand: { text: 'App' },
     items: [
         { text: 'Home', url: '#' },
@@ -313,7 +334,8 @@ Domma.elements.navbar('#nav', {
             ]
         }
     ]
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <!-- Example 4: Action Buttons -->
@@ -323,7 +345,8 @@ Domma.elements.navbar('#nav', {
             <nav id="actions-example"></nav>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>Domma.elements.navbar('#nav', {
+            <pre><code>
+Domma.elements.navbar('#nav', {
     brand: { text: 'SaaS App' },
     items: [
         { text: 'Features', url: '#' },
@@ -333,7 +356,8 @@ Domma.elements.navbar('#nav', {
         { text: 'Login', variant: 'outline', url: '/login' },
         { text: 'Sign Up', variant: 'primary', url: '/signup' }
     ]
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <!-- Example 5: Fixed Position -->
@@ -342,19 +366,23 @@ Domma.elements.navbar('#nav', {
         <div class="demo-area mb-4">
             <p class="text-sm text-muted mb-2">Fixed (stays at top even when scrolling):</p>
             <div class="code-block language-javascript mb-3">
-                <pre><code>Domma.elements.navbar('#nav', {
+                <pre><code>
+Domma.elements.navbar('#nav', {
     position: 'fixed',  // Always at top of viewport
     brand: { text: 'App' },
     items: [...]
-});</code></pre>
+});
+</code></pre>
             </div>
             <p class="text-sm text-muted mb-2">Sticky (scrolls normally until reaching top):</p>
             <div class="code-block language-javascript">
-                <pre><code>Domma.elements.navbar('#nav', {
+                <pre><code>
+Domma.elements.navbar('#nav', {
     position: 'sticky',  // Sticks when scrolled to top
     brand: { text: 'App' },
     items: [...]
-});</code></pre>
+});
+</code></pre>
             </div>
         </div>
 
@@ -366,7 +394,8 @@ Domma.elements.navbar('#nav', {
             <p class="text-sm text-muted mt-3">Resize browser width below 768px to see hamburger menu</p>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>Domma.elements.navbar('#nav', {
+            <pre><code>
+Domma.elements.navbar('#nav', {
     brand: { text: 'Responsive App' },
     items: [
         { text: 'Home', url: '#' },
@@ -376,7 +405,8 @@ Domma.elements.navbar('#nav', {
     ],
     collapsible: true,  // Enable hamburger menu (default)
     collapseAt: 768     // Breakpoint in pixels (default 768)
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <!-- Example 7: Programmatic Control -->
@@ -392,7 +422,8 @@ Domma.elements.navbar('#nav', {
             </div>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>const navbar = Domma.elements.navbar('#nav', {
+            <pre><code>
+const navbar = Domma.elements.navbar('#nav', {
     brand: { text: 'App' },
     items: [
         { text: 'Home', url: '#', active: true },
@@ -414,7 +445,8 @@ navbar.setItems([
 navbar.expand();         // Show mobile menu
 navbar.collapse();       // Hide mobile menu
 navbar.toggle();         // Toggle mobile menu
-navbar.isCollapsed();    // Check state → true/false</code></pre>
+navbar.isCollapsed();    // Check state → true/false
+</code></pre>
         </div>
 
         <!-- Example 8: Real-World Example -->
@@ -424,7 +456,8 @@ navbar.isCollapsed();    // Check state → true/false</code></pre>
             <nav id="docs-navbar"></nav>
         </div>
         <div class="code-block language-javascript">
-            <pre><code>Domma.elements.navbar('#docs-navbar', {
+            <pre><code>
+Domma.elements.navbar('#docs-navbar', {
     brand: {
         logo: '/logo.svg',
         text: 'API Docs',
@@ -455,11 +488,12 @@ navbar.isCollapsed();    // Check state → true/false</code></pre>
     ],
     variant: 'light',
     position: 'sticky',
-    onItemClick: (item, index, event) => {
+    onItemClick: (item, index, event) =&gt; {
         event.preventDefault();
         console.log('Navigate to:', item.url);
     }
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -546,14 +580,15 @@ navbar.isCollapsed();    // Check state → true/false</code></pre>
         </ul>
 
         <div class="code-block language-javascript">
-            <pre><code><!-- Accessible Navbar with Skip Link -->
-<a href="#main-content" class="skip-link">Skip to main content</a>
-<nav id="main-nav"></nav>
-<main id="main-content">
-    <!-- Page content -->
-</main>
+            <pre><code>
+&lt;!-- Accessible Navbar with Skip Link --&gt;
+&lt;a href="#main-content" class="skip-link"&gt;Skip to main content&lt;/a&gt;
+&lt;nav id="main-nav"&gt;&lt;/nav&gt;
+&lt;main id="main-content"&gt;
+    &lt;!-- Page content --&gt;
+&lt;/main&gt;
 
-<style>
+&lt;style&gt;
 /* Skip link (hidden until focused) */
 .skip-link {
     position: absolute;
@@ -573,9 +608,9 @@ navbar.isCollapsed();    // Check state → true/false</code></pre>
 body {
     padding-top: 60px;
 }
-</style>
+&lt;/style&gt;
 
-<script>
+&lt;script&gt;
 Domma.elements.navbar('#main-nav', {
     brand: {
         logo: '/logo.svg',
@@ -598,13 +633,14 @@ Domma.elements.navbar('#main-nav', {
     ],
     variant: 'light',
     position: 'fixed',
-    onItemClick: (item, index, event) => {
+    onItemClick: (item, index, event) =&gt; {
         event.preventDefault();
         // Handle navigation with proper focus management
         navigateToPage(item.url);
     }
 });
-</script></code></pre>
+&lt;/script&gt;
+</code></pre>
         </div>
     </div>
 </section>
@@ -857,7 +893,8 @@ Domma.elements.navbar('#main-nav', {
         </div>
 
         <div class="code-block language-javascript mt-4">
-            <pre><code>// Complete API Example
+            <pre><code>
+// Complete API Example
 const navbar = Domma.elements.navbar('#nav', {
     brand: {
         text: 'My App',
@@ -882,7 +919,7 @@ const navbar = Domma.elements.navbar('#nav', {
     position: 'sticky',
     collapsible: true,
     collapseAt: 768,
-    onItemClick: (item, index, event) => {
+    onItemClick: (item, index, event) =&gt; {
         event.preventDefault();
         console.log('Clicked:', item.text);
     }
@@ -895,7 +932,8 @@ navbar.expand();                    // Show mobile menu
 navbar.collapse();                  // Hide mobile menu
 navbar.toggle();                    // Toggle mobile menu
 const collapsed = navbar.isCollapsed(); // Check state
-navbar.destroy();                   // Clean up</code></pre>
+navbar.destroy();                   // Clean up
+</code></pre>
         </div>
     </div>
 </section>
@@ -912,7 +950,8 @@ navbar.destroy();                   // Clean up</code></pre>
 
         <h3 class="category-title">Basic Setup</h3>
         <div class="code-block language-javascript mb-6">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#main-nav': {
         component: 'navbar',
         options: {
@@ -924,12 +963,14 @@ navbar.destroy();                   // Clean up</code></pre>
             variant: 'light'
         }
     }
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <h3 class="category-title">Complete Configuration</h3>
         <div class="code-block language-javascript mb-6">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#app-navbar': {
         component: 'navbar',
         options: {
@@ -955,13 +996,14 @@ navbar.destroy();                   // Clean up</code></pre>
             ],
             variant: 'dark',
             position: 'sticky',
-            onItemClick: (item, index, event) => {
+            onItemClick: (item, index, event) =&gt; {
                 event.preventDefault();
                 navigateToPage(item.url);
             }
         }
     }
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <h3 class="category-title">Live Demo</h3>
@@ -970,7 +1012,8 @@ navbar.destroy();                   // Clean up</code></pre>
             <nav id="config-demo-navbar"></nav>
         </div>
         <div class="code-block language-javascript">
-            <pre><code>// Configuration
+            <pre><code>
+// Configuration
 $.setup({
     '#config-demo-navbar': {
         component: 'navbar',
@@ -989,7 +1032,8 @@ $.setup({
 
 // Access instance later
 const navbar = Domma.elements.get('#config-demo-navbar');
-navbar.setActive(1);</code></pre>
+navbar.setActive(1);
+</code></pre>
         </div>
     </div>
 </section>
@@ -1038,9 +1082,9 @@ navbar.setActive(1);</code></pre>
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     const sampleItems = [
         {text: 'Home', url: '#', active: true},

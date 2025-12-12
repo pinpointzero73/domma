@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dialog - Elements - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -34,14 +34,16 @@
 
         <h3 class="category-title">Basic Usage</h3>
         <div class="code-block language-javascript">
-            <pre><code>// Alert
+            <pre><code>
+// Alert
 await Domma.elements.alert('Operation successful!');
 
 // Confirm
 const confirmed = await Domma.elements.confirm('Delete this item?');
 
 // Prompt
-const name = await Domma.elements.prompt('Enter your name:');</code></pre>
+const name = await Domma.elements.prompt('Enter your name:');
+</code></pre>
         </div>
     </div>
 </section>
@@ -56,10 +58,12 @@ const name = await Domma.elements.prompt('Enter your name:');</code></pre>
             <button id="quick-alert" class="btn btn-primary">Show Alert</button>
         </div>
         <div class="code-block language-javascript">
-            <pre><code>document.getElementById('btn').addEventListener('click', async () => {
+            <pre><code>
+document.getElementById('btn').addEventListener('click', async () =&gt; {
     await Domma.elements.alert('This is an alert message!');
     console.log('Alert closed');
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -81,7 +85,8 @@ const name = await Domma.elements.prompt('Enter your name:');</code></pre>
         </div>
 
         <div class="code-block language-javascript">
-            <pre><code>document.getElementById('delete-btn').addEventListener('click', async () => {
+            <pre><code>
+document.getElementById('delete-btn').addEventListener('click', async () =&gt; {
     // Step 1: Confirm deletion
     const confirmed = await Domma.elements.confirm(
         'Are you sure you want to delete this item?',
@@ -112,7 +117,8 @@ const name = await Domma.elements.prompt('Enter your name:');</code></pre>
             title: 'Cancelled'
         });
     }
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -290,10 +296,11 @@ const name = await Domma.elements.prompt('Enter your name:');</code></pre>
     <div class="card-body">
         <p class="mb-4">Dialogs are typically called programmatically, but you can attach them to buttons:</p>
         <div class="code-block language-javascript">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#delete-btn': {
         events: {
-            click: async (e, $el) => {
+            click: async (e, $el) =&gt; {
                 const confirmed = await Domma.elements.confirm(
                     'Delete this item?',
                     { confirmText: 'Delete', cancelText: 'Cancel' }
@@ -304,7 +311,8 @@ const name = await Domma.elements.prompt('Enter your name:');</code></pre>
             }
         }
     }
-});</code></pre>
+});
+</code></pre>
         </div>
     </div>
 </section>
@@ -333,9 +341,9 @@ const name = await Domma.elements.prompt('Enter your name:');</code></pre>
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Quick Start
     document.getElementById('quick-alert').addEventListener('click', async () => {

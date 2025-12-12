@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DesktopNotification - Domma Elements</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -66,7 +66,8 @@
             </ul>
 
             <h4 class="category-title">Basic Usage</h4>
-            <pre class="code-block language-javascript">// Quick notification (static method)
+            <pre class="code-block language-javascript">
+// Quick notification (static method)
 Domma.elements.notify('Hello', {
     body: 'This is a notification!',
     icon: '/icon.png'
@@ -77,7 +78,7 @@ const notif = Domma.elements.notification({
     title: 'New Message',
     body: 'You have 3 unread messages',
     requireInteraction: true,
-    onClick: () => {
+    onClick: () =&gt; {
         console.log('Notification clicked!');
         window.focus();
     }
@@ -85,7 +86,8 @@ const notif = Domma.elements.notification({
 
 await notif.show();  // Returns promise
 notif.close();       // Close manually
-notif.isShown();     // Check state</pre>
+notif.isShown();     // Check state
+</pre>
         </div>
     </section>
 
@@ -100,20 +102,23 @@ notif.isShown();     // Check state</pre>
             </p>
 
             <h4 class="category-title">Simplest Notification</h4>
-            <pre class="code-block language-javascript">// One-liner for quick notifications
+            <pre class="code-block language-javascript">
+// One-liner for quick notifications
 Domma.elements.notify('Hello World!');
 
 // With body text
 Domma.elements.notify('Success', {
     body: 'Your changes have been saved'
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-primary" id="quick-demo">Show Quick Notification</button>
             </div>
 
             <h4 class="category-title">Permission Handling</h4>
-            <pre class="code-block language-javascript">// Check permission status
+            <pre class="code-block language-javascript">
+// Check permission status
 console.log(Domma.DesktopNotification.permission); // 'default', 'granted', 'denied'
 
 // Request permission manually (optional - auto-requested on first show)
@@ -121,7 +126,8 @@ const permission = await Domma.DesktopNotification.requestPermission();
 
 if (permission === 'granted') {
     Domma.elements.notify('Permission Granted!');
-}</pre>
+}
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-secondary" id="request-permission">Request Permission</button>
@@ -141,38 +147,43 @@ if (permission === 'granted') {
             </p>
 
             <h4 class="category-title">Step 1: Create Notification Instance</h4>
-            <pre class="code-block language-javascript">const notification = Domma.elements.notification({
+            <pre class="code-block language-javascript">
+const notification = Domma.elements.notification({
     title: 'Meeting Reminder',
     body: 'Team standup in 5 minutes',
     icon: '/assets/calendar-icon.png',
     badge: '/assets/badge.png',
     tag: 'meeting-reminder',  // Reuse tag to replace existing
     requireInteraction: true  // Stays until user dismisses
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Step 2: Add Event Handlers</h4>
-            <pre class="code-block language-javascript">const notification = Domma.elements.notification({
+            <pre class="code-block language-javascript">
+const notification = Domma.elements.notification({
     title: 'New Message',
     body: 'Click to view',
-    onClick: (event, notificationInstance) => {
+    onClick: (event, notificationInstance) =&gt; {
         console.log('User clicked notification');
         window.focus();
         // Navigate to messages page
         window.location.href = '/messages';
     },
-    onClose: (event, notificationInstance) => {
+    onClose: (event, notificationInstance) =&gt; {
         console.log('Notification closed');
     },
-    onShow: (event, notificationInstance) => {
+    onShow: (event, notificationInstance) =&gt; {
         console.log('Notification shown');
     },
-    onError: (error) => {
+    onError: (error) =&gt; {
         console.error('Notification error:', error);
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Step 3: Show and Control</h4>
-            <pre class="code-block language-javascript">// Show the notification (async)
+            <pre class="code-block language-javascript">
+// Show the notification (async)
 await notification.show();
 
 // Check if shown
@@ -181,9 +192,10 @@ if (notification.isShown()) {
 }
 
 // Close programmatically
-setTimeout(() => {
+setTimeout(() =&gt; {
     notification.close();
-}, 5000);</pre>
+}, 5000);
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-primary" id="tutorial-demo">Run Tutorial Demo</button>
@@ -200,7 +212,8 @@ setTimeout(() => {
         <div class="card-body">
 
             <h4 class="category-title">1. Success/Error Notifications</h4>
-            <pre class="code-block language-javascript">// Success notification
+            <pre class="code-block language-javascript">
+// Success notification
 function notifySuccess(message) {
     Domma.elements.notify('Success', {
         body: message,
@@ -221,7 +234,8 @@ function notifyError(message) {
 
 // Usage
 notifySuccess('Profile updated successfully');
-notifyError('Failed to upload file');</pre>
+notifyError('Failed to upload file');
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-success" id="example-success">Show Success</button>
@@ -229,17 +243,19 @@ notifyError('Failed to upload file');</pre>
             </div>
 
             <h4 class="category-title">2. Integration with Timer</h4>
-            <pre class="code-block language-javascript">// Notify when timer completes
+            <pre class="code-block language-javascript">
+// Notify when timer completes
 const timer = Domma.elements.timer('#timer', {
     duration: 300000,  // 5 minutes
-    onComplete: () => {
+    onComplete: () =&gt; {
         Domma.elements.notify('Timer Complete!', {
             body: 'Your 5-minute timer has finished',
             requireInteraction: true,
-            onClick: () => window.focus()
+            onClick: () =&gt; window.focus()
         });
     }
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-primary" id="example-timer">Start 5-Second Timer</button>
@@ -247,10 +263,11 @@ const timer = Domma.elements.timer('#timer', {
             </div>
 
             <h4 class="category-title">3. Multiple Notifications with Tracking</h4>
-            <pre class="code-block language-javascript">// Create multiple notifications
+            <pre class="code-block language-javascript">
+// Create multiple notifications
 const notifications = [];
 
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i &lt; 3; i++) {
     const notif = Domma.elements.notification({
         title: `Notification ${i + 1}`,
         body: `Message content ${i + 1}`,
@@ -265,7 +282,8 @@ for (let i = 0; i < 3; i++) {
 Domma.DesktopNotification.closeAll();
 
 // Or close specific one
-notifications[0].close();</pre>
+notifications[0].close();
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-primary" id="example-multiple">Show 3 Notifications</button>
@@ -273,19 +291,22 @@ notifications[0].close();</pre>
             </div>
 
             <h4 class="category-title">4. Silent Notifications</h4>
-            <pre class="code-block language-javascript">// Silent notification (no sound)
+            <pre class="code-block language-javascript">
+// Silent notification (no sound)
 Domma.elements.notify('Background Task Complete', {
     body: 'File has been processed',
     silent: true,  // No notification sound
     tag: 'background-task'
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-secondary" id="example-silent">Show Silent Notification</button>
             </div>
 
             <h4 class="category-title">5. Hybrid: Desktop with Toast Fallback (Recommended)</h4>
-            <pre class="code-block language-javascript">// Smart notification that always shows something
+            <pre class="code-block language-javascript">
+// Smart notification that always shows something
 async function smartNotify(title, options = {}) {
     // Try desktop notification first
     if (Domma.DesktopNotification.isSupported &&
@@ -313,7 +334,8 @@ async function smartNotify(title, options = {}) {
 await smartNotify('Task Complete', {
     body: 'Your file has been uploaded',
     type: 'success'
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-primary" id="example-hybrid">Show Hybrid Notification</button>
@@ -366,7 +388,8 @@ await smartNotify('Task Complete', {
             </ul>
 
             <h4 class="category-title">Permission UX Pattern</h4>
-            <pre class="code-block language-javascript">// Good: Explain before requesting
+            <pre class="code-block language-javascript">
+// Good: Explain before requesting
 async function setupNotifications() {
     // Show in-app prompt first
     const userWantsNotifications = await showInAppPrompt(
@@ -384,10 +407,12 @@ async function setupNotifications() {
             showToast('Notifications blocked. You can enable them in settings.');
         }
     }
-}</pre>
+}
+</pre>
 
             <h4 class="category-title">Error Handling Pattern</h4>
-            <pre class="code-block language-javascript">async function safeNotify(title, options = {}) {
+            <pre class="code-block language-javascript">
+async function safeNotify(title, options = {}) {
     // Check support
     if (!Domma.DesktopNotification.isSupported) {
         console.warn('Notifications not supported');
@@ -407,7 +432,7 @@ async function setupNotifications() {
     const notif = Domma.elements.notification({
         title,
         ...options,
-        onError: (error) => {
+        onError: (error) =&gt; {
             console.error('Notification failed:', error);
             showToast(title); // Fallback
         }
@@ -415,7 +440,8 @@ async function setupNotifications() {
 
     await notif.show();
     return notif;
-}</pre>
+}
+</pre>
         </div>
     </section>
 
@@ -427,11 +453,13 @@ async function setupNotifications() {
         <div class="card-body">
 
             <h4 class="category-title">Factory Methods</h4>
-            <pre class="code-block language-javascript">// Create notification instance
+            <pre class="code-block language-javascript">
+// Create notification instance
 elements.notification(options)
 
 // Quick notification (static method)
-elements.notify(title, options)</pre>
+elements.notify(title, options)
+</pre>
 
             <h4 class="category-title">Options</h4>
             <table class="options-table">
@@ -520,31 +548,37 @@ elements.notify(title, options)</pre>
             </table>
 
             <h4 class="category-title">Instance Methods</h4>
-            <pre class="code-block language-javascript">// Show notification (returns Promise)
+            <pre class="code-block language-javascript">
+// Show notification (returns Promise)
 await notification.show()
 
 // Close notification
 notification.close()
 
 // Check if shown
-notification.isShown()  // Returns boolean</pre>
+notification.isShown()  // Returns boolean
+</pre>
 
             <h4 class="category-title">Static Methods</h4>
-            <pre class="code-block language-javascript">// Request permission (returns Promise<string>)
+            <pre class="code-block language-javascript">
+// Request permission (returns Promise&lt;string&gt;)
 await DesktopNotification.requestPermission()
 
 // Quick notification
 DesktopNotification.notify(title, options)
 
 // Close all active notifications
-DesktopNotification.closeAll()</pre>
+DesktopNotification.closeAll()
+</pre>
 
             <h4 class="category-title">Static Properties</h4>
-            <pre class="code-block language-javascript">// Current permission state
+            <pre class="code-block language-javascript">
+// Current permission state
 DesktopNotification.permission  // 'default', 'granted', 'denied'
 
 // Browser support check
-DesktopNotification.isSupported  // boolean</pre>
+DesktopNotification.isSupported  // boolean
+</pre>
         </div>
     </section>
 
@@ -560,27 +594,30 @@ DesktopNotification.isSupported  // boolean</pre>
             </p>
 
             <h4 class="category-title">Trigger Notification on Click</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#notify-button': {
         events: {
-            click: (e, $el) => {
+            click: (e, $el) =&gt; {
                 Domma.elements.notify('Button Clicked', {
                     body: 'You clicked the notification button'
                 });
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-primary" id="config-demo">Config Engine Demo</button>
             </div>
 
             <h4 class="category-title">Form Submission Notification</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#contact-form': {
         events: {
-            submit: async (e, $el) => {
+            submit: async (e, $el) =&gt; {
                 e.preventDefault();
 
                 // Submit form
@@ -603,7 +640,8 @@ DesktopNotification.isSupported  // boolean</pre>
             }
         }
     }
-});</pre>
+});
+</pre>
         </div>
     </section>
 
@@ -657,9 +695,9 @@ DesktopNotification.isSupported  // boolean</pre>
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Quick Demo
     document.getElementById('quick-demo').addEventListener('click', async () => {

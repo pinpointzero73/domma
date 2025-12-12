@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alarm - Domma Elements</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
     <style>
         .alarm-list {
@@ -99,9 +99,10 @@
             </ul>
 
             <h4 class="category-title">Basic Usage</h4>
-            <pre class="code-block language-javascript">// Create alarm manager (singleton)
+            <pre class="code-block language-javascript">
+// Create alarm manager (singleton)
 const alarms = Domma.elements.alarm({
-    onTrigger: (alarm) => {
+    onTrigger: (alarm) =&gt; {
         console.log('Alarm triggered:', alarm);
     }
 });
@@ -115,7 +116,8 @@ alarms.add({
 });
 
 // Alarms persist automatically to localStorage
-// They'll trigger even after browser restart!</pre>
+// They'll trigger even after browser restart!
+</pre>
         </div>
     </section>
 
@@ -130,7 +132,8 @@ alarms.add({
             </p>
 
             <h4 class="category-title">Simplest One-Time Alarm</h4>
-            <pre class="code-block language-javascript">// Create alarm manager
+            <pre class="code-block language-javascript">
+// Create alarm manager
 const alarms = Domma.elements.alarm();
 
 // Add one-time alarm (1 minute from now)
@@ -142,7 +145,8 @@ alarms.add({
     time: time,
     label: 'Quick Reminder',
     notification: true
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-primary" id="quick-alarm">Set 1-Minute Alarm</button>
@@ -150,13 +154,15 @@ alarms.add({
             </div>
 
             <h4 class="category-title">Simplest Daily Alarm</h4>
-            <pre class="code-block language-javascript">// Daily morning alarm
+            <pre class="code-block language-javascript">
+// Daily morning alarm
 alarms.add({
     time: '08:00',
     label: 'Morning Routine',
     repeat: 'daily',
     notification: true
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-primary" id="quick-daily">Set Daily 8 AM Alarm</button>
@@ -176,26 +182,29 @@ alarms.add({
             </p>
 
             <h4 class="category-title">Step 1: Initialize Alarm Manager</h4>
-            <pre class="code-block language-javascript">const alarmManager = Domma.elements.alarm({
+            <pre class="code-block language-javascript">
+const alarmManager = Domma.elements.alarm({
     storageKey: 'my-app-alarms',  // Custom storage key
     checkInterval: 30000,          // Check every 30 seconds
-    onTrigger: (alarm) => {
+    onTrigger: (alarm) =&gt; {
         console.log('Alarm triggered:', alarm);
         // Show visual feedback
         showAlarmModal(alarm);
     },
-    onAlarmAdd: (alarm) => {
+    onAlarmAdd: (alarm) =&gt; {
         console.log('Alarm added:', alarm);
         updateAlarmList();
     },
-    onAlarmRemove: (alarm) => {
+    onAlarmRemove: (alarm) =&gt; {
         console.log('Alarm removed:', alarm);
         updateAlarmList();
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Step 2: Add Multiple Alarms</h4>
-            <pre class="code-block language-javascript">// Morning routine
+            <pre class="code-block language-javascript">
+// Morning routine
 alarmManager.add({
     time: '07:00',
     label: 'Wake Up',
@@ -222,27 +231,29 @@ alarmManager.add({
     label: 'End of Workday',
     repeat: 'weekdays',
     notification: true
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Step 3: Display and Manage Alarms</h4>
-            <pre class="code-block language-javascript">function updateAlarmList() {
+            <pre class="code-block language-javascript">
+function updateAlarmList() {
     const alarms = alarmManager.getAlarms();
     const listEl = document.getElementById('alarm-list');
 
-    listEl.innerHTML = alarms.map(alarm => `
-        <div class="alarm-item ${alarm.enabled ? '' : 'disabled'}">
-            <div class="alarm-info">
-                <div class="alarm-time">${alarm.time}</div>
-                <div class="alarm-label">${alarm.label}</div>
-                <div class="alarm-repeat">${getRepeatText(alarm.repeat)}</div>
-            </div>
-            <div class="alarm-controls">
-                <button onclick="toggleAlarm('${alarm.id}')">
+    listEl.innerHTML = alarms.map(alarm =&gt; `
+        &lt;div class="alarm-item ${alarm.enabled ? '' : 'disabled'}"&gt;
+            &lt;div class="alarm-info"&gt;
+                &lt;div class="alarm-time"&gt;${alarm.time}&lt;/div&gt;
+                &lt;div class="alarm-label"&gt;${alarm.label}&lt;/div&gt;
+                &lt;div class="alarm-repeat"&gt;${getRepeatText(alarm.repeat)}&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="alarm-controls"&gt;
+                &lt;button onclick="toggleAlarm('${alarm.id}')"&gt;
                     ${alarm.enabled ? 'Disable' : 'Enable'}
-                </button>
-                <button onclick="deleteAlarm('${alarm.id}')">Delete</button>
-            </div>
-        </div>
+                &lt;/button&gt;
+                &lt;button onclick="deleteAlarm('${alarm.id}')"&gt;Delete&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
     `).join('');
 }
 
@@ -254,7 +265,8 @@ function toggleAlarm(id) {
 function deleteAlarm(id) {
     alarmManager.remove(id);
     updateAlarmList();
-}</pre>
+}
+</pre>
 
             <div class="demo-area">
                 <h4>Tutorial Demo: Alarm Manager</h4>
@@ -274,7 +286,8 @@ function deleteAlarm(id) {
         <div class="card-body">
 
             <h4 class="category-title">1. Workday Schedule</h4>
-            <pre class="code-block language-javascript">const workdayAlarms = [
+            <pre class="code-block language-javascript">
+const workdayAlarms = [
     { time: '09:00', label: 'Morning Standup', repeat: 'weekdays' },
     { time: '10:30', label: 'Focus Time Starts', repeat: 'weekdays' },
     { time: '12:00', label: 'Lunch Break', repeat: 'weekdays' },
@@ -283,7 +296,7 @@ function deleteAlarm(id) {
 ];
 
 const alarms = Domma.elements.alarm();
-workdayAlarms.forEach(alarm => {
+workdayAlarms.forEach(alarm =&gt; {
     alarms.add({
         ...alarm,
         notification: true,
@@ -291,7 +304,8 @@ workdayAlarms.forEach(alarm => {
             requireInteraction: true
         }
     });
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-primary" id="example-workday">Setup Workday Alarms</button>
@@ -299,7 +313,8 @@ workdayAlarms.forEach(alarm => {
             </div>
 
             <h4 class="category-title">2. Fitness Reminders</h4>
-            <pre class="code-block language-javascript">// Custom workout schedule
+            <pre class="code-block language-javascript">
+// Custom workout schedule
 alarms.add({
     time: '06:30',
     label: 'Morning Workout',
@@ -321,7 +336,8 @@ alarms.add({
     label: 'Posture Check',
     repeat: 'daily',
     notification: true
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-primary" id="example-fitness">Setup Fitness Alarms</button>
@@ -329,12 +345,13 @@ alarms.add({
             </div>
 
             <h4 class="category-title">3. Medication Reminders</h4>
-            <pre class="code-block language-javascript">const medications = [
+            <pre class="code-block language-javascript">
+const medications = [
     { time: '08:00', label: 'Morning Medication', repeat: 'daily' },
     { time: '20:00', label: 'Evening Medication', repeat: 'daily' }
 ];
 
-medications.forEach(med => {
+medications.forEach(med =&gt; {
     alarms.add({
         ...med,
         notification: true,
@@ -345,7 +362,8 @@ medications.forEach(med => {
             icon: '/icons/medical.png'
         }
     });
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-primary" id="example-medication">Setup Medication Reminders</button>
@@ -353,8 +371,9 @@ medications.forEach(med => {
             </div>
 
             <h4 class="category-title">4. Snooze Functionality</h4>
-            <pre class="code-block language-javascript">const alarms = Domma.elements.alarm({
-    onTrigger: async (alarm) => {
+            <pre class="code-block language-javascript">
+const alarms = Domma.elements.alarm({
+    onTrigger: async (alarm) =&gt; {
         // Show modal with snooze option
         const result = await Domma.elements.confirm(
             `Alarm: ${alarm.label}\nSnooze for 10 minutes?`,
@@ -374,7 +393,8 @@ medications.forEach(med => {
             console.log('Alarm dismissed');
         }
     }
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <button class="btn btn-primary" id="example-snooze">Test Snooze (1 min alarm)</button>
@@ -419,7 +439,8 @@ medications.forEach(med => {
             </ul>
 
             <h4 class="category-title">Persistence Pattern</h4>
-            <pre class="code-block language-javascript">// Alarms automatically persist, but good to verify
+            <pre class="code-block language-javascript">
+// Alarms automatically persist, but good to verify
 function setupAlarms() {
     const alarms = Domma.elements.alarm();
 
@@ -434,10 +455,12 @@ function setupAlarms() {
         console.log(`Loaded ${existing.length} alarms from storage`);
         displayAlarms(existing);
     }
-}</pre>
+}
+</pre>
 
             <h4 class="category-title">Next Alarm Display Pattern</h4>
-            <pre class="code-block language-javascript">function showNextAlarm() {
+            <pre class="code-block language-javascript">
+function showNextAlarm() {
     const alarms = Domma.elements.alarm();
     const next = alarms.getNextAlarm();
 
@@ -448,8 +471,8 @@ function setupAlarms() {
         const minutes = Math.floor((timeUntil % 3600000) / 60000);
 
         document.getElementById('next-alarm').innerHTML = `
-            <strong>Next Alarm:</strong> ${next.label}<br>
-            <em>In ${hours}h ${minutes}m (${next.time})</em>
+            &lt;strong&gt;Next Alarm:&lt;/strong&gt; ${next.label}&lt;br&gt;
+            &lt;em&gt;In ${hours}h ${minutes}m (${next.time})&lt;/em&gt;
         `;
     } else {
         document.getElementById('next-alarm').textContent = 'No alarms set';
@@ -458,7 +481,8 @@ function setupAlarms() {
 
 // Update every minute
 setInterval(showNextAlarm, 60000);
-showNextAlarm();</pre>
+showNextAlarm();
+</pre>
         </div>
     </section>
 
@@ -470,8 +494,10 @@ showNextAlarm();</pre>
         <div class="card-body">
 
             <h4 class="category-title">Factory Method</h4>
-            <pre class="code-block language-javascript">// Singleton - always returns same instance
-elements.alarm(options)</pre>
+            <pre class="code-block language-javascript">
+// Singleton - always returns same instance
+elements.alarm(options)
+</pre>
 
             <h4 class="category-title">Options</h4>
             <table class="options-table">
@@ -536,7 +562,8 @@ elements.alarm(options)</pre>
             </table>
 
             <h4 class="category-title">Alarm Object Structure</h4>
-            <pre class="code-block language-javascript">{
+            <pre class="code-block language-javascript">
+{
     id: 'alarm-1',              // Auto-generated
     time: '14:30',              // HH:MM format (24-hour)
     label: 'Meeting',           // Alarm description
@@ -548,10 +575,12 @@ elements.alarm(options)</pre>
     soundUrl: null,             // URL to sound file
     lastTriggered: 1234567890,  // Timestamp of last trigger
     snoozedUntil: null          // Snooze expiration timestamp
-}</pre>
+}
+</pre>
 
             <h4 class="category-title">Repeat Patterns</h4>
-            <pre class="code-block language-javascript">// String patterns
+            <pre class="code-block language-javascript">
+// String patterns
 'daily'           // Every day
 'weekdays'        // Monday-Friday
 'weekends'        // Saturday-Sunday
@@ -561,10 +590,12 @@ elements.alarm(options)</pre>
 ['tue', 'thu']         // Tuesday and Thursday
 
 // One-time alarm
-null              // No repeat (auto-disables after trigger)</pre>
+null              // No repeat (auto-disables after trigger)
+</pre>
 
             <h4 class="category-title">Instance Methods</h4>
-            <pre class="code-block language-javascript">// Add/Remove alarms
+            <pre class="code-block language-javascript">
+// Add/Remove alarms
 alarms.add(alarm)           // Returns alarm with id
 alarms.remove(id)           // Returns boolean
 alarms.update(id, changes)  // Returns updated alarm or null
@@ -584,7 +615,8 @@ alarms.getNextAlarm()       // Returns next alarm with nextTrigger date
 
 // Management
 alarms.clearAll()           // Remove all alarms
-alarms.destroy()            // Stop checking and cleanup</pre>
+alarms.destroy()            // Stop checking and cleanup
+</pre>
         </div>
     </section>
 
@@ -599,7 +631,8 @@ alarms.destroy()            // Stop checking and cleanup</pre>
             </p>
 
             <h4 class="category-title">Initialize with Default Alarms</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     body: {
         // No selector needed - alarm is singleton
     }
@@ -611,13 +644,14 @@ const alarms = Domma.elements.alarm({
         { time: '09:00', label: 'Daily Standup', repeat: 'weekdays' },
         { time: '17:00', label: 'End of Day', repeat: 'weekdays' }
     ],
-    onTrigger: (alarm) => {
+    onTrigger: (alarm) =&gt; {
         Domma.elements.notify(alarm.label, {
             body: `Alarm at ${alarm.time}`,
             requireInteraction: true
         });
     }
-});</pre>
+});
+</pre>
         </div>
     </section>
 
@@ -668,9 +702,9 @@ const alarms = Domma.elements.alarm({
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Initialize alarm manager
     const alarmManager = Domma.elements.alarm({

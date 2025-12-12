@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pillbox - Elements - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../css/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
@@ -47,12 +47,13 @@
 
             <h3 class="category-title">Basic Usage</h3>
             <div class="code-block language-javascript">
-            <pre><code>// Select from predefined options
+            <pre><code>
+// Select from predefined options
 const pillbox = Domma.elements.pillbox('#tags', {
     data: ['React', 'Vue', 'Angular', 'Svelte'],
     value: ['React'],
     maxItems: 5,
-    onChange: (values) => console.log('Selected:', values)
+    onChange: (values) =&gt; console.log('Selected:', values)
 });
 
 // Allow creating custom tags
@@ -60,7 +61,8 @@ Domma.elements.pillbox('#custom-tags', {
     data: ['JavaScript', 'Python', 'Java'],
     creatable: true,
     duplicates: false
-});</code></pre>
+});
+</code></pre>
             </div>
         </div>
     </section>
@@ -76,9 +78,10 @@ Domma.elements.pillbox('#custom-tags', {
                 <input type="text" id="quick-pillbox" style="max-width: 600px;">
             </div>
             <div class="code-block language-javascript">
-            <pre><code><input type="text" id="tech-stack">
+            <pre><code>
+&lt;input type="text" id="tech-stack"&gt;
 
-<script>
+&lt;script&gt;
 const languages = [
     { value: 'js', label: 'JavaScript' },
     { value: 'ts', label: 'TypeScript' },
@@ -92,11 +95,12 @@ Domma.elements.pillbox('#tech-stack', {
     data: languages,
     value: ['js'],
     maxItems: 3,
-    onChange: (values) => {
+    onChange: (values) =&gt; {
         console.log('Selected languages:', values);
     }
 });
-</script></code></pre>
+&lt;/script&gt;
+</code></pre>
             </div>
         </div>
     </section>
@@ -110,28 +114,33 @@ Domma.elements.pillbox('#tech-stack', {
 
             <h4 class="text-lg font-medium mb-3">Step 1: Create the Input</h4>
             <div class="code-block language-javascript mb-4">
-            <pre><code><input type="text" id="recipients-input" placeholder="Add recipients...">
-<div id="recipient-count"></div></code></pre>
+            <pre><code>
+&lt;input type="text" id="recipients-input" placeholder="Add recipients..."&gt;
+&lt;div id="recipient-count"&gt;&lt;/div&gt;
+</code></pre>
             </div>
 
             <h4 class="text-lg font-medium mb-3">Step 2: Prepare Contact Data</h4>
             <div class="code-block language-javascript mb-4">
-            <pre><code>const contacts = [
+            <pre><code>
+const contacts = [
     { value: 'alice@company.com', label: 'Alice Johnson' },
     { value: 'bob@company.com', label: 'Bob Smith' },
     { value: 'carol@company.com', label: 'Carol White' },
     // ... more contacts
-];</code></pre>
+];
+</code></pre>
             </div>
 
             <h4 class="text-lg font-medium mb-3">Step 3: Initialize with Validation</h4>
             <div class="code-block language-javascript mb-4">
-            <pre><code>const recipientPillbox = Domma.elements.pillbox('#recipients-input', {
+            <pre><code>
+const recipientPillbox = Domma.elements.pillbox('#recipients-input', {
     data: contacts,
     creatable: true,  // Allow adding custom emails
     duplicates: false,
     maxItems: 10,
-    validatePill: (email) => {
+    validatePill: (email) =&gt; {
         // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
@@ -139,14 +148,15 @@ Domma.elements.pillbox('#tech-stack', {
         }
         return true;
     },
-    onChange: (values) => {
+    onChange: (values) =&gt; {
         document.getElementById('recipient-count').textContent =
             `${values.length} recipient(s) selected`;
     },
-    onValidationError: (error, value) => {
+    onValidationError: (error, value) =&gt; {
         alert(`Error: ${error}`);
     }
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h4 class="text-lg font-medium mb-3">Step 4: Try It Out</h4>
@@ -178,15 +188,17 @@ Domma.elements.pillbox('#tech-stack', {
                 <p class="text-xs text-muted mt-2">Type any skill and press Enter to add it</p>
             </div>
             <div class="code-block language-javascript">
-            <pre><code>Domma.elements.pillbox('#skills-input', {
+            <pre><code>
+Domma.elements.pillbox('#skills-input', {
     data: ['JavaScript', 'React', 'Node.js', 'MongoDB'],
     creatable: true,
     searchable: true,
     duplicates: false,
-    onCreate: (skill) => {
+    onCreate: (skill) =&gt; {
         console.log('Created new skill:', skill);
     }
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h3 class="category-title">Example 2: Size Variants</h3>
@@ -206,7 +218,8 @@ Domma.elements.pillbox('#tech-stack', {
                 </div>
             </div>
             <div class="code-block language-javascript">
-            <pre><code>// Small
+            <pre><code>
+// Small
 Domma.elements.pillbox('#small', {
     data: items,
     size: 'small'
@@ -216,7 +229,8 @@ Domma.elements.pillbox('#small', {
 Domma.elements.pillbox('#large', {
     data: items,
     size: 'large'
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h3 class="category-title">Example 3: Max Items Limit</h3>
@@ -226,14 +240,16 @@ Domma.elements.pillbox('#large', {
                 <p id="max-items-status" class="text-xs mt-2"></p>
             </div>
             <div class="code-block language-javascript">
-            <pre><code>Domma.elements.pillbox('#limited-input', {
+            <pre><code>
+Domma.elements.pillbox('#limited-input', {
     data: ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5'],
     maxItems: 3,
     maxItemsMessage: 'You can only select {max} items',
-    onMaxReached: () => {
+    onMaxReached: () =&gt; {
         alert('Maximum items reached!');
     }
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h3 class="category-title">Example 4: Custom Pill Rendering</h3>
@@ -243,7 +259,8 @@ Domma.elements.pillbox('#large', {
                        style="max-width: 600px;">
             </div>
             <div class="code-block language-javascript">
-            <pre><code>const team = [
+            <pre><code>
+const team = [
     { value: '1', label: 'Alice', role: 'Admin' },
     { value: '2', label: 'Bob', role: 'Developer' },
     { value: '3', label: 'Carol', role: 'Designer' }
@@ -251,25 +268,26 @@ Domma.elements.pillbox('#large', {
 
 Domma.elements.pillbox('#team-select', {
     data: team,
-    renderPill: (item) => {
+    renderPill: (item) =&gt; {
         const icon = item.role === 'Admin' ? '👑' :
                      item.role === 'Developer' ? '💻' : '🎨';
-        return `${icon} ${item.label} <span style="opacity: 0.6;">(${item.role})</span>`;
+        return `${icon} ${item.label} &lt;span style="opacity: 0.6;"&gt;(${item.role})&lt;/span&gt;`;
     },
-    renderOption: (item) => {
+    renderOption: (item) =&gt; {
         const icon = item.role === 'Admin' ? '👑' :
                      item.role === 'Developer' ? '💻' : '🎨';
         return `
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <span>${icon}</span>
-                <div>
-                    <div><strong>${item.label}</strong></div>
-                    <div style="font-size: 0.75rem; opacity: 0.7;">${item.role}</div>
-                </div>
-            </div>
+            &lt;div style="display: flex; align-items: center; gap: 0.5rem;"&gt;
+                &lt;span&gt;${icon}&lt;/span&gt;
+                &lt;div&gt;
+                    &lt;div&gt;&lt;strong&gt;${item.label}&lt;/strong&gt;&lt;/div&gt;
+                    &lt;div style="font-size: 0.75rem; opacity: 0.7;"&gt;${item.role}&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
         `;
     }
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h3 class="category-title">Example 5: Programmatic Control</h3>
@@ -284,7 +302,8 @@ Domma.elements.pillbox('#team-select', {
                 </div>
             </div>
             <div class="code-block language-javascript">
-            <pre><code>const pillbox = Domma.elements.pillbox('#controlled-pillbox', {
+            <pre><code>
+const pillbox = Domma.elements.pillbox('#controlled-pillbox', {
     data: ['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon']
 });
 
@@ -305,7 +324,8 @@ const values = pillbox.getValue();
 console.log(values);  // ['Beta', 'Gamma']
 
 // Set values programmatically
-pillbox.setValue(['Delta', 'Epsilon']);</code></pre>
+pillbox.setValue(['Delta', 'Epsilon']);
+</code></pre>
             </div>
 
         </div>
@@ -678,7 +698,8 @@ pillbox.setValue(['Delta', 'Epsilon']);</code></pre>
 
             <h3 class="category-title">Basic Configuration</h3>
             <div class="code-block language-javascript mb-4">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#skills-input': {
         component: 'pillbox',
         options: {
@@ -687,29 +708,33 @@ pillbox.setValue(['Delta', 'Epsilon']);</code></pre>
             duplicates: false
         }
     }
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h3 class="category-title">With Creatable Mode</h3>
             <div class="code-block language-javascript mb-4">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#tags-input': {
         component: 'pillbox',
         options: {
             data: ['Frontend', 'Backend', 'DevOps'],
             creatable: true,
             searchable: true,
-            onCreate: (tag) => {
+            onCreate: (tag) =&gt; {
                 console.log('Created new tag:', tag);
             }
         }
     }
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h3 class="category-title">Multiple Instances</h3>
             <div class="code-block language-javascript">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#skills': {
         component: 'pillbox',
         options: {
@@ -726,7 +751,8 @@ pillbox.setValue(['Delta', 'Epsilon']);</code></pre>
             creatable: true
         }
     }
-});</code></pre>
+});
+</code></pre>
             </div>
         </div>
     </section>
@@ -753,7 +779,8 @@ pillbox.setValue(['Delta', 'Epsilon']);</code></pre>
                 </div>
             </div>
             <div class="code-block language-javascript">
-            <pre><code>// Create a model with an array field
+            <pre><code>
+// Create a model with an array field
 const tagsModel = M.create({
     selectedTags: { type: 'array', default: [] }
 });
@@ -767,8 +794,9 @@ Domma.elements.pillbox('#tags', {
 
 // Display model value elsewhere
 M.bind(tagsModel, 'selectedTags', '#tag-display', {
-    format: (tags) => tags.length > 0 ? tags.join(', ') : 'None selected'
-});</code></pre>
+    format: (tags) =&gt; tags.length &gt; 0 ? tags.join(', ') : 'None selected'
+});
+</code></pre>
             </div>
 
             <h3 class="category-title">Two-Way Synchronisation</h3>
@@ -776,16 +804,19 @@ M.bind(tagsModel, 'selectedTags', '#tag-display', {
                 Changes to the model automatically update the pillbox, and vice versa:
             </p>
             <div class="code-block language-javascript">
-            <pre><code>// Model changes update the pillbox
+            <pre><code>
+// Model changes update the pillbox
 tagsModel.set('selectedTags', ['React', 'Vue']);  // Pills appear
 
 // Adding/removing pills updates the model
-// User adds pill → model.set() called → other bindings update</code></pre>
+// User adds pill → model.set() called → other bindings update
+</code></pre>
             </div>
 
             <h3 class="category-title">Config Engine Integration</h3>
             <div class="code-block language-javascript">
-            <pre><code>const userModel = M.create({
+            <pre><code>
+const userModel = M.create({
     skills: { type: 'array', default: [] }
 });
 
@@ -798,7 +829,8 @@ $.setup({
             modelKey: 'skills'
         }
     }
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h3 class="category-title">Multiple Bindings</h3>
@@ -806,7 +838,8 @@ $.setup({
                 Multiple elements can bind to the same model field for synchronised updates:
             </p>
             <div class="code-block language-javascript">
-            <pre><code>const formModel = M.create({
+            <pre><code>
+const formModel = M.create({
     tags: { type: 'array', default: [] }
 });
 
@@ -819,13 +852,14 @@ Domma.elements.pillbox('#tags-input', {
 
 // Display tag count
 M.bind(formModel, 'tags', '#tag-count', {
-    format: (tags) => `${tags.length} tag(s) selected`
+    format: (tags) =&gt; `${tags.length} tag(s) selected`
 });
 
 // Display as JSON
 M.bind(formModel, 'tags', '#tags-json', {
-    format: (tags) => JSON.stringify(tags, null, 2)
-});</code></pre>
+    format: (tags) =&gt; JSON.stringify(tags, null, 2)
+});
+</code></pre>
             </div>
         </div>
     </section>
@@ -855,9 +889,9 @@ M.bind(formModel, 'tags', '#tags-json', {
 
 </main>
 
-<script src="/dist/domma.min.js"></script>
-<script src="/dist/domma-syntax.min.js"></script>
-<script type="module" src="/layouts/js/layout.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Sample data
     const languages = [
