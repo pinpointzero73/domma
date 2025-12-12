@@ -1773,11 +1773,11 @@ class Timer extends Component {
     };
 
     constructor(selector, options = {}) {
-        // Allow headless mode (selector can be null/undefined)
-        if (selector) {
-            super(selector, options);
-        } else {
-            // Headless mode - no DOM element
+        // Must call super before accessing 'this' in derived class
+        super(selector, options);
+
+        // Headless mode: Allow null/undefined selector (no DOM element)
+        if (!selector) {
             this.element = null;
             this.options = {...Timer.defaults, ...options};
         }
