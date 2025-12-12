@@ -1,0 +1,25 @@
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- DCBW-IT Logo - Stylized D with tech circuit elements -->
+    <!-- Uses currentColor for theme adaptability -->
+
+    <!-- Outer D shape - geometric and bold -->
+    <path d="M8 12 L8 36" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    <path d="M8 12 L20 12" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    <path d="M8 36 L20 36" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    <path d="M20 12 Q 32 12 32 24 Q 32 36 20 36" stroke="currentColor" stroke-width="4" stroke-linecap="round"
+          fill="none"/>
+
+    <!-- IT circuit elements - nodes representing connectivity -->
+    <circle cx="16" cy="18" r="2.5" fill="currentColor"/>
+    <circle cx="24" cy="24" r="2.5" fill="currentColor"/>
+    <circle cx="16" cy="30" r="2.5" fill="currentColor"/>
+
+    <!-- Connecting lines - suggest data flow -->
+    <path d="M16 18 L24 24" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+    <path d="M16 30 L24 24" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+
+    <!-- Corner accent - modern tech aesthetic -->
+    <path d="M36 8 L40 8 L40 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M36 40 L40 40 L40 36" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round"/>
+</svg>

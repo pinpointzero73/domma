@@ -25,23 +25,42 @@ test('Domma text()', () => {
     assert(el.text() === 'Hello', 'Should get text content');
 });
 
-test('Domma css()', () => {
+test('Domma utils.merge()', () => {
+    const a = {x: 1};
+    const b = {y: 2};
+    const c = Domma.utils.merge({}, a, b);
+    assert(c.x === 1 && c.y === 2, 'Should merge objects');
+});
+
+// Domma DOM CSS/Class
+test('dom.css()', () => {
     const el = Domma('#test');
     el.css('color', 'red');
     assert(document.getElementById('test').style.color === 'red', 'Should set CSS property');
 });
 
-test('Domma addClass()', () => {
+test('dom.addClass()', () => {
     const el = Domma('#test');
     el.addClass('foo');
     assert(document.getElementById('test').classList.contains('foo'), 'Should add class');
 });
 
-test('Domma utils.merge()', () => {
-    const a = { x: 1 };
-    const b = { y: 2 };
-    const c = Domma.utils.merge({}, a, b);
-    assert(c.x === 1 && c.y === 2, 'Should merge objects');
+test('dom.removeClass()', () => {
+    const el = Domma('#test').addClass('foo').removeClass('foo');
+    assert(el.hasClass('foo') === false, 'should remove a class');
+});
+
+test('dom.toggleClass()', () => {
+    const el = Domma('#test').toggleClass('foo');
+    assert(el.hasClass('foo') === true, 'should toggle a class on');
+    el.toggleClass('foo');
+    assert(el.hasClass('foo') === false, 'should toggle a class off');
+});
+
+test('dom.hasClass()', () => {
+    const el = Domma('#test').addClass('foo');
+    assert(el.hasClass('foo') === true, 'should return true for an existing class');
+    assert(el.hasClass('bar') === false, 'should return false for a nonexistent class');
 });
 
 // Array Utilities
@@ -1328,6 +1347,334 @@ test('utils.chain()', () => {
 });
 
 
+// Domma DOM Traversal
+test('Domma constructor', () => {
+    assert(Domma('#test').length === 1, 'should select an element by ID');
+    assert(Domma('.child').length === 3, 'should select elements by class');
+    assert(Domma('<div>').length === 1, 'should create an element from an HTML string');
+});
+
+test('dom.find()', () => {
+    const parent = Domma('#parent');
+    const children = parent.find('.child');
+    assert(children.length === 3, 'should find descendant elements');
+    const grandchild = parent.find('#grandchild');
+    assert(grandchild.length === 1, 'should find a nested descendant element');
+});
+
+test('dom.children()', () => {
+    const parent = Domma('#parent');
+    const children = parent.children();
+    assert(children.length === 3, 'should get immediate children');
+    const child2 = parent.children('#child2');
+    assert(child2.length === 1, 'should get immediate children filtered by a selector');
+});
+
+test('dom.parent()', () => {
+    const child1 = Domma('#child1');
+    const parent = child1.parent();
+    assert(parent.length === 1 && parent.get(0).id === 'parent', 'should get the parent of an element');
+});
+
+test('dom.parents()', () => {
+    const grandchild = Domma('#grandchild');
+    const parents = grandchild.parents();
+    assert(parents.length === 5, 'should get all ancestors');
+    const parent = grandchild.parents('#parent');
+    assert(parent.length === 1 && parent.get(0).id === 'parent', 'should get all ancestors filtered by a selector');
+});
+
+test('dom.closest()', () => {
+    const grandchild = Domma('#grandchild');
+    const closest = grandchild.closest('.child');
+    assert(closest.length === 1 && closest.get(0).id === 'child2', 'should get the closest ancestor matching a selector');
+});
+
+test('dom.siblings()', () => {
+    const child2 = Domma('#child2');
+    const siblings = child2.siblings();
+    assert(siblings.length === 2, 'should get all siblings');
+    const child1 = child2.siblings('#child1');
+    assert(child1.length === 1, 'should get all siblings filtered by a selector');
+});
+
+test('dom.next()', () => {
+    const child1 = Domma('#child1');
+    const next = child1.next();
+    assert(next.length === 1 && next.get(0).id === 'child2', 'should get the next sibling');
+});
+
+test('dom.nextAll()', () => {
+    const child1 = Domma('#child1');
+    const nextAll = child1.nextAll();
+    assert(nextAll.length === 2, 'should get all following siblings');
+});
+
+test('dom.prev()', () => {
+    const child2 = Domma('#child2');
+    const prev = child2.prev();
+    assert(prev.length === 1 && prev.get(0).id === 'child1', 'should get the previous sibling');
+});
+
+test('dom.prevAll()', () => {
+    const child3 = Domma('#child3');
+    const prevAll = child3.prevAll();
+    assert(prevAll.length === 2, 'should get all preceding siblings');
+});
+
+test('dom.first()', () => {
+    const children = Domma('.child');
+    const first = children.first();
+    assert(first.length === 1 && first.get(0).id === 'child1', 'should get the first element in the collection');
+});
+
+test('dom.last()', () => {
+    const children = Domma('.child');
+    const last = children.last();
+    assert(last.length === 1 && last.get(0).id === 'child3', 'should get the last element in the collection');
+});
+
+test('dom.eq()', () => {
+    const children = Domma('.child');
+    const eq = children.eq(1);
+    assert(eq.length === 1 && eq.get(0).id === 'child2', 'should get the element at the specified index');
+});
+
+test('dom.get()', () => {
+    const children = Domma('.child');
+    const el = children.get(1);
+    assert(el.id === 'child2', 'should get the raw element at the specified index');
+    const all = children.get();
+    assert(all.length === 3, 'should get all raw elements');
+});
+
+test('dom.filter()', () => {
+    const children = Domma('.child');
+    const filtered = children.filter('#child2');
+    assert(filtered.length === 1 && filtered.get(0).id === 'child2', 'should filter elements by a selector');
+});
+
+test('dom.not()', () => {
+    const children = Domma('.child');
+    const not = children.not('#child2');
+    assert(not.length === 2 && not.get(0).id === 'child1' && not.get(1).id === 'child3', 'should remove elements matching a selector from the collection');
+});
+
+test('dom.is()', () => {
+    const children = Domma('.child');
+    assert(children.is('.child') === true, 'should check if any element matches a selector');
+    assert(children.is('#child4') === false, 'should return false if no element matches a selector');
+});
+
+test('dom.has()', () => {
+    const parent = Domma('#parent');
+    const has = parent.has('span');
+    assert(has.length === 1, 'should filter elements that have descendants matching a selector');
+});
+
+test('dom.add()', () => {
+    const child1 = Domma('#child1');
+    const added = child1.add('#child2');
+    assert(added.length === 2, 'should add elements to the collection');
+});
+
+test('dom.contents()', () => {
+    const child2 = Domma('#child2');
+    const contents = child2.contents();
+    assert(contents.length === 1, 'should get children including text nodes');
+});
+
+test('dom.toArray()', () => {
+    const children = Domma('.child');
+    const array = children.toArray();
+    assert(Array.isArray(array) && array.length === 3, 'should convert the collection to an array');
+});
+
+test('dom.index()', () => {
+    const child2 = Domma('#child2');
+    assert(child2.index() === 1, 'should get the index of the element in its parent');
+    assert(child2.index('#child2') === 0, 'should get the index of the element in a collection');
+});
+
+// Domma DOM Content
+test('dom.each()', () => {
+    let count = 0;
+    Domma('.child').each(() => count++);
+    assert(count === 3, 'should iterate over each element in the collection');
+});
+
+test('dom.html()', () => {
+    const el = Domma('#test').html('<span>hello</span>');
+    assert(el.get(0).innerHTML === '<span>hello</span>', 'should set the inner HTML of the element');
+    assert(el.html() === '<span>hello</span>', 'should get the inner HTML of the first element');
+});
+
+test('dom.text()', () => {
+    const el = Domma('#test').text('hello');
+    assert(el.get(0).textContent === 'hello', 'should set the text content of the element');
+    assert(el.text() === 'hello', 'should get the text content of the first element');
+});
+
+test('dom.val()', () => {
+    const input = Domma('<input type="text" value="hello">').appendTo('body');
+    assert(input.val() === 'hello', 'should get the value of a form element');
+    input.val('world');
+    assert(input.val() === 'world', 'should set the value of a form element');
+    input.remove();
+});
+
+// Domma DOM Manipulation
+test('dom.append()', () => {
+    const el = Domma('#test').html('');
+    el.append('<span>hello</span>');
+    assert(el.get(0).children.length === 1, 'should append content to the element');
+});
+
+test('dom.prepend()', () => {
+    const el = Domma('#test').html('<span>hello</span>');
+    el.prepend('<span>world</span>');
+    assert(el.get(0).children.length === 2 && el.get(0).firstChild.textContent === 'world', 'should prepend content to the element');
+});
+
+test('dom.after()', () => {
+    Domma('#test-container').html('<div id="test"></div>');
+    const el = Domma('#test');
+    el.after('<span>hello</span>');
+    assert(el.get(0).nextSibling.textContent === 'hello', 'should insert content after the element');
+});
+
+test('dom.before()', () => {
+    Domma('#test-container').html('<div id="test"></div>');
+    const el = Domma('#test');
+    el.before('<span>hello</span>');
+    assert(el.get(0).previousSibling.textContent === 'hello', 'should insert content before the element');
+});
+
+test('dom.appendTo()', () => {
+    Domma('#test').html('');
+    const el = Domma('<span>hello</span>').appendTo('#test');
+    assert(Domma('#test').get(0).children.length === 1, 'should append elements to the target');
+});
+
+test('dom.prependTo()', () => {
+    Domma('#test').html('');
+    const el = Domma('<span>hello</span>').prependTo('#test');
+    assert(Domma('#test').get(0).children.length === 1, 'should prepend elements to the target');
+});
+
+test('dom.insertAfter()', () => {
+    Domma('#test-container').html('<div id="test"></div>');
+    const el = Domma('<span>hello</span>').insertAfter('#test');
+    assert(Domma('#test').get(0).nextSibling.textContent === 'hello', 'should insert elements after the target');
+});
+
+test('dom.insertBefore()', () => {
+    Domma('#test-container').html('<div id="test"></div>');
+    const el = Domma('<span>hello</span>').insertBefore('#test');
+    assert(Domma('#test').get(0).previousSibling.textContent === 'hello', 'should insert elements before the target');
+    el.remove();
+});
+
+test('dom.wrap()', () => {
+    Domma('#test').html('<p>hello</p>');
+    Domma('#test p').wrap('<div class="wrapper"></div>');
+    assert(Domma('#test .wrapper').length === 1, 'should wrap each element with the given structure');
+    assert(Domma('#test .wrapper p').length === 1, 'should have the original element inside the wrapper');
+});
+
+test('dom.wrapAll()', () => {
+    Domma('#test').html('<p>hello</p><p>world</p>');
+    Domma('#test p').wrapAll('<div class="wrapper"></div>');
+    assert(Domma('#test .wrapper').length === 1, 'should wrap all elements together with the given structure');
+    assert(Domma('#test .wrapper p').length === 2, 'should have the original elements inside the wrapper');
+});
+
+test('dom.wrapInner()', () => {
+    Domma('#test').html('<p>hello</p>');
+    Domma('#test p').wrapInner('<b></b>');
+    assert(Domma('#test p b').length === 1, 'should wrap inner contents of each element');
+    assert(Domma('#test p b').get(0).textContent === 'hello', 'should have the original content inside the wrapper');
+});
+
+test('dom.unwrap()', () => {
+    Domma('#test').html('<div class="wrapper"><p>hello</p></div>');
+    Domma('#test p').unwrap();
+    assert(Domma('#test .wrapper').length === 0, 'should remove the parent wrapper from each element');
+    assert(Domma('#test p').length === 1, 'should keep the original element');
+});
+
+test('dom.remove()', () => {
+    Domma('#test').html('<p>hello</p>');
+    Domma('#test p').remove();
+    assert(Domma('#test p').length === 0, 'should remove elements from the DOM');
+});
+
+test('dom.detach()', () => {
+    Domma('#test').html('<p>hello</p>');
+    Domma('#test p').detach();
+    assert(Domma('#test p').length === 0, 'should remove elements from the DOM');
+});
+
+test('dom.empty()', () => {
+    Domma('#test').html('<p>hello</p>');
+    Domma('#test').empty();
+    assert(Domma('#test').html() === '', 'should remove all children from elements');
+});
+
+test('dom.clone()', () => {
+    const el = Domma('<p>hello</p>');
+    const clone = el.clone();
+    assert(clone.text() === 'hello', 'should clone the element');
+    assert(clone.get(0) !== el.get(0), 'should be a new element');
+});
+
+test('dom.replaceWith()', () => {
+    Domma('#test').html('<p>hello</p>');
+    Domma('#test p').replaceWith('<b>world</b>');
+    assert(Domma('#test p').length === 0, 'should not have the old element');
+    assert(Domma('#test b').length === 1, 'should have the new element');
+});
+
+test('dom.replaceAll()', () => {
+    Domma('#test').html('<p>hello</p>');
+    Domma('<b>world</b>').replaceAll('#test p');
+    assert(Domma('#test p').length === 0, 'should not have the old element');
+    assert(Domma('#test b').length === 1, 'should have the new element');
+});
+
+// Domma DOM Attributes
+test('dom.attr()', () => {
+    const el = Domma('#test').attr('foo', 'bar');
+    assert(el.attr('foo') === 'bar', 'should set and get an attribute');
+});
+
+test('dom.removeAttr()', () => {
+    const el = Domma('#test').attr('foo', 'bar').removeAttr('foo');
+    assert(el.attr('foo') === null, 'should remove an attribute');
+});
+
+test('dom.prop()', () => {
+    const el = Domma('#test').prop('foo', 'bar');
+    assert(el.prop('foo') === 'bar', 'should set and get a property');
+});
+
+test('dom.removeProp()', () => {
+    const el = Domma('#test').prop('foo', 'bar').removeProp('foo');
+    assert(el.prop('foo') === undefined, 'should remove a property');
+});
+
+test('dom.data()', () => {
+    const el = Domma('#test').data('foo', 'bar');
+    assert(el.data('foo') === 'bar', 'should set and get a data attribute');
+    const allData = el.data();
+    assert(allData.foo === 'bar', 'should get all data attributes');
+});
+
+test('dom.removeData()', () => {
+    const el = Domma('#test').data('foo', 'bar').removeData('foo');
+    assert(el.data('foo') === undefined, 'should remove a data attribute');
+});
+
 // Storage Utilities
 test('storage.isAvailable()', () => {
     assert(Domma.storage.isAvailable() === true, 'should confirm that localStorage is available');
@@ -1388,6 +1735,52 @@ test('storage.getAll()', () => {
 test('storage.setAll()', () => {
     Domma.storage.setAll({'foo': 'bar', 'baz': 'qux'});
     assert(Domma.storage.get('foo') === 'bar' && Domma.storage.get('baz') === 'qux', 'should set multiple values at once');
+});
+
+// Domma DOM Events
+test('dom.on() and dom.off()', () => {
+    const el = Domma('#test');
+    let count = 0;
+    const handler = () => count++;
+    el.on('click', handler);
+    el.get(0).click();
+    assert(count === 1, 'should attach an event handler');
+    el.off('click', handler);
+    el.get(0).click();
+    assert(count === 1, 'should detach an event handler');
+});
+
+test('dom.one()', () => {
+    const el = Domma('#test');
+    let count = 0;
+    el.one('click', () => count++);
+    el.get(0).click();
+    el.get(0).click();
+    assert(count === 1, 'should attach an event handler that executes only once');
+});
+
+test('dom.trigger()', () => {
+    const el = Domma('#test');
+    let triggered = false;
+    el.on('custom-event', () => triggered = true);
+    el.trigger('custom-event');
+    assert(triggered === true, 'should trigger a custom event');
+});
+
+test('dom.triggerNative()', () => {
+    const el = Domma('#test');
+    let triggered = false;
+    el.on('click', () => triggered = true);
+    el.triggerNative('click');
+    assert(triggered === true, 'should trigger a native event');
+});
+
+test('dom.click()', () => {
+    const el = Domma('#test');
+    let count = 0;
+    el.click(() => count++);
+    el.click();
+    assert(count === 1, 'should trigger a click event');
 });
 
 // Run Tests

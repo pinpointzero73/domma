@@ -12,7 +12,7 @@
  * Note: Uses tar.gz format for better cross-platform compatibility
  */
 
-import {cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync} from 'fs';
+import {cpSync, existsSync, mkdirSync, rmSync, statSync} from 'fs';
 import {execSync} from 'child_process';
 import {dirname, join} from 'path';
 import {fileURLToPath} from 'url';
@@ -34,63 +34,16 @@ if (existsSync(tempDir)) {
 }
 mkdirSync(tempContentDir, {recursive: true});
 
-// 1. Copy and modify index.html
-console.log('  → Processing index.html...');
-const indexHtml = readFileSync(join(kickstartDir, 'index.html'), 'utf8')
-    .replace(/\.\.\/dist\//g, 'dist/')
-    .replace(/\.\.\/showcase\/css\//g, 'css/')
-    .replace(/\.\.\/assets\//g, 'assets/')
-    .replace(/src="index\.js"/g, 'src="js/index.js"');
-
-writeFileSync(join(tempContentDir, 'index.html'), indexHtml);
-
-// 2. Copy index.js
-console.log('  → Copying index.js...');
-mkdirSync(join(tempContentDir, 'js'), {recursive: true});
-cpSync(
-    join(kickstartDir, 'index.js'),
-    join(tempContentDir, 'js/index.js')
-);
-
-// 3. Copy Domma dist files
-console.log('  → Copying Domma core files...');
-mkdirSync(join(tempContentDir, 'dist/themes'), {recursive: true});
-cpSync(
-    join(rootDir, 'public/dist/domma.min.js'),
-    join(tempContentDir, 'dist/domma.min.js')
-);
-cpSync(
-    join(rootDir, 'public/dist/themes/domma-themes.css'),
-    join(tempContentDir, 'dist/themes/domma-themes.css')
-);
-
-// 4. Copy CSS
-console.log('  → Copying CSS files...');
-mkdirSync(join(tempContentDir, 'css'), {recursive: true});
-cpSync(
-    join(rootDir, 'public/dist/domma.css'),
-    join(tempContentDir, 'css/domma.css')
-);
-cpSync(
-    join(rootDir, 'public/dist/grid.css'),
-    join(tempContentDir, 'css/grid.css')
-);
-cpSync(
-    join(rootDir, 'public/dist/elements.css'),
-    join(tempContentDir, 'css/elements.css')
-);
-
-// 5. Copy logos
-console.log('  → Copying logo assets...');
-mkdirSync(join(tempContentDir, 'assets/logo'), {recursive: true});
-cpSync(
-    join(rootDir, 'public/assets/logo/domma-icon.svg'),
-    join(tempContentDir, 'assets/logo/domma-icon.svg')
-);
-cpSync(
-    join(rootDir, 'public/assets/logo/dcbw-it-icon.svg'),
-    join(tempContentDir, 'assets/logo/dcbw-it-icon.svg')
-);
+// 1. Copy entire kickstart directory structure
+console.log('  → Copying kickstart directory...');
+cpSync(kickstartDir, tempContentDir, {
+    recursive: true,
+    filter: (src) => {
+        // Exclude any potential temp or hidden files
+        const name = src.split('/').pop();
+        return !name.startsWith('.');
+    }
+});
 
 // 6. Create tar.gz archive using system tar command
 console.log('  → Creating archive...');
@@ -130,11 +83,13 @@ console.log(`  Size: ${zipSizeKB} KB`);
 console.log('\n  Contents:');
 console.log('    kickstart-starter/');
 console.log('    ├── index.html');
-console.log('    ├── js/index.js');
-console.log('    ├── dist/domma.min.js');
-console.log('    ├── dist/themes/domma-themes.css');
-console.log('    ├── css/domma.css');
-console.log('    ├── css/grid.css');
-console.log('    ├── css/elements.css');
+console.log('    ├── includes/index.js');
+console.log('    ├── css/custom.css');
+console.log('    ├── dist/');
+console.log('    │   ├── domma.min.js');
+console.log('    │   ├── domma.css');
+console.log('    │   ├── grid.css');
+console.log('    │   ├── elements.css');
+console.log('    │   └── themes/domma-themes.css');
 console.log('    └── assets/logo/ (2 SVG files)');
 console.log('');

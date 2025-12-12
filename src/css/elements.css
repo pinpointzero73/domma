@@ -1136,6 +1136,28 @@ code {
     text-decoration: none;
 }
 
+.navbar-brand-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: var(--dm-space-2);
+}
+
+.navbar-brand-text {
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1.2;
+    font-size: var(--dm-font-size-lg);
+    font-weight: 600;
+}
+
+.navbar-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
 /* Hamburger Toggle */
 
 .navbar-toggle {
@@ -1193,14 +1215,45 @@ code {
     background-color: color-mix(in srgb, var(--dm-primary) 10%, transparent);
 }
 
-/* Dark navbar variant (optional explicit dark navbar) */
+/* Light navbar variant */
+
+.navbar-light {
+    background-color: var(--dm-white);
+    border-bottom-color: var(--dm-border);
+}
+
+.navbar-light .navbar-brand,
+.navbar-light .navbar-brand-text {
+    color: var(--dm-text);
+}
+
+.navbar-light .navbar-link {
+    color: var(--dm-text-secondary);
+}
+
+.navbar-light .navbar-link:hover {
+    color: var(--dm-text);
+    background-color: var(--dm-gray-100);
+}
+
+.navbar-light .navbar-toggle {
+    color: var(--dm-text);
+}
+
+.navbar-light .navbar-toggle:hover {
+    background: var(--dm-gray-100);
+    color: var(--dm-text);
+}
+
+/* Dark navbar variant */
 
 .navbar-dark {
     background-color: var(--dm-gray-900);
     border-bottom-color: var(--dm-gray-800);
 }
 
-.navbar-dark .navbar-brand {
+.navbar-dark .navbar-brand,
+.navbar-dark .navbar-brand-text {
     color: var(--dm-white);
 }
 
@@ -1349,7 +1402,7 @@ code {
     color: var(--dm-primary-light);
 }
 
-#main-navbar .navbar-container {
+.navbar-container {
     display: flex;
     align-items: center;
     justify-content: space-between;

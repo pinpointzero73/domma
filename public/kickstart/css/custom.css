@@ -1,0 +1,37 @@
+/**
+ * Custom Styles
+ * Add your project-specific styles here
+ *
+ * This file is loaded after all Domma CSS files, so you can:
+ * - Override Domma styles
+ * - Add your own component styles
+ * - Customize the theme
+ *
+ * Available CSS variables from Domma:
+ * - Colors: --dm-primary, --dm-secondary, --dm-success, --dm-danger, etc.
+ * - Spacing: --dm-space-1 through --dm-space-16
+ * - Typography: --dm-font-sans, --dm-font-mono, --dm-font-size-*
+ * - Borders: --dm-radius-*, --dm-border, --dm-shadow-*
+ */
+
+/* Example: Custom button style */
+.btn-custom {
+    background: var(--dm-primary);
+    color: white;
+    padding: var(--dm-space-3) var(--dm-space-5);
+    border-radius: var(--dm-radius-md);
+    transition: all 0.2s ease;
+}
+
+.btn-custom:hover {
+    background: var(--dm-primary-hover);
+    transform: translateY(-2px);
+}
+
+/* Example: Custom card variant */
+.card-highlight {
+    border-left: 4px solid var(--dm-primary);
+    background: var(--dm-surface-raised);
+}
+
+/* Add your custom styles below */

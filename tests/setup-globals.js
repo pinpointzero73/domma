@@ -31,11 +31,27 @@ global.__BUILD_DATE__ = formatDate(new Date());
 global.__BUILD_COMMIT__ = getGitCommit();
 
 // Setup JSDOM environment
-const dom = new JSDOM(`<!DOCTYPE html><body><div id="test"></div></body>`);
+const dom = new JSDOM(`<!DOCTYPE html>
+    <body>
+        <div id="test"></div>
+        <div id="test-container">
+            <div id="parent">
+                <div id="child1" class="child"></div>
+                <div id="child2" class="child">
+                    <span id="grandchild"></span>
+                </div>
+                <div id="child3" class="child"></div>
+            </div>
+        </div>
+    </body>
+`);
 global.window = dom.window;
 global.document = dom.window.document;
 global.HTMLElement = dom.window.HTMLElement;
 global.NodeList = dom.window.NodeList;
+global.HTMLCollection = dom.window.HTMLCollection;
+global.Event = dom.window.Event;
+global.CustomEvent = dom.window.CustomEvent;
 
 // Mock localStorage
 const localStorageMock = (function () {

@@ -1,11 +1,11 @@
 /**
- * Domma Kickstart - JavaScript Initialization
+ * Domma Kickstart - JavaScript Initialisation
  *
  * This file demonstrates Domma's core features and best practices.
- * It's designed to be educational and easy to customize.
+ * It's designed to be educational and easy to customise.
  *
  * Sections:
- * 1. Navbar Initialization
+ * 1. Navbar Initialisation
  * 2. Basic Setup & Config Examples
  * 3. Grid Layout Logic
  * 4. Example Interactions
@@ -34,7 +34,7 @@
     // - Active state tracking
     // - Smooth animations
     //
-    // Customize:
+    // Customise:
     // - Change brand text/logo
     // - Add/remove menu items
     // - Adjust breakpoint (collapseAt)
@@ -46,8 +46,8 @@
     Domma.elements.navbar('#main-nav', {
         brand: {
             text: 'Domma Kickstart',
-            logo: '../assets/logo/domma-icon.svg',
-            url: '/kickstart/'
+            logo: 'assets/logo/domma-icon.svg',
+            url: './'
         },
         items: [
             {text: 'Home', url: '/kickstart/', active: true},
@@ -62,7 +62,7 @@
                 ]
             }
         ],
-        variant: 'light',    // Try 'dark' or 'transparent'
+        variant: 'dark',     // Try 'light' or 'transparent'
         collapsible: true,   // Enable mobile menu
         collapseAt: 768      // Breakpoint in pixels
     });
@@ -127,9 +127,9 @@
 
     // Collection operations
     const users = [
-        {name: 'Alice', age: 30},
-        {name: 'Bob', age: 25},
-        {name: 'Charlie', age: 35}
+        {name: 'Rita', age: 19},
+        {name: 'Sue', age: 20},
+        {name: 'Bob', age: 38}
     ];
     const sorted = _.sortBy(users, 'age');
     console.log('Utils: Sorted by age:', sorted);
@@ -197,7 +197,7 @@
     // - Select and manipulate multiple elements
     // - Work with data attributes
     // - Use Domma's icon system
-    // - Initialize components on page load
+    // - Initialise components on page load
     //
     // Icons are rendered from data-icon attributes
     // using Domma's built-in SVG icon library
@@ -345,7 +345,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         console.log('[Kickstart] DOM ready, initializing...');
 
-        // Initialize step cards with icons
+        // Initialise step cards with icons
         initializeStepCards();
 
         // Set up smooth scrolling
@@ -376,7 +376,7 @@
     //
     // 2. Experiment with components
     //    - Add modals for login/signup
-    //    - Use tabs for content organization
+    //    - Use tabs for content organisation
     //    - Add a carousel for images
     //
     // 3. Build features
@@ -384,9 +384,9 @@
     //    - Add a search functionality
     //    - Implement a data table
     //
-    // 4. Customize styling
+    // 4. Customise styling
     //    - Try different theme variants (ocean, forest, sunset)
-    //    - Modify colors in CSS variables
+    //    - Modify colours in CSS variables
     //    - Add your own components
     //
     // 5. Learn more
