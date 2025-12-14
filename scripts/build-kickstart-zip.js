@@ -45,11 +45,30 @@ cpSync(kickstartDir, tempContentDir, {
     }
 });
 
+// 2. Create dist directory in temp content
+const tempDistDir = join(tempContentDir, 'dist');
+const tempThemesDir = join(tempDistDir, 'themes');
+mkdirSync(tempThemesDir, {recursive: true});
+
+// 3. Copy Domma core library
+console.log('  → Copying domma.min.js...');
+const distDir = join(rootDir, 'public/dist');
+cpSync(join(distDir, 'domma.min.js'), join(tempDistDir, 'domma.min.js'));
+
+// 4. Copy CSS files
+console.log('  → Copying CSS files...');
+cpSync(join(distDir, 'domma.css'), join(tempDistDir, 'domma.css'));
+cpSync(join(distDir, 'grid.css'), join(tempDistDir, 'grid.css'));
+cpSync(join(distDir, 'elements.css'), join(tempDistDir, 'elements.css'));
+
+// 5. Copy themes
+console.log('  → Copying themes...');
+cpSync(join(distDir, 'themes/domma-themes.css'), join(tempThemesDir, 'domma-themes.css'));
+
 // 6. Create tar.gz archive using system tar command
 console.log('  → Creating archive...');
 
 // Ensure dist directory exists
-const distDir = join(rootDir, 'public/dist');
 if (!existsSync(distDir)) {
     mkdirSync(distDir, {recursive: true});
 }
