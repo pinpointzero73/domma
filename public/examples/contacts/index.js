@@ -23,6 +23,7 @@ const contactsData = M.create({
 
 let contactsTable = null;
 let groupsDropdown = null;
+let managementAccordion = null;
 let selectedGroups = [];
 let currentEditId = null;
 
@@ -46,6 +47,13 @@ function initApp() {
             content: $(this).attr('data-tooltip'),
             position: 'top'
         });
+    });
+
+    // Initialise accordion
+    managementAccordion = Domma.elements.accordion('#management-accordion', {
+        multiExpand: false,
+        activeIndex: 1, // Open "Add Contact" by default
+        animation: true
     });
 
     // Initialise groups dropdown
@@ -188,7 +196,7 @@ function updateGroupsDisplay() {
     if (selectedGroups.length === 0) {
         $display.text('Select groups...');
     } else {
-        $display.html(selectedGroups.map(g => `<span class="group-badge">${g}</span>`).join(' '));
+        $display.html(selectedGroups.map(g => `<span class="group-badge badge-primary">${g}</span>`).join(' '));
     }
 }
 
@@ -225,7 +233,7 @@ function initTable() {
                 sortable: false,
                 render: (value) => {
                     if (!value || value.length === 0) return '-';
-                    return value.map(g => `<span class="group-badge">${g}</span>`).join(' ');
+                    return value.map(g => `<span class="group-badge badge-primary">${g}</span>`).join(' ');
                 }
             },
             {
@@ -243,8 +251,14 @@ function initTable() {
                 render: (value, row) => {
                     return `
                         <div class="contact-actions">
-                            <button class="btn btn-sm btn-outline edit-contact" data-icon="edit" ${row.id}">Edit</button>
-                            <button class="btn btn-sm btn-danger delete-contact" data-id="${row.id}">Delete</button>
+                            <button class="btn btn-sm btn-outline edit-contact" data-id="${row.id}">
+                                <span data-icon="edit" data-icon-size="16"></span>
+                                Edit
+                            </button>
+                            <button class="btn btn-sm btn-danger delete-contact" data-id="${row.id}">
+                                <span data-icon="trash" data-icon-size="16"></span>
+                                Delete
+                            </button>
                         </div>
                     `;
                 }
@@ -443,8 +457,14 @@ function editContact(id) {
     // Enable save button
     updateSaveButtonState();
 
-    // Scroll to form
-    document.getElementById('contact-form').scrollIntoView({behavior: 'smooth', block: 'start'});
+    // Open the contact form accordion panel (index 1), then scroll after animation
+    if (managementAccordion) {
+        managementAccordion.open(1);
+        // Wait for accordion animation to complete before scrolling
+        setTimeout(() => {
+            document.getElementById('management-accordion').scrollIntoView({behavior: 'smooth', block: 'start'});
+        }, 300);
+    }
 }
 
 /**
@@ -628,6 +648,48 @@ function addGroup() {
 }
 
 /**
+ * Renames a group and updates it in all associated contacts.
+ *
+ * @param {string} oldName - The current name of the group.
+ * @param {string} newName - The new name for the group.
+ *
+ * @return {void}
+ */
+function renameGroup(oldName, newName) {
+    const groups = contactsData.get('groups');
+
+    // Check if new name already exists
+    if (groups.includes(newName)) {
+        Domma.elements.toast('A group with that name already exists', {type: 'error'});
+        return;
+    }
+
+    // Update groups list
+    const index = groups.indexOf(oldName);
+    if (index !== -1) {
+        groups[index] = newName;
+        contactsData.set('groups', groups);
+        contactsData.save();
+    }
+
+    // Update group name in all contacts
+    const contacts = contactsData.get('contacts');
+    contacts.forEach(contact => {
+        if (contact.groups && contact.groups.includes(oldName)) {
+            const groupIndex = contact.groups.indexOf(oldName);
+            contact.groups[groupIndex] = newName;
+        }
+    });
+    contactsData.set('contacts', contacts);
+    contactsData.save();
+
+    renderGroupsList();
+    updateStats();
+    contactsTable.setData(contacts);
+    Domma.elements.toast('Group renamed successfully!', {type: 'success'});
+}
+
+/**
  * Deletes a group and removes it from all associated contacts.
  *
  * @param {string} groupName - The name of the group to be deleted.
@@ -672,11 +734,17 @@ function renderGroupsList() {
 
     const html = groups.map(group => `
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; border: 1px solid var(--dm-border); border-radius: var(--dm-radius); margin-bottom: 0.5rem;">
-            <span class="group-badge">${group}</span>
-            <button class="btn btn-sm btn-danger delete-group-btn" data-group="${group}">
-                <span data-icon="trash" data-icon-size="24"></span>
-                Delete
-            </button>
+            <span class="group-badge badge-primary">${group}</span>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-sm btn-outline edit-group-btn" data-group="${group}">
+                    <span data-icon="edit" data-icon-size="16"></span>
+                    Edit
+                </button>
+                <button class="btn btn-sm btn-danger delete-group-btn" data-group="${group}">
+                    <span data-icon="trash" data-icon-size="16"></span>
+                    Delete
+                </button>
+            </div>
         </div>
     `).join('');
 
@@ -684,6 +752,19 @@ function renderGroupsList() {
 
     // Scan for icons in the newly added content
     Domma.icons.scan();
+
+    // Bind edit buttons
+    $('.edit-group-btn').on('click', async function () {
+        const oldName = $(this).attr('data-group');
+        const newName = await Domma.elements.prompt('Edit group name:', {
+            title: 'Edit Group',
+            inputValue: oldName
+        });
+
+        if (newName && newName.trim() && newName !== oldName) {
+            renameGroup(oldName, newName.trim());
+        }
+    });
 
     // Bind delete buttons
     $('.delete-group-btn').on('click', async function () {
