@@ -34,7 +34,7 @@
 
 .btn:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.3);
+    box-shadow: 0 0 0 3px var(--dm-focus-ring);
 }
 
 .btn:disabled {
@@ -632,7 +632,7 @@ select:not([class]):focus,
 textarea:not([class]):focus {
     outline: none;
     border-color: var(--dm-primary);
-    box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.2);
+    box-shadow: 0 0 0 3px var(--dm-focus-ring);
 }
 
 input:not([type="checkbox"]):not([type="radio"]):not([class]):hover:not(:disabled):not(:focus),
@@ -691,7 +691,7 @@ textarea:not([class])::placeholder {
 .form-textarea:focus {
     outline: none;
     border-color: var(--dm-primary);
-    box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.2);
+    box-shadow: 0 0 0 3px var(--dm-focus-ring);
 }
 
 .form-input:disabled,
@@ -729,7 +729,7 @@ textarea:not([class])::placeholder {
 .form-input.error:focus,
 .form-select.error:focus,
 .form-textarea.error:focus {
-    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+    box-shadow: 0 0 0 3px var(--dm-focus-ring-danger);
 }
 
 .form-help {
@@ -790,7 +790,7 @@ textarea:not([class])::placeholder {
 .form-check-input:focus {
     outline: none;
     border-color: var(--dm-primary);
-    box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.2);
+    box-shadow: 0 0 0 3px var(--dm-focus-ring);
 }
 
 .form-check-input:checked {
@@ -951,12 +951,12 @@ textarea:not([class])::placeholder {
 .pill-light {
     background-color: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.3);
-    color: white;
+    color: var(--dm-white);
 }
 
 .pill-light:hover {
     background-color: rgba(255, 255, 255, 0.25);
-    color: white;
+    color: var(--dm-white);
     text-decoration-line: none;
 }
 
@@ -984,33 +984,33 @@ textarea:not([class])::placeholder {
 }
 
 .alert-primary {
-    background-color: rgba(100, 149, 237, 0.1);
+    background-color: var(--dm-primary-light);
     border: 1px solid var(--dm-primary);
     color: var(--dm-primary-dark);
 }
 
 .alert-success {
-    background-color: rgba(40, 167, 69, 0.1);
+    background-color: var(--dm-success-light);
     border: 1px solid var(--dm-success);
-    color: #155724;
+    color: var(--dm-success-dark);
 }
 
 .alert-danger {
-    background-color: rgba(220, 53, 69, 0.1);
+    background-color: var(--dm-danger-light);
     border: 1px solid var(--dm-danger);
-    color: #721c24;
+    color: var(--dm-danger-dark);
 }
 
 .alert-warning {
-    background-color: rgba(255, 193, 7, 0.1);
+    background-color: var(--dm-warning-light);
     border: 1px solid var(--dm-warning);
-    color: #856404;
+    color: var(--dm-warning-text);
 }
 
 .alert-info {
-    background-color: rgba(23, 162, 184, 0.1);
+    background-color: var(--dm-info-light);
     border: 1px solid var(--dm-info);
-    color: #0c5460;
+    color: var(--dm-info-dark);
 }
 
 
@@ -1089,7 +1089,7 @@ code {
 .code-block-copy.copied {
     background: var(--dm-success);
     border-color: var(--dm-success);
-    color: white;
+    color: var(--dm-white);
     opacity: 1;
 }
 
@@ -1409,7 +1409,7 @@ code {
     display: inline-flex;
     flex-direction: column;
     line-height: 1.2;
-    color: white;
+    color: var(--dm-white);
     font-family: inherit;
 }
 
@@ -1421,7 +1421,7 @@ code {
 #main-navbar .navbar-logo {
     vertical-align: middle;
     margin-right: 0.35rem;
-    color: white;
+    color: var(--dm-white);
 }
 
 #main-navbar .navbar-link,
@@ -1539,7 +1539,7 @@ code {
 .pill-light {
     background: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.3);
-    color: white;
+    color: var(--dm-white);
 }
 
 .pill-light:hover {
@@ -1655,7 +1655,7 @@ code {
 
 .dm-pillbox-container.focused {
     border-color: var(--dm-primary);
-    box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.2);
+    box-shadow: 0 0 0 3px var(--dm-focus-ring);
 }
 
 .dm-pillbox-pill {
