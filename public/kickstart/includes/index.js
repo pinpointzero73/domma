@@ -51,14 +51,14 @@
         },
         items: [
             {text: 'Home', url: '/kickstart/', active: true},
-            {text: 'Documentation', url: 'http://domma.dcbw-it.co.uk/showcase/index.html'},
-            {text: 'Examples', url: 'http://domma.dcbw-it.co.uk/examples/index.html'},
+            {text: 'Documentation', url: 'https://domma.dcbw-it.co.uk/showcase/index.html'},
+            {text: 'Examples', url: 'https://domma.dcbw-it.co.uk/examples/index.html'},
             {
                 text: 'More',
                 items: [  // Dropdown example
                     {text: 'GitHub', url: 'https://github.com/'},
                     {text: 'NPM', url: 'https://npmjs.com/'},
-                    {text: 'Download', url: 'http://domma.dcbw-it.co.uk/showcase/download/index.html'}
+                    {text: 'Download', url: 'https://domma.dcbw-it.co.uk/showcase/download/index.html'}
                 ]
             }
         ],
@@ -204,7 +204,7 @@
     // ==============================================
 
     /**
-     * Initialize step cards with icons
+     * Initialise step cards with icons
      * This function demonstrates:
      * - jQuery-style iteration with .each()
      * - Setting multiple attributes at once
@@ -246,7 +246,7 @@
     // ==============================================
     // 4. EXAMPLE INTERACTIONS
     // ==============================================
-    // Simple interactive examples users can customize
+    // Simple interactive examples users can customise
     //
     // These demonstrate common UI patterns:
     // - Smooth scrolling

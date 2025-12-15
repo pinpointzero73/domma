@@ -86,6 +86,8 @@ printer.print();
     <section class="card mb-6" data-section="Basic Example">
         <div class="card-header"><h2 class="text-xl font-semibold m-0">Basic Print Example</h2></div>
         <div class="card-body">
+          <p class="mb-4"><strong>Note:</strong> Configure print options when creating the instance, then call <code>print()</code>
+            to trigger the browser's native print dialog.</p>
             <div class="controls">
                 <button id="print-default" class="btn btn-primary">
                     <span data-icon="printer" data-icon-size="18"></span>
@@ -251,23 +253,21 @@ printer.print();
                     <tbody>
                     <tr>
                         <td><code>print()</code></td>
-                        <td>Trigger print dialog immediately</td>
-                    </tr>
-                    <tr>
-                        <td><code>preview()</code></td>
-                        <td>Show preview (not yet implemented)</td>
+                      <td>Trigger browser print dialog immediately</td>
                     </tr>
                     <tr>
                         <td><code>setOptions(options)</code></td>
-                        <td>Update configuration</td>
+                      <td>Update configuration options</td>
                     </tr>
                     <tr>
                         <td><code>destroy()</code></td>
-                        <td>Cleanup and remove instance</td>
+                      <td>Cleanup and remove print styles</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
+          <p class="mt-2"><strong>Note:</strong> The <code>preview()</code> method is not implemented. Configure all
+            options when creating the instance.</p>
         </div>
     </section>
 

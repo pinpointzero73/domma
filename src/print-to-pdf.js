@@ -39,7 +39,6 @@ class PrintToPDF extends Component {
 
         // Internal state
         this._styleElement = null;
-        this._previewContainer = null;
         this._boundBeforePrint = null;
         this._boundAfterPrint = null;
         this._hiddenElements = [];
@@ -281,12 +280,15 @@ class PrintToPDF extends Component {
         }
     }
 
+
     /**
      * Show print preview modal
+     * Note: Preview feature removed due to modal interaction complexity.
+     * Users can configure options when creating the instance, then call print().
      */
     preview() {
-        // TODO: Implement preview modal in next iteration
-        console.warn('PrintToPDF: Preview mode not yet implemented. Calling print() instead.');
+      console.warn('PrintToPDF: preview() is not implemented. Configure options and call print() directly.');
+      // Fallback to direct print
         this.print();
     }
 
