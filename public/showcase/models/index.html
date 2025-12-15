@@ -8,188 +8,11 @@
     <link rel="stylesheet" href="../../dist/domma.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-    <style>
-        .hero {
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .hero code {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--dm-radius-full);
-        }
-
-        .demo-result {
-            background: var(--dm-gray-900);
-            color: var(--dm-gray-100);
-            padding: var(--dm-space-3);
-            border-radius: var(--dm-radius-md);
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            margin-top: var(--dm-space-2);
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .method-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: var(--dm-space-2);
-        }
-
-        .method-item {
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            padding: var(--dm-space-2);
-            background: var(--dm-gray-100);
-            border-radius: var(--dm-radius-sm);
-        }
-
-        .category-title {
-            font-weight: 600;
-            color: var(--dm-primary);
-            margin: var(--dm-space-4) 0 var(--dm-space-2);
-            padding-bottom: var(--dm-space-2);
-            border-bottom: 2px solid var(--dm-primary);
-        }
-
-        .try-section {
-            background: var(--dm-gray-100);
-            padding: var(--dm-space-4);
-            border-radius: var(--dm-radius-md);
-            margin-top: var(--dm-space-4);
-        }
-
-        .event-log {
-            background: var(--dm-gray-900);
-            color: var(--dm-success);
-            padding: var(--dm-space-3);
-            border-radius: var(--dm-radius-md);
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            height: 150px;
-            overflow-y: auto;
-        }
-
-        .event-log .timestamp {
-            color: var(--dm-gray-500);
-        }
-
-        .event-log .event-name {
-            color: var(--dm-primary-light);
-        }
-
-        .model-display {
-            background: var(--dm-white);
-            border: 2px solid var(--dm-gray-200);
-            border-radius: var(--dm-radius-md);
-            padding: var(--dm-space-4);
-        }
-
-        .model-field {
-            display: flex;
-            justify-content: space-between;
-            padding: var(--dm-space-2) 0;
-            border-bottom: 1px solid var(--dm-gray-200);
-        }
-
-        .model-field:last-child {
-            border-bottom: none;
-        }
-
-        .validation-error {
-            color: var(--dm-danger);
-            font-size: var(--dm-font-size-sm);
-            margin-top: var(--dm-space-1);
-        }
-
-        .bound-display {
-            font-size: var(--dm-font-size-2xl);
-            font-weight: 700;
-            color: var(--dm-primary);
-            padding: var(--dm-space-4);
-            background: var(--dm-gray-100);
-            border-radius: var(--dm-radius-md);
-            text-align: center;
-        }
-
-        .user-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .user-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--dm-space-2) var(--dm-space-3);
-            border: 1px solid var(--dm-gray-200);
-            border-radius: var(--dm-radius-sm);
-            margin-bottom: var(--dm-space-2);
-            background: var(--dm-white);
-        }
-
-        .user-item:hover {
-            background: var(--dm-gray-50);
-        }
-
-        .user-info {
-            flex: 1;
-        }
-
-        .user-name {
-            font-weight: 600;
-        }
-
-        .user-meta {
-            font-size: var(--dm-font-size-sm);
-            color: var(--dm-gray-600);
-        }
-
-        .user-actions {
-            display: flex;
-            gap: var(--dm-space-1);
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 0.125rem 0.5rem;
-            border-radius: 9999px;
-            font-size: var(--dm-font-size-xs);
-            margin-left: var(--dm-space-2);
-        }
-
-        .status-active {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--dm-success);
-        }
-
-        .status-inactive {
-            background: var(--dm-gray-200);
-            color: var(--dm-gray-600);
-        }
-    </style>
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body data-layout="showcase" data-layout-variant="subpage">
 <!-- Hero Section -->
-<div class="hero">
+<div class="hero models-hero-style">
     <h1>Models</h1>
     <p>Reactive data models with pub/sub events, validation, and two-way DOM binding.</p>
     <p><code>M</code> or <code>Domma.models</code></p>
@@ -205,14 +28,14 @@
         <div class="card-body">
             <p class="mb-4">A simple but powerful event system for decoupled communication between components.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item">subscribe()</span>
-                <span class="method-item">publish()</span>
-                <span class="method-item">unsubscribe()</span>
-                <span class="method-item">once()</span>
-                <span class="method-item">on()</span>
-                <span class="method-item">off()</span>
-                <span class="method-item">emit()</span>
+            <div class="models-method-grid mb-4">
+                <span class="models-method-item">subscribe()</span>
+                <span class="models-method-item">publish()</span>
+                <span class="models-method-item">unsubscribe()</span>
+                <span class="models-method-item">once()</span>
+                <span class="models-method-item">on()</span>
+                <span class="models-method-item">off()</span>
+                <span class="models-method-item">emit()</span>
             </div>
 
             <pre class="code-block language-javascript">// Subscribe to an event
@@ -241,7 +64,7 @@ M.on('cart:add', handler);
 M.on('cart:remove', handler);
 M.on('cart:clear', handler);</pre>
 
-            <div class="try-section">
+            <div class="models-try-section">
                 <h4 class="font-semibold mb-3">Try It - Event Console</h4>
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div>
@@ -261,7 +84,7 @@ M.on('cart:clear', handler);</pre>
                         </div>
                     </div>
                     <div>
-                        <div class="event-log" id="event-log">
+                        <div class="models-event-log" id="event-log">
                             <div class="text-muted">Event log will appear here...</div>
                         </div>
                     </div>
@@ -326,7 +149,7 @@ const result = user.validate();
 // { valid: true, errors: {} }
 // or { valid: false, errors: { email: 'Invalid email' } }</pre>
 
-            <div class="try-section">
+            <div class="models-try-section">
                 <h4 class="font-semibold mb-3">Try It - User Model</h4>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -337,13 +160,13 @@ const result = user.validate();
                         <div class="form-group">
                             <label class="form-label">Email (required, must contain @)</label>
                             <input type="email" id="model-email" class="form-input" placeholder="Enter email">
-                            <div class="validation-error" id="email-error"></div>
+                            <div class="models-validation-error" id="email-error"></div>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Age (0-150)</label>
                             <input type="number" id="model-age" class="form-input" placeholder="Enter age" min="0"
                                    max="150">
-                            <div class="validation-error" id="age-error"></div>
+                            <div class="models-validation-error" id="age-error"></div>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Role</label>
@@ -357,26 +180,26 @@ const result = user.validate();
                     </div>
                     <div>
                         <h5 class="font-semibold mb-2">Model State</h5>
-                        <div class="model-display" id="model-display">
-                            <div class="model-field">
+                        <div class="models-model-display" id="model-display">
+                            <div class="models-model-field">
                                 <span>name:</span>
                                 <span id="display-name">-</span>
                             </div>
-                            <div class="model-field">
+                            <div class="models-model-field">
                                 <span>email:</span>
                                 <span id="display-email">-</span>
                             </div>
-                            <div class="model-field">
+                            <div class="models-model-field">
                                 <span>age:</span>
                                 <span id="display-age">-</span>
                             </div>
-                            <div class="model-field">
+                            <div class="models-model-field">
                                 <span>role:</span>
                                 <span id="display-role">-</span>
                             </div>
                         </div>
                         <h5 class="font-semibold mt-4 mb-2">Change Log</h5>
-                        <div class="event-log" id="model-log" style="height: 100px;">
+                        <div class="models-event-log" id="model-log" style="height: 100px;">
                             <div class="text-muted">Changes will appear here...</div>
                         </div>
                     </div>
@@ -478,7 +301,7 @@ user.set('name', 'Bob');  // All three elements update
 // Unbind
 M.unbind(user, 'name', '#name-display');</pre>
 
-            <div class="try-section">
+            <div class="models-try-section">
                 <h4 class="font-semibold mb-3">Try It - Live Binding</h4>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -491,7 +314,7 @@ M.unbind(user, 'name', '#name-display');</pre>
                     </div>
                     <div>
                         <label class="form-label">Live Display (one-way bound)</label>
-                        <div class="bound-display" id="bound-display">
+                        <div class="models-bound-display" id="bound-display">
                             Type something...
                         </div>
                         <div class="mt-3 text-center">
@@ -551,7 +374,7 @@ $('.add-to-cart').on('click', function() {
     M.emit('cart:add', product);
 });</pre>
 
-            <div class="try-section">
+            <div class="models-try-section">
                 <h4 class="font-semibold mb-3">Try It - Mini Cart</h4>
                 <div class="grid grid-cols-3 gap-4 mb-4">
                     <div class="card">
@@ -636,7 +459,7 @@ if (formModel.validate().valid) {
 // Export to clipboard
 navigator.clipboard.writeText(JSON.stringify(usersModel.get('users'), null, 2));</pre>
 
-            <div class="try-section">
+            <div class="models-try-section">
                 <h4 class="font-semibold mb-3">Try It - User Manager</h4>
                 <div class="grid grid-cols-2 gap-4">
                     <!-- Left: Add/Edit Form -->
@@ -646,12 +469,12 @@ navigator.clipboard.writeText(JSON.stringify(usersModel.get('users'), null, 2));
                             <div class="form-group">
                                 <label class="form-label">Name (required)</label>
                                 <input type="text" id="um-name" class="form-input" placeholder="Enter name">
-                                <div class="validation-error" id="um-name-error"></div>
+                                <div class="models-validation-error" id="um-name-error"></div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Email (required)</label>
                                 <input type="email" id="um-email" class="form-input" placeholder="Enter email">
-                                <div class="validation-error" id="um-email-error"></div>
+                                <div class="models-validation-error" id="um-email-error"></div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Role</label>
@@ -683,7 +506,7 @@ navigator.clipboard.writeText(JSON.stringify(usersModel.get('users'), null, 2));
                             <h5 class="font-semibold">Users (<span id="um-count">0</span>)</h5>
                             <button class="btn btn-outline btn-sm" id="um-copy">Copy to Clipboard</button>
                         </div>
-                        <div id="um-list" class="user-list">
+                        <div id="um-list" class="models-user-list">
                             <p class="text-muted">No users yet. Add one using the form.</p>
                         </div>
                     </div>
@@ -708,46 +531,46 @@ navigator.clipboard.writeText(JSON.stringify(usersModel.get('users'), null, 2));
                 <div class="tab-content">
                     <div class="tab-panel active" data-tab="pubsub">
                         <p class="text-muted mb-3">Event system for decoupled communication between components.</p>
-                        <div class="method-grid">
-                            <span class="method-item">subscribe()</span>
-                            <span class="method-item">publish()</span>
-                            <span class="method-item">unsubscribe()</span>
-                            <span class="method-item">once()</span>
-                            <span class="method-item">on()</span>
-                            <span class="method-item">off()</span>
-                            <span class="method-item">emit()</span>
+                        <div class="models-method-grid">
+                            <span class="models-method-item">subscribe()</span>
+                            <span class="models-method-item">publish()</span>
+                            <span class="models-method-item">unsubscribe()</span>
+                            <span class="models-method-item">once()</span>
+                            <span class="models-method-item">on()</span>
+                            <span class="models-method-item">off()</span>
+                            <span class="models-method-item">emit()</span>
                         </div>
                     </div>
                     <div class="tab-panel" data-tab="factory">
                         <p class="text-muted mb-3">Static methods on the M/Models namespace.</p>
-                        <div class="method-grid">
-                            <span class="method-item">create()</span>
-                            <span class="method-item">bind()</span>
-                            <span class="method-item">unbind()</span>
+                        <div class="models-method-grid">
+                            <span class="models-method-item">create()</span>
+                            <span class="models-method-item">bind()</span>
+                            <span class="models-method-item">unbind()</span>
                         </div>
                     </div>
                     <div class="tab-panel" data-tab="instance">
                         <p class="text-muted mb-3">Methods available on model instances returned by M.create().</p>
-                        <div class="method-grid">
-                            <span class="method-item">get()</span>
-                            <span class="method-item">set()</span>
-                            <span class="method-item">toJSON()</span>
-                            <span class="method-item">validate()</span>
-                            <span class="method-item">onChange()</span>
-                            <span class="method-item">offChange()</span>
-                            <span class="method-item">reset()</span>
+                        <div class="models-method-grid">
+                            <span class="models-method-item">get()</span>
+                            <span class="models-method-item">set()</span>
+                            <span class="models-method-item">toJSON()</span>
+                            <span class="models-method-item">validate()</span>
+                            <span class="models-method-item">onChange()</span>
+                            <span class="models-method-item">offChange()</span>
+                            <span class="models-method-item">reset()</span>
                         </div>
                     </div>
                     <div class="tab-panel" data-tab="types">
                         <p class="text-muted mb-3">Built-in validators for schema definitions.</p>
-                        <div class="method-grid">
-                            <span class="method-item">types.string</span>
-                            <span class="method-item">types.number</span>
-                            <span class="method-item">types.boolean</span>
-                            <span class="method-item">types.array</span>
-                            <span class="method-item">types.object</span>
-                            <span class="method-item">types.date</span>
-                            <span class="method-item">types.any</span>
+                        <div class="models-method-grid">
+                            <span class="models-method-item">types.string</span>
+                            <span class="models-method-item">types.number</span>
+                            <span class="models-method-item">types.boolean</span>
+                            <span class="models-method-item">types.array</span>
+                            <span class="models-method-item">types.object</span>
+                            <span class="models-method-item">types.date</span>
+                            <span class="models-method-item">types.any</span>
                         </div>
                     </div>
                 </div>
@@ -766,7 +589,7 @@ navigator.clipboard.writeText(JSON.stringify(usersModel.get('users'), null, 2));
     function logEvent(message) {
         const log = $('#event-log');
         const time = D().format('HH:mm:ss');
-        log.prepend(`<div><span class="timestamp">[${time}]</span> ${message}</div>`);
+        log.prepend(`<div><span class="models-event-log-timestamp">[${time}]</span> ${message}</div>`);
     }
 
     $('#btn-subscribe').on('click', function () {
@@ -777,7 +600,7 @@ navigator.clipboard.writeText(JSON.stringify(usersModel.get('users'), null, 2));
         }
 
         const handler = (data) => {
-            logEvent(`<span class="event-name">${eventName}</span> received: ${JSON.stringify(data)}`);
+            logEvent(`<span class="models-event-log-event-name">${eventName}</span> received: ${JSON.stringify(data)}`);
         };
         eventHandlers[eventName] = handler;
         M.on(eventName, handler);
@@ -826,7 +649,7 @@ navigator.clipboard.writeText(JSON.stringify(usersModel.get('users'), null, 2));
     function logModelChange(message) {
         const log = $('#model-log');
         const time = D().format('HH:mm:ss');
-        log.prepend(`<div><span class="timestamp">[${time}]</span> ${message}</div>`);
+        log.prepend(`<div><span class="models-event-log-timestamp">[${time}]</span> ${message}</div>`);
     }
 
     function updateModelDisplay() {
@@ -978,15 +801,15 @@ navigator.clipboard.writeText(JSON.stringify(usersModel.get('users'), null, 2));
             $list.html('<p class="text-muted">No users yet. Add one using the form.</p>');
         } else {
             $list.html(users.map((user, i) => `
-                <div class="user-item">
-                    <div class="user-info">
-                        <div class="user-name">${_.escape(user.name)}</div>
-                        <div class="user-meta">
+                <div class="models-user-item">
+                    <div class="models-user-info">
+                        <div class="models-user-name">${_.escape(user.name)}</div>
+                        <div class="models-user-meta">
                             ${_.escape(user.email)} · ${user.role}
-                            <span class="status-badge status-${user.status}">${user.status}</span>
+                            <span class="models-status-badge models-status-${user.status}">${user.status}</span>
                         </div>
                     </div>
-                    <div class="user-actions">
+                    <div class="models-user-actions">
                         <button class="btn btn-outline btn-sm um-edit" data-index="${i}">Edit</button>
                         <button class="btn btn-danger btn-sm um-remove" data-index="${i}">Remove</button>
                     </div>

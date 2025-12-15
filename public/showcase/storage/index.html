@@ -8,144 +8,12 @@
     <link rel="stylesheet" href="../../dist/domma.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-    <style>
-        .hero {
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .hero code {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--dm-radius-full);
-        }
-
-        .demo-result {
-            background: var(--dm-gray-900);
-            color: var(--dm-gray-100);
-            padding: var(--dm-space-3);
-            border-radius: var(--dm-radius-md);
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            margin-top: var(--dm-space-2);
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .method-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: var(--dm-space-2);
-        }
-
-        .method-item {
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            padding: var(--dm-space-2);
-            background: var(--dm-gray-100);
-            border-radius: var(--dm-radius-sm);
-        }
-
-        .category-title {
-            font-weight: 600;
-            color: var(--dm-primary);
-            margin: var(--dm-space-4) 0 var(--dm-space-2);
-            padding-bottom: var(--dm-space-2);
-            border-bottom: 2px solid var(--dm-primary);
-        }
-
-        .try-section {
-            background: var(--dm-gray-100);
-            padding: var(--dm-space-4);
-            border-radius: var(--dm-radius-md);
-            margin-top: var(--dm-space-4);
-        }
-
-        .storage-inspector {
-            background: var(--dm-gray-900);
-            color: var(--dm-gray-100);
-            border-radius: var(--dm-radius-md);
-            padding: var(--dm-space-4);
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .storage-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: var(--dm-space-2) 0;
-            border-bottom: 1px solid var(--dm-gray-700);
-        }
-
-        .storage-item:last-child {
-            border-bottom: none;
-        }
-
-        .storage-key {
-            color: var(--dm-primary-light);
-            font-weight: 600;
-        }
-
-        .storage-value {
-            color: var(--dm-success-light);
-            max-width: 60%;
-            word-break: break-all;
-        }
-
-        .storage-actions {
-            display: flex;
-            gap: var(--dm-space-1);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: var(--dm-space-4);
-            margin-bottom: var(--dm-space-4);
-        }
-
-        .stat-card {
-            background: var(--dm-gray-100);
-            padding: var(--dm-space-4);
-            border-radius: var(--dm-radius-md);
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: var(--dm-font-size-2xl);
-            font-weight: 700;
-            color: var(--dm-primary);
-        }
-
-        .stat-label {
-            font-size: var(--dm-font-size-sm);
-            color: var(--dm-gray-600);
-        }
-    </style>
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body data-layout="showcase" data-layout-variant="subpage">
 
 <!-- Hero Section -->
-<div class="hero">
+<div class="hero models-hero-style">
     <h1>Storage</h1>
     <p>Simple, prefixed localStorage with auto-serialisation and model persistence.</p>
     <p><code>S</code> or <code>Domma.storage</code></p>
@@ -162,18 +30,18 @@
             <p class="mb-4">Store and retrieve data with automatic JSON serialisation. All keys are prefixed with
                 <code>domma:</code> to avoid collisions.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item">get()</span>
-                <span class="method-item">set()</span>
-                <span class="method-item">remove()</span>
-                <span class="method-item">has()</span>
-                <span class="method-item">clear()</span>
-                <span class="method-item">keys()</span>
-                <span class="method-item">getAll()</span>
-                <span class="method-item">setAll()</span>
-                <span class="method-item">size()</span>
-                <span class="method-item">totalSize()</span>
-                <span class="method-item">isAvailable()</span>
+            <div class="models-method-grid mb-4">
+                <span class="models-method-item">get()</span>
+                <span class="models-method-item">set()</span>
+                <span class="models-method-item">remove()</span>
+                <span class="models-method-item">has()</span>
+                <span class="models-method-item">clear()</span>
+                <span class="models-method-item">keys()</span>
+                <span class="models-method-item">getAll()</span>
+                <span class="models-method-item">setAll()</span>
+                <span class="models-method-item">size()</span>
+                <span class="models-method-item">totalSize()</span>
+                <span class="models-method-item">isAvailable()</span>
             </div>
 
             <pre class="code-block language-javascript">// Set values (auto-stringify)
@@ -192,7 +60,7 @@ S.keys();                // ['user', 'preferences', 'count']
 S.remove('count');
 S.clear();               // Clear only Domma keys</pre>
 
-            <div class="try-section">
+            <div class="models-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -214,7 +82,7 @@ S.clear();               // Clear only Domma keys</pre>
                     </div>
                     <div>
                         <label class="font-semibold mb-2 block">Result</label>
-                        <div class="demo-result" id="storage-result">Click a button to see result</div>
+                        <div class="storage-demo-result" id="storage-result">Click a button to see result</div>
                     </div>
                 </div>
             </div>
@@ -249,7 +117,7 @@ settings.load();           // Force reload from storage
 settings.clearStorage();   // Remove from localStorage
 settings.reset(true);      // Reset and clear storage</pre>
 
-            <div class="try-section">
+            <div class="models-try-section">
                 <h4 class="font-semibold mb-3">Try It - Persistent Settings</h4>
                 <p class="text-muted mb-4">Change these settings and refresh the page - they'll persist!</p>
 
@@ -279,7 +147,7 @@ settings.reset(true);      // Reset and clear storage</pre>
                     <button class="btn btn-danger btn-sm" id="btn-clear-prefs">Clear Storage</button>
                 </div>
 
-                <div class="demo-result mt-4" id="prefs-state">Loading...</div>
+                <div class="storage-demo-result mt-4" id="prefs-state">Loading...</div>
             </div>
         </div>
     </section>
@@ -292,18 +160,18 @@ settings.reset(true);      // Reset and clear storage</pre>
         <div class="card-body">
             <p class="mb-4">View all Domma storage keys in real-time.</p>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="stat-keys">0</div>
-                    <div class="stat-label">Keys</div>
+            <div class="storage-stats-grid">
+                <div class="storage-stat-card">
+                    <div class="storage-stat-value" id="stat-keys">0</div>
+                    <div class="storage-stat-label">Keys</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="stat-size">0 B</div>
-                    <div class="stat-label">Total Size</div>
+                <div class="storage-stat-card">
+                    <div class="storage-stat-value" id="stat-size">0 B</div>
+                    <div class="storage-stat-label">Total Size</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="stat-available">-</div>
-                    <div class="stat-label">Available</div>
+                <div class="storage-stat-card">
+                    <div class="storage-stat-value" id="stat-available">-</div>
+                    <div class="storage-stat-label">Available</div>
                 </div>
             </div>
 
@@ -311,7 +179,7 @@ settings.reset(true);      // Reset and clear storage</pre>
                 <span class="font-semibold">Stored Data</span>
                 <button class="btn btn-outline btn-sm" id="btn-refresh-inspector">Refresh</button>
             </div>
-            <div class="storage-inspector" id="storage-inspector">
+            <div class="storage-inspector-style" id="storage-inspector">
                 <p class="text-muted">No data stored</p>
             </div>
         </div>
@@ -323,7 +191,7 @@ settings.reset(true);      // Reset and clear storage</pre>
             <h2 class="text-xl font-semibold">Method Reference</h2>
         </div>
         <div class="card-body">
-            <h4 class="category-title">Core Methods</h4>
+            <h4 class="models-category-title">Core Methods</h4>
             <table class="w-full text-sm mb-6">
                 <tr>
                     <td class="py-2 font-mono">get(key, default)</td>
@@ -351,7 +219,7 @@ settings.reset(true);      // Reset and clear storage</pre>
                 </tr>
             </table>
 
-            <h4 class="category-title">Utility Methods</h4>
+            <h4 class="models-category-title">Utility Methods</h4>
             <table class="w-full text-sm mb-6">
                 <tr>
                     <td class="py-2 font-mono">getAll()</td>
@@ -370,12 +238,12 @@ settings.reset(true);      // Reset and clear storage</pre>
                     <td class="py-2 text-muted">Get total size of all Domma storage in bytes.</td>
                 </tr>
                 <tr>
-                    <td class="py-2 font-mono">isAvailable()</td>
-                    <td class="py-2 text-muted">Check if localStorage is available.</td>
+                    <td><code>isAvailable()</code></td>
+                    <td><code class="py-2 text-muted">Check if localStorage is available.</code></td>
                 </tr>
             </table>
 
-            <h4 class="category-title">Model Persistence Methods</h4>
+            <h4 class="models-category-title">Model Persistence Methods</h4>
             <table class="w-full text-sm">
                 <tr>
                     <td class="py-2 font-mono">model.save()</td>
@@ -549,9 +417,9 @@ settings.reset(true);      // Reset and clear storage</pre>
             const value = S.get(key);
             const displayValue = JSON.stringify(value);
             html += `
-                <div class="storage-item">
-                    <span class="storage-key">${_.escape(key)}</span>
-                    <span class="storage-value">${_.escape(displayValue)}</span>
+                <div class="storage-item-style">
+                    <span class="storage-key-style">${_.escape(key)}</span>
+                    <span class="storage-value-style">${_.escape(displayValue)}</span>
                 </div>
             `;
         });

@@ -8,125 +8,12 @@
     <link rel="stylesheet" href="../../dist/domma.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-    <style>
-        .hero {
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .hero code {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--dm-radius-full);
-        }
-
-        .demo-area {
-            background: var(--dm-gray-100);
-            padding: var(--dm-space-4);
-            border-radius: var(--dm-radius-md);
-        }
-
-        .method-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: var(--dm-space-2);
-        }
-
-        .method-item {
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            padding: var(--dm-space-2);
-            background: var(--dm-gray-100);
-            border-radius: var(--dm-radius-sm);
-        }
-
-        .category-title {
-            font-weight: 600;
-            color: var(--dm-primary);
-            margin: var(--dm-space-4) 0 var(--dm-space-2);
-            padding-bottom: var(--dm-space-2);
-            border-bottom: 2px solid var(--dm-primary);
-        }
-
-        .table-controls {
-            display: flex;
-            gap: var(--dm-space-3);
-            flex-wrap: wrap;
-            align-items: center;
-            margin-bottom: var(--dm-space-4);
-        }
-
-        .table-info {
-            font-size: var(--dm-font-size-sm);
-            color: var(--dm-gray-600);
-        }
-
-        .option-table {
-            width: 100%;
-            font-size: var(--dm-font-size-sm);
-        }
-
-        .option-table th {
-            text-align: left;
-            padding: var(--dm-space-2);
-            background: var(--dm-gray-100);
-        }
-
-        .option-table td {
-            padding: var(--dm-space-2);
-            border-bottom: 1px solid var(--dm-gray-200);
-        }
-
-        .option-table code {
-            font-size: var(--dm-font-size-xs);
-        }
-
-        .table-checkbox {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .selected-row {
-            background: rgba(100, 149, 237, 0.1) !important;
-        }
-
-        .editable-cell {
-            cursor: pointer;
-        }
-
-        .editable-cell:hover {
-            background: var(--dm-gray-200);
-        }
-
-        .editing input {
-            width: 100%;
-            padding: var(--dm-space-1);
-            border: 2px solid var(--dm-primary);
-            border-radius: var(--dm-radius-sm);
-        }
-    </style>
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body data-layout="showcase" data-layout-variant="subpage">
 
 <!-- Hero Section -->
-<div class="hero">
+<div class="hero tables-hero-style">
     <h1>Tables</h1>
     <p>DataTable-like functionality for interactive data grids with sorting, filtering, pagination, and more.</p>
     <p><code>Domma.tables</code></p>
@@ -168,8 +55,8 @@ const table = Domma.tables.create('#my-table', {
 // HTML
 <table id="my-table" class="table"></table></pre>
 
-            <h4 class="category-title">Column Options</h4>
-            <table class="option-table mb-4">
+            <h4 class="tables-category-title">Column Options</h4>
+            <table class="tables-option-table mb-4">
                 <tr>
                     <th>Option</th>
                     <th>Type</th>
@@ -207,7 +94,7 @@ const table = Domma.tables.create('#my-table', {
                 </tr>
             </table>
 
-            <h4 class="category-title">Custom Render Examples</h4>
+            <h4 class="tables-category-title">Custom Render Examples</h4>
             <p class="mb-4">Use the <code>render</code> function to transform cell values — perfect for date formatting,
                 badges, or custom HTML.</p>
             <pre class="code-block language-javascript mb-4">// Format dates using Domma's date module
@@ -235,8 +122,8 @@ const table = Domma.tables.create('#my-table', {
             <p class="text-sm text-muted mb-4"><strong>Tip:</strong> Use <code>width: '100px'</code> or <code>width:
                 '20%'</code> to set column widths.</p>
 
-            <h4 class="category-title">Table Options</h4>
-            <table class="option-table">
+            <h4 class="tables-category-title">Table Options</h4>
+            <table class="tables-option-table">
                 <tr>
                     <th>Option</th>
                     <th>Type</th>
@@ -303,7 +190,7 @@ const table = Domma.tables.create('#my-table', {
                 <div id="demo-table"></div>
             </div>
 
-            <div class="flex justify-between items-center">
+            <div class="tables-table-controls">
                 <div class="flex gap-2">
                     <select id="role-filter" class="form-select" style="width: 150px;">
                         <option value="">All Roles</option>
@@ -579,8 +466,8 @@ const table = Domma.tables.create('#my-table', {
 // Toggle LEFT  = Copy mode (copies to clipboard)
 // Toggle RIGHT = Download mode (downloads file)</pre>
 
-            <h4 class="category-title">Export Panel Options</h4>
-            <table class="option-table mb-4">
+            <h4 class="tables-category-title">Export Panel Options</h4>
+            <table class="tables-option-table mb-4">
                 <tr>
                     <th>Option</th>
                     <th>Type</th>
@@ -640,8 +527,8 @@ table.getVisibleColumns();      // Array of visible column configs
 table.getHiddenColumns();       // Array of hidden column configs
 table.getColumns();             // All columns</pre>
 
-            <h4 class="category-title">Column Visibility Options</h4>
-            <table class="option-table mb-4">
+            <h4 class="tables-category-title">Column Visibility Options</h4>
+            <table class="tables-option-table mb-4">
                 <tr>
                     <th>Option</th>
                     <th>Type</th>
@@ -715,7 +602,7 @@ const table3 = Domma.tables.create('#table', {
 //                 'danger-tint', 'info-tint'</pre>
 
             <h3 class="text-lg font-semibold mt-6 mb-3">Stripe Colour Options</h3>
-            <table class="option-table">
+            <table class="tables-option-table">
                 <thead>
                 <tr>
                     <th>Option</th>
@@ -791,7 +678,7 @@ table.download('json', 'users.json');
 
 // Export callback
 table.on('export', (info) => {
-    // info = { format: 'csv', filename: 'users.csv', rowCount: 15 }
+    console.log(`Exported ${info.rowCount} rows as ${info.format}`);
 });</pre>
 
             <div class="demo-area">
@@ -846,7 +733,7 @@ table.once('render', () => {
                 declaratively manage table setups, event handlers, and interactions.
             </p>
 
-            <h4 class="category-title">Centralized Table Config</h4>
+            <h4 class="tables-category-title">Centralized Table Config</h4>
             <pre class="code-block language-javascript">// Define all table configurations in one place
 const tableConfigs = {
     users: {
@@ -902,7 +789,7 @@ Object.values(tableConfigs).forEach(config => {
     }
 });</pre>
 
-            <h4 class="category-title">Using $.setup() for Table Containers</h4>
+            <h4 class="tables-category-title">Using $.setup() for Table Containers</h4>
             <pre class="code-block language-javascript">// Enhance table containers with config engine
 $.setup({
     '.table-container': {
@@ -942,7 +829,7 @@ $.setup({
     }
 });</pre>
 
-            <h4 class="category-title">Dynamic Table Factory</h4>
+            <h4 class="tables-category-title">Dynamic Table Factory</h4>
             <pre class="code-block language-javascript">// Create a reusable table factory with config
 class TableFactory {
     static presets = {
@@ -961,8 +848,8 @@ class TableFactory {
             columns: [
                 { key: 'sku', title: 'SKU', sortable: true },
                 { key: 'name', title: 'Product', sortable: true },
-                { key: 'price', title: 'Price', sortable: true },
-                { key: 'stock', title: 'In Stock', sortable: true }
+                { key: 'price', title: 'Price', sortable: true, render: (val) => `$${val}` },
+                { key: 'stock', title: 'Stock', sortable: true }
             ],
             pagination: true,
             pageSize: 50
@@ -989,7 +876,7 @@ const productsTable = TableFactory.create('#products', 'products', productData, 
     pageSize: 100  // Override preset
 });</pre>
 
-            <h4 class="category-title">State-Driven Table Management</h4>
+            <h4 class="tables-category-title">State-Driven Table Management</h4>
             <pre class="code-block language-javascript">// Use Domma models for reactive table state
 const tableState = M.create({
     data: { type: 'array', default: [] },
@@ -1029,7 +916,7 @@ tableState.onChange('selectedRows', (rows) => {
     $('#selection-count').text(`${rows.length} selected`);
 });</pre>
 
-            <h4 class="category-title">Benefits of Configuration-Driven Tables</h4>
+            <h4 class="tables-category-title">Benefits of Configuration-Driven Tables</h4>
             <ul class="mb-4">
                 <li><strong>Maintainability</strong> - All table configs in centralized location</li>
                 <li><strong>Reusability</strong> - Share column definitions and presets across tables</li>
@@ -1038,7 +925,7 @@ tableState.onChange('selectedRows', (rows) => {
                 <li><strong>State Management</strong> - Integrate with reactive models for data flow</li>
             </ul>
 
-            <h4 class="category-title">Imperative vs Configuration-Driven</h4>
+            <h4 class="tables-category-title">Imperative vs Configuration-Driven</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">Imperative (Scattered)</p>
@@ -1096,89 +983,89 @@ initTables(config);</pre>
             <h2 class="text-xl font-semibold">Complete Method Reference</h2>
         </div>
         <div class="card-body">
-            <h4 class="category-title">Data Methods</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">setData()</span>
-                <span class="method-item">getData()</span>
-                <span class="method-item">addRow()</span>
-                <span class="method-item">addRows()</span>
-                <span class="method-item">updateRow()</span>
-                <span class="method-item">removeRow()</span>
-                <span class="method-item">removeRows()</span>
-                <span class="method-item">clear()</span>
-                <span class="method-item">refresh()</span>
+            <h4 class="tables-category-title">Data Methods</h4>
+            <div class="tables-method-grid mb-4">
+                <span class="tables-method-item">setData()</span>
+                <span class="tables-method-item">getData()</span>
+                <span class="tables-method-item">addRow()</span>
+                <span class="tables-method-item">addRows()</span>
+                <span class="tables-method-item">updateRow()</span>
+                <span class="tables-method-item">removeRow()</span>
+                <span class="tables-method-item">removeRows()</span>
+                <span class="tables-method-item">clear()</span>
+                <span class="tables-method-item">refresh()</span>
             </div>
 
-            <h4 class="category-title">Sorting Methods</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">sort()</span>
-                <span class="method-item">sortMultiple()</span>
-                <span class="method-item">clearSort()</span>
-                <span class="method-item">getSortState()</span>
+            <h4 class="tables-category-title">Sorting Methods</h4>
+            <div class="tables-method-grid mb-4">
+                <span class="tables-method-item">sort()</span>
+                <span class="tables-method-item">sortMultiple()</span>
+                <span class="tables-method-item">clearSort()</span>
+                <span class="tables-method-item">getSortState()</span>
             </div>
 
-            <h4 class="category-title">Filtering Methods</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">search()</span>
-                <span class="method-item">filter()</span>
-                <span class="method-item">filterBy()</span>
-                <span class="method-item">clearFilters()</span>
-                <span class="method-item">getFilters()</span>
+            <h4 class="tables-category-title">Filtering Methods</h4>
+            <div class="tables-method-grid mb-4">
+                <span class="tables-method-item">search()</span>
+                <span class="tables-method-item">filter()</span>
+                <span class="tables-method-item">filterBy()</span>
+                <span class="tables-method-item">clearFilters()</span>
+                <span class="tables-method-item">getFilters()</span>
             </div>
 
-            <h4 class="category-title">Pagination Methods</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">page()</span>
-                <span class="method-item">pageSize()</span>
-                <span class="method-item">nextPage()</span>
-                <span class="method-item">prevPage()</span>
-                <span class="method-item">firstPage()</span>
-                <span class="method-item">lastPage()</span>
-                <span class="method-item">pageInfo()</span>
+            <h4 class="tables-category-title">Pagination Methods</h4>
+            <div class="tables-method-grid mb-4">
+                <span class="tables-method-item">page()</span>
+                <span class="tables-method-item">pageSize()</span>
+                <span class="tables-method-item">nextPage()</span>
+                <span class="tables-method-item">prevPage()</span>
+                <span class="tables-method-item">firstPage()</span>
+                <span class="tables-method-item">lastPage()</span>
+                <span class="tables-method-item">pageInfo()</span>
             </div>
 
-            <h4 class="category-title">Selection Methods</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">select()</span>
-                <span class="method-item">deselect()</span>
-                <span class="method-item">selectAll()</span>
-                <span class="method-item">deselectAll()</span>
-                <span class="method-item">toggleSelect()</span>
-                <span class="method-item">getSelected()</span>
-                <span class="method-item">getSelectedIndices()</span>
+            <h4 class="tables-category-title">Selection Methods</h4>
+            <div class="tables-method-grid mb-4">
+                <span class="tables-method-item">select()</span>
+                <span class="tables-method-item">deselect()</span>
+                <span class="tables-method-item">selectAll()</span>
+                <span class="tables-method-item">deselectAll()</span>
+                <span class="tables-method-item">toggleSelect()</span>
+                <span class="tables-method-item">getSelected()</span>
+                <span class="tables-method-item">getSelectedIndices()</span>
             </div>
 
-            <h4 class="category-title">Column Methods</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">showColumn()</span>
-                <span class="method-item">hideColumn()</span>
-                <span class="method-item">toggleColumn()</span>
-                <span class="method-item">getColumns()</span>
-                <span class="method-item">getVisibleColumns()</span>
-                <span class="method-item">getHiddenColumns()</span>
+            <h4 class="tables-category-title">Column Methods</h4>
+            <div class="tables-method-grid mb-4">
+                <span class="tables-method-item">showColumn()</span>
+                <span class="tables-method-item">hideColumn()</span>
+                <span class="tables-method-item">toggleColumn()</span>
+                <span class="tables-method-item">getColumns()</span>
+                <span class="tables-method-item">getVisibleColumns()</span>
+                <span class="tables-method-item">getHiddenColumns()</span>
             </div>
 
-            <h4 class="category-title">Export Methods</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">toCSV()</span>
-                <span class="method-item">toJSON()</span>
-                <span class="method-item">toExcel()</span>
-                <span class="method-item">download()</span>
-                <span class="method-item">copyToClipboard()</span>
+            <h4 class="tables-category-title">Export Methods</h4>
+            <div class="tables-method-grid mb-4">
+                <span class="tables-method-item">toCSV()</span>
+                <span class="tables-method-item">toJSON()</span>
+                <span class="tables-method-item">toExcel()</span>
+                <span class="tables-method-item">download()</span>
+                <span class="tables-method-item">copyToClipboard()</span>
             </div>
 
-            <h4 class="category-title">Event Methods</h4>
-            <div class="method-grid mb-4">
-                <span class="method-item">on()</span>
-                <span class="method-item">off()</span>
-                <span class="method-item">once()</span>
+            <h4 class="tables-category-title">Event Methods</h4>
+            <div class="tables-method-grid mb-4">
+                <span class="tables-method-item">on()</span>
+                <span class="tables-method-item">off()</span>
+                <span class="tables-method-item">once()</span>
             </div>
 
-            <h4 class="category-title">Static Methods</h4>
-            <div class="method-grid">
-                <span class="method-item">tables.create()</span>
-                <span class="method-item">tables.get()</span>
-                <span class="method-item">tables.destroy()</span>
+            <h4 class="tables-category-title">Static Methods</h4>
+            <div class="tables-method-grid">
+                <span class="tables-method-item">tables.create()</span>
+                <span class="tables-method-item">tables.get()</span>
+                <span class="tables-method-item">tables.destroy()</span>
             </div>
         </div>
     </section>

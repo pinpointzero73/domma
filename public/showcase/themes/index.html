@@ -8,238 +8,15 @@
     <link rel="stylesheet" href="../../dist/domma.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-    <style>
-        .hero {
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto 2rem;
-        }
-
-        .theme-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .theme-card {
-            border: 2px solid var(--dm-border);
-            border-radius: var(--dm-radius-xl);
-            overflow: hidden;
-            cursor: pointer;
-            transition: all var(--dm-transition-fast);
-            background: var(--dm-surface);
-        }
-
-        .theme-card:hover {
-            border-color: var(--dm-primary);
-            transform: translateY(-2px);
-            box-shadow: var(--dm-shadow-lg);
-        }
-
-        .theme-card.active {
-            border-color: var(--dm-primary);
-            box-shadow: 0 0 0 3px var(--dm-primary-light);
-        }
-
-        .theme-preview {
-            height: 80px;
-            display: flex;
-            align-items: stretch;
-        }
-
-        .theme-preview-bg {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .theme-preview-accent {
-            width: 8px;
-        }
-
-        .theme-card-body {
-            padding: 0.75rem 1rem;
-            text-align: center;
-        }
-
-        .theme-name {
-            font-weight: 600;
-            font-size: var(--dm-text-sm);
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--dm-primary);
-            display: inline-block;
-        }
-
-        .preview-section {
-            margin-bottom: 3rem;
-        }
-
-        .component-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .preview-card {
-            background: var(--dm-surface);
-            border: 1px solid var(--dm-border);
-            border-radius: var(--dm-radius-xl);
-            padding: 1.5rem;
-        }
-
-        .preview-card h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--dm-text);
-        }
-
-        .button-showcase {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .alert-showcase {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .alert {
-            padding: 0.875rem 1rem;
-            border-radius: var(--dm-radius-lg);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: var(--dm-text-sm);
-        }
-
-        .alert-success {
-            background: var(--dm-success-light);
-            color: var(--dm-success-dark);
-            border: 1px solid var(--dm-success);
-        }
-
-        .alert-danger {
-            background: var(--dm-danger-light);
-            color: var(--dm-danger-dark);
-            border: 1px solid var(--dm-danger);
-        }
-
-        .alert-warning {
-            background: var(--dm-warning-light);
-            color: var(--dm-warning-dark);
-            border: 1px solid var(--dm-warning);
-        }
-
-        .alert-info {
-            background: var(--dm-info-light);
-            color: var(--dm-info-dark);
-            border: 1px solid var(--dm-info);
-        }
-
-        .colour-palette {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 0.75rem;
-        }
-
-        .colour-swatch {
-            text-align: center;
-        }
-
-        .colour-circle {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            margin: 0 auto 0.5rem;
-            border: 2px solid var(--dm-border);
-            box-shadow: var(--dm-shadow-sm);
-        }
-
-        .colour-label {
-            font-size: var(--dm-text-xs);
-            font-weight: 500;
-            color: var(--dm-text-muted);
-        }
-
-        .code-block {
-            background: var(--dm-gray-900);
-            color: var(--dm-gray-100);
-            border-radius: var(--dm-radius-lg);
-            padding: 1.25rem;
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-text-sm);
-            overflow-x: auto;
-            line-height: 1.6;
-        }
-
-        .code-block .comment {
-            color: var(--dm-gray-500);
-        }
-
-        .code-block .keyword {
-            color: #c792ea;
-        }
-
-        .code-block .string {
-            color: #c3e88d;
-        }
-
-        .code-block .function {
-            color: #82aaff;
-        }
-
-        .current-theme-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: var(--dm-radius-full);
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-text-sm);
-        }
-
-        .badge-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: currentColor;
-        }
-    </style>
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="subpage">
 
 <!-- Hero Section -->
-<div class="hero">
+<div class="hero themes-hero-style">
     <h1>Domma Themes</h1>
     <p>Beautiful, consistent theming with light & dark modes plus 7 colour variants. Zero JavaScript required.</p>
-    <div class="current-theme-badge" id="current-badge">
+    <div class="themes-current-theme-badge" id="current-badge">
         <span class="badge-dot"></span>
         <span id="badge-text">Light</span>
     </div>
@@ -248,128 +25,128 @@
 <main class="container pb-8">
     <!-- Theme Selector -->
     <section class="preview-section" data-section="Theme Selector">
-        <h2 class="section-title">Choose a Theme</h2>
+        <h2 class="themes-section-title">Choose a Theme</h2>
         <p class="text-muted mb-4">Click any theme to preview it instantly. Changes apply to the entire page.</p>
 
         <h4 class="font-semibold mb-3">Base Themes</h4>
-        <div class="theme-grid mb-6" id="base-themes">
+        <div class="themes-theme-grid mb-6" id="base-themes">
             <!-- Light Theme -->
-            <div class="theme-card active" data-theme="light" data-variant="">
-                <div class="theme-preview">
-                    <div class="theme-preview-bg" style="background: #ffffff;">
+            <div class="themes-theme-card active" data-theme="light" data-variant="">
+                <div class="themes-theme-preview">
+                    <div class="themes-theme-preview-bg" style="background: #ffffff;">
                         <span style="color: #1a1a2e; font-weight: 600;">Aa</span>
                     </div>
-                    <div class="theme-preview-accent" style="background: #4f46e5;"></div>
+                    <div class="themes-theme-preview-accent" style="background: #4f46e5;"></div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-name">Light</div>
+                <div class="themes-theme-card-body">
+                    <div class="themes-theme-name">Light</div>
                 </div>
             </div>
 
             <!-- Dark Theme -->
-            <div class="theme-card" data-theme="dark" data-variant="">
-                <div class="theme-preview">
-                    <div class="theme-preview-bg" style="background: #1a1a2e;">
+            <div class="themes-theme-card" data-theme="dark" data-variant="">
+                <div class="themes-theme-preview">
+                    <div class="themes-theme-preview-bg" style="background: #1a1a2e;">
                         <span style="color: #f8f9fa; font-weight: 600;">Aa</span>
                     </div>
-                    <div class="theme-preview-accent" style="background: #818cf8;"></div>
+                    <div class="themes-theme-preview-accent" style="background: #818cf8;"></div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-name">Dark</div>
+                <div class="themes-theme-card-body">
+                    <div class="themes-theme-name">Dark</div>
                 </div>
             </div>
         </div>
 
         <h4 class="font-semibold mb-3">Colour Variants</h4>
-        <div class="theme-grid" id="variant-themes">
+        <div class="themes-theme-grid" id="variant-themes">
             <!-- Ocean -->
-            <div class="theme-card" data-theme="light" data-variant="ocean">
-                <div class="theme-preview">
-                    <div class="theme-preview-bg" style="background: linear-gradient(135deg, #e0f7fa, #b2ebf2);">
+            <div class="themes-theme-card" data-theme="light" data-variant="ocean">
+                <div class="themes-theme-preview">
+                    <div class="themes-theme-preview-bg" style="background: linear-gradient(135deg, #e0f7fa, #b2ebf2);">
                         <span style="color: #006064; font-weight: 600;">Aa</span>
                     </div>
-                    <div class="theme-preview-accent" style="background: #0077b6;"></div>
+                    <div class="themes-theme-preview-accent" style="background: #0077b6;"></div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-name">Ocean</div>
+                <div class="themes-theme-card-body">
+                    <div class="themes-theme-name">Ocean</div>
                 </div>
             </div>
 
             <!-- Forest -->
-            <div class="theme-card" data-theme="light" data-variant="forest">
-                <div class="theme-preview">
-                    <div class="theme-preview-bg" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
+            <div class="themes-theme-card" data-theme="light" data-variant="forest">
+                <div class="themes-theme-preview">
+                    <div class="themes-theme-preview-bg" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
                         <span style="color: #1b5e20; font-weight: 600;">Aa</span>
                     </div>
-                    <div class="theme-preview-accent" style="background: #2d6a4f;"></div>
+                    <div class="themes-theme-preview-accent" style="background: #2d6a4f;"></div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-name">Forest</div>
+                <div class="themes-theme-card-body">
+                    <div class="themes-theme-name">Forest</div>
                 </div>
             </div>
 
             <!-- Sunset -->
-            <div class="theme-card" data-theme="light" data-variant="sunset">
-                <div class="theme-preview">
-                    <div class="theme-preview-bg" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2);">
+            <div class="themes-theme-card" data-theme="light" data-variant="sunset">
+                <div class="themes-theme-preview">
+                    <div class="themes-theme-preview-bg" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2);">
                         <span style="color: #e65100; font-weight: 600;">Aa</span>
                     </div>
-                    <div class="theme-preview-accent" style="background: #e85d04;"></div>
+                    <div class="themes-theme-preview-accent" style="background: #e85d04;"></div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-name">Sunset</div>
+                <div class="themes-theme-card-body">
+                    <div class="themes-theme-name">Sunset</div>
                 </div>
             </div>
 
             <!-- Royal -->
-            <div class="theme-card" data-theme="light" data-variant="royal">
-                <div class="theme-preview">
-                    <div class="theme-preview-bg" style="background: linear-gradient(135deg, #ede7f6, #d1c4e9);">
+            <div class="themes-theme-card" data-theme="light" data-variant="royal">
+                <div class="themes-theme-preview">
+                    <div class="themes-theme-preview-bg" style="background: linear-gradient(135deg, #ede7f6, #d1c4e9);">
                         <span style="color: #4a148c; font-weight: 600;">Aa</span>
                     </div>
-                    <div class="theme-preview-accent" style="background: #7c3aed;"></div>
+                    <div class="themes-theme-preview-accent" style="background: #7c3aed;"></div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-name">Royal</div>
+                <div class="themes-theme-card-body">
+                    <div class="themes-theme-name">Royal</div>
                 </div>
             </div>
 
             <!-- Lemon -->
-            <div class="theme-card" data-theme="light" data-variant="lemon">
-                <div class="theme-preview">
-                    <div class="theme-preview-bg" style="background: linear-gradient(135deg, #fffde7, #fff9c4);">
+            <div class="themes-theme-card" data-theme="light" data-variant="lemon">
+                <div class="themes-theme-preview">
+                    <div class="themes-theme-preview-bg" style="background: linear-gradient(135deg, #fffde7, #fff9c4);">
                         <span style="color: #f57f17; font-weight: 600;">Aa</span>
                     </div>
-                    <div class="theme-preview-accent" style="background: #fbbf24;"></div>
+                    <div class="themes-theme-preview-accent" style="background: #fbbf24;"></div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-name">Lemon</div>
+                <div class="themes-theme-card-body">
+                    <div class="themes-theme-name">Lemon</div>
                 </div>
             </div>
 
             <!-- Silver -->
-            <div class="theme-card" data-theme="light" data-variant="silver">
-                <div class="theme-preview">
-                    <div class="theme-preview-bg" style="background: linear-gradient(135deg, #fafafa, #eeeeee);">
+            <div class="themes-theme-card" data-theme="light" data-variant="silver">
+                <div class="themes-theme-preview">
+                    <div class="themes-theme-preview-bg" style="background: linear-gradient(135deg, #fafafa, #eeeeee);">
                         <span style="color: #424242; font-weight: 600;">Aa</span>
                     </div>
-                    <div class="theme-preview-accent" style="background: #6b7280;"></div>
+                    <div class="themes-theme-preview-accent" style="background: #6b7280;"></div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-name">Silver</div>
+                <div class="themes-theme-card-body">
+                    <div class="themes-theme-name">Silver</div>
                 </div>
             </div>
 
             <!-- Charcoal -->
-            <div class="theme-card" data-theme="dark" data-variant="charcoal">
-                <div class="theme-preview">
-                    <div class="theme-preview-bg" style="background: linear-gradient(135deg, #212121, #424242);">
+            <div class="themes-theme-card" data-theme="dark" data-variant="charcoal">
+                <div class="themes-theme-preview">
+                    <div class="themes-theme-preview-bg" style="background: linear-gradient(135deg, #212121, #424242);">
                         <span style="color: #e0e0e0; font-weight: 600;">Aa</span>
                     </div>
-                    <div class="theme-preview-accent" style="background: #78909c;"></div>
+                    <div class="themes-theme-preview-accent" style="background: #78909c;"></div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-name">Charcoal</div>
+                <div class="themes-theme-card-body">
+                    <div class="themes-theme-name">Charcoal</div>
                 </div>
             </div>
         </div>
@@ -377,14 +154,14 @@
 
     <!-- Component Preview -->
     <section class="preview-section" data-section="Component Preview">
-        <h2 class="section-title">Component Preview</h2>
+        <h2 class="themes-section-title">Component Preview</h2>
         <p class="text-muted mb-4">See how components look with the selected theme.</p>
 
-        <div class="component-grid">
+        <div class="themes-component-grid">
             <!-- Buttons -->
-            <div class="preview-card">
+            <div class="themes-preview-card">
                 <h3>Buttons</h3>
-                <div class="button-showcase">
+                <div class="themes-button-showcase">
                     <button class="btn btn-primary">Primary</button>
                     <button class="btn btn-secondary">Secondary</button>
                     <button class="btn btn-success">Success</button>
@@ -397,22 +174,22 @@
             </div>
 
             <!-- Alerts -->
-            <div class="preview-card">
+            <div class="themes-preview-card">
                 <h3>Alerts</h3>
-                <div class="alert-showcase">
-                    <div class="alert alert-success">
+                <div class="themes-alert-showcase">
+                    <div class="themes-alert-base themes-alert-success">
                         <span data-icon="check-circle" data-icon-size="18"></span>
                         Success! Operation completed.
                     </div>
-                    <div class="alert alert-danger">
+                    <div class="themes-alert-base themes-alert-danger">
                         <span data-icon="x-circle" data-icon-size="18"></span>
                         Error! Something went wrong.
                     </div>
-                    <div class="alert alert-warning">
+                    <div class="themes-alert-base themes-alert-warning">
                         <span data-icon="warning" data-icon-size="18"></span>
                         Warning! Please review.
                     </div>
-                    <div class="alert alert-info">
+                    <div class="themes-alert-base themes-alert-info">
                         <span data-icon="info" data-icon-size="18"></span>
                         Info: Updates available.
                     </div>
@@ -420,7 +197,7 @@
             </div>
 
             <!-- Form -->
-            <div class="preview-card">
+            <div class="themes-preview-card">
                 <h3>Form Elements</h3>
                 <div class="form-group">
                     <label class="form-label">Email</label>
@@ -437,7 +214,7 @@
             </div>
 
             <!-- Card -->
-            <div class="preview-card">
+            <div class="themes-preview-card">
                 <h3>Nested Card</h3>
                 <div class="card">
                     <div class="card-body">
@@ -455,11 +232,11 @@
 
     <!-- Colour Palette -->
     <section class="preview-section" data-section="Colour Palette">
-        <h2 class="section-title">Colour Palette</h2>
+        <h2 class="themes-section-title">Colour Palette</h2>
         <p class="text-muted mb-4">Current theme colours update as you switch themes.</p>
 
-        <div class="preview-card">
-            <div class="colour-palette" id="colour-palette">
+        <div class="themes-preview-card">
+            <div class="themes-colour-palette" id="colour-palette">
                 <!-- Generated by JS -->
             </div>
         </div>
@@ -467,12 +244,12 @@
 
     <!-- Usage -->
     <section class="preview-section" data-section="Usage">
-        <h2 class="section-title">Usage</h2>
+        <h2 class="themes-section-title">Usage</h2>
 
-        <div class="component-grid">
-            <div class="preview-card">
+        <div class="themes-component-grid">
+            <div class="themes-preview-card">
                 <h3>CSS Only</h3>
-                <div class="code-block language-javascript">
+                <div class="themes-code-block language-javascript">
                     <span class="comment"><!-- Include themes CSS --></span>
                     <link rel="stylesheet" href="<span class="string">domma-themes.css</span>">
 
@@ -481,9 +258,9 @@
                 </div>
             </div>
 
-            <div class="preview-card">
+            <div class="themes-preview-card">
                 <h3>JavaScript API</h3>
-                <div class="code-block language-javascript">
+                <div class="themes-code-block language-javascript">
                     <span class="comment">// Initialise with options</span>
                     Domma.theme.<span class="function">init</span>({
                     theme: <span class="string">'dark'</span>,
@@ -523,9 +300,9 @@
     function renderPalette() {
         const style = getComputedStyle(document.body);
         const html = colours.map(c => `
-            <div class="colour-swatch">
-                <div class="colour-circle" style="background: var(${c.var})"></div>
-                <div class="colour-label">${c.name}</div>
+            <div class="themes-colour-swatch">
+                <div class="themes-colour-circle" style="background: var(${c.var})"></div>
+                <div class="themes-colour-label">${c.name}</div>
             </div>
         `).join('');
         $('#colour-palette').html(html);
@@ -541,16 +318,16 @@
 
     // Update active states
     function updateActiveStates(theme, variant) {
-        $('.theme-card').removeClass('active');
+        $('.themes-theme-card').removeClass('active');
         if (variant) {
-            $(`.theme-card[data-variant="${variant}"]`).addClass('active');
+            $(`.themes-theme-card[data-variant="${variant}"]`).addClass('active');
         } else {
-            $(`.theme-card[data-theme="${theme}"][data-variant=""]`).addClass('active');
+            $(`.themes-theme-card[data-theme="${theme}"][data-variant=""]`).addClass('active');
         }
     }
 
     // Theme card click handler
-    $('.theme-card').on('click', function () {
+    $('.themes-theme-card').on('click', function () {
         const theme = $(this).data('theme');
         const variant = $(this).data('variant');
 

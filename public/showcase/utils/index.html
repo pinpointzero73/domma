@@ -8,80 +8,11 @@
     <link rel="stylesheet" href="../../dist/domma.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-    <style>
-        .hero {
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .hero code {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--dm-radius-full);
-        }
-
-        .demo-result {
-            background: var(--dm-gray-900);
-            color: var(--dm-gray-100);
-            padding: var(--dm-space-3);
-            border-radius: var(--dm-radius-md);
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            margin-top: var(--dm-space-2);
-            white-space: pre-wrap;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .method-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: var(--dm-space-2);
-        }
-
-        .method-item {
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            padding: var(--dm-space-2);
-            background: var(--dm-gray-100);
-            border-radius: var(--dm-radius-sm);
-        }
-
-        .category-title {
-            font-weight: 600;
-            color: var(--dm-primary);
-            margin: var(--dm-space-4) 0 var(--dm-space-2);
-            padding-bottom: var(--dm-space-2);
-            border-bottom: 2px solid var(--dm-primary);
-        }
-
-        .try-section {
-            background: var(--dm-gray-100);
-            padding: var(--dm-space-4);
-            border-radius: var(--dm-radius-md);
-            margin-top: var(--dm-space-4);
-        }
-    </style>
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body data-layout="showcase" data-layout-variant="subpage">
 <!-- Hero Section -->
-<div class="hero">
+<div class="hero utils-hero-style">
     <h1>Utilities</h1>
     <p>Lodash-compatible utility functions with 120+ methods for arrays, objects, strings, and more.</p>
     <p><code>_</code> or <code>Domma.utils</code></p>
@@ -97,47 +28,47 @@
         <div class="card-body">
             <p class="mb-4">Manipulate and transform arrays with powerful utility functions.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item">chunk()</span>
-                <span class="method-item">compact()</span>
-                <span class="method-item">concat()</span>
-                <span class="method-item">difference()</span>
-                <span class="method-item">drop()</span>
-                <span class="method-item">dropRight()</span>
-                <span class="method-item">dropWhile()</span>
-                <span class="method-item">fill()</span>
-                <span class="method-item">flatten()</span>
-                <span class="method-item">flattenDeep()</span>
-                <span class="method-item">flattenDepth()</span>
-                <span class="method-item">fromPairs()</span>
-                <span class="method-item">head()</span>
-                <span class="method-item">indexOf()</span>
-                <span class="method-item">initial()</span>
-                <span class="method-item">intersection()</span>
-                <span class="method-item">join()</span>
-                <span class="method-item">last()</span>
-                <span class="method-item">lastIndexOf()</span>
-                <span class="method-item">nth()</span>
-                <span class="method-item">pull()</span>
-                <span class="method-item">pullAll()</span>
-                <span class="method-item">pullAt()</span>
-                <span class="method-item">remove()</span>
-                <span class="method-item">reverse()</span>
-                <span class="method-item">slice()</span>
-                <span class="method-item">sortedIndex()</span>
-                <span class="method-item">sortedUniq()</span>
-                <span class="method-item">tail()</span>
-                <span class="method-item">take()</span>
-                <span class="method-item">takeRight()</span>
-                <span class="method-item">takeWhile()</span>
-                <span class="method-item">union()</span>
-                <span class="method-item">uniq()</span>
-                <span class="method-item">uniqBy()</span>
-                <span class="method-item">unzip()</span>
-                <span class="method-item">without()</span>
-                <span class="method-item">xor()</span>
-                <span class="method-item">zip()</span>
-                <span class="method-item">zipObject()</span>
+            <div class="utils-method-grid mb-4">
+                <span class="utils-method-item">chunk()</span>
+                <span class="utils-method-item">compact()</span>
+                <span class="utils-method-item">concat()</span>
+                <span class="utils-method-item">difference()</span>
+                <span class="utils-method-item">drop()</span>
+                <span class="utils-method-item">dropRight()</span>
+                <span class="utils-method-item">dropWhile()</span>
+                <span class="utils-method-item">fill()</span>
+                <span class="utils-method-item">flatten()</span>
+                <span class="utils-method-item">flattenDeep()</span>
+                <span class="utils-method-item">flattenDepth()</span>
+                <span class="utils-method-item">fromPairs()</span>
+                <span class="utils-method-item">head()</span>
+                <span class="utils-method-item">indexOf()</span>
+                <span class="utils-method-item">initial()</span>
+                <span class="utils-method-item">intersection()</span>
+                <span class="utils-method-item">join()</span>
+                <span class="utils-method-item">last()</span>
+                <span class="utils-method-item">lastIndexOf()</span>
+                <span class="utils-method-item">nth()</span>
+                <span class="utils-method-item">pull()</span>
+                <span class="utils-method-item">pullAll()</span>
+                <span class="utils-method-item">pullAt()</span>
+                <span class="utils-method-item">remove()</span>
+                <span class="utils-method-item">reverse()</span>
+                <span class="utils-method-item">slice()</span>
+                <span class="utils-method-item">sortedIndex()</span>
+                <span class="utils-method-item">sortedUniq()</span>
+                <span class="utils-method-item">tail()</span>
+                <span class="utils-method-item">take()</span>
+                <span class="utils-method-item">takeRight()</span>
+                <span class="utils-method-item">takeWhile()</span>
+                <span class="utils-method-item">union()</span>
+                <span class="utils-method-item">uniq()</span>
+                <span class="utils-method-item">uniqBy()</span>
+                <span class="utils-method-item">unzip()</span>
+                <span class="utils-method-item">without()</span>
+                <span class="utils-method-item">xor()</span>
+                <span class="utils-method-item">zip()</span>
+                <span class="utils-method-item">zipObject()</span>
             </div>
 
             <pre class="code-block language-javascript">// Chunk array into groups
@@ -165,7 +96,7 @@ _.intersection([1, 2], [2, 3])  // [2]
 _.zipObject(['a', 'b'], [1, 2])  // {a: 1, b: 2}
 _.fromPairs([['a', 1], ['b', 2]])  // {a: 1, b: 2}</pre>
 
-            <div class="try-section">
+            <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
                 <div class="flex gap-2 flex-wrap mb-3">
                     <button class="btn btn-outline btn-sm" data-util="chunk">chunk([1,2,3,4,5], 2)</button>
@@ -173,7 +104,7 @@ _.fromPairs([['a', 1], ['b', 2]])  // {a: 1, b: 2}</pre>
                     <button class="btn btn-outline btn-sm" data-util="uniq">uniq([1,2,2,3,3])</button>
                     <button class="btn btn-outline btn-sm" data-util="flatten">flattenDeep([[1,[2,[3]]]])</button>
                 </div>
-                <div class="demo-result" id="array-result">Click a button to see result</div>
+                <div class="utils-demo-result" id="array-result">Click a button to see result</div>
             </div>
         </div>
     </section>
@@ -186,32 +117,32 @@ _.fromPairs([['a', 1], ['b', 2]])  // {a: 1, b: 2}</pre>
         <div class="card-body">
             <p class="mb-4">Iterate, search, and transform collections (arrays and objects).</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item">countBy()</span>
-                <span class="method-item">each()</span>
-                <span class="method-item">every()</span>
-                <span class="method-item">filter()</span>
-                <span class="method-item">find()</span>
-                <span class="method-item">findIndex()</span>
-                <span class="method-item">findLast()</span>
-                <span class="method-item">flatMap()</span>
-                <span class="method-item">forEach()</span>
-                <span class="method-item">groupBy()</span>
-                <span class="method-item">includes()</span>
-                <span class="method-item">invokeMap()</span>
-                <span class="method-item">keyBy()</span>
-                <span class="method-item">map()</span>
-                <span class="method-item">orderBy()</span>
-                <span class="method-item">partition()</span>
-                <span class="method-item">reduce()</span>
-                <span class="method-item">reduceRight()</span>
-                <span class="method-item">reject()</span>
-                <span class="method-item">sample()</span>
-                <span class="method-item">sampleSize()</span>
-                <span class="method-item">shuffle()</span>
-                <span class="method-item">size()</span>
-                <span class="method-item">some()</span>
-                <span class="method-item">sortBy()</span>
+            <div class="utils-method-grid mb-4">
+                <span class="utils-method-item">countBy()</span>
+                <span class="utils-method-item">each()</span>
+                <span class="utils-method-item">every()</span>
+                <span class="utils-method-item">filter()</span>
+                <span class="utils-method-item">find()</span>
+                <span class="utils-method-item">findIndex()</span>
+                <span class="utils-method-item">findLast()</span>
+                <span class="utils-method-item">flatMap()</span>
+                <span class="utils-method-item">forEach()</span>
+                <span class="utils-method-item">groupBy()</span>
+                <span class="utils-method-item">includes()</span>
+                <span class="utils-method-item">invokeMap()</span>
+                <span class="utils-method-item">keyBy()</span>
+                <span class="utils-method-item">map()</span>
+                <span class="utils-method-item">orderBy()</span>
+                <span class="utils-method-item">partition()</span>
+                <span class="utils-method-item">reduce()</span>
+                <span class="utils-method-item">reduceRight()</span>
+                <span class="utils-method-item">reject()</span>
+                <span class="utils-method-item">sample()</span>
+                <span class="utils-method-item">sampleSize()</span>
+                <span class="utils-method-item">shuffle()</span>
+                <span class="utils-method-item">size()</span>
+                <span class="utils-method-item">some()</span>
+                <span class="utils-method-item">sortBy()</span>
             </div>
 
             <pre class="code-block language-javascript">const users = [
@@ -244,16 +175,15 @@ _.partition(users, u => u.age > 25)
 _.countBy(users, 'dept')
 // { Engineering: 2, Sales: 1 }</pre>
 
-            <div class="try-section">
+            <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
                 <div class="flex gap-2 flex-wrap mb-3">
                     <button class="btn btn-outline btn-sm" data-util="groupBy">groupBy(users, 'dept')</button>
                     <button class="btn btn-outline btn-sm" data-util="sortBy">sortBy(users, 'age')</button>
-                    <button class="btn btn-outline btn-sm" data-util="filter">filter(users, {dept:'Engineering'})
-                    </button>
+                    <button class="btn btn-outline btn-sm" data-util="filter">filter(users, {dept:'Engineering'})</button>
                     <button class="btn btn-outline btn-sm" data-util="countBy">countBy(users, 'dept')</button>
                 </div>
-                <div class="demo-result" id="collection-result">Click a button to see result</div>
+                <div class="utils-demo-result" id="collection-result">Click a button to see result</div>
             </div>
         </div>
     </section>
@@ -266,36 +196,36 @@ _.countBy(users, 'dept')
         <div class="card-body">
             <p class="mb-4">Work with objects - access, transform, and manipulate properties.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item">assign()</span>
-                <span class="method-item">at()</span>
-                <span class="method-item">defaults()</span>
-                <span class="method-item">defaultsDeep()</span>
-                <span class="method-item">entries()</span>
-                <span class="method-item">findKey()</span>
-                <span class="method-item">forIn()</span>
-                <span class="method-item">forOwn()</span>
-                <span class="method-item">get()</span>
-                <span class="method-item">has()</span>
-                <span class="method-item">hasIn()</span>
-                <span class="method-item">invert()</span>
-                <span class="method-item">invoke()</span>
-                <span class="method-item">keys()</span>
-                <span class="method-item">mapKeys()</span>
-                <span class="method-item">mapValues()</span>
-                <span class="method-item">merge()</span>
-                <span class="method-item">mergeWith()</span>
-                <span class="method-item">omit()</span>
-                <span class="method-item">omitBy()</span>
-                <span class="method-item">pick()</span>
-                <span class="method-item">pickBy()</span>
-                <span class="method-item">result()</span>
-                <span class="method-item">set()</span>
-                <span class="method-item">toPairs()</span>
-                <span class="method-item">transform()</span>
-                <span class="method-item">unset()</span>
-                <span class="method-item">update()</span>
-                <span class="method-item">values()</span>
+            <div class="utils-method-grid mb-4">
+                <span class="utils-method-item">assign()</span>
+                <span class="utils-method-item">at()</span>
+                <span class="utils-method-item">defaults()</span>
+                <span class="utils-method-item">defaultsDeep()</span>
+                <span class="utils-method-item">entries()</span>
+                <span class="utils-method-item">findKey()</span>
+                <span class="utils-method-item">forIn()</span>
+                <span class="utils-method-item">forOwn()</span>
+                <span class="utils-method-item">get()</span>
+                <span class="utils-method-item">has()</span>
+                <span class="utils-method-item">hasIn()</span>
+                <span class="utils-method-item">invert()</span>
+                <span class="utils-method-item">invoke()</span>
+                <span class="utils-method-item">keys()</span>
+                <span class="utils-method-item">mapKeys()</span>
+                <span class="utils-method-item">mapValues()</span>
+                <span class="utils-method-item">merge()</span>
+                <span class="utils-method-item">mergeWith()</span>
+                <span class="utils-method-item">omit()</span>
+                <span class="utils-method-item">omitBy()</span>
+                <span class="utils-method-item">pick()</span>
+                <span class="utils-method-item">pickBy()</span>
+                <span class="utils-method-item">result()</span>
+                <span class="utils-method-item">set()</span>
+                <span class="utils-method-item">toPairs()</span>
+                <span class="utils-method-item">transform()</span>
+                <span class="utils-method-item">unset()</span>
+                <span class="utils-method-item">update()</span>
+                <span class="utils-method-item">values()</span>
             </div>
 
             <pre class="code-block language-javascript">const obj = {
@@ -330,7 +260,7 @@ _.mapValues({a: 1, b: 2}, v => v * 2)  // {a: 2, b: 4}
 // Invert object
 _.invert({a: 1, b: 2})  // {1: 'a', 2: 'b'}</pre>
 
-            <div class="try-section">
+            <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
                 <div class="flex gap-2 flex-wrap mb-3">
                     <button class="btn btn-outline btn-sm" data-util="get">get(obj, 'user.address.city')</button>
@@ -338,7 +268,7 @@ _.invert({a: 1, b: 2})  // {1: 'a', 2: 'b'}</pre>
                     <button class="btn btn-outline btn-sm" data-util="merge">merge({a:1}, {b:2})</button>
                     <button class="btn btn-outline btn-sm" data-util="invert">invert({a:1, b:2})</button>
                 </div>
-                <div class="demo-result" id="object-result">Click a button to see result</div>
+                <div class="utils-demo-result" id="object-result">Click a button to see result</div>
             </div>
         </div>
     </section>
@@ -351,28 +281,28 @@ _.invert({a: 1, b: 2})  // {1: 'a', 2: 'b'}</pre>
         <div class="card-body">
             <p class="mb-4">Control function execution with debounce, throttle, memoize, and more.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item">after()</span>
-                <span class="method-item">ary()</span>
-                <span class="method-item">before()</span>
-                <span class="method-item">bind()</span>
-                <span class="method-item">curry()</span>
-                <span class="method-item">curryRight()</span>
-                <span class="method-item">debounce()</span>
-                <span class="method-item">defer()</span>
-                <span class="method-item">delay()</span>
-                <span class="method-item">flip()</span>
-                <span class="method-item">memoize()</span>
-                <span class="method-item">negate()</span>
-                <span class="method-item">once()</span>
-                <span class="method-item">partial()</span>
-                <span class="method-item">partialRight()</span>
-                <span class="method-item">rearg()</span>
-                <span class="method-item">rest()</span>
-                <span class="method-item">spread()</span>
-                <span class="method-item">throttle()</span>
-                <span class="method-item">unary()</span>
-                <span class="method-item">wrap()</span>
+            <div class="utils-method-grid mb-4">
+                <span class="utils-method-item">after()</span>
+                <span class="utils-method-item">ary()</span>
+                <span class="utils-method-item">before()</span>
+                <span class="utils-method-item">bind()</span>
+                <span class="utils-method-item">curry()</span>
+                <span class="utils-method-item">curryRight()</span>
+                <span class="utils-method-item">debounce()</span>
+                <span class="utils-method-item">defer()</span>
+                <span class="utils-method-item">delay()</span>
+                <span class="utils-method-item">flip()</span>
+                <span class="utils-method-item">memoize()</span>
+                <span class="utils-method-item">negate()</span>
+                <span class="utils-method-item">once()</span>
+                <span class="utils-method-item">partial()</span>
+                <span class="utils-method-item">partialRight()</span>
+                <span class="utils-method-item">rearg()</span>
+                <span class="utils-method-item">rest()</span>
+                <span class="utils-method-item">spread()</span>
+                <span class="utils-method-item">throttle()</span>
+                <span class="utils-method-item">unary()</span>
+                <span class="utils-method-item">wrap()</span>
             </div>
 
             <pre class="code-block language-javascript">// Debounce - wait for pause in calls
@@ -408,10 +338,10 @@ add(1)(2)(3);  // 6
 add(1, 2)(3);  // 6
 add(1)(2, 3);  // 6</pre>
 
-            <div class="try-section">
+            <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It - Debounce</h4>
                 <input type="text" id="debounce-input" class="form-input mb-2" placeholder="Type here (debounced)">
-                <div class="demo-result" id="debounce-result">Start typing to see debounce in action...</div>
+                <div class="utils-demo-result" id="debounce-result">Start typing to see debounce in action...</div>
             </div>
         </div>
     </section>
@@ -424,37 +354,37 @@ add(1)(2, 3);  // 6</pre>
         <div class="card-body">
             <p class="mb-4">Transform and manipulate strings.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item">camelCase()</span>
-                <span class="method-item">capitalize()</span>
-                <span class="method-item">deburr()</span>
-                <span class="method-item">endsWith()</span>
-                <span class="method-item">escape()</span>
-                <span class="method-item">escapeRegExp()</span>
-                <span class="method-item">kebabCase()</span>
-                <span class="method-item">lowerCase()</span>
-                <span class="method-item">lowerFirst()</span>
-                <span class="method-item">pad()</span>
-                <span class="method-item">padEnd()</span>
-                <span class="method-item">padStart()</span>
-                <span class="method-item">parseInt()</span>
-                <span class="method-item">repeat()</span>
-                <span class="method-item">replace()</span>
-                <span class="method-item">snakeCase()</span>
-                <span class="method-item">split()</span>
-                <span class="method-item">startCase()</span>
-                <span class="method-item">startsWith()</span>
-                <span class="method-item">template()</span>
-                <span class="method-item">toLower()</span>
-                <span class="method-item">toUpper()</span>
-                <span class="method-item">trim()</span>
-                <span class="method-item">trimEnd()</span>
-                <span class="method-item">trimStart()</span>
-                <span class="method-item">truncate()</span>
-                <span class="method-item">unescape()</span>
-                <span class="method-item">upperCase()</span>
-                <span class="method-item">upperFirst()</span>
-                <span class="method-item">words()</span>
+            <div class="utils-method-grid mb-4">
+                <span class="utils-method-item">camelCase()</span>
+                <span class="utils-method-item">capitalize()</span>
+                <span class="utils-method-item">deburr()</span>
+                <span class="utils-method-item">endsWith()</span>
+                <span class="utils-method-item">escape()</span>
+                <span class="utils-method-item">escapeRegExp()</span>
+                <span class="utils-method-item">kebabCase()</span>
+                <span class="utils-method-item">lowerCase()</span>
+                <span class="utils-method-item">lowerFirst()</span>
+                <span class="utils-method-item">pad()</span>
+                <span class="utils-method-item">padEnd()</span>
+                <span class="utils-method-item">padStart()</span>
+                <span class="utils-method-item">parseInt()</span>
+                <span class="utils-method-item">repeat()</span>
+                <span class="utils-method-item">replace()</span>
+                <span class="utils-method-item">snakeCase()</span>
+                <span class="utils-method-item">split()</span>
+                <span class="utils-method-item">startCase()</span>
+                <span class="utils-method-item">startsWith()</span>
+                <span class="utils-method-item">template()</span>
+                <span class="utils-method-item">toLower()</span>
+                <span class="utils-method-item">toUpper()</span>
+                <span class="utils-method-item">trim()</span>
+                <span class="utils-method-item">trimEnd()</span>
+                <span class="utils-method-item">trimStart()</span>
+                <span class="utils-method-item">truncate()</span>
+                <span class="utils-method-item">unescape()</span>
+                <span class="utils-method-item">upperCase()</span>
+                <span class="utils-method-item">upperFirst()</span>
+                <span class="utils-method-item">words()</span>
             </div>
 
             <pre class="code-block language-javascript">// Case conversion
@@ -486,7 +416,7 @@ _.escape('<div>')            // '&lt;div&gt;'
 // Words
 _.words('fred, barney, & pebbles')  // ['fred', 'barney', 'pebbles']</pre>
 
-            <div class="try-section">
+            <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
                 <input type="text" id="string-input" class="form-input mb-3" value="hello world example">
                 <div class="flex gap-2 flex-wrap mb-3">
@@ -496,7 +426,7 @@ _.words('fred, barney, & pebbles')  // ['fred', 'barney', 'pebbles']</pre>
                     <button class="btn btn-outline btn-sm" data-string="startCase">startCase</button>
                     <button class="btn btn-outline btn-sm" data-string="capitalize">capitalize</button>
                 </div>
-                <div class="demo-result" id="string-result">Click a button to transform the string</div>
+                <div class="utils-demo-result" id="string-result">Click a button to transform the string</div>
             </div>
         </div>
     </section>
@@ -510,12 +440,12 @@ _.words('fred, barney, & pebbles')  // ['fred', 'barney', 'pebbles']</pre>
             <p class="mb-4">Mustache-style templates with loops, conditionals, partials, and automatic HTML
                 escaping.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item">template()</span>
-                <span class="method-item">render()</span>
+            <div class="utils-method-grid mb-4">
+                <span class="utils-method-item">template()</span>
+                <span class="utils-method-item">render()</span>
             </div>
 
-            <h4 class="category-title">Basic Usage</h4>
+            <h4 class="utils-category-title">Basic Usage</h4>
             <pre class="code-block language-javascript">// Compile and reuse
 const tmpl = _.template('Hello {{name}}!');
 tmpl({ name: 'World' });  // 'Hello World!'
@@ -532,7 +462,7 @@ _.render('<p>{{content}}</p>', { content: '<scr' + 'ipt>' });
 _.render('{{{html}}}', { html: '<strong>Bold</strong>' });
 // '<strong>Bold</strong>'</pre>
 
-            <h4 class="category-title">Conditionals</h4>
+            <h4 class="utils-category-title">Conditionals</h4>
             <pre class="code-block language-javascript">// {{#if}}...{{/if}}
 _.render('{{#if active}}Online{{/if}}', { active: true });
 // 'Online'
@@ -545,7 +475,7 @@ _.render('{{#if premium}}Pro{{else}}Free{{/if}}', { premium: false });
 _.render('{{#unless verified}}Please verify{{/unless}}', { verified: false });
 // 'Please verify'</pre>
 
-            <h4 class="category-title">Loops</h4>
+            <h4 class="utils-category-title">Loops</h4>
             <pre class="code-block language-javascript">// {{#each}}...{{/each}}
 _.render('{{#each items}}<li>{{name}}</li>{{/each}}', {
     items: [{ name: 'Apple' }, { name: 'Banana' }]
@@ -560,7 +490,7 @@ _.render('{{#each tags}}#{{.}} {{/each}}', { tags: ['js', 'css', 'html'] });
 _.render('{{#each items}}{{@index}}: {{name}}{{/each}}', { items: [...] });
 // '0: Apple1: Banana'</pre>
 
-            <h4 class="category-title">Context & Partials</h4>
+            <h4 class="utils-category-title">Context & Partials</h4>
             <pre class="code-block language-javascript">// {{#with}}...{{/with}} - shift context
 _.render('{{#with user}}{{firstName}} {{lastName}}{{/with}}', {
     user: { firstName: 'John', lastName: 'Doe' }
@@ -572,14 +502,14 @@ const opts = { partials: { header: '<h1>{{title}}</h1>' } };
 _.render('{{> header}}', { title: 'Welcome' }, opts);
 // '<h1>Welcome</h1>'</pre>
 
-            <div class="try-section">
+            <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
                 <textarea id="template-input" class="form-input mb-2" rows="3"
                           style="font-family: var(--dm-font-mono); font-size: 0.875rem;">Hello {{name}}! {{#if premium}}(Premium){{/if}}</textarea>
                 <input type="text" id="template-data" class="form-input mb-3" value='{"name": "Alice", "premium": true}'
                        placeholder="JSON data">
                 <button class="btn btn-primary btn-sm" id="template-run">Render</button>
-                <div class="demo-result mt-3" id="template-result">Click 'Render' to see the output</div>
+                <div class="utils-demo-result" id="template-result">Click 'Render' to see the output</div>
             </div>
         </div>
     </section>
@@ -592,56 +522,56 @@ _.render('{{> header}}', { title: 'Welcome' }, opts);
         <div class="card-body">
             <p class="mb-4">Type checking, comparison, and cloning utilities.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item">castArray()</span>
-                <span class="method-item">clone()</span>
-                <span class="method-item">cloneDeep()</span>
-                <span class="method-item">conformsTo()</span>
-                <span class="method-item">eq()</span>
-                <span class="method-item">gt()</span>
-                <span class="method-item">gte()</span>
-                <span class="method-item">isArray()</span>
-                <span class="method-item">isBoolean()</span>
-                <span class="method-item">isDate()</span>
-                <span class="method-item">isElement()</span>
-                <span class="method-item">isEmpty()</span>
-                <span class="method-item">isEqual()</span>
-                <span class="method-item">isEqualWith()</span>
-                <span class="method-item">isError()</span>
-                <span class="method-item">isFinite()</span>
-                <span class="method-item">isFunction()</span>
-                <span class="method-item">isInteger()</span>
-                <span class="method-item">isLength()</span>
-                <span class="method-item">isMatch()</span>
-                <span class="method-item">isNaN()</span>
-                <span class="method-item">isNil()</span>
-                <span class="method-item">isNull()</span>
-                <span class="method-item">isNumber()</span>
-                <span class="method-item">isObject()</span>
-                <span class="method-item">isPlainObject()</span>
-                <span class="method-item">isRegExp()</span>
-                <span class="method-item">isString()</span>
-                <span class="method-item">isSymbol()</span>
-                <span class="method-item">isUndefined()</span>
-                <span class="method-item">lt()</span>
-                <span class="method-item">lte()</span>
-                <span class="method-item">castArray()</span>
-                <span class="method-item">parseInt()</span>
-                <span class="method-item">toArray()</span>
-                <span class="method-item">toFinite()</span>
-                <span class="method-item">toInteger()</span>
-                <span class="method-item">toLength()</span>
-                <span class="method-item">toNumber()</span>
-                <span class="method-item">toPlainObject()</span>
-                <span class="method-item">toSafeInteger()</span>
-                <span class="method-item">toString()</span>
+            <div class="utils-method-grid mb-4">
+                <span class="utils-method-item">castArray()</span>
+                <span class="utils-method-item">clone()</span>
+                <span class="utils-method-item">cloneDeep()</span>
+                <span class="utils-method-item">conformsTo()</span>
+                <span class="utils-method-item">eq()</span>
+                <span class="utils-method-item">gt()</span>
+                <span class="utils-method-item">gte()</span>
+                <span class="utils-method-item">isArray()</span>
+                <span class="utils-method-item">isBoolean()</span>
+                <span class="utils-method-item">isDate()</span>
+                <span class="utils-method-item">isElement()</span>
+                <span class="utils-method-item">isEmpty()</span>
+                <span class="utils-method-item">isEqual()</span>
+                <span class="utils-method-item">isEqualWith()</span>
+                <span class="utils-method-item">isError()</span>
+                <span class="utils-method-item">isFinite()</span>
+                <span class="utils-method-item">isFunction()</span>
+                <span class="utils-method-item">isInteger()</span>
+                <span class="utils-method-item">isLength()</span>
+                <span class="utils-method-item">isMatch()</span>
+                <span class="utils-method-item">isNaN()</span>
+                <span class="utils-method-item">isNil()</span>
+                <span class="utils-method-item">isNull()</span>
+                <span class="utils-method-item">isNumber()</span>
+                <span class="utils-method-item">isObject()</span>
+                <span class="utils-method-item">isPlainObject()</span>
+                <span class="utils-method-item">isRegExp()</span>
+                <span class="utils-method-item">isString()</span>
+                <span class="utils-method-item">isSymbol()</span>
+                <span class="utils-method-item">isUndefined()</span>
+                <span class="utils-method-item">lt()</span>
+                <span class="utils-method-item">lte()</span>
+                <span class="utils-method-item">castArray()</span>
+                <span class="utils-method-item">parseInt()</span>
+                <span class="utils-method-item">toArray()</span>
+                <span class="utils-method-item">toFinite()</span>
+                <span class="utils-method-item">toInteger()</span>
+                <span class="utils-method-item">toLength()</span>
+                <span class="utils-method-item">toNumber()</span>
+                <span class="utils-method-item">toPlainObject()</span>
+                <span class="utils-method-item">toSafeInteger()</span>
+                <span class="utils-method-item">toString()</span>
             </div>
 
             <pre class="code-block language-javascript">// Type checking
 _.isArray([1, 2])        // true
 _.isObject({})           // true
 _.isPlainObject({})      // true
-_.isFunction(() => {})   // true
+_.isFunction(() => {})
 _.isString('hello')      // true
 _.isNumber(123)          // true
 _.isNil(null)            // true
@@ -672,7 +602,7 @@ _.toString([1, 2, 3])    // '1,2,3'
 _.castArray(1)           // [1]
 _.castArray([1])         // [1]</pre>
 
-            <div class="try-section">
+            <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
                 <div class="flex gap-2 flex-wrap mb-3">
                     <button class="btn btn-outline btn-sm" data-lang="isEqual">isEqual({a:1}, {a:1})</button>
@@ -682,7 +612,7 @@ _.castArray([1])         // [1]</pre>
                     <button class="btn btn-outline btn-sm" data-lang="parseInt">parseInt('42')</button>
                     <button class="btn btn-outline btn-sm" data-lang="toNumber">toNumber('3.14')</button>
                 </div>
-                <div class="demo-result" id="lang-result">Click a button to see result</div>
+                <div class="utils-demo-result" id="lang-result">Click a button to see result</div>
             </div>
         </div>
     </section>
@@ -695,25 +625,25 @@ _.castArray([1])         // [1]</pre>
         <div class="card-body">
             <p class="mb-4">Mathematical operations and aggregations.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item">add()</span>
-                <span class="method-item">ceil()</span>
-                <span class="method-item">divide()</span>
-                <span class="method-item">floor()</span>
-                <span class="method-item">max()</span>
-                <span class="method-item">maxBy()</span>
-                <span class="method-item">mean()</span>
-                <span class="method-item">meanBy()</span>
-                <span class="method-item">min()</span>
-                <span class="method-item">minBy()</span>
-                <span class="method-item">multiply()</span>
-                <span class="method-item">round()</span>
-                <span class="method-item">subtract()</span>
-                <span class="method-item">sum()</span>
-                <span class="method-item">sumBy()</span>
-                <span class="method-item">clamp()</span>
-                <span class="method-item">inRange()</span>
-                <span class="method-item">random()</span>
+            <div class="utils-method-grid mb-4">
+                <span class="utils-method-item">add()</span>
+                <span class="utils-method-item">ceil()</span>
+                <span class="utils-method-item">divide()</span>
+                <span class="utils-method-item">floor()</span>
+                <span class="utils-method-item">max()</span>
+                <span class="utils-method-item">maxBy()</span>
+                <span class="utils-method-item">mean()</span>
+                <span class="utils-method-item">meanBy()</span>
+                <span class="utils-method-item">min()</span>
+                <span class="utils-method-item">minBy()</span>
+                <span class="utils-method-item">multiply()</span>
+                <span class="utils-method-item">round()</span>
+                <span class="utils-method-item">subtract()</span>
+                <span class="utils-method-item">sum()</span>
+                <span class="utils-method-item">sumBy()</span>
+                <span class="utils-method-item">clamp()</span>
+                <span class="utils-method-item">inRange()</span>
+                <span class="utils-method-item">random()</span>
             </div>
 
             <pre class="code-block language-javascript">// Basic maths
@@ -746,7 +676,7 @@ _.inRange(3, 2, 4)       // true
 _.random(0, 100)         // Random number 0-100
 _.random(1.5, 5.5, true) // Random float</pre>
 
-            <div class="try-section">
+            <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
                 <div class="flex gap-2 flex-wrap mb-3">
                     <button class="btn btn-outline btn-sm" data-math="sum">sum([1,2,3,4,5])</button>
@@ -754,7 +684,7 @@ _.random(1.5, 5.5, true) // Random float</pre>
                     <button class="btn btn-outline btn-sm" data-math="random">random(1, 100)</button>
                     <button class="btn btn-outline btn-sm" data-math="clamp">clamp(150, 0, 100)</button>
                 </div>
-                <div class="demo-result" id="math-result">Click a button to see result</div>
+                <div class="utils-demo-result" id="math-result">Click a button to see result</div>
             </div>
         </div>
     </section>
@@ -815,7 +745,7 @@ $.setup({
             <h4 class="font-semibold mb-3 mt-4">Form Validation & Data Processing</h4>
             <pre class="code-block language-javascript">// Centralized form validation with utils
 const validators = {
-    email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+    email: (value) => /^[^S@]+@[^S@]+\.[^S@]+$/.test(value),
     required: (value) => !_.isEmpty(_.trim(value)),
     minLength: (min) => (value) => _.trim(value).length >= min,
     alphanumeric: (value) => /^[a-zA-Z0-9]+$/.test(value)
@@ -1097,37 +1027,37 @@ const byDept = _.flow([
         <div class="card-body">
             <p class="mb-4">General utility functions.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item">attempt()</span>
-                <span class="method-item">cond()</span>
-                <span class="method-item">conforms()</span>
-                <span class="method-item">constant()</span>
-                <span class="method-item">defaultTo()</span>
-                <span class="method-item">flow()</span>
-                <span class="method-item">flowRight()</span>
-                <span class="method-item">identity()</span>
-                <span class="method-item">iteratee()</span>
-                <span class="method-item">matches()</span>
-                <span class="method-item">matchesProperty()</span>
-                <span class="method-item">method()</span>
-                <span class="method-item">methodOf()</span>
-                <span class="method-item">noop()</span>
-                <span class="method-item">nthArg()</span>
-                <span class="method-item">over()</span>
-                <span class="method-item">overEvery()</span>
-                <span class="method-item">overSome()</span>
-                <span class="method-item">property()</span>
-                <span class="method-item">propertyOf()</span>
-                <span class="method-item">range()</span>
-                <span class="method-item">rangeRight()</span>
-                <span class="method-item">stubArray()</span>
-                <span class="method-item">stubFalse()</span>
-                <span class="method-item">stubObject()</span>
-                <span class="method-item">stubString()</span>
-                <span class="method-item">stubTrue()</span>
-                <span class="method-item">times()</span>
-                <span class="method-item">toPath()</span>
-                <span class="method-item">uniqueId()</span>
+            <div class="utils-method-grid mb-4">
+                <span class="utils-method-item">attempt()</span>
+                <span class="utils-method-item">cond()</span>
+                <span class="utils-method-item">conforms()</span>
+                <span class="utils-method-item">constant()</span>
+                <span class="utils-method-item">defaultTo()</span>
+                <span class="utils-method-item">flow()</span>
+                <span class="utils-method-item">flowRight()</span>
+                <span class="utils-method-item">identity()</span>
+                <span class="utils-method-item">iteratee()</span>
+                <span class="utils-method-item">matches()</span>
+                <span class="utils-method-item">matchesProperty()</span>
+                <span class="utils-method-item">method()</span>
+                <span class="utils-method-item">methodOf()</span>
+                <span class="utils-method-item">noop()</span>
+                <span class="utils-method-item">nthArg()</span>
+                <span class="utils-method-item">over()</span>
+                <span class="utils-method-item">overEvery()</span>
+                <span class="utils-method-item">overSome()</span>
+                <span class="utils-method-item">property()</span>
+                <span class="utils-method-item">propertyOf()</span>
+                <span class="utils-method-item">range()</span>
+                <span class="utils-method-item">rangeRight()</span>
+                <span class="utils-method-item">stubArray()</span>
+                <span class="utils-method-item">stubFalse()</span>
+                <span class="utils-method-item">stubObject()</span>
+                <span class="utils-method-item">stubString()</span>
+                <span class="utils-method-item">stubTrue()</span>
+                <span class="utils-method-item">times()</span>
+                <span class="utils-method-item">toPath()</span>
+                <span class="utils-method-item">uniqueId()</span>
             </div>
 
             <pre class="code-block language-javascript">// Generate ranges
@@ -1162,14 +1092,14 @@ _.identity('hello')      // 'hello'
 // Noop
 _.noop()                 // undefined (do nothing)</pre>
 
-            <div class="try-section">
+            <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
                 <div class="flex gap-2 flex-wrap mb-3">
                     <button class="btn btn-outline btn-sm" data-utility="range">range(0, 10, 2)</button>
                     <button class="btn btn-outline btn-sm" data-utility="uniqueId">uniqueId('id_')</button>
                     <button class="btn btn-outline btn-sm" data-utility="times">times(5, i => i*i)</button>
                 </div>
-                <div class="demo-result" id="utility-result">Click a button to see result</div>
+                <div class="utils-demo-result" id="utility-result">Click a button to see result</div>
             </div>
         </div>
     </section>
@@ -1282,7 +1212,8 @@ _.noop()                 // undefined (do nothing)</pre>
                 const original = {a: {b: 1}};
                 const cloned = _.cloneDeep(original);
                 cloned.a.b = 999;
-                description = `Original: ${JSON.stringify(original)}\nCloned (modified): ${JSON.stringify(cloned)}`;
+                description = `Original: ${JSON.stringify(original)}
+Cloned (modified): ${JSON.stringify(cloned)}`;
                 break;
             case 'isMatch':
                 result = _.isMatch({a: 1, b: 2}, {a: 1});
@@ -1290,7 +1221,8 @@ _.noop()                 // undefined (do nothing)</pre>
                 break;
             case 'parseInt':
                 result = _.parseInt('42');
-                description = `_.parseInt('42') = ${result}\n_.parseInt('08', 10) = ${_.parseInt('08', 10)}\n_.parseInt('0xff', 16) = ${_.parseInt('0xff', 16)}`;
+                description = `_.parseInt('42') = ${result}\n_.parseInt('08', 10) = ${_.parseInt('08', 10)}
+_.parseInt('0xff', 16) = ${_.parseInt('0xff', 16)}`;
                 break;
             case 'toNumber':
                 result = _.toNumber('3.14');
