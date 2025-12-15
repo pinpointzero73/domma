@@ -151,7 +151,7 @@ npm run build:css  # Builds src/css/* → public/dist/*
 ```
 src/
 ├── index.js         # Main entry, exports Domma + aliases
-├── tools.js         # Tools bundle entry (Theme Roller, Quick Roller, Editor)
+├── tools.js         # Tools bundle entry (Theme Roller, Page Roller, Editor, Print-to-PDF)
 ├── dom.js           # jQuery-compatible DOM API
 ├── utils.js         # Lodash-compatible utilities
 ├── dates.js         # Moment-style date manipulation
@@ -165,7 +165,8 @@ src/
 ├── icons.js         # SVG icon system
 ├── theme-roller.js  # Theme customisation tool (tools bundle)
 ├── quick-roller.js  # Page builder tool (tools bundle)
-└── editor.js        # Content editor tool (tools bundle)
+├── editor.js        # Content editor tool (tools bundle)
+└── print-to-pdf.js  # Print-to-PDF tool (tools bundle)
 
 showcase/            # Comprehensive demos for each namespace
 public/dist/         # Built bundles (UMD + ESM)

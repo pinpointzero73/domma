@@ -208,6 +208,11 @@
           "text": "Editor",
           "url": "showcase/elements/editor/index.html",
           "section": "editor"
+        },
+        {
+          "text": "Print to PDF",
+          "url": "showcase/print-to-pdf/index.html",
+          "section": "print-to-pdf"
         }
       ]
     },

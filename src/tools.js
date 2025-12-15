@@ -10,6 +10,7 @@
 import {ThemeRoller} from './theme-roller.js';
 import {PageRoller} from './page-roller.js';
 import Editor from './editor.js';
+import PrintToPDF from './print-to-pdf.js';
 
 // Factory functions
 const tools = {
@@ -35,6 +36,14 @@ const tools = {
             Domma.elements._instances.set(instance.element, instance);
         }
         return instance;
+    },
+
+    printToPDF(selector, options = {}) {
+        const instance = new PrintToPDF(selector, options);
+        if (instance.element && typeof Domma !== 'undefined') {
+            Domma.elements._instances.set(instance.element, instance);
+        }
+        return instance;
     }
 };
 
@@ -43,6 +52,7 @@ if (typeof Domma !== 'undefined' && Domma.elements) {
     Domma.elements.themeRoller = tools.themeRoller;
     Domma.elements.pageRoller = tools.pageRoller;
     Domma.elements.editor = tools.editor;
+    Domma.elements.printToPDF = tools.printToPDF;
 }
 
 // Also expose as DommaTools for direct access
@@ -50,5 +60,5 @@ if (typeof window !== 'undefined') {
     window.DommaTools = tools;
 }
 
-export {tools, ThemeRoller, PageRoller, Editor};
+export {tools, ThemeRoller, PageRoller, Editor, PrintToPDF};
 export default tools;
