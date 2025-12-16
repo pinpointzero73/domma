@@ -1100,6 +1100,33 @@
 }
 
 /* Storage-specific styles */
+.storage-hero-style {
+    background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
+    color: var(--dm-white);
+    padding: 4rem 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.storage-hero-style h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.storage-hero-style p {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.storage-hero-style code {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--dm-radius-full);
+}
+
 .storage-demo-result {
     background: var(--dm-gray-900);
     color: var(--dm-gray-100);
@@ -1323,9 +1350,9 @@
     background: transparent;
     color: var(--dm-text-muted);
     cursor: pointer;
-    transition: all var(--dm-transition-fast);
     font-size: var(--dm-text-sm);
     font-weight: 500;
+    transition: all var(--dm-transition-fast);
 }
 
 .theme-btn:hover {
@@ -2035,4 +2062,27 @@
     padding: var(--dm-space-4);
     border-radius: var(--dm-radius-md);
     margin-top: var(--dm-space-4);
+}
+.storage-hero-style {
+    background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
+    color: var(--dm-white);
+    padding: 4rem 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.storage-hero-style h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+.storage-hero-style p {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+.storage-hero-style code {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--dm-radius-full);
 }
