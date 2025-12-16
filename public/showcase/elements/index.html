@@ -8,109 +8,31 @@
     <link rel="stylesheet" href="../../dist/domma.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-    <style>
-        .hero {
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
-            color: white;
-            padding: var(--dm-space-16) var(--dm-space-4);
-            text-align: center;
-        }
-
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin: 0 0 var(--dm-space-4);
-            letter-spacing: -0.025em;
-        }
-
-        .hero-subtitle {
-            font-size: var(--dm-font-size-xl);
-            opacity: 0.9;
-            margin: 0 0 var(--dm-space-8);
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .namespace-card {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .namespace-card .card-body {
-            flex: 1;
-        }
-
-        .namespace-icon {
-            margin-bottom: var(--dm-space-4);
-            color: var(--dm-primary);
-        }
-
-        .namespace-icon svg {
-            width: 48px;
-            height: 48px;
-        }
-
-        .feature-list {
-            list-style: none;
-            padding: 0;
-            margin: var(--dm-space-4) 0 0;
-        }
-
-        .feature-list li {
-            padding: var(--dm-space-1) 0;
-            color: var(--dm-gray-600);
-            font-size: var(--dm-font-size-sm);
-        }
-
-        .feature-list li::before {
-            content: "\2713";
-            color: var(--dm-success);
-            margin-right: var(--dm-space-2);
-            font-weight: bold;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: var(--dm-space-8);
-        }
-
-        .section-title h2 {
-            font-size: var(--dm-font-size-3xl);
-            margin: 0 0 var(--dm-space-2);
-        }
-
-        .section-title p {
-            color: var(--dm-gray-600);
-            margin: 0;
-        }
-    </style>
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="subpage">
 
-<section class="hero">
-    <h1 class="hero-title">Elements</h1>
-    <p class="hero-subtitle">
+<section class="hero bg-primary text-white py-16 px-4 text-center">
+  <h1 class="text-5xl font-bold mb-4 tracking-tight">Elements</h1>
+  <p class="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
         Ready-to-use UI components with JavaScript interactivity. From cards and modals to complex forms and navigation,
         each element is designed for ease of use and customisation.
     </p>
-    <p class="hero-subtitle" style="opacity: 0.85; font-size: 1rem; margin-top: 0.5rem;">
-        <code style="background: rgba(255, 255, 255, 0.2); padding: 0.25rem 0.75rem; border-radius: var(--dm-radius-full);">Domma.elements</code>
+  <p class="opacity-85 text-base mt-2 max-w-2xl mx-auto">
+    <code class="bg-white-t20 px-3 py-1 rounded-full">Domma.elements</code>
     </p>
 </section>
 
 <main class="container py-8">
-    <div class="grid grid-cols-1 gap-6" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+  <div class="grid grid-cols-1 gap-6 grid-auto-fit">
 
         <!-- Accordion -->
-        <a href="accordion/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="chevron-down"></div>
+    <a href="accordion/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="chevron-down"></div>
                 <h3 class="card-title">Accordion</h3>
                 <p class="card-text">Collapsible content sections with smooth animations.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Single or multi-expand</li>
                     <li>Smooth animations</li>
                     <li>Nested support</li>
@@ -123,13 +45,12 @@
         </a>
 
         <!-- Back to Top -->
-        <a href="back-to-top/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="chevron-up"></div>
+    <a href="back-to-top/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="chevron-up"></div>
                 <h3 class="card-title">Back to Top</h3>
                 <p class="card-text">Scroll-to-top button that appears after scrolling.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Auto show/hide</li>
                     <li>Smooth scroll</li>
                     <li>Customisable position</li>
@@ -142,13 +63,12 @@
         </a>
 
         <!-- Badge -->
-        <a href="badge/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="star"></div>
+    <a href="badge/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="star"></div>
                 <h3 class="card-title">Badge</h3>
                 <p class="card-text">Small count or status indicators for UI elements.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Colour variants</li>
                     <li>Pill and square shapes</li>
                     <li>Count badges</li>
@@ -161,13 +81,12 @@
         </a>
 
         <!-- Breadcrumbs -->
-        <a href="breadcrumbs/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="external-link"></div>
+    <a href="breadcrumbs/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="external-link"></div>
                 <h3 class="card-title">Breadcrumbs</h3>
                 <p class="card-text">Navigation trail for hierarchical page structures.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Custom separators</li>
                     <li>Home icon option</li>
                     <li>Responsive collapse</li>
@@ -180,13 +99,12 @@
         </a>
 
         <!-- Button Group -->
-        <a href="button-group/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="grid"></div>
+    <a href="button-group/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="grid"></div>
                 <h3 class="card-title">Button Group</h3>
                 <p class="card-text">Grouped buttons with single or multiple selection.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Radio mode (single)</li>
                     <li>Checkbox mode (multi)</li>
                     <li>Vertical layout</li>
@@ -200,11 +118,11 @@
 
         <!-- Card -->
         <a href="card/index.html" class="card card-hover namespace-card" style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="box"></div>
+          <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="box"></div>
                 <h3 class="card-title">Card</h3>
                 <p class="card-text">Flexible content containers with optional hover effects.</p>
-                <ul class="feature-list">
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Hover lift effect</li>
                     <li>Clickable variants</li>
                     <li>Header and footer</li>
@@ -217,13 +135,12 @@
         </a>
 
         <!-- Carousel -->
-        <a href="carousel/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="layout"></div>
+    <a href="carousel/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="layout"></div>
                 <h3 class="card-title">Carousel</h3>
                 <p class="card-text">Image and content sliders with navigation and autoplay.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Autoplay support</li>
                     <li>Slide or fade</li>
                     <li>Indicators</li>
@@ -236,13 +153,12 @@
         </a>
 
         <!-- Dialog -->
-        <a href="dialog/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="document"></div>
+    <a href="dialog/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="document"></div>
                 <h3 class="card-title">Dialog</h3>
                 <p class="card-text">Promise-based alert, confirm, and prompt dialogs.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Alert messages</li>
                     <li>Confirm dialogs</li>
                     <li>Input prompts</li>
@@ -255,13 +171,12 @@
         </a>
 
         <!-- Dropdown -->
-        <a href="dropdown/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="menu"></div>
+    <a href="dropdown/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="menu"></div>
                 <h3 class="card-title">Dropdown</h3>
                 <p class="card-text">Toggleable contextual menus for navigation and actions.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Click or hover trigger</li>
                     <li>Multiple positions</li>
                     <li>Nested dropdowns</li>
@@ -274,13 +189,12 @@
         </a>
 
         <!-- Forms -->
-        <a href="forms/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="edit"></div>
+    <a href="forms/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="edit"></div>
                 <h3 class="card-title">Forms</h3>
                 <p class="card-text">Comprehensive form components with theme support.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Custom checkboxes</li>
                     <li>Toggle switches</li>
                     <li>Input validation</li>
@@ -293,13 +207,12 @@
         </a>
 
         <!-- Jumbotron -->
-        <a href="jumbotron/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="layout"></div>
+    <a href="jumbotron/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="layout"></div>
                 <h3 class="card-title">Jumbotron</h3>
                 <p class="card-text">Large hero sections for showcasing key content.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>CSS-only component</li>
                     <li>Gradient backgrounds</li>
                     <li>Cover images</li>
@@ -312,13 +225,12 @@
         </a>
 
         <!-- Loader -->
-        <a href="loader/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="zap"></div>
+    <a href="loader/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="zap"></div>
                 <h3 class="card-title">Loader</h3>
                 <p class="card-text">Loading indicators with multiple animation types.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>4 animation types</li>
                     <li>Overlay mode</li>
                     <li>Size customisation</li>
@@ -331,13 +243,12 @@
         </a>
 
         <!-- Modal -->
-        <a href="modal/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="document"></div>
+    <a href="modal/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="document"></div>
                 <h3 class="card-title">Modal</h3>
                 <p class="card-text">Dialog windows with backdrop, keyboard support, and animations.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Backdrop support</li>
                     <li>Keyboard shortcuts</li>
                     <li>Fade animations</li>
@@ -350,13 +261,12 @@
         </a>
 
         <!-- Navbar -->
-        <a href="navbar/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="menu"></div>
+    <a href="navbar/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="menu"></div>
                 <h3 class="card-title">Navbar</h3>
                 <p class="card-text">Responsive navigation bar with brand, links, and dropdowns.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Responsive collapse</li>
                     <li>Dropdown support</li>
                     <li>Light/dark variants</li>
@@ -369,13 +279,12 @@
         </a>
 
         <!-- DesktopNotification -->
-        <a href="notification/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="zap"></div>
+    <a href="notification/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="zap"></div>
                 <h3 class="card-title">DesktopNotification</h3>
                 <p class="card-text">Browser native desktop notifications with permission handling.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Desktop push alerts</li>
                     <li>Permission management</li>
                     <li>Event callbacks</li>
@@ -388,13 +297,12 @@
         </a>
 
         <!-- Timer -->
-        <a href="timer/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="clock"></div>
+    <a href="timer/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="clock"></div>
                 <h3 class="card-title">Timer</h3>
                 <p class="card-text">Countdown timer with visual display or headless mode.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Visual or headless</li>
                     <li>Multiple formats</li>
                     <li>Time manipulation</li>
@@ -407,13 +315,12 @@
         </a>
 
         <!-- Alarm -->
-        <a href="alarm/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="bell"></div>
+    <a href="alarm/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="bell"></div>
                 <h3 class="card-title">Alarm</h3>
                 <p class="card-text">Scheduled time-based alerts with localStorage persistence.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Persistent alarms</li>
                     <li>Repeat patterns</li>
                     <li>Snooze support</li>
@@ -426,13 +333,12 @@
         </a>
 
         <!-- Autocomplete -->
-        <a href="autocomplete/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="edit"></div>
+    <a href="autocomplete/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="edit"></div>
                 <h3 class="card-title">Autocomplete</h3>
                 <p class="card-text">Text input with intelligent suggestion dropdown.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Static or async data</li>
                     <li>Match highlighting</li>
                     <li>Keyboard navigation</li>
@@ -445,13 +351,12 @@
         </a>
 
         <!-- Pillbox -->
-        <a href="pillbox/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="plus"></div>
+    <a href="pillbox/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="plus"></div>
                 <h3 class="card-title">Pillbox</h3>
                 <p class="card-text">Multi-select tag input with removable pills.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Searchable dropdown</li>
                     <li>Creatable mode</li>
                     <li>Max items validation</li>
@@ -464,13 +369,12 @@
         </a>
 
         <!-- Editor -->
-        <a href="editor/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="edit"></div>
+    <a href="editor/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="edit"></div>
                 <h3 class="card-title">Editor</h3>
                 <p class="card-text">Universal content editor with three modes: text, rich, and code.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Three editing modes</li>
                     <li>Model integration</li>
                     <li>Autosave & localStorage</li>
@@ -484,11 +388,11 @@
 
         <!-- Tabs -->
         <a href="tabs/index.html" class="card card-hover namespace-card" style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="folder-open"></div>
+          <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="folder-open"></div>
                 <h3 class="card-title">Tabs</h3>
                 <p class="card-text">Tabbed navigation with panel switching and animations.</p>
-                <ul class="feature-list">
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Multiple layouts</li>
                     <li>Smooth transitions</li>
                     <li>Programmatic control</li>
@@ -501,13 +405,12 @@
         </a>
 
         <!-- Toast -->
-        <a href="toast/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="check"></div>
+    <a href="toast/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="check"></div>
                 <h3 class="card-title">Toast</h3>
                 <p class="card-text">Non-blocking notification messages with auto-dismiss.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>Success/error/info</li>
                     <li>Auto-dismiss timer</li>
                     <li>Position control</li>
@@ -520,13 +423,12 @@
         </a>
 
         <!-- Tooltip -->
-        <a href="tooltip/index.html" class="card card-hover namespace-card"
-           style="text-decoration: none; color: inherit;">
-            <div class="card-body">
-                <div class="namespace-icon" data-icon="eye"></div>
+    <a href="tooltip/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="eye"></div>
                 <h3 class="card-title">Tooltip</h3>
                 <p class="card-text">Contextual information on hover or focus.</p>
-                <ul class="feature-list">
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
                     <li>4 positions</li>
                     <li>Hover/click/focus</li>
                     <li>Delay control</li>

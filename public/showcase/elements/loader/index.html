@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -47,7 +48,7 @@
         <div class="code-block language-javascript">
             <pre><code>
 &lt;!-- HTML Container --&gt;
-&lt;div id="my-container" style="min-height: 120px; position: relative;"&gt;
+&lt;div id="my-container" class="demo-area-min-h-120"&gt;
     &lt;!-- Loader will be inserted here --&gt;
 &lt;/div&gt;
 
@@ -79,12 +80,12 @@ loader.toggle();
 
         <h3 class="category-title">Basic Spinner Loader</h3>
         <p class="text-muted mb-2">Create a container and initialise a loader:</p>
-        <div class="demo-area mb-4" style="min-height: 120px; position: relative;" id="quick-start-demo">
+      <div class="demo-area mb-4" class="demo-area-min-h-120" id="quick-start-demo">
             <!-- Loader will be inserted here -->
         </div>
         <div class="code-block language-javascript mb-6">
             <pre><code>
-&lt;div id="my-loader-container" style="min-height: 120px; position: relative;"&gt;
+&lt;div id="my-loader-container" class="demo-area-min-h-120"&gt;
     &lt;!-- Loader appears here --&gt;
 &lt;/div&gt;
 
@@ -133,11 +134,11 @@ setTimeout(() =&gt; fsLoader.destroy(), 2000);
 &lt;button id="load-data-btn" class="btn btn-primary"&gt;Load Data&lt;/button&gt;
 
 &lt;div id="data-container" class="demo-area mt-4"
-     style="min-height: 200px; position: relative;"&gt;
+     class="demo-area-min-h-200"&gt;
     &lt;p class="text-center text-muted" id="placeholder-text"&gt;
         Click "Load Data" to fetch content
     &lt;/p&gt;
-    &lt;div id="data-result" style="display: none;"&gt;&lt;/div&gt;
+    &lt;div id="data-result" class="hidden"&gt;&lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
         </div>
@@ -149,7 +150,7 @@ setTimeout(() =&gt; fsLoader.destroy(), 2000);
 const dataLoader = Domma.elements.loader('#data-container', {
     type: 'spinner',
     size: 'large',
-    color: 'white',
+    color: 'var(--dm-white)',
     overlay: true,           // Semi-transparent backdrop
     text: 'Loading data...'  // Text below spinner
 });
@@ -162,7 +163,7 @@ const dataLoader = Domma.elements.loader('#data-container', {
             <pre><code>
 async function loadData() {
     // Hide placeholder
-    document.getElementById('placeholder-text').style.display = 'none';
+    document.getElementById('placeholder-text').classList.add('hidden');
 
     // Show loader
     dataLoader.show();
@@ -185,7 +186,7 @@ async function loadData() {
         <div class="code-block language-javascript mb-4">
             <pre><code>
 async function loadData() {
-    document.getElementById('placeholder-text').style.display = 'none';
+    document.getElementById('placeholder-text').classList.add('hidden');
     dataLoader.show();
 
     try {
@@ -198,7 +199,7 @@ async function loadData() {
         // Display results
         const resultEl = document.getElementById('data-result');
         resultEl.innerHTML = `&lt;h4&gt;Data Loaded!&lt;/h4&gt;&lt;pre&gt;${JSON.stringify(data, null, 2)}&lt;/pre&gt;`;
-        resultEl.style.display = 'block';
+        resultEl.classList.remove('hidden');
     } catch (error) {
         dataLoader.hide();
         alert('Failed to load data');
@@ -234,11 +235,11 @@ async function loadMultipleResources() {
         <div class="demo-area">
             <button id="tutorial-load-btn" class="btn btn-primary">Load Data</button>
             <div id="tutorial-container" class="mt-4 p-4 bg-surface rounded border"
-                 style="min-height: 200px; position: relative;">
+                 class="demo-area-min-h-200">
                 <p class="text-center text-muted" id="tutorial-placeholder">
                     Click "Load Data" to fetch content
                 </p>
-                <div id="tutorial-result" style="display: none;"></div>
+              <div id="tutorial-result" class="hidden"></div>
             </div>
         </div>
     </div>
@@ -255,21 +256,21 @@ async function loadMultipleResources() {
         <h3 class="category-title">Four Loader Types</h3>
         <p class="text-muted mb-2">Domma provides four different animation styles:</p>
         <div class="demo-area mb-4">
-            <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+          <div class="grid grid-cols-1 gap-4" class="grid-auto-fit-200">
                 <div id="type-spinner" class="p-4 bg-surface rounded border text-center"
-                     style="min-height: 120px; position: relative;">
+                     class="demo-area-min-h-120">
                     <p class="text-sm text-muted mb-2">Spinner</p>
                 </div>
                 <div id="type-dots" class="p-4 bg-surface rounded border text-center"
-                     style="min-height: 120px; position: relative;">
+                     class="demo-area-min-h-120">
                     <p class="text-sm text-muted mb-2">Dots</p>
                 </div>
                 <div id="type-pulse" class="p-4 bg-surface rounded border text-center"
-                     style="min-height: 120px; position: relative;">
+                     class="demo-area-min-h-120">
                     <p class="text-sm text-muted mb-2">Pulse</p>
                 </div>
                 <div id="type-bars" class="p-4 bg-surface rounded border text-center"
-                     style="min-height: 120px; position: relative;">
+                     class="demo-area-min-h-120">
                     <p class="text-sm text-muted mb-2">Bars</p>
                 </div>
             </div>
@@ -295,11 +296,11 @@ Domma.elements.loader('#bars-container', { type: 'bars' }).show();
         <p class="text-muted mb-2">Small, medium, and large sizes, plus custom pixel values:</p>
         <div class="demo-area mb-4">
             <div class="flex items-center justify-around gap-4">
-                <div id="size-small" class="p-3" style="position: relative; min-height: 60px; min-width: 60px;"></div>
-                <div id="size-medium" class="p-3" style="position: relative; min-height: 80px; min-width: 80px;"></div>
-                <div id="size-large" class="p-3" style="position: relative; min-height: 100px; min-width: 100px;"></div>
+              <div id="size-small" class="p-3" class="loader-size-example-60"></div>
+              <div id="size-medium" class="p-3" class="loader-size-example-80"></div>
+              <div id="size-large" class="p-3" class="loader-size-example-100"></div>
                 <div id="size-custom" class="p-3"
-                     style="position: relative; min-height: 120px; min-width: 120px;"></div>
+                     class="loader-size-example-120"></div>
             </div>
             <p class="text-center text-sm text-muted mt-2">Small (24px) | Medium (40px) | Large (64px) | Custom
                 (80px)</p>
@@ -324,7 +325,7 @@ Domma.elements.loader('#container', { size: 80 }).show();
         <h3 class="category-title">Colour Variants</h3>
         <p class="text-muted mb-2">Theme-aware colours or custom hex values:</p>
         <div class="demo-area mb-4">
-            <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+          <div class="grid grid-cols-1 gap-4" class="grid-auto-fit-150">
                 <div id="color-primary" class="p-3 bg-surface rounded border"
                      style="min-height: 80px; position: relative;"></div>
                 <div id="color-success" class="p-3 bg-surface rounded border"
@@ -350,7 +351,7 @@ Domma.elements.loader('#container', { color: 'danger' }).show();
 Domma.elements.loader('#container', { color: 'warning' }).show();
 
 // Custom hex colour
-Domma.elements.loader('#container', { color: '#9b59b6' }).show();
+Domma.elements.loader('#container', { color: 'var(--dm-primary)' }).show();
 </code></pre>
         </div>
 
@@ -359,7 +360,7 @@ Domma.elements.loader('#container', { color: '#9b59b6' }).show();
         <p class="text-muted mb-2">Cover container with semi-transparent backdrop:</p>
         <div class="demo-area mb-4">
             <div id="overlay-container" class="p-4 bg-surface rounded border"
-                 style="min-height: 200px; position: relative;">
+                 class="demo-area-min-h-200">
                 <h4>Content Being Loaded</h4>
                 <p>This content is blocked by the overlay loader.</p>
                 <button id="show-overlay-btn" class="btn btn-primary">Show Overlay Loader</button>
@@ -370,7 +371,7 @@ Domma.elements.loader('#container', { color: '#9b59b6' }).show();
 const overlayLoader = Domma.elements.loader('#container', {
     type: 'spinner',
     size: 'large',
-    color: 'white',
+    color: 'var(--dm-white)',
     overlay: true,           // Enable backdrop overlay
     text: 'Loading content...'
 });
@@ -415,7 +416,7 @@ setTimeout(() =&gt; textLoader.setText('Almost there...'), 1500);
                 <button id="static-hide-btn" class="btn btn-secondary">Hide Loader</button>
             </div>
             <div id="static-container" class="p-4 bg-surface rounded border"
-                 style="min-height: 120px; position: relative;">
+                 class="demo-area-min-h-120">
                 <p class="text-center text-muted">Click "Show Loader" to display</p>
             </div>
         </div>
@@ -438,7 +439,7 @@ setTimeout(() =&gt; fs.destroy(), 2000);
         <p class="text-muted mb-2">Show loader inside a button during submission:</p>
         <div class="demo-area mb-4">
             <button id="submit-btn" class="btn btn-primary"
-                    style="position: relative; min-width: 120px; min-height: 40px;">
+                    class="btn-loader-container">
                 Submit Form
             </button>
         </div>
@@ -452,10 +453,10 @@ submitBtn.addEventListener('click', async () =&gt; {
     submitBtn.disabled = true;
     submitBtn.textContent = '';
 
-    btnLoader = Domma.elements.loader(submitBtn, {
+    btnLoader = Domma.elements.loader(this, {
         type: 'spinner',
         size: 20,
-        color: 'white',
+        color: 'var(--dm-white)',
         centered: true
     });
     btnLoader.show();
@@ -466,7 +467,7 @@ submitBtn.addEventListener('click', async () =&gt; {
     // Re-enable button
     btnLoader.destroy();
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit Form';
+    submitBtn.textContent = originalText;
 });
 </code></pre>
         </div>
@@ -476,7 +477,7 @@ submitBtn.addEventListener('click', async () =&gt; {
         <p class="text-muted mb-2">Load and display images with a progress loader:</p>
         <div class="demo-area">
             <button id="gallery-load-btn" class="btn btn-primary mb-3">Load Gallery</button>
-            <div id="gallery-container" class="grid grid-cols-3 gap-4" style="min-height: 200px; position: relative;">
+          <div id="gallery-container" class="grid grid-cols-3 gap-4" class="demo-area-min-h-200">
                 <p class="text-center text-muted col-span-3">Click "Load Gallery" to fetch images</p>
             </div>
         </div>
@@ -768,24 +769,6 @@ async function fetchData() {
                     <td>this</td>
                     <td>Toggle visibility (show if hidden, hide if visible). Chainable</td>
                 </tr>
-                <tr>
-                    <td><code>isVisible()</code></td>
-                    <td>-</td>
-                    <td>Boolean</td>
-                    <td>Check if loader is currently visible</td>
-                </tr>
-                <tr>
-                    <td><code>setText(text)</code></td>
-                    <td>String</td>
-                    <td>this</td>
-                    <td>Update the loading text. Creates text element if it doesn't exist. Chainable</td>
-                </tr>
-                <tr>
-                    <td><code>destroy()</code></td>
-                    <td>-</td>
-                    <td>void</td>
-                    <td>Remove loader from DOM and clean up. Call before removing container</td>
-                </tr>
                 </tbody>
             </table>
         </div>
@@ -855,10 +838,6 @@ async function fetchData() {
                     <td><code>.dm-loader-bars</code></td>
                     <td>Four vertical bars animation container</td>
                 </tr>
-                <tr>
-                    <td><code>.dm-loader-text</code></td>
-                    <td>Loading text element displayed below animation</td>
-                </tr>
                 </tbody>
             </table>
         </div>
@@ -917,7 +896,7 @@ $.setup({
         options: {
             type: 'spinner',
             size: 'large',
-            color: 'white',
+            color: 'var(--dm-white)',
             overlay: true,
             text: 'Loading data...'
         },
@@ -948,7 +927,7 @@ $.setup({
         options: {
             type: 'pulse',
             size: 'large',
-            color: 'white',
+            color: 'var(--dm-white)',
             overlay: true,
             text: 'Loading content...'
         }
@@ -1020,7 +999,7 @@ $.setup({
         <h2 class="text-xl font-semibold m-0">Related Elements</h2>
     </div>
     <div class="card-body">
-        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+      <div class="grid grid-cols-1 gap-4" class="grid-auto-fit-250">
             <a href="../modal/index.html" class="card card-hover">
                 <div class="card-body">
                     <h3 class="card-title">Modal</h3>
@@ -1080,7 +1059,7 @@ $.setup({
     const tutorialLoader = Domma.elements.loader('#tutorial-container', {
         type: 'spinner',
         size: 'large',
-        color: 'white',
+      color: 'var(--dm-white)',
         overlay: true,
         text: 'Loading data...'
     });
@@ -1136,7 +1115,7 @@ $.setup({
     Domma.elements.loader('#color-danger', {type: 'spinner', size: 'medium', color: 'danger'}).show();
     Domma.elements.loader('#color-warning', {type: 'spinner', size: 'medium', color: 'warning'}).show();
     Domma.elements.loader('#color-dark', {type: 'spinner', size: 'medium', color: 'dark'}).show();
-    Domma.elements.loader('#color-custom', {type: 'spinner', size: 'medium', color: '#9b59b6'}).show();
+    Domma.elements.loader('#color-custom', {type: 'spinner', size: 'medium', color: 'var(--dm-primary)'}).show();
 
     // Example 4: Overlay Mode
     let overlayLoader = null;
@@ -1145,7 +1124,7 @@ $.setup({
             overlayLoader = Domma.elements.loader('#overlay-container', {
                 type: 'spinner',
                 size: 'large',
-                color: 'white',
+              color: 'var(--dm-white)',
                 overlay: true,
                 text: 'Loading content...'
             });
@@ -1185,7 +1164,7 @@ $.setup({
         btnLoader = Domma.elements.loader(this, {
             type: 'spinner',
             size: 20,
-            color: 'white',
+          color: 'var(--dm-white)',
             centered: true
         });
         btnLoader.show();
@@ -1220,12 +1199,12 @@ $.setup({
 
         // Display placeholder images
         const placeholderImages = [
-            'https://via.placeholder.com/200x150/6495ED/ffffff?text=Image+1',
-            'https://via.placeholder.com/200x150/28a745/ffffff?text=Image+2',
-            'https://via.placeholder.com/200x150/dc3545/ffffff?text=Image+3',
-            'https://via.placeholder.com/200x150/ffc107/333333?text=Image+4',
-            'https://via.placeholder.com/200x150/17a2b8/ffffff?text=Image+5',
-            'https://via.placeholder.com/200x150/6c757d/ffffff?text=Image+6'
+          'https://via.placeholder.com/200x150/2563eb/ffffff?text=Image+1',
+          'https://via.placeholder.com/200x150/16a34a/ffffff?text=Image+2',
+          'https://via.placeholder.com/200x150/dc2626/ffffff?text=Image+3',
+          'https://via.placeholder.com/200x150/f59e0b/1e293b?text=Image+4',
+          'https://via.placeholder.com/200x150/0ea5e9/ffffff?text=Image+5',
+          'https://via.placeholder.com/200x150/475569/ffffff?text=Image+6'
         ];
 
         $('#gallery-container').html(placeholderImages.map(url =>

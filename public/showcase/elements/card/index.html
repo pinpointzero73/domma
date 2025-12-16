@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -87,7 +88,7 @@ const card = Domma.elements.card('#my-card', {
 </pre>
 
             <div class="demo-area mb-4">
-                <div class="card" style="max-width: 400px;">
+              <div class="card" class="card-max-w-400">
                     <div class="card-body">
                         <h3 class="card-title">Simple Card</h3>
                         <p class="card-text">This card requires no JavaScript. It uses only CSS classes for styling.</p>
@@ -110,7 +111,7 @@ Domma.elements.card('#hover-card', { hover: true });
 </pre>
 
             <div class="demo-area">
-                <div id="quick-hover-card" class="card" style="max-width: 400px;">
+              <div id="quick-hover-card" class="card" class="card-max-w-400">
                     <div class="card-body">
                         <h3 class="card-title">Hover Me</h3>
                         <p class="card-text">Move your cursor over this card to see the lift effect.</p>
@@ -184,7 +185,7 @@ const productCard = Domma.elements.card('#product-card', {
             <p class="mb-2">Here's the finished interactive product card:</p>
 
             <div class="demo-area">
-                <div id="tutorial-card" class="card" style="max-width: 350px; margin: 0 auto;">
+              <div id="tutorial-card" class="card" class="card-max-w-350-center">
                     <div class="card-header">
                         <span class="badge badge-primary">New</span>
                     </div>
@@ -212,7 +213,7 @@ const productCard = Domma.elements.card('#product-card', {
             <h4 class="category-title">Example 1: Basic Card</h4>
             <p class="mb-2">Simple card with title and content:</p>
             <div class="demo-area mb-4">
-                <div class="card" style="max-width: 400px;">
+              <div class="card" class="card-max-w-400">
                     <div class="card-body">
                         <h3 class="card-title">Basic Card</h3>
                         <p class="card-text">A simple card with just a title and some text content. No header or footer
@@ -224,7 +225,7 @@ const productCard = Domma.elements.card('#product-card', {
             <h4 class="category-title">Example 2: Card with Hover Effect</h4>
             <p class="mb-2">Card that lifts on hover with enhanced shadow:</p>
             <div class="demo-area mb-4">
-                <div id="example-hover" class="card" style="max-width: 400px;">
+              <div id="example-hover" class="card" class="card-max-w-400">
                     <div class="card-body">
                         <h3 class="card-title">Hover Card</h3>
                         <p class="card-text">Hover over this card to see the lift animation and enhanced shadow
@@ -236,21 +237,21 @@ const productCard = Domma.elements.card('#product-card', {
             <h4 class="category-title">Example 3: Clickable Card</h4>
             <p class="mb-2">Entire card acts as a button:</p>
             <div class="demo-area mb-4">
-                <div id="example-clickable" class="card" style="max-width: 400px;">
+              <div id="example-clickable" class="card" class="card-max-w-400">
                     <div class="card-body">
                         <h3 class="card-title">Clickable Card</h3>
                         <p class="card-text">Click anywhere on this card to trigger an action.</p>
                     </div>
                 </div>
-                <div class="demo-result mt-2" id="click-result" style="display: none;"></div>
+              <div class="demo-result mt-2" id="click-result" class="hidden"></div>
             </div>
 
             <h4 class="category-title">Example 4: Styled Card (Primary)</h4>
             <p class="mb-2">Card with primary colour border:</p>
             <div class="demo-area mb-4">
-                <div class="card card-primary" style="max-width: 400px;">
+              <div class="card card-primary" class="card-max-w-400">
                     <div class="card-header">
-                        <h3 class="m-0" style="color: white;">Featured</h3>
+                      <h3 class="m-0" class="text-white">Featured</h3>
                     </div>
                     <div class="card-body">
                         <h3 class="card-title">Premium Plan</h3>
@@ -262,16 +263,16 @@ const productCard = Domma.elements.card('#product-card', {
             <h4 class="category-title">Example 5: Profile Card</h4>
             <p class="mb-2">User profile with avatar and actions:</p>
             <div class="demo-area mb-4">
-                <div id="profile-card" class="card" style="max-width: 350px; margin: 0 auto;">
+              <div id="profile-card" class="card" class="card-max-w-350-center">
                     <div class="card-body text-center">
-                        <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--dm-primary-light); margin: 0 auto var(--dm-space-3); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--dm-primary);">
+                      <div class="profile-avatar">
                             JD
                         </div>
                         <h3 class="card-title mb-1">Jane Doe</h3>
                         <p class="card-subtitle mb-3">Senior Developer</p>
                         <p class="card-text">Passionate about building beautiful, accessible web experiences.</p>
                     </div>
-                    <div class="card-footer" style="display: flex; gap: 0.5rem; justify-content: center;">
+                <div class="card-footer" class="flex gap-2 justify-center">
                         <button class="btn btn-secondary btn-sm">View Profile</button>
                         <button class="btn btn-primary btn-sm">Message</button>
                     </div>
@@ -281,17 +282,17 @@ const productCard = Domma.elements.card('#product-card', {
             <h4 class="category-title">Example 6: Statistics Card</h4>
             <p class="mb-2">Dashboard metric with icon:</p>
             <div class="demo-area mb-4">
-                <div class="card" style="max-width: 300px;">
+              <div class="card" class="card-max-w-300">
                     <div class="card-body">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <div>
                                 <p class="card-subtitle mb-1">Total Sales</p>
                                 <h2 class="m-0">£24,580</h2>
-                                <p class="card-text mt-2" style="color: var(--dm-success); font-size: 0.875rem;">
+                              <p class="card-text mt-2" class="text-success text-sm">
                                     ↑ 12.5% from last month
                                 </p>
                             </div>
-                            <div data-icon="database" style="color: var(--dm-primary); opacity: 0.6;"></div>
+                          <div data-icon="database" class="text-primary opacity-60"></div>
                         </div>
                     </div>
                 </div>
@@ -300,10 +301,10 @@ const productCard = Domma.elements.card('#product-card', {
             <h4 class="category-title">Example 7: Horizontal Card</h4>
             <p class="mb-2">Card with side-by-side layout:</p>
             <div class="demo-area mb-4">
-                <div class="card" style="max-width: 600px;">
+              <div class="card" class="card-max-w-600">
                     <div class="card-body"
-                         style="display: grid; grid-template-columns: 120px 1fr; gap: var(--dm-space-4);">
-                        <div style="background: var(--dm-gray-200); border-radius: var(--dm-radius-md); aspect-ratio: 1; display: flex; align-items: center; justify-content: center;"
+                         class="card-body-horizontal">
+                      <div class="card-image-placeholder"
                              data-icon="box"></div>
                         <div>
                             <h3 class="card-title mt-0">Wireless Mouse</h3>
@@ -319,7 +320,7 @@ const productCard = Domma.elements.card('#product-card', {
             <p class="mb-2">Multiple cards in a responsive grid:</p>
             <div class="demo-area">
                 <div class="grid grid-cols-1"
-                     style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--dm-space-4);">
+                     class="grid-auto-fit-250 gap-4">
                     <div id="grid-card-1" class="card">
                         <div class="card-body">
                             <h3 class="card-title">Feature One</h3>
@@ -687,7 +688,7 @@ function renderTeam($container, members) {
     const html = _.map(members, member =&gt; `
         &lt;div class="card text-center"&gt;
             &lt;img src="${member.avatar}" alt="${member.name}"
-                 class="card-img-top" style="border-radius: 50%; width: 100px; margin: 1rem auto;"&gt;
+                 class="card-img-top" class="team-member-avatar"&gt;
             &lt;div class="card-body"&gt;
                 &lt;h4 class="card-title"&gt;${member.name}&lt;/h4&gt;
                 &lt;p class="card-text"&gt;${member.role}&lt;/p&gt;
@@ -813,15 +814,15 @@ $.setup({
             <p class="mb-4">Cards work great with these complementary components:</p>
 
             <div class="grid grid-cols-1"
-                 style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--dm-space-4);">
-                <a href="../modal/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+                 class="grid-auto-fit-250 gap-4">
+              <a href="../modal/index.html" class="card card-hover" class="no-underline text-inherit">
                     <div class="card-body">
                         <h4 class="card-title">Modal</h4>
                         <p class="card-text">Display cards within modals for detailed views or forms.</p>
                     </div>
                 </a>
 
-                <a href="../tabs/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+              <a href="../tabs/index.html" class="card card-hover" class="no-underline text-inherit">
                     <div class="card-body">
                         <h4 class="card-title">Tabs</h4>
                         <p class="card-text">Organise cards into tabbed sections for categorised content.</p>
@@ -829,14 +830,14 @@ $.setup({
                 </a>
 
                 <a href="../accordion/index.html" class="card card-hover"
-                   style="text-decoration: none; color: inherit;">
+                   class="no-underline text-inherit">
                     <div class="card-body">
                         <h4 class="card-title">Accordion</h4>
                         <p class="card-text">Use cards as accordion items for collapsible content.</p>
                     </div>
                 </a>
 
-                <a href="../loader/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+              <a href="../loader/index.html" class="card card-hover" class="no-underline text-inherit">
                     <div class="card-body">
                         <h4 class="card-title">Loader</h4>
                         <p class="card-text">Add loading states to cards for async content.</p>
@@ -872,7 +873,7 @@ $.setup({
         clickable: true,
         onClick: (e) => {
             const result = document.getElementById('click-result');
-            result.style.display = 'block';
+          result.classList.remove('hidden');
             result.textContent = `Card clicked at ${new Date().toLocaleTimeString()}`;
         }
     });

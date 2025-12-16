@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -24,7 +25,7 @@
             and input collection.
         </p>
 
-        <h3 class="category-title">Key Features</h3>
+      <h3 class="category-title-style">Key Features</h3>
         <ul class="feature-list mb-4">
             <li><strong>Promise-Based API</strong> - Modern async/await support</li>
             <li><strong>Three Types</strong> - Alert, confirm, and prompt dialogs</li>
@@ -32,7 +33,7 @@
             <li><strong>Keyboard Support</strong> - Enter to confirm, Escape to cancel</li>
         </ul>
 
-        <h3 class="category-title">Basic Usage</h3>
+      <h3 class="category-title-style">Basic Usage</h3>
         <div class="code-block language-javascript">
             <pre><code>
 // Alert
@@ -53,13 +54,13 @@ const name = await Domma.elements.prompt('Enter your name:');
         <h2 class="text-xl font-semibold m-0">Quick Start</h2>
     </div>
     <div class="card-body">
-        <h3 class="category-title">Simple Alert</h3>
-        <div class="demo-area mb-4 text-center">
+      <h3 class="category-title-style">Simple Alert</h3>
+      <div class="demo-area dialog-text-center mb-4">
             <button id="quick-alert" class="btn btn-primary">Show Alert</button>
         </div>
         <div class="code-block language-javascript">
             <pre><code>
-document.getElementById('btn').addEventListener('click', async () =&gt; {
+document.getElementById('btn').addEventListener('click', async () => {
     await Domma.elements.alert('This is an alert message!');
     console.log('Alert closed');
 });
@@ -79,14 +80,14 @@ document.getElementById('btn').addEventListener('click', async () =&gt; {
             <div class="flex gap-4 justify-center">
                 <button id="tutorial-delete" class="btn btn-danger">Delete Item</button>
             </div>
-            <div id="tutorial-result" class="mt-4 p-4 bg-surface rounded" style="min-height: 60px;">
+          <div id="tutorial-result" class="mt-4 p-4 bg-surface rounded dialog-min-h-60">
                 <p class="text-muted">Click "Delete Item" to start the flow</p>
             </div>
         </div>
 
         <div class="code-block language-javascript">
             <pre><code>
-document.getElementById('delete-btn').addEventListener('click', async () =&gt; {
+document.getElementById('delete-btn').addEventListener('click', async () => {
     // Step 1: Confirm deletion
     const confirmed = await Domma.elements.confirm(
         'Are you sure you want to delete this item?',
@@ -129,31 +130,31 @@ document.getElementById('delete-btn').addEventListener('click', async () =&gt; {
     </div>
     <div class="card-body">
 
-        <h3 class="category-title">Alert Dialog</h3>
-        <div class="demo-area mb-4 text-center">
+      <h3 class="category-title-style">Alert Dialog</h3>
+      <div class="demo-area dialog-text-center mb-4">
             <button id="ex-alert" class="btn btn-primary">Show Alert</button>
         </div>
 
-        <h3 class="category-title">Confirm Dialog</h3>
-        <div class="demo-area mb-4 text-center">
+      <h3 class="category-title-style">Confirm Dialog</h3>
+      <div class="demo-area dialog-text-center mb-4">
             <button id="ex-confirm" class="btn btn-warning">Show Confirm</button>
             <p class="text-sm text-muted mt-2">Result: <span id="confirm-result">-</span></p>
         </div>
 
-        <h3 class="category-title">Prompt Dialog (Text)</h3>
-        <div class="demo-area mb-4 text-center">
+      <h3 class="category-title-style">Prompt Dialog (Text)</h3>
+      <div class="demo-area dialog-text-center mb-4">
             <button id="ex-prompt-text" class="btn btn-secondary">Show Text Prompt</button>
             <p class="text-sm text-muted mt-2">Input: <span id="prompt-text-result">-</span></p>
         </div>
 
-        <h3 class="category-title">Prompt Dialog (Email)</h3>
-        <div class="demo-area mb-4 text-center">
+      <h3 class="category-title-style">Prompt Dialog (Email)</h3>
+      <div class="demo-area dialog-text-center mb-4">
             <button id="ex-prompt-email" class="btn btn-secondary">Show Email Prompt</button>
             <p class="text-sm text-muted mt-2">Input: <span id="prompt-email-result">-</span></p>
         </div>
 
-        <h3 class="category-title">Custom Button Text</h3>
-        <div class="demo-area text-center">
+      <h3 class="category-title-style">Custom Button Text</h3>
+      <div class="demo-area dialog-text-center">
             <button id="ex-custom" class="btn btn-danger">Delete Account</button>
         </div>
     </div>
@@ -164,21 +165,21 @@ document.getElementById('delete-btn').addEventListener('click', async () =&gt; {
         <h2 class="text-xl font-semibold m-0">Best Practices</h2>
     </div>
     <div class="card-body">
-        <h3 class="category-title">Accessibility</h3>
+      <h3 class="category-title-style">Accessibility</h3>
         <ul class="mb-4">
             <li><strong>Keyboard Support</strong> - Always enabled: Enter confirms, Escape cancels</li>
             <li><strong>Focus Management</strong> - Auto-focuses confirm button or input field</li>
             <li><strong>Clear Actions</strong> - Use descriptive button text ("Delete" not "OK")</li>
         </ul>
 
-        <h3 class="category-title">UX Guidelines</h3>
+      <h3 class="category-title-style">UX Guidelines</h3>
         <ul class="mb-4">
             <li><strong>Confirm Destructive Actions</strong> - Always confirm deletes, permanent changes</li>
             <li><strong>Provide Context</strong> - Use custom titles to clarify the action</li>
             <li><strong>Handle Cancellation</strong> - Check promise result and handle appropriately</li>
         </ul>
 
-        <h3 class="category-title">Performance</h3>
+      <h3 class="category-title-style">Performance</h3>
         <ul>
             <li><strong>Await Properly</strong> - Always use <code>await</code> or <code>.then()</code> to handle
                 results
@@ -193,9 +194,9 @@ document.getElementById('delete-btn').addEventListener('click', async () =&gt; {
         <h2 class="text-xl font-semibold m-0">API Reference</h2>
     </div>
     <div class="card-body">
-        <h3 class="category-title">Static Methods</h3>
-        <div class="option-table">
-            <table>
+      <h3 class="category-title-style">Static Methods</h3>
+      <div class="option-table-accordion">
+        <table class="api-table-accordion">
                 <thead>
                 <tr>
                     <th>Method</th>
@@ -223,9 +224,9 @@ document.getElementById('delete-btn').addEventListener('click', async () =&gt; {
             </table>
         </div>
 
-        <h3 class="category-title mt-4">Options</h3>
-        <div class="option-table">
-            <table>
+      <h3 class="category-title-style mt-4">Options</h3>
+      <div class="option-table-accordion">
+        <table class="api-table-accordion">
                 <thead>
                 <tr>
                     <th>Option</th>
@@ -300,7 +301,7 @@ document.getElementById('delete-btn').addEventListener('click', async () =&gt; {
 $.setup({
     '#delete-btn': {
         events: {
-            click: async (e, $el) =&gt; {
+            click: async (e, $el) => {
                 const confirmed = await Domma.elements.confirm(
                     'Delete this item?',
                     { confirmText: 'Delete', cancelText: 'Cancel' }
@@ -322,7 +323,7 @@ $.setup({
         <h2 class="text-xl font-semibold m-0">Related Elements</h2>
     </div>
     <div class="card-body">
-        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+      <div class="grid grid-cols-1 gap-4 grid-auto-fit-250">
             <a href="../modal/index.html" class="card card-hover">
                 <div class="card-body">
                     <h3 class="card-title">Modal</h3>

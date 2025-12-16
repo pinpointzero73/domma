@@ -8,114 +8,17 @@
     <link rel="stylesheet" href="../../dist/domma.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-    <style>
-        .hero {
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            margin-bottom: 0;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .hero code {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--dm-radius-full);
-        }
-
-        .demo-result {
-            background: var(--dm-gray-900);
-            color: var(--dm-gray-100);
-            padding: var(--dm-space-3);
-            border-radius: var(--dm-radius-md);
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            margin-top: var(--dm-space-2);
-        }
-
-        .method-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: var(--dm-space-2);
-        }
-
-        .method-item {
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            padding: var(--dm-space-2);
-            background: var(--dm-gray-100);
-            border-radius: var(--dm-radius-sm);
-        }
-
-        .category-title {
-            font-weight: 600;
-            color: var(--dm-primary);
-            margin: var(--dm-space-4) 0 var(--dm-space-2);
-            padding-bottom: var(--dm-space-2);
-            border-bottom: 2px solid var(--dm-primary);
-        }
-
-        .try-section {
-            background: var(--dm-gray-100);
-            padding: var(--dm-space-4);
-            border-radius: var(--dm-radius-md);
-            margin-top: var(--dm-space-4);
-        }
-
-        .live-clock {
-            font-size: var(--dm-font-size-3xl);
-            font-weight: 700;
-            text-align: center;
-            padding: var(--dm-space-6);
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
-            color: white;
-            border-radius: var(--dm-radius-lg);
-            margin-bottom: var(--dm-space-4);
-        }
-
-        .live-date {
-            font-size: var(--dm-font-size-lg);
-            opacity: 0.9;
-        }
-
-        .format-token {
-            display: inline-block;
-            padding: var(--dm-space-1) var(--dm-space-2);
-            margin: var(--dm-space-1);
-            background: var(--dm-gray-200);
-            border-radius: var(--dm-radius-sm);
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-        }
-
-        .format-token span {
-            color: var(--dm-gray-600);
-            font-size: var(--dm-font-size-xs);
-        }
-    </style>
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body data-layout="showcase" data-layout-variant="subpage">
 <!-- Hero Section with Live Clock -->
-<div class="hero">
+<div class="hero hero-dates-style">
     <h1>Dates</h1>
     <p>Moment.js-style chainable date manipulation without the bloat.</p>
-    <p style="margin-bottom: 1.5rem;"><code>D()</code> or <code>Domma.dates()</code></p>
-    <div style="background: rgba(255,255,255,0.15); border-radius: var(--dm-radius-lg); padding: 1.5rem 2rem; display: inline-block;">
-        <div id="live-time" style="font-size: 2.5rem; font-weight: 700;">--:--:--</div>
-        <div id="live-date" style="opacity: 0.9;">Loading...</div>
+  <p class="mb-6"><code>D()</code> or <code>Domma.dates()</code></p>
+  <div class="hero-live-clock-container">
+    <div id="live-time" class="live-clock-style">--:--:--</div>
+    <div id="live-date" class="opacity-90">Loading...</div>
     </div>
 </div>
 
@@ -150,7 +53,7 @@ Domma.dates.parse('2025-12-25')
 // Get current timestamp
 Domma.dates.now()  // Returns timestamp number</pre>
 
-            <div class="try-section">
+          <div class="try-section-style">
                 <h4 class="font-semibold mb-3">Try It</h4>
                 <div class="flex gap-2 flex-wrap mb-3">
                     <button class="btn btn-outline btn-sm" data-create="now">D()</button>
@@ -158,7 +61,7 @@ Domma.dates.now()  // Returns timestamp number</pre>
                     <button class="btn btn-outline btn-sm" data-create="timestamp">D(1735084800000)</button>
                     <button class="btn btn-outline btn-sm" data-create="static">dates.now()</button>
                 </div>
-                <div class="demo-result" id="create-result">Click a button to create a date</div>
+            <div class="demo-result-style" id="create-result">Click a button to create a date</div>
             </div>
         </div>
     </section>
@@ -171,7 +74,7 @@ Domma.dates.now()  // Returns timestamp number</pre>
         <div class="card-body">
             <p class="mb-4">Format dates using tokens similar to Moment.js.</p>
 
-            <h4 class="category-title">Format Tokens</h4>
+          <h4 class="category-title-style">Format Tokens</h4>
             <div class="mb-4">
                 <div class="format-token">YYYY <span>2025</span></div>
                 <div class="format-token">YY <span>25</span></div>
@@ -210,7 +113,7 @@ D().toISOString()                   // '2025-12-03T14:30:45.000Z'
 // Unix timestamp
 D().unix()                          // 1733236245</pre>
 
-            <div class="try-section">
+          <div class="try-section-style">
                 <h4 class="font-semibold mb-3">Try It</h4>
                 <input type="text" id="format-input" class="form-input mb-3" value="MMMM D, YYYY h:mm A"
                        placeholder="Enter format string">
@@ -221,7 +124,7 @@ D().unix()                          // 1733236245</pre>
                     <button class="btn btn-outline btn-sm" data-format="h:mm A">h:mm A</button>
                     <button class="btn btn-primary btn-sm" id="format-btn">Format</button>
                 </div>
-                <div class="demo-result" id="format-result">Click a format or enter your own</div>
+            <div class="demo-result-style" id="format-result">Click a format or enter your own</div>
             </div>
         </div>
     </section>
@@ -235,12 +138,12 @@ D().unix()                          // 1733236245</pre>
             <p class="mb-4">Add, subtract, and modify dates with a chainable API.</p>
 
             <div class="method-grid mb-4">
-                <span class="method-item">add()</span>
-                <span class="method-item">subtract()</span>
-                <span class="method-item">startOf()</span>
-                <span class="method-item">endOf()</span>
-                <span class="method-item">set()</span>
-                <span class="method-item">clone()</span>
+              <span class="method-item-style">add()</span>
+              <span class="method-item-style">subtract()</span>
+              <span class="method-item-style">startOf()</span>
+              <span class="method-item-style">endOf()</span>
+              <span class="method-item-style">set()</span>
+              <span class="method-item-style">clone()</span>
             </div>
 
             <pre class="code-block language-javascript">// Add time
@@ -276,7 +179,7 @@ D()
 const date = D('2025-06-15');
 const nextMonth = date.clone().add(1, 'month');</pre>
 
-            <div class="try-section">
+          <div class="try-section-style">
                 <h4 class="font-semibold mb-3">Try It</h4>
                 <p class="text-sm text-muted mb-3">Starting from: <strong id="manip-base"></strong></p>
                 <div class="flex gap-2 flex-wrap mb-3">
@@ -287,7 +190,7 @@ const nextMonth = date.clone().add(1, 'month');</pre>
                     <button class="btn btn-outline btn-sm" data-manip="endOf-month">endOf('month')</button>
                     <button class="btn btn-outline btn-sm" data-manip="startOf-year">startOf('year')</button>
                 </div>
-                <div class="demo-result" id="manip-result">Click a button to manipulate the date</div>
+            <div class="demo-result-style" id="manip-result">Click a button to manipulate the date</div>
             </div>
         </div>
     </section>
@@ -301,17 +204,17 @@ const nextMonth = date.clone().add(1, 'month');</pre>
             <p class="mb-4">Get and set individual date/time components.</p>
 
             <div class="method-grid mb-4">
-                <span class="method-item">year()</span>
-                <span class="method-item">month()</span>
-                <span class="method-item">date()</span>
-                <span class="method-item">day()</span>
-                <span class="method-item">hour()</span>
-                <span class="method-item">minute()</span>
-                <span class="method-item">second()</span>
-                <span class="method-item">millisecond()</span>
-                <span class="method-item">dayOfYear()</span>
-                <span class="method-item">week()</span>
-                <span class="method-item">quarter()</span>
+              <span class="method-item-style">year()</span>
+              <span class="method-item-style">month()</span>
+              <span class="method-item-style">date()</span>
+              <span class="method-item-style">day()</span>
+              <span class="method-item-style">hour()</span>
+              <span class="method-item-style">minute()</span>
+              <span class="method-item-style">second()</span>
+              <span class="method-item-style">millisecond()</span>
+              <span class="method-item-style">dayOfYear()</span>
+              <span class="method-item-style">week()</span>
+              <span class="method-item-style">quarter()</span>
             </div>
 
             <pre class="code-block language-javascript">const d = D('2025-12-25T14:30:45');
@@ -341,7 +244,7 @@ d.toDate()      // Returns Date instance
 d.toObject()
 // { year: 2025, month: 11, date: 25, ... }</pre>
 
-            <div class="try-section">
+          <div class="try-section-style">
                 <h4 class="font-semibold mb-3">Current Date Components</h4>
                 <div class="grid grid-cols-4 gap-3" id="getters-display">
                     <!-- Filled by JS -->
@@ -359,10 +262,10 @@ d.toObject()
             <p class="mb-4">Display human-readable relative time strings.</p>
 
             <div class="method-grid mb-4">
-                <span class="method-item">fromNow()</span>
-                <span class="method-item">from()</span>
-                <span class="method-item">toNow()</span>
-                <span class="method-item">to()</span>
+              <span class="method-item-style">fromNow()</span>
+              <span class="method-item-style">from()</span>
+              <span class="method-item-style">toNow()</span>
+              <span class="method-item-style">to()</span>
             </div>
 
             <pre class="code-block language-javascript">// Time from now
@@ -381,7 +284,7 @@ future.from(past)                      // 'in 12 months'
 D().add(2, 'weeks').toNow()            // 'in 2 weeks'
 past.to(future)                        // 'in 12 months'</pre>
 
-            <div class="try-section">
+          <div class="try-section-style">
                 <h4 class="font-semibold mb-3">Try It</h4>
                 <div class="flex gap-2 flex-wrap mb-3">
                     <button class="btn btn-outline btn-sm" data-relative="-5-minutes">5 minutes ago</button>
@@ -392,7 +295,7 @@ past.to(future)                        // 'in 12 months'</pre>
                     <button class="btn btn-outline btn-sm" data-relative="7-days">in 7 days</button>
                     <button class="btn btn-outline btn-sm" data-relative="1-month">in 1 month</button>
                 </div>
-                <div class="demo-result" id="relative-result">Click a button to see relative time</div>
+            <div class="demo-result-style" id="relative-result">Click a button to see relative time</div>
             </div>
         </div>
     </section>
@@ -406,13 +309,13 @@ past.to(future)                        // 'in 12 months'</pre>
             <p class="mb-4">Compare dates and calculate differences.</p>
 
             <div class="method-grid mb-4">
-                <span class="method-item">isBefore()</span>
-                <span class="method-item">isAfter()</span>
-                <span class="method-item">isSame()</span>
-                <span class="method-item">isSameOrBefore()</span>
-                <span class="method-item">isSameOrAfter()</span>
-                <span class="method-item">isBetween()</span>
-                <span class="method-item">diff()</span>
+              <span class="method-item-style">isBefore()</span>
+              <span class="method-item-style">isAfter()</span>
+              <span class="method-item-style">isSame()</span>
+              <span class="method-item-style">isSameOrBefore()</span>
+              <span class="method-item-style">isSameOrAfter()</span>
+              <span class="method-item-style">isBetween()</span>
+              <span class="method-item-style">diff()</span>
             </div>
 
             <pre class="code-block language-javascript">const jan = D('2025-01-15');
@@ -440,7 +343,7 @@ dec.diff(jan, 'weeks')               // 49
 // Float difference
 dec.diff(jan, 'months', true)        // 11.33...</pre>
 
-            <div class="try-section">
+          <div class="try-section-style">
                 <h4 class="font-semibold mb-3">Try It - Date Difference</h4>
                 <div class="grid grid-cols-2 gap-4 mb-3">
                     <div>
@@ -453,7 +356,7 @@ dec.diff(jan, 'months', true)        // 11.33...</pre>
                     </div>
                 </div>
                 <button class="btn btn-primary btn-sm mb-3" id="diff-calc">Calculate Difference</button>
-                <div class="demo-result" id="diff-result">Enter dates and click Calculate</div>
+            <div class="demo-result-style" id="diff-result">Enter dates and click Calculate</div>
             </div>
         </div>
     </section>
@@ -467,12 +370,12 @@ dec.diff(jan, 'months', true)        // 11.33...</pre>
             <p class="mb-4">Validate dates and use helpful static methods.</p>
 
             <div class="method-grid mb-4">
-                <span class="method-item">isValid()</span>
-                <span class="method-item">isLeapYear()</span>
-                <span class="method-item">daysInMonth()</span>
-                <span class="method-item">dates.isValid()</span>
-                <span class="method-item">dates.min()</span>
-                <span class="method-item">dates.max()</span>
+              <span class="method-item-style">isValid()</span>
+              <span class="method-item-style">isLeapYear()</span>
+              <span class="method-item-style">daysInMonth()</span>
+              <span class="method-item-style">dates.isValid()</span>
+              <span class="method-item-style">dates.min()</span>
+              <span class="method-item-style">dates.max()</span>
             </div>
 
             <pre class="code-block language-javascript">// Instance validation
@@ -497,7 +400,7 @@ const dates = [D('2025-03-15'), D('2025-01-01'), D('2025-06-20')];
 Domma.dates.min(dates).format('MMM D')  // 'Jan 1'
 Domma.dates.max(dates).format('MMM D')  // 'Jun 20'</pre>
 
-            <div class="try-section">
+          <div class="try-section-style">
                 <h4 class="font-semibold mb-3">Try It</h4>
                 <div class="flex gap-2 flex-wrap mb-3">
                     <button class="btn btn-outline btn-sm" data-valid="valid">isValid('2025-12-25')</button>
@@ -506,7 +409,7 @@ Domma.dates.max(dates).format('MMM D')  // 'Jun 20'</pre>
                     <button class="btn btn-outline btn-sm" data-valid="leap2025">isLeapYear(2025)</button>
                     <button class="btn btn-outline btn-sm" data-valid="days">daysInMonth(Feb 2025)</button>
                 </div>
-                <div class="demo-result" id="valid-result">Click a button to see result</div>
+            <div class="demo-result-style" id="valid-result">Click a button to see result</div>
             </div>
         </div>
     </section>
@@ -517,54 +420,54 @@ Domma.dates.max(dates).format('MMM D')  // 'Jun 20'</pre>
             <h2 class="text-xl font-semibold">Complete Method Reference</h2>
         </div>
         <div class="card-body">
-            <h4 class="category-title">Instance Methods</h4>
+          <h4 class="category-title-style">Instance Methods</h4>
             <div class="method-grid mb-4">
-                <span class="method-item">format()</span>
-                <span class="method-item">toISOString()</span>
-                <span class="method-item">toDate()</span>
-                <span class="method-item">toObject()</span>
-                <span class="method-item">unix()</span>
-                <span class="method-item">valueOf()</span>
-                <span class="method-item">clone()</span>
-                <span class="method-item">add()</span>
-                <span class="method-item">subtract()</span>
-                <span class="method-item">startOf()</span>
-                <span class="method-item">endOf()</span>
-                <span class="method-item">set()</span>
-                <span class="method-item">year()</span>
-                <span class="method-item">month()</span>
-                <span class="method-item">date()</span>
-                <span class="method-item">day()</span>
-                <span class="method-item">hour()</span>
-                <span class="method-item">minute()</span>
-                <span class="method-item">second()</span>
-                <span class="method-item">millisecond()</span>
-                <span class="method-item">dayOfYear()</span>
-                <span class="method-item">week()</span>
-                <span class="method-item">quarter()</span>
-                <span class="method-item">daysInMonth()</span>
-                <span class="method-item">isLeapYear()</span>
-                <span class="method-item">isValid()</span>
-                <span class="method-item">isBefore()</span>
-                <span class="method-item">isAfter()</span>
-                <span class="method-item">isSame()</span>
-                <span class="method-item">isSameOrBefore()</span>
-                <span class="method-item">isSameOrAfter()</span>
-                <span class="method-item">isBetween()</span>
-                <span class="method-item">diff()</span>
-                <span class="method-item">fromNow()</span>
-                <span class="method-item">from()</span>
-                <span class="method-item">toNow()</span>
-                <span class="method-item">to()</span>
+              <span class="method-item-style">format()</span>
+              <span class="method-item-style">toISOString()</span>
+              <span class="method-item-style">toDate()</span>
+              <span class="method-item-style">toObject()</span>
+              <span class="method-item-style">unix()</span>
+              <span class="method-item-style">valueOf()</span>
+              <span class="method-item-style">clone()</span>
+              <span class="method-item-style">add()</span>
+              <span class="method-item-style">subtract()</span>
+              <span class="method-item-style">startOf()</span>
+              <span class="method-item-style">endOf()</span>
+              <span class="method-item-style">set()</span>
+              <span class="method-item-style">year()</span>
+              <span class="method-item-style">month()</span>
+              <span class="method-item-style">date()</span>
+              <span class="method-item-style">day()</span>
+              <span class="method-item-style">hour()</span>
+              <span class="method-item-style">minute()</span>
+              <span class="method-item-style">second()</span>
+              <span class="method-item-style">millisecond()</span>
+              <span class="method-item-style">dayOfYear()</span>
+              <span class="method-item-style">week()</span>
+              <span class="method-item-style">quarter()</span>
+              <span class="method-item-style">daysInMonth()</span>
+              <span class="method-item-style">isLeapYear()</span>
+              <span class="method-item-style">isValid()</span>
+              <span class="method-item-style">isBefore()</span>
+              <span class="method-item-style">isAfter()</span>
+              <span class="method-item-style">isSame()</span>
+              <span class="method-item-style">isSameOrBefore()</span>
+              <span class="method-item-style">isSameOrAfter()</span>
+              <span class="method-item-style">isBetween()</span>
+              <span class="method-item-style">diff()</span>
+              <span class="method-item-style">fromNow()</span>
+              <span class="method-item-style">from()</span>
+              <span class="method-item-style">toNow()</span>
+              <span class="method-item-style">to()</span>
             </div>
 
-            <h4 class="category-title">Static Methods</h4>
-            <div class="method-grid">
-                <span class="method-item">dates.now()</span>
-                <span class="method-item">dates.parse()</span>
-                <span class="method-item">dates.isValid()</span>
-                <span class="method-item">dates.min()</span>
-                <span class="method-item">dates.max()</span>
+          <h4 class="category-title-style">Static Methods</h4>
+          <div class="method-grid-style">
+            <span class="method-item-style">dates.now()</span>
+            <span class="method-item-style">dates.parse()</span>
+            <span class="method-item-style">dates.isValid()</span>
+            <span class="method-item-style">dates.min()</span>
+            <span class="method-item-style">dates.max()</span>
             </div>
         </div>
     </section>
@@ -683,7 +586,7 @@ Domma.dates.max(dates).format('MMM D')  // 'Jun 20'</pre>
         ];
 
         $('#getters-display').html(getters.map(([name, value]) =>
-            `<div class="p-3 bg-white rounded border">
+          `<div class="p-3 bg-white rounded border" style="background: var(--dm-white); border: 1px solid var(--dm-border);">
                     <div class="text-sm text-muted">${name}</div>
                     <div class="font-semibold">${value}</div>
                 </div>`

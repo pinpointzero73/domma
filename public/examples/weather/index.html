@@ -43,7 +43,7 @@
             padding: 2rem;
             margin: 0 0 2rem;
             border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--dm-shadow-sm);
             text-align: center;
         }
 
@@ -102,7 +102,7 @@
             padding: 1.5rem;
             margin: 0 0 2rem;
             border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--dm-shadow-sm);
             width: 100%;
         }
 
@@ -113,7 +113,7 @@
             border-radius: 12px;
             padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--dm-shadow-md);
         }
 
         .weather-header {
@@ -204,7 +204,7 @@
             border-radius: 8px;
             padding: 1rem;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--dm-shadow-sm);
         }
 
         .forecast-card h4 {
@@ -242,7 +242,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: var(--dm-black-t50);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -253,7 +253,7 @@
         .loading-spinner {
             width: 48px;
             height: 48px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
+            border: 4px solid var(--dm-white-t30);
             border-top-color: var(--dm-primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -267,7 +267,7 @@
 
         .loading-overlay p {
             margin-top: 1rem;
-            color: white;
+            color: var(--dm-white);
             font-size: 1rem;
         }
 
@@ -279,8 +279,8 @@
             transform: translateX(-50%) translateY(100px);
             padding: 1rem 1.5rem;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            color: white;
+            box-shadow: var(--dm-shadow);
+            color: var(--dm-white);
             font-size: 0.95rem;
             z-index: 10000;
             opacity: 0;
@@ -376,8 +376,8 @@
 
             <!-- Row 2: Search input and Search button -->
             <div class="flex gap-3 mb-3">
-                <input type="text" id="city-search" placeholder="Enter city name (e.g., London, Tokyo)" class="flex-1"
-                       style="padding: 0.75rem; border: 1px solid var(--dm-border); border-radius: 8px; background: var(--dm-surface); color: var(--dm-text);"/>
+              <input type="text" id="city-search" placeholder="Enter city name (e.g., London, Tokyo)"
+                     class="flex-1 form-input"/>
                 <button class="btn btn-primary" id="search-btn">
                     <span data-icon="search" data-icon-size="18"></span>
                     Search

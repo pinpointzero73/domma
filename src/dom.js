@@ -714,9 +714,22 @@ class DommaCollection {
      */
     wrap(wrapper) {
         return this.each((i, el) => {
+            console.log('--- wrap() START ---');
+            console.log('Element to wrap (el):', el.outerHTML);
+            console.log('Parent of el BEFORE:', el.parentNode ? el.parentNode.outerHTML : 'No parent');
+
             const wrap = this._getWrapper(wrapper, i, el);
-            el.parentNode.insertBefore(wrap, el);
-            wrap.appendChild(el);
+            console.log('Created wrapper:', wrap.outerHTML);
+
+            if (el.parentNode) {
+                el.parentNode.insertBefore(wrap, el);
+                wrap.appendChild(el);
+            } else {
+                console.warn('Element has no parent, cannot wrap:', el.outerHTML);
+            }
+
+            console.log('Parent of el AFTER:', el.parentNode ? el.parentNode.outerHTML : 'No parent');
+            console.log('--- wrap() END ---');
         });
     }
 
@@ -857,21 +870,28 @@ class DommaCollection {
 
     // Helper: Get wrapper element
     _getWrapper(wrapper, index, element) {
+        console.log('--- _getWrapper() START ---');
+        console.log('Wrapper input:', wrapper);
+        let resultWrap;
+
         if (typeof wrapper === 'function') {
             wrapper = wrapper.call(element, index);
+            console.log('Wrapper after function call:', wrapper);
         }
         if (typeof wrapper === 'string') {
             const temp = document.createElement('div');
             temp.innerHTML = wrapper.trim();
-            return temp.firstElementChild;
+            resultWrap = temp.firstElementChild;
+        } else if (wrapper instanceof HTMLElement) {
+            resultWrap = wrapper.cloneNode(true);
+        } else if (wrapper instanceof DommaCollection) {
+            resultWrap = wrapper.elements[0].cloneNode(true);
+        } else {
+            resultWrap = document.createElement('div');
         }
-        if (wrapper instanceof HTMLElement) {
-            return wrapper.cloneNode(true);
-        }
-        if (wrapper instanceof DommaCollection) {
-            return wrapper.elements[0].cloneNode(true);
-        }
-        return document.createElement('div');
+        console.log('Final generated wrapper:', resultWrap.outerHTML);
+        console.log('--- _getWrapper() END ---');
+        return resultWrap;
     }
 
     // ============================================

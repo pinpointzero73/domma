@@ -35,13 +35,13 @@
             border: 1px solid var(--dm-border);
             border-radius: 8px;
             padding: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--dm-shadow-sm);
             transition: box-shadow 0.2s ease;
             cursor: pointer;
         }
 
         .note-card:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--dm-shadow-md);
         }
 
         .note-header {
@@ -112,7 +112,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: var(--dm-black-t50);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -126,7 +126,7 @@
             max-width: 800px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--dm-shadow-xl);
         }
 
         .editor-header {
@@ -252,8 +252,7 @@
                 <span data-icon="plus" data-icon-size="18"></span>
                 New Note
             </button>
-            <input type="text" id="search-input" placeholder="Search notes..." class="flex-1"
-                   style="padding: 0.75rem; border: 1px solid var(--dm-border); border-radius: 8px; background: var(--dm-surface); color: var(--dm-text);">
+          <input type="text" id="search-input" placeholder="Search notes..." class="flex-1 form-input">
         </div>
 
         <!-- Notes Grid -->

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -41,18 +42,18 @@ const carousel = Domma.elements.carousel('#carousel', {
     <div class="card-header"><h2 class="text-xl font-semibold m-0">Quick Start</h2></div>
     <div class="card-body">
         <div class="demo-area mb-4">
-            <div id="quick-carousel" class="carousel" style="max-width: 600px; margin: 0 auto;">
+          <div id="quick-carousel" class="carousel" class="carousel-centered-600">
                 <div class="carousel-track">
                     <div class="carousel-slide"
-                         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 300px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                         class="bg-gradient-blue-carousel min-h-300 flex items-center justify-center text-white text-2xl">
                         Slide 1
                     </div>
                     <div class="carousel-slide"
-                         style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 300px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                         class="bg-gradient-red min-h-300 flex items-center justify-center text-white text-2xl">
                         Slide 2
                     </div>
                     <div class="carousel-slide"
-                         style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); min-height: 300px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                         class="bg-gradient-sky min-h-300 flex items-center justify-center text-white text-2xl">
                         Slide 3
                     </div>
                 </div>
@@ -66,18 +67,18 @@ const carousel = Domma.elements.carousel('#carousel', {
     <div class="card-body">
         <h3 class="category-title">With Autoplay</h3>
         <div class="demo-area">
-            <div id="autoplay-carousel" class="carousel" style="max-width: 600px; margin: 0 auto;">
+          <div id="autoplay-carousel" class="carousel" class="carousel-centered-600">
                 <div class="carousel-track">
                     <div class="carousel-slide"
-                         style="background: #6495ED; min-height: 200px; display: flex; align-items: center; justify-content: center; color: white;">
+                         class="bg-primary min-h-200 flex items-center justify-center text-white">
                         Auto 1
                     </div>
                     <div class="carousel-slide"
-                         style="background: #28a745; min-height: 200px; display: flex; align-items: center; justify-content: center; color: white;">
+                         class="bg-success min-h-200 flex items-center justify-center text-white">
                         Auto 2
                     </div>
                     <div class="carousel-slide"
-                         style="background: #dc3545; min-height: 200px; display: flex; align-items: center; justify-content: center; color: white;">
+                         class="bg-danger min-h-200 flex items-center justify-center text-white">
                         Auto 3
                     </div>
                 </div>
@@ -223,7 +224,7 @@ $.setup({
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">Programmatic</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;">const carousel = Domma.elements.carousel(
+                  <pre class="code-block language-javascript" class="text-sm">const carousel = Domma.elements.carousel(
     '#carousel',
     {
         autoplay: true,
@@ -235,7 +236,7 @@ carousel.play();</pre>
                 </div>
                 <div>
                     <p class="font-semibold mb-2">Declarative (Recommended)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;">$.setup({
+                  <pre class="code-block language-javascript" class="text-sm">$.setup({
     '#carousel': {
         component: 'carousel',
         options: {
@@ -252,7 +253,7 @@ carousel.play();</pre>
     <section class="card mb-6" data-section="Related">
     <div class="card-header"><h2 class="text-xl font-semibold m-0">Related Elements</h2></div>
     <div class="card-body">
-        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+      <div class="grid grid-cols-1 gap-4" class="grid-auto-fit-250">
             <a href="../modal/index.html" class="card card-hover">
                 <div class="card-body">
                     <h3 class="card-title">Modal</h3>

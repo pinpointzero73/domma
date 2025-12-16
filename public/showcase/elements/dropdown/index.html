@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -23,7 +24,7 @@
             settings panels. Domma's dropdown supports positioning, triggers, and dynamic content.
         </p>
 
-        <h3 class="category-title">Key Features</h3>
+      <h3 class="category-title-style">Key Features</h3>
         <ul class="feature-list mb-4">
             <li><strong>Multiple Triggers</strong> - Click or hover activation</li>
             <li><strong>Smart Positioning</strong> - Auto-adjusts to viewport edges</li>
@@ -31,7 +32,7 @@
             <li><strong>Close on Outside Click</strong> - Automatic dismiss behaviour</li>
         </ul>
 
-        <h3 class="category-title">Basic Usage</h3>
+      <h3 class="category-title-style">Basic Usage</h3>
         <div class="code-block language-javascript">
             <pre><code>
 // Attach to a button element
@@ -42,11 +43,11 @@ const dropdown = Domma.elements.dropdown('#my-button', {
     ],
     trigger: 'click',
     position: 'bottom-start',
-    onSelect: (item) =&gt; console.log(item.value)
+    onSelect: (item) => console.log(item.value)
 });
 </code></pre>
         </div>
-        <p class="text-sm text-muted mt-2">
+      <p class="dropdown-p-sm-muted mt-2">
             <strong>Note:</strong> The dropdown component creates menus programmatically from the <code>items</code>
             array.
             It doesn't use static HTML menu structures.
@@ -59,8 +60,8 @@ const dropdown = Domma.elements.dropdown('#my-button', {
         <h2 class="text-xl font-semibold m-0">Quick Start</h2>
     </div>
     <div class="card-body">
-        <h3 class="category-title">Simple Dropdown</h3>
-        <div class="demo-area mb-4 text-center">
+      <h3 class="category-title-style">Simple Dropdown</h3>
+      <div class="demo-area mb-4 dropdown-text-center">
             <button class="btn btn-primary" id="quick-dropdown">Actions</button>
         </div>
         <div class="code-block language-javascript">
@@ -75,7 +76,7 @@ Domma.elements.dropdown('#my-dropdown', {
         { divider: true },
         { text: 'Delete', value: 'delete', class: 'text-danger' }
     ],
-    onSelect: (item) =&gt; console.log('Selected:', item)
+    onSelect: (item) => console.log('Selected:', item)
 });
 &lt;/script&gt;
 </code></pre>
@@ -90,7 +91,7 @@ Domma.elements.dropdown('#my-dropdown', {
     <div class="card-body">
         <p class="mb-4">Build a user profile dropdown with event handling.</p>
 
-        <div class="demo-area mb-4 text-center">
+      <div class="demo-area mb-4 dropdown-text-center">
             <button class="btn btn-secondary" id="tutorial-dropdown">
                 <span>👤</span> User Menu
             </button>
@@ -111,9 +112,9 @@ const dropdown = Domma.elements.dropdown('#user-dropdown', {
         { divider: true },
         { text: 'Sign Out', value: 'logout' }
     ],
-    onOpen: () =&gt; console.log('Dropdown opened'),
-    onClose: () =&gt; console.log('Dropdown closed'),
-    onSelect: (item) =&gt; {
+    onOpen: () => console.log('Dropdown opened'),
+    onClose: () => console.log('Dropdown closed'),
+    onSelect: (item) => {
         console.log(`Action selected: ${item.value}`);
     }
 });
@@ -128,14 +129,14 @@ const dropdown = Domma.elements.dropdown('#user-dropdown', {
     </div>
     <div class="card-body">
 
-        <h3 class="category-title">Hover Trigger</h3>
-        <div class="demo-area mb-4 text-center">
+      <h3 class="category-title-style">Hover Trigger</h3>
+      <div class="demo-area mb-4 dropdown-text-center">
             <button class="btn btn-outline" id="hover-dropdown">Hover Me</button>
         </div>
 
-        <h3 class="category-title">Positioning</h3>
+      <h3 class="category-title-style">Positioning</h3>
         <div class="demo-area mb-4">
-            <div class="flex gap-4 justify-center flex-wrap">
+          <div class="dropdown-flex-center-wrap">
                 <button class="btn btn-outline" id="pos-bottom">Bottom</button>
                 <button class="btn btn-outline" id="pos-top">Top</button>
                 <button class="btn btn-outline" id="pos-left">Left</button>
@@ -143,13 +144,13 @@ const dropdown = Domma.elements.dropdown('#user-dropdown', {
             </div>
         </div>
 
-        <h3 class="category-title">With Dividers and Headers</h3>
-        <div class="demo-area mb-4 text-center">
+      <h3 class="category-title-style">With Dividers and Headers</h3>
+      <div class="demo-area mb-4 dropdown-text-center">
             <button class="btn btn-primary" id="structured-dropdown">Menu</button>
         </div>
 
-        <h3 class="category-title">Programmatic Control</h3>
-        <div class="demo-area text-center">
+      <h3 class="category-title-style">Programmatic Control</h3>
+      <div class="demo-area dropdown-text-center">
             <button class="btn btn-secondary" id="programmatic-dropdown">Controlled Dropdown</button>
             <div class="flex gap-2 justify-center mt-3">
                 <button id="prog-open" class="btn btn-outline btn-sm">Open</button>
@@ -165,7 +166,7 @@ const dropdown = Domma.elements.dropdown('#user-dropdown', {
         <h2 class="text-xl font-semibold m-0">Best Practices</h2>
     </div>
     <div class="card-body">
-        <h3 class="category-title">Accessibility</h3>
+      <h3 class="category-title-style">Accessibility</h3>
         <ul class="mb-4">
             <li><strong>Keyboard Navigation</strong> - Use arrow keys to navigate items, Enter to select, Escape to
                 close
@@ -177,7 +178,7 @@ const dropdown = Domma.elements.dropdown('#user-dropdown', {
             <li><strong>Screen Readers</strong> - Use semantic <code><button></code> elements for triggers</li>
         </ul>
 
-        <h3 class="category-title">UX Guidelines</h3>
+      <h3 class="category-title-style">UX Guidelines</h3>
         <ul class="mb-4">
             <li><strong>Clear Trigger</strong> - Make dropdown button visually distinct with chevron icon</li>
             <li><strong>Logical Grouping</strong> - Use dividers and headers to organise menu items</li>
@@ -185,7 +186,7 @@ const dropdown = Domma.elements.dropdown('#user-dropdown', {
             <li><strong>Hover Delay</strong> - Add slight delay for hover triggers to prevent accidental opens</li>
         </ul>
 
-        <h3 class="category-title">Performance</h3>
+      <h3 class="category-title-style">Performance</h3>
         <ul>
             <li><strong>Event Delegation</strong> - Attach single listener to menu instead of individual items</li>
             <li><strong>Destroy When Done</strong> - Call <code>destroy()</code> on dynamic dropdowns</li>
@@ -198,8 +199,8 @@ const dropdown = Domma.elements.dropdown('#user-dropdown', {
         <h2 class="text-xl font-semibold m-0">API Reference</h2>
     </div>
     <div class="card-body">
-        <div class="option-table">
-            <table>
+      <div class="option-table-accordion">
+        <table class="api-table-accordion">
                 <thead>
                 <tr>
                     <th>Option</th>
@@ -274,9 +275,9 @@ const dropdown = Domma.elements.dropdown('#user-dropdown', {
             </table>
         </div>
 
-        <h3 class="category-title mt-4">Methods</h3>
-        <div class="option-table">
-            <table>
+      <h3 class="category-title-style mt-4">Methods</h3>
+      <div class="option-table-accordion">
+        <table class="api-table-accordion">
                 <thead>
                 <tr>
                     <th>Method</th>
@@ -308,9 +309,9 @@ const dropdown = Domma.elements.dropdown('#user-dropdown', {
             </table>
         </div>
 
-        <h3 class="category-title mt-4">CSS Classes</h3>
-        <div class="option-table">
-            <table>
+      <h3 class="category-title-style mt-4">CSS Classes</h3>
+      <div class="option-table-accordion">
+        <table class="api-table-accordion">
                 <thead>
                 <tr>
                     <th>Class</th>
@@ -362,7 +363,7 @@ $.setup({
             trigger: 'click',
             position: 'bottom-end',
             closeOnClick: true,
-            onOpen: () =&gt; console.log('Menu opened')
+            onOpen: () => console.log('Menu opened')
         }
     },
     '#hover-menu': {
@@ -383,7 +384,7 @@ $.setup({
         <h2 class="text-xl font-semibold m-0">Related Elements</h2>
     </div>
     <div class="card-body">
-        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+      <div class="grid grid-cols-1 gap-4 grid-auto-fit-250">
             <a href="../tooltip/index.html" class="card card-hover">
                 <div class="card-body">
                     <h3 class="card-title">Tooltip</h3>

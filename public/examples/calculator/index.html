@@ -46,7 +46,7 @@
             border: 1px solid var(--dm-border);
             border-radius: 12px;
             padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--dm-shadow-md);
         }
 
         .calculator-display {
@@ -96,7 +96,7 @@
         .calc-btn:hover {
             background: var(--dm-hover-bg);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--dm-shadow-md);
         }
 
         .calc-btn:active {
@@ -111,12 +111,12 @@
 
         .calc-btn-operator:hover {
             background: var(--dm-primary);
-            color: white;
+            color: var(--dm-white);
         }
 
         .calc-btn-equals {
             background: var(--dm-success);
-            color: white;
+            color: var(--dm-white);
             grid-column: span 2;
         }
 
@@ -131,7 +131,7 @@
 
         .calc-btn-clear:hover {
             background: var(--dm-danger);
-            color: white;
+            color: var(--dm-white);
         }
 
         /* Mode toggle */
@@ -156,7 +156,7 @@
 
         .mode-btn.active {
             background: var(--dm-primary);
-            color: white;
+            color: var(--dm-white);
             border-color: var(--dm-primary);
         }
 
@@ -186,7 +186,7 @@
 
         .angle-btn.active {
             background: var(--dm-info);
-            color: white;
+            color: var(--dm-white);
             border-color: var(--dm-info);
         }
 
@@ -222,7 +222,7 @@
 
         .calc-btn-function:hover {
             background: var(--dm-info);
-            color: white;
+            color: var(--dm-white);
         }
 
         /* Memory buttons */
@@ -235,7 +235,7 @@
 
         .calc-btn-memory:hover {
             background: var(--dm-warning);
-            color: white;
+            color: var(--dm-white);
         }
 
         /* Constant buttons */
@@ -248,7 +248,7 @@
 
         .calc-btn-constant:hover {
             background: var(--dm-success);
-            color: white;
+            color: var(--dm-white);
         }
 
         /* Memory indicator */
@@ -275,10 +275,10 @@
             left: 50%;
             transform: translateX(-50%) translateY(100px);
             background: var(--dm-danger);
-            color: white;
+            color: var(--dm-white);
             padding: 1rem 1.5rem;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--dm-shadow-lg);
             font-size: 0.95rem;
             font-weight: 500;
             z-index: 10000;

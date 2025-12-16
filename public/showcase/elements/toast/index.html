@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -23,7 +24,7 @@
             and auto-dismiss, perfect for success confirmations, warnings, and informational messages.
         </p>
 
-        <h3 class="category-title">Key Features</h3>
+      <h3 class="category-title-style">Key Features</h3>
         <ul class="feature-list mb-4">
             <li><strong>Auto-Dismiss</strong> - Configurable duration with optional persistence</li>
             <li><strong>Multiple Types</strong> - Success, error, warning, info styles</li>
@@ -31,7 +32,7 @@
             <li><strong>Queueing</strong> - Stack multiple toasts automatically</li>
         </ul>
 
-        <h3 class="category-title">Basic Usage</h3>
+      <h3 class="category-title-style">Basic Usage</h3>
         <div class="code-block language-javascript">
             <pre><code>
 Domma.elements.toast('Operation successful!', {
@@ -49,13 +50,13 @@ Domma.elements.toast('Operation successful!', {
         <h2 class="text-xl font-semibold m-0">Quick Start</h2>
     </div>
     <div class="card-body">
-        <h3 class="category-title">Simple Toast</h3>
+      <h3 class="category-title-style">Simple Toast</h3>
         <div class="demo-area mb-4 text-center">
             <button id="quick-toast" class="btn btn-primary">Show Toast</button>
         </div>
         <div class="code-block language-javascript">
             <pre><code>
-document.getElementById('btn').addEventListener('click', () =&gt; {
+document.getElementById('btn').addEventListener('click', () => {
     Domma.elements.toast('Hello, World!', {
         type: 'info',
         duration: 3000
@@ -74,7 +75,7 @@ document.getElementById('btn').addEventListener('click', () =&gt; {
         <p class="mb-4">Build a form submission flow with toast notifications.</p>
 
         <div class="demo-area">
-            <div style="max-width: 400px; margin: 0 auto;">
+          <div class="forms-max-w-400-center mb-4">
                 <div class="form-group mb-3">
                     <label>Email</label>
                     <input type="email" id="tutorial-email" class="form-input" placeholder="you@example.com">
@@ -89,7 +90,7 @@ document.getElementById('btn').addEventListener('click', () =&gt; {
 
         <div class="code-block language-javascript mt-4">
             <pre><code>
-document.getElementById('submit-btn').addEventListener('click', () =&gt; {
+document.getElementById('submit-btn').addEventListener('click', () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
@@ -102,7 +103,7 @@ document.getElementById('submit-btn').addEventListener('click', () =&gt; {
         return;
     }
 
-    if (password.length &lt; 8) {
+    if (password.length < 8) {
         Domma.elements.toast('Password must be at least 8 characters', {
             type: 'warning',
             duration: 4000
@@ -127,7 +128,7 @@ document.getElementById('submit-btn').addEventListener('click', () =&gt; {
     </div>
     <div class="card-body">
 
-        <h3 class="category-title">Toast Types</h3>
+      <h3 class="category-title-style">Toast Types</h3>
         <div class="demo-area mb-4">
             <div class="flex gap-2 flex-wrap justify-center">
                 <button id="ex-success" class="btn btn-success">Success</button>
@@ -137,9 +138,9 @@ document.getElementById('submit-btn').addEventListener('click', () =&gt; {
             </div>
         </div>
 
-        <h3 class="category-title">Positioning</h3>
+      <h3 class="category-title-style">Positioning</h3>
         <div class="demo-area mb-4">
-            <div class="grid gap-2" style="grid-template-columns: repeat(3, 1fr); max-width: 400px; margin: 0 auto;">
+          <div class="grid gap-2 toast-grid-cols-3-max-w-400 forms-max-w-400-center">
                 <button id="pos-tl" class="btn btn-outline btn-sm">Top Left</button>
                 <button id="pos-tc" class="btn btn-outline btn-sm">Top Center</button>
                 <button id="pos-tr" class="btn btn-outline btn-sm">Top Right</button>
@@ -152,7 +153,7 @@ document.getElementById('submit-btn').addEventListener('click', () =&gt; {
             </div>
         </div>
 
-        <h3 class="category-title">Duration Options</h3>
+      <h3 class="category-title-style">Duration Options</h3>
         <div class="demo-area mb-4 text-center">
             <div class="flex gap-2 justify-center">
                 <button id="dur-short" class="btn btn-outline">Short (1s)</button>
@@ -162,7 +163,7 @@ document.getElementById('submit-btn').addEventListener('click', () =&gt; {
             </div>
         </div>
 
-        <h3 class="category-title">With Actions</h3>
+      <h3 class="category-title-style">With Actions</h3>
         <div class="demo-area text-center">
             <button id="ex-action" class="btn btn-primary">Toast with Action</button>
         </div>
@@ -174,7 +175,7 @@ document.getElementById('submit-btn').addEventListener('click', () =&gt; {
         <h2 class="text-xl font-semibold m-0">Best Practices</h2>
     </div>
     <div class="card-body">
-        <h3 class="category-title">Accessibility</h3>
+      <h3 class="category-title-style">Accessibility</h3>
         <ul class="mb-4">
             <li><strong>ARIA Live Regions</strong> - Toasts use <code>role="status"</code> and
                 <code>aria-live="polite"</code></li>
@@ -182,7 +183,7 @@ document.getElementById('submit-btn').addEventListener('click', () =&gt; {
             <li><strong>Dismissible</strong> - Provide close button for screen reader users</li>
         </ul>
 
-        <h3 class="category-title">UX Guidelines</h3>
+      <h3 class="category-title-style">UX Guidelines</h3>
         <ul class="mb-4">
             <li><strong>Appropriate Duration</strong> - 3-5 seconds for reading time, longer for actions</li>
             <li><strong>Type Matching</strong> - Success for confirmations, error for failures, warning for alerts</li>
@@ -190,7 +191,7 @@ document.getElementById('submit-btn').addEventListener('click', () =&gt; {
             <li><strong>Limit Stack</strong> - Don't overwhelm users with too many simultaneous toasts</li>
         </ul>
 
-        <h3 class="category-title">Performance</h3>
+      <h3 class="category-title-style">Performance</h3>
         <ul>
             <li><strong>Auto-Cleanup</strong> - Toasts automatically remove themselves from DOM</li>
             <li><strong>Queue Management</strong> - System handles multiple toasts efficiently</li>
@@ -203,9 +204,9 @@ document.getElementById('submit-btn').addEventListener('click', () =&gt; {
         <h2 class="text-xl font-semibold m-0">API Reference</h2>
     </div>
     <div class="card-body">
-        <h3 class="category-title">Static Method</h3>
-        <div class="option-table">
-            <table>
+      <h3 class="category-title-style">Static Method</h3>
+      <div class="option-table-accordion">
+        <table class="api-table-accordion">
                 <thead>
                 <tr>
                     <th>Method</th>
@@ -221,9 +222,9 @@ document.getElementById('submit-btn').addEventListener('click', () =&gt; {
             </table>
         </div>
 
-        <h3 class="category-title mt-4">Options</h3>
-        <div class="option-table">
-            <table>
+      <h3 class="category-title-style mt-4">Options</h3>
+      <div class="option-table-accordion">
+        <table class="api-table-accordion">
                 <thead>
                 <tr>
                     <th>Option</th>
@@ -281,9 +282,9 @@ document.getElementById('submit-btn').addEventListener('click', () =&gt; {
             </table>
         </div>
 
-        <h3 class="category-title mt-4">Methods</h3>
-        <div class="option-table">
-            <table>
+      <h3 class="category-title-style mt-4">Methods</h3>
+      <div class="option-table-accordion">
+        <table class="api-table-accordion">
                 <thead>
                 <tr>
                     <th>Method</th>
@@ -316,7 +317,7 @@ document.getElementById('submit-btn').addEventListener('click', () =&gt; {
 $.setup({
     '#save-btn': {
         events: {
-            click: (e, $el) =&gt; {
+            click: (e, $el) => {
                 Domma.elements.toast('Changes saved successfully!', {
                     type: 'success',
                     duration: 3000
@@ -326,7 +327,7 @@ $.setup({
     },
     '#delete-btn': {
         events: {
-            click: (e, $el) =&gt; {
+            click: (e, $el) => {
                 Domma.elements.toast('Item deleted', {
                     type: 'error',
                     duration: 4000
@@ -345,14 +346,14 @@ $.setup({
         <h2 class="text-xl font-semibold m-0">Related Elements</h2>
     </div>
     <div class="card-body">
-        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
-            <a href="../dialog/index.html" class="card card-hover">
+      <div class="grid grid-cols-1 grid-auto-fit-250 gap-4">
+        <a href="../dialog/index.html" class="card card-hover no-underline text-inherit">
                 <div class="card-body">
                     <h3 class="card-title">Dialog</h3>
                     <p class="card-text">For blocking confirmations and prompts</p>
                 </div>
             </a>
-            <a href="../modal/index.html" class="card card-hover">
+        <a href="../modal/index.html" class="card card-hover no-underline text-inherit">
                 <div class="card-body">
                     <h3 class="card-title">Modal</h3>
                     <p class="card-text">For detailed content requiring user focus</p>

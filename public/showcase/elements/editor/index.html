@@ -8,37 +8,7 @@
     <link rel="stylesheet" href="../../css/grid.css">
     <link rel="stylesheet" href="../../css/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
-    <style>
-        .mode-switcher {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .mode-switcher button {
-            padding: 0.5rem 1rem;
-            border: 1px solid #ddd;
-            background: white;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .mode-switcher button.active {
-            background: var(--dm-primary);
-            color: white;
-            border-color: var(--dm-primary);
-        }
-
-        .editor-demo {
-            margin-bottom: 2rem;
-        }
-
-        .storage-info {
-            font-size: 0.875rem;
-            color: #666;
-            margin-top: 0.5rem;
-        }
-    </style>
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -114,10 +84,10 @@ Domma.elements.editor('#editor', {
         <div class="card-body">
             <p class="mb-4">Enhanced textarea with auto-resize, character counting, and autosave.</p>
 
-            <div class="editor-demo">
+          <div class="editor-demo-section">
                 <label class="form-label">Try it out:</label>
                 <textarea id="text-editor"></textarea>
-                <div class="storage-info">💾 Auto-saves to localStorage every 3 seconds</div>
+            <div class="storage-info-text">💾 Auto-saves to localStorage every 3 seconds</div>
             </div>
 
             <div class="code-block language-javascript">
@@ -147,7 +117,7 @@ Domma.elements.editor('#editor', {
                 Try pasting an image from your clipboard!
             </p>
 
-            <div class="editor-demo">
+          <div class="editor-demo-section">
                 <label class="form-label">Rich Text Editor:</label>
                 <div id="rich-editor"></div>
                 <p class="text-sm text-muted mt-2">
@@ -186,7 +156,7 @@ Domma.elements.editor('#editor', {
         <div class="card-body">
             <p class="mb-4">Code editor with line numbers, tab indentation, and syntax highlighting markers.</p>
 
-            <div class="editor-demo">
+          <div class="editor-demo-section">
                 <label class="form-label">JavaScript Code Editor:</label>
                 <textarea id="code-editor"></textarea>
                 <p class="text-sm text-muted mt-2">
@@ -216,11 +186,11 @@ Domma.elements.editor('#editor', {
         <div class="card-body">
             <p class="mb-4">Switch between modes dynamically while preserving content:</p>
 
-            <div class="editor-demo">
-                <div class="mode-switcher">
-                    <button onclick="switchMode('text')" class="active" data-mode="text">Text</button>
-                    <button onclick="switchMode('rich')" data-mode="rich">Rich</button>
-                    <button onclick="switchMode('code')" data-mode="code">Code</button>
+          <div class="editor-demo-section">
+            <div class="mode-switcher-container">
+              <button onclick="switchMode('text')" class="mode-switcher-button active" data-mode="text">Text</button>
+              <button onclick="switchMode('rich')" class="mode-switcher-button" data-mode="rich">Rich</button>
+              <button onclick="switchMode('code')" class="mode-switcher-button" data-mode="code">Code</button>
                 </div>
                 <textarea id="switchable-editor"></textarea>
             </div>
@@ -250,7 +220,7 @@ console.log(editor.getMode());  // 'text', 'rich', or 'code'
         <div class="card-body">
             <p class="mb-4">Two-way reactive binding with Domma's Model system:</p>
 
-            <div class="editor-demo">
+          <div class="editor-demo-section">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="form-label">Editor (bound to model):</label>
@@ -258,8 +228,7 @@ console.log(editor.getMode());  // 'text', 'rich', or 'code'
                     </div>
                     <div>
                         <label class="form-label">Model Value Display:</label>
-                        <div id="model-display" class="p-4 bg-surface rounded"
-                             style="min-height: 200px; font-family: monospace; white-space: pre-wrap;"></div>
+                      <div id="model-display" class="p-4 bg-surface rounded model-display-area"></div>
                     </div>
                 </div>
                 <div class="mt-3">
@@ -298,10 +267,10 @@ contentModel.set('text', 'New content');
         <div class="card-body">
             <p class="mb-4">Automatic saving to localStorage with configurable intervals:</p>
 
-            <div class="editor-demo">
+          <div class="editor-demo-section">
                 <label class="form-label">Autosave Demo (saves every 2 seconds):</label>
                 <textarea id="autosave-editor"></textarea>
-                <div class="storage-info">
+            <div class="storage-info-text">
                     Last saved: <span id="last-saved">Never</span> •
                     <button class="btn btn-sm" onclick="manualSave()">Save Now</button>
                     <button class="btn btn-sm" onclick="clearStorage()">Clear Storage</button>

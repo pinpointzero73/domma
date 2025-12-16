@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -52,15 +53,15 @@ const backToTop = Domma.elements.backToTop('#back-to-top', {
         <h3 class="category-title">Simple Back to Top Button</h3>
         <div class="demo-area mb-4">
             <p class="text-center text-muted mb-3">Scroll down this demo area to see the button appear</p>
-            <div style="height: 400px; overflow-y: auto; border: 1px solid var(--dm-border); padding: 1rem; position: relative;"
+          <div class="scrollable-demo-area-400"
                  id="quick-demo-container">
-                <div style="height: 1200px;">
+            <div class="scroll-content-1200">
                     <p><strong>Scroll down...</strong></p>
-                    <p style="margin-top: 300px;">Keep scrolling...</p>
-                    <p style="margin-top: 300px;">Almost there...</p>
-                    <p style="margin-top: 200px;">You should see the button now!</p>
+              <p class="mt-300">Keep scrolling...</p>
+              <p class="mt-300">Almost there...</p>
+              <p class="mt-200">You should see the button now!</p>
                 </div>
-                <button id="quick-back-to-top" class="back-to-top-btn" style="display: none;">↑</button>
+            <button id="quick-back-to-top" class="btn btn-primary back-to-top-btn">↑</button>
             </div>
         </div>
         <div class="code-block language-javascript">
@@ -86,31 +87,30 @@ Domma.elements.backToTop('#back-to-top', {
         <p class="mb-4">Build a back to top button with custom styling and callbacks.</p>
 
         <div class="demo-area">
-            <div style="height: 400px; overflow-y: auto; border: 1px solid var(--dm-border); padding: 1rem; position: relative;"
+          <div class="scrollable-demo-area-400"
                  id="tutorial-container">
                 <div style="height: 1500px;">
                     <h3>Long Article Content</h3>
                     <p>Scroll down to see the custom back to top button...</p>
-                    <div style="margin-top: 200px;">
+                  <div class="mt-200">
                         <h4>Section 1</h4>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                     </div>
-                    <div style="margin-top: 200px;">
+                  <div class="mt-200">
                         <h4>Section 2</h4>
                         <p>Sed do eiusmod tempor incididunt ut labore et dolore.</p>
                     </div>
-                    <div style="margin-top: 200px;">
+                  <div class="mt-200">
                         <h4>Section 3</h4>
                         <p>Ut enim ad minim veniam, quis nostrud exercitation.</p>
                     </div>
-                    <div style="margin-top: 200px;">
+                  <div class="mt-200">
                         <h4>Section 4</h4>
                         <p>Duis aute irure dolor in reprehenderit in voluptate.</p>
                     </div>
                 </div>
-                <button id="tutorial-back-to-top" class="btn btn-primary"
-                        style="display: none; position: absolute; bottom: 20px; right: 20px; border-radius: 50%; width: 50px; height: 50px; padding: 0;">
-                    <span style="font-size: 1.5rem;">↑</span>
+            <button id="tutorial-back-to-top" class="btn btn-primary back-to-top-btn">
+              <span class="text-2xl">↑</span>
                 </button>
             </div>
             <div id="tutorial-status" class="mt-3 p-3 bg-surface rounded text-center">
@@ -152,35 +152,31 @@ const backToTop = Domma.elements.backToTop('#back-to-top', {
                 <button id="show-bottom-right" class="btn btn-outline btn-sm">Bottom Right</button>
                 <button id="show-bottom-left" class="btn btn-outline btn-sm">Bottom Left</button>
             </div>
-            <div style="height: 300px; overflow-y: auto; border: 1px solid var(--dm-border); padding: 1rem; position: relative;"
+          <div class="scrollable-demo-area-300"
                  id="position-demo">
-                <div style="height: 800px;">
+            <div class="scroll-content-800">
                     <p>Scroll to see buttons at different positions...</p>
-                    <p style="margin-top: 200px;">Bottom right button appears first</p>
-                    <p style="margin-top: 300px;">You should see the buttons now</p>
+              <p class="mt-200">Bottom right button appears first</p>
+              <p class="mt-300">You should see the buttons now</p>
                 </div>
-                <button id="btn-bottom-right" class="back-to-top-btn"
-                        style="display: none; position: absolute; bottom: 20px; right: 20px;">↑
-                </button>
-                <button id="btn-bottom-left" class="back-to-top-btn"
-                        style="display: none; position: absolute; bottom: 20px; left: 20px;">↑
-                </button>
+            <button id="btn-bottom-right" class="btn btn-primary back-to-top-btn">↑</button>
+            <button id="btn-bottom-left" class="btn btn-primary back-to-top-btn">↑</button>
             </div>
         </div>
 
         <h3 class="category-title">Custom Duration</h3>
         <div class="demo-area mb-4">
-            <div style="height: 300px; overflow-y: auto; border: 1px solid var(--dm-border); padding: 1rem; position: relative;"
+          <div class="scrollable-demo-area-300"
                  id="duration-demo">
-                <div style="height: 1000px;">
+            <div class="scroll-content-1000">
                     <p>Try different scroll speeds...</p>
                     <div class="flex gap-2 mt-4">
                         <button class="btn btn-sm btn-outline" onclick="durationBtn.scroll(200)">Fast (200ms)</button>
                         <button class="btn btn-sm btn-outline" onclick="durationBtn.scroll(1000)">Slow (1000ms)</button>
                     </div>
-                    <p style="margin-top: 300px;">Scroll down to see the button</p>
+              <p class="mt-300">Scroll down to see the button</p>
                 </div>
-                <button id="duration-btn" class="back-to-top-btn" style="display: none;">↑</button>
+            <button id="duration-btn" class="btn btn-primary back-to-top-btn">↑</button>
             </div>
         </div>
 
@@ -192,13 +188,13 @@ const backToTop = Domma.elements.backToTop('#back-to-top', {
                 <button id="prog-toggle" class="btn btn-outline btn-sm">Toggle</button>
                 <button id="prog-scroll" class="btn btn-outline btn-sm">Scroll to Top</button>
             </div>
-            <div style="height: 300px; overflow-y: auto; border: 1px solid var(--dm-border); padding: 1rem; position: relative;"
+          <div class="scrollable-demo-area-300"
                  id="programmatic-demo">
-                <div style="height: 800px;">
+            <div class="scroll-content-800">
                     <p>Use buttons above to control the back to top button</p>
-                    <p style="margin-top: 600px;">Scroll position tracked</p>
+              <p class="mt-600">Scroll position tracked</p>
                 </div>
-                <button id="programmatic-btn" class="back-to-top-btn" style="display: none;">↑</button>
+            <button id="programmatic-btn" class="btn btn-primary back-to-top-btn">↑</button>
             </div>
         </div>
     </div>
@@ -376,7 +372,7 @@ $.setup({
         <h2 class="text-xl font-semibold m-0">Related Elements</h2>
     </div>
     <div class="card-body">
-        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+      <div class="grid grid-cols-1 gap-4" class="grid-auto-fit-250">
             <a href="../navbar/index.html" class="card card-hover">
                 <div class="card-body">
                     <h3 class="card-title">Navbar</h3>

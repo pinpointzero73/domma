@@ -31,7 +31,11 @@ global.__BUILD_DATE__ = formatDate(new Date());
 global.__BUILD_COMMIT__ = getGitCommit();
 
 // Setup JSDOM environment
-const dom = new JSDOM(`<!DOCTYPE html>
+let domInstance;
+let localStorageStore = {};
+
+function setupJSDOM() {
+  domInstance = new JSDOM(`<!DOCTYPE html>
     <body>
         <div id="test"></div>
         <div id="test-container">
@@ -45,13 +49,18 @@ const dom = new JSDOM(`<!DOCTYPE html>
         </div>
     </body>
 `);
-global.window = dom.window;
-global.document = dom.window.document;
-global.HTMLElement = dom.window.HTMLElement;
-global.NodeList = dom.window.NodeList;
-global.HTMLCollection = dom.window.HTMLCollection;
-global.Event = dom.window.Event;
-global.CustomEvent = dom.window.CustomEvent;
+  global.window = domInstance.window;
+  global.document = domInstance.window.document;
+  global.HTMLElement = domInstance.window.HTMLElement;
+  global.NodeList = domInstance.window.NodeList;
+  global.HTMLCollection = domInstance.window.HTMLCollection;
+  global.Event = domInstance.window.Event;
+  global.CustomEvent = domInstance.window.CustomEvent;
+  global.MouseEvent = domInstance.window.MouseEvent; // Ensure MouseEvent is defined globally
+}
+
+// Initial setup
+setupJSDOM();
 
 // Mock fetch API
 global.fetch = async (url, options) => {
@@ -86,27 +95,34 @@ global.fetch = async (url, options) => {
 
 // Mock localStorage
 const localStorageMock = (function () {
-    let store = {};
     return {
         getItem: function (key) {
-            return store[key] || null;
+          return localStorageStore[key] || null;
         },
         setItem: function (key, value) {
-            store[key] = value.toString();
+          localStorageStore[key] = value.toString();
         },
         removeItem: function (key) {
-            delete store[key];
+          delete localStorageStore[key];
         },
         clear: function () {
-            store = {};
+          localStorageStore = {};
         },
         key: function (i) {
-            return Object.keys(store)[i] || null;
+          return Object.keys(localStorageStore)[i] || null;
         },
         get length() {
-            return Object.keys(store).length;
+          return Object.keys(localStorageStore).length;
         }
     };
 })();
 
 global.localStorage = localStorageMock;
+
+// Function to reset DOM and localStorage before each test
+global.resetTestEnvironment = () => {
+  // Re-initialize JSDOM to get a fresh DOM state
+  setupJSDOM();
+  // Clear localStorage mock
+  localStorageMock.clear();
+};

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -24,7 +25,7 @@
             variants.
         </p>
 
-        <h3 class="category-title">Key Features</h3>
+      <h3 class="category-title-style">Key Features</h3>
         <ul class="feature-list mb-4">
             <li><strong>CSS-Only</strong> - No JavaScript required</li>
             <li><strong>Colour Variants</strong> - Primary, success, danger, warning, info styles</li>
@@ -32,7 +33,7 @@
             <li><strong>Pill Style</strong> - Fully rounded corners for tags</li>
         </ul>
 
-        <h3 class="category-title">Basic Usage</h3>
+      <h3 class="category-title-style">Basic Usage</h3>
         <div class="code-block language-javascript">
             <pre><code>
 &lt;span class="badge"&gt;Default&lt;/span&gt;
@@ -48,8 +49,8 @@
         <h2 class="text-xl font-semibold m-0">Quick Start</h2>
     </div>
     <div class="card-body">
-        <h3 class="category-title">Simple Badge</h3>
-        <div class="demo-area mb-4 text-center">
+      <h3 class="category-title-style">Simple Badge</h3>
+      <div class="demo-area badge-text-center mb-4">
             <span class="badge badge-primary">New</span>
             <span class="badge badge-success">Active</span>
             <span class="badge badge-danger">Urgent</span>
@@ -72,27 +73,27 @@
         <p class="mb-4">Build a notification indicator with dynamic badge count.</p>
 
         <div class="demo-area mb-4">
-            <div style="max-width: 400px; margin: 0 auto;">
+          <div class="badge-card-width-center">
                 <div class="card">
                     <div class="card-body">
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="m-0">Notifications</h3>
                             <span id="notification-count" class="badge badge-danger">3</span>
                         </div>
-                        <ul style="list-style: none; padding: 0; margin: 0;">
-                            <li style="padding: 0.75rem; border-bottom: 1px solid var(--dm-border);">
+                      <ul class="list-none p-0 m-0">
+                        <li class="p-3 border-b border-dm-border">
                                 <div class="flex items-center justify-between">
                                     <span>New message received</span>
                                     <span class="badge badge-sm badge-primary">New</span>
                                 </div>
                             </li>
-                            <li style="padding: 0.75rem; border-bottom: 1px solid var(--dm-border);">
+                        <li class="p-3 border-b border-dm-border">
                                 <div class="flex items-center justify-between">
                                     <span>Task completed</span>
                                     <span class="badge badge-sm badge-success">Done</span>
                                 </div>
                             </li>
-                            <li style="padding: 0.75rem;">
+                        <li class="p-3">
                                 <div class="flex items-center justify-between">
                                     <span>Server alert</span>
                                     <span class="badge badge-sm badge-warning">Warning</span>
@@ -118,7 +119,7 @@
 const badge = document.querySelector('.badge');
 let count = 3;
 
-document.getElementById('clear-btn').addEventListener('click', () =&gt; {
+document.getElementById('clear-btn').addEventListener('click', () => {
     count = 0;
     badge.textContent = count;
     if (count === 0) {
@@ -137,8 +138,8 @@ document.getElementById('clear-btn').addEventListener('click', () =&gt; {
     </div>
     <div class="card-body">
 
-        <h3 class="category-title">Colour Variants</h3>
-        <div class="demo-area mb-4 text-center">
+      <h3 class="category-title-style">Colour Variants</h3>
+      <div class="demo-area badge-text-center mb-4">
             <span class="badge">Default</span>
             <span class="badge badge-primary">Primary</span>
             <span class="badge badge-success">Success</span>
@@ -147,23 +148,23 @@ document.getElementById('clear-btn').addEventListener('click', () =&gt; {
             <span class="badge badge-info">Info</span>
         </div>
 
-        <h3 class="category-title">Sizes</h3>
-        <div class="demo-area mb-4 text-center">
+      <h3 class="category-title-style">Sizes</h3>
+      <div class="demo-area badge-text-center mb-4">
             <span class="badge badge-sm badge-primary">Small</span>
             <span class="badge badge-primary">Default</span>
             <span class="badge badge-lg badge-primary">Large</span>
         </div>
 
-        <h3 class="category-title">Pill Style</h3>
-        <div class="demo-area mb-4 text-center">
+      <h3 class="category-title-style">Pill Style</h3>
+      <div class="demo-area badge-text-center mb-4">
             <span class="badge badge-pill badge-primary">JavaScript</span>
             <span class="badge badge-pill badge-success">CSS</span>
             <span class="badge badge-pill badge-info">HTML</span>
             <span class="badge badge-pill badge-warning">TypeScript</span>
         </div>
 
-        <h3 class="category-title">In Buttons</h3>
-        <div class="demo-area mb-4 text-center">
+      <h3 class="category-title-style">In Buttons</h3>
+      <div class="demo-area badge-text-center mb-4">
             <button class="btn btn-primary">
                 Messages <span class="badge badge-light">4</span>
             </button>
@@ -172,29 +173,29 @@ document.getElementById('clear-btn').addEventListener('click', () =&gt; {
             </button>
         </div>
 
-        <h3 class="category-title">Status Indicators</h3>
+      <h3 class="category-title-style">Status Indicators</h3>
         <div class="demo-area mb-4">
-            <div style="max-width: 400px; margin: 0 auto;">
-                <ul style="list-style: none; padding: 0; margin: 0;">
-                    <li style="padding: 0.75rem; border-bottom: 1px solid var(--dm-border);">
+          <div class="badge-card-width-center">
+            <ul class="list-none p-0 m-0">
+              <li class="p-3 border-b border-dm-border">
                         <div class="flex items-center justify-between">
                             <span>API Server</span>
                             <span class="badge badge-success">Online</span>
                         </div>
                     </li>
-                    <li style="padding: 0.75rem; border-bottom: 1px solid var(--dm-border);">
+              <li class="p-3 border-b border-dm-border">
                         <div class="flex items-center justify-between">
                             <span>Database</span>
                             <span class="badge badge-success">Connected</span>
                         </div>
                     </li>
-                    <li style="padding: 0.75rem; border-bottom: 1px solid var(--dm-border);">
+              <li class="p-3 border-b border-dm-border">
                         <div class="flex items-center justify-between">
                             <span>Cache Server</span>
                             <span class="badge badge-warning">Degraded</span>
                         </div>
                     </li>
-                    <li style="padding: 0.75rem;">
+              <li class="p-3">
                         <div class="flex items-center justify-between">
                             <span>Queue Worker</span>
                             <span class="badge badge-danger">Offline</span>
@@ -204,13 +205,13 @@ document.getElementById('clear-btn').addEventListener('click', () =&gt; {
             </div>
         </div>
 
-        <h3 class="category-title">Category Tags</h3>
-        <div class="demo-area text-center">
-            <div class="card" style="max-width: 500px; margin: 0 auto;">
+      <h3 class="category-title-style">Category Tags</h3>
+      <div class="demo-area badge-text-center">
+        <div class="card badge-card-width-center">
                 <div class="card-body">
                     <h3 class="card-title">Advanced JavaScript Patterns</h3>
                     <p class="card-text mb-3">Learn advanced techniques for modern web development</p>
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                  <div class="flex gap-2 flex-wrap">
                         <span class="badge badge-pill">JavaScript</span>
                         <span class="badge badge-pill">ES6+</span>
                         <span class="badge badge-pill">Async/Await</span>
@@ -228,14 +229,14 @@ document.getElementById('clear-btn').addEventListener('click', () =&gt; {
         <h2 class="text-xl font-semibold m-0">Best Practices</h2>
     </div>
     <div class="card-body">
-        <h3 class="category-title">Accessibility</h3>
+      <h3 class="category-title-style">Accessibility</h3>
         <ul class="mb-4">
             <li><strong>Descriptive Text</strong> - Use clear, meaningful badge text</li>
             <li><strong>Colour Independence</strong> - Don't rely solely on colour to convey meaning</li>
             <li><strong>ARIA Labels</strong> - Add <code>aria-label</code> for icon-only or number badges</li>
         </ul>
 
-        <h3 class="category-title">Design Guidelines</h3>
+      <h3 class="category-title-style">Design Guidelines</h3>
         <ul class="mb-4">
             <li><strong>Consistent Meaning</strong> - Use colour variants consistently (red for errors/urgent, green for
                 success/active)
@@ -245,7 +246,7 @@ document.getElementById('clear-btn').addEventListener('click', () =&gt; {
             <li><strong>Pill vs Default</strong> - Use pills for tags/categories, default for counts/status</li>
         </ul>
 
-        <h3 class="category-title">Common Use Cases</h3>
+      <h3 class="category-title-style">Common Use Cases</h3>
         <ul>
             <li><strong>Notification Counts</strong> - Unread messages, pending tasks</li>
             <li><strong>Status Indicators</strong> - Online/offline, active/inactive</li>
@@ -260,8 +261,8 @@ document.getElementById('clear-btn').addEventListener('click', () =&gt; {
         <h2 class="text-xl font-semibold m-0">CSS Classes</h2>
     </div>
     <div class="card-body">
-        <div class="option-table">
-            <table>
+      <div class="option-table-accordion">
+        <table class="api-table-accordion">
                 <thead>
                 <tr>
                     <th>Class</th>
@@ -343,7 +344,7 @@ $.setup({
 function updateBadge(count) {
     const $badge = $('#notification-badge');
     $badge.text(count);
-    $badge.css('display', count &gt; 0 ? 'inline-block' : 'none');
+    $badge.css('display', count > 0 ? 'inline-block' : 'none');
 }
 </code></pre>
         </div>
@@ -355,7 +356,7 @@ function updateBadge(count) {
         <h2 class="text-xl font-semibold m-0">Related Elements</h2>
     </div>
     <div class="card-body">
-        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+      <div class="grid grid-cols-1 gap-4 grid-auto-fit-250">
             <a href="../button-group/index.html" class="card card-hover">
                 <div class="card-body">
                     <h3 class="card-title">Button Group</h3>

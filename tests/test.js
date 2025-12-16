@@ -14,11 +14,13 @@ function assert(condition, message) {
 
 // Define Tests
 test('Domma selection', () => {
+  resetTestEnvironment();
     const el = Domma('#test');
     assert(el.elements.length === 1, 'Should select one element');
 });
 
 test('Domma text()', () => {
+  resetTestEnvironment();
     const el = Domma('#test');
     el.text('Hello');
     assert(document.getElementById('test').textContent === 'Hello', 'Should set text content');
@@ -26,6 +28,7 @@ test('Domma text()', () => {
 });
 
 test('Domma utils.merge()', () => {
+  resetTestEnvironment();
     const a = {x: 1};
     const b = {y: 2};
     const c = Domma.utils.merge({}, a, b);
@@ -34,23 +37,27 @@ test('Domma utils.merge()', () => {
 
 // Domma DOM CSS/Class
 test('dom.css()', () => {
+  resetTestEnvironment();
     const el = Domma('#test');
     el.css('color', 'red');
     assert(document.getElementById('test').style.color === 'red', 'Should set CSS property');
 });
 
 test('dom.addClass()', () => {
+  resetTestEnvironment();
     const el = Domma('#test');
     el.addClass('foo');
     assert(document.getElementById('test').classList.contains('foo'), 'Should add class');
 });
 
 test('dom.removeClass()', () => {
+  resetTestEnvironment();
     const el = Domma('#test').addClass('foo').removeClass('foo');
     assert(el.hasClass('foo') === false, 'should remove a class');
 });
 
 test('dom.toggleClass()', () => {
+  resetTestEnvironment();
     const el = Domma('#test').toggleClass('foo');
     assert(el.hasClass('foo') === true, 'should toggle a class on');
     el.toggleClass('foo');
@@ -58,6 +65,7 @@ test('dom.toggleClass()', () => {
 });
 
 test('dom.hasClass()', () => {
+  resetTestEnvironment();
     const el = Domma('#test').addClass('foo');
     assert(el.hasClass('foo') === true, 'should return true for an existing class');
     assert(el.hasClass('bar') === false, 'should return false for a nonexistent class');
@@ -65,33 +73,39 @@ test('dom.hasClass()', () => {
 
 // Array Utilities
 test('utils.chunk()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.chunk([1, 2, 3, 4, 5], 2);
     assert(result.length === 3, 'Should create 3 chunks');
     assert(result[0].length === 2, 'First chunk should have 2 items');
 });
 
 test('utils.compact()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.compact([0, 1, false, 2, '', 3, null]);
     assert(result.length === 3, 'Should remove falsy values');
 });
 
 test('utils.difference()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.difference([1, 2, 3], [2, 3, 4]);
     assert(result.length === 1 && result[0] === 1, 'Should return difference');
 });
 
 test('utils.differenceBy()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.differenceBy([2.1, 1.2], [2.3, 3.4], Math.floor);
     assert(result.length === 1 && result[0] === 1.2, 'should return difference by iteratee');
 });
 
 test('utils.differenceWith()', () => {
+  resetTestEnvironment();
     const objects = [{'x': 1, 'y': 2}, {'x': 2, 'y': 1}];
     const result = Domma.utils.differenceWith(objects, [{'x': 1, 'y': 2}], (a, b) => Domma.utils.isEqual(a, b));
     assert(result.length === 1 && result[0].x === 2, 'should return difference with comparator');
 });
 
 test('utils.dropRightWhile()', () => {
+  resetTestEnvironment();
     const users = [
         {'user': 'barney', 'active': true},
         {'user': 'fred', 'active': false},
@@ -102,6 +116,7 @@ test('utils.dropRightWhile()', () => {
 });
 
 test('utils.dropWhile()', () => {
+  resetTestEnvironment();
     const users = [
         {'user': 'barney', 'active': false},
         {'user': 'fred', 'active': false},
@@ -112,6 +127,7 @@ test('utils.dropWhile()', () => {
 });
 
 test('utils.eq()', () => {
+  resetTestEnvironment();
     const object = {'a': 1};
     assert(Domma.utils.eq(object, object) === true, 'should return true for same value');
     assert(Domma.utils.eq(object, {'a': 1}) === false, 'should return false for different objects with same values');
@@ -119,26 +135,31 @@ test('utils.eq()', () => {
 });
 
 test('utils.flatten()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.flatten([1, [2, [3, [4]]]]);
     assert(result.length === 3, 'Should flatten one level');
 });
 
 test('utils.flattenDeep()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.flattenDeep([1, [2, [3, [4]]]]);
     assert(result.length === 4, 'Should flatten all levels');
 });
 
 test('utils.uniq()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.uniq([1, 2, 2, 3, 3, 3]);
     assert(result.length === 3, 'Should remove duplicates');
 });
 
 test('utils.intersection()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.intersection([1, 2, 3], [2, 3, 4]);
     assert(result.length === 2, 'Should return common elements');
 });
 
 test('utils.concat()', () => {
+  resetTestEnvironment();
     const array = [1];
     const result = Domma.utils.concat(array, 2, [3], [[4]]);
     assert(result.length === 4, 'Should concatenate values and arrays');
@@ -146,6 +167,7 @@ test('utils.concat()', () => {
 });
 
 test('utils.drop()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.drop([1, 2, 3]);
     assert(result.length === 2 && result[0] === 2 && result[1] === 3, 'Should drop the first element');
     const result2 = Domma.utils.drop([1, 2, 3], 2);
@@ -153,6 +175,7 @@ test('utils.drop()', () => {
 });
 
 test('utils.dropRight()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.dropRight([1, 2, 3]);
     assert(result.length === 2 && result[0] === 1 && result[1] === 2, 'Should drop the last element');
     const result2 = Domma.utils.dropRight([1, 2, 3], 2);
@@ -160,6 +183,7 @@ test('utils.dropRight()', () => {
 });
 
 test('utils.fill()', () => {
+  resetTestEnvironment();
     const array = [1, 2, 3];
     Domma.utils.fill(array, 'a');
     assert(array[0] === 'a' && array[1] === 'a' && array[2] === 'a', 'Should fill the whole array');
@@ -169,6 +193,7 @@ test('utils.fill()', () => {
 });
 
 test('utils.findIndex()', () => {
+  resetTestEnvironment();
     const users = [
         {'user': 'barney', 'active': false},
         {'user': 'fred', 'active': false},
@@ -179,6 +204,7 @@ test('utils.findIndex()', () => {
 });
 
 test('utils.findLastIndex()', () => {
+  resetTestEnvironment();
     const users = [
         {'user': 'barney', 'active': true},
         {'user': 'fred', 'active': false},
@@ -189,12 +215,14 @@ test('utils.findLastIndex()', () => {
 });
 
 test('utils.first() and utils.head()', () => {
+  resetTestEnvironment();
     const array = [1, 2, 3];
     assert(Domma.utils.first(array) === 1, 'first() should return the first element');
     assert(Domma.utils.head(array) === 1, 'head() should be an alias for first() and return the first element');
 });
 
 test('utils.flattenDepth()', () => {
+  resetTestEnvironment();
     const array = [1, [2, [3, [4]], 5]];
     const result = Domma.utils.flattenDepth(array, 2);
     assert(result.length === 5, 'Should flatten to a depth of 2');
@@ -202,50 +230,59 @@ test('utils.flattenDepth()', () => {
 });
 
 test('utils.fromPairs()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.fromPairs([['a', 1], ['b', 2]]);
     assert(result.a === 1 && result.b === 2, 'Should create an object from key-value pairs');
 });
 
 test('utils.indexOf()', () => {
+  resetTestEnvironment();
     const array = [1, 2, 1, 2];
     assert(Domma.utils.indexOf(array, 2) === 1, 'Should return the first index of the value');
     assert(Domma.utils.indexOf(array, 2, 2) === 3, 'Should return the first index of the value at or after the fromIndex');
 });
 
 test('utils.initial()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.initial([1, 2, 3]);
     assert(result.length === 2 && result[0] === 1 && result[1] === 2, 'Should return all but the last element');
 });
 
 test('utils.join()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.join(['a', 'b', 'c'], '~');
     assert(result === 'a~b~c', 'Should join the array elements with the separator');
 });
 
 test('utils.last()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.last([1, 2, 3]);
     assert(result === 3, 'Should return the last element of the array');
 });
 
 test('utils.lastIndexOf()', () => {
+  resetTestEnvironment();
     const array = [1, 2, 1, 2];
     assert(Domma.utils.lastIndexOf(array, 1) === 2, 'Should return the last index of the value');
     assert(Domma.utils.lastIndexOf(array, 1, 1) === 0, 'Should return the last index of the value at or before the fromIndex');
 });
 
 test('utils.nth()', () => {
+  resetTestEnvironment();
     const array = ['a', 'b', 'c', 'd'];
     assert(Domma.utils.nth(array, 1) === 'b', 'Should return the element at the specified index');
     assert(Domma.utils.nth(array, -2) === 'c', 'Should return the element at the specified negative index');
 });
 
 test('utils.pull()', () => {
+  resetTestEnvironment();
     const array = ['a', 'b', 'c', 'a', 'b', 'c'];
     Domma.utils.pull(array, 'a', 'c');
     assert(array.length === 2 && array[0] === 'b' && array[1] === 'b', 'Should remove all given values from array');
 });
 
 test('utils.pullAt()', () => {
+  resetTestEnvironment();
     const array = ['a', 'b', 'c', 'd'];
     const pulled = Domma.utils.pullAt(array, [1, 3]);
     assert(array.length === 2 && array[0] === 'a' && array[1] === 'c', 'Should remove elements at the specified indexes');
@@ -253,6 +290,7 @@ test('utils.pullAt()', () => {
 });
 
 test('utils.reverse()', () => {
+  resetTestEnvironment();
     const array = [1, 2, 3];
     const reversed = Domma.utils.reverse(array);
     assert(reversed[0] === 3 && reversed[1] === 2 && reversed[2] === 1, 'Should reverse the array');
@@ -260,62 +298,74 @@ test('utils.reverse()', () => {
 });
 
 test('utils.slice()', () => {
+  resetTestEnvironment();
     const array = [1, 2, 3, 4];
     const sliced = Domma.utils.slice(array, 1, 3);
     assert(sliced.length === 2 && sliced[0] === 2 && sliced[1] === 3, 'Should return a slice of the array');
 });
 
 test('utils.tail()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.tail([1, 2, 3]);
     assert(result.length === 2 && result[0] === 2 && result[1] === 3, 'Should return all but the first element');
 });
 
 test('utils.take()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.take([1, 2, 3], 2);
     assert(result.length === 2 && result[0] === 1 && result[1] === 2, 'Should take the first two elements');
 });
 
 test('utils.takeRight()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.takeRight([1, 2, 3], 2);
     assert(result.length === 2 && result[0] === 2 && result[1] === 3, 'Should take the last two elements');
 });
 
 test('utils.union()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.union([2], [1, 2]);
     assert(result.length === 2 && result[0] === 2 && result[1] === 1, 'Should create an array of unique values');
 });
 
 test('utils.uniqBy()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.uniqBy([2.1, 1.2, 2.3], Math.floor);
     assert(result.length === 2 && result[0] === 2.1 && result[1] === 1.2, 'Should create a duplicate-free version of an array using an iteratee');
 });
 
 test('utils.without()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.without([2, 1, 2, 3], 1, 2);
     assert(result.length === 1 && result[0] === 3, 'Should create an array excluding all given values');
 });
 
 test('utils.xor()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.xor([2, 1], [2, 3]);
     assert(result.length === 2 && result.includes(1) && result.includes(3), 'Should create an array of unique values that is the symmetric difference of the given arrays');
 });
 
 test('utils.zip()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.zip(['a', 'b'], [1, 2], [true, false]);
     assert(result.length === 2 && result[0][0] === 'a' && result[1][2] === false, 'Should create an array of grouped elements');
 });
 
 test('utils.zipObject()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.zipObject(['a', 'b'], [1, 2]);
     assert(result.a === 1 && result.b === 2, 'Should create an object from arrays of keys and values');
 });
 
 test('utils.times()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.times(3, String);
     assert(result.length === 3 && result[0] === '0' && result[1] === '1' && result[2] === '2', 'Should invoke the iteratee n times');
 });
 
 test('utils.range()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.range(4);
     assert(result.length === 4 && result[3] === 3, 'Should create an array of numbers');
     const result2 = Domma.utils.range(-4);
@@ -323,6 +373,7 @@ test('utils.range()', () => {
 });
 
 test('utils.uniqueId()', () => {
+  resetTestEnvironment();
     const id1 = Domma.utils.uniqueId();
     const id2 = Domma.utils.uniqueId();
     assert(id1 !== id2, 'Should generate unique IDs');
@@ -332,11 +383,13 @@ test('utils.uniqueId()', () => {
 
 // Collection Utilities
 test('utils.countBy()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.countBy([6.1, 4.2, 6.3], Math.floor);
     assert(result[4] === 1 && result[6] === 2, 'Should count the occurrences of each element');
 });
 
 test('utils.each() and utils.forEach()', () => {
+  resetTestEnvironment();
     let sum = 0;
     Domma.utils.each([1, 2, 3], n => sum += n);
     assert(sum === 6, 'each() should iterate over each element');
@@ -347,6 +400,7 @@ test('utils.each() and utils.forEach()', () => {
 });
 
 test('utils.eachRight() and utils.forEachRight()', () => {
+  resetTestEnvironment();
     let result = '';
     Domma.utils.eachRight([1, 2, 3], n => result += n);
     assert(result === '321', 'eachRight() should iterate over each element in reverse');
@@ -357,11 +411,13 @@ test('utils.eachRight() and utils.forEachRight()', () => {
 });
 
 test('utils.every()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.every([true, 1, null, 'yes'], Boolean) === false, 'Should return false if not all elements pass the predicate');
     assert(Domma.utils.every([true, 1, 'yes'], Boolean) === true, 'Should return true if all elements pass the predicate');
 });
 
 test('utils.findLast()', () => {
+  resetTestEnvironment();
     const users = [{
         user: 'barney',
         active: true
@@ -377,6 +433,7 @@ test('utils.findLast()', () => {
 });
 
 test('utils.flatMap()', () => {
+  resetTestEnvironment();
     function duplicate(n) {
         return [n, n];
     }
@@ -386,6 +443,7 @@ test('utils.flatMap()', () => {
 });
 
 test('utils.flatMapDeep()', () => {
+  resetTestEnvironment();
     function duplicate(n) {
         return [[[n, n]]];
     }
@@ -395,12 +453,14 @@ test('utils.flatMapDeep()', () => {
 });
 
 test('utils.includes()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.includes([1, 2, 3], 1) === true, 'Should return true if the value is in the collection');
     assert(Domma.utils.includes([1, 2, 3], 1, 2) === false, 'Should return false if the value is not in the collection at or after the fromIndex');
     assert(Domma.utils.includes({'a': 1, 'b': 2}, 1) === true, 'Should work with objects');
 });
 
 test('utils.keyBy()', () => {
+  resetTestEnvironment();
     const array = [
         {'dir': 'left', 'code': 97},
         {'dir': 'right', 'code': 100}
@@ -410,6 +470,7 @@ test('utils.keyBy()', () => {
 });
 
 test('utils.orderBy()', () => {
+  resetTestEnvironment();
     const users = [
         {'user': 'fred', 'age': 48},
         {'user': 'barney', 'age': 34},
@@ -421,6 +482,7 @@ test('utils.orderBy()', () => {
 });
 
 test('utils.partition()', () => {
+  resetTestEnvironment();
     const users = [
         {'user': 'barney', 'age': 36, 'active': false},
         {'user': 'fred', 'age': 40, 'active': true},
@@ -432,12 +494,14 @@ test('utils.partition()', () => {
 });
 
 test('utils.reduceRight()', () => {
+  resetTestEnvironment();
     const array = [[0, 1], [2, 3], [4, 5]];
     const result = Domma.utils.reduceRight(array, (flattened, other) => flattened.concat(other), []);
     assert(result.length === 6 && result[0] === 4 && result[5] === 1, 'Should reduce a collection from right to left');
 });
 
 test('utils.reject()', () => {
+  resetTestEnvironment();
     const users = [
         {'user': 'barney', 'age': 36, 'active': false},
         {'user': 'fred', 'age': 40, 'active': true}
@@ -447,66 +511,78 @@ test('utils.reject()', () => {
 });
 
 test('utils.sample()', () => {
+  resetTestEnvironment();
     const array = [1, 2, 3, 4, 5];
     const result = Domma.utils.sample(array);
     assert(array.includes(result), 'Should return a random element from the collection');
 });
 
 test('utils.sampleSize()', () => {
+  resetTestEnvironment();
     const array = [1, 2, 3, 4, 5];
     const result = Domma.utils.sampleSize(array, 3);
     assert(result.length === 3, 'Should return a random sample of n elements from the collection');
 });
 
 test('utils.shuffle()', () => {
+  resetTestEnvironment();
     const array = [1, 2, 3, 4, 5];
     const result = Domma.utils.shuffle(array);
     assert(result.length === 5, 'Should return a shuffled array');
 });
 
 test('utils.size()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.size([1, 2, 3]) === 3, 'Should return the size of the collection');
     assert(Domma.utils.size({'a': 1, 'b': 2}) === 2, 'Should return the size of the object');
     assert(Domma.utils.size('pebbles') === 7, 'Should return the size of the string');
 });
 
 test('utils.some()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.some([null, 0, 'yes', false], Boolean) === true, 'Should return true if any element passes the predicate');
     assert(Domma.utils.some([null, 0, false], Boolean) === false, 'Should return false if no element passes the predicate');
 });
 
 test('utils.filter()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.filter([1, 2, 3, 4], n => n > 2);
     assert(result.length === 2, 'Should filter elements');
 });
 
 test('utils.find()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.find([1, 2, 3], n => n > 1);
     assert(result === 2, 'Should find first matching element');
 });
 
 test('utils.groupBy()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.groupBy([1.2, 2.1, 2.3], Math.floor);
     assert(result[1].length === 1 && result[2].length === 2, 'Should group by key');
 });
 
 test('utils.map()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.map([1, 2, 3], n => n * 2);
     assert(result[0] === 2 && result[2] === 6, 'Should map elements');
 });
 
 test('utils.reduce()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.reduce([1, 2, 3], (sum, n) => sum + n, 0);
     assert(result === 6, 'Should reduce to sum');
 });
 
 test('utils.sortBy()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.sortBy([{ n: 3 }, { n: 1 }, { n: 2 }], 'n');
     assert(result[0].n === 1, 'Should sort by property');
 });
 
 // Function Utilities
 test('utils.after()', () => {
+  resetTestEnvironment();
     const saves = ['profile', 'settings'];
     const done = Domma.utils.after(saves.length, () => {
         assert(true, 'should be called after all saves are done');
@@ -517,6 +593,7 @@ test('utils.after()', () => {
 });
 
 test('utils.ary()', () => {
+  resetTestEnvironment();
     const takesTwo = (a, b) => [a, b];
     const takesOne = Domma.utils.ary(takesTwo, 1);
     const result = takesOne(1, 2);
@@ -524,6 +601,7 @@ test('utils.ary()', () => {
 });
 
 test('utils.before()', () => {
+  resetTestEnvironment();
     let count = 0;
     const fn = Domma.utils.before(3, () => ++count);
     fn();
@@ -533,6 +611,7 @@ test('utils.before()', () => {
 });
 
 test('utils.bind()', () => {
+  resetTestEnvironment();
     const greet = function (greeting, punctuation) {
         return greeting + ' ' + this.user + punctuation;
     };
@@ -542,6 +621,7 @@ test('utils.bind()', () => {
 });
 
 test('utils.curry()', () => {
+  resetTestEnvironment();
     const abc = function (a, b, c) {
         return [a, b, c];
     };
@@ -551,6 +631,7 @@ test('utils.curry()', () => {
 });
 
 test('utils.curryRight()', () => {
+  resetTestEnvironment();
     const abc = function (a, b, c) {
         return [a, b, c];
     };
@@ -560,6 +641,7 @@ test('utils.curryRight()', () => {
 });
 
 test('utils.defer()', () => {
+  resetTestEnvironment();
     return new Promise(resolve => {
         let deferred = false;
         Domma.utils.defer((a) => {
@@ -572,6 +654,7 @@ test('utils.defer()', () => {
 });
 
 test('utils.delay()', () => {
+  resetTestEnvironment();
     return new Promise(resolve => {
         let delayed = false;
         Domma.utils.delay((a) => {
@@ -584,6 +667,7 @@ test('utils.delay()', () => {
 });
 
 test('utils.flip()', () => {
+  resetTestEnvironment();
     const flipped = Domma.utils.flip(function () {
         return Domma.utils.toArray(arguments);
     });
@@ -592,6 +676,7 @@ test('utils.flip()', () => {
 });
 
 test('utils.flow()', () => {
+  resetTestEnvironment();
     const add = (a, b) => a + b;
     const square = n => n * n;
     const addAndSquare = Domma.utils.flow(add, square);
@@ -600,6 +685,7 @@ test('utils.flow()', () => {
 });
 
 test('utils.compose()', () => {
+  resetTestEnvironment();
     const add5 = n => n + 5;
     const square = n => n * n;
     const squareAndAdd5 = Domma.utils.compose(add5, square);
@@ -608,6 +694,7 @@ test('utils.compose()', () => {
 });
 
 test('utils.negate()', () => {
+  resetTestEnvironment();
     const isEven = n => n % 2 == 0;
     const isOdd = Domma.utils.negate(isEven);
     assert(isOdd(1) === true, 'should create a function that negates the result of the predicate');
@@ -615,6 +702,7 @@ test('utils.negate()', () => {
 });
 
 test('utils.partial()', () => {
+  resetTestEnvironment();
     const greet = (greeting, name) => greeting + ' ' + name;
     const sayHelloTo = Domma.utils.partial(greet, 'hello');
     const result = sayHelloTo('fred');
@@ -622,6 +710,7 @@ test('utils.partial()', () => {
 });
 
 test('utils.partialRight()', () => {
+  resetTestEnvironment();
     const greet = (greeting, name) => greeting + ' ' + name;
     const greetFred = Domma.utils.partialRight(greet, 'fred');
     const result = greetFred('hi');
@@ -629,6 +718,7 @@ test('utils.partialRight()', () => {
 });
 
 test('utils.throttle()', () => {
+  resetTestEnvironment();
     return new Promise(resolve => {
         let callCount = 0;
         const throttled = Domma.utils.throttle(() => {
@@ -645,6 +735,7 @@ test('utils.throttle()', () => {
 });
 
 test('utils.unary()', () => {
+  resetTestEnvironment();
     const takesTwo = (a, b) => [a, b];
     const takesOne = Domma.utils.unary(takesTwo);
     const result = takesOne(1, 2);
@@ -652,6 +743,7 @@ test('utils.unary()', () => {
 });
 
 test('utils.wrap()', () => {
+  resetTestEnvironment();
     const p = Domma.utils.wrap(Domma.utils.escape, function (func, text) {
         return '<p>' + func(text) + '</p>';
     });
@@ -660,6 +752,7 @@ test('utils.wrap()', () => {
 });
 
 test('utils.debounce()', () => {
+  resetTestEnvironment();
     let count = 0;
     const fn = Domma.utils.debounce(() => count++, 10);
     assert(typeof fn === 'function', 'Should return a function');
@@ -667,6 +760,7 @@ test('utils.debounce()', () => {
 });
 
 test('utils.memoize()', () => {
+  resetTestEnvironment();
     let calls = 0;
     const fn = Domma.utils.memoize(n => { calls++; return n * 2; });
     fn(5);
@@ -675,6 +769,7 @@ test('utils.memoize()', () => {
 });
 
 test('utils.once()', () => {
+  resetTestEnvironment();
     let count = 0;
     const fn = Domma.utils.once(() => ++count);
     fn();
@@ -685,6 +780,7 @@ test('utils.once()', () => {
 
 // Object Utilities
 test('utils.assign()', () => {
+  resetTestEnvironment();
     function Foo() {
         this.a = 1;
     }
@@ -700,6 +796,7 @@ test('utils.assign()', () => {
 });
 
 test('utils.assignIn() and utils.extend()', () => {
+  resetTestEnvironment();
     function Foo() {
         this.a = 1;
     }
@@ -717,28 +814,33 @@ test('utils.assignIn() and utils.extend()', () => {
 });
 
 test('utils.at()', () => {
+  resetTestEnvironment();
     const object = {'a': [{'b': {'c': 3}}, 4]};
     const result = Domma.utils.at(object, ['a[0].b.c', 'a[1]']);
     assert(result.length === 2 && result[0] === 3 && result[1] === 4, 'should create an array of values corresponding to paths of object');
 });
 
 test('utils.clone()', () => {
+  resetTestEnvironment();
     const objects = [{'a': 1}, {'b': 2}];
     const shallow = Domma.utils.clone(objects);
     assert(shallow !== objects && shallow[0] === objects[0], 'should create a shallow clone');
 });
 
 test('utils.defaults()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.defaults({'a': 1}, {'b': 2}, {'a': 3});
     assert(result.a === 1 && result.b === 2, 'should assign source properties if missing on the destination object');
 });
 
 test('utils.defaultsDeep()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.defaultsDeep({'a': {'b': 2}}, {'a': {'b': 1, 'c': 3}});
     assert(result.a.b === 2 && result.a.c === 3, 'should recursively assign default properties');
 });
 
 test('utils.entries() and utils.toPairs()', () => {
+  resetTestEnvironment();
     function Foo() {
         this.a = 1;
         this.b = 2;
@@ -751,6 +853,7 @@ test('utils.entries() and utils.toPairs()', () => {
 });
 
 test('utils.findKey()', () => {
+  resetTestEnvironment();
     const users = {
         'barney': {'age': 36, 'active': true},
         'fred': {'age': 40, 'active': false},
@@ -761,6 +864,7 @@ test('utils.findKey()', () => {
 });
 
 test('utils.findLastKey()', () => {
+  resetTestEnvironment();
     const users = {
         'barney': {'age': 36, 'active': true},
         'fred': {'age': 40, 'active': false},
@@ -771,6 +875,7 @@ test('utils.findLastKey()', () => {
 });
 
 test('utils.forIn()', () => {
+  resetTestEnvironment();
     function Foo() {
         this.a = 1;
     }
@@ -784,6 +889,7 @@ test('utils.forIn()', () => {
 });
 
 test('utils.forOwn()', () => {
+  resetTestEnvironment();
     function Foo() {
         this.a = 1;
     }
@@ -797,18 +903,21 @@ test('utils.forOwn()', () => {
 });
 
 test('utils.invert()', () => {
+  resetTestEnvironment();
     const object = {'a': 1, 'b': 2, 'c': 1};
     const result = Domma.utils.invert(object);
     assert(result[1] === 'c' && result[2] === 'b', 'should create an object composed of the inverted keys and values of object');
 });
 
 test('utils.invertBy()', () => {
+  resetTestEnvironment();
     const object = {'a': 1, 'b': 2, 'c': 1};
     const result = Domma.utils.invertBy(object);
     assert(result[1].length === 2 && result[1].includes('a') && result[1].includes('c'), 'should create an object composed of the inverted keys and values of object');
 });
 
 test('utils.keys()', () => {
+  resetTestEnvironment();
     function Foo() {
         this.a = 1;
         this.b = 2;
@@ -820,6 +929,7 @@ test('utils.keys()', () => {
 });
 
 test('utils.keysIn()', () => {
+  resetTestEnvironment();
     function Foo() {
         this.a = 1;
         this.b = 2;
@@ -831,11 +941,13 @@ test('utils.keysIn()', () => {
 });
 
 test('utils.mapKeys()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.mapKeys({'a': 1, 'b': 2}, (value, key) => key + value);
     assert(result.a1 === 1 && result.b2 === 2, 'should create an object with the same values as object and keys generated by running each own enumerable property through iteratee');
 });
 
 test('utils.mapValues()', () => {
+  resetTestEnvironment();
     const users = {
         'fred': {'user': 'fred', 'age': 40},
         'pebbles': {'user': 'pebbles', 'age': 1}
@@ -845,24 +957,28 @@ test('utils.mapValues()', () => {
 });
 
 test('utils.omitBy()', () => {
+  resetTestEnvironment();
     const object = {'a': 1, 'b': '2', 'c': 3};
     const result = Domma.utils.omitBy(object, Domma.utils.isNumber);
     assert(Object.keys(result).length === 1 && result.b === '2', 'should create an object composed of the properties predicate does not return truthy for');
 });
 
 test('utils.pickBy()', () => {
+  resetTestEnvironment();
     const object = {'a': 1, 'b': '2', 'c': 3};
     const result = Domma.utils.pickBy(object, Domma.utils.isNumber);
     assert(Object.keys(result).length === 2 && result.a === 1 && result.c === 3, 'should create an object composed of the properties predicate returns truthy for');
 });
 
 test('utils.unset()', () => {
+  resetTestEnvironment();
     const object = {'a': [{'b': {'c': 7}}]};
     Domma.utils.unset(object, 'a[0].b.c');
     assert(object.a[0].b.c === undefined, 'should unset the value at path of object');
 });
 
 test('utils.setIfUndefined()', () => {
+  resetTestEnvironment();
     const object = {'a': [{'b': {'c': 3}}]};
     Domma.utils.setIfUndefined(object, 'a[0].b.d', 4);
     assert(object.a[0].b.d === 4, 'should set the value at path of object if the resolved value is undefined');
@@ -871,6 +987,7 @@ test('utils.setIfUndefined()', () => {
 });
 
 test('utils.values()', () => {
+  resetTestEnvironment();
     function Foo() {
         this.a = 1;
         this.b = 2;
@@ -882,6 +999,7 @@ test('utils.values()', () => {
 });
 
 test('utils.valuesIn()', () => {
+  resetTestEnvironment();
     function Foo() {
         this.a = 1;
         this.b = 2;
@@ -893,34 +1011,40 @@ test('utils.valuesIn()', () => {
 });
 
 test('utils.get()', () => {
+  resetTestEnvironment();
     const obj = { a: { b: { c: 3 } } };
     assert(Domma.utils.get(obj, 'a.b.c') === 3, 'Should get nested value');
     assert(Domma.utils.get(obj, 'a.b.d', 'default') === 'default', 'Should return default');
 });
 
 test('utils.set()', () => {
+  resetTestEnvironment();
     const obj = {};
     Domma.utils.set(obj, 'a.b.c', 1);
     assert(obj.a.b.c === 1, 'Should set nested value');
 });
 
 test('utils.has()', () => {
+  resetTestEnvironment();
     const obj = { a: { b: 2 } };
     assert(Domma.utils.has(obj, 'a.b') === true, 'Should find existing path');
     assert(Domma.utils.has(obj, 'a.c') === false, 'Should not find missing path');
 });
 
 test('utils.pick()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.pick({ a: 1, b: 2, c: 3 }, 'a', 'c');
     assert(result.a === 1 && result.c === 3 && result.b === undefined, 'Should pick properties');
 });
 
 test('utils.omit()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.omit({ a: 1, b: 2, c: 3 }, 'b');
     assert(result.a === 1 && result.c === 3 && result.b === undefined, 'Should omit properties');
 });
 
 test('utils.cloneDeep()', () => {
+  resetTestEnvironment();
     const obj = { a: { b: 2 } };
     const clone = Domma.utils.cloneDeep(obj);
     clone.a.b = 3;
@@ -929,66 +1053,78 @@ test('utils.cloneDeep()', () => {
 
 // Lang Utilities
 test('utils.isBoolean()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isBoolean(false) === true, 'should return true for a boolean primitive');
     assert(Domma.utils.isBoolean(null) === false, 'should return false for null');
 });
 
 test('utils.isDate()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isDate(new Date()) === true, 'should return true for a date object');
     assert(Domma.utils.isDate('Mon April 23 2012') === false, 'should return false for a string');
 });
 
 test('utils.isMatch()', () => {
+  resetTestEnvironment();
     const object = {'a': 1, 'b': 2};
     assert(Domma.utils.isMatch(object, {'b': 2}) === true, 'should perform a partial deep comparison between two objects');
     assert(Domma.utils.isMatch(object, {'b': 1}) === false, 'should return false if the objects do not match');
 });
 
 test('utils.isFinite()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isFinite(3) === true, 'should return true for a finite number');
     assert(Domma.utils.isFinite(Number.MIN_VALUE) === true, 'should return true for a very small number');
     assert(Domma.utils.isFinite(Infinity) === false, 'should return false for infinity');
 });
 
 test('utils.isFunction()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isFunction(Domma.utils.isFunction) === true, 'should return true for a function');
     assert(Domma.utils.isFunction(/abc/) === false, 'should return false for a regex');
 });
 
 test('utils.isInteger()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isInteger(3) === true, 'should return true for an integer');
     assert(Domma.utils.isInteger(Number.MIN_VALUE) === false, 'should return false for a float');
 });
 
 test('utils.isNaN()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isNaN(NaN) === true, 'should return true for NaN');
     assert(Domma.utils.isNaN(undefined) === false, 'should return false for undefined');
 });
 
 test('utils.isNil()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isNil(null) === true, 'should return true for null');
     assert(Domma.utils.isNil(undefined) === true, 'should return true for undefined');
     assert(Domma.utils.isNil(NaN) === false, 'should return false for NaN');
 });
 
 test('utils.isNull()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isNull(null) === true, 'should return true for null');
     assert(Domma.utils.isNull(undefined) === false, 'should return false for undefined');
 });
 
 test('utils.isNumber()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isNumber(3) === true, 'should return true for a number primitive');
     assert(Domma.utils.isNumber(Number.MIN_VALUE) === true, 'should return true for a number object');
     assert(Domma.utils.isNumber('3') === false, 'should return false for a string');
 });
 
 test('utils.isObject()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isObject({}) === true, 'should return true for an object');
     assert(Domma.utils.isObject([1, 2, 3]) === true, 'should return true for an array');
     assert(Domma.utils.isObject(null) === false, 'should return false for null');
 });
 
 test('utils.isPlainObject()', () => {
+  resetTestEnvironment();
     function Foo() {
         this.a = 1;
     }
@@ -998,38 +1134,45 @@ test('utils.isPlainObject()', () => {
 });
 
 test('utils.isRegExp()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isRegExp(/abc/) === true, 'should return true for a regex');
     assert(Domma.utils.isRegExp('/abc/') === false, 'should return false for a string');
 });
 
 test('utils.isString()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isString('abc') === true, 'should return true for a string primitive');
     assert(Domma.utils.isString(new String('abc')) === true, 'should return true for a string object');
     assert(Domma.utils.isString(1) === false, 'should return false for a number');
 });
 
 test('utils.isSymbol()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isSymbol(Symbol.iterator) === true, 'should return true for a symbol');
     assert(Domma.utils.isSymbol('abc') === false, 'should return false for a string');
 });
 
 test('utils.isUndefined()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isUndefined(undefined) === true, 'should return true for undefined');
     assert(Domma.utils.isUndefined(null) === false, 'should return false for null');
 });
 
 test('utils.isArray()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isArray([]) === true, 'Should detect array');
     assert(Domma.utils.isArray({}) === false, 'Should not detect object as array');
 });
 
 test('utils.isEmpty()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isEmpty([]) === true, 'Empty array should be empty');
     assert(Domma.utils.isEmpty({}) === true, 'Empty object should be empty');
     assert(Domma.utils.isEmpty([1]) === false, 'Non-empty array should not be empty');
 });
 
 test('utils.isEqual()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.isEqual({ a: 1 }, { a: 1 }) === true, 'Should compare equal objects');
     assert(Domma.utils.isEqual([1, 2], [1, 2]) === true, 'Should compare equal arrays');
     assert(Domma.utils.isEqual({ a: 1 }, { a: 2 }) === false, 'Should detect differences');
@@ -1037,55 +1180,65 @@ test('utils.isEqual()', () => {
 
 // Type Conversion Utilities
 test('utils.parseInt()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.parseInt('08') === 8, 'should convert a string to an integer');
     assert(Domma.utils.parseInt('0x10') === 16, 'should convert a hex string to an integer');
 });
 
 test('utils.toNumber()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.toNumber('3.2') === 3.2, 'should convert a string to a number');
     assert(Domma.utils.toNumber(Number.MIN_VALUE) === 5e-324, 'should handle number objects');
     assert(Domma.utils.isNaN(Domma.utils.toNumber('invalid')) === true, 'should return NaN for invalid strings');
 });
 
 test('utils.toInteger()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.toInteger(3.2) === 3, 'should convert a float to an integer');
     assert(Domma.utils.toInteger(Number.MIN_VALUE) === 0, 'should convert a very small number to 0');
     assert(Domma.utils.toInteger(Infinity) === Infinity, 'should handle infinity');
 });
 
 test('utils.toFinite()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.toFinite(3.2) === 3.2, 'should return a finite number');
     assert(Domma.utils.toFinite(Number.MIN_VALUE) === 5e-324, 'should handle very small numbers');
     assert(Domma.utils.toFinite(Infinity) === 1.7976931348623157e+308, 'should handle infinity');
 });
 
 test('utils.toSafeInteger()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.toSafeInteger(3.2) === 3, 'should convert a float to a safe integer');
     assert(Domma.utils.toSafeInteger(Number.MAX_SAFE_INTEGER + 1) === Number.MAX_SAFE_INTEGER, 'should cap the number at MAX_SAFE_INTEGER');
 });
 
 test('utils.toString()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.toString(null) === '', 'should convert null to an empty string');
     assert(Domma.utils.toString(-0) === '-0', 'should preserve the sign of -0');
     assert(Domma.utils.toString([1, 2, 3]) === '1,2,3', 'should convert an array to a string');
 });
 
 test('utils.toArray()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.toArray({'a': 1, 'b': 2}).length === 2, 'should convert an object to an array');
     assert(Domma.utils.toArray('abc').length === 3, 'should convert a string to an array');
 });
 
 test('utils.castArray()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.castArray(1).length === 1, 'should wrap a non-array value in an array');
     assert(Domma.utils.castArray([1, 2, 3]).length === 3, 'should return the same array if the value is already an array');
 });
 
 test('utils.toLength()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.toLength(3.2) === 3, 'should convert a float to a length');
     assert(Domma.utils.toLength(Number.MAX_VALUE) === 4294967295, 'should cap the length at MAX_ARRAY_LENGTH');
 });
 
 test('utils.toPlainObject()', () => {
+  resetTestEnvironment();
     function Foo() {
         this.a = 1;
     }
@@ -1097,81 +1250,98 @@ test('utils.toPlainObject()', () => {
 
 // Math Utilities
 test('utils.add()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.add(6, 4) === 10, 'should add two numbers');
 });
 
 test('utils.ceil()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.ceil(4.006) === 5, 'should compute number rounded up to precision');
     assert(Domma.utils.ceil(6.004, 2) === 6.01, 'should compute number rounded up to precision');
 });
 
 test('utils.divide()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.divide(6, 4) === 1.5, 'should divide two numbers');
 });
 
 test('utils.floor()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.floor(4.006) === 4, 'should compute number rounded down to precision');
     assert(Domma.utils.floor(0.046, 2) === 0.04, 'should compute number rounded down to precision');
 });
 
 test('utils.max()', () => {
+  resetTestEnvironment();
     const array = [4, 2, 8, 6];
     assert(Domma.utils.max(array) === 8, 'should compute the maximum value of array');
 });
 
 test('utils.maxBy()', () => {
+  resetTestEnvironment();
     const objects = [{'n': 1}, {'n': 2}];
     assert(Domma.utils.maxBy(objects, o => o.n).n === 2, 'should compute the maximum value of array with iteratee');
 });
 
 test('utils.meanBy()', () => {
+  resetTestEnvironment();
     const objects = [{'n': 4}, {'n': 2}, {'n': 8}, {'n': 6}];
     assert(Domma.utils.meanBy(objects, o => o.n) === 5, 'should compute the mean using iteratee');
 });
 
 test('utils.min()', () => {
+  resetTestEnvironment();
     const array = [4, 2, 8, 6];
     assert(Domma.utils.min(array) === 2, 'should compute the minimum value of array');
 });
 
 test('utils.minBy()', () => {
+  resetTestEnvironment();
     const objects = [{'n': 1}, {'n': 2}];
     assert(Domma.utils.minBy(objects, o => o.n).n === 1, 'should compute the minimum value of array with iteratee');
 });
 
 test('utils.multiply()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.multiply(6, 4) === 24, 'should multiply two numbers');
 });
 
 test('utils.round()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.round(4.006) === 4, 'should compute number rounded to precision');
     assert(Domma.utils.round(4.006, 2) === 4.01, 'should compute number rounded to precision');
 });
 
 test('utils.subtract()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.subtract(6, 4) === 2, 'should subtract two numbers');
 });
 
 test('utils.sumBy()', () => {
+  resetTestEnvironment();
     const objects = [{'n': 4}, {'n': 2}, {'n': 8}, {'n': 6}];
     assert(Domma.utils.sumBy(objects, o => o.n) === 20, 'should compute the sum using iteratee');
 });
 
 test('utils.sum()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.sum([1, 2, 3, 4]) === 10, 'Should sum array');
 });
 
 test('utils.mean()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.mean([1, 2, 3, 4, 5]) === 3, 'Should compute mean');
 });
 
 test('utils.clamp()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.clamp(10, 0, 5) === 5, 'Should clamp to upper bound');
     assert(Domma.utils.clamp(-5, 0, 5) === 0, 'Should clamp to lower bound');
 });
 
 // Number Utilities
 test('utils.inRange()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.inRange(3, 2, 4) === true, 'should return true if the number is in range');
     assert(Domma.utils.inRange(4, 8) === true, 'should return true if the number is in range');
     assert(Domma.utils.inRange(4, 2) === false, 'should return false if the number is not in range');
@@ -1179,6 +1349,7 @@ test('utils.inRange()', () => {
 });
 
 test('utils.random()', () => {
+  resetTestEnvironment();
     const result = Domma.utils.random(5);
     assert(result >= 0 && result <= 5, 'should return a random number between 0 and 5');
     const result2 = Domma.utils.random(5, 10);
@@ -1189,50 +1360,60 @@ test('utils.random()', () => {
 
 // String Utilities
 test('utils.endsWith()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.endsWith('abc', 'c') === true, 'should return true if the string ends with the target');
     assert(Domma.utils.endsWith('abc', 'b') === false, 'should return false if the string does not end with the target');
     assert(Domma.utils.endsWith('abc', 'b', 2) === true, 'should return true if the string ends with the target at the given position');
 });
 
 test('utils.escape()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.escape('fred, barney, & pebbles') === 'fred, barney, &amp; pebbles', 'should convert characters to HTML entities');
 });
 
 test('utils.lowerCase()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.lowerCase('--Foo-Bar--') === 'foo bar', 'should convert a string to lower case');
     assert(Domma.utils.lowerCase('fooBar') === 'foo bar', 'should convert a string to lower case');
     assert(Domma.utils.lowerCase('__FOO_BAR__') === 'foo bar', 'should convert a string to lower case');
 });
 
 test('utils.lowerFirst()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.lowerFirst('Fred') === 'fred', 'should convert the first character of a string to lower case');
     assert(Domma.utils.lowerFirst('FRED') === 'fRED', 'should convert the first character of a string to lower case');
 });
 
 test('utils.pad()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.pad('abc', 8) === '  abc   ', 'should pad a string on the left and right sides if it is shorter than length');
     assert(Domma.utils.pad('abc', 8, '_-') === '_-abc_-_', 'should pad a string with the given characters');
 });
 
 test('utils.padEnd()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.padEnd('abc', 6) === 'abc   ', 'should pad a string on the right side if it is shorter than length');
     assert(Domma.utils.padEnd('abc', 6, '_-') === 'abc_-_', 'should pad a string with the given characters');
 });
 
 test('utils.padStart()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.padStart('abc', 6) === '   abc', 'should pad a string on the left side if it is shorter than length');
     assert(Domma.utils.padStart('abc', 6, '_-') === '_-_abc', 'should pad a string with the given characters');
 });
 
 test('utils.repeat()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.repeat('*', 3) === '***', 'should repeat the given string n times');
 });
 
 test('utils.replace()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.replace('Hi Fred', 'Fred', 'Barney') === 'Hi Barney', 'should replace matches for pattern in string with replacement');
 });
 
 test('utils.snakeCase()', () => {
+  resetTestEnvironment();
     assert(Domma.utils.snakeCase('Foo Bar') === 'foo_bar', 'should convert a string to snake case');
     assert(Domma.utils.snakeCase('fooBar') === 'foo_bar', 'should convert a string to snake case');
     assert(Domma.utils.snakeCase('--FOO-BAR--') === 'foo_bar', 'should convert a string to snake case');
@@ -1576,7 +1757,8 @@ test('dom.insertBefore()', () => {
 });
 
 test('dom.wrap()', () => {
-    Domma('#test').html('<p>hello</p>'); // Clean up and setup
+  Domma('#test').html(''); // Clean up
+  Domma('#test').html('<p>hello</p>'); // Setup
     Domma('#test p').wrap('<div class="wrapper"></div>');
     assert(Domma('#test .wrapper').length === 1, 'should wrap each element with the given structure');
     assert(Domma('#test .wrapper p').length === 1, 'should have the original element inside the wrapper');

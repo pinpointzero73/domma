@@ -6,104 +6,15 @@
     <title>HTTP - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
     <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-    <style>
-        .hero {
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .hero code {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--dm-radius-full);
-        }
-
-        .method-badge {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: var(--dm-radius-sm);
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-xs);
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .method-get {
-            background: color-mix(in srgb, var(--dm-success) 20%, transparent);
-            color: var(--dm-success);
-        }
-
-        .method-post {
-            background: color-mix(in srgb, var(--dm-info) 20%, transparent);
-            color: var(--dm-info);
-        }
-
-        .method-put {
-            background: color-mix(in srgb, var(--dm-warning) 20%, transparent);
-            color: var(--dm-warning);
-        }
-
-        .method-delete {
-            background: color-mix(in srgb, var(--dm-danger) 20%, transparent);
-            color: var(--dm-danger);
-        }
-
-        .response-area {
-            background: var(--dm-gray-900);
-            color: var(--dm-gray-100);
-            padding: var(--dm-space-4);
-            border-radius: var(--dm-radius-md);
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            max-height: 300px;
-            overflow: auto;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        .response-area.loading {
-            color: var(--dm-gray-500);
-        }
-
-        .response-area.error {
-            color: var(--dm-danger);
-        }
-
-        .demo-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--dm-space-4);
-        }
-
-        @media (max-width: 768px) {
-            .demo-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body data-layout="showcase" data-layout-variant="subpage">
 
 <!-- Hero Section -->
-<div class="hero">
+<div class="hero grid-hero-style">
     <h1>HTTP Client</h1>
     <p>Fetch-based HTTP client for making API requests with Promises and async/await support.</p>
     <p><code>Domma.http</code></p>
@@ -143,22 +54,22 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td><span class="method-badge method-get">GET</span></td>
+                  <td><span class="http-method-badge http-method-get">GET</span></td>
                     <td><code>http.get(url, config)</code></td>
                     <td>Fetch data from a URL</td>
                 </tr>
                 <tr>
-                    <td><span class="method-badge method-post">POST</span></td>
+                  <td><span class="http-method-badge http-method-post">POST</span></td>
                     <td><code>http.post(url, data, config)</code></td>
                     <td>Send data to create a resource</td>
                 </tr>
                 <tr>
-                    <td><span class="method-badge method-put">PUT</span></td>
+                  <td><span class="http-method-badge http-method-put">PUT</span></td>
                     <td><code>http.put(url, data, config)</code></td>
                     <td>Send data to update a resource</td>
                 </tr>
                 <tr>
-                    <td><span class="method-badge method-delete">DELETE</span></td>
+                  <td><span class="http-method-badge http-method-delete">DELETE</span></td>
                     <td><code>http.delete(url, config)</code></td>
                     <td>Delete a resource</td>
                 </tr>
@@ -184,14 +95,14 @@
     <section class="card mb-6" data-section="GET Fetch Data">
         <div class="card-header">
             <h2 class="text-xl font-semibold">
-                <span class="method-badge method-get">GET</span>
+              <span class="http-method-badge http-method-get">GET</span>
                 Fetch Data
             </h2>
         </div>
         <div class="card-body">
             <p class="mb-4">Fetch posts from JSONPlaceholder API:</p>
 
-            <div class="demo-grid">
+          <div class="http-demo-grid">
                 <div>
                     <pre class="code-block language-javascript mb-4">// Fetch a single post
 const post = await Domma.http.get(
@@ -210,7 +121,7 @@ const posts = await Domma.http.get(
                 </div>
                 <div>
                     <label class="form-label">Response:</label>
-                    <div class="response-area" id="get-response">Click "Fetch Posts" to see the response...</div>
+                  <div class="http-response-area" id="get-response">Click "Fetch Posts" to see the response...</div>
                 </div>
             </div>
         </div>
@@ -220,14 +131,14 @@ const posts = await Domma.http.get(
     <section class="card mb-6" data-section="POST Create Resource">
         <div class="card-header">
             <h2 class="text-xl font-semibold">
-                <span class="method-badge method-post">POST</span>
+              <span class="http-method-badge http-method-post">POST</span>
                 Create Resource
             </h2>
         </div>
         <div class="card-body">
             <p class="mb-4">Create a new post (simulated with JSONPlaceholder):</p>
 
-            <div class="demo-grid">
+          <div class="http-demo-grid">
                 <div>
                     <div class="form-group mb-3">
                         <label class="form-label">Title</label>
@@ -252,7 +163,7 @@ const posts = await Domma.http.get(
                 </div>
                 <div>
                     <label class="form-label">Response:</label>
-                    <div class="response-area" id="post-response">Click "Create Post" to see the response...</div>
+                  <div class="http-response-area" id="post-response">Click "Create Post" to see the response...</div>
                 </div>
             </div>
         </div>
@@ -262,14 +173,14 @@ const posts = await Domma.http.get(
     <section class="card mb-6" data-section="PUT Update Resource">
         <div class="card-header">
             <h2 class="text-xl font-semibold">
-                <span class="method-badge method-put">PUT</span>
+              <span class="http-method-badge method-put">PUT</span>
                 Update Resource
             </h2>
         </div>
         <div class="card-body">
             <p class="mb-4">Update an existing post:</p>
 
-            <div class="demo-grid">
+          <div class="http-demo-grid">
                 <div>
                     <pre class="code-block language-javascript mb-4">const updated = await Domma.http.put(
     'https://jsonplaceholder.typicode.com/posts/1',
@@ -287,7 +198,7 @@ const posts = await Domma.http.get(
                 </div>
                 <div>
                     <label class="form-label">Response:</label>
-                    <div class="response-area" id="put-response">Click "Update Post" to see the response...</div>
+                  <div class="http-response-area" id="put-response">Click "Update Post" to see the response...</div>
                 </div>
             </div>
         </div>
@@ -297,14 +208,14 @@ const posts = await Domma.http.get(
     <section class="card mb-6" data-section="DELETE Delete Resource">
         <div class="card-header">
             <h2 class="text-xl font-semibold">
-                <span class="method-badge method-delete">DELETE</span>
+              <span class="http-method-badge method-delete">DELETE</span>
                 Delete Resource
             </h2>
         </div>
         <div class="card-body">
             <p class="mb-4">Delete a post:</p>
 
-            <div class="demo-grid">
+          <div class="http-demo-grid">
                 <div>
                     <pre class="code-block language-javascript mb-4">await Domma.http.delete(
     'https://jsonplaceholder.typicode.com/posts/1'
@@ -317,7 +228,7 @@ const posts = await Domma.http.get(
                 </div>
                 <div>
                     <label class="form-label">Response:</label>
-                    <div class="response-area" id="delete-response">Click "Delete Post" to see the response...</div>
+                  <div class="http-response-area" id="delete-response">Click "Delete Post" to see the response...</div>
                 </div>
             </div>
         </div>
@@ -331,7 +242,7 @@ const posts = await Domma.http.get(
         <div class="card-body">
             <p class="mb-4">Handle errors with try/catch:</p>
 
-            <div class="demo-grid">
+          <div class="http-demo-grid">
                 <div>
                     <pre class="code-block language-javascript mb-4">try {
     const data = await Domma.http.get(
@@ -348,7 +259,7 @@ const posts = await Domma.http.get(
                 </div>
                 <div>
                     <label class="form-label">Response:</label>
-                    <div class="response-area" id="error-response">Click to trigger an error...</div>
+                  <div class="http-response-area" id="error-response">Click to trigger an error...</div>
                 </div>
             </div>
         </div>
@@ -390,7 +301,7 @@ const xml = await Domma.http.post('/api/xml', xmlData, {
                 maintainability and testability.
             </p>
 
-            <h4 class="font-semibold mb-3">API Service Class</h4>
+          <h4 class="category-title-style mb-3">API Service Class</h4>
             <pre class="code-block language-javascript">// Create a service class for your API
 class UserService {
     constructor(baseURL = '/api') {
@@ -427,7 +338,7 @@ const userService = new UserService();
 const users = await userService.getAll();
 const user = await userService.getById(123);</pre>
 
-            <h4 class="font-semibold mb-3 mt-4">Centralized API Configuration</h4>
+          <h4 class="category-title-style mb-3 mt-4">Centralized API Configuration</h4>
             <pre class="code-block language-javascript">// Define all API endpoints in config
 const apiConfig = {
     baseURL: 'https://api.example.com',
@@ -494,7 +405,7 @@ const newUser = await api.request('POST', apiConfig.endpoints.users.create, {
     email: 'alice@example.com'
 });</pre>
 
-            <h4 class="font-semibold mb-3 mt-4">Using $.setup() for API Interactions</h4>
+          <h4 class="category-title-style mb-3 mt-4">Using $.setup() for API Interactions</h4>
             <pre class="code-block language-javascript">// Declaratively handle API-driven UI interactions
 $.setup({
     '#user-list': {
@@ -551,7 +462,7 @@ $.setup({
     }
 });</pre>
 
-            <h4 class="font-semibold mb-3 mt-4">Request/Response Interceptor Pattern</h4>
+          <h4 class="category-title-style mb-3 mt-4">Request/Response Interceptor Pattern</h4>
             <pre class="code-block language-javascript">// Wrap Domma.http with interceptors
 class HTTPClient {
     constructor() {
@@ -635,7 +546,7 @@ client.addErrorInterceptor(async (error) => {
     return error;
 });</pre>
 
-            <h4 class="font-semibold mb-3 mt-4">Benefits of Service Layer Pattern</h4>
+          <h4 class="category-title-style mb-3 mt-4">Benefits of Service Layer Pattern</h4>
             <ul class="mb-4">
                 <li><strong>Centralization</strong> - All API logic in dedicated service classes</li>
                 <li><strong>Reusability</strong> - Share endpoints across components</li>
@@ -645,7 +556,7 @@ client.addErrorInterceptor(async (error) => {
                 <li><strong>Consistency</strong> - Uniform error handling and headers</li>
             </ul>
 
-            <h4 class="font-semibold mb-3 mt-4">Scattered Requests vs Service Layer</h4>
+          <h4 class="category-title-style mb-3 mt-4">Scattered Requests vs Service Layer</h4>
             <div class="grid grid-cols-1 grid-cols-md-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">Scattered (Hard to Maintain)</p>

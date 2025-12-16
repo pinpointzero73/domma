@@ -25,11 +25,11 @@
             text-align: center;
             padding: 2rem;
             background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
-            color: white;
+            color: var(--dm-white);
         }
 
         .hero-logo {
-            color: rgba(255, 255, 255, 0.85);
+            color: var(--dm-white-t85);
             margin-bottom: 1rem;
             animation: glow 3s ease-in-out infinite alternate;
         }
@@ -38,7 +38,7 @@
             font-size: 5rem;
             font-weight: 800;
             letter-spacing: -0.05em;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+            background: linear-gradient(135deg, var(--dm-white-t90) 0%, var(--dm-white-t70) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -48,10 +48,10 @@
 
         @keyframes glow {
             from {
-                filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+                filter: drop-shadow(0 0 20px var(--dm-white-t30));
             }
             to {
-                filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.5));
+                filter: drop-shadow(0 0 40px var(--dm-white-t50));
             }
         }
 
@@ -84,8 +84,8 @@
         }
 
         .feature {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--dm-white-t10);
+            border: 1px solid var(--dm-white-t20);
             border-radius: 12px;
             padding: 1.25rem 1.5rem;
             min-width: 120px;
@@ -96,7 +96,7 @@
 
         .feature:hover {
             transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.15);
+            background: var(--dm-white-t15);
         }
 
         .feature-icon {
@@ -117,8 +117,8 @@
         }
 
         .splash-carousel .carousel {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--dm-white-t10);
+            border: 1px solid var(--dm-white-t30);
             border-radius: 16px;
             overflow: hidden;
         }
@@ -130,7 +130,7 @@
 
         .slide-number {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--dm-white-t20);
             width: 2.5rem;
             height: 2.5rem;
             line-height: 2.5rem;
@@ -154,7 +154,7 @@
         }
 
         .splash-carousel .code-block {
-            background: rgba(1, 1, 1, 0.0125);
+            background: var(--dm-black-t1);
             border-radius: 8px;
             padding: 1rem 1.25rem;
             font-family: var(--dm-font-mono);
@@ -170,13 +170,13 @@
         }
 
         .splash-carousel .carousel-arrow {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--dm-white-t15);
+            color: var(--dm-white);
+            border: 1px solid var(--dm-white-t30);
         }
 
         .splash-carousel .carousel-arrow:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: var(--dm-white-t25);
         }
 
         .splash-carousel .carousel-indicators {
@@ -184,11 +184,11 @@
         }
 
         .splash-carousel .carousel-indicator {
-            background: rgba(255, 255, 255, 0.3);
+            background: var(--dm-white-t30);
         }
 
         .splash-carousel .carousel-indicator.active {
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--dm-white-t90);
         }
 
         .cta-group {
@@ -202,7 +202,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--dm-white-t95);
             color: var(--dm-primary-dark);
             text-decoration: none;
             font-size: 1.1rem;
@@ -210,22 +210,22 @@
             padding: 0.875rem 2rem;
             border-radius: 50px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 20px var(--dm-black-t20);
         }
 
         .cta:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 30px var(--dm-black-t30);
         }
 
         .cta-secondary {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.4);
+            background: var(--dm-white-t15);
+            color: var(--dm-white);
+            border: 2px solid var(--dm-white-t40);
         }
 
         .cta-secondary:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: var(--dm-white-t25);
         }
 
         .cta-arrow {
@@ -245,37 +245,12 @@
         }
 
         .badge {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--dm-white-t15);
+            border: 1px solid var(--dm-white-t20);
             padding: 0.5rem 1rem;
             border-radius: 50px;
             font-size: 0.8rem;
         }
-
-        /* Footer styles */
-        /*.footer {*/
-        /*    background: var(--dm-gray-900);*/
-        /*    color: var(--dm-gray-300);*/
-        /*    border-top: 1px solid var(--dm-gray-800);*/
-        /*}*/
-
-        /*.footer-content {*/
-        /*    display: flex;*/
-        /*    justify-content: space-between;*/
-        /*    align-items: center;*/
-        /*    padding: 1rem 2rem;*/
-        /*    max-width: 1200px;*/
-        /*    margin: 0 auto;*/
-        /*}*/
-
-        /*.footer-version {*/
-        /*    font-size: 0.8rem;*/
-        /*    opacity: 0.7;*/
-        /*}*/
-
-        /*.footer-copyright {*/
-        /*    font-size: 0.85rem;*/
-        /*}*/
 
         @media (max-width: 576px) {
             .footer-content {

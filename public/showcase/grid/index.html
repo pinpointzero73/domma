@@ -9,141 +9,15 @@
     <link rel="stylesheet" href="../../dist/grid.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-    <style>
-        .hero {
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            margin-bottom: 0;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .hero code {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.25rem 0.5rem;
-            border-radius: var(--dm-radius-sm);
-        }
-
-        /* Demo column styling */
-        .demo-col {
-            background: var(--dm-primary-bg, rgba(100, 149, 237, 0.15));
-            border: 1px solid var(--dm-primary);
-            border-radius: var(--dm-radius-sm);
-            padding: 1rem;
-            text-align: center;
-            font-size: 0.875rem;
-            color: var(--dm-text);
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .demo-col-alt {
-            background: var(--dm-success-bg, rgba(40, 167, 69, 0.15));
-            border-color: var(--dm-success);
-        }
-
-        .demo-col-warning {
-            background: var(--dm-warning-bg, rgba(255, 193, 7, 0.15));
-            border-color: var(--dm-warning);
-        }
-
-        /* For alignment demos */
-        .demo-col-tall {
-            min-height: 120px;
-        }
-
-        .demo-col-short {
-            min-height: 40px;
-        }
-
-        /* Section styling */
-        section {
-            margin-bottom: 3rem;
-        }
-
-        .section-header {
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--dm-border);
-        }
-
-        .section-header h2 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.5rem;
-        }
-
-        .section-header p {
-            margin: 0;
-            color: var(--dm-text-muted);
-        }
-
-        .demo-row {
-            margin-bottom: 1rem;
-        }
-
-        .code-label {
-            font-size: 0.75rem;
-            color: var(--dm-text-muted);
-            margin-bottom: 0.5rem;
-            font-family: monospace;
-        }
-
-        /* Container demo */
-        .container-demo {
-            background: var(--dm-gray-100);
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: var(--dm-radius-sm);
-            text-align: center;
-            border: 1px dashed var(--dm-border);
-        }
-
-        /* CSS Grid demo */
-        .grid-demo-item {
-            background: var(--dm-info-bg, rgba(23, 162, 184, 0.15));
-            border: 1px solid var(--dm-info);
-            border-radius: var(--dm-radius-sm);
-            padding: 1rem;
-            text-align: center;
-        }
-
-        /* Breakpoint indicator */
-        .breakpoint-indicator {
-            position: fixed;
-            bottom: 1rem;
-            left: 1rem;
-            background: var(--dm-gray-800);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: var(--dm-radius-full);
-            font-size: 0.75rem;
-            font-family: monospace;
-            z-index: 1000;
-        }
-    </style>
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="subpage">
 
 <!-- Hero Section -->
-<div class="hero">
+<div class="hero grid-hero-style">
     <h1>Grid System</h1>
     <p>12-column flexbox grid with mobile-first stacking. Columns stack below 576px, activate grid above.</p>
-    <p style="margin-top: 1rem;"><code>.row</code> <code>.col-*</code> <code>.offset-*</code></p>
+  <p class="mt-4"><code>.row</code> <code>.col-*</code> <code>.offset-*</code></p>
 </div>
 
 <!-- Main Content -->
@@ -151,7 +25,7 @@
 
     <!-- Basic Columns -->
     <section data-section="Basic Columns">
-        <div class="section-header">
+      <div class="section-header-grid">
             <h2>Basic Columns</h2>
             <p>Use <code>.col-*</code> classes to specify column widths (1-12)</p>
         </div>
@@ -159,53 +33,53 @@
         <div class="code-label">.row > .col-4 + .col-4 + .col-4 (3 equal columns)</div>
         <div class="row demo-row">
             <div class="col-4">
-                <div class="demo-col">.col-4</div>
+              <div class="demo-col-grid">.col-4</div>
             </div>
             <div class="col-4">
-                <div class="demo-col">.col-4</div>
+              <div class="demo-col-grid">.col-4</div>
             </div>
             <div class="col-4">
-                <div class="demo-col">.col-4</div>
+              <div class="demo-col-grid">.col-4</div>
             </div>
         </div>
 
         <div class="code-label">.row > .col-6 + .col-6 (2 equal columns)</div>
         <div class="row demo-row">
             <div class="col-6">
-                <div class="demo-col">.col-6</div>
+              <div class="demo-col-grid">.col-6</div>
             </div>
             <div class="col-6">
-                <div class="demo-col">.col-6</div>
+              <div class="demo-col-grid">.col-6</div>
             </div>
         </div>
 
         <div class="code-label">.row > .col-3 + .col-9 (sidebar + content)</div>
         <div class="row demo-row">
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-9">
-                <div class="demo-col">.col-9</div>
+              <div class="demo-col-grid">.col-9</div>
             </div>
         </div>
 
         <div class="code-label">.row > .col-2 + .col-8 + .col-2</div>
         <div class="row demo-row">
             <div class="col-2">
-                <div class="demo-col">.col-2</div>
+              <div class="demo-col-grid">.col-2</div>
             </div>
             <div class="col-8">
-                <div class="demo-col">.col-8</div>
+              <div class="demo-col-grid">.col-8</div>
             </div>
             <div class="col-2">
-                <div class="demo-col">.col-2</div>
+              <div class="demo-col-grid">.col-2</div>
             </div>
         </div>
     </section>
 
     <!-- Equal Width Columns -->
     <section data-section="Equal Width">
-        <div class="section-header">
+      <div class="section-header-grid">
             <h2>Equal Width Columns</h2>
             <p>Use <code>.col</code> for auto-sizing equal-width columns</p>
         </div>
@@ -213,39 +87,39 @@
         <div class="code-label">.row > .col + .col + .col (3 equal, auto-sized)</div>
         <div class="row demo-row">
             <div class="col">
-                <div class="demo-col">.col</div>
+              <div class="demo-col-grid">.col</div>
             </div>
             <div class="col">
-                <div class="demo-col">.col</div>
+              <div class="demo-col-grid">.col</div>
             </div>
             <div class="col">
-                <div class="demo-col">.col</div>
+              <div class="demo-col-grid">.col</div>
             </div>
         </div>
 
         <div class="code-label">.row > .col + .col + .col + .col + .col (5 equal)</div>
         <div class="row demo-row">
             <div class="col">
-                <div class="demo-col">.col</div>
+              <div class="demo-col-grid">.col</div>
             </div>
             <div class="col">
-                <div class="demo-col">.col</div>
+              <div class="demo-col-grid">.col</div>
             </div>
             <div class="col">
-                <div class="demo-col">.col</div>
+              <div class="demo-col-grid">.col</div>
             </div>
             <div class="col">
-                <div class="demo-col">.col</div>
+              <div class="demo-col-grid">.col</div>
             </div>
             <div class="col">
-                <div class="demo-col">.col</div>
+              <div class="demo-col-grid">.col</div>
             </div>
         </div>
     </section>
 
     <!-- Auto Width -->
     <section data-section="Auto Width">
-        <div class="section-header">
+      <div class="section-header-grid">
             <h2>Auto Width Columns</h2>
             <p>Use <code>.col-auto</code> for content-based width</p>
         </div>
@@ -253,20 +127,20 @@
         <div class="code-label">.row > .col-auto + .col + .col-auto</div>
         <div class="row demo-row">
             <div class="col-auto">
-                <div class="demo-col">Auto (short)</div>
+              <div class="demo-col-grid">Auto (short)</div>
             </div>
             <div class="col">
-                <div class="demo-col">.col (fills remaining)</div>
+              <div class="demo-col-grid">.col (fills remaining)</div>
             </div>
             <div class="col-auto">
-                <div class="demo-col">Auto (longer content here)</div>
+              <div class="demo-col-grid">Auto (longer content here)</div>
             </div>
         </div>
     </section>
 
     <!-- Offsets -->
     <section data-section="Offsets">
-        <div class="section-header">
+      <div class="section-header-grid">
             <h2>Offsets</h2>
             <p>Use <code>.offset-*</code> to push columns to the right</p>
         </div>
@@ -274,162 +148,159 @@
         <div class="code-label">.row > .col-4.offset-4 (centred column)</div>
         <div class="row demo-row">
             <div class="col-4 offset-4">
-                <div class="demo-col">.col-4.offset-4</div>
+              <div class="demo-col-grid">.col-4.offset-4</div>
             </div>
         </div>
 
         <div class="code-label">.row > .col-3.offset-3 + .col-3.offset-3</div>
         <div class="row demo-row">
             <div class="col-3 offset-3">
-                <div class="demo-col">.col-3.offset-3</div>
+              <div class="demo-col-grid">.col-3.offset-3</div>
             </div>
             <div class="col-3 offset-3">
-                <div class="demo-col">.col-3.offset-3</div>
+              <div class="demo-col-grid">.col-3.offset-3</div>
             </div>
         </div>
 
         <div class="code-label">.row > .col-6.offset-6 (right-aligned)</div>
         <div class="row demo-row">
             <div class="col-6 offset-6">
-                <div class="demo-col">.col-6.offset-6</div>
+              <div class="demo-col-grid">.col-6.offset-6</div>
             </div>
         </div>
     </section>
 
     <!-- Horizontal Alignment -->
     <section data-section="Horizontal Alignment">
-        <div class="section-header">
+      <div class="section-header-grid">
             <h2>Horizontal Alignment</h2>
             <p>Use <code>.row.justify-*</code> to align columns horizontally</p>
         </div>
 
         <div class="code-label">.row.justify-start</div>
-        <div class="row justify-start demo-row" style="background: var(--dm-gray-100); padding: 0.5rem;">
+      <div class="row justify-start demo-row grid-bg-gray-100 grid-padding-half grid-min-height-150">
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
         </div>
 
         <div class="code-label">.row.justify-center</div>
-        <div class="row justify-center demo-row" style="background: var(--dm-gray-100); padding: 0.5rem;">
+      <div class="row justify-center demo-row grid-bg-gray-100 grid-padding-half grid-min-height-150">
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
         </div>
 
         <div class="code-label">.row.justify-end</div>
-        <div class="row justify-end demo-row" style="background: var(--dm-gray-100); padding: 0.5rem;">
+      <div class="row justify-end demo-row grid-bg-gray-100 grid-padding-half grid-min-height-150">
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
         </div>
 
         <div class="code-label">.row.justify-between</div>
-        <div class="row justify-between demo-row" style="background: var(--dm-gray-100); padding: 0.5rem;">
+      <div class="row justify-between demo-row grid-bg-gray-100 grid-padding-half grid-min-height-150">
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
         </div>
 
         <div class="code-label">.row.justify-around</div>
-        <div class="row justify-around demo-row" style="background: var(--dm-gray-100); padding: 0.5rem;">
+      <div class="row justify-around demo-row grid-bg-gray-100 grid-padding-half grid-min-height-150">
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
         </div>
 
         <div class="code-label">.row.justify-evenly</div>
-        <div class="row justify-evenly demo-row" style="background: var(--dm-gray-100); padding: 0.5rem;">
+      <div class="row justify-evenly demo-row grid-bg-gray-100 grid-padding-half grid-min-height-150">
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
         </div>
     </section>
 
     <!-- Vertical Alignment -->
     <section data-section="Vertical Alignment">
-        <div class="section-header">
+      <div class="section-header-grid">
             <h2>Vertical Alignment</h2>
             <p>Use <code>.row.align-*</code> to align columns vertically</p>
         </div>
 
         <div class="code-label">.row.align-start</div>
-        <div class="row align-start demo-row"
-             style="background: var(--dm-gray-100); padding: 0.5rem; min-height: 150px;">
+      <div class="row align-start demo-row grid-bg-gray-100 grid-padding-half grid-min-height-150">
             <div class="col-4">
-                <div class="demo-col demo-col-short">Short</div>
+              <div class="demo-col-grid demo-col-short-grid">Short</div>
             </div>
             <div class="col-4">
-                <div class="demo-col demo-col-tall">Tall</div>
+              <div class="demo-col-grid demo-col-tall-grid">Tall</div>
             </div>
             <div class="col-4">
-                <div class="demo-col">Normal</div>
+              <div class="demo-col-grid">Normal</div>
             </div>
         </div>
 
         <div class="code-label">.row.align-center</div>
-        <div class="row align-center demo-row"
-             style="background: var(--dm-gray-100); padding: 0.5rem; min-height: 150px;">
+      <div class="row align-center demo-row grid-bg-gray-100 grid-padding-half grid-min-height-150">
             <div class="col-4">
-                <div class="demo-col demo-col-short">Short</div>
+              <div class="demo-col-grid demo-col-short-grid">Short</div>
             </div>
             <div class="col-4">
-                <div class="demo-col demo-col-tall">Tall</div>
+              <div class="demo-col-grid demo-col-tall-grid">Tall</div>
             </div>
             <div class="col-4">
-                <div class="demo-col">Normal</div>
+              <div class="demo-col-grid">Normal</div>
             </div>
         </div>
 
         <div class="code-label">.row.align-end</div>
-        <div class="row align-end demo-row" style="background: var(--dm-gray-100); padding: 0.5rem; min-height: 150px;">
+      <div class="row align-end demo-row grid-bg-gray-100 grid-padding-half grid-min-height-150">
             <div class="col-4">
-                <div class="demo-col demo-col-short">Short</div>
+              <div class="demo-col-grid demo-col-short-grid">Short</div>
             </div>
             <div class="col-4">
-                <div class="demo-col demo-col-tall">Tall</div>
+              <div class="demo-col-grid demo-col-tall-grid">Tall</div>
             </div>
             <div class="col-4">
-                <div class="demo-col">Normal</div>
+              <div class="demo-col-grid">Normal</div>
             </div>
         </div>
 
         <div class="code-label">.row.align-stretch (default)</div>
-        <div class="row align-stretch demo-row"
-             style="background: var(--dm-gray-100); padding: 0.5rem; min-height: 150px;">
+      <div class="row align-stretch demo-row grid-bg-gray-100 grid-padding-half grid-min-height-150">
             <div class="col-4">
-                <div class="demo-col" style="height: 100%;">Stretches</div>
+              <div class="demo-col-grid grid-height-100">Stretches</div>
             </div>
             <div class="col-4">
-                <div class="demo-col" style="height: 100%;">Stretches</div>
+              <div class="demo-col-grid grid-height-100">Stretches</div>
             </div>
             <div class="col-4">
-                <div class="demo-col" style="height: 100%;">Stretches</div>
+              <div class="demo-col-grid grid-height-100">Stretches</div>
             </div>
         </div>
     </section>
 
     <!-- Column Order -->
     <section data-section="Column Order">
-        <div class="section-header">
+      <div class="section-header-grid">
             <h2>Column Order</h2>
             <p>Use <code>.order-*</code> to reorder columns visually</p>
         </div>
@@ -437,46 +308,46 @@
         <div class="code-label">Natural order: 1, 2, 3</div>
         <div class="row demo-row">
             <div class="col-4">
-                <div class="demo-col">1st in HTML</div>
+              <div class="demo-col-grid">1st in HTML</div>
             </div>
             <div class="col-4">
-                <div class="demo-col demo-col-alt">2nd in HTML</div>
+              <div class="demo-col-grid demo-col-alt">2nd in HTML</div>
             </div>
             <div class="col-4">
-                <div class="demo-col demo-col-warning">3rd in HTML</div>
+              <div class="demo-col-grid demo-col-warning">3rd in HTML</div>
             </div>
         </div>
 
         <div class="code-label">.order-last on 1st, .order-first on 3rd</div>
         <div class="row demo-row">
             <div class="col-4 order-last">
-                <div class="demo-col">1st (order-last)</div>
+              <div class="demo-col-grid">1st (order-last)</div>
             </div>
             <div class="col-4">
-                <div class="demo-col demo-col-alt">2nd (no order)</div>
+              <div class="demo-col-grid demo-col-alt">2nd (no order)</div>
             </div>
             <div class="col-4 order-first">
-                <div class="demo-col demo-col-warning">3rd (order-first)</div>
+              <div class="demo-col-grid demo-col-warning">3rd (order-first)</div>
             </div>
         </div>
 
         <div class="code-label">.order-3, .order-1, .order-2</div>
         <div class="row demo-row">
             <div class="col-4 order-3">
-                <div class="demo-col">1st (order-3)</div>
+              <div class="demo-col-grid">1st (order-3)</div>
             </div>
             <div class="col-4 order-1">
-                <div class="demo-col demo-col-alt">2nd (order-1)</div>
+              <div class="demo-col-grid demo-col-alt">2nd (order-1)</div>
             </div>
             <div class="col-4 order-2">
-                <div class="demo-col demo-col-warning">3rd (order-2)</div>
+              <div class="demo-col-grid demo-col-warning">3rd (order-2)</div>
             </div>
         </div>
     </section>
 
     <!-- No Gutters -->
     <section data-section="No Gutters">
-        <div class="section-header">
+      <div class="section-header-grid">
             <h2>No Gutters</h2>
             <p>Use <code>.row.no-gutters</code> to remove column padding</p>
         </div>
@@ -484,33 +355,33 @@
         <div class="code-label">.row (with gutters - default)</div>
         <div class="row demo-row">
             <div class="col-4">
-                <div class="demo-col">.col-4</div>
+              <div class="demo-col-grid">.col-4</div>
             </div>
             <div class="col-4">
-                <div class="demo-col">.col-4</div>
+              <div class="demo-col-grid">.col-4</div>
             </div>
             <div class="col-4">
-                <div class="demo-col">.col-4</div>
+              <div class="demo-col-grid">.col-4</div>
             </div>
         </div>
 
         <div class="code-label">.row.no-gutters</div>
         <div class="row no-gutters demo-row">
             <div class="col-4">
-                <div class="demo-col" style="border-radius: 0;">.col-4</div>
+              <div class="demo-col-grid grid-border-radius-0">.col-4</div>
             </div>
             <div class="col-4">
-                <div class="demo-col" style="border-radius: 0;">.col-4</div>
+              <div class="demo-col-grid grid-border-radius-0">.col-4</div>
             </div>
             <div class="col-4">
-                <div class="demo-col" style="border-radius: 0;">.col-4</div>
+              <div class="demo-col-grid grid-border-radius-0">.col-4</div>
             </div>
         </div>
     </section>
 
     <!-- Gap Utilities -->
     <section data-section="Gap Utilities">
-        <div class="section-header">
+      <div class="section-header-grid">
             <h2>Gap Utilities</h2>
             <p>Use <code>.row.gap-*</code> for consistent spacing (uses CSS gap)</p>
         </div>
@@ -518,55 +389,55 @@
         <div class="code-label">.row.gap-0</div>
         <div class="row no-gutters gap-0 demo-row">
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
         </div>
 
         <div class="code-label">.row.gap-2</div>
         <div class="row no-gutters gap-2 demo-row">
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
         </div>
 
         <div class="code-label">.row.gap-4</div>
         <div class="row no-gutters gap-4 demo-row">
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
             <div class="col-3">
-                <div class="demo-col">.col-3</div>
+              <div class="demo-col-grid">.col-3</div>
             </div>
         </div>
     </section>
 
     <!-- Nested Grids -->
     <section data-section="Nested Grids">
-        <div class="section-header">
+      <div class="section-header-grid">
             <h2>Nested Grids</h2>
             <p>Place rows inside columns for complex layouts</p>
         </div>
@@ -574,17 +445,17 @@
         <div class="code-label">Nested: .col-8 contains another .row</div>
         <div class="row demo-row">
             <div class="col-4">
-                <div class="demo-col demo-col-alt">.col-4</div>
+              <div class="demo-col-grid demo-col-alt">.col-4</div>
             </div>
             <div class="col-8">
-                <div class="demo-col" style="padding: 0.5rem;">
+              <div class="demo-col-grid grid-padding-half">
                     <div>.col-8 with nested row:</div>
-                    <div class="row" style="margin-top: 0.5rem;">
+                <div class="row mt-2">
                         <div class="col-6">
-                            <div class="demo-col demo-col-warning">.col-6</div>
+                          <div class="demo-col-grid demo-col-warning">.col-6</div>
                         </div>
                         <div class="col-6">
-                            <div class="demo-col demo-col-warning">.col-6</div>
+                          <div class="demo-col-grid demo-col-warning">.col-6</div>
                         </div>
                     </div>
                 </div>
@@ -594,67 +465,67 @@
 
     <!-- Containers -->
     <section data-section="Containers">
-        <div class="section-header">
+      <div class="section-header-grid">
             <h2>Containers</h2>
             <p>Centred containers with max-width constraints</p>
         </div>
 
         <div class="code-label">.container (max-width: 1200px)</div>
-        <div class="container container-demo">.container</div>
+      <div class="container container-demo-grid">.container</div>
 
         <div class="code-label">.container.container-xl (max-width: 1280px)</div>
-        <div class="container container-xl container-demo">.container-xl</div>
+      <div class="container container-xl container-demo-grid">.container-xl</div>
 
         <div class="code-label">.container.container-lg (max-width: 1024px)</div>
-        <div class="container container-lg container-demo">.container-lg</div>
+      <div class="container container-lg container-demo-grid">.container-lg</div>
 
         <div class="code-label">.container.container-md (max-width: 768px)</div>
-        <div class="container container-md container-demo">.container-md</div>
+      <div class="container container-md container-demo-grid">.container-md</div>
 
         <div class="code-label">.container.container-sm (max-width: 640px)</div>
-        <div class="container container-sm container-demo">.container-sm</div>
+      <div class="container container-sm container-demo-grid">.container-sm</div>
     </section>
 
     <!-- CSS Grid -->
     <section data-section="CSS Grid">
-        <div class="section-header">
+      <div class="section-header-grid">
             <h2>CSS Grid (Alternative)</h2>
             <p>Tailwind-style CSS Grid with <code>.grid</code>, <code>.grid-cols-*</code>, <code>.col-span-*</code></p>
         </div>
 
         <div class="code-label">.grid.grid-cols-3.gap-4</div>
         <div class="grid grid-cols-3 gap-4 demo-row">
-            <div class="grid-demo-item">1</div>
-            <div class="grid-demo-item">2</div>
-            <div class="grid-demo-item">3</div>
-            <div class="grid-demo-item">4</div>
-            <div class="grid-demo-item">5</div>
-            <div class="grid-demo-item">6</div>
+          <div class="grid-demo-item-style">1</div>
+          <div class="grid-demo-item-style">2</div>
+          <div class="grid-demo-item-style">3</div>
+          <div class="grid-demo-item-style">4</div>
+          <div class="grid-demo-item-style">5</div>
+          <div class="grid-demo-item-style">6</div>
         </div>
 
         <div class="code-label">.grid.grid-cols-4 with .col-span-2</div>
         <div class="grid grid-cols-4 gap-4 demo-row">
-            <div class="grid-demo-item">1</div>
-            <div class="grid-demo-item col-span-2">2 (col-span-2)</div>
-            <div class="grid-demo-item">3</div>
-            <div class="grid-demo-item col-span-3">4 (col-span-3)</div>
-            <div class="grid-demo-item">5</div>
+          <div class="grid-demo-item-style">1</div>
+          <div class="grid-demo-item-style col-span-2">2 (col-span-2)</div>
+          <div class="grid-demo-item-style">3</div>
+          <div class="grid-demo-item-style col-span-3">4 (col-span-3)</div>
+          <div class="grid-demo-item-style">5</div>
         </div>
 
         <div class="code-label">.grid.grid-cols-12 with various spans</div>
         <div class="grid grid-cols-12 gap-2 demo-row">
-            <div class="grid-demo-item col-span-3">3</div>
-            <div class="grid-demo-item col-span-6">6</div>
-            <div class="grid-demo-item col-span-3">3</div>
-            <div class="grid-demo-item col-span-4">4</div>
-            <div class="grid-demo-item col-span-4">4</div>
-            <div class="grid-demo-item col-span-4">4</div>
+          <div class="grid-demo-item-style col-span-3">3</div>
+          <div class="grid-demo-item-style col-span-6">6</div>
+          <div class="grid-demo-item-style col-span-3">3</div>
+          <div class="grid-demo-item-style col-span-4">4</div>
+          <div class="grid-demo-item-style col-span-4">4</div>
+          <div class="grid-demo-item-style col-span-4">4</div>
         </div>
     </section>
 
     <!-- Responsive Stacking -->
     <section data-section="Responsive Behaviour">
-        <div class="section-header">
+      <div class="section-header-grid">
             <h2>Responsive Behaviour</h2>
             <p>Columns stack below 576px viewport width (mobile-first)</p>
         </div>
@@ -664,20 +535,20 @@
                 <p><strong>How it works:</strong></p>
                 <ul>
                     <li><code>< 576px</code>: All <code>.col-*</code> columns stack vertically (width: 100%)</li>
-                    <li><code>&ge; 576px</code>: Columns display at their specified widths</li>
+                  <li><code>≥ 576px</code>: Columns display at their specified widths</li>
                 </ul>
                 <p class="mt-4"><strong>Try it:</strong> Resize your browser window to see the columns below stack on
                     mobile.</p>
 
                 <div class="row mt-4">
                     <div class="col-4">
-                        <div class="demo-col">.col-4</div>
+                      <div class="demo-col-grid">.col-4</div>
                     </div>
                     <div class="col-4">
-                        <div class="demo-col demo-col-alt">.col-4</div>
+                      <div class="demo-col-grid demo-col-alt">.col-4</div>
                     </div>
                     <div class="col-4">
-                        <div class="demo-col demo-col-warning">.col-4</div>
+                      <div class="demo-col-grid demo-col-warning">.col-4</div>
                     </div>
                 </div>
             </div>

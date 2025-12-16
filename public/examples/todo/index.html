@@ -45,7 +45,7 @@
             background: var(--dm-card-bg);
             border: 1px solid var(--dm-border);
             border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--dm-shadow-sm);
         }
 
         .todo-input {
@@ -62,7 +62,7 @@
         .todo-input:focus {
             outline: none;
             border-color: var(--dm-primary);
-            box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.1);
+            box-shadow: 0 0 0 3px var(--dm-focus-ring);
         }
 
         .todo-input::placeholder {
@@ -96,7 +96,7 @@
         }
 
         .todo-item:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: var(--dm-shadow-md);
             border-color: var(--dm-primary-light);
         }
 
@@ -169,7 +169,7 @@
         .todo-select:focus, .create-select:focus {
             outline: none;
             border-color: var(--dm-primary);
-            box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.1);
+            box-shadow: 0 0 0 3px var(--dm-focus-ring);
         }
 
         /* Action buttons */
@@ -244,28 +244,28 @@
         }
 
         .badge-highest {
-            background: #dc3545;
-            color: white;
+            background: var(--dm-danger);
+            color: var(--dm-white);
         }
 
         .badge-high {
-            background: #fd7e14;
-            color: white;
+            background: var(--dm-warning); /* Mapped from #fd7e14 */
+            color: var(--dm-white);
         }
 
         .badge-medium {
-            background: #ffc107;
-            color: #000;
+            background: var(--dm-warning); /* Mapped from #ffc107 */
+            color: var(--dm-black);
         }
 
         .badge-low {
-            background: #20c997;
-            color: white;
+            background: var(--dm-info); /* Mapped from #20c997 */
+            color: var(--dm-white);
         }
 
         .badge-lowest {
             background: var(--dm-gray-400);
-            color: white;
+            color: var(--dm-white);
         }
     </style>
 </head>

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -250,7 +251,7 @@ function showSubcategories(category) {
                 </div>
             </div>
 
-            <div id="tutorial-subcategories" style="display: none;">
+          <div id="tutorial-subcategories" class="hidden">
                 <h4 class="text-sm font-semibold mb-2">Subcategories:</h4>
                 <div id="tutorial-subcategory-list" class="flex gap-2 flex-wrap"></div>
             </div>
@@ -456,11 +457,11 @@ function generateBreadcrumbsFromURL() {
         <h3 class="category-title">Custom Styling</h3>
         <p class="text-muted mb-2">Apply custom colours and styles:</p>
         <div class="demo-area mb-4">
-            <nav id="styled-example" style="font-size: 1rem; color: #6495ED;"></nav>
+          <nav id="styled-example" class="text-base text-primary"></nav>
         </div>
         <div class="code-block language-javascript mb-6">
             <pre><code>
-&lt;nav id="breadcrumb-nav" style="font-size: 1rem; color: #6495ED;"&gt;&lt;/nav&gt;
+&lt;nav id="breadcrumb-nav" class="text-base text-blue-400"&gt;&lt;/nav&gt;
 
 &lt;script&gt;
 Domma.elements.breadcrumbs('#breadcrumb-nav', {
@@ -1100,7 +1101,7 @@ breadcrumbs.addItem({ text: 'New Level', active: true });
 
     Domma.elements.breadcrumbs('#separator-custom', {
         items: sampleItems,
-        separator: '<span style="color: #6495ED;">•</span>'
+      separator: '<span style="color: var(--dm-primary);">•</span>'
     });
 
     // Example 2: Home Icon

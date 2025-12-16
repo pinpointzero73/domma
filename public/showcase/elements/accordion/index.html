@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -18,7 +19,7 @@
     <div class="card-body">
         <p class="mb-4">Accordions organize content into collapsible sections, perfect for FAQs, product details, and
             navigation menus.</p>
-        <h3 class="category-title">Key Features</h3>
+        <h3 class="category-title-style">Key Features</h3>
         <ul class="feature-list mb-4">
             <li><strong>Single/Multi Expand</strong> - Control how many panels can be open</li>
             <li><strong>Smooth Animations</strong> - Configurable slide transitions</li>
@@ -38,7 +39,7 @@ const accordion = Domma.elements.accordion('#accordion', {
 <section class="card mb-6" data-section="Quick Start">
     <div class="card-header"><h2 class="text-xl font-semibold m-0">Quick Start</h2></div>
     <div class="card-body">
-        <div class="demo-area mb-4">
+        <div class="demo-area-accordion mb-4">
             <div id="quick-accordion" class="accordion">
                 <div class="accordion-item active">
                     <div class="accordion-header">
@@ -66,8 +67,8 @@ const accordion = Domma.elements.accordion('#accordion', {
 <section class="card mb-6" data-section="Examples">
     <div class="card-header"><h2 class="text-xl font-semibold m-0">Examples</h2></div>
     <div class="card-body">
-        <h3 class="category-title">FAQ Accordion (Single Expand)</h3>
-        <div class="demo-area mb-4">
+        <h3 class="category-title-style">FAQ Accordion (Single Expand)</h3>
+        <div class="demo-area-accordion mb-4">
             <div id="faq-accordion" class="accordion">
                 <div class="accordion-item active">
                     <div class="accordion-header">
@@ -92,8 +93,8 @@ const accordion = Domma.elements.accordion('#accordion', {
             </div>
         </div>
 
-        <h3 class="category-title">Multi-Expand Mode</h3>
-        <div class="demo-area">
+        <h3 class="category-title-style">Multi-Expand Mode</h3>
+        <div class="demo-area-accordion">
             <div id="multi-accordion" class="accordion">
                 <div class="accordion-item">
                     <div class="accordion-header">
@@ -121,7 +122,7 @@ const accordion = Domma.elements.accordion('#accordion', {
 <section class="card mb-6" data-section="Best Practices">
     <div class="card-header"><h2 class="text-xl font-semibold m-0">Best Practices</h2></div>
     <div class="card-body">
-        <ul>
+        <ul class="list-disc list-inside">
             <li><strong>Accessibility</strong> - Use semantic HTML, ARIA attributes for screen readers</li>
             <li><strong>Clear Headers</strong> - Make accordion headers descriptive and actionable</li>
             <li><strong>Initial State</strong> - Consider opening first panel by default for discoverability</li>
@@ -132,8 +133,8 @@ const accordion = Domma.elements.accordion('#accordion', {
 <section class="card mb-6" data-section="API Reference">
     <div class="card-header"><h2 class="text-xl font-semibold m-0">API Reference</h2></div>
     <div class="card-body">
-        <div class="option-table">
-            <table>
+        <div class="option-table-accordion">
+            <table class="api-table-accordion">
                 <thead>
                 <tr>
                     <th>Option</th>
@@ -170,9 +171,9 @@ const accordion = Domma.elements.accordion('#accordion', {
                 </tbody>
             </table>
         </div>
-        <h3 class="category-title mt-4">Methods</h3>
-        <div class="option-table">
-            <table>
+        <h3 class="category-title-style mt-4">Methods</h3>
+        <div class="option-table-accordion">
+            <table class="api-table-accordion">
                 <thead>
                 <tr>
                     <th>Method</th>
@@ -214,7 +215,7 @@ const accordion = Domma.elements.accordion('#accordion', {
                 cleaner, more maintainable, and allows you to configure multiple components at once.
             </p>
 
-            <h4 class="category-title">Single Accordion Setup</h4>
+            <h4 class="category-title-style">Single Accordion Setup</h4>
             <pre class="code-block language-javascript">
 $.setup({
     '#my-accordion': {
@@ -228,7 +229,7 @@ $.setup({
 });
 </pre>
 
-            <h4 class="category-title">Multiple Accordions at Once</h4>
+            <h4 class="category-title-style">Multiple Accordions at Once</h4>
             <pre class="code-block language-javascript">
 // Configure all FAQ accordions site-wide
 $.setup({
@@ -240,7 +241,7 @@ $.setup({
         },
         events: {
             // Add click tracking
-            change: (index, $item, instance) =&gt; {
+            change: (index, $item, instance) => {
                 console.log(`FAQ ${index + 1} opened`);
             }
         }
@@ -254,14 +255,14 @@ $.setup({
 });
 </pre>
 
-            <h4 class="category-title">With Initial State & Events</h4>
+            <h4 class="category-title-style">With Initial State & Events</h4>
             <pre class="code-block language-javascript">
 $.setup({
     '#product-details': {
         component: 'accordion',
         options: {
             activeIndex: 0,
-            onChange: (index) =&gt; {
+            onChange: (index) => {
                 // Track which section users view
                 analytics.track('Product Section Viewed', {
                     section: ['specs', 'reviews', 'shipping'][index]
@@ -279,8 +280,8 @@ $.setup({
 });
 </pre>
 
-            <h4 class="category-title">Benefits of Declarative Config</h4>
-            <ul class="mb-4">
+            <h4 class="category-title-style">Benefits of Declarative Config</h4>
+            <ul class="list-disc list-inside mb-4">
                 <li><strong>Centralized Configuration</strong> - All component setup in one place</li>
                 <li><strong>Easier Maintenance</strong> - Update options without touching HTML</li>
                 <li><strong>Batch Operations</strong> - Configure multiple components at once</li>
@@ -288,11 +289,12 @@ $.setup({
                     <code>$.config()</code>, reset with <code>$.reset()</code></li>
             </ul>
 
-            <h4 class="category-title">Programmatic vs Declarative</h4>
+            <h4 class="category-title-style">Programmatic vs Declarative</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">Programmatic (Traditional)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;">// Scattered throughout code
+                    <pre class="code-block language-javascript">
+// Scattered throughout code
 const acc1 = Domma.elements.accordion(
     '#accordion-1',
     {multiExpand: false}
@@ -305,7 +307,8 @@ const acc2 = Domma.elements.accordion(
                 </div>
                 <div>
                     <p class="font-semibold mb-2">Declarative (Recommended)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;">// Clean, centralized config
+                    <pre class="code-block language-javascript">
+// Clean, centralized config
 $.setup({
     '#accordion-1': {
         component: 'accordion',
@@ -324,7 +327,7 @@ $.setup({
     <section class="card mb-6" data-section="Related">
     <div class="card-header"><h2 class="text-xl font-semibold m-0">Related Elements</h2></div>
     <div class="card-body">
-        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+        <div class="grid grid-cols-1 gap-4 grid-auto-fit-250">
             <a href="../tabs/index.html" class="card card-hover">
                 <div class="card-body">
                     <h3 class="card-title">Tabs</h3>

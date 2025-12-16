@@ -9,49 +9,7 @@
     <link rel="stylesheet" href="../../dist/grid.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-    <style>
-        /* Demo content styling */
-        .demo-content {
-            padding: 2rem;
-            background: var(--dm-surface);
-            border: 1px solid var(--dm-border);
-            border-radius: var(--dm-radius-md);
-            margin-bottom: 2rem;
-        }
-
-        .demo-content h2 {
-            margin-top: 0;
-        }
-
-        .sample-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-        }
-
-        .sample-table th,
-        .sample-table td {
-            padding: 0.75rem;
-            text-align: left;
-            border: 1px solid var(--dm-border);
-        }
-
-        .sample-table th {
-            background: var(--dm-primary);
-            color: white;
-        }
-
-        .sample-table tr:nth-child(even) {
-            background: var(--dm-surface);
-        }
-
-        .controls {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
-        }
-    </style>
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -62,7 +20,7 @@
         <div class="card-body">
             <p class="mb-4">Minimal, zero-dependency print-to-PDF tool using browser native <code>window.print()</code>
                 API.</p>
-            <h3 class="category-title">Key Features</h3>
+          <h3 class="category-title-style">Key Features</h3>
             <ul class="feature-list mb-4">
                 <li><strong>Zero Dependencies</strong> - Uses only browser APIs</li>
                 <li><strong>Page Configuration</strong> - Size, orientation, margins</li>
@@ -88,7 +46,7 @@ printer.print();
         <div class="card-body">
           <p class="mb-4"><strong>Note:</strong> Configure print options when creating the instance, then call <code>print()</code>
             to trigger the browser's native print dialog.</p>
-            <div class="controls">
+          <div class="controls-print-to-pdf">
                 <button id="print-default" class="btn btn-primary">
                     <span data-icon="printer" data-icon-size="18"></span>
                     Print Default (A4)
@@ -107,13 +65,13 @@ printer.print();
                 </button>
             </div>
 
-            <div id="print-content" class="demo-content">
+          <div id="print-content" class="demo-content-print-to-pdf">
                 <h2>Sample Document</h2>
                 <p>This is a sample document demonstrating the print-to-PDF functionality. The content below will be
                     optimized for printing.</p>
 
                 <h3>Sample Data Table</h3>
-                <table class="sample-table">
+            <table class="sample-table-print-to-pdf">
                     <thead>
                     <tr>
                         <th>Name</th>
@@ -173,8 +131,8 @@ printer.print();
     <section class="card mb-6" data-section="API Reference">
         <div class="card-header"><h2 class="text-xl font-semibold m-0">API Reference</h2></div>
         <div class="card-body">
-            <div class="option-table">
-                <table>
+          <div class="option-table-print-to-pdf">
+            <table class="api-table-print-to-pdf">
                     <thead>
                     <tr>
                         <th>Option</th>
@@ -241,9 +199,9 @@ printer.print();
                     </tbody>
                 </table>
             </div>
-            <h3 class="category-title mt-4">Methods</h3>
-            <div class="option-table">
-                <table>
+          <h3 class="category-title-style mt-4">Methods</h3>
+          <div class="option-table-print-to-pdf">
+            <table class="api-table-print-to-pdf">
                     <thead>
                     <tr>
                         <th>Method</th>

@@ -9,153 +9,47 @@
     <link rel="stylesheet" href="/dist/grid.css">
     <link rel="stylesheet" href="/dist/elements.css">
     <link rel="stylesheet" href="/dist/themes/domma-themes.css">
-    <style>
-        .hero {
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
-            color: white;
-            padding: var(--dm-space-16) var(--dm-space-4);
-            text-align: center;
-        }
-
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin: 0 0 var(--dm-space-4);
-            letter-spacing: -0.025em;
-        }
-
-        .hero-subtitle {
-            font-size: var(--dm-font-size-xl);
-            opacity: 0.9;
-            margin: 0 0 var(--dm-space-8);
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-badges {
-            display: flex;
-            justify-content: center;
-            gap: var(--dm-space-3);
-            flex-wrap: wrap;
-        }
-
-        .hero-badge {
-            background: rgba(255, 255, 255, 0.2);
-            padding: var(--dm-space-2) var(--dm-space-4);
-            border-radius: var(--dm-radius-full);
-            font-size: var(--dm-font-size-sm);
-            font-weight: 500;
-        }
-
-        .namespace-card {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .namespace-card .card-body {
-            flex: 1;
-        }
-
-        .namespace-icon {
-            margin-bottom: var(--dm-space-4);
-            color: var(--dm-primary);
-        }
-
-        .namespace-icon svg {
-            width: 48px;
-            height: 48px;
-        }
-
-        .feature-list {
-            list-style: none;
-            padding: 0;
-            margin: var(--dm-space-4) 0 0;
-        }
-
-        .feature-list li {
-            padding: var(--dm-space-1) 0;
-            color: var(--dm-gray-600);
-            font-size: var(--dm-font-size-sm);
-        }
-
-        .feature-list li::before {
-            content: "\2713";
-            color: var(--dm-success);
-            margin-right: var(--dm-space-2);
-            font-weight: bold;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: var(--dm-space-8);
-        }
-
-        .section-title h2 {
-            font-size: var(--dm-font-size-3xl);
-            margin: 0 0 var(--dm-space-2);
-        }
-
-        .section-title p {
-            color: var(--dm-gray-600);
-            margin: 0;
-        }
-
-        .quick-start {
-            background: var(--dm-gray-900);
-            color: var(--dm-gray-100);
-            padding: var(--dm-space-6);
-            border-radius: var(--dm-radius-lg);
-            margin-top: var(--dm-space-8);
-        }
-
-        .quick-start code {
-            background: var(--dm-gray-800);
-            color: var(--dm-primary-light);
-        }
-    </style>
+    <link rel="stylesheet" href="css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="index">
 
-<section class="hero">
-    <h1 class="hero-title">Domma</h1>
-    <p class="hero-subtitle">
+<section class="hero hero-gradient py-16 px-4 text-center text-white">
+    <h1 class="text-5xl font-bold mb-4 tracking-tight">Domma</h1>
+    <p class="text-xl opacity-90 mb-8 max-w-lg mx-auto">
         <strong>D</strong>ynamic <strong>O</strong>bject <strong>M</strong>anipulation & <strong>M</strong>odeling
         <strong>A</strong>PI
     </p>
-    <p class="hero-subtitle" style="opacity: 0.85; font-size: 1rem; margin-top: 0.5rem;">
+    <p class="opacity-85 text-base mt-2 max-w-lg mx-auto">
         A lightweight, zero-dependency JavaScript framework combining jQuery-style DOM manipulation,
         Lodash utilities, and modern components.
     </p>
-    <div class="hero-badges">
-        <span class="hero-badge">Zero Dependencies</span>
-        <span class="hero-badge">~185KB Bundled</span>
-        <span class="hero-badge">ES Modules</span>
-        <span class="hero-badge">Chainable API</span>
+    <div class="flex justify-center gap-3 flex-wrap">
+        <span class="bg-white-t20 py-2 px-4 rounded-full text-sm font-medium">Zero Dependencies</span>
+        <span class="bg-white-t20 py-2 px-4 rounded-full text-sm font-medium">~185KB Bundled</span>
+        <span class="bg-white-t20 py-2 px-4 rounded-full text-sm font-medium">ES Modules</span>
+        <span class="bg-white-t20 py-2 px-4 rounded-full text-sm font-medium">Chainable API</span>
     </div>
 </section>
 
 <main class="container py-8">
     <section class="mb-8">
-        <div class="section-title">
-            <h2>Namespaces</h2>
-            <p>Everything you need to build modern web applications</p>
+        <div class="text-center mb-8">
+            <h2 class="text-3xl mb-2">Namespaces</h2>
+            <p class="text-gray-600">Everything you need to build modern web applications</p>
         </div>
 
-        <div class="grid grid-cols-1 gap-6" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+        <div class="grid grid-cols-1 gap-6 grid-auto-fit">
             <!-- Config -->
-            <a href="config/index.html" class="card card-hover namespace-card"
-               style="text-decoration: none; color: inherit;">
-                <div class="card-body">
-                    <div class="namespace-icon" data-icon="settings"></div>
+            <a href="config/index.html" class="card card-hover namespace-card no-underline text-inherit">
+                <div class="card-body flex-1">
+                    <div class="namespace-icon mb-4 text-primary" data-icon="settings"></div>
                     <h3 class="card-title">Config</h3>
                     <p class="card-text">Declarative configuration engine for component initialisation.</p>
-                    <ul class="feature-list">
-                        <li>JSON-based setup</li>
-                        <li>Auto component init</li>
-                        <li>Runtime updates</li>
-                        <li>Lifecycle management</li>
+                    <ul class="list-none p-0 mt-4">
+                        <li class="py-1 text-gray-600 text-sm">JSON-based setup</li>
+                        <li class="py-1 text-gray-600 text-sm">Auto component init</li>
+                        <li class="py-1 text-gray-600 text-sm">Runtime updates</li>
+                        <li class="py-1 text-gray-600 text-sm">Lifecycle management</li>
                     </ul>
                 </div>
                 <div class="card-footer">
@@ -164,17 +58,16 @@
             </a>
 
             <!-- DOM -->
-            <a href="dom/index.html" class="card card-hover namespace-card"
-               style="text-decoration: none; color: inherit;">
-                <div class="card-body">
-                    <div class="namespace-icon" data-icon="file-code"></div>
+            <a href="dom/index.html" class="card card-hover namespace-card no-underline text-inherit">
+                <div class="card-body flex-1">
+                    <div class="namespace-icon mb-4 text-primary" data-icon="file-code"></div>
                     <h3 class="card-title">DOM</h3>
                     <p class="card-text">jQuery-compatible DOM manipulation with a chainable API.</p>
-                    <ul class="feature-list">
-                        <li>90+ methods</li>
-                        <li>Traversal & manipulation</li>
-                        <li>Events & animations</li>
-                        <li>CSS & attributes</li>
+                    <ul class="list-none p-0 mt-4">
+                        <li class="py-1 text-gray-600 text-sm">90+ methods</li>
+                        <li class="py-1 text-gray-600 text-sm">Traversal & manipulation</li>
+                        <li class="py-1 text-gray-600 text-sm">Events & animations</li>
+                        <li class="py-1 text-gray-600 text-sm">CSS & attributes</li>
                     </ul>
                 </div>
                 <div class="card-footer">
@@ -183,17 +76,16 @@
             </a>
 
             <!-- Utils -->
-            <a href="utils/index.html" class="card card-hover namespace-card"
-               style="text-decoration: none; color: inherit;">
-                <div class="card-body">
-                    <div class="namespace-icon" data-icon="grid"></div>
+            <a href="utils/index.html" class="card card-hover namespace-card no-underline text-inherit">
+                <div class="card-body flex-1">
+                    <div class="namespace-icon mb-4 text-primary" data-icon="grid"></div>
                     <h3 class="card-title">Utils</h3>
                     <p class="card-text">Lodash-compatible utility functions for common operations.</p>
-                    <ul class="feature-list">
-                        <li>120+ utilities</li>
-                        <li>Array & collection methods</li>
-                        <li>Object manipulation</li>
-                        <li>String & function helpers</li>
+                    <ul class="list-none p-0 mt-4">
+                        <li class="py-1 text-gray-600 text-sm">120+ utilities</li>
+                        <li class="py-1 text-gray-600 text-sm">Array & collection methods</li>
+                        <li class="py-1 text-gray-600 text-sm">Object manipulation</li>
+                        <li class="py-1 text-gray-600 text-sm">String & function helpers</li>
                     </ul>
                 </div>
                 <div class="card-footer">
@@ -202,17 +94,16 @@
             </a>
 
             <!-- Dates -->
-            <a href="dates/index.html" class="card card-hover namespace-card"
-               style="text-decoration: none; color: inherit;">
-                <div class="card-body">
-                    <div class="namespace-icon" data-icon="calendar"></div>
+            <a href="dates/index.html" class="card card-hover namespace-card no-underline text-inherit">
+                <div class="card-body flex-1">
+                    <div class="namespace-icon mb-4 text-primary" data-icon="calendar"></div>
                     <h3 class="card-title">Dates</h3>
                     <p class="card-text">Moment.js-style chainable date manipulation.</p>
-                    <ul class="feature-list">
-                        <li>Chainable API</li>
-                        <li>Formatting & parsing</li>
-                        <li>Relative time (fromNow)</li>
-                        <li>Comparison & diff</li>
+                    <ul class="list-none p-0 mt-4">
+                        <li class="py-1 text-gray-600 text-sm">Chainable API</li>
+                        <li class="py-1 text-gray-600 text-sm">Formatting & parsing</li>
+                        <li class="py-1 text-gray-600 text-sm">Relative time (fromNow)</li>
+                        <li class="py-1 text-gray-600 text-sm">Comparison & diff</li>
                     </ul>
                 </div>
                 <div class="card-footer">
@@ -221,17 +112,16 @@
             </a>
 
             <!-- Models -->
-            <a href="models/index.html" class="card card-hover namespace-card"
-               style="text-decoration: none; color: inherit;">
-                <div class="card-body">
-                    <div class="namespace-icon" data-icon="database"></div>
+            <a href="models/index.html" class="card card-hover namespace-card no-underline text-inherit">
+                <div class="card-body flex-1">
+                    <div class="namespace-icon mb-4 text-primary" data-icon="database"></div>
                     <h3 class="card-title">Models</h3>
                     <p class="card-text">Reactive data models with pub/sub events and validation.</p>
-                    <ul class="feature-list">
-                        <li>Pub/Sub events</li>
-                        <li>Reactive data binding</li>
-                        <li>Schema validation</li>
-                        <li>Two-way DOM binding</li>
+                    <ul class="list-none p-0 mt-4">
+                        <li class="py-1 text-gray-600 text-sm">Pub/Sub events</li>
+                        <li class="py-1 text-gray-600 text-sm">Reactive data binding</li>
+                        <li class="py-1 text-gray-600 text-sm">Schema validation</li>
+                        <li class="py-1 text-gray-600 text-sm">Two-way DOM binding</li>
                     </ul>
                 </div>
                 <div class="card-footer">
@@ -240,17 +130,16 @@
             </a>
 
             <!-- Elements -->
-            <a href="elements/index.html" class="card card-hover namespace-card"
-               style="text-decoration: none; color: inherit;">
-                <div class="card-body">
-                    <div class="namespace-icon" data-icon="list"></div>
+            <a href="elements/index.html" class="card card-hover namespace-card no-underline text-inherit">
+                <div class="card-body flex-1">
+                    <div class="namespace-icon mb-4 text-primary" data-icon="list"></div>
                     <h3 class="card-title">Elements</h3>
                     <p class="card-text">Ready-to-use UI components with JavaScript interactivity.</p>
-                    <ul class="feature-list">
-                        <li>Modals & tooltips</li>
-                        <li>Tabs & accordions</li>
-                        <li>Cards with effects</li>
-                        <li>Config integration</li>
+                    <ul class="list-none p-0 mt-4">
+                        <li class="py-1 text-gray-600 text-sm">Modals & tooltips</li>
+                        <li class="py-1 text-gray-600 text-sm">Tabs & accordions</li>
+                        <li class="py-1 text-gray-600 text-sm">Cards with effects</li>
+                        <li class="py-1 text-gray-600 text-sm">Config integration</li>
                     </ul>
                 </div>
                 <div class="card-footer">
@@ -259,17 +148,16 @@
             </a>
 
             <!-- Tables -->
-            <a href="tables/index.html" class="card card-hover namespace-card"
-               style="text-decoration: none; color: inherit;">
-                <div class="card-body">
-                    <div class="namespace-icon" data-icon="clipboard-list"></div>
+            <a href="tables/index.html" class="card card-hover namespace-card no-underline text-inherit">
+                <div class="card-body flex-1">
+                    <div class="namespace-icon mb-4 text-primary" data-icon="clipboard-list"></div>
                     <h3 class="card-title">Tables</h3>
                     <p class="card-text">DataTable-like functionality for interactive data grids.</p>
-                    <ul class="feature-list">
-                        <li>Sorting & filtering</li>
-                        <li>Pagination</li>
-                        <li>Row selection</li>
-                        <li>CSV/JSON export</li>
+                    <ul class="list-none p-0 mt-4">
+                        <li class="py-1 text-gray-600 text-sm">Sorting & filtering</li>
+                        <li class="py-1 text-gray-600 text-sm">Pagination</li>
+                        <li class="py-1 text-gray-600 text-sm">Row selection</li>
+                        <li class="py-1 text-gray-600 text-sm">CSV/JSON export</li>
                     </ul>
                 </div>
                 <div class="card-footer">
@@ -278,17 +166,16 @@
             </a>
 
             <!-- Storage -->
-            <a href="storage/index.html" class="card card-hover namespace-card"
-               style="text-decoration: none; color: inherit;">
-                <div class="card-body">
-                    <div class="namespace-icon" data-icon="hard-drive"></div>
+            <a href="storage/index.html" class="card card-hover namespace-card no-underline text-inherit">
+                <div class="card-body flex-1">
+                    <div class="namespace-icon mb-4 text-primary" data-icon="hard-drive"></div>
                     <h3 class="card-title">Storage</h3>
                     <p class="card-text">localStorage wrapper with auto-serialisation and model persistence.</p>
-                    <ul class="feature-list">
-                        <li>Auto JSON serialisation</li>
-                        <li>Prefixed keys</li>
-                        <li>Model persistence</li>
-                        <li>Graceful fallbacks</li>
+                    <ul class="list-none p-0 mt-4">
+                        <li class="py-1 text-gray-600 text-sm">Auto JSON serialisation</li>
+                        <li class="py-1 text-gray-600 text-sm">Prefixed keys</li>
+                        <li class="py-1 text-gray-600 text-sm">Model persistence</li>
+                        <li class="py-1 text-gray-600 text-sm">Graceful fallbacks</li>
                     </ul>
                 </div>
                 <div class="card-footer">
@@ -297,17 +184,16 @@
             </a>
 
             <!-- Icons -->
-            <a href="icons/index.html" class="card card-hover namespace-card"
-               style="text-decoration: none; color: inherit;">
-                <div class="card-body">
-                    <div class="namespace-icon" data-icon="star"></div>
+            <a href="icons/index.html" class="card card-hover namespace-card no-underline text-inherit">
+                <div class="card-body flex-1">
+                    <div class="namespace-icon mb-4 text-primary" data-icon="star"></div>
                     <h3 class="card-title">Icons</h3>
                     <p class="card-text">Comprehensive SVG icon library with 100+ icons.</p>
-                    <ul class="feature-list">
-                        <li>100+ icons in 8 categories</li>
-                        <li>Render, inject, or scan</li>
-                        <li>Size & colour options</li>
-                        <li>Custom icon registration</li>
+                    <ul class="list-none p-0 mt-4">
+                        <li class="py-1 text-gray-600 text-sm">100+ icons in 8 categories</li>
+                        <li class="py-1 text-gray-600 text-sm">Render, inject, or scan</li>
+                        <li class="py-1 text-gray-600 text-sm">Size & colour options</li>
+                        <li class="py-1 text-gray-600 text-sm">Custom icon registration</li>
                     </ul>
                 </div>
                 <div class="card-footer">
@@ -316,17 +202,16 @@
             </a>
 
             <!-- Themes -->
-            <a href="themes/index.html" class="card card-hover namespace-card"
-               style="text-decoration: none; color: inherit;">
-                <div class="card-body">
-                    <div class="namespace-icon" data-icon="sun"></div>
+            <a href="themes/index.html" class="card card-hover namespace-card no-underline text-inherit">
+                <div class="card-body flex-1">
+                    <div class="namespace-icon mb-4 text-primary" data-icon="sun"></div>
                     <h3 class="card-title">Themes</h3>
                     <p class="card-text">Complete theming system with light/dark modes and colour variants.</p>
-                    <ul class="feature-list">
-                        <li>Light & dark themes</li>
-                        <li>Ocean, forest, sunset variants</li>
-                        <li>CSS-only or JS API</li>
-                        <li>System preference detection</li>
+                    <ul class="list-none p-0 mt-4">
+                        <li class="py-1 text-gray-600 text-sm">Light & dark themes</li>
+                        <li class="py-1 text-gray-600 text-sm">Ocean, forest, sunset variants</li>
+                        <li class="py-1 text-gray-600 text-sm">CSS-only or JS API</li>
+                        <li class="py-1 text-gray-600 text-sm">System preference detection</li>
                     </ul>
                 </div>
                 <div class="card-footer">
@@ -337,12 +222,12 @@
     </section>
 
     <section class="mb-8">
-        <div class="section-title">
-            <h2>Quick Start</h2>
-            <p>Get up and running in seconds</p>
+        <div class="text-center mb-8">
+            <h2 class="text-3xl mb-2">Quick Start</h2>
+            <p class="text-gray-600">Get up and running in seconds</p>
         </div>
 
-        <div class="quick-start">
+        <div class="quick-start bg-gray-900 text-gray-100 p-6 rounded-lg mt-8">
             <p class="mb-4"><strong>1. Include Domma</strong></p>
             <pre class="code-block language-javascript mb-6">&lt;script src="dist/domma.min.js"&gt;</script></pre>
 
@@ -380,8 +265,8 @@ S.get('prefs');  // { theme: 'dark' }</pre>
     </section>
 
     <section>
-        <div class="section-title">
-            <h2>Why Domma?</h2>
+        <div class="text-center mb-8">
+            <h2 class="text-3xl mb-2">Why Domma?</h2>
         </div>
 
         <div class="grid grid-cols-3 gap-6">

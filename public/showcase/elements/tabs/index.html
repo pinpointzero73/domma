@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -26,7 +27,7 @@
                 overwhelming users.
             </p>
 
-            <h4 class="category-title">Key Features</h4>
+          <h4 class="category-title-style">Key Features</h4>
             <ul class="mb-4">
                 <li>Multiple visual styles (standard, pills, underline)</li>
                 <li>Smooth animated transitions between panels</li>
@@ -37,7 +38,7 @@
                 <li>Responsive behaviour on mobile devices</li>
             </ul>
 
-            <h4 class="category-title">When to Use Tabs</h4>
+          <h4 class="category-title-style">When to Use Tabs</h4>
             <ul class="mb-4">
                 <li><strong>Content Organisation</strong>: Product details, documentation, settings panels</li>
                 <li><strong>Alternative Views</strong>: Charts vs tables, grid vs list, different time periods</li>
@@ -46,7 +47,7 @@
                 <li><strong>Navigation</strong>: Profile sections (about, posts, photos), account settings</li>
             </ul>
 
-            <h4 class="category-title">Basic Usage</h4>
+          <h4 class="category-title-style">Basic Usage</h4>
             <pre class="code-block language-javascript">
 // HTML structure
 &lt;div id="my-tabs" class="tabs"&gt;
@@ -87,7 +88,7 @@ tabs.getActive(); // Returns active index
                 Create basic tabs in under a minute. Tabs work automatically with the correct HTML structure.
             </p>
 
-            <h4 class="category-title">Simple Tabs</h4>
+          <h4 class="category-title-style">Simple Tabs</h4>
             <pre class="code-block language-javascript">
 // HTML
 &lt;div id="quick-tabs" class="tabs"&gt;
@@ -152,7 +153,7 @@ Domma.elements.tabs('#quick-tabs');
                 Build a product information page with tabs for Overview, Features, and Reviews.
             </p>
 
-            <h4 class="category-title">Step 1: Create Tab Headers</h4>
+          <h4 class="category-title-style">Step 1: Create Tab Headers</h4>
             <p class="mb-2">Start with the tab list structure:</p>
             <pre class="code-block language-javascript">
 &lt;div id="product-tabs" class="tabs"&gt;
@@ -164,7 +165,7 @@ Domma.elements.tabs('#quick-tabs');
 &lt;/div&gt;
 </pre>
 
-            <h4 class="category-title mt-4">Step 2: Add Tab Panels</h4>
+          <h4 class="category-title-style mt-4">Step 2: Add Tab Panels</h4>
             <p class="mb-2">Add corresponding content panels (same order as tabs):</p>
             <pre class="code-block language-javascript">
 &lt;div id="product-tabs" class="tabs"&gt;
@@ -189,7 +190,7 @@ Domma.elements.tabs('#quick-tabs');
 &lt;/div&gt;
 </pre>
 
-            <h4 class="category-title mt-4">Step 3: Initialise with Animation</h4>
+          <h4 class="category-title-style mt-4">Step 3: Initialise with Animation</h4>
             <p class="mb-2">Add smooth transitions between tabs:</p>
             <pre class="code-block language-javascript">
 const productTabs = Domma.elements.tabs('#product-tabs', {
@@ -198,35 +199,35 @@ const productTabs = Domma.elements.tabs('#product-tabs', {
 });
 </pre>
 
-            <h4 class="category-title mt-4">Step 4: Add Change Callback</h4>
+          <h4 class="category-title-style mt-4">Step 4: Add Change Callback</h4>
             <p class="mb-2">Track which tab users view:</p>
             <pre class="code-block language-javascript">
 const productTabs = Domma.elements.tabs('#product-tabs', {
     activeIndex: 0,
     animation: true,
-    onChange: (index, panel) =&gt; {
+    onChange: (index, panel) => {
         const tabs = ['Overview', 'Features', 'Reviews'];
         console.log(`User viewing: ${tabs[index]}`);
     }
 });
 </pre>
 
-            <h4 class="category-title mt-4">Step 5: Add Next/Previous Buttons</h4>
+          <h4 class="category-title-style mt-4">Step 5: Add Next/Previous Buttons</h4>
             <p class="mb-2">Navigate programmatically with buttons:</p>
             <pre class="code-block language-javascript">
 &lt;button id="prev-tab"&gt;← Previous&lt;/button&gt;
 &lt;button id="next-tab"&gt;Next →&lt;/button&gt;
 
-document.getElementById('prev-tab').addEventListener('click', () =&gt; {
+document.getElementById('prev-tab').addEventListener('click', () => {
     productTabs.prev();
 });
 
-document.getElementById('next-tab').addEventListener('click', () =&gt; {
+document.getElementById('next-tab').addEventListener('click', () => {
     productTabs.next();
 });
 </pre>
 
-            <h4 class="category-title mt-4">Step 6: Complete Working Demo</h4>
+          <h4 class="category-title-style mt-4">Step 6: Complete Working Demo</h4>
             <div class="demo-area">
                 <div id="tutorial-tabs" class="tabs mb-3">
                     <ul class="tab-list">
@@ -253,7 +254,7 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                         </div>
                         <div class="tab-panel">
                             <h3>Customer Reviews</h3>
-                            <p style="font-size: 1.5rem; color: var(--dm-warning);">⭐⭐⭐⭐⭐</p>
+                          <p class="text-2xl text-warning">⭐⭐⭐⭐⭐</p>
                             <p class="mb-2"><strong>4.8 out of 5</strong> (1,247 reviews)</p>
                             <p class="text-sm">"Best headphones I've ever owned!" - Sarah M.</p>
                         </div>
@@ -262,7 +263,7 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                 <div class="flex gap-2">
                     <button class="btn btn-secondary" id="tutorial-prev">← Previous</button>
                     <button class="btn btn-secondary" id="tutorial-next">Next →</button>
-                    <div class="demo-result flex-1" id="tutorial-result"></div>
+                  <div class="demo-result flex-1 tutorial-result-tabs"></div>
                 </div>
             </div>
         </div>
@@ -275,9 +276,9 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
         </div>
         <div class="card-body">
 
-            <h4 class="category-title">Example 1: Standard Tabs</h4>
+          <h4 class="category-title-style">Example 1: Standard Tabs</h4>
             <p class="mb-2">Classic tab design with underline indicator:</p>
-            <div class="demo-area mb-4">
+          <div class="demo-area tabs-demo-area mb-4">
                 <div id="standard-tabs" class="tabs">
                     <ul class="tab-list">
                         <li class="tab-item active">All</li>
@@ -294,9 +295,9 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                 </div>
             </div>
 
-            <h4 class="category-title">Example 2: Pill Tabs</h4>
+          <h4 class="category-title-style">Example 2: Pill Tabs</h4>
             <p class="mb-2">Rounded pill-style tabs for modern interfaces:</p>
-            <div class="demo-area mb-4">
+          <div class="demo-area tabs-demo-area mb-4">
                 <div id="pill-tabs" class="tabs tabs-pills">
                     <ul class="tab-list">
                         <li class="tab-item active">Today</li>
@@ -313,9 +314,9 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                 </div>
             </div>
 
-            <h4 class="category-title">Example 3: Vertical Tabs</h4>
+          <h4 class="category-title-style">Example 3: Vertical Tabs</h4>
             <p class="mb-2">Side-by-side layout for settings or profiles:</p>
-            <div class="demo-area mb-4">
+          <div class="demo-area tabs-demo-area mb-4">
                 <div id="vertical-tabs" class="tabs tabs-vertical">
                     <ul class="tab-list">
                         <li class="tab-item active">General</li>
@@ -344,21 +345,21 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                 </div>
             </div>
 
-            <h4 class="category-title">Example 4: Tabs with Icons</h4>
+          <h4 class="category-title-style">Example 4: Tabs with Icons</h4>
             <p class="mb-2">Enhance tabs with icons for better recognition:</p>
-            <div class="demo-area mb-4">
+          <div class="demo-area tabs-demo-area mb-4">
                 <div id="icon-tabs" class="tabs">
                     <ul class="tab-list">
                         <li class="tab-item active">
-                            <span data-icon="document" style="margin-right: 0.5rem;"></span>
+                          <span data-icon="document" class="mr-2"></span>
                             Documents
                         </li>
                         <li class="tab-item">
-                            <span data-icon="database" style="margin-right: 0.5rem;"></span>
+                          <span data-icon="database" class="mr-2"></span>
                             Data
                         </li>
                         <li class="tab-item">
-                            <span data-icon="layout" style="margin-right: 0.5rem;"></span>
+                          <span data-icon="layout" class="mr-2"></span>
                             Media
                         </li>
                     </ul>
@@ -370,19 +371,19 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                 </div>
             </div>
 
-            <h4 class="category-title">Example 5: Tabs with Badge Counts</h4>
+          <h4 class="category-title-style">Example 5: Tabs with Badge Counts</h4>
             <p class="mb-2">Show counts or status with badges:</p>
-            <div class="demo-area mb-4">
+          <div class="demo-area tabs-demo-area mb-4">
                 <div id="badge-tabs" class="tabs">
                     <ul class="tab-list">
                         <li class="tab-item active">
-                            Inbox <span class="badge badge-primary" style="margin-left: 0.5rem;">12</span>
+                          Inbox <span class="badge badge-primary ml-2">12</span>
                         </li>
                         <li class="tab-item">
-                            Drafts <span class="badge badge-secondary" style="margin-left: 0.5rem;">3</span>
+                          Drafts <span class="badge badge-secondary ml-2">3</span>
                         </li>
                         <li class="tab-item">
-                            Sent <span class="badge badge-success" style="margin-left: 0.5rem;">45</span>
+                          Sent <span class="badge badge-success ml-2">45</span>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -393,9 +394,9 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                 </div>
             </div>
 
-            <h4 class="category-title">Example 6: Dynamic Content Loading</h4>
+          <h4 class="category-title-style">Example 6: Dynamic Content Loading</h4>
             <p class="mb-2">Load panel content dynamically on tab change:</p>
-            <div class="demo-area">
+          <div class="demo-area tabs-demo-area">
                 <div id="dynamic-tabs" class="tabs">
                     <ul class="tab-list">
                         <li class="tab-item active">Tab 1</li>
@@ -408,7 +409,7 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                         <div class="tab-panel"><p>Loading...</p></div>
                     </div>
                 </div>
-                <p class="text-sm mt-2" style="color: var(--dm-text-muted);">Content loads when tab is clicked for the
+            <p class="text-sm mt-2 text-muted">Content loads when tab is clicked for the
                     first time.</p>
             </div>
         </div>
@@ -421,7 +422,7 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
         </div>
         <div class="card-body">
 
-            <h4 class="category-title">Accessibility</h4>
+          <h4 class="category-title-style">Accessibility</h4>
             <ul class="mb-4">
                 <li><strong>ARIA Roles</strong>: Domma automatically adds <code>role="tablist"</code>,
                     <code>role="tab"</code>, <code>role="tabpanel"</code></li>
@@ -438,7 +439,7 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                 </li>
             </ul>
 
-            <h4 class="category-title">Performance</h4>
+          <h4 class="category-title-style">Performance</h4>
             <ul class="mb-4">
                 <li><strong>Lazy Loading</strong>: Load heavy content only when tab is first activated</li>
                 <li><strong>Limit Tabs</strong>: Keep to 5-7 tabs maximum for usability; use dropdowns or accordions for
@@ -453,8 +454,8 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                 </li>
             </ul>
 
-            <h4 class="category-title">Common Gotchas</h4>
-            <table class="option-table mb-4">
+          <h4 class="category-title-style">Common Gotchas</h4>
+          <table class="option-table-accordion mb-4">
                 <tr>
                     <th>Issue</th>
                     <th>Solution</th>
@@ -490,7 +491,7 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                 </tr>
             </table>
 
-            <h4 class="category-title">Tips & Tricks</h4>
+          <h4 class="category-title-style">Tips & Tricks</h4>
             <ul class="mb-4">
                 <li><strong>Deep Linking</strong>: Use URL hash to pre-select tab: <code>if (location.hash ===
                     '#features') tabs.show(1);</code></li>
@@ -513,8 +514,8 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
         </div>
         <div class="card-body">
 
-            <h4 class="category-title">Constructor Options</h4>
-            <table class="option-table mb-6">
+          <h4 class="category-title-style">Constructor Options</h4>
+          <table class="option-table-accordion mb-6">
                 <tr>
                     <th>Option</th>
                     <th>Type</th>
@@ -541,8 +542,8 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                 </tr>
             </table>
 
-            <h4 class="category-title">Methods</h4>
-            <table class="option-table mb-6">
+          <h4 class="category-title-style">Methods</h4>
+          <table class="option-table-accordion mb-6">
                 <tr>
                     <th>Method</th>
                     <th>Parameters</th>
@@ -581,8 +582,8 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                 </tr>
             </table>
 
-            <h4 class="category-title">Events</h4>
-            <table class="option-table mb-6">
+          <h4 class="category-title-style">Events</h4>
+          <table class="option-table-accordion mb-6">
                 <tr>
                     <th>Event</th>
                     <th>Parameters</th>
@@ -595,8 +596,8 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                 </tr>
             </table>
 
-            <h4 class="category-title">CSS Classes</h4>
-            <table class="option-table mb-4">
+          <h4 class="category-title-style">CSS Classes</h4>
+          <table class="option-table-accordion mb-4">
                 <tr>
                     <th>Class</th>
                     <th>Description</th>
@@ -651,7 +652,7 @@ document.getElementById('next-tab').addEventListener('click', () =&gt; {
                 Declaratively initialise tabs using Domma's Config Engine.
             </p>
 
-            <h4 class="category-title">Basic Setup</h4>
+          <h4 class="category-title-style">Basic Setup</h4>
             <pre class="code-block language-javascript">
 $.setup({
     '#product-tabs': {
@@ -664,7 +665,7 @@ $.setup({
 });
 </pre>
 
-            <h4 class="category-title mt-4">With Change Tracking</h4>
+          <h4 class="category-title-style mt-4">With Change Tracking</h4>
             <pre class="code-block language-javascript">
 $.setup({
     '#analytics-tabs': {
@@ -672,7 +673,7 @@ $.setup({
         options: {
             activeIndex: 0,
             animation: true,
-            onChange: (index) =&gt; {
+            onChange: (index) => {
                 const views = ['Today', 'Week', 'Month', 'Year'];
                 console.log(`Viewing ${views[index]} analytics`);
                 // Could fetch data for selected period
@@ -682,7 +683,7 @@ $.setup({
 });
 </pre>
 
-            <h4 class="category-title mt-4">Multiple Tab Sets</h4>
+          <h4 class="category-title-style mt-4">Multiple Tab Sets</h4>
             <pre class="code-block language-javascript">
 $.setup({
     '.product-tabs': {
@@ -702,8 +703,8 @@ $.setup({
 });
 </pre>
 
-            <h4 class="category-title mt-4">Demo</h4>
-            <div class="demo-area">
+          <h4 class="category-title-style mt-4">Demo</h4>
+          <div class="demo-area tabs-demo-area">
                 <div class="config-demo-tabs tabs">
                     <ul class="tab-list">
                         <li class="tab-item active">Config Tab 1</li>
@@ -721,17 +722,15 @@ $.setup({
     </section>
 
     <!-- SECTION 8: Related Elements -->
-    <section class="card mb-6" data-section="Related">
+  <section class="card mb-6" data-section="Related Elements">
         <div class="card-header">
             <h2 class="text-xl font-semibold m-0">Related Elements</h2>
         </div>
         <div class="card-body">
             <p class="mb-4">Tabs work great with these complementary components:</p>
 
-            <div class="grid grid-cols-1"
-                 style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--dm-space-4);">
-                <a href="../accordion/index.html" class="card card-hover"
-                   style="text-decoration: none; color: inherit;">
+          <div class="grid grid-cols-1 grid-auto-fit-250 gap-4">
+            <a href="../accordion/index.html" class="card card-hover no-underline text-inherit">
                     <div class="card-body">
                         <h4 class="card-title">Accordion</h4>
                         <p class="card-text">Alternative to tabs when vertical space isn't limited; all content on one
@@ -739,21 +738,21 @@ $.setup({
                     </div>
                 </a>
 
-                <a href="../card/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+            <a href="../card/index.html" class="card card-hover no-underline text-inherit">
                     <div class="card-body">
                         <h4 class="card-title">Card</h4>
                         <p class="card-text">Wrap tab panels in cards for better visual separation and structure.</p>
                     </div>
                 </a>
 
-                <a href="../modal/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+            <a href="../modal/index.html" class="card card-hover no-underline text-inherit">
                     <div class="card-body">
                         <h4 class="card-title">Modal</h4>
                         <p class="card-text">Use tabs within modals for complex forms or multi-section content.</p>
                     </div>
                 </a>
 
-                <a href="../loader/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+            <a href="../loader/index.html" class="card card-hover no-underline text-inherit">
                     <div class="card-body">
                         <h4 class="card-title">Loader</h4>
                         <p class="card-text">Show loading states while tab content loads asynchronously.</p>
@@ -798,7 +797,7 @@ $.setup({
             // Simulate loading content
             const $panel = $(panel);
             if (!panel.dataset.loaded) {
-                $panel.html('<p style="color: var(--dm-text-muted);">Loading content...</p>');
+              $panel.html('<p class="text-muted">Loading content...</p>');
 
                 setTimeout(() => {
                     $panel.html(`<p>Dynamically loaded content for Tab ${index + 1}</p>

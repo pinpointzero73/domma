@@ -1946,6 +1946,328 @@ code {
     justify-content: center;
 }
 
+/* ============================================
+   JUMBOTRON - Enhanced Tailwind-Inspired Utilities
+   ============================================ */
+
+/* 1. Split Layouts - Text + Image Grid Layouts */
+
+.jumbotron-split {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--dm-space-8);
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .jumbotron-split {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Reverse layout (image left, text right) */
+@media (min-width: 768px) {
+    .jumbotron-split-reverse .jumbotron-text {
+        order: 2;
+    }
+
+    .jumbotron-split-reverse .jumbotron-media {
+        order: 1;
+    }
+}
+
+/* Asymmetric split layouts */
+@media (min-width: 768px) {
+    .jumbotron-split-60-40 {
+        grid-template-columns: 60% 40%;
+    }
+
+    .jumbotron-split-70-30 {
+        grid-template-columns: 70% 30%;
+    }
+
+    .jumbotron-split-40-60 {
+        grid-template-columns: 40% 60%;
+    }
+
+    .jumbotron-split-30-70 {
+        grid-template-columns: 30% 70%;
+    }
+}
+
+/* Child containers for split layouts */
+.jumbotron-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.jumbotron-media {
+    border-radius: var(--dm-radius-lg);
+    overflow: hidden;
+}
+
+.jumbotron-media img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+/* 2. Enhanced Overlay System - Multiple Overlay Variants */
+
+/* Light overlay (for dark images) */
+.jumbotron-overlay-light {
+    position: relative;
+}
+
+.jumbotron-overlay-light::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.3);
+    z-index: 1;
+    border-radius: inherit;
+}
+
+.jumbotron-overlay-light > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Dark overlay (for bright images) */
+.jumbotron-overlay-dark {
+    position: relative;
+}
+
+.jumbotron-overlay-dark::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+    border-radius: inherit;
+}
+
+.jumbotron-overlay-dark > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Extra dark overlay for maximum contrast */
+.jumbotron-overlay-darker {
+    position: relative;
+}
+
+.jumbotron-overlay-darker::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1;
+    border-radius: inherit;
+}
+
+.jumbotron-overlay-darker > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Gradient overlay (bottom to top fade) */
+.jumbotron-overlay-gradient {
+    position: relative;
+}
+
+.jumbotron-overlay-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    z-index: 1;
+    border-radius: inherit;
+}
+
+.jumbotron-overlay-gradient > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Gradient overlay variant - top to bottom */
+.jumbotron-overlay-gradient-reverse {
+    position: relative;
+}
+
+.jumbotron-overlay-gradient-reverse::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+    z-index: 1;
+    border-radius: inherit;
+}
+
+.jumbotron-overlay-gradient-reverse > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* 3. Announcement Badges - Small notification badges */
+
+.jumbotron-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dm-space-2);
+    padding: var(--dm-space-1) var(--dm-space-3);
+    background: var(--dm-primary);
+    color: white;
+    font-size: var(--dm-font-size-sm);
+    font-weight: 500;
+    border-radius: var(--dm-radius-full);
+    margin-bottom: var(--dm-space-4);
+    line-height: 1.5;
+}
+
+.jumbotron-badge-secondary {
+    background: var(--dm-gray-200);
+    color: var(--dm-gray-900);
+}
+
+.jumbotron-badge-outline {
+    background: transparent;
+    border: 1px solid currentColor;
+    color: inherit;
+}
+
+.jumbotron-badge-success {
+    background: var(--dm-success);
+    color: white;
+}
+
+.jumbotron-badge-warning {
+    background: var(--dm-warning);
+    color: var(--dm-gray-900);
+}
+
+.jumbotron-badge-danger {
+    background: var(--dm-danger);
+    color: white;
+}
+
+.jumbotron-badge-info {
+    background: var(--dm-info);
+    color: white;
+}
+
+/* Badge icon/emoji support */
+.jumbotron-badge-icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+}
+
+/* 4. Responsive Utilities - Advanced responsive behaviors */
+
+/* Responsive typography using CSS clamp (fluid scaling) */
+.jumbotron-title-responsive {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.2;
+}
+
+.jumbotron-subtitle-responsive {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    line-height: 1.5;
+}
+
+/* Responsive spacing */
+.jumbotron-responsive {
+    padding: clamp(2rem, 6vw, 5rem) clamp(1rem, 3vw, 2rem);
+}
+
+/* Conditional display utilities */
+.jumbotron-hide-mobile {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .jumbotron-hide-mobile {
+        display: block;
+    }
+}
+
+.jumbotron-show-mobile {
+    display: block;
+}
+
+@media (min-width: 768px) {
+    .jumbotron-show-mobile {
+        display: none;
+    }
+}
+
+/* Responsive alignment */
+.jumbotron-center-mobile {
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .jumbotron-center-mobile {
+        text-align: left;
+    }
+}
+
+.jumbotron-left-mobile {
+    text-align: left;
+}
+
+@media (min-width: 768px) {
+    .jumbotron-left-mobile {
+        text-align: center;
+    }
+}
+
+/* 5. Additional Gradient Variants - Modern gradient backgrounds */
+
+.jumbotron-gradient-purple {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.jumbotron-gradient-blue {
+    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    color: white;
+}
+
+.jumbotron-gradient-green {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.jumbotron-gradient-sunset {
+    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+    color: white;
+}
+
+.jumbotron-gradient-ocean {
+    background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+    color: white;
+}
+
+.jumbotron-gradient-rose {
+    background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+    color: white;
+}
+
+.jumbotron-gradient-forest {
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    color: white;
+}
+
+.jumbotron-gradient-night {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: white;
+}
+
 
 /* ============================================
    CAROUSEL

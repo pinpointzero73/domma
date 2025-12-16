@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -35,7 +36,6 @@
                 <li>Multiple size variants (small, default, large)</li>
                 <li>Event callbacks for lifecycle management</li>
                 <li>Programmatic control (open, close, toggle)</li>
-                <li>Prevents body scroll when open</li>
             </ul>
 
             <h4 class="category-title">When to Use Modals</h4>
@@ -59,7 +59,7 @@
         Modal content goes here.
     &lt;/div&gt;
     &lt;div class="modal-footer"&gt;
-        &lt;button class="btn btn-secondary modal-close-btn"&gt;Close&lt;/button&gt;
+        &lt;button class="btn btn-secondary modal-close-btn"&gt;Cancel&lt;/button&gt;
         &lt;button class="btn btn-primary"&gt;Save&lt;/button&gt;
     &lt;/div&gt;
 &lt;/div&gt;
@@ -215,7 +215,6 @@ const confirmModal = Domma.elements.modal('#confirm-modal', {
     },
     onClosed: () =&gt; {
         console.log('Modal fully closed');
-        // Could re-enable page actions
     }
 });
 </pre>
@@ -223,7 +222,7 @@ const confirmModal = Domma.elements.modal('#confirm-modal', {
             <h4 class="category-title mt-4">Step 6: Complete Working Demo</h4>
             <div class="demo-area">
                 <button class="btn btn-danger" id="tutorial-delete-btn">Delete Item</button>
-                <div class="demo-result mt-2" id="tutorial-result" style="display: none;"></div>
+              <div class="demo-result mt-2" id="tutorial-result" class="hidden"></div>
 
                 <div id="tutorial-modal" class="modal">
                     <div class="modal-header">
@@ -232,7 +231,7 @@ const confirmModal = Domma.elements.modal('#confirm-modal', {
                     </div>
                     <div class="modal-body">
                         <p class="mb-2">Are you sure you want to delete this item?</p>
-                        <p class="text-sm" style="color: var(--dm-danger);">This action cannot be undone.</p>
+                      <p class="text-sm" class="text-danger">This action cannot be undone.</p>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary modal-close-btn">Cancel</button>
@@ -331,16 +330,16 @@ const confirmModal = Domma.elements.modal('#confirm-modal', {
                 <button class="btn btn-success" id="open-success">Show Success</button>
 
                 <div id="success-modal" class="modal modal-sm">
-                    <div class="modal-header" style="background: var(--dm-success); color: white; border: none;">
+                  <div class="modal-header" class="bg-success text-white border-0">
                         <h5 class="modal-title m-0">✓ Success!</h5>
-                        <button class="modal-close" style="color: white;">&times;</button>
+                    <button class="modal-close" class="text-white">&times;</button>
                     </div>
                     <div class="modal-body text-center">
-                        <div style="font-size: 3rem; color: var(--dm-success); margin-bottom: var(--dm-space-3);">✓
+                      <div class="text-5xl text-success mb-3">✓
                         </div>
                         <p>Your changes have been saved successfully.</p>
                     </div>
-                    <div class="modal-footer" style="justify-content: center;">
+                  <div class="modal-footer" class="justify-center">
                         <button class="btn btn-success modal-close-btn">Great!</button>
                     </div>
                 </div>
@@ -356,7 +355,7 @@ const confirmModal = Domma.elements.modal('#confirm-modal', {
                         <h5 class="modal-title">Terms and Conditions</h5>
                         <button class="modal-close">&times;</button>
                     </div>
-                    <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                  <div class="modal-body" class="modal-body-scrollable">
                         <h6 class="mb-2">1. Introduction</h6>
                         <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
                             incididunt ut labore et dolore magna aliqua.</p>
@@ -522,187 +521,6 @@ const confirmModal = Domma.elements.modal('#confirm-modal', {
         </div>
     </section>
 
-    <!-- SECTION 6: API Reference -->
-    <section class="card mb-6" data-section="API Reference">
-        <div class="card-header">
-            <h2 class="text-xl font-semibold m-0">API Reference</h2>
-        </div>
-        <div class="card-body">
-
-            <h4 class="category-title">Constructor Options</h4>
-            <table class="option-table mb-6">
-                <tr>
-                    <th>Option</th>
-                    <th>Type</th>
-                    <th>Default</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td><code>backdrop</code></td>
-                    <td>Boolean</td>
-                    <td><code>true</code></td>
-                    <td>Show semi-transparent backdrop overlay</td>
-                </tr>
-                <tr>
-                    <td><code>backdropClose</code></td>
-                    <td>Boolean</td>
-                    <td><code>true</code></td>
-                    <td>Close modal when backdrop is clicked</td>
-                </tr>
-                <tr>
-                    <td><code>keyboard</code></td>
-                    <td>Boolean</td>
-                    <td><code>true</code></td>
-                    <td>Close modal when Escape key is pressed</td>
-                </tr>
-                <tr>
-                    <td><code>animation</code></td>
-                    <td>String</td>
-                    <td><code>'fade'</code></td>
-                    <td>Animation type for open/close transitions</td>
-                </tr>
-                <tr>
-                    <td><code>onOpen</code></td>
-                    <td>Function</td>
-                    <td><code>null</code></td>
-                    <td>Callback fired when modal starts opening</td>
-                </tr>
-                <tr>
-                    <td><code>onClose</code></td>
-                    <td>Function</td>
-                    <td><code>null</code></td>
-                    <td>Callback fired when modal starts closing</td>
-                </tr>
-                <tr>
-                    <td><code>onClosed</code></td>
-                    <td>Function</td>
-                    <td><code>null</code></td>
-                    <td>Callback fired after modal is fully closed</td>
-                </tr>
-            </table>
-
-            <h4 class="category-title">Methods</h4>
-            <table class="option-table mb-6">
-                <tr>
-                    <th>Method</th>
-                    <th>Parameters</th>
-                    <th>Returns</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td><code>open()</code></td>
-                    <td>None</td>
-                    <td>this</td>
-                    <td>Opens the modal with fade animation</td>
-                </tr>
-                <tr>
-                    <td><code>close()</code></td>
-                    <td>None</td>
-                    <td>this</td>
-                    <td>Closes the modal with fade animation</td>
-                </tr>
-                <tr>
-                    <td><code>toggle()</code></td>
-                    <td>None</td>
-                    <td>this</td>
-                    <td>Toggles modal open/closed state</td>
-                </tr>
-                <tr>
-                    <td><code>isOpen()</code></td>
-                    <td>None</td>
-                    <td>Boolean</td>
-                    <td>Returns true if modal is currently open</td>
-                </tr>
-                <tr>
-                    <td><code>destroy()</code></td>
-                    <td>None</td>
-                    <td>void</td>
-                    <td>Removes event listeners and cleans up instance</td>
-                </tr>
-            </table>
-
-            <h4 class="category-title">Events</h4>
-            <table class="option-table mb-6">
-                <tr>
-                    <th>Event</th>
-                    <th>Parameters</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td><code>onOpen</code></td>
-                    <td>None</td>
-                    <td>Fired when modal begins opening animation</td>
-                </tr>
-                <tr>
-                    <td><code>onClose</code></td>
-                    <td>None</td>
-                    <td>Fired when modal begins closing animation</td>
-                </tr>
-                <tr>
-                    <td><code>onClosed</code></td>
-                    <td>None</td>
-                    <td>Fired after modal is fully closed and hidden</td>
-                </tr>
-            </table>
-
-            <h4 class="category-title">CSS Classes</h4>
-            <table class="option-table mb-4">
-                <tr>
-                    <th>Class</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td><code>.modal</code></td>
-                    <td>Base modal container (hidden by default)</td>
-                </tr>
-                <tr>
-                    <td><code>.modal-sm</code></td>
-                    <td>Small modal variant (max-width: 400px)</td>
-                </tr>
-                <tr>
-                    <td><code>.modal-lg</code></td>
-                    <td>Large modal variant (max-width: 800px)</td>
-                </tr>
-                <tr>
-                    <td><code>.modal-xl</code></td>
-                    <td>Extra large modal variant (max-width: 1000px)</td>
-                </tr>
-                <tr>
-                    <td><code>.modal-header</code></td>
-                    <td>Top section with title and close button</td>
-                </tr>
-                <tr>
-                    <td><code>.modal-body</code></td>
-                    <td>Main content area with padding</td>
-                </tr>
-                <tr>
-                    <td><code>.modal-footer</code></td>
-                    <td>Bottom section for action buttons</td>
-                </tr>
-                <tr>
-                    <td><code>.modal-title</code></td>
-                    <td>Heading within modal header</td>
-                </tr>
-                <tr>
-                    <td><code>.modal-close</code></td>
-                    <td>Close button (typically × symbol)</td>
-                </tr>
-                <tr>
-                    <td><code>.modal-close-btn</code></td>
-                    <td>Button with close behaviour (any text)</td>
-                </tr>
-                <tr>
-                    <td><code>.modal-backdrop</code></td>
-                    <td>Semi-transparent overlay behind modal</td>
-                </tr>
-                <tr>
-                    <td><code>.active</code></td>
-                    <td>Applied to modal and backdrop when visible</td>
-                </tr>
-            </table>
-        </div>
-    </section>
-
     <!-- SECTION 7: Config Engine Integration -->
     <section class="card mb-6" data-section="Config Engine">
         <div class="card-header">
@@ -792,8 +610,8 @@ $.setup({
             <p class="mb-4">Modals work great with these complementary components:</p>
 
             <div class="grid grid-cols-1"
-                 style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--dm-space-4);">
-                <a href="../dialog/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+                 class="grid-auto-fit-250 gap-4">
+              <a href="../dialog/index.html" class="card card-hover" class="no-underline text-inherit">
                     <div class="card-body">
                         <h4 class="card-title">Dialog</h4>
                         <p class="card-text">Promise-based alert/confirm/prompt alternatives for simpler
@@ -801,21 +619,21 @@ $.setup({
                     </div>
                 </a>
 
-                <a href="../toast/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+              <a href="../toast/index.html" class="card card-hover" class="no-underline text-inherit">
                     <div class="card-body">
                         <h4 class="card-title">Toast</h4>
                         <p class="card-text">Non-blocking notifications for feedback after modal actions.</p>
                     </div>
                 </a>
 
-                <a href="../forms/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+              <a href="../forms/index.html" class="card card-hover" class="no-underline text-inherit">
                     <div class="card-body">
                         <h4 class="card-title">Forms</h4>
                         <p class="card-text">Form components perfect for modal-based data entry.</p>
                     </div>
                 </a>
 
-                <a href="../loader/index.html" class="card card-hover" style="text-decoration: none; color: inherit;">
+              <a href="../loader/index.html" class="card card-hover" class="no-underline text-inherit">
                     <div class="card-body">
                         <h4 class="card-title">Loader</h4>
                         <p class="card-text">Loading indicators for async operations within modals.</p>
@@ -851,7 +669,7 @@ $.setup({
     });
 
     $('#tutorial-confirm').on('click', () => {
-        $('#tutorial-result').css('display', 'block').html('<span style="color: var(--dm-success);">✓ Item deleted successfully at ' + new Date().toLocaleTimeString() + '</span>');
+      $('#tutorial-result').removeClass('hidden').html('<span class="text-success">✓ Item deleted successfully at ' + new Date().toLocaleTimeString() + '</span>');
         tutorialModal.close();
     });
 

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -24,7 +25,7 @@
             enhanced with Domma's theme-aware styling.
         </p>
 
-        <h3 class="category-title">Key Features</h3>
+      <h3 class="category-title-style">Key Features</h3>
         <ul class="feature-list mb-4">
             <li><strong>Native HTML</strong> - Works with standard form elements</li>
             <li><strong>Validation States</strong> - Success, error, and warning styling</li>
@@ -32,7 +33,7 @@
             <li><strong>Layouts</strong> - Vertical, horizontal, and inline forms</li>
         </ul>
 
-        <h3 class="category-title">Basic Usage</h3>
+      <h3 class="category-title-style">Basic Usage</h3>
         <div class="code-block language-javascript">
             <pre><code>
 &lt;div class="form-group"&gt;
@@ -49,9 +50,9 @@
         <h2 class="text-xl font-semibold m-0">Quick Start</h2>
     </div>
     <div class="card-body">
-        <h3 class="category-title">Simple Form</h3>
+      <h3 class="category-title-style">Simple Form</h3>
         <div class="demo-area mb-4">
-            <form style="max-width: 400px; margin: 0 auto;">
+          <form class="forms-max-w-400-center">
                 <div class="form-group">
                     <label>Email</label>
                     <input type="email" class="form-input" placeholder="you@example.com">
@@ -89,7 +90,7 @@
         <p class="mb-4">Build a registration form with validation.</p>
 
         <div class="demo-area">
-            <form id="tutorial-form" style="max-width: 500px; margin: 0 auto;">
+          <form id="tutorial-form" class="forms-max-w-500-center">
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" id="name" class="form-input" placeholder="John Doe" required>
@@ -134,17 +135,17 @@
 
         <div class="code-block language-javascript mt-4">
             <pre><code>
-document.getElementById('form').addEventListener('submit', (e) =&gt; {
+document.getElementById('form').addEventListener('submit', (e) => {
     e.preventDefault();
 
     // Clear previous validation
-    document.querySelectorAll('.form-group').forEach(group =&gt; {
+    document.querySelectorAll('.form-group').forEach(group => {
         group.classList.remove('has-error', 'has-success');
     });
 
     // Validate name
     const name = document.getElementById('name');
-    if (name.value.length &lt; 2) {
+    if (name.value.length < 2) {
         name.closest('.form-group').classList.add('has-error');
         return;
     }
@@ -172,9 +173,9 @@ document.getElementById('form').addEventListener('submit', (e) =&gt; {
     </div>
     <div class="card-body">
 
-        <h3 class="category-title">Input Types</h3>
+      <h3 class="category-title-style">Input Types</h3>
         <div class="demo-area mb-4">
-            <div style="max-width: 500px; margin: 0 auto;">
+          <div class="forms-max-w-500-center">
                 <div class="form-group">
                     <label>Text Input</label>
                     <input type="text" class="form-input" placeholder="Enter text">
@@ -198,9 +199,9 @@ document.getElementById('form').addEventListener('submit', (e) =&gt; {
             </div>
         </div>
 
-        <h3 class="category-title">Select Menus</h3>
+      <h3 class="category-title-style">Select Menus</h3>
         <div class="demo-area mb-4">
-            <div style="max-width: 500px; margin: 0 auto;">
+          <div class="forms-max-w-500-center">
                 <div class="form-group">
                     <label>Single Select</label>
                     <select class="form-select">
@@ -222,9 +223,9 @@ document.getElementById('form').addEventListener('submit', (e) =&gt; {
             </div>
         </div>
 
-        <h3 class="category-title">Checkboxes and Radios</h3>
+      <h3 class="category-title-style">Checkboxes and Radios</h3>
         <div class="demo-area mb-4">
-            <div style="max-width: 500px; margin: 0 auto;">
+          <div class="forms-max-w-500-center">
                 <div class="form-group">
                     <label>Checkboxes</label>
                     <label class="form-checkbox">
@@ -259,9 +260,9 @@ document.getElementById('form').addEventListener('submit', (e) =&gt; {
             </div>
         </div>
 
-        <h3 class="category-title">Input Sizes</h3>
+      <h3 class="category-title-style">Input Sizes</h3>
         <div class="demo-area mb-4">
-            <div style="max-width: 500px; margin: 0 auto;">
+          <div class="forms-max-w-500-center">
                 <div class="form-group">
                     <label>Small</label>
                     <input type="text" class="form-input form-input-sm" placeholder="Small input">
@@ -277,9 +278,9 @@ document.getElementById('form').addEventListener('submit', (e) =&gt; {
             </div>
         </div>
 
-        <h3 class="category-title">Validation States</h3>
+      <h3 class="category-title-style">Validation States</h3>
         <div class="demo-area mb-4">
-            <div style="max-width: 500px; margin: 0 auto;">
+          <div class="forms-max-w-500-center">
                 <div class="form-group has-success">
                     <label>Success</label>
                     <input type="text" class="form-input" value="Valid input">
@@ -298,9 +299,9 @@ document.getElementById('form').addEventListener('submit', (e) =&gt; {
             </div>
         </div>
 
-        <h3 class="category-title">Input Groups</h3>
+      <h3 class="category-title-style">Input Groups</h3>
         <div class="demo-area mb-4">
-            <div style="max-width: 500px; margin: 0 auto;">
+          <div class="forms-max-w-500-center">
                 <div class="form-group">
                     <label>With Prefix</label>
                     <div class="input-group">
@@ -325,8 +326,8 @@ document.getElementById('form').addEventListener('submit', (e) =&gt; {
             </div>
         </div>
 
-        <h3 class="category-title">Inline Forms</h3>
-        <div class="demo-area text-center">
+      <h3 class="category-title-style">Inline Forms</h3>
+      <div class="demo-area forms-text-center">
             <form class="form-inline">
                 <input type="email" class="form-input" placeholder="Email">
                 <input type="password" class="form-input" placeholder="Password">
@@ -341,7 +342,7 @@ document.getElementById('form').addEventListener('submit', (e) =&gt; {
         <h2 class="text-xl font-semibold m-0">Best Practices</h2>
     </div>
     <div class="card-body">
-        <h3 class="category-title">Accessibility</h3>
+      <h3 class="category-title-style">Accessibility</h3>
         <ul class="mb-4">
             <li><strong>Labels</strong> - Always provide <code><label></code> elements for inputs</li>
             <li><strong>ARIA Attributes</strong> - Use <code>aria-required</code>, <code>aria-invalid</code> for
@@ -351,7 +352,7 @@ document.getElementById('form').addEventListener('submit', (e) =&gt; {
             <li><strong>Keyboard Navigation</strong> - Ensure all form controls are keyboard accessible</li>
         </ul>
 
-        <h3 class="category-title">Validation</h3>
+      <h3 class="category-title-style">Validation</h3>
         <ul class="mb-4">
             <li><strong>Client-Side First</strong> - Validate on submit before sending to server</li>
             <li><strong>Clear Feedback</strong> - Use validation states and helper text</li>
@@ -359,7 +360,7 @@ document.getElementById('form').addEventListener('submit', (e) =&gt; {
             <li><strong>Server-Side Required</strong> - Always validate on backend for security</li>
         </ul>
 
-        <h3 class="category-title">UX Guidelines</h3>
+      <h3 class="category-title-style">UX Guidelines</h3>
         <ul>
             <li><strong>Placeholder Text</strong> - Use for examples, not instructions</li>
             <li><strong>Help Text</strong> - Provide context with <code>.form-text</code></li>
@@ -375,8 +376,8 @@ document.getElementById('form').addEventListener('submit', (e) =&gt; {
         <h2 class="text-xl font-semibold m-0">CSS Classes</h2>
     </div>
     <div class="card-body">
-        <div class="option-table">
-            <table>
+      <div class="option-table-accordion">
+        <table class="api-table-accordion">
                 <thead>
                 <tr>
                     <th>Class</th>
@@ -460,7 +461,7 @@ document.getElementById('form').addEventListener('submit', (e) =&gt; {
             auto-save, dynamic fields, and more using Domma's declarative configuration.
         </p>
 
-        <h4 class="category-title">Form Validation with $.setup()</h4>
+      <h4 class="category-title-style">Form Validation with $.setup()</h4>
         <pre class="code-block language-javascript">
 $.setup({
     '#registration-form': {
@@ -468,7 +469,7 @@ $.setup({
             data: { touched: {}, errors: {} }
         },
         events: {
-            submit: (e, $form) =&gt; {
+            submit: (e, $form) => {
                 e.preventDefault();
 
                 // Collect form data
@@ -486,7 +487,7 @@ $.setup({
                 if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
                     errors.email = 'Invalid email';
                 }
-                if (formData.password.length &lt; 8) {
+                if (formData.password.length < 8) {
                     errors.password = 'Password must be 8+ characters';
                 }
 
@@ -495,16 +496,16 @@ $.setup({
                 if (_.isEmpty(errors)) {
                     // Submit
                     Domma.http.post('/api/register', formData)
-                        .then(() =&gt; {
+                        .then(() => {
                             Domma.elements.toast.success('Registered successfully!');
                             window.location = '/dashboard';
                         })
-                        .catch(err =&gt; {
+                        .catch(err => {
                             Domma.elements.toast.error(err.message);
                         });
                 } else {
                     // Show errors
-                    _.forEach(errors, (msg, field) =&gt; {
+                    _.forEach(errors, (msg, field) => {
                         $form.find(`[name="${field}"]`)
                             .closest('.form-group')
                             .addClass('has-error')
@@ -513,7 +514,7 @@ $.setup({
                 }
             },
 
-            'blur .form-input': _.debounce((e, $form) =&gt; {
+            'blur .form-input': _.debounce((e, $form) => {
                 const $input = $(e.target);
                 const field = $input.attr('name');
                 const value = $input.val();
@@ -529,7 +530,7 @@ $.setup({
                 if (field === 'email') {
                     isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
                 } else if (field === 'password') {
-                    isValid = value.length &gt;= 8;
+                    isValid = value.length >= 8;
                 } else {
                     isValid = !_.isEmpty(_.trim(value));
                 }
@@ -542,7 +543,7 @@ $.setup({
 });
 </pre>
 
-        <h4 class="category-title">Auto-Save Draft</h4>
+      <h4 class="category-title-style">Auto-Save Draft</h4>
         <pre class="code-block language-javascript">
 $.setup({
     '#article-form': {
@@ -550,7 +551,7 @@ $.setup({
             data: { saveTimer: null, lastSaved: null }
         },
         events: {
-            'input .form-input, change select': _.debounce((e, $form) =&gt; {
+            'input .form-input, change select': _.debounce((e, $form) => {
                 // Collect current state
                 const data = {
                     title: $form.find('[name="title"]').val(),
@@ -560,7 +561,7 @@ $.setup({
 
                 // Save draft
                 Domma.http.post('/api/drafts/auto-save', data)
-                    .then(() =&gt; {
+                    .then(() => {
                         $form.data('lastSaved', new Date());
                         $('#save-status').text('Draft saved ' + D().format('HH:mm:ss'));
                     });
@@ -570,12 +571,12 @@ $.setup({
 });
 </pre>
 
-        <h4 class="category-title">Dynamic Form Fields</h4>
+      <h4 class="category-title-style">Dynamic Form Fields</h4>
         <pre class="code-block language-javascript">
 $.setup({
     '#contact-form': {
         events: {
-            'click #add-phone': (e, $form) =&gt; {
+            'click #add-phone': (e, $form) => {
                 const phoneCount = $form.find('.phone-input').length;
                 const html = `
                     &lt;div class="form-group"&gt;
@@ -587,7 +588,7 @@ $.setup({
                 $form.find('#phone-inputs').append(html);
             },
 
-            'change [name="contact-method"]': (e, $form) =&gt; {
+            'change [name="contact-method"]': (e, $form) => {
                 const method = $(e.target).val();
 
                 // Show/hide relevant fields
@@ -600,7 +601,7 @@ $.setup({
 });
 </pre>
 
-        <h4 class="category-title">Multi-Step Form</h4>
+      <h4 class="category-title-style">Multi-Step Form</h4>
         <pre class="code-block language-javascript">
 $.setup({
     '#wizard-form': {
@@ -608,9 +609,9 @@ $.setup({
             data: { currentStep: 1, totalSteps: 3, formData: {} }
         },
         events: {
-            'click .next-step': (e, $form) =&gt; {
+            'click .next-step': (e, $form) => {
                 const data = $form.data();
-                if (data.currentStep &lt; data.totalSteps) {
+                if (data.currentStep < data.totalSteps) {
                     // Collect current step data
                     $form.find(`.step-${data.currentStep} .form-input`).each(function() {
                         const $input = $(this);
@@ -629,9 +630,9 @@ $.setup({
                 }
             },
 
-            'click .prev-step': (e, $form) =&gt; {
+            'click .prev-step': (e, $form) => {
                 const data = $form.data();
-                if (data.currentStep &gt; 1) {
+                if (data.currentStep > 1) {
                     data.currentStep--;
                     $form.data(data);
 
@@ -646,7 +647,7 @@ $.setup({
 });
 </pre>
 
-        <h4 class="category-title">Benefits of Hybrid Approach</h4>
+      <h4 class="category-title-style">Benefits of Hybrid Approach</h4>
         <ul class="mb-4">
             <li><strong>Progressive Enhancement</strong> - Forms work without JS, enhanced with JS</li>
             <li><strong>Better UX</strong> - Real-time validation, auto-save, dynamic fields</li>
@@ -654,7 +655,7 @@ $.setup({
             <li><strong>Accessibility</strong> - CSS provides base styling, JS adds interactivity</li>
         </ul>
 
-        <h4 class="category-title">CSS-Only vs CSS+JS Hybrid</h4>
+      <h4 class="category-title-style">CSS-Only vs CSS+JS Hybrid</h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <p class="font-semibold mb-2">CSS-Only (Default)</p>
@@ -712,7 +713,7 @@ $.setup({
         <h2 class="text-xl font-semibold m-0">Related Elements</h2>
     </div>
     <div class="card-body">
-        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+      <div class="grid grid-cols-1 gap-4 grid-auto-fit-250">
             <a href="../button-group/index.html" class="card card-hover">
                 <div class="card-body">
                     <h3 class="card-title">Button Group</h3>

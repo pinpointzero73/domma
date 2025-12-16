@@ -35,7 +35,7 @@
 
         .gallery-item:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--dm-shadow-lg);
         }
 
         .gallery-item img {
@@ -52,7 +52,7 @@
             right: 0;
             background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
             padding: 1rem;
-            color: white;
+            color: var(--dm-white);
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -93,7 +93,7 @@
         .carousel {
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--dm-shadow-md);
         }
 
         /* Lightbox modal */
@@ -102,7 +102,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #000;
+            background: var(--dm-black);
         }
 
         .lightbox-modal img {

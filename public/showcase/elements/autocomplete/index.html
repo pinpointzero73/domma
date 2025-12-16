@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -26,7 +27,7 @@
                 tag selection, and any scenario where users need suggestions while typing.
             </p>
 
-            <h3 class="category-title">Key Features</h3>
+            <h3 class="category-title-style">Key Features</h3>
             <ul class="feature-list mb-4">
                 <li><strong>Flexible Data Sources</strong> - Static arrays or async functions (API calls)</li>
                 <li><strong>Smart Filtering</strong> - Client-side and server-side filtering with debouncing</li>
@@ -37,7 +38,7 @@
                 <li><strong>Accessibility</strong> - ARIA compliant with screen reader support</li>
             </ul>
 
-            <h3 class="category-title">When to Use</h3>
+            <h3 class="category-title-style">When to Use</h3>
             <ul class="feature-list mb-4">
                 <li>Search inputs with suggested queries</li>
                 <li>Address or location lookups</li>
@@ -46,19 +47,19 @@
                 <li>Any input that benefits from auto-suggestions</li>
             </ul>
 
-            <h3 class="category-title">Basic Usage</h3>
+            <h3 class="category-title-style">Basic Usage</h3>
             <div class="code-block language-javascript">
             <pre><code>
 // Static data source
 const autocomplete = Domma.elements.autocomplete('#search', {
     data: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'],
     minChars: 1,
-    onSelect: (value) =&gt; console.log('Selected:', value)
+    onSelect: (value) => console.log('Selected:', value)
 });
 
 // Async data source
 Domma.elements.autocomplete('#city', {
-    dataSource: async (query) =&gt; {
+    dataSource: async (query) => {
         const res = await fetch(`/api/cities?q=${query}`);
         return res.json();
     },
@@ -74,10 +75,11 @@ Domma.elements.autocomplete('#city', {
             <h2 class="text-xl font-semibold m-0">Quick Start</h2>
         </div>
         <div class="card-body">
-            <h3 class="category-title">Simple Autocomplete</h3>
+            <h3 class="category-title-style">Simple Autocomplete</h3>
             <p class="mb-4">Type to see fruit suggestions:</p>
             <div class="demo-area mb-4">
-                <input type="text" id="quick-autocomplete" placeholder="Type a fruit name..." style="max-width: 400px;">
+                <input type="text" id="quick-autocomplete" placeholder="Type a fruit name..."
+                       class="autocomplete-input-style">
             </div>
             <div class="code-block language-javascript">
             <pre><code>
@@ -96,7 +98,7 @@ Domma.elements.autocomplete('#fruit-search', {
     data: fruits,
     minChars: 1,
     maxResults: 8,
-    onSelect: (value) =&gt; {
+    onSelect: (value) => {
         console.log('Selected fruit:', value);
     }
 });
@@ -130,7 +132,7 @@ const countries = [
     { value: 'au', label: '\ud83c\udde6\ud83c\uddfa Australia' },
     { value: 'de', label: '\ud83c\udde9\ud83c\uddea Germany' },
     { value: 'fr', label: '\ud83c\uddeb\ud83c\uddf7 France' },
-    { value: 'jp', label: '\ud83c\uddef\ud83c\uddf5 Japan' },
+    { value: 'jp', label: '\ud83c\uddef\ud83c\uddf5 Japan'},
     { value: 'cn', label: '\ud83c\udde8\ud83c\uddf3 China' }
     // ... more countries
 ];
@@ -144,7 +146,7 @@ const countryPicker = Domma.elements.autocomplete('#country-search', {
     data: countries,
     minChars: 1,
     highlightMatches: true,
-    onSelect: (country) =&gt; {
+    onSelect: (country) => {
         console.log('Selected:', country.label);
         console.log('Country code:', country.value);
     }
@@ -155,7 +157,7 @@ const countryPicker = Domma.elements.autocomplete('#country-search', {
             <h4 class="text-lg font-medium mb-3">Step 4: Try It Out</h4>
             <div class="demo-area mb-4">
                 <input type="text" id="tutorial-autocomplete" placeholder="Search countries..."
-                       style="max-width: 400px;">
+                       class="autocomplete-input-style">
                 <div id="tutorial-result" class="mt-4 p-3 bg-surface rounded">
                     <p class="text-sm text-muted">Select a country to see the result</p>
                 </div>
@@ -175,26 +177,26 @@ const countryPicker = Domma.elements.autocomplete('#country-search', {
         </div>
         <div class="card-body">
 
-            <h3 class="category-title">Example 1: Async Data Source (Simulated API)</h3>
+            <h3 class="category-title-style">Example 1: Async Data Source (Simulated API)</h3>
             <p class="mb-3">Search for programming languages with simulated async fetch:</p>
             <div class="demo-area mb-4">
                 <input type="text" id="async-autocomplete" placeholder="Search programming languages..."
-                       style="max-width: 400px;">
+                       class="autocomplete-input-style">
                 <p class="text-xs text-muted mt-2">Notice the loading indicator while fetching results</p>
             </div>
             <div class="code-block language-javascript">
             <pre><code>
 Domma.elements.autocomplete('#language-search', {
-    dataSource: async (query) =&gt; {
+    dataSource: async (query) => {
         // Simulate API call with delay
-        await new Promise(resolve =&gt; setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 500));
 
         const languages = [
             'JavaScript', 'TypeScript', 'Python', 'Java', 'C++', 'C#',
             'Ruby', 'Go', 'Rust', 'PHP', 'Swift', 'Kotlin'
         ];
 
-        return languages.filter(lang =&gt;
+        return languages.filter(lang =>
             lang.toLowerCase().includes(query.toLowerCase())
         );
     },
@@ -205,11 +207,11 @@ Domma.elements.autocomplete('#language-search', {
 </code></pre>
             </div>
 
-            <h3 class="category-title">Example 2: Custom Rendering</h3>
+            <h3 class="category-title-style">Example 2: Custom Rendering</h3>
             <p class="mb-3">Render suggestions with custom HTML structure:</p>
             <div class="demo-area mb-4">
                 <input type="text" id="custom-render-autocomplete" placeholder="Search users..."
-                       style="max-width: 400px;">
+                       class="autocomplete-input-style">
             </div>
             <div class="code-block language-javascript">
             <pre><code>
@@ -221,7 +223,7 @@ const users = [
 
 Domma.elements.autocomplete('#user-search', {
     data: users,
-    renderItem: (user, query) =&gt; {
+    renderItem: (user, query) => {
         return `
             &lt;div style="display: flex; flex-direction: column;"&gt;
                 &lt;strong&gt;${user.name}&lt;/strong&gt;
@@ -230,22 +232,25 @@ Domma.elements.autocomplete('#user-search', {
             &lt;/div&gt;
         `;
     },
-    onSelect: (user) =&gt; console.log('Selected user:', user.name)
+    onSelect: (user) => console.log('Selected user:', user.name)
 });
 </code></pre>
             </div>
 
-            <h3 class="category-title">Example 3: Position Control</h3>
+            <h3 class="category-title-style">Example 3: Position Control</h3>
             <p class="mb-3">Control dropdown position (try scrolling):</p>
             <div class="demo-area mb-4">
                 <label class="text-sm mb-2">Position Above:</label>
-                <input type="text" id="position-above" placeholder="Dropdown opens above..." style="max-width: 400px;">
+                <input type="text" id="position-above" placeholder="Dropdown opens above..."
+                       class="autocomplete-input-style">
                 <br><br>
                 <label class="text-sm mb-2">Position Below (Default):</label>
-                <input type="text" id="position-below" placeholder="Dropdown opens below..." style="max-width: 400px;">
+                <input type="text" id="position-below" placeholder="Dropdown opens below..."
+                       class="autocomplete-input-style">
                 <br><br>
                 <label class="text-sm mb-2">Auto Position:</label>
-                <input type="text" id="position-auto" placeholder="Dropdown auto-adjusts..." style="max-width: 400px;">
+                <input type="text" id="position-auto" placeholder="Dropdown auto-adjusts..."
+                       class="autocomplete-input-style">
             </div>
             <div class="code-block language-javascript">
             <pre><code>
@@ -263,10 +268,10 @@ Domma.elements.autocomplete('#input-auto', {
 </code></pre>
             </div>
 
-            <h3 class="category-title">Example 4: Clear on Select</h3>
+            <h3 class="category-title-style">Example 4: Clear on Select</h3>
             <p class="mb-3">Useful for multi-entry inputs (tags, emails, etc.):</p>
             <div class="demo-area mb-4">
-                <input type="text" id="clear-on-select" placeholder="Add tags..." style="max-width: 400px;">
+                <input type="text" id="clear-on-select" placeholder="Add tags..." class="autocomplete-input-style">
                 <div id="selected-tags" class="mt-3 flex flex-wrap gap-2"></div>
             </div>
             <div class="code-block language-javascript">
@@ -277,7 +282,7 @@ const selectedTags = [];
 Domma.elements.autocomplete('#tag-input', {
     data: tags,
     clearOnSelect: true,
-    onSelect: (tag) =&gt; {
+    onSelect: (tag) => {
         if (!selectedTags.includes(tag)) {
             selectedTags.push(tag);
             renderTags();
@@ -287,7 +292,7 @@ Domma.elements.autocomplete('#tag-input', {
 
 function renderTags() {
     document.getElementById('tag-container').innerHTML =
-        selectedTags.map(tag =&gt;
+        selectedTags.map(tag =>
             `&lt;span class="badge"&gt;${tag}&lt;/span&gt;`
         ).join('');
 }
@@ -302,7 +307,7 @@ function renderTags() {
             <h2 class="text-xl font-semibold m-0">Best Practices</h2>
         </div>
         <div class="card-body">
-            <h3 class="category-title">Accessibility</h3>
+            <h3 class="category-title-style">Accessibility</h3>
             <ul class="feature-list mb-4">
                 <li><strong>ARIA Attributes:</strong> Autocomplete includes proper ARIA roles and attributes
                     automatically
@@ -314,7 +319,7 @@ function renderTags() {
                 <li><strong>Label Elements:</strong> Always use <code>&lt;label&gt;</code> elements for inputs</li>
             </ul>
 
-            <h3 class="category-title">Performance</h3>
+            <h3 class="category-title-style">Performance</h3>
             <ul class="feature-list mb-4">
                 <li><strong>Debouncing:</strong> Use appropriate debounce values (200-500ms) for async data sources</li>
                 <li><strong>Result Limits:</strong> Set <code>maxResults</code> to limit dropdown size (recommended:
@@ -325,7 +330,7 @@ function renderTags() {
                 <li><strong>Caching:</strong> Cache API responses when appropriate to reduce network requests</li>
             </ul>
 
-            <h3 class="category-title">UX Guidelines</h3>
+            <h3 class="category-title-style">UX Guidelines</h3>
             <ul class="feature-list mb-4">
                 <li><strong>Minimum Characters:</strong> Set <code>minChars</code> to 2-3 to avoid showing too many
                     results
@@ -338,7 +343,7 @@ function renderTags() {
                 </li>
             </ul>
 
-            <h3 class="category-title">Common Pitfalls</h3>
+            <h3 class="category-title-style">Common Pitfalls</h3>
             <ul class="feature-list mb-4">
                 <li><strong>Avoid:</strong> Setting <code>minChars: 0</code> - this can show entire dataset on focus
                 </li>
@@ -354,9 +359,9 @@ function renderTags() {
             <h2 class="text-xl font-semibold m-0">API Reference</h2>
         </div>
         <div class="card-body">
-            <h3 class="category-title">Options</h3>
-            <div class="api-table">
-                <table>
+            <h3 class="category-title-style">Options</h3>
+            <div class="api-table-accordion">
+                <table class="api-table-accordion">
                     <thead>
                     <tr>
                         <th>Option</th>
@@ -490,9 +495,9 @@ function renderTags() {
                 </table>
             </div>
 
-            <h3 class="category-title">Methods</h3>
-            <div class="api-table">
-                <table>
+            <h3 class="category-title-style">Methods</h3>
+            <div class="api-table-accordion">
+                <table class="api-table-accordion">
                     <thead>
                     <tr>
                         <th>Method</th>
@@ -560,9 +565,9 @@ function renderTags() {
                 </table>
             </div>
 
-            <h3 class="category-title">CSS Classes</h3>
-            <div class="api-table">
-                <table>
+            <h3 class="category-title-style">CSS Classes</h3>
+            <div class="api-table-accordion">
+                <table class="api-table-accordion">
                     <thead>
                     <tr>
                         <th>Class</th>
@@ -614,14 +619,14 @@ function renderTags() {
 
     <section class="card mb-6" data-section="Config Engine">
         <div class="card-header">
-            <h2 class="text-xl font-semibold m-0">Config Engine</h2>
+            <h2 class="text-xl font-semibold m-0">Declarative Configuration</h2>
         </div>
         <div class="card-body">
             <p class="mb-4">
                 Use Domma's declarative configuration system to initialize autocomplete components from JSON config.
             </p>
 
-            <h3 class="category-title">Basic Configuration</h3>
+            <h3 class="category-title-style">Basic Configuration</h3>
             <div class="code-block language-javascript mb-4">
             <pre><code>
 $.setup({
@@ -637,19 +642,19 @@ $.setup({
 </code></pre>
             </div>
 
-            <h3 class="category-title">With Callbacks</h3>
+            <h3 class="category-title-style">With Callbacks</h3>
             <div class="code-block language-javascript mb-4">
             <pre><code>
 $.setup({
     '#search-input': {
         component: 'autocomplete',
         options: {
-            dataSource: async (query) =&gt; {
+            dataSource: async (query) => {
                 const response = await fetch(`/api/search?q=${query}`);
                 return response.json();
             },
             debounce: 400,
-            onSelect: (item) =&gt; {
+            onSelect: (item) => {
                 console.log('User selected:', item);
             }
         }
@@ -658,7 +663,7 @@ $.setup({
 </code></pre>
             </div>
 
-            <h3 class="category-title">Multiple Instances</h3>
+            <h3 class="category-title-style">Multiple Instances</h3>
             <div class="code-block language-javascript">
             <pre><code>
 $.setup({
@@ -694,10 +699,10 @@ $.setup({
                 when user input changes.
             </p>
 
-            <h3 class="category-title">Basic Model Binding</h3>
+            <h3 class="category-title-style">Basic Model Binding</h3>
             <div class="demo-area mb-4">
-                <input type="text" id="model-search" placeholder="Type to search..." style="max-width: 400px;">
-                <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px;">
+                <input type="text" id="model-search" placeholder="Type to search..." class="autocomplete-input-style">
+                <div class="mt-4 p-3 bg-surface rounded">
                     <strong>Model Value:</strong> <span id="model-display">""</span>
                 </div>
             </div>
@@ -724,7 +729,7 @@ M.bind(searchModel, 'query', '#model-display');
 </code></pre>
             </div>
 
-            <h3 class="category-title">With Config Engine</h3>
+            <h3 class="category-title-style">With Config Engine</h3>
             <div class="code-block language-javascript mb-4">
             <pre><code>
 const userModel = M.create({
@@ -744,7 +749,7 @@ $.setup({
 </code></pre>
             </div>
 
-            <h3 class="category-title">Multiple Bindings</h3>
+            <h3 class="category-title-style">Multiple Bindings</h3>
             <p class="mb-4">
                 When multiple elements bind to the same model field, they all stay in sync automatically:
             </p>
@@ -830,9 +835,7 @@ M.bind(model, 'query', '#search-mirror', { twoWay: true });
     const users = [
         {name: 'Alice Johnson', email: 'alice@example.com', role: 'Admin'},
         {name: 'Bob Smith', email: 'bob@example.com', role: 'User'},
-        {name: 'Carol White', email: 'carol@example.com', role: 'Editor'},
-        {name: 'David Brown', email: 'david@example.com', role: 'User'},
-        {name: 'Eve Davis', email: 'eve@example.com', role: 'Admin'}
+        {name: 'Carol White', email: 'carol@example.com', role: 'Editor'}
     ];
 
     const languages = [
@@ -880,10 +883,10 @@ M.bind(model, 'query', '#search-mirror', { twoWay: true });
         data: users,
         renderItem: (user, query) => {
             return `
-                <div style="display: flex; flex-direction: column;">
+                <div class="flex flex-col">
                     <strong>${user.name}</strong>
-                    <span style="font-size: 0.875rem; color: #666;">${user.email}</span>
-                    <span style="font-size: 0.75rem; color: #999;">Role: ${user.role}</span>
+                    <span class="text-sm text-muted">${user.email}</span>
+                    <span class="text-xs text-muted">Role: ${user.role}</span>
                 </div>
             `;
         },
@@ -922,7 +925,7 @@ M.bind(model, 'query', '#search-mirror', { twoWay: true });
     function renderTags() {
         document.getElementById('selected-tags').innerHTML =
             selectedTags.map(tag =>
-                `<span class="badge">${tag} <button onclick="removeTag('${tag}')" style="margin-left: 4px; background: none; border: none; cursor: pointer;">&times;</button></span>`
+                `<span class="badge">${tag} <button onclick="removeTag('${tag}')" class="ml-1 bg-none border-none cursor-pointer">&times;</button></span>`
             ).join('');
     }
 

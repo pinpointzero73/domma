@@ -8,111 +8,28 @@
     <link rel="stylesheet" href="../../dist/domma.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-    <style>
-        .hero {
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .hero code {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--dm-radius-full);
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--dm-space-4);
-            margin: var(--dm-space-6) 0;
-        }
-
-        .feature-item {
-            text-align: center;
-            padding: var(--dm-space-4);
-        }
-
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: var(--dm-space-2);
-        }
-
-        .demo-result {
-            background: var(--dm-gray-900);
-            color: var(--dm-gray-100);
-            padding: var(--dm-space-3);
-            border-radius: var(--dm-radius-md);
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            margin-top: var(--dm-space-2);
-            max-height: 150px;
-            overflow-y: auto;
-        }
-
-        .category-title {
-            font-weight: 600;
-            color: var(--dm-primary);
-            margin: var(--dm-space-4) 0 var(--dm-space-2);
-            padding-bottom: var(--dm-space-2);
-            border-bottom: 2px solid var(--dm-primary);
-        }
-
-        .try-section {
-            background: var(--dm-gray-100);
-            padding: var(--dm-space-4);
-            border-radius: var(--dm-radius-md);
-            margin-top: var(--dm-space-4);
-        }
-
-        .api-table {
-            width: 100%;
-            font-size: var(--dm-font-size-sm);
-        }
-
-        .api-table th {
-            text-align: left;
-            padding: var(--dm-space-2);
-            background: var(--dm-gray-100);
-        }
-
-        .api-table td {
-            padding: var(--dm-space-2);
-            border-bottom: 1px solid var(--dm-gray-200);
-            vertical-align: top;
-        }
-
-        .live-demo {
-            border: 2px dashed var(--dm-border);
-            padding: var(--dm-space-4);
-            border-radius: var(--dm-radius-md);
-            margin: var(--dm-space-4) 0;
-        }
-    </style>
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body data-layout="showcase" data-layout-variant="subpage">
 
 <!-- Hero Section -->
-<div class="hero">
+<div class="hero hero-config-style">
     <h1>Config Engine</h1>
     <p>Declarative component initialisation with JSON configuration. Setup once, update anytime, clean up when done.</p>
-    <p style="margin-top: 1rem;"><code>$.setup({ ... })</code> <code>$.update()</code> <code>$.config()</code> <code>$.reset()</code>
+    <p class="mt-4"><code>$.setup({ ... })</code> <code>$.update()</code> <code>$.config()</code> <code>$.reset()</code>
     </p>
+</div>
+<div class="jumbotron">
+    <div class="jumbotron-content">
+        <h1 class="jumbotron-title">Config Engine</h1>
+        <p class="jumbotron-subtitle">Declarative component initialisation with JSON configuration. Setup once, update
+            anytime, clean up when done.</p>
+        <div class="jumbotron-actions">
+            <!--            <button class="btn btn-primary btn-lg">Get Started</button>-->
+            <p class="mt-4"><code>$.setup({ ... })</code> <code>$.update()</code> <code>$.config()</code> <code>$.reset()</code>
+            </p>
+        </div>
+    </div>
 </div>
 
 <div class="container py-8">
@@ -122,24 +39,24 @@
             <h2 class="text-xl font-semibold">Why Config Engine?</h2>
         </div>
         <div class="card-body">
-            <div class="feature-grid">
-                <div class="feature-item">
-                    <div class="feature-icon">{ }</div>
+            <div class="grid grid-cols-4 gap-4">
+                <div class="feature-item-config">
+                    <div class="feature-icon-config">{ }</div>
                     <h4 class="font-semibold">Declarative</h4>
                     <p class="text-sm text-muted">Define components with JSON, not imperative code</p>
                 </div>
-                <div class="feature-item">
-                    <div class="feature-icon">&#x21bb;</div>
+                <div class="feature-item-config">
+                    <div class="feature-icon-config">&#x21bb;</div>
                     <h4 class="font-semibold">Mutable</h4>
                     <p class="text-sm text-muted">Update configuration at runtime with deep merging</p>
                 </div>
-                <div class="feature-item">
-                    <div class="feature-icon">&#x1F50D;</div>
+                <div class="feature-item-config">
+                    <div class="feature-icon-config">&#x1F50D;</div>
                     <h4 class="font-semibold">Inspectable</h4>
                     <p class="text-sm text-muted">Retrieve current config for debugging</p>
                 </div>
-                <div class="feature-item">
-                    <div class="feature-icon">&#x2715;</div>
+                <div class="feature-item-config">
+                    <div class="feature-icon-config">&#x2715;</div>
                     <h4 class="font-semibold">Cleanable</h4>
                     <p class="text-sm text-muted">Reset components and free resources</p>
                 </div>
@@ -174,7 +91,7 @@ $.setup({
     }
 });</pre>
 
-            <h4 class="category-title">Supported Components</h4>
+            <h4 class="category-title-config">Supported Components</h4>
             <div class="grid grid-cols-3 gap-4">
                 <div><code>card</code> - Interactive cards</div>
                 <div><code>modal</code> - Dialog windows</div>
@@ -226,7 +143,7 @@ $.setup({
     }
 });</pre>
 
-            <div class="try-section">
+            <div class="try-section-config">
                 <h5 class="font-semibold mb-3">Try it</h5>
                 <div class="flex gap-4 items-center">
                     <button id="demo-click-btn" class="btn btn-primary">Click me</button>
@@ -268,10 +185,10 @@ $.setup({
     }
 });</pre>
 
-            <h4 class="category-title">Available Properties</h4>
-            <table class="api-table">
+            <h4 class="category-title-config">Available Properties</h4>
+            <table class="api-table-config">
                 <tr>
-                    <th>Property</th>
+                    <th class="w-200px">Property</th>
                     <th>Description</th>
                     <th>Example</th>
                 </tr>
@@ -351,11 +268,10 @@ $.update('#status', {
     }
 });</pre>
 
-            <div class="try-section">
+            <div class="try-section-config">
                 <h5 class="font-semibold mb-3">Try it</h5>
                 <div class="flex gap-4 items-center mb-3">
-                    <div id="demo-update-box" class="p-4 rounded"
-                         style="background: var(--dm-gray-200); min-width: 150px; text-align: center;">
+                    <div id="demo-update-box" class="p-4 rounded demo-update-box-style">
                         Original State
                     </div>
                 </div>
@@ -386,10 +302,10 @@ const allConfigs = $.config();
 console.log(allConfigs);
 // { '#my-modal': {...}, '.card': {...}, ... }</pre>
 
-            <div class="try-section">
+            <div class="try-section-config">
                 <h5 class="font-semibold mb-3">Current Page Configurations</h5>
                 <button id="demo-inspect" class="btn btn-primary btn-sm mb-3">Inspect $.config()</button>
-                <div id="demo-inspect-result" class="demo-result" style="display: none;"></div>
+                <div id="demo-inspect-result" class="demo-result-config hidden"></div>
             </div>
         </div>
     </section>
@@ -477,9 +393,9 @@ $.reset();
     }
 });</pre>
 
-            <div class="live-demo">
+            <div class="live-demo-config">
                 <h5 class="font-semibold mb-3">Live Demo</h5>
-                <form id="live-form" class="grid grid-cols-2 gap-4" style="max-width: 500px;">
+                <form id="live-form" class="grid grid-cols-2 gap-4 max-w-500px">
                     <div class="form-group">
                         <label class="form-label">Name</label>
                         <input type="text" id="live-name" class="form-input" placeholder="Your name">
@@ -502,9 +418,9 @@ $.reset();
             <h2 class="text-xl font-semibold">API Reference</h2>
         </div>
         <div class="card-body">
-            <table class="api-table">
+            <table class="api-table-config">
                 <tr>
-                    <th style="width: 200px;">Method</th>
+                    <th class="w-200px">Method</th>
                     <th>Description</th>
                 </tr>
                 <tr>
@@ -573,7 +489,7 @@ $.reset();
             events: {
                 click: () => $.update('#demo-update-box', {
                     initial: {
-                        css: {background: 'var(--dm-primary)', color: 'white'}
+                        css: {background: 'var(--dm-primary)', color: 'var(--dm-white)'}
                     }
                 })
             }
@@ -597,7 +513,7 @@ $.reset();
                 click: () => {
                     const config = $.config();
                     const result = $('#demo-inspect-result');
-                    result.css({display: 'block'});
+                    result.removeClass('hidden');
                     result.text(JSON.stringify(config, (key, value) => {
                         if (typeof value === 'function') return '[Function]';
                         return value;

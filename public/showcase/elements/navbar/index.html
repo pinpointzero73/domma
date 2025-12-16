@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
-<body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
+<body class="dm-theme-light body-padding-top-60" data-layout="showcase" data-layout-variant="element">
 
 <main class="container py-8">
 
@@ -253,7 +254,7 @@ const appNav = Domma.elements.navbar('#app-navbar', {
                 <p class="text-sm font-semibold mb-2">Dark Variant:</p>
                 <nav id="variant-dark"></nav>
             </div>
-            <div class="p-6" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+          <div class="p-6 bg-gradient-blue">
                 <p class="text-sm font-semibold mb-2 text-white">Transparent Variant (on coloured background):</p>
                 <nav id="variant-transparent"></nav>
             </div>
@@ -293,13 +294,13 @@ Domma.elements.navbar('#nav', {
             <pre><code>
 Domma.elements.navbar('#nav', {
     brand: {
-        logo: 'https://via.placeholder.com/32x32/6495ED/ffffff?text=D',
+        logo: 'https://via.placeholder.com/32x32/2563eb/ffffff?text=D',
         text: 'Domma',
-        url: '/'
+        url: '#'
     },
     items: [
-        { text: 'Home', url: '#' },
-        { text: 'About', url: '#' }
+        {text: 'Home', url: '#'},
+        {text: 'About', url: '#'}
     ]
 });
 </code></pre>
@@ -364,7 +365,7 @@ Domma.elements.navbar('#nav', {
         <h3 class="category-title">Fixed and Sticky Positioning</h3>
         <p class="text-muted mb-2">Keep navbar visible while scrolling:</p>
         <div class="demo-area mb-4">
-            <p class="text-sm text-muted mb-2">Fixed (stays at top even when scrolling):</p>
+          <p class="text-sm text-muted mb-2">Fixed (stays at top of viewport):</p>
             <div class="code-block language-javascript mb-3">
                 <pre><code>
 Domma.elements.navbar('#nav', {
@@ -398,10 +399,10 @@ Domma.elements.navbar('#nav', {
 Domma.elements.navbar('#nav', {
     brand: { text: 'Responsive App' },
     items: [
-        { text: 'Home', url: '#' },
-        { text: 'Features', url: '#' },
-        { text: 'Pricing', url: '#' },
-        { text: 'Contact', url: '#' }
+        { text: 'Home', url: '#'},
+        { text: 'Features', url: '#'},
+        { text: 'Pricing', url: '#'},
+        { text: 'Contact', url: '#'}
     ],
     collapsible: true,  // Enable hamburger menu (default)
     collapseAt: 768     // Breakpoint in pixels (default 768)
@@ -427,8 +428,8 @@ const navbar = Domma.elements.navbar('#nav', {
     brand: { text: 'App' },
     items: [
         { text: 'Home', url: '#', active: true },
-        { text: 'About', url: '#' },
-        { text: 'Contact', url: '#' }
+        { text: 'About', url: '#'},
+        { text: 'Contact', url: '#'}
     ]
 });
 
@@ -438,7 +439,7 @@ navbar.setActive(1);  // Make "About" active
 // Update all items
 navbar.setItems([
     { text: 'Dashboard', url: '/dashboard', active: true },
-    { text: 'Profile', url: '/profile' }
+    { text: 'Profile', url: '/profile'}
 ]);
 
 // Control mobile menu
@@ -459,39 +460,35 @@ navbar.isCollapsed();    // Check state → true/false
             <pre><code>
 Domma.elements.navbar('#docs-navbar', {
     brand: {
-        logo: '/logo.svg',
+        logo: 'https://via.placeholder.com/32x32/2563eb/ffffff?text=D',
         text: 'API Docs',
-        url: '/'
+        url: '#'
     },
     items: [
-        { text: 'Home', url: '/', active: true },
+        { text: 'Home', url: '#', active: true },
         {
             text: 'Getting Started',
             items: [
-                { text: 'Installation', url: '/docs/install' },
-                { text: 'Quick Start', url: '/docs/quickstart' },
-                { text: 'Configuration', url: '/docs/config' }
+                { text: 'Installation', url: '#'},
+                { text: 'Quick Start', url: '#'},
+                { text: 'Configuration', url: '#'}
             ]
         },
         {
             text: 'API Reference',
             items: [
-                { text: 'Elements', url: '/api/elements' },
-                { text: 'Utilities', url: '/api/utils' },
-                { text: 'Models', url: '/api/models' }
+                { text: 'Elements', url: '#'},
+                { text: 'Utilities', url: '#'},
+                { text: 'Models', url: '#'}
             ]
         },
-        { text: 'Examples', url: '/examples' }
+        { text: 'Examples', url: '#'}
     ],
     actions: [
-        { text: 'GitHub', variant: 'outline', url: 'https://github.com' }
+        { text: 'GitHub', variant: 'outline', url: '#'}
     ],
     variant: 'light',
-    position: 'sticky',
-    onItemClick: (item, index, event) =&gt; {
-        event.preventDefault();
-        console.log('Navigate to:', item.url);
-    }
+    position: 'static'
 });
 </code></pre>
         </div>
@@ -595,7 +592,7 @@ Domma.elements.navbar('#docs-navbar', {
     top: -40px;
     left: 0;
     background: var(--dm-primary);
-    color: white;
+    color: var(--dm-white);
     padding: 0.5rem 1rem;
     text-decoration: none;
     z-index: 100;
@@ -613,7 +610,7 @@ body {
 &lt;script&gt;
 Domma.elements.navbar('#main-nav', {
     brand: {
-        logo: '/logo.svg',
+        logo: 'https://via.placeholder.com/32x32/2563eb/ffffff?text=D',
         text: 'Accessible App',
         url: '/'
     },
@@ -623,8 +620,9 @@ Domma.elements.navbar('#main-nav', {
         {
             text: 'Resources',
             items: [
-                { text: 'Documentation', url: '/docs' },
-                { text: 'Support', url: '/support' }
+                { text: 'Installation', url: '/docs/install' },
+                { text: 'Quick Start', url: '/docs/quickstart' },
+                { text: 'Configuration', url: '/docs/config' }
             ]
         }
     ],
@@ -1021,10 +1019,10 @@ $.setup({
             brand: { text: 'Config Demo' },
             items: [
                 { text: 'Home', url: '#', active: true },
-                { text: 'Docs', url: '#' }
+                { text: 'Docs', url: '#'}
             ],
             actions: [
-                { text: 'Get Started', variant: 'primary', url: '#' }
+                { text: 'Get Started', variant: 'primary', url: '#'}
             ]
         }
     }
@@ -1044,7 +1042,7 @@ navbar.setActive(1);
         <h2 class="text-xl font-semibold m-0">Related Elements</h2>
     </div>
     <div class="card-body">
-        <div class="grid grid-cols-1 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+      <div class="grid grid-cols-1 gap-4 grid-auto-fit-250">
             <a href="../breadcrumbs/index.html" class="card card-hover">
                 <div class="card-body">
                     <h3 class="card-title">Breadcrumbs</h3>
@@ -1159,7 +1157,7 @@ navbar.setActive(1);
     // Example 2: Logo
     Domma.elements.navbar('#logo-example', {
         brand: {
-            logo: 'https://via.placeholder.com/32x32/6495ED/ffffff?text=D',
+          logo: 'https://via.placeholder.com/32x32/2563eb/ffffff?text=D',
             text: 'Domma',
             url: '#'
         },
@@ -1201,12 +1199,25 @@ navbar.setActive(1);
             {text: 'Pricing', url: '#'}
         ],
         actions: [
-            {text: 'Login', variant: 'outline', url: '#'},
-            {text: 'Sign Up', variant: 'primary', url: '#'}
+          {text: 'Login', variant: 'outline', url: '/login'},
+          {text: 'Sign Up', variant: 'primary', url: '/signup'}
         ]
     });
 
-    // Example 6: Mobile
+    // Example 5: Fixed Position
+    Domma.elements.navbar('#mobile-example', {
+      brand: {text: 'Responsive App'},
+      items: [
+        {text: 'Home', url: '#'},
+        {text: 'Features', url: '#'},
+        {text: 'Pricing', url: '#'},
+        {text: 'Contact', url: '#'}
+      ],
+      collapsible: true,
+      collapseAt: 768
+    });
+
+    // Example 6: Mobile Hamburger Menu
     Domma.elements.navbar('#mobile-example', {
         brand: {text: 'Responsive App'},
         items: [
@@ -1237,7 +1248,7 @@ navbar.setActive(1);
     // Example 8: Documentation Site
     Domma.elements.navbar('#docs-navbar', {
         brand: {
-            logo: 'https://via.placeholder.com/32x32/6495ED/ffffff?text=D',
+          logo: 'https://via.placeholder.com/32x32/2563eb/ffffff?text=D',
             text: 'API Docs',
             url: '#'
         },

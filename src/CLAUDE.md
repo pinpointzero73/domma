@@ -158,8 +158,25 @@ Accessed via `Domma.elements`:
 - **Carousel**:
   `elements.carousel(selector, { autoplay, interval, pauseOnHover, loop, animation, showArrows, showIndicators, onChange })` →
   `next()`, `prev()`, `goTo()`, `play()`, `pause()`, `getIndex()`, `getSlide()`
-- **Jumbotron**: CSS-only component using classes: `.jumbotron`, `.jumbotron-primary`, `.jumbotron-dark`,
-  `.jumbotron-center`, `.jumbotron-cover`, `.jumbotron-overlay`, `.jumbotron-sm`, `.jumbotron-lg`
+- **Jumbotron**: CSS-only component with Tailwind-inspired utilities for modern hero sections
+    - **Base**: `.jumbotron`, `.jumbotron-content`, `.jumbotron-title`, `.jumbotron-subtitle`, `.jumbotron-actions`,
+      `.jumbotron-note`
+    - **Themes**: `.jumbotron-primary`, `.jumbotron-dark`
+    - **Layouts**: `.jumbotron-center`, `.jumbotron-cover`, `.jumbotron-overlay`, `.jumbotron-fluid`, `.jumbotron-full`
+    - **Sizes**: `.jumbotron-sm`, `.jumbotron-lg`
+    - **Split Layouts (New)**: `.jumbotron-split`, `.jumbotron-split-reverse`, `.jumbotron-split-60-40`,
+      `.jumbotron-split-70-30`, `.jumbotron-split-40-60`, `.jumbotron-split-30-70`, `.jumbotron-text`,
+      `.jumbotron-media`
+    - **Enhanced Overlays (New)**: `.jumbotron-overlay-light`, `.jumbotron-overlay-dark`, `.jumbotron-overlay-darker`,
+      `.jumbotron-overlay-gradient`, `.jumbotron-overlay-gradient-reverse`
+    - **Badges (New)**: `.jumbotron-badge`, `.jumbotron-badge-secondary`, `.jumbotron-badge-success`,
+      `.jumbotron-badge-warning`, `.jumbotron-badge-danger`, `.jumbotron-badge-info`, `.jumbotron-badge-outline`,
+      `.jumbotron-badge-icon`
+    - **Responsive Utilities (New)**: `.jumbotron-title-responsive`, `.jumbotron-subtitle-responsive`,
+      `.jumbotron-responsive`, `.jumbotron-hide-mobile`, `.jumbotron-show-mobile`, `.jumbotron-center-mobile`
+    - **Gradients (New)**: `.jumbotron-gradient-purple`, `.jumbotron-gradient-blue`, `.jumbotron-gradient-green`,
+      `.jumbotron-gradient-sunset`, `.jumbotron-gradient-ocean`, `.jumbotron-gradient-rose`,
+      `.jumbotron-gradient-forest`, `.jumbotron-gradient-night`
 - **BackToTop**: `elements.backToTop(selector, { showAfter, duration, position, offset, target, onShow, onHide })` →
   `scroll()`, `show()`, `hide()`, `toggle()`, `isVisible()`, `getButton()`, `destroy()`
 - **ButtonGroup**: `elements.buttonGroup(selector, { mode, activeClass, allowEmpty, onChange })` →
