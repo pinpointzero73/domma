@@ -1757,29 +1757,32 @@ test('dom.insertBefore()', () => {
 });
 
 test('dom.wrap()', () => {
-  Domma('#test').html(''); // Clean up
-  Domma('#test').html('<p>hello</p>'); // Setup
+  resetTestEnvironment();
+  Domma('#test').html('<p>hello</p>');
     Domma('#test p').wrap('<div class="wrapper"></div>');
     assert(Domma('#test .wrapper').length === 1, 'should wrap each element with the given structure');
     assert(Domma('#test .wrapper p').length === 1, 'should have the original element inside the wrapper');
 });
 
 test('dom.wrapAll()', () => {
-    Domma('#test').html('<p>hello</p><p>world</p>'); // Clean up and setup
+  resetTestEnvironment();
+  Domma('#test').html('<p>hello</p><p>world</p>');
     Domma('#test p').wrapAll('<div class="wrapper"></div>');
     assert(Domma('#test .wrapper').length === 1, 'should wrap all elements together with the given structure');
     assert(Domma('#test .wrapper p').length === 2, 'should have the original elements inside the wrapper');
 });
 
 test('dom.wrapInner()', () => {
-    Domma('#test').html('<p>hello</p>'); // Clean up and setup
+  resetTestEnvironment();
+  Domma('#test').html('<p>hello</p>');
     Domma('#test p').wrapInner('<b></b>');
     assert(Domma('#test p b').length === 1, 'should wrap inner contents of each element');
     assert(Domma('#test p b').get(0).textContent === 'hello', 'should have the original content inside the wrapper');
 });
 
 test('dom.unwrap()', () => {
-    Domma('#test').html('<div class="wrapper"><p>hello</p></div>'); // Clean up and setup
+  resetTestEnvironment();
+  Domma('#test').html('<div class="wrapper"><p>hello</p></div>');
     Domma('#test p').unwrap();
     assert(Domma('#test .wrapper').length === 0, 'should remove the parent wrapper from each element');
     assert(Domma('#test p').length === 1, 'should keep the original element');
@@ -1811,14 +1814,16 @@ test('dom.clone()', () => {
 });
 
 test('dom.replaceWith()', () => {
-    Domma('#test').html('<p>hello</p>'); // Clean up and setup
+  resetTestEnvironment();
+  Domma('#test').html('<p>hello</p>');
     Domma('#test p').replaceWith('<b>world</b>');
     assert(Domma('#test p').length === 0, 'should not have the old element');
     assert(Domma('#test b').length === 1, 'should have the new element');
 });
 
 test('dom.replaceAll()', () => {
-    Domma('#test').html('<p>hello</p>'); // Clean up and setup
+  resetTestEnvironment();
+  Domma('#test').html('<p>hello</p>');
     Domma('<b>world</b>').replaceAll('#test p');
     assert(Domma('#test p').length === 0, 'should not have the old element');
     assert(Domma('#test b').length === 1, 'should have the new element');
@@ -1953,7 +1958,7 @@ test('dom.triggerNative()', () => {
 });
 
 test('dom.click()', () => {
-    Domma('#test').html(''); // Clean up and setup
+  resetTestEnvironment();
     const el = Domma('#test');
     let count = 0;
     el.on('click', () => count++);
