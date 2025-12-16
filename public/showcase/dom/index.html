@@ -5,94 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DOM - Domma Showcase</title>
     <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="/dist/domma.css">
-    <link rel="stylesheet" href="/dist/grid.css">
-    <link rel="stylesheet" href="/dist/elements.css">
-    <link rel="stylesheet" href="/dist/themes/domma-themes.css">
-    <style>
-        .hero {
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .hero code {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--dm-radius-full);
-        }
-
-        .demo-box {
-            background: var(--dm-gray-100);
-            border: 2px dashed var(--dm-gray-300);
-            padding: var(--dm-space-4);
-            border-radius: var(--dm-radius-md);
-            margin: var(--dm-space-4) 0;
-            min-height: 60px;
-        }
-
-        .demo-item {
-            display: inline-block;
-            padding: var(--dm-space-2) var(--dm-space-4);
-            background: var(--dm-primary);
-            color: white;
-            border-radius: var(--dm-radius-md);
-            margin: var(--dm-space-1);
-            transition: all 0.3s ease;
-        }
-
-        .demo-result {
-            background: var(--dm-gray-900);
-            color: var(--dm-gray-100);
-            padding: var(--dm-space-3);
-            border-radius: var(--dm-radius-md);
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            margin-top: var(--dm-space-2);
-            min-height: 40px;
-        }
-
-        .method-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: var(--dm-space-2);
-        }
-
-        .method-item {
-            font-family: var(--dm-font-mono);
-            font-size: var(--dm-font-size-sm);
-            padding: var(--dm-space-2);
-            background: var(--dm-gray-100);
-            border-radius: var(--dm-radius-sm);
-        }
-
-        .category-title {
-            font-weight: 600;
-            color: var(--dm-primary);
-            margin: var(--dm-space-4) 0 var(--dm-space-2);
-            padding-bottom: var(--dm-space-2);
-            border-bottom: 2px solid var(--dm-primary);
-        }
-    </style>
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body data-layout="showcase" data-layout-variant="subpage">
 <!-- Hero Section -->
-<div class="hero">
+<div class="hero hero-dom-style">
     <h1>DOM Manipulation</h1>
     <p>jQuery-compatible API with 90+ chainable methods for traversal, manipulation, events, and more.</p>
     <p><code>$('selector')</code> or <code>Domma('selector')</code></p>
@@ -122,19 +43,19 @@ $('<div class="new">Content</div>')
 // Collection from NodeList
 $(document.querySelectorAll('p'))</pre>
 
-            <h4 class="category-title">Try It</h4>
+            <h4 class="category-title-style">Try It</h4>
             <div class="flex gap-2 mb-4">
                 <input type="text" id="selector-input" class="form-input" value=".demo-item"
                        placeholder="Enter selector">
                 <button class="btn btn-primary" id="selector-btn">Select</button>
             </div>
-            <div class="demo-box">
-                <span class="demo-item">Item 1</span>
-                <span class="demo-item">Item 2</span>
+            <div class="demo-box-style">
+                <span class="demo-item-style">Item 1</span>
+                <span class="demo-item-style">Item 2</span>
                 <span class="demo-item special">Item 3</span>
-                <span class="demo-item">Item 4</span>
+                <span class="demo-item-style">Item 4</span>
             </div>
-            <div class="demo-result" id="selector-result">Click "Select" to see result</div>
+            <div class="demo-result-style" id="selector-result">Click "Select" to see result</div>
         </div>
     </section>
 
@@ -147,26 +68,26 @@ $(document.querySelectorAll('p'))</pre>
             <p class="mb-4">Navigate the DOM tree with chainable methods.</p>
 
             <div class="method-grid mb-4">
-                <span class="method-item">find()</span>
-                <span class="method-item">children()</span>
-                <span class="method-item">parent()</span>
-                <span class="method-item">parents()</span>
-                <span class="method-item">closest()</span>
-                <span class="method-item">siblings()</span>
-                <span class="method-item">next()</span>
-                <span class="method-item">prev()</span>
-                <span class="method-item">nextAll()</span>
-                <span class="method-item">prevAll()</span>
-                <span class="method-item">first()</span>
-                <span class="method-item">last()</span>
-                <span class="method-item">eq()</span>
-                <span class="method-item">filter()</span>
-                <span class="method-item">not()</span>
-                <span class="method-item">has()</span>
-                <span class="method-item">is()</span>
-                <span class="method-item">add()</span>
-                <span class="method-item">contents()</span>
-                <span class="method-item">offsetParent()</span>
+                <span class="method-item-style">find()</span>
+                <span class="method-item-style">children()</span>
+                <span class="method-item-style">parent()</span>
+                <span class="method-item-style">parents()</span>
+                <span class="method-item-style">closest()</span>
+                <span class="method-item-style">siblings()</span>
+                <span class="method-item-style">next()</span>
+                <span class="method-item-style">prev()</span>
+                <span class="method-item-style">nextAll()</span>
+                <span class="method-item-style">prevAll()</span>
+                <span class="method-item-style">first()</span>
+                <span class="method-item-style">last()</span>
+                <span class="method-item-style">eq()</span>
+                <span class="method-item-style">filter()</span>
+                <span class="method-item-style">not()</span>
+                <span class="method-item-style">has()</span>
+                <span class="method-item-style">is()</span>
+                <span class="method-item-style">add()</span>
+                <span class="method-item-style">contents()</span>
+                <span class="method-item-style">offsetParent()</span>
             </div>
 
             <pre class="code-block language-javascript">// Find descendants
@@ -189,7 +110,7 @@ $('.items').eq(2)  // Third element
 $('.items').first()
 $('.items').last()</pre>
 
-            <h4 class="category-title">Try It</h4>
+            <h4 class="category-title-style">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
                 <button class="btn btn-outline btn-sm" data-traverse="parent">parent()</button>
                 <button class="btn btn-outline btn-sm" data-traverse="siblings">siblings()</button>
@@ -198,13 +119,13 @@ $('.items').last()</pre>
                 <button class="btn btn-outline btn-sm" data-traverse="first">first()</button>
                 <button class="btn btn-outline btn-sm" data-traverse="last">last()</button>
             </div>
-            <div class="demo-box" id="traverse-container">
-                <div class="demo-item" id="traverse-target" style="background: var(--dm-success);">Target</div>
-                <div class="demo-item">Sibling 1</div>
-                <div class="demo-item">Sibling 2</div>
-                <div class="demo-item">Sibling 3</div>
+            <div class="demo-box-style" id="traverse-container">
+                <div class="demo-item-style" id="traverse-target" class="bg-success">Target</div>
+                <div class="demo-item-style">Sibling 1</div>
+                <div class="demo-item-style">Sibling 2</div>
+                <div class="demo-item-style">Sibling 3</div>
             </div>
-            <div class="demo-result" id="traverse-result">Click a method to see result</div>
+            <div class="demo-result-style" id="traverse-result">Click a method to see result</div>
         </div>
     </section>
 
@@ -217,15 +138,15 @@ $('.items').last()</pre>
             <p class="mb-4">Get and set element content, attributes, and values.</p>
 
             <div class="method-grid mb-4">
-                <span class="method-item">html()</span>
-                <span class="method-item">text()</span>
-                <span class="method-item">val()</span>
-                <span class="method-item">attr()</span>
-                <span class="method-item">removeAttr()</span>
-                <span class="method-item">prop()</span>
-                <span class="method-item">removeProp()</span>
-                <span class="method-item">data()</span>
-                <span class="method-item">removeData()</span>
+                <span class="method-item-style">html()</span>
+                <span class="method-item-style">text()</span>
+                <span class="method-item-style">val()</span>
+                <span class="method-item-style">attr()</span>
+                <span class="method-item-style">removeAttr()</span>
+                <span class="method-item-style">prop()</span>
+                <span class="method-item-style">removeProp()</span>
+                <span class="method-item-style">data()</span>
+                <span class="method-item-style">removeData()</span>
             </div>
 
             <pre class="code-block language-javascript">// Get/set HTML content
@@ -249,17 +170,17 @@ $('img').attr({ src: 'img.jpg', alt: 'Image' })
 $('#el').data('id')          // data-id
 $('#el').data('id', '123')</pre>
 
-            <h4 class="category-title">Try It</h4>
+            <h4 class="category-title-style">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
                 <button class="btn btn-outline btn-sm" id="get-html">Get html()</button>
                 <button class="btn btn-outline btn-sm" id="set-html">Set html()</button>
                 <button class="btn btn-outline btn-sm" id="get-text">Get text()</button>
                 <button class="btn btn-outline btn-sm" id="set-text">Set text()</button>
             </div>
-            <div class="demo-box" id="content-box">
+            <div class="demo-box-style" id="content-box">
                 <strong>Hello</strong> <em>World</em>
             </div>
-            <div class="demo-result" id="content-result">Click a button to see result</div>
+            <div class="demo-result-style" id="content-result">Click a button to see result</div>
         </div>
     </section>
 
@@ -272,14 +193,14 @@ $('#el').data('id', '123')</pre>
             <p class="mb-4">Manipulate styles and CSS classes.</p>
 
             <div class="method-grid mb-4">
-                <span class="method-item">css()</span>
-                <span class="method-item">addClass()</span>
-                <span class="method-item">removeClass()</span>
-                <span class="method-item">toggleClass()</span>
-                <span class="method-item">hasClass()</span>
-                <span class="method-item">show()</span>
-                <span class="method-item">hide()</span>
-                <span class="method-item">toggle()</span>
+                <span class="method-item-style">css()</span>
+                <span class="method-item-style">addClass()</span>
+                <span class="method-item-style">removeClass()</span>
+                <span class="method-item-style">toggleClass()</span>
+                <span class="method-item-style">hasClass()</span>
+                <span class="method-item-style">show()</span>
+                <span class="method-item-style">hide()</span>
+                <span class="method-item-style">toggle()</span>
             </div>
 
             <pre class="code-block language-javascript">// Get/set CSS
@@ -298,16 +219,16 @@ $('#box').show()
 $('#box').hide()
 $('#box').toggle()</pre>
 
-            <h4 class="category-title">Try It</h4>
+            <h4 class="category-title-style">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
                 <button class="btn btn-outline btn-sm" id="toggle-class">toggleClass('special')</button>
                 <button class="btn btn-outline btn-sm" id="change-color">css('background')</button>
                 <button class="btn btn-outline btn-sm" id="toggle-vis">toggle()</button>
             </div>
-            <div class="demo-box">
-                <div class="demo-item" id="css-target">Style Me</div>
+            <div class="demo-box-style">
+                <div class="demo-item-style" id="css-target">Style Me</div>
             </div>
-            <div class="demo-result" id="css-result">Click a button to manipulate styles</div>
+            <div class="demo-result-style" id="css-result">Click a button to manipulate styles</div>
         </div>
     </section>
 
@@ -320,24 +241,24 @@ $('#box').toggle()</pre>
             <p class="mb-4">Insert, replace, and remove elements.</p>
 
             <div class="method-grid mb-4">
-                <span class="method-item">append()</span>
-                <span class="method-item">prepend()</span>
-                <span class="method-item">after()</span>
-                <span class="method-item">before()</span>
-                <span class="method-item">appendTo()</span>
-                <span class="method-item">prependTo()</span>
-                <span class="method-item">insertAfter()</span>
-                <span class="method-item">insertBefore()</span>
-                <span class="method-item">wrap()</span>
-                <span class="method-item">wrapAll()</span>
-                <span class="method-item">wrapInner()</span>
-                <span class="method-item">unwrap()</span>
-                <span class="method-item">clone()</span>
-                <span class="method-item">remove()</span>
-                <span class="method-item">detach()</span>
-                <span class="method-item">empty()</span>
-                <span class="method-item">replaceWith()</span>
-                <span class="method-item">replaceAll()</span>
+                <span class="method-item-style">append()</span>
+                <span class="method-item-style">prepend()</span>
+                <span class="method-item-style">after()</span>
+                <span class="method-item-style">before()</span>
+                <span class="method-item-style">appendTo()</span>
+                <span class="method-item-style">prependTo()</span>
+                <span class="method-item-style">insertAfter()</span>
+                <span class="method-item-style">insertBefore()</span>
+                <span class="method-item-style">wrap()</span>
+                <span class="method-item-style">wrapAll()</span>
+                <span class="method-item-style">wrapInner()</span>
+                <span class="method-item-style">unwrap()</span>
+                <span class="method-item-style">clone()</span>
+                <span class="method-item-style">remove()</span>
+                <span class="method-item-style">detach()</span>
+                <span class="method-item-style">empty()</span>
+                <span class="method-item-style">replaceWith()</span>
+                <span class="method-item-style">replaceAll()</span>
             </div>
 
             <pre class="code-block language-javascript">// Inserting content
@@ -360,7 +281,7 @@ $('#list').empty()
 // Cloning
 $('#item').clone()</pre>
 
-            <h4 class="category-title">Try It</h4>
+            <h4 class="category-title-style">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
                 <button class="btn btn-outline btn-sm" id="dom-append">append()</button>
                 <button class="btn btn-outline btn-sm" id="dom-prepend">prepend()</button>
@@ -368,9 +289,9 @@ $('#item').clone()</pre>
                 <button class="btn btn-outline btn-sm" id="dom-empty">empty()</button>
                 <button class="btn btn-outline btn-sm" id="dom-reset">Reset</button>
             </div>
-            <div class="demo-box" id="dom-container">
-                <span class="demo-item">Original 1</span>
-                <span class="demo-item">Original 2</span>
+            <div class="demo-box-style" id="dom-container">
+                <span class="demo-item-style">Original 1</span>
+                <span class="demo-item-style">Original 2</span>
             </div>
         </div>
     </section>
@@ -384,30 +305,30 @@ $('#item').clone()</pre>
             <p class="mb-4">Attach, trigger, and manage events.</p>
 
             <div class="method-grid mb-4">
-                <span class="method-item">on()</span>
-                <span class="method-item">off()</span>
-                <span class="method-item">one()</span>
-                <span class="method-item">trigger()</span>
-                <span class="method-item">click()</span>
-                <span class="method-item">dblclick()</span>
-                <span class="method-item">mouseenter()</span>
-                <span class="method-item">mouseleave()</span>
-                <span class="method-item">mouseover()</span>
-                <span class="method-item">mouseout()</span>
-                <span class="method-item">mousemove()</span>
-                <span class="method-item">mousedown()</span>
-                <span class="method-item">mouseup()</span>
-                <span class="method-item">hover()</span>
-                <span class="method-item">focus()</span>
-                <span class="method-item">blur()</span>
-                <span class="method-item">change()</span>
-                <span class="method-item">submit()</span>
-                <span class="method-item">keydown()</span>
-                <span class="method-item">keyup()</span>
-                <span class="method-item">keypress()</span>
-                <span class="method-item">scroll()</span>
-                <span class="method-item">resize()</span>
-                <span class="method-item">load()</span>
+                <span class="method-item-style">on()</span>
+                <span class="method-item-style">off()</span>
+                <span class="method-item-style">one()</span>
+                <span class="method-item-style">trigger()</span>
+                <span class="method-item-style">click()</span>
+                <span class="method-item-style">dblclick()</span>
+                <span class="method-item-style">mouseenter()</span>
+                <span class="method-item-style">mouseleave()</span>
+                <span class="method-item-style">mouseover()</span>
+                <span class="method-item-style">mouseout()</span>
+                <span class="method-item-style">mousemove()</span>
+                <span class="method-item-style">mousedown()</span>
+                <span class="method-item-style">mouseup()</span>
+                <span class="method-item-style">hover()</span>
+                <span class="method-item-style">focus()</span>
+                <span class="method-item-style">blur()</span>
+                <span class="method-item-style">change()</span>
+                <span class="method-item-style">submit()</span>
+                <span class="method-item-style">keydown()</span>
+                <span class="method-item-style">keyup()</span>
+                <span class="method-item-style">keypress()</span>
+                <span class="method-item-style">scroll()</span>
+                <span class="method-item-style">resize()</span>
+                <span class="method-item-style">load()</span>
             </div>
 
             <pre class="code-block language-javascript">// Basic event binding
@@ -436,13 +357,13 @@ $('#form').submit(handler);
 // Hover (mouseenter + mouseleave)
 $('#box').hover(enterFn, leaveFn);</pre>
 
-            <h4 class="category-title">Try It</h4>
-            <div class="demo-box">
+            <h4 class="category-title-style">Try It</h4>
+            <div class="demo-box-style">
                 <button class="btn btn-primary" id="event-btn">Click Me</button>
                 <button class="btn btn-secondary" id="event-trigger">Trigger Click</button>
-                <div class="demo-item mt-4" id="event-hover" style="cursor: pointer;">Hover Me</div>
+                <div class="demo-item mt-4" id="event-hover" class="cursor-pointer">Hover Me</div>
             </div>
-            <div class="demo-result" id="event-result">Interact with elements above</div>
+            <div class="demo-result-style" id="event-result">Interact with elements above</div>
         </div>
     </section>
 
@@ -455,16 +376,16 @@ $('#box').hover(enterFn, leaveFn);</pre>
             <p class="mb-4">Animate elements with built-in effects.</p>
 
             <div class="method-grid mb-4">
-                <span class="method-item">fadeIn()</span>
-                <span class="method-item">fadeOut()</span>
-                <span class="method-item">fadeToggle()</span>
-                <span class="method-item">fadeTo()</span>
-                <span class="method-item">slideDown()</span>
-                <span class="method-item">slideUp()</span>
-                <span class="method-item">slideToggle()</span>
-                <span class="method-item">animate()</span>
-                <span class="method-item">stop()</span>
-                <span class="method-item">delay()</span>
+                <span class="method-item-style">fadeIn()</span>
+                <span class="method-item-style">fadeOut()</span>
+                <span class="method-item-style">fadeToggle()</span>
+                <span class="method-item-style">fadeTo()</span>
+                <span class="method-item-style">slideDown()</span>
+                <span class="method-item-style">slideUp()</span>
+                <span class="method-item-style">slideToggle()</span>
+                <span class="method-item-style">animate()</span>
+                <span class="method-item-style">stop()</span>
+                <span class="method-item-style">delay()</span>
             </div>
 
             <pre class="code-block language-javascript">// Fade effects
@@ -490,14 +411,14 @@ $('#box')
     .delay(500)
     .fadeIn(200)</pre>
 
-            <h4 class="category-title">Try It</h4>
+            <h4 class="category-title-style">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
                 <button class="btn btn-outline btn-sm" id="fx-fade">fadeToggle()</button>
                 <button class="btn btn-outline btn-sm" id="fx-slide">slideToggle()</button>
                 <button class="btn btn-outline btn-sm" id="fx-animate">animate()</button>
             </div>
-            <div class="demo-box">
-                <div class="demo-item" id="fx-target" style="width: 100px; text-align: center;">Animate</div>
+            <div class="demo-box-style">
+                <div class="demo-item-style" id="fx-target" class="w-100px text-center">Animate</div>
             </div>
         </div>
     </section>
@@ -511,16 +432,16 @@ $('#box')
             <p class="mb-4">Get and set element dimensions and position.</p>
 
             <div class="method-grid mb-4">
-                <span class="method-item">width()</span>
-                <span class="method-item">height()</span>
-                <span class="method-item">innerWidth()</span>
-                <span class="method-item">innerHeight()</span>
-                <span class="method-item">outerWidth()</span>
-                <span class="method-item">outerHeight()</span>
-                <span class="method-item">offset()</span>
-                <span class="method-item">position()</span>
-                <span class="method-item">scrollTop()</span>
-                <span class="method-item">scrollLeft()</span>
+                <span class="method-item-style">width()</span>
+                <span class="method-item-style">height()</span>
+                <span class="method-item-style">innerWidth()</span>
+                <span class="method-item-style">innerHeight()</span>
+                <span class="method-item-style">outerWidth()</span>
+                <span class="method-item-style">outerHeight()</span>
+                <span class="method-item-style">offset()</span>
+                <span class="method-item-style">position()</span>
+                <span class="method-item-style">scrollTop()</span>
+                <span class="method-item-style">scrollLeft()</span>
             </div>
 
             <pre class="code-block language-javascript">// Dimensions
@@ -540,13 +461,13 @@ $(window).scrollTop()
 $(window).scrollTop(0)         // Scroll to top
 $('#box').scrollLeft()</pre>
 
-            <h4 class="category-title">Try It</h4>
+            <h4 class="category-title-style">Try It</h4>
             <button class="btn btn-primary mb-4" id="dim-btn">Get Dimensions</button>
-            <div class="demo-box" id="dim-target"
-                 style="width: 200px; height: 100px; padding: 20px; border: 5px solid var(--dm-primary); margin: 10px;">
+            <div class="demo-box-style" id="dim-target"
+                 class="dim-target-box">
                 Measure Me
             </div>
-            <div class="demo-result" id="dim-result">Click button to measure the box</div>
+            <div class="demo-result-style" id="dim-result">Click button to measure the box</div>
         </div>
     </section>
 
@@ -559,13 +480,13 @@ $('#box').scrollLeft()</pre>
             <p class="mb-4">Iterate and work with element collections.</p>
 
             <div class="method-grid mb-4">
-                <span class="method-item">each()</span>
-                <span class="method-item">map()</span>
-                <span class="method-item">get()</span>
-                <span class="method-item">index()</span>
-                <span class="method-item">toArray()</span>
-                <span class="method-item">slice()</span>
-                <span class="method-item">length</span>
+                <span class="method-item-style">each()</span>
+                <span class="method-item-style">map()</span>
+                <span class="method-item-style">get()</span>
+                <span class="method-item-style">index()</span>
+                <span class="method-item-style">toArray()</span>
+                <span class="method-item-style">slice()</span>
+                <span class="method-item-style">length</span>
             </div>
 
             <pre class="code-block language-javascript">// Iterate
@@ -612,133 +533,133 @@ $('.items').length    // Number of elements</pre>
                 <div class="tab-content">
                     <div class="tab-panel active" data-tab="traversal">
                         <p class="text-muted mb-3">Navigate the DOM tree to find related elements (20 methods).</p>
-                        <div class="method-grid">
-                            <span class="method-item">find()</span>
-                            <span class="method-item">children()</span>
-                            <span class="method-item">parent()</span>
-                            <span class="method-item">parents()</span>
-                            <span class="method-item">parentsUntil()</span>
-                            <span class="method-item">closest()</span>
-                            <span class="method-item">siblings()</span>
-                            <span class="method-item">next()</span>
-                            <span class="method-item">nextAll()</span>
-                            <span class="method-item">nextUntil()</span>
-                            <span class="method-item">prev()</span>
-                            <span class="method-item">prevAll()</span>
-                            <span class="method-item">prevUntil()</span>
-                            <span class="method-item">first()</span>
-                            <span class="method-item">last()</span>
-                            <span class="method-item">eq()</span>
-                            <span class="method-item">filter()</span>
-                            <span class="method-item">not()</span>
-                            <span class="method-item">has()</span>
-                            <span class="method-item">is()</span>
+                        <div class="method-grid-style">
+                            <span class="method-item-style">find()</span>
+                            <span class="method-item-style">children()</span>
+                            <span class="method-item-style">parent()</span>
+                            <span class="method-item-style">parents()</span>
+                            <span class="method-item-style">parentsUntil()</span>
+                            <span class="method-item-style">closest()</span>
+                            <span class="method-item-style">siblings()</span>
+                            <span class="method-item-style">next()</span>
+                            <span class="method-item-style">nextAll()</span>
+                            <span class="method-item-style">nextUntil()</span>
+                            <span class="method-item-style">prev()</span>
+                            <span class="method-item-style">prevAll()</span>
+                            <span class="method-item-style">prevUntil()</span>
+                            <span class="method-item-style">first()</span>
+                            <span class="method-item-style">last()</span>
+                            <span class="method-item-style">eq()</span>
+                            <span class="method-item-style">filter()</span>
+                            <span class="method-item-style">not()</span>
+                            <span class="method-item-style">has()</span>
+                            <span class="method-item-style">is()</span>
                         </div>
                     </div>
                     <div class="tab-panel" data-tab="content">
                         <p class="text-muted mb-3">Get and set element content and attributes (9 methods).</p>
-                        <div class="method-grid">
-                            <span class="method-item">html()</span>
-                            <span class="method-item">text()</span>
-                            <span class="method-item">val()</span>
-                            <span class="method-item">attr()</span>
-                            <span class="method-item">removeAttr()</span>
-                            <span class="method-item">prop()</span>
-                            <span class="method-item">removeProp()</span>
-                            <span class="method-item">data()</span>
-                            <span class="method-item">removeData()</span>
+                        <div class="method-grid-style">
+                            <span class="method-item-style">html()</span>
+                            <span class="method-item-style">text()</span>
+                            <span class="method-item-style">val()</span>
+                            <span class="method-item-style">attr()</span>
+                            <span class="method-item-style">removeAttr()</span>
+                            <span class="method-item-style">prop()</span>
+                            <span class="method-item-style">removeProp()</span>
+                            <span class="method-item-style">data()</span>
+                            <span class="method-item-style">removeData()</span>
                         </div>
                     </div>
                     <div class="tab-panel" data-tab="css">
                         <p class="text-muted mb-3">Manipulate styles and CSS classes (8 methods).</p>
-                        <div class="method-grid">
-                            <span class="method-item">css()</span>
-                            <span class="method-item">addClass()</span>
-                            <span class="method-item">removeClass()</span>
-                            <span class="method-item">toggleClass()</span>
-                            <span class="method-item">hasClass()</span>
-                            <span class="method-item">show()</span>
-                            <span class="method-item">hide()</span>
-                            <span class="method-item">toggle()</span>
+                        <div class="method-grid-style">
+                            <span class="method-item-style">css()</span>
+                            <span class="method-item-style">addClass()</span>
+                            <span class="method-item-style">removeClass()</span>
+                            <span class="method-item-style">toggleClass()</span>
+                            <span class="method-item-style">hasClass()</span>
+                            <span class="method-item-style">show()</span>
+                            <span class="method-item-style">hide()</span>
+                            <span class="method-item-style">toggle()</span>
                         </div>
                     </div>
                     <div class="tab-panel" data-tab="manipulation">
                         <p class="text-muted mb-3">Insert, move, copy and remove DOM elements (14 methods).</p>
-                        <div class="method-grid">
-                            <span class="method-item">append()</span>
-                            <span class="method-item">prepend()</span>
-                            <span class="method-item">after()</span>
-                            <span class="method-item">before()</span>
-                            <span class="method-item">appendTo()</span>
-                            <span class="method-item">prependTo()</span>
-                            <span class="method-item">insertAfter()</span>
-                            <span class="method-item">insertBefore()</span>
-                            <span class="method-item">wrap()</span>
-                            <span class="method-item">wrapAll()</span>
-                            <span class="method-item">wrapInner()</span>
-                            <span class="method-item">unwrap()</span>
-                            <span class="method-item">clone()</span>
-                            <span class="method-item">remove()</span>
+                        <div class="method-grid-style">
+                            <span class="method-item-style">append()</span>
+                            <span class="method-item-style">prepend()</span>
+                            <span class="method-item-style">after()</span>
+                            <span class="method-item-style">before()</span>
+                            <span class="method-item-style">appendTo()</span>
+                            <span class="method-item-style">prependTo()</span>
+                            <span class="method-item-style">insertAfter()</span>
+                            <span class="method-item-style">insertBefore()</span>
+                            <span class="method-item-style">wrap()</span>
+                            <span class="method-item-style">wrapAll()</span>
+                            <span class="method-item-style">wrapInner()</span>
+                            <span class="method-item-style">unwrap()</span>
+                            <span class="method-item-style">clone()</span>
+                            <span class="method-item-style">remove()</span>
                         </div>
                     </div>
                     <div class="tab-panel" data-tab="events">
                         <p class="text-muted mb-3">Attach, remove and trigger event handlers (24 methods).</p>
-                        <div class="method-grid">
-                            <span class="method-item">on()</span>
-                            <span class="method-item">off()</span>
-                            <span class="method-item">one()</span>
-                            <span class="method-item">trigger()</span>
-                            <span class="method-item">click()</span>
-                            <span class="method-item">dblclick()</span>
-                            <span class="method-item">mouseenter()</span>
-                            <span class="method-item">mouseleave()</span>
-                            <span class="method-item">mouseover()</span>
-                            <span class="method-item">mouseout()</span>
-                            <span class="method-item">mousemove()</span>
-                            <span class="method-item">mousedown()</span>
-                            <span class="method-item">mouseup()</span>
-                            <span class="method-item">hover()</span>
-                            <span class="method-item">focus()</span>
-                            <span class="method-item">blur()</span>
-                            <span class="method-item">change()</span>
-                            <span class="method-item">submit()</span>
-                            <span class="method-item">keydown()</span>
-                            <span class="method-item">keyup()</span>
-                            <span class="method-item">keypress()</span>
-                            <span class="method-item">scroll()</span>
-                            <span class="method-item">resize()</span>
-                            <span class="method-item">load()</span>
+                        <div class="method-grid-style">
+                            <span class="method-item-style">on()</span>
+                            <span class="method-item-style">off()</span>
+                            <span class="method-item-style">one()</span>
+                            <span class="method-item-style">trigger()</span>
+                            <span class="method-item-style">click()</span>
+                            <span class="method-item-style">dblclick()</span>
+                            <span class="method-item-style">mouseenter()</span>
+                            <span class="method-item-style">mouseleave()</span>
+                            <span class="method-item-style">mouseover()</span>
+                            <span class="method-item-style">mouseout()</span>
+                            <span class="method-item-style">mousemove()</span>
+                            <span class="method-item-style">mousedown()</span>
+                            <span class="method-item-style">mouseup()</span>
+                            <span class="method-item-style">hover()</span>
+                            <span class="method-item-style">focus()</span>
+                            <span class="method-item-style">blur()</span>
+                            <span class="method-item-style">change()</span>
+                            <span class="method-item-style">submit()</span>
+                            <span class="method-item-style">keydown()</span>
+                            <span class="method-item-style">keyup()</span>
+                            <span class="method-item-style">keypress()</span>
+                            <span class="method-item-style">scroll()</span>
+                            <span class="method-item-style">resize()</span>
+                            <span class="method-item-style">load()</span>
                         </div>
                     </div>
                     <div class="tab-panel" data-tab="effects">
                         <p class="text-muted mb-3">Animate elements with fades, slides and custom animations (10
                             methods).</p>
-                        <div class="method-grid">
-                            <span class="method-item">fadeIn()</span>
-                            <span class="method-item">fadeOut()</span>
-                            <span class="method-item">fadeToggle()</span>
-                            <span class="method-item">fadeTo()</span>
-                            <span class="method-item">slideDown()</span>
-                            <span class="method-item">slideUp()</span>
-                            <span class="method-item">slideToggle()</span>
-                            <span class="method-item">animate()</span>
-                            <span class="method-item">stop()</span>
-                            <span class="method-item">delay()</span>
+                        <div class="method-grid-style">
+                            <span class="method-item-style">fadeIn()</span>
+                            <span class="method-item-style">fadeOut()</span>
+                            <span class="method-item-style">fadeToggle()</span>
+                            <span class="method-item-style">fadeTo()</span>
+                            <span class="method-item-style">slideDown()</span>
+                            <span class="method-item-style">slideUp()</span>
+                            <span class="method-item-style">slideToggle()</span>
+                            <span class="method-item-style">animate()</span>
+                            <span class="method-item-style">stop()</span>
+                            <span class="method-item-style">delay()</span>
                         </div>
                     </div>
                     <div class="tab-panel" data-tab="dimensions">
                         <p class="text-muted mb-3">Get and set element dimensions and positions (10 methods).</p>
-                        <div class="method-grid">
-                            <span class="method-item">width()</span>
-                            <span class="method-item">height()</span>
-                            <span class="method-item">innerWidth()</span>
-                            <span class="method-item">innerHeight()</span>
-                            <span class="method-item">outerWidth()</span>
-                            <span class="method-item">outerHeight()</span>
-                            <span class="method-item">offset()</span>
-                            <span class="method-item">position()</span>
-                            <span class="method-item">scrollTop()</span>
-                            <span class="method-item">scrollLeft()</span>
+                        <div class="method-grid-style">
+                            <span class="method-item-style">width()</span>
+                            <span class="method-item-style">height()</span>
+                            <span class="method-item-style">innerWidth()</span>
+                            <span class="method-item-style">innerHeight()</span>
+                            <span class="method-item-style">outerWidth()</span>
+                            <span class="method-item-style">outerHeight()</span>
+                            <span class="method-item-style">offset()</span>
+                            <span class="method-item-style">position()</span>
+                            <span class="method-item-style">scrollTop()</span>
+                            <span class="method-item-style">scrollLeft()</span>
                         </div>
                     </div>
                 </div>
@@ -758,8 +679,8 @@ $('.items').length    // Number of elements</pre>
             const $els = $(selector);
             $('#selector-result').text(`Found ${$els.length} element(s) matching "${selector}"`);
             // Highlight selected elements briefly
-            $els.css('background', 'var(--dm-warning)');
-            setTimeout(() => $els.css('background', 'var(--dm-primary)'), 1000);
+            $els.addClass('bg-warning');
+            setTimeout(() => $els.removeClass('bg-warning').addClass('bg-primary'), 1000);
         } catch (e) {
             $('#selector-result').text(`Error: ${e.message}`);
         }
@@ -800,12 +721,12 @@ $('.items').length    // Number of elements</pre>
         }
 
         // Reset colors
-        $('#traverse-container .demo-item').css('background', 'var(--dm-primary)');
-        $('#traverse-target').css('background', 'var(--dm-success)');
+        $('#traverse-container .demo-item').addClass('bg-primary').removeClass('bg-warning');
+        $('#traverse-target').addClass('bg-success').removeClass('bg-primary');
 
         // Highlight result
         if ($result && $result.length) {
-            $result.css('background', 'var(--dm-warning)');
+            $result.addClass('bg-warning');
         }
         $('#traverse-result').text(description);
     });
@@ -848,16 +769,16 @@ $('.items').length    // Number of elements</pre>
 
     // DOM manipulation demo
     let itemCount = 2;
-    const originalHTML = '<span class="demo-item">Original 1</span><span class="demo-item">Original 2</span>';
+    const originalHTML = '<span class="demo-item-style">Original 1</span><span class="demo-item-style">Original 2</span>';
 
     $('#dom-append').on('click', function () {
         itemCount++;
-        $('#dom-container').append(`<span class="demo-item">Appended ${itemCount}</span>`);
+        $('#dom-container').append(`<span class="demo-item-style">Appended ${itemCount}</span>`);
     });
 
     $('#dom-prepend').on('click', function () {
         itemCount++;
-        $('#dom-container').prepend(`<span class="demo-item">Prepended ${itemCount}</span>`);
+        $('#dom-container').prepend(`<span class="demo-item-style">Prepended ${itemCount}</span>`);
     });
 
     $('#dom-remove').on('click', function () {
@@ -887,11 +808,11 @@ $('.items').length    // Number of elements</pre>
     $('#event-hover').hover(
         function () {
             $('#event-result').text('Mouse entered!');
-            $(this).css('background', 'var(--dm-success)');
+            $(this).addClass('bg-success').removeClass('bg-primary');
         },
         function () {
             $('#event-result').text('Mouse left!');
-            $(this).css('background', 'var(--dm-primary)');
+            $(this).addClass('bg-primary').removeClass('bg-success');
         }
     );
 

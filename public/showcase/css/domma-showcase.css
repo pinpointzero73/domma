@@ -1107,26 +1107,22 @@
     text-align: center;
     margin-bottom: 2rem;
 }
-
 .storage-hero-style h1 {
     font-size: 3rem;
     font-weight: 700;
     margin-bottom: 1rem;
 }
-
 .storage-hero-style p {
     font-size: 1.25rem;
     opacity: 0.9;
     max-width: 600px;
     margin: 0 auto;
 }
-
 .storage-hero-style code {
     background: rgba(255, 255, 255, 0.2);
     padding: 0.25rem 0.75rem;
     border-radius: var(--dm-radius-full);
 }
-
 .storage-demo-result {
     background: var(--dm-gray-900);
     color: var(--dm-gray-100);
@@ -2021,7 +2017,6 @@
     padding: 0.25rem 0.75rem;
     border-radius: var(--dm-radius-full);
 }
-
 .utils-demo-result {
     background: var(--dm-gray-900);
     color: var(--dm-gray-100);
@@ -2034,13 +2029,11 @@
     max-height: 200px;
     overflow-y: auto;
 }
-
 .utils-method-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: var(--dm-space-2);
 }
-
 .utils-method-item {
     font-family: var(--dm-font-mono);
     font-size: var(--dm-font-size-sm);
@@ -2048,7 +2041,6 @@
     background: var(--dm-gray-100);
     border-radius: var(--dm-radius-sm);
 }
-
 .utils-category-title {
     font-weight: 600;
     color: var(--dm-primary);
@@ -2056,32 +2048,31 @@
     padding-bottom: var(--dm-space-2);
     border-bottom: 2px solid var(--dm-primary);
 }
-
 .utils-try-section {
     background: var(--dm-gray-100);
     padding: var(--dm-space-4);
     border-radius: var(--dm-radius-md);
     margin-top: var(--dm-space-4);
 }
-.storage-hero-style {
+.dom-hero-style {
     background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
     color: var(--dm-white);
     padding: 4rem 2rem;
     text-align: center;
     margin-bottom: 2rem;
 }
-.storage-hero-style h1 {
+.dom-hero-style h1 {
     font-size: 3rem;
     font-weight: 700;
     margin-bottom: 1rem;
 }
-.storage-hero-style p {
+.dom-hero-style p {
     font-size: 1.25rem;
     opacity: 0.9;
     max-width: 600px;
     margin: 0 auto;
 }
-.storage-hero-style code {
+.dom-hero-style code {
     background: rgba(255, 255, 255, 0.2);
     padding: 0.25rem 0.75rem;
     border-radius: var(--dm-radius-full);
