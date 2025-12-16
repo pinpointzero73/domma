@@ -178,8 +178,8 @@
    CARDS
    ============================================ */
 .card {
-    background-color: var(--dm-white);
-    border: 1px solid var(--dm-gray-200);
+    background-color: var(--dm-card-bg);
+    border: 1px solid var(--dm-card-border);
     border-radius: var(--dm-radius-lg);
     box-shadow: var(--dm-shadow-md);
     overflow: hidden;
@@ -196,8 +196,8 @@
 
 .card-header {
     padding: var(--dm-space-4) var(--dm-space-6);
-    border-bottom: 1px solid var(--dm-gray-200);
-    background-color: var(--dm-primary-light, var(--dm-gray-100));
+    border-bottom: 1px solid var(--dm-card-border);
+    background-color: var(--dm-surface-secondary);
 }
 
 .card-body {
@@ -206,8 +206,8 @@
 
 .card-footer {
     padding: var(--dm-space-4) var(--dm-space-6);
-    border-top: 1px solid var(--dm-gray-200);
-    background-color: var(--dm-primary-light, var(--dm-gray-100));
+    border-top: 1px solid var(--dm-card-border);
+    background-color: var(--dm-surface-secondary);
 }
 
 .card-title {
@@ -234,6 +234,20 @@
     background-color: var(--dm-primary);
     color: var(--dm-white);
     border-color: var(--dm-primary);
+}
+
+/* Card Variant - Namespace/Feature Cards */
+.card.namespace-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    transition: transform var(--dm-transition-base), box-shadow var(--dm-transition-base);
+}
+
+.card.namespace-card:hover {
+    text-decoration: none;
 }
 
 
@@ -974,6 +988,22 @@ textarea:not([class])::placeholder {
 
 
 /* ============================================
+   ICON SIZES
+   ============================================ */
+
+/* Icon Size - Large (for featured content) */
+.icon-lg,
+.namespace-icon {
+    font-size: 2.5rem;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* ============================================
    ALERT
    ============================================ */
 
@@ -1029,6 +1059,10 @@ textarea:not([class])::placeholder {
     line-height: 1.6;
     white-space: pre;
     border: 1px solid var(--dm-gray-700);
+}
+
+.code-block-sm {
+    font-size: 0.85em;
 }
 
 code {
@@ -2270,6 +2304,118 @@ code {
 
 
 /* ============================================
+   HERO SECTION
+   ============================================ */
+
+/* Base Hero - Structure Only */
+.hero {
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+    background: var(--dm-surface);
+    color: var(--dm-text);
+}
+
+.hero h1,
+.hero .hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.hero p,
+.hero .hero-subtitle {
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    opacity: 0.9;
+}
+
+.hero code {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--dm-radius-sm);
+}
+
+.hero .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Hero Size Variants */
+.hero-sm {
+    padding: 2rem 1rem;
+}
+
+.hero-sm h1,
+.hero-sm .hero-title {
+    font-size: 2rem;
+}
+
+.hero-sm p,
+.hero-sm .hero-subtitle {
+    font-size: 1rem;
+}
+
+.hero-lg {
+    padding: 6rem 2rem;
+}
+
+.hero-lg h1,
+.hero-lg .hero-title {
+    font-size: 4rem;
+}
+
+.hero-full {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Hero Text Color Variants */
+.hero-light {
+    color: var(--dm-white);
+}
+
+.hero-dark {
+    color: var(--dm-gray-900);
+}
+
+/* Hero Background Variants */
+.hero-gradient-primary {
+    background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-hover) 100%);
+    color: var(--dm-white);
+}
+
+.hero-gradient-secondary {
+    background: linear-gradient(135deg, var(--dm-secondary) 0%, var(--dm-secondary-hover) 100%);
+    color: var(--dm-white);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero h1,
+    .hero .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero p,
+    .hero .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .hero {
+        padding: 3rem 1.5rem;
+    }
+}
+
+
+/* ============================================
    CAROUSEL
    ============================================ */
 
@@ -2915,4 +3061,130 @@ code {
 .dm-theme-dark .syntax-language-badge {
     background: rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.8);
+}
+
+
+/* ============================================
+   BACKGROUND UTILITIES
+   ============================================ */
+
+.bg-primary {
+    background-color: var(--dm-primary) !important;
+    color: var(--dm-white) !important;
+}
+
+.bg-secondary {
+    background-color: var(--dm-secondary) !important;
+    color: var(--dm-white) !important;
+}
+
+.bg-success {
+    background-color: var(--dm-success) !important;
+    color: var(--dm-white) !important;
+}
+
+.bg-danger {
+    background-color: var(--dm-danger) !important;
+    color: var(--dm-white) !important;
+}
+
+.bg-warning {
+    background-color: var(--dm-warning) !important;
+    color: var(--dm-warning-text) !important;
+}
+
+.bg-info {
+    background-color: var(--dm-info) !important;
+    color: var(--dm-white) !important;
+}
+
+.bg-light {
+    background-color: var(--dm-gray-100) !important;
+    color: var(--dm-gray-900) !important;
+}
+
+.bg-dark {
+    background-color: var(--dm-gray-900) !important;
+    color: var(--dm-white) !important;
+}
+
+/* Background Tints (Lighter) */
+.bg-primary-light {
+    background-color: var(--dm-primary-bg) !important;
+    color: var(--dm-primary) !important;
+}
+
+.bg-secondary-light {
+    background-color: var(--dm-secondary-bg) !important;
+    color: var(--dm-secondary) !important;
+}
+
+.bg-success-light {
+    background-color: var(--dm-success-bg) !important;
+    color: var(--dm-success) !important;
+}
+
+.bg-danger-light {
+    background-color: var(--dm-danger-bg) !important;
+    color: var(--dm-danger) !important;
+}
+
+.bg-warning-light {
+    background-color: var(--dm-warning-bg) !important;
+    color: var(--dm-warning) !important;
+}
+
+.bg-info-light {
+    background-color: var(--dm-info-bg) !important;
+    color: var(--dm-info) !important;
+}
+
+
+/* ============================================
+   TEXT COLOR UTILITIES
+   ============================================ */
+
+.text-primary {
+    color: var(--dm-primary) !important;
+}
+
+.text-secondary {
+    color: var(--dm-secondary) !important;
+}
+
+.text-success {
+    color: var(--dm-success) !important;
+}
+
+.text-danger {
+    color: var(--dm-danger) !important;
+}
+
+.text-warning {
+    color: var(--dm-warning) !important;
+}
+
+.text-info {
+    color: var(--dm-info) !important;
+}
+
+.text-muted {
+    color: var(--dm-gray-600) !important;
+}
+
+.text-white {
+    color: var(--dm-white) !important;
+}
+
+.text-dark {
+    color: var(--dm-gray-900) !important;
+}
+
+/* ============================================
+   FONT UTILITIES
+   ============================================ */
+
+.font-mono {
+    font-family: var(--dm-font-mono, monospace) !important;
+    font-size: 0.875rem;
 }

@@ -328,3 +328,11 @@
 .row.gap-6 {
     gap: var(--dm-space-6, 2rem);
 }
+
+/* ============================================
+   CSS GRID UTILITIES (Auto-fit)
+   ============================================ */
+
+.grid-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+}

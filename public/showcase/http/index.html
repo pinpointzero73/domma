@@ -14,7 +14,7 @@
 <body data-layout="showcase" data-layout-variant="subpage">
 
 <!-- Hero Section -->
-<div class="hero grid-hero-style">
+<div class="hero hero-gradient-primary http-hero-style">
     <h1>HTTP Client</h1>
     <p>Fetch-based HTTP client for making API requests with Promises and async/await support.</p>
     <p><code>Domma.http</code></p>
@@ -560,7 +560,7 @@ client.addErrorInterceptor(async (error) => {
             <div class="grid grid-cols-1 grid-cols-md-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">Scattered (Hard to Maintain)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;">// Component 1
+                  <pre class="code-block code-block-sm language-javascript">// Component 1
 const users = await Domma.http.get(
     'https://api.example.com/users'
 );
@@ -582,7 +582,7 @@ await Domma.http.post(
                 </div>
                 <div>
                     <p class="font-semibold mb-2">Service Layer (Centralized)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;">// services/user.js
+                  <pre class="code-block code-block-sm language-javascript">// services/user.js
 class UserService {
     baseURL = 'https://api.example.com';
 

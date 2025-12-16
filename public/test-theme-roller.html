@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Roller TEST</title>
+  <link rel="stylesheet" href="dist/domma.css">
+  <link rel="stylesheet" href="dist/elements.css">
+  <link rel="stylesheet" href="dist/domma-tools.css">
+  <link rel="stylesheet" href="dist/themes/domma-themes.css">
+  <style>
+      body {
+          padding: 2rem;
+      }
+
+      #test {
+          border: 2px solid red;
+          min-height: 100px;
+      }
+  </style>
+</head>
+<body class="dm-theme-light">
+<h1>Theme Roller Test</h1>
+<div id="test"></div>
+
+<script src="dist/domma.min.js?v=16"></script>
+<script src="dist/domma-tools.min.js?v=16"></script>
+<script>
+  console.log('Domma:', typeof Domma);
+  console.log('Domma.elements:', typeof Domma.elements);
+  console.log('Domma.elements.themeRoller:', typeof Domma.elements.themeRoller);
+  console.log('Domma.elements.accordion:', typeof Domma.elements.accordion);
+  console.log('Domma.theme:', typeof Domma.theme);
+  console.log('Domma.theme.listVariants:', typeof Domma.theme.listVariants);
+
+  Domma.theme.init({theme: 'light', autoDetect: false});
+
+  try {
+    const roller = Domma.elements.themeRoller('#test', {
+      baseTheme: 'light',
+      showPresets: true,
+      showPreviewPanel: true
+    });
+    console.log('Theme roller created:', roller);
+    console.log('Element HTML:', document.getElementById('test').innerHTML.substring(0, 500));
+  } catch (e) {
+    console.error('ERROR creating theme roller:', e);
+  }
+
+  Domma.icons.scan();
+</script>
+</body>
+</html>

@@ -81,7 +81,8 @@ const coreCSSFiles = [
     {src: 'src/css/domma.css', dest: 'public/dist/domma.css', name: 'Domma Core CSS'},
     {src: 'src/css/grid.css', dest: 'public/dist/grid.css', name: 'Domma Grid CSS'},
     {src: 'src/css/elements.css', dest: 'public/dist/elements.css', name: 'Domma Elements CSS'},
-    {src: 'src/css/syntax.css', dest: 'public/dist/syntax.css', name: 'Domma Syntax Highlighting CSS'}
+    {src: 'src/css/syntax.css', dest: 'public/dist/syntax.css', name: 'Domma Syntax Highlighting CSS'},
+    {src: 'src/css/domma-tools.css', dest: 'public/dist/domma-tools.css', name: 'Domma Tools CSS'}
 ];
 
 const cssBanner = (name) => `/*!

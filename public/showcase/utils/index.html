@@ -12,7 +12,7 @@
 </head>
 <body data-layout="showcase" data-layout-variant="subpage">
 <!-- Hero Section -->
-<div class="hero utils-hero-style">
+<div class="hero hero-gradient-primary utils-hero-style">
     <h1>Utilities</h1>
     <p>Lodash-compatible utility functions with 120+ methods for arrays, objects, strings, and more.</p>
     <p><code>_</code> or <code>Domma.utils</code></p>
@@ -504,8 +504,7 @@ _.render('{{> header}}', { title: 'Welcome' }, opts);
 
             <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
-                <textarea id="template-input" class="form-input mb-2" rows="3"
-                          style="font-family: var(--dm-font-mono); font-size: 0.875rem;">Hello {{name}}! {{#if premium}}(Premium){{/if}}</textarea>
+                <textarea id="template-input" class="form-input font-mono mb-2" rows="3">Hello {{name}}! {{#if premium}}(Premium){{/if}}</textarea>
                 <input type="text" id="template-data" class="form-input mb-3" value='{"name": "Alice", "premium": true}'
                        placeholder="JSON data">
                 <button class="btn btn-primary btn-sm" id="template-run">Render</button>
@@ -976,7 +975,7 @@ $.setup({
             <div class="grid grid-cols-1 grid-cols-md-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">Imperative (Verbose)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;">// Filter, sort, group manually
+                    <pre class="code-block code-block-sm language-javascript">// Filter, sort, group manually
 const active = [];
 for (const user of users) {
     if (user.status === 'active') {
@@ -1001,7 +1000,7 @@ for (const user of active) {
                 </div>
                 <div>
                     <p class="font-semibold mb-2">Functional with Utils (Clean)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;">// Pipeline with utils
+                    <pre class="code-block code-block-sm language-javascript">// Pipeline with utils
 const byDept = _.flow([
     users => _.filter(users, {
         status: 'active'

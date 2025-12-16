@@ -1,80 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Theme Roller - Domma Showcase</title>
-    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../dist/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
-    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-    <link rel="stylesheet" href="../../css/domma-showcase.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Roller - Domma Showcase</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+  <link rel="stylesheet" href="../../dist/domma.css?v=49">
+  <link rel="stylesheet" href="../../dist/elements.css?v=49">
+  <link rel="stylesheet" href="../../dist/domma-tools.css?v=49">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css?v=49">
+  <link rel="stylesheet" href="../css/domma-showcase.css?v=49">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="subpage">
 
 <!-- Hero Section -->
-<div class="hero theme-hero-style">
-    <h1>Theme Roller</h1>
-    <p>Customise every aspect of your Domma theme with live preview and one-click export.</p>
+<div class="hero hero-gradient-primary theme-hero-style">
+  <h1>Theme Roller</h1>
+  <p>Customise every aspect of your Domma theme with live preview and one-click export.</p>
 </div>
 
 <main class="container pb-8">
-    <div class="theme-main-content">
-        <!-- Theme Roller Component -->
-        <div class="theme-roller-container-style" id="theme-roller-container">
-            <!-- Theme Roller will be rendered here -->
-        </div>
-
-        <!-- Usage Section -->
-        <div class="theme-usage-section">
-            <h3>Usage</h3>
-
-            <div class="code-block language-javascript">
-                <span class="comment">// Initialise Theme Roller</span>
-                <span class="keyword">const</span> roller = Domma.elements.<span class="function">themeRoller</span>(
-                <span class="string">'#container'</span>, {
-                baseTheme: <span class="string">'light'</span>,
-                showPresets: <span class="keyword">true</span>,
-                livePreview: <span class="keyword">true</span>
-                });
-
-                <span class="comment">// Get/Set values</span>
-                roller.<span class="function">set</span>(<span class="string">'--dm-primary'</span>, <span
-                    class="string">'#ff6b6b'</span>);
-                roller.<span class="function">get</span>(<span class="string">'--dm-primary'</span>);
-
-                <span class="comment">// Export options</span>
-                roller.<span class="function">download</span>(<span class="string">'my-theme'</span>);
-                roller.<span class="function">copyToClipboard</span>();
-                roller.<span class="function">saveToStorage</span>();
-
-                <span class="comment">// Reset to defaults</span>
-                roller.<span class="function">reset</span>();
-            </div>
-
-            <h3 class="mt-6">Features</h3>
-            <ul class="list-disc ml-5 text-secondary">
-                <li>Live preview of all changes</li>
-                <li>Colour picker for all colour variables</li>
-                <li>Sliders for sizing and spacing</li>
-                <li>Preset theme loading</li>
-                <li>Light/Dark mode toggle</li>
-                <li>Download CSS file</li>
-                <li>Copy CSS to clipboard</li>
-                <li>Save to browser storage</li>
-            </ul>
-
-            <h3 class="mt-6">Categories</h3>
-            <ul class="list-disc ml-5 text-secondary">
-                <li><strong>Colours:</strong> Brand, status, backgrounds, text, borders</li>
-                <li><strong>Typography:</strong> Font families, sizes</li>
-                <li><strong>Spacing:</strong> Spacing scale values</li>
-                <li><strong>Borders:</strong> Border radius options</li>
-                <li><strong>Transitions:</strong> Animation durations</li>
-                <li><strong>States:</strong> Interactive state styles</li>
-            </ul>
-        </div>
+  <div class="theme-main-content">
+    <!-- Theme Roller Component -->
+    <div class="theme-roller-container-style" id="theme-roller-container">
+      <!-- Theme Roller will be rendered here -->
     </div>
+
+    <br/>
+
+    <!-- Usage Section -->
+    <div class="theme-usage-section">
+      <h3>Usage</h3>
+
+      <div class="code-block language-javascript">
+        <span class="comment">// Initialise Theme Roller</span>
+        <span class="keyword">const</span> roller = Domma.elements.<span class="function">themeRoller</span>(
+        <span class="string">'#container'</span>, {
+        baseTheme: <span class="string">'light'</span>,
+        showPresets: <span class="keyword">true</span>,
+        livePreview: <span class="keyword">true</span>
+        });
+
+        <span class="comment">// Get/Set values</span>
+        roller.<span class="function">set</span>(<span class="string">'--dm-primary'</span>, <span
+          class="string">'#ff6b6b'</span>);
+        roller.<span class="function">get</span>(<span class="string">'--dm-primary'</span>);
+
+        <span class="comment">// Export options</span>
+        roller.<span class="function">download</span>(<span class="string">'my-theme'</span>);
+        roller.<span class="function">copyToClipboard</span>();
+        roller.<span class="function">saveToStorage</span>();
+
+        <span class="comment">// Reset to defaults</span>
+        roller.<span class="function">reset</span>();
+      </div>
+
+      <h3 class="mt-6">Features</h3>
+      <ul class="list-disc ml-5 text-secondary">
+        <li>Live preview of all changes</li>
+        <li>Colour picker for all colour variables</li>
+        <li>Sliders for sizing and spacing</li>
+        <li>Preset theme loading</li>
+        <li>Light/Dark mode toggle</li>
+        <li>Download CSS file</li>
+        <li>Copy CSS to clipboard</li>
+        <li>Save to browser storage</li>
+      </ul>
+
+      <h3 class="mt-6">Categories</h3>
+      <ul class="list-disc ml-5 text-secondary">
+        <li><strong>Colours:</strong> Brand, status, backgrounds, text, borders</li>
+        <li><strong>Typography:</strong> Font families, sizes</li>
+        <li><strong>Spacing:</strong> Spacing scale values</li>
+        <li><strong>Borders:</strong> Border radius options</li>
+        <li><strong>Transitions:</strong> Animation durations</li>
+        <li><strong>States:</strong> Interactive state styles</li>
+      </ul>
+    </div>
+  </div>
 </main>
 
 <script src="../../dist/domma.min.js"></script>
@@ -82,26 +85,26 @@
 <script src="../../dist/domma-tools.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
-    // Initialise theme
-    Domma.theme.init({autoDetect: true});
+  // Initialise theme to light (don't auto-detect for demo)
+  Domma.theme.init({theme: 'light', autoDetect: false});
 
-    // Create Theme Roller
-    const roller = Domma.elements.themeRoller('#theme-roller-container', {
-        baseTheme: Domma.theme.get(),
-        baseVariant: Domma.theme.getVariant(),
-        showPresets: true,
-        showPreviewPanel: true,
-        livePreview: true,
-        onChange: (variable, value) => {
-            console.log(`Changed: ${variable} = ${value}`);
-        }
-    });
+  // Create Theme Roller
+  const roller = Domma.elements.themeRoller('#theme-roller-container', {
+    baseTheme: 'light',
+    baseVariant: null,
+    showPresets: true,
+    showPreviewPanel: true,
+    livePreview: true,
+    onChange: (variable, value) => {
+      console.log(`Changed: ${variable} = ${value}`);
+    }
+  });
 
-    // Try to load saved theme
-    roller.loadFromStorage();
+  // Don't auto-load from storage - start fresh
+  // roller.loadFromStorage();
 
-    // Scan icons
-    Domma.icons.scan();
+  // Scan icons
+  Domma.icons.scan();
 </script>
 </body>
 </html>

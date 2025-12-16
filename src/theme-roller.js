@@ -588,6 +588,15 @@ class ThemeRoller {
     _init() {
         this._createPreviewStyle();
         this._render();
+
+        // Initialize accordion BEFORE binding events (so events attach to accordion-processed DOM)
+        if (typeof Domma !== 'undefined' && Domma.elements) {
+            this._accordionInstance = Domma.elements.accordion('#theme-roller-accordion', {
+                multiExpand: true,
+                activeIndex: 0
+            });
+        }
+
         this._bindEvents();
 
         // Set initial base theme
@@ -659,9 +668,12 @@ class ThemeRoller {
                     <div class="accordion-header">
                         <span data-icon="${category.icon}" data-icon-size="18"></span>
                         ${category.name}
+                        <span class="accordion-icon">&#9660;</span>
                     </div>
-                    <div class="accordion-content">
-                        ${this._renderCategoryContent(categoryKey, category)}
+                    <div class="accordion-body">
+                        <div class="accordion-content">
+                            ${this._renderCategoryContent(categoryKey, category)}
+                        </div>
                     </div>
                 </div>
             `;
@@ -700,6 +712,14 @@ class ThemeRoller {
 
         this.element.innerHTML = html;
 
+        // Force color input swatches to display by setting values via JavaScript
+        this.element.querySelectorAll('input[type="color"]').forEach(input => {
+            const value = input.getAttribute('value');
+            if (value) {
+                input.value = value;
+            }
+        });
+
         // Scan icons
         if (typeof Domma !== 'undefined' && Domma.icons) {
             Domma.icons.scan(this.element);
@@ -729,7 +749,27 @@ class ThemeRoller {
                 const defaultValue = isDark
                     ? (varDef.defaultDark || varDef.default)
                     : (varDef.defaultLight || varDef.default);
-                const currentValue = this._changes[varName] || defaultValue;
+
+                // Get actual computed value from CSS (read from body where theme classes are applied)
+                let computedValue = getComputedStyle(document.body)
+                  .getPropertyValue(varName).trim();
+
+                if (varDef.type === 'color') {
+                    console.log(`[ThemeRoller] Reading ${varName}: "${computedValue}"`);
+                }
+
+                // Convert RGB to hex for color inputs
+                if (varDef.type === 'color' && computedValue.startsWith('rgb')) {
+                    const match = computedValue.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+                    if (match) {
+                        const r = parseInt(match[1]).toString(16).padStart(2, '0');
+                        const g = parseInt(match[2]).toString(16).padStart(2, '0');
+                        const b = parseInt(match[3]).toString(16).padStart(2, '0');
+                        computedValue = `#${r}${g}${b}`.toUpperCase();
+                    }
+                }
+
+                const currentValue = this._changes[varName] || computedValue || defaultValue;
 
                 html += this._renderInput(varName, varDef, currentValue);
             }
@@ -849,10 +889,12 @@ class ThemeRoller {
                 <h4>Live Preview</h4>
                 <div class="dm-preview-content">
                     <div class="dm-preview-buttons">
-                        <button class="dm-btn dm-btn-primary">Primary</button>
-                        <button class="dm-btn dm-btn-secondary">Secondary</button>
-                        <button class="dm-btn dm-btn-success">Success</button>
-                        <button class="dm-btn dm-btn-danger">Danger</button>
+                        <button class="btn btn-primary">Primary</button>
+                        <button class="btn btn-secondary">Secondary</button>
+                        <button class="btn btn-success">Success</button>
+                        <button class="btn btn-danger">Danger</button>
+                        <button class="btn btn-warning">Warning</button>
+                        <button class="btn btn-info">Info</button>
                     </div>
                     <div class="dm-preview-card">
                         <h5>Sample Card</h5>
@@ -873,112 +915,112 @@ class ThemeRoller {
     }
 
     /**
-     * Bind event handlers
+     * Bind event handlers (declarative style inspired by Domma.config)
      * @private
      */
     _bindEvents() {
-        // Theme toggle buttons
-        this.element.querySelectorAll('.dm-theme-btn').forEach(btn => {
-            this._addEventListener(btn, 'click', () => {
-                const newTheme = btn.dataset.theme;
-                theme.set(newTheme);
-                this._updateThemeButtons();
-                this._refreshInputs();
-            });
-        });
+        const eventConfig = {
+            '.dm-theme-btn': {
+                on: 'click',
+                call: (e, el) => {
+                    const newTheme = el.dataset.theme;
+                    theme.set(newTheme);
+                    this._updateThemeButtons();
+                    this._refreshInputs();
+                }
+            },
+            '.dm-preset-btn': {
+                on: 'click',
+                call: (e, el) => {
+                    console.log('[ThemeRoller] Preset button clicked:', el.dataset.preset);
+                    this.loadPreset(el.dataset.preset || null);
+                }
+            },
+            'input[type="color"]': {
+                on: 'input',
+                call: (e, el) => {
+                    const varName = el.dataset.var;
+                    this.set(varName, el.value);
+                    // Sync text input
+                    const textInput = this.element.querySelector(`.dm-color-text[data-var="${varName}"]`);
+                    if (textInput) textInput.value = el.value;
+                }
+            },
+            '.dm-color-text': {
+                on: 'change',
+                call: (e, el) => {
+                    const varName = el.dataset.var;
+                    const value = el.value;
+                    if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                        this.set(varName, value);
+                        // Sync colour picker
+                        const colorInput = this.element.querySelector(`input[type="color"][data-var="${varName}"]`);
+                        if (colorInput) colorInput.value = value;
+                    }
+                }
+            },
+            'input[type="range"]': {
+                on: 'input',
+                call: (e, el) => {
+                    const varName = el.dataset.var;
+                    const varDef = VARIABLE_REGISTRY[varName];
+                    let value = el.value;
+                    let displayValue = value;
 
-        // Preset buttons
-        this.element.querySelectorAll('.dm-preset-btn').forEach(btn => {
-            this._addEventListener(btn, 'click', () => {
-                this.loadPreset(btn.dataset.preset || null);
-            });
-        });
+                    if (varDef.type === 'size') {
+                        value = `${value}${varDef.unit}`;
+                        displayValue = value;
+                    } else if (varDef.type === 'transition') {
+                        displayValue = `${value}ms`;
+                        value = `${value}ms ease`;
+                    }
 
-        // Colour inputs
-        this.element.querySelectorAll('input[type="color"]').forEach(input => {
-            this._addEventListener(input, 'input', (e) => {
-                const varName = e.target.dataset.var;
-                this.set(varName, e.target.value);
-                // Sync text input
-                const textInput = this.element.querySelector(`.dm-color-text[data-var="${varName}"]`);
-                if (textInput) textInput.value = e.target.value;
-            });
-        });
-
-        // Colour text inputs
-        this.element.querySelectorAll('.dm-color-text').forEach(input => {
-            this._addEventListener(input, 'change', (e) => {
-                const varName = e.target.dataset.var;
-                const value = e.target.value;
-                if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
                     this.set(varName, value);
-                    // Sync colour picker
-                    const colorInput = this.element.querySelector(`input[type="color"][data-var="${varName}"]`);
-                    if (colorInput) colorInput.value = value;
+
+                    // Update display value
+                    const valueSpan = el.parentElement.querySelector('.dm-size-value');
+                    if (valueSpan) valueSpan.textContent = displayValue;
                 }
-            });
-        });
-
-        // Range inputs (size, transition, opacity)
-        this.element.querySelectorAll('input[type="range"]').forEach(input => {
-            this._addEventListener(input, 'input', (e) => {
-                const varName = e.target.dataset.var;
-                const varDef = VARIABLE_REGISTRY[varName];
-                let value = e.target.value;
-                let displayValue = value;
-
-                if (varDef.type === 'size') {
-                    value = `${value}${varDef.unit}`;
-                    displayValue = value;
-                } else if (varDef.type === 'transition') {
-                    displayValue = `${value}ms`;
-                    value = `${value}ms ease`;
+            },
+            'select[data-var]': {
+                on: 'change',
+                call: (e, el) => {
+                    const varName = el.dataset.var;
+                    this.set(varName, el.value);
                 }
-
-                this.set(varName, value);
-
-                // Update display value
-                const valueSpan = e.target.parentElement.querySelector('.dm-size-value');
-                if (valueSpan) valueSpan.textContent = displayValue;
-            });
-        });
-
-        // Select inputs
-        this.element.querySelectorAll('select[data-var]').forEach(select => {
-            this._addEventListener(select, 'change', (e) => {
-                const varName = e.target.dataset.var;
-                this.set(varName, e.target.value);
-            });
-        });
-
-        // Action buttons
-        this.element.querySelectorAll('[data-action]').forEach(btn => {
-            this._addEventListener(btn, 'click', async () => {
-                const action = btn.dataset.action;
-                switch (action) {
-                    case 'reset':
-                        this.reset();
-                        break;
-                    case 'save':
-                        this.saveToStorage();
-                        break;
-                    case 'copy':
-                        await this.copyToClipboard();
-                        break;
-                    case 'download':
-                        this.download();
-                        break;
+            },
+            '[data-action]': {
+                on: 'click',
+                call: async (e, el) => {
+                    const action = el.dataset.action;
+                    switch (action) {
+                        case 'reset':
+                            this.reset();
+                            break;
+                        case 'save':
+                            this.saveToStorage();
+                            break;
+                        case 'copy':
+                            await this.copyToClipboard();
+                            break;
+                        case 'download':
+                            this.download();
+                            break;
+                    }
                 }
+            }
+        };
+
+        console.log('[ThemeRoller] Setting up event bindings (declarative style)');
+        // Apply event config to elements within container
+        Object.keys(eventConfig).forEach(selector => {
+            const elements = this.element.querySelectorAll(selector);
+            const {on, call} = eventConfig[selector];
+
+            elements.forEach(el => {
+                el.addEventListener(on, (e) => call(e, el));
             });
         });
-
-        // Initialise accordion
-        if (typeof Domma !== 'undefined' && Domma.elements) {
-            this._accordionInstance = Domma.elements.accordion('#theme-roller-accordion', {
-                multiExpand: true,
-                activeIndex: 0
-            });
-        }
     }
 
     /**
@@ -1018,11 +1060,30 @@ class ThemeRoller {
      * @private
      */
     _refreshInputs() {
+        console.log('[ThemeRoller] _refreshInputs starting');
         this._changes = {};
         this._updatePreview();
         // Re-render to update default values based on theme
+        console.log('[ThemeRoller] About to re-render');
         this._render();
+        console.log('[ThemeRoller] Re-render completed');
+
+        // Re-initialize accordion after re-render
+        if (typeof Domma !== 'undefined' && Domma.elements && this._accordionInstance) {
+            console.log('[ThemeRoller] Destroying old accordion instance');
+            this._accordionInstance.destroy();
+        }
+        if (typeof Domma !== 'undefined' && Domma.elements) {
+            console.log('[ThemeRoller] Creating new accordion instance');
+            this._accordionInstance = Domma.elements.accordion('#theme-roller-accordion', {
+                multiExpand: true,
+                activeIndex: 0
+            });
+        }
+
+        console.log('[ThemeRoller] About to rebind events');
         this._bindEvents();
+        console.log('[ThemeRoller] _refreshInputs complete');
     }
 
     /**
@@ -1037,7 +1098,8 @@ class ThemeRoller {
             return;
         }
 
-        let css = ':root {\n';
+        // Apply changes to body (where theme classes are applied) AND root (for universal access)
+        let css = 'body, :root {\n';
         for (const [variable, value] of Object.entries(this._changes)) {
             css += `    ${variable}: ${value} !important;\n`;
         }
@@ -1130,14 +1192,51 @@ class ThemeRoller {
      * @returns {ThemeRoller}
      */
     loadPreset(preset) {
+        console.log('[ThemeRoller] loadPreset called:', preset);
+
+        // Enable theme engine if it was disabled
+        if (theme.isDisabled()) {
+            console.log('[ThemeRoller] Theme engine is disabled, enabling it');
+            theme.enable();
+        }
+
+        // Force theme reapply by clearing variant first (prevents early return in setVariant)
+        theme.setVariant(null);
+        console.log('[ThemeRoller] Cleared variant, now applying:', preset);
         theme.setVariant(preset);
+        console.log('[ThemeRoller] theme.setVariant completed, current variant:', theme.getVariant());
+        console.log('[ThemeRoller] Body classes:', document.body.className);
+
+        // Force browser reflow to apply new CSS
+        document.body.offsetHeight; // trigger reflow
+
+        // Small delay to ensure CSS is applied before reading values
+        setTimeout(() => {
+            console.log('[ThemeRoller] Body classes after delay:', document.body.className);
+            // Verify the CSS variable actually changed
+            const primaryColor = getComputedStyle(document.body).getPropertyValue('--dm-primary').trim();
+            console.log('[ThemeRoller] --dm-primary after setVariant + reflow:', primaryColor);
+
+            // Now refresh inputs with the new values
+            this._refreshInputsDelayed();
+        }, 50);
+
         this._changes = {};
         this._updatePreview();
         this._updatePresetButtons();
-        this._refreshInputs();
-
-        this._showToast(`Loaded preset: ${preset || 'Default'}`);
         return this;
+    }
+
+    /**
+     * Refresh inputs after delay (for async theme changes)
+     * @private
+     */
+    _refreshInputsDelayed() {
+        console.log('[ThemeRoller] _refreshInputsDelayed called');
+        this._changes = {};
+        this._updatePreview();
+        this._refreshInputs();
+        this._showToast(`Theme preset loaded`);
     }
 
     /**

@@ -8,28 +8,16 @@
     <link rel="stylesheet" href="../../dist/domma.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-    <link rel="stylesheet" href="../../css/domma-showcase.css">
+    <link rel="stylesheet" href="../../showcase/css/domma-showcase.css">
 </head>
 <body data-layout="showcase" data-layout-variant="subpage">
 
 <!-- Hero Section -->
-<div class="hero hero-config-style">
+<div class="hero hero-gradient-primary config-hero-style">
     <h1>Config Engine</h1>
     <p>Declarative component initialisation with JSON configuration. Setup once, update anytime, clean up when done.</p>
     <p class="mt-4"><code>$.setup({ ... })</code> <code>$.update()</code> <code>$.config()</code> <code>$.reset()</code>
     </p>
-</div>
-<div class="jumbotron">
-    <div class="jumbotron-content">
-        <h1 class="jumbotron-title">Config Engine</h1>
-        <p class="jumbotron-subtitle">Declarative component initialisation with JSON configuration. Setup once, update
-            anytime, clean up when done.</p>
-        <div class="jumbotron-actions">
-            <!--            <button class="btn btn-primary btn-lg">Get Started</button>-->
-            <p class="mt-4"><code>$.setup({ ... })</code> <code>$.update()</code> <code>$.config()</code> <code>$.reset()</code>
-            </p>
-        </div>
-    </div>
 </div>
 
 <div class="container py-8">
@@ -41,22 +29,22 @@
         <div class="card-body">
             <div class="grid grid-cols-4 gap-4">
                 <div class="feature-item-config">
-                    <div class="feature-icon-config">{ }</div>
+                    <div class="feature-icon-config" data-icon="code"></div>
                     <h4 class="font-semibold">Declarative</h4>
                     <p class="text-sm text-muted">Define components with JSON, not imperative code</p>
                 </div>
                 <div class="feature-item-config">
-                    <div class="feature-icon-config">&#x21bb;</div>
+                    <div class="feature-icon-config" data-icon="refresh"></div>
                     <h4 class="font-semibold">Mutable</h4>
                     <p class="text-sm text-muted">Update configuration at runtime with deep merging</p>
                 </div>
                 <div class="feature-item-config">
-                    <div class="feature-icon-config">&#x1F50D;</div>
+                    <div class="feature-icon-config" data-icon="search"></div>
                     <h4 class="font-semibold">Inspectable</h4>
                     <p class="text-sm text-muted">Retrieve current config for debugging</p>
                 </div>
                 <div class="feature-item-config">
-                    <div class="feature-icon-config">&#x2715;</div>
+                    <div class="feature-icon-config" data-icon="close"></div>
                     <h4 class="font-semibold">Cleanable</h4>
                     <p class="text-sm text-muted">Reset components and free resources</p>
                 </div>

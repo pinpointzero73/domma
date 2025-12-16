@@ -714,22 +714,11 @@ class DommaCollection {
      */
     wrap(wrapper) {
         return this.each((i, el) => {
-            console.log('--- wrap() START ---');
-            console.log('Element to wrap (el):', el.outerHTML);
-            console.log('Parent of el BEFORE:', el.parentNode ? el.parentNode.outerHTML : 'No parent');
-
             const wrap = this._getWrapper(wrapper, i, el);
-            console.log('Created wrapper:', wrap.outerHTML);
-
             if (el.parentNode) {
                 el.parentNode.insertBefore(wrap, el);
                 wrap.appendChild(el);
-            } else {
-                console.warn('Element has no parent, cannot wrap:', el.outerHTML);
             }
-
-            console.log('Parent of el AFTER:', el.parentNode ? el.parentNode.outerHTML : 'No parent');
-            console.log('--- wrap() END ---');
         });
     }
 
@@ -870,13 +859,10 @@ class DommaCollection {
 
     // Helper: Get wrapper element
     _getWrapper(wrapper, index, element) {
-        console.log('--- _getWrapper() START ---');
-        console.log('Wrapper input:', wrapper);
         let resultWrap;
 
         if (typeof wrapper === 'function') {
             wrapper = wrapper.call(element, index);
-            console.log('Wrapper after function call:', wrapper);
         }
         if (typeof wrapper === 'string') {
             const temp = document.createElement('div');
@@ -889,8 +875,6 @@ class DommaCollection {
         } else {
             resultWrap = document.createElement('div');
         }
-        console.log('Final generated wrapper:', resultWrap.outerHTML);
-        console.log('--- _getWrapper() END ---');
         return resultWrap;
     }
 

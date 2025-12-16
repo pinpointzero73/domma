@@ -292,6 +292,12 @@ class ThemeEngine {
      */
     enable() {
         this._disabled = false;
+
+        // Re-initialize target if it's missing
+        if (!this._target) {
+            this._target = document.body;
+        }
+
         this._applyTheme();
         return this;
     }
@@ -316,12 +322,20 @@ class ThemeEngine {
      * @private
      */
     _applyTheme(updateMeta = true) {
-        if (!this._target || this._disabled) {
+        if (this._disabled) {
+            return;
+        }
+
+        // Fallback to document.body if target is null
+        const target = this._target || document.body;
+
+        if (!target) {
+            console.error('[ThemeEngine] No target element available for theme application');
             return;
         }
 
         // Remove all theme classes
-        const classes = this._target.className.split(' ').filter(c => !c.startsWith(CLASS_PREFIX));
+        const classes = target.className.split(' ').filter(c => !c.startsWith(CLASS_PREFIX));
 
         // Add current theme class
         classes.push(`${CLASS_PREFIX}${this._theme}`);
@@ -331,7 +345,7 @@ class ThemeEngine {
             classes.push(`${CLASS_PREFIX}${this._variant}`);
         }
 
-        this._target.className = classes.join(' ').trim();
+        target.className = classes.join(' ').trim();
 
         // Update meta theme-color
         if (updateMeta) {

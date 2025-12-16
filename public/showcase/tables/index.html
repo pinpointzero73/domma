@@ -13,7 +13,7 @@
 <body data-layout="showcase" data-layout-variant="subpage">
 
 <!-- Hero Section -->
-<div class="hero tables-hero-style">
+<div class="hero hero-gradient-primary tables-hero-style">
     <h1>Tables</h1>
     <p>DataTable-like functionality for interactive data grids with sorting, filtering, pagination, and more.</p>
     <p><code>Domma.tables</code></p>
@@ -929,7 +929,7 @@ tableState.onChange('selectedRows', (rows) => {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">Imperative (Scattered)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;">// Table 1
+                    <pre class="code-block code-block-sm language-javascript">// Table 1
 const table1 = Domma.tables.create('#t1', {
     data: data1,
     columns: [/*...*/],
@@ -951,7 +951,7 @@ const table2 = Domma.tables.create('#t2', {
                 </div>
                 <div>
                     <p class="font-semibold mb-2">Configuration-Driven (Centralized)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;">// One config object
+                    <pre class="code-block code-block-sm language-javascript">// One config object
 const config = {
     table1: {
         selector: '#t1',

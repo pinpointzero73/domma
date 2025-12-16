@@ -173,6 +173,23 @@
     --dm-info-light: var(--dm-sky-100);
     --dm-info-dark: var(--dm-sky-800);
 
+    /* ================================================
+       BACKGROUND TINTS (Lighter versions for backgrounds)
+       ================================================ */
+    --dm-primary-bg: var(--dm-blue-100);
+    --dm-secondary-bg: var(--dm-slate-100);
+    --dm-success-bg: var(--dm-green-100);
+    --dm-danger-bg: var(--dm-red-100);
+    --dm-warning-bg: var(--dm-amber-100);
+    --dm-info-bg: var(--dm-sky-100);
+
+    /* ================================================
+       SEMANTIC SURFACE COLORS (For components)
+       ================================================ */
+    --dm-surface-secondary: var(--dm-slate-50);
+    --dm-card-bg: var(--dm-white);
+    --dm-card-border: var(--dm-slate-200);
+
     /* Legacy color names (kept for backwards compatibility) */
     --dm-light: var(--dm-slate-100);
     --dm-dark: var(--dm-slate-800);
@@ -193,7 +210,7 @@
     --dm-gray-950: var(--dm-slate-950);
 
     /* Typography */
-    --dm-font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --dm-font-sans: Roboto, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --dm-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --dm-font-size-xs: 0.75rem; /* 12px */
     --dm-font-size-sm: 0.875rem; /* 14px */
@@ -337,7 +354,7 @@
 
 body {
     margin: 0;
-    font-family: var(--dm-font-sans, sans-serif);
+    font-family: var(--dm-font-sans, sans-serif), sans-serif;
     font-size: var(--dm-font-size-base);
     line-height: 1.5;
     color: var(--dm-text);
@@ -357,7 +374,7 @@ a:hover {
 }
 
 code, pre {
-    font-family: var(--dm-font-mono, monospace);
+    font-family: var(--dm-font-mono, monospace), serif;
 }
 
 /* ============================================
@@ -2178,6 +2195,23 @@ code, pre {
     --dm-info-active: var(--dm-sky-200);
     --dm-info-light: rgba(56, 189, 248, 0.15); /* sky-400 */
     --dm-info-dark: var(--dm-sky-500);
+
+    /* ================================================
+       BACKGROUND TINTS (Dark theme versions)
+       ================================================ */
+    --dm-primary-bg: rgba(96, 165, 250, 0.15); /* blue-400 */
+    --dm-secondary-bg: rgba(148, 163, 184, 0.15); /* slate-400 */
+    --dm-success-bg: rgba(74, 222, 128, 0.15); /* green-400 */
+    --dm-danger-bg: rgba(248, 113, 113, 0.15); /* red-400 */
+    --dm-warning-bg: rgba(251, 191, 36, 0.15); /* amber-400 */
+    --dm-info-bg: rgba(56, 189, 248, 0.15); /* sky-400 */
+
+    /* ================================================
+       SEMANTIC SURFACE COLORS (Dark theme versions)
+       ================================================ */
+    --dm-surface-secondary: var(--dm-slate-900);
+    --dm-card-bg: var(--dm-slate-800);
+    --dm-card-border: var(--dm-slate-700);
 
     /* ================================================
        INTERACTIVE STATES

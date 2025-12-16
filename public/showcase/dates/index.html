@@ -12,7 +12,7 @@
 </head>
 <body data-layout="showcase" data-layout-variant="subpage">
 <!-- Hero Section with Live Clock -->
-<div class="hero hero-dates-style">
+<div class="hero hero-gradient-primary dates-hero-style">
     <h1>Dates</h1>
     <p>Moment.js-style chainable date manipulation without the bloat.</p>
   <p class="mb-6"><code>D()</code> or <code>Domma.dates()</code></p>
@@ -586,7 +586,7 @@ Domma.dates.max(dates).format('MMM D')  // 'Jun 20'</pre>
         ];
 
         $('#getters-display').html(getters.map(([name, value]) =>
-          `<div class="p-3 bg-white rounded border" style="background: var(--dm-white); border: 1px solid var(--dm-border);">
+          `<div class="p-3 bg-white rounded border">
                     <div class="text-sm text-muted">${name}</div>
                     <div class="font-semibold">${value}</div>
                 </div>`
