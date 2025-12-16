@@ -8,7 +8,9 @@
       "aliases": [
         "_"
       ],
-      "tier": 1
+      "tier": 1,
+      "cssRequired": [],
+      "cssOptional": []
     },
     "http": {
       "name": "HTTP",
@@ -16,7 +18,9 @@
       "size": 2,
       "dependencies": [],
       "aliases": [],
-      "tier": 1
+      "tier": 1,
+      "cssRequired": [],
+      "cssOptional": []
     },
     "dates": {
       "name": "Dates",
@@ -26,7 +30,9 @@
       "aliases": [
         "D"
       ],
-      "tier": 1
+      "tier": 1,
+      "cssRequired": [],
+      "cssOptional": []
     },
     "storage": {
       "name": "Storage",
@@ -36,7 +42,9 @@
       "aliases": [
         "S"
       ],
-      "tier": 1
+      "tier": 1,
+      "cssRequired": [],
+      "cssOptional": []
     },
     "theme": {
       "name": "Theme",
@@ -44,7 +52,11 @@
       "size": 10,
       "dependencies": [],
       "aliases": [],
-      "tier": 1
+      "tier": 1,
+      "cssRequired": [],
+      "cssOptional": [
+        "themes"
+      ]
     },
     "dom": {
       "name": "DOM",
@@ -56,7 +68,13 @@
       "aliases": [
         "$"
       ],
-      "tier": 2
+      "tier": 2,
+      "cssRequired": [
+        "domma"
+      ],
+      "cssOptional": [
+        "grid"
+      ]
     },
     "icons": {
       "name": "Icons",
@@ -64,7 +82,9 @@
       "size": 8,
       "dependencies": [],
       "aliases": [],
-      "tier": 2
+      "tier": 2,
+      "cssRequired": [],
+      "cssOptional": []
     },
     "models": {
       "name": "Models",
@@ -77,7 +97,9 @@
       "aliases": [
         "M"
       ],
-      "tier": 2
+      "tier": 2,
+      "cssRequired": [],
+      "cssOptional": []
     },
     "elements": {
       "name": "Elements",
@@ -85,7 +107,15 @@
       "size": 85,
       "dependencies": [],
       "aliases": [],
-      "tier": 2
+      "tier": 2,
+      "cssRequired": [
+        "domma",
+        "elements"
+      ],
+      "cssOptional": [
+        "grid",
+        "themes"
+      ]
     },
     "tables": {
       "name": "Tables",
@@ -96,7 +126,15 @@
         "icons"
       ],
       "aliases": [],
-      "tier": 3
+      "tier": 3,
+      "cssRequired": [
+        "domma",
+        "elements"
+      ],
+      "cssOptional": [
+        "grid",
+        "themes"
+      ]
     },
     "config": {
       "name": "Config",
@@ -108,7 +146,41 @@
         "utils"
       ],
       "aliases": [],
-      "tier": 3
+      "tier": 3,
+      "cssRequired": [
+        "domma",
+        "elements"
+      ],
+      "cssOptional": [
+        "grid",
+        "themes"
+      ]
+    }
+  },
+  "css": {
+    "domma": {
+      "name": "Domma Base CSS",
+      "file": "domma.css",
+      "size": 48,
+      "description": "Base styles, typography, utilities"
+    },
+    "grid": {
+      "name": "Grid System",
+      "file": "grid.css",
+      "size": 5,
+      "description": "Bootstrap + CSS Grid utilities"
+    },
+    "elements": {
+      "name": "UI Components",
+      "file": "elements.css",
+      "size": 65,
+      "description": "19 UI components"
+    },
+    "themes": {
+      "name": "Theme System",
+      "file": "themes/domma-themes.css",
+      "size": 37,
+      "description": "Light/dark + colour variants"
     }
   },
   "presets": {
@@ -122,7 +194,12 @@
         "icons"
       ],
       "estimatedSize": 144,
-      "useCase": "Simple DOM manipulation, no UI components"
+      "useCase": "Simple DOM manipulation, no UI components",
+      "cssFiles": [
+        "domma",
+        "grid"
+      ],
+      "cssSize": 53
     },
     "essentials": {
       "name": "Essentials",
@@ -137,7 +214,14 @@
         "http"
       ],
       "estimatedSize": 211,
-      "useCase": "Interactive sites with UI components"
+      "useCase": "Interactive sites with UI components",
+      "cssFiles": [
+        "domma",
+        "grid",
+        "elements",
+        "themes"
+      ],
+      "cssSize": 155
     },
     "full": {
       "name": "Full",
@@ -156,7 +240,14 @@
         "theme"
       ],
       "estimatedSize": 258,
-      "useCase": "Applications using all features"
+      "useCase": "Applications using all features",
+      "cssFiles": [
+        "domma",
+        "grid",
+        "elements",
+        "themes"
+      ],
+      "cssSize": 155
     },
     "data-focused": {
       "name": "Data-Focused",
@@ -170,7 +261,14 @@
         "http"
       ],
       "estimatedSize": 172,
-      "useCase": "Data-heavy applications, dashboards"
+      "useCase": "Data-heavy applications, dashboards",
+      "cssFiles": [
+        "domma",
+        "grid",
+        "elements",
+        "themes"
+      ],
+      "cssSize": 155
     },
     "no-ui": {
       "name": "No-UI",
@@ -183,7 +281,9 @@
         "storage"
       ],
       "estimatedSize": 39,
-      "useCase": "Integration with existing frameworks"
+      "useCase": "Integration with existing frameworks",
+      "cssFiles": [],
+      "cssSize": 0
     }
   }
 }

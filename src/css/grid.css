@@ -330,9 +330,201 @@
 }
 
 /* ============================================
-   CSS GRID UTILITIES (Auto-fit)
+   CSS GRID UTILITIES
    ============================================ */
 
+/* Base grid class */
+.grid {
+    display: grid;
+}
+
+/* Column classes (1-12 columns) */
+.grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.grid-cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.grid-cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.grid-cols-7 {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.grid-cols-8 {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.grid-cols-9 {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+
+.grid-cols-10 {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+.grid-cols-11 {
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+
+.grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+/* Auto-fit utility */
 .grid-auto-fit {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Standalone gap utilities (work with .grid and .row) */
+.gap-0 {
+    gap: 0;
+}
+
+.gap-1 {
+    gap: var(--dm-space-1, 0.25rem);
+}
+
+.gap-2 {
+    gap: var(--dm-space-2, 0.5rem);
+}
+
+.gap-3 {
+    gap: var(--dm-space-3, 0.75rem);
+}
+
+.gap-4 {
+    gap: var(--dm-space-4, 1rem);
+}
+
+.gap-5 {
+    gap: var(--dm-space-5, 1.5rem);
+}
+
+.gap-6 {
+    gap: var(--dm-space-6, 2rem);
+}
+
+/* ============================================
+   RESPONSIVE GRID UTILITIES (Tablet ≥768px)
+   ============================================ */
+
+@media (min-width: 768px) {
+    .grid-cols-md-1 {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-6 {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-7 {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-8 {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-9 {
+        grid-template-columns: repeat(9, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-10 {
+        grid-template-columns: repeat(10, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-11 {
+        grid-template-columns: repeat(11, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-12 {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+}
+
+/* ============================================
+   RESPONSIVE GRID UTILITIES (Desktop ≥1024px)
+   ============================================ */
+
+@media (min-width: 1024px) {
+    .grid-cols-lg-1 {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-6 {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-7 {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-8 {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-9 {
+        grid-template-columns: repeat(9, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-10 {
+        grid-template-columns: repeat(10, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-11 {
+        grid-template-columns: repeat(11, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-12 {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
 }

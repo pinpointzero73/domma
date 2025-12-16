@@ -1516,3 +1516,295 @@
 .dom-hero-style {
     margin-bottom: 2rem;
 }
+
+/* ============================================
+   DOWNLOAD PAGE
+   ============================================ */
+
+/* Version Badge */
+.version-badge {
+    display: inline-block;
+    padding: var(--dm-space-2) var(--dm-space-4);
+    background: var(--dm-primary);
+    color: var(--dm-white);
+    border-radius: var(--dm-radius-full);
+    font-weight: 600;
+    font-size: var(--dm-text-lg);
+}
+
+/* Download Cards */
+.download-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.download-card .card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.download-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto var(--dm-space-4);
+    color: var(--dm-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.download-description {
+    flex: 1;
+    color: var(--dm-text-secondary);
+    font-size: var(--dm-text-sm);
+    margin-bottom: var(--dm-space-3);
+}
+
+.download-size {
+    color: var(--dm-text-muted);
+    font-size: var(--dm-text-sm);
+    margin-bottom: var(--dm-space-4);
+}
+
+/* Theme Preview Swatches */
+.theme-preview {
+    display: flex;
+    gap: var(--dm-space-2);
+    margin-top: var(--dm-space-3);
+    flex-wrap: wrap;
+}
+
+.theme-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--dm-radius-sm);
+    border: 2px solid var(--dm-border);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.theme-swatch:hover {
+    transform: scale(1.1);
+}
+
+/* Bundle Builder - Preset Buttons */
+.preset-buttons {
+    display: flex;
+    gap: var(--dm-space-3);
+    flex-wrap: wrap;
+}
+
+.preset-btn {
+    padding: var(--dm-space-3) var(--dm-space-4);
+    border: 2px solid var(--dm-border);
+    border-radius: var(--dm-radius-md);
+    background: var(--dm-white);
+    color: var(--dm-text);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: var(--dm-space-2);
+    font-weight: 500;
+}
+
+.preset-btn:hover {
+    border-color: var(--dm-primary);
+    background: var(--dm-primary-light);
+}
+
+.preset-btn.active {
+    border-color: var(--dm-primary);
+    background: var(--dm-primary);
+    color: var(--dm-white);
+}
+
+/* Module Selection */
+.module-tier-section {
+    margin-bottom: var(--dm-space-6);
+}
+
+.module-tier-section h4 {
+    margin-bottom: var(--dm-space-3);
+}
+
+.module-checkbox {
+    padding: var(--dm-space-2);
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: start;
+    gap: var(--dm-space-2);
+    min-height: 0;
+}
+
+.module-checkbox:hover {
+    border-color: var(--dm-primary);
+    background: var(--dm-surface);
+}
+
+.module-checkbox.selected {
+    border-color: var(--dm-primary);
+    background: var(--dm-primary-light);
+}
+
+.module-checkbox.required {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: var(--dm-gray-100);
+}
+
+.module-checkbox input[type="checkbox"] {
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.module-info {
+    flex: 1;
+}
+
+.module-name {
+    font-weight: 600;
+    margin-bottom: var(--dm-space-1);
+}
+
+.module-alias {
+    font-weight: 400;
+    color: var(--dm-text-muted);
+    font-size: var(--dm-text-sm);
+    margin-left: var(--dm-space-2);
+}
+
+.module-description {
+    font-size: var(--dm-text-xs);
+    color: var(--dm-text-secondary);
+    margin-bottom: var(--dm-space-1);
+    line-height: 1.3;
+}
+
+.module-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--dm-text-xs);
+    color: var(--dm-text-muted);
+    flex-wrap: wrap;
+    gap: var(--dm-space-1);
+}
+
+.module-size {
+    font-weight: 600;
+}
+
+.module-dependencies {
+    font-size: var(--dm-text-xs);
+}
+
+/* Bundle Summary */
+.bundle-summary {
+    background: var(--dm-surface);
+    padding: var(--dm-space-4);
+    border-radius: var(--dm-radius-md);
+    border: 1px solid var(--dm-border);
+}
+
+.bundle-size-display {
+    display: flex;
+    align-items: baseline;
+    gap: var(--dm-space-2);
+}
+
+/* Build Instructions */
+.build-instructions {
+    margin-top: var(--dm-space-6);
+}
+
+.accordion-header {
+    padding: var(--dm-space-3);
+    background: var(--dm-surface);
+    border: 1px solid var(--dm-border);
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: var(--dm-radius-md) var(--dm-radius-md) 0 0;
+}
+
+.accordion-content {
+    padding: var(--dm-space-4);
+    border: 1px solid var(--dm-border);
+    border-top: none;
+    border-radius: 0 0 var(--dm-radius-md) var(--dm-radius-md);
+}
+
+.accordion-item {
+    margin-bottom: var(--dm-space-3);
+}
+
+.accordion-item.active .accordion-header {
+    border-radius: var(--dm-radius-md) var(--dm-radius-md) 0 0;
+}
+
+.accordion-item:not(.active) .accordion-content {
+    display: none;
+}
+
+.code-block-custom {
+    background: var(--dm-gray-900);
+    color: var(--dm-gray-100);
+    padding: var(--dm-space-4);
+    border-radius: var(--dm-radius-md);
+    overflow-x: auto;
+    font-family: var(--dm-font-mono);
+    font-size: var(--dm-text-sm);
+    line-height: 1.6;
+    white-space: pre;
+}
+
+/* Requirements Table */
+.requirements-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.requirements-table th,
+.requirements-table td {
+    padding: var(--dm-space-3);
+    text-align: left;
+    border-bottom: 1px solid var(--dm-border);
+}
+
+.requirements-table th {
+    background: var(--dm-surface);
+    font-weight: 600;
+}
+
+.browser-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dm-space-2);
+    font-weight: 600;
+}
+
+.check-icon {
+    color: var(--dm-success);
+}
+
+/* Feature Support Tags */
+.feature-support {
+    display: flex;
+    gap: var(--dm-space-2);
+    flex-wrap: wrap;
+    margin-top: var(--dm-space-4);
+}
+
+.feature-tag {
+    padding: var(--dm-space-1) var(--dm-space-3);
+    background: var(--dm-primary-light);
+    color: var(--dm-primary-dark);
+    border-radius: var(--dm-radius-full);
+    font-size: var(--dm-text-sm);
+    font-weight: 500;
+}
