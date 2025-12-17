@@ -234,6 +234,44 @@ Convert collection to array.
 const arr = Domma('li').toArray();
 ```
 
+### Using Context Parameter
+
+The context parameter allows you to scope your searches to a specific element or document fragment:
+
+```javascript
+// Basic usage
+const menuElement = document.getElementById('main-menu');
+Domma('li', menuElement);  // Only li elements within #main-menu
+
+// Equivalent to chaining
+Domma('#main-menu').find('li');
+
+// Performance comparison
+// Context parameter: O(n) search within subset
+Domma('.item', document.getElementById('container'));
+
+// vs. Global search: O(n) search across entire document
+Domma('.item')  // Then filter/process
+
+// Practical example: Update dashboard widgets
+const dashboard = document.getElementById('dashboard');
+Domma('.widget', dashboard).each(function() {
+    // Each widget's internal elements
+    Domma('.title', this).css('font-weight', 'bold');
+    Domma('.value', this).fadeIn(300);
+});
+```
+
+**When to use context parameter:**
+
+- **Performance:** Searching within a known subset of the DOM
+- **Clarity:** When scope is important to the operation's intent
+- **Dynamic content:** Working with specific containers or components
+- **Large DOMs:** Reducing search space for better performance
+
+**Note:** Context parameter only applies to CSS selectors. HTML strings (like `'<div>New</div>'`) ignore the context
+parameter since they create elements rather than selecting them.
+
 ### Content
 
 #### html(content)

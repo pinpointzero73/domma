@@ -65,7 +65,9 @@ import { dom } from '../dom.js';
 import { utils } from '../utils.js';
 import { http } from '../http.js';
 
-const Domma = (selector) => dom(selector);
+// Context parameter allows scoped DOM searches:
+// Domma('.item', container)  // Search within container only
+const Domma = (selector, context) => dom(selector, context);
 
 Domma.version = __BUILD_VERSION__;
 Domma.buildInfo = {

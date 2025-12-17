@@ -108,7 +108,7 @@ Domma.reset = (selector) => config.reset(selector);
 
 ${imports}
 
-const Domma = (selector) => ${hasDom ? 'dom(selector)' : 'null'};
+const Domma = (selector, context) => ${hasDom ? 'dom(selector, context)' : 'null'};
 
 // Version and build info (injected at build time by Rollup)
 /* eslint-disable no-undef */

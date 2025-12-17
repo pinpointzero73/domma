@@ -75,6 +75,58 @@ const el = Domma(document.getElementById('app'));
 const nodes = Domma(document.querySelectorAll('div'));
 ```
 
+#### Context Parameter Examples
+
+The context parameter allows you to scope DOM searches to a specific element, improving performance and code clarity:
+
+```javascript
+// Basic scoped search - search only within sidebar element
+const sidebar = document.getElementById('sidebar');
+const sidebarLinks = Domma('a', sidebar);  // Only links within sidebar
+
+// Performance optimisation - search within subset
+const container = document.getElementById('search-results');
+Domma('.item', container).addClass('found');  // Faster than global search
+
+// Event delegation with scoped operations
+Domma('.container').on('click', '.item', function() {
+    // Search only within the clicked item's container
+    const parent = this.parentElement;
+    Domma('.child', parent).toggleClass('active');
+});
+
+// Dynamic content handling
+function updateWidget(widgetElement) {
+    // All operations scoped to this widget
+    Domma('.title', widgetElement).text('Updated');
+    Domma('.status', widgetElement).addClass('active');
+    Domma('.content', widgetElement).fadeIn();
+}
+
+// Context vs. Chaining - These are equivalent:
+const container = document.getElementById('main');
+Domma('.item', container);      // Context parameter (one query)
+Domma(container).find('.item'); // Chaining approach (two queries)
+
+// But context can be more efficient for single operations
+// Context: One querySelectorAll within subset
+// Chaining: Two querySelectorAll calls (container + items)
+
+// Multiple scoped searches within same context
+const dashboard = document.getElementById('dashboard');
+Domma('.widget', dashboard).each(function() {
+    // Each callback receives the element
+    Domma('.title', this).css('font-weight', 'bold');
+    Domma('.value', this).fadeIn(300);
+});
+```
+
+**Important Notes:**
+
+- Context parameter must be an HTMLElement or Document, not a selector string
+- For selector strings as context, use chaining: `Domma('#container').find('.item')`
+- Context parameter is ignored for HTML strings (which create new elements)
+
 ### `Domma.setup(config)`
 
 Initialises the application with a JSON configuration.

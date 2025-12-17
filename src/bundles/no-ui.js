@@ -13,7 +13,7 @@ import {dates} from '../dates.js';
 import {models} from '../models.js';
 import {storage} from '../storage.js';
 
-const Domma = (selector) => null;
+const Domma = (selector, context) => null;
 
 // Version and build info (injected at build time by Rollup)
 /* eslint-disable no-undef */

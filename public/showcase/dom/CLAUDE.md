@@ -350,6 +350,81 @@ $('.box')
     .fadeIn(200);
 ```
 
+### Context Parameter for Scoped Searches
+
+The context parameter (second argument) limits DOM searches to a specific element:
+
+```javascript
+// Context parameter - second argument to $() or Domma()
+const sidebar = document.getElementById('sidebar');
+$('.nav-link', sidebar).addClass('active');
+
+// Equivalent to find() but can be more efficient
+$('#sidebar').find('.nav-link').addClass('active');
+
+// Dynamic context from user interaction
+$('.container').on('click', function() {
+    // Search only within the clicked container
+    $('.item', this).toggleClass('expanded');
+});
+
+// Performance optimisation for large DOMs
+const searchScope = document.getElementById('search-results');
+$('.highlight', searchScope).removeClass('highlight');
+$('.match', searchScope).addClass('highlight');
+```
+
+**When to use context parameter:**
+
+| Use Case           | Why Context Parameter     | Example                                 |
+|--------------------|---------------------------|-----------------------------------------|
+| **Performance**    | Reduces search space      | `$('.item', container)` vs `$('.item')` |
+| **Clarity**        | Makes intent explicit     | `$('button', toolbar)` - clearly scoped |
+| **Components**     | Isolate component queries | `$('.title', widgetElement)`            |
+| **Event Handling** | Scope within event target | `$('.child', this)`                     |
+
+**Context vs. Chaining Comparison:**
+
+```javascript
+// These achieve the same result:
+$('.item', document.getElementById('container'))  // Context (element) ✓
+$('#container').find('.item')                      // Chaining ✓
+
+// Performance characteristics:
+// Context with element: O(n) within subset - single querySelectorAll
+// Chaining: O(m) find container + O(n) find items - two querySelectorAll calls
+
+// Context parameter is more efficient for one-time searches:
+const container = document.getElementById('dashboard');
+$('.widget', container).each(function() {
+    $('.title', this).text('Widget ' + (index + 1));
+    $('.status', this).addClass('active');
+});
+```
+
+**Important Notes:**
+
+1. **Context must be an element or document**, not a selector string:
+   ```javascript
+   // ✓ Correct
+   $('.item', document.getElementById('container'))
+   $('.item', document.body)
+   $('.item', element)
+
+   // ✗ Won't work (string context not supported by constructor)
+   $('.item', '#container')  // Use chaining instead
+   ```
+
+2. **HTML strings ignore context** (they create elements, not select them):
+   ```javascript
+   $('<div>New</div>', container)  // Context ignored - creates element
+   ```
+
+3. **Choose based on your use case:**
+    - **One search**: Context parameter (`$('.item', container)`)
+    - **Multiple searches**: Get container once, then chain (`const $c = $('#container'); $c.find('.item')`)
+    - **Global search**: No context (`$('.item')`)
+
 ## Related Documentation
 
 - [Showcase Meta Guide](../CLAUDE.md) - General showcase guidelines

@@ -59,6 +59,62 @@ $(document.querySelectorAll('p'))</pre>
         </div>
     </section>
 
+    <!-- Context Parameter -->
+    <section class="card mb-6" data-section="Context">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Context Parameter</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Limit your search to a specific element for better performance and clarity.</p>
+
+            <pre class="code-block language-javascript">// Search within specific container
+const container = document.getElementById('container');
+$('li', container).addClass('highlight');
+
+// Equivalent to chaining
+$('#container').find('li').addClass('highlight');
+
+// Performance benefit: searches smaller subset
+$('.item', containerEl).css('color', 'blue');</pre>
+
+            <h4 class="category-title-style">Try It</h4>
+            <div class="demo-box-style mb-4">
+                <div id="context-demo-1" class="p-4 border rounded mb-2" style="background: #f9f9f9;">
+                    <strong>Container 1</strong>
+                    <div class="mt-2">
+                        <span class="context-item badge badge-secondary mr-2">Item A</span>
+                        <span class="context-item badge badge-secondary mr-2">Item B</span>
+                        <span class="context-item badge badge-secondary">Item C</span>
+                    </div>
+                </div>
+                <div id="context-demo-2" class="p-4 border rounded" style="background: #f0f0f0;">
+                    <strong>Container 2</strong>
+                    <div class="mt-2">
+                        <span class="context-item badge badge-secondary mr-2">Item X</span>
+                        <span class="context-item badge badge-secondary mr-2">Item Y</span>
+                        <span class="context-item badge badge-secondary">Item Z</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-2 mb-4">
+                <button class="btn btn-primary" id="context-btn-1">
+                    Highlight Container 1
+                </button>
+                <button class="btn btn-secondary" id="context-btn-2">
+                    Highlight Container 2
+                </button>
+                <button class="btn btn-outline" id="context-btn-reset">
+                    Reset
+                </button>
+            </div>
+
+            <div class="demo-result-style" id="context-result">
+                Click buttons to see context-scoped selection
+            </div>
+        </div>
+    </section>
+
     <!-- Traversal -->
     <section class="card mb-6" data-section="Traversal">
         <div class="card-header">
@@ -684,6 +740,44 @@ $('.items').length    // Number of elements</pre>
         } catch (e) {
             $('#selector-result').text(`Error: ${e.message}`);
         }
+    });
+
+    // Context parameter demonstration
+    $('#context-btn-1').on('click', function () {
+        // Reset all badges first
+        $('.context-item').removeClass('badge-primary').addClass('badge-secondary');
+
+        // Select only within container 1 using context parameter
+        const container1 = document.getElementById('context-demo-1');
+        $('.context-item', container1)
+            .removeClass('badge-secondary')
+            .addClass('badge-primary');
+
+        $('#context-result')
+            .text('Highlighted 3 items in Container 1 using: $(".context-item", container1)')
+            .css('color', '#0066cc');
+    });
+
+    $('#context-btn-2').on('click', function () {
+        // Reset all badges first
+        $('.context-item').removeClass('badge-primary').addClass('badge-secondary');
+
+        // Select only within container 2 using context parameter
+        const container2 = document.getElementById('context-demo-2');
+        $('.context-item', container2)
+            .removeClass('badge-secondary')
+            .addClass('badge-primary');
+
+        $('#context-result')
+            .text('Highlighted 3 items in Container 2 using: $(".context-item", container2)')
+            .css('color', '#0066cc');
+    });
+
+    $('#context-btn-reset').on('click', function () {
+        $('.context-item').removeClass('badge-primary').addClass('badge-secondary');
+        $('#context-result')
+            .text('Click buttons to see context-scoped selection')
+            .css('color', '');
     });
 
     // Traversal demo

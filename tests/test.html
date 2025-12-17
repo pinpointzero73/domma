@@ -136,6 +136,56 @@
             el.off('click', handler);
         });
 
+        // Context Parameter Tests
+        test('Domma context parameter with element', () => {
+          const container = document.getElementById('test-container');
+          const result = Domma('.test-class', container);
+          assert(result.elements.length === 1, 'Should find element within context');
+          assert(result.elements[0].id === 'test-elem', 'Should match correct element');
+        });
+
+        test('Domma context parameter with document', () => {
+          const result = Domma('#test-elem', document);
+          assert(result.elements.length === 1, 'Should work with document as context');
+        });
+
+        test('Domma context parameter limits scope', () => {
+          // Create test structure
+          const wrapper = document.createElement('div');
+          wrapper.innerHTML = `
+                <div id="ctx1"><span class="target">A</span></div>
+                <div id="ctx2"><span class="target">B</span></div>
+            `;
+          document.body.appendChild(wrapper);
+
+          const ctx1 = document.getElementById('ctx1');
+          const result = Domma('.target', ctx1);
+
+          assert(result.elements.length === 1, 'Should find only one element in context');
+          assert(result.text() === 'A', 'Should find correct element from context');
+
+          // Cleanup
+          document.body.removeChild(wrapper);
+        });
+
+        test('Domma context parameter backward compatibility', () => {
+          // Without context should still work
+          const result1 = Domma('#test-elem');
+          assert(result1.elements.length === 1, 'Should work without context parameter');
+
+          // With undefined context should work
+          const result2 = Domma('#test-elem', undefined);
+          assert(result2.elements.length === 1, 'Should work with undefined context');
+        });
+
+        test('Domma alias $ works with context', () => {
+          const container = document.getElementById('test-container');
+          // Create a Domma reference since the test file imports Domma
+          const $ = Domma;
+          const result = $('.test-class', container);
+          assert(result.elements.length === 1, 'Alias should work with context parameter');
+        });
+
         // Utils Tests
         test('Utils.merge', () => {
             const a = { x: 1, nested: { a: 1 } };

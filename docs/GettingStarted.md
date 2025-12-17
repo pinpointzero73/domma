@@ -18,6 +18,13 @@ import Domma from 'domma';
 
 ```javascript
 Domma('#my-element').text('Hello World!');
+
+// Select within a specific context for better performance
+const sidebar = document.querySelector('.sidebar');
+Domma('.nav-item', sidebar).addClass('active');
+
+// Useful for dynamic content or large pages
+Domma('button', document.getElementById('toolbar')).prop('disabled', true);
 ```
 
 ### Handling Events

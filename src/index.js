@@ -10,7 +10,7 @@ import {theme} from './theme.js';
 import {icons} from './icons.js';
 import {storage} from './storage.js';
 
-const Domma = (selector) => dom(selector);
+const Domma = (selector, context) => dom(selector, context);
 
 // Version and build info (injected at build time by Rollup)
 /* eslint-disable no-undef */
