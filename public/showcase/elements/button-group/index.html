@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
-  <link rel="stylesheet" href="../../../css/domma-showcase.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -169,7 +169,7 @@ const toolbar = Domma.elements.buttonGroup('#format-toolbar', {
     onChange: (values) => {
         const labels = ['Bold', 'Italic', 'Underline'];
         const active = values.map(i => labels[i]).join(', ');
-        document.getElementById('format-result').textContent =
+        $('#format-result').text(
             active || 'No formatting selected';
     }
 });
@@ -184,11 +184,11 @@ const toolbar = Domma.elements.buttonGroup('#format-toolbar', {
 &lt;button id="clear-all" class="btn btn-sm btn-secondary"&gt;Clear All&lt;/button&gt;
 
 &lt;script&gt;
-document.getElementById('select-all').addEventListener('click', () => {
+$('#select-all').on('click', () => {
     toolbar.selectAll();
 });
 
-document.getElementById('clear-all').addEventListener('click', () => {
+$('#clear-all').on('click', () => {
     toolbar.deselectAll();
 });
 &lt;/script&gt;
@@ -202,7 +202,7 @@ document.getElementById('clear-all').addEventListener('click', () => {
 const toolbar = Domma.elements.buttonGroup('#format-toolbar', {
     mode: 'multiple',
     onChange: (values) => {
-        const result = document.getElementById('format-result');
+        const result = $('#format-result');
         const labels = ['Bold', 'Italic', 'Underline'];
 
         // Update text
@@ -261,7 +261,7 @@ const viewToggle = Domma.elements.buttonGroup('#view-toggle', {
     mode: 'single',
     onChange: (value) => {
         const labels = ['Day', 'Week', 'Month'];
-        document.getElementById('view-value').textContent = labels[value];
+        $('#view-value').text(labels[value]);
     }
 });
 </code></pre>
@@ -285,7 +285,7 @@ const formatToggle = Domma.elements.buttonGroup('#format-toggle', {
     onChange: (values) => {
         const labels = ['Bold', 'Italic', 'Underline'];
         const active = values.map(i => labels[i]).join(', ');
-        document.getElementById('format-value').textContent = active || 'None';
+        $('#format-value').text(active || 'None');
     }
 });
 </code></pre>
@@ -376,7 +376,7 @@ const optionalGroup = Domma.elements.buttonGroup('#optional-group', {
     allowEmpty: true,  // Allow no selection
     onChange: (value) => {
         const labels = ['Option A', 'Option B', 'Option C'];
-        document.getElementById('optional-value').textContent =
+        $('#optional-value').text(
             value !== null ? labels[value] : 'None';
     }
 });
@@ -405,24 +405,24 @@ const optionalGroup = Domma.elements.buttonGroup('#optional-group', {
 const group = Domma.elements.buttonGroup('#programmatic-group', {
     mode: 'multiple',
     onChange: (values) => {
-        document.getElementById('prog-value').textContent = JSON.stringify(values);
+        $('#prog-value').text(JSON.stringify(values));
     }
 });
 
 // Programmatic methods
-document.getElementById('prog-set-0').addEventListener('click', () => {
+$('#prog-set-0').on('click', () => {
     group.setValue([0]);  // Set active buttons by index
 });
 
-document.getElementById('prog-set-1').addEventListener('click', () => {
+$('#prog-set-1').on('click', () => {
     group.setValue([1]);
 });
 
-document.getElementById('prog-toggle-2').addEventListener('click', () => {
+$('#prog-toggle-2').on('click', () => {
     group.toggle(2);  // Toggle specific button
 });
 
-document.getElementById('prog-clear').addEventListener('click', () => {
+$('#prog-clear').on('click', () => {
     group.deselectAll();  // Clear all selections
 });
 </code></pre>
@@ -526,7 +526,7 @@ function updateFilters() {
     if (category !== null) filters.push(categories[category]);
     if (price !== null) filters.push(prices[price]);
 
-    document.getElementById('filter-summary').textContent =
+    $('#filter-summary').text(
         filters.length ? filters.join(', ') : 'None selected';
 }
 </code></pre>
@@ -1038,6 +1038,7 @@ group.setValue(1);  // Programmatic control still works
 <script src="../../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
+  $(() => {
     // Quick Start Demo
     const quickStartLabels = ['Day', 'Week', 'Month'];
     Domma.elements.buttonGroup('#quick-start-group', {
@@ -1052,22 +1053,24 @@ group.setValue(1);  // Programmatic control still works
     const tutorialToolbar = Domma.elements.buttonGroup('#tutorial-toolbar', {
         mode: 'multiple',
         onChange: (values) => {
-            const result = document.getElementById('tutorial-result');
+          const result = $('#tutorial-result');
             const active = values.map(i => tutorialLabels[i]).join(', ');
-            result.textContent = active || 'No formatting selected';
+          result.text(active || 'No formatting selected');
 
             // Apply visual styles
-            result.style.fontWeight = values.includes(0) ? 'bold' : 'normal';
-            result.style.fontStyle = values.includes(1) ? 'italic' : 'normal';
-            result.style.textDecoration = values.includes(2) ? 'underline' : 'none';
+          result.css({
+            'font-weight': values.includes(0) ? 'bold' : 'normal',
+            'font-style': values.includes(1) ? 'italic' : 'normal',
+            'text-decoration': values.includes(2) ? 'underline' : 'none'
+          });
         }
     });
 
-    document.getElementById('tutorial-select-all').addEventListener('click', () => {
+    $('#tutorial-select-all').on('click', () => {
         tutorialToolbar.selectAll();
     });
 
-    document.getElementById('tutorial-clear-all').addEventListener('click', () => {
+    $('#tutorial-clear-all').on('click', () => {
         tutorialToolbar.deselectAll();
     });
 
@@ -1113,10 +1116,10 @@ group.setValue(1);  // Programmatic control still works
         }
     });
 
-    document.getElementById('prog-set-0').addEventListener('click', () => progGroup.setValue([0]));
-    document.getElementById('prog-set-1').addEventListener('click', () => progGroup.setValue([1]));
-    document.getElementById('prog-toggle-2').addEventListener('click', () => progGroup.toggle(2));
-    document.getElementById('prog-clear').addEventListener('click', () => progGroup.deselectAll());
+    $('#prog-set-0').on('click', () => progGroup.setValue([0]));
+    $('#prog-set-1').on('click', () => progGroup.setValue([1]));
+    $('#prog-toggle-2').on('click', () => progGroup.toggle(2));
+    $('#prog-clear').on('click', () => progGroup.deselectAll());
 
     // Examples: Icon Group
     Domma.elements.buttonGroup('#icon-group', {
@@ -1163,6 +1166,7 @@ group.setValue(1);  // Programmatic control still works
             }
         }
     });
+  });
 </script>
 
 </body>

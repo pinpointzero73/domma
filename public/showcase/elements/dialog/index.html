@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
-  <link rel="stylesheet" href="../../../css/domma-showcase.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -60,7 +60,7 @@ const name = await Domma.elements.prompt('Enter your name:');
         </div>
         <div class="code-block language-javascript">
             <pre><code>
-document.getElementById('btn').addEventListener('click', async () => {
+$('#btn').on('click', async () => {
     await Domma.elements.alert('This is an alert message!');
     console.log('Alert closed');
 });
@@ -87,7 +87,7 @@ document.getElementById('btn').addEventListener('click', async () => {
 
         <div class="code-block language-javascript">
             <pre><code>
-document.getElementById('delete-btn').addEventListener('click', async () => {
+$('#delete-btn').on('click', async () => {
     // Step 1: Confirm deletion
     const confirmed = await Domma.elements.confirm(
         'Are you sure you want to delete this item?',
@@ -347,14 +347,14 @@ $.setup({
 <script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Quick Start
-    document.getElementById('quick-alert').addEventListener('click', async () => {
+    $('#quick-alert').on('click', async () => {
         await Domma.elements.alert('This is an alert message!');
     });
 
     // Tutorial
-    document.getElementById('tutorial-delete').addEventListener('click', async () => {
-        const resultDiv = document.getElementById('tutorial-result');
-        resultDiv.innerHTML = '<p class="text-muted">Processing...</p>';
+    $('#tutorial-delete').on('click', async () => {
+      const resultDiv = $('#tutorial-result');
+      resultDiv.html('<p class="text-muted">Processing...</p>');
 
         const confirmed = await Domma.elements.confirm(
             'Are you sure you want to delete this item?',
@@ -366,7 +366,7 @@ $.setup({
         );
 
         if (!confirmed) {
-            resultDiv.innerHTML = '<p class="text-warning">Deletion cancelled by user.</p>';
+          resultDiv.html('<p class="text-warning">Deletion cancelled by user.</p>');
             return;
         }
 
@@ -379,46 +379,46 @@ $.setup({
         );
 
         if (input === 'DELETE') {
-            resultDiv.innerHTML = '<p class="text-success">✓ Item deleted successfully!</p>';
+          resultDiv.html('<p class="text-success">✓ Item deleted successfully!</p>');
         } else {
-            resultDiv.innerHTML = `<p class="text-warning">Deletion cancelled - you typed "${input || '(nothing)'}" instead of "DELETE".</p>`;
+          resultDiv.html(`<p class="text-warning">Deletion cancelled - you typed "${input || '(nothing)'}" instead of "DELETE".</p>`);
         }
     });
 
     // Examples
-    document.getElementById('ex-alert').addEventListener('click', async () => {
+    $('#ex-alert').on('click', async () => {
         await Domma.elements.alert('Operation completed successfully!', {
             title: 'Success'
         });
     });
 
-    document.getElementById('ex-confirm').addEventListener('click', async () => {
+    $('#ex-confirm').on('click', async () => {
         const result = await Domma.elements.confirm('Do you want to proceed?', {
             title: 'Confirm Action',
             confirmText: 'Yes',
             cancelText: 'No'
         });
-        document.getElementById('confirm-result').textContent = result ? 'Confirmed' : 'Cancelled';
+      $('#confirm-result').text(result ? 'Confirmed' : 'Cancelled');
     });
 
-    document.getElementById('ex-prompt-text').addEventListener('click', async () => {
+    $('#ex-prompt-text').on('click', async () => {
         const result = await Domma.elements.prompt('What is your name?', {
             title: 'User Information',
             inputPlaceholder: 'Enter your name'
         });
-        document.getElementById('prompt-text-result').textContent = result || '(cancelled)';
+      $('#prompt-text-result').text(result || '(cancelled)');
     });
 
-    document.getElementById('ex-prompt-email').addEventListener('click', async () => {
+    $('#ex-prompt-email').on('click', async () => {
         const result = await Domma.elements.prompt('Enter your email:', {
             title: 'Email Address',
             inputPlaceholder: 'you@example.com',
             inputType: 'email'
         });
-        document.getElementById('prompt-email-result').textContent = result || '(cancelled)';
+      $('#prompt-email-result').text(result || '(cancelled)');
     });
 
-    document.getElementById('ex-custom').addEventListener('click', async () => {
+    $('#ex-custom').on('click', async () => {
         const confirmed = await Domma.elements.confirm(
             'This action cannot be undone. Are you absolutely sure?',
             {

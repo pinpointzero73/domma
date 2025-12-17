@@ -755,43 +755,43 @@ $.setup({
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">CSS-Only (Static)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;"><div class="card">
-    <img src="image.jpg"
+                    <pre class="code-block language-javascript" style="font-size: 0.85em;">&lt;div class="card"&gt;
+    &lt;img src="image.jpg"
          class="card-img-top"
-         alt="Product">
-    <div class="card-body">
-        <h4 class="card-title">
+         alt="Product"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h4 class="card-title"&gt;
             Static Product
-        </h4>
-        <p class="card-text">
+        &lt;/h4&gt;
+        &lt;p class="card-text"&gt;
             Fixed content
-        </p>
-        <a href="#" class="btn">
+        &lt;/p&gt;
+        &lt;a href="#" class="btn"&gt;
             View
-        </a>
-    </div>
-</div>
+        &lt;/a&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
 
-<!-- No dynamic content --></pre>
+&lt;!-- No dynamic content --&gt;</pre>
                 </div>
                 <div>
                     <p class="font-semibold mb-2">CSS+JS Hybrid (Dynamic)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;"><div id="products">
-    <!-- Cards loaded via JS -->
-</div>
+                    <pre class="code-block language-javascript" style="font-size: 0.85em;">&lt;div id="products"&gt;
+    &lt;!-- Cards loaded via JS --&gt;
+&lt;/div&gt;
 
-<script>
+&lt;script&gt;
 $.setup({
     '#products': {
         events: {
-            ready: async (e, $el) => {
+            ready: async (e, $el) =&gt; {
                 const products = await
                     Domma.http.get('/api/products');
 
-                const html = _.map(products, p => `
-                    <div class="card">
+                const html = _.map(products, p =&gt; `
+                    &lt;div class="card"&gt;
                         ...
-                    </div>
+                    &lt;/div&gt;
                 `).join('');
 
                 $el.html(html);
@@ -799,7 +799,8 @@ $.setup({
         }
     }
 });
-</script></pre>
+&lt;/script&gt;
+                    </pre>
                 </div>
             </div>
         </div>
@@ -853,46 +854,48 @@ $.setup({
 <script src="../../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
-    // Quick Start examples
-    Domma.elements.card('#quick-hover-card', {hover: true});
+    $(() => {
+        // Quick Start examples
+        Domma.elements.card('#quick-hover-card', {hover: true});
 
-    // Tutorial example
-    Domma.elements.card('#tutorial-card', {
-        hover: true,
-        clickable: true,
-        onClick: () => {
-            alert('Product added to cart!');
-        }
-    });
-
-    // Examples section
-    Domma.elements.card('#example-hover', {hover: true});
-
-    Domma.elements.card('#example-clickable', {
-        hover: true,
-        clickable: true,
-        onClick: (e) => {
-            const result = document.getElementById('click-result');
-          result.classList.remove('hidden');
-            result.textContent = `Card clicked at ${new Date().toLocaleTimeString()}`;
-        }
-    });
-
-    Domma.elements.card('#profile-card', {hover: true});
-
-    // Grid cards with hover
-    ['#grid-card-1', '#grid-card-2', '#grid-card-3'].forEach(id => {
-        Domma.elements.card(id, {hover: true});
-    });
-
-    // Config Engine demo
-    $.setup({
-        '.config-demo-card': {
-            component: 'card',
-            options: {
-                hover: true
+        // Tutorial example
+        Domma.elements.card('#tutorial-card', {
+            hover: true,
+            clickable: true,
+            onClick: () => {
+                alert('Product added to cart!');
             }
-        }
+        });
+
+        // Examples section
+        Domma.elements.card('#example-hover', {hover: true});
+
+        Domma.elements.card('#example-clickable', {
+            hover: true,
+            clickable: true,
+            onClick: (e) => {
+                const result = document.getElementById('click-result');
+                result.classList.remove('hidden');
+                result.textContent = `Card clicked at ${new Date().toLocaleTimeString()}`;
+            }
+        });
+
+        Domma.elements.card('#profile-card', {hover: true});
+
+        // Grid cards with hover
+        ['#grid-card-1', '#grid-card-2', '#grid-card-3'].forEach(id => {
+            Domma.elements.card(id, {hover: true});
+        });
+
+        // Config Engine demo
+        $.setup({
+            '.config-demo-card': {
+                component: 'card',
+                options: {
+                    hover: true
+                }
+            }
+        });
     });
 </script>
 </body>

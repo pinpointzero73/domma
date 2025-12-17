@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
-  <link rel="stylesheet" href="../../../css/domma-showcase.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -56,7 +56,7 @@ Domma.elements.toast('Operation successful!', {
         </div>
         <div class="code-block language-javascript">
             <pre><code>
-document.getElementById('btn').addEventListener('click', () => {
+$('#btn').on('click', () => {
     Domma.elements.toast('Hello, World!', {
         type: 'info',
         duration: 3000
@@ -90,9 +90,9 @@ document.getElementById('btn').addEventListener('click', () => {
 
         <div class="code-block language-javascript mt-4">
             <pre><code>
-document.getElementById('submit-btn').addEventListener('click', () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+$('#submit-btn').on('click', () => {
+    const email = $('#email').val();
+    const password = $('#password').val();
 
     // Validation with error toast
     if (!email) {
@@ -370,7 +370,7 @@ $.setup({
 <script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Quick Start
-    document.getElementById('quick-toast').addEventListener('click', () => {
+    $('#quick-toast').on('click', () => {
         Domma.elements.toast('Hello, World!', {
             type: 'info',
             duration: 3000
@@ -378,9 +378,9 @@ $.setup({
     });
 
     // Tutorial
-    document.getElementById('tutorial-submit').addEventListener('click', () => {
-        const email = document.getElementById('tutorial-email').value;
-        const password = document.getElementById('tutorial-password').value;
+    $('#tutorial-submit').on('click', () => {
+      const email = $('#tutorial-email').val();
+      const password = $('#tutorial-password').val();
 
         if (!email) {
             Domma.elements.toast('Email is required', {
@@ -405,16 +405,16 @@ $.setup({
     });
 
     // Toast Types
-    document.getElementById('ex-success').addEventListener('click', () => {
+    $('#ex-success').on('click', () => {
         Domma.elements.toast('Operation completed successfully!', {type: 'success'});
     });
-    document.getElementById('ex-error').addEventListener('click', () => {
+    $('#ex-error').on('click', () => {
         Domma.elements.toast('An error occurred. Please try again.', {type: 'error'});
     });
-    document.getElementById('ex-warning').addEventListener('click', () => {
+    $('#ex-warning').on('click', () => {
         Domma.elements.toast('Warning: This action may have consequences.', {type: 'warning'});
     });
-    document.getElementById('ex-info').addEventListener('click', () => {
+    $('#ex-info').on('click', () => {
         Domma.elements.toast('For your information: Updates are available.', {type: 'info'});
     });
 
@@ -432,7 +432,7 @@ $.setup({
     };
 
     Object.keys(positions).forEach(id => {
-        document.getElementById(id).addEventListener('click', () => {
+      $('#' + id).on('click', () => {
             Domma.elements.toast(`Toast at ${positions[id]}`, {
                 position: positions[id],
                 type: 'info'
@@ -441,16 +441,16 @@ $.setup({
     });
 
     // Duration
-    document.getElementById('dur-short').addEventListener('click', () => {
+    $('#dur-short').on('click', () => {
         Domma.elements.toast('Short duration (1 second)', {duration: 1000});
     });
-    document.getElementById('dur-medium').addEventListener('click', () => {
+    $('#dur-medium').on('click', () => {
         Domma.elements.toast('Medium duration (3 seconds)', {duration: 3000});
     });
-    document.getElementById('dur-long').addEventListener('click', () => {
+    $('#dur-long').on('click', () => {
         Domma.elements.toast('Long duration (5 seconds)', {duration: 5000});
     });
-    document.getElementById('dur-persist').addEventListener('click', () => {
+    $('#dur-persist').on('click', () => {
         Domma.elements.toast('Persistent toast - click X to close', {
             duration: 0,
             type: 'warning'
@@ -458,7 +458,7 @@ $.setup({
     });
 
     // Action
-    document.getElementById('ex-action').addEventListener('click', () => {
+    $('#ex-action').on('click', () => {
         Domma.elements.toast('File uploaded successfully. Click to view.', {
             type: 'success',
             duration: 5000,

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../../dist/domma.css">
     <link rel="stylesheet" href="../../../dist/elements.css">
     <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
-  <link rel="stylesheet" href="../../../css/domma-showcase.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
 
@@ -701,7 +701,7 @@ $.setup({
 <script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
     // Quick Demo
-    document.getElementById('quick-demo').addEventListener('click', async () => {
+    $('#quick-demo').on('click', async () => {
         // Check if notifications are supported
         if (!Domma.DesktopNotification.isSupported) {
             await Domma.elements.alert(
@@ -732,28 +732,27 @@ $.setup({
     });
 
     // Request Permission
-    document.getElementById('request-permission').addEventListener('click', async () => {
+    $('#request-permission').on('click', async () => {
         const permission = await Domma.DesktopNotification.requestPermission();
-        document.getElementById('permission-status').textContent =
-            `Permission: ${permission}`;
-        document.getElementById('permission-status').className =
-            `mt-2 ${permission === 'granted' ? 'text-success' : 'text-danger'}`;
+      $('#permission-status').text(`Permission: ${permission}`);
+      $('#permission-status').attr('class',
+        `mt-2 ${permission === 'granted' ? 'text-success' : 'text-danger'}`);
     });
 
     // Tutorial Demo
-    document.getElementById('tutorial-demo').addEventListener('click', async () => {
-        const status = document.getElementById('tutorial-status');
-        status.textContent = 'Creating notification...';
+    $('#tutorial-demo').on('click', async () => {
+      const status = $('#tutorial-status');
+      status.text('Creating notification...');
 
         const notification = Domma.elements.notification({
             title: 'Tutorial Demo',
             body: 'Click this notification to see the onClick handler',
             onClick: () => {
-                status.textContent = '✓ Notification clicked!';
-                status.className = 'mt-2 text-success';
+              status.text('✓ Notification clicked!');
+              status.attr('class', 'mt-2 text-success');
             },
             onShow: () => {
-                status.textContent = '✓ Notification shown (waiting for click)';
+              status.text('✓ Notification shown (waiting for click)');
             },
             onClose: () => {
                 if (status.textContent.includes('waiting')) {
@@ -766,13 +765,13 @@ $.setup({
     });
 
     // Example: Success/Error
-    document.getElementById('example-success').addEventListener('click', () => {
+    $('#example-success').on('click', () => {
         Domma.elements.notify('Success', {
             body: 'Operation completed successfully!'
         });
     });
 
-    document.getElementById('example-error').addEventListener('click', () => {
+    $('#example-error').on('click', () => {
         Domma.elements.notify('Error', {
             body: 'Something went wrong',
             requireInteraction: true
@@ -780,17 +779,17 @@ $.setup({
     });
 
     // Example: Timer Integration
-    document.getElementById('example-timer').addEventListener('click', () => {
-        const status = document.getElementById('timer-status');
-        status.textContent = 'Timer started (5 seconds)...';
+    $('#example-timer').on('click', () => {
+      const status = $('#timer-status');
+      status.text('Timer started (5 seconds)...');
 
         const timer = Domma.elements.timer(null, {
             duration: 5000,
             onTick: (remaining) => {
-                status.textContent = `Timer: ${Math.ceil(remaining / 1000)}s remaining`;
+              status.text(`Timer: ${Math.ceil(remaining / 1000)}s remaining`);
             },
             onComplete: () => {
-                status.textContent = '✓ Timer complete! Check your notifications';
+              status.text('✓ Timer complete! Check your notifications');
                 Domma.elements.notify('Timer Complete!', {
                     body: 'Your 5-second timer has finished',
                     requireInteraction: true
@@ -804,7 +803,7 @@ $.setup({
     // Example: Multiple Notifications
     let multipleNotifications = [];
 
-    document.getElementById('example-multiple').addEventListener('click', async () => {
+    $('#example-multiple').on('click', async () => {
         multipleNotifications = [];
 
         for (let i = 0; i < 3; i++) {
@@ -819,12 +818,12 @@ $.setup({
         }
     });
 
-    document.getElementById('example-close-all').addEventListener('click', () => {
+    $('#example-close-all').on('click', () => {
         Domma.DesktopNotification.closeAll();
     });
 
     // Example: Silent Notification
-    document.getElementById('example-silent').addEventListener('click', () => {
+    $('#example-silent').on('click', () => {
         Domma.elements.notify('Silent Notification', {
             body: 'This notification has no sound',
             silent: true
@@ -855,16 +854,16 @@ $.setup({
         return 'toast';
     }
 
-    document.getElementById('example-hybrid').addEventListener('click', async () => {
+    $('#example-hybrid').on('click', async () => {
         const method = await smartNotify('Hybrid Test', {
             body: 'This notification uses the best available method',
             type: 'success',
             duration: 5000
         });
 
-        const status = document.getElementById('hybrid-status');
-        status.textContent = `✓ Shown using: ${method}`;
-        status.className = 'mt-2 text-success';
+      const status = $('#hybrid-status');
+      status.text(`✓ Shown using: ${method}`);
+      status.attr('class', 'mt-2 text-success');
     });
 
     // Config Engine Demo
