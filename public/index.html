@@ -236,21 +236,77 @@
           transform: translateX(4px);
       }
 
-      .badges {
+      /* Module cards grid */
+      .module-cards {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 1.5rem;
+          max-width: 1200px;
+          margin: 2rem auto 2rem;
+          padding: 0 2rem;
+      }
+
+      .module-card {
+          background: rgba(255, 255, 255, 0.95);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          text-decoration: none;
+          color: #333;
           display: flex;
-          gap: 1rem;
-          margin-top: 1rem;
+          flex-direction: column;
+      }
+
+      .module-card .card-body {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+      }
+
+      .module-icon {
+          color: var(--dm-primary);
           margin-bottom: 1rem;
-          flex-wrap: wrap;
+          display: flex;
+          align-items: center;
           justify-content: center;
       }
 
-      .badge {
-          background: var(--dm-white-t15);
-          border: 1px solid var(--dm-white-t20);
-          padding: 0.5rem 1rem;
-          border-radius: 50px;
-          font-size: 0.8rem;
+      .module-card .card-title {
+          color: #333;
+          margin-bottom: 0.75rem;
+      }
+
+      .module-card .card-text {
+          color: #666;
+          margin-bottom: 1rem;
+          flex-grow: 1;
+      }
+
+      .module-features {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          font-size: 0.875rem;
+          color: #555;
+      }
+
+      .module-features li {
+          padding: 0.25rem 0;
+          padding-left: 1.25rem;
+          position: relative;
+      }
+
+      .module-features li::before {
+          content: "✓";
+          position: absolute;
+          left: 0;
+          color: var(--dm-primary);
+          font-weight: bold;
+      }
+
+      @media (max-width: 768px) {
+          .module-cards {
+              grid-template-columns: 1fr;
+              padding: 0 1rem;
+          }
       }
 
       /* Thinner, fixed footer */
@@ -583,12 +639,152 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
     </div>
   </div>
 
-  <div class="badges">
-    <span class="badge">Zero Dependencies</span>
-    <span class="badge">~160KB Bundled</span>
-    <span class="badge">ES Modules</span>
-    <span class="badge">Chainable API</span>
+  <div class="module-cards">
+    <a href="showcase/config/index.html" class="card module-card card-hover">
+      <div class="card-body">
+        <div class="module-icon" data-icon="settings" data-icon-size="48"></div>
+        <h3 class="card-title">Config Engine</h3>
+        <p class="card-text">JSON-driven configuration system with presets, variants, and template processing.</p>
+        <ul class="module-features">
+          <li>JSON configuration files</li>
+          <li>Template system with inheritance</li>
+          <li>Dynamic component injection</li>
+        </ul>
+      </div>
+    </a>
+
+    <a href="showcase/models/index.html" class="card module-card card-hover">
+      <div class="card-body">
+        <div class="module-icon" data-icon="database" data-icon-size="48"></div>
+        <h3 class="card-title">Models</h3>
+        <p class="card-text">Reactive data models with validation, relationships, and pub/sub messaging.</p>
+        <ul class="module-features">
+          <li>Reactive data binding</li>
+          <li>Validation & computed fields</li>
+          <li>Event system & messaging</li>
+        </ul>
+      </div>
+    </a>
+
+    <a href="showcase/elements/index.html" class="card module-card card-hover">
+      <div class="card-body">
+        <div class="module-icon" data-icon="layout" data-icon-size="48"></div>
+        <h3 class="card-title">Elements</h3>
+        <p class="card-text">19 production-ready UI components with themes and responsive design.</p>
+        <ul class="module-features">
+          <li>19 UI components</li>
+          <li>Theme system (10+ themes)</li>
+          <li>Responsive & accessible</li>
+        </ul>
+      </div>
+    </a>
+
+    <a href="showcase/dom/index.html" class="card module-card card-hover">
+      <div class="card-body">
+        <div class="module-icon" data-icon="code" data-icon-size="48"></div>
+        <h3 class="card-title">DOM</h3>
+        <p class="card-text">jQuery-compatible DOM manipulation with modern enhancements.</p>
+        <ul class="module-features">
+          <li>90+ jQuery methods</li>
+          <li>Chainable API</li>
+          <li>Event delegation</li>
+        </ul>
+      </div>
+    </a>
+
+    <a href="showcase/utils/index.html" class="card module-card card-hover">
+      <div class="card-body">
+        <div class="module-icon" data-icon="cog" data-icon-size="48"></div>
+        <h3 class="card-title">Utils</h3>
+        <p class="card-text">120+ Lodash-compatible utility functions for arrays, objects, and collections.</p>
+        <ul class="module-features">
+          <li>120+ utility functions</li>
+          <li>Lodash-compatible API</li>
+          <li>Functional programming</li>
+        </ul>
+      </div>
+    </a>
+
+    <a href="showcase/tables/index.html" class="card module-card card-hover">
+      <div class="card-body">
+        <div class="module-icon" data-icon="grid" data-icon-size="48"></div>
+        <h3 class="card-title">Tables</h3>
+        <p class="card-text">DataTable functionality with sorting, filtering, pagination, and export.</p>
+        <ul class="module-features">
+          <li>Sort, filter, search</li>
+          <li>Pagination & export</li>
+          <li>Responsive tables</li>
+        </ul>
+      </div>
+    </a>
+
+    <a href="showcase/dates/index.html" class="card module-card card-hover">
+      <div class="card-body">
+        <div class="module-icon" data-icon="calendar" data-icon-size="48"></div>
+        <h3 class="card-title">Dates</h3>
+        <p class="card-text">Moment-style date manipulation with formatting, parsing, and calculations.</p>
+        <ul class="module-features">
+          <li>Parse & format dates</li>
+          <li>Date math & comparisons</li>
+          <li>Moment-compatible API</li>
+        </ul>
+      </div>
+    </a>
+
+    <a href="showcase/http/index.html" class="card module-card card-hover">
+      <div class="card-body">
+        <div class="module-icon" data-icon="globe" data-icon-size="48"></div>
+        <h3 class="card-title">HTTP</h3>
+        <p class="card-text">Promise-based HTTP client with interceptors, retries, and error handling.</p>
+        <ul class="module-features">
+          <li>Promise-based requests</li>
+          <li>Interceptors & middleware</li>
+          <li>Auto retry & timeout</li>
+        </ul>
+      </div>
+    </a>
+
+    <a href="showcase/storage/index.html" class="card module-card card-hover">
+      <div class="card-body">
+        <div class="module-icon" data-icon="save" data-icon-size="48"></div>
+        <h3 class="card-title">Storage</h3>
+        <p class="card-text">localStorage wrapper with auto JSON serialisation and graceful fallbacks.</p>
+        <ul class="module-features">
+          <li>Auto JSON serialisation</li>
+          <li>Key prefix & namespace</li>
+          <li>Size tracking & utilities</li>
+        </ul>
+      </div>
+    </a>
+
+    <a href="showcase/themes/index.html" class="card module-card card-hover">
+      <div class="card-body">
+        <div class="module-icon" data-icon="palette" data-icon-size="48"></div>
+        <h3 class="card-title">Theme</h3>
+        <p class="card-text">Dynamic theme management with 10+ built-in themes and custom theme support.</p>
+        <ul class="module-features">
+          <li>10+ built-in themes</li>
+          <li>Light & dark variants</li>
+          <li>Custom theme creation</li>
+        </ul>
+      </div>
+    </a>
+
+    <a href="showcase/icons/index.html" class="card module-card card-hover">
+      <div class="card-body">
+        <div class="module-icon" data-icon="image" data-icon-size="48"></div>
+        <h3 class="card-title">Icons</h3>
+        <p class="card-text">SVG icon system with 200+ icons, categories, and automatic rendering.</p>
+        <ul class="module-features">
+          <li>200+ SVG icons</li>
+          <li>15 categorised sets</li>
+          <li>Automatic scanning & injection</li>
+        </ul>
+      </div>
+    </a>
   </div>
+  <br/>
+  <br/>
 </section>
 
 <script src="dist/domma.min.js"></script>
