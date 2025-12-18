@@ -12,6 +12,12 @@
       "page": "examples"
     },
     {
+      "text": "MiniApps",
+      "url": "miniapps/index.html",
+      "page": "miniapps",
+      "badge": "New"
+    },
+    {
       "text": "About Us",
       "url": "about/index.html",
       "page": "about"

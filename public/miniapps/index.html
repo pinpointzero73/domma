@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MiniApps - Domma Framework</title>
+  <meta name="description"
+        content="Powerful, standalone applications built with the Domma framework - Document Editor, My Garage, and Invoicing System">
+
+  <!-- Domma Core Styles -->
+  <link rel="stylesheet" href="../dist/domma.css">
+  <link rel="stylesheet" href="../dist/grid.css">
+  <link rel="stylesheet" href="../dist/elements.css">
+  <link rel="stylesheet" href="../dist/themes/domma-themes.css">
+
+  <!-- Layout System -->
+  <script type="module" src="../layouts/js/layout.js"></script>
+
+  <!-- Domma Core -->
+  <script src="../dist/domma.min.js" defer></script>
+</head>
+<body data-layout="public" data-theme="default">
+
+<!-- Layout system will inject navbar here -->
+
+<main class="container">
+  <!-- Hero Section -->
+  <section class="jumbotron jumbotron-center mt-5">
+    <h1 class="jumbotron-title">Domma MiniApps</h1>
+    <p class="jumbotron-subtitle">Powerful, standalone applications built with the Domma framework</p>
+    <p class="lead mt-3">Real-world applications demonstrating the full capabilities of Domma.<br/>
+      Each app is production-ready, fully functional, and open source.</p>
+  </section>
+
+  <!-- MiniApps Grid -->
+  <section class="apps-grid my-5">
+    <div class="row g-4">
+      <!-- Document Editor Card -->
+      <div class="col-12 col-md-4">
+        <div class="card h-100">
+          <div class="card-body d-flex flex-column">
+            <div class="text-center mb-3">
+              <div data-icon="document" data-icon-size="64" style="color: var(--dm-primary);"></div>
+            </div>
+            <h3 class="card-title">Domma Docs</h3>
+            <p class="card-text">A powerful document editor with rich text formatting, markdown support, and export
+              capabilities.</p>
+            <ul class="list-unstyled small mb-4">
+              <li>✓ Rich text editing with toolbar</li>
+              <li>✓ Document management (save, open, delete)</li>
+              <li>✓ Export to PDF, HTML, and Markdown</li>
+              <li>✓ Auto-save with Domma.storage</li>
+              <li>✓ Keyboard shortcuts</li>
+            </ul>
+            <div class="mt-auto">
+              <span class="badge badge-primary me-2">Coming Soon</span>
+              <span class="badge badge-secondary">Domma.storage</span>
+            </div>
+          </div>
+          <div class="card-footer d-flex gap-2">
+            <a href="#" class="btn btn-primary flex-fill" disabled>Launch App</a>
+            <a href="https://github.com/yourusername/domma-docs" class="btn btn-secondary" target="_blank"
+               rel="noopener">
+              <span data-icon="external-link" data-icon-size="16"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Garage Card -->
+      <div class="col-12 col-md-4">
+        <div class="card h-100">
+          <div class="card-body d-flex flex-column">
+            <div class="text-center mb-3">
+              <div data-icon="car" data-icon-size="64" style="color: var(--dm-primary);"></div>
+            </div>
+            <h3 class="card-title">My Garage</h3>
+            <p class="card-text">Vehicle management system with DVLA integration for UK registration lookups and MOT/tax
+              tracking.</p>
+            <ul class="list-unstyled small mb-4">
+              <li>✓ DVLA registration lookup (UK)</li>
+              <li>✓ MOT & tax status checking</li>
+              <li>✓ Vehicle history tracking</li>
+              <li>✓ Save vehicles to browser storage</li>
+              <li>✓ User-provided API key</li>
+            </ul>
+            <div class="mt-auto">
+              <span class="badge badge-success me-2">Available</span>
+              <span class="badge badge-secondary">Domma.http</span>
+            </div>
+          </div>
+          <div class="card-footer d-flex gap-2">
+            <a href="./garage/index.html" class="btn btn-primary flex-fill">Launch App</a>
+            <a href="https://github.com/yourusername/domma-garage" class="btn btn-secondary" target="_blank"
+               rel="noopener">
+              <span data-icon="external-link" data-icon-size="16"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoicing System Card -->
+      <div class="col-12 col-md-4">
+        <div class="card h-100">
+          <div class="card-body d-flex flex-column">
+            <div class="text-center mb-3">
+              <div data-icon="document-add" data-icon-size="64" style="color: var(--dm-primary);"></div>
+            </div>
+            <h3 class="card-title">Domma Invoicing</h3>
+            <p class="card-text">Complete invoicing solution for freelancers and small businesses with client management
+              and PDF export.</p>
+            <ul class="list-unstyled small mb-4">
+              <li>✓ Create & manage invoices</li>
+              <li>✓ Client database with full CRUD</li>
+              <li>✓ Invoice tracking & status management</li>
+              <li>✓ Professional PDF export</li>
+              <li>✓ Dashboard & reporting</li>
+            </ul>
+            <div class="mt-auto">
+              <span class="badge badge-primary me-2">Coming Soon</span>
+              <span class="badge badge-secondary">Domma.models</span>
+              <span class="badge badge-secondary">Domma.tables</span>
+            </div>
+          </div>
+          <div class="card-footer d-flex gap-2">
+            <a href="#" class="btn btn-primary flex-fill" disabled>Launch App</a>
+            <a href="https://github.com/yourusername/domma-invoicing" class="btn btn-secondary" target="_blank"
+               rel="noopener">
+              <span data-icon="external-link" data-icon-size="16"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Getting Started Section -->
+  <section class="getting-started my-5">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">Getting Started</h2>
+        <p>All miniApps are built with the Domma framework and demonstrate real-world usage patterns:</p>
+        <div class="row mt-4">
+          <div class="col-12 col-md-4">
+            <h4><span data-icon="zap" data-icon-size="20"></span> Use Directly</h4>
+            <p>Click "Launch App" to use the hosted versions immediately - no installation required.</p>
+          </div>
+          <div class="col-12 col-md-4">
+            <h4><span data-icon="download" data-icon-size="20"></span> Self-Host</h4>
+            <p>Clone the repositories and host on your own infrastructure for complete control.</p>
+          </div>
+          <div class="col-12 col-md-4">
+            <h4><span data-icon="code" data-icon-size="20"></span> Customise</h4>
+            <p>Fork the code and adapt it to your specific needs. MIT licensed and open source.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features my-5">
+    <h2 class="text-center mb-4">Why MiniApps?</h2>
+    <div class="row g-4">
+      <div class="col-12 col-md-3">
+        <div class="text-center">
+          <div data-icon="box" data-icon-size="48" style="color: var(--dm-primary);" class="mb-2"></div>
+          <h4>Production Ready</h4>
+          <p>Fully functional applications, not just demos or prototypes.</p>
+        </div>
+      </div>
+      <div class="col-12 col-md-3">
+        <div class="text-center">
+          <div data-icon="layout" data-icon-size="48" style="color: var(--dm-primary);" class="mb-2"></div>
+          <h4>Consistent Design</h4>
+          <p>Unified branding and UX across all apps using Domma's layout system.</p>
+        </div>
+      </div>
+      <div class="col-12 col-md-3">
+        <div class="text-center">
+          <div data-icon="database" data-icon-size="48" style="color: var(--dm-primary);" class="mb-2"></div>
+          <h4>Best Practices</h4>
+          <p>Learn from real implementations of Domma's modules and patterns.</p>
+        </div>
+      </div>
+      <div class="col-12 col-md-3">
+        <div class="text-center">
+          <div data-icon="github" data-icon-size="48" style="color: var(--dm-primary);" class="mb-2"></div>
+          <h4>Open Source</h4>
+          <p>MIT licensed. Fork, modify, and use in your own projects.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Documentation Link -->
+  <section class="docs-link text-center my-5 py-4">
+    <h3>Build Your Own MiniApp</h3>
+    <p>Learn how to create your own Domma-powered applications</p>
+    <a href="../docs/MINIAPPS.md" class="btn btn-primary btn-lg">View Documentation</a>
+  </section>
+</main>
+
+<!-- Layout system will inject footer here -->
+
+</body>
+</html>

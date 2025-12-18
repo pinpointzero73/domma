@@ -291,6 +291,45 @@ npm run demo
 npm run showcase
 ```
 
+## MiniApps
+
+Real-world, production-ready applications built with Domma:
+
+### My Garage
+
+Vehicle management system with DVLA integration for UK registration lookups.
+
+- Look up any UK vehicle by registration number
+- Display MOT and tax status
+- Save vehicle history with Domma.storage
+- **Status:** Coming Soon
+- **Repository:** [domma-garage](https://github.com/yourusername/domma-garage)
+
+### Domma Docs
+
+Powerful document editor with rich text formatting and export capabilities.
+
+- Rich text editing with toolbar (bold, italic, lists, headings)
+- Document management (save, open, delete)
+- Export to PDF, HTML, and Markdown
+- Auto-save with Domma.storage
+- **Status:** Coming Soon
+- **Repository:** [domma-docs](https://github.com/yourusername/domma-docs)
+
+### Invoicing System
+
+Complete invoicing solution for freelancers and small businesses.
+
+- Create and manage invoices with line items
+- Client database with full CRUD operations
+- Invoice tracking and status management
+- Professional PDF export
+- Dashboard and reporting
+- **Status:** Coming Soon
+- **Repository:** [domma-invoicing](https://github.com/yourusername/domma-invoicing)
+
+**Learn More:** Visit the [MiniApps Hub](./public/miniapps/index.html) to explore all available applications.
+
 ## Documentation
 
 ### For Claude Code Development

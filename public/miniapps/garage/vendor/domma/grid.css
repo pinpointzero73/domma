@@ -1,0 +1,538 @@
+/*!
+ * Domma Grid CSS v0.8.0b
+ * Dynamic Object Manipulation & Modeling API
+ * (c) 2025 Darryl Waterhouse & DCBW-IT
+ * Built: 2025-12-18T15:45:46.431Z
+ * Commit: 107748c
+ */
+
+/**
+ * Domma Grid System
+ * Bootstrap-style 12-column flexbox grid with mobile-first stacking
+ *
+ * Usage:
+ *   <div class="row">
+ *       <div class="col-4">Column 1</div>
+ *       <div class="col-4">Column 2</div>
+ *       <div class="col-4">Column 3</div>
+ *   </div>
+ *
+ * Mobile-first: columns stack below 576px, activate grid above
+ */
+
+/* ============================================
+   ROW CONTAINER
+   ============================================ */
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: calc(var(--dm-space-3, 0.75rem) * -1);
+    margin-right: calc(var(--dm-space-3, 0.75rem) * -1);
+}
+
+/* No gutters variant */
+.row.no-gutters {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.row.no-gutters > [class*="col"] {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* ============================================
+   COLUMN BASE STYLES
+   ============================================ */
+
+/* Base column styles - mobile-first (stacked) */
+.col,
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6,
+.col-7, .col-8, .col-9, .col-10, .col-11, .col-12,
+.col-auto {
+    position: relative;
+    width: 100%;
+    padding-left: var(--dm-space-3, 0.75rem);
+    padding-right: var(--dm-space-3, 0.75rem);
+    box-sizing: border-box;
+}
+
+/* Equal-width column */
+.col {
+    flex: 1 0 0%;
+    max-width: 100%;
+}
+
+/* Auto-width column */
+.col-auto {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 100%;
+}
+
+/* ============================================
+   COLUMN WIDTHS (activate at ≥576px)
+   ============================================ */
+
+@media (min-width: 576px) {
+    .col-1 {
+        flex: 0 0 auto;
+        width: 8.333333%;
+    }
+
+    .col-2 {
+        flex: 0 0 auto;
+        width: 16.666667%;
+    }
+
+    .col-3 {
+        flex: 0 0 auto;
+        width: 25%;
+    }
+
+    .col-4 {
+        flex: 0 0 auto;
+        width: 33.333333%;
+    }
+
+    .col-5 {
+        flex: 0 0 auto;
+        width: 41.666667%;
+    }
+
+    .col-6 {
+        flex: 0 0 auto;
+        width: 50%;
+    }
+
+    .col-7 {
+        flex: 0 0 auto;
+        width: 58.333333%;
+    }
+
+    .col-8 {
+        flex: 0 0 auto;
+        width: 66.666667%;
+    }
+
+    .col-9 {
+        flex: 0 0 auto;
+        width: 75%;
+    }
+
+    .col-10 {
+        flex: 0 0 auto;
+        width: 83.333333%;
+    }
+
+    .col-11 {
+        flex: 0 0 auto;
+        width: 91.666667%;
+    }
+
+    .col-12 {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+}
+
+/* ============================================
+   OFFSET CLASSES (activate at ≥576px)
+   ============================================ */
+
+@media (min-width: 576px) {
+    .offset-0 {
+        margin-left: 0;
+    }
+
+    .offset-1 {
+        margin-left: 8.333333%;
+    }
+
+    .offset-2 {
+        margin-left: 16.666667%;
+    }
+
+    .offset-3 {
+        margin-left: 25%;
+    }
+
+    .offset-4 {
+        margin-left: 33.333333%;
+    }
+
+    .offset-5 {
+        margin-left: 41.666667%;
+    }
+
+    .offset-6 {
+        margin-left: 50%;
+    }
+
+    .offset-7 {
+        margin-left: 58.333333%;
+    }
+
+    .offset-8 {
+        margin-left: 66.666667%;
+    }
+
+    .offset-9 {
+        margin-left: 75%;
+    }
+
+    .offset-10 {
+        margin-left: 83.333333%;
+    }
+
+    .offset-11 {
+        margin-left: 91.666667%;
+    }
+}
+
+/* ============================================
+   ROW ALIGNMENT UTILITIES
+   ============================================ */
+
+/* Horizontal alignment */
+.row.justify-start {
+    justify-content: flex-start;
+}
+
+.row.justify-center {
+    justify-content: center;
+}
+
+.row.justify-end {
+    justify-content: flex-end;
+}
+
+.row.justify-between {
+    justify-content: space-between;
+}
+
+.row.justify-around {
+    justify-content: space-around;
+}
+
+.row.justify-evenly {
+    justify-content: space-evenly;
+}
+
+/* Vertical alignment */
+.row.align-start {
+    align-items: flex-start;
+}
+
+.row.align-center {
+    align-items: center;
+}
+
+.row.align-end {
+    align-items: flex-end;
+}
+
+.row.align-stretch {
+    align-items: stretch;
+}
+
+.row.align-baseline {
+    align-items: baseline;
+}
+
+/* ============================================
+   COLUMN ORDER UTILITIES
+   ============================================ */
+
+.order-first {
+    order: -1;
+}
+
+.order-last {
+    order: 13;
+}
+
+.order-0 {
+    order: 0;
+}
+
+.order-1 {
+    order: 1;
+}
+
+.order-2 {
+    order: 2;
+}
+
+.order-3 {
+    order: 3;
+}
+
+.order-4 {
+    order: 4;
+}
+
+.order-5 {
+    order: 5;
+}
+
+.order-6 {
+    order: 6;
+}
+
+.order-7 {
+    order: 7;
+}
+
+.order-8 {
+    order: 8;
+}
+
+.order-9 {
+    order: 9;
+}
+
+.order-10 {
+    order: 10;
+}
+
+.order-11 {
+    order: 11;
+}
+
+.order-12 {
+    order: 12;
+}
+
+/* ============================================
+   GAP UTILITIES (for .row)
+   ============================================ */
+
+.row.gap-0 {
+    gap: 0;
+}
+
+.row.gap-1 {
+    gap: var(--dm-space-1, 0.25rem);
+}
+
+.row.gap-2 {
+    gap: var(--dm-space-2, 0.5rem);
+}
+
+.row.gap-3 {
+    gap: var(--dm-space-3, 0.75rem);
+}
+
+.row.gap-4 {
+    gap: var(--dm-space-4, 1rem);
+}
+
+.row.gap-5 {
+    gap: var(--dm-space-5, 1.5rem);
+}
+
+.row.gap-6 {
+    gap: var(--dm-space-6, 2rem);
+}
+
+/* ============================================
+   CSS GRID UTILITIES
+   ============================================ */
+
+/* Base grid class */
+.grid {
+    display: grid;
+}
+
+/* Column classes (1-12 columns) */
+.grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.grid-cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.grid-cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.grid-cols-7 {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.grid-cols-8 {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.grid-cols-9 {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+
+.grid-cols-10 {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+.grid-cols-11 {
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+
+.grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+/* Auto-fit utility */
+.grid-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Standalone gap utilities (work with .grid and .row) */
+.gap-0 {
+    gap: 0;
+}
+
+.gap-1 {
+    gap: var(--dm-space-1, 0.25rem);
+}
+
+.gap-2 {
+    gap: var(--dm-space-2, 0.5rem);
+}
+
+.gap-3 {
+    gap: var(--dm-space-3, 0.75rem);
+}
+
+.gap-4 {
+    gap: var(--dm-space-4, 1rem);
+}
+
+.gap-5 {
+    gap: var(--dm-space-5, 1.5rem);
+}
+
+.gap-6 {
+    gap: var(--dm-space-6, 2rem);
+}
+
+/* ============================================
+   RESPONSIVE GRID UTILITIES (Tablet ≥768px)
+   ============================================ */
+
+@media (min-width: 768px) {
+    .grid-cols-md-1 {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-6 {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-7 {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-8 {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-9 {
+        grid-template-columns: repeat(9, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-10 {
+        grid-template-columns: repeat(10, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-11 {
+        grid-template-columns: repeat(11, minmax(0, 1fr));
+    }
+
+    .grid-cols-md-12 {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+}
+
+/* ============================================
+   RESPONSIVE GRID UTILITIES (Desktop ≥1024px)
+   ============================================ */
+
+@media (min-width: 1024px) {
+    .grid-cols-lg-1 {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-6 {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-7 {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-8 {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-9 {
+        grid-template-columns: repeat(9, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-10 {
+        grid-template-columns: repeat(10, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-11 {
+        grid-template-columns: repeat(11, minmax(0, 1fr));
+    }
+
+    .grid-cols-lg-12 {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+}
