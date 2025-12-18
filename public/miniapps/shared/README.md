@@ -34,7 +34,7 @@ The following placeholders are replaced during the build process:
 
 ### Environment URLs
 
-- **Development**: `http://localhost:3001/api`
+- **Development**: `http://localhost:3000/api`
 - **Production**: `https://domma.dcbw-it.co.uk:3000/api`
 
 ### Configuration API
@@ -101,8 +101,8 @@ console.log(config.apiUrl); // %%API_URL%%
 **Output** (dist/app.min.js):
 
 ```javascript
-const config={apiUrl:"http://localhost:3001/api"...};
-console.log(config.apiUrl); // http://localhost:3001/api
+const config = {apiUrl: "http://localhost:3000/api"...};
+console.log(config.apiUrl); // http://localhost:3000/api
 ```
 
 ### Example: Production Build

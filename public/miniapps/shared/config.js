@@ -9,7 +9,7 @@ export const config = {
   /**
    * Backend API base URL
    *
-   * Development: http://localhost:3001/api
+   * Development: http://localhost:3000/api
    * Production: https://domma.dcbw-it.co.uk:3000/api
    *
    * @type {string}

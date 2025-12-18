@@ -195,7 +195,7 @@ API_URL=https://staging.example.com/api npm run build:miniapp:garage
 
 #### Environment URLs
 
-- **Development**: `http://localhost:3001/api`
+- **Development**: `http://localhost:3000/api`
 - **Production**: `https://domma.dcbw-it.co.uk:3000/api`
 
 Configuration values are replaced at build time, so there's no runtime overhead or exposed configuration in the browser.
@@ -209,7 +209,7 @@ All MiniApps can use the authentication module for user management. Here's how:
 ```javascript
 // In your app's init() method
 Domma.auth.init({
-  apiUrl: 'http://localhost:3001/api'  // Your backend API URL
+  apiUrl: 'http://localhost:3000/api'  // Your backend API URL
 });
 ```
 
