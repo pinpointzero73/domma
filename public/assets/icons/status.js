@@ -109,11 +109,20 @@ export const status = {
         viewBox: '0 0 24 24',
         path: 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
         stroke: 'currentColor',
-        fill: 'none',
-        strokeWidth: 2,
-        strokeLinecap: 'round',
-        strokeLinejoin: 'round'
+      fill: 'none',
+      strokeWidth: 2,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round'
     },
+  'alert-circle': {
+    viewBox: '0 0 24 24',
+    path: 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+    stroke: 'currentColor',
+    fill: 'none',
+    strokeWidth: 2,
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round'
+  },
     'ban': {
         viewBox: '0 0 24 24',
         path: 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636',

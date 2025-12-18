@@ -9,6 +9,7 @@ import {tables} from './tables.js';
 import {theme} from './theme.js';
 import {icons} from './icons.js';
 import {storage} from './storage.js';
+import {auth} from './auth.js';
 
 const Domma = (selector, context) => dom(selector, context);
 
@@ -64,6 +65,7 @@ Domma.tables = tables;
 Domma.theme = theme;
 Domma.icons = icons;
 Domma.storage = storage;
+Domma.auth = auth;
 
 // Expose DesktopNotification class for static method access
 Domma.DesktopNotification = DesktopNotification;
@@ -74,11 +76,13 @@ const _ = utils;
 const M = models;
 const D = dates;
 const S = storage;
+const A = auth;
 
 // Attach aliases to Domma
 Domma.M = M;
 Domma.D = D;
 Domma.S = S;
+Domma.A = A;
 
 // Expose globally if needed
 if (typeof window !== 'undefined') {
@@ -88,7 +92,8 @@ if (typeof window !== 'undefined') {
     window.M = M;
     window.D = D;
     window.S = S;
+    window.A = A;
 }
 
 export default Domma;
-export {Domma, $, _, M, D, S};
+export {Domma, $, _, M, D, S, A};
