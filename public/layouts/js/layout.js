@@ -87,6 +87,11 @@ import {SidebarModule} from './modules/sidebar.js';
             await renderThemeControls(presetConfig.theme);
         }
 
+        // Render snow controls
+        if (presetConfig.snow) {
+            await renderSnowControls(presetConfig.snow);
+        }
+
         // Render footer
         if (presetConfig.footer) {
             await renderFooter(presetConfig.footer, data, configBase);
@@ -157,6 +162,94 @@ import {SidebarModule} from './modules/sidebar.js';
         }
         .theme-toggle:hover::after {
           opacity: 1;
+        }
+
+        /* Snow toggle disc */
+        .snow-toggle-container {
+          position: fixed;
+          top: calc(50vh - 175px);
+          right: calc(-5px);
+          z-index: 1000;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+        .snow-toggle {
+          width: 40px;
+          height: 40px;
+          border-radius: 9999px;
+          background: var(--dm-surface, #fff);
+          border: 1px solid var(--dm-border, #dee2e6);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s ease, transform 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .snow-toggle:hover {
+          background: var(--dm-hover-bg, rgba(0,0,0,0.04));
+          transform: scale(1.05);
+        }
+        .snow-toggle svg {
+          color: var(--dm-text, #212529);
+          width: 20px;
+          height: 20px;
+        }
+        .snow-toggle.active svg {
+          color: var(--dm-primary, #0d6efd);
+        }
+        .snow-toggle::after {
+          content: attr(data-tooltip);
+          position: absolute;
+          right: 50px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: var(--dm-gray-800, #343a40);
+          color: var(--dm-white, #fff);
+          padding: 0.35rem 0.6rem;
+          border-radius: 4px;
+          font-size: 0.75rem;
+          white-space: nowrap;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.15s ease;
+        }
+        .snow-toggle:hover::after {
+          opacity: 1;
+        }
+        .snow-slider {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(-10px);
+          transition: all 0.2s ease;
+        }
+        .snow-toggle-container:hover .snow-slider {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
+        .snow-intensity-btn {
+          padding: 0.35rem 0.6rem;
+          background: var(--dm-surface, #fff);
+          border: 1px solid var(--dm-border, #dee2e6);
+          border-radius: 4px;
+          font-size: 0.75rem;
+          cursor: pointer;
+          transition: all 0.15s ease;
+          white-space: nowrap;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .snow-intensity-btn:hover {
+          background: var(--dm-hover-bg, rgba(0,0,0,0.04));
+        }
+        .snow-intensity-btn.active {
+          background: var(--dm-primary, #0d6efd);
+          color: var(--dm-white, #fff);
+          border-color: var(--dm-primary, #0d6efd);
         }
 
         /* Variant selector */
@@ -646,6 +739,132 @@ import {SidebarModule} from './modules/sidebar.js';
         });
 
         updateVariantActive();
+    }
+
+    /**
+     * Check if current date is in festive season (Dec 1 - Jan 3)
+     */
+    function isFestiveSeason() {
+        const now = new Date();
+        const month = now.getMonth(); // 0-11
+        const day = now.getDate();
+
+        // December (month 11) or January 1-3 (month 0, days 1-3)
+        return (month === 11) || (month === 0 && day <= 3);
+
+        // TEMP: Override for testing - remove this line after Dec/Jan
+        // return true;
+    }
+
+    /**
+     * Render snow toggle disc
+     */
+    async function renderSnowControls(config) {
+        try {
+            if (!config.toggle || !isFestiveSeason()) {
+                return; // Only show during festive season
+            }
+
+            // Get Christmas tree icon from Domma icon system
+            const treeIcon = typeof Domma !== 'undefined' && Domma.icons
+              ? Domma.icons.html('tree', {size: 20})
+              : '<svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2l2 4h-1l2 4h-1.5l2.5 5h-2l3 6H7l3-6H8l2.5-5H9l2-4h-1l2-4z"/></svg>';
+
+            // Create snow toggle HTML
+            const toggleHtml = `
+                <div class="snow-toggle-container">
+                    <button class="snow-toggle" id="snow-toggle" data-tooltip="Snow effect">
+                        ${treeIcon}
+                    </button>
+                    <div class="snow-slider" id="snow-slider">
+                        <button class="snow-intensity-btn" data-intensity="light">Light</button>
+                        <button class="snow-intensity-btn" data-intensity="medium">Medium</button>
+                        <button class="snow-intensity-btn" data-intensity="heavy">Heavy</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('afterbegin', toggleHtml);
+
+            const {SnowEffect} = await import('./modules/snow.js');
+            initSnowToggle(SnowEffect);
+
+            console.log('[Domma Layout] Snow toggle rendered');
+        } catch (error) {
+            console.error('[Domma Layout] Snow toggle render failed:', error);
+        }
+    }
+
+    /**
+     * Initialize snow toggle
+     */
+    function initSnowToggle(SnowEffect) {
+        const toggleBtn = document.getElementById('snow-toggle');
+        const slider = document.getElementById('snow-slider');
+
+        if (!toggleBtn || !slider) return;
+
+        const storage = typeof Domma !== 'undefined' && Domma.storage ? Domma.storage : null;
+        let snowEffect = null;
+
+        // Load saved state
+        const savedEnabled = storage ? storage.get('snow-enabled', false) : false;
+        const savedIntensity = storage ? storage.get('snow-intensity', 'medium') : 'medium';
+
+        // Initialize if enabled
+        if (savedEnabled) {
+            snowEffect = new SnowEffect({intensity: savedIntensity, enabled: true});
+            snowEffect.init();
+            snowEffect.start();
+            toggleBtn.classList.add('active');
+        }
+
+        // Update slider active state
+        function updateSliderState() {
+            const current = storage ? storage.get('snow-intensity', 'medium') : 'medium';
+            slider.querySelectorAll('.snow-intensity-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.intensity === current);
+            });
+        }
+
+        // Toggle handler
+        toggleBtn.addEventListener('click', () => {
+            const isActive = toggleBtn.classList.contains('active');
+
+            if (isActive) {
+                // Disable snow
+                if (snowEffect) {
+                    snowEffect.stop();
+                    snowEffect = null;
+                }
+                toggleBtn.classList.remove('active');
+                if (storage) storage.set('snow-enabled', false);
+            } else {
+                // Enable snow
+                const intensity = storage ? storage.get('snow-intensity', 'medium') : 'medium';
+                snowEffect = new SnowEffect({intensity, enabled: true});
+                snowEffect.init();
+                snowEffect.start();
+                toggleBtn.classList.add('active');
+                if (storage) storage.set('snow-enabled', true);
+            }
+        });
+
+        // Intensity handlers
+        slider.querySelectorAll('.snow-intensity-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const intensity = btn.dataset.intensity;
+                if (storage) storage.set('snow-intensity', intensity);
+
+                if (snowEffect) {
+                    snowEffect.setIntensity(intensity);
+                }
+
+                updateSliderState();
+            });
+        });
+
+        updateSliderState();
     }
 
     /**

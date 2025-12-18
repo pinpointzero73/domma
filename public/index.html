@@ -1,592 +1,643 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Domma - Dynamic Object Manipulation & Modeling API</title>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="alternate icon" href="assets/logo/domma-icon.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap"
-          rel="stylesheet">
-    <link rel="stylesheet" href="dist/domma.css">
-    <link rel="stylesheet" href="dist/grid.css">
-    <link rel="stylesheet" href="dist/elements.css">
-    <link rel="stylesheet" href="dist/syntax.css">
-    <link rel="stylesheet" href="dist/themes/domma-themes.css">
-    <style>
-        .splash-hero {
-            min-height: calc(100vh - 120px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 2rem;
-            background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
-            color: var(--dm-white);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domma - Dynamic Object Manipulation & Modeling API</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" href="assets/logo/domma-icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap"
+      rel="stylesheet">
+  <link rel="stylesheet" href="dist/domma.css">
+  <link rel="stylesheet" href="dist/grid.css">
+  <link rel="stylesheet" href="dist/elements.css">
+  <link rel="stylesheet" href="dist/syntax.css">
+  <link rel="stylesheet" href="dist/themes/domma-themes.css">
+  <style>
+      .splash-hero {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: 3rem 2rem 2rem 2rem;
+          background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
+          color: var(--dm-white);
+      }
 
-        .hero-logo {
-            color: var(--dm-white-t85);
-            margin-bottom: 1rem;
-            animation: glow 3s ease-in-out infinite alternate;
-        }
+      .hero-logo {
+          color: var(--dm-white-t85);
+          animation: glow 3s ease-in-out infinite alternate;
+          flex-shrink: 0;
+      }
 
-        .logo {
-            font-size: 5rem;
-            font-weight: 800;
-            letter-spacing: -0.05em;
-            background: linear-gradient(135deg, var(--dm-white-t90) 0%, var(--dm-white-t70) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 0 0 0.5rem;
-            animation: glow 3s ease-in-out infinite alternate;
-        }
+      .logo {
+          font-size: 5rem;
+          font-weight: 800;
+          letter-spacing: -0.05em;
+          background: linear-gradient(135deg, var(--dm-white-t90) 0%, var(--dm-white-t70) 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin: 0 0 0.5rem;
+          animation: glow 3s ease-in-out infinite alternate;
+      }
 
-        @keyframes glow {
-            from {
-                filter: drop-shadow(0 0 20px var(--dm-white-t30));
-            }
-            to {
-                filter: drop-shadow(0 0 40px var(--dm-white-t50));
-            }
-        }
+      @keyframes glow {
+          from {
+              filter: drop-shadow(0 0 20px var(--dm-white-t30));
+          }
+          to {
+              filter: drop-shadow(0 0 40px var(--dm-white-t50));
+          }
+      }
 
-        .backronym {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin: 0 0 1rem;
-            font-weight: 300;
-            letter-spacing: 0.05em;
-        }
+      .backronym {
+          font-size: 1.1rem;
+          opacity: 0.9;
+          margin: 0 0 1rem;
+          font-weight: 300;
+          letter-spacing: 0.05em;
+      }
 
-        .backronym strong {
-            font-weight: 600;
-        }
+      .backronym strong {
+          font-weight: 600;
+      }
 
-        .tagline {
-            font-size: 1rem;
-            opacity: 0.85;
-            max-width: 600px;
-            line-height: 1.6;
-            margin: 0 0 2.5rem;
-        }
+      .tagline {
+          font-size: 1rem;
+          opacity: 0.85;
+          max-width: 600px;
+          line-height: 1.6;
+          margin: 0 0 2.5rem;
+      }
 
-        .features {
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 2rem;
-        }
+      .features {
+          display: flex;
+          gap: 1.5rem;
+          flex-wrap: wrap;
+          justify-content: center;
+          margin-bottom: 2rem;
+      }
 
-        .feature {
-            background: var(--dm-white-t10);
-            border: 1px solid var(--dm-white-t20);
-            border-radius: 12px;
-            padding: 1.25rem 1.5rem;
-            min-width: 120px;
-            text-decoration: none;
-            color: inherit;
-            transition: transform 0.2s ease, background 0.2s ease;
-        }
+      .feature {
+          background: var(--dm-white-t10);
+          border: 1px solid var(--dm-white-t20);
+          border-radius: 12px;
+          padding: 1.25rem 1.5rem;
+          min-width: 120px;
+          text-decoration: none;
+          color: inherit;
+          transition: transform 0.2s ease, background 0.2s ease;
+      }
 
-        .feature:hover {
-            transform: translateY(-3px);
-            background: var(--dm-white-t15);
-        }
+      .feature:hover {
+          transform: translateY(-3px);
+          background: var(--dm-white-t15);
+      }
 
-        .feature-icon {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
+      .feature-icon {
+          font-size: 1.75rem;
+          font-weight: 700;
+          margin-bottom: 0.5rem;
+      }
 
-        .feature-label {
-            font-size: 0.875rem;
-            opacity: 0.9;
-        }
+      .feature-label {
+          font-size: 0.875rem;
+          opacity: 0.9;
+      }
 
-        .splash-carousel {
-            width: 100%;
-            max-width: 800px;
-            margin-bottom: 2.5rem;
-        }
+      .splash-carousel {
+          width: 100%;
+          max-width: 800px;
+          margin-bottom: 1rem;
+      }
 
-        .splash-carousel .carousel {
-            background: var(--dm-white-t10);
-            border: 1px solid var(--dm-white-t30);
-            border-radius: 16px;
-            overflow: hidden;
-        }
+      .splash-carousel .carousel {
+          background: var(--dm-white-t10);
+          border: 1px solid var(--dm-white-t30);
+          border-radius: 16px;
+          overflow: hidden;
+      }
 
-        .splash-carousel .carousel-slide {
-            padding: 2.5rem 3rem;
-            text-align: center;
-        }
+      .splash-carousel .carousel-slide {
+          padding: 2.5rem 3rem;
+          text-align: center;
+      }
 
-        .slide-number {
-            display: inline-block;
-            background: var(--dm-white-t20);
-            width: 2.5rem;
-            height: 2.5rem;
-            line-height: 2.5rem;
-            border-radius: 50%;
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-        }
+      .slide-number {
+          display: inline-block;
+          background: var(--dm-white-t20);
+          width: 2.5rem;
+          height: 2.5rem;
+          line-height: 2.5rem;
+          border-radius: 50%;
+          font-weight: 700;
+          font-size: 1.1rem;
+          margin-bottom: 1rem;
+      }
 
-        .slide-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin: 0 0 0.75rem;
-        }
+      .slide-title {
+          font-size: 1.75rem;
+          font-weight: 700;
+          margin: 0 0 0.75rem;
+      }
 
-        .slide-description {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin: 0 0 1.5rem;
-            line-height: 1.6;
-        }
+      .slide-description {
+          font-size: 1.1rem;
+          opacity: 0.9;
+          margin: 0 0 1.5rem;
+          line-height: 1.6;
+      }
 
-        .splash-carousel .code-block {
-            background: var(--dm-black-t1);
-            border-radius: 8px;
-            padding: 1rem 1.25rem;
-            font-family: var(--dm-font-mono);
-            font-size: 0.875rem;
-            text-align: left;
-            display: inline-block;
-            max-width: 100%;
-            overflow-x: auto;
-        }
+      .splash-carousel .code-block {
+          background: var(--dm-black-t1);
+          border-radius: 8px;
+          padding: 1rem 1.25rem;
+          font-family: var(--dm-font-mono);
+          font-size: 0.875rem;
+          text-align: left;
+          display: inline-block;
+          max-width: 100%;
+          overflow-x: auto;
+      }
 
-        .splash-carousel .code-block .comment {
-            opacity: 0.6;
-        }
+      .splash-carousel .code-block .comment {
+          opacity: 0.6;
+      }
 
-        .splash-carousel .carousel-arrow {
-            background: var(--dm-white-t15);
-            color: var(--dm-white);
-            border: 1px solid var(--dm-white-t30);
-        }
+      .splash-carousel .carousel-arrow {
+          background: var(--dm-white-t15);
+          color: var(--dm-white);
+          border: 1px solid var(--dm-white-t30);
+      }
 
-        .splash-carousel .carousel-arrow:hover {
-            background: var(--dm-white-t25);
-        }
+      .splash-carousel .carousel-arrow:hover {
+          background: var(--dm-white-t25);
+      }
 
-        .splash-carousel .carousel-indicators {
-            margin-top: 1rem;
-        }
+      .splash-carousel .carousel-indicators {
+          margin-top: 1rem;
+      }
 
-        .splash-carousel .carousel-indicator {
-            background: var(--dm-white-t30);
-        }
+      .splash-carousel .carousel-indicator {
+          background: var(--dm-white-t30);
+      }
 
-        .splash-carousel .carousel-indicator.active {
-            background: var(--dm-white-t90);
-        }
+      .splash-carousel .carousel-indicator.active {
+          background: var(--dm-white-t90);
+      }
 
-        .cta-group {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+      .cta-group {
+          display: flex;
+          gap: 1rem;
+          flex-wrap: wrap;
+          justify-content: center;
+      }
 
-        .cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: var(--dm-white-t95);
-            color: var(--dm-primary-dark);
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 600;
-            padding: 0.875rem 2rem;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px var(--dm-black-t20);
-        }
+      .cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.75rem;
+          background: var(--dm-white-t95);
+          color: var(--dm-primary-dark);
+          text-decoration: none;
+          font-size: 1.1rem;
+          font-weight: 600;
+          padding: 0.875rem 2rem;
+          border-radius: 50px;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 20px var(--dm-black-t20);
+      }
 
-        .cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 30px var(--dm-black-t30);
-        }
+      .cta:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 30px var(--dm-black-t30);
+      }
 
-        .cta-secondary {
-            background: var(--dm-white-t15);
-            color: var(--dm-white);
-            border: 2px solid var(--dm-white-t40);
-        }
+      .cta-secondary {
+          background: var(--dm-white-t15);
+          color: var(--dm-white);
+          border: 2px solid var(--dm-white-t40);
+      }
 
-        .cta-secondary:hover {
-            background: var(--dm-white-t25);
-        }
+      .cta-secondary:hover {
+          background: var(--dm-white-t25);
+      }
 
-        .cta-arrow {
-            transition: transform 0.3s ease;
-        }
+      .cta-arrow {
+          transition: transform 0.3s ease;
+      }
 
-        .cta:hover .cta-arrow {
-            transform: translateX(4px);
-        }
+      .cta:hover .cta-arrow {
+          transform: translateX(4px);
+      }
 
-        .badges {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2.5rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+      .badges {
+          display: flex;
+          gap: 1rem;
+          margin-top: 1rem;
+          margin-bottom: 1rem;
+          flex-wrap: wrap;
+          justify-content: center;
+      }
 
-        .badge {
-            background: var(--dm-white-t15);
-            border: 1px solid var(--dm-white-t20);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-        }
+      .badge {
+          background: var(--dm-white-t15);
+          border: 1px solid var(--dm-white-t20);
+          padding: 0.5rem 1rem;
+          border-radius: 50px;
+          font-size: 0.8rem;
+      }
 
-        @media (max-width: 576px) {
-            .footer-content {
-                flex-direction: column;
-                gap: 0.5rem;
-                text-align: center;
-                padding: 1rem;
-            }
-        }
+      /* Thinner, fixed footer */
+      .footer {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          width: 100%;
+          padding: 0.75rem 1.5rem !important;
+          font-size: 0.875rem;
+          z-index: 100;
+      }
 
-    </style>
+      @media (max-width: 576px) {
+          .footer-content {
+              flex-direction: column;
+              gap: 0.5rem;
+              text-align: center;
+              padding: 1rem;
+          }
+      }
+
+  </style>
 </head>
 <body class="dm-theme-light" data-layout="splash">
 
-<section class="splash-hero">
-    <svg class="hero-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="120" height="120">
-        <path d="M12 8 L12 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-        <path d="M12 8 L24 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-        <path d="M12 40 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-        <path d="M24 8 L36 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M36 16 L36 32" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-        <path d="M36 32 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="24" cy="24" r="3" fill="currentColor"/>
-    </svg>
-    <h1 class="logo">Domma</h1>
+<nav id="main-navbar"></nav>
 
-    <p class="backronym">
+<section class="splash-hero">
+  <div
+      style="display: grid; grid-template-columns: auto 1fr; gap: 3rem; max-width: 1200px; margin: 0 auto 2rem; align-items: center;">
+    <!-- Left column: Logo, heading, and backronym -->
+    <div>
+      <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;">
+        <svg class="hero-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="120"
+             height="120">
+          <path d="M12 8 L12 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <path d="M12 8 L24 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <path d="M12 40 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <path d="M24 8 L36 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M36 16 L36 32" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <path d="M36 32 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"
+                stroke-linejoin="round"/>
+          <circle cx="24" cy="24" r="3" fill="currentColor"/>
+        </svg>
+        <h1 class="logo" style="margin: 0;">Domma</h1>
+      </div>
+      <p class="backronym" style="text-align: left; margin: 0;">
         <strong>D</strong>ynamic <strong>O</strong>bject <strong>M</strong>anipulation & <strong>M</strong>odeling
         <strong>A</strong>PI
-    </p>
-
-    <p class="tagline">
-        A lightweight, zero-dependency JavaScript framework combining jQuery-style DOM manipulation,
-        Lodash utilities, and modern UI components.
-    </p>
-
-    <div class="features">
-        <a href="showcase/config/index.html" class="feature card-hover">
-            <div class="feature-icon" data-icon="settings" data-icon-size="42"></div>
-            <div class="feature-label">Config</div>
-        </a>
-        <a href="showcase/dom/index.html" class="feature card-hover">
-            <div class="feature-icon">$</div>
-            <div class="feature-label">DOM</div>
-        </a>
-        <a href="showcase/utils/index.html" class="feature card-hover">
-            <div class="feature-icon">_</div>
-            <div class="feature-label">Utils</div>
-        </a>
-        <a href="showcase/dates/index.html" class="feature card-hover">
-            <div class="feature-icon" data-icon="calendar" data-icon-size="42"></div>
-            <div class="feature-label">Dates</div>
-        </a>
-        <a href="showcase/models/index.html" class="feature card-hover">
-            <div class="feature-icon" data-icon="database" data-icon-size="42"></div>
-            <div class="feature-label">Models</div>
-        </a>
-        <a href="showcase/elements/index.html" class="feature card-hover">
-            <div class="feature-icon" data-icon="layout" data-icon-size="42"></div>
-            <div class="feature-label">Elements</div>
-        </a>
-        <a href="showcase/storage/index.html" class="feature card-hover">
-            <div class="feature-icon" data-icon="save" data-icon-size="42"></div>
-            <div class="feature-label">Storage</div>
-        </a>
-        <a href="showcase/tables/index.html" class="feature card-hover">
-            <div class="feature-icon" data-icon="grid" data-icon-size="42"></div>
-            <div class="feature-label">Tables</div>
-        </a>
-        <a href="showcase/http/index.html" class="feature card-hover">
-            <div class="feature-icon" data-icon="globe" data-icon-size="42"></div>
-            <div class="feature-label">HTTP</div>
-        </a>
-        <a href="showcase/icons/index.html" class="feature card-hover">
-            <div class="feature-icon" data-icon="image" data-icon-size="42"></div>
-            <div class="feature-label">Icons</div>
-        </a>
-        <a href="showcase/themes/index.html" class="feature card-hover">
-            <div class="feature-icon" data-icon="sun" data-icon-size="42"></div>
-            <div class="feature-label">Themes</div>
-        </a>
+      </p>
     </div>
 
-    <div class="splash-carousel">
-        <div id="features-carousel" class="carousel">
-            <div class="carousel-track">
-                <!-- 1. Zero Dependencies -->
-                <div class="carousel-slide">
-                    <span class="slide-number">1</span>
-                    <h3 class="slide-title">Zero Dependencies</h3>
-                    <p class="slide-description">
-                        No external libraries required. Everything is self-contained in a single <span data-build-size>~250KB</span>
-                        bundle.
-                    </p>
-                    <pre class="code-block language-html">&lt;script src="domma.min.js"&gt;&lt;/script&gt;
-// That's it. You're ready to go!</pre>
-                </div>
+    <!-- Right column: Tagline and CTA -->
+    <div>
+      <p class="tagline" style="text-align: left; margin: 0 0 1.5rem 0; font-size: 1.1rem; line-height: 1.6;">
+        A lightweight, zero-dependency JavaScript framework combining jQuery-style DOM manipulation,
+        Lodash utilities, and modern UI components.
+      </p>
+      <div style="text-align: right;">
+        <a href="showcase/index.html" class="cta">
+          Explore the Showcase
+          <span class="cta-arrow">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  </div>
 
-                <!-- 2. jQuery-Style DOM -->
-                <div class="carousel-slide">
-                    <span class="slide-number">2</span>
-                    <h3 class="slide-title">jQuery-Style DOM API</h3>
-                    <p class="slide-description">
-                        Familiar $() syntax with 90+ chainable methods for traversal, manipulation, events, and effects.
-                    </p>
-                    <pre class="code-block language-javascript">$('.card').addClass('active')
+  <div class="features">
+    <a href="showcase/config/index.html" class="feature card-hover">
+      <div class="feature-icon" data-icon="settings" data-icon-size="42"></div>
+      <div class="feature-label">Config</div>
+    </a>
+    <a href="showcase/dom/index.html" class="feature card-hover">
+      <div class="feature-icon">$</div>
+      <div class="feature-label">DOM</div>
+    </a>
+    <a href="showcase/utils/index.html" class="feature card-hover">
+      <div class="feature-icon">_</div>
+      <div class="feature-label">Utils</div>
+    </a>
+    <a href="showcase/dates/index.html" class="feature card-hover">
+      <div class="feature-icon" data-icon="calendar" data-icon-size="42"></div>
+      <div class="feature-label">Dates</div>
+    </a>
+    <a href="showcase/models/index.html" class="feature card-hover">
+      <div class="feature-icon" data-icon="database" data-icon-size="42"></div>
+      <div class="feature-label">Models</div>
+    </a>
+    <a href="showcase/elements/index.html" class="feature card-hover">
+      <div class="feature-icon" data-icon="layout" data-icon-size="42"></div>
+      <div class="feature-label">Elements</div>
+    </a>
+    <a href="showcase/storage/index.html" class="feature card-hover">
+      <div class="feature-icon" data-icon="save" data-icon-size="42"></div>
+      <div class="feature-label">Storage</div>
+    </a>
+    <a href="showcase/tables/index.html" class="feature card-hover">
+      <div class="feature-icon" data-icon="grid" data-icon-size="42"></div>
+      <div class="feature-label">Tables</div>
+    </a>
+    <a href="showcase/http/index.html" class="feature card-hover">
+      <div class="feature-icon" data-icon="globe" data-icon-size="42"></div>
+      <div class="feature-label">HTTP</div>
+    </a>
+    <a href="showcase/icons/index.html" class="feature card-hover">
+      <div class="feature-icon" data-icon="image" data-icon-size="42"></div>
+      <div class="feature-label">Icons</div>
+    </a>
+    <a href="showcase/themes/index.html" class="feature card-hover">
+      <div class="feature-icon" data-icon="sun" data-icon-size="42"></div>
+      <div class="feature-label">Themes</div>
+    </a>
+  </div>
+
+  <div class="splash-carousel">
+    <div id="features-carousel" class="carousel">
+      <div class="carousel-track">
+        <!-- 1. Zero Dependencies -->
+        <div class="carousel-slide">
+          <span class="slide-number">1</span>
+          <h3 class="slide-title">Zero Dependencies</h3>
+          <p class="slide-description">
+            No external libraries required. Everything is self-contained in a single <span data-build-size>~250KB</span>
+            bundle.
+          </p>
+          <pre class="code-block language-html">&lt;script src="domma.min.js"&gt;&lt;/script&gt;
+// That's it. You're ready to go!</pre>
+        </div>
+
+        <!-- 2. jQuery-Style DOM -->
+        <div class="carousel-slide">
+          <span class="slide-number">2</span>
+          <h3 class="slide-title">jQuery-Style DOM API</h3>
+          <p class="slide-description">
+            Familiar $() syntax with 90+ chainable methods for traversal, manipulation, events, and effects.
+          </p>
+          <pre class="code-block language-javascript">$('.card').addClass('active')
   .fadeIn(300)
   .on('click', handler);</pre>
-                </div>
+        </div>
 
-                <!-- 3. Template Engine -->
-                <div class="carousel-slide">
-                    <span class="slide-number">3</span>
-                    <h3 class="slide-title">Template Engine</h3>
-                    <p class="slide-description">
-                        Mustache-style templates with loops, conditionals, partials, and auto-escaping built in.
-                    </p>
-                    <pre class="code-block language-javascript">const tmpl = _.template('Hello {{name}}!');
+        <!-- 3. Template Engine -->
+        <div class="carousel-slide">
+          <span class="slide-number">3</span>
+          <h3 class="slide-title">Template Engine</h3>
+          <p class="slide-description">
+            Mustache-style templates with loops, conditionals, partials, and auto-escaping built in.
+          </p>
+          <pre class="code-block language-javascript">const tmpl = _.template('Hello {{name}}!');
 tmpl({ name: 'World' }); // "Hello World!"
 _.render('{{#each items}}{{.}}{{/each}}', data);</pre>
-                </div>
+        </div>
 
-                <!-- 4. Lodash Utils -->
-                <div class="carousel-slide">
-                    <span class="slide-number">4</span>
-                    <h3 class="slide-title">Lodash-Compatible Utils</h3>
-                    <p class="slide-description">
-                        120+ utility functions for arrays, objects, strings, and functions &mdash; all via the _ alias.
-                    </p>
-                    <pre class="code-block language-javascript">const grouped = _.groupBy(users, 'role');
+        <!-- 4. Lodash Utils -->
+        <div class="carousel-slide">
+          <span class="slide-number">4</span>
+          <h3 class="slide-title">Lodash-Compatible Utils</h3>
+          <p class="slide-description">
+            120+ utility functions for arrays, objects, strings, and functions &mdash; all via the _ alias.
+          </p>
+          <pre class="code-block language-javascript">const grouped = _.groupBy(users, 'role');
 const unique = _.uniqBy(items, 'id');
 const result = _.flow([fn1, fn2])(data);</pre>
-                </div>
+        </div>
 
-                <!-- 5. Moment-Style Dates -->
-                <div class="carousel-slide">
-                    <span class="slide-number">5</span>
-                    <h3 class="slide-title">Moment-Style Dates</h3>
-                    <p class="slide-description">
-                        Chainable date manipulation with formatting, parsing, comparison, and relative time.
-                    </p>
-                    <pre class="code-block language-javascript">D().add(7, 'days').format('MMM D, YYYY');
+        <!-- 5. Moment-Style Dates -->
+        <div class="carousel-slide">
+          <span class="slide-number">5</span>
+          <h3 class="slide-title">Moment-Style Dates</h3>
+          <p class="slide-description">
+            Chainable date manipulation with formatting, parsing, comparison, and relative time.
+          </p>
+          <pre class="code-block language-javascript">D().add(7, 'days').format('MMM D, YYYY');
 D('2025-01-01').fromNow();
 D().startOf('month').isBefore(D());</pre>
-                </div>
+        </div>
 
-                <!-- 6. Reactive Models -->
-                <div class="carousel-slide">
-                    <span class="slide-number">6</span>
-                    <h3 class="slide-title">Reactive Models</h3>
-                    <p class="slide-description">
-                        Pub/sub events, schema validation, and two-way DOM binding for reactive data.
-                    </p>
-                    <pre class="code-block language-javascript">const user = M.create({ name: M.types.string });
+        <!-- 6. Reactive Models -->
+        <div class="carousel-slide">
+          <span class="slide-number">6</span>
+          <h3 class="slide-title">Reactive Models</h3>
+          <p class="slide-description">
+            Pub/sub events, schema validation, and two-way DOM binding for reactive data.
+          </p>
+          <pre class="code-block language-javascript">const user = M.create({ name: M.types.string });
 M.bind(user, 'name', '#input', { twoWay: true });
 user.onChange('name', val => console.log(val));</pre>
-                </div>
+        </div>
 
-                <!-- 7. UI Components -->
-                <div class="carousel-slide">
-                    <span class="slide-number">7</span>
-                    <h3 class="slide-title">UI Components</h3>
-                    <p class="slide-description">
-                        Ready-to-use modals, tabs, accordions, carousels, tooltips, and toasts.
-                    </p>
-                    <pre class="code-block language-javascript">const modal = Domma.elements.modal('#dialog');
+        <!-- 7. UI Components -->
+        <div class="carousel-slide">
+          <span class="slide-number">7</span>
+          <h3 class="slide-title">UI Components</h3>
+          <p class="slide-description">
+            Ready-to-use modals, tabs, accordions, carousels, tooltips, and toasts.
+          </p>
+          <pre class="code-block language-javascript">const modal = Domma.elements.modal('#dialog');
 modal.open();
 Domma.elements.toast.success('Saved!');</pre>
-                </div>
+        </div>
 
-                <!-- 8. DataTable-Like Tables -->
-                <div class="carousel-slide">
-                    <span class="slide-number">8</span>
-                    <h3 class="slide-title">DataTable-Like Tables</h3>
-                    <p class="slide-description">
-                        Sorting, filtering, pagination, row selection, and CSV/JSON export built in.
-                    </p>
-                    <pre class="code-block language-javascript">const table = Domma.tables.create('#grid', {
+        <!-- 8. DataTable-Like Tables -->
+        <div class="carousel-slide">
+          <span class="slide-number">8</span>
+          <h3 class="slide-title">DataTable-Like Tables</h3>
+          <p class="slide-description">
+            Sorting, filtering, pagination, row selection, and CSV/JSON export built in.
+          </p>
+          <pre class="code-block language-javascript">const table = Domma.tables.create('#grid', {
   data, columns, pagination: true
 });
 table.search('query').toCSV();</pre>
-                </div>
+        </div>
 
-                <!-- 9. Mutable Configuration -->
-                <div class="carousel-slide">
-                    <span class="slide-number">9</span>
-                    <h3 class="slide-title">Mutable Configuration</h3>
-                    <p class="slide-description">
-                        Setup once, update anytime. Inspect and reset configuration at runtime.
-                    </p>
-                    <pre class="code-block language-javascript">$.setup({ '#modal': { component: 'modal' } });
+        <!-- 9. Mutable Configuration -->
+        <div class="carousel-slide">
+          <span class="slide-number">9</span>
+          <h3 class="slide-title">Mutable Configuration</h3>
+          <p class="slide-description">
+            Setup once, update anytime. Inspect and reset configuration at runtime.
+          </p>
+          <pre class="code-block language-javascript">$.setup({ '#modal': { component: 'modal' } });
 $.update('#modal', { options: { backdrop: false } });
 $.config('#modal'); $.reset('#modal');</pre>
-                </div>
+        </div>
 
-                <!-- 10. 100+ SVG Icons -->
-                <div class="carousel-slide">
-                    <span class="slide-number">10</span>
-                    <h3 class="slide-title">100+ SVG Icons</h3>
-                    <p class="slide-description">
-                        Built-in icon library with render, inject, and scan modes. Customisable size and colour.
-                    </p>
-                    <pre class="code-block language-javascript">Domma.icons.render('search', { size: 24 });
+        <!-- 10. 100+ SVG Icons -->
+        <div class="carousel-slide">
+          <span class="slide-number">10</span>
+          <h3 class="slide-title">100+ SVG Icons</h3>
+          <p class="slide-description">
+            Built-in icon library with render, inject, and scan modes. Customisable size and colour.
+          </p>
+          <pre class="code-block language-javascript">Domma.icons.render('search', { size: 24 });
 Domma.icons.inject('#icon-container', 'check');
 &lt;i data-icon="heart"&gt;&lt;/i&gt; // Auto-scanned</pre>
-                </div>
+        </div>
 
-                <!-- 11. Theme System -->
-                <div class="carousel-slide">
-                    <span class="slide-number">11</span>
-                    <h3 class="slide-title">Theme System</h3>
-                    <p class="slide-description">
-                        Light/dark modes with 8 colour variants. Auto-detects system preference and persists choices.
-                    </p>
-                    <pre class="code-block language-javascript">Domma.theme.init({ autoDetect: true });
+        <!-- 11. Theme System -->
+        <div class="carousel-slide">
+          <span class="slide-number">11</span>
+          <h3 class="slide-title">Theme System</h3>
+          <p class="slide-description">
+            Light/dark modes with 8 colour variants. Auto-detects system preference and persists choices.
+          </p>
+          <pre class="code-block language-javascript">Domma.theme.init({ autoDetect: true });
 Domma.theme.set('dark');
 Domma.theme.setVariant('ocean');</pre>
-                </div>
+        </div>
 
-                <!-- 12. HTTP Client -->
-                <div class="carousel-slide">
-                    <span class="slide-number">12</span>
-                    <h3 class="slide-title">HTTP Client</h3>
-                    <p class="slide-description">
-                        Fetch-based HTTP client with promise API. GET, POST, PUT, DELETE with automatic JSON handling.
-                    </p>
-                    <pre class="code-block language-javascript">const users = await Domma.http.get('/api/users');
+        <!-- 12. HTTP Client -->
+        <div class="carousel-slide">
+          <span class="slide-number">12</span>
+          <h3 class="slide-title">HTTP Client</h3>
+          <p class="slide-description">
+            Fetch-based HTTP client with promise API. GET, POST, PUT, DELETE with automatic JSON handling.
+          </p>
+          <pre class="code-block language-javascript">const users = await Domma.http.get('/api/users');
 await Domma.http.post('/api/users', { name: 'Alice' });
 await Domma.http.delete('/api/users/1');</pre>
-                </div>
+        </div>
 
-                <!-- 13. Storage Wrapper -->
-                <div class="carousel-slide">
-                    <span class="slide-number">13</span>
-                    <h3 class="slide-title">Storage Wrapper</h3>
-                    <p class="slide-description">
-                        localStorage wrapper with auto JSON serialisation, namespaced keys, and graceful fallbacks.
-                    </p>
-                    <pre class="code-block language-javascript">S.set('user', { name: 'Alice', role: 'admin' });
+        <!-- 13. Storage Wrapper -->
+        <div class="carousel-slide">
+          <span class="slide-number">13</span>
+          <h3 class="slide-title">Storage Wrapper</h3>
+          <p class="slide-description">
+            localStorage wrapper with auto JSON serialisation, namespaced keys, and graceful fallbacks.
+          </p>
+          <pre class="code-block language-javascript">S.set('user', { name: 'Alice', role: 'admin' });
 const user = S.get('user'); // Auto-parsed
 S.keys(); S.has('user'); S.clear();</pre>
-                </div>
+        </div>
 
-                <!-- 14. Model Persistence -->
-                <div class="carousel-slide">
-                    <span class="slide-number">14</span>
-                    <h3 class="slide-title">Model Persistence</h3>
-                    <p class="slide-description">
-                        Models auto-save to localStorage. Load state on page refresh, reset to defaults anytime.
-                    </p>
-                    <pre class="code-block language-javascript">const settings = M.create(schema, data, {
+        <!-- 14. Model Persistence -->
+        <div class="carousel-slide">
+          <span class="slide-number">14</span>
+          <h3 class="slide-title">Model Persistence</h3>
+          <p class="slide-description">
+            Models auto-save to localStorage. Load state on page refresh, reset to defaults anytime.
+          </p>
+          <pre class="code-block language-javascript">const settings = M.create(schema, data, {
   persist: 'app-settings' // Auto-save key
 });
 settings.reset(true); // Clear storage too</pre>
-                </div>
+        </div>
 
-                <!-- 15. Comprehensive Tests -->
-                <div class="carousel-slide">
-                    <span class="slide-number">15</span>
-                    <h3 class="slide-title">100+ Unit Tests</h3>
-                    <p class="slide-description">
-                        Comprehensive test suite covering all modules: DOM, utils, dates, models, storage, tables,
-                        elements, and more.
-                    </p>
-                    <pre class="code-block language-bash"># Run tests in browser
+        <!-- 15. Comprehensive Tests -->
+        <div class="carousel-slide">
+          <span class="slide-number">15</span>
+          <h3 class="slide-title">100+ Unit Tests</h3>
+          <p class="slide-description">
+            Comprehensive test suite covering all modules: DOM, utils, dates, models, storage, tables,
+            elements, and more.
+          </p>
+          <pre class="code-block language-bash"># Run tests in browser
 open tests/test.html
 # DOM, Utils, Dates, Models, Storage...</pre>
-                </div>
+        </div>
 
-                <!-- 16. CSS Grid System -->
-                <div class="carousel-slide">
-                    <span class="slide-number">16</span>
-                    <h3 class="slide-title">CSS Grid System</h3>
-                    <p class="slide-description">
-                        Bootstrap-style 12-column grid plus modern CSS Grid utilities. Mobile-first, responsive
-                        breakpoints.
-                    </p>
-                    <pre class="code-block language-html">&lt;div class="row"&gt;
+        <!-- 16. CSS Grid System -->
+        <div class="carousel-slide">
+          <span class="slide-number">16</span>
+          <h3 class="slide-title">CSS Grid System</h3>
+          <p class="slide-description">
+            Bootstrap-style 12-column grid plus modern CSS Grid utilities. Mobile-first, responsive
+            breakpoints.
+          </p>
+          <pre class="code-block language-html">&lt;div class="row"&gt;
   &lt;div class="col-6"&gt;Half&lt;/div&gt;
   &lt;div class="col-6"&gt;Half&lt;/div&gt;
 &lt;/div&gt;</pre>
-                </div>
+        </div>
 
-                <!-- 17. BYOS - Bring Your Own Styles -->
-                <div class="carousel-slide">
-                    <span class="slide-number">17</span>
-                    <h3 class="slide-title">CSS-Free Usage</h3>
-                    <p class="slide-description">
-                        Use Domma's JS with your own CSS framework. Disable theming entirely for Bootstrap, Tailwind, or
-                        custom styles.
-                    </p>
-                    <pre class="code-block language-javascript">$.setup({ noStyles: true });
+        <!-- 17. BYOS - Bring Your Own Styles -->
+        <div class="carousel-slide">
+          <span class="slide-number">17</span>
+          <h3 class="slide-title">CSS-Free Usage</h3>
+          <p class="slide-description">
+            Use Domma's JS with your own CSS framework. Disable theming entirely for Bootstrap, Tailwind, or
+            custom styles.
+          </p>
+          <pre class="code-block language-javascript">$.setup({ noStyles: true });
 // All JS features work without Domma CSS
 $('.tailwind-class').fadeIn().on('click', fn);</pre>
-                </div>
-            </div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <div class="cta-group">
-        <a href="showcase/index.html" class="cta">
-            Explore the Showcase
-            <span class="cta-arrow">&rarr;</span>
-        </a>
-        <a href="showcase/download/index.html" class="cta cta-secondary">
-            <span data-icon="download" data-icon-size="18"></span>
-            Download
-        </a>
-    </div>
-
-    <div class="badges">
-        <span class="badge">Zero Dependencies</span>
-        <span class="badge">~160KB Bundled</span>
-        <span class="badge">ES Modules</span>
-        <span class="badge">Chainable API</span>
-    </div>
+  <div class="badges">
+    <span class="badge">Zero Dependencies</span>
+    <span class="badge">~160KB Bundled</span>
+    <span class="badge">ES Modules</span>
+    <span class="badge">Chainable API</span>
+  </div>
 </section>
 
 <script src="dist/domma.min.js"></script>
 <script src="dist/domma-syntax.min.js"></script>
 <script type="module" src="layouts/js/layout.js"></script>
 <script>
+  $(() => {
+    // Initialise navbar
+    const logoSvg = `<svg class="navbar-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+      <path d="M12 8 L12 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <path d="M12 8 L24 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <path d="M12 40 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <path d="M24 8 L36 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M36 16 L36 32" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <path d="M36 32 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="24" cy="24" r="3" fill="currentColor"/>
+    </svg>`;
+
+    Domma.elements.navbar('#main-navbar', {
+      brand: {
+        html: '<span style="display: inline-flex; align-items: center; gap: 0.5rem;">' + logoSvg + '<span class="navbar-brand-text">Domma</span></span>',
+        url: 'index.html'
+      },
+      items: [],
+      variant: 'dark',
+      position: 'static',
+      collapseAt: 992
+    });
+
+    // Add Download button to navbar
+    const $brandContainer = $('.navbar-brand');
+    if ($brandContainer.length) {
+      $brandContainer.append('<a href="showcase/download/index.html" class="pill pill-light">Download</a>');
+    }
+
     // Declarative setup for components
     $.setup({
-        '#features-carousel': {
-            component: 'carousel',
-            options: {
-                autoplay: true,
-                interval: 6000,
-                pauseOnHover: true,
-                loop: true,
-                animation: 'fade',
-                showArrows: true,
-                showIndicators: true
-            }
+      '#features-carousel': {
+        component: 'carousel',
+        options: {
+          autoplay: true,
+          interval: 6000,
+          pauseOnHover: true,
+          loop: true,
+          animation: 'fade',
+          showArrows: true,
+          showIndicators: true
         }
+      }
     });
 
     // Scan for data-icon attributes
@@ -594,8 +645,9 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
 
     // Scan and highlight code blocks
     if (typeof Domma !== 'undefined' && Domma.syntax) {
-        Domma.syntax.scan();
+      Domma.syntax.scan();
     }
+  });
 </script>
 
 </body>

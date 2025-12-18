@@ -4077,11 +4077,16 @@ class Navbar extends Component {
             if (brand.url) {
                 html += `<a href="${brand.url}" class="navbar-brand-link">`;
             }
-            if (brand.logo) {
-                html += `<img src="${brand.logo}" alt="${brand.text || ''}" class="navbar-logo">`;
-            }
-            if (brand.text) {
-                html += `<span class="navbar-brand-text">${brand.text}</span>`;
+            // Support custom HTML or standard logo/text
+            if (brand.html) {
+                html += brand.html;
+            } else {
+                if (brand.logo) {
+                    html += `<img src="${brand.logo}" alt="${brand.text || ''}" class="navbar-logo">`;
+                }
+                if (brand.text) {
+                    html += `<span class="navbar-brand-text">${brand.text}</span>`;
+                }
             }
             if (brand.url) {
                 html += '</a>';
