@@ -7,7 +7,7 @@
   "types": "assets/types/index.d.ts",
   "type": "module",
   "scripts": {
-    "dev": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run build:css && npm run build:miniapps && live-server public --port=3000 --open=/index.html",
+    "dev": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run build:css && npm run build:miniapps && live-server public --port=3001 --open=/index.html",
     "build": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run build:css && npm run build:css-bundles && npm run build:archives && npm run build:kickstart && npm run build:miniapps",
     "build:js": "rollup -c",
     "build:css": "node scripts/build-css.js",
@@ -20,7 +20,7 @@
     "build:miniapp:garage": "node scripts/build-miniapp.js garage",
     "generate:bundles": "node scripts/generate-bundles.js",
     "test": "node -r ./tests/setup-globals.js tests/test.js",
-    "showcase": "live-server public --port=3000 --open=/showcase/index.html"
+    "showcase": "live-server public --port=3001 --open=/showcase/index.html"
   },
   "keywords": [
     "dom",
@@ -39,5 +39,8 @@
     "live-server": "^1.2.0",
     "rollup": "^4.28.0",
     "rollup-plugin-obfuscator": "^1.1.0"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.2.0"
   }
 }
