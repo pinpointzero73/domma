@@ -148,6 +148,58 @@ Creating a MiniApp with Domma is straightforward. Here's the basic structure:
 </html>
 ```
 
+### Environment Configuration
+
+MiniApps use build-time environment variables for optimal performance and security.
+
+#### Using the Shared Config Module
+
+```javascript
+import config from '../../miniapps/shared/config.js';
+
+const MyApp = {
+    async init() {
+        // Use environment-aware API URL
+        Domma.auth.init({ apiUrl: config.apiUrl });
+
+        // Check environment
+        if (config.isDevelopment()) {
+            console.log('Development mode');
+        }
+
+        // Access version
+        console.log('App version:', config.version);
+    }
+};
+```
+
+#### Building for Different Environments
+
+```bash
+# Development (default) - uses http://localhost:3001/api
+npm run build:miniapp:garage
+
+# Production - uses https://domma.dcbw-it.co.uk:3000/api
+NODE_ENV=production npm run build:miniapp:garage
+
+# Custom API URL
+API_URL=https://staging.example.com/api npm run build:miniapp:garage
+```
+
+#### How It Works
+
+1. Source files contain placeholders: `%%API_URL%%`, `%%NODE_ENV%%`
+2. During build, Rollup replaces placeholders with actual values
+3. Output contains hardcoded URLs for zero runtime overhead
+4. Each environment gets its own optimized build
+
+#### Environment URLs
+
+- **Development**: `http://localhost:3001/api`
+- **Production**: `https://domma.dcbw-it.co.uk:3000/api`
+
+Configuration values are replaced at build time, so there's no runtime overhead or exposed configuration in the browser.
+
 ### Using Domma.auth
 
 All MiniApps can use the authentication module for user management. Here's how:

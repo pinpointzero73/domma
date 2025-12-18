@@ -4,11 +4,15 @@
  * Copy Domma distribution files to miniApps vendor directories
  * This script runs as part of the main build process to ensure
  * miniApps always have the latest Domma files
+ *
+ * NOTE: MiniApps are now built first by build-miniapp.js, then this script
+ * copies Domma framework files to their vendor directories
  */
 
 import fs from 'fs';
 import path, {dirname} from 'path';
 import {fileURLToPath} from 'url';
+import {execSync} from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,10 +22,27 @@ const colours = {
   reset: '\x1b[0m',
   green: '\x1b[32m',
   blue: '\x1b[34m',
-  red: '\x1b[31m'
+  red: '\x1b[31m',
+  yellow: '\x1b[33m'
 };
 
-console.log(`${colours.blue}📦 Copying Domma files to miniApps...${colours.reset}\n`);
+console.log(`${colours.blue}📦 Building and deploying MiniApps...${colours.reset}\n`);
+
+// Step 1: Build miniapps first
+console.log(`${colours.blue}Step 1: Building miniapps...${colours.reset}`);
+try {
+  execSync('node scripts/build-miniapp.js', {
+    stdio: 'inherit',
+    cwd: path.join(__dirname, '..')
+  });
+  console.log(`${colours.green}✓ MiniApps built${colours.reset}\n`);
+} catch (error) {
+  console.error(`${colours.red}✗ Build failed${colours.reset}`);
+  process.exit(1);
+}
+
+// Step 2: Copy Domma files
+console.log(`${colours.blue}Step 2: Copying Domma files...${colours.reset}\n`);
 
 // Define source and destination paths
 const distDir = path.join(__dirname, '../public/dist');

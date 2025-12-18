@@ -371,6 +371,14 @@ npm run build
 npm test
 ```
 
+**MiniApps:**
+
+```bash
+npm run build:miniapps              # Build all miniapps
+npm run build:miniapp:garage        # Build specific miniapp
+NODE_ENV=production npm run build   # Production build
+```
+
 ## Bundle Size
 
 ~125KB minified (includes all namespaces)
