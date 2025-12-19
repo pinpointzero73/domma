@@ -14,7 +14,7 @@ const pkg = JSON.parse(readFileSync('./package.json', 'utf8'));
 
 // Environment-based API URLs
 const API_URLS = {
-  production: 'https://domma.dcbw-it.co.uk:3000/api',
+  production: '/api',
   development: 'http://localhost:3000/api'
 };
 
