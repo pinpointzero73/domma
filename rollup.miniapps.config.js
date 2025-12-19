@@ -79,8 +79,8 @@ export function createMiniAppConfig(name, options = {}) {
 
 // Export configurations for all miniapps
 export default [
-  createMiniAppConfig('garage')
+  createMiniAppConfig('garage'),
+  createMiniAppConfig('docs')
   // Add more miniapps here as they're created:
-  // createMiniAppConfig('docs'),
   // createMiniAppConfig('invoicing'),
 ];
