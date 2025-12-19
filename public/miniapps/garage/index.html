@@ -369,38 +369,9 @@
           border: 1px solid #bfdbfe;
       }
 
-      /* Garage Search Input Group */
+      /* Garage Search - uses Domma input-group component */
       .garage-search-wrapper {
           margin-bottom: 1.5rem;
-      }
-
-      .garage-search-group {
-          position: relative;
-      }
-
-      .garage-search-group .garage-search-icon {
-          position: absolute;
-          left: 1rem;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #9ca3af;
-          pointer-events: none;
-          z-index: 1;
-      }
-
-      .garage-search-input {
-          width: 100%;
-          padding: 0.75rem 1rem 0.75rem 3rem !important;
-          border: 2px solid #e5e7eb;
-          border-radius: 8px;
-          font-size: 0.875rem;
-          text-align: left;
-      }
-
-      .garage-search-input:focus {
-          outline: none;
-          border-color: var(--dm-primary);
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
       }
 
       .garage-search-count {
@@ -819,11 +790,11 @@
 
         <!-- Search Box -->
         <div class="garage-search-wrapper">
-          <div class="garage-search-group">
-            <span class="garage-search-icon" data-icon="search" data-icon-size="18"></span>
+          <div class="input-group-icon has-addon-left">
+            <span class="input-group-addon input-group-addon-left" data-icon="search" data-icon-size="18"></span>
             <input type="text"
                    id="garageSearch"
-                   class="garage-search-input form-input"
+                   class="form-input"
                    placeholder="Search by registration, make, colour, year...">
           </div>
           <div id="garageSearchCount" class="garage-search-count"></div>

@@ -855,6 +855,208 @@ textarea:not([class])::placeholder {
     border-radius: 50%;
 }
 
+
+/* ============================================
+   INPUT GROUP
+   ============================================ */
+
+/* Input group container */
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+}
+
+.input-group > .form-input,
+.input-group > input {
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+}
+
+/* Icon-based input group (icon positioned inside input) */
+.input-group-icon {
+    position: relative;
+    width: 100%;
+}
+
+.input-group-icon > .input-group-addon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    color: var(--dm-gray-500);
+}
+
+.input-group-icon > .input-group-addon-left {
+    left: var(--dm-space-3);
+}
+
+.input-group-icon > .input-group-addon-right {
+    right: var(--dm-space-3);
+}
+
+/* Adjust input padding when icon is present */
+.input-group-icon.has-addon-left > .form-input,
+.input-group-icon.has-addon-left > input {
+    padding-left: 2.75rem;
+}
+
+.input-group-icon.has-addon-right > .form-input,
+.input-group-icon.has-addon-right > input {
+    padding-right: 2.75rem;
+}
+
+.input-group-icon.has-addon-left.has-addon-right > .form-input,
+.input-group-icon.has-addon-left.has-addon-right > input {
+    padding-left: 2.75rem;
+    padding-right: 2.75rem;
+}
+
+/* Prepend/Append style (addon outside input) */
+.input-group-prepend,
+.input-group-append {
+    display: flex;
+    align-items: center;
+}
+
+.input-group-prepend {
+    margin-right: -1px;
+}
+
+.input-group-append {
+    margin-left: -1px;
+}
+
+.input-group-text {
+    display: flex;
+    align-items: center;
+    padding: var(--dm-space-2) var(--dm-space-3);
+    font-size: var(--dm-font-size-base);
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--dm-gray-700);
+    text-align: center;
+    white-space: nowrap;
+    background-color: var(--dm-gray-100);
+    border: 1px solid var(--dm-border, var(--dm-gray-300));
+    border-radius: var(--dm-radius-md);
+}
+
+.input-group > .input-group-prepend > .input-group-text {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.input-group > .input-group-append > .input-group-text {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.input-group > .input-group-prepend ~ .form-input,
+.input-group > .input-group-prepend ~ input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.input-group > .form-input:not(:last-child),
+.input-group > input:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+/* Button addon support */
+.input-group > .input-group-prepend > .btn {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.input-group > .input-group-append > .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Input group sizes */
+.input-group-sm .input-group-text {
+    padding: var(--dm-space-1) var(--dm-space-2);
+    font-size: var(--dm-font-size-sm);
+}
+
+.input-group-sm .form-input,
+.input-group-sm input {
+    padding: var(--dm-space-1) var(--dm-space-2);
+    font-size: var(--dm-font-size-sm);
+}
+
+.input-group-sm.input-group-icon.has-addon-left > .form-input,
+.input-group-sm.input-group-icon.has-addon-left > input {
+    padding-left: 2rem;
+}
+
+.input-group-sm.input-group-icon.has-addon-right > .form-input,
+.input-group-sm.input-group-icon.has-addon-right > input {
+    padding-right: 2rem;
+}
+
+.input-group-sm .input-group-addon-left {
+    left: var(--dm-space-2);
+}
+
+.input-group-sm .input-group-addon-right {
+    right: var(--dm-space-2);
+}
+
+.input-group-lg .input-group-text {
+    padding: var(--dm-space-3) var(--dm-space-4);
+    font-size: var(--dm-font-size-lg);
+}
+
+.input-group-lg .form-input,
+.input-group-lg input {
+    padding: var(--dm-space-3) var(--dm-space-4);
+    font-size: var(--dm-font-size-lg);
+}
+
+.input-group-lg.input-group-icon.has-addon-left > .form-input,
+.input-group-lg.input-group-icon.has-addon-left > input {
+    padding-left: 3.5rem;
+}
+
+.input-group-lg.input-group-icon.has-addon-right > .form-input,
+.input-group-lg.input-group-icon.has-addon-right > input {
+    padding-right: 3.5rem;
+}
+
+.input-group-lg .input-group-addon-left {
+    left: var(--dm-space-4);
+}
+
+.input-group-lg .input-group-addon-right {
+    right: var(--dm-space-4);
+}
+
+/* Dark theme support */
+.dm-theme-dark .input-group-text {
+    color: var(--dm-gray-300);
+    background-color: var(--dm-gray-800);
+    border-color: var(--dm-gray-600);
+}
+
+.dm-theme-dark .input-group-icon > .input-group-addon {
+    color: var(--dm-gray-400);
+}
+
+/* Focus state - highlight addon when input is focused */
+.input-group-icon:focus-within > .input-group-addon {
+    color: var(--dm-primary);
+}
+
+
 /* ============================================
    BADGE
    ============================================ */
