@@ -2,8 +2,8 @@
  * Domma Elements CSS v0.8.0b
  * Dynamic Object Manipulation & Modeling API
  * (c) 2025 Darryl Waterhouse & DCBW-IT
- * Built: 2025-12-19T11:47:44.958Z
- * Commit: ceec70d
+ * Built: 2025-12-21T15:06:26.027Z
+ * Commit: 19ddd3c
  */
 
 /**
@@ -2901,6 +2901,23 @@ code {
     overflow: hidden;
 }
 
+/* Dialog size variants */
+.dm-dialog-small {
+    max-width: 400px;
+}
+
+.dm-dialog-medium {
+    max-width: 600px;
+}
+
+.dm-dialog-large {
+    max-width: 800px;
+}
+
+.dm-dialog-xl {
+    max-width: 1000px;
+}
+
 .dm-dialog-content {
     display: flex;
     flex-direction: column;
@@ -2909,6 +2926,7 @@ code {
 .dm-dialog-header {
     padding: var(--dm-space-4) var(--dm-space-6);
     border-bottom: 1px solid var(--dm-border, #dee2e6);
+    position: relative;
 }
 
 .dm-dialog-title {
@@ -2920,6 +2938,33 @@ code {
 
 .dm-dialog-body {
     padding: var(--dm-space-6);
+}
+
+/* Scrollable body variant */
+.dm-dialog-body-scrollable {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* Close button */
+.dm-dialog-close {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--dm-gray-500, #6b7280);
+    line-height: 1;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    transition: color 0.15s ease;
+}
+
+.dm-dialog-close:hover {
+    color: var(--dm-gray-700, #374151);
 }
 
 .dm-dialog-message {

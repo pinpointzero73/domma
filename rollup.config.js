@@ -54,6 +54,16 @@ const syntaxBanner = `/*!
  * Commit: ${getGitCommit()}
  */`;
 
+const extensionsBanner = `/*!
+ * Domma Editor Extensions v${pkg.version}
+ * Optional enhancements for Domma editor
+ * (c) ${new Date().getFullYear()} Darryl Waterhouse & DCBW-IT
+ * Built: ${new Date().toISOString()}
+ * Commit: ${getGitCommit()}
+ *
+ * Requires: domma.min.js
+ */`;
+
 const obfuscatorOptions = {
     compact: true,
     controlFlowFlattening: true,
@@ -177,6 +187,26 @@ export default [
                 format: 'es',
                 sourcemap: false,
                 banner: syntaxBanner
+            }
+        ],
+        plugins: commonPlugins
+    },
+    // Editor Extensions bundle
+    {
+        input: 'src/editor-extensions.js',
+        output: [
+            {
+                file: 'public/dist/domma-editor-extensions.min.js',
+                format: 'umd',
+                name: 'DommaEditorExtensions',
+                sourcemap: false,
+                banner: extensionsBanner
+            },
+            {
+                file: 'public/dist/domma-editor-extensions.esm.js',
+                format: 'es',
+                sourcemap: false,
+                banner: extensionsBanner
             }
         ],
         plugins: commonPlugins

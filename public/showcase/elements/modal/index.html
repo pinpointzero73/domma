@@ -418,7 +418,269 @@ const confirmModal = Domma.elements.modal('#confirm-modal', {
         </div>
     </section>
 
-    <!-- SECTION 5: Best Practices -->
+  <!-- SECTION 5: Factory Mode - Programmatic Creation -->
+  <section class="card mb-6" data-section="Factory Mode">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Factory Mode - Programmatic Creation</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Create modals programmatically without pre-existing HTML using <code>createModal()</code>.
+        Perfect for dynamic content, notifications, and on-demand dialogs.
+      </p>
+
+      <h4 class="category-title">Example 1: Basic Factory Modal</h4>
+      <p class="mb-2">Create a modal with title, content, and buttons programmatically:</p>
+      <pre class="code-block language-javascript">
+const modal = Domma.elements.createModal({
+    title: 'Welcome',
+    content: '&lt;p&gt;This modal was created programmatically!&lt;/p&gt;',
+    size: 'medium',
+    buttons: [
+        {id: 'close', text: 'Close', variant: 'primary'}
+    ]
+});
+
+modal.open();
+</pre>
+      <div class="demo-area mb-4">
+        <button class="btn btn-primary" id="demo-factory-basic">Open Factory Modal</button>
+      </div>
+
+      <h4 class="category-title">Example 2: Size Variants</h4>
+      <p class="mb-2">Available sizes: <code>small</code>, <code>medium</code>, <code>large</code>, <code>xl</code>:</p>
+      <pre class="code-block language-javascript">
+Domma.elements.createModal({
+    title: 'Large Modal',
+    content: '&lt;p&gt;This is a large modal for extensive content.&lt;/p&gt;',
+    size: 'large'
+}).open();
+</pre>
+      <div class="demo-area mb-4">
+        <button class="btn btn-secondary" id="demo-factory-small">Small</button>
+        <button class="btn btn-secondary" id="demo-factory-medium">Medium</button>
+        <button class="btn btn-secondary" id="demo-factory-large">Large</button>
+        <button class="btn btn-secondary" id="demo-factory-xl">Extra Large</button>
+      </div>
+
+      <h4 class="category-title">Example 3: Custom Buttons with Actions</h4>
+      <p class="mb-2">Define multiple buttons with custom actions:</p>
+      <pre class="code-block language-javascript">
+Domma.elements.createModal({
+    title: 'Custom Actions',
+    content: '&lt;p&gt;Choose an action to perform:&lt;/p&gt;',
+    buttons: [
+        {id: 'cancel', text: 'Cancel', variant: 'secondary'},
+        {id: 'save', text: 'Save', variant: 'primary'},
+        {id: 'delete', text: 'Delete', variant: 'danger'}
+    ],
+    onButtonClick: (buttonId, modal) =&gt; {
+        console.log('Button clicked:', buttonId);
+        if (buttonId === 'delete') {
+            Domma.elements.showToast('Deleted!', {type: 'success'});
+        }
+    }
+}).open();
+</pre>
+      <div class="demo-area mb-4">
+        <button class="btn btn-primary" id="demo-factory-actions">Custom Buttons Modal</button>
+      </div>
+
+      <h4 class="category-title">Example 4: Dynamic Content Loading</h4>
+      <p class="mb-2">Load content asynchronously and display in modal:</p>
+      <pre class="code-block language-javascript">
+async function showUserProfile(userId) {
+    const modal = Domma.elements.createModal({
+        title: 'User Profile',
+        content: '&lt;div class="text-center"&gt;&lt;p&gt;Loading...&lt;/p&gt;&lt;/div&gt;',
+        size: 'large'
+    });
+
+    modal.open();
+
+    // Fetch user data
+    const user = await fetch(`/api/users/${userId}`).then(r =&gt; r.json());
+
+    // Update modal content
+    const content = `
+        &lt;h4&gt;${user.name}&lt;/h4&gt;
+        &lt;p&gt;Email: ${user.email}&lt;/p&gt;
+        &lt;p&gt;Role: ${user.role}&lt;/p&gt;
+    `;
+
+    $('#' + modal.element.id + ' .dm-dialog-body').html(content);
+}
+</pre>
+      <div class="demo-area mb-4">
+        <button class="btn btn-primary" id="demo-factory-dynamic">Load Dynamic Content</button>
+      </div>
+
+      <h4 class="category-title">Example 5: Scrollable Content</h4>
+      <p class="mb-2">Create modal with scrollable body for long content:</p>
+      <pre class="code-block language-javascript">
+Domma.elements.createModal({
+    title: 'Privacy Policy',
+    content: `&lt;p&gt;Long content...&lt;/p&gt;`.repeat(20),
+    size: 'large',
+    scrollable: true,
+    buttons: [{id: 'accept', text: 'Accept', variant: 'primary'}]
+}).open();
+</pre>
+      <div class="demo-area">
+        <button class="btn btn-secondary" id="demo-factory-scroll">Scrollable Content</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: Promise Mode - Async/Await -->
+  <section class="card mb-6" data-section="Promise Mode">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Promise Mode - Async/Await</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Use <code>showModal()</code> for promise-based modals that resolve with the button ID clicked.
+        Perfect for confirmations, choices, and async workflows.
+      </p>
+
+      <h4 class="category-title">Example 1: Confirmation Dialog</h4>
+      <p class="mb-2">Wait for user confirmation with async/await:</p>
+      <pre class="code-block language-javascript">
+async function deleteItem() {
+    const result = await Domma.elements.showModal({
+        title: 'Confirm Deletion',
+        content: '&lt;p&gt;Are you sure you want to delete this item?&lt;/p&gt;',
+        buttons: [
+            {id: 'cancel', text: 'Cancel', variant: 'secondary'},
+            {id: 'delete', text: 'Delete', variant: 'danger'}
+        ]
+    });
+
+    if (result === 'delete') {
+        console.log('Item deleted!');
+        Domma.elements.showToast('Item deleted successfully', {type: 'success'});
+    } else {
+        console.log('Deletion cancelled');
+    }
+}
+</pre>
+      <div class="demo-area mb-4">
+        <button class="btn btn-danger" id="demo-promise-confirm">Delete Item (Promise)</button>
+        <div id="promise-result-1" class="mt-2"></div>
+      </div>
+
+      <h4 class="category-title">Example 2: Multiple Choice Selection</h4>
+      <p class="mb-2">Let user choose from multiple options:</p>
+      <pre class="code-block language-javascript">
+async function selectSize() {
+    const size = await Domma.elements.showModal({
+        title: 'Select Size',
+        content: '&lt;p&gt;Choose your preferred size:&lt;/p&gt;',
+        buttons: [
+            {id: 'small', text: 'Small'},
+            {id: 'medium', text: 'Medium'},
+            {id: 'large', text: 'Large'},
+            {id: 'xl', text: 'Extra Large'}
+        ]
+    });
+
+    console.log('Selected size:', size);
+}
+</pre>
+      <div class="demo-area mb-4">
+        <button class="btn btn-primary" id="demo-promise-choice">Select Size</button>
+        <div id="promise-result-2" class="mt-2"></div>
+      </div>
+
+      <h4 class="category-title">Example 3: Form Submission with Promise</h4>
+      <p class="mb-2">Combine form input with promise resolution:</p>
+      <pre class="code-block language-javascript">
+async function getUserInput() {
+    const modal = Domma.elements.createModal({
+        title: 'Enter Details',
+        content: `
+            &lt;div class="form-group"&gt;
+                &lt;label class="form-label"&gt;Name&lt;/label&gt;
+                &lt;input type="text" id="user-name" class="form-input"&gt;
+            &lt;/div&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label class="form-label"&gt;Email&lt;/label&gt;
+                &lt;input type="email" id="user-email" class="form-input"&gt;
+            &lt;/div&gt;
+        `,
+        buttons: [
+            {id: 'cancel', text: 'Cancel', variant: 'secondary'},
+            {id: 'submit', text: 'Submit', variant: 'primary'}
+        ]
+    });
+
+    return new Promise((resolve) =&gt; {
+        modal.options.onButtonClick = (buttonId) =&gt; {
+            if (buttonId === 'submit') {
+                const data = {
+                    name: $('#user-name').val(),
+                    email: $('#user-email').val()
+                };
+                resolve(data);
+            } else {
+                resolve(null);
+            }
+        };
+        modal.open();
+    });
+}
+
+// Usage
+const userData = await getUserInput();
+if (userData) {
+    console.log('User data:', userData);
+}
+</pre>
+      <div class="demo-area mb-4">
+        <button class="btn btn-primary" id="demo-promise-form">Get User Input</button>
+        <div id="promise-result-3" class="mt-2"></div>
+      </div>
+
+      <h4 class="category-title">Example 4: Chained Confirmations</h4>
+      <p class="mb-2">Create multi-step confirmation flows:</p>
+      <pre class="code-block language-javascript">
+async function dangerousOperation() {
+    // First confirmation
+    const firstConfirm = await Domma.elements.showModal({
+        title: 'Warning',
+        content: '&lt;p&gt;This will permanently delete all data.&lt;/p&gt;',
+        buttons: [
+            {id: 'cancel', text: 'Cancel', variant: 'secondary'},
+            {id: 'continue', text: 'Continue', variant: 'warning'}
+        ]
+    });
+
+    if (firstConfirm !== 'continue') return;
+
+    // Second confirmation
+    const secondConfirm = await Domma.elements.showModal({
+        title: 'Final Confirmation',
+        content: '&lt;p class="text-danger"&gt;&lt;strong&gt;Are you absolutely sure?&lt;/strong&gt;&lt;/p&gt;',
+        buttons: [
+            {id: 'no', text: 'No, Go Back', variant: 'secondary'},
+            {id: 'yes', text: 'Yes, Delete Everything', variant: 'danger'}
+        ]
+    });
+
+    if (secondConfirm === 'yes') {
+        console.log('Performing dangerous operation...');
+        Domma.elements.showToast('All data deleted', {type: 'error'});
+    }
+}
+</pre>
+      <div class="demo-area">
+        <button class="btn btn-danger" id="demo-promise-chain">Dangerous Operation</button>
+        <div id="promise-result-4" class="mt-2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: Best Practices -->
     <section class="card mb-6" data-section="Best Practices">
         <div class="card-header">
             <h2 class="text-xl font-semibold m-0">Best Practices</h2>
@@ -714,6 +976,261 @@ $.setup({
                 });
             }
         });
+    });
+
+    // Factory Mode Examples
+    $('#demo-factory-basic').on('click', () => {
+      const modal = Domma.elements.createModal({
+        title: 'Welcome',
+        content: '<p>This modal was created programmatically using <code>createModal()</code>!</p><p>No pre-existing HTML required.</p>',
+        size: 'medium',
+        buttons: [
+          {id: 'close', text: 'Close', variant: 'primary'}
+        ]
+      });
+      modal.open();
+    });
+
+    // Size variants
+    $('#demo-factory-small').on('click', () => {
+      Domma.elements.createModal({
+        title: 'Small Modal',
+        content: '<p>This is a small modal (400px max-width).</p>',
+        size: 'small'
+      }).open();
+    });
+
+    $('#demo-factory-medium').on('click', () => {
+      Domma.elements.createModal({
+        title: 'Medium Modal',
+        content: '<p>This is a medium modal (600px max-width).</p>',
+        size: 'medium'
+      }).open();
+    });
+
+    $('#demo-factory-large').on('click', () => {
+      Domma.elements.createModal({
+        title: 'Large Modal',
+        content: '<p>This is a large modal (800px max-width).</p>',
+        size: 'large'
+      }).open();
+    });
+
+    $('#demo-factory-xl').on('click', () => {
+      Domma.elements.createModal({
+        title: 'Extra Large Modal',
+        content: '<p>This is an extra large modal (1000px max-width).</p>',
+        size: 'xl'
+      }).open();
+    });
+
+    // Custom buttons with actions
+    $('#demo-factory-actions').on('click', () => {
+      Domma.elements.createModal({
+        title: 'Custom Actions',
+        content: '<p>Choose an action to perform:</p>',
+        buttons: [
+          {id: 'cancel', text: 'Cancel', variant: 'secondary'},
+          {id: 'save', text: 'Save', variant: 'primary'},
+          {id: 'delete', text: 'Delete', variant: 'danger'}
+        ],
+        onButtonClick: (buttonId, modal) => {
+          console.log('Button clicked:', buttonId);
+          if (buttonId === 'save') {
+            Domma.elements.showToast('Saved successfully!', {type: 'success'});
+          } else if (buttonId === 'delete') {
+            Domma.elements.showToast('Deleted!', {type: 'error'});
+          }
+        }
+      }).open();
+    });
+
+    // Dynamic content loading
+    $('#demo-factory-dynamic').on('click', async () => {
+      const modal = Domma.elements.createModal({
+        title: 'User Profile',
+        content: '<div class="text-center"><p>Loading user data...</p></div>',
+        size: 'large'
+      });
+
+      modal.open();
+
+      // Simulate async data fetch
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      const userData = {
+        name: 'John Doe',
+        email: 'john.doe@example.com',
+        role: 'Administrator',
+        lastLogin: new Date().toLocaleDateString()
+      };
+
+      // Update modal content
+      const content = `
+            <div class="grid grid-cols-2 gap-4">
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <p class="mb-0">${userData.name}</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <p class="mb-0">${userData.email}</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <p class="mb-0">${userData.role}</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Last Login</label>
+                    <p class="mb-0">${userData.lastLogin}</p>
+                </div>
+            </div>
+        `;
+
+      $(modal.element).find('.dm-dialog-body').html(content);
+    });
+
+    // Scrollable content
+    $('#demo-factory-scroll').on('click', () => {
+      const longContent = Array(15).fill(null).map((_, i) => `
+            <h6 class="mb-2">Section ${i + 1}</h6>
+            <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+        `).join('');
+
+      Domma.elements.createModal({
+        title: 'Privacy Policy',
+        content: longContent,
+        size: 'large',
+        scrollable: true,
+        buttons: [
+          {id: 'decline', text: 'Decline', variant: 'secondary'},
+          {id: 'accept', text: 'Accept', variant: 'primary'}
+        ],
+        onButtonClick: (buttonId) => {
+          if (buttonId === 'accept') {
+            Domma.elements.showToast('Privacy policy accepted', {type: 'success'});
+          }
+        }
+      }).open();
+    });
+
+    // Promise Mode Examples
+    $('#demo-promise-confirm').on('click', async () => {
+      const result = await Domma.elements.showModal({
+        title: 'Confirm Deletion',
+        content: '<p>Are you sure you want to delete this item?</p><p class="text-sm text-danger">This action cannot be undone.</p>',
+        buttons: [
+          {id: 'cancel', text: 'Cancel', variant: 'secondary'},
+          {id: 'delete', text: 'Delete', variant: 'danger'}
+        ]
+      });
+
+      const resultDiv = $('#promise-result-1');
+      if (result === 'delete') {
+        resultDiv.html('<span class="text-danger">✓ Item deleted at ' + new Date().toLocaleTimeString() + '</span>');
+        Domma.elements.showToast('Item deleted successfully', {type: 'success'});
+      } else {
+        resultDiv.html('<span class="text-secondary">Deletion cancelled</span>');
+      }
+    });
+
+    // Multiple choice
+    $('#demo-promise-choice').on('click', async () => {
+      const size = await Domma.elements.showModal({
+        title: 'Select Size',
+        content: '<p>Choose your preferred size:</p>',
+        buttons: [
+          {id: 'small', text: 'Small'},
+          {id: 'medium', text: 'Medium'},
+          {id: 'large', text: 'Large'},
+          {id: 'xl', text: 'Extra Large'}
+        ]
+      });
+
+      const resultDiv = $('#promise-result-2');
+      resultDiv.html(`<span class="text-success">✓ Selected: <strong>${size.toUpperCase()}</strong></span>`);
+      console.log('Selected size:', size);
+    });
+
+    // Form submission with promise
+    $('#demo-promise-form').on('click', async () => {
+      const modal = Domma.elements.createModal({
+        title: 'Enter Details',
+        content: `
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <input type="text" id="user-name-input" class="form-input" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="user-email-input" class="form-input" placeholder="john@example.com">
+                </div>
+            `,
+        buttons: [
+          {id: 'cancel', text: 'Cancel', variant: 'secondary'},
+          {id: 'submit', text: 'Submit', variant: 'primary'}
+        ]
+      });
+
+      const userData = await new Promise((resolve) => {
+        modal.options.onButtonClick = (buttonId) => {
+          if (buttonId === 'submit') {
+            const data = {
+              name: $('#user-name-input').val(),
+              email: $('#user-email-input').val()
+            };
+            resolve(data);
+          } else {
+            resolve(null);
+          }
+        };
+        modal.open();
+      });
+
+      const resultDiv = $('#promise-result-3');
+      if (userData && userData.name && userData.email) {
+        resultDiv.html(`<span class="text-success">✓ Submitted: ${userData.name} (${userData.email})</span>`);
+      } else {
+        resultDiv.html('<span class="text-secondary">Form submission cancelled</span>');
+      }
+    });
+
+    // Chained confirmations
+    $('#demo-promise-chain').on('click', async () => {
+      // First confirmation
+      const firstConfirm = await Domma.elements.showModal({
+        title: 'Warning',
+        content: '<p class="mb-2">This will permanently delete all data.</p><p class="text-warning"><strong>Are you sure you want to continue?</strong></p>',
+        buttons: [
+          {id: 'cancel', text: 'Cancel', variant: 'secondary'},
+          {id: 'continue', text: 'Continue', variant: 'warning'}
+        ]
+      });
+
+      if (firstConfirm !== 'continue') {
+        $('#promise-result-4').html('<span class="text-secondary">Operation cancelled at step 1</span>');
+        return;
+      }
+
+      // Second confirmation
+      const secondConfirm = await Domma.elements.showModal({
+        title: 'Final Confirmation',
+        content: '<p class="text-danger"><strong>Are you absolutely sure?</strong></p><p class="text-sm">This action cannot be undone!</p>',
+        buttons: [
+          {id: 'no', text: 'No, Go Back', variant: 'secondary'},
+          {id: 'yes', text: 'Yes, Delete Everything', variant: 'danger'}
+        ]
+      });
+
+      const resultDiv = $('#promise-result-4');
+      if (secondConfirm === 'yes') {
+        resultDiv.html('<span class="text-danger">✓ All data deleted at ' + new Date().toLocaleTimeString() + '</span>');
+        Domma.elements.showToast('All data deleted', {type: 'error'});
+      } else {
+        resultDiv.html('<span class="text-secondary">Operation cancelled at step 2</span>');
+      }
     });
 </script>
 </body>

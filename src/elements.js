@@ -99,7 +99,25 @@ class Modal extends Component {
         onOpen: null,
         onOpened: null,
         onClose: null,
-        onClosed: null
+        onClosed: null,
+
+        // Factory mode options
+        size: 'medium',              // 'small', 'medium', 'large', 'xl'
+        centered: true,
+        scrollable: false,
+
+        // Content options (for programmatic creation)
+        title: '',
+        content: '',
+        footer: '',
+        buttons: [],                 // [{id, text, variant, close}]
+
+        // Styling options
+        className: '',
+        headerClass: '',
+        bodyClass: '',
+        footerClass: '',
+        onButtonClick: null
     };
 
     constructor(selector, options = {}) {
@@ -252,7 +270,274 @@ class Modal extends Component {
             this._backdrop.remove();
         }
     }
+
+    remove() {
+        if (this._isOpen) {
+            this.close();
+        }
+
+        // Wait for close animation
+        setTimeout(() => {
+            this.destroy();
+
+            if (this.element && this.element.parentNode) {
+                this.element.remove();
+            }
+
+            if (this._backdrop) {
+                this._backdrop.remove();
+                this._backdrop = null;
+            }
+
+            // Remove from instances map (access via elements namespace)
+            const elementsNS = typeof elements !== 'undefined' ? elements :
+              (typeof window !== 'undefined' && window.Domma && window.Domma.elements) || null;
+            if (elementsNS && elementsNS._instances && elementsNS._instances.has(this.element)) {
+                elementsNS._instances.delete(this.element);
+            }
+
+            // Remove overlay if factory-created
+            if (this._overlay && this._overlay.parentNode) {
+                this._overlay.remove();
+            }
+        }, this.options.animationDuration);
+
+        return this;
+    }
 }
+
+// ============================================
+// Modal Factory (Programmatic Creation)
+// ============================================
+
+const ModalFactory = {
+    _container: null,
+    _zIndexBase: 1050,
+    _activeModals: [],
+    _defaults: {
+        size: 'medium',
+        title: '',
+        content: '',
+        buttons: [{id: 'close', text: 'Close', variant: 'secondary'}],
+        backdrop: true,
+        backdropClose: true,
+        keyboard: true,
+        animation: true,
+        animationDuration: 300,
+        className: '',
+        headerClass: '',
+        bodyClass: '',
+        footerClass: '',
+        scrollable: false,
+        onButtonClick: null,
+        onOpen: null,
+        onClose: null
+    },
+
+    _ensureContainer() {
+        if (!this._container) {
+            this._container = document.createElement('div');
+            this._container.className = 'dm-dialog-container';
+            this._container.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 1040;';
+            document.body.appendChild(this._container);
+        }
+        return this._container;
+    },
+
+    _createElements(options) {
+        const opts = {...this._defaults, ...options};
+        const container = this._ensureContainer();
+
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'dm-dialog-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: ${this._getNextZIndex()};
+            pointer-events: auto;
+            opacity: 0;
+            transition: opacity ${opts.animationDuration}ms ease;
+        `;
+
+        // Create dialog
+        const dialog = document.createElement('div');
+        dialog.className = `dm-dialog dm-dialog-${opts.size}${opts.className ? ' ' + opts.className : ''}`;
+        dialog.setAttribute('role', 'dialog');
+        dialog.setAttribute('aria-modal', 'true');
+        dialog.style.cssText = `
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 90%;
+            max-height: 90vh;
+            overflow: hidden;
+            transform: scale(0.95) translateY(-10px);
+            transition: transform ${opts.animationDuration}ms ease, opacity ${opts.animationDuration}ms ease;
+            opacity: 0;
+        `;
+
+        // Build content
+        let html = '<div class="dm-dialog-content">';
+
+        if (opts.title) {
+            html += `<div class="dm-dialog-header${opts.headerClass ? ' ' + opts.headerClass : ''}" style="position: relative; padding: 1.5rem 1.5rem 1rem; border-bottom: 1px solid #e5e7eb;">`;
+            html += `<h3 class="dm-dialog-title" style="margin: 0; font-size: 1.25rem; font-weight: 600;">${opts.title}</h3>`;
+            if (opts.backdrop && opts.backdropClose) {
+                html += '<button type="button" class="dm-dialog-close" aria-label="Close" style="position: absolute; right: 1rem; top: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6b7280; line-height: 1; padding: 0; width: 2rem; height: 2rem;">&times;</button>';
+            }
+            html += '</div>';
+        }
+
+        html += `<div class="dm-dialog-body${opts.bodyClass ? ' ' + opts.bodyClass : ''}${opts.scrollable ? ' dm-dialog-body-scrollable' : ''}" style="padding: 1.5rem;">`;
+        html += opts.content;
+        html += '</div>';
+
+        if (opts.buttons && opts.buttons.length > 0) {
+            html += `<div class="dm-dialog-footer${opts.footerClass ? ' ' + opts.footerClass : ''}" style="display: flex; justify-content: flex-end; gap: 0.5rem; padding: 1rem 1.5rem; border-top: 1px solid #e5e7eb; background: #f9fafb;">`;
+            opts.buttons.forEach(btn => {
+                const variant = btn.variant || 'secondary';
+                html += `<button type="button" class="btn btn-${variant}" data-button-id="${btn.id}">${btn.text}</button>`;
+            });
+            html += '</div>';
+        }
+
+        html += '</div>';
+        dialog.innerHTML = html;
+        overlay.appendChild(dialog);
+
+        return {overlay, dialog, opts};
+    },
+
+    _getNextZIndex() {
+        return this._zIndexBase + (this._activeModals.length * 10);
+    },
+
+    createModal(options) {
+        const {overlay, dialog, opts} = this._createElements(options);
+
+        // Create Modal instance using the generated dialog element
+        const modal = new Modal(dialog, opts);
+        modal._overlay = overlay;
+        modal._factoryCreated = true;
+
+        // Append to container (hidden initially)
+        this._ensureContainer().appendChild(overlay);
+
+        // Button click handling
+        const closeButton = dialog.querySelector('.dm-dialog-close');
+        if (closeButton) {
+            closeButton.addEventListener('click', () => {
+                modal.close();
+                if (modal._factoryCreated) {
+                    setTimeout(() => modal.remove(), opts.animationDuration);
+                }
+            });
+        }
+
+        dialog.querySelectorAll('[data-button-id]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const buttonId = btn.getAttribute('data-button-id');
+                if (opts.onButtonClick) {
+                    opts.onButtonClick(buttonId, modal);
+                }
+
+                const buttonConfig = opts.buttons.find(b => b.id === buttonId);
+                if (!buttonConfig || buttonConfig.close !== false) {
+                    modal.close();
+                    if (modal._factoryCreated) {
+                        setTimeout(() => modal.remove(), opts.animationDuration);
+                    }
+                }
+            });
+        });
+
+        // Backdrop click handling
+        if (opts.backdropClose) {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    modal.close();
+                    if (modal._factoryCreated) {
+                        setTimeout(() => modal.remove(), opts.animationDuration);
+                    }
+                }
+            });
+        }
+
+        // Override open to show overlay with animation
+        const originalOpen = modal.open.bind(modal);
+        modal.open = function () {
+            overlay.style.display = 'flex';
+            this._activeModals.push(modal);
+
+            // Trigger animations
+            setTimeout(() => {
+                overlay.style.opacity = '1';
+                dialog.style.transform = 'scale(1) translateY(0)';
+                dialog.style.opacity = '1';
+            }, 10);
+
+            // Call callbacks
+            if (opts.onOpen) opts.onOpen(modal);
+            if (opts.onOpened) {
+                setTimeout(() => opts.onOpened(modal), opts.animationDuration);
+            }
+
+            modal._isOpen = true;
+            return modal;
+        }.bind(this);
+
+        // Override close to hide overlay with animation
+        const originalClose = modal.close.bind(modal);
+        modal.close = function () {
+            if (!modal._isOpen) return modal;
+
+            if (opts.onClose) opts.onClose(modal);
+
+            // Trigger animations
+            overlay.style.opacity = '0';
+            dialog.style.transform = 'scale(0.95) translateY(-10px)';
+            dialog.style.opacity = '0';
+
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                const index = this._activeModals.indexOf(modal);
+                if (index > -1) this._activeModals.splice(index, 1);
+
+                modal._isOpen = false;
+
+                if (opts.onClosed) opts.onClosed(modal);
+            }, opts.animationDuration);
+
+            return modal;
+        }.bind(this);
+
+        return modal;
+    },
+
+    showModal(options) {
+        return new Promise((resolve) => {
+            const modal = this.createModal({
+                ...options,
+                onButtonClick: (buttonId, modalInstance) => {
+                    if (options.onButtonClick) {
+                        options.onButtonClick(buttonId, modalInstance);
+                    }
+                    resolve(buttonId);
+                }
+            });
+
+            modal.open();
+        });
+    }
+};
 
 // ============================================
 // Tabs Component
@@ -5430,8 +5715,16 @@ export const elements = {
         return instance;
     },
 
-    modal(selector, options = {}) {
-        const instance = new Modal(selector, options);
+    modal(selectorOrOptions, options = {}) {
+        // Detect factory mode: first arg is plain object (not string, not DOM element)
+        if (typeof selectorOrOptions === 'object' &&
+          !selectorOrOptions.nodeType &&
+          typeof selectorOrOptions !== 'string') {
+            return ModalFactory.createModal(selectorOrOptions);
+        }
+
+        // Traditional selector mode
+        const instance = new Modal(selectorOrOptions, options);
         if (instance.element) {
             this._instances.set(instance.element, instance);
         }
@@ -5614,6 +5907,10 @@ export const elements = {
     alert: Dialog.alert.bind(Dialog),
     confirm: Dialog.confirm.bind(Dialog),
     prompt: Dialog.prompt.bind(Dialog),
+
+    // Modal factory methods
+    createModal: ModalFactory.createModal.bind(ModalFactory),
+    showModal: ModalFactory.showModal.bind(ModalFactory),
 
     // Note: themeRoller() and pageRoller() are in domma-tools.min.js
     // Load that bundle to enable: Domma.elements.themeRoller(), Domma.elements.pageRoller()

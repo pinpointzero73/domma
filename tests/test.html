@@ -1013,6 +1013,196 @@
             document.body.removeChild(container);
         });
 
+        test('Elements - createModal returns instance', () => {
+          const modal = Domma.elements.createModal({
+            title: 'Test Modal',
+            content: '<p>Test content</p>',
+            size: 'medium'
+          });
+          assert(modal !== null, 'Should create modal instance');
+          assert(typeof modal.open === 'function', 'Should have open method');
+          assert(typeof modal.close === 'function', 'Should have close method');
+          assert(typeof modal.remove === 'function', 'Should have remove method');
+          assert(modal._factoryCreated === true, 'Should be marked as factory created');
+
+          // Cleanup
+          modal.remove();
+        });
+
+        test('Elements - createModal with custom buttons', () => {
+          let clickedButton = null;
+          const modal = Domma.elements.createModal({
+            title: 'Confirm',
+            content: '<p>Are you sure?</p>',
+            buttons: [
+              {id: 'cancel', text: 'Cancel', variant: 'secondary'},
+              {id: 'ok', text: 'OK', variant: 'primary'}
+            ],
+            onButtonClick: (buttonId) => {
+              clickedButton = buttonId;
+            }
+          });
+
+          modal.open();
+          assert(modal.isOpen(), 'Should open modal');
+
+          // Find and click OK button
+          const okButton = document.querySelector('[data-button-id="ok"]');
+          assert(okButton !== null, 'Should create OK button');
+          okButton.click();
+
+          setTimeout(() => {
+            assert(clickedButton === 'ok', 'Should trigger button click handler');
+          }, 50);
+
+          // Cleanup
+          setTimeout(() => modal.remove(), 400);
+        });
+
+        test('Elements - showModal returns promise', async () => {
+          const promise = Domma.elements.showModal({
+            title: 'Test Promise',
+            content: '<p>Click OK</p>',
+            buttons: [{id: 'ok', text: 'OK', variant: 'primary'}]
+          });
+
+          assert(promise instanceof Promise, 'Should return promise');
+
+          // Auto-click button after short delay
+          setTimeout(() => {
+            const okBtn = document.querySelector('[data-button-id="ok"]');
+            if (okBtn) okBtn.click();
+          }, 100);
+
+          const result = await promise;
+          assert(result === 'ok', 'Should resolve with button ID');
+
+          // Cleanup happens automatically after close
+        });
+
+        test('Elements - modal() detects factory mode', () => {
+          // Factory mode - object without selector
+          const factoryModal = Domma.elements.modal({
+            title: 'Factory Mode',
+            content: '<p>Test</p>'
+          });
+          assert(factoryModal._factoryCreated === true, 'Should detect factory mode');
+          factoryModal.remove();
+
+          // Selector mode - string selector
+          const container = document.createElement('div');
+          container.id = 'selector-modal-test';
+          container.className = 'modal';
+          container.innerHTML = '<div class="modal-content">Test</div>';
+          document.body.appendChild(container);
+
+          const selectorModal = Domma.elements.modal('#selector-modal-test');
+          assert(!selectorModal._factoryCreated, 'Should detect selector mode');
+
+          document.body.removeChild(container);
+        });
+
+        test('Elements - modal() detects element mode', () => {
+          const container = document.createElement('div');
+          container.className = 'modal';
+          container.innerHTML = '<div class="modal-content">Test</div>';
+          document.body.appendChild(container);
+
+          const elementModal = Domma.elements.modal(container);
+          assert(!elementModal._factoryCreated, 'Should detect element mode (not factory)');
+          assert(elementModal.element === container, 'Should use provided element');
+
+          document.body.removeChild(container);
+        });
+
+        test('Elements - remove() cleans up DOM', () => {
+          const modal = Domma.elements.createModal({
+            title: 'Remove Test',
+            content: '<p>Testing cleanup</p>'
+          });
+
+          modal.open();
+          const overlay = modal._overlay;
+          assert(document.body.contains(overlay), 'Overlay should be in DOM');
+
+          modal.remove();
+
+          // Check after animation completes
+          setTimeout(() => {
+            assert(!document.body.contains(overlay), 'Overlay should be removed from DOM');
+          }, 400);
+        });
+
+        test('Elements - modal size variants', () => {
+          const sizes = ['small', 'medium', 'large', 'xl'];
+
+          sizes.forEach(size => {
+            const modal = Domma.elements.createModal({
+              title: `${size} Modal`,
+              content: '<p>Test</p>',
+              size: size
+            });
+
+            modal.open();
+            const dialog = document.querySelector('.dm-dialog');
+            assert(dialog.classList.contains(`dm-dialog-${size}`), `Should have dm-dialog-${size} class`);
+            modal.remove();
+          });
+        });
+
+        test('Elements - modal backdrop close', () => {
+          const modal = Domma.elements.createModal({
+            title: 'Backdrop Test',
+            content: '<p>Click backdrop to close</p>',
+            backdropClose: true
+          });
+
+          modal.open();
+          assert(modal.isOpen(), 'Should be open');
+
+          // Click backdrop (overlay)
+          const overlay = modal._overlay;
+          if (overlay) {
+            // Simulate backdrop click (not on dialog)
+            const clickEvent = new MouseEvent('click', {
+              bubbles: true,
+              cancelable: true,
+              target: overlay
+            });
+            overlay.dispatchEvent(clickEvent);
+
+            setTimeout(() => {
+              assert(!modal.isOpen(), 'Should close on backdrop click');
+            }, 100);
+          }
+
+          setTimeout(() => modal.remove(), 400);
+        });
+
+        test('Elements - modal keyboard close', () => {
+          const modal = Domma.elements.createModal({
+            title: 'Keyboard Test',
+            content: '<p>Press Escape to close</p>',
+            keyboard: true
+          });
+
+          modal.open();
+          assert(modal.isOpen(), 'Should be open');
+
+          // Simulate Escape key
+          const escEvent = new KeyboardEvent('keydown', {
+            key: 'Escape',
+            keyCode: 27,
+            bubbles: true
+          });
+          document.dispatchEvent(escEvent);
+
+          setTimeout(() => {
+            assert(!modal.isOpen(), 'Should close on Escape key');
+            modal.remove();
+          }, 100);
+        });
+
         test('Elements - tabs create', () => {
             const container = document.createElement('div');
             container.id = 'test-tabs';

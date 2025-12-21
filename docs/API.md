@@ -805,3 +805,376 @@ Domma.utils.mean([1,2,3,4,5]);
 Domma.utils.clamp(val, min, max);
 Domma.utils.random(1, 10);
 ```
+
+---
+
+## Elements (`Domma.elements`)
+
+UI component library providing 25+ interactive elements including modals, tabs, carousels, tooltips, and more.
+
+### Modal
+
+Create and control modal dialogs with three initialization modes: selector-based, factory mode, and promise mode.
+
+#### `elements.modal(selectorOrOptions, options)`
+
+Creates a modal instance. Auto-detects mode based on first argument type.
+
+**Selector Mode** (existing behavior - 100% backward compatible):
+
+```javascript
+// HTML-based modal
+const modal = Domma.elements.modal('#my-modal', {
+  backdrop: true,
+  backdropClose: true,
+  keyboard: true,
+  onOpen: () => console.log('Opened'),
+  onClose: () => console.log('Closed')
+});
+
+modal.open();
+modal.close();
+modal.toggle();
+modal.isOpen(); // Returns boolean
+```
+
+**Factory Mode** (new - programmatic creation):
+
+```javascript
+// Create modal without HTML
+const modal = Domma.elements.modal({
+  title: 'Welcome',
+  content: '<p>Modal content</p>',
+  size: 'medium',
+  buttons: [
+    {id: 'close', text: 'Close', variant: 'primary'}
+  ],
+  onButtonClick: (buttonId, modal) => {
+    console.log('Clicked:', buttonId);
+  }
+});
+
+modal.open();
+```
+
+**Options** (all modes):
+
+| Option              | Type     | Default  | Description                      |
+|---------------------|----------|----------|----------------------------------|
+| `backdrop`          | Boolean  | `true`   | Show semi-transparent backdrop   |
+| `backdropClose`     | Boolean  | `true`   | Close when clicking backdrop     |
+| `keyboard`          | Boolean  | `true`   | Close with Escape key            |
+| `animation`         | String   | `'fade'` | Animation type                   |
+| `animationDuration` | Number   | `300`    | Animation duration (ms)          |
+| `closeButton`       | Boolean  | `true`   | Show close button (×)            |
+| `onOpen`            | Function | `null`   | Called when modal opens          |
+| `onOpened`          | Function | `null`   | Called after open animation      |
+| `onClose`           | Function | `null`   | Called when modal starts closing |
+| `onClosed`          | Function | `null`   | Called after close animation     |
+
+**Factory Mode Additional Options**:
+
+| Option          | Type     | Default    | Description                                           |
+|-----------------|----------|------------|-------------------------------------------------------|
+| `size`          | String   | `'medium'` | Modal size: `'small'`, `'medium'`, `'large'`, `'xl'`  |
+| `title`         | String   | `''`       | Modal title                                           |
+| `content`       | String   | `''`       | Modal body HTML content                               |
+| `footer`        | String   | `''`       | Modal footer HTML                                     |
+| `buttons`       | Array    | `[]`       | Button configurations (see below)                     |
+| `centered`      | Boolean  | `true`     | Vertically center modal                               |
+| `scrollable`    | Boolean  | `false`    | Enable body scrolling for long content                |
+| `className`     | String   | `''`       | Custom CSS class for modal                            |
+| `headerClass`   | String   | `''`       | Custom CSS class for header                           |
+| `bodyClass`     | String   | `''`       | Custom CSS class for body                             |
+| `footerClass`   | String   | `''`       | Custom CSS class for footer                           |
+| `onButtonClick` | Function | `null`     | Called when button clicked: `(buttonId, modal) => {}` |
+
+**Button Configuration**:
+
+```javascript
+{
+  id: 'save',               // Button identifier (returned in callbacks/promises)
+    text
+:
+  'Save Changes',     // Button text
+    variant
+:
+  'primary',       // Button style: 'primary', 'secondary', 'danger', 'success', etc.
+    close
+:
+  true               // Auto-close modal on click (default: true)
+}
+```
+
+**Methods**:
+
+- `open()` - Opens the modal
+- `close()` - Closes the modal
+- `toggle()` - Toggles modal state
+- `isOpen()` - Returns `true` if modal is open
+- `destroy()` - Removes event listeners
+- `remove()` - Completely removes modal from DOM (factory modals)
+
+---
+
+#### `elements.createModal(options)`
+
+Creates a modal programmatically without requiring existing HTML. Returns a Modal instance.
+
+**Parameters**:
+
+- `options` (Object) - Configuration object (see Factory Mode options above)
+
+**Returns**: `Modal` instance with `.open()`, `.close()`, `.remove()` methods
+
+**Example - Basic Usage**:
+
+```javascript
+const modal = Domma.elements.createModal({
+  title: 'Notification',
+  content: '<p>Your changes have been saved!</p>',
+  size: 'small',
+  buttons: [
+    {id: 'ok', text: 'OK', variant: 'primary'}
+  ]
+});
+
+modal.open();
+```
+
+**Example - Custom Buttons**:
+
+```javascript
+const modal = Domma.elements.createModal({
+  title: 'Confirm Action',
+  content: '<p>Are you sure you want to proceed?</p>',
+  buttons: [
+    {id: 'cancel', text: 'Cancel', variant: 'secondary'},
+    {id: 'confirm', text: 'Confirm', variant: 'primary'}
+  ],
+  onButtonClick: (buttonId, modal) => {
+    if (buttonId === 'confirm') {
+      console.log('Action confirmed');
+      performAction();
+    }
+  }
+});
+
+modal.open();
+```
+
+**Example - Dynamic Content**:
+
+```javascript
+async function showUserProfile(userId) {
+  const modal = Domma.elements.createModal({
+    title: 'User Profile',
+    content: '<p>Loading...</p>',
+    size: 'large'
+  });
+
+  modal.open();
+
+  // Fetch user data
+  const user = await Domma.http.get(`/api/users/${userId}`);
+
+  // Update modal content
+  const content = `
+        <h4>${user.name}</h4>
+        <p>Email: ${user.email}</p>
+        <p>Role: ${user.role}</p>
+    `;
+
+  $(modal.element).find('.dm-dialog-body').html(content);
+}
+```
+
+**Example - Size Variants**:
+
+```javascript
+// Small (400px max-width)
+Domma.elements.createModal({
+  title: 'Quick Message',
+  content: '<p>Brief notification</p>',
+  size: 'small'
+}).open();
+
+// Medium (600px) - default
+Domma.elements.createModal({
+  title: 'Standard Dialog',
+  size: 'medium'
+}).open();
+
+// Large (800px)
+Domma.elements.createModal({
+  title: 'Contact Form',
+  content: '<form>...</form>',
+  size: 'large'
+}).open();
+
+// Extra Large (1000px)
+Domma.elements.createModal({
+  title: 'Data Table',
+  content: '<table>...</table>',
+  size: 'xl'
+}).open();
+```
+
+**Example - Scrollable Content**:
+
+```javascript
+Domma.elements.createModal({
+  title: 'Terms and Conditions',
+  content: longHtmlContent,  // Very long content
+  size: 'large',
+  scrollable: true,          // Body scrolls independently
+  buttons: [
+    {id: 'decline', text: 'Decline', variant: 'secondary'},
+    {id: 'accept', text: 'Accept', variant: 'primary'}
+  ]
+}).open();
+```
+
+---
+
+#### `elements.showModal(options)`
+
+Shows a modal and returns a Promise that resolves with the button ID that was clicked. Perfect for async/await
+workflows.
+
+**Parameters**:
+
+- `options` (Object) - Same as `createModal()` options
+
+**Returns**: `Promise<string>` - Resolves with the clicked button's `id`
+
+**Example - Confirmation Dialog**:
+
+```javascript
+async function deleteItem() {
+  const result = await Domma.elements.showModal({
+    title: 'Confirm Deletion',
+    content: '<p>Are you sure you want to delete this item?</p>',
+    buttons: [
+      {id: 'cancel', text: 'Cancel', variant: 'secondary'},
+      {id: 'delete', text: 'Delete', variant: 'danger'}
+    ]
+  });
+
+  if (result === 'delete') {
+    await performDeletion();
+    Domma.elements.showToast('Item deleted', {type: 'success'});
+  }
+}
+```
+
+**Example - Multiple Choice**:
+
+```javascript
+async function selectSize() {
+  const size = await Domma.elements.showModal({
+    title: 'Select Size',
+    content: '<p>Choose your preferred size:</p>',
+    buttons: [
+      {id: 'small', text: 'Small'},
+      {id: 'medium', text: 'Medium'},
+      {id: 'large', text: 'Large'},
+      {id: 'xl', text: 'Extra Large'}
+    ]
+  });
+
+  console.log('Selected:', size); // 'small', 'medium', 'large', or 'xl'
+  return size;
+}
+```
+
+**Example - Chained Confirmations**:
+
+```javascript
+async function dangerousOperation() {
+  // First confirmation
+  const firstConfirm = await Domma.elements.showModal({
+    title: 'Warning',
+    content: '<p>This will permanently delete all data.</p>',
+    buttons: [
+      {id: 'cancel', text: 'Cancel', variant: 'secondary'},
+      {id: 'continue', text: 'Continue', variant: 'warning'}
+    ]
+  });
+
+  if (firstConfirm !== 'continue') return;
+
+  // Second confirmation
+  const secondConfirm = await Domma.elements.showModal({
+    title: 'Final Confirmation',
+    content: '<p class="text-danger">Are you absolutely sure?</p>',
+    buttons: [
+      {id: 'no', text: 'No, Go Back', variant: 'secondary'},
+      {id: 'yes', text: 'Yes, Delete Everything', variant: 'danger'}
+    ]
+  });
+
+  if (secondConfirm === 'yes') {
+    await performDeletion();
+  }
+}
+```
+
+**Example - Form Input with Promise**:
+
+```javascript
+async function getUserInput() {
+  const modal = Domma.elements.createModal({
+    title: 'Enter Details',
+    content: `
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="user-name" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="user-email" class="form-input">
+            </div>
+        `,
+    buttons: [
+      {id: 'cancel', text: 'Cancel', variant: 'secondary'},
+      {id: 'submit', text: 'Submit', variant: 'primary'}
+    ]
+  });
+
+  return new Promise((resolve) => {
+    modal.options.onButtonClick = (buttonId) => {
+      if (buttonId === 'submit') {
+        resolve({
+          name: $('#user-name').val(),
+          email: $('#user-email').val()
+        });
+      } else {
+        resolve(null);
+      }
+    };
+    modal.open();
+  });
+}
+
+// Usage
+const userData = await getUserInput();
+if (userData) {
+  console.log('User data:', userData);
+}
+```
+
+---
+
+### Other UI Components
+
+The Elements namespace includes 25+ additional components. For complete documentation, see:
+
+- **Interactive**: `tabs`, `accordion`, `carousel`, `dropdown`, `tooltip`
+- **Forms**: `autocomplete`, `pillbox`, `buttonGroup`
+- **Feedback**: `toast`, `dialog`, `loader`, `badge`, `notification`
+- **Navigation**: `navbar`, `breadcrumbs`, `backToTop`
+- **Utilities**: `timer`, `alarm`, `card`
+- **Tools**: `editor`, `themeRoller`, `pageRoller` (in tools bundle)
+
+See [DommaDocumentation.md](./DommaDocumentation.md#elements) for full component reference.

@@ -268,6 +268,24 @@ export const files = {
     'book-closed': {
         viewBox: '0 0 24 24',
         path: 'M4 19.5A2.5 2.5 0 016.5 17H20M4 19.5A2.5 2.5 0 006.5 22H20v-5M6 3h14v16H6a2 2 0 01-2-2V5a2 2 0 012-2z',
+      stroke: 'currentColor',
+      fill: 'none',
+      strokeWidth: 2,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round'
+    },
+  'folder-plus': {
+    viewBox: '0 0 24 24',
+    path: 'M9 13h6m-3-3v6M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z',
+    stroke: 'currentColor',
+    fill: 'none',
+    strokeWidth: 2,
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round'
+  },
+  'folder-minus': {
+    viewBox: '0 0 24 24',
+    path: 'M9 13h6M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z',
         stroke: 'currentColor',
         fill: 'none',
         strokeWidth: 2,

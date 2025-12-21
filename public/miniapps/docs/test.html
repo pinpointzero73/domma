@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Docs Test</title>
+  <style>
+      body {
+          font-family: sans-serif;
+          padding: 2rem;
+          background: #f0f0f0;
+      }
+
+      .test-box {
+          background: white;
+          padding: 2rem;
+          border-radius: 8px;
+          margin-bottom: 1rem;
+      }
+  </style>
+</head>
+<body>
+<h1>Domma Docs Test Page</h1>
+
+<div class="test-box">
+  <h2>✓ HTML is loading</h2>
+  <p>If you can see this, the HTML file is being served correctly.</p>
+</div>
+
+<div class="test-box">
+  <h2>Testing CSS</h2>
+  <p>CSS Path Test: <code>../../dist/domma.css</code></p>
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <button class="btn btn-primary">Domma Button</button>
+  <p><small>If button above is styled, CSS is loading.</small></p>
+</div>
+
+<div class="test-box">
+  <h2>Testing JavaScript</h2>
+  <p>Domma loaded: <span id="dommaStatus">...</span></p>
+  <p>DocsApp loaded: <span id="appStatus">...</span></p>
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="./dist/app.min.js"></script>
+<script>
+  setTimeout(() => {
+    document.getElementById('dommaStatus').textContent = typeof Domma !== 'undefined' ? '✓ YES' : '✗ NO';
+    document.getElementById('appStatus').textContent = typeof DocsApp !== 'undefined' ? '✓ YES' : '✗ NO';
+
+    if (typeof Domma !== 'undefined') {
+      console.log('✓ Domma loaded successfully');
+      console.log('Domma version:', Domma.version || 'unknown');
+    }
+
+    if (typeof DocsApp !== 'undefined') {
+      console.log('✓ DocsApp loaded successfully');
+    }
+  }, 500);
+</script>
+</body>
+</html>
