@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../dist/domma.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-  <link rel="stylesheet" href="../../css/domma-showcase.css">
+  <link rel="stylesheet" href="../css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="subpage">
 
@@ -24,7 +24,7 @@
 </section>
 
 <main class="container py-8">
-  <div class="grid grid-cols-1 gap-6 grid-auto-fit">
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
 
         <!-- Accordion -->
     <a href="accordion/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
@@ -367,6 +367,24 @@
                 <code>elements.pillbox('#tags', { maxItems: 5 })</code>
             </div>
         </a>
+
+    <!-- TreeView -->
+    <a href="treeview/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="folder"></div>
+        <h3 class="card-title">TreeView</h3>
+        <p class="card-text">Hierarchical tree view with expand/collapse, selection, and custom rendering.</p>
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+          <li>Expand/collapse nodes</li>
+          <li>Selection management</li>
+          <li>Custom rendering & badges</li>
+          <li>Action buttons</li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <code>elements.treeView('#tree', { data })</code>
+      </div>
+    </a>
 
         <!-- Editor -->
     <a href="editor/index.html" class="card card-hover h-full flex flex-col no-underline text-inherit">

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TreeView - Domma Elements</title>
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+  <link rel="stylesheet" href="../../../dist/domma.css">
+  <link rel="stylesheet" href="../../../dist/elements.css">
+  <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
+  <style>
+      .tree-demo {
+          max-width: 500px;
+          background: white;
+          border: 1px solid var(--dm-slate-200);
+          border-radius: 8px;
+          padding: 1rem;
+          margin: 1.5rem 0;
+      }
+
+      [data-theme="dark"] .tree-demo {
+          background: var(--dm-slate-900);
+          border-color: var(--dm-slate-700);
+      }
+
+      .demo-controls {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+          margin-bottom: 1rem;
+      }
+  </style>
+</head>
+<body class="dm-theme-light" data-layout="showcase" data-layout-variant="element">
+
+<main class="container py-8">
+
+  <!-- SECTION 1: Overview -->
+  <section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+      <h1 class="text-3xl font-semibold m-0">TreeView</h1>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        TreeView provides a hierarchical tree structure for displaying nested data with expand/collapse functionality,
+        selection management, and customisable rendering. Perfect for file systems, folder hierarchies, navigation
+        menus,
+        and any nested data structure.
+      </p>
+
+      <h4 class="category-title">Key Features</h4>
+      <ul class="mb-4">
+        <li>Automatic tree building from flat data with parent_id relationships</li>
+        <li>Expand/collapse nodes with smooth animations</li>
+        <li>Single or multi-select node selection</li>
+        <li>Custom node rendering with badges and icons</li>
+        <li>Action buttons on hover for CRUD operations</li>
+        <li>Comprehensive API for programmatic control</li>
+        <li>Event callbacks for all interactions</li>
+        <li>Theme-aware with light/dark mode support</li>
+      </ul>
+
+      <h4 class="category-title">When to Use TreeView</h4>
+      <ul class="mb-4">
+        <li><strong>File Systems</strong>: Display folders and files with hierarchical structure</li>
+        <li><strong>Navigation</strong>: Multi-level navigation menus and sitemap structures</li>
+        <li><strong>Organisation</strong>: Category hierarchies, taxonomies, org charts</li>
+        <li><strong>Data Management</strong>: Hierarchical data browsing and selection</li>
+      </ul>
+
+      <h4 class="category-title">Basic Usage</h4>
+      <pre class="code-block language-javascript">
+// Simple hierarchical data
+const folders = [
+    { id: 1, name: 'Documents', parent_id: null },
+    { id: 2, name: 'Work', parent_id: 1 },
+    { id: 3, name: 'Personal', parent_id: 1 },
+    { id: 4, name: 'Reports', parent_id: 2 }
+];
+
+// Create TreeView
+const tree = Domma.elements.treeView('#tree', {
+    data: folders,
+    expandedByDefault: true,
+    selectable: true,
+    onSelect: (nodeId, node) => {
+        console.log('Selected:', node.name);
+    }
+});
+
+// Control programmatically
+tree.expandAll();      // Expand all nodes
+tree.collapseAll();    // Collapse all nodes
+tree.select(nodeId);   // Select a node
+tree.refresh();        // Re-render tree
+</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 2: Basic Tree -->
+  <section class="card mb-6" data-section="Basic Tree">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Basic Tree</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        A simple hierarchical tree with default styling. Click nodes to select them, click the chevron to
+        expand/collapse.
+      </p>
+
+      <div class="tree-demo">
+        <div id="tree1"></div>
+      </div>
+
+      <pre class="code-block language-javascript">
+const tree = Domma.elements.treeView('#tree1', {
+    data: [
+        { id: 1, name: 'Root', parent_id: null },
+        { id: 2, name: 'Child 1', parent_id: 1 },
+        { id: 3, name: 'Child 2', parent_id: 1 },
+        { id: 4, name: 'Grandchild', parent_id: 2 }
+    ]
+});
+</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 3: With Icons -->
+  <section class="card mb-6" data-section="With Icons">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">With Icons</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Add custom icons to tree nodes using the <code>icon</code> property. Uses Domma's icon system.
+      </p>
+
+      <div class="tree-demo">
+        <div id="tree2"></div>
+      </div>
+
+      <pre class="code-block language-javascript">
+Domma.elements.treeView('#tree2', {
+    data: [
+        { id: 1, name: 'Documents', parent_id: null, icon: 'folder' },
+        { id: 2, name: 'Images', parent_id: null, icon: 'folder' },
+        { id: 3, name: 'Report.pdf', parent_id: 1, icon: 'file-text' },
+        { id: 4, name: 'Photo.jpg', parent_id: 2, icon: 'image' }
+    ]
+});
+</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 4: With Badges -->
+  <section class="card mb-6" data-section="With Badges">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">With Badges</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Display counts or status indicators using the <code>getBadge</code> callback. Perfect for showing item counts.
+      </p>
+
+      <div class="tree-demo">
+        <div id="tree3"></div>
+      </div>
+
+      <pre class="code-block language-javascript">
+Domma.elements.treeView('#tree3', {
+    data: [
+        { id: 1, name: 'Projects', parent_id: null, count: 12 },
+        { id: 2, name: 'Work', parent_id: 1, count: 5 },
+        { id: 3, name: 'Personal', parent_id: 1, count: 7 },
+        { id: 4, name: 'Archive', parent_id: null, count: 25 }
+    ],
+    getBadge: (node) => node.count || null
+});
+</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 5: With Actions -->
+  <section class="card mb-6" data-section="With Actions">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">With Action Buttons</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Add action buttons that appear on hover. Perfect for CRUD operations like add, edit, and delete.
+      </p>
+
+      <div class="tree-demo">
+        <div id="tree4"></div>
+      </div>
+
+      <pre class="code-block language-javascript">
+Domma.elements.treeView('#tree4', {
+    data: [
+        { id: 1, name: 'Folder 1', parent_id: null },
+        { id: 2, name: 'Folder 2', parent_id: null },
+        { id: 3, name: 'Subfolder', parent_id: 1 }
+    ],
+    actions: [
+        { name: 'add', icon: 'plus', tooltip: 'Add subfolder' },
+        { name: 'edit', icon: 'edit', tooltip: 'Edit' },
+        { name: 'delete', icon: 'trash', tooltip: 'Delete' }
+    ],
+    onAction: (action, nodeId, node) => {
+        Domma.elements.toast(`${action}: ${node.name}`, { type: 'info' });
+    }
+});
+</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 6: Custom Rendering -->
+  <section class="card mb-6" data-section="Custom Rendering">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Custom Node Rendering</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Fully customise node appearance using the <code>renderNode</code> callback. Add file sizes, metadata, or any
+        custom HTML.
+      </p>
+
+      <div class="tree-demo">
+        <div id="tree5"></div>
+      </div>
+
+      <pre class="code-block language-javascript">
+Domma.elements.treeView('#tree5', {
+    data: [
+        { id: 1, name: 'index.js', parent_id: null, icon: 'file-text', size: '2.4 KB' },
+        { id: 2, name: 'package.json', parent_id: null, icon: 'package', size: '1.2 KB' },
+        { id: 3, name: 'src', parent_id: null, icon: 'folder', size: '' },
+        { id: 4, name: 'utils.js', parent_id: 3, icon: 'file-text', size: '3.1 KB' }
+    ],
+    renderNode: (node, depth, state) => {
+        const iconColor = node.icon === 'folder' ? '#f59e0b' : '#6b7280';
+        return `
+            &lt;span data-icon="${node.icon}" style="color: ${iconColor};"&gt;&lt;/span&gt;
+            &lt;span style="flex: 1;"&gt;${node.name}&lt;/span&gt;
+            ${node.size ? `&lt;span style="color: var(--dm-slate-500); font-size: 0.75rem;"&gt;${node.size}&lt;/span&gt;` : ''}
+        `;
+    }
+});
+</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 7: Event Handling -->
+  <section class="card mb-6" data-section="Events">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Event Handling</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        React to user interactions with event callbacks. Monitor selections, expansions, and custom actions.
+      </p>
+
+      <div class="tree-demo">
+        <div id="tree6"></div>
+      </div>
+
+      <div class="alert alert-info mb-4">
+        <strong>Event Log:</strong>
+        <div id="eventLog"
+             style="font-family: monospace; font-size: 0.875rem; margin-top: 0.5rem; max-height: 150px; overflow-y: auto;">
+          Click tree nodes to see events...
+        </div>
+      </div>
+
+      <pre class="code-block language-javascript">
+Domma.elements.treeView('#tree6', {
+    data: [
+        { id: 1, name: 'Node 1', parent_id: null },
+        { id: 2, name: 'Node 2', parent_id: null },
+        { id: 3, name: 'Child', parent_id: 1 }
+    ],
+    onSelect: (nodeId, node) => {
+        console.log('Selected:', node.name);
+    },
+    onExpand: (nodeId, node) => {
+        console.log('Expanded:', node.name);
+    },
+    onCollapse: (nodeId, node) => {
+        console.log('Collapsed:', node.name);
+    }
+});
+</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 8: API Methods -->
+  <section class="card mb-6" data-section="API Methods">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Programmatic Control</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Control the tree programmatically using the comprehensive API. Expand, collapse, select, and navigate nodes.
+      </p>
+
+      <div class="demo-controls">
+        <button class="btn btn-sm btn-primary" onclick="tree7.expandAll()">Expand All</button>
+        <button class="btn btn-sm btn-secondary" onclick="tree7.collapseAll()">Collapse All</button>
+        <button class="btn btn-sm btn-success" onclick="tree7.select(2)">Select Node 2</button>
+        <button class="btn btn-sm btn-info" onclick="tree7.deselectAll()">Deselect All</button>
+        <button class="btn btn-sm btn-warning" onclick="showSelected()">Get Selected</button>
+      </div>
+
+      <div class="tree-demo">
+        <div id="tree7"></div>
+      </div>
+
+      <pre class="code-block language-javascript">
+const tree = Domma.elements.treeView('#tree', { data });
+
+// Expansion
+tree.expandAll();           // Expand all nodes
+tree.collapseAll();         // Collapse all nodes
+tree.toggle(nodeId);        // Toggle specific node
+tree.expand(nodeId);        // Expand specific node
+tree.collapse(nodeId);      // Collapse specific node
+
+// Selection
+tree.select(nodeId);        // Select a node
+tree.deselect(nodeId);      // Deselect a node
+tree.selectAll();           // Select all (multiSelect only)
+tree.deselectAll();         // Clear all selections
+tree.getSelected();         // Get array of selected IDs
+
+// Navigation
+tree.getParent(nodeId);     // Get parent node
+tree.getChildren(nodeId);   // Get child nodes
+tree.getAncestors(nodeId);  // Get path to root
+tree.getDescendants(nodeId);// Get all descendants
+tree.getLevel(nodeId);      // Get depth level
+
+// Data
+tree.setData(newData);      // Replace tree data
+tree.refresh();             // Re-render tree
+tree.updateNode(id, data);  // Update specific node
+tree.getData();             // Get hierarchical data
+tree.getFlatData();         // Get flat array
+
+// Utilities
+tree.find(predicate);       // Find first matching node
+tree.filter(predicate);     // Find all matching nodes
+tree.scrollToNode(nodeId);  // Scroll into view
+</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 9: Configuration Options -->
+  <section class="card mb-6" data-section="Options">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Configuration Options</h2>
+    </div>
+    <div class="card-body">
+      <h4 class="category-title">Data Configuration</h4>
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th>Option</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>data</code></td>
+          <td>Array</td>
+          <td>[]</td>
+          <td>Flat or hierarchical array of nodes</td>
+        </tr>
+        <tr>
+          <td><code>idKey</code></td>
+          <td>String</td>
+          <td>'id'</td>
+          <td>Property name for node ID</td>
+        </tr>
+        <tr>
+          <td><code>parentKey</code></td>
+          <td>String</td>
+          <td>'parent_id'</td>
+          <td>Property name for parent reference</td>
+        </tr>
+        <tr>
+          <td><code>labelKey</code></td>
+          <td>String</td>
+          <td>'name'</td>
+          <td>Property name for node label</td>
+        </tr>
+        <tr>
+          <td><code>iconKey</code></td>
+          <td>String</td>
+          <td>'icon'</td>
+          <td>Property name for icon name</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <h4 class="category-title mt-4">Behaviour Options</h4>
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th>Option</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>expandedByDefault</code></td>
+          <td>Boolean</td>
+          <td>true</td>
+          <td>Expand all nodes initially</td>
+        </tr>
+        <tr>
+          <td><code>selectable</code></td>
+          <td>Boolean</td>
+          <td>true</td>
+          <td>Enable node selection</td>
+        </tr>
+        <tr>
+          <td><code>multiSelect</code></td>
+          <td>Boolean</td>
+          <td>false</td>
+          <td>Allow multiple selected nodes</td>
+        </tr>
+        <tr>
+          <td><code>indentSize</code></td>
+          <td>Number</td>
+          <td>1.5</td>
+          <td>Indentation per level (rem)</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <h4 class="category-title mt-4">Callback Options</h4>
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th>Option</th>
+          <th>Parameters</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>renderNode</code></td>
+          <td>(node, depth, state)</td>
+          <td>Custom node rendering function</td>
+        </tr>
+        <tr>
+          <td><code>getBadge</code></td>
+          <td>(node)</td>
+          <td>Return badge content for node</td>
+        </tr>
+        <tr>
+          <td><code>onSelect</code></td>
+          <td>(nodeId, node, event)</td>
+          <td>Called when node is selected</td>
+        </tr>
+        <tr>
+          <td><code>onDeselect</code></td>
+          <td>(nodeId, node, event)</td>
+          <td>Called when node is deselected</td>
+        </tr>
+        <tr>
+          <td><code>onExpand</code></td>
+          <td>(nodeId, node, event)</td>
+          <td>Called when node expands</td>
+        </tr>
+        <tr>
+          <td><code>onCollapse</code></td>
+          <td>(nodeId, node, event)</td>
+          <td>Called when node collapses</td>
+        </tr>
+        <tr>
+          <td><code>onAction</code></td>
+          <td>(action, nodeId, node, event)</td>
+          <td>Called when action button clicked</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+  // Initialize syntax highlighting
+  if (window.DommaSyntax) {
+    DommaSyntax.scan();
+  }
+
+  // Tree 1: Basic
+  const tree1 = Domma.elements.treeView('#tree1', {
+    data: [
+      {id: 1, name: 'Root', parent_id: null},
+      {id: 2, name: 'Child 1', parent_id: 1},
+      {id: 3, name: 'Child 2', parent_id: 1},
+      {id: 4, name: 'Grandchild', parent_id: 2}
+    ]
+  });
+
+  // Tree 2: With Icons
+  Domma.elements.treeView('#tree2', {
+    data: [
+      {id: 1, name: 'Documents', parent_id: null, icon: 'folder'},
+      {id: 2, name: 'Images', parent_id: null, icon: 'folder'},
+      {id: 3, name: 'Report.pdf', parent_id: 1, icon: 'file-text'},
+      {id: 4, name: 'Photo.jpg', parent_id: 2, icon: 'image'}
+    ]
+  });
+
+  // Tree 3: With Badges
+  Domma.elements.treeView('#tree3', {
+    data: [
+      {id: 1, name: 'Projects', parent_id: null, count: 12},
+      {id: 2, name: 'Work', parent_id: 1, count: 5},
+      {id: 3, name: 'Personal', parent_id: 1, count: 7},
+      {id: 4, name: 'Archive', parent_id: null, count: 25}
+    ],
+    getBadge: (node) => node.count || null
+  });
+
+  // Tree 4: With Actions
+  Domma.elements.treeView('#tree4', {
+    data: [
+      {id: 1, name: 'Folder 1', parent_id: null},
+      {id: 2, name: 'Folder 2', parent_id: null},
+      {id: 3, name: 'Subfolder', parent_id: 1}
+    ],
+    actions: [
+      {name: 'add', icon: 'plus', tooltip: 'Add subfolder'},
+      {name: 'edit', icon: 'edit', tooltip: 'Edit'},
+      {name: 'delete', icon: 'trash', tooltip: 'Delete'}
+    ],
+    onAction: (action, nodeId, node) => {
+      Domma.elements.toast(`${action}: ${node.name}`, {type: 'info'});
+    }
+  });
+
+  // Tree 5: Custom Rendering
+  Domma.elements.treeView('#tree5', {
+    data: [
+      {id: 1, name: 'index.js', parent_id: null, icon: 'file-text', size: '2.4 KB'},
+      {id: 2, name: 'package.json', parent_id: null, icon: 'package', size: '1.2 KB'},
+      {id: 3, name: 'src', parent_id: null, icon: 'folder', size: ''},
+      {id: 4, name: 'utils.js', parent_id: 3, icon: 'file-text', size: '3.1 KB'}
+    ],
+    renderNode: (node, depth, state) => {
+      const iconColor = node.icon === 'folder' ? '#f59e0b' : '#6b7280';
+      return `
+                <span data-icon="${node.icon}" style="color: ${iconColor};"></span>
+                <span style="flex: 1;">${node.name}</span>
+                ${node.size ? `<span style="color: var(--dm-slate-500); font-size: 0.75rem;">${node.size}</span>` : ''}
+            `;
+    }
+  });
+
+  // Tree 6: Events
+  const eventLog = document.getElementById('eventLog');
+
+  function logEvent(message) {
+    const time = new Date().toLocaleTimeString();
+    eventLog.innerHTML = `[${time}] ${message}<br>` + eventLog.innerHTML;
+  }
+
+  Domma.elements.treeView('#tree6', {
+    data: [
+      {id: 1, name: 'Node 1', parent_id: null},
+      {id: 2, name: 'Node 2', parent_id: null},
+      {id: 3, name: 'Child', parent_id: 1}
+    ],
+    onSelect: (nodeId, node) => {
+      logEvent(`Selected: ${node.name}`);
+    },
+    onExpand: (nodeId, node) => {
+      logEvent(`Expanded: ${node.name}`);
+    },
+    onCollapse: (nodeId, node) => {
+      logEvent(`Collapsed: ${node.name}`);
+    }
+  });
+
+  // Tree 7: API Methods
+  window.tree7 = Domma.elements.treeView('#tree7', {
+    data: [
+      {id: 1, name: 'Node 1', parent_id: null},
+      {id: 2, name: 'Node 2', parent_id: null},
+      {id: 3, name: 'Node 3', parent_id: null},
+      {id: 4, name: 'Child 1-1', parent_id: 1},
+      {id: 5, name: 'Child 2-1', parent_id: 2},
+      {id: 6, name: 'Grandchild', parent_id: 4}
+    ]
+  });
+
+  function showSelected() {
+    const selected = tree7.getSelected();
+    if (selected.length > 0) {
+      Domma.elements.toast(`Selected IDs: ${selected.join(', ')}`, {type: 'success'});
+    } else {
+      Domma.elements.toast('No nodes selected', {type: 'info'});
+    }
+  }
+
+  // Initialize icons
+  if (Domma.icons) {
+    Domma.icons.scan();
+  }
+</script>
+
+</body>
+</html>
