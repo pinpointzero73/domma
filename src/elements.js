@@ -6,6 +6,7 @@
  */
 
 import Component from './component.js';
+import TreeView from './treeview.js';
 
 // ============================================
 // Card Component
@@ -5888,6 +5889,14 @@ export const elements = {
         return instance;
     },
 
+    treeView(selector, options = {}) {
+        const instance = new TreeView(selector, options);
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
     // Toast wrapper - callable as function or use static methods
     toast: Object.assign(
         (message, options = {}) => Toast.show(message, options),
@@ -5956,5 +5965,5 @@ export const elements = {
     }
 };
 
-// Export DesktopNotification class for direct access to static methods
-export {DesktopNotification};
+// Export component classes for direct access to static methods
+export {DesktopNotification, TreeView};

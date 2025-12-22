@@ -2,8 +2,8 @@
  * Domma Elements CSS v0.8.0b
  * Dynamic Object Manipulation & Modeling API
  * (c) 2025 Darryl Waterhouse & DCBW-IT
- * Built: 2025-12-21T15:06:26.027Z
- * Commit: 19ddd3c
+ * Built: 2025-12-22T11:27:04.942Z
+ * Commit: e7d1d1d
  */
 
 /**
@@ -3442,4 +3442,146 @@ code {
 .font-mono {
     font-family: var(--dm-font-mono, monospace) !important;
     font-size: 0.875rem;
+}
+
+/* ============================================
+   TREEVIEW COMPONENT
+   ============================================ */
+
+.dm-treeview {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.dm-treeview-node {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    border-radius: var(--dm-radius-md);
+    cursor: pointer;
+    transition: background-color var(--dm-transition-fast);
+    position: relative;
+}
+
+.dm-treeview-node:hover {
+    background-color: var(--dm-slate-100);
+}
+
+.dm-treeview-node-selected {
+    background-color: var(--dm-blue-50);
+    color: var(--dm-primary);
+    font-weight: 500;
+}
+
+.dm-treeview-node-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.dm-treeview-toggle {
+    background: transparent;
+    border: none;
+    color: var(--dm-slate-600);
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--dm-transition-fast);
+}
+
+.dm-treeview-toggle.dm-treeview-expanded {
+    transform: rotate(0deg);
+}
+
+.dm-treeview-toggle.dm-treeview-collapsed {
+    transform: rotate(-90deg);
+}
+
+.dm-treeview-spacer {
+    width: 20px;
+    display: inline-block;
+}
+
+.dm-treeview-icon {
+    color: var(--dm-slate-600);
+    display: flex;
+    align-items: center;
+}
+
+.dm-treeview-node-selected .dm-treeview-icon {
+    color: var(--dm-primary);
+}
+
+.dm-treeview-label {
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+
+.dm-treeview-badge {
+    background-color: var(--dm-primary);
+    color: var(--dm-white);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--dm-radius-full);
+    min-width: 1.5rem;
+    text-align: center;
+    margin-left: auto;
+}
+
+.dm-treeview-children {
+    margin-left: 0;
+}
+
+.dm-treeview-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    opacity: 0;
+    transition: opacity var(--dm-transition-fast);
+}
+
+.dm-treeview-node:hover .dm-treeview-actions {
+    opacity: 1;
+}
+
+.dm-treeview-action {
+    background: transparent;
+    border: none;
+    color: var(--dm-slate-600);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: var(--dm-radius-sm);
+    display: flex;
+    align-items: center;
+    transition: all var(--dm-transition-fast);
+}
+
+.dm-treeview-action:hover {
+    background-color: var(--dm-slate-200);
+    color: var(--dm-slate-900);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .dm-treeview-node:hover {
+    background-color: var(--dm-slate-800);
+}
+
+[data-theme="dark"] .dm-treeview-node-selected {
+    background-color: var(--dm-slate-800);
+}
+
+[data-theme="dark"] .dm-treeview-action:hover {
+    background-color: var(--dm-slate-700);
 }

@@ -115,6 +115,11 @@
       "text": "Tooltip",
       "url": "../tooltip/index.html",
       "slug": "tooltip"
+    },
+    {
+      "text": "TreeView",
+      "url": "../treeview/index.html",
+      "slug": "treeview"
     }
   ]
 }

@@ -168,6 +168,11 @@
           "text": "Tooltip",
           "url": "showcase/elements/tooltip/index.html",
           "section": "tooltip"
+        },
+        {
+          "text": "TreeView",
+          "url": "showcase/elements/treeview/index.html",
+          "section": "treeview"
         }
       ]
     },

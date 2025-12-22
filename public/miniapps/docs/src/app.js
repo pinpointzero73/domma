@@ -18,7 +18,8 @@ const DocsApp = {
 
   // State
   currentDocId: null,
-  documents: [],
+  documents: [],         // Currently displayed documents (can be filtered)
+  allDocuments: [],      // ALL documents (never filtered, used for badge counts)
   editor: null,
   findReplace: null,
   folderManager: null,
@@ -521,6 +522,7 @@ const DocsApp = {
 
       const data = await response.json();
       this.documents = data.documents || [];
+      this.allDocuments = data.documents || [];  // Store ALL documents for badge counts
 
       // Cache to localStorage
       S.set('domma-docs:list-cache', this.documents);
@@ -531,6 +533,7 @@ const DocsApp = {
 
       // Try loading from cache
       this.documents = S.get('domma-docs:list-cache', []);
+      this.allDocuments = this.documents;  // Sync allDocuments with cache
 
       if (this.documents.length > 0) {
         await Domma.elements.alert('Failed to load documents from server. Showing cached documents.');
@@ -649,22 +652,25 @@ const DocsApp = {
       }
 
       const data = await response.json();
-      let allDocuments = data.documents || [];
+      let fetchedDocuments = data.documents || [];
 
       console.log('Filtering by folderId:', folderId, 'type:', typeof folderId);
-      console.log('All documents:', allDocuments.length);
-      console.log('Sample doc folder_id:', allDocuments[0]?.folder_id, 'type:', typeof allDocuments[0]?.folder_id);
+      console.log('All documents:', fetchedDocuments.length);
+      console.log('Sample doc folder_id:', fetchedDocuments[0]?.folder_id, 'type:', typeof fetchedDocuments[0]?.folder_id);
+
+      // Always store ALL documents for badge counts
+      this.allDocuments = fetchedDocuments;
 
       // Filter client-side if folder specified
       if (folderId !== null) {
         // Parse folder_id to int for comparison (API might return as string)
-        this.documents = allDocuments.filter(doc => {
+        this.documents = fetchedDocuments.filter(doc => {
           const docFolderId = doc.folder_id === null ? null : parseInt(doc.folder_id);
           return docFolderId === folderId;
         });
         console.log('Filtered documents:', this.documents.length);
       } else {
-        this.documents = allDocuments;
+        this.documents = fetchedDocuments;
       }
 
       // Update cache
@@ -1008,11 +1014,17 @@ const DocsApp = {
       const data = await response.json();
       const newDoc = data.document;
 
-      // Add to documents array
+      // Add to both documents arrays
       this.documents.unshift(newDoc);
+      this.allDocuments.unshift(newDoc);
 
       // Update cache
       S.set('domma-docs:list-cache', this.documents);
+
+      // Refresh folder badges
+      if (this.folderManager) {
+        await this.folderManager.refreshBadges();
+      }
 
       // Open the new document
       await this.openDocument(newDoc.id);
@@ -1217,11 +1229,17 @@ const DocsApp = {
           const document = await this.importDocumentFromFile(selectedFile);
           modal.remove();
 
-          // Add to documents array
+          // Add to both documents arrays
           this.documents.unshift(document);
+          this.allDocuments.unshift(document);
 
           // Update cache
           S.set('domma-docs:list-cache', this.documents);
+
+          // Refresh folder badges
+          if (this.folderManager) {
+            await this.folderManager.refreshBadges();
+          }
 
           // Open the imported document
           await this.openDocument(document.id);
@@ -1311,16 +1329,16 @@ const DocsApp = {
       const data = await response.json();
       const newDoc = data.document;
 
-      // Add to documents array
+      // Add to both documents arrays
       this.documents.unshift(newDoc);
+      this.allDocuments.unshift(newDoc);
 
       // Update cache
       S.set('domma-docs:list-cache', this.documents);
 
-      // Reload folders to update document counts
+      // Refresh folder badges
       if (this.folderManager) {
-        await this.folderManager.loadFolders();
-        this.folderManager.renderSidebar();
+        await this.folderManager.refreshBadges();
       }
 
       // Refresh the list to show the new document
@@ -2142,8 +2160,9 @@ const DocsApp = {
         throw new Error(`HTTP ${response.status}`);
       }
 
-      // Remove from documents array
+      // Remove from both documents arrays
       this.documents = this.documents.filter(d => d.id !== docId);
+      this.allDocuments = this.allDocuments.filter(d => d.id !== docId);
 
       // Clear draft
       this.clearDraft(docId);
@@ -2151,10 +2170,9 @@ const DocsApp = {
       // Update cache
       S.set('domma-docs:list-cache', this.documents);
 
-      // Reload folders to update document counts
+      // Refresh folder badges
       if (this.folderManager) {
-        await this.folderManager.loadFolders();
-        this.folderManager.renderSidebar();
+        await this.folderManager.refreshBadges();
       }
 
       // If currently editing this document, go back to list

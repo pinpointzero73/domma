@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="dist/elements.css">
   <link rel="stylesheet" href="dist/syntax.css">
   <link rel="stylesheet" href="dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="dist/festive-snow.css">
   <style>
       .splash-hero {
           display: flex;
@@ -858,8 +859,16 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
 
 <script src="dist/domma.min.js"></script>
 <script src="dist/domma-syntax.min.js"></script>
+<script src="dist/festive-snow.js"></script>
 <script type="module" src="layouts/js/layout.js"></script>
 <script>
+  // Add festive snow if it's the season!
+  if (typeof FestiveSnow !== 'undefined' && FestiveSnow.isFestiveSeason()) {
+    FestiveSnow.createSnowToggle({
+      position: 'bottom-left'
+    });
+  }
+
   $(() => {
     // Initialise navbar
     const logoSvg = `<svg class="navbar-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
