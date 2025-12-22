@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Festive Snow - Vanilla JS Example</title>
+
+  <!-- Load CSS from CDN (or local dist folder) -->
+  <link rel="stylesheet" href="../../dist/festive-snow.css?v=6">
+
+  <style>
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+
+      body {
+          font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem;
+      }
+
+      .container {
+          max-width: 600px;
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(10px);
+          border-radius: 1rem;
+          padding: 3rem;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+          font-size: 3rem;
+          margin-bottom: 1rem;
+          text-align: center;
+      }
+
+      p {
+          font-size: 1.125rem;
+          line-height: 1.6;
+          margin-bottom: 2rem;
+          opacity: 0.9;
+      }
+
+      .controls {
+          display: flex;
+          gap: 1rem;
+          flex-wrap: wrap;
+          justify-content: center;
+      }
+
+      button {
+          background: white;
+          color: #667eea;
+          border: none;
+          padding: 0.75rem 1.5rem;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      button:active {
+          transform: translateY(0);
+      }
+
+      .info {
+          margin-top: 2rem;
+          padding: 1rem;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 0.5rem;
+          font-size: 0.875rem;
+      }
+
+      .info p {
+          margin-bottom: 0.5rem;
+      }
+
+      .info p:last-child {
+          margin-bottom: 0;
+      }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>🎄 Festive Snow 🎄</h1>
+  <p>Welcome to the Festive Snow demo! Use the toggle button (top right) or the controls below to experience the festive
+    atmosphere.</p>
+
+  <div class="controls">
+    <button id="btn-start">Start Snow</button>
+    <button id="btn-pause">Pause Snow</button>
+    <button id="btn-stop">Stop Snow</button>
+    <button id="btn-light">Light</button>
+    <button id="btn-medium">Medium</button>
+    <button id="btn-heavy">Heavy</button>
+  </div>
+
+  <div class="info">
+    <p><strong>Features:</strong></p>
+    <p>✨ 6-pointed crystalline snowflakes</p>
+    <p>🎄 Decorated Christmas trees with twinkling lights</p>
+    <p>🎅 Santa's sleigh with Rudolph and 4 reindeer</p>
+    <p>🎀 Christmas wreaths with bows</p>
+    <p>💨 Wind gusts and realistic physics</p>
+  </div>
+</div>
+
+<!-- Load library from CDN (or local dist folder) -->
+<script src="../../dist/festive-snow.js?v=6"></script>
+
+<script>
+  // Example 1: Create toggle with default UI (top-right corner)
+  const toggle = FestiveSnow.createSnowToggle({
+    position: 'top-right',
+    defaultIntensity: 'medium',
+    // Optional: Only show during festive season (Dec 1 - Jan 3)
+    // seasonCheck: FestiveSnow.isFestiveSeason
+  });
+
+  // Example 2: Programmatic control
+  let snow = null;
+
+  document.getElementById('btn-start').addEventListener('click', () => {
+    if (!snow) {
+      snow = FestiveSnow.createSnowEffect({
+        intensity: 'medium',
+        autoStart: true
+      });
+    } else {
+      snow.start();
+    }
+  });
+
+  document.getElementById('btn-pause').addEventListener('click', () => {
+    if (snow) {
+      snow.pause();
+    }
+  });
+
+  document.getElementById('btn-stop').addEventListener('click', () => {
+    if (snow) {
+      snow.stop();
+      snow = null;
+    }
+  });
+
+  document.getElementById('btn-light').addEventListener('click', () => {
+    if (snow) {
+      snow.setIntensity('light');
+    } else {
+      snow = FestiveSnow.createSnowEffect({intensity: 'light'});
+    }
+  });
+
+  document.getElementById('btn-medium').addEventListener('click', () => {
+    if (snow) {
+      snow.setIntensity('medium');
+    } else {
+      snow = FestiveSnow.createSnowEffect({intensity: 'medium'});
+    }
+  });
+
+  document.getElementById('btn-heavy').addEventListener('click', () => {
+    if (snow) {
+      snow.setIntensity('heavy');
+    } else {
+      snow = FestiveSnow.createSnowEffect({intensity: 'heavy'});
+    }
+  });
+
+  // Log when festive season
+  console.log('Is festive season?', FestiveSnow.isFestiveSeason());
+</script>
+</body>
+</html>
