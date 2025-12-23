@@ -1203,6 +1203,42 @@
           }, 100);
         });
 
+        test('Elements - modal-close-btn auto-handler', () => {
+            const container = document.createElement('div');
+            container.id = 'test-modal-close-btn';
+            container.className = 'modal';
+            container.innerHTML = `
+            <div class="modal-header">
+              <h5 class="modal-title">Test Modal</h5>
+              <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p>Test content</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary modal-close-btn">Cancel</button>
+              <button class="btn btn-primary modal-close-btn">OK</button>
+            </div>
+          `;
+            document.body.appendChild(container);
+
+            const modal = Domma.elements.modal('#test-modal-close-btn');
+            modal.open();
+            assert(modal.isOpen(), 'Should be open');
+
+            // Test that .modal-close-btn buttons auto-close the modal
+            const closeBtns = container.querySelectorAll('.modal-close-btn');
+            assert(closeBtns.length === 2, 'Should have 2 close buttons');
+
+            // Simulate clicking the first close button
+            closeBtns[0].click();
+
+            setTimeout(() => {
+                assert(!modal.isOpen(), 'Should close when .modal-close-btn is clicked');
+                document.body.removeChild(container);
+            }, 100);
+        });
+
         test('Elements - tabs create', () => {
             const container = document.createElement('div');
             container.id = 'test-tabs';

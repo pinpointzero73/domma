@@ -134,15 +134,22 @@ class Modal extends Component {
         const el = this.element;
         const opts = this.options;
 
-        // Initial hidden state
-        el.style.display = 'none';
-        el.style.position = 'fixed';
-        el.style.top = '50%';
-        el.style.left = '50%';
-        el.style.transform = 'translate(-50%, -50%)';
-        el.style.zIndex = '1001';
-        el.style.opacity = '0';
-        el.style.transition = `opacity ${opts.animationDuration}ms ease, transform ${opts.animationDuration}ms ease`;
+        // Skip inline positioning for factory-created modals (they use flexbox overlay)
+        if (!opts._factoryCreated) {
+            // Traditional modal: use fixed positioning with manual centering
+            el.style.display = 'none';
+            el.style.position = 'fixed';
+            el.style.top = '50%';
+            el.style.left = '50%';
+            el.style.transform = 'translate(-50%, -50%)';
+            el.style.zIndex = '1001';
+            el.style.opacity = '0';
+            el.style.transition = `opacity ${opts.animationDuration}ms ease, transform ${opts.animationDuration}ms ease`;
+        } else {
+            // Factory modal: positioned by flexbox overlay, only set initial opacity
+            el.style.opacity = '0';
+            el.style.transition = `opacity ${opts.animationDuration}ms ease, transform ${opts.animationDuration}ms ease`;
+        }
 
         // Keyboard handler
         if (opts.keyboard) {
@@ -154,13 +161,19 @@ class Modal extends Component {
             document.addEventListener('keydown', this._keyHandler);
         }
 
-        // Close button
+        // Close button (header × button)
         if (opts.closeButton) {
             const closeBtn = el.querySelector('[data-close], .modal-close, .close');
             if (closeBtn) {
                 this._addEventListener(closeBtn, 'click', () => this.close());
             }
         }
+
+        // Close button(s) in footer (e.g., Cancel, Close buttons)
+        const closeBtns = el.querySelectorAll('.modal-close-btn');
+        closeBtns.forEach(btn => {
+            this._addEventListener(btn, 'click', () => this.close());
+        });
     }
 
     open() {
@@ -424,6 +437,9 @@ const ModalFactory = {
     createModal(options) {
         const {overlay, dialog, opts} = this._createElements(options);
 
+        // Pass factory flag via options so _init() can check it
+        opts._factoryCreated = true;
+
         // Create Modal instance using the generated dialog element
         const modal = new Modal(dialog, opts);
         modal._overlay = overlay;
@@ -476,6 +492,7 @@ const ModalFactory = {
         const originalOpen = modal.open.bind(modal);
         modal.open = function () {
             overlay.style.display = 'flex';
+            dialog.style.display = 'block';
             this._activeModals.push(modal);
 
             // Trigger animations
@@ -509,6 +526,7 @@ const ModalFactory = {
 
             setTimeout(() => {
                 overlay.style.display = 'none';
+                dialog.style.display = 'none';
                 const index = this._activeModals.indexOf(modal);
                 if (index > -1) this._activeModals.splice(index, 1);
 

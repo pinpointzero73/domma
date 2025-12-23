@@ -299,7 +299,7 @@ $.setup({
 
 **Not Supported via Config Engine:**
 
-- `toast` - Use static methods: `Domma.elements.showToast()` or instance methods
+- `toast` - Use static method: `Domma.elements.toast()`
 - `dialog` - Use static methods: `Domma.elements.alert()`, `.confirm()`, `.prompt()`
 - `jumbotron` - CSS-only component (no JavaScript)
 - `forms` - Documentation only (native HTML forms)

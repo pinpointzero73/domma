@@ -1063,7 +1063,7 @@ async function deleteItem() {
 
   if (result === 'delete') {
     await performDeletion();
-    Domma.elements.showToast('Item deleted', {type: 'success'});
+    Domma.elements.toast('Item deleted', {type: 'success'});
   }
 }
 ```

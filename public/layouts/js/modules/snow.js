@@ -306,6 +306,21 @@ export class SnowEffect {
         active: true,
         static: false
       });
+    } else if (choice < 0.0009) { // Even rarer for train
+      const fromLeft = Math.random() < 0.5;
+      this.specialParticles.push({
+        type: 'train',
+        x: fromLeft ? -500 : this.canvas.width + 500, // Start further off-screen
+        y: this.canvas.height - 50, // Near the bottom
+        baseY: this.canvas.height - 50,
+        vx: fromLeft ? 2 + Math.random() * 1 : -(2 + Math.random() * 1),
+        size: 20 + Math.random() * 10,
+        opacity: 1,
+        time: 0,
+        smoke: [], // To store individual smoke puffs
+        active: true,
+        static: false
+      });
     }
   }
 
@@ -319,9 +334,35 @@ export class SnowEffect {
     const normDelta = deltaTime / (16.67);
     particle.x += particle.vx * normDelta;
     particle.time += deltaTime;
+
     if (particle.type === 'sleigh' || particle.type === 'elf') {
       particle.y = particle.baseY + (Math.sin(particle.time * particle.waveFrequency + particle.wavePhase) * particle.waveAmplitude);
       const margin = particle.type === 'sleigh' ? 200 : 100;
+      if (particle.x < -margin || particle.x > this.canvas.width + margin) {
+        particle.active = false;
+      }
+    } else if (particle.type === 'train') {
+      // Train smoke animation
+      if (Math.random() < 0.3) { // Spawn smoke puff
+        particle.smoke.push({
+          x: particle.x + (particle.vx > 0 ? -particle.size * 2 : particle.size * 2),
+          y: particle.y - particle.size * 2.5,
+          size: particle.size * 0.5 + Math.random() * particle.size,
+          opacity: 0.8,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: -1 - Math.random(), // Smoke rises
+          life: 100 // Frames to live
+        });
+      }
+      particle.smoke.forEach(s => {
+        s.x += s.vx * normDelta;
+        s.y += s.vy * normDelta;
+        s.opacity -= 0.8 / s.life * normDelta;
+        s.size += 0.1 * normDelta;
+      });
+      particle.smoke = particle.smoke.filter(s => s.opacity > 0);
+
+      const margin = 500; // Train is larger, give it more margin
       if (particle.x < -margin || particle.x > this.canvas.width + margin) {
         particle.active = false;
       }
@@ -335,6 +376,7 @@ export class SnowEffect {
     else if (p.type === 'tree') this._drawTree(p);
     else if (p.type === 'wreath') this._drawWreath(p);
     else if (p.type === 'elf') this._drawElf(p);
+    else if (p.type === 'train') this._drawTrain(p); // Draw the train
     this.ctx.restore();
   }
 
@@ -405,11 +447,28 @@ export class SnowEffect {
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
-    const sackX = x - dir * size * 0.05;
-    ctx.fillStyle = '#5c4033';
+    const sackX = x - dir * size * 0.05; // Re-inserted sackX definition
+    ctx.fillStyle = '#5c4033'; // Brown sack
     ctx.beginPath();
-    ctx.ellipse(sackX, y - size * 0.2, size * 0.4, size * 0.5, 0, 0, Math.PI * 2);
+    // More irregular, lumpy shape for the sack
+    ctx.moveTo(sackX - size * 0.3, y - size * 0.4);
+    ctx.quadraticCurveTo(sackX - size * 0.6, y - size * 0.2, sackX - size * 0.4, y + size * 0.1);
+    ctx.quadraticCurveTo(sackX, y + size * 0.3, sackX + size * 0.4, y + size * 0.1);
+    ctx.quadraticCurveTo(sackX + size * 0.6, y - size * 0.2, sackX + size * 0.3, y - size * 0.4);
+    ctx.closePath();
     ctx.fill();
+
+    // Add a highlight for dimension
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.beginPath();
+    ctx.ellipse(sackX + size * 0.1, y - size * 0.3, size * 0.2, size * 0.1, -Math.PI / 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = '#654321'; // Rope tie
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(sackX, y - size * 0.4, size * 0.2, 0, Math.PI, true);
+    ctx.stroke();
     const saX = x + dir * size * 0.6, saY = y - size * 0.55;
     ctx.fillStyle = '#c00';
     ctx.beginPath();

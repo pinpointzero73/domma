@@ -63,7 +63,7 @@ Components that can be auto-initialized via config:
 
 These require direct instantiation:
 
-- `toast` - Use `Domma.elements.showToast()` or instance methods
+- `toast` - Use `Domma.elements.toast()`
 - `dialog` - Use `Domma.elements.alert()`, `.confirm()`, `.prompt()`
 - `jumbotron` - CSS-only component (no JavaScript)
 - `forms` - Documentation only (native HTML forms)

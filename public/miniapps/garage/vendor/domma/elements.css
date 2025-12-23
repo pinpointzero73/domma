@@ -2,8 +2,8 @@
  * Domma Elements CSS v0.8.0b
  * Dynamic Object Manipulation & Modeling API
  * (c) 2025 Darryl Waterhouse & DCBW-IT
- * Built: 2025-12-23T07:23:06.148Z
- * Commit: c8cb1af
+ * Built: 2025-12-23T10:12:49.576Z
+ * Commit: 370999e
  */
 
 /**
@@ -316,6 +316,11 @@
 
 .modal-body {
     padding: var(--dm-space-6);
+}
+
+.modal-body-scrollable {
+    max-height: 60vh;
+    overflow-y: auto;
 }
 
 .modal-footer {

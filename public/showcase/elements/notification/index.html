@@ -405,7 +405,7 @@ async function setupNotifications() {
             Domma.elements.notify('Notifications Enabled!');
         } else {
             // Show fallback option
-            showToast('Notifications blocked. You can enable them in settings.');
+            Domma.elements.toast('Notifications blocked. You can enable them in settings.');
         }
     }
 }
@@ -418,14 +418,14 @@ async function safeNotify(title, options = {}) {
     if (!Domma.DesktopNotification.isSupported) {
         console.warn('Notifications not supported');
         // Fallback to toast or banner
-        showToast(title);
+        Domma.elements.toast(title);
         return null;
     }
 
     // Check permission
     if (Domma.DesktopNotification.permission !== 'granted') {
         console.warn('Notification permission not granted');
-        showToast(title);
+        Domma.elements.toast(title);
         return null;
     }
 
@@ -435,7 +435,7 @@ async function safeNotify(title, options = {}) {
         ...options,
         onError: (error) => {
             console.error('Notification failed:', error);
-            showToast(title); // Fallback
+            Domma.elements.toast(title); // Fallback
         }
     });
 

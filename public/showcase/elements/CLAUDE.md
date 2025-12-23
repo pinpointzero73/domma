@@ -282,7 +282,7 @@ function notify(title, message, type = 'info') {
     }
 
     // Toast notification
-    Domma.elements.showToast(message, {
+    Domma.elements.toast(message, {
         type: type,
         duration: 3000
     });
