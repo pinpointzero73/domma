@@ -115,78 +115,8 @@ const GarageApp = {
    * Setup event listeners
    */
   setupEventListeners() {
-    // Get form elements
-    const $loginForm = $('#loginForm');
-    const $registerForm = $('#registerForm');
-    const $showRegisterTab = $('#showRegisterTab');
-    const $showLoginTab = $('#showLoginTab');
-
-    // Login form submission
-    if ($loginForm.length > 0) {
-      $loginForm.on('submit', async (e) => {
-        e.preventDefault();
-
-        const $submitBtn = $loginForm.find('button[type="submit"]');
-        const originalText = $submitBtn.html();
-
-        // Disable button and show spinner
-        $submitBtn.prop('disabled', true);
-        $submitBtn.html('<span data-icon="loader" data-icon-size="16" class="spinning"></span> Logging in...');
-
-        // Scan icons for the new loader icon
-        if (Domma.icons) {
-          Domma.icons.scan();
-        }
-
-        const email = $('#loginEmail').val();
-        const password = $('#loginPassword').val();
-
-        try {
-          await Domma.auth.login(email, password);
-          // Success handled by auth event listener
-        } catch (error) {
-          // Error handled by auth error event listener
-        } finally {
-          // Re-enable button and restore text
-          $submitBtn.prop('disabled', false);
-          $submitBtn.html(originalText);
-        }
-      });
-    }
-
-    // Register form submission
-    if ($registerForm.length > 0) {
-      $registerForm.on('submit', async (e) => {
-        e.preventDefault();
-
-        const $submitBtn = $registerForm.find('button[type="submit"]');
-        const originalText = $submitBtn.html();
-
-        // Disable button and show spinner
-        $submitBtn.prop('disabled', true);
-        $submitBtn.html('<span data-icon="loader" data-icon-size="16" class="spinning"></span> Creating account...');
-
-        // Scan icons for the new loader icon
-        if (Domma.icons) {
-          Domma.icons.scan();
-        }
-
-        const email = $('#registerEmail').val();
-        const password = $('#registerPassword').val();
-        const name = $('#registerName').val();
-
-        try {
-          await Domma.auth.register(email, password, name);
-          // Success handled by auth event listener
-        } catch (error) {
-          // Error handled by auth error event listener
-        } finally {
-          // Re-enable button and restore text
-          $submitBtn.prop('disabled', false);
-          $submitBtn.html(originalText);
-        }
-      });
-    }
+    // Initialize centralized auth components
+    this.initAuthComponents();
 
     // Logout button
     const $logoutBtn = $('#logoutBtn');
@@ -221,27 +151,52 @@ const GarageApp = {
         $(e.target).val($(e.target).val().toUpperCase().replace(/\s/g, ''));
       });
     }
+  },
 
-    // Auth tab switching (Login/Register)
-    if ($showRegisterTab.length > 0 && $showLoginTab.length > 0) {
-      $showRegisterTab.on('click', () => {
-        // Toggle tab active state
-        $showLoginTab.removeClass('active');
-        $showRegisterTab.addClass('active');
-        // Toggle form visibility
-        $loginForm.removeClass('active');
-        $registerForm.addClass('active');
-      });
+  /**
+   * Initialize centralized auth components
+   */
+  initAuthComponents() {
+    // Create auth tabs
+    Domma.auth.createAuthTabs('#authTabs', {
+      activeTab: 'login',
+      onChange: (tab) => {
+        // Show/hide forms based on active tab
+        const loginContainer = document.getElementById('loginFormContainer');
+        const registerContainer = document.getElementById('registerFormContainer');
 
-      $showLoginTab.on('click', () => {
-        // Toggle tab active state
-        $showRegisterTab.removeClass('active');
-        $showLoginTab.addClass('active');
-        // Toggle form visibility
-        $registerForm.removeClass('active');
-        $loginForm.addClass('active');
-      });
-    }
+        if (loginContainer && registerContainer) {
+          loginContainer.style.display = tab === 'login' ? 'block' : 'none';
+          registerContainer.style.display = tab === 'register' ? 'block' : 'none';
+        }
+      }
+    });
+
+    // Create login form
+    Domma.auth.createLoginForm('#loginFormContainer', {
+      showLabels: true,
+      onSuccess: (user) => {
+        // Success handled by auth event listener
+        // Display welcome message
+        this.showAlert(`Welcome back, ${user.name || user.email}!`, 'success');
+      },
+      onError: (error) => {
+        this.showAlert(error.message || 'Login failed', 'error');
+      }
+    });
+
+    // Create register form
+    Domma.auth.createRegisterForm('#registerFormContainer', {
+      showLabels: true,
+      onSuccess: (user) => {
+        // Success handled by auth event listener
+        // Display welcome message
+        this.showAlert(`Welcome to My Garage, ${user.name || user.email}!`, 'success');
+      },
+      onError: (error) => {
+        this.showAlert(error.message || 'Registration failed', 'error');
+      }
+    });
   },
 
   /**

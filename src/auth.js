@@ -169,6 +169,56 @@ export const auth = {
   },
 
   /**
+   * Get current user role
+   * @returns {string|null} Role ('admin', 'subscriber', 'guest') or null
+   */
+  getRole() {
+    return this.user?.role || null;
+  },
+
+  /**
+   * Check if user has specific role
+   * @param {string} role - Role to check
+   * @returns {boolean}
+   */
+  hasRole(role) {
+    return this.user?.role === role;
+  },
+
+  /**
+   * Check if user has any of the specified roles
+   * @param {string[]} roles - Roles to check
+   * @returns {boolean}
+   */
+  hasAnyRole(roles) {
+    return roles.includes(this.user?.role);
+  },
+
+  /**
+   * Check if user is admin
+   * @returns {boolean}
+   */
+  isAdmin() {
+    return this.user?.role === 'admin';
+  },
+
+  /**
+   * Check if user is subscriber
+   * @returns {boolean}
+   */
+  isSubscriber() {
+    return this.user?.role === 'subscriber';
+  },
+
+  /**
+   * Check if user is guest
+   * @returns {boolean}
+   */
+  isGuest() {
+    return this.user?.role === 'guest';
+  },
+
+  /**
    * Verify token with backend
    * @returns {Promise<Object>} User object
    * @private
@@ -306,6 +356,11 @@ class LoginForm extends Component {
     onError: null
   };
 
+  constructor(selector, options = {}) {
+    super(selector, options);
+    this._init();
+  }
+
   _init() {
     if (!this.element) return;
 
@@ -344,7 +399,7 @@ class LoginForm extends Component {
                         placeholder="${opts.passwordPlaceholder}"
                         required>
                 </div>
-                <button type="submit" class="form-btn">${opts.buttonText}</button>
+                <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1rem;">${opts.buttonText}</button>
             </form>
         `;
     this.element.innerHTML = html;
@@ -387,6 +442,11 @@ class RegisterForm extends Component {
     onSuccess: null,
     onError: null
   };
+
+  constructor(selector, options = {}) {
+    super(selector, options);
+    this._init();
+  }
 
   _init() {
     if (!this.element) return;
@@ -436,7 +496,7 @@ class RegisterForm extends Component {
                         minlength="${opts.minPasswordLength}"
                         required>
                 </div>
-                <button type="submit" class="form-btn">${opts.buttonText}</button>
+                <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1rem;">${opts.buttonText}</button>
             </form>
         `;
     this.element.innerHTML = html;
@@ -476,6 +536,11 @@ class AuthTabs extends Component {
     onChange: null
   };
 
+  constructor(selector, options = {}) {
+    super(selector, options);
+    this._init();
+  }
+
   _init() {
     if (!this.element) return;
 
@@ -494,11 +559,11 @@ class AuthTabs extends Component {
   render() {
     const opts = this.options;
     const html = `
-            <div class="auth-tabs">
-                <button class="auth-tab ${opts.activeTab === 'login' ? 'active' : ''}" data-tab="login">
+            <div class="btn-group btn-group-block" style="margin-bottom: 1.5rem;">
+                <button class="btn ${opts.activeTab === 'login' ? 'active' : ''}" data-tab="login">
                     ${opts.loginText}
                 </button>
-                <button class="auth-tab ${opts.activeTab === 'register' ? 'active' : ''}" data-tab="register">
+                <button class="btn ${opts.activeTab === 'register' ? 'active' : ''}" data-tab="register">
                     ${opts.registerText}
                 </button>
             </div>
@@ -532,6 +597,7 @@ class AuthTabs extends Component {
 class UserInfo extends Component {
   static defaults = {
     showIcon: true,
+    showRole: true,
     logoutText: 'Logout',
     onLogout: null
   };
@@ -564,16 +630,52 @@ class UserInfo extends Component {
       return;
     }
 
-    const html = `
-            <div class="auth-user-info">
-                <span class="auth-user-email">
-                    ${opts.showIcon ? '<span data-icon="user" data-icon-size="18"></span>' : ''}
-                    ${user.email}
-                </span>
-                <button class="auth-logout-btn">${opts.logoutText}</button>
-            </div>
-        `;
-    this.element.innerHTML = html;
+    // Clear existing content
+    this.element.innerHTML = '';
+
+    // Create container
+    const container = document.createElement('div');
+    container.className = 'auth-user-info';
+
+    // Create email span
+    const emailSpan = document.createElement('span');
+    emailSpan.className = 'auth-user-email';
+
+    // Add icon if enabled
+    if (opts.showIcon) {
+      const iconSpan = document.createElement('span');
+      iconSpan.setAttribute('data-icon', 'user');
+      iconSpan.setAttribute('data-icon-size', '18');
+      emailSpan.appendChild(iconSpan);
+    }
+
+    // Add email text (safely)
+    const emailText = document.createTextNode(user.email);
+    emailSpan.appendChild(emailText);
+
+    // Add role badge if enabled and role exists
+    if (opts.showRole !== false && user.role) {
+      const roleBadgeClass = {
+        admin: 'badge-danger',
+        subscriber: 'badge-primary',
+        guest: 'badge-secondary'
+      }[user.role] || 'badge-secondary';
+
+      const badge = document.createElement('span');
+      badge.className = `badge ${roleBadgeClass}`;
+      badge.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+      emailSpan.appendChild(badge);
+    }
+
+    // Create logout button
+    const logoutBtn = document.createElement('button');
+    logoutBtn.className = 'auth-logout-btn';
+    logoutBtn.textContent = opts.logoutText;
+
+    // Assemble
+    container.appendChild(emailSpan);
+    container.appendChild(logoutBtn);
+    this.element.appendChild(container);
   }
 
   handleLogout() {

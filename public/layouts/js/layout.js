@@ -437,6 +437,52 @@ import {SidebarModule} from './modules/sidebar.js';
           font-size: 0.9rem;
         }
 
+        /* Auth Modal Styles */
+        .auth-user-display {
+          display: flex;
+          gap: 1rem;
+          padding: 1rem;
+          background: var(--dm-gray-50, #f9fafb);
+          border-radius: 8px;
+        }
+        .auth-user-avatar {
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          background: var(--dm-primary, #0d6efd);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .auth-user-details {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 0.25rem;
+        }
+        .auth-user-name {
+          font-weight: 600;
+          font-size: 1.125rem;
+          color: var(--dm-gray-900, #212529);
+        }
+        .auth-user-email {
+          font-size: 0.875rem;
+          color: var(--dm-gray-600, #6c757d);
+        }
+        .auth-user-role {
+          margin-top: 0.5rem;
+        }
+        #authModalTabs {
+          margin-bottom: 1.5rem;
+        }
+        #authModalLoginForm,
+        #authModalRegisterForm {
+          display: none;
+        }
+
         @media (max-width: 576px) {
           .footer-content {
             flex-direction: column;
@@ -461,15 +507,20 @@ import {SidebarModule} from './modules/sidebar.js';
      */
     async function renderNavbar(config, data) {
         try {
-            // Load navbar placeholder template
-            const template = await TemplateLoader.load('navbar');
-            const html = template({});
+            // Check if navbar already exists in HTML
+            const navbarExists = document.getElementById('main-navbar');
 
-            // Inject into page
-            const body = document.body;
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = html;
-            body.insertBefore(tempDiv.firstElementChild, body.firstChild);
+            // Only load and inject template if navbar doesn't exist
+            if (!navbarExists) {
+                const template = await TemplateLoader.load('navbar');
+                const html = template({});
+
+                // Inject into page (safe: template is from trusted local source)
+                const body = document.body;
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                body.insertBefore(tempDiv.firstElementChild, body.firstChild);
+            }
 
             // Logo SVG
             const logoSvg = `<svg class="navbar-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
@@ -482,17 +533,74 @@ import {SidebarModule} from './modules/sidebar.js';
         <circle cx="24" cy="24" r="3" fill="currentColor"/>
       </svg>`;
 
+            // Initialize Domma.auth FIRST (so it loads user from localStorage)
+            if (typeof Domma !== 'undefined' && Domma.auth && !Domma.auth.initialized) {
+                Domma.auth.init({
+                    apiUrl: 'http://localhost:3000/api'
+                });
+            }
+
             // Initialize navbar using Domma.elements.navbar()
             if (typeof Domma !== 'undefined' && Domma.elements && Domma.elements.navbar) {
+                // Build complete items array with Download and Login/Logout
+                const navItems = [];
+
+                // Add Download at the start if configured
+                const downloadAction = config.actions?.find(a => a.text.toLowerCase() === 'download');
+                if (downloadAction) {
+                    navItems.push({
+                        text: 'Download',
+                        url: downloadAction.url,
+                        icon: 'download'
+                    });
+                }
+
+                // Add existing nav items from config
+                if (config.items && config.items.length > 0) {
+                    navItems.push(...config.items);
+                }
+
+                // Add Login/Logout at the end
+                const user = Domma.auth?.getUser();
+                const pathParts = window.location.pathname.split('/').filter(Boolean);
+                const levelsUp = pathParts.length - 1;
+                const loginPath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'login/index.html' : 'login/index.html';
+
+                if (user) {
+                    navItems.push({
+                        text: 'Logout',
+                        url: '#',
+                        icon: 'log-out'
+                    });
+                } else {
+                    navItems.push({
+                        text: 'Login/Register',
+                        url: loginPath,
+                        icon: 'user'
+                    });
+                }
+
                 Domma.elements.navbar('#main-navbar', {
                     brand: {text: config.brand?.text || 'Domma', url: config.brand?.url || '/'},
-                    items: config.items || [],
+                    items: navItems,
                     variant: config.variant || 'dark',
                     position: 'static',
-                    collapseAt: 992
+                    collapseAt: 992,
+                    onItemClick: (item, index, e) => {
+                        // Handle Logout click
+                        if (item.text === 'Logout') {
+                            Domma.auth.logout();
+                            const homePath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'index.html' : 'index.html';
+                            window.location.href = homePath;
+                        } else if (item.url && item.url !== '#') {
+                            // For all other items with URLs (Login, Download, etc), navigate manually
+                            // because navbar component prevents default when onItemClick is defined
+                            window.location.href = item.url;
+                        }
+                    }
                 });
 
-                // Customise brand section with logo + version + download button
+                // Customise brand section with logo + version
                 const $brandLink = $('#main-navbar .navbar-brand-link');
                 const $brandContainer = $('#main-navbar .navbar-brand');
 
@@ -506,11 +614,39 @@ import {SidebarModule} from './modules/sidebar.js';
           `);
                 }
 
-                // Add actions (like Download pill) next to brand if configured
-                if ($brandContainer.length && config.actions && config.actions.length > 0) {
-                    config.actions.forEach(action => {
-                        $brandContainer.append(`<a href="${action.url}" class="${action.class}">${action.text}</a>`);
-                    });
+                // Add user name and role badge next to brand if logged in
+                if ($brandContainer.length && user) {
+                    const userName = user.name || user.email.split('@')[0];
+                    const userRole = user.role || 'guest';
+
+                    // Determine badge colour based on role
+                    const roleBadgeClass = {
+                        admin: 'badge-danger',
+                        subscriber: 'badge-primary',
+                        guest: 'badge-secondary'
+                    }[userRole] || 'badge-secondary';
+
+                    const userInfoEl = document.createElement('span');
+                    userInfoEl.className = 'navbar-user-info';
+                    userInfoEl.style.cssText = 'margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem;';
+
+                    const nameSpan = document.createElement('span');
+                    nameSpan.textContent = `Hello, ${userName}`;
+
+                    const badge = document.createElement('span');
+                    badge.className = `badge ${roleBadgeClass}`;
+                    badge.style.cssText = 'text-transform: capitalize; font-size: 0.75rem;';
+                    badge.textContent = userRole;
+
+                    userInfoEl.appendChild(nameSpan);
+                    userInfoEl.appendChild(badge);
+                    $brandContainer.get(0).appendChild(userInfoEl);
+                }
+
+                // Set up auth state listeners to reload page on auth changes
+                if (typeof Domma !== 'undefined' && Domma.auth) {
+                    Domma.auth.on('login', () => window.location.reload());
+                    Domma.auth.on('logout', () => window.location.reload());
                 }
 
                 // Set active dropdown for showcase pages

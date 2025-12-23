@@ -1926,86 +1926,7 @@
 <!-- Layout system will inject navbar here -->
 
 <main>
-  <!-- Authentication Section -->
-  <div id="authSection">
-    <div class="auth-card">
-      <div class="auth-header">
-        <h2>
-          <span data-icon="document" data-icon-size="24"></span>
-          Domma Docs
-        </h2>
-        <p>Sign in to manage your documents</p>
-      </div>
-
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="showLoginTab">Login</button>
-        <button class="auth-tab" id="showRegisterTab">Register</button>
-      </div>
-
-      <!-- Login Form -->
-      <form class="auth-form active" id="loginForm">
-        <div class="form-group">
-          <label class="form-label" for="loginEmail">Email</label>
-          <input
-              type="email"
-              class="form-input"
-              id="loginEmail"
-              placeholder="your@email.com"
-              required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="loginPassword">Password</label>
-          <input
-              type="password"
-              class="form-input"
-              id="loginPassword"
-              placeholder="Enter your password"
-              required>
-        </div>
-
-        <button type="submit" class="form-btn">Login</button>
-      </form>
-
-      <!-- Register Form -->
-      <form class="auth-form" id="registerForm">
-        <div class="form-group">
-          <label class="form-label" for="registerName">Name</label>
-          <input
-              type="text"
-              class="form-input"
-              id="registerName"
-              placeholder="Your name"
-              required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="registerEmail">Email</label>
-          <input
-              type="email"
-              class="form-input"
-              id="registerEmail"
-              placeholder="your@email.com"
-              required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="registerPassword">Password</label>
-          <input
-              type="password"
-              class="form-input"
-              id="registerPassword"
-              placeholder="Create a password"
-              minlength="6"
-              required>
-        </div>
-
-        <button type="submit" class="form-btn">Register</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- App Section (Hidden until authenticated) -->
+  <!-- App Section -->
   <div id="appSection" style="display: none;">
     <!-- App Header -->
     <div class="container" style="max-width: 1200px;">
@@ -2194,31 +2115,6 @@
 
 <!-- Layout system will inject footer here -->
 
-<script>
-  // Auth tab switching
-  document.addEventListener('DOMContentLoaded', () => {
-    const loginTab = document.getElementById('showLoginTab');
-    const registerTab = document.getElementById('showRegisterTab');
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-
-    if (loginTab && registerTab) {
-      loginTab.addEventListener('click', () => {
-        loginTab.classList.add('active');
-        registerTab.classList.remove('active');
-        loginForm.classList.add('active');
-        registerForm.classList.remove('active');
-      });
-
-      registerTab.addEventListener('click', () => {
-        registerTab.classList.add('active');
-        loginTab.classList.remove('active');
-        registerForm.classList.add('active');
-        loginForm.classList.remove('active');
-      });
-    }
-  });
-</script>
 
 </body>
 </html>

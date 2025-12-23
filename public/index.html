@@ -795,9 +795,9 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
     <p class="lead">Production-ready applications built with Domma</p>
   </div>
 
-  <div class="row g-4 mb-4">
+  <div class="row g-4 mb-4 flex-nowrap">
     <!-- My Garage Preview -->
-    <div class="col-12 col-md-4">
+    <div class="col">
       <div class="card h-100 card-hover">
         <div class="card-body">
           <div class="text-center mb-3">
@@ -815,7 +815,7 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
     </div>
 
     <!-- Document Editor Preview -->
-    <div class="col-12 col-md-4">
+    <div class="col">
       <div class="card h-100 card-hover">
         <div class="card-body">
           <div class="text-center mb-3">
@@ -833,7 +833,7 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
     </div>
 
     <!-- Invoicing Preview -->
-    <div class="col-12 col-md-4">
+    <div class="col">
       <div class="card h-100 card-hover">
         <div class="card-body">
           <div class="text-center mb-3">
@@ -863,34 +863,6 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
 
 <script>
   $(() => {
-    // Initialise navbar
-    const logoSvg = `<svg class="navbar-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
-      <path d="M12 8 L12 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-      <path d="M12 8 L24 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-      <path d="M12 40 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-      <path d="M24 8 L36 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M36 16 L36 32" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-      <path d="M36 32 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="24" cy="24" r="3" fill="currentColor"/>
-    </svg>`;
-
-    Domma.elements.navbar('#main-navbar', {
-      brand: {
-        html: '<span style="display: inline-flex; align-items: center; gap: 0.5rem;">' + logoSvg + '<span class="navbar-brand-text">Domma</span></span>',
-        url: 'index.html'
-      },
-      items: [],
-      variant: 'dark',
-      position: 'static',
-      collapseAt: 992
-    });
-
-    // Add Download button to navbar
-    const $brandContainer = $('.navbar-brand');
-    if ($brandContainer.length) {
-      $brandContainer.append('<a href="showcase/download/index.html" class="pill pill-light">Download</a>');
-    }
-
     // Declarative setup for components
     $.setup({
       '#features-carousel': {

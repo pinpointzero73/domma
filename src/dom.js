@@ -1503,4 +1503,17 @@ class DommaCollection {
     }
 }
 
-export const dom = (selector, context) => new DommaCollection(selector, context);
+export const dom = (selector, context) => {
+    // Handle function (DOM ready callback)
+    if (typeof selector === 'function') {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', selector);
+        } else {
+            // DOM is already ready
+            selector();
+        }
+        return new DommaCollection([]);
+    }
+
+    return new DommaCollection(selector, context);
+};

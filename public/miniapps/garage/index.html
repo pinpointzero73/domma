@@ -662,71 +662,14 @@
         <p>Sign in to manage your vehicles</p>
       </div>
 
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="showLoginTab">Login</button>
-        <button class="auth-tab" id="showRegisterTab">Register</button>
-      </div>
+      <!-- Auth Tabs (managed by Domma.auth) -->
+      <div id="authTabs"></div>
 
-      <!-- Login Form -->
-      <form class="auth-form active" id="loginForm">
-        <div class="form-group">
-          <label class="form-label" for="loginEmail">Email</label>
-          <input
-              type="email"
-              class="form-input"
-              id="loginEmail"
-              placeholder="your@email.com"
-              required>
-        </div>
+      <!-- Login Form (managed by Domma.auth) -->
+      <div id="loginFormContainer"></div>
 
-        <div class="form-group">
-          <label class="form-label" for="loginPassword">Password</label>
-          <input
-              type="password"
-              class="form-input"
-              id="loginPassword"
-              placeholder="Enter your password"
-              required>
-        </div>
-
-        <button type="submit" class="form-btn">Login</button>
-      </form>
-
-      <!-- Register Form -->
-      <form class="auth-form" id="registerForm">
-        <div class="form-group">
-          <label class="form-label" for="registerName">Name</label>
-          <input
-              type="text"
-              class="form-input"
-              id="registerName"
-              placeholder="Your name"
-              required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="registerEmail">Email</label>
-          <input
-              type="email"
-              class="form-input"
-              id="registerEmail"
-              placeholder="your@email.com"
-              required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="registerPassword">Password</label>
-          <input
-              type="password"
-              class="form-input"
-              id="registerPassword"
-              placeholder="Create a password"
-              minlength="6"
-              required>
-        </div>
-
-        <button type="submit" class="form-btn">Register</button>
-      </form>
+      <!-- Register Form (managed by Domma.auth) -->
+      <div id="registerFormContainer"></div>
     </div>
   </div>
 

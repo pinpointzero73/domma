@@ -88,17 +88,8 @@ const DocsApp = {
    * Setup all event listeners
    */
   setupEventListeners() {
-    // Login form
-    $('#loginForm').on('submit', async (e) => {
-      e.preventDefault();
-      await this.handleLoginSubmit();
-    });
-
-    // Register form
-    $('#registerForm').on('submit', async (e) => {
-      e.preventDefault();
-      await this.handleRegisterSubmit();
-    });
+    // Initialize centralized auth components
+    this.initAuthComponents();
 
     // Logout button
     $('#logoutBtn').on('click', () => {
@@ -437,60 +428,101 @@ const DocsApp = {
   },
 
   /**
-   * Handle login form submission
+   * Initialize centralized auth components
    */
-  async handleLoginSubmit() {
-    const email = $('#loginEmail').val();
-    const password = $('#loginPassword').val();
-    const submitBtn = $('#loginForm button[type="submit"]');
+  initAuthComponents() {
+    // Create auth tabs
+    Domma.auth.createAuthTabs('#authTabs', {
+      activeTab: 'login',
+      onChange: (tab) => {
+        // Show/hide forms based on active tab
+        const loginContainer = document.getElementById('loginFormContainer');
+        const registerContainer = document.getElementById('registerFormContainer');
 
-    submitBtn.prop('disabled', true).text('Logging in...');
+        if (loginContainer && registerContainer) {
+          loginContainer.style.display = tab === 'login' ? 'block' : 'none';
+          registerContainer.style.display = tab === 'register' ? 'block' : 'none';
+        }
+      }
+    });
 
-    try {
-      await Domma.auth.login(email, password);
-      // Success handled by 'login' event
-    } catch (error) {
-      // Error handled by 'error' event
-    } finally {
-      submitBtn.prop('disabled', false).text('Login');
-    }
+    // Create login form
+    Domma.auth.createLoginForm('#loginFormContainer', {
+      showLabels: true,
+      onSuccess: (user) => {
+        // Success handled by auth event listener
+        this.showAlert(`Welcome back, ${user.name || user.email}!`, 'success');
+      },
+      onError: (error) => {
+        this.showAlert(error.message || 'Login failed', 'error');
+      }
+    });
+
+    // Create register form
+    Domma.auth.createRegisterForm('#registerFormContainer', {
+      showLabels: true,
+      onSuccess: (user) => {
+        // Success handled by auth event listener
+        this.showAlert(`Welcome to Domma Docs, ${user.name || user.email}!`, 'success');
+      },
+      onError: (error) => {
+        this.showAlert(error.message || 'Registration failed', 'error');
+      }
+    });
   },
 
   /**
-   * Handle register form submission
-   */
-  async handleRegisterSubmit() {
-    const name = $('#registerName').val();
-    const email = $('#registerEmail').val();
-    const password = $('#registerPassword').val();
-    const submitBtn = $('#registerForm button[type="submit"]');
-
-    submitBtn.prop('disabled', true).text('Registering...');
-
-    try {
-      await Domma.auth.register(email, password, name);
-      // Success handled by 'register' event
-    } catch (error) {
-      // Error handled by 'error' event
-    } finally {
-      submitBtn.prop('disabled', false).text('Register');
-    }
-  },
-
-  /**
-   * Show auth section
+   * Show auth message (user must login via navbar)
    */
   showAuth() {
-    document.getElementById('authSection').style.display = 'block';
-    document.getElementById('appSection').style.display = 'none';
+    const appSection = document.getElementById('appSection');
+    if (appSection) {
+      appSection.style.display = 'none';
+    }
+
+    // Show message to login via navbar using safe DOM methods
+    const main = document.querySelector('main');
+    if (main && !document.getElementById('loginMessage')) {
+      const messageDiv = document.createElement('div');
+      messageDiv.id = 'loginMessage';
+      messageDiv.style.cssText = 'text-align: center; padding: 4rem 2rem; max-width: 600px; margin: 0 auto;';
+
+      const heading = document.createElement('h2');
+      heading.style.marginBottom = '1rem';
+      heading.textContent = 'Welcome to Domma Docs';
+
+      const para = document.createElement('p');
+      para.style.cssText = 'color: #666; margin-bottom: 2rem;';
+      para.textContent = 'Please use the Login button in the navigation bar to access your documents.';
+
+      const icon = document.createElement('span');
+      icon.setAttribute('data-icon', 'document');
+      icon.setAttribute('data-icon-size', '64');
+      icon.style.opacity = '0.3';
+
+      messageDiv.appendChild(heading);
+      messageDiv.appendChild(para);
+      messageDiv.appendChild(icon);
+      main.insertBefore(messageDiv, main.firstChild);
+
+      if (Domma.icons) Domma.icons.scan();
+    }
   },
 
   /**
    * Show app section
    */
   showApp() {
-    document.getElementById('authSection').style.display = 'none';
-    document.getElementById('appSection').style.display = 'block';
+    // Hide login message if exists
+    const loginMessage = document.getElementById('loginMessage');
+    if (loginMessage) {
+      loginMessage.remove();
+    }
+
+    const appSection = document.getElementById('appSection');
+    if (appSection) {
+      appSection.style.display = 'block';
+    }
 
     // Update user email
     const user = Domma.auth.getUser();

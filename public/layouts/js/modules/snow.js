@@ -1,35 +1,84 @@
+/**
+ * SnowEffect - Canvas-based festive snow animation with special effects
+ * Standalone festive snow effect library
+ *
+ * Features:
+ * - 6-pointed crystalline snowflakes with rotation
+ * - Decorated Christmas trees with lights, baubles, tinsel, and star
+ * - Christmas wreaths with bows and ornaments
+ * - Santa's sleigh with 5 reindeer (including Rudolph)
+ * - Sine wave flight motion for sleighs
+ * - Wind gusts and physics simulation
+ * - Twinkling lights animation
+ * - Depth layers for parallax effect
+ * - Mobile-responsive (reduced particles on small screens)
+ * - Christmas Steam Train with animated smoke and decorations
+ *
+ * @license MIT
+ */
+
+const INTENSITY_CONFIG = {
+  light: {
+    count: 50,
+    speedRange: [0.5, 1.5],
+    sizeRange: [1, 3],
+    trees: 3,
+    wreaths: 2
+  },
+  medium: {
+    count: 150,
+    speedRange: [0.8, 2.5],
+    sizeRange: [1, 4],
+    trees: 6,
+    wreaths: 3
+  },
+  heavy: {
+    count: 300,
+    speedRange: [1.0, 3.5],
+    sizeRange: [1, 5],
+    trees: 10,
+    wreaths: 4
+  }
+};
+
 export class SnowEffect {
   constructor(options = {}) {
     this.intensity = options.intensity || 'medium';
     this.enabled = options.enabled !== undefined ? options.enabled : false;
-    this.seasonCheck = options.seasonCheck || null;
+    this.seasonCheck = options.seasonCheck || null; // Optional callback for date-based visibility
     this.canvas = null;
     this.ctx = null;
     this.particles = [];
-    this.specialParticles = [];
+    this.specialParticles = []; // Sleighs, trees, etc.
     this.animationId = null;
     this.lastTime = 0;
     this.isPaused = false;
     this.resizeTimeout = null;
-    this.windGust = 0;
-    this.windGustTarget = 0;
+    this.windGust = 0; // Current wind strength
+    this.windGustTarget = 0; // Target wind strength
     this.lastGustTime = 0;
-    this.twinkleTime = 0;
+    this.twinkleTime = 0; // For twinkling lights
 
+    // Bind methods
     this._animate = this._animate.bind(this);
     this._handleResize = this._handleResize.bind(this);
     this._handleVisibility = this._handleVisibility.bind(this);
   }
 
+  /**
+   * Check if the effect should be displayed based on season check callback
+   * @returns {boolean} True if effect should display
+   */
   shouldDisplay() {
     if (typeof this.seasonCheck === 'function') {
       return this.seasonCheck();
     }
-    return true;
+    return true; // Default: always allow
   }
 
   init() {
-    if (this.canvas) return;
+    if (this.canvas) return; // Already initialized
+
     this._createCanvas();
     this._createParticles();
     this._bindEvents();
@@ -37,6 +86,7 @@ export class SnowEffect {
 
   start() {
     if (!this.canvas || this.animationId) return;
+
     this.isPaused = false;
     this.lastTime = performance.now();
     this.lastGustTime = performance.now();
@@ -58,17 +108,24 @@ export class SnowEffect {
 
   setIntensity(level) {
     if (!['light', 'medium', 'heavy'].includes(level)) return;
+
     this.intensity = level;
-    this._createParticles();
+    this._createParticles(); // Recreate particles with new count
   }
 
   _createCanvas() {
     this.canvas = document.createElement('canvas');
     this.canvas.id = 'festive-snow-canvas';
     this.canvas.style.cssText = `
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      pointer-events: none; z-index: 999;
-    `;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 999;
+        `;
+
     this.ctx = this.canvas.getContext('2d', {alpha: true});
     this._resizeCanvas();
     document.body.appendChild(this.canvas);
@@ -80,51 +137,66 @@ export class SnowEffect {
   }
 
   _createParticles() {
-    const config = {
-      light: {count: 50, speedRange: [0.5, 1.5], sizeRange: [1, 3], trees: 3, wreaths: 2},
-      medium: {count: 150, speedRange: [0.8, 2.5], sizeRange: [1, 4], trees: 6, wreaths: 3},
-      heavy: {count: 300, speedRange: [1.0, 3.5], sizeRange: [1, 5], trees: 10, wreaths: 4}
-    }[this.intensity];
-
+    const config = INTENSITY_CONFIG[this.intensity];
     const isMobile = window.innerWidth < 768;
     const count = isMobile ? Math.floor(config.count / 2) : config.count;
 
-    this.particles = Array.from({length: count}, () => this._createParticle(config));
-    this.specialParticles = [
-      ...Array.from({length: isMobile ? Math.floor(config.trees / 2) : config.trees}, () => this._createStaticTree()),
-      ...Array.from({length: isMobile ? Math.floor(config.wreaths / 2) : config.wreaths}, () => this._createStaticWreath())
-    ];
+    this.particles = [];
+    this.specialParticles = [];
+
+    // Create regular snowflakes
+    for (let i = 0; i < count; i++) {
+      this.particles.push(this._createParticle(config));
+    }
+
+    // Create static trees in random positions
+    const treeCount = isMobile ? Math.floor(config.trees / 2) : config.trees;
+    for (let i = 0; i < treeCount; i++) {
+      this.specialParticles.push(this._createStaticTree());
+    }
+
+    // Create static wreaths in random positions
+    const wreathCount = isMobile ? Math.floor(config.wreaths / 2) : config.wreaths;
+    for (let i = 0; i < wreathCount; i++) {
+      this.specialParticles.push(this._createStaticWreath());
+    }
   }
 
   _createParticle(config) {
+    // Determine depth layer (front, middle, back)
     const depth = Math.random();
     let size, speed, opacity, windSpeed;
+
     if (depth < 0.33) {
+      // Front layer - larger, faster, more opaque
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 1.5;
-      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 1.3;
+      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.sizeRange[0]) * 1.3;
       opacity = 0.8 + Math.random() * 0.2;
       windSpeed = 0.01 + Math.random() * 0.02;
     } else if (depth < 0.66) {
+      // Middle layer
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]);
-      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]);
+      speed = config.speedRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]);
       opacity = 0.5 + Math.random() * 0.2;
       windSpeed = 0.02 + Math.random() * 0.03;
     } else {
+      // Back layer - smaller, slower, less opaque
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.7;
-      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.7;
+      speed = config.speedRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.7;
       opacity = 0.3 + Math.random() * 0.2;
       windSpeed = 0.03 + Math.random() * 0.04;
     }
+
     return {
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight - window.innerHeight,
-      size,
-      speed,
-      opacity,
+      x: Math.random() * this.canvas.width,
+      y: Math.random() * this.canvas.height - this.canvas.height,
+      size: size,
+      speed: speed,
+      opacity: opacity,
       windOffset: Math.random() * Math.PI * 2,
-      windSpeed,
-      rotation: Math.random() * Math.PI * 2,
-      rotationSpeed: (Math.random() - 0.5) * 0.02
+      windSpeed: windSpeed,
+      rotation: Math.random() * Math.PI * 2, // For snowflake rotation
+      rotationSpeed: (Math.random() - 0.5) * 0.02 // Slow rotation
     };
   }
 
@@ -141,20 +213,24 @@ export class SnowEffect {
       rotationSpeed: 0,
       active: true,
       static: true,
-      snowLevel: 0
+      snowLevel: 0 // For snow accumulation
     };
   }
 
   _createStaticWreath() {
+    // Generate the wreath's shape data once
     const wreathShape = [];
-    for (let i = 0; i < 20; i++) {
+    const segments = 20;
+    for (let i = 0; i < segments; i++) {
+      const angle = (i / segments) * Math.PI * 2;
       wreathShape.push({
-        angle: (i / 20) * Math.PI * 2,
-        radius: 0.9 + Math.random() * 0.2,
-        thickness: 0.2 + Math.random() * 0.15,
-        color: i % 2 === 0 ? '#1a6b1a' : '#228B22'
+        angle: angle,
+        radius: 0.9 + Math.random() * 0.2, // Randomize radius for this segment
+        thickness: 0.2 + Math.random() * 0.15, // Randomize thickness
+        color: i % 2 === 0 ? '#1a6b1a' : '#228B22' // Alternate shades
       });
     }
+
     return {
       type: 'wreath',
       x: Math.random() * this.canvas.width,
@@ -167,45 +243,74 @@ export class SnowEffect {
       rotationSpeed: 0,
       active: true,
       static: true,
-      shape: wreathShape,
-      snowLevel: 0
+      shape: wreathShape, // Store the pre-generated shape
+      snowLevel: 0 // For snow accumulation
     };
   }
 
   _animate(currentTime) {
     if (this.isPaused || !this.canvas) return;
+
     const deltaTime = currentTime - this.lastTime;
     this.lastTime = currentTime;
+
+    // Update twinkle time for lights
     this.twinkleTime = currentTime;
+
+    // Clear canvas
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    // Update wind gusts (every 5-15 seconds)
     if (currentTime - this.lastGustTime > 5000 + Math.random() * 10000) {
-      this.windGustTarget = (Math.random() - 0.5) * 4;
+      this.windGustTarget = (Math.random() - 0.5) * 4; // -2 to +2
       this.lastGustTime = currentTime;
     }
+
+    // Smooth wind transition
     this.windGust += (this.windGustTarget - this.windGust) * 0.02;
+
+    // Spawn special particles occasionally
     this._spawnSpecialParticle();
-    this.particles.forEach(p => {
-      this._updateParticle(p, deltaTime);
-      this._drawSnowflake(p);
+
+
+    // Update and draw regular snowflakes
+    this.particles.forEach(particle => {
+      this._updateParticle(particle, deltaTime);
+      this._drawSnowflake(particle);
     });
-    this.specialParticles = this.specialParticles.filter(p => {
-      this._updateSpecialParticle(p, deltaTime);
-      this._drawSpecialParticle(p);
-      return p.active;
+
+    // Update and draw special particles
+    this.specialParticles = this.specialParticles.filter(particle => {
+      this._updateSpecialParticle(particle, deltaTime);
+      this._drawSpecialParticle(particle);
+      return particle.active;
     });
+
+    // Continue animation loop
     this.animationId = requestAnimationFrame(this._animate);
   }
 
   _updateParticle(particle, deltaTime) {
-    const normDelta = deltaTime / (16.67);
-    particle.y += particle.speed * normDelta;
-    particle.windOffset += particle.windSpeed * normDelta;
-    particle.x += (Math.sin(particle.windOffset) * 0.5 + this.windGust) * normDelta;
-    particle.rotation += particle.rotationSpeed * normDelta;
+    const normalizedDelta = deltaTime / (1000 / 60);
+
+    // Apply gravity
+    particle.y += particle.speed * normalizedDelta;
+
+    // Apply wind drift + wind gust
+    particle.windOffset += particle.windSpeed * normalizedDelta;
+    const baseWind = Math.sin(particle.windOffset) * 0.5;
+    particle.x += (baseWind + this.windGust) * normalizedDelta;
+
+    // Rotate snowflake
+    particle.rotation += particle.rotationSpeed * normalizedDelta;
+
+    // Recycle at bottom
     if (particle.y > this.canvas.height + 10) {
       particle.y = -10;
       particle.x = Math.random() * this.canvas.width;
     }
+
+    // Wrap horizontally
     if (particle.x < -10) {
       particle.x = this.canvas.width + 10;
     } else if (particle.x > this.canvas.width + 10) {
@@ -271,6 +376,9 @@ export class SnowEffect {
   _spawnSpecialParticle() {
     const choice = Math.random();
     if (choice < 0.0005) {
+      if (this.specialParticles.some(p => p.type === 'sleigh')) {
+        return;
+      }
       const fromLeft = Math.random() < 0.5;
       this.specialParticles.push({
         type: 'sleigh',
@@ -306,20 +414,21 @@ export class SnowEffect {
         active: true,
         static: false
       });
-    } else if (choice < 0.0009) { // Even rarer for train
+    } else if (choice < 0.001) { // Even rarer for train
       const fromLeft = Math.random() < 0.5;
       this.specialParticles.push({
         type: 'train',
         x: fromLeft ? -500 : this.canvas.width + 500, // Start further off-screen
         y: this.canvas.height - 50, // Near the bottom
         baseY: this.canvas.height - 50,
-        vx: fromLeft ? 2 + Math.random() * 1 : -(2 + Math.random() * 1),
+        vx: fromLeft ? 4 + Math.random() * 2 : -(4 + Math.random() * 2),
         size: 20 + Math.random() * 10,
         opacity: 1,
         time: 0,
         smoke: [], // To store individual smoke puffs
         active: true,
-        static: false
+        static: false,
+        carriages: 2 + Math.floor(Math.random() * 2) // 2 or 3 carriages
       });
     }
   }
@@ -343,26 +452,43 @@ export class SnowEffect {
       }
     } else if (particle.type === 'train') {
       // Train smoke animation
-      if (Math.random() < 0.3) { // Spawn smoke puff
+      // Calculate local chimney position for smoke emission
+      const size = particle.size * 1.8;
+      const baseUnit = size / 20;
+      const wheelRadius = baseUnit * 8; // Needed for engineChassisBottomY calc
+      const engineChassisBottomY = -wheelRadius - baseUnit; // As defined in _drawTrain
+      const chassisHeight = baseUnit * 7;
+      const boilerRadius = baseUnit * 10;
+      const boilerTopY = engineChassisBottomY - chassisHeight - boilerRadius * 2;
+      const engineLength = baseUnit * 70;
+      const cabWidth = baseUnit * 25;
+      const boilerWidth = engineLength - cabWidth;
+
+      const smokeOriginX = boilerWidth * 0.7 + baseUnit * 4; // Approx center of chimney top
+      const smokeOriginY = boilerTopY - baseUnit * 10; // Approx above chimney top
+
+      if (Math.random() < 0.45) { // Increased spawn probability
+        const smokeSize = particle.size * 0.6 + Math.random() * particle.size * 1.0; // Larger initial size
         particle.smoke.push({
-          x: particle.x + (particle.vx > 0 ? -particle.size * 2 : particle.size * 2),
-          y: particle.y - particle.size * 2.5,
-          size: particle.size * 0.5 + Math.random() * particle.size,
-          opacity: 0.8,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: -1 - Math.random(), // Smoke rises
-          life: 100 // Frames to live
+          x: smokeOriginX + (Math.random() - 0.5) * baseUnit * 2, // Slight randomness in x
+          y: smokeOriginY + (Math.random() - 0.5) * baseUnit * 1, // Slight randomness in y
+          size: smokeSize,
+          opacity: 0.8 + Math.random() * 0.2, // Higher initial opacity
+          vx: (Math.random() - 0.5) * 0.6 + this.windGust * 0.15, // Increased horizontal spread and wind influence
+          vy: -1.5 - Math.random() * 0.8, // Smoke rises faster
+          growth: 0.2 + Math.random() * 0.15, // Increased growth rate
+          life: 120 + Math.random() * 80 // Longer life
         });
       }
       particle.smoke.forEach(s => {
         s.x += s.vx * normDelta;
         s.y += s.vy * normDelta;
-        s.opacity -= 0.8 / s.life * normDelta;
-        s.size += 0.1 * normDelta;
+        s.opacity -= (1 / s.life) * normDelta; // Faster fade with longer life
+        s.size += s.growth * normDelta;
       });
       particle.smoke = particle.smoke.filter(s => s.opacity > 0);
 
-      const margin = 500; // Train is larger, give it more margin
+      const margin = 500;
       if (particle.x < -margin || particle.x > this.canvas.width + margin) {
         particle.active = false;
       }
@@ -424,29 +550,67 @@ export class SnowEffect {
         const nX = hX + dir * size * 0.25, nY = hY;
         ctx.fillStyle = '#ff0000';
         ctx.beginPath();
-        ctx.arc(nX, nY, size * 0.05, 0, Math.PI * 2);
+        ctx.arc(nX, nY, size * 0.03, 0, Math.PI * 2);
         ctx.fill();
-        const g = ctx.createRadialGradient(nX, nY, 0, nX, nY, size * 0.15);
+        const g = ctx.createRadialGradient(nX, nY, 0, nX, nY, size * 0.10);
         g.addColorStop(0, 'rgba(255,0,0,0.7)');
         g.addColorStop(1, 'rgba(255,0,0,0)');
         ctx.fillStyle = g;
         ctx.beginPath();
-        ctx.arc(nX, nY, size * 0.15, 0, Math.PI * 2);
+        ctx.arc(nX, nY, size * 0.10, 0, Math.PI * 2);
         ctx.fill();
       }
     });
     ctx.fillStyle = '#c00';
     ctx.strokeStyle = '#FFD700';
     ctx.lineWidth = 2;
-    ctx.beginPath();
     const sT = y - size * 0.7, sF = x + dir * size * 1.5, sB = x - dir * size * 0.3, sBot = y + size * 0.3;
+
+    // Sleigh body
+    ctx.beginPath();
     ctx.moveTo(sF, sT);
-    ctx.quadraticCurveTo(x + dir * size * 1.2, y - size * 0.3, sF, sBot);
+    ctx.quadraticCurveTo(x + dir * size, y - size * 0.2, sF - dir * size * 0.8, y);
+    ctx.lineTo(sB, y);
     ctx.lineTo(sB, sBot);
-    ctx.quadraticCurveTo(x - dir * size * 0.5, y, sB, sT);
+    ctx.lineTo(sF, sBot);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
+
+    // Sleigh back
+    ctx.beginPath();
+    ctx.moveTo(sB, y);
+    ctx.quadraticCurveTo(sB - dir * size * 0.4, y - size * 0.5, sB, sT);
+    ctx.quadraticCurveTo(sB + dir * size * 0.2, y - size * 0.4, sB + dir * size * 0.2, y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Runners/blades
+    ctx.strokeStyle = '#a52a2a';
+    ctx.lineWidth = 4;
+    const runnerY = sBot + size * 0.2;
+
+    function drawRunner(offset) {
+      ctx.beginPath();
+      ctx.moveTo(sF + dir * size * 0.1, runnerY + offset);
+      ctx.quadraticCurveTo(x, runnerY + offset + size * 0.2, sB - dir * size * 0.2, runnerY + offset);
+      ctx.stroke();
+      // Struts
+      ctx.beginPath();
+      ctx.moveTo(sF - dir * size * 0.5, sBot);
+      ctx.lineTo(sF - dir * size * 0.5, runnerY + offset);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(sB + dir * size * 0.5, sBot);
+      ctx.lineTo(sB + dir * size * 0.5, runnerY + offset);
+      ctx.stroke();
+    }
+
+    drawRunner(0);
+    drawRunner(size * 0.1);
+
+
     const sackX = x - dir * size * 0.05; // Re-inserted sackX definition
     ctx.fillStyle = '#5c4033'; // Brown sack
     ctx.beginPath();
@@ -501,6 +665,12 @@ export class SnowEffect {
     });
   }
 
+  /**
+   * Draws a tree at the specified particle's position with given size and rotation.
+   *
+   * @param {Object} particle - The particle object containing properties like x, y, size, rotation, and snowLevel.
+   * @return {void}
+   */
   _drawTree(particle) {
     const ctx = this.ctx, x = particle.x, y = particle.y, size = particle.size;
     ctx.save();
@@ -617,6 +787,12 @@ export class SnowEffect {
     ctx.restore();
   }
 
+  /**
+   * Draws a wreath on the canvas based on the provided particle's properties.
+   *
+   * @param {Object} particle - The particle object containing shape, position, size, rotation, and snowLevel.
+   * @return {void}
+   */
   _drawWreath(particle) {
     const ctx = this.ctx, x = particle.x, y = particle.y, size = particle.size;
     ctx.save();
@@ -670,6 +846,13 @@ export class SnowEffect {
     ctx.restore();
   }
 
+  /**
+   * Draws an elf representation using the provided particle's position and properties.
+   *
+   * @param {Object} particle - The object containing position, velocity, size, and time information.
+   *                             It should have properties x (x-coordinate), y (y-coordinate),
+   *                             vx (velocity in x-direction), size (size of the elf), and time (elapsed time).
+   */
   _drawElf(particle) {
     const ctx = this.ctx, x = particle.x, y = particle.y, size = particle.size, dir = particle.vx > 0 ? 1 : -1;
     ctx.save();
@@ -716,6 +899,241 @@ export class SnowEffect {
     ctx.restore();
   }
 
+  _drawTrain(particle) {
+    const ctx = this.ctx;
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size * 1.8;
+    const dir = particle.vx > 0 ? 1 : -1;
+    const time = particle.time;
+
+    ctx.save();
+    ctx.translate(x, y);
+    if (dir === -1) {
+      ctx.scale(-1, 1);
+    }
+
+    const wheelRotation = time * 0.005;
+    const baseUnit = size / 20;
+
+    // --- Define a stable baseline and proportions ---
+    const baseY = 0; // Let baseY be the track level where wheels touch
+
+    const wheelRadius = baseUnit * 8;
+    const smallWheelRadius = baseUnit * 5;
+
+    const chassisHeight = baseUnit * 7;
+    const carHeight = baseUnit * 35;
+
+    // Align bottom of chassis and carriage bodies to be the same distance from their respective wheel axles
+    const carriageBodyBottomY = -smallWheelRadius - baseUnit;
+    const engineChassisBottomY = -wheelRadius - baseUnit;
+
+    const carBodyTopY = carriageBodyBottomY - carHeight;
+
+    const cabHeight = baseUnit * 30;
+    const boilerRadius = baseUnit * 10;
+    const boilerTopY = engineChassisBottomY - chassisHeight - boilerRadius * 2;
+
+    const engineLength = baseUnit * 70;
+    const cabWidth = baseUnit * 25;
+    const boilerWidth = engineLength - cabWidth;
+    const carWidth = baseUnit * 60;
+    const carGap = baseUnit * 15;
+
+    // --- Draw Carriages ---
+    for (let i = 1; i <= particle.carriages; i++) {
+      const carX = -(cabWidth + (i * (carWidth + carGap)) - carGap);
+
+      // Wheels
+      ctx.fillStyle = '#222';
+      ctx.strokeStyle = '#444';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(carX + carWidth * 0.25, -smallWheelRadius, smallWheelRadius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(carX + carWidth * 0.75, -smallWheelRadius, smallWheelRadius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Body
+      ctx.fillStyle = '#004d00';
+      ctx.strokeStyle = '#DAA520';
+      ctx.lineWidth = baseUnit * 0.5;
+      ctx.fillRect(carX, carBodyTopY, carWidth, carHeight);
+      ctx.strokeRect(carX, carBodyTopY, carWidth, carHeight);
+
+      // Windows, Silhouettes, Wreath...
+      const windowHeight = carHeight * 0.6;
+      const windowY = carBodyTopY + carHeight * 0.2;
+      // ... (rest of the window/decoration logic)
+      ctx.shadowColor = '#F1C40F';
+      ctx.shadowBlur = 15;
+      const lightIntensity = 0.8 + Math.sin(time * 0.001 + i) * 0.2;
+      ctx.fillStyle = `rgba(255, 235, 150, ${lightIntensity})`;
+
+      const windowWidth = carWidth * 0.25;
+      const window1X = carX + carWidth * 0.15;
+      const window2X = carX + carWidth * 0.6;
+
+      ctx.fillRect(window1X, windowY, windowWidth, windowHeight);
+      ctx.fillRect(window2X, windowY, windowWidth, windowHeight);
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+      const headRadius1 = windowWidth * 0.2;
+      const headX1 = window1X + windowWidth / 2;
+      const headY1 = windowY + headRadius1 * 1.8;
+      ctx.beginPath();
+      ctx.arc(headX1, headY1, headRadius1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillRect(headX1 - headRadius1, headY1 + headRadius1, headRadius1 * 2, headRadius1 * 2);
+
+      const headRadius2 = windowWidth * 0.18;
+      const headX2 = window2X + windowWidth / 2;
+      const headY2 = windowY + headRadius2 * 1.6;
+      ctx.beginPath();
+      ctx.arc(headX2, headY2, headRadius2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillRect(headX2 - headRadius2 * 1.2, headY2, headRadius2 * 2.4, headRadius2 * 2.5);
+
+      const wreathSize = baseUnit * 4;
+      ctx.fillStyle = '#228B22';
+      ctx.beginPath();
+      ctx.arc(carX + carWidth / 2, carBodyTopY + carHeight / 2, wreathSize, 0, Math.PI * 2);
+      ctx.arc(carX + carWidth / 2, carBodyTopY + carHeight / 2, wreathSize * 0.6, 0, Math.PI * 2, true);
+      ctx.fill();
+      ctx.fillStyle = '#c00';
+      ctx.beginPath();
+      ctx.arc(carX + carWidth / 2, carBodyTopY + carHeight / 2 + wreathSize, wreathSize * 0.3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Coupling
+      ctx.strokeStyle = '#111';
+      ctx.lineWidth = baseUnit;
+      ctx.beginPath();
+      const couplingY = carriageBodyBottomY + chassisHeight / 2;
+      const prevEnd = (i === 1) ? -cabWidth : carX + carWidth + carGap;
+      ctx.moveTo(carX + carWidth, couplingY);
+      ctx.lineTo(prevEnd, couplingY);
+      ctx.stroke();
+    }
+
+    // --- Draw Engine ---
+    // Wheels
+    ctx.fillStyle = '#2C3E50';
+    ctx.strokeStyle = '#555';
+    ctx.lineWidth = baseUnit;
+    const wheelPositions = [baseUnit * 15, baseUnit * 35, baseUnit * 55];
+    wheelPositions.forEach(wx => {
+      ctx.beginPath();
+      ctx.arc(wx, -wheelRadius, wheelRadius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    });
+    const smallWheelX = -baseUnit * 10;
+    ctx.beginPath();
+    ctx.arc(smallWheelX, -smallWheelRadius, smallWheelRadius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Chassis
+    ctx.fillStyle = '#1C2833';
+    ctx.fillRect(-cabWidth - baseUnit * 5, engineChassisBottomY - chassisHeight, engineLength + baseUnit * 5, chassisHeight);
+
+    // Cab
+    ctx.fillStyle = '#B03A2E';
+    ctx.strokeStyle = '#DAA520';
+    ctx.lineWidth = baseUnit * 0.7;
+    const cabTopY = engineChassisBottomY - chassisHeight - cabHeight;
+    ctx.beginPath();
+    ctx.moveTo(-cabWidth, cabTopY);
+    ctx.lineTo(0, cabTopY);
+    ctx.lineTo(0, engineChassisBottomY - chassisHeight);
+    ctx.lineTo(-cabWidth - baseUnit * 5, engineChassisBottomY - chassisHeight);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = `rgba(255, 235, 150, ${0.8 + Math.sin(time * 0.001) * 0.2})`;
+    ctx.fillRect(-cabWidth + baseUnit * 4, cabTopY + baseUnit * 4, cabWidth - baseUnit * 12, baseUnit * 10);
+
+    // Boiler
+    ctx.fillStyle = '#2C3E50';
+    ctx.beginPath();
+    ctx.moveTo(0, engineChassisBottomY - chassisHeight);
+    ctx.lineTo(boilerWidth, engineChassisBottomY - chassisHeight);
+    ctx.arc(boilerWidth, boilerTopY + boilerRadius, boilerRadius, Math.PI / 2, -Math.PI / 2);
+    ctx.lineTo(0, boilerTopY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Chimney & Headlight
+    const chimneyTopY = boilerTopY - baseUnit * 8;
+    ctx.fillStyle = '#17202A';
+    ctx.beginPath();
+    ctx.moveTo(boilerWidth * 0.7, boilerTopY);
+    ctx.lineTo(boilerWidth * 0.7 - baseUnit * 2, chimneyTopY);
+    ctx.lineTo(boilerWidth * 0.7 + baseUnit * 10, chimneyTopY - baseUnit * 4);
+    ctx.lineTo(boilerWidth * 0.7 + baseUnit * 8, boilerTopY);
+    ctx.closePath();
+    ctx.fill();
+
+    const lightX = boilerWidth + boilerRadius;
+    const lightY = boilerTopY + boilerRadius;
+    const lightRadius = baseUnit * 4;
+    const gradient = ctx.createRadialGradient(lightX, lightY, lightRadius * 0.2, lightX, lightY, lightRadius * 1.5);
+    gradient.addColorStop(0, 'rgba(255, 255, 200, 1)');
+    gradient.addColorStop(0.4, 'rgba(255, 220, 100, 0.8)');
+    gradient.addColorStop(1, 'rgba(255, 200, 0, 0)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(lightX - lightRadius, lightY - lightRadius, lightRadius * 2, lightRadius * 2);
+
+    // Rods
+    ctx.strokeStyle = '#99A3A4';
+    ctx.lineWidth = baseUnit * 2;
+    const rodYOffset = Math.sin(wheelRotation) * wheelRadius * 0.6;
+    const mainRodX = wheelPositions[1] + Math.cos(wheelRotation) * wheelRadius * 0.6;
+    const pistonX = engineLength - baseUnit * 10;
+    const pistonY = engineChassisBottomY - chassisHeight + baseUnit * 2 + Math.sin(time * 0.01) * baseUnit;
+
+    ctx.beginPath();
+    ctx.moveTo(pistonX, pistonY);
+    ctx.lineTo(mainRodX, -wheelRadius + rodYOffset);
+    ctx.stroke();
+
+    ctx.lineWidth = baseUnit * 1.5;
+    [wheelPositions[0], wheelPositions[2]].forEach(wx => {
+      const subRodX = wx + Math.cos(wheelRotation) * wheelRadius * 0.6;
+      ctx.beginPath();
+      ctx.moveTo(mainRodX, -wheelRadius + rodYOffset);
+      ctx.lineTo(subRodX, -wheelRadius + rodYOffset);
+      ctx.stroke();
+    });
+
+    // Smoke
+    particle.smoke.forEach(s => {
+      ctx.fillStyle = `rgba(220, 220, 220, ${s.opacity})`;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    ctx.restore();
+  }
+
+  /**
+   * Draws a simple star on the canvas context.
+   *
+   * @param {CanvasRenderingContext2D} ctx - The canvas rendering context used for drawing.
+   * @param {number} x - The x-coordinate of the center of the star.
+   * @param {number} y - The y-coordinate of the center of the star.
+   * @param {number} size - The size of the star, determining its overall dimensions.
+   *
+   * @return {void}
+   */
   _drawSimpleStar(ctx, x, y, size) {
     ctx.save();
     ctx.translate(x, y);
@@ -730,11 +1148,27 @@ export class SnowEffect {
     ctx.restore();
   }
 
+  /**
+   * Binds event listeners to the window and document objects.
+   *
+   * This method attaches a 'resize' event listener to the window that triggers the _handleResize method
+   * when the window is resized. Additionally, it attaches a 'visibilitychange' event listener to the document
+   * which invokes the _handleVisibility method when the visibility of the page changes (e.g., switching tabs).
+   *
+   * @return {void}
+   */
   _bindEvents() {
     window.addEventListener('resize', this._handleResize);
     document.addEventListener('visibilitychange', this._handleVisibility);
   }
 
+  /**
+   * Handles the resize event for the canvas.
+   * Clears any existing timeout and sets a new one to delay the resizing action,
+   * ensuring that rapid window resizes do not trigger multiple resize operations.
+   *
+   * @return {void}
+   */
   _handleResize() {
     clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
@@ -745,6 +1179,13 @@ export class SnowEffect {
     }, 250);
   }
 
+  /**
+   * Handles the visibility change of the document.
+   * If the document is hidden, it pauses the operation.
+   * If the document is visible, and the operation is enabled and not already paused, it starts the operation.
+   *
+   * @return {void}
+   */
   _handleVisibility() {
     if (document.hidden) {
       this.pause();
@@ -753,6 +1194,14 @@ export class SnowEffect {
     }
   }
 
+  /**
+   * Cleans up resources and event listeners used by the object.
+   *
+   * This method removes the canvas element from the DOM, detaches resize and visibility change event listeners,
+   * and sets various properties to null to free up memory.
+   *
+   * @return {void}
+   */
   _cleanup() {
     if (this.canvas && this.canvas.parentNode) {
       this.canvas.parentNode.removeChild(this.canvas);
