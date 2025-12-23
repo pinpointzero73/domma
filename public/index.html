@@ -859,16 +859,9 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
 
 <script src="dist/domma.min.js"></script>
 <script src="dist/domma-syntax.min.js"></script>
-<script src="dist/festive-snow.js"></script>
 <script type="module" src="layouts/js/layout.js"></script>
-<script>
-  // Add festive snow if it's the season!
-  if (typeof FestiveSnow !== 'undefined' && FestiveSnow.isFestiveSeason()) {
-    FestiveSnow.createSnowToggle({
-      position: 'bottom-left'
-    });
-  }
 
+<script>
   $(() => {
     // Initialise navbar
     const logoSvg = `<svg class="navbar-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">

@@ -1,58 +1,35 @@
-/**
- * SnowEffect - Canvas-based festive snow animation with special effects
- * Part of Domma Layout System
- */
-
-const INTENSITY_CONFIG = {
-  light: {
-    count: 50,
-    speedRange: [0.5, 1.5],
-    sizeRange: [1, 3],
-    trees: 5,
-    wreaths: 3
-  },
-  medium: {
-    count: 150,
-    speedRange: [0.8, 2.5],
-    sizeRange: [1, 4],
-    trees: 10,
-    wreaths: 6
-  },
-  heavy: {
-    count: 300,
-    speedRange: [1.0, 3.5],
-    sizeRange: [1, 5],
-    trees: 20,
-    wreaths: 10
-  }
-};
-
 export class SnowEffect {
   constructor(options = {}) {
     this.intensity = options.intensity || 'medium';
     this.enabled = options.enabled !== undefined ? options.enabled : false;
+    this.seasonCheck = options.seasonCheck || null;
     this.canvas = null;
     this.ctx = null;
     this.particles = [];
-    this.specialParticles = []; // Sleighs, trees, etc.
+    this.specialParticles = [];
     this.animationId = null;
     this.lastTime = 0;
     this.isPaused = false;
     this.resizeTimeout = null;
-    this.windGust = 0; // Current wind strength
-    this.windGustTarget = 0; // Target wind strength
+    this.windGust = 0;
+    this.windGustTarget = 0;
     this.lastGustTime = 0;
-    this.twinkleTime = 0; // For twinkling lights
+    this.twinkleTime = 0;
 
-    // Bind methods
     this._animate = this._animate.bind(this);
     this._handleResize = this._handleResize.bind(this);
     this._handleVisibility = this._handleVisibility.bind(this);
   }
 
-  init() {
-    if (this.canvas) return; // Already initialized
+  shouldDisplay() {
+    if (typeof this.seasonCheck === 'function') {
+      return this.seasonCheck();
+    }
+    return true;
+  }
 
+  init() {
+    if (this.canvas) return;
     this._createCanvas();
     this._createParticles();
     this._bindEvents();
@@ -60,7 +37,6 @@ export class SnowEffect {
 
   start() {
     if (!this.canvas || this.animationId) return;
-
     this.isPaused = false;
     this.lastTime = performance.now();
     this.lastGustTime = performance.now();
@@ -82,24 +58,17 @@ export class SnowEffect {
 
   setIntensity(level) {
     if (!['light', 'medium', 'heavy'].includes(level)) return;
-
     this.intensity = level;
-    this._createParticles(); // Recreate particles with new count
+    this._createParticles();
   }
 
   _createCanvas() {
     this.canvas = document.createElement('canvas');
-    this.canvas.id = 'dm-snow-effect';
+    this.canvas.id = 'festive-snow-canvas';
     this.canvas.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 999;
-        `;
-
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none; z-index: 999;
+    `;
     this.ctx = this.canvas.getContext('2d', {alpha: true});
     this._resizeCanvas();
     document.body.appendChild(this.canvas);
@@ -111,66 +80,51 @@ export class SnowEffect {
   }
 
   _createParticles() {
-    const config = INTENSITY_CONFIG[this.intensity];
+    const config = {
+      light: {count: 50, speedRange: [0.5, 1.5], sizeRange: [1, 3], trees: 3, wreaths: 2},
+      medium: {count: 150, speedRange: [0.8, 2.5], sizeRange: [1, 4], trees: 6, wreaths: 3},
+      heavy: {count: 300, speedRange: [1.0, 3.5], sizeRange: [1, 5], trees: 10, wreaths: 4}
+    }[this.intensity];
+
     const isMobile = window.innerWidth < 768;
     const count = isMobile ? Math.floor(config.count / 2) : config.count;
 
-    this.particles = [];
-    this.specialParticles = [];
-
-    // Create regular snowflakes
-    for (let i = 0; i < count; i++) {
-      this.particles.push(this._createParticle(config));
-    }
-
-    // Create static trees in random positions
-    const treeCount = isMobile ? Math.floor(config.trees / 2) : config.trees;
-    for (let i = 0; i < treeCount; i++) {
-      this.specialParticles.push(this._createStaticTree());
-    }
-
-    // Create static wreaths in random positions
-    const wreathCount = isMobile ? Math.floor(config.wreaths / 2) : config.wreaths;
-    for (let i = 0; i < wreathCount; i++) {
-      this.specialParticles.push(this._createStaticWreath());
-    }
+    this.particles = Array.from({length: count}, () => this._createParticle(config));
+    this.specialParticles = [
+      ...Array.from({length: isMobile ? Math.floor(config.trees / 2) : config.trees}, () => this._createStaticTree()),
+      ...Array.from({length: isMobile ? Math.floor(config.wreaths / 2) : config.wreaths}, () => this._createStaticWreath())
+    ];
   }
 
   _createParticle(config) {
-    // Determine depth layer (front, middle, back)
     const depth = Math.random();
     let size, speed, opacity, windSpeed;
-
     if (depth < 0.33) {
-      // Front layer - larger, faster, more opaque
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 1.5;
       speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 1.3;
       opacity = 0.8 + Math.random() * 0.2;
       windSpeed = 0.01 + Math.random() * 0.02;
     } else if (depth < 0.66) {
-      // Middle layer
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]);
       speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]);
       opacity = 0.5 + Math.random() * 0.2;
       windSpeed = 0.02 + Math.random() * 0.03;
     } else {
-      // Back layer - smaller, slower, less opaque
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.7;
       speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.7;
       opacity = 0.3 + Math.random() * 0.2;
       windSpeed = 0.03 + Math.random() * 0.04;
     }
-
     return {
-      x: Math.random() * this.canvas.width,
-      y: Math.random() * this.canvas.height - this.canvas.height,
-      size: size,
-      speed: speed,
-      opacity: opacity,
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight - window.innerHeight,
+      size,
+      speed,
+      opacity,
       windOffset: Math.random() * Math.PI * 2,
-      windSpeed: windSpeed,
-      rotation: Math.random() * Math.PI * 2, // For snowflake rotation
-      rotationSpeed: (Math.random() - 0.5) * 0.02 // Slow rotation
+      windSpeed,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: (Math.random() - 0.5) * 0.02
     };
   }
 
@@ -186,11 +140,21 @@ export class SnowEffect {
       rotation: 0,
       rotationSpeed: 0,
       active: true,
-      static: true
+      static: true,
+      snowLevel: 0
     };
   }
 
   _createStaticWreath() {
+    const wreathShape = [];
+    for (let i = 0; i < 20; i++) {
+      wreathShape.push({
+        angle: (i / 20) * Math.PI * 2,
+        radius: 0.9 + Math.random() * 0.2,
+        thickness: 0.2 + Math.random() * 0.15,
+        color: i % 2 === 0 ? '#1a6b1a' : '#228B22'
+      });
+    }
     return {
       type: 'wreath',
       x: Math.random() * this.canvas.width,
@@ -199,77 +163,49 @@ export class SnowEffect {
       vy: 0,
       size: 15 + Math.random() * 10,
       opacity: 0.7 + Math.random() * 0.2,
-      rotation: Math.random() * Math.PI * 2,
+      rotation: 0,
       rotationSpeed: 0,
       active: true,
-      static: true
+      static: true,
+      shape: wreathShape,
+      snowLevel: 0
     };
   }
 
   _animate(currentTime) {
     if (this.isPaused || !this.canvas) return;
-
     const deltaTime = currentTime - this.lastTime;
     this.lastTime = currentTime;
-
-    // Update twinkle time for lights
     this.twinkleTime = currentTime;
-
-    // Clear canvas
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    // Update wind gusts (every 5-15 seconds)
     if (currentTime - this.lastGustTime > 5000 + Math.random() * 10000) {
-      this.windGustTarget = (Math.random() - 0.5) * 4; // -2 to +2
+      this.windGustTarget = (Math.random() - 0.5) * 4;
       this.lastGustTime = currentTime;
     }
-
-    // Smooth wind transition
     this.windGust += (this.windGustTarget - this.windGust) * 0.02;
-
-    // Spawn special particles occasionally
-    if (Math.random() < 0.0005) { // ~0.05% chance per frame
-      this._spawnSpecialParticle();
-    }
-
-    // Update and draw regular snowflakes
-    this.particles.forEach(particle => {
-      this._updateParticle(particle, deltaTime);
-      this._drawSnowflake(particle);
+    this._spawnSpecialParticle();
+    this.particles.forEach(p => {
+      this._updateParticle(p, deltaTime);
+      this._drawSnowflake(p);
     });
-
-    // Update and draw special particles
-    this.specialParticles = this.specialParticles.filter(particle => {
-      this._updateSpecialParticle(particle, deltaTime);
-      this._drawSpecialParticle(particle);
-      return particle.active;
+    this.specialParticles = this.specialParticles.filter(p => {
+      this._updateSpecialParticle(p, deltaTime);
+      this._drawSpecialParticle(p);
+      return p.active;
     });
-
-    // Continue animation loop
     this.animationId = requestAnimationFrame(this._animate);
   }
 
   _updateParticle(particle, deltaTime) {
-    const normalizedDelta = deltaTime / (1000 / 60);
-
-    // Apply gravity
-    particle.y += particle.speed * normalizedDelta;
-
-    // Apply wind drift + wind gust
-    particle.windOffset += particle.windSpeed * normalizedDelta;
-    const baseWind = Math.sin(particle.windOffset) * 0.5;
-    particle.x += (baseWind + this.windGust) * normalizedDelta;
-
-    // Rotate snowflake
-    particle.rotation += particle.rotationSpeed * normalizedDelta;
-
-    // Recycle at bottom
+    const normDelta = deltaTime / (16.67);
+    particle.y += particle.speed * normDelta;
+    particle.windOffset += particle.windSpeed * normDelta;
+    particle.x += (Math.sin(particle.windOffset) * 0.5 + this.windGust) * normDelta;
+    particle.rotation += particle.rotationSpeed * normDelta;
     if (particle.y > this.canvas.height + 10) {
       particle.y = -10;
       particle.x = Math.random() * this.canvas.width;
     }
-
-    // Wrap horizontally
     if (particle.x < -10) {
       particle.x = this.canvas.width + 10;
     } else if (particle.x > this.canvas.width + 10) {
@@ -333,289 +269,192 @@ export class SnowEffect {
   }
 
   _spawnSpecialParticle() {
-    // Only spawn sleighs (trees and wreaths are static)
-    const fromLeft = Math.random() < 0.5;
-    const startY = Math.random() * (this.canvas.height * 0.5); // Upper 50% of screen
-
-    this.specialParticles.push({
-      type: 'sleigh',
-      x: fromLeft ? -100 : this.canvas.width + 100,
-      y: startY,
-      baseY: startY, // Track original Y for sine wave
-      vx: fromLeft ? 3 + Math.random() * 2 : -(3 + Math.random() * 2), // Horizontal speed
-      waveAmplitude: 20 + Math.random() * 30, // How much the sleigh bobs up/down
-      waveFrequency: 0.001 + Math.random() * 0.002, // Speed of wave oscillation
-      wavePhase: Math.random() * Math.PI * 2, // Random starting point in wave
-      time: 0, // Track time for sine wave
-      size: 15 + Math.random() * 10,
-      opacity: 0.9,
-      rotation: 0,
-      active: true,
-      static: false
-    });
+    const choice = Math.random();
+    if (choice < 0.0005) {
+      const fromLeft = Math.random() < 0.5;
+      this.specialParticles.push({
+        type: 'sleigh',
+        x: fromLeft ? -100 : this.canvas.width + 100,
+        y: Math.random() * (this.canvas.height * 0.5),
+        baseY: Math.random() * (this.canvas.height * 0.5),
+        vx: fromLeft ? 3 + Math.random() * 2 : -(3 + Math.random() * 2),
+        waveAmplitude: 20 + Math.random() * 30,
+        waveFrequency: 0.001 + Math.random() * 0.002,
+        wavePhase: Math.random() * Math.PI * 2,
+        time: 0,
+        size: 15 + Math.random() * 10,
+        opacity: 0.9,
+        rotation: 0,
+        active: true,
+        static: false
+      });
+    } else if (choice < 0.0008) {
+      const fromLeft = Math.random() < 0.5;
+      this.specialParticles.push({
+        type: 'elf',
+        x: fromLeft ? -50 : this.canvas.width + 50,
+        y: this.canvas.height - 30,
+        baseY: this.canvas.height - 30,
+        vx: fromLeft ? 1.5 + Math.random() * 1 : -(1.5 + Math.random() * 1),
+        waveAmplitude: 3,
+        waveFrequency: 0.05,
+        wavePhase: Math.random() * Math.PI * 2,
+        time: 0,
+        size: 10 + Math.random() * 5,
+        opacity: 0.95,
+        rotation: 0,
+        active: true,
+        static: false
+      });
+    }
   }
 
   _updateSpecialParticle(particle, deltaTime) {
-    // Skip static particles (trees and wreaths)
-    if (particle.static) return;
-
-    const normalizedDelta = deltaTime / (1000 / 60);
-
-    // Update horizontal position
-    particle.x += particle.vx * normalizedDelta;
-
-    // For sleighs, use sine wave for smooth up/down flight motion
-    if (particle.type === 'sleigh') {
-      particle.time += deltaTime;
-      const wave = Math.sin(particle.time * particle.waveFrequency + particle.wavePhase);
-      particle.y = particle.baseY + (wave * particle.waveAmplitude);
-
-      // Mark inactive when off screen
-      if (particle.x < -200 || particle.x > this.canvas.width + 200) {
+    if (particle.static) {
+      if (Math.random() < 0.0005) {
+        particle.snowLevel = Math.min(particle.snowLevel + Math.random() * 0.2, particle.size * 0.3);
+      }
+      return;
+    }
+    const normDelta = deltaTime / (16.67);
+    particle.x += particle.vx * normDelta;
+    particle.time += deltaTime;
+    if (particle.type === 'sleigh' || particle.type === 'elf') {
+      particle.y = particle.baseY + (Math.sin(particle.time * particle.waveFrequency + particle.wavePhase) * particle.waveAmplitude);
+      const margin = particle.type === 'sleigh' ? 200 : 100;
+      if (particle.x < -margin || particle.x > this.canvas.width + margin) {
         particle.active = false;
       }
     }
   }
 
-  _drawSpecialParticle(particle) {
-    const ctx = this.ctx;
-    ctx.save();
-    ctx.globalAlpha = particle.opacity;
-
-    if (particle.type === 'sleigh') {
-      this._drawSleigh(particle);
-    } else if (particle.type === 'tree') {
-      this._drawTree(particle);
-    } else if (particle.type === 'wreath') {
-      this._drawWreath(particle);
-    }
-
-    ctx.restore();
+  _drawSpecialParticle(p) {
+    this.ctx.save();
+    this.ctx.globalAlpha = p.opacity;
+    if (p.type === 'sleigh') this._drawSleigh(p);
+    else if (p.type === 'tree') this._drawTree(p);
+    else if (p.type === 'wreath') this._drawWreath(p);
+    else if (p.type === 'elf') this._drawElf(p);
+    this.ctx.restore();
   }
 
   _drawSleigh(particle) {
-    const ctx = this.ctx;
-    const x = particle.x;
-    const y = particle.y;
-    const size = particle.size * 1.5; // Make it bigger
-    const direction = particle.vx > 0 ? 1 : -1;
-
-    // Draw 5 reindeer in V-formation
-    const reindeerPositions = [
-      {x: 4.8, y: 0},      // Rudolph - lead position, straight ahead
-      {x: 4.0, y: -0.3},   // Second row left
-      {x: 4.0, y: 0.3},    // Second row right
-      {x: 3.2, y: -0.15},  // Back row left
-      {x: 3.2, y: 0.15}    // Back row right
-    ];
-
-    for (let i = 0; i < 5; i++) {
-      const reindeerX = x + direction * (size * reindeerPositions[i].x);
-      const offsetY = reindeerPositions[i].y * size;
-
-      ctx.fillStyle = '#8B4513'; // Brown
-
-      // Reindeer body
+    const ctx = this.ctx, x = particle.x, y = particle.y, size = particle.size * 1.5, dir = particle.vx > 0 ? 1 : -1;
+    const legAngle = Math.sin(particle.time * 0.01) * (Math.PI / 5);
+    [{x: 4.8, y: 0}, {x: 4.0, y: -0.3}, {x: 4.0, y: 0.3}, {x: 3.2, y: -0.15}, {x: 3.2, y: 0.15}].forEach((pos, i) => {
+      const rX = x + dir * (size * pos.x), oY = pos.y * size;
+      ctx.fillStyle = '#9c6e49';
+      ctx.strokeStyle = '#7b563a';
+      ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.ellipse(reindeerX, y + offsetY, size * 0.5, size * 0.3, 0, 0, Math.PI * 2);
+      ctx.moveTo(rX - dir * size * 0.4, y + oY);
+      ctx.quadraticCurveTo(rX, y + oY - size * 0.4, rX + dir * size * 0.4, y + oY);
+      ctx.quadraticCurveTo(rX, y + oY + size * 0.4, rX - dir * size * 0.4, y + oY);
       ctx.fill();
-
-      // Reindeer neck
-      ctx.fillRect(reindeerX + direction * size * 0.35, y + offsetY - size * 0.25, size * 0.15, size * 0.25);
-
-      // Reindeer head
+      ctx.stroke();
+      const hX = rX + dir * size * 0.5, hY = y + oY - size * 0.3;
       ctx.beginPath();
-      ctx.ellipse(reindeerX + direction * size * 0.6, y + offsetY - size * 0.35, size * 0.25, size * 0.2, 0, 0, Math.PI * 2);
+      ctx.ellipse(hX, hY, size * 0.25, size * 0.2, 0, 0, Math.PI * 2);
       ctx.fill();
-
-      // Antlers (branching)
-      ctx.strokeStyle = '#8B4513';
+      ctx.stroke();
+      ctx.strokeStyle = '#6e4a2e';
       ctx.lineWidth = 1.5;
-      const antlerBase = reindeerX + direction * size * 0.6;
-      // Main antler branch
+      const anX = hX - dir * size * 0.1, anY = hY - size * 0.15;
       ctx.beginPath();
-      ctx.moveTo(antlerBase, y + offsetY - size * 0.45);
-      ctx.lineTo(antlerBase + direction * size * 0.15, y + offsetY - size * 0.7);
+      ctx.moveTo(anX, anY);
+      ctx.lineTo(anX - dir * size * 0.2, anY - size * 0.3);
+      ctx.lineTo(anX - dir * size * 0.1, anY - size * 0.4);
+      ctx.moveTo(anX - dir * size * 0.2, anY - size * 0.3);
+      ctx.lineTo(anX - dir * size * 0.3, anY - size * 0.35);
       ctx.stroke();
-      // Sub branches
+      const legY = y + oY + size * 0.1;
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = '#7b563a';
       ctx.beginPath();
-      ctx.moveTo(antlerBase + direction * size * 0.08, y + offsetY - size * 0.58);
-      ctx.lineTo(antlerBase + direction * size * 0.2, y + offsetY - size * 0.65);
+      ctx.moveTo(rX + dir * size * 0.3, legY);
+      ctx.lineTo(rX + dir * (size * 0.3 + Math.sin(legAngle) * size * 0.2), legY + size * 0.3);
       ctx.stroke();
-
-      // Legs
-      ctx.fillStyle = '#8B4513';
-      ctx.fillRect(reindeerX - size * 0.15, y + offsetY + size * 0.25, size * 0.1, size * 0.2);
-      ctx.fillRect(reindeerX + size * 0.15, y + offsetY + size * 0.25, size * 0.1, size * 0.2);
-
-      // Red nose on Rudolph (lead reindeer at i === 0)
+      ctx.beginPath();
+      ctx.moveTo(rX - dir * size * 0.3, legY);
+      ctx.lineTo(rX - dir * (size * 0.3 - Math.sin(legAngle) * size * 0.2), legY + size * 0.3);
+      ctx.stroke();
       if (i === 0) {
+        const nX = hX + dir * size * 0.25, nY = hY;
         ctx.fillStyle = '#ff0000';
         ctx.beginPath();
-        ctx.arc(reindeerX + direction * size * 0.75, y + offsetY - size * 0.35, size * 0.08, 0, Math.PI * 2);
+        ctx.arc(nX, nY, size * 0.05, 0, Math.PI * 2);
         ctx.fill();
-        // Nose glow
-        const noseGlow = ctx.createRadialGradient(
-          reindeerX + direction * size * 0.75, y + offsetY - size * 0.35, 0,
-          reindeerX + direction * size * 0.75, y + offsetY - size * 0.35, size * 0.2
-        );
-        noseGlow.addColorStop(0, 'rgba(255, 0, 0, 0.6)');
-        noseGlow.addColorStop(1, 'rgba(255, 0, 0, 0)');
-        ctx.fillStyle = noseGlow;
+        const g = ctx.createRadialGradient(nX, nY, 0, nX, nY, size * 0.15);
+        g.addColorStop(0, 'rgba(255,0,0,0.7)');
+        g.addColorStop(1, 'rgba(255,0,0,0)');
+        ctx.fillStyle = g;
         ctx.beginPath();
-        ctx.arc(reindeerX + direction * size * 0.75, y + offsetY - size * 0.35, size * 0.2, 0, Math.PI * 2);
+        ctx.arc(nX, nY, size * 0.15, 0, Math.PI * 2);
         ctx.fill();
       }
-    }
-
-    // Reins connecting Santa to each reindeer
-    const santaX = x + direction * size * 0.6;
-    ctx.strokeStyle = '#654321';
-    ctx.lineWidth = 1;
-    for (let i = 0; i < 5; i++) {
-      const reindeerX = x + direction * (size * reindeerPositions[i].x);
-      const offsetY = reindeerPositions[i].y * size;
-      ctx.beginPath();
-      ctx.moveTo(santaX + direction * size * 0.2, y - size * 0.3);
-      ctx.quadraticCurveTo(
-        x + direction * size * 2, y + offsetY - size * 0.4,
-        reindeerX - direction * size * 0.3, y + offsetY - size * 0.1
-      );
-      ctx.stroke();
-    }
-
-    // Gift sack at rear of sleigh (behind Santa)
-    const sackX = x - direction * size * 0.2;
-    ctx.fillStyle = '#8B4513';
-    ctx.beginPath();
-    ctx.ellipse(sackX, y - size * 0.15, size * 0.3, size * 0.35, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Sack tie/rope at top
-    ctx.strokeStyle = '#654321';
+    });
+    ctx.fillStyle = '#c00';
+    ctx.strokeStyle = '#FFD700';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(sackX, y - size * 0.45, size * 0.15, 0, Math.PI, true);
-    ctx.stroke();
-
-    // Gold ribbon/bow
-    ctx.fillStyle = '#FFD700';
-    ctx.beginPath();
-    ctx.arc(sackX - size * 0.1, y - size * 0.5, size * 0.08, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(sackX + size * 0.1, y - size * 0.5, size * 0.08, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Sleigh runners - curved skis
-    ctx.strokeStyle = '#C0C0C0';
-    ctx.lineWidth = 3;
-    ctx.lineCap = 'round';
-    // Front runner
-    ctx.beginPath();
-    ctx.moveTo(x - direction * size * 0.4, y + size * 0.3);
-    ctx.quadraticCurveTo(x + direction * size * 0.2, y + size * 0.5, x + direction * size * 0.7, y + size * 0.25);
-    ctx.stroke();
-    // Back runner
-    ctx.beginPath();
-    ctx.moveTo(x + direction * size * 0.5, y + size * 0.3);
-    ctx.quadraticCurveTo(x + direction * size * 1.1, y + size * 0.5, x + direction * size * 1.6, y + size * 0.25);
-    ctx.stroke();
-
-    // Sleigh body - elegant curved design (drawn before Santa so he appears inside)
-    ctx.fillStyle = '#8B0000'; // Dark red
-    ctx.beginPath();
-    ctx.moveTo(x - direction * size * 0.3, y - size * 0.5);
-    ctx.quadraticCurveTo(x + direction * size * 0.5, y - size * 0.7, x + direction * size * 1.5, y - size * 0.5);
-    ctx.lineTo(x + direction * size * 1.3, y + size * 0.2);
-    ctx.quadraticCurveTo(x + direction * size * 0.7, y + size * 0.4, x - direction * size * 0.1, y + size * 0.2);
+    const sT = y - size * 0.7, sF = x + dir * size * 1.5, sB = x - dir * size * 0.3, sBot = y + size * 0.3;
+    ctx.moveTo(sF, sT);
+    ctx.quadraticCurveTo(x + dir * size * 1.2, y - size * 0.3, sF, sBot);
+    ctx.lineTo(sB, sBot);
+    ctx.quadraticCurveTo(x - dir * size * 0.5, y, sB, sT);
     ctx.closePath();
     ctx.fill();
-
-    // Sleigh highlights
-    ctx.strokeStyle = '#FFD700';
-    ctx.lineWidth = 2;
     ctx.stroke();
-
-    // Gold decorative swirls
-    ctx.strokeStyle = '#FFD700';
-    ctx.lineWidth = 1.5;
+    const sackX = x - dir * size * 0.05;
+    ctx.fillStyle = '#5c4033';
     ctx.beginPath();
-    ctx.arc(x + direction * size * 0.6, y - size * 0.3, size * 0.15, 0, Math.PI);
-    ctx.stroke();
-
-    // Santa in sleigh (drawn AFTER sleigh body so upper body visible above sleigh edge)
-    // Santa's upper body (red coat) - only top half visible
-    ctx.fillStyle = '#C41E3A';
-    ctx.beginPath();
-    ctx.arc(santaX, y - size * 0.1, size * 0.35, 0, Math.PI, true); // Top half of torso
+    ctx.ellipse(sackX, y - size * 0.2, size * 0.4, size * 0.5, 0, 0, Math.PI * 2);
     ctx.fill();
-
-    // White fur trim at waist (where sleigh edge cuts off)
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(santaX - size * 0.35, y - size * 0.12, size * 0.7, size * 0.08);
-
-    // Santa's head
+    const saX = x + dir * size * 0.6, saY = y - size * 0.55;
+    ctx.fillStyle = '#c00';
+    ctx.beginPath();
+    ctx.moveTo(saX - size * 0.2, saY);
+    ctx.lineTo(saX + size * 0.2, saY);
+    ctx.lineTo(saX, saY - size * 0.4);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(saX - size * 0.22, saY, size * 0.44, size * 0.08);
+    ctx.beginPath();
+    ctx.arc(saX, saY - size * 0.4, size * 0.07, 0, Math.PI * 2);
+    ctx.fill();
     ctx.fillStyle = '#FFD7BA';
     ctx.beginPath();
-    ctx.arc(santaX, y - size * 0.5, size * 0.22, 0, Math.PI * 2);
+    ctx.arc(saX, saY + size * 0.08, size * 0.18, 0, Math.PI * 2);
     ctx.fill();
-
-    // Santa's beard
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#fff';
     ctx.beginPath();
-    ctx.ellipse(santaX, y - size * 0.35, size * 0.25, size * 0.2, 0, 0, Math.PI);
+    ctx.ellipse(saX, saY + size * 0.2, size * 0.25, size * 0.2, 0, 0, Math.PI);
     ctx.fill();
-
-    // Santa's hat
-    ctx.fillStyle = '#C41E3A';
-    ctx.beginPath();
-    ctx.moveTo(santaX - size * 0.2, y - size * 0.6);
-    ctx.lineTo(santaX + size * 0.2, y - size * 0.6);
-    ctx.lineTo(santaX + direction * size * 0.35, y - size * 0.9);
-    ctx.closePath();
-    ctx.fill();
-
-    // Hat white trim
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(santaX - size * 0.2, y - size * 0.63, size * 0.4, size * 0.08);
-
-    // Hat pompom
-    ctx.beginPath();
-    ctx.arc(santaX + direction * size * 0.35, y - size * 0.9, size * 0.1, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Santa's mittens holding reins
-    ctx.fillStyle = '#C41E3A';
-    ctx.beginPath();
-    ctx.arc(santaX + direction * size * 0.2, y - size * 0.3, size * 0.12, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(santaX - direction * size * 0.1, y - size * 0.3, size * 0.12, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.strokeStyle = '#654321';
+    ctx.lineWidth = 1;
+    [{x: 4.8, y: 0}, {x: 4.0, y: -0.3}, {x: 4.0, y: 0.3}, {x: 3.2, y: -0.15}, {x: 3.2, y: 0.15}].forEach(pos => {
+      const rX = x + dir * (size * pos.x), oY = pos.y * size, hX = rX + dir * size * 0.5;
+      ctx.beginPath();
+      ctx.moveTo(saX, saY + size * 0.1);
+      ctx.quadraticCurveTo((saX + hX) / 2, y + oY - size * 0.5, hX - dir * size * 0.1, y + oY - size * 0.3);
+      ctx.stroke();
+    });
   }
 
   _drawTree(particle) {
-    const ctx = this.ctx;
-    const x = particle.x;
-    const y = particle.y;
-    const size = particle.size;
-
+    const ctx = this.ctx, x = particle.x, y = particle.y, size = particle.size;
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(particle.rotation);
-
-    // Tree trunk - tapered shape
-    ctx.fillStyle = '#654321'; // Darker brown
+    ctx.fillStyle = '#654321';
     ctx.beginPath();
-    ctx.moveTo(-size * 0.2, size * 0.8); // Top left
-    ctx.lineTo(size * 0.2, size * 0.8);  // Top right
-    ctx.lineTo(size * 0.15, size * 1.3); // Bottom right
-    ctx.lineTo(-size * 0.15, size * 1.3); // Bottom left
+    ctx.moveTo(-size * 0.2, size * 0.8);
+    ctx.lineTo(size * 0.2, size * 0.8);
+    ctx.lineTo(size * 0.15, size * 1.3);
+    ctx.lineTo(-size * 0.15, size * 1.3);
     ctx.closePath();
     ctx.fill();
-
-    // Trunk texture lines
     ctx.strokeStyle = '#4a2f1a';
     ctx.lineWidth = 1;
     for (let i = 0; i < 3; i++) {
@@ -624,244 +463,211 @@ export class SnowEffect {
       ctx.lineTo(size * 0.15, size * 0.9 + i * size * 0.12);
       ctx.stroke();
     }
-
-    // Tree layers (3 triangles)
-    ctx.fillStyle = '#228B22'; // Forest green
-
+    ctx.fillStyle = '#228B22';
     for (let i = 0; i < 3; i++) {
-      const layerY = i * size * 0.4;
-      const layerSize = size * (1.2 - i * 0.2);
-
+      const lY = i * size * 0.4, lS = size * (1.2 - i * 0.2);
       ctx.beginPath();
-      ctx.moveTo(0, -layerY);
-      ctx.lineTo(-layerSize, size * 0.3 - layerY);
-      ctx.lineTo(layerSize, size * 0.3 - layerY);
+      ctx.moveTo(0, -lY);
+      ctx.lineTo(-lS, size * 0.3 - lY);
+      ctx.lineTo(lS, size * 0.3 - lY);
       ctx.closePath();
       ctx.fill();
     }
-
-    // Tinsel garland (zigzag lines)
-    ctx.strokeStyle = '#C0C0C0'; // Silver
+    if (particle.snowLevel > 0) {
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      for (let i = 0; i < 3; i++) {
+        const lY = i * size * 0.4, lS = size * (1.2 - i * 0.2), sH = particle.snowLevel * (1 - i * 0.2);
+        if (sH > 0.5) {
+          ctx.beginPath();
+          ctx.moveTo(-lS, size * 0.3 - lY);
+          ctx.quadraticCurveTo(0, size * 0.3 - lY - sH, lS, size * 0.3 - lY);
+          ctx.closePath();
+          ctx.fill();
+        }
+      }
+    }
+    ctx.strokeStyle = '#C0C0C0';
     ctx.lineWidth = 1.5;
-    for (let layer = 0; layer < 3; layer++) {
-      const layerY = layer * size * 0.4;
-      const layerSize = size * (1.2 - layer * 0.2);
+    for (let l = 0; l < 3; l++) {
+      const lY = l * size * 0.4, lS = size * (1.2 - l * 0.2);
       ctx.beginPath();
       for (let i = 0; i <= 6; i++) {
-        const xPos = -layerSize + (i / 6) * layerSize * 2;
-        const yPos = size * 0.15 - layerY + (i % 2 === 0 ? -size * 0.1 : 0);
-        if (i === 0) {
-          ctx.moveTo(xPos, yPos);
-        } else {
-          ctx.lineTo(xPos, yPos);
-        }
+        const xP = -lS + (i / 6) * lS * 2, yP = size * 0.15 - lY + (i % 2 === 0 ? -size * 0.1 : 0);
+        if (i === 0) ctx.moveTo(xP, yP); else ctx.lineTo(xP, yP);
       }
       ctx.stroke();
     }
-
-    // Baubles (ornaments)
     const baubleColors = ['#ff0000', '#0000ff', '#ffd700', '#ff69b4', '#00ff00'];
     for (let i = 0; i < 8; i++) {
-      const layer = Math.floor(i / 3);
-      const layerY = layer * size * 0.4;
-      const layerSize = size * (1.2 - layer * 0.2) * 0.7;
-      const angle = (i % 3) * (Math.PI * 2 / 3) + layer * 0.5;
-      const bx = Math.cos(angle) * layerSize;
-      const by = size * 0.1 - layerY;
-
+      const l = Math.floor(i / 3), lY = l * size * 0.4, lS = size * (1.2 - l * 0.2) * 0.7,
+        angle = (i % 3) * (Math.PI * 2 / 3) + l * 0.5, bX = Math.cos(angle) * lS, bY = size * 0.1 - lY;
       ctx.fillStyle = baubleColors[i % baubleColors.length];
       ctx.beginPath();
-      ctx.arc(bx, by, size * 0.12, 0, Math.PI * 2);
+      ctx.arc(bX, bY, size * 0.12, 0, Math.PI * 2);
       ctx.fill();
-      // Bauble highlight
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
       ctx.beginPath();
-      ctx.arc(bx - size * 0.04, by - size * 0.04, size * 0.04, 0, Math.PI * 2);
+      ctx.arc(bX - size * 0.04, bY - size * 0.04, size * 0.04, 0, Math.PI * 2);
       ctx.fill();
     }
-
-    // Twinkling lights (glowing dots)
     const lightColors = ['#ffff00', '#ff0000', '#00ff00', '#0000ff', '#ffffff'];
     for (let i = 0; i < 12; i++) {
-      const layer = Math.floor(i / 4);
-      const layerY = layer * size * 0.4;
-      const layerSize = size * (1.2 - layer * 0.2) * 0.85;
-      const angle = (i % 4) * (Math.PI * 2 / 4) + layer * 0.3;
-      const lx = Math.cos(angle) * layerSize;
-      const ly = size * 0.2 - layerY;
-
-      // Twinkle effect - each light has its own phase
-      const twinklePhase = (this.twinkleTime * 0.003) + (i * 0.5); // Different phase for each light
-      const twinkleIntensity = (Math.sin(twinklePhase) + 1) * 0.5; // 0 to 1
-
-      // Glow effect with twinkle
-      const glowOpacity = 0.3 + (twinkleIntensity * 0.7);
-      const gradient = ctx.createRadialGradient(lx, ly, 0, lx, ly, size * 0.15);
-      const color = lightColors[i % lightColors.length];
-      gradient.addColorStop(0, color);
-      gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-      ctx.globalAlpha = glowOpacity;
-      ctx.fillStyle = gradient;
+      const l = Math.floor(i / 4), lY = l * size * 0.4, lS = size * (1.2 - l * 0.2) * 0.85,
+        angle = (i % 4) * (Math.PI * 2 / 4) + l * 0.3, lX = Math.cos(angle) * lS, lY_ = size * 0.2 - lY,
+        tI = (Math.sin((this.twinkleTime * 0.003) + (i * 0.5)) + 1) * 0.5, gO = 0.3 + (tI * 0.7),
+        g = ctx.createRadialGradient(lX, lY_, 0, lX, lY_, size * 0.15), c = lightColors[i % lightColors.length];
+      g.addColorStop(0, c);
+      g.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.globalAlpha = gO;
+      ctx.fillStyle = g;
       ctx.beginPath();
-      ctx.arc(lx, ly, size * 0.15, 0, Math.PI * 2);
+      ctx.arc(lX, lY_, size * 0.15, 0, Math.PI * 2);
       ctx.fill();
-
-      // Light bulb with twinkle
-      ctx.globalAlpha = 0.5 + (twinkleIntensity * 0.5);
-      ctx.fillStyle = color;
+      ctx.globalAlpha = 0.5 + (tI * 0.5);
+      ctx.fillStyle = c;
       ctx.beginPath();
-      ctx.arc(lx, ly, size * 0.08, 0, Math.PI * 2);
+      ctx.arc(lX, lY_, size * 0.08, 0, Math.PI * 2);
       ctx.fill();
-
-      ctx.globalAlpha = 1; // Reset
+      ctx.globalAlpha = 1;
     }
-
-    // BRIGHT STAR ON TOP
-    const starSize = size * 0.35; // Reduced by half
-    const starY = -size * 1.4; // Higher up
-
-    // Bright glow effect
-    const starGlow = ctx.createRadialGradient(0, starY, 0, 0, starY, starSize * 2);
-    starGlow.addColorStop(0, 'rgba(255, 223, 0, 1)');
-    starGlow.addColorStop(0.3, 'rgba(255, 215, 0, 0.7)');
-    starGlow.addColorStop(0.6, 'rgba(255, 215, 0, 0.3)');
-    starGlow.addColorStop(1, 'rgba(255, 215, 0, 0)');
-    ctx.fillStyle = starGlow;
+    const sS = size * 0.35, sY = -size * 1.4;
+    const sG = ctx.createRadialGradient(0, sY, 0, 0, sY, sS * 2);
+    sG.addColorStop(0, 'rgba(255,223,0,1)');
+    sG.addColorStop(0.3, 'rgba(255,215,0,0.7)');
+    sG.addColorStop(0.6, 'rgba(255,215,0,0.3)');
+    sG.addColorStop(1, 'rgba(255,215,0,0)');
+    ctx.fillStyle = sG;
     ctx.beginPath();
-    ctx.arc(0, starY, starSize * 2, 0, Math.PI * 2);
+    ctx.arc(0, sY, sS * 2, 0, Math.PI * 2);
     ctx.fill();
-
-    // Bright gold star
     ctx.fillStyle = '#FFD700';
     ctx.strokeStyle = '#FFA500';
     ctx.lineWidth = 2;
-    this._drawSimpleStar(ctx, 0, starY, starSize);
-
-    // Add stroke to star for visibility
+    this._drawSimpleStar(ctx, 0, sY, sS);
     ctx.save();
-    ctx.translate(0, starY);
+    ctx.translate(0, sY);
     ctx.beginPath();
     for (let i = 0; i < 10; i++) {
-      const angle = (Math.PI * 2 * i) / 10 - Math.PI / 2;
-      const radius = i % 2 === 0 ? starSize : starSize * 0.4;
-      const px = Math.cos(angle) * radius;
-      const py = Math.sin(angle) * radius;
-      if (i === 0) ctx.moveTo(px, py);
-      else ctx.lineTo(px, py);
+      const a = (Math.PI * 2 * i) / 10 - Math.PI / 2, r = i % 2 === 0 ? sS : sS * 0.4, pX = Math.cos(a) * r,
+        pY = Math.sin(a) * r;
+      if (i === 0) ctx.moveTo(pX, pY); else ctx.lineTo(pX, pY);
     }
     ctx.closePath();
     ctx.stroke();
     ctx.restore();
-
     ctx.restore();
   }
 
-  _drawStar(particle) {
-    const ctx = this.ctx;
-    const x = particle.x;
-    const y = particle.y;
-    const size = particle.size;
-
-    ctx.fillStyle = '#FFD700'; // Gold
-    this._drawSimpleStar(ctx, x, y, size);
-
-    // Tail/trail
-    ctx.strokeStyle = 'rgba(255, 215, 0, 0.5)';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x - particle.vx * 3, y);
-    ctx.stroke();
-  }
-
   _drawWreath(particle) {
-    const ctx = this.ctx;
-    const x = particle.x;
-    const y = particle.y;
-    const size = particle.size;
-
+    const ctx = this.ctx, x = particle.x, y = particle.y, size = particle.size;
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(particle.rotation);
-
-    // Outer wreath ring (evergreen)
-    ctx.strokeStyle = '#228B22'; // Forest green
-    ctx.lineWidth = size * 0.3;
-    ctx.beginPath();
-    ctx.arc(0, 0, size, 0, Math.PI * 2);
-    ctx.stroke();
-
-    // Inner darker ring for depth
-    ctx.strokeStyle = '#1a6b1a';
-    ctx.lineWidth = size * 0.15;
-    ctx.beginPath();
-    ctx.arc(0, 0, size * 0.85, 0, Math.PI * 2);
-    ctx.stroke();
-
-    // Red bow at top
-    ctx.fillStyle = '#C41E3A'; // Christmas red
-    // Left bow loop
-    ctx.beginPath();
-    ctx.ellipse(-size * 0.3, -size * 1.1, size * 0.25, size * 0.35, -0.3, 0, Math.PI * 2);
-    ctx.fill();
-    // Right bow loop
-    ctx.beginPath();
-    ctx.ellipse(size * 0.3, -size * 1.1, size * 0.25, size * 0.35, 0.3, 0, Math.PI * 2);
-    ctx.fill();
-    // Bow center knot
-    ctx.beginPath();
-    ctx.arc(0, -size * 1.1, size * 0.15, 0, Math.PI * 2);
-    ctx.fill();
-    // Bow ribbons
-    ctx.fillRect(-size * 0.08, -size * 1.1, size * 0.16, size * 0.4);
-
-    // Berries (small red dots around wreath)
-    ctx.fillStyle = '#ff0000';
-    const berryCount = 8;
-    for (let i = 0; i < berryCount; i++) {
-      const angle = (i / berryCount) * Math.PI * 2;
-      const bx = Math.cos(angle) * size;
-      const by = Math.sin(angle) * size;
+    particle.shape.forEach(seg => {
+      ctx.lineWidth = size * seg.thickness;
+      ctx.strokeStyle = seg.color;
       ctx.beginPath();
-      ctx.arc(bx, by, size * 0.1, 0, Math.PI * 2);
-      ctx.fill();
+      const sA = seg.angle - (Math.PI / particle.shape.length), eA = seg.angle + (Math.PI / particle.shape.length);
+      ctx.arc(0, 0, size * seg.radius, sA, eA);
+      ctx.stroke();
+    });
+    const lightColors = ['#ff0000', '#ffff00', '#0000ff'];
+    for (let i = 0; i < 4; i++) {
+      const angle = (i / 4) * Math.PI * 2 + particle.rotation, lX = Math.cos(angle) * size, lY = Math.sin(angle) * size,
+        tI = (Math.sin((this.twinkleTime * 0.002) + (i * 0.7)) + 1) / 2;
+      if (tI > 0.5) {
+        const gO = (tI - 0.5) * 2, c = lightColors[i % lightColors.length],
+          g = ctx.createRadialGradient(lX, lY, 0, lX, lY, size * 0.15);
+        g.addColorStop(0, c);
+        g.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.globalAlpha = gO;
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(lX, lY, size * 0.15, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
     }
-
-    // Small ornament baubles
-    const baubleColors = ['#ffd700', '#0000ff', '#ff69b4'];
-    for (let i = 0; i < 6; i++) {
-      const angle = (i / 6) * Math.PI * 2 + 0.5;
-      const ox = Math.cos(angle) * size * 1.1;
-      const oy = Math.sin(angle) * size * 1.1;
-      ctx.fillStyle = baubleColors[i % baubleColors.length];
+    ctx.fillStyle = '#c00';
+    const bowY = -size;
+    ctx.beginPath();
+    ctx.ellipse(-size * 0.3, bowY, size * 0.3, size * 0.4, -0.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(size * 0.3, bowY, size * 0.3, size * 0.4, 0.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(0, bowY, size * 0.2, 0, Math.PI * 2);
+    ctx.fill();
+    if (particle.snowLevel > 0.1) {
       ctx.beginPath();
-      ctx.arc(ox, oy, size * 0.12, 0, Math.PI * 2);
+      ctx.arc(0, -size, size * 0.8, 0, Math.PI, true);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
+      ctx.shadowBlur = 5;
       ctx.fill();
+      ctx.shadowBlur = 0;
     }
+    ctx.restore();
+  }
 
+  _drawElf(particle) {
+    const ctx = this.ctx, x = particle.x, y = particle.y, size = particle.size, dir = particle.vx > 0 ? 1 : -1;
+    ctx.save();
+    ctx.translate(x, y);
+    const legAngle = Math.sin(particle.time * 0.02) * (Math.PI / 6);
+    ctx.fillStyle = '#004d00';
+    ctx.fillRect(dir * -size * 0.1, size * 0.2, size * 0.2, size * 0.5 + (Math.sin(legAngle + Math.PI) * size * 0.1));
+    ctx.fillStyle = '#4a2c2a';
+    ctx.beginPath();
+    ctx.ellipse(dir * 0, size * 0.7 + (Math.sin(legAngle + Math.PI) * size * 0.1), size * 0.3, size * 0.15, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#006400';
+    ctx.fillRect(dir * size * 0.1, size * 0.2, size * 0.2, size * 0.5 + (Math.sin(legAngle) * size * 0.1));
+    ctx.fillStyle = '#5d3836';
+    ctx.beginPath();
+    ctx.ellipse(dir * size * 0.2, size * 0.7 + (Math.sin(legAngle) * size * 0.1), size * 0.3, size * 0.15, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#008000';
+    ctx.beginPath();
+    ctx.moveTo(0, -size * 0.5);
+    ctx.lineTo(dir * size * 0.4, size * 0.3);
+    ctx.lineTo(dir * -size * 0.4, size * 0.3);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#FFD7BA';
+    ctx.beginPath();
+    ctx.arc(0, -size * 0.6, size * 0.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#c00';
+    ctx.beginPath();
+    ctx.moveTo(0, -size * 0.7);
+    ctx.lineTo(dir * size * 0.35, -size * 0.6);
+    ctx.lineTo(dir * -size * 0.35, -size * 0.6);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(0, -size * 0.7);
+    ctx.quadraticCurveTo(dir * size * 0.2, -size * 1.1, dir * size * 0.4, -size * 1.3);
+    ctx.stroke();
+    ctx.fillStyle = '#ffff00';
+    ctx.beginPath();
+    ctx.arc(dir * size * 0.4, -size * 1.3, size * 0.15, 0, Math.PI * 2);
+    ctx.fill();
     ctx.restore();
   }
 
   _drawSimpleStar(ctx, x, y, size) {
     ctx.save();
     ctx.translate(x, y);
-
     ctx.beginPath();
     for (let i = 0; i < 5; i++) {
-      const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
-      const radius = i % 2 === 0 ? size : size * 0.4;
-      const px = Math.cos(angle) * radius;
-      const py = Math.sin(angle) * radius;
-
-      if (i === 0) {
-        ctx.moveTo(px, py);
-      } else {
-        ctx.lineTo(px, py);
-      }
+      const a = (Math.PI * 2 * i) / 5 - Math.PI / 2, r = i % 2 === 0 ? size : size * 0.4, pX = Math.cos(a) * r,
+        pY = Math.sin(a) * r;
+      if (i === 0) ctx.moveTo(pX, pY); else ctx.lineTo(pX, pY);
     }
     ctx.closePath();
     ctx.fill();
-
     ctx.restore();
   }
 
@@ -892,10 +698,8 @@ export class SnowEffect {
     if (this.canvas && this.canvas.parentNode) {
       this.canvas.parentNode.removeChild(this.canvas);
     }
-
     window.removeEventListener('resize', this._handleResize);
     document.removeEventListener('visibilitychange', this._handleVisibility);
-
     this.canvas = null;
     this.ctx = null;
     this.particles = [];
