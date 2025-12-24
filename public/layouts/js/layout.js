@@ -544,10 +544,25 @@ import {SidebarModule} from './modules/sidebar.js';
 
             // Initialize navbar using Domma.elements.navbar()
             if (typeof Domma !== 'undefined' && Domma.elements && Domma.elements.navbar) {
-                // Build complete items array with Download and Login/Logout
+                // Build complete items array with Admin, Download and Login/Logout
                 const navItems = [];
 
-                // Add Download at the start if configured
+                // Get user for role checking
+                const user = Domma.auth?.getUser();
+                const pathParts = window.location.pathname.split('/').filter(Boolean);
+                const levelsUp = pathParts.length - 1;
+                const adminPath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'admin/index.html' : 'admin/index.html';
+
+                // Add Admin link at the start if user is admin
+                if (user && Domma.auth?.isAdmin()) {
+                    navItems.push({
+                        text: 'Admin',
+                        url: adminPath,
+                        icon: 'settings'
+                    });
+                }
+
+                // Add Download after Admin if configured
                 const downloadAction = config.actions?.find(a => a.text.toLowerCase() === 'download');
                 if (downloadAction) {
                     navItems.push({
@@ -563,9 +578,6 @@ import {SidebarModule} from './modules/sidebar.js';
                 }
 
                 // Add Login/Logout at the end
-                const user = Domma.auth?.getUser();
-                const pathParts = window.location.pathname.split('/').filter(Boolean);
-                const levelsUp = pathParts.length - 1;
                 const loginPath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'login/index.html' : 'login/index.html';
 
                 if (user) {

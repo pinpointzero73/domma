@@ -170,19 +170,19 @@ export class SnowEffect {
     if (depth < 0.33) {
       // Front layer - larger, faster, more opaque
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 1.5;
-      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.sizeRange[0]) * 1.3;
+      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 1.3;
       opacity = 0.8 + Math.random() * 0.2;
       windSpeed = 0.01 + Math.random() * 0.02;
     } else if (depth < 0.66) {
       // Middle layer
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]);
-      speed = config.speedRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]);
+      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]);
       opacity = 0.5 + Math.random() * 0.2;
       windSpeed = 0.02 + Math.random() * 0.03;
     } else {
       // Back layer - smaller, slower, less opaque
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.7;
-      speed = config.speedRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.7;
+      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.7;
       opacity = 0.3 + Math.random() * 0.2;
       windSpeed = 0.03 + Math.random() * 0.04;
     }
@@ -212,8 +212,7 @@ export class SnowEffect {
       rotation: 0,
       rotationSpeed: 0,
       active: true,
-      static: true,
-      snowLevel: 0 // For snow accumulation
+      static: true
     };
   }
 
@@ -243,8 +242,7 @@ export class SnowEffect {
       rotationSpeed: 0,
       active: true,
       static: true,
-      shape: wreathShape, // Store the pre-generated shape
-      snowLevel: 0 // For snow accumulation
+      shape: wreathShape // Store the pre-generated shape
     };
   }
 
@@ -430,14 +428,43 @@ export class SnowEffect {
         static: false,
         carriages: 2 + Math.floor(Math.random() * 2) // 2 or 3 carriages
       });
+    } else if (choice < 0.0025) { // Spawn Robins
+      if (this.specialParticles.some(p => p.type === 'robin')) {
+        return;
+      }
+      const fromLeft = Math.random() < 0.5;
+      const startY = Math.random() * (this.canvas.height * 0.2);
+      const startX = fromLeft ? -50 : this.canvas.width + 50;
+
+      const robinSize = 10 + Math.random() * 5;
+      const targetX = Math.random() * (this.canvas.width * 0.6) + (this.canvas.width * 0.2);
+      const targetY = this.canvas.height * 0.5 + Math.random() * (this.canvas.height * 0.4);
+
+      this.specialParticles.push({
+        type: 'robin',
+        state: 'flying_in',
+        x: startX,
+        y: startY,
+        startX: startX,
+        startY: startY,
+        targetX: targetX,
+        targetY: targetY,
+        vx: fromLeft ? 0.5 + Math.random() * 0.5 : -(0.5 + Math.random() * 0.5),
+        vy: 0,
+        size: robinSize,
+        opacity: 0.95,
+        active: true,
+        static: false,
+        sitTime: 2000 + Math.random() * 3000,
+        sitStartTime: 0,
+        flightProgress: 0,
+        time: 0
+      });
     }
   }
 
   _updateSpecialParticle(particle, deltaTime) {
     if (particle.static) {
-      if (Math.random() < 0.0005) {
-        particle.snowLevel = Math.min(particle.snowLevel + Math.random() * 0.2, particle.size * 0.3);
-      }
       return;
     }
     const normDelta = deltaTime / (16.67);
@@ -452,11 +479,10 @@ export class SnowEffect {
       }
     } else if (particle.type === 'train') {
       // Train smoke animation
-      // Calculate local chimney position for smoke emission
       const size = particle.size * 1.8;
       const baseUnit = size / 20;
-      const wheelRadius = baseUnit * 8; // Needed for engineChassisBottomY calc
-      const engineChassisBottomY = -wheelRadius - baseUnit; // As defined in _drawTrain
+      const wheelRadius = baseUnit * 8;
+      const engineChassisBottomY = -wheelRadius - baseUnit;
       const chassisHeight = baseUnit * 7;
       const boilerRadius = baseUnit * 10;
       const boilerTopY = engineChassisBottomY - chassisHeight - boilerRadius * 2;
@@ -464,26 +490,26 @@ export class SnowEffect {
       const cabWidth = baseUnit * 25;
       const boilerWidth = engineLength - cabWidth;
 
-      const smokeOriginX = boilerWidth * 0.7 + baseUnit * 4; // Approx center of chimney top
-      const smokeOriginY = boilerTopY - baseUnit * 10; // Approx above chimney top
+      const smokeOriginX = boilerWidth * 0.7 + baseUnit * 4;
+      const smokeOriginY = boilerTopY - baseUnit * 10;
 
-      if (Math.random() < 0.45) { // Increased spawn probability
-        const smokeSize = particle.size * 0.6 + Math.random() * particle.size * 1.0; // Larger initial size
+      if (Math.random() < 0.45) {
+        const smokeSize = particle.size * 0.6 + Math.random() * particle.size * 1.0;
         particle.smoke.push({
-          x: smokeOriginX + (Math.random() - 0.5) * baseUnit * 2, // Slight randomness in x
-          y: smokeOriginY + (Math.random() - 0.5) * baseUnit * 1, // Slight randomness in y
+          x: smokeOriginX + (Math.random() - 0.5) * baseUnit * 2,
+          y: smokeOriginY + (Math.random() - 0.5) * baseUnit * 1,
           size: smokeSize,
-          opacity: 0.8 + Math.random() * 0.2, // Higher initial opacity
-          vx: (Math.random() - 0.5) * 0.6 + this.windGust * 0.15, // Increased horizontal spread and wind influence
-          vy: -1.5 - Math.random() * 0.8, // Smoke rises faster
-          growth: 0.2 + Math.random() * 0.15, // Increased growth rate
-          life: 120 + Math.random() * 80 // Longer life
+          opacity: 0.8 + Math.random() * 0.2,
+          vx: (Math.random() - 0.5) * 0.6 + this.windGust * 0.15,
+          vy: -1.5 - Math.random() * 0.8,
+          growth: 0.2 + Math.random() * 0.15,
+          life: 120 + Math.random() * 80
         });
       }
       particle.smoke.forEach(s => {
         s.x += s.vx * normDelta;
         s.y += s.vy * normDelta;
-        s.opacity -= (1 / s.life) * normDelta; // Faster fade with longer life
+        s.opacity -= (1 / s.life) * normDelta;
         s.size += s.growth * normDelta;
       });
       particle.smoke = particle.smoke.filter(s => s.opacity > 0);
@@ -491,6 +517,46 @@ export class SnowEffect {
       const margin = 500;
       if (particle.x < -margin || particle.x > this.canvas.width + margin) {
         particle.active = false;
+      }
+    } else if (particle.type === 'robin') {
+      const speed = 0.01;
+      switch (particle.state) {
+        case 'flying_in':
+          particle.flightProgress += speed;
+          const journeyX = particle.targetX - particle.startX;
+          const journeyY = particle.targetY - particle.startY;
+
+          particle.x = particle.startX + journeyX * particle.flightProgress;
+          particle.y = particle.startY + journeyY * Math.sin(particle.flightProgress * Math.PI);
+
+
+          if (particle.flightProgress >= 1) {
+            particle.state = 'sitting';
+            particle.sitStartTime = this.lastTime;
+            particle.flightProgress = 0;
+          }
+          break;
+        case 'sitting':
+          if (this.lastTime - particle.sitStartTime > particle.sitTime) {
+            particle.state = 'flying_away';
+            particle.startX = particle.x;
+            particle.startY = particle.y;
+            particle.targetX = particle.x - 20;
+            particle.targetY = -50;
+          }
+          break;
+        case 'flying_away':
+          particle.flightProgress += speed;
+          const journeyX2 = particle.targetX - particle.startX;
+          const journeyY2 = particle.targetY - particle.startY;
+
+          particle.x = particle.startX + journeyX2 * particle.flightProgress;
+          particle.y = particle.startY + journeyY2 * particle.flightProgress;
+
+          if (particle.y < -50) {
+            particle.active = false;
+          }
+          break;
       }
     }
   }
@@ -502,8 +568,125 @@ export class SnowEffect {
     else if (p.type === 'tree') this._drawTree(p);
     else if (p.type === 'wreath') this._drawWreath(p);
     else if (p.type === 'elf') this._drawElf(p);
-    else if (p.type === 'train') this._drawTrain(p); // Draw the train
+    else if (p.type === 'train') this._drawTrain(p);
+    else if (p.type === 'robin') this._drawRobin(p);
     this.ctx.restore();
+  }
+
+  _drawRobin(particle) {
+    const ctx = this.ctx;
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size;
+    const dir = particle.vx > 0 ? 1 : -1;
+    const time = particle.time; // Access particle.time
+
+    ctx.save();
+    ctx.translate(x, y);
+    if (dir === -1) {
+      ctx.scale(-1, 1);
+    }
+
+    let wingAngle = 0;
+    if (particle.state === 'flying_in' || particle.state === 'flying_away') {
+      // Oscillate wing angle between -PI/4 and PI/4
+      wingAngle = Math.sin(time * 0.015) * (Math.PI / 4); // Increased frequency for faster flap
+    }
+
+    // Legs
+    ctx.strokeStyle = '#5D4037';
+    ctx.lineWidth = size * 0.1;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(-size * 0.2, size * 0.5);
+    ctx.moveTo(0, 0);
+    ctx.lineTo(size * 0.2, size * 0.5);
+    ctx.stroke();
+
+    // Body
+    ctx.fillStyle = '#8D6E63';
+    ctx.beginPath();
+    ctx.ellipse(0, -size * 0.5, size, size * 0.6, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Red breast
+    ctx.fillStyle = '#D32F2F';
+    ctx.beginPath();
+    ctx.arc(size * 0.3, -size * 0.4, size * 0.4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Head
+    ctx.fillStyle = '#A1887F';
+    ctx.beginPath();
+    ctx.arc(size * 0.5, -size, size * 0.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Beak
+    ctx.fillStyle = '#FFC107';
+    ctx.beginPath();
+    ctx.moveTo(size, -size * 1.1);
+    ctx.lineTo(size * 1.3, -size);
+    ctx.lineTo(size, -size * 0.9);
+    ctx.closePath();
+    ctx.fill();
+
+    // Eye
+    ctx.fillStyle = '#000';
+    ctx.beginPath();
+    ctx.arc(size * 0.7, -size * 1.1, size * 0.08, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Santa Hat
+    const hatX = size * 0.4;
+    const hatY = -size * 1.4;
+    ctx.fillStyle = '#c00';
+    ctx.beginPath();
+    ctx.moveTo(hatX, hatY);
+    ctx.lineTo(hatX + size * 0.6, hatY);
+    ctx.lineTo(hatX + size * 0.3, hatY - size * 0.5);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(hatX - size * 0.05, hatY, size * 0.7, size * 0.15);
+    ctx.beginPath();
+    ctx.arc(hatX + size * 0.3, hatY - size * 0.5, size * 0.1, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Wings (draw after body so they appear layered correctly)
+    ctx.fillStyle = '#8D6E63'; // Same color as body
+    ctx.strokeStyle = '#5D4037';
+    ctx.lineWidth = size * 0.05;
+
+    ctx.save();
+    ctx.translate(-size * 0.8, -size * 0.4); // Position wings relative to body
+    ctx.rotate(wingAngle); // Apply rotation for flapping
+
+    // Left wing
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.quadraticCurveTo(-size * 0.5, -size * 0.5, -size * 0.8, 0);
+    ctx.quadraticCurveTo(-size * 0.5, size * 0.5, 0, 0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(size * 0.8, -size * 0.4); // Position wings relative to body
+    ctx.scale(-1, 1); // Mirror for right wing
+    ctx.rotate(-wingAngle); // Apply opposite rotation for flapping
+
+    // Right wing
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.quadraticCurveTo(-size * 0.5, -size * 0.5, -size * 0.8, 0);
+    ctx.quadraticCurveTo(-size * 0.5, size * 0.5, 0, 0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.restore();
   }
 
   _drawSleigh(particle) {
@@ -702,19 +885,6 @@ export class SnowEffect {
       ctx.closePath();
       ctx.fill();
     }
-    if (particle.snowLevel > 0) {
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-      for (let i = 0; i < 3; i++) {
-        const lY = i * size * 0.4, lS = size * (1.2 - i * 0.2), sH = particle.snowLevel * (1 - i * 0.2);
-        if (sH > 0.5) {
-          ctx.beginPath();
-          ctx.moveTo(-lS, size * 0.3 - lY);
-          ctx.quadraticCurveTo(0, size * 0.3 - lY - sH, lS, size * 0.3 - lY);
-          ctx.closePath();
-          ctx.fill();
-        }
-      }
-    }
     ctx.strokeStyle = '#C0C0C0';
     ctx.lineWidth = 1.5;
     for (let l = 0; l < 3; l++) {
@@ -834,15 +1004,6 @@ export class SnowEffect {
     ctx.beginPath();
     ctx.arc(0, bowY, size * 0.2, 0, Math.PI * 2);
     ctx.fill();
-    if (particle.snowLevel > 0.1) {
-      ctx.beginPath();
-      ctx.arc(0, -size, size * 0.8, 0, Math.PI, true);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-      ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
-      ctx.shadowBlur = 5;
-      ctx.fill();
-      ctx.shadowBlur = 0;
-    }
     ctx.restore();
   }
 

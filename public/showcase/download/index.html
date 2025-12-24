@@ -1,86 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download - Domma</title>
-    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../dist/domma.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download - Domma</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+  <link rel="stylesheet" href="../../dist/domma.css">
   <link rel="stylesheet" href="../../dist/grid.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
-    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
   <link rel="stylesheet" href="../../showcase/css/domma-showcase.css">
 </head>
 <body class="dm-theme-light" data-layout="showcase" data-layout-variant="subpage">
 <main class="container py-8">
-    <!-- Hero Section -->
-  <section class="hero hero-gradient-primary download-hero-style mb-8">
-        <h1>Download Domma</h1>
-        <p>Get the latest version of Domma and start building modern web applications with zero dependencies.</p>
-    </section>
+  <div class="jumbotron primary-center hero-gradient-primary download-hero-style">
+    <div class="jumbotron-content">
+      <h1 class="jumbotron-title">Download Domma</h1>
+      <p class="jumbotron-subtitle">Get the latest version of Domma and start building modern web applications with zero
+        dependencies.</p>
+      <p class="jumbotron-content">
+        <span class="version-badge-style text-right text-xl" id="current-version"></span>
+        <span class="text-sm">December 2025</span>
+      </p>
+    </div>
+  </div>
 
-    <!-- Version Info -->
-    <section class="text-center mb-8">
-      <span class="version-badge-style" id="current-version">v1.0.0</span>
-        <p class="text-muted">Released: December 2025</p>
-    </section>
-
-    <!-- Download Cards -->
-    <section class="mb-8">
-        <h2 class="text-2xl font-semibold mb-6 text-center">Core Library</h2>
-        <div class="grid grid-cols-3 grid-cols-md-3 gap-6">
-            <!-- UMD Bundle -->
-          <div class="card download-card-styles">
-                <div class="card-body">
-                  <div class="download-icon-style" data-icon="file-text" data-icon-size="48"></div>
-                    <h3 class="text-xl font-semibold mb-2">domma.min.js</h3>
-                  <p class="download-description-text">
-                        UMD bundle for use with <code>&lt;script&gt;</code> tags.<br/>
-                        Works in browsers and with AMD/CommonJS loaders.
-                    </p>
-                  <p class="download-size-text" id="umd-size">~183 KB minified</p>
-                    <a href="../../dist/domma.min.js" download class="btn btn-primary btn-block mt-auto">
-                        <span data-icon="download" data-icon-size="16"></span>
-                        Download UMD
-                    </a>
-                </div>
-            </div>
-
-            <!-- ESM Bundle -->
-          <div class="card download-card-styles">
-                <div class="card-body">
-                  <div class="download-icon-style" data-icon="file-text" data-icon-size="48"></div>
-                    <h3 class="text-xl font-semibold mb-2">domma.esm.js</h3>
-                  <p class="download-description-text">
-                        ES Module bundle for modern build tools like Vite, Webpack, or Rollup.<br/>
-                        Supports tree-shaking.
-                    </p>
-                  <p class="download-size-text" id="esm-size">~183 KB minified</p>
-                    <a href="../../dist/domma.esm.js" download class="btn btn-outline btn-block mt-auto">
-                        <span data-icon="download" data-icon-size="16"></span>
-                        Download ESM
-                    </a>
-                </div>
-            </div>
-
-            <!-- Kickstart Starter Kit -->
-          <div class="card download-card-styles">
-                <div class="card-body">
-                  <div class="download-icon-style" data-icon="zap" data-icon-size="48"></div>
-                    <h3 class="text-xl font-semibold mb-2">Kickstart Starter</h3>
-                  <p class="download-description-text">
-                        Complete starter kit with Domma, themes, CSS, and a ready-to-use template.<br/>
-                        Extract and start building immediately.
-                    </p>
-                  <p class="download-size-text" id="kickstart-size">~260 KB</p>
-                    <a href="../../dist/kickstart.tar.gz" download class="btn btn-success btn-block mt-auto">
-                        <span data-icon="download" data-icon-size="16"></span>
-                        Download Kickstart
-                    </a>
-                </div>
-            </div>
+  <!-- Download Cards -->
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-6 text-center">Core Library</h2>
+    <div class="grid grid-cols-3 grid-cols-md-3 gap-6">
+      <!-- UMD Bundle -->
+      <div class="card download-card-styles">
+        <div class="card-body">
+          <div class="download-icon-style" data-icon="file-text" data-icon-size="48"></div>
+          <h3 class="text-xl font-semibold mb-2">domma.min.js</h3>
+          <p class="download-description-text">
+            UMD bundle for use with <code>&lt;script&gt;</code> tags.<br/>
+            Works in browsers and with AMD/CommonJS loaders.
+          </p>
+          <p class="download-size-text" id="umd-size">~183 KB minified</p>
+          <a href="../../dist/domma.min.js" download class="btn btn-primary btn-block mt-auto">
+            <span data-icon="download" data-icon-size="16"></span>
+            Download UMD
+          </a>
         </div>
-    </section>
+      </div>
+
+      <!-- ESM Bundle -->
+      <div class="card download-card-styles">
+        <div class="card-body">
+          <div class="download-icon-style" data-icon="file-text" data-icon-size="48"></div>
+          <h3 class="text-xl font-semibold mb-2">domma.esm.js</h3>
+          <p class="download-description-text">
+            ES Module bundle for modern build tools like Vite, Webpack, or Rollup.<br/>
+            Supports tree-shaking.
+          </p>
+          <p class="download-size-text" id="esm-size">~183 KB minified</p>
+          <a href="../../dist/domma.esm.js" download class="btn btn-outline btn-block mt-auto">
+            <span data-icon="download" data-icon-size="16"></span>
+            Download ESM
+          </a>
+        </div>
+      </div>
+
+      <!-- Kickstart Starter Kit -->
+      <div class="card download-card-styles">
+        <div class="card-body">
+          <div class="download-icon-style" data-icon="zap" data-icon-size="48"></div>
+          <h3 class="text-xl font-semibold mb-2">Kickstart Starter</h3>
+          <p class="download-description-text">
+            Complete starter kit with Domma, themes, CSS, and a ready-to-use template.<br/>
+            Extract and start building immediately.
+          </p>
+          <p class="download-size-text" id="kickstart-size">~260 KB</p>
+          <a href="../../dist/kickstart.tar.gz" download class="btn btn-success btn-block mt-auto">
+            <span data-icon="download" data-icon-size="16"></span>
+            Download Kickstart
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Preset Packages (NEW) -->
   <section class="mb-8">
@@ -213,434 +213,434 @@
   </section>
 
   <!-- Themes -->
-    <section class="mb-8">
-        <h2 class="text-2xl font-semibold mb-6 text-center">Themes</h2>
-        <div class="grid grid-cols-2 grid-cols-md-2 gap-6">
-            <!-- Theme CSS -->
-          <div class="card download-card-styles">
-                <div class="card-body">
-                  <div class="download-icon-style" data-icon="palette" data-icon-size="48"></div>
-                    <h3 class="text-xl font-semibold mb-2">domma-themes.css</h3>
-                  <p class="download-description-text">
-                        Complete theme system with light/dark modes and 8 colour variants.
-                    </p>
-                  <div class="theme-preview-style">
-                    <span class="theme-swatch-style" style="background: var(--dm-primary);" title="Default"></span>
-                    <span class="theme-swatch-style" class="bg-gradient-sky-theme"
-                              title="Ocean"></span>
-                    <span class="theme-swatch-style" class="bg-gradient-forest-theme"
-                              title="Forest"></span>
-                    <span class="theme-swatch-style" class="bg-gradient-sunset-theme"
-                              title="Sunset"></span>
-                    <span class="theme-swatch-style" class="bg-gradient-royal-theme"
-                              title="Royal"></span>
-                    <span class="theme-swatch-style" class="bg-gradient-lemon-theme"
-                              title="Lemon"></span>
-                    <span class="theme-swatch-style" class="bg-gradient-silver-theme"
-                              title="Silver"></span>
-                    <span class="theme-swatch-style" class="bg-gradient-charcoal-theme"
-                              title="Charcoal"></span>
-                    </div>
-                  <p class="download-size-text" id="theme-size">~40 KB</p>
-                    <a href="../../dist/themes/domma-themes.css" download class="btn btn-primary btn-block mt-auto">
-                        <span data-icon="download" data-icon-size="16"></span>
-                        Download Themes
-                    </a>
-                </div>
-            </div>
-
-            <!-- Base CSS -->
-          <div class="card download-card-styles">
-                <div class="card-body">
-                  <div class="download-icon-style" data-icon="layout" data-icon-size="48"></div>
-                    <h3 class="text-xl font-semibold mb-2">domma.css</h3>
-                  <p class="download-description-text">
-                        Base styles, typography, and utility classes. Load this first.
-                    </p>
-                  <p class="download-size-text" id="css-size">~48 KB</p>
-                    <a href="../../dist/domma.css" download class="btn btn-outline btn-block mt-auto">
-                        <span data-icon="download" data-icon-size="16"></span>
-                        Download CSS
-                    </a>
-                </div>
-            </div>
-
-            <!-- Grid CSS -->
-          <div class="card download-card-styles">
-                <div class="card-body">
-                  <div class="download-icon-style" data-icon="grid" data-icon-size="48"></div>
-                    <h3 class="text-xl font-semibold mb-2">grid.css</h3>
-                  <p class="download-description-text">
-                        Bootstrap-style grid and CSS Grid utilities. Optional but recommended.
-                    </p>
-                  <p class="download-size-text" id="grid-size">~12 KB</p>
-                    <a href="../../dist/grid.css" download class="btn btn-outline btn-block mt-auto">
-                        <span data-icon="download" data-icon-size="16"></span>
-                        Download Grid
-                    </a>
-                </div>
-            </div>
-
-            <!-- Elements CSS -->
-          <div class="card download-card-styles">
-                <div class="card-body">
-                  <div class="download-icon-style" data-icon="box" data-icon-size="48"></div>
-                    <h3 class="text-xl font-semibold mb-2">elements.css</h3>
-                  <p class="download-description-text">
-                        19 UI components: buttons, cards, modals, tabs, jumbotron, carousel, and more.
-                    </p>
-                  <p class="download-size-text" id="elements-size">~28 KB</p>
-                    <a href="../../dist/elements.css" download class="btn btn-outline btn-block mt-auto">
-                        <span data-icon="download" data-icon-size="16"></span>
-                        Download Elements
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Custom Bundle Builder -->
-    <section class="mb-8">
-        <h2 class="text-2xl font-semibold mb-6 text-center">Custom Bundle Builder</h2>
-
-        <div class="card">
-            <div class="card-body">
-                <!-- Preset Buttons -->
-                <div class="preset-section mb-6">
-                    <h3 class="text-lg font-semibold mb-3">Quick Presets</h3>
-                    <p class="text-muted mb-4">Select a pre-configured bundle or customise below:</p>
-
-                  <div class="preset-buttons">
-                    <button class="preset-btn" data-preset="minimal">
-                            <span data-icon="box" data-icon-size="16"></span>
-                            Minimal (~144KB)
-                        </button>
-                    <button class="preset-btn" data-preset="essentials">
-                            <span data-icon="star" data-icon-size="16"></span>
-                            Essentials (~211KB)
-                        </button>
-                    <button class="preset-btn" data-preset="full">
-                            <span data-icon="package" data-icon-size="16"></span>
-                            Full (~258KB)
-                        </button>
-                    <button class="preset-btn" data-preset="data-focused">
-                            <span data-icon="database" data-icon-size="16"></span>
-                            Data-Focused (~172KB)
-                        </button>
-                    <button class="preset-btn" data-preset="no-ui">
-                            <span data-icon="code" data-icon-size="16"></span>
-                            No-UI (~39KB)
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Module Selection -->
-                <div class="module-selection mb-6">
-                    <h3 class="text-lg font-semibold mb-3">Select Modules</h3>
-                    <p class="text-muted mb-4">Choose specific modules to include. Dependencies are automatically
-                        selected.</p>
-
-                    <div class="module-grid">
-                        <!-- Tier 1 Modules -->
-                      <div class="module-tier-section">
-                        <h4 class="font-semibold text-sm text-muted mb-3">Core Utilities (No Dependencies)</h4>
-                        <div class="grid grid-cols-1 grid-cols-md-3 grid-cols-lg-5 gap-3">
-                                <!-- Module checkboxes will be dynamically generated -->
-                            </div>
-                        </div>
-
-                        <!-- Tier 2 Modules -->
-                      <div class="module-tier-section">
-                        <h4 class="font-semibold text-sm text-muted mb-3">Intermediate Features</h4>
-                        <div class="grid grid-cols-1 grid-cols-md-3 grid-cols-lg-5 gap-3">
-                                <!-- Module checkboxes will be dynamically generated -->
-                            </div>
-                        </div>
-
-                        <!-- Tier 3 Modules -->
-                      <div class="module-tier-section">
-                        <h4 class="font-semibold text-sm text-muted mb-3">Advanced Features</h4>
-                        <div class="grid grid-cols-1 grid-cols-md-3 grid-cols-lg-5 gap-3">
-                                <!-- Module checkboxes will be dynamically generated -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Bundle Summary -->
-              <div class="bundle-summary">
-                <div class="grid grid-cols-1 grid-cols-md-3 grid-cols-lg-3 gap-4 mb-4">
-                  <!-- JavaScript Column -->
-                  <div style="padding: 1rem; background: var(--dm-gray-50); border-radius: 8px;">
-                    <h4 class="font-semibold mb-2">JavaScript</h4>
-                    <p class="text-2xl text-primary mb-1" id="bundle-size">0 KB</p>
-                    <p class="text-muted text-sm" id="selected-count">0 modules selected</p>
-                        </div>
-
-                  <!-- CSS Column -->
-                  <div style="padding: 1rem; background: var(--dm-gray-50); border-radius: 8px;">
-                    <h4 class="font-semibold mb-2">CSS Required</h4>
-                    <p class="text-2xl text-primary mb-1" id="css-size">0 KB</p>
-                    <div id="css-requirements" class="mt-2">
-                      <!-- CSS files will be listed here -->
-                            </div>
-                        </div>
-
-                  <!-- Total Column -->
-                  <div
-                      style="padding: 1rem; background: var(--dm-primary); color: var(--dm-white); border-radius: 8px;">
-                    <h4 class="font-semibold mb-2" style="color: var(--dm-white);">Total Package</h4>
-                    <p class="text-3xl font-bold mb-1" id="total-size" style="color: var(--dm-white);">0 KB</p>
-                    <p class="text-sm" style="color: rgba(255,255,255,0.9);">JS + CSS combined</p>
-                  </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="bundle-actions">
-                        <div class="grid grid-cols-1 grid-cols-md-3 gap-3">
-                            <button class="btn btn-outline" id="reset-selection">
-                                <span data-icon="x" data-icon-size="16"></span>
-                                Reset Selection
-                            </button>
-                            <button class="btn btn-primary" id="download-bundle" disabled>
-                                <span data-icon="download" data-icon-size="16"></span>
-                                Download Bundle
-                            </button>
-                            <button class="btn btn-outline" id="view-instructions">
-                                <span data-icon="book" data-icon-size="16"></span>
-                                Build Instructions
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Build Instructions (Hidden by default) -->
-              <div class="build-instructions" id="build-instructions" style="display: none;">
-                    <hr class="my-6">
-                    <h3 class="text-lg font-semibold mb-3">Build Instructions</h3>
-                    <p class="text-muted mb-4">To build this custom bundle, follow these steps:</p>
-
-                    <div class="accordion" id="instructions-accordion">
-                        <!-- Step 1: Entry Point -->
-                        <div class="accordion-item active">
-                          <div class="accordion-header">
-                                <h4>1. Create Custom Entry Point</h4>
-                            </div>
-                          <div class="accordion-content">
-                                <p class="mb-2">Create <code>src/bundles/custom.js</code>:</p>
-                            <pre class="code-block-custom language-javascript" id="entry-point-code">// Code will be generated based on your selection</pre>
-                                <button class="btn btn-sm btn-outline mt-2" data-copy="entry-point-code">
-                                    <span data-icon="copy" data-icon-size="14"></span>
-                                    Copy Code
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Step 2: Rollup Config -->
-                      <div class="accordion-item">
-                        <div class="accordion-header">
-                                <h4>2. Update Rollup Configuration</h4>
-                            </div>
-                        <div class="accordion-content">
-                                <p class="mb-2">Add to <code>rollup.config.js</code>:</p>
-                          <pre class="code-block-custom language-javascript" id="rollup-config-code">// Configuration will be generated</pre>
-                                <button class="btn btn-sm btn-outline mt-2" data-copy="rollup-config-code">
-                                    <span data-icon="copy" data-icon-size="14"></span>
-                                    Copy Code
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Step 3: Build -->
-                      <div class="accordion-item">
-                        <div class="accordion-header">
-                                <h4>3. Build Your Bundle</h4>
-                            </div>
-                        <div class="accordion-content">
-                                <p class="mb-2">Run the build command:</p>
-                          <pre class="code-block-custom language-javascript">npm run build</pre>
-                                <p class="mt-3">Your custom bundle will be in
-                                    <code>public/dist/domma-custom.min.js</code>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CDN Usage -->
-    <section class="card mb-8">
-        <div class="card-header">
-            <h2 class="text-xl font-semibold">Quick Start via CDN</h2>
-        </div>
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-6 text-center">Themes</h2>
+    <div class="grid grid-cols-2 grid-cols-md-2 gap-6">
+      <!-- Theme CSS -->
+      <div class="card download-card-styles">
         <div class="card-body">
-            <p class="mb-4">Include Domma directly in your HTML:</p>
-          <div class="code code-block language-javascript">
+          <div class="download-icon-style" data-icon="palette" data-icon-size="48"></div>
+          <h3 class="text-xl font-semibold mb-2">domma-themes.css</h3>
+          <p class="download-description-text">
+            Complete theme system with light/dark modes and 8 colour variants.
+          </p>
+          <div class="theme-preview-style">
+            <span class="theme-swatch-style" style="background: var(--dm-primary);" title="Default"></span>
+            <span class="theme-swatch-style" class="bg-gradient-sky-theme"
+                  title="Ocean"></span>
+            <span class="theme-swatch-style" class="bg-gradient-forest-theme"
+                  title="Forest"></span>
+            <span class="theme-swatch-style" class="bg-gradient-sunset-theme"
+                  title="Sunset"></span>
+            <span class="theme-swatch-style" class="bg-gradient-royal-theme"
+                  title="Royal"></span>
+            <span class="theme-swatch-style" class="bg-gradient-lemon-theme"
+                  title="Lemon"></span>
+            <span class="theme-swatch-style" class="bg-gradient-silver-theme"
+                  title="Silver"></span>
+            <span class="theme-swatch-style" class="bg-gradient-charcoal-theme"
+                  title="Charcoal"></span>
+          </div>
+          <p class="download-size-text" id="theme-size">~40 KB</p>
+          <a href="../../dist/themes/domma-themes.css" download class="btn btn-primary btn-block mt-auto">
+            <span data-icon="download" data-icon-size="16"></span>
+            Download Themes
+          </a>
+        </div>
+      </div>
+
+      <!-- Base CSS -->
+      <div class="card download-card-styles">
+        <div class="card-body">
+          <div class="download-icon-style" data-icon="layout" data-icon-size="48"></div>
+          <h3 class="text-xl font-semibold mb-2">domma.css</h3>
+          <p class="download-description-text">
+            Base styles, typography, and utility classes. Load this first.
+          </p>
+          <p class="download-size-text" id="css-size">~48 KB</p>
+          <a href="../../dist/domma.css" download class="btn btn-outline btn-block mt-auto">
+            <span data-icon="download" data-icon-size="16"></span>
+            Download CSS
+          </a>
+        </div>
+      </div>
+
+      <!-- Grid CSS -->
+      <div class="card download-card-styles">
+        <div class="card-body">
+          <div class="download-icon-style" data-icon="grid" data-icon-size="48"></div>
+          <h3 class="text-xl font-semibold mb-2">grid.css</h3>
+          <p class="download-description-text">
+            Bootstrap-style grid and CSS Grid utilities. Optional but recommended.
+          </p>
+          <p class="download-size-text" id="grid-size">~12 KB</p>
+          <a href="../../dist/grid.css" download class="btn btn-outline btn-block mt-auto">
+            <span data-icon="download" data-icon-size="16"></span>
+            Download Grid
+          </a>
+        </div>
+      </div>
+
+      <!-- Elements CSS -->
+      <div class="card download-card-styles">
+        <div class="card-body">
+          <div class="download-icon-style" data-icon="box" data-icon-size="48"></div>
+          <h3 class="text-xl font-semibold mb-2">elements.css</h3>
+          <p class="download-description-text">
+            19 UI components: buttons, cards, modals, tabs, jumbotron, carousel, and more.
+          </p>
+          <p class="download-size-text" id="elements-size">~28 KB</p>
+          <a href="../../dist/elements.css" download class="btn btn-outline btn-block mt-auto">
+            <span data-icon="download" data-icon-size="16"></span>
+            Download Elements
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Custom Bundle Builder -->
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-6 text-center">Custom Bundle Builder</h2>
+
+    <div class="card">
+      <div class="card-body">
+        <!-- Preset Buttons -->
+        <div class="preset-section mb-6">
+          <h3 class="text-lg font-semibold mb-3">Quick Presets</h3>
+          <p class="text-muted mb-4">Select a pre-configured bundle or customise below:</p>
+
+          <div class="preset-buttons">
+            <button class="preset-btn" data-preset="minimal">
+              <span data-icon="box" data-icon-size="16"></span>
+              Minimal (~144KB)
+            </button>
+            <button class="preset-btn" data-preset="essentials">
+              <span data-icon="star" data-icon-size="16"></span>
+              Essentials (~211KB)
+            </button>
+            <button class="preset-btn" data-preset="full">
+              <span data-icon="package" data-icon-size="16"></span>
+              Full (~258KB)
+            </button>
+            <button class="preset-btn" data-preset="data-focused">
+              <span data-icon="database" data-icon-size="16"></span>
+              Data-Focused (~172KB)
+            </button>
+            <button class="preset-btn" data-preset="no-ui">
+              <span data-icon="code" data-icon-size="16"></span>
+              No-UI (~39KB)
+            </button>
+          </div>
+        </div>
+
+        <!-- Module Selection -->
+        <div class="module-selection mb-6">
+          <h3 class="text-lg font-semibold mb-3">Select Modules</h3>
+          <p class="text-muted mb-4">Choose specific modules to include. Dependencies are automatically
+            selected.</p>
+
+          <div class="module-grid">
+            <!-- Tier 1 Modules -->
+            <div class="module-tier-section">
+              <h4 class="font-semibold text-sm text-muted mb-3">Core Utilities (No Dependencies)</h4>
+              <div class="grid grid-cols-1 grid-cols-md-3 grid-cols-lg-5 gap-3">
+                <!-- Module checkboxes will be dynamically generated -->
+              </div>
+            </div>
+
+            <!-- Tier 2 Modules -->
+            <div class="module-tier-section">
+              <h4 class="font-semibold text-sm text-muted mb-3">Intermediate Features</h4>
+              <div class="grid grid-cols-1 grid-cols-md-3 grid-cols-lg-5 gap-3">
+                <!-- Module checkboxes will be dynamically generated -->
+              </div>
+            </div>
+
+            <!-- Tier 3 Modules -->
+            <div class="module-tier-section">
+              <h4 class="font-semibold text-sm text-muted mb-3">Advanced Features</h4>
+              <div class="grid grid-cols-1 grid-cols-md-3 grid-cols-lg-5 gap-3">
+                <!-- Module checkboxes will be dynamically generated -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bundle Summary -->
+        <div class="bundle-summary">
+          <div class="grid grid-cols-1 grid-cols-md-3 grid-cols-lg-3 gap-4 mb-4">
+            <!-- JavaScript Column -->
+            <div style="padding: 1rem; background: var(--dm-gray-50); border-radius: 8px;">
+              <h4 class="font-semibold mb-2">JavaScript</h4>
+              <p class="text-2xl text-primary mb-1" id="bundle-size">0 KB</p>
+              <p class="text-muted text-sm" id="selected-count">0 modules selected</p>
+            </div>
+
+            <!-- CSS Column -->
+            <div style="padding: 1rem; background: var(--dm-gray-50); border-radius: 8px;">
+              <h4 class="font-semibold mb-2">CSS Required</h4>
+              <p class="text-2xl text-primary mb-1" id="css-size">0 KB</p>
+              <div id="css-requirements" class="mt-2">
+                <!-- CSS files will be listed here -->
+              </div>
+            </div>
+
+            <!-- Total Column -->
+            <div
+                style="padding: 1rem; background: var(--dm-primary); color: var(--dm-white); border-radius: 8px;">
+              <h4 class="font-semibold mb-2" style="color: var(--dm-white);">Total Package</h4>
+              <p class="text-3xl font-bold mb-1" id="total-size" style="color: var(--dm-white);">0 KB</p>
+              <p class="text-sm" style="color: rgba(255,255,255,0.9);">JS + CSS combined</p>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="bundle-actions">
+            <div class="grid grid-cols-1 grid-cols-md-3 gap-3">
+              <button class="btn btn-outline" id="reset-selection">
+                <span data-icon="x" data-icon-size="16"></span>
+                Reset Selection
+              </button>
+              <button class="btn btn-primary" id="download-bundle" disabled>
+                <span data-icon="download" data-icon-size="16"></span>
+                Download Bundle
+              </button>
+              <button class="btn btn-outline" id="view-instructions">
+                <span data-icon="book" data-icon-size="16"></span>
+                Build Instructions
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Build Instructions (Hidden by default) -->
+        <div class="build-instructions" id="build-instructions" style="display: none;">
+          <hr class="my-6">
+          <h3 class="text-lg font-semibold mb-3">Build Instructions</h3>
+          <p class="text-muted mb-4">To build this custom bundle, follow these steps:</p>
+
+          <div class="accordion" id="instructions-accordion">
+            <!-- Step 1: Entry Point -->
+            <div class="accordion-item active">
+              <div class="accordion-header">
+                <h4>1. Create Custom Entry Point</h4>
+              </div>
+              <div class="accordion-content">
+                <p class="mb-2">Create <code>src/bundles/custom.js</code>:</p>
+                <pre class="code-block-custom language-javascript" id="entry-point-code">// Code will be generated based on your selection</pre>
+                <button class="btn btn-sm btn-outline mt-2" data-copy="entry-point-code">
+                  <span data-icon="copy" data-icon-size="14"></span>
+                  Copy Code
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 2: Rollup Config -->
+            <div class="accordion-item">
+              <div class="accordion-header">
+                <h4>2. Update Rollup Configuration</h4>
+              </div>
+              <div class="accordion-content">
+                <p class="mb-2">Add to <code>rollup.config.js</code>:</p>
+                <pre class="code-block-custom language-javascript" id="rollup-config-code">// Configuration will be generated</pre>
+                <button class="btn btn-sm btn-outline mt-2" data-copy="rollup-config-code">
+                  <span data-icon="copy" data-icon-size="14"></span>
+                  Copy Code
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 3: Build -->
+            <div class="accordion-item">
+              <div class="accordion-header">
+                <h4>3. Build Your Bundle</h4>
+              </div>
+              <div class="accordion-content">
+                <p class="mb-2">Run the build command:</p>
+                <pre class="code-block-custom language-javascript">npm run build</pre>
+                <p class="mt-3">Your custom bundle will be in
+                  <code>public/dist/domma-custom.min.js</code>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CDN Usage -->
+  <section class="card mb-8">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Quick Start via CDN</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">Include Domma directly in your HTML:</p>
+      <div class="code code-block language-javascript">
   <span class="comment">
   &lt;!-- CSS (in this order) --&gt;
   </span>
-            <br/>
-            &lt;link rel="stylesheet" href="path/to/domma.css"&gt;<br/>
-            &lt;link rel="stylesheet" href="path/to/grid.css"&gt;<br/>
-            &lt;link rel="stylesheet" href="path/to/elements.css"&gt;<br/>
-            &lt;link rel="stylesheet" href="path/to/domma-themes.css"&gt;<br/><br/>
-            <span class="comment">&lt;!-- JavaScript --&gt;</span><br/>
-            &lt;script src="path/to/domma.min.js"&gt;&lt;/script&gt;<br/><br/>
-            <span class="comment">&lt;!-- Ready to use! --&gt;</span><br/>
-            &lt;script&gt;<br>
-            &nbsp;&nbsp; $('.btn').on('click', () =&gt; console.log('Clicked!'));<br/>
-            &nbsp;&nbsp; Domma.theme.init({ autoDetect: true });<br/>
-            &lt;/script&gt;
-            </div>
-        </div>
-    </section>
+        <br/>
+        &lt;link rel="stylesheet" href="path/to/domma.css"&gt;<br/>
+        &lt;link rel="stylesheet" href="path/to/grid.css"&gt;<br/>
+        &lt;link rel="stylesheet" href="path/to/elements.css"&gt;<br/>
+        &lt;link rel="stylesheet" href="path/to/domma-themes.css"&gt;<br/><br/>
+        <span class="comment">&lt;!-- JavaScript --&gt;</span><br/>
+        &lt;script src="path/to/domma.min.js"&gt;&lt;/script&gt;<br/><br/>
+        <span class="comment">&lt;!-- Ready to use! --&gt;</span><br/>
+        &lt;script&gt;<br>
+        &nbsp;&nbsp; $('.btn').on('click', () =&gt; console.log('Clicked!'));<br/>
+        &nbsp;&nbsp; Domma.theme.init({ autoDetect: true });<br/>
+        &lt;/script&gt;
+      </div>
+    </div>
+  </section>
 
-    <!-- Browser Requirements -->
-    <section class="card mb-8">
-        <div class="card-header">
-            <h2 class="text-xl font-semibold">Browser Requirements</h2>
-        </div>
-        <div class="card-body">
-            <p class="mb-4">Domma requires modern browser features and supports the following minimum versions:</p>
-          <table class="requirements-table-style">
-                <thead>
-                <tr>
-                    <th>Browser</th>
-                    <th>Minimum Version</th>
-                    <th>Release Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
+  <!-- Browser Requirements -->
+  <section class="card mb-8">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Browser Requirements</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">Domma requires modern browser features and supports the following minimum versions:</p>
+      <table class="requirements-table-style">
+        <thead>
+        <tr>
+          <th>Browser</th>
+          <th>Minimum Version</th>
+          <th>Release Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>
                             <span class="browser-icon-style">
                                 <span data-icon="globe" data-icon-size="20"></span>
                                 Chrome
                             </span>
-                    </td>
-                  <td><span class="check-icon-style" data-icon="check" data-icon-size="16"></span> 80+</td>
-                    <td>February 2020</td>
-                </tr>
-                <tr>
-                    <td>
+          </td>
+          <td><span class="check-icon-style" data-icon="check" data-icon-size="16"></span> 80+</td>
+          <td>February 2020</td>
+        </tr>
+        <tr>
+          <td>
                             <span class="browser-icon-style">
                                 <span data-icon="globe" data-icon-size="20"></span>
                                 Firefox
                             </span>
-                    </td>
-                  <td><span class="check-icon-style" data-icon="check" data-icon-size="16"></span> 75+</td>
-                    <td>April 2020</td>
-                </tr>
-                <tr>
-                    <td>
+          </td>
+          <td><span class="check-icon-style" data-icon="check" data-icon-size="16"></span> 75+</td>
+          <td>April 2020</td>
+        </tr>
+        <tr>
+          <td>
                             <span class="browser-icon-style">
                                 <span data-icon="globe" data-icon-size="20"></span>
                                 Safari
                             </span>
-                    </td>
-                  <td><span class="check-icon-style" data-icon="check" data-icon-size="16"></span> 13.1+</td>
-                    <td>March 2020</td>
-                </tr>
-                <tr>
-                    <td>
+          </td>
+          <td><span class="check-icon-style" data-icon="check" data-icon-size="16"></span> 13.1+</td>
+          <td>March 2020</td>
+        </tr>
+        <tr>
+          <td>
                             <span class="browser-icon-style">
                                 <span data-icon="globe" data-icon-size="20"></span>
                                 Edge
                             </span>
-                    </td>
-                  <td><span class="check-icon-style" data-icon="check" data-icon-size="16"></span> 80+</td>
-                    <td>February 2020</td>
-                </tr>
-                <tr>
-                    <td>
+          </td>
+          <td><span class="check-icon-style" data-icon="check" data-icon-size="16"></span> 80+</td>
+          <td>February 2020</td>
+        </tr>
+        <tr>
+          <td>
                             <span class="browser-icon-style">
                                 <span data-icon="globe" data-icon-size="20"></span>
                                 Opera
                             </span>
-                    </td>
-                  <td><span class="check-icon-style" data-icon="check" data-icon-size="16"></span> 67+</td>
-                    <td>March 2020</td>
-                </tr>
-                </tbody>
-            </table>
+          </td>
+          <td><span class="check-icon-style" data-icon="check" data-icon-size="16"></span> 67+</td>
+          <td>March 2020</td>
+        </tr>
+        </tbody>
+      </table>
 
-            <h3 class="text-lg font-semibold mt-6 mb-3">Required Features</h3>
-            <p class="text-muted mb-3">Domma uses the following modern JavaScript features:</p>
-          <div class="feature-support-section">
-            <span class="feature-tag-style">ES6+ Syntax</span>
-            <span class="feature-tag-style">Promises</span>
-            <span class="feature-tag-style">Fetch API</span>
-            <span class="feature-tag-style">CSS Custom Properties</span>
-            <span class="feature-tag-style">CSS Grid</span>
-            <span class="feature-tag-style">CSS Flexbox</span>
-            <span class="feature-tag-style">IntersectionObserver</span>
-            <span class="feature-tag-style">MutationObserver</span>
-            <span class="feature-tag-style">localStorage</span>
-            <span class="feature-tag-style">matchMedia</span>
-            </div>
+      <h3 class="text-lg font-semibold mt-6 mb-3">Required Features</h3>
+      <p class="text-muted mb-3">Domma uses the following modern JavaScript features:</p>
+      <div class="feature-support-section">
+        <span class="feature-tag-style">ES6+ Syntax</span>
+        <span class="feature-tag-style">Promises</span>
+        <span class="feature-tag-style">Fetch API</span>
+        <span class="feature-tag-style">CSS Custom Properties</span>
+        <span class="feature-tag-style">CSS Grid</span>
+        <span class="feature-tag-style">CSS Flexbox</span>
+        <span class="feature-tag-style">IntersectionObserver</span>
+        <span class="feature-tag-style">MutationObserver</span>
+        <span class="feature-tag-style">localStorage</span>
+        <span class="feature-tag-style">matchMedia</span>
+      </div>
 
-            <div class="alert alert-warning mt-4">
-                <strong>Note:</strong> Internet Explorer is not supported. For legacy browser support, consider using
-                polyfills or a transpiler like Babel.
-            </div>
-        </div>
-    </section>
+      <div class="alert alert-warning mt-4">
+        <strong>Note:</strong> Internet Explorer is not supported. For legacy browser support, consider using
+        polyfills or a transpiler like Babel.
+      </div>
+    </div>
+  </section>
 
-    <!-- Package Contents -->
-    <section class="card mb-8">
-        <div class="card-header">
-            <h2 class="text-xl font-semibold">What's Included</h2>
+  <!-- Package Contents -->
+  <section class="card mb-8">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">What's Included</h2>
+    </div>
+    <div class="card-body">
+      <div class="grid grid-cols-1 grid-cols-md-2 gap-6">
+        <div>
+          <h3 class="font-semibold mb-3">JavaScript Modules</h3>
+          <ul class="list-disc pl-4">
+            <li><strong>DOM</strong> - jQuery-compatible API (90+ methods)</li>
+            <li><strong>Utils</strong> - Lodash-compatible utilities (120+)</li>
+            <li><strong>Dates</strong> - Moment-style date manipulation</li>
+            <li><strong>Models</strong> - Reactive models & pub/sub</li>
+            <li><strong>Elements</strong> - UI components (Modal, Tabs, etc.)</li>
+            <li><strong>Tables</strong> - DataTable-like functionality</li>
+            <li><strong>Config</strong> - Declarative setup engine</li>
+            <li><strong>HTTP</strong> - Fetch-based client</li>
+            <li><strong>Icons</strong> - 100+ SVG icons</li>
+            <li><strong>Theme</strong> - Theme management</li>
+            <li><strong>Storage</strong> - localStorage/sessionStorage wrapper</li>
+          </ul>
         </div>
-        <div class="card-body">
-            <div class="grid grid-cols-1 grid-cols-md-2 gap-6">
-                <div>
-                    <h3 class="font-semibold mb-3">JavaScript Modules</h3>
-                    <ul class="list-disc pl-4">
-                        <li><strong>DOM</strong> - jQuery-compatible API (90+ methods)</li>
-                        <li><strong>Utils</strong> - Lodash-compatible utilities (120+)</li>
-                        <li><strong>Dates</strong> - Moment-style date manipulation</li>
-                        <li><strong>Models</strong> - Reactive models & pub/sub</li>
-                        <li><strong>Elements</strong> - UI components (Modal, Tabs, etc.)</li>
-                        <li><strong>Tables</strong> - DataTable-like functionality</li>
-                        <li><strong>Config</strong> - Declarative setup engine</li>
-                        <li><strong>HTTP</strong> - Fetch-based client</li>
-                        <li><strong>Icons</strong> - 100+ SVG icons</li>
-                        <li><strong>Theme</strong> - Theme management</li>
-                        <li><strong>Storage</strong> - localStorage/sessionStorage wrapper</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="font-semibold mb-3">CSS Components</h3>
-                    <ul class="list-disc pl-4">
-                        <li><strong>Grid System</strong> - 12-column responsive grid</li>
-                        <li><strong>Typography</strong> - Headings, text utilities</li>
-                        <li><strong>Buttons</strong> - Multiple styles and sizes</li>
-                        <li><strong>Forms</strong> - Inputs, selects, checkboxes</li>
-                        <li><strong>Cards</strong> - Content containers</li>
-                        <li><strong>Tables</strong> - Styled data tables</li>
-                        <li><strong>Navigation</strong> - Navbar, tabs, breadcrumbs</li>
-                        <li><strong>Alerts</strong> - Notification styles</li>
-                        <li><strong>Badges</strong> - Labels and counters</li>
-                        <li><strong>Utilities</strong> - Spacing, colours, display</li>
-                    </ul>
-                </div>
-            </div>
+        <div>
+          <h3 class="font-semibold mb-3">CSS Components</h3>
+          <ul class="list-disc pl-4">
+            <li><strong>Grid System</strong> - 12-column responsive grid</li>
+            <li><strong>Typography</strong> - Headings, text utilities</li>
+            <li><strong>Buttons</strong> - Multiple styles and sizes</li>
+            <li><strong>Forms</strong> - Inputs, selects, checkboxes</li>
+            <li><strong>Cards</strong> - Content containers</li>
+            <li><strong>Tables</strong> - Styled data tables</li>
+            <li><strong>Navigation</strong> - Navbar, tabs, breadcrumbs</li>
+            <li><strong>Alerts</strong> - Notification styles</li>
+            <li><strong>Badges</strong> - Labels and counters</li>
+            <li><strong>Utilities</strong> - Spacing, colours, display</li>
+          </ul>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Licence -->
-    <section class="card">
-        <div class="card-header">
-            <h2 class="text-xl font-semibold">Licence</h2>
-        </div>
-        <div class="card-body">
-            <p>Domma is released under the <strong>MIT Licence</strong>. You are free to use it in personal and
-                commercial projects.</p>
-            <p class="text-muted mt-2">Copyright &copy; 2025 DCBW-IT. All rights reserved.</p>
-        </div>
-    </section>
+  <!-- Licence -->
+  <section class="card">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Licence</h2>
+    </div>
+    <div class="card-body">
+      <p>Domma is released under the <strong>MIT Licence</strong>. You are free to use it in personal and
+        commercial projects.</p>
+      <p class="text-muted mt-2">Copyright &copy; 2025 DCBW-IT. All rights reserved.</p>
+    </div>
+  </section>
 </main>
 
 <script src="../../dist/domma.min.js"></script>
@@ -648,55 +648,57 @@
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script src="bundle-builder.js"></script>
 <script>
+  $(() => {
     // Scan for icons
     Domma.icons.scan();
 
     // Load and display actual bundle sizes from build-info.json
     fetch('../../dist/build-info.json')
-        .then(r => r.json())
-        .then(info => {
-            // Update UMD and ESM sizes (both are the same - full bundle)
-            if (info.bundles && info.bundles.full) {
-                const fullSize = info.bundles.full.sizeFormatted;
-                document.getElementById('umd-size').textContent = fullSize + ' minified';
-                document.getElementById('esm-size').textContent = fullSize + ' minified';
-            }
+      .then(r => r.json())
+      .then(info => {
+        // Update UMD and ESM sizes (both are the same - full bundle)
+        if (info.bundles && info.bundles.full) {
+          const fullSize = info.bundles.full.sizeFormatted;
+          document.getElementById('umd-size').textContent = fullSize + ' minified';
+          document.getElementById('esm-size').textContent = fullSize + ' minified';
+        }
 
-            // Update tools bundle size
-            if (info.bundles && info.bundles.tools) {
-                const toolsSize = info.bundles.tools.sizeFormatted;
-                // If there's a tools size element, update it
-                const toolsEl = document.getElementById('tools-size');
-                if (toolsEl) {
-                    toolsEl.textContent = toolsSize;
-                }
-            }
+        // Update tools bundle size
+        if (info.bundles && info.bundles.tools) {
+          const toolsSize = info.bundles.tools.sizeFormatted;
+          // If there's a tools size element, update it
+          const toolsEl = document.getElementById('tools-size');
+          if (toolsEl) {
+            toolsEl.textContent = toolsSize;
+          }
+        }
 
-            // Update current version
-            if (info.version) {
-                const versionEl = document.getElementById('current-version');
-                if (versionEl) {
-                    versionEl.textContent = 'v' + info.version;
-                }
-            }
-        })
-        .catch(err => {
-            console.warn('Could not load build info:', err);
-        });
+        // Update current version
+        if (info.version) {
+          const versionEl = document.getElementById('current-version');
+          if (versionEl) {
+            versionEl.textContent = 'v' + info.version;
+          }
+        }
+      })
+      .catch(err => {
+        console.warn('Could not load build info:', err);
+      });
 
     // Load and display kickstart.tar.gz size
     fetch('../../dist/kickstart.tar.gz')
-        .then(r => r.blob())
-        .then(blob => {
-            const sizeKB = Math.round(blob.size / 1024);
-            const sizeEl = document.getElementById('kickstart-size');
-            if (sizeEl) {
-                sizeEl.textContent = `~${sizeKB} KB`;
-            }
-        })
-        .catch(err => {
-            console.warn('Could not load kickstart.tar.gz size:', err);
-        });
+      .then(r => r.blob())
+      .then(blob => {
+        const sizeKB = Math.round(blob.size / 1024);
+        const sizeEl = document.getElementById('kickstart-size');
+        if (sizeEl) {
+          sizeEl.textContent = `~${sizeKB} KB`;
+        }
+      })
+      .catch(err => {
+        console.warn('Could not load kickstart.tar.gz size:', err);
+      });
+  });
 </script>
 </body>
 </html>
