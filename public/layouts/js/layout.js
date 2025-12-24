@@ -535,8 +535,10 @@ import {SidebarModule} from './modules/sidebar.js';
 
             // Initialize Domma.auth FIRST (so it loads user from localStorage)
             if (typeof Domma !== 'undefined' && Domma.auth && !Domma.auth.initialized) {
+                // Use localhost API for local dev, relative path for production
+                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                 Domma.auth.init({
-                    apiUrl: 'http://localhost:3000/api'
+                    apiUrl: isLocal ? 'http://localhost:3000/api' : '/api'
                 });
             }
 
