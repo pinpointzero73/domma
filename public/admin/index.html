@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Domma</title>
+  <meta name="description" content="Domma administration panel">
+
+  <!-- Domma Core Styles -->
+  <link rel="stylesheet" href="../dist/domma.css">
+  <link rel="stylesheet" href="../dist/grid.css">
+  <link rel="stylesheet" href="../dist/elements.css">
+  <link rel="stylesheet" href="../dist/themes/domma-themes.css">
+
+  <!-- Admin Custom Styles -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body data-layout="public" data-theme="default">
+
+<!-- Admin Dashboard Hero -->
+<div class="jumbotron jumbotron-primary jumbotron-center">
+  <div class="jumbotron-content">
+    <h1 class="jumbotron-title">Admin Dashboard</h1>
+    <p class="jumbotron-subtitle">System overview and user management</p>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div class="container py-8">
+
+  <!-- Statistics Cards Row -->
+  <div class="grid grid-cols-4 gap-6 mb-6" id="stats-cards">
+    <!-- Total Users Card -->
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title text-sm text-gray-600 mb-2">Total Users</h3>
+        <p class="text-3xl font-bold mb-2" id="stat-total-users">-</p>
+        <p class="text-xs text-gray-500">
+          <span class="badge badge-danger" id="stat-role-admin">0 admin</span>
+          <span class="badge badge-primary" id="stat-role-subscriber">0 subscriber</span>
+          <span class="badge badge-secondary" id="stat-role-guest">0 guest</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Today's Activity Card -->
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title text-sm text-gray-600 mb-2">Today's Activity</h3>
+        <p class="text-sm mb-2">
+          <strong id="stat-today-signups">0</strong> Signups<br>
+          <strong id="stat-today-pageviews">0</strong> Page Views<br>
+          <strong id="stat-today-sessions">0</strong> Sessions
+        </p>
+      </div>
+    </div>
+
+    <!-- Content Stats Card -->
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title text-sm text-gray-600 mb-2">Total Content</h3>
+        <p class="text-sm mb-2">
+          <strong id="stat-documents">0</strong> Documents<br>
+          <strong id="stat-invoices">0</strong> Invoices<br>
+          <strong id="stat-vehicles">0</strong> Vehicles
+        </p>
+      </div>
+    </div>
+
+    <!-- This Month Card -->
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title text-sm text-gray-600 mb-2">This Month</h3>
+        <p class="text-3xl font-bold mb-2" id="stat-month-signups">-</p>
+        <p class="text-xs text-gray-500">New signups</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 mb-6 gap-6">
+
+    <!-- Charts Row -->
+    <!-- Signup Trend Chart -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">7-Day Signup Trend</h2>
+      </div>
+      <div class="card-body">
+        <canvas id="signup-chart"></canvas>
+      </div>
+    </div>
+
+    <!-- Page Views Trend Chart -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">7-Day Page Views Trend</h2>
+      </div>
+      <div class="card-body">
+        <canvas id="pageview-chart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Pages Table -->
+  <div class="card mb-6">
+    <div class="card-header">
+      <h2 class="card-title">Top Pages (Last 7 Days)</h2>
+    </div>
+    <div class="card-body">
+      <table id="top-pages-table" class="table"></table>
+    </div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">All Users</h2>
+    </div>
+    <div class="card-body">
+      <!-- Search and Filters -->
+      <div class="grid grid-cols-12 gap-4 mb-4">
+        <div class="col-span-6">
+          <input type="text" id="user-search" class="form-input" placeholder="Search by email or name...">
+        </div>
+        <div class="col-span-3">
+          <select id="role-filter" class="form-input">
+            <option value="">All Roles</option>
+            <option value="admin">Admin</option>
+            <option value="subscriber">Subscriber</option>
+            <option value="guest">Guest</option>
+          </select>
+        </div>
+        <div class="col-span-3">
+          <button id="refresh-users" class="btn btn-primary btn-block">Refresh</button>
+        </div>
+      </div>
+
+      <!-- Users Table -->
+      <table id="users-table" class="table"></table>
+    </div>
+  </div>
+</div>
+
+<!-- Domma Framework -->
+<script src="../dist/domma.min.js"></script>
+<!-- Chart.js for visualizations -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<!-- Layout System -->
+<script type="module" src="../layouts/js/layout.js"></script>
+<!-- Admin Page Logic -->
+<script src="index.js"></script>
+</body>
+</html>

@@ -428,6 +428,21 @@ export class SnowEffect {
         static: false,
         carriages: 2 + Math.floor(Math.random() * 2) // 2 or 3 carriages
       });
+    } else if (choice < 0.0015) { // Spawn fireworks
+      this.specialParticles.push({
+        type: 'firework',
+        x: Math.random() * this.canvas.width,
+        y: this.canvas.height,
+        vx: (Math.random() - 0.5) * 4,
+        vy: -10 - Math.random() * 5,
+        size: 2 + Math.random() * 2,
+        opacity: 1,
+        active: true,
+        static: false,
+        time: 0,
+        exploded: false,
+        explosionTime: 30 + Math.random() * 30
+      });
     } else if (choice < 0.0025) { // Spawn Robins
       if (this.specialParticles.some(p => p.type === 'robin')) {
         return;
@@ -455,10 +470,11 @@ export class SnowEffect {
         opacity: 0.95,
         active: true,
         static: false,
-        sitTime: 2000 + Math.random() * 3000,
+        sitTime: 3000 + Math.random() * 2000,
         sitStartTime: 0,
         flightProgress: 0,
-        time: 0
+        time: 0,
+        wavePhase: Math.random() * Math.PI * 2
       });
     }
   }
@@ -518,22 +534,50 @@ export class SnowEffect {
       if (particle.x < -margin || particle.x > this.canvas.width + margin) {
         particle.active = false;
       }
+    } else if (particle.type === 'firework') {
+      particle.vy += 0.1;
+      particle.y += particle.vy;
+      particle.time++;
+
+      if (!particle.exploded && (particle.vy >= 0 || particle.time > particle.explosionTime)) {
+        this._explode(particle);
+        particle.exploded = true;
+        particle.active = false;
+      }
+    } else if (particle.type === 'spark') {
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+      particle.vy += 0.1;
+      particle.opacity -= 0.02;
+      if (particle.opacity <= 0) {
+        particle.active = false;
+      }
     } else if (particle.type === 'robin') {
-      const speed = 0.01;
+      const speed = 0.007; // A little slower
       switch (particle.state) {
         case 'flying_in':
           particle.flightProgress += speed;
           const journeyX = particle.targetX - particle.startX;
           const journeyY = particle.targetY - particle.startY;
 
-          particle.x = particle.startX + journeyX * particle.flightProgress;
-          particle.y = particle.startY + journeyY * Math.sin(particle.flightProgress * Math.PI);
+          // Easing for horizontal movement
+          const easedProgress = (1 - Math.cos(particle.flightProgress * Math.PI)) / 2;
+          particle.x = particle.startX + journeyX * easedProgress;
+
+          // Swoop trajectory for vertical movement
+          // Dips down before rising to the target.
+          const swoop = Math.sin(particle.flightProgress * Math.PI);
+          const dip = Math.sin(particle.flightProgress * Math.PI * 2) * -0.2; // Dip down in the middle
+          particle.y = particle.startY + journeyY * swoop + dip * journeyY;
 
 
           if (particle.flightProgress >= 1) {
             particle.state = 'sitting';
             particle.sitStartTime = this.lastTime;
             particle.flightProgress = 0;
+            // Stop movement during sitting
+            particle.vx = 0;
+            particle.vy = 0;
           }
           break;
         case 'sitting':
@@ -541,8 +585,9 @@ export class SnowEffect {
             particle.state = 'flying_away';
             particle.startX = particle.x;
             particle.startY = particle.y;
-            particle.targetX = particle.x - 20;
-            particle.targetY = -50;
+            // Fly up and away
+            particle.targetX = particle.vx > 0 ? this.canvas.width + 50 : -50;
+            particle.targetY = Math.random() * this.canvas.height * 0.2;
           }
           break;
         case 'flying_away':
@@ -550,10 +595,13 @@ export class SnowEffect {
           const journeyX2 = particle.targetX - particle.startX;
           const journeyY2 = particle.targetY - particle.startY;
 
-          particle.x = particle.startX + journeyX2 * particle.flightProgress;
-          particle.y = particle.startY + journeyY2 * particle.flightProgress;
+          // Swoop up and away
+          const easedProgress2 = particle.flightProgress;
+          particle.x = particle.startX + journeyX2 * easedProgress2;
+          particle.y = particle.startY + journeyY2 * Math.sin(easedProgress2 * (Math.PI / 2));
 
-          if (particle.y < -50) {
+
+          if (particle.flightProgress >= 1) {
             particle.active = false;
           }
           break;
@@ -569,8 +617,39 @@ export class SnowEffect {
     else if (p.type === 'wreath') this._drawWreath(p);
     else if (p.type === 'elf') this._drawElf(p);
     else if (p.type === 'train') this._drawTrain(p);
+    else if (p.type === 'firework') this._drawFirework(p);
+    else if (p.type === 'spark') this._drawFirework(p);
     else if (p.type === 'robin') this._drawRobin(p);
     this.ctx.restore();
+  }
+
+  _explode(particle) {
+    const sparkCount = 50 + Math.random() * 50;
+    const colors = ['#ff0000', '#ffff00', '#00ff00', '#0000ff', '#ffffff'];
+    for (let i = 0; i < sparkCount; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 5 + 2;
+      this.specialParticles.push({
+        type: 'spark',
+        x: particle.x,
+        y: particle.y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        size: 2 + Math.random() * 2,
+        opacity: 1,
+        active: true,
+        static: false,
+        color: colors[Math.floor(Math.random() * colors.length)]
+      });
+    }
+  }
+
+  _drawFirework(particle) {
+    const ctx = this.ctx;
+    ctx.fillStyle = particle.color || '#ffffff';
+    ctx.beginPath();
+    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+    ctx.fill();
   }
 
   _drawRobin(particle) {
@@ -579,7 +658,7 @@ export class SnowEffect {
     const y = particle.y;
     const size = particle.size;
     const dir = particle.vx > 0 ? 1 : -1;
-    const time = particle.time; // Access particle.time
+    const time = particle.time;
 
     ctx.save();
     ctx.translate(x, y);
@@ -587,21 +666,30 @@ export class SnowEffect {
       ctx.scale(-1, 1);
     }
 
+    const isFlying = particle.state === 'flying_in' || particle.state === 'flying_away';
+
+    // More realistic wing flap
     let wingAngle = 0;
-    if (particle.state === 'flying_in' || particle.state === 'flying_away') {
-      // Oscillate wing angle between -PI/4 and PI/4
-      wingAngle = Math.sin(time * 0.015) * (Math.PI / 4); // Increased frequency for faster flap
+    if (isFlying) {
+      const flapCycle = time * 0.025; // Faster flapping
+      // Use a custom curve for a more natural flap.
+      // A power of sine makes the up/down stroke uneven.
+      wingAngle = Math.sin(flapCycle) * (Math.PI / 3); // Wider angle
+      // Add a secondary motion to make it less robotic
+      wingAngle += Math.sin(flapCycle * 2) * (Math.PI / 10);
     }
 
-    // Legs
-    ctx.strokeStyle = '#5D4037';
-    ctx.lineWidth = size * 0.1;
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(-size * 0.2, size * 0.5);
-    ctx.moveTo(0, 0);
-    ctx.lineTo(size * 0.2, size * 0.5);
-    ctx.stroke();
+    // Legs: Only draw when sitting
+    if (!isFlying) {
+      ctx.strokeStyle = '#5D4037';
+      ctx.lineWidth = size * 0.1;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(-size * 0.2, size * 0.5);
+      ctx.moveTo(0, 0);
+      ctx.lineTo(size * 0.2, size * 0.5);
+      ctx.stroke();
+    }
 
     // Body
     ctx.fillStyle = '#8D6E63';
@@ -618,7 +706,7 @@ export class SnowEffect {
     // Head
     ctx.fillStyle = '#A1887F';
     ctx.beginPath();
-    ctx.arc(size * 0.5, -size, size * 0.5, 0, Math.PI * 2);
+    ctx.arc(size * 0.5, -size, size * 0.5, 0, 0, Math.PI * 2);
     ctx.fill();
 
     // Beak
@@ -652,39 +740,40 @@ export class SnowEffect {
     ctx.arc(hatX + size * 0.3, hatY - size * 0.5, size * 0.1, 0, Math.PI * 2);
     ctx.fill();
 
-    // Wings (draw after body so they appear layered correctly)
-    ctx.fillStyle = '#8D6E63'; // Same color as body
-    ctx.strokeStyle = '#5D4037';
-    ctx.lineWidth = size * 0.05;
+    // Wings
+    if (isFlying) {
+      ctx.fillStyle = '#8D6E63';
+      ctx.strokeStyle = '#5D4037';
+      ctx.lineWidth = size * 0.05;
 
-    ctx.save();
-    ctx.translate(-size * 0.8, -size * 0.4); // Position wings relative to body
-    ctx.rotate(wingAngle); // Apply rotation for flapping
+      // Draw two wings, one behind the other for a 3D effect
+      // Back wing
+      ctx.save();
+      ctx.translate(-size * 0.2, -size * 0.5);
+      ctx.rotate(wingAngle * 0.9); // Slightly different rotation
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(-size * 0.6, -size * 0.7, -size, 0);
+      ctx.quadraticCurveTo(-size * 0.6, size * 0.4, 0, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
 
-    // Left wing
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.quadraticCurveTo(-size * 0.5, -size * 0.5, -size * 0.8, 0);
-    ctx.quadraticCurveTo(-size * 0.5, size * 0.5, 0, 0);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-    ctx.restore();
-
-    ctx.save();
-    ctx.translate(size * 0.8, -size * 0.4); // Position wings relative to body
-    ctx.scale(-1, 1); // Mirror for right wing
-    ctx.rotate(-wingAngle); // Apply opposite rotation for flapping
-
-    // Right wing
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.quadraticCurveTo(-size * 0.5, -size * 0.5, -size * 0.8, 0);
-    ctx.quadraticCurveTo(-size * 0.5, size * 0.5, 0, 0);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-    ctx.restore();
+      // Front wing
+      ctx.save();
+      ctx.translate(size * 0.2, -size * 0.5);
+      ctx.rotate(-wingAngle);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(size * 0.6, -size * 0.7, size, 0);
+      ctx.quadraticCurveTo(size * 0.6, size * 0.4, 0, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+    // If not flying, wings are not drawn, making them look 'folded'.
 
     ctx.restore();
   }

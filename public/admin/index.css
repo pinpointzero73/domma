@@ -1,0 +1,200 @@
+/**
+ * Admin Dashboard Custom Styles
+ */
+
+/* ============================================
+   Statistics Cards
+   ============================================ */
+#stats-cards .card {
+    height: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#stats-cards .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#stats-cards .text-3xl {
+    font-size: 2rem;
+    line-height: 1.2;
+}
+
+#stats-cards .text-sm {
+    font-size: 0.875rem;
+}
+
+#stats-cards .text-xs {
+    font-size: 0.75rem;
+}
+
+/* ============================================
+   Charts
+   ============================================ */
+#signup-chart,
+#pageview-chart {
+    max-height: 300px;
+}
+
+.card-body canvas {
+    margin: 0 auto;
+}
+
+/* ============================================
+   Tables
+   ============================================ */
+.change-role-btn {
+    white-space: nowrap;
+}
+
+#top-pages-table td,
+#users-table td {
+    vertical-align: middle;
+}
+
+/* ============================================
+   Badges
+   ============================================ */
+.badge + .badge {
+    margin-left: 0.25rem;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.25em 0.6em;
+    font-size: 0.75em;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+}
+
+.badge-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.badge-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.badge-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* ============================================
+   Form Elements
+   ============================================ */
+.form-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-input:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.mb-6 {
+    margin-bottom: 1.5rem;
+}
+
+.py-8 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.text-gray-600 {
+    color: #6c757d;
+}
+
+.text-gray-500 {
+    color: #adb5bd;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+/* ============================================
+   Responsive Adjustments
+   ============================================ */
+@media (max-width: 768px) {
+    #stats-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #stats-cards .text-3xl {
+        font-size: 1.5rem;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    #stats-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    #signup-chart,
+    #pageview-chart {
+        max-height: 250px;
+    }
+}
