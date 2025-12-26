@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Config Engine Components - Domma Showcase</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../showcase/css/domma-showcase.css">
+  <style>
+      .component-demo {
+          background: var(--dm-gray-100);
+          padding: 2rem;
+          border-radius: 8px;
+          margin-top: 1rem;
+      }
+
+      .component-demo-dark {
+          background: var(--dm-gray-800);
+          color: var(--dm-gray-100);
+      }
+
+      .component-status {
+          display: inline-block;
+          padding: 0.25rem 0.75rem;
+          border-radius: 4px;
+          font-size: 0.875rem;
+          font-weight: 600;
+      }
+
+      .component-status-supported {
+          background: var(--dm-success);
+          color: white;
+      }
+
+      .component-status-unsupported {
+          background: var(--dm-danger);
+          color: white;
+      }
+
+      .demo-card-hover {
+          transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .demo-card-hover:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      .breadcrumb-container {
+          padding: 1rem;
+          background: white;
+          border-radius: 4px;
+      }
+  </style>
+</head>
+<body data-layout="showcase" data-layout-variant="subpage">
+
+<!-- Hero Section -->
+<div class="hero hero-gradient-primary">
+  <h1>All Config Engine Components</h1>
+  <p>Complete reference of the 16 components that support <code>$.setup()</code> configuration</p>
+  <div class="mt-4">
+    <span class="component-status component-status-supported">16 Supported</span>
+    <span class="component-status component-status-unsupported">9 Unsupported</span>
+  </div>
+</div>
+
+<div class="container py-8">
+
+  <!-- Quick Reference -->
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2>Quick Reference</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4"><strong>Supported Components (16):</strong> Can be configured via <code>$.setup()</code></p>
+      <div class="grid grid-cols-4 gap-2 mb-4">
+        <code class="text-success">card</code>
+        <code class="text-success">modal</code>
+        <code class="text-success">tabs</code>
+        <code class="text-success">accordion</code>
+        <code class="text-success">tooltip</code>
+        <code class="text-success">carousel</code>
+        <code class="text-success">dropdown</code>
+        <code class="text-success">badge</code>
+        <code class="text-success">backToTop</code>
+        <code class="text-success">buttonGroup</code>
+        <code class="text-success">loader</code>
+        <code class="text-success">breadcrumbs</code>
+        <code class="text-success">navbar</code>
+        <code class="text-success">notification</code>
+        <code class="text-success">timer</code>
+        <code class="text-success">alarm</code>
+      </div>
+
+      <p class="mb-4"><strong>Not Supported (9):</strong> Must use direct initialization</p>
+      <div class="grid grid-cols-4 gap-2">
+        <code class="text-danger">autocomplete</code>
+        <code class="text-danger">pillbox</code>
+        <code class="text-danger">toast</code>
+        <code class="text-danger">dialog</code>
+        <code class="text-danger">treeView</code>
+        <code class="text-danger">jumbotron</code>
+        <code class="text-danger">themeRoller</code>
+        <code class="text-danger">pageRoller</code>
+        <code class="text-danger">editor</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===============================================
+       SUPPORTED COMPONENTS (16)
+       =============================================== -->
+
+  <!-- 1. Card -->
+  <section class="card mb-6" id="card-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 1. card</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Interactive container elements with hover effects and click handling</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '.demo-card': {
+    component: 'card',
+    options: {
+      hoverable: true,
+      shadow: 'medium',
+      onClick: () => console.log('Card clicked!')
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <div class="grid grid-cols-3 gap-4">
+          <div class="card demo-card demo-card-hover" style="cursor: pointer;">
+            <div class="card-body">
+              <h4>Product 1</h4>
+              <p class="text-sm text-muted">Hover or click me!</p>
+            </div>
+          </div>
+          <div class="card demo-card demo-card-hover" style="cursor: pointer;">
+            <div class="card-body">
+              <h4>Product 2</h4>
+              <p class="text-sm text-muted">Hover or click me!</p>
+            </div>
+          </div>
+          <div class="card demo-card demo-card-hover" style="cursor: pointer;">
+            <div class="card-body">
+              <h4>Product 3</h4>
+              <p class="text-sm text-muted">Hover or click me!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Modal -->
+  <section class="card mb-6" id="modal-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 2. modal</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Dialog overlays with backdrop, keyboard support, and animations</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '#demo-modal': {
+    component: 'modal',
+    options: {
+      backdrop: true,
+      backdropClose: true,
+      keyboard: true,
+      animation: 'fade'
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <button id="open-modal-btn" class="btn btn-primary">Open Modal</button>
+
+        <div id="demo-modal" class="modal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3>Modal Title</h3>
+                <button class="modal-close">&times;</button>
+              </div>
+              <div class="modal-body">
+                <p>This modal was configured via $.setup()</p>
+                <p class="text-muted">Press ESC or click backdrop to close</p>
+              </div>
+              <div class="modal-footer">
+                <button class="btn" onclick="$('#demo-modal').data('modalInstance').close()">Close</button>
+                <button class="btn btn-primary">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Tabs -->
+  <section class="card mb-6" id="tabs-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 3. tabs</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Tabbed content panels with animation support</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '#demo-tabs': {
+    component: 'tabs',
+    options: {
+      activeIndex: 0,
+      animation: 'fade'
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <div id="demo-tabs" class="tabs">
+          <div class="tabs-nav">
+            <button class="tabs-nav-item active">Overview</button>
+            <button class="tabs-nav-item">Specifications</button>
+            <button class="tabs-nav-item">Reviews</button>
+          </div>
+          <div class="tabs-content">
+            <div class="tabs-pane active">
+              <h4>Product Overview</h4>
+              <p>This is the overview content. Configured tabs automatically handle switching.</p>
+            </div>
+            <div class="tabs-pane">
+              <h4>Technical Specifications</h4>
+              <p>Detailed specifications appear in this tab panel.</p>
+            </div>
+            <div class="tabs-pane">
+              <h4>Customer Reviews</h4>
+              <p>Reviews and ratings are displayed here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Accordion -->
+  <section class="card mb-6" id="accordion-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 4. accordion</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Collapsible content sections with single or multi-expand modes</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '#demo-accordion': {
+    component: 'accordion',
+    options: {
+      multiExpand: false,
+      animation: 'slide'
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <div id="demo-accordion" class="accordion">
+          <div class="accordion-item">
+            <button class="accordion-header active">What is Domma?</button>
+            <div class="accordion-content" style="display: block;">
+              <p>Domma is a lightweight JavaScript framework combining jQuery-style DOM manipulation with modern UI
+                components.</p>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-header">How do I install it?</button>
+            <div class="accordion-content">
+              <p>Include the CDN link or npm install domma-framework</p>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-header">Is it production-ready?</button>
+            <div class="accordion-content">
+              <p>Yes! Domma is stable and used in production applications.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Tooltip -->
+  <section class="card mb-6" id="tooltip-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 5. tooltip</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Contextual popups on hover or click with multiple positioning options</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '[data-tooltip]': {
+    component: 'tooltip',
+    options: {
+      position: 'top',
+      trigger: 'hover',
+      delay: 200
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <div class="flex gap-4">
+          <button class="btn btn-primary" data-tooltip="This appears on top!" data-tooltip-position="top">Top Tooltip
+          </button>
+          <button class="btn btn-primary" data-tooltip="This appears on the right!" data-tooltip-position="right">Right
+            Tooltip
+          </button>
+          <button class="btn btn-primary" data-tooltip="This appears on the bottom!" data-tooltip-position="bottom">
+            Bottom Tooltip
+          </button>
+          <button class="btn btn-primary" data-tooltip="This appears on the left!" data-tooltip-position="left">Left
+            Tooltip
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Carousel -->
+  <section class="card mb-6" id="carousel-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 6. carousel</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Image/content slider with autoplay, indicators, and navigation arrows</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '#demo-carousel': {
+    component: 'carousel',
+    options: {
+      autoplay: true,
+      interval: 3000,
+      loop: true,
+      showArrows: true,
+      showIndicators: true
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <div id="demo-carousel" class="carousel" style="max-width: 600px; margin: 0 auto;">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div
+                  style="height: 300px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; border-radius: 8px;">
+                Slide 1
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div
+                  style="height: 300px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; border-radius: 8px;">
+                Slide 2
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div
+                  style="height: 300px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; border-radius: 8px;">
+                Slide 3
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev">&lsaquo;</button>
+          <button class="carousel-control-next">&rsaquo;</button>
+          <div class="carousel-indicators">
+            <button class="active"></button>
+            <button></button>
+            <button></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Dropdown -->
+  <section class="card mb-6" id="dropdown-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 7. dropdown</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Dropdown menus with positioning and selection handling</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '#demo-dropdown': {
+    component: 'dropdown',
+    options: {
+      placement: 'bottom',
+      closeOnSelect: true
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <div class="dropdown" id="demo-dropdown">
+          <button class="btn btn-primary dropdown-toggle">
+            Actions
+          </button>
+          <div class="dropdown-menu">
+            <button class="dropdown-item">Edit</button>
+            <button class="dropdown-item">Duplicate</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item text-danger">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Badge -->
+  <section class="card mb-6" id="badge-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 8. badge</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Status indicators and labels with variant styles</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '.demo-badge': {
+    component: 'badge',
+    options: {
+      variant: 'primary',
+      rounded: true
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <div class="flex gap-2 flex-wrap">
+          <span class="badge badge-primary demo-badge">Primary</span>
+          <span class="badge badge-secondary demo-badge">Secondary</span>
+          <span class="badge badge-success demo-badge">Success</span>
+          <span class="badge badge-danger demo-badge">Danger</span>
+          <span class="badge badge-warning demo-badge">Warning</span>
+          <span class="badge badge-info demo-badge">Info</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Back to Top -->
+  <section class="card mb-6" id="backtotop-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 9. backToTop</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Scroll-to-top button that appears after scrolling down</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '#back-to-top': {
+    component: 'backToTop',
+    options: {
+      showAfter: 300,
+      duration: 500,
+      position: 'bottom-right'
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <p class="text-muted"><strong>Note:</strong> Scroll down the page to see the back-to-top button appear in the
+          bottom-right corner.</p>
+        <button id="demo-backtotop-btn" class="btn btn-sm btn-primary"
+                style="position: fixed; bottom: 20px; right: 20px; display: none;">
+          ↑ Top
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Button Group -->
+  <section class="card mb-6" id="buttongroup-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 10. buttonGroup</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Radio/checkbox style button groups with single or multi-select</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '#demo-btngroup': {
+    component: 'buttonGroup',
+    options: {
+      mode: 'single',  // or 'multiple'
+      activeClass: 'active'
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <div class="btn-group" id="demo-btngroup">
+          <button class="btn active">Left</button>
+          <button class="btn">Center</button>
+          <button class="btn">Right</button>
+          <button class="btn">Justify</button>
+        </div>
+        <p class="mt-3 text-muted">Selected: <span id="btngroup-result">Left</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. Loader -->
+  <section class="card mb-6" id="loader-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 11. loader</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Loading indicators with multiple animation types</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '#demo-loader-container': {
+    component: 'loader',
+    options: {
+      type: 'spinner',
+      size: 'medium',
+      overlay: true,
+      text: 'Loading...'
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <button id="show-loader-btn" class="btn btn-primary">Show Loader</button>
+        <div id="demo-loader-container"
+             style="position: relative; min-height: 200px; background: white; border-radius: 8px; margin-top: 1rem; display: flex; align-items: center; justify-content: center;">
+          <p>Content area - click button to show loader overlay</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. Breadcrumbs -->
+  <section class="card mb-6" id="breadcrumbs-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 12. breadcrumbs</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Navigation trail showing current page location</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '#demo-breadcrumbs': {
+    component: 'breadcrumbs',
+    options: {
+      items: [
+        {label: 'Home', url: '/'},
+        {label: 'Showcase', url: '/showcase'},
+        {label: 'Config Engine', active: true}
+      ],
+      separator: '/'
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <div class="breadcrumb-container">
+          <nav id="demo-breadcrumbs" class="breadcrumb"></nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. Navbar -->
+  <section class="card mb-6" id="navbar-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 13. navbar</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Responsive navigation bar with brand, menu items, and actions</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '#demo-navbar': {
+    component: 'navbar',
+    options: {
+      brand: {text: 'Domma', url: '/'},
+      items: [
+        {label: 'Home', url: '/'},
+        {label: 'Docs', url: '/docs'}
+      ],
+      position: 'static',
+      variant: 'light',
+      collapsible: true
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <nav id="demo-navbar" class="navbar" style="background: white; padding: 1rem; border-radius: 8px;">
+          <div class="navbar-brand">
+            <strong>Domma</strong>
+          </div>
+          <div class="navbar-nav">
+            <a href="#" class="nav-link active">Home</a>
+            <a href="#" class="nav-link">Docs</a>
+            <a href="#" class="nav-link">Examples</a>
+          </div>
+          <div class="navbar-actions">
+            <button class="btn btn-sm btn-primary">Sign In</button>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14. Notification -->
+  <section class="card mb-6" id="notification-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 14. notification</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Desktop browser notifications (requires permission)</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '#demo-notification': {
+    component: 'notification',
+    options: {
+      title: 'Domma Notification',
+      body: 'This is a desktop notification!',
+      icon: '/assets/logo/domma-icon.svg'
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <button id="request-notification-btn" class="btn btn-primary">Request Permission & Show Notification</button>
+        <p class="mt-3 text-muted"><strong>Note:</strong> Browser will prompt for permission to show notifications.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. Timer -->
+  <section class="card mb-6" id="timer-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 15. timer</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Countdown timer with optional visual display and controls</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '#demo-timer': {
+    component: 'timer',
+    options: {
+      duration: 60000,  // 60 seconds
+      format: 'mm:ss',
+      showControls: true,
+      autoStart: false
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <div id="demo-timer" class="timer" style="text-align: center;">
+          <div class="timer-display" style="font-size: 3rem; font-weight: bold; margin-bottom: 1rem;">01:00</div>
+          <div class="timer-controls flex gap-2 justify-center">
+            <button class="btn btn-success timer-start">Start</button>
+            <button class="btn btn-warning timer-pause">Pause</button>
+            <button class="btn btn-danger timer-reset">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16. Alarm -->
+  <section class="card mb-6" id="alarm-demo">
+    <div class="card-header">
+      <h2><span class="component-status component-status-supported">Supported</span> 16. alarm</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Purpose:</strong> Scheduled time-based alerts with localStorage persistence</p>
+
+      <pre class="code-block language-javascript mb-4">$.setup({
+  '#demo-alarm': {
+    component: 'alarm',
+    options: {
+      alarms: [
+        {
+          time: '09:00',
+          label: 'Morning Meeting',
+          repeat: 'weekdays',
+          enabled: true
+        }
+      ],
+      storageKey: 'demo-alarms'
+    }
+  }
+});</pre>
+
+      <div class="component-demo">
+        <div class="alert alert-info">
+          <strong>Alarm Configuration:</strong> Alarms are configured via options and persist in localStorage.
+          When an alarm triggers, a desktop notification and optional sound are displayed.
+        </div>
+        <pre class="code-block">Current Time: <span id="current-time">--:--</span>
+Next Alarm: Morning Meeting at 09:00 (weekdays)</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===============================================
+       NOT SUPPORTED COMPONENTS (9)
+       =============================================== -->
+
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2><span class="component-status component-status-unsupported">Not Supported</span> Components Requiring Direct
+        Init</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">These components cannot be configured via <code>$.setup()</code> and must be initialized directly.
+      </p>
+
+      <div class="grid grid-cols-2 gap-6">
+        <!-- Autocomplete -->
+        <div>
+          <h4 class="text-danger">autocomplete</h4>
+          <p class="text-sm text-muted mb-2"><strong>Why:</strong> Complex data binding and async data sources</p>
+          <pre class="code-block language-javascript text-xs">// Use direct init
+const ac = Domma.elements.autocomplete('#search', {
+  data: ['Apple', 'Banana', 'Cherry'],
+  onSelect: (val) => console.log(val)
+});</pre>
+        </div>
+
+        <!-- Pillbox -->
+        <div>
+          <h4 class="text-danger">pillbox</h4>
+          <p class="text-sm text-muted mb-2"><strong>Why:</strong> Advanced multi-select state management</p>
+          <pre class="code-block language-javascript text-xs">// Use direct init
+const pb = Domma.elements.pillbox('#tags', {
+  data: ['React', 'Vue', 'Angular'],
+  creatable: true
+});</pre>
+        </div>
+
+        <!-- Toast -->
+        <div>
+          <h4 class="text-danger">toast</h4>
+          <p class="text-sm text-muted mb-2"><strong>Why:</strong> Ephemeral notifications (no persistent DOM element)
+          </p>
+          <pre class="code-block language-javascript text-xs">// Use static method
+Domma.elements.toast('Success!', {
+  type: 'success',
+  duration: 3000
+});</pre>
+        </div>
+
+        <!-- Dialog -->
+        <div>
+          <h4 class="text-danger">dialog (alert, confirm, prompt)</h4>
+          <p class="text-sm text-muted mb-2"><strong>Why:</strong> Promise-based programmatic APIs</p>
+          <pre class="code-block language-javascript text-xs">// Use static methods
+const ok = await Domma.elements.confirm('Delete?');
+const name = await Domma.elements.prompt('Name:');</pre>
+        </div>
+
+        <!-- TreeView -->
+        <div>
+          <h4 class="text-danger">treeView</h4>
+          <p class="text-sm text-muted mb-2"><strong>Why:</strong> Hierarchical data requires direct data binding</p>
+          <pre class="code-block language-javascript text-xs">// Use direct init
+const tree = Domma.elements.treeView('#tree', {
+  items: [{label: 'Parent', children: [...]}]
+});</pre>
+        </div>
+
+        <!-- Jumbotron -->
+        <div>
+          <h4 class="text-danger">jumbotron</h4>
+          <p class="text-sm text-muted mb-2"><strong>Why:</strong> CSS-only component (no JavaScript)</p>
+          <pre class="code-block language-html text-xs"><!-- Use HTML + CSS classes -->
+<div class="jumbotron jumbotron-primary">
+  <h1>Hero Section</h1>
+</div></pre>
+        </div>
+
+        <!-- Developer Tools -->
+        <div>
+          <h4 class="text-danger">themeRoller / pageRoller / editor</h4>
+          <p class="text-sm text-muted mb-2"><strong>Why:</strong> Developer tools (in tools bundle, not main bundle)
+          </p>
+          <pre class="code-block language-javascript text-xs">// Load domma-tools.min.js first
+const roller = Domma.elements.themeRoller('#container');
+const editor = Domma.elements.editor('#editor');</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Summary -->
+  <section class="card">
+    <div class="card-header">
+      <h2>When to Use Config Engine vs. Direct Init</h2>
+    </div>
+    <div class="card-body">
+      <div class="grid grid-cols-2 gap-6">
+        <div>
+          <h4 class="text-success mb-3">✓ Use $.setup() for:</h4>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Static component initialization</li>
+            <li>Multiple similar components</li>
+            <li>Simple setup scenarios</li>
+            <li>Layout-based components</li>
+            <li>Components with persistent DOM elements</li>
+            <li>Declarative configuration approach</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-danger mb-3">✓ Use Direct Init for:</h4>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Dynamic data sources</li>
+            <li>Complex interactions</li>
+            <li>Conditional setup logic</li>
+            <li>Ephemeral/temporary components</li>
+            <li>Promise-based workflows</li>
+            <li>Components requiring runtime data</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  // Initialize all components via config engine
+  $.setup({
+    // 1. Card
+    '.demo-card': {
+      component: 'card',
+      options: {
+        hoverable: true,
+        onClick: function () {
+          Domma.elements.toast('Card clicked!', {type: 'info', duration: 2000});
+        }
+      }
+    },
+
+    // 2. Modal
+    '#demo-modal': {
+      component: 'modal',
+      options: {
+        backdrop: true,
+        backdropClose: true,
+        keyboard: true,
+        animation: 'fade'
+      }
+    },
+    '#open-modal-btn': {
+      events: {
+        click: () => {
+          const modal = $('#demo-modal').data('modalInstance');
+          if (modal) modal.open();
+        }
+      }
+    },
+
+    // 3. Tabs
+    '#demo-tabs': {
+      component: 'tabs',
+      options: {
+        activeIndex: 0,
+        animation: 'fade'
+      }
+    },
+
+    // 4. Accordion
+    '#demo-accordion': {
+      component: 'accordion',
+      options: {
+        multiExpand: false,
+        animation: 'slide',
+        activeIndex: 0
+      }
+    },
+
+    // 5. Tooltip
+    '[data-tooltip]': {
+      component: 'tooltip',
+      options: {
+        trigger: 'hover',
+        delay: 200
+      }
+    },
+
+    // 6. Carousel
+    '#demo-carousel': {
+      component: 'carousel',
+      options: {
+        autoplay: true,
+        interval: 3000,
+        loop: true,
+        showArrows: true,
+        showIndicators: true
+      }
+    },
+
+    // 7. Dropdown
+    '#demo-dropdown': {
+      component: 'dropdown',
+      options: {
+        placement: 'bottom',
+        closeOnSelect: true
+      }
+    },
+
+    // 10. Button Group
+    '#demo-btngroup': {
+      component: 'buttonGroup',
+      options: {
+        mode: 'single',
+        activeClass: 'active',
+        onChange: (value, $active) => {
+          $('#btngroup-result').text($active.text());
+        }
+      }
+    },
+
+    // 11. Loader
+    '#show-loader-btn': {
+      events: {
+        click: () => {
+          const loader = Domma.elements.loader('#demo-loader-container', {
+            type: 'spinner',
+            overlay: true,
+            text: 'Loading...'
+          });
+          loader.show();
+          setTimeout(() => loader.hide(), 3000);
+        }
+      }
+    },
+
+    // 12. Breadcrumbs
+    '#demo-breadcrumbs': {
+      component: 'breadcrumbs',
+      options: {
+        items: [
+          {label: 'Home', url: '#'},
+          {label: 'Showcase', url: '#'},
+          {label: 'Config Engine', url: '#'},
+          {label: 'All Components', active: true}
+        ],
+        separator: '/'
+      }
+    },
+
+    // 14. Notification
+    '#request-notification-btn': {
+      events: {
+        click: async () => {
+          if ('Notification' in window) {
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+              Domma.elements.notify('Domma Notification', {
+                body: 'This is a desktop notification configured via $.setup()!',
+                icon: '../../assets/logo/domma-icon.svg'
+              });
+            }
+          } else {
+            Domma.elements.toast('Notifications not supported', {type: 'error'});
+          }
+        }
+      }
+    },
+
+    // 15. Timer
+    '#demo-timer': {
+      component: 'timer',
+      options: {
+        duration: 60000,
+        format: 'mm:ss',
+        showControls: true,
+        autoStart: false
+      }
+    }
+  });
+
+  // Back to top button demo (manual show/hide based on scroll)
+  let scrollTimeout;
+  $(window).on('scroll', () => {
+    clearTimeout(scrollTimeout);
+    const btn = $('#demo-backtotop-btn');
+
+    if (window.scrollY > 300) {
+      btn.show();
+    } else {
+      scrollTimeout = setTimeout(() => btn.hide(), 100);
+    }
+  });
+
+  $('#demo-backtotop-btn').on('click', () => {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  });
+
+  // Update current time for alarm demo
+  setInterval(() => {
+    const now = new Date();
+    const timeStr = now.getHours().toString().padStart(2, '0') + ':' +
+      now.getMinutes().toString().padStart(2, '0');
+    $('#current-time').text(timeStr);
+  }, 1000);
+</script>
+</body>
+</html>
