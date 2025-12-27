@@ -12,7 +12,7 @@
       "actions": [
         {
           "text": "Download",
-          "url": "showcase/download/index.html",
+          "url": "download/index.html",
           "class": "pill pill-light"
         },
         {
@@ -55,7 +55,7 @@
           "actions": [
             {
               "text": "Download",
-              "url": "download/index.html",
+              "url": "../download/index.html",
               "class": "pill pill-light"
             }
           ]
@@ -91,7 +91,7 @@
           "actions": [
             {
               "text": "Download",
-              "url": "../download/index.html",
+              "url": "../../download/index.html",
               "class": "pill pill-light"
             }
           ]
@@ -131,7 +131,7 @@
           "actions": [
             {
               "text": "Download",
-              "url": "../../download/index.html",
+              "url": "../../../download/index.html",
               "class": "pill pill-light"
             }
           ]
@@ -165,7 +165,7 @@
       "type": "flat",
       "brand": {
         "text": "Domma",
-        "url": "index.html",
+        "url": "../index.html",
         "showVersion": true
       },
       "items": "nav-public",

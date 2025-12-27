@@ -58,7 +58,7 @@
                 items: [  // Dropdown example
                     {text: 'GitHub', url: 'https://github.com/'},
                     {text: 'NPM', url: 'https://npmjs.com/'},
-                    {text: 'Download', url: 'https://domma.dcbw-it.co.uk/showcase/download/index.html'}
+                  {text: 'Download', url: 'https://domma.dcbw-it.co.uk/download/index.html'}
                 ]
             }
         ],

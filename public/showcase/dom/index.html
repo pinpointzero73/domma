@@ -43,19 +43,21 @@ $('<div class="new">Content</div>')
 // Collection from NodeList
 $(document.querySelectorAll('p'))</pre>
 
-            <h4 class="category-title-style">Try It</h4>
+          <h4 class="font-semibold mt-4 mb-2">Try It</h4>
             <div class="flex gap-2 mb-4">
                 <input type="text" id="selector-input" class="form-input" value=".demo-item"
                        placeholder="Enter selector">
                 <button class="btn btn-primary" id="selector-btn">Select</button>
             </div>
-            <div class="demo-box-style">
-                <span class="demo-item-style">Item 1</span>
-                <span class="demo-item-style">Item 2</span>
-                <span class="demo-item special">Item 3</span>
-                <span class="demo-item-style">Item 4</span>
+          <div class="p-4 border rounded bg-gray-50 flex gap-2 flex-wrap">
+            <span class="demo-item badge badge-secondary">Item 1</span>
+            <span class="demo-item badge badge-secondary">Item 2</span>
+            <span class="demo-item special badge badge-secondary">Item 3</span>
+            <span class="demo-item badge badge-secondary">Item 4</span>
             </div>
-            <div class="demo-result-style" id="selector-result">Click "Select" to see result</div>
+          <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded text-sm" id="selector-result">Click "Select" to
+            see result
+          </div>
         </div>
     </section>
 
@@ -77,9 +79,9 @@ $('#container').find('li').addClass('highlight');
 // Performance benefit: searches smaller subset
 $('.item', containerEl).css('color', 'blue');</pre>
 
-            <h4 class="category-title-style">Try It</h4>
-            <div class="demo-box-style mb-4">
-                <div id="context-demo-1" class="p-4 border rounded mb-2" style="background: #f9f9f9;">
+          <h4 class="font-semibold mt-4 mb-2">Try It</h4>
+          <div class="mb-4">
+            <div id="context-demo-1" class="p-4 border rounded mb-2 bg-gray-50">
                     <strong>Container 1</strong>
                     <div class="mt-2">
                         <span class="context-item badge badge-secondary mr-2">Item A</span>
@@ -87,7 +89,7 @@ $('.item', containerEl).css('color', 'blue');</pre>
                         <span class="context-item badge badge-secondary">Item C</span>
                     </div>
                 </div>
-                <div id="context-demo-2" class="p-4 border rounded" style="background: #f0f0f0;">
+            <div id="context-demo-2" class="p-4 border rounded bg-gray-100">
                     <strong>Container 2</strong>
                     <div class="mt-2">
                         <span class="context-item badge badge-secondary mr-2">Item X</span>
@@ -109,7 +111,7 @@ $('.item', containerEl).css('color', 'blue');</pre>
                 </button>
             </div>
 
-            <div class="demo-result-style" id="context-result">
+          <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded text-sm" id="context-result">
                 Click buttons to see context-scoped selection
             </div>
         </div>
@@ -123,27 +125,27 @@ $('.item', containerEl).css('color', 'blue');</pre>
         <div class="card-body">
             <p class="mb-4">Navigate the DOM tree with chainable methods.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item-style">find()</span>
-                <span class="method-item-style">children()</span>
-                <span class="method-item-style">parent()</span>
-                <span class="method-item-style">parents()</span>
-                <span class="method-item-style">closest()</span>
-                <span class="method-item-style">siblings()</span>
-                <span class="method-item-style">next()</span>
-                <span class="method-item-style">prev()</span>
-                <span class="method-item-style">nextAll()</span>
-                <span class="method-item-style">prevAll()</span>
-                <span class="method-item-style">first()</span>
-                <span class="method-item-style">last()</span>
-                <span class="method-item-style">eq()</span>
-                <span class="method-item-style">filter()</span>
-                <span class="method-item-style">not()</span>
-                <span class="method-item-style">has()</span>
-                <span class="method-item-style">is()</span>
-                <span class="method-item-style">add()</span>
-                <span class="method-item-style">contents()</span>
-                <span class="method-item-style">offsetParent()</span>
+          <div class="grid grid-cols-4 gap-2 mb-4">
+            <code class="badge badge-light">find()</code>
+            <code class="badge badge-light">children()</code>
+            <code class="badge badge-light">parent()</code>
+            <code class="badge badge-light">parents()</code>
+            <code class="badge badge-light">closest()</code>
+            <code class="badge badge-light">siblings()</code>
+            <code class="badge badge-light">next()</code>
+            <code class="badge badge-light">prev()</code>
+            <code class="badge badge-light">nextAll()</code>
+            <code class="badge badge-light">prevAll()</code>
+            <code class="badge badge-light">first()</code>
+            <code class="badge badge-light">last()</code>
+            <code class="badge badge-light">eq()</code>
+            <code class="badge badge-light">filter()</code>
+            <code class="badge badge-light">not()</code>
+            <code class="badge badge-light">has()</code>
+            <code class="badge badge-light">is()</code>
+            <code class="badge badge-light">add()</code>
+            <code class="badge badge-light">contents()</code>
+            <code class="badge badge-light">offsetParent()</code>
             </div>
 
             <pre class="code-block language-javascript">// Find descendants
@@ -166,7 +168,7 @@ $('.items').eq(2)  // Third element
 $('.items').first()
 $('.items').last()</pre>
 
-            <h4 class="category-title-style">Try It</h4>
+          <h4 class="font-semibold mt-4 mb-2">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
                 <button class="btn btn-outline btn-sm" data-traverse="parent">parent()</button>
                 <button class="btn btn-outline btn-sm" data-traverse="siblings">siblings()</button>
@@ -175,13 +177,15 @@ $('.items').last()</pre>
                 <button class="btn btn-outline btn-sm" data-traverse="first">first()</button>
                 <button class="btn btn-outline btn-sm" data-traverse="last">last()</button>
             </div>
-            <div class="demo-box-style" id="traverse-container">
-                <div class="demo-item-style" id="traverse-target" class="bg-success">Target</div>
-                <div class="demo-item-style">Sibling 1</div>
-                <div class="demo-item-style">Sibling 2</div>
-                <div class="demo-item-style">Sibling 3</div>
+          <div class="p-4 border rounded bg-gray-50 flex gap-2 flex-wrap" id="traverse-container">
+            <div class="demo-item badge badge-success" id="traverse-target">Target</div>
+            <div class="demo-item badge badge-primary">Sibling 1</div>
+            <div class="demo-item badge badge-primary">Sibling 2</div>
+            <div class="demo-item badge badge-primary">Sibling 3</div>
             </div>
-            <div class="demo-result-style" id="traverse-result">Click a method to see result</div>
+          <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded text-sm" id="traverse-result">Click a method to
+            see result
+          </div>
         </div>
     </section>
 
@@ -193,16 +197,16 @@ $('.items').last()</pre>
         <div class="card-body">
             <p class="mb-4">Get and set element content, attributes, and values.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item-style">html()</span>
-                <span class="method-item-style">text()</span>
-                <span class="method-item-style">val()</span>
-                <span class="method-item-style">attr()</span>
-                <span class="method-item-style">removeAttr()</span>
-                <span class="method-item-style">prop()</span>
-                <span class="method-item-style">removeProp()</span>
-                <span class="method-item-style">data()</span>
-                <span class="method-item-style">removeData()</span>
+          <div class="grid grid-cols-4 gap-2 mb-4">
+            <code class="badge badge-light">html()</code>
+            <code class="badge badge-light">text()</code>
+            <code class="badge badge-light">val()</code>
+            <code class="badge badge-light">attr()</code>
+            <code class="badge badge-light">removeAttr()</code>
+            <code class="badge badge-light">prop()</code>
+            <code class="badge badge-light">removeProp()</code>
+            <code class="badge badge-light">data()</code>
+            <code class="badge badge-light">removeData()</code>
             </div>
 
             <pre class="code-block language-javascript">// Get/set HTML content
@@ -226,17 +230,19 @@ $('img').attr({ src: 'img.jpg', alt: 'Image' })
 $('#el').data('id')          // data-id
 $('#el').data('id', '123')</pre>
 
-            <h4 class="category-title-style">Try It</h4>
+          <h4 class="font-semibold mt-4 mb-2">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
                 <button class="btn btn-outline btn-sm" id="get-html">Get html()</button>
                 <button class="btn btn-outline btn-sm" id="set-html">Set html()</button>
                 <button class="btn btn-outline btn-sm" id="get-text">Get text()</button>
                 <button class="btn btn-outline btn-sm" id="set-text">Set text()</button>
             </div>
-            <div class="demo-box-style" id="content-box">
+          <div class="p-4 border rounded bg-gray-50" id="content-box">
                 <strong>Hello</strong> <em>World</em>
             </div>
-            <div class="demo-result-style" id="content-result">Click a button to see result</div>
+          <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded text-sm" id="content-result">Click a button to
+            see result
+          </div>
         </div>
     </section>
 
@@ -248,15 +254,15 @@ $('#el').data('id', '123')</pre>
         <div class="card-body">
             <p class="mb-4">Manipulate styles and CSS classes.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item-style">css()</span>
-                <span class="method-item-style">addClass()</span>
-                <span class="method-item-style">removeClass()</span>
-                <span class="method-item-style">toggleClass()</span>
-                <span class="method-item-style">hasClass()</span>
-                <span class="method-item-style">show()</span>
-                <span class="method-item-style">hide()</span>
-                <span class="method-item-style">toggle()</span>
+          <div class="grid grid-cols-4 gap-2 mb-4">
+            <code class="badge badge-light">css()</code>
+            <code class="badge badge-light">addClass()</code>
+            <code class="badge badge-light">removeClass()</code>
+            <code class="badge badge-light">toggleClass()</code>
+            <code class="badge badge-light">hasClass()</code>
+            <code class="badge badge-light">show()</code>
+            <code class="badge badge-light">hide()</code>
+            <code class="badge badge-light">toggle()</code>
             </div>
 
             <pre class="code-block language-javascript">// Get/set CSS
@@ -275,16 +281,18 @@ $('#box').show()
 $('#box').hide()
 $('#box').toggle()</pre>
 
-            <h4 class="category-title-style">Try It</h4>
+          <h4 class="font-semibold mt-4 mb-2">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
                 <button class="btn btn-outline btn-sm" id="toggle-class">toggleClass('special')</button>
                 <button class="btn btn-outline btn-sm" id="change-color">css('background')</button>
                 <button class="btn btn-outline btn-sm" id="toggle-vis">toggle()</button>
             </div>
-            <div class="demo-box-style">
-                <div class="demo-item-style" id="css-target">Style Me</div>
+          <div class="p-4 border rounded bg-gray-50 flex justify-center">
+            <div class="badge badge-primary" id="css-target">Style Me</div>
             </div>
-            <div class="demo-result-style" id="css-result">Click a button to manipulate styles</div>
+          <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded text-sm" id="css-result">Click a button to
+            manipulate styles
+          </div>
         </div>
     </section>
 
@@ -296,25 +304,25 @@ $('#box').toggle()</pre>
         <div class="card-body">
             <p class="mb-4">Insert, replace, and remove elements.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item-style">append()</span>
-                <span class="method-item-style">prepend()</span>
-                <span class="method-item-style">after()</span>
-                <span class="method-item-style">before()</span>
-                <span class="method-item-style">appendTo()</span>
-                <span class="method-item-style">prependTo()</span>
-                <span class="method-item-style">insertAfter()</span>
-                <span class="method-item-style">insertBefore()</span>
-                <span class="method-item-style">wrap()</span>
-                <span class="method-item-style">wrapAll()</span>
-                <span class="method-item-style">wrapInner()</span>
-                <span class="method-item-style">unwrap()</span>
-                <span class="method-item-style">clone()</span>
-                <span class="method-item-style">remove()</span>
-                <span class="method-item-style">detach()</span>
-                <span class="method-item-style">empty()</span>
-                <span class="method-item-style">replaceWith()</span>
-                <span class="method-item-style">replaceAll()</span>
+          <div class="grid grid-cols-4 gap-2 mb-4">
+            <code class="badge badge-light">append()</code>
+            <code class="badge badge-light">prepend()</code>
+            <code class="badge badge-light">after()</code>
+            <code class="badge badge-light">before()</code>
+            <code class="badge badge-light">appendTo()</code>
+            <code class="badge badge-light">prependTo()</code>
+            <code class="badge badge-light">insertAfter()</code>
+            <code class="badge badge-light">insertBefore()</code>
+            <code class="badge badge-light">wrap()</code>
+            <code class="badge badge-light">wrapAll()</code>
+            <code class="badge badge-light">wrapInner()</code>
+            <code class="badge badge-light">unwrap()</code>
+            <code class="badge badge-light">clone()</code>
+            <code class="badge badge-light">remove()</code>
+            <code class="badge badge-light">detach()</code>
+            <code class="badge badge-light">empty()</code>
+            <code class="badge badge-light">replaceWith()</code>
+            <code class="badge badge-light">replaceAll()</code>
             </div>
 
             <pre class="code-block language-javascript">// Inserting content
@@ -337,7 +345,7 @@ $('#list').empty()
 // Cloning
 $('#item').clone()</pre>
 
-            <h4 class="category-title-style">Try It</h4>
+          <h4 class="font-semibold mt-4 mb-2">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
                 <button class="btn btn-outline btn-sm" id="dom-append">append()</button>
                 <button class="btn btn-outline btn-sm" id="dom-prepend">prepend()</button>
@@ -345,9 +353,9 @@ $('#item').clone()</pre>
                 <button class="btn btn-outline btn-sm" id="dom-empty">empty()</button>
                 <button class="btn btn-outline btn-sm" id="dom-reset">Reset</button>
             </div>
-            <div class="demo-box-style" id="dom-container">
-                <span class="demo-item-style">Original 1</span>
-                <span class="demo-item-style">Original 2</span>
+          <div class="p-4 border rounded bg-gray-50 flex gap-2 flex-wrap" id="dom-container">
+            <span class="demo-item badge badge-secondary">Original 1</span>
+            <span class="demo-item badge badge-secondary">Original 2</span>
             </div>
         </div>
     </section>
@@ -360,31 +368,31 @@ $('#item').clone()</pre>
         <div class="card-body">
             <p class="mb-4">Attach, trigger, and manage events.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item-style">on()</span>
-                <span class="method-item-style">off()</span>
-                <span class="method-item-style">one()</span>
-                <span class="method-item-style">trigger()</span>
-                <span class="method-item-style">click()</span>
-                <span class="method-item-style">dblclick()</span>
-                <span class="method-item-style">mouseenter()</span>
-                <span class="method-item-style">mouseleave()</span>
-                <span class="method-item-style">mouseover()</span>
-                <span class="method-item-style">mouseout()</span>
-                <span class="method-item-style">mousemove()</span>
-                <span class="method-item-style">mousedown()</span>
-                <span class="method-item-style">mouseup()</span>
-                <span class="method-item-style">hover()</span>
-                <span class="method-item-style">focus()</span>
-                <span class="method-item-style">blur()</span>
-                <span class="method-item-style">change()</span>
-                <span class="method-item-style">submit()</span>
-                <span class="method-item-style">keydown()</span>
-                <span class="method-item-style">keyup()</span>
-                <span class="method-item-style">keypress()</span>
-                <span class="method-item-style">scroll()</span>
-                <span class="method-item-style">resize()</span>
-                <span class="method-item-style">load()</span>
+          <div class="grid grid-cols-4 gap-2 mb-4">
+            <code class="badge badge-light">on()</code>
+            <code class="badge badge-light">off()</code>
+            <code class="badge badge-light">one()</code>
+            <code class="badge badge-light">trigger()</code>
+            <code class="badge badge-light">click()</code>
+            <code class="badge badge-light">dblclick()</code>
+            <code class="badge badge-light">mouseenter()</code>
+            <code class="badge badge-light">mouseleave()</code>
+            <code class="badge badge-light">mouseover()</code>
+            <code class="badge badge-light">mouseout()</code>
+            <code class="badge badge-light">mousemove()</code>
+            <code class="badge badge-light">mousedown()</code>
+            <code class="badge badge-light">mouseup()</code>
+            <code class="badge badge-light">hover()</code>
+            <code class="badge badge-light">focus()</code>
+            <code class="badge badge-light">blur()</code>
+            <code class="badge badge-light">change()</code>
+            <code class="badge badge-light">submit()</code>
+            <code class="badge badge-light">keydown()</code>
+            <code class="badge badge-light">keyup()</code>
+            <code class="badge badge-light">keypress()</code>
+            <code class="badge badge-light">scroll()</code>
+            <code class="badge badge-light">resize()</code>
+            <code class="badge badge-light">load()</code>
             </div>
 
             <pre class="code-block language-javascript">// Basic event binding
@@ -413,13 +421,15 @@ $('#form').submit(handler);
 // Hover (mouseenter + mouseleave)
 $('#box').hover(enterFn, leaveFn);</pre>
 
-            <h4 class="category-title-style">Try It</h4>
-            <div class="demo-box-style">
+          <h4 class="font-semibold mt-4 mb-2">Try It</h4>
+          <div class="p-4 border rounded bg-gray-50">
                 <button class="btn btn-primary" id="event-btn">Click Me</button>
                 <button class="btn btn-secondary" id="event-trigger">Trigger Click</button>
-                <div class="demo-item mt-4" id="event-hover" class="cursor-pointer">Hover Me</div>
+            <div class="badge badge-primary mt-4 cursor-pointer" id="event-hover">Hover Me</div>
             </div>
-            <div class="demo-result-style" id="event-result">Interact with elements above</div>
+          <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded text-sm" id="event-result">Interact with
+            elements above
+          </div>
         </div>
     </section>
 
@@ -431,17 +441,17 @@ $('#box').hover(enterFn, leaveFn);</pre>
         <div class="card-body">
             <p class="mb-4">Animate elements with built-in effects.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item-style">fadeIn()</span>
-                <span class="method-item-style">fadeOut()</span>
-                <span class="method-item-style">fadeToggle()</span>
-                <span class="method-item-style">fadeTo()</span>
-                <span class="method-item-style">slideDown()</span>
-                <span class="method-item-style">slideUp()</span>
-                <span class="method-item-style">slideToggle()</span>
-                <span class="method-item-style">animate()</span>
-                <span class="method-item-style">stop()</span>
-                <span class="method-item-style">delay()</span>
+          <div class="grid grid-cols-4 gap-2 mb-4">
+            <code class="badge badge-light">fadeIn()</code>
+            <code class="badge badge-light">fadeOut()</code>
+            <code class="badge badge-light">fadeToggle()</code>
+            <code class="badge badge-light">fadeTo()</code>
+            <code class="badge badge-light">slideDown()</code>
+            <code class="badge badge-light">slideUp()</code>
+            <code class="badge badge-light">slideToggle()</code>
+            <code class="badge badge-light">animate()</code>
+            <code class="badge badge-light">stop()</code>
+            <code class="badge badge-light">delay()</code>
             </div>
 
             <pre class="code-block language-javascript">// Fade effects
@@ -467,14 +477,14 @@ $('#box')
     .delay(500)
     .fadeIn(200)</pre>
 
-            <h4 class="category-title-style">Try It</h4>
+          <h4 class="font-semibold mt-4 mb-2">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
                 <button class="btn btn-outline btn-sm" id="fx-fade">fadeToggle()</button>
                 <button class="btn btn-outline btn-sm" id="fx-slide">slideToggle()</button>
                 <button class="btn btn-outline btn-sm" id="fx-animate">animate()</button>
             </div>
-            <div class="demo-box-style">
-                <div class="demo-item-style" id="fx-target" class="w-100px text-center">Animate</div>
+          <div class="p-4 border rounded bg-gray-50">
+            <div class="badge badge-primary" id="fx-target">Animate</div>
             </div>
         </div>
     </section>
@@ -487,17 +497,17 @@ $('#box')
         <div class="card-body">
             <p class="mb-4">Get and set element dimensions and position.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item-style">width()</span>
-                <span class="method-item-style">height()</span>
-                <span class="method-item-style">innerWidth()</span>
-                <span class="method-item-style">innerHeight()</span>
-                <span class="method-item-style">outerWidth()</span>
-                <span class="method-item-style">outerHeight()</span>
-                <span class="method-item-style">offset()</span>
-                <span class="method-item-style">position()</span>
-                <span class="method-item-style">scrollTop()</span>
-                <span class="method-item-style">scrollLeft()</span>
+          <div class="grid grid-cols-4 gap-2 mb-4">
+            <code class="badge badge-light">width()</code>
+            <code class="badge badge-light">height()</code>
+            <code class="badge badge-light">innerWidth()</code>
+            <code class="badge badge-light">innerHeight()</code>
+            <code class="badge badge-light">outerWidth()</code>
+            <code class="badge badge-light">outerHeight()</code>
+            <code class="badge badge-light">offset()</code>
+            <code class="badge badge-light">position()</code>
+            <code class="badge badge-light">scrollTop()</code>
+            <code class="badge badge-light">scrollLeft()</code>
             </div>
 
             <pre class="code-block language-javascript">// Dimensions
@@ -517,13 +527,14 @@ $(window).scrollTop()
 $(window).scrollTop(0)         // Scroll to top
 $('#box').scrollLeft()</pre>
 
-            <h4 class="category-title-style">Try It</h4>
+          <h4 class="font-semibold mt-4 mb-2">Try It</h4>
             <button class="btn btn-primary mb-4" id="dim-btn">Get Dimensions</button>
-            <div class="demo-box-style" id="dim-target"
-                 class="dim-target-box">
+          <div class="p-4 border rounded bg-gray-50" id="dim-target">
                 Measure Me
             </div>
-            <div class="demo-result-style" id="dim-result">Click button to measure the box</div>
+          <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded text-sm" id="dim-result">Click button to
+            measure the box
+          </div>
         </div>
     </section>
 
@@ -535,14 +546,14 @@ $('#box').scrollLeft()</pre>
         <div class="card-body">
             <p class="mb-4">Iterate and work with element collections.</p>
 
-            <div class="method-grid mb-4">
-                <span class="method-item-style">each()</span>
-                <span class="method-item-style">map()</span>
-                <span class="method-item-style">get()</span>
-                <span class="method-item-style">index()</span>
-                <span class="method-item-style">toArray()</span>
-                <span class="method-item-style">slice()</span>
-                <span class="method-item-style">length</span>
+          <div class="grid grid-cols-4 gap-2 mb-4">
+            <code class="badge badge-light">each()</code>
+            <code class="badge badge-light">map()</code>
+            <code class="badge badge-light">get()</code>
+            <code class="badge badge-light">index()</code>
+            <code class="badge badge-light">toArray()</code>
+            <code class="badge badge-light">slice()</code>
+            <code class="badge badge-light">length</code>
             </div>
 
             <pre class="code-block language-javascript">// Iterate

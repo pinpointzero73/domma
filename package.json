@@ -20,8 +20,8 @@
     "build:miniapp:garage": "node scripts/build-miniapp.js garage",
     "generate:bundles": "node scripts/generate-bundles.js",
     "test:vitest": "vitest",
-    "test:e2e": "playwright test",
     "test": "vitest",
+    "cypress:run": "cypress run",
     "showcase": "live-server public --port=3001 --open=/showcase/index.html"
   },
   "keywords": [
@@ -37,9 +37,9 @@
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-replace": "^6.0.3",
     "@rollup/plugin-terser": "^0.4.4",
+    "cypress": "^15.8.1",
     "jsdom": "^24.1.0",
     "live-server": "^1.2.0",
-    "playwright": "^1.57.0",
     "rollup": "^4.28.0",
     "rollup-plugin-obfuscator": "^1.1.0",
     "vitest": "^4.0.16"
