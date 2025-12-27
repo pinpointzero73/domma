@@ -97,7 +97,7 @@
         <code class="text-success">alarm</code>
       </div>
 
-      <p class="mb-4"><strong>Not Supported (9):</strong> Must use direct initialization</p>
+      <p class="mb-4"><strong>Not Supported (9):</strong> Must use direct initialisation</p>
       <div class="grid grid-cols-4 gap-2">
         <code class="text-danger">autocomplete</code>
         <code class="text-danger">pillbox</code>
@@ -184,21 +184,17 @@
         <button id="open-modal-btn" class="btn btn-primary">Open Modal</button>
 
         <div id="demo-modal" class="modal">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3>Modal Title</h3>
-                <button class="modal-close">&times;</button>
-              </div>
-              <div class="modal-body">
-                <p>This modal was configured via $.setup()</p>
-                <p class="text-muted">Press ESC or click backdrop to close</p>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" onclick="$('#demo-modal').data('modalInstance').close()">Close</button>
-                <button class="btn btn-primary">Save</button>
-              </div>
-            </div>
+          <div class="modal-header">
+            <h5 class="modal-title">Modal Title</h5>
+            <button class="modal-close">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>This modal was configured via $.setup()</p>
+            <p class="text-muted">Press ESC or click backdrop to close</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn modal-close">Close</button>
+            <button class="btn btn-primary">Save</button>
           </div>
         </div>
       </div>
@@ -225,21 +221,21 @@
 
       <div class="component-demo">
         <div id="demo-tabs" class="tabs">
-          <div class="tabs-nav">
-            <button class="tabs-nav-item active">Overview</button>
-            <button class="tabs-nav-item">Specifications</button>
-            <button class="tabs-nav-item">Reviews</button>
-          </div>
-          <div class="tabs-content">
-            <div class="tabs-pane active">
+          <ul class="tab-list">
+            <li class="tab-item active">Overview</li>
+            <li class="tab-item">Specifications</li>
+            <li class="tab-item">Reviews</li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-panel active">
               <h4>Product Overview</h4>
               <p>This is the overview content. Configured tabs automatically handle switching.</p>
             </div>
-            <div class="tabs-pane">
+            <div class="tab-panel">
               <h4>Technical Specifications</h4>
               <p>Detailed specifications appear in this tab panel.</p>
             </div>
-            <div class="tabs-pane">
+            <div class="tab-panel">
               <h4>Customer Reviews</h4>
               <p>Reviews and ratings are displayed here.</p>
             </div>
@@ -269,23 +265,38 @@
 
       <div class="component-demo">
         <div id="demo-accordion" class="accordion">
-          <div class="accordion-item">
-            <button class="accordion-header active">What is Domma?</button>
-            <div class="accordion-content" style="display: block;">
-              <p>Domma is a lightweight JavaScript framework combining jQuery-style DOM manipulation with modern UI
-                components.</p>
+          <div class="accordion-item active">
+            <div class="accordion-header">
+              <span>What is Domma?</span>
+              <span class="accordion-icon">&#9660;</span>
+            </div>
+            <div class="accordion-body">
+              <div class="accordion-content">
+                <p>Domma is a lightweight JavaScript framework combining jQuery-style DOM manipulation with modern UI
+                  components.</p>
+              </div>
             </div>
           </div>
           <div class="accordion-item">
-            <button class="accordion-header">How do I install it?</button>
-            <div class="accordion-content">
-              <p>Include the CDN link or npm install domma-framework</p>
+            <div class="accordion-header">
+              <span>How do I install it?</span>
+              <span class="accordion-icon">&#9660;</span>
+            </div>
+            <div class="accordion-body">
+              <div class="accordion-content">
+                <p>Include the CDN link or npm install domma-framework</p>
+              </div>
             </div>
           </div>
           <div class="accordion-item">
-            <button class="accordion-header">Is it production-ready?</button>
-            <div class="accordion-content">
-              <p>Yes! Domma is stable and used in production applications.</p>
+            <div class="accordion-header">
+              <span>Is it production-ready?</span>
+              <span class="accordion-icon">&#9660;</span>
+            </div>
+            <div class="accordion-body">
+              <div class="accordion-content">
+                <p>Yes! Domma is stable and used in production applications.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -353,32 +364,19 @@
 
       <div class="component-demo">
         <div id="demo-carousel" class="carousel" style="max-width: 600px; margin: 0 auto;">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <div
-                  style="height: 300px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; border-radius: 8px;">
-                Slide 1
-              </div>
+          <div class="carousel-track">
+            <div class="carousel-slide"
+                 style="height: 300px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; border-radius: 8px;">
+              Slide 1
             </div>
-            <div class="carousel-item">
-              <div
-                  style="height: 300px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; border-radius: 8px;">
-                Slide 2
-              </div>
+            <div class="carousel-slide"
+                 style="height: 300px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; border-radius: 8px;">
+              Slide 2
             </div>
-            <div class="carousel-item">
-              <div
-                  style="height: 300px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; border-radius: 8px;">
-                Slide 3
-              </div>
+            <div class="carousel-slide"
+                 style="height: 300px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; border-radius: 8px;">
+              Slide 3
             </div>
-          </div>
-          <button class="carousel-control-prev">&lsaquo;</button>
-          <button class="carousel-control-next">&rsaquo;</button>
-          <div class="carousel-indicators">
-            <button class="active"></button>
-            <button></button>
-            <button></button>
           </div>
         </div>
       </div>
@@ -397,24 +395,20 @@
   '#demo-dropdown': {
     component: 'dropdown',
     options: {
+      items: [
+        { text: 'Edit', value: 'edit' },
+        { text: 'Duplicate', value: 'duplicate' },
+        { divider: true },
+        { text: 'Delete', value: 'delete', class: 'text-danger' }
+      ],
       placement: 'bottom',
       closeOnSelect: true
     }
   }
 });</pre>
 
-      <div class="component-demo">
-        <div class="dropdown" id="demo-dropdown">
-          <button class="btn btn-primary dropdown-toggle">
-            Actions
-          </button>
-          <div class="dropdown-menu">
-            <button class="dropdown-item">Edit</button>
-            <button class="dropdown-item">Duplicate</button>
-            <div class="dropdown-divider"></div>
-            <button class="dropdown-item text-danger">Delete</button>
-          </div>
-        </div>
+      <div class="component-demo" style="text-align: center;">
+        <button class="btn btn-primary" id="demo-dropdown">Actions</button>
       </div>
     </div>
   </section>
@@ -553,9 +547,9 @@
     component: 'breadcrumbs',
     options: {
       items: [
-        {label: 'Home', url: '/'},
-        {label: 'Showcase', url: '/showcase'},
-        {label: 'Config Engine', active: true}
+        {text: 'Home', url: '#'},
+        {text: 'Showcase', url: '#'},
+        {text: 'Config Engine', active: true}
       ],
       separator: '/'
     }
@@ -582,32 +576,19 @@
   '#demo-navbar': {
     component: 'navbar',
     options: {
-      brand: {text: 'Domma', url: '/'},
+      brand: {text: 'Domma', url: '#'},
       items: [
-        {label: 'Home', url: '/'},
-        {label: 'Docs', url: '/docs'}
+        {text: 'Home', url: '#', active: true},
+        {text: 'Docs', url: '#'},
+        {text: 'Examples', url: '#'}
       ],
-      position: 'static',
-      variant: 'light',
-      collapsible: true
+      variant: 'light'
     }
   }
 });</pre>
 
       <div class="component-demo">
-        <nav id="demo-navbar" class="navbar" style="background: white; padding: 1rem; border-radius: 8px;">
-          <div class="navbar-brand">
-            <strong>Domma</strong>
-          </div>
-          <div class="navbar-nav">
-            <a href="#" class="nav-link active">Home</a>
-            <a href="#" class="nav-link">Docs</a>
-            <a href="#" class="nav-link">Examples</a>
-          </div>
-          <div class="navbar-actions">
-            <button class="btn btn-sm btn-primary">Sign In</button>
-          </div>
-        </nav>
+        <nav id="demo-navbar" class="navbar"></nav>
       </div>
     </div>
   </section>
@@ -621,12 +602,19 @@
       <p><strong>Purpose:</strong> Desktop browser notifications (requires permission)</p>
 
       <pre class="code-block language-javascript mb-4">$.setup({
-  '#demo-notification': {
-    component: 'notification',
-    options: {
-      title: 'Domma Notification',
-      body: 'This is a desktop notification!',
-      icon: '/assets/logo/domma-icon.svg'
+  '#request-notification-btn': {
+    events: {
+      click: async () => {
+        if ('Notification' in window) {
+          const permission = await Notification.requestPermission();
+          if (permission === 'granted') {
+            Domma.elements.notify('Domma Notification', {
+              body: 'Desktop notification configured via $.setup()!',
+              icon: '../../assets/logo/domma-icon.svg'
+            });
+          }
+        }
+      }
     }
   }
 });</pre>
@@ -659,14 +647,7 @@
 });</pre>
 
       <div class="component-demo">
-        <div id="demo-timer" class="timer" style="text-align: center;">
-          <div class="timer-display" style="font-size: 3rem; font-weight: bold; margin-bottom: 1rem;">01:00</div>
-          <div class="timer-controls flex gap-2 justify-center">
-            <button class="btn btn-success timer-start">Start</button>
-            <button class="btn btn-warning timer-pause">Pause</button>
-            <button class="btn btn-danger timer-reset">Reset</button>
-          </div>
-        </div>
+        <div id="demo-timer"></div>
       </div>
     </div>
   </section>
@@ -807,7 +788,7 @@ const editor = Domma.elements.editor('#editor');</pre>
         <div>
           <h4 class="text-success mb-3">✓ Use $.setup() for:</h4>
           <ul class="list-disc pl-6 space-y-2">
-            <li>Static component initialization</li>
+            <li>Static component initialisation</li>
             <li>Multiple similar components</li>
             <li>Simple setup scenarios</li>
             <li>Layout-based components</li>
@@ -836,7 +817,7 @@ const editor = Domma.elements.editor('#editor');</pre>
 <script src="../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
-  // Initialize all components via config engine
+  // Initialise all components via config engine
   $.setup({
     // 1. Card
     '.demo-card': {
@@ -862,7 +843,7 @@ const editor = Domma.elements.editor('#editor');</pre>
     '#open-modal-btn': {
       events: {
         click: () => {
-          const modal = $('#demo-modal').data('modalInstance');
+          const modal = $('#demo-modal').data('component');
           if (modal) modal.open();
         }
       }
@@ -912,6 +893,12 @@ const editor = Domma.elements.editor('#editor');</pre>
     '#demo-dropdown': {
       component: 'dropdown',
       options: {
+        items: [
+          {text: 'Edit', value: 'edit'},
+          {text: 'Duplicate', value: 'duplicate'},
+          {divider: true},
+          {text: 'Delete', value: 'delete', class: 'text-danger'}
+        ],
         placement: 'bottom',
         closeOnSelect: true
       }
@@ -923,8 +910,9 @@ const editor = Domma.elements.editor('#editor');</pre>
       options: {
         mode: 'single',
         activeClass: 'active',
-        onChange: (value, $active) => {
-          $('#btngroup-result').text($active.text());
+        onChange: (value) => {
+          const labels = ['Left', 'Center', 'Right', 'Justify'];
+          $('#btngroup-result').text(labels[value]);
         }
       }
     },
@@ -949,12 +937,26 @@ const editor = Domma.elements.editor('#editor');</pre>
       component: 'breadcrumbs',
       options: {
         items: [
-          {label: 'Home', url: '#'},
-          {label: 'Showcase', url: '#'},
-          {label: 'Config Engine', url: '#'},
-          {label: 'All Components', active: true}
+          {text: 'Home', url: '#'},
+          {text: 'Showcase', url: '#'},
+          {text: 'Config Engine', url: '#'},
+          {text: 'All Components', active: true}
         ],
         separator: '/'
+      }
+    },
+
+    // 13. Navbar
+    '#demo-navbar': {
+      component: 'navbar',
+      options: {
+        brand: {text: 'Domma', url: '#'},
+        items: [
+          {text: 'Home', url: '#', active: true},
+          {text: 'Docs', url: '#'},
+          {text: 'Examples', url: '#'}
+        ],
+        variant: 'light'
       }
     },
 

@@ -21,7 +21,19 @@
 </div>
 
 <div class="container py-8">
-    <!-- Key Features -->
+  <!-- All Components Showcase Link -->
+  <div class="alert alert-info mb-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="font-semibold mb-2">📚 Complete Component Reference</h3>
+        <p class="mb-0">View all 16 supported components with live interactive demos and code examples in one
+          comprehensive showcase.</p>
+      </div>
+      <a href="all-components.html" class="btn btn-primary">View All Components</a>
+    </div>
+  </div>
+
+  <!-- Key Features -->
     <section class="card mb-6" data-section="Why Config Engine?">
         <div class="card-header">
             <h2 class="text-xl font-semibold">Why Config Engine?</h2>
@@ -79,8 +91,8 @@ $.setup({
     }
 });</pre>
 
-            <h4 class="category-title-config">Supported Components</h4>
-            <div class="grid grid-cols-3 gap-4">
+          <h4 class="category-title-config">Supported Components (16 total)</h4>
+          <div class="grid grid-cols-4 gap-3 mb-4">
                 <div><code>card</code> - Interactive cards</div>
                 <div><code>modal</code> - Dialog windows</div>
                 <div><code>tabs</code> - Tabbed panels</div>
@@ -88,7 +100,19 @@ $.setup({
                 <div><code>tooltip</code> - Hover tooltips</div>
                 <div><code>carousel</code> - Image sliders</div>
                 <div><code>dropdown</code> - Dropdown menus</div>
+            <div><code>badge</code> - Status indicators</div>
+            <div><code>backToTop</code> - Scroll button</div>
+            <div><code>buttonGroup</code> - Button groups</div>
+            <div><code>loader</code> - Loading states</div>
+            <div><code>breadcrumbs</code> - Navigation trails</div>
+            <div><code>navbar</code> - Navigation bars</div>
+            <div><code>notification</code> - Desktop alerts</div>
+            <div><code>timer</code> - Countdown timers</div>
+            <div><code>alarm</code> - Scheduled alerts</div>
             </div>
+          <p class="text-sm text-muted">
+            <a href="all-components.html" class="text-primary">→ View complete component reference with live demos</a>
+          </p>
         </div>
     </section>
 
@@ -332,7 +356,7 @@ $.reset();
             <p class="mb-4">A complete form with validation, dynamic UI, and component integration.</p>
 
             <pre class="code-block language-javascript mb-4">$.setup({
-    // Form validation
+    // Form validation and submission
     '#contact-form': {
         events: {
             submit: (e, $form) => {
@@ -341,7 +365,23 @@ $.reset();
                     name: $('#name').val(),
                     email: $('#email').val()
                 };
-                console.log('Submitting:', data);
+
+                // Show loading state
+                $('#submit-btn').text('Sending...').attr('disabled', true);
+
+                // Simulate API call
+                setTimeout(() => {
+                    // Show success toast (better UX for transient feedback)
+                    Domma.elements.toast('Message sent successfully!', {
+                        type: 'success',
+                        duration: 3000
+                    });
+
+                    // Reset form and button
+                    $form[0].reset();
+                    $('#email').removeClass('success error');
+                    $('#submit-btn').text('Send Message').attr('disabled', false);
+                }, 1500);
             }
         }
     },
@@ -353,29 +393,6 @@ $.reset();
                 const valid = $el.val().includes('@');
                 $el.removeClass('success error')
                    .addClass(valid ? 'success' : 'error');
-            }
-        }
-    },
-
-    // Success modal
-    '#success-modal': {
-        component: 'modal',
-        options: {
-            backdrop: true,
-            onClose: () => $('#contact-form')[0].reset()
-        }
-    },
-
-    // Submit button state
-    '#submit-btn': {
-        initial: { text: 'Send Message' },
-        events: {
-            click: (e, $el) => {
-                $el.text('Sending...').attr('disabled', true);
-                setTimeout(() => {
-                    $el.text('Send Message').attr('disabled', false);
-                    Domma.elements.get('#success-modal').open();
-                }, 1500);
             }
         }
     }
@@ -533,14 +550,22 @@ $.reset();
                 submit: (e, $form) => {
                     e.preventDefault();
                     const $btn = $('#live-submit');
+
+                  // Show loading state
                     $btn.text('Sending...').attr('disabled', true);
 
+                  // Simulate API call
                     setTimeout(() => {
-                        $btn.text('Sent!').addClass('btn-success').removeClass('btn-primary');
-                        setTimeout(() => {
-                            $btn.text('Send Message').addClass('btn-primary').removeClass('btn-success').attr('disabled', false);
-                            $form.find('input').val('').removeClass('success error');
-                        }, 1500);
+                      // Show success toast
+                      Domma.elements.toast('Message sent successfully!', {
+                        type: 'success',
+                        duration: 3000
+                      });
+
+                      // Reset form and button
+                      $form[0].reset();
+                      $form.find('input').removeClass('success error');
+                      $btn.text('Send Message').attr('disabled', false);
                     }, 1000);
                 }
             }

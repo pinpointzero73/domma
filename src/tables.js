@@ -949,25 +949,17 @@ class TableInstance {
         // Toolbar (search + export)
         const toolbar = document.createElement('div');
         toolbar.className = 'domma-table-toolbar';
-        toolbar.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;';
 
         // Search bar
         if (opts.searchable) {
             const searchWrapper = document.createElement('div');
-            searchWrapper.className = classes.search;
-            searchWrapper.style.cssText = 'display: flex; align-items: center; gap: 4px;';
+            searchWrapper.className = 'domma-table-search-wrapper';
 
             const searchInput = document.createElement('input');
             searchInput.type = 'text';
+            searchInput.className = `domma-table-search-input${this._searchIsRegex ? ' regex-mode' : ''}`;
             searchInput.placeholder = this._searchIsRegex ? 'Regex pattern...' : opts.searchPlaceholder;
             searchInput.value = this._searchQuery;
-            searchInput.style.cssText = `
-                padding: 8px 12px;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                width: 250px;
-                ${this._searchIsRegex ? 'font-family: monospace; background: #f8f5ff;' : ''}
-            `;
 
             this._addEventHandler(searchInput, 'input', utils.debounce((e) => {
                 this.search(e.target.value);
@@ -979,20 +971,9 @@ class TableInstance {
             if (opts.regexSearch) {
                 const regexBtn = document.createElement('button');
                 regexBtn.type = 'button';
+                regexBtn.className = `domma-table-regex-button${this._searchIsRegex ? ' active' : ''}`;
                 regexBtn.title = this._searchIsRegex ? 'Regex mode (click for text)' : 'Text mode (click for regex)';
                 regexBtn.innerHTML = '.*';
-                regexBtn.style.cssText = `
-                    padding: 8px 10px;
-                    border: 1px solid ${this._searchIsRegex ? '#4f46e5' : '#ddd'};
-                    background: ${this._searchIsRegex ? '#4f46e5' : '#fff'};
-                    color: ${this._searchIsRegex ? '#fff' : '#666'};
-                    border-radius: 4px;
-                    font-family: monospace;
-                    font-size: 13px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    transition: all 0.15s;
-                `;
 
                 this._addEventHandler(regexBtn, 'click', () => {
                     this._searchIsRegex = !this._searchIsRegex;
@@ -1006,19 +987,6 @@ class TableInstance {
                     this.render();
                 });
 
-                this._addEventHandler(regexBtn, 'mouseenter', () => {
-                    if (!this._searchIsRegex) {
-                        regexBtn.style.background = '#f8f9fa';
-                        regexBtn.style.borderColor = '#adb5bd';
-                    }
-                });
-                this._addEventHandler(regexBtn, 'mouseleave', () => {
-                    if (!this._searchIsRegex) {
-                        regexBtn.style.background = '#fff';
-                        regexBtn.style.borderColor = '#ddd';
-                    }
-                });
-
                 searchWrapper.appendChild(regexBtn);
             }
 
@@ -1029,68 +997,27 @@ class TableInstance {
         if (opts.columnToggle) {
             const columnWrapper = document.createElement('div');
             columnWrapper.className = 'domma-table-column-toggle';
-            columnWrapper.style.cssText = 'position: relative;';
 
             const columnBtn = document.createElement('button');
             columnBtn.type = 'button';
+            columnBtn.className = 'domma-table-column-button';
             columnBtn.innerHTML = `${icons.html('columns', {size: 16})} Columns`;
-            columnBtn.style.cssText = `
-                padding: 8px 12px;
-                border: 1px solid #ddd;
-                background: ${this._columnDropdownOpen ? '#f0f0f0' : '#fff'};
-                border-radius: 4px;
-                font-size: 13px;
-                cursor: pointer;
-                display: inline-flex;
-                align-items: center;
-                gap: 6px;
-            `;
 
             const dropdown = document.createElement('div');
-            dropdown.className = 'domma-column-dropdown';
-            dropdown.style.cssText = `
-                position: absolute;
-                top: 100%;
-                left: 0;
-                margin-top: 4px;
-                background: #fff;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                min-width: 200px;
-                z-index: 1000;
-                display: ${this._columnDropdownOpen ? 'block' : 'none'};
-                max-height: 300px;
-                overflow-y: auto;
-            `;
+            dropdown.className = `domma-column-dropdown${this._columnDropdownOpen ? ' show' : ''}`;
 
             // Build column list with styled toggles
             for (const col of this._columns) {
                 const item = document.createElement('label');
-                item.style.cssText = `
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    gap: 12px;
-                    padding: 10px 12px;
-                    cursor: pointer;
-                    font-size: 13px;
-                    transition: background 0.15s;
-                    border-bottom: 1px solid #f0f0f0;
-                `;
+                item.className = 'domma-column-toggle-item';
 
                 const labelText = document.createElement('span');
+                labelText.className = 'domma-column-toggle-label';
                 labelText.textContent = col.title;
-                labelText.style.cssText = col.visible ? 'color: #333;' : 'color: #999;';
 
                 // Styled toggle switch
                 const toggleWrapper = document.createElement('div');
-                toggleWrapper.style.cssText = `
-                    position: relative;
-                    width: 36px;
-                    height: 20px;
-                    flex-shrink: 0;
-                `;
+                toggleWrapper.className = 'domma-toggle-switch';
 
                 const toggleInput = document.createElement('input');
                 toggleInput.type = 'checkbox';
@@ -1098,29 +1025,10 @@ class TableInstance {
                 toggleInput.style.cssText = 'opacity: 0; width: 0; height: 0; position: absolute;';
 
                 const toggleTrack = document.createElement('span');
-                toggleTrack.style.cssText = `
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: ${col.visible ? '#4f46e5' : '#ccc'};
-                    border-radius: 20px;
-                    transition: background 0.2s;
-                `;
+                toggleTrack.className = `domma-toggle-track${col.visible ? ' active' : ''}`;
 
                 const toggleKnob = document.createElement('span');
-                toggleKnob.style.cssText = `
-                    position: absolute;
-                    height: 16px;
-                    width: 16px;
-                    left: ${col.visible ? '18px' : '2px'};
-                    top: 2px;
-                    background: white;
-                    border-radius: 50%;
-                    transition: left 0.2s;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-                `;
+                toggleKnob.className = `domma-toggle-knob${col.visible ? ' active' : ''}`;
 
                 toggleTrack.appendChild(toggleKnob);
                 toggleWrapper.appendChild(toggleInput);
@@ -1130,21 +1038,18 @@ class TableInstance {
                     e.preventDefault();
                     e.stopPropagation();
                     col.visible = !col.visible;
-                    // Update visuals immediately
-                    toggleTrack.style.background = col.visible ? '#4f46e5' : '#ccc';
-                    toggleKnob.style.left = col.visible ? '18px' : '2px';
-                    labelText.style.color = col.visible ? '#333' : '#999';
+                    // Update visuals immediately using CSS classes
+                    if (col.visible) {
+                        toggleTrack.classList.add('active');
+                        toggleKnob.classList.add('active');
+                    } else {
+                        toggleTrack.classList.remove('active');
+                        toggleKnob.classList.remove('active');
+                    }
                     toggleInput.checked = col.visible;
                     // Re-render table but keep dropdown open
                     this._columnDropdownOpen = true;
                     this.render();
-                });
-
-                this._addEventHandler(item, 'mouseenter', () => {
-                    item.style.background = '#f8f9fa';
-                });
-                this._addEventHandler(item, 'mouseleave', () => {
-                    item.style.background = 'transparent';
                 });
 
                 item.appendChild(labelText);
@@ -1152,39 +1057,28 @@ class TableInstance {
                 dropdown.appendChild(item);
             }
 
-            // Remove border from last item
-            if (dropdown.lastChild) {
-                dropdown.lastChild.style.borderBottom = 'none';
-            }
-
             // Toggle dropdown
             this._addEventHandler(columnBtn, 'click', (e) => {
                 e.stopPropagation();
                 this._columnDropdownOpen = !this._columnDropdownOpen;
-                dropdown.style.display = this._columnDropdownOpen ? 'block' : 'none';
-                columnBtn.style.background = this._columnDropdownOpen ? '#f0f0f0' : '#fff';
+                if (this._columnDropdownOpen) {
+                    dropdown.classList.add('show');
+                } else {
+                    dropdown.classList.remove('show');
+                }
             });
 
             // Close on outside click
             this._addEventHandler(document, 'click', () => {
                 if (this._columnDropdownOpen) {
                     this._columnDropdownOpen = false;
-                    dropdown.style.display = 'none';
-                    columnBtn.style.background = '#fff';
+                    dropdown.classList.remove('show');
                 }
             });
 
             // Prevent dropdown clicks from closing
             this._addEventHandler(dropdown, 'click', (e) => {
                 e.stopPropagation();
-            });
-
-            // Hover effects for button
-            this._addEventHandler(columnBtn, 'mouseenter', () => {
-                if (!this._columnDropdownOpen) columnBtn.style.background = '#f8f9fa';
-            });
-            this._addEventHandler(columnBtn, 'mouseleave', () => {
-                if (!this._columnDropdownOpen) columnBtn.style.background = '#fff';
             });
 
             columnWrapper.appendChild(columnBtn);
@@ -1195,80 +1089,50 @@ class TableInstance {
         // Export panel
         if (opts.exportPanel) {
             const exportWrapper = document.createElement('div');
-            exportWrapper.className = 'domma-table-export';
-            exportWrapper.style.cssText = 'display: flex; gap: 8px; align-items: center;';
+            exportWrapper.className = 'domma-table-export-wrapper';
 
             // Mode toggle (Copy / Download)
             let downloadMode = false;
 
             const toggleWrapper = document.createElement('div');
-            toggleWrapper.style.cssText = 'display: flex; align-items: center; gap: 6px; margin-right: 8px;';
+            toggleWrapper.className = 'domma-export-mode-toggle';
 
             const toggleLabel = document.createElement('span');
+            toggleLabel.className = 'domma-export-mode-label active';
             toggleLabel.textContent = 'Copy';
-            toggleLabel.style.cssText = 'font-size: 12px; color: #666;';
 
             const toggleSwitch = document.createElement('label');
-            toggleSwitch.style.cssText = `
-                position: relative;
-                display: inline-block;
-                width: 44px;
-                height: 22px;
-                cursor: pointer;
-            `;
+            toggleSwitch.className = 'domma-export-toggle-switch';
 
             const toggleInput = document.createElement('input');
             toggleInput.type = 'checkbox';
-            toggleInput.style.cssText = 'opacity: 0; width: 0; height: 0;';
+            toggleInput.className = 'domma-export-toggle-input';
 
             const toggleSlider = document.createElement('span');
-            toggleSlider.style.cssText = `
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: #ccc;
-                border-radius: 22px;
-                transition: 0.3s;
-            `;
+            toggleSlider.className = 'domma-export-toggle-slider';
 
             const toggleKnob = document.createElement('span');
-            toggleKnob.style.cssText = `
-                position: absolute;
-                height: 16px;
-                width: 16px;
-                left: 3px;
-                bottom: 3px;
-                background: white;
-                border-radius: 50%;
-                transition: 0.3s;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-            `;
+            toggleKnob.className = 'domma-export-toggle-knob';
 
             toggleSlider.appendChild(toggleKnob);
             toggleSwitch.appendChild(toggleInput);
             toggleSwitch.appendChild(toggleSlider);
 
             const toggleLabelRight = document.createElement('span');
+            toggleLabelRight.className = 'domma-export-mode-label';
             toggleLabelRight.textContent = 'Download';
-            toggleLabelRight.style.cssText = 'font-size: 12px; color: #999;';
 
             const updateToggleState = () => {
                 if (downloadMode) {
-                    toggleSlider.style.background = '#4f46e5';
-                    toggleKnob.style.transform = 'translateX(22px)';
-                    toggleLabel.style.color = '#999';
-                    toggleLabelRight.style.color = '#4f46e5';
-                    toggleLabelRight.style.fontWeight = '600';
-                    toggleLabel.style.fontWeight = 'normal';
+                    toggleSlider.classList.add('active');
+                    toggleKnob.classList.add('active');
+                    toggleLabel.classList.remove('active');
+                    toggleLabelRight.classList.add('active');
                 } else {
-                    toggleSlider.style.background = '#ccc';
-                    toggleKnob.style.transform = 'translateX(0)';
-                    toggleLabel.style.color = '#333';
-                    toggleLabel.style.fontWeight = '600';
-                    toggleLabelRight.style.color = '#999';
-                    toggleLabelRight.style.fontWeight = 'normal';
+                    toggleSlider.classList.remove('active');
+                    toggleKnob.classList.remove('active');
+                    toggleLabel.classList.add('active');
+                    toggleLabelRight.classList.remove('active');
                 }
             };
 
@@ -1286,21 +1150,8 @@ class TableInstance {
 
             // Separator
             const separator = document.createElement('span');
-            separator.style.cssText = 'width: 1px; height: 20px; background: #ddd;';
+            separator.className = 'domma-export-separator';
             exportWrapper.appendChild(separator);
-
-            const btnStyle = `
-                padding: 6px 12px;
-                border: 1px solid #ddd;
-                background: #fff;
-                border-radius: 4px;
-                font-size: 13px;
-                cursor: pointer;
-                display: inline-flex;
-                align-items: center;
-                gap: 4px;
-                transition: all 0.15s ease;
-            `;
 
             const exportFormats = {
                 text: {
@@ -1334,30 +1185,19 @@ class TableInstance {
 
                 const btn = document.createElement('button');
                 btn.type = 'button';
+                btn.className = 'domma-export-button';
                 btn.setAttribute('data-export', exportType);
                 btn.innerHTML = `${config.icon} ${config.label}`;
-                btn.style.cssText = btnStyle;
 
                 const showFeedback = (message, success = true) => {
                     const originalText = btn.innerHTML;
                     btn.innerHTML = message;
-                    btn.style.background = success ? '#d4edda' : '#f8d7da';
-                    btn.style.borderColor = success ? '#28a745' : '#dc3545';
+                    btn.classList.add(success ? 'success' : 'error');
                     setTimeout(() => {
                         btn.innerHTML = originalText;
-                        btn.style.background = '#fff';
-                        btn.style.borderColor = '#ddd';
+                        btn.classList.remove('success', 'error');
                     }, 1500);
                 };
-
-                this._addEventHandler(btn, 'mouseenter', () => {
-                    btn.style.background = '#f8f9fa';
-                    btn.style.borderColor = '#adb5bd';
-                });
-                this._addEventHandler(btn, 'mouseleave', () => {
-                    btn.style.background = '#fff';
-                    btn.style.borderColor = '#ddd';
-                });
                 this._addEventHandler(btn, 'click', () => {
                     const selected = this.getSelected();
                     const rowCount = selected.length > 0 ? selected.length : this._filteredData.length;

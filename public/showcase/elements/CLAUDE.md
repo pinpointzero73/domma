@@ -54,6 +54,27 @@ Accessed via `Domma.elements` - provides 25+ UI components including modals, tab
 
 ### Modal Example
 
+**⚠️ Important:** Domma modals use a **flat HTML structure** - do NOT use Bootstrap's `.modal-dialog` and
+`.modal-content` wrappers!
+
+```html
+<!-- ✅ CORRECT: Domma structure -->
+<div id="modal" class="modal">
+  <div class="modal-header">
+    <h5 class="modal-title">Title</h5>
+    <button class="modal-close">&times;</button>
+  </div>
+  <div class="modal-body">Content</div>
+  <div class="modal-footer">Buttons</div>
+</div>
+
+<!-- ❌ WRONG: Bootstrap structure -->
+<div class="modal">
+  <div class="modal-dialog">      <!-- DON'T USE -->
+    <div class="modal-content">   <!-- DON'T USE -->
+      ...
+```
+
 ```javascript
 const modal = Domma.elements.modal('#modal', {
     backdrop: true,

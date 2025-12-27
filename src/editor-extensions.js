@@ -76,22 +76,21 @@ EditorExtensions.register('colorPicker', {
 
   createColorButton(label, defaultColor, onChange) {
     const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'position: relative; display: inline-block;';
+    wrapper.className = 'dm-editor-color-picker';
 
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'dm-editor-toolbar-btn';
     button.setAttribute('data-tooltip', label);
-    button.style.position = 'relative';
     button.innerHTML = `
             <span data-icon="palette" data-icon-size="16"></span>
-            <span style="position:absolute;bottom:2px;right:2px;width:8px;height:8px;border:1px solid #fff;background:${defaultColor};border-radius:50%;"></span>
+            <span class="dm-editor-color-dot" style="background:${defaultColor};"></span>
         `;
 
     const input = document.createElement('input');
     input.type = 'color';
+    input.className = 'dm-editor-color-input';
     input.value = defaultColor;
-    input.style.cssText = 'position:absolute;opacity:0;width:0;height:0;';
 
     button.addEventListener('click', () => input.click());
     input.addEventListener('change', (e) => {
@@ -114,8 +113,7 @@ EditorExtensions.register('colorPicker', {
 EditorExtensions.register('headings', {
   install(editor, toolbar) {
     const group = document.createElement('div');
-    group.className = 'dm-editor-toolbar-group';
-    group.style.position = 'relative';
+    group.className = 'dm-editor-toolbar-group dm-editor-dropdown-group';
 
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -133,13 +131,13 @@ EditorExtensions.register('headings', {
 
     const showDropdown = () => {
       clearTimeout(hideTimeout);
-      dropdown.style.display = 'block';
+      dropdown.classList.add('show');
       if (window.Domma && window.Domma.icons) window.Domma.icons.scan();
     };
 
     const hideDropdown = () => {
       hideTimeout = setTimeout(() => {
-        dropdown.style.display = 'none';
+        dropdown.classList.remove('show');
       }, 200);
     };
 
@@ -155,44 +153,19 @@ EditorExtensions.register('headings', {
 
   createDropdown(editor, items) {
     const dropdown = document.createElement('div');
-    dropdown.style.cssText = `
-            display: none;
-            position: absolute;
-            top: calc(100% - 2px);
-            left: 0;
-            background: white;
-            border: 1px solid var(--dm-border-color, #ddd);
-            border-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            z-index: 1000;
-            padding-top: 6px;
-            min-width: 120px;
-        `;
+    dropdown.className = 'dm-editor-dropdown';
 
     items.forEach(item => {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.style.cssText = `
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                width: 100%;
-                padding: 8px 12px;
-                border: none;
-                background: white;
-                text-align: left;
-                cursor: pointer;
-                font-size: 14px;
-            `;
+      btn.className = 'dm-editor-dropdown-item';
       btn.innerHTML = `<span data-icon="${item.icon}" data-icon-size="14"></span>${item.label}`;
 
-      btn.addEventListener('mouseenter', () => btn.style.background = '#f0f0f0');
-      btn.addEventListener('mouseleave', () => btn.style.background = 'white');
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         document.execCommand(item.cmd, false, item.value);
         editor._editorEl.focus();
-        dropdown.style.display = 'none';
+        dropdown.classList.remove('show');
       });
 
       dropdown.appendChild(btn);
@@ -209,8 +182,7 @@ EditorExtensions.register('headings', {
 EditorExtensions.register('lists', {
   install(editor, toolbar) {
     const group = document.createElement('div');
-    group.className = 'dm-editor-toolbar-group';
-    group.style.position = 'relative';
+    group.className = 'dm-editor-toolbar-group dm-editor-dropdown-group';
 
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -227,13 +199,13 @@ EditorExtensions.register('lists', {
 
     const showDropdown = () => {
       clearTimeout(hideTimeout);
-      dropdown.style.display = 'block';
+      dropdown.classList.add('show');
       if (window.Domma && window.Domma.icons) window.Domma.icons.scan();
     };
 
     const hideDropdown = () => {
       hideTimeout = setTimeout(() => {
-        dropdown.style.display = 'none';
+        dropdown.classList.remove('show');
       }, 200);
     };
 
@@ -255,8 +227,7 @@ EditorExtensions.register('lists', {
 EditorExtensions.register('alignment', {
   install(editor, toolbar) {
     const group = document.createElement('div');
-    group.className = 'dm-editor-toolbar-group';
-    group.style.position = 'relative';
+    group.className = 'dm-editor-toolbar-group dm-editor-dropdown-group';
 
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -275,13 +246,13 @@ EditorExtensions.register('alignment', {
 
     const showDropdown = () => {
       clearTimeout(hideTimeout);
-      dropdown.style.display = 'block';
+      dropdown.classList.add('show');
       if (window.Domma && window.Domma.icons) window.Domma.icons.scan();
     };
 
     const hideDropdown = () => {
       hideTimeout = setTimeout(() => {
-        dropdown.style.display = 'none';
+        dropdown.classList.remove('show');
       }, 200);
     };
 
@@ -397,17 +368,7 @@ EditorExtensions.register('contextMenu', {
     };
 
     const menu = document.createElement('div');
-    menu.style.cssText = `
-            position: fixed;
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            padding: 4px 0;
-            z-index: 10000;
-            display: none;
-            min-width: 180px;
-        `;
+    menu.className = 'dm-editor-context-menu';
 
     const menuItems = [
       {
@@ -474,21 +435,12 @@ EditorExtensions.register('contextMenu', {
     menuItems.forEach(item => {
       if (item.type === 'separator') {
         const sep = document.createElement('div');
-        sep.style.cssText = 'height: 1px; background: #e0e0e0; margin: 4px 0;';
+        sep.className = 'dm-editor-context-separator';
         menu.appendChild(sep);
       } else {
         const menuItem = document.createElement('div');
-        menuItem.style.cssText = `
-                    padding: 8px 16px;
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                `;
-        menuItem.innerHTML = `<span data-icon="${item.icon}" data-icon-size="16" style="width:20px;display:inline-flex;align-items:center"></span><span>${item.label}</span>`;
-
-        menuItem.addEventListener('mouseenter', () => menuItem.style.background = '#f0f0f0');
-        menuItem.addEventListener('mouseleave', () => menuItem.style.background = 'white');
+        menuItem.className = 'dm-editor-context-item';
+        menuItem.innerHTML = `<span class="dm-editor-context-icon" data-icon="${item.icon}" data-icon-size="16"></span><span>${item.label}</span>`;
         menuItem.addEventListener('click', async (e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -515,11 +467,11 @@ EditorExtensions.register('contextMenu', {
 
             // Focus editor and hide menu AFTER execution
             editorEl.focus();
-            menu.style.display = 'none';
+            menu.classList.remove('show');
           } catch (err) {
             console.error('Context menu action failed:', err);
             alert('Action failed: ' + err.message);
-            menu.style.display = 'none';
+            menu.classList.remove('show');
           }
         });
 
@@ -537,13 +489,13 @@ EditorExtensions.register('contextMenu', {
 
       menu.style.left = e.pageX + 'px';
       menu.style.top = e.pageY + 'px';
-      menu.style.display = 'block';
+      menu.classList.add('show');
       if (window.Domma && window.Domma.icons) window.Domma.icons.scan();
     });
 
     document.addEventListener('click', (e) => {
       if (!menu.contains(e.target)) {
-        menu.style.display = 'none';
+        menu.classList.remove('show');
       }
     });
   }

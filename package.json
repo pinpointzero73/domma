@@ -19,7 +19,9 @@
     "build:miniapps": "node scripts/build-miniapp.js && node scripts/copy-miniapps.js",
     "build:miniapp:garage": "node scripts/build-miniapp.js garage",
     "generate:bundles": "node scripts/generate-bundles.js",
-    "test": "node -r ./tests/setup-globals.js tests/test.js",
+    "test:vitest": "vitest",
+    "test:e2e": "playwright test",
+    "test": "vitest",
     "showcase": "live-server public --port=3001 --open=/showcase/index.html"
   },
   "keywords": [
@@ -37,8 +39,10 @@
     "@rollup/plugin-terser": "^0.4.4",
     "jsdom": "^24.1.0",
     "live-server": "^1.2.0",
+    "playwright": "^1.57.0",
     "rollup": "^4.28.0",
-    "rollup-plugin-obfuscator": "^1.1.0"
+    "rollup-plugin-obfuscator": "^1.1.0",
+    "vitest": "^4.0.16"
   },
   "dependencies": {
     "@fastify/cors": "^11.2.0"

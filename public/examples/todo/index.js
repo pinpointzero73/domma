@@ -161,7 +161,7 @@
         const priority = $('#priority-input').val();
 
         if (!text) {
-            Domma.elements.toast('warning', 'Please enter a task', {
+          Domma.elements.toast.warning('Please enter a task', {
                 position: 'top-center',
                 duration: 3000
             });
@@ -186,7 +186,7 @@
         $('#status-input').val(STATUS.NOT_STARTED);
         $('#priority-input').val(PRIORITY.MEDIUM);
 
-        Domma.elements.toast('success', 'Task added successfully!', {
+      Domma.elements.toast.success('Task added successfully!', {
             position: 'top-center',
             duration: 2000
         });
@@ -202,7 +202,7 @@
             saveTodos(todos);
             renderTodos();
 
-            Domma.elements.toast('info',
+          Domma.elements.toast.info(
                 todo.status === STATUS.COMPLETED ? 'Task completed!' : 'Task reopened',
                 {position: 'top-center', duration: 2000}
             );
@@ -230,7 +230,7 @@
                 saveTodos(todos);
                 renderTodos();
 
-                Domma.elements.toast('success', 'Task updated!', {
+              Domma.elements.toast.success('Task updated!', {
                     position: 'top-center',
                     duration: 2000
                 });
@@ -258,7 +258,7 @@
                     renderTodos();
                 });
 
-                Domma.elements.toast('success', 'Task deleted', {
+              Domma.elements.toast.success('Task deleted', {
                     position: 'top-center',
                     duration: 2000
                 });
@@ -278,7 +278,7 @@
             saveTodos(todos);
             renderTodos();
 
-            Domma.elements.toast('success', `Status updated to ${formatStatus(status)}`, {
+          Domma.elements.toast.success(`Status updated to ${formatStatus(status)}`, {
                 position: 'bottom-center',
                 duration: 2000
             });
@@ -295,7 +295,7 @@
             saveTodos(todos);
             renderTodos();
 
-            Domma.elements.toast('success', `Priority set to ${formatPriority(priority)}`, {
+          Domma.elements.toast.success(`Priority set to ${formatPriority(priority)}`, {
                 position: 'bottom-center',
                 duration: 2000
             });

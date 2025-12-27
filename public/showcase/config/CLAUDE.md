@@ -11,7 +11,7 @@ The configuration engine allows declarative setup of components, styles, and eve
 ```javascript
 $.setup({
     '#selector': {
-        component: 'modal',           // Component to initialize
+      component: 'modal',           // Component to initialise
         options: {                    // Component options
             backdrop: true,
             keyboard: true
@@ -67,11 +67,11 @@ These require direct instantiation:
 - `dialog` - Use `Domma.elements.alert()`, `.confirm()`, `.prompt()`
 - `jumbotron` - CSS-only component (no JavaScript)
 - `forms` - Documentation only (native HTML forms)
-- `autocomplete` - Initialize directly
-- `pillbox` - Initialize directly
-- `editor` - Initialize directly (tools bundle)
-- `themeRoller` - Initialize directly (tools bundle)
-- `pageRoller` - Initialize directly (tools bundle)
+- `autocomplete` - Initialise directly
+- `pillbox` - Initialise directly
+- `editor` - Initialise directly (tools bundle)
+- `themeRoller` - Initialise directly (tools bundle)
+- `pageRoller` - Initialise directly (tools bundle)
 
 ## Mutable Configuration
 

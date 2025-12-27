@@ -895,7 +895,7 @@ class Tooltip extends Component {
 
         this._hideTimeout = setTimeout(() => {
             if (this._tooltip) {
-                this._tooltip.style.opacity = '0';
+                this._tooltip.classList.remove('show');
 
                 setTimeout(() => {
                     if (this._tooltip) {
@@ -921,19 +921,6 @@ class Tooltip extends Component {
 
         this._tooltip = document.createElement('div');
         this._tooltip.className = 'domma-tooltip';
-        this._tooltip.style.cssText = `
-            position: absolute;
-            z-index: 10000;
-            padding: 6px 12px;
-            background: #333;
-            color: #fff;
-            font-size: 14px;
-            border-radius: 4px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity ${opts.animationDuration}ms ease;
-            white-space: nowrap;
-        `;
 
         if (opts.html) {
             this._tooltip.innerHTML = opts.content;
@@ -946,7 +933,7 @@ class Tooltip extends Component {
 
         // Trigger animation
         this._tooltip.offsetHeight;
-        this._tooltip.style.opacity = '1';
+        this._tooltip.classList.add('show');
 
         this._isVisible = true;
     }
@@ -1103,21 +1090,6 @@ class Badge extends Component {
         const removeBtn = document.createElement('span');
         removeBtn.className = 'domma-badge-remove';
         removeBtn.innerHTML = '&times;';
-        removeBtn.style.cssText = `
-            cursor: pointer;
-            font-size: 1.2em;
-            line-height: 1;
-            opacity: 0.7;
-            margin-left: 2px;
-        `;
-
-        this._addEventListener(removeBtn, 'mouseenter', () => {
-            removeBtn.style.opacity = '1';
-        });
-
-        this._addEventListener(removeBtn, 'mouseleave', () => {
-            removeBtn.style.opacity = '0.7';
-        });
 
         this._addEventListener(removeBtn, 'click', (e) => {
             e.stopPropagation();
@@ -1262,8 +1234,7 @@ class Dropdown extends Component {
         const opts = this.options;
 
         if (this._menu) {
-            this._menu.style.opacity = '0';
-            this._menu.style.transform = 'translateY(-4px)';
+            this._menu.classList.remove('show');
 
             setTimeout(() => {
                 if (this._menu) {
@@ -1289,19 +1260,6 @@ class Dropdown extends Component {
 
         this._menu = document.createElement('div');
         this._menu.className = 'domma-dropdown-menu';
-        this._menu.style.cssText = `
-            position: absolute;
-            z-index: 10000;
-            min-width: 160px;
-            background: #fff;
-            border: 1px solid #e5e7eb;
-            border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(-4px);
-            transition: opacity ${opts.animationDuration}ms ease, transform ${opts.animationDuration}ms ease;
-        `;
 
         this._renderMenu();
 
@@ -1309,8 +1267,7 @@ class Dropdown extends Component {
 
         // Trigger animation
         this._menu.offsetHeight;
-        this._menu.style.opacity = '1';
-        this._menu.style.transform = 'translateY(0)';
+        this._menu.classList.add('show');
     }
 
     _renderMenu() {
@@ -1328,19 +1285,12 @@ class Dropdown extends Component {
                 menuItem.textContent = item;
                 menuItem.dataset.value = item;
             } else if (item.divider) {
-                menuItem.style.cssText = 'height: 1px; background: #e5e7eb; margin: 4px 0;';
+                menuItem.className = 'domma-dropdown-divider';
                 this._menu.appendChild(menuItem);
                 return;
             } else if (item.header) {
+                menuItem.className = 'domma-dropdown-header';
                 menuItem.textContent = item.header;
-                menuItem.style.cssText = `
-                    padding: 8px 12px;
-                    font-size: 11px;
-                    font-weight: 600;
-                    color: #6b7280;
-                    text-transform: uppercase;
-                    letter-spacing: 0.05em;
-                `;
                 this._menu.appendChild(menuItem);
                 return;
             } else {
@@ -1352,30 +1302,16 @@ class Dropdown extends Component {
                 menuItem.dataset.value = item.value !== undefined ? item.value : index;
 
                 if (item.disabled) {
-                    menuItem.style.opacity = '0.5';
-                    menuItem.style.pointerEvents = 'none';
+                    menuItem.classList.add('disabled');
                 }
 
                 if (item.icon) {
-                    menuItem.innerHTML = `<span style="margin-right: 8px;">${item.icon}</span>` + menuItem.innerHTML;
+                    const iconSpan = document.createElement('span');
+                    iconSpan.className = 'domma-dropdown-icon';
+                    iconSpan.innerHTML = item.icon;
+                    menuItem.insertBefore(iconSpan, menuItem.firstChild);
                 }
             }
-
-            menuItem.style.cssText += `
-                padding: 8px 12px;
-                cursor: pointer;
-                font-size: 14px;
-                color: #374151;
-                transition: background 100ms ease;
-            `;
-
-            this._addEventListener(menuItem, 'mouseenter', () => {
-                menuItem.style.background = '#f3f4f6';
-            });
-
-            this._addEventListener(menuItem, 'mouseleave', () => {
-                menuItem.style.background = 'transparent';
-            });
 
             this._addEventListener(menuItem, 'click', (e) => {
                 e.stopPropagation();
@@ -1516,25 +1452,6 @@ class Toast {
             const container = document.createElement('div');
             container.className = `domma-toast-container domma-toast-${position}`;
 
-            const posStyles = {
-                'top-left': 'top: 16px; left: 16px;',
-                'top-right': 'top: 16px; right: 16px;',
-                'top-center': 'top: 16px; left: 50%; transform: translateX(-50%);',
-                'bottom-left': 'bottom: 16px; left: 16px;',
-                'bottom-right': 'bottom: 16px; right: 16px;',
-                'bottom-center': 'bottom: 16px; left: 50%; transform: translateX(-50%);'
-            };
-
-            container.style.cssText = `
-                position: fixed;
-                z-index: 99999;
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-                pointer-events: none;
-                ${posStyles[position] || posStyles['top-right']}
-            `;
-
             document.body.appendChild(container);
             Toast._containers[position] = container;
         }
@@ -1625,52 +1542,32 @@ class ToastInstance {
 
     _create(message) {
         const opts = this.options;
-        const typeStyle = ToastInstance.typeStyles[opts.type] || ToastInstance.typeStyles.default;
+        const typeStyle = ToastInstance.typeStyles[opts.type || 'default'];
 
         this._element = document.createElement('div');
-        this._element.className = 'domma-toast';
-        this._element.style.cssText = `
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            min-width: 280px;
-            max-width: 420px;
-            padding: 14px 16px;
-            background: ${typeStyle.bg};
-            color: ${typeStyle.color};
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-            font-size: 14px;
-            line-height: 1.4;
-            pointer-events: auto;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateX(${opts.position.includes('right') ? '100%' : opts.position.includes('left') ? '-100%' : '0'})
-                       translateY(${opts.position.includes('bottom') ? '20px' : opts.position.includes('top') ? '-20px' : '0'});
-            transition: opacity ${opts.animationDuration}ms ease, transform ${opts.animationDuration}ms ease;
-        `;
+        this._element.className = `domma-toast domma-toast-${opts.type || 'default'}`;
 
         // Icon
         if (opts.icon) {
             const iconWrapper = document.createElement('div');
-            iconWrapper.style.cssText = `flex-shrink: 0; color: ${typeStyle.accent};`;
+            iconWrapper.className = 'domma-toast-icon';
             iconWrapper.innerHTML = opts.icon;
             this._element.appendChild(iconWrapper);
         }
 
         // Content
         const content = document.createElement('div');
-        content.style.cssText = 'flex: 1;';
+        content.className = 'domma-toast-content';
 
         if (opts.title) {
             const title = document.createElement('div');
-            title.style.cssText = 'font-weight: 600; margin-bottom: 4px;';
+            title.className = 'domma-toast-title';
             title.textContent = opts.title;
             content.appendChild(title);
         }
 
         const messageEl = document.createElement('div');
+        messageEl.className = 'domma-toast-message';
         if (opts.html) {
             messageEl.innerHTML = message;
         } else {
@@ -1681,7 +1578,7 @@ class ToastInstance {
         // Action buttons
         if (opts.actions && opts.actions.length) {
             const actions = document.createElement('div');
-            actions.style.cssText = 'display: flex; gap: 8px; margin-top: 12px;';
+            actions.className = 'domma-toast-actions';
 
             opts.actions.forEach(action => {
                 const btn = document.createElement('button');
@@ -1761,8 +1658,7 @@ class ToastInstance {
     _show() {
         // Trigger reflow and animate in
         this._element.offsetHeight;
-        this._element.style.opacity = '1';
-        this._element.style.transform = 'translateX(0) translateY(0)';
+        this._element.classList.add('show');
     }
 
     _startTimer() {
@@ -1805,8 +1701,8 @@ class ToastInstance {
 
         clearTimeout(this._timeout);
 
-        this._element.style.opacity = '0';
-        this._element.style.transform = `translateX(${opts.position.includes('right') ? '100%' : opts.position.includes('left') ? '-100%' : '0'})`;
+        this._element.classList.add('hiding');
+        this._element.classList.remove('show');
 
         setTimeout(() => {
             if (this._element) {

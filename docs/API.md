@@ -816,6 +816,37 @@ UI component library providing 25+ interactive elements including modals, tabs, 
 
 Create and control modal dialogs with three initialization modes: selector-based, factory mode, and promise mode.
 
+**HTML Structure (Selector Mode):**
+
+Domma modals use a **flat structure** - direct children of `.modal` container. Do NOT use Bootstrap's `.modal-dialog`
+and `.modal-content` wrappers!
+
+```html
+<!-- ✅ CORRECT: Domma structure (flat) -->
+<div id="my-modal" class="modal">
+  <div class="modal-header">
+    <h5 class="modal-title">Modal Title</h5>
+    <button class="modal-close">&times;</button>
+  </div>
+  <div class="modal-body">
+    <p>Modal content goes here.</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn modal-close">Cancel</button>
+    <button class="btn btn-primary">Save</button>
+  </div>
+</div>
+
+<!-- ❌ WRONG: Bootstrap structure (nested wrappers) -->
+<div class="modal">
+  <div class="modal-dialog">        <!-- DON'T USE THIS -->
+    <div class="modal-content">     <!-- DON'T USE THIS -->
+      <div class="modal-header">...</div>
+    </div>
+  </div>
+</div>
+```
+
 #### `elements.modal(selectorOrOptions, options)`
 
 Creates a modal instance. Auto-detects mode based on first argument type.
