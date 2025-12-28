@@ -11,7 +11,8 @@ class DommaCollection {
                 const ctx = context || document;
                 this.elements = Array.from(ctx.querySelectorAll(selector));
             }
-        } else if (selector instanceof HTMLElement) {
+        } else if (selector instanceof Node) {
+            // Handles HTMLElement, Document, Window, and all other Node types
             this.elements = [selector];
         } else if (selector instanceof NodeList || selector instanceof HTMLCollection) {
             this.elements = Array.from(selector);

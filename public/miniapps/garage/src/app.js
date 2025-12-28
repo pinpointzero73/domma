@@ -151,6 +151,16 @@ const GarageApp = {
         $(e.target).val($(e.target).val().toUpperCase().replace(/\s/g, ''));
       });
     }
+
+    // Event delegation for save/remove vehicle buttons
+    $(document).on('click', '.save-vehicle-btn, .remove-vehicle-btn', function (e) {
+      e.preventDefault();
+      const $btn = $(this);
+      const vehicleId = parseInt($btn.attr('data-vehicle-id'), 10);
+      const currentlySaved = $btn.attr('data-is-saved') === 'true';
+      // Toggle the save state
+      GarageApp.toggleSaveVehicle(vehicleId, !currentlySaved);
+    });
   },
 
   /**
@@ -524,9 +534,8 @@ const GarageApp = {
                                 <div style="font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-bottom: 0.25rem;">${vehicle.vrn}</div>
                                 <div style="font-size: 1.125rem; color: #4b5563; font-weight: 600;">${v.make}</div>
                             </div>
-                            <button class="btn-sm" style="background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; white-space: nowrap;"
-                                    data-id="${vehicle.id}"
-                                    onclick="GarageApp.toggleSaveVehicle(${vehicle.id}, false)">
+                            <button class="btn-sm remove-vehicle-btn" style="background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; white-space: nowrap;"
+                                    data-vehicle-id="${vehicle.id}" data-is-saved="true">
                                 <span data-icon="trash" data-icon-size="16"></span> Remove
                             </button>
                         </div>
@@ -650,12 +659,12 @@ const GarageApp = {
 
     // Save/Remove button
     const saveButton = vehicle.is_saved
-      ? `<button class="btn" style="background: #ef4444; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;"
-                       onclick="GarageApp.toggleSaveVehicle(${vehicle.id}, false)">
+      ? `<button class="btn remove-vehicle-btn" style="background: #ef4444; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;"
+                       data-vehicle-id="${vehicle.id}" data-is-saved="true">
                  <span data-icon="trash" data-icon-size="18"></span> Remove from Garage
                </button>`
-      : `<button class="btn" style="background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;"
-                       onclick="GarageApp.toggleSaveVehicle(${vehicle.id}, true)">
+      : `<button class="btn save-vehicle-btn" style="background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;"
+                       data-vehicle-id="${vehicle.id}" data-is-saved="false">
                  <span data-icon="bookmark" data-icon-size="18"></span> Save to Garage
                </button>`;
 
