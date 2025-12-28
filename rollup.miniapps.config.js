@@ -9,16 +9,20 @@ import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
 import {readFileSync} from 'fs';
+import dotenv from 'dotenv';
+
+// Load .env file
+dotenv.config();
 
 const pkg = JSON.parse(readFileSync('./package.json', 'utf8'));
 
-// Environment-based API URLs
+// Environment-based API URL defaults
 const API_URLS = {
   production: '/api',
   development: 'http://localhost:3000/api'
 };
 
-const NODE_ENV = process.env.NODE_ENV || 'development';
+const NODE_ENV = process.env.NODE_ENV || 'production';
 const API_URL = process.env.API_URL || API_URLS[NODE_ENV];
 
 console.log(`\n🔧 Building miniapps for ${NODE_ENV}`);

@@ -7,7 +7,7 @@
   "types": "assets/types/index.d.ts",
   "type": "module",
   "scripts": {
-    "dev": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run build:css && npm run build:miniapps && live-server public --port=3001 --open=/index.html",
+    "dev": "NODE_ENV=development npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run build:css && npm run build:miniapps && live-server public --port=3001 --open=/index.html",
     "build": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run build:css && npm run build:css-bundles && npm run build:archives && npm run build:kickstart && npm run build:miniapps",
     "build:js": "rollup -c",
     "build:css": "node scripts/build-css.js",
@@ -39,6 +39,7 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@vitest/coverage-v8": "^4.0.16",
     "cypress": "^15.8.1",
+    "dotenv": "^17.2.3",
     "jsdom": "^24.1.0",
     "live-server": "^1.2.0",
     "rollup": "^4.28.0",

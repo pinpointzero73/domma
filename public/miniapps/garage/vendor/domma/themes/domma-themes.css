@@ -2,8 +2,8 @@
  * Domma Themes v0.3.0a
  * Dynamic Object Manipulation & Modeling API
  * (c) 2025 Darryl Waterhouse & DCBW-IT
- * Built: 2025-12-28T11:40:43.618Z
- * Commit: 1656196
+ * Built: 2025-12-28T21:31:21.992Z
+ * Commit: b4369a5
  */
 
 /**
@@ -284,74 +284,74 @@
     color-scheme: light;
 
     /* ================================================
-       FOUNDATIONAL COLORS - Light Mode Base
+       FOUNDATIONAL COLORS - Dark Mode Base
        ================================================ */
 
-    /* Backgrounds - Light/white backgrounds */
-    --dm-background: #ffffff;
-    --dm-background-alt: #f8f9fa;
-    --dm-surface: #ffffff;
-    --dm-surface-raised: #f1f3f5;
-    --dm-surface-overlay: #f8f9fa;
+    /* Backgrounds - Dark slate/charcoal backgrounds */
+    --dm-background: #0f172a; /* slate-900 */
+    --dm-background-alt: #1e293b; /* slate-800 */
+    --dm-surface: #1e293b; /* slate-800 */
+    --dm-surface-raised: #334155; /* slate-700 */
+    --dm-surface-overlay: #334155; /* slate-700 */
 
-    /* Text - Dark colors for readability on light */
-    --dm-text: #212529;
-    --dm-text-secondary: #495057;
-    --dm-text-muted: #6c757d;
-    --dm-text-disabled: #adb5bd;
-    --dm-text-inverse: #ffffff;
+    /* Text - Light colors for readability on dark */
+    --dm-text: #e2e8f0; /* slate-200 */
+    --dm-text-secondary: #94a3b8; /* slate-400 */
+    --dm-text-muted: #64748b; /* slate-500 */
+    --dm-text-disabled: #475569; /* slate-600 */
+    --dm-text-inverse: #0f172a; /* slate-900 */
 
-    /* Borders - Subtle on light backgrounds */
-    --dm-border: #dee2e6;
-    --dm-border-light: #e9ecef;
-    --dm-border-dark: #ced4da;
+    /* Borders - Subtle on dark backgrounds */
+    --dm-border: #334155; /* slate-700 */
+    --dm-border-light: #1e293b; /* slate-800 */
+    --dm-border-dark: #475569; /* slate-600 */
 
     /* ================================================
-       OCEAN ACCENT COLORS - Dark/rich for light mode
+       OCEAN ACCENT COLORS - Bright for dark mode
        ================================================ */
 
-    /* Primary - Rich ocean blue for contrast */
-    --dm-primary: #0077b6;
-    --dm-primary-hover: #0096c7;
-    --dm-primary-active: #00b4d8;
-    --dm-primary-light: #caf0f8;
-    --dm-primary-dark: #023e8a;
+    /* Primary - Bright cyan/blue for visibility */
+    --dm-primary: #48cae4;
+    --dm-primary-hover: #5cd2e8;
+    --dm-primary-active: #70daec;
+    --dm-primary-light: rgba(72, 202, 228, 0.15);
+    --dm-primary-dark: #00b4d8;
 
-    /* Secondary - Slate blue */
-    --dm-secondary: #457b9d;
-    --dm-secondary-hover: #5a8fad;
-    --dm-secondary-active: #6ea3bd;
-    --dm-secondary-light: #e8f4f8;
-    --dm-secondary-dark: #1d3557;
+    /* Secondary - Light slate blue */
+    --dm-secondary: #90e0ef;
+    --dm-secondary-hover: #a6e7f2;
+    --dm-secondary-active: #bceef5;
+    --dm-secondary-light: rgba(144, 224, 239, 0.15);
+    --dm-secondary-dark: #48cae4;
 
-    /* Success - Ocean-tinted teal */
-    --dm-success: #06d6a0;
-    --dm-success-hover: #1fe0ac;
-    --dm-success-active: #39eab7;
-    --dm-success-light: #d4f5ed;
-    --dm-success-dark: #05a87d;
+    /* Success - Bright teal/green */
+    --dm-success: #52e3b8;
+    --dm-success-hover: #66e7c1;
+    --dm-success-active: #7aebca;
+    --dm-success-light: rgba(82, 227, 184, 0.15);
+    --dm-success-dark: #06d6a0;
 
-    /* Danger - Standard red */
-    --dm-danger: #dc3545;
-    --dm-danger-hover: #bb2d3b;
-    --dm-danger-active: #b02a37;
-    --dm-danger-light: #f8d7da;
-    --dm-danger-dark: #842029;
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
 
-    /* Warning - Standard amber */
-    --dm-warning: #ffc107;
-    --dm-warning-hover: #ffca2c;
-    --dm-warning-active: #ffcd39;
-    --dm-warning-light: #fff3cd;
-    --dm-warning-dark: #664d03;
-    --dm-warning-text: #664d03;
+    /* Warning - Bright amber (standard dark mode) */
+    --dm-warning: #fbbf24; /* amber-400 */
+    --dm-warning-hover: #fcd34d; /* amber-300 */
+    --dm-warning-active: #fde68a; /* amber-200 */
+    --dm-warning-text: #78350f; /* amber-950 */
+    --dm-warning-light: rgba(251, 191, 36, 0.15);
+    --dm-warning-dark: #f59e0b; /* amber-500 */
 
-    /* Info - Light cyan */
-    --dm-info: #48cae4;
-    --dm-info-hover: #5cd2e8;
-    --dm-info-active: #70daec;
-    --dm-info-light: #daf4f9;
-    --dm-info-dark: #00b4d8;
+    /* Info - Bright ocean cyan */
+    --dm-info: #90e0ef;
+    --dm-info-hover: #a6e7f2;
+    --dm-info-active: #bceef5;
+    --dm-info-light: rgba(144, 224, 239, 0.15);
+    --dm-info-dark: #48cae4;
 
     /* ================================================
        INTERACTIVE STATES
@@ -497,74 +497,74 @@
     color-scheme: dark;
 
     /* ================================================
-       FOUNDATIONAL COLORS - Dark Mode Base
+       FOUNDATIONAL COLORS - Light Mode Base
        ================================================ */
 
-    /* Backgrounds - Dark slate/charcoal backgrounds */
-    --dm-background: #0f172a; /* slate-900 */
-    --dm-background-alt: #1e293b; /* slate-800 */
-    --dm-surface: #1e293b; /* slate-800 */
-    --dm-surface-raised: #334155; /* slate-700 */
-    --dm-surface-overlay: #334155; /* slate-700 */
+    /* Backgrounds - Light/white backgrounds */
+    --dm-background: #ffffff;
+    --dm-background-alt: #f8f9fa;
+    --dm-surface: #ffffff;
+    --dm-surface-raised: #f1f3f5;
+    --dm-surface-overlay: #f8f9fa;
 
-    /* Text - Light colors for readability on dark */
-    --dm-text: #e2e8f0; /* slate-200 */
-    --dm-text-secondary: #94a3b8; /* slate-400 */
-    --dm-text-muted: #64748b; /* slate-500 */
-    --dm-text-disabled: #475569; /* slate-600 */
-    --dm-text-inverse: #0f172a; /* slate-900 */
+    /* Text - Dark colors for readability on light */
+    --dm-text: #212529;
+    --dm-text-secondary: #495057;
+    --dm-text-muted: #6c757d;
+    --dm-text-disabled: #adb5bd;
+    --dm-text-inverse: #ffffff;
 
-    /* Borders - Subtle on dark backgrounds */
-    --dm-border: #334155; /* slate-700 */
-    --dm-border-light: #1e293b; /* slate-800 */
-    --dm-border-dark: #475569; /* slate-600 */
+    /* Borders - Subtle on light backgrounds */
+    --dm-border: #dee2e6;
+    --dm-border-light: #e9ecef;
+    --dm-border-dark: #ced4da;
 
     /* ================================================
-       OCEAN ACCENT COLORS - Bright for dark mode
+       OCEAN ACCENT COLORS - Dark/rich for light mode
        ================================================ */
 
-    /* Primary - Bright cyan/blue for visibility */
-    --dm-primary: #48cae4;
-    --dm-primary-hover: #5cd2e8;
-    --dm-primary-active: #70daec;
-    --dm-primary-light: rgba(72, 202, 228, 0.15);
-    --dm-primary-dark: #00b4d8;
+    /* Primary - Rich ocean blue for contrast */
+    --dm-primary: #0077b6;
+    --dm-primary-hover: #0096c7;
+    --dm-primary-active: #00b4d8;
+    --dm-primary-light: #caf0f8;
+    --dm-primary-dark: #023e8a;
 
-    /* Secondary - Light slate blue */
-    --dm-secondary: #90e0ef;
-    --dm-secondary-hover: #a6e7f2;
-    --dm-secondary-active: #bceef5;
-    --dm-secondary-light: rgba(144, 224, 239, 0.15);
-    --dm-secondary-dark: #48cae4;
+    /* Secondary - Slate blue */
+    --dm-secondary: #457b9d;
+    --dm-secondary-hover: #5a8fad;
+    --dm-secondary-active: #6ea3bd;
+    --dm-secondary-light: #e8f4f8;
+    --dm-secondary-dark: #1d3557;
 
-    /* Success - Bright teal/green */
-    --dm-success: #52e3b8;
-    --dm-success-hover: #66e7c1;
-    --dm-success-active: #7aebca;
-    --dm-success-light: rgba(82, 227, 184, 0.15);
-    --dm-success-dark: #06d6a0;
+    /* Success - Ocean-tinted teal */
+    --dm-success: #06d6a0;
+    --dm-success-hover: #1fe0ac;
+    --dm-success-active: #39eab7;
+    --dm-success-light: #d4f5ed;
+    --dm-success-dark: #05a87d;
 
-    /* Danger - Bright red (standard dark mode) */
-    --dm-danger: #ef4444; /* red-500 */
-    --dm-danger-hover: #f87171; /* red-400 */
-    --dm-danger-active: #fca5a5; /* red-300 */
-    --dm-danger-light: rgba(248, 113, 113, 0.15);
-    --dm-danger-dark: #dc2626; /* red-600 */
+    /* Danger - Standard red */
+    --dm-danger: #dc3545;
+    --dm-danger-hover: #bb2d3b;
+    --dm-danger-active: #b02a37;
+    --dm-danger-light: #f8d7da;
+    --dm-danger-dark: #842029;
 
-    /* Warning - Bright amber (standard dark mode) */
-    --dm-warning: #fbbf24; /* amber-400 */
-    --dm-warning-hover: #fcd34d; /* amber-300 */
-    --dm-warning-active: #fde68a; /* amber-200 */
-    --dm-warning-text: #78350f; /* amber-950 */
-    --dm-warning-light: rgba(251, 191, 36, 0.15);
-    --dm-warning-dark: #f59e0b; /* amber-500 */
+    /* Warning - Standard amber */
+    --dm-warning: #ffc107;
+    --dm-warning-hover: #ffca2c;
+    --dm-warning-active: #ffcd39;
+    --dm-warning-light: #fff3cd;
+    --dm-warning-dark: #664d03;
+    --dm-warning-text: #664d03;
 
-    /* Info - Bright ocean cyan */
-    --dm-info: #90e0ef;
-    --dm-info-hover: #a6e7f2;
-    --dm-info-active: #bceef5;
-    --dm-info-light: rgba(144, 224, 239, 0.15);
-    --dm-info-dark: #48cae4;
+    /* Info - Light cyan */
+    --dm-info: #48cae4;
+    --dm-info-hover: #5cd2e8;
+    --dm-info-active: #70daec;
+    --dm-info-light: #daf4f9;
+    --dm-info-dark: #00b4d8;
 
     /* ================================================
        INTERACTIVE STATES
@@ -702,81 +702,61 @@
     color-scheme: light;
 
     /* ================================================
-       FOUNDATIONAL COLORS - Light Mode Base
+       FOUNDATIONAL COLORS - Dark Mode Base
        ================================================ */
 
-    /* Backgrounds - Light/white backgrounds */
-    --dm-background: #ffffff;
-    --dm-background-alt: #f8f9fa;
-    --dm-surface: #ffffff;
-    --dm-surface-raised: #f1f3f5;
-    --dm-surface-overlay: #f8f9fa;
+    /* Backgrounds - Dark slate/charcoal backgrounds */
+    --dm-background: #0f172a; /* slate-900 */
+    --dm-background-alt: #1e293b; /* slate-800 */
+    --dm-surface: #1e293b; /* slate-800 */
+    --dm-surface-raised: #334155; /* slate-700 */
+    --dm-surface-overlay: #334155; /* slate-700 */
 
-    /* Text - Dark colors for readability on light */
-    --dm-text: #212529;
-    --dm-text-secondary: #495057;
-    --dm-text-muted: #6c757d;
-    --dm-text-disabled: #adb5bd;
-    --dm-text-inverse: #ffffff;
+    /* Text - Light colors for readability on dark */
+    --dm-text: #e2e8f0; /* slate-200 */
+    --dm-text-secondary: #94a3b8; /* slate-400 */
+    --dm-text-muted: #64748b; /* slate-500 */
+    --dm-text-disabled: #475569; /* slate-600 */
+    --dm-text-inverse: #0f172a; /* slate-900 */
 
-    /* Borders - Subtle on light backgrounds */
-    --dm-border: #dee2e6;
-    --dm-border-light: #e9ecef;
-    --dm-border-dark: #ced4da;
+    /* Borders - Subtle on dark backgrounds */
+    --dm-border: #334155; /* slate-700 */
+    --dm-border-light: #1e293b; /* slate-800 */
+    --dm-border-dark: #475569; /* slate-600 */
 
     /* ================================================
-       FOREST ACCENT COLORS - Rich greens for light mode
+       FOREST ACCENT COLORS - Bright greens for dark mode
        ================================================ */
 
-    /* PRIMARY COLOURS - Forest Green */
-    --dm-primary: #2d6a4f;
-    --dm-primary-hover: #40916c;
-    --dm-primary-active: #52b788;
-    --dm-primary-light: #d8f3dc;
-    --dm-primary-dark: #1b4332;
+    /* Primary - Bright forest green */
+    --dm-primary: #74c69d;
+    --dm-primary-hover: #88d0ac;
+    --dm-primary-active: #9cdabb;
+    --dm-primary-light: rgba(116, 198, 157, 0.15);
+    --dm-primary-dark: #52b788;
 
-    /* Focus ring with forest colour */
-    --dm-focus-ring: 0 0 0 3px rgba(45, 106, 79, 0.3);
-    --dm-border-focus: #2d6a4f;
+    --dm-secondary: #a3b899;
+    --dm-secondary-hover: #b2c4a9;
+    --dm-secondary-active: #c1d0b9;
+    --dm-secondary-light: rgba(163, 184, 153, 0.15);
+    --dm-secondary-dark: #7d9273;
 
-    /* ================================================
-       SECONDARY COLOURS - Earth Brown
-       ================================================ */
-    --dm-secondary: #6b705c;
-    --dm-secondary-hover: #7d826d;
-    --dm-secondary-active: #8f937e;
-    --dm-secondary-light: #f0efe9;
-    --dm-secondary-dark: #52554a;
+    --dm-success: #95d5b2;
+    --dm-success-light: rgba(149, 213, 178, 0.15);
 
-    /* ================================================
-       STATUS COLOURS - Nature-tinted
-       ================================================ */
-    --dm-success: #40916c;
-    --dm-success-hover: #52b788;
-    --dm-success-active: #74c69d;
-    --dm-success-light: #d8f3dc;
-    --dm-success-dark: #2d6a4f;
+    --dm-info: #95d5b2;
+    --dm-info-light: rgba(149, 213, 178, 0.15);
 
-    --dm-info: #588157;
-    --dm-info-hover: #6b9669;
-    --dm-info-active: #7eab7c;
-    --dm-info-light: #e2f0e1;
-    --dm-info-dark: #3a5a40;
+    --dm-warning: #e9c38e;
+    --dm-warning-light: rgba(233, 195, 142, 0.15);
+    --dm-warning-text: #e9c38e;
 
-    --dm-warning: #dda15e;
-    --dm-warning-hover: #e3b276;
-    --dm-warning-active: #e9c38e;
-    --dm-warning-light: #faf3e7;
-    --dm-warning-dark: #bc6c25;
-    --dm-warning-text: #bc6c25;
-
-    /* ================================================
-       ACCENT COLOURS
-       ================================================ */
-    --dm-accent-1: #95d5b2; /* Mint */
-    --dm-accent-2: #74c69d; /* Sage */
-    --dm-accent-3: #52b788; /* Emerald */
-    --dm-accent-4: #1b4332; /* Pine */
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
 
     /* ================================================
        INTERACTIVE STATES
@@ -914,61 +894,81 @@
     color-scheme: dark;
 
     /* ================================================
-       FOUNDATIONAL COLORS - Dark Mode Base
+       FOUNDATIONAL COLORS - Light Mode Base
        ================================================ */
 
-    /* Backgrounds - Dark slate/charcoal backgrounds */
-    --dm-background: #0f172a; /* slate-900 */
-    --dm-background-alt: #1e293b; /* slate-800 */
-    --dm-surface: #1e293b; /* slate-800 */
-    --dm-surface-raised: #334155; /* slate-700 */
-    --dm-surface-overlay: #334155; /* slate-700 */
+    /* Backgrounds - Light/white backgrounds */
+    --dm-background: #ffffff;
+    --dm-background-alt: #f8f9fa;
+    --dm-surface: #ffffff;
+    --dm-surface-raised: #f1f3f5;
+    --dm-surface-overlay: #f8f9fa;
 
-    /* Text - Light colors for readability on dark */
-    --dm-text: #e2e8f0; /* slate-200 */
-    --dm-text-secondary: #94a3b8; /* slate-400 */
-    --dm-text-muted: #64748b; /* slate-500 */
-    --dm-text-disabled: #475569; /* slate-600 */
-    --dm-text-inverse: #0f172a; /* slate-900 */
+    /* Text - Dark colors for readability on light */
+    --dm-text: #212529;
+    --dm-text-secondary: #495057;
+    --dm-text-muted: #6c757d;
+    --dm-text-disabled: #adb5bd;
+    --dm-text-inverse: #ffffff;
 
-    /* Borders - Subtle on dark backgrounds */
-    --dm-border: #334155; /* slate-700 */
-    --dm-border-light: #1e293b; /* slate-800 */
-    --dm-border-dark: #475569; /* slate-600 */
+    /* Borders - Subtle on light backgrounds */
+    --dm-border: #dee2e6;
+    --dm-border-light: #e9ecef;
+    --dm-border-dark: #ced4da;
 
     /* ================================================
-       FOREST ACCENT COLORS - Bright greens for dark mode
+       FOREST ACCENT COLORS - Rich greens for light mode
        ================================================ */
 
-    /* Primary - Bright forest green */
-    --dm-primary: #74c69d;
-    --dm-primary-hover: #88d0ac;
-    --dm-primary-active: #9cdabb;
-    --dm-primary-light: rgba(116, 198, 157, 0.15);
-    --dm-primary-dark: #52b788;
+    /* PRIMARY COLOURS - Forest Green */
+    --dm-primary: #2d6a4f;
+    --dm-primary-hover: #40916c;
+    --dm-primary-active: #52b788;
+    --dm-primary-light: #d8f3dc;
+    --dm-primary-dark: #1b4332;
 
-    --dm-secondary: #a3b899;
-    --dm-secondary-hover: #b2c4a9;
-    --dm-secondary-active: #c1d0b9;
-    --dm-secondary-light: rgba(163, 184, 153, 0.15);
-    --dm-secondary-dark: #7d9273;
+    /* Focus ring with forest colour */
+    --dm-focus-ring: 0 0 0 3px rgba(45, 106, 79, 0.3);
+    --dm-border-focus: #2d6a4f;
 
-    --dm-success: #95d5b2;
-    --dm-success-light: rgba(149, 213, 178, 0.15);
+    /* ================================================
+       SECONDARY COLOURS - Earth Brown
+       ================================================ */
+    --dm-secondary: #6b705c;
+    --dm-secondary-hover: #7d826d;
+    --dm-secondary-active: #8f937e;
+    --dm-secondary-light: #f0efe9;
+    --dm-secondary-dark: #52554a;
 
-    --dm-info: #95d5b2;
-    --dm-info-light: rgba(149, 213, 178, 0.15);
+    /* ================================================
+       STATUS COLOURS - Nature-tinted
+       ================================================ */
+    --dm-success: #40916c;
+    --dm-success-hover: #52b788;
+    --dm-success-active: #74c69d;
+    --dm-success-light: #d8f3dc;
+    --dm-success-dark: #2d6a4f;
 
-    --dm-warning: #e9c38e;
-    --dm-warning-light: rgba(233, 195, 142, 0.15);
-    --dm-warning-text: #e9c38e;
+    --dm-info: #588157;
+    --dm-info-hover: #6b9669;
+    --dm-info-active: #7eab7c;
+    --dm-info-light: #e2f0e1;
+    --dm-info-dark: #3a5a40;
 
-    /* Danger - Bright red (standard dark mode) */
-    --dm-danger: #ef4444; /* red-500 */
-    --dm-danger-hover: #f87171; /* red-400 */
-    --dm-danger-active: #fca5a5; /* red-300 */
-    --dm-danger-light: rgba(248, 113, 113, 0.15);
-    --dm-danger-dark: #dc2626; /* red-600 */
+    --dm-warning: #dda15e;
+    --dm-warning-hover: #e3b276;
+    --dm-warning-active: #e9c38e;
+    --dm-warning-light: #faf3e7;
+    --dm-warning-dark: #bc6c25;
+    --dm-warning-text: #bc6c25;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #95d5b2; /* Mint */
+    --dm-accent-2: #74c69d; /* Sage */
+    --dm-accent-3: #52b788; /* Emerald */
+    --dm-accent-4: #1b4332; /* Pine */
 
     /* ================================================
        INTERACTIVE STATES
@@ -1126,65 +1126,44 @@
     --dm-border-light: #e9ecef;
     --dm-border-dark: #ced4da;
 
-    /* ================================================
-       SUNSET ACCENT COLORS - Warm tones for light mode
-       ================================================ */
 
-    /* PRIMARY COLOURS - Soft Terracotta */
-    --dm-primary: #c67b5c;
-    --dm-primary-hover: #d08c6f;
-    --dm-primary-active: #da9d82;
-    --dm-primary-light: #faf3f0;
-    --dm-primary-dark: #a66349;
+    --dm-primary: #da9d82;
+    --dm-primary-hover: #e0ac94;
+    --dm-primary-active: #e6bba6;
+    --dm-primary-light: rgba(218, 157, 130, 0.15);
+    --dm-primary-dark: #d08c6f;
 
-    /* Focus ring with soft sunset colour */
-    --dm-focus-ring: 0 0 0 3px rgba(198, 123, 92, 0.3);
-    --dm-border-focus: #c67b5c;
+    --dm-secondary: #c2a2aa;
+    --dm-secondary-hover: #cdb0b7;
+    --dm-secondary-active: #d8bec4;
+    --dm-secondary-light: rgba(194, 162, 170, 0.15);
+    --dm-secondary-dark: #b5919a;
 
-    /* ================================================
-       SECONDARY COLOURS - Dusty Rose
-       ================================================ */
-    --dm-secondary: #a8808a;
-    --dm-secondary-hover: #b5919a;
-    --dm-secondary-active: #c2a2aa;
-    --dm-secondary-light: #f8f3f4;
-    --dm-secondary-dark: #8a6670;
+    --dm-success: #9cbe91;
+    --dm-success-light: rgba(156, 190, 145, 0.15);
 
-    /* ================================================
-       STATUS COLOURS - Muted tones
-       ================================================ */
-    --dm-success: #7a9e6d;
-    --dm-success-hover: #8bae7f;
-    --dm-success-active: #9cbe91;
-    --dm-success-light: #f2f6f0;
-    --dm-success-dark: #628256;
+    --dm-info: #afc1cd;
+    --dm-info-light: rgba(175, 193, 205, 0.15);
 
-    --dm-info: #8fa5b5;
-    --dm-info-hover: #9fb3c1;
-    --dm-info-active: #afc1cd;
-    --dm-info-light: #f3f6f8;
-    --dm-info-dark: #708694;
+    --dm-warning: #e2c484;
+    --dm-warning-light: rgba(226, 196, 132, 0.15);
+    --dm-warning-text: #e2c484;
 
-    --dm-warning: #d4a85c;
-    --dm-warning-hover: #dbb670;
-    --dm-warning-active: #e2c484;
-    --dm-warning-light: #faf6ef;
-    --dm-warning-dark: #b58e45;
-    --dm-warning-text: #8a6b30;
+    --dm-danger: #da8282;
+    --dm-danger-light: rgba(218, 130, 130, 0.15);
 
-    --dm-danger: #c45c5c;
-    --dm-danger-hover: #cf6f6f;
-    --dm-danger-active: #da8282;
-    --dm-danger-light: #faf0f0;
-    --dm-danger-dark: #a54848;
+    --dm-focus-ring: 0 0 0 3px rgba(218, 157, 130, 0.35);
+    --dm-selected-bg: rgba(218, 157, 130, 0.2);
+    --dm-tab-active-border: #da9d82;
+    --dm-tab-active-text: #da9d82;
+    --dm-progress-bar: #da9d82;
 
-    /* ================================================
-       ACCENT COLOURS
-       ================================================ */
-    --dm-accent-1: #e8c9a8; /* Soft peach */
-    --dm-accent-2: #d4a88a; /* Warm sand */
-    --dm-accent-3: #c67b5c; /* Terracotta */
-    --dm-accent-4: #a66349; /* Clay */
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
 
     /* ================================================
        INTERACTIVE STATES
@@ -1344,44 +1323,65 @@
     --dm-border-light: #1e293b; /* slate-800 */
     --dm-border-dark: #475569; /* slate-600 */
 
+    /* ================================================
+       SUNSET ACCENT COLORS - Warm tones for light mode
+       ================================================ */
 
-    --dm-primary: #da9d82;
-    --dm-primary-hover: #e0ac94;
-    --dm-primary-active: #e6bba6;
-    --dm-primary-light: rgba(218, 157, 130, 0.15);
-    --dm-primary-dark: #d08c6f;
+    /* PRIMARY COLOURS - Soft Terracotta */
+    --dm-primary: #c67b5c;
+    --dm-primary-hover: #d08c6f;
+    --dm-primary-active: #da9d82;
+    --dm-primary-light: #faf3f0;
+    --dm-primary-dark: #a66349;
 
-    --dm-secondary: #c2a2aa;
-    --dm-secondary-hover: #cdb0b7;
-    --dm-secondary-active: #d8bec4;
-    --dm-secondary-light: rgba(194, 162, 170, 0.15);
-    --dm-secondary-dark: #b5919a;
+    /* Focus ring with soft sunset colour */
+    --dm-focus-ring: 0 0 0 3px rgba(198, 123, 92, 0.3);
+    --dm-border-focus: #c67b5c;
 
-    --dm-success: #9cbe91;
-    --dm-success-light: rgba(156, 190, 145, 0.15);
+    /* ================================================
+       SECONDARY COLOURS - Dusty Rose
+       ================================================ */
+    --dm-secondary: #a8808a;
+    --dm-secondary-hover: #b5919a;
+    --dm-secondary-active: #c2a2aa;
+    --dm-secondary-light: #f8f3f4;
+    --dm-secondary-dark: #8a6670;
 
-    --dm-info: #afc1cd;
-    --dm-info-light: rgba(175, 193, 205, 0.15);
+    /* ================================================
+       STATUS COLOURS - Muted tones
+       ================================================ */
+    --dm-success: #7a9e6d;
+    --dm-success-hover: #8bae7f;
+    --dm-success-active: #9cbe91;
+    --dm-success-light: #f2f6f0;
+    --dm-success-dark: #628256;
 
-    --dm-warning: #e2c484;
-    --dm-warning-light: rgba(226, 196, 132, 0.15);
-    --dm-warning-text: #e2c484;
+    --dm-info: #8fa5b5;
+    --dm-info-hover: #9fb3c1;
+    --dm-info-active: #afc1cd;
+    --dm-info-light: #f3f6f8;
+    --dm-info-dark: #708694;
 
-    --dm-danger: #da8282;
-    --dm-danger-light: rgba(218, 130, 130, 0.15);
+    --dm-warning: #d4a85c;
+    --dm-warning-hover: #dbb670;
+    --dm-warning-active: #e2c484;
+    --dm-warning-light: #faf6ef;
+    --dm-warning-dark: #b58e45;
+    --dm-warning-text: #8a6b30;
 
-    --dm-focus-ring: 0 0 0 3px rgba(218, 157, 130, 0.35);
-    --dm-selected-bg: rgba(218, 157, 130, 0.2);
-    --dm-tab-active-border: #da9d82;
-    --dm-tab-active-text: #da9d82;
-    --dm-progress-bar: #da9d82;
+    --dm-danger: #c45c5c;
+    --dm-danger-hover: #cf6f6f;
+    --dm-danger-active: #da8282;
+    --dm-danger-light: #faf0f0;
+    --dm-danger-dark: #a54848;
 
-    /* Danger - Bright red (standard dark mode) */
-    --dm-danger: #ef4444; /* red-500 */
-    --dm-danger-hover: #f87171; /* red-400 */
-    --dm-danger-active: #fca5a5; /* red-300 */
-    --dm-danger-light: rgba(248, 113, 113, 0.15);
-    --dm-danger-dark: #dc2626; /* red-600 */
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #e8c9a8; /* Soft peach */
+    --dm-accent-2: #d4a88a; /* Warm sand */
+    --dm-accent-3: #c67b5c; /* Terracotta */
+    --dm-accent-4: #a66349; /* Clay */
 
     /* ================================================
        INTERACTIVE STATES
@@ -1527,65 +1527,36 @@
     --dm-border-dark: #ced4da;
 
 
-    /* ================================================
-       PRIMARY COLOURS - Royal Blue
-       ================================================ */
-    --dm-primary: #4169e1;
-    --dm-primary-hover: #5a7de6;
-    --dm-primary-active: #7391eb;
-    --dm-primary-light: #e8edfc;
-    --dm-primary-dark: #2c4a9e;
+    --dm-primary: #6495ed;
+    --dm-primary-hover: #79a5f0;
+    --dm-primary-active: #8eb5f3;
+    --dm-primary-light: rgba(100, 149, 237, 0.15);
+    --dm-primary-dark: #4169e1;
 
-    /* Focus ring with royal colour */
-    --dm-focus-ring: 0 0 0 3px rgba(65, 105, 225, 0.3);
-    --dm-border-focus: #4169e1;
+    --dm-secondary: #9370db;
+    --dm-secondary-hover: #a384e0;
+    --dm-secondary-active: #b398e5;
+    --dm-secondary-light: rgba(147, 112, 219, 0.15);
+    --dm-secondary-dark: #6a5acd;
 
-    /* ================================================
-       SECONDARY COLOURS - Purple Blue
-       ================================================ */
-    --dm-secondary: #6a5acd;
-    --dm-secondary-hover: #7d6fd4;
-    --dm-secondary-active: #9084db;
-    --dm-secondary-light: #f0eefa;
-    --dm-secondary-dark: #483d8b;
+    --dm-success: #50fa7b;
+    --dm-success-light: rgba(80, 250, 123, 0.15);
 
-    /* ================================================
-       STATUS COLOURS - Royal-tinted
-       ================================================ */
-    --dm-success: #32cd32;
-    --dm-success-hover: #4ad34a;
-    --dm-success-active: #62d962;
-    --dm-success-light: #e6f9e6;
-    --dm-success-dark: #228b22;
+    --dm-info: #87ceeb;
+    --dm-info-light: rgba(135, 206, 235, 0.15);
 
-    --dm-info: #6495ed;
-    --dm-info-hover: #79a5f0;
-    --dm-info-active: #8eb5f3;
-    --dm-info-light: #ebf1fd;
-    --dm-info-dark: #4169e1;
+    --dm-focus-ring: 0 0 0 3px rgba(100, 149, 237, 0.35);
+    --dm-selected-bg: rgba(100, 149, 237, 0.2);
+    --dm-tab-active-border: #6495ed;
+    --dm-tab-active-text: #6495ed;
+    --dm-progress-bar: #6495ed;
 
-    /* ================================================
-       ACCENT COLOURS
-       ================================================ */
-    --dm-accent-1: #b0c4de; /* Light steel blue */
-    --dm-accent-2: #6495ed; /* Cornflower blue */
-    --dm-accent-3: #4169e1; /* Royal blue */
-    --dm-accent-4: #191970; /* Midnight blue */
-
-    /* ================================================
-       SELECTION
-       ================================================ */
-    --dm-selected-bg: rgba(65, 105, 225, 0.15);
-    --dm-tab-active-border: #4169e1;
-    --dm-tab-active-text: #4169e1;
-    --dm-progress-bar: #4169e1;
-
-    /* Danger - Standard red */
-    --dm-danger: #dc3545;
-    --dm-danger-hover: #bb2d3b;
-    --dm-danger-active: #b02a37;
-    --dm-danger-light: #f8d7da;
-    --dm-danger-dark: #842029;
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
 
     /* ================================================
        INTERACTIVE STATES
@@ -1706,7 +1677,6 @@
     --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
 
 }
-
 /**
  * Domma Royal Dark Theme
  * Rich royal blue colour palette
@@ -1740,36 +1710,65 @@
     --dm-border-dark: #475569; /* slate-600 */
 
 
-    --dm-primary: #6495ed;
-    --dm-primary-hover: #79a5f0;
-    --dm-primary-active: #8eb5f3;
-    --dm-primary-light: rgba(100, 149, 237, 0.15);
-    --dm-primary-dark: #4169e1;
+    /* ================================================
+       PRIMARY COLOURS - Royal Blue
+       ================================================ */
+    --dm-primary: #4169e1;
+    --dm-primary-hover: #5a7de6;
+    --dm-primary-active: #7391eb;
+    --dm-primary-light: #e8edfc;
+    --dm-primary-dark: #2c4a9e;
 
-    --dm-secondary: #9370db;
-    --dm-secondary-hover: #a384e0;
-    --dm-secondary-active: #b398e5;
-    --dm-secondary-light: rgba(147, 112, 219, 0.15);
-    --dm-secondary-dark: #6a5acd;
+    /* Focus ring with royal colour */
+    --dm-focus-ring: 0 0 0 3px rgba(65, 105, 225, 0.3);
+    --dm-border-focus: #4169e1;
 
-    --dm-success: #50fa7b;
-    --dm-success-light: rgba(80, 250, 123, 0.15);
+    /* ================================================
+       SECONDARY COLOURS - Purple Blue
+       ================================================ */
+    --dm-secondary: #6a5acd;
+    --dm-secondary-hover: #7d6fd4;
+    --dm-secondary-active: #9084db;
+    --dm-secondary-light: #f0eefa;
+    --dm-secondary-dark: #483d8b;
 
-    --dm-info: #87ceeb;
-    --dm-info-light: rgba(135, 206, 235, 0.15);
+    /* ================================================
+       STATUS COLOURS - Royal-tinted
+       ================================================ */
+    --dm-success: #32cd32;
+    --dm-success-hover: #4ad34a;
+    --dm-success-active: #62d962;
+    --dm-success-light: #e6f9e6;
+    --dm-success-dark: #228b22;
 
-    --dm-focus-ring: 0 0 0 3px rgba(100, 149, 237, 0.35);
-    --dm-selected-bg: rgba(100, 149, 237, 0.2);
-    --dm-tab-active-border: #6495ed;
-    --dm-tab-active-text: #6495ed;
-    --dm-progress-bar: #6495ed;
+    --dm-info: #6495ed;
+    --dm-info-hover: #79a5f0;
+    --dm-info-active: #8eb5f3;
+    --dm-info-light: #ebf1fd;
+    --dm-info-dark: #4169e1;
 
-    /* Danger - Bright red (standard dark mode) */
-    --dm-danger: #ef4444; /* red-500 */
-    --dm-danger-hover: #f87171; /* red-400 */
-    --dm-danger-active: #fca5a5; /* red-300 */
-    --dm-danger-light: rgba(248, 113, 113, 0.15);
-    --dm-danger-dark: #dc2626; /* red-600 */
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #b0c4de; /* Light steel blue */
+    --dm-accent-2: #6495ed; /* Cornflower blue */
+    --dm-accent-3: #4169e1; /* Royal blue */
+    --dm-accent-4: #191970; /* Midnight blue */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(65, 105, 225, 0.15);
+    --dm-tab-active-border: #4169e1;
+    --dm-tab-active-text: #4169e1;
+    --dm-progress-bar: #4169e1;
+
+    /* Danger - Standard red */
+    --dm-danger: #dc3545;
+    --dm-danger-hover: #bb2d3b;
+    --dm-danger-active: #b02a37;
+    --dm-danger-light: #f8d7da;
+    --dm-danger-dark: #842029;
 
     /* ================================================
        INTERACTIVE STATES
@@ -1915,72 +1914,40 @@
     --dm-border-dark: #ced4da;
 
 
-    /* ================================================
-       PRIMARY COLOURS - Muted Golden Yellow
-       ================================================ */
-    --dm-primary: #c9b458;
-    --dm-primary-hover: #d4c06a;
-    --dm-primary-active: #dfcc7c;
-    --dm-primary-light: #faf8f0;
-    --dm-primary-dark: #a89740;
+    --dm-primary: #d4c06a;
+    --dm-primary-hover: #dfcc7c;
+    --dm-primary-active: #ead88e;
+    --dm-primary-light: rgba(212, 192, 106, 0.15);
+    --dm-primary-dark: #c9b458;
 
-    /* Focus ring with subtle lemon colour */
-    --dm-focus-ring: 0 0 0 3px rgba(201, 180, 88, 0.3);
-    --dm-border-focus: #c9b458;
+    --dm-secondary: #b6b1a1;
+    --dm-secondary-hover: #c4bfb0;
+    --dm-secondary-active: #d2cdbf;
+    --dm-secondary-light: rgba(182, 177, 161, 0.15);
+    --dm-secondary-dark: #9a9583;
 
-    /* ================================================
-       SECONDARY COLOURS - Warm Stone
-       ================================================ */
-    --dm-secondary: #9a9583;
-    --dm-secondary-hover: #a8a392;
-    --dm-secondary-active: #b6b1a1;
-    --dm-secondary-light: #f5f4f1;
-    --dm-secondary-dark: #7a766a;
+    --dm-success: #a1c277;
+    --dm-success-light: rgba(161, 194, 119, 0.15);
 
-    /* ================================================
-       STATUS COLOURS - Muted tones
-       ================================================ */
-    --dm-success: #7da453;
-    --dm-success-hover: #8fb365;
-    --dm-success-active: #a1c277;
-    --dm-success-light: #f2f7ed;
-    --dm-success-dark: #658840;
+    --dm-info: #90bbcd;
+    --dm-info-light: rgba(144, 187, 205, 0.15);
 
-    --dm-info: #6a9fb5;
-    --dm-info-hover: #7dadc1;
-    --dm-info-active: #90bbcd;
-    --dm-info-light: #f0f6f8;
-    --dm-info-dark: #527d91;
+    --dm-warning: #e2c46d;
+    --dm-warning-light: rgba(226, 196, 109, 0.15);
+    --dm-warning-text: #e2c46d;
 
-    --dm-warning: #d4a843;
-    --dm-warning-hover: #dbb658;
-    --dm-warning-active: #e2c46d;
-    --dm-warning-light: #faf6ec;
-    --dm-warning-dark: #b08a30;
-    --dm-warning-text: #8a6b20;
+    --dm-focus-ring: 0 0 0 3px rgba(212, 192, 106, 0.35);
+    --dm-selected-bg: rgba(212, 192, 106, 0.2);
+    --dm-tab-active-border: #d4c06a;
+    --dm-tab-active-text: #d4c06a;
+    --dm-progress-bar: #d4c06a;
 
-    /* ================================================
-       ACCENT COLOURS
-       ================================================ */
-    --dm-accent-1: #e8e2c8; /* Pale straw */
-    --dm-accent-2: #d4cba8; /* Soft wheat */
-    --dm-accent-3: #c9b458; /* Muted gold */
-    --dm-accent-4: #a89740; /* Dark honey */
-
-    /* ================================================
-       SELECTION
-       ================================================ */
-    --dm-selected-bg: rgba(201, 180, 88, 0.15);
-    --dm-tab-active-border: #c9b458;
-    --dm-tab-active-text: #8a7530;
-    --dm-progress-bar: #c9b458;
-
-    /* Danger - Standard red */
-    --dm-danger: #dc3545;
-    --dm-danger-hover: #bb2d3b;
-    --dm-danger-active: #b02a37;
-    --dm-danger-light: #f8d7da;
-    --dm-danger-dark: #842029;
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
 
     /* ================================================
        INTERACTIVE STATES
@@ -2101,7 +2068,6 @@
     --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
 
 }
-
 /**
  * Domma Lemon Dark Theme
  * Soft, subtle yellow colour palette
@@ -2135,40 +2101,72 @@
     --dm-border-dark: #475569; /* slate-600 */
 
 
-    --dm-primary: #d4c06a;
-    --dm-primary-hover: #dfcc7c;
-    --dm-primary-active: #ead88e;
-    --dm-primary-light: rgba(212, 192, 106, 0.15);
-    --dm-primary-dark: #c9b458;
+    /* ================================================
+       PRIMARY COLOURS - Muted Golden Yellow
+       ================================================ */
+    --dm-primary: #c9b458;
+    --dm-primary-hover: #d4c06a;
+    --dm-primary-active: #dfcc7c;
+    --dm-primary-light: #faf8f0;
+    --dm-primary-dark: #a89740;
 
-    --dm-secondary: #b6b1a1;
-    --dm-secondary-hover: #c4bfb0;
-    --dm-secondary-active: #d2cdbf;
-    --dm-secondary-light: rgba(182, 177, 161, 0.15);
-    --dm-secondary-dark: #9a9583;
+    /* Focus ring with subtle lemon colour */
+    --dm-focus-ring: 0 0 0 3px rgba(201, 180, 88, 0.3);
+    --dm-border-focus: #c9b458;
 
-    --dm-success: #a1c277;
-    --dm-success-light: rgba(161, 194, 119, 0.15);
+    /* ================================================
+       SECONDARY COLOURS - Warm Stone
+       ================================================ */
+    --dm-secondary: #9a9583;
+    --dm-secondary-hover: #a8a392;
+    --dm-secondary-active: #b6b1a1;
+    --dm-secondary-light: #f5f4f1;
+    --dm-secondary-dark: #7a766a;
 
-    --dm-info: #90bbcd;
-    --dm-info-light: rgba(144, 187, 205, 0.15);
+    /* ================================================
+       STATUS COLOURS - Muted tones
+       ================================================ */
+    --dm-success: #7da453;
+    --dm-success-hover: #8fb365;
+    --dm-success-active: #a1c277;
+    --dm-success-light: #f2f7ed;
+    --dm-success-dark: #658840;
 
-    --dm-warning: #e2c46d;
-    --dm-warning-light: rgba(226, 196, 109, 0.15);
-    --dm-warning-text: #e2c46d;
+    --dm-info: #6a9fb5;
+    --dm-info-hover: #7dadc1;
+    --dm-info-active: #90bbcd;
+    --dm-info-light: #f0f6f8;
+    --dm-info-dark: #527d91;
 
-    --dm-focus-ring: 0 0 0 3px rgba(212, 192, 106, 0.35);
-    --dm-selected-bg: rgba(212, 192, 106, 0.2);
-    --dm-tab-active-border: #d4c06a;
-    --dm-tab-active-text: #d4c06a;
-    --dm-progress-bar: #d4c06a;
+    --dm-warning: #d4a843;
+    --dm-warning-hover: #dbb658;
+    --dm-warning-active: #e2c46d;
+    --dm-warning-light: #faf6ec;
+    --dm-warning-dark: #b08a30;
+    --dm-warning-text: #8a6b20;
 
-    /* Danger - Bright red (standard dark mode) */
-    --dm-danger: #ef4444; /* red-500 */
-    --dm-danger-hover: #f87171; /* red-400 */
-    --dm-danger-active: #fca5a5; /* red-300 */
-    --dm-danger-light: rgba(248, 113, 113, 0.15);
-    --dm-danger-dark: #dc2626; /* red-600 */
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #e8e2c8; /* Pale straw */
+    --dm-accent-2: #d4cba8; /* Soft wheat */
+    --dm-accent-3: #c9b458; /* Muted gold */
+    --dm-accent-4: #a89740; /* Dark honey */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(201, 180, 88, 0.15);
+    --dm-tab-active-border: #c9b458;
+    --dm-tab-active-text: #8a7530;
+    --dm-progress-bar: #c9b458;
+
+    /* Danger - Standard red */
+    --dm-danger: #dc3545;
+    --dm-danger-hover: #bb2d3b;
+    --dm-danger-active: #b02a37;
+    --dm-danger-light: #f8d7da;
+    --dm-danger-dark: #842029;
 
     /* ================================================
        INTERACTIVE STATES
@@ -2314,65 +2312,36 @@
     --dm-border-dark: #ced4da;
 
 
-    /* ================================================
-       PRIMARY COLOURS - Silver Gray
-       ================================================ */
-    --dm-primary: #708090;
-    --dm-primary-hover: #84929f;
-    --dm-primary-active: #98a4ae;
-    --dm-primary-light: #f0f2f4;
-    --dm-primary-dark: #4a5568;
+    --dm-primary: #a0aec0;
+    --dm-primary-hover: #b0bac9;
+    --dm-primary-active: #c0c6d2;
+    --dm-primary-light: rgba(160, 174, 192, 0.15);
+    --dm-primary-dark: #718096;
 
-    /* Focus ring with silver colour */
-    --dm-focus-ring: 0 0 0 3px rgba(112, 128, 144, 0.3);
-    --dm-border-focus: #708090;
+    --dm-secondary: #cbd5e0;
+    --dm-secondary-hover: #d5dce6;
+    --dm-secondary-active: #dfe3ec;
+    --dm-secondary-light: rgba(203, 213, 224, 0.15);
+    --dm-secondary-dark: #a0aec0;
 
-    /* ================================================
-       SECONDARY COLOURS - Cool Gray
-       ================================================ */
-    --dm-secondary: #a0aec0;
-    --dm-secondary-hover: #b0bac9;
-    --dm-secondary-active: #c0c6d2;
-    --dm-secondary-light: #f7f8fa;
-    --dm-secondary-dark: #718096;
+    --dm-success: #9ae6b4;
+    --dm-success-light: rgba(154, 230, 180, 0.15);
 
-    /* ================================================
-       STATUS COLOURS - Neutral-tinted
-       ================================================ */
-    --dm-success: #68d391;
-    --dm-success-hover: #7cdaa0;
-    --dm-success-active: #90e1af;
-    --dm-success-light: #f0faf4;
-    --dm-success-dark: #48bb78;
+    --dm-info: #90cdf4;
+    --dm-info-light: rgba(144, 205, 244, 0.15);
 
-    --dm-info: #63b3ed;
-    --dm-info-hover: #79bff0;
-    --dm-info-active: #8fcbf3;
-    --dm-info-light: #ebf8ff;
-    --dm-info-dark: #4299e1;
+    --dm-focus-ring: 0 0 0 3px rgba(160, 174, 192, 0.35);
+    --dm-selected-bg: rgba(160, 174, 192, 0.2);
+    --dm-tab-active-border: #a0aec0;
+    --dm-tab-active-text: #a0aec0;
+    --dm-progress-bar: #a0aec0;
 
-    /* ================================================
-       ACCENT COLOURS
-       ================================================ */
-    --dm-accent-1: #e2e8f0; /* Light slate */
-    --dm-accent-2: #cbd5e0; /* Cool gray */
-    --dm-accent-3: #a0aec0; /* Gray blue */
-    --dm-accent-4: #4a5568; /* Dark slate */
-
-    /* ================================================
-       SELECTION
-       ================================================ */
-    --dm-selected-bg: rgba(112, 128, 144, 0.12);
-    --dm-tab-active-border: #708090;
-    --dm-tab-active-text: #4a5568;
-    --dm-progress-bar: #708090;
-
-    /* Danger - Standard red */
-    --dm-danger: #dc3545;
-    --dm-danger-hover: #bb2d3b;
-    --dm-danger-active: #b02a37;
-    --dm-danger-light: #f8d7da;
-    --dm-danger-dark: #842029;
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
 
     /* ================================================
        INTERACTIVE STATES
@@ -2493,7 +2462,6 @@
     --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
 
 }
-
 /**
  * Domma Silver Dark Theme
  * Light gray/silver colour palette
@@ -2527,36 +2495,65 @@
     --dm-border-dark: #475569; /* slate-600 */
 
 
-    --dm-primary: #a0aec0;
-    --dm-primary-hover: #b0bac9;
-    --dm-primary-active: #c0c6d2;
-    --dm-primary-light: rgba(160, 174, 192, 0.15);
-    --dm-primary-dark: #718096;
+    /* ================================================
+       PRIMARY COLOURS - Silver Gray
+       ================================================ */
+    --dm-primary: #708090;
+    --dm-primary-hover: #84929f;
+    --dm-primary-active: #98a4ae;
+    --dm-primary-light: #f0f2f4;
+    --dm-primary-dark: #4a5568;
 
-    --dm-secondary: #cbd5e0;
-    --dm-secondary-hover: #d5dce6;
-    --dm-secondary-active: #dfe3ec;
-    --dm-secondary-light: rgba(203, 213, 224, 0.15);
-    --dm-secondary-dark: #a0aec0;
+    /* Focus ring with silver colour */
+    --dm-focus-ring: 0 0 0 3px rgba(112, 128, 144, 0.3);
+    --dm-border-focus: #708090;
 
-    --dm-success: #9ae6b4;
-    --dm-success-light: rgba(154, 230, 180, 0.15);
+    /* ================================================
+       SECONDARY COLOURS - Cool Gray
+       ================================================ */
+    --dm-secondary: #a0aec0;
+    --dm-secondary-hover: #b0bac9;
+    --dm-secondary-active: #c0c6d2;
+    --dm-secondary-light: #f7f8fa;
+    --dm-secondary-dark: #718096;
 
-    --dm-info: #90cdf4;
-    --dm-info-light: rgba(144, 205, 244, 0.15);
+    /* ================================================
+       STATUS COLOURS - Neutral-tinted
+       ================================================ */
+    --dm-success: #68d391;
+    --dm-success-hover: #7cdaa0;
+    --dm-success-active: #90e1af;
+    --dm-success-light: #f0faf4;
+    --dm-success-dark: #48bb78;
 
-    --dm-focus-ring: 0 0 0 3px rgba(160, 174, 192, 0.35);
-    --dm-selected-bg: rgba(160, 174, 192, 0.2);
-    --dm-tab-active-border: #a0aec0;
-    --dm-tab-active-text: #a0aec0;
-    --dm-progress-bar: #a0aec0;
+    --dm-info: #63b3ed;
+    --dm-info-hover: #79bff0;
+    --dm-info-active: #8fcbf3;
+    --dm-info-light: #ebf8ff;
+    --dm-info-dark: #4299e1;
 
-    /* Danger - Bright red (standard dark mode) */
-    --dm-danger: #ef4444; /* red-500 */
-    --dm-danger-hover: #f87171; /* red-400 */
-    --dm-danger-active: #fca5a5; /* red-300 */
-    --dm-danger-light: rgba(248, 113, 113, 0.15);
-    --dm-danger-dark: #dc2626; /* red-600 */
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #e2e8f0; /* Light slate */
+    --dm-accent-2: #cbd5e0; /* Cool gray */
+    --dm-accent-3: #a0aec0; /* Gray blue */
+    --dm-accent-4: #4a5568; /* Dark slate */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(112, 128, 144, 0.12);
+    --dm-tab-active-border: #708090;
+    --dm-tab-active-text: #4a5568;
+    --dm-progress-bar: #708090;
+
+    /* Danger - Standard red */
+    --dm-danger: #dc3545;
+    --dm-danger-hover: #bb2d3b;
+    --dm-danger-active: #b02a37;
+    --dm-danger-light: #f8d7da;
+    --dm-danger-dark: #842029;
 
     /* ================================================
        INTERACTIVE STATES
@@ -2702,65 +2699,36 @@
     --dm-border-dark: #ced4da;
 
 
-    /* ================================================
-       PRIMARY COLOURS - Charcoal Gray
-       ================================================ */
-    --dm-primary: #36454f;
-    --dm-primary-hover: #4a5d69;
-    --dm-primary-active: #5e7583;
-    --dm-primary-light: #e8ebed;
-    --dm-primary-dark: #1c2428;
+    --dm-primary: #78909c;
+    --dm-primary-hover: #8a9fa9;
+    --dm-primary-active: #9caeb6;
+    --dm-primary-light: rgba(120, 144, 156, 0.15);
+    --dm-primary-dark: #607d8b;
 
-    /* Focus ring with charcoal colour */
-    --dm-focus-ring: 0 0 0 3px rgba(54, 69, 79, 0.3);
-    --dm-border-focus: #36454f;
+    --dm-secondary: #90a4ae;
+    --dm-secondary-hover: #a1b3bb;
+    --dm-secondary-active: #b2c2c8;
+    --dm-secondary-light: rgba(144, 164, 174, 0.15);
+    --dm-secondary-dark: #78909c;
 
-    /* ================================================
-       SECONDARY COLOURS - Slate
-       ================================================ */
-    --dm-secondary: #5f6f7a;
-    --dm-secondary-hover: #738290;
-    --dm-secondary-active: #8795a0;
-    --dm-secondary-light: #f0f2f3;
-    --dm-secondary-dark: #3d4a52;
+    --dm-success: #81c784;
+    --dm-success-light: rgba(129, 199, 132, 0.15);
 
-    /* ================================================
-       STATUS COLOURS - Neutral-tinted
-       ================================================ */
-    --dm-success: #4caf50;
-    --dm-success-hover: #61b965;
-    --dm-success-active: #76c37a;
-    --dm-success-light: #e8f5e9;
-    --dm-success-dark: #388e3c;
+    --dm-info: #64b5f6;
+    --dm-info-light: rgba(100, 181, 246, 0.15);
 
-    --dm-info: #2196f3;
-    --dm-info-hover: #42a5f5;
-    --dm-info-active: #64b5f6;
-    --dm-info-light: #e3f2fd;
-    --dm-info-dark: #1976d2;
+    --dm-focus-ring: 0 0 0 3px rgba(120, 144, 156, 0.35);
+    --dm-selected-bg: rgba(120, 144, 156, 0.2);
+    --dm-tab-active-border: #78909c;
+    --dm-tab-active-text: #78909c;
+    --dm-progress-bar: #78909c;
 
-    /* ================================================
-       ACCENT COLOURS
-       ================================================ */
-    --dm-accent-1: #78909c; /* Blue gray */
-    --dm-accent-2: #607d8b; /* Gray blue */
-    --dm-accent-3: #455a64; /* Dark blue gray */
-    --dm-accent-4: #263238; /* Charcoal */
-
-    /* ================================================
-       SELECTION
-       ================================================ */
-    --dm-selected-bg: rgba(54, 69, 79, 0.12);
-    --dm-tab-active-border: #36454f;
-    --dm-tab-active-text: #1c2428;
-    --dm-progress-bar: #36454f;
-
-    /* Danger - Standard red */
-    --dm-danger: #dc3545;
-    --dm-danger-hover: #bb2d3b;
-    --dm-danger-active: #b02a37;
-    --dm-danger-light: #f8d7da;
-    --dm-danger-dark: #842029;
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
 
     /* ================================================
        INTERACTIVE STATES
@@ -2881,7 +2849,6 @@
     --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
 
 }
-
 /**
  * Domma Charcoal Dark Theme
  * Dark gray/charcoal colour palette
@@ -2915,36 +2882,65 @@
     --dm-border-dark: #475569; /* slate-600 */
 
 
-    --dm-primary: #78909c;
-    --dm-primary-hover: #8a9fa9;
-    --dm-primary-active: #9caeb6;
-    --dm-primary-light: rgba(120, 144, 156, 0.15);
-    --dm-primary-dark: #607d8b;
+    /* ================================================
+       PRIMARY COLOURS - Charcoal Gray
+       ================================================ */
+    --dm-primary: #36454f;
+    --dm-primary-hover: #4a5d69;
+    --dm-primary-active: #5e7583;
+    --dm-primary-light: #e8ebed;
+    --dm-primary-dark: #1c2428;
 
-    --dm-secondary: #90a4ae;
-    --dm-secondary-hover: #a1b3bb;
-    --dm-secondary-active: #b2c2c8;
-    --dm-secondary-light: rgba(144, 164, 174, 0.15);
-    --dm-secondary-dark: #78909c;
+    /* Focus ring with charcoal colour */
+    --dm-focus-ring: 0 0 0 3px rgba(54, 69, 79, 0.3);
+    --dm-border-focus: #36454f;
 
-    --dm-success: #81c784;
-    --dm-success-light: rgba(129, 199, 132, 0.15);
+    /* ================================================
+       SECONDARY COLOURS - Slate
+       ================================================ */
+    --dm-secondary: #5f6f7a;
+    --dm-secondary-hover: #738290;
+    --dm-secondary-active: #8795a0;
+    --dm-secondary-light: #f0f2f3;
+    --dm-secondary-dark: #3d4a52;
 
-    --dm-info: #64b5f6;
-    --dm-info-light: rgba(100, 181, 246, 0.15);
+    /* ================================================
+       STATUS COLOURS - Neutral-tinted
+       ================================================ */
+    --dm-success: #4caf50;
+    --dm-success-hover: #61b965;
+    --dm-success-active: #76c37a;
+    --dm-success-light: #e8f5e9;
+    --dm-success-dark: #388e3c;
 
-    --dm-focus-ring: 0 0 0 3px rgba(120, 144, 156, 0.35);
-    --dm-selected-bg: rgba(120, 144, 156, 0.2);
-    --dm-tab-active-border: #78909c;
-    --dm-tab-active-text: #78909c;
-    --dm-progress-bar: #78909c;
+    --dm-info: #2196f3;
+    --dm-info-hover: #42a5f5;
+    --dm-info-active: #64b5f6;
+    --dm-info-light: #e3f2fd;
+    --dm-info-dark: #1976d2;
 
-    /* Danger - Bright red (standard dark mode) */
-    --dm-danger: #ef4444; /* red-500 */
-    --dm-danger-hover: #f87171; /* red-400 */
-    --dm-danger-active: #fca5a5; /* red-300 */
-    --dm-danger-light: rgba(248, 113, 113, 0.15);
-    --dm-danger-dark: #dc2626; /* red-600 */
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #78909c; /* Blue gray */
+    --dm-accent-2: #607d8b; /* Gray blue */
+    --dm-accent-3: #455a64; /* Dark blue gray */
+    --dm-accent-4: #263238; /* Charcoal */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(54, 69, 79, 0.12);
+    --dm-tab-active-border: #36454f;
+    --dm-tab-active-text: #1c2428;
+    --dm-progress-bar: #36454f;
+
+    /* Danger - Standard red */
+    --dm-danger: #dc3545;
+    --dm-danger-hover: #bb2d3b;
+    --dm-danger-active: #b02a37;
+    --dm-danger-light: #f8d7da;
+    --dm-danger-dark: #842029;
 
     /* ================================================
        INTERACTIVE STATES
@@ -3090,78 +3086,49 @@
     --dm-border-dark: #ced4da;
 
 
-    /* ================================================
-       PRIMARY COLOURS - Christmas Red
-       ================================================ */
-    --dm-primary: #c41e3a;
-    --dm-primary-hover: #d42c48;
-    --dm-primary-active: #e43a56;
-    --dm-primary-light: #fce4e8;
-    --dm-primary-dark: #9a1830;
+    --dm-primary: #ef5566;
+    --dm-primary-hover: #f16d7a;
+    --dm-primary-active: #f3858e;
+    --dm-primary-light: rgba(239, 85, 102, 0.15);
+    --dm-primary-dark: #e43a56;
 
-    /* Focus ring with festive red */
-    --dm-focus-ring: 0 0 0 3px rgba(196, 30, 58, 0.3);
-    --dm-border-focus: #c41e3a;
+    --dm-secondary: #5cb85c;
+    --dm-secondary-hover: #6dc46d;
+    --dm-secondary-active: #7ed07e;
+    --dm-secondary-light: rgba(92, 184, 92, 0.15);
+    --dm-secondary-dark: #4cae4c;
 
-    /* ================================================
-       SECONDARY COLOURS - Christmas Green
-       ================================================ */
-    --dm-secondary: #165b33;
-    --dm-secondary-hover: #1e7a45;
-    --dm-secondary-active: #269957;
-    --dm-secondary-light: #e3f2e9;
-    --dm-secondary-dark: #0f3d23;
-
-    /* ================================================
-       STATUS COLOURS - Festive tinted
-       ================================================ */
-    --dm-success: #228b22;
-    --dm-success-hover: #2ea02e;
-    --dm-success-active: #3ab53a;
-    --dm-success-light: #e6f4e6;
-    --dm-success-dark: #1a6b1a;
+    --dm-success: #6dd66d;
+    --dm-success-light: rgba(109, 214, 109, 0.15);
 
     --dm-info: #a8d5e5;
-    --dm-info-hover: #b8dde9;
-    --dm-info-active: #c8e5ed;
-    --dm-info-light: #f0f9fc;
-    --dm-info-dark: #6bb8d1;
+    --dm-info-light: rgba(168, 213, 229, 0.15);
 
-    --dm-warning: #d4af37;
-    --dm-warning-hover: #dabb4f;
-    --dm-warning-active: #e0c767;
-    --dm-warning-light: #faf6e7;
-    --dm-warning-dark: #b8962d;
-    --dm-warning-text: #8b7021;
+    --dm-warning: #f0d264;
+    --dm-warning-light: rgba(240, 210, 100, 0.15);
+    --dm-warning-text: #f0d264;
 
-    --dm-danger: #bb2528;
-    --dm-danger-hover: #cc3336;
-    --dm-danger-active: #dd4144;
-    --dm-danger-light: #fce8e8;
-    --dm-danger-dark: #991e20;
+    --dm-danger: #ef6b6b;
+    --dm-danger-light: rgba(239, 107, 107, 0.15);
 
-    /* ================================================
-       ACCENT COLOURS
-       ================================================ */
-    --dm-accent-1: #d4af37; /* Gold */
-    --dm-accent-2: #bb2528; /* Holly Berry */
-    --dm-accent-3: #228b22; /* Pine Green */
-    --dm-accent-4: #f5f5f5; /* Snow White */
+    /* Gold accents pop nicely on dark */
+    --dm-accent-1: #f0d264;
+    --dm-accent-2: #ef6b6b;
+    --dm-accent-3: #6dd66d;
+    --dm-accent-4: #e0e0e0;
 
-    /* ================================================
-       SELECTION
-       ================================================ */
-    --dm-selected-bg: rgba(196, 30, 58, 0.12);
-    --dm-tab-active-border: #c41e3a;
-    --dm-tab-active-text: #c41e3a;
-    --dm-progress-bar: #c41e3a;
+    --dm-focus-ring: 0 0 0 3px rgba(239, 85, 102, 0.35);
+    --dm-selected-bg: rgba(239, 85, 102, 0.2);
+    --dm-tab-active-border: #ef5566;
+    --dm-tab-active-text: #ef5566;
+    --dm-progress-bar: #ef5566;
 
-    /* Danger - Standard red */
-    --dm-danger: #dc3545;
-    --dm-danger-hover: #bb2d3b;
-    --dm-danger-active: #b02a37;
-    --dm-danger-light: #f8d7da;
-    --dm-danger-dark: #842029;
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
 
     /* ================================================
        INTERACTIVE STATES
@@ -3282,7 +3249,6 @@
     --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
 
 }
-
 /**
  * Domma Christmas Dark Theme
  * Traditional festive colour palette: red, green, gold
@@ -3316,49 +3282,78 @@
     --dm-border-dark: #475569; /* slate-600 */
 
 
-    --dm-primary: #ef5566;
-    --dm-primary-hover: #f16d7a;
-    --dm-primary-active: #f3858e;
-    --dm-primary-light: rgba(239, 85, 102, 0.15);
-    --dm-primary-dark: #e43a56;
+    /* ================================================
+       PRIMARY COLOURS - Christmas Red
+       ================================================ */
+    --dm-primary: #c41e3a;
+    --dm-primary-hover: #d42c48;
+    --dm-primary-active: #e43a56;
+    --dm-primary-light: #fce4e8;
+    --dm-primary-dark: #9a1830;
 
-    --dm-secondary: #5cb85c;
-    --dm-secondary-hover: #6dc46d;
-    --dm-secondary-active: #7ed07e;
-    --dm-secondary-light: rgba(92, 184, 92, 0.15);
-    --dm-secondary-dark: #4cae4c;
+    /* Focus ring with festive red */
+    --dm-focus-ring: 0 0 0 3px rgba(196, 30, 58, 0.3);
+    --dm-border-focus: #c41e3a;
 
-    --dm-success: #6dd66d;
-    --dm-success-light: rgba(109, 214, 109, 0.15);
+    /* ================================================
+       SECONDARY COLOURS - Christmas Green
+       ================================================ */
+    --dm-secondary: #165b33;
+    --dm-secondary-hover: #1e7a45;
+    --dm-secondary-active: #269957;
+    --dm-secondary-light: #e3f2e9;
+    --dm-secondary-dark: #0f3d23;
+
+    /* ================================================
+       STATUS COLOURS - Festive tinted
+       ================================================ */
+    --dm-success: #228b22;
+    --dm-success-hover: #2ea02e;
+    --dm-success-active: #3ab53a;
+    --dm-success-light: #e6f4e6;
+    --dm-success-dark: #1a6b1a;
 
     --dm-info: #a8d5e5;
-    --dm-info-light: rgba(168, 213, 229, 0.15);
+    --dm-info-hover: #b8dde9;
+    --dm-info-active: #c8e5ed;
+    --dm-info-light: #f0f9fc;
+    --dm-info-dark: #6bb8d1;
 
-    --dm-warning: #f0d264;
-    --dm-warning-light: rgba(240, 210, 100, 0.15);
-    --dm-warning-text: #f0d264;
+    --dm-warning: #d4af37;
+    --dm-warning-hover: #dabb4f;
+    --dm-warning-active: #e0c767;
+    --dm-warning-light: #faf6e7;
+    --dm-warning-dark: #b8962d;
+    --dm-warning-text: #8b7021;
 
-    --dm-danger: #ef6b6b;
-    --dm-danger-light: rgba(239, 107, 107, 0.15);
+    --dm-danger: #bb2528;
+    --dm-danger-hover: #cc3336;
+    --dm-danger-active: #dd4144;
+    --dm-danger-light: #fce8e8;
+    --dm-danger-dark: #991e20;
 
-    /* Gold accents pop nicely on dark */
-    --dm-accent-1: #f0d264;
-    --dm-accent-2: #ef6b6b;
-    --dm-accent-3: #6dd66d;
-    --dm-accent-4: #e0e0e0;
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #d4af37; /* Gold */
+    --dm-accent-2: #bb2528; /* Holly Berry */
+    --dm-accent-3: #228b22; /* Pine Green */
+    --dm-accent-4: #f5f5f5; /* Snow White */
 
-    --dm-focus-ring: 0 0 0 3px rgba(239, 85, 102, 0.35);
-    --dm-selected-bg: rgba(239, 85, 102, 0.2);
-    --dm-tab-active-border: #ef5566;
-    --dm-tab-active-text: #ef5566;
-    --dm-progress-bar: #ef5566;
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(196, 30, 58, 0.12);
+    --dm-tab-active-border: #c41e3a;
+    --dm-tab-active-text: #c41e3a;
+    --dm-progress-bar: #c41e3a;
 
-    /* Danger - Bright red (standard dark mode) */
-    --dm-danger: #ef4444; /* red-500 */
-    --dm-danger-hover: #f87171; /* red-400 */
-    --dm-danger-active: #fca5a5; /* red-300 */
-    --dm-danger-light: rgba(248, 113, 113, 0.15);
-    --dm-danger-dark: #dc2626; /* red-600 */
+    /* Danger - Standard red */
+    --dm-danger: #dc3545;
+    --dm-danger-hover: #bb2d3b;
+    --dm-danger-active: #b02a37;
+    --dm-danger-light: #f8d7da;
+    --dm-danger-dark: #842029;
 
     /* ================================================
        INTERACTIVE STATES
