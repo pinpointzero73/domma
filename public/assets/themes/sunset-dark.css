@@ -1,0 +1,203 @@
+/**
+ * Domma Sunset Dark Theme
+ * Soft, warm terracotta and peach tones
+ * Dark mode variant
+ */
+
+.dm-theme-sunset-dark {
+    color-scheme: dark;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Dark Mode Base
+       ================================================ */
+
+    /* Backgrounds - Dark slate/charcoal backgrounds */
+    --dm-background: #0f172a; /* slate-900 */
+    --dm-background-alt: #1e293b; /* slate-800 */
+    --dm-surface: #1e293b; /* slate-800 */
+    --dm-surface-raised: #334155; /* slate-700 */
+    --dm-surface-overlay: #334155; /* slate-700 */
+
+    /* Text - Light colors for readability on dark */
+    --dm-text: #e2e8f0; /* slate-200 */
+    --dm-text-secondary: #94a3b8; /* slate-400 */
+    --dm-text-muted: #64748b; /* slate-500 */
+    --dm-text-disabled: #475569; /* slate-600 */
+    --dm-text-inverse: #0f172a; /* slate-900 */
+
+    /* Borders - Subtle on dark backgrounds */
+    --dm-border: #334155; /* slate-700 */
+    --dm-border-light: #1e293b; /* slate-800 */
+    --dm-border-dark: #475569; /* slate-600 */
+
+    /* ================================================
+       SUNSET ACCENT COLORS - Warm tones for light mode
+       ================================================ */
+
+    /* PRIMARY COLOURS - Soft Terracotta */
+    --dm-primary: #c67b5c;
+    --dm-primary-hover: #d08c6f;
+    --dm-primary-active: #da9d82;
+    --dm-primary-light: #faf3f0;
+    --dm-primary-dark: #a66349;
+
+    /* Focus ring with soft sunset colour */
+    --dm-focus-ring: 0 0 0 3px rgba(198, 123, 92, 0.3);
+    --dm-border-focus: #c67b5c;
+
+    /* ================================================
+       SECONDARY COLOURS - Dusty Rose
+       ================================================ */
+    --dm-secondary: #a8808a;
+    --dm-secondary-hover: #b5919a;
+    --dm-secondary-active: #c2a2aa;
+    --dm-secondary-light: #f8f3f4;
+    --dm-secondary-dark: #8a6670;
+
+    /* ================================================
+       STATUS COLOURS - Muted tones
+       ================================================ */
+    --dm-success: #7a9e6d;
+    --dm-success-hover: #8bae7f;
+    --dm-success-active: #9cbe91;
+    --dm-success-light: #f2f6f0;
+    --dm-success-dark: #628256;
+
+    --dm-info: #8fa5b5;
+    --dm-info-hover: #9fb3c1;
+    --dm-info-active: #afc1cd;
+    --dm-info-light: #f3f6f8;
+    --dm-info-dark: #708694;
+
+    --dm-warning: #d4a85c;
+    --dm-warning-hover: #dbb670;
+    --dm-warning-active: #e2c484;
+    --dm-warning-light: #faf6ef;
+    --dm-warning-dark: #b58e45;
+    --dm-warning-text: #8a6b30;
+
+    --dm-danger: #c45c5c;
+    --dm-danger-hover: #cf6f6f;
+    --dm-danger-active: #da8282;
+    --dm-danger-light: #faf0f0;
+    --dm-danger-dark: #a54848;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #e8c9a8; /* Soft peach */
+    --dm-accent-2: #d4a88a; /* Warm sand */
+    --dm-accent-3: #c67b5c; /* Terracotta */
+    --dm-accent-4: #a66349; /* Clay */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(255, 255, 255, 0.07);
+    --dm-active-bg: rgba(255, 255, 255, 0.1);
+    --dm-disabled-opacity: 0.4;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-md);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #1e293b;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #0f172a;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #0f172a;
+
+    /* Progress */
+    --dm-progress-bg: #334155;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #1e293b;
+    --dm-scrollbar-thumb: #475569;
+    --dm-scrollbar-thumb-hover: #64748b;
+
+    /* Code */
+    --dm-code-bg: #0f172a;
+    --dm-code-text: #fca5a5;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Subtle for dark mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+}

@@ -1,0 +1,153 @@
+// src/elements.test.js
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
+import Domma from './index.js';
+
+describe('Domma.elements - UI Components', () => {
+  let testContainer;
+
+  beforeEach(() => {
+    testContainer = document.createElement('div');
+    testContainer.id = 'test-container-elements';
+    document.body.appendChild(testContainer);
+    vi.useFakeTimers(); // Use fake timers for all element tests
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    document.body.innerHTML = '';
+    testContainer = null;
+  });
+
+  describe('Modal', () => {
+    it('modal() should create an instance from a selector', () => {
+      testContainer.innerHTML = '<div id="test-modal" class="modal"><div class="modal-content">Test</div></div>';
+      const modal = Domma.elements.modal('#test-modal');
+      expect(modal).not.toBeNull();
+      expect(typeof modal.open).toBe('function');
+      expect(typeof modal.close).toBe('function');
+    });
+
+    it('modal() should open and close an existing modal', async () => {
+      testContainer.innerHTML = '<div id="test-modal-toggle" class="modal" style="display: none;"><div class="modal-content">Test</div></div>';
+      const modal = Domma.elements.modal('#test-modal-toggle');
+
+      modal.open();
+      await vi.advanceTimersByTimeAsync(10);
+      expect(modal.isOpen()).toBe(true);
+
+      modal.close();
+      await vi.advanceTimersByTimeAsync(500);
+      expect(modal.isOpen()).toBe(false);
+    });
+
+    it('createModal() should return a new modal instance', () => {
+      const modal = Domma.elements.createModal({title: 'Test Modal'});
+      expect(modal).not.toBeNull();
+      expect(typeof modal.open).toBe('function');
+      expect(modal._factoryCreated).toBe(true);
+      modal.remove();
+    });
+
+    it.skip('createModal() should handle custom buttons and onButtonClick callback', async () => {
+      const onButtonClickSpy = vi.fn();
+      const modal = Domma.elements.createModal({
+        title: 'Confirm',
+        buttons: [{id: 'ok', text: 'OK'}],
+        onButtonClick: onButtonClickSpy,
+        animation: false,
+      });
+
+      modal.open();
+      const okButton = document.querySelector('[data-button-id="ok"]');
+      expect(okButton).not.toBeNull();
+      okButton.click();
+
+      await vi.runAllTimersAsync();
+      expect(onButtonClickSpy).toHaveBeenCalledWith('ok', expect.any(Object));
+      modal.remove();
+    });
+
+    it.skip('showModal() should return a promise that resolves with button ID', async () => {
+      const promise = Domma.elements.showModal({
+        title: 'Test Promise',
+        buttons: [{id: 'ok', text: 'OK'}],
+        animation: false,
+      });
+
+      await vi.advanceTimersByTimeAsync(50);
+
+      const okBtn = document.querySelector('[data-button-id="ok"]');
+      expect(okBtn).not.toBeNull();
+      okBtn.click();
+
+      await expect(promise).resolves.toBe('ok');
+    });
+
+    it('modal() should handle different creation modes', () => {
+      const factoryModal = Domma.elements.modal({title: 'Factory'});
+      expect(factoryModal._factoryCreated).toBe(true);
+      factoryModal.remove();
+
+      testContainer.innerHTML = '<div id="selector-modal" class="modal"></div>';
+      const selectorModal = Domma.elements.modal('#selector-modal');
+      expect(selectorModal._factoryCreated).toBe(undefined);
+
+      const el = document.createElement('div');
+      const elementModal = Domma.elements.modal(el);
+      expect(elementModal._factoryCreated).toBe(undefined);
+    });
+  });
+
+  it('tabs() should create a tabs instance', () => {
+    testContainer.innerHTML = `
+      <div id="test-tabs">
+        <div class="tabs-nav"><button data-tab="tab1"></button></div>
+        <div class="tabs-content"><div data-panel="tab1"></div></div>
+      </div>
+    `;
+    const tabs = Domma.elements.tabs('#test-tabs');
+    expect(tabs).not.toBeNull();
+    expect(typeof tabs.show).toBe('function');
+  });
+
+  it('accordion() should create an accordion instance', () => {
+    testContainer.innerHTML = `
+      <div id="test-accordion">
+        <div class="accordion-item">
+          <div class="accordion-header"></div><div class="accordion-body"></div>
+        </div>
+      </div>
+    `;
+    const accordion = Domma.elements.accordion('#test-accordion');
+    expect(accordion).not.toBeNull();
+    expect(typeof accordion.open).toBe('function');
+  });
+
+  it('tooltip() should create a tooltip instance', () => {
+    testContainer.innerHTML = '<button id="test-tooltip-btn"></button>';
+    const tooltip = Domma.elements.tooltip('#test-tooltip-btn', {content: 'Tooltip'});
+    expect(tooltip).not.toBeNull();
+    expect(typeof tooltip.show).toBe('function');
+  });
+
+  it('card() should create a card instance', () => {
+    testContainer.innerHTML = '<div id="test-card"></div>';
+    const card = Domma.elements.card('#test-card');
+    expect(card).not.toBeNull();
+  });
+
+  it('buttonGroup() should create a button group instance', () => {
+    testContainer.innerHTML = '<div id="test-btn-group"></div>';
+    const group = Domma.elements.buttonGroup('#test-btn-group');
+    expect(group).not.toBeNull();
+    expect(typeof group.getValue).toBe('function');
+  });
+
+  it('backToTop() should create a backToTop instance', () => {
+    testContainer.innerHTML = '<button id="test-back-to-top"></button>';
+    const backToTop = Domma.elements.backToTop('#test-back-to-top');
+    expect(backToTop).not.toBeNull();
+    expect(typeof backToTop.scroll).toBe('function');
+    backToTop.destroy();
+  });
+});

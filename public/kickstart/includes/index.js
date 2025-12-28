@@ -143,7 +143,6 @@
 
     // Store complex objects
     S.set('user-preferences', {
-        theme: 'light',
         notifications: true,
         language: 'en'
     });
@@ -274,61 +273,69 @@
     }
 
     /**
-     * Theme toggle functionality (optional enhancement)
-     * Shows how to work with CSS classes and storage
+     * Theme selection functionality
+     * Shows how to work with Domma's ThemeEngine API
      *
-     * Uncomment the button code below to enable theme switching
+     * NOTE: With Domma v0.5.0a+, themes are now unified (e.g., 'ocean-dark', 'forest-light')
+     * The ThemeEngine handles storage and CSS class management automatically
      */
-    function toggleTheme() {
-        const body = $('body');
-
-        if (body.hasClass('dm-theme-light')) {
-            // Switch to dark theme
-            body.removeClass('dm-theme-light').addClass('dm-theme-dark');
-            S.set('theme', 'dark');
-            console.log('[Kickstart] Switched to dark theme');
+    function setTheme(themeName) {
+        if (typeof Domma !== 'undefined' && Domma.theme) {
+            Domma.theme.set(themeName);
+            console.log('[Kickstart] Theme changed to:', themeName);
         } else {
-            // Switch to light theme
-            body.removeClass('dm-theme-dark').addClass('dm-theme-light');
-            S.set('theme', 'light');
-            console.log('[Kickstart] Switched to light theme');
+            console.warn('[Kickstart] ThemeEngine not available');
         }
     }
 
     /**
-     * Create a floating theme toggle button
-     * Uncomment this code to add a theme switcher to your page
+     * Create a floating theme dropdown
+     * Uncomment this code to add a theme selector to your page
      */
-    function createThemeToggle() {
-        $('<button>')
-            .text('Toggle Theme')
-            .addClass('btn btn-outline')
+    function createThemeSelector() {
+        const dropdown = $('<select>')
+          .addClass('form-select')
             .css({
                 position: 'fixed',
                 top: '1rem',
                 right: '1rem',
                 zIndex: 1000,
-                boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                maxWidth: '200px'
             })
-            .on('click', toggleTheme)
+          .html(`
+                <optgroup label="Charcoal">
+                    <option value="charcoal-light">Charcoal Light</option>
+                    <option value="charcoal-dark" selected>Charcoal Dark</option>
+                </optgroup>
+                <optgroup label="Ocean">
+                    <option value="ocean-light">Ocean Light</option>
+                    <option value="ocean-dark">Ocean Dark</option>
+                </optgroup>
+                <optgroup label="Forest">
+                    <option value="forest-light">Forest Light</option>
+                    <option value="forest-dark">Forest Dark</option>
+                </optgroup>
+            `)
+          .on('change', function () {
+              setTheme($(this).val());
+          })
             .appendTo('body');
 
-        console.log('[Kickstart] Theme toggle button added');
+        console.log('[Kickstart] Theme selector added');
     }
 
     /**
      * Load saved theme preference
-     * Applies the user's preferred theme on page load
+     * The ThemeEngine automatically loads saved themes, but you can
+     * initialise it manually if needed
      */
     function loadThemePreference() {
-        const savedTheme = S.get('theme');
-
-        if (savedTheme === 'dark') {
-            $('body')
-                .removeClass('dm-theme-light')
-                .addClass('dm-theme-dark');
-
-            console.log('[Kickstart] Loaded dark theme preference');
+        if (typeof Domma !== 'undefined' && Domma.theme) {
+            // ThemeEngine auto-loads from localStorage during init
+            // This is just for demonstration - usually not needed
+            const currentTheme = Domma.theme.get();
+            console.log('[Kickstart] Current theme:', currentTheme);
         }
     }
 
@@ -354,8 +361,8 @@
         // Load saved theme preference
         loadThemePreference();
 
-        // Optional: Uncomment to add theme toggle button
-        // createThemeToggle();
+        // Optional: Uncomment to add theme selector dropdown
+        // createThemeSelector();
 
         console.log('[Kickstart] Initialization complete!');
         console.log('\n═══════════════════════════════════════');

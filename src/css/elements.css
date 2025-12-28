@@ -622,7 +622,7 @@
     background-size: 16px;
 }
 
-.dm-theme-dark .form-select {
+[class*="-dark"].form-select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
 }
 
@@ -668,9 +668,9 @@ textarea:not([class]):disabled {
     opacity: 0.6;
 }
 
-.dm-theme-dark input:not([type="checkbox"]):not([type="radio"]):not([class]):disabled,
-.dm-theme-dark select:not([class]):disabled,
-.dm-theme-dark textarea:not([class]):disabled {
+[class*="-dark"] input:not([type="checkbox"]):not([type="radio"]):not([class]):disabled,
+[class*="-dark"] select:not([class]):disabled,
+[class*="-dark"] textarea:not([class]):disabled {
     background-color: var(--dm-gray-800);
 }
 
@@ -687,7 +687,7 @@ select:not([class]) {
     background-size: 16px;
 }
 
-.dm-theme-dark select:not([class]) {
+[class*="-dark"] select:not([class]) {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
 }
 
@@ -721,9 +721,9 @@ textarea:not([class])::placeholder {
     opacity: 0.7;
 }
 
-.dm-theme-dark .form-input:disabled,
-.dm-theme-dark .form-select:disabled,
-.dm-theme-dark .form-textarea:disabled {
+[class*="-dark"].form-input:disabled,
+[class*="-dark"].form-select:disabled,
+[class*="-dark"].form-textarea:disabled {
     background-color: var(--dm-gray-800);
 }
 
@@ -1046,13 +1046,13 @@ textarea:not([class])::placeholder {
 }
 
 /* Dark theme support */
-.dm-theme-dark .input-group-text {
+[class*="-dark"].input-group-text {
     color: var(--dm-gray-300);
     background-color: var(--dm-gray-800);
     border-color: var(--dm-gray-600);
 }
 
-.dm-theme-dark .input-group-icon > .input-group-addon {
+[class*="-dark"].input-group-icon > .input-group-addon {
     color: var(--dm-gray-400);
 }
 
@@ -1851,20 +1851,20 @@ code {
 }
 
 /* Dark theme autocomplete */
-.dm-theme-dark .dm-autocomplete-dropdown {
+[class*="-dark"].dm-autocomplete-dropdown {
     background: var(--dm-gray-800);
     border-color: var(--dm-gray-700);
 }
 
-.dm-theme-dark .dm-autocomplete-item {
+[class*="-dark"].dm-autocomplete-item {
     color: var(--dm-gray-300);
 }
 
-.dm-theme-dark .dm-autocomplete-item:hover {
+[class*="-dark"].dm-autocomplete-item:hover {
     background-color: var(--dm-gray-700);
 }
 
-.dm-theme-dark .dm-autocomplete-item.active {
+[class*="-dark"].dm-autocomplete-item.active {
     background-color: var(--dm-primary);
     color: var(--dm-white);
 }
@@ -2020,25 +2020,25 @@ code {
 }
 
 /* Dark theme pillbox */
-.dm-theme-dark .dm-pillbox-container {
+[class*="-dark"].dm-pillbox-container {
     background: var(--dm-gray-800);
     border-color: var(--dm-gray-700);
 }
 
-.dm-theme-dark .dm-pillbox-input {
+[class*="-dark"].dm-pillbox-input {
     color: var(--dm-gray-300);
 }
 
-.dm-theme-dark .dm-pillbox-dropdown {
+[class*="-dark"].dm-pillbox-dropdown {
     background: var(--dm-gray-800);
     border-color: var(--dm-gray-700);
 }
 
-.dm-theme-dark .dm-pillbox-option {
+[class*="-dark"].dm-pillbox-option {
     color: var(--dm-gray-300);
 }
 
-.dm-theme-dark .dm-pillbox-option:hover {
+[class*="-dark"].dm-pillbox-option:hover {
     background-color: var(--dm-gray-700);
 }
 
@@ -2988,7 +2988,7 @@ code {
     border-radius: 0 0 var(--dm-radius-lg) var(--dm-radius-lg);
 }
 
-.dm-theme-dark .dm-dialog-footer {
+[class*="-dark"].dm-dialog-footer {
     background: var(--dm-gray-800);
     border-top-color: var(--dm-gray-700);
 }
@@ -3215,85 +3215,85 @@ code {
 }
 
 /* Light theme overrides */
-.dm-theme-light .code-block {
+[class*="-light"].code-block {
     background-color: var(--dm-gray-100);
     color: var(--dm-gray-900);
     border-color: var(--dm-border);
 }
 
-.dm-theme-light .code-block-copy {
+[class*="-light"].code-block-copy {
     background: var(--dm-gray-100);
     /*background: rgba(1, 1, 1, 0.125);*/
     border-color: var(--dm-border);
     color: var(--dm-gray-700);
 }
 
-.dm-theme-light .code-block-copy:hover {
+[class*="-light"].code-block-copy:hover {
     background: rgba(0, 0, 0, 0.1);
     color: var(--dm-gray-900);
 }
 
-.dm-theme-light .syntax-keyword {
+[class*="-light"].syntax-keyword {
     color: #0000ff;
 }
 
-.dm-theme-light .syntax-string {
+[class*="-light"].syntax-string {
     color: #a31515;
 }
 
-.dm-theme-light .syntax-comment {
+[class*="-light"].syntax-comment {
     color: #008000;
 }
 
-.dm-theme-light .syntax-number {
+[class*="-light"].syntax-number {
     color: #098658;
 }
 
-.dm-theme-light .syntax-function {
+[class*="-light"].syntax-function {
     color: #795e26;
 }
 
-.dm-theme-light .syntax-class {
+[class*="-light"].syntax-class {
     color: #267f99;
 }
 
-.dm-theme-light .syntax-tag {
+[class*="-light"].syntax-tag {
     color: #800000;
 }
 
-.dm-theme-light .syntax-attr-name {
+[class*="-light"].syntax-attr-name {
     color: #e50000;
 }
 
-.dm-theme-light .syntax-attr-value {
+[class*="-light"].syntax-attr-value {
     color: #0000ff;
 }
 
-.dm-theme-light .syntax-selector {
+[class*="-light"].syntax-selector {
     color: #800000;
 }
 
-.dm-theme-light .syntax-property {
+[class*="-light"].syntax-property {
     color: #e50000;
 }
 
-.dm-theme-light .syntax-value {
+[class*="-light"].syntax-value {
     color: #0451a5;
 }
 
-.dm-theme-light .syntax-operator {
+[class*="-light"].syntax-operator {
     color: #000000;
 }
 
-.dm-theme-light .syntax-punctuation {
+[class*="-light"].syntax-punctuation {
     color: #000000;
 }
 
-.dm-theme-light .syntax-boolean {
+[class*="-light"].syntax-boolean {
     color: #0000ff;
 }
 
-.dm-theme-light .syntax-regex {
+[class*="-light"].syntax-regex {
     color: #811f3f;
 }
 
@@ -3312,7 +3312,7 @@ code {
     z-index: 10;
 }
 
-.dm-theme-dark .syntax-language-badge {
+[class*="-dark"].syntax-language-badge {
     background: rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.8);
 }

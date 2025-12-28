@@ -27,7 +27,6 @@
       "enabled": false
     },
     "theme": {
-      "toggle": true,
       "variantSelector": true,
       "position": "fixed-right"
     },
@@ -183,7 +182,6 @@
       "enabled": false
     },
     "theme": {
-      "toggle": true,
       "variantSelector": true,
       "position": "fixed-right"
     },
@@ -201,7 +199,6 @@
       "enabled": false
     },
     "theme": {
-      "toggle": false,
       "variantSelector": false
     },
     "features": []

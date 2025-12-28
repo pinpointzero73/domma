@@ -31,10 +31,9 @@ Domma.setup = (config) => {
     // noStyles: true disables all Domma theming (for BYOS - Bring Your Own Styles)
     if (config.noStyles) {
         theme.init({disabled: true});
-    } else if (config.theme || config.themeVariant || config.autoDetectTheme) {
+    } else if (config.theme || config.autoDetectTheme) {
         theme.init({
-            theme: config.theme,
-            variant: config.themeVariant,
+            theme: config.theme, // Now expects full theme name like 'ocean-dark'
             autoDetect: config.autoDetectTheme,
             persist: config.persistTheme !== false
         });

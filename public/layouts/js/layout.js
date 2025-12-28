@@ -119,51 +119,6 @@ import {SidebarModule} from './modules/sidebar.js';
     function injectStyles() {
         const styles = `
       <style id="layout-styles">
-        /* Theme toggle */
-        .theme-toggle {
-          position: fixed;
-          top: 50vh;
-          transform: translateY(-50%);
-          right: 1rem;
-          padding: 0.5rem;
-          background: var(--dm-surface, #fff);
-          border: 1px solid var(--dm-border, #dee2e6);
-          border-radius: 9999px;
-          cursor: pointer;
-          z-index: 1000;
-          width: 40px;
-          height: 40px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: background 0.2s ease, transform 0.2s ease;
-        }
-        .theme-toggle:hover {
-          background: var(--dm-hover-bg, rgba(0,0,0,0.04));
-        }
-        .theme-toggle svg {
-          color: var(--dm-text, #212529);
-        }
-        .theme-toggle::after {
-          content: attr(data-tooltip);
-          position: absolute;
-          right: 50px;
-          top: 50%;
-          transform: translateY(-50%);
-          background: var(--dm-gray-800, #343a40);
-          color: var(--dm-white, #fff);
-          padding: 0.35rem 0.6rem;
-          border-radius: 4px;
-          font-size: 0.75rem;
-          white-space: nowrap;
-          opacity: 0;
-          pointer-events: none;
-          transition: opacity 0.15s ease;
-        }
-        .theme-toggle:hover::after {
-          opacity: 1;
-        }
-
         /* Snow toggle disc */
         .snow-toggle-container {
           position: fixed;
@@ -300,9 +255,14 @@ import {SidebarModule} from './modules/sidebar.js';
           position: absolute;
           top: 48px;
           right: 0;
-          display: flex;
-          flex-direction: column;
+          display: grid;
+          grid-template-columns: repeat(2, 40px);
           gap: 0.5rem;
+          padding: 0.5rem;
+          background: var(--dm-surface, #fff);
+          border: 1px solid var(--dm-border, #dee2e6);
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
           opacity: 0;
           visibility: hidden;
           transform: translateY(-10px);
@@ -332,15 +292,30 @@ import {SidebarModule} from './modules/sidebar.js';
           border-color: var(--dm-primary, #6495ED);
           box-shadow: 0 0 0 2px var(--dm-primary, #6495ED);
         }
-        .variant-dot-default { background: var(--dm-gray-400, #adb5bd); }
-        .variant-dot-ocean { background: linear-gradient(135deg, #0077b6, #48cae4); }
-        .variant-dot-forest { background: linear-gradient(135deg, #2d6a4f, #74c69d); }
-        .variant-dot-sunset { background: linear-gradient(135deg, #c67b5c, #da9d82); }
-        .variant-dot-royal { background: linear-gradient(135deg, #4169e1, #6495ed); }
-        .variant-dot-lemon { background: linear-gradient(135deg, #c9b458, #d4c06a); }
-        .variant-dot-silver { background: linear-gradient(135deg, #708090, #a0aec0); }
-        .variant-dot-charcoal { background: linear-gradient(135deg, #36454f, #607d8b); }
-        .variant-dot-christmas { background: linear-gradient(135deg, #c41e3a, #165b33); }
+        /* Ocean - CORRECTED: Dark swatch gets dark colors, Light swatch gets light colors */
+        .variant-dot-ocean-dark { background: linear-gradient(135deg, #023e8a, #0077b6); }
+        .variant-dot-ocean-light { background: linear-gradient(135deg, #48cae4, #90e0ef); }
+        /* Forest - CORRECTED */
+        .variant-dot-forest-dark { background: linear-gradient(135deg, #1b4332, #2d6a4f); }
+        .variant-dot-forest-light { background: linear-gradient(135deg, #52b788, #95d5b2); }
+        /* Sunset - CORRECTED */
+        .variant-dot-sunset-dark { background: linear-gradient(135deg, #8b4513, #a0522d); }
+        .variant-dot-sunset-light { background: linear-gradient(135deg, #f4a261, #ffc09f); }
+        /* Royal - CORRECTED */
+        .variant-dot-royal-dark { background: linear-gradient(135deg, #1e3a8a, #2b4c9e); }
+        .variant-dot-royal-light { background: linear-gradient(135deg, #6495ed, #a3b8f2); }
+        /* Lemon - CORRECTED */
+        .variant-dot-lemon-dark { background: linear-gradient(135deg, #854d0e, #a89c3a); }
+        .variant-dot-lemon-light { background: linear-gradient(135deg, #fef3c7, #fffbeb); }
+        /* Silver - CORRECTED */
+        .variant-dot-silver-dark { background: linear-gradient(135deg, #2d3748, #4a5568); }
+        .variant-dot-silver-light { background: linear-gradient(135deg, #e2e8f0, #f7fafc); }
+        /* Charcoal - CORRECTED */
+        .variant-dot-charcoal-dark { background: linear-gradient(135deg, #1a202c, #2d3748); }
+        .variant-dot-charcoal-light { background: linear-gradient(135deg, #a0aec0, #cbd5e0); }
+        /* Christmas - CORRECTED */
+        .variant-dot-christmas-dark { background: linear-gradient(135deg, #7f1d1d, #14532d); }
+        .variant-dot-christmas-light { background: linear-gradient(135deg, #ef4444, #86efac); }
         .variant-dot::after {
           content: attr(data-tooltip);
           position: absolute;
@@ -752,27 +727,11 @@ import {SidebarModule} from './modules/sidebar.js';
      */
     async function renderThemeControls(config) {
         try {
-            // Load and inject theme toggle if enabled
-            if (config.toggle) {
-                const toggleTemplate = await TemplateLoader.load('theme-toggle');
-                const toggleHtml = toggleTemplate({});
-                document.body.insertAdjacentHTML('afterbegin', toggleHtml);
-            }
-
             // Load and inject variant selector if enabled
             if (config.variantSelector) {
                 const variantTemplate = await TemplateLoader.load('variant-selector');
                 const variantHtml = variantTemplate({});
                 document.body.insertAdjacentHTML('afterbegin', variantHtml);
-            }
-
-            // Initialize theme toggle functionality
-            if (config.toggle) {
-                initThemeToggle();
-            }
-
-            // Initialize variant selector functionality
-            if (config.variantSelector) {
                 initVariantSelector();
             }
 
@@ -783,100 +742,39 @@ import {SidebarModule} from './modules/sidebar.js';
     }
 
     /**
-     * Initialize theme toggle
-     */
-    function initThemeToggle() {
-        const toggleBtn = document.getElementById('theme-toggle');
-        const body = document.body;
-
-        if (!toggleBtn) return;
-
-        // Load saved theme
-        const storage = typeof Domma !== 'undefined' && Domma.storage ? Domma.storage : null;
-        const savedTheme = storage ? storage.get('theme') : null;
-
-        if (savedTheme === 'dark') {
-            body.classList.remove('dm-theme-light');
-            body.classList.add('dm-theme-dark');
-        }
-
-        // Update icon visibility
-        function updateThemeIcon() {
-            const isDark = body.classList.contains('dm-theme-dark');
-            const sunIcon = document.getElementById('theme-icon-sun');
-            const moonIcon = document.getElementById('theme-icon-moon');
-
-            // Show icon for CURRENT state (moon in dark, sun in light)
-            if (moonIcon) moonIcon.style.display = isDark ? 'block' : 'none';
-            if (sunIcon) sunIcon.style.display = isDark ? 'none' : 'block';
-            toggleBtn.setAttribute('data-tooltip', isDark ? 'Switch to light mode' : 'Switch to dark mode');
-        }
-
-        // Toggle theme
-        function toggleTheme() {
-            const isDark = body.classList.contains('dm-theme-dark');
-            body.classList.remove('dm-theme-light', 'dm-theme-dark');
-            body.classList.add(isDark ? 'dm-theme-light' : 'dm-theme-dark');
-
-            // Save preference
-            if (storage) {
-                storage.set('theme', isDark ? 'light' : 'dark');
-            }
-
-            updateThemeIcon();
-        }
-
-        toggleBtn.addEventListener('click', toggleTheme);
-        updateThemeIcon();
-    }
-
-    /**
      * Initialize variant selector
      */
     function initVariantSelector() {
         const selector = document.getElementById('variant-selector');
         if (!selector) return;
 
-        const storage = typeof Domma !== 'undefined' && Domma.storage ? Domma.storage : null;
-        const body = document.body;
-
-        // Load saved variant
-        const savedVariant = storage ? storage.get('theme-variant') : null;
-        if (savedVariant) {
-            body.classList.add('dm-theme-' + savedVariant);
+        // Check if ThemeEngine is available
+        if (typeof Domma === 'undefined' || !Domma.theme) {
+            console.warn('[Domma Layout] ThemeEngine not available, variant selector disabled');
+            return;
         }
 
-        // Set variant
-        function setVariant(variant) {
-            // Remove existing variant classes
-            body.classList.remove('dm-theme-ocean', 'dm-theme-forest', 'dm-theme-sunset',
-                'dm-theme-royal', 'dm-theme-lemon', 'dm-theme-silver',
-                'dm-theme-charcoal', 'dm-theme-christmas');
+        const themeEngine = Domma.theme;
 
-            // Add new variant if specified
-            if (variant) {
-                body.classList.add('dm-theme-' + variant);
-            }
+        // Set theme
+        function setTheme(themeName) {
+            if (!themeName) return;
 
-            // Save to storage
-            if (storage) {
-                storage.set('theme-variant', variant || '');
-            }
+            // Use ThemeEngine to apply theme (handles storage, classes, and notifications)
+            themeEngine.set(themeName);
 
-            // Sync with Domma.theme if available
-            if (typeof Domma !== 'undefined' && Domma.theme) {
-                Domma.theme.setVariant(variant || null);
-            }
-
-            updateVariantActive();
+            // Update active state
+            updateActiveState();
         }
 
-        // Update active variant dot
-        function updateVariantActive() {
-            const current = storage ? storage.get('theme-variant') || '' : '';
+        // Update active theme dot
+        function updateActiveState() {
+            const currentTheme = themeEngine.get(); // Returns full theme like 'ocean-dark'
             const dots = selector.querySelectorAll('.variant-dot');
+
             dots.forEach(dot => {
-                dot.classList.toggle('active', dot.getAttribute('data-variant') === current);
+                const dotTheme = dot.getAttribute('data-theme');
+                dot.classList.toggle('active', dotTheme === currentTheme);
             });
         }
 
@@ -884,11 +782,17 @@ import {SidebarModule} from './modules/sidebar.js';
         const dots = selector.querySelectorAll('.variant-dot');
         dots.forEach(dot => {
             dot.addEventListener('click', () => {
-                setVariant(dot.getAttribute('data-variant'));
+                setTheme(dot.getAttribute('data-theme'));
             });
         });
 
-        updateVariantActive();
+        // Listen for theme changes from other sources (e.g., ThemeRoller)
+        themeEngine.onChange((oldTheme, newTheme) => {
+            updateActiveState();
+        });
+
+        // Initial update
+        updateActiveState();
     }
 
     /**

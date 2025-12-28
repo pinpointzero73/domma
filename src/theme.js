@@ -1,16 +1,31 @@
 /**
- * Domma Theme Engine
- * Provides theme management with CSS class toggle and JavaScript API
+ * Domma Theme Engine v2.0 (v0.5.0a)
+ * Unified theme system - 16 independent themes
+ * Migrates from light/dark + variants to single theme names (e.g., 'ocean-dark', 'forest-light')
  */
 
 const STORAGE_KEY = 'domma-theme';
-const STORAGE_VARIANT_KEY = 'domma-theme-variant';
+const STORAGE_VARIANT_KEY = 'domma-theme-variant'; // Legacy key for migration
 const CLASS_PREFIX = 'dm-theme-';
+
+// List of all 16 available themes
+const AVAILABLE_THEMES = [
+    'ocean-light', 'ocean-dark',
+    'forest-light', 'forest-dark',
+    'sunset-light', 'sunset-dark',
+    'royal-light', 'royal-dark',
+    'lemon-light', 'lemon-dark',
+    'silver-light', 'silver-dark',
+    'charcoal-light', 'charcoal-dark',
+    'christmas-light', 'christmas-dark'
+];
+
+// Default theme
+const DEFAULT_THEME = 'charcoal-dark';
 
 class ThemeEngine {
     constructor() {
-        this._theme = 'light';
-        this._variant = null;
+        this._theme = DEFAULT_THEME; // Now stores full theme name like 'ocean-dark'
         this._listeners = [];
         this._target = null;
         this._initialised = false;
@@ -22,9 +37,8 @@ class ThemeEngine {
     /**
      * Initialise the theme engine
      * @param {Object} options - Configuration options
-     * @param {string} [options.theme] - Initial theme ('light' or 'dark')
-     * @param {string} [options.variant] - Initial variant ('ocean', 'forest', 'sunset')
-     * @param {boolean} [options.autoDetect=false] - Respect system preference
+     * @param {string} [options.theme] - Initial theme (e.g., 'ocean-dark', 'forest-light')
+     * @param {boolean} [options.autoDetect=false] - Respect system preference (maps to light/dark variants)
      * @param {boolean} [options.persist=true] - Save to localStorage
      * @param {boolean} [options.disabled=false] - Disable theming entirely (no classes applied)
      * @param {HTMLElement|string} [options.target=document.body] - Target element
@@ -33,7 +47,6 @@ class ThemeEngine {
     init(options = {}) {
         const {
             theme = null,
-            variant = null,
             autoDetect = false,
             persist = true,
             disabled = false,
@@ -61,31 +74,33 @@ class ThemeEngine {
 
         // Determine initial theme
         let initialTheme = theme;
-        let initialVariant = variant;
 
-        // Check localStorage first (if persisting)
+        // Check localStorage first (if persisting) - includes migration logic
         if (persist) {
             const stored = this._loadFromStorage();
-            if (stored.theme && !theme) {
-                initialTheme = stored.theme;
-            }
-            if (stored.variant && !variant) {
-                initialVariant = stored.variant;
+            if (stored && !theme) {
+                initialTheme = stored;
             }
         }
 
         // Check system preference if auto-detect enabled
         if (autoDetect && !initialTheme) {
-            initialTheme = this._getSystemPreference();
+            const systemPref = this._getSystemPreference();
+            // Map system preference to default theme with that mode
+            initialTheme = systemPref === 'dark' ? 'charcoal-dark' : 'charcoal-light';
             this._setupSystemListener();
         }
 
-        // Default to light
-        initialTheme = initialTheme || 'light';
+        // Default to charcoal-dark
+        initialTheme = initialTheme || DEFAULT_THEME;
 
-        // Apply theme
+        // Validate and apply theme
+        if (!AVAILABLE_THEMES.includes(initialTheme)) {
+            console.warn(`Invalid theme: ${initialTheme}. Using default: ${DEFAULT_THEME}`);
+            initialTheme = DEFAULT_THEME;
+        }
+
         this._theme = initialTheme;
-        this._variant = initialVariant;
         this._applyTheme();
 
         this._initialised = true;
@@ -93,7 +108,7 @@ class ThemeEngine {
     }
 
     /**
-     * Get the current theme
+     * Get the current theme (full name, e.g., 'ocean-dark')
      * @returns {string}
      */
     get() {
@@ -101,37 +116,45 @@ class ThemeEngine {
     }
 
     /**
-     * Get the current variant
-     * @returns {string|null}
+     * Get the theme base colour (e.g., 'ocean' from 'ocean-dark')
+     * @returns {string}
      */
-    getVariant() {
-        return this._variant;
+    getBase() {
+        return this._theme.split('-').slice(0, -1).join('-');
     }
 
     /**
-     * Check if dark theme is active
+     * Get the theme mode (e.g., 'dark' from 'ocean-dark', 'light' from 'forest-light')
+     * @returns {string}
+     */
+    getMode() {
+        return this._theme.split('-').pop();
+    }
+
+    /**
+     * Check if dark mode is active
      * @returns {boolean}
      */
     isDark() {
-        return this._theme === 'dark';
+        return this.getMode() === 'dark';
     }
 
     /**
-     * Check if light theme is active
+     * Check if light mode is active
      * @returns {boolean}
      */
     isLight() {
-        return this._theme === 'light';
+        return this.getMode() === 'light';
     }
 
     /**
-     * Set the theme
-     * @param {string} theme - Theme name ('light' or 'dark')
+     * Set the theme (e.g., 'ocean-dark', 'forest-light')
+     * @param {string} theme - Full theme name
      * @returns {ThemeEngine}
      */
     set(theme) {
-        if (!['light', 'dark'].includes(theme)) {
-            console.warn(`Invalid theme: ${theme}. Use 'light' or 'dark'.`);
+        if (!AVAILABLE_THEMES.includes(theme)) {
+            console.warn(`Invalid theme: ${theme}. Available themes: ${AVAILABLE_THEMES.join(', ')}`);
             return this;
         }
 
@@ -143,47 +166,30 @@ class ThemeEngine {
         this._theme = theme;
         this._applyTheme();
         this._saveToStorage();
-        this._notifyListeners(oldTheme, theme, this._variant);
+        this._notifyListeners(oldTheme, theme);
 
         return this;
     }
 
     /**
-     * Set the colour variant
-     * @param {string|null} variant - Variant name or null
-     * @returns {ThemeEngine}
+     * @deprecated Use set() with full theme name instead (e.g., set('ocean-dark'))
      */
-    setVariant(variant) {
-        const validVariants = ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', null];
-        if (!validVariants.includes(variant)) {
-            console.warn(`Invalid variant: ${variant}. Use one of: ${validVariants.filter(v => v).join(', ')}, or null.`);
-            return this;
-        }
-
-        const oldVariant = this._variant;
-        if (oldVariant === variant) {
-            return this;
-        }
-
-        this._variant = variant;
-        this._applyTheme();
-        this._saveToStorage();
-        this._notifyListeners(this._theme, this._theme, variant, oldVariant);
-
+    setVariant() {
+        console.warn('[ThemeEngine] setVariant() is deprecated. Use set() with full theme name (e.g., set("ocean-dark"))');
         return this;
     }
 
     /**
-     * Toggle between light and dark themes
-     * @returns {ThemeEngine}
+     * @deprecated No longer applicable with unified theme system. Use variant selector UI instead.
      */
     toggle() {
-        return this.set(this._theme === 'dark' ? 'light' : 'dark');
+        console.warn('[ThemeEngine] toggle() is deprecated. Use variant selector UI or set() method.');
+        return this;
     }
 
     /**
      * Register a callback for theme changes
-     * @param {Function} callback - Callback function
+     * @param {Function} callback - Callback function(oldTheme, newTheme)
      * @returns {Function} Unsubscribe function
      */
     onChange(callback) {
@@ -204,44 +210,52 @@ class ThemeEngine {
     }
 
     /**
-     * Preview a theme temporarily
-     * @param {string} theme - Theme to preview
-     * @param {string} [variant] - Variant to preview
+     * Preview a theme temporarily without saving
+     * @param {string} theme - Theme to preview (e.g., 'ocean-dark')
      * @returns {Function} Restore function
      */
-    preview(theme, variant = undefined) {
+    preview(theme) {
+        if (!AVAILABLE_THEMES.includes(theme)) {
+            console.warn(`Invalid theme for preview: ${theme}`);
+            return () => {
+            };
+        }
+
         const originalTheme = this._theme;
-        const originalVariant = this._variant;
 
         // Apply preview without saving
         this._theme = theme;
-        if (variant !== undefined) {
-            this._variant = variant;
-        }
         this._applyTheme(false);
 
         // Return restore function
         return () => {
             this._theme = originalTheme;
-            this._variant = originalVariant;
             this._applyTheme(false);
         };
     }
 
     /**
-     * List available themes
-     * @returns {string[]}
+     * List all available themes
+     * @returns {string[]} Array of all 16 theme names
      */
     listThemes() {
-        return ['light', 'dark'];
+        return [...AVAILABLE_THEMES];
     }
 
     /**
-     * List available variants
+     * List available colour bases (without mode suffix)
      * @returns {string[]}
      */
-    listVariants() {
+    listBases() {
         return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas'];
+    }
+
+    /**
+     * @deprecated Use listThemes() instead. Kept for backward compatibility.
+     */
+    listVariants() {
+        console.warn('[ThemeEngine] listVariants() is deprecated. Use listThemes() instead.');
+        return this.listBases();
     }
 
     /**
@@ -251,7 +265,8 @@ class ThemeEngine {
     getConfig() {
         return {
             theme: this._theme,
-            variant: this._variant,
+            base: this.getBase(),
+            mode: this.getMode(),
             autoDetect: this._autoDetect,
             persist: this._persist,
             disabled: this._disabled
@@ -275,7 +290,7 @@ class ThemeEngine {
             document.head.appendChild(meta);
         }
 
-        meta.content = colors[this._theme] || colors.light;
+        meta.content = colors[this.getMode()] || colors.dark;
     }
 
     /**
@@ -337,13 +352,8 @@ class ThemeEngine {
         // Remove all theme classes
         const classes = target.className.split(' ').filter(c => !c.startsWith(CLASS_PREFIX));
 
-        // Add current theme class
+        // Add current theme class (single class now, e.g., 'dm-theme-ocean-dark')
         classes.push(`${CLASS_PREFIX}${this._theme}`);
-
-        // Add variant class if set
-        if (this._variant) {
-            classes.push(`${CLASS_PREFIX}${this._variant}`);
-        }
 
         target.className = classes.join(' ').trim();
 
@@ -363,34 +373,58 @@ class ThemeEngine {
         }
 
         try {
+            // Save full theme name
             localStorage.setItem(STORAGE_KEY, this._theme);
-            if (this._variant) {
-                localStorage.setItem(STORAGE_VARIANT_KEY, this._variant);
-            } else {
-                localStorage.removeItem(STORAGE_VARIANT_KEY);
-            }
+            // Clean up old variant key if it exists
+            localStorage.removeItem(STORAGE_VARIANT_KEY);
         } catch (e) {
             // localStorage might be disabled
         }
     }
 
     /**
-     * Load theme from localStorage
-     * @returns {Object}
+     * Load theme from localStorage with automatic migration from old format
+     * @returns {string|null}
      * @private
      */
     _loadFromStorage() {
         if (typeof localStorage === 'undefined') {
-            return {theme: null, variant: null};
+            return null;
         }
 
         try {
-            return {
-                theme: localStorage.getItem(STORAGE_KEY),
-                variant: localStorage.getItem(STORAGE_VARIANT_KEY)
-            };
+            // Try to load new format first
+            const stored = localStorage.getItem(STORAGE_KEY);
+
+            // Check if it's a valid theme name (new format)
+            if (stored && AVAILABLE_THEMES.includes(stored)) {
+                return stored;
+            }
+
+            // Migration: Check for old format (separate theme + variant keys)
+            const oldTheme = stored; // Will be 'light' or 'dark' in old format
+            const oldVariant = localStorage.getItem(STORAGE_VARIANT_KEY);
+
+            if (oldTheme && ['light', 'dark'].includes(oldTheme)) {
+                // Migrate from old format
+                const base = oldVariant || 'charcoal'; // Default to charcoal if no variant
+                const newTheme = `${base}-${oldTheme}`;
+
+                console.log(`[ThemeEngine] Migrating theme: ${oldTheme} + ${oldVariant} → ${newTheme}`);
+
+                // Validate migrated theme
+                if (AVAILABLE_THEMES.includes(newTheme)) {
+                    // Save in new format
+                    localStorage.setItem(STORAGE_KEY, newTheme);
+                    localStorage.removeItem(STORAGE_VARIANT_KEY);
+                    return newTheme;
+                }
+            }
+
+            // Invalid or missing - return null to use default
+            return null;
         } catch (e) {
-            return {theme: null, variant: null};
+            return null;
         }
     }
 
@@ -404,13 +438,11 @@ class ThemeEngine {
             return 'light';
         }
 
-        return window.matchMedia('(prefers-color-scheme: dark)').matches
-            ? 'dark'
-            : 'light';
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
 
     /**
-     * Set up system preference listener
+     * Setup listener for system preference changes
      * @private
      */
     _setupSystemListener() {
@@ -421,57 +453,80 @@ class ThemeEngine {
         this._systemMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
         const handler = (e) => {
-            if (this._autoDetect) {
-                this.set(e.matches ? 'dark' : 'light');
+            if (!this._autoDetect) {
+                return;
+            }
+
+            // When system preference changes, switch to corresponding mode of current base
+            const newMode = e.matches ? 'dark' : 'light';
+            const base = this.getBase();
+            const newTheme = `${base}-${newMode}`;
+
+            if (AVAILABLE_THEMES.includes(newTheme)) {
+                this.set(newTheme);
             }
         };
 
-        // Use addEventListener for modern browsers, addListener for older ones
+        // Modern browsers
         if (this._systemMediaQuery.addEventListener) {
             this._systemMediaQuery.addEventListener('change', handler);
-        } else if (this._systemMediaQuery.addListener) {
+        } else {
+            // Fallback for older browsers
             this._systemMediaQuery.addListener(handler);
         }
     }
 
     /**
-     * Notify all listeners of theme change
-     * @param {string} oldTheme
-     * @param {string} newTheme
-     * @param {string|null} newVariant
-     * @param {string|null} [oldVariant]
+     * Notify all registered listeners of theme change
+     * @param {string} oldTheme - Previous theme
+     * @param {string} newTheme - New theme
      * @private
      */
-    _notifyListeners(oldTheme, newTheme, newVariant, oldVariant = null) {
-        const event = {
-            oldTheme,
-            newTheme,
-            variant: newVariant,
-            oldVariant: oldVariant || this._variant,
-            isDark: newTheme === 'dark',
-            isLight: newTheme === 'light'
-        };
-
+    _notifyListeners(oldTheme, newTheme) {
         this._listeners.forEach(callback => {
             try {
-                callback(event);
+                callback(oldTheme, newTheme);
             } catch (e) {
-                console.error('Theme change callback error:', e);
+                console.error('[ThemeEngine] Error in change listener:', e);
             }
         });
     }
 
     /**
-     * Clean up resources
+     * Cleanup and destroy the theme engine
      */
     destroy() {
+        if (this._systemMediaQuery) {
+            if (this._systemMediaQuery.removeEventListener) {
+                // Can't remove without storing the handler reference, skip for now
+            }
+        }
         this._listeners = [];
+        this._target = null;
         this._initialised = false;
     }
 }
 
 // Create singleton instance
-const theme = new ThemeEngine();
+const themeEngine = new ThemeEngine();
 
-export {theme, ThemeEngine};
-export default theme;
+// Auto-initialize on DOM ready (with defaults)
+if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!themeEngine._initialised) {
+                themeEngine.init({persist: true, autoDetect: false});
+            }
+        });
+    } else {
+        // DOM already loaded
+        if (!themeEngine._initialised) {
+            themeEngine.init({persist: true, autoDetect: false});
+        }
+    }
+}
+
+// Export for ES modules
+export {themeEngine as theme};
+export default themeEngine;
+

@@ -1,0 +1,187 @@
+/**
+ * Domma Lemon Light Theme
+ * Soft, subtle yellow colour palette
+ * Light mode variant
+ */
+
+.dm-theme-lemon-light {
+    color-scheme: light;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Light Mode Base
+       ================================================ */
+
+    /* Backgrounds - Light/white backgrounds */
+    --dm-background: #ffffff;
+    --dm-background-alt: #f8f9fa;
+    --dm-surface: #ffffff;
+    --dm-surface-raised: #f1f3f5;
+    --dm-surface-overlay: #f8f9fa;
+
+    /* Text - Dark colors for readability on light */
+    --dm-text: #212529;
+    --dm-text-secondary: #495057;
+    --dm-text-muted: #6c757d;
+    --dm-text-disabled: #adb5bd;
+    --dm-text-inverse: #ffffff;
+
+    /* Borders - Subtle on light backgrounds */
+    --dm-border: #dee2e6;
+    --dm-border-light: #e9ecef;
+    --dm-border-dark: #ced4da;
+
+
+    --dm-primary: #d4c06a;
+    --dm-primary-hover: #dfcc7c;
+    --dm-primary-active: #ead88e;
+    --dm-primary-light: rgba(212, 192, 106, 0.15);
+    --dm-primary-dark: #c9b458;
+
+    --dm-secondary: #b6b1a1;
+    --dm-secondary-hover: #c4bfb0;
+    --dm-secondary-active: #d2cdbf;
+    --dm-secondary-light: rgba(182, 177, 161, 0.15);
+    --dm-secondary-dark: #9a9583;
+
+    --dm-success: #a1c277;
+    --dm-success-light: rgba(161, 194, 119, 0.15);
+
+    --dm-info: #90bbcd;
+    --dm-info-light: rgba(144, 187, 205, 0.15);
+
+    --dm-warning: #e2c46d;
+    --dm-warning-light: rgba(226, 196, 109, 0.15);
+    --dm-warning-text: #e2c46d;
+
+    --dm-focus-ring: 0 0 0 3px rgba(212, 192, 106, 0.35);
+    --dm-selected-bg: rgba(212, 192, 106, 0.2);
+    --dm-tab-active-border: #d4c06a;
+    --dm-tab-active-text: #d4c06a;
+    --dm-progress-bar: #d4c06a;
+
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-active-bg: rgba(0, 0, 0, 0.08);
+    --dm-disabled-opacity: 0.65;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-sm);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #e9ecef;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(0, 0, 0, 0.02);
+    --dm-table-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.5);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #212529;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #ffffff;
+
+    /* Progress */
+    --dm-progress-bg: #e9ecef;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #f1f1f1;
+    --dm-scrollbar-thumb: #c1c1c1;
+    --dm-scrollbar-thumb-hover: #a8a8a8;
+
+    /* Code */
+    --dm-code-bg: #f8f9fa;
+    --dm-code-text: #e83e8c;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Standard for light mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* ================================================
+       ELEVATION / DEPTH
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+
+}

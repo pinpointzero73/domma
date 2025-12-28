@@ -23,19 +23,33 @@ const getGitCommit = () => {
     }
 };
 
-// Theme CSS files in order
+// Theme CSS files in order (16 total: 8 colors × 2 modes)
 const themeFiles = [
     'public/assets/themes/_base.css',
-    'public/assets/themes/light.css',
-    'public/assets/themes/dark.css',
-    'public/assets/themes/ocean.css',
-    'public/assets/themes/forest.css',
-    'public/assets/themes/sunset.css',
-    'public/assets/themes/royal.css',
-    'public/assets/themes/lemon.css',
-    'public/assets/themes/silver.css',
-    'public/assets/themes/charcoal.css',
-    'public/assets/themes/christmas.css'
+  // Ocean themes
+  'public/assets/themes/ocean-light.css',
+  'public/assets/themes/ocean-dark.css',
+  // Forest themes
+  'public/assets/themes/forest-light.css',
+  'public/assets/themes/forest-dark.css',
+  // Sunset themes
+  'public/assets/themes/sunset-light.css',
+  'public/assets/themes/sunset-dark.css',
+  // Royal themes
+  'public/assets/themes/royal-light.css',
+  'public/assets/themes/royal-dark.css',
+  // Lemon themes
+  'public/assets/themes/lemon-light.css',
+  'public/assets/themes/lemon-dark.css',
+  // Silver themes
+  'public/assets/themes/silver-light.css',
+  'public/assets/themes/silver-dark.css',
+  // Charcoal themes
+  'public/assets/themes/charcoal-light.css',
+  'public/assets/themes/charcoal-dark.css',
+  // Christmas themes
+  'public/assets/themes/christmas-light.css',
+  'public/assets/themes/christmas-dark.css'
 ];
 
 // Build banner

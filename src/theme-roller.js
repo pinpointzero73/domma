@@ -553,11 +553,9 @@ const CATEGORIES = {
 
 class ThemeRoller {
     static defaults = {
-        baseTheme: 'light',
-        baseVariant: null,
+      baseTheme: 'charcoal-dark',
         sections: ['colours', 'typography', 'spacing', 'borders', 'transitions', 'states'],
         livePreview: true,
-        showPresets: true,
         showPreviewPanel: true,
         onChange: null,
         onApply: null,
@@ -599,12 +597,9 @@ class ThemeRoller {
 
         this._bindEvents();
 
-        // Set initial base theme
+      // Set initial theme (uses full theme name like 'charcoal-dark')
         if (this.options.baseTheme) {
             theme.set(this.options.baseTheme);
-        }
-        if (this.options.baseVariant) {
-            theme.setVariant(this.options.baseVariant);
         }
     }
 
@@ -626,35 +621,52 @@ class ThemeRoller {
      * @private
      */
     _render() {
-        const isDark = theme.isDark();
+      // Get current theme
+      const currentTheme = theme.get();
 
         let html = `
             <div class="dm-theme-roller">
                 <div class="dm-theme-roller-header">
                     <h3 class="dm-theme-roller-title">Theme Roller</h3>
                     <div class="dm-theme-roller-controls">
-                        <div class="dm-theme-toggle">
-                            <button class="dm-theme-btn ${!isDark ? 'active' : ''}" data-theme="light">Light</button>
-                            <button class="dm-theme-btn ${isDark ? 'active' : ''}" data-theme="dark">Dark</button>
-                        </div>
+                        <label for="theme-select" class="dm-theme-select-label">Theme:</label>
+                        <select id="theme-select" class="dm-theme-select form-select">
+                            <optgroup label="Ocean">
+                                <option value="ocean-light" ${currentTheme === 'ocean-light' ? 'selected' : ''}>Ocean Light ☀️</option>
+                                <option value="ocean-dark" ${currentTheme === 'ocean-dark' ? 'selected' : ''}>Ocean Dark 🌙</option>
+                            </optgroup>
+                            <optgroup label="Forest">
+                                <option value="forest-light" ${currentTheme === 'forest-light' ? 'selected' : ''}>Forest Light ☀️</option>
+                                <option value="forest-dark" ${currentTheme === 'forest-dark' ? 'selected' : ''}>Forest Dark 🌙</option>
+                            </optgroup>
+                            <optgroup label="Sunset">
+                                <option value="sunset-light" ${currentTheme === 'sunset-light' ? 'selected' : ''}>Sunset Light ☀️</option>
+                                <option value="sunset-dark" ${currentTheme === 'sunset-dark' ? 'selected' : ''}>Sunset Dark 🌙</option>
+                            </optgroup>
+                            <optgroup label="Royal">
+                                <option value="royal-light" ${currentTheme === 'royal-light' ? 'selected' : ''}>Royal Light ☀️</option>
+                                <option value="royal-dark" ${currentTheme === 'royal-dark' ? 'selected' : ''}>Royal Dark 🌙</option>
+                            </optgroup>
+                            <optgroup label="Lemon">
+                                <option value="lemon-light" ${currentTheme === 'lemon-light' ? 'selected' : ''}>Lemon Light ☀️</option>
+                                <option value="lemon-dark" ${currentTheme === 'lemon-dark' ? 'selected' : ''}>Lemon Dark 🌙</option>
+                            </optgroup>
+                            <optgroup label="Silver">
+                                <option value="silver-light" ${currentTheme === 'silver-light' ? 'selected' : ''}>Silver Light ☀️</option>
+                                <option value="silver-dark" ${currentTheme === 'silver-dark' ? 'selected' : ''}>Silver Dark 🌙</option>
+                            </optgroup>
+                            <optgroup label="Charcoal">
+                                <option value="charcoal-light" ${currentTheme === 'charcoal-light' ? 'selected' : ''}>Charcoal Light ☀️</option>
+                                <option value="charcoal-dark" ${currentTheme === 'charcoal-dark' ? 'selected' : ''}>Charcoal Dark 🌙</option>
+                            </optgroup>
+                            <optgroup label="Christmas">
+                                <option value="christmas-light" ${currentTheme === 'christmas-light' ? 'selected' : ''}>Christmas Light ☀️</option>
+                                <option value="christmas-dark" ${currentTheme === 'christmas-dark' ? 'selected' : ''}>Christmas Dark 🌙</option>
+                            </optgroup>
+                        </select>
                     </div>
                 </div>
         `;
-
-        // Presets bar
-        if (this.options.showPresets) {
-            const variants = theme.listVariants();
-            const currentVariant = theme.getVariant();
-            html += `
-                <div class="dm-theme-roller-presets">
-                    <span class="dm-presets-label">Presets:</span>
-                    <button class="dm-preset-btn ${!currentVariant ? 'active' : ''}" data-preset="">Default</button>
-                    ${variants.map(v => `
-                        <button class="dm-preset-btn ${currentVariant === v ? 'active' : ''}" data-preset="${v}">${this._capitalize(v)}</button>
-                    `).join('')}
-                </div>
-            `;
-        }
 
         // Accordion sections
         html += `<div class="dm-theme-roller-sections accordion" id="theme-roller-accordion">`;
@@ -920,20 +932,13 @@ class ThemeRoller {
      */
     _bindEvents() {
         const eventConfig = {
-            '.dm-theme-btn': {
-                on: 'click',
+          '#theme-select': {
+            on: 'change',
                 call: (e, el) => {
-                    const newTheme = el.dataset.theme;
+                  const newTheme = el.value;
+                  console.log('[ThemeRoller] Theme changed to:', newTheme);
                     theme.set(newTheme);
-                    this._updateThemeButtons();
                     this._refreshInputs();
-                }
-            },
-            '.dm-preset-btn': {
-                on: 'click',
-                call: (e, el) => {
-                    console.log('[ThemeRoller] Preset button clicked:', el.dataset.preset);
-                    this.loadPreset(el.dataset.preset || null);
                 }
             },
             'input[type="color"]': {
@@ -1033,26 +1038,15 @@ class ThemeRoller {
     }
 
     /**
-     * Update theme toggle button states
+     * Update theme dropdown selected option
      * @private
      */
-    _updateThemeButtons() {
-        const isDark = theme.isDark();
-        this.element.querySelectorAll('.dm-theme-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.theme === (isDark ? 'dark' : 'light'));
-        });
-    }
-
-    /**
-     * Update preset button states
-     * @private
-     */
-    _updatePresetButtons() {
-        const currentVariant = theme.getVariant();
-        this.element.querySelectorAll('.dm-preset-btn').forEach(btn => {
-            const preset = btn.dataset.preset;
-            btn.classList.toggle('active', preset === (currentVariant || ''));
-        });
+    _updateThemeDropdown() {
+      const currentTheme = theme.get();
+      const dropdown = this.element.querySelector('#theme-select');
+      if (dropdown) {
+        dropdown.value = currentTheme;
+      }
     }
 
     /**
@@ -1187,43 +1181,37 @@ class ThemeRoller {
     }
 
     /**
-     * Load a preset theme variant
-     * @param {string|null} preset - Preset name or null for default
+     * Load a theme (replaces old preset functionality)
+     * @param {string} themeName - Full theme name like 'ocean-dark'
      * @returns {ThemeRoller}
+     * @deprecated Use theme dropdown in UI instead
      */
-    loadPreset(preset) {
-        console.log('[ThemeRoller] loadPreset called:', preset);
+    loadPreset(themeName) {
+      console.warn('[ThemeRoller] loadPreset() is deprecated. Use the theme dropdown instead.');
+
+      if (!themeName) {
+        themeName = 'charcoal-dark'; // Default theme
+      }
 
         // Enable theme engine if it was disabled
         if (theme.isDisabled()) {
-            console.log('[ThemeRoller] Theme engine is disabled, enabling it');
             theme.enable();
         }
 
-        // Force theme reapply by clearing variant first (prevents early return in setVariant)
-        theme.setVariant(null);
-        console.log('[ThemeRoller] Cleared variant, now applying:', preset);
-        theme.setVariant(preset);
-        console.log('[ThemeRoller] theme.setVariant completed, current variant:', theme.getVariant());
-        console.log('[ThemeRoller] Body classes:', document.body.className);
+      // Apply theme
+      theme.set(themeName);
 
         // Force browser reflow to apply new CSS
-        document.body.offsetHeight; // trigger reflow
+      document.body.offsetHeight;
 
-        // Small delay to ensure CSS is applied before reading values
+      // Refresh inputs after short delay
         setTimeout(() => {
-            console.log('[ThemeRoller] Body classes after delay:', document.body.className);
-            // Verify the CSS variable actually changed
-            const primaryColor = getComputedStyle(document.body).getPropertyValue('--dm-primary').trim();
-            console.log('[ThemeRoller] --dm-primary after setVariant + reflow:', primaryColor);
-
-            // Now refresh inputs with the new values
             this._refreshInputsDelayed();
         }, 50);
 
         this._changes = {};
         this._updatePreview();
-        this._updatePresetButtons();
+      this._updateThemeDropdown();
         return this;
     }
 
@@ -1336,8 +1324,7 @@ class ThemeRoller {
      */
     saveToStorage() {
         S.set('theme-roller-custom', {
-            theme: theme.get(),
-            variant: theme.getVariant(),
+          theme: theme.get(), // Now stores full theme name like 'ocean-dark'
             changes: this._changes
         });
 
@@ -1353,11 +1340,14 @@ class ThemeRoller {
         const data = S.get('theme-roller-custom');
 
         if (data) {
-            if (data.theme) theme.set(data.theme);
-            if (data.variant) theme.setVariant(data.variant);
+          // Handle both old and new storage formats
+          if (data.theme) {
+            // New format: full theme name like 'ocean-dark'
+            // Old format: just 'light' or 'dark' (will be migrated by ThemeEngine)
+            theme.set(data.theme);
+          }
             if (data.changes) this.setAll(data.changes);
-            this._updateThemeButtons();
-            this._updatePresetButtons();
+          this._updateThemeDropdown();
             this._showToast('Theme loaded from browser');
         }
 
