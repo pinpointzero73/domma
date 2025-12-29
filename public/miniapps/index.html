@@ -20,156 +20,17 @@
   <script src="../dist/domma.min.js" defer></script>
 
   <style>
-      /* Status Indicators */
-      .status-indicator {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.75rem 1rem;
-          border-radius: 8px;
-          font-weight: 600;
-          margin-bottom: 1rem;
-          font-size: 0.9rem;
-      }
-
-      .status-available {
-          background: #d1fae5;
-          color: #065f46;
-          border: 2px solid #10b981;
-      }
-
-      .status-coming-soon {
-          background: #f3f4f6;
-          color: #6b7280;
-          border: 2px solid #d1d5db;
-      }
-
-      /* Card Enhancement */
-      .miniapp-available {
-          border: 3px solid #10b981 !important;
-          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2) !important;
-      }
-
-      .miniapp-coming-soon {
-          border: 2px solid #d1d5db !important;
-          opacity: 0.85;
-      }
-
-      .miniapp-available .card-title {
-          color: #065f46;
-      }
-
-      /* ============================================
-         SMALL MINIAPP CARDS
-         ============================================ */
-      .miniapp-card {
-          background: white;
-          border: 3px solid transparent;
-          border-radius: 12px;
-          padding: 1.5rem 1rem;
-          text-align: center;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      }
-
-      .miniapp-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-      }
-
-      .miniapp-card.active {
-          border-color: #10b981;
-          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-      }
-
-      .miniapp-card-icon {
-          margin-bottom: 0.75rem;
-          color: var(--dm-primary);
-      }
-
-      .miniapp-card-available .miniapp-card-icon {
-          color: #10b981;
-      }
-
-      .miniapp-card-coming-soon {
-          opacity: 0.7;
-          cursor: not-allowed;
-      }
-
-      .miniapp-card-title {
-          font-size: 1.1rem;
-          font-weight: 600;
-          margin-bottom: 0.5rem;
-      }
-
-      .miniapp-card-badge {
-          display: inline-block;
-          margin-bottom: 0.5rem;
-      }
-
-      .miniapp-card-tagline {
-          font-size: 0.85rem;
-          color: #6b7280;
-          margin: 0;
-      }
-
-      /* ============================================
-         CAROUSEL SECTION
-         ============================================ */
-      .miniapps-carousel {
-          background: #f9fafb;
-          border-radius: 16px;
-          padding: 1.5rem;
-      }
-
-      .carousel-slide-inner {
-          padding: 1rem;
-      }
-
-      /* App Preview Placeholder */
-      .app-preview {
-          border-radius: 12px;
-          overflow: hidden;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      }
-
-      .app-preview-placeholder {
-          aspect-ratio: 16 / 10;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          min-height: 250px;
-      }
-
-      /* App Details */
-      .app-details-title {
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: #111827;
-          margin-bottom: 0.75rem;
-      }
-
-      .app-details-description {
-          font-size: 0.95rem;
-          color: #6b7280;
-          line-height: 1.5;
-      }
-
       .app-features-list {
           list-style: none;
           padding: 0;
           margin: 0;
+          font-size: 0.9rem;
+          color: #495057;
       }
-
       .app-features-list li {
-          padding: 0.5rem 0;
-          padding-left: 1.5rem;
+          padding: 0.3rem 0 0.3rem 1.5rem;
           position: relative;
-          color: #374151;
       }
-
       .app-features-list li::before {
           content: "✓";
           position: absolute;
@@ -178,51 +39,13 @@
           font-weight: bold;
       }
 
-      .app-tech-stack .badge {
-          font-size: 0.85rem;
-          padding: 0.4rem 0.8rem;
-      }
-
-      .app-actions {
+      .card-body {
           display: flex;
-          gap: 1rem;
-          flex-wrap: wrap;
+          flex-direction: column;
       }
 
-      /* ============================================
-         RESPONSIVE
-         ============================================ */
-      @media (max-width: 992px) {
-          .carousel-slide-inner {
-              padding: 0.5rem;
-          }
-
-          .app-preview-placeholder {
-              aspect-ratio: 16 / 9;
-              min-height: 200px;
-          }
-
-          .app-details-title {
-              font-size: 1.25rem;
-          }
-
-          .app-details-description {
-              font-size: 0.875rem;
-          }
-      }
-
-      @media (max-width: 768px) {
-          .miniapp-card {
-              padding: 1rem 0.5rem;
-          }
-
-          .miniapp-card-title {
-              font-size: 1rem;
-          }
-
-          .miniapp-card-tagline {
-              font-size: 0.75rem;
-          }
+      .mt-auto {
+          margin-top: auto;
       }
   </style>
 </head>
@@ -239,203 +62,97 @@
       Each app is production-ready, fully functional, and open source.</p>
   </section>
 
-  <!-- Small Mini-App Cards -->
-  <section class="miniapps-quick-view my-5">
-    <div class="row g-4 flex-nowrap">
-      <!-- Domma Docs - Small Card -->
-      <div class="col">
-        <div class="miniapp-card miniapp-card-available active" data-app-index="0">
-          <div class="miniapp-card-icon">
-            <span data-icon="document" data-icon-size="48"></span>
-          </div>
-          <h4 class="miniapp-card-title">Domma Docs</h4>
-          <span class="badge badge-success miniapp-card-badge">Available Now</span>
-          <p class="miniapp-card-tagline">Rich text editor with export</p>
-        </div>
-      </div>
+  <!-- Mini-App Cards Section -->
+  <section class="miniapps-view my-5">
+    <div class="row g-4">
 
-      <!-- My Garage - Small Card -->
-      <div class="col">
-        <div class="miniapp-card miniapp-card-available" data-app-index="1">
-          <div class="miniapp-card-icon">
-            <span data-icon="car" data-icon-size="48"></span>
-          </div>
-          <h4 class="miniapp-card-title">My Garage</h4>
-          <span class="badge badge-success miniapp-card-badge">Available Now</span>
-          <p class="miniapp-card-tagline">UK vehicle DVLA lookup</p>
-        </div>
-      </div>
-
-      <!-- Invoicing - Small Card -->
-      <div class="col">
-        <div class="miniapp-card miniapp-card-coming-soon" data-app-index="2">
-          <div class="miniapp-card-icon">
-            <span data-icon="document-add" data-icon-size="48"></span>
-          </div>
-          <h4 class="miniapp-card-title">Domma Invoicing</h4>
-          <span class="badge badge-secondary miniapp-card-badge">Coming Soon</span>
-          <p class="miniapp-card-tagline">Complete invoicing solution</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Large Carousel with Detailed App Info -->
-  <section class="miniapps-carousel my-5">
-    <div class="carousel" id="miniappsCarousel">
-      <div class="carousel-track">
-
-        <!-- Slide 1: Domma Docs -->
-        <div class="carousel-slide" data-app="docs">
-          <div class="carousel-slide-inner">
-            <div class="row align-items-center g-4">
-              <!-- Left: Preview Image -->
-              <div class="col-12 col-lg-5">
-                <div class="app-preview">
-                  <div class="app-preview-placeholder"
-                       style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    <span data-icon="document" data-icon-size="120" style="color: white; opacity: 0.3;"></span>
-                  </div>
-                </div>
+      <!-- Domma Docs Card -->
+      <div class="col-4 d-flex">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="text-center">
+              <span data-icon="document" data-icon-size="48" class="text-success"></span>
+              <h3 class="card-title mt-2">Domma Docs</h3>
+              <span class="badge badge-success mb-3">Available Now</span>
+            </div>
+            <p class="card-text small">A powerful document editor with rich text formatting, markdown support, and
+              export capabilities.</p>
+            <ul class="app-features-list small">
+              <li>Rich text editing with toolbar</li>
+              <li>Document management (save, open, delete)</li>
+              <li>Export to PDF, HTML, and Markdown</li>
+            </ul>
+            <div class="mt-auto pt-3">
+              <div class="app-tech-stack mb-3">
+                <span class="badge badge-primary-soft me-1">Domma.storage</span>
+                <span class="badge badge-primary-soft me-1">Domma.elements</span>
               </div>
-
-              <!-- Right: Details -->
-              <div class="col-12 col-lg-7">
-                <div class="app-details">
-                  <h2 class="app-details-title">Domma Docs</h2>
-                  <p class="app-details-description">A powerful document editor with rich text formatting, markdown
-                    support, and export capabilities.</p>
-
-                  <h4 class="mt-4 mb-2">Features</h4>
-                  <ul class="app-features-list">
-                    <li>Rich text editing with toolbar</li>
-                    <li>Document management (save, open, delete)</li>
-                    <li>Export to PDF, HTML, and Markdown</li>
-                    <li>Auto-save with Domma.storage</li>
-                    <li>Keyboard shortcuts</li>
-                  </ul>
-
-                  <div class="app-tech-stack mt-4 mb-4">
-                    <span class="badge badge-primary me-2">Domma.storage</span>
-                    <span class="badge badge-primary me-2">Domma.elements</span>
-                  </div>
-
-                  <div class="app-actions">
-                    <a href="./docs/index.html" class="btn btn-success btn-lg me-2">Launch App</a>
-                    <a href="https://github.com/darryl-dcbw/domma-docs" class="btn btn-outline-secondary"
-                       target="_blank" rel="noopener">
-                      <span data-icon="github" data-icon-size="20" class="me-1"></span>
-                      View Source
-                    </a>
-                  </div>
-                </div>
+              <div class="app-actions">
+                <a href="./docs/index.html" class="btn btn-success w-100">Launch App</a>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Slide 2: My Garage -->
-        <div class="carousel-slide" data-app="garage">
-          <div class="carousel-slide-inner">
-            <div class="row align-items-center g-4">
-              <div class="col-12 col-lg-5">
-                <div class="app-preview">
-                  <div class="app-preview-placeholder"
-                       style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-                    <span data-icon="car" data-icon-size="120" style="color: white; opacity: 0.3;"></span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12 col-lg-7">
-                <div class="app-details">
-                  <h2 class="app-details-title">My Garage</h2>
-                  <p class="app-details-description">Vehicle management system with DVLA integration for UK registration
-                    lookups and MOT/tax tracking.</p>
-
-                  <h4 class="mt-4 mb-2">Features</h4>
-                  <ul class="app-features-list">
-                    <li>DVLA registration lookup (UK)</li>
-                    <li>MOT & tax status checking</li>
-                    <li>Vehicle history tracking</li>
-                    <li>Save vehicles to My Garage</li>
-                    <li>User authentication with JWT</li>
-                  </ul>
-
-                  <div class="app-tech-stack mt-4 mb-4">
-                    <span class="badge badge-primary me-2">Domma.http</span>
-                    <span class="badge badge-primary me-2">Domma.storage</span>
-                    <span class="badge badge-primary me-2">Domma.auth</span>
-                  </div>
-
-                  <div class="app-actions">
-                    <a href="./garage/index.html" class="btn btn-success btn-lg me-2">Launch App</a>
-                    <a href="https://github.com/darryl-dcbw/domma-garage" class="btn btn-outline-secondary"
-                       target="_blank" rel="noopener">
-                      <span data-icon="github" data-icon-size="20" class="me-1"></span>
-                      View Source
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 3: Invoicing -->
-        <div class="carousel-slide" data-app="invoicing">
-          <div class="carousel-slide-inner">
-            <div class="row align-items-center g-4">
-              <div class="col-12 col-lg-5">
-                <div class="app-preview">
-                  <div class="app-preview-placeholder"
-                       style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
-                    <span data-icon="document-add" data-icon-size="120" style="color: white; opacity: 0.3;"></span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12 col-lg-7">
-                <div class="app-details">
-                  <h2 class="app-details-title">Domma Invoicing</h2>
-                  <p class="app-details-description">Complete invoicing solution for freelancers and small businesses
-                    with client management and PDF export.</p>
-
-                  <h4 class="mt-4 mb-2">Features</h4>
-                  <ul class="app-features-list">
-                    <li>Create & manage invoices</li>
-                    <li>Client database with full CRUD</li>
-                    <li>Invoice tracking & status management</li>
-                    <li>Professional PDF export</li>
-                    <li>Dashboard & reporting</li>
-                  </ul>
-
-                  <div class="app-tech-stack mt-4 mb-4">
-                    <span class="badge badge-primary me-2">Domma.models</span>
-                    <span class="badge badge-primary me-2">Domma.tables</span>
-                    <span class="badge badge-primary me-2">Domma.auth</span>
-                  </div>
-
-                  <div class="app-actions">
-                    <a href="#" class="btn btn-secondary btn-lg me-2 disabled">Coming Soon</a>
-                    <a href="#" class="btn btn-outline-secondary disabled">
-                      <span data-icon="github" data-icon-size="20" class="me-1"></span>
-                      View Source
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
 
-      <!-- Carousel Controls -->
-      <button class="carousel-arrow carousel-prev" aria-label="Previous">‹</button>
-      <button class="carousel-arrow carousel-next" aria-label="Next">›</button>
+      <!-- My Garage Card -->
+      <div class="col-4 d-flex">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="text-center">
+              <span data-icon="car" data-icon-size="48" class="text-success"></span>
+              <h3 class="card-title mt-2">My Garage</h3>
+              <span class="badge badge-success mb-3">Available Now</span>
+            </div>
+            <p class="card-text small">Vehicle management system with DVLA integration for UK registration lookups and
+              MOT/tax tracking.</p>
+            <ul class="app-features-list small">
+              <li>DVLA registration lookup (UK)</li>
+              <li>MOT & tax status checking</li>
+              <li>Save vehicles to My Garage</li>
+            </ul>
+            <div class="mt-auto pt-3">
+              <div class="app-tech-stack mb-3">
+                <span class="badge badge-primary-soft me-1">Domma.http</span>
+                <span class="badge badge-primary-soft me-1">Domma.storage</span>
+              </div>
+              <div class="app-actions">
+                <a href="./garage/index.html" class="btn btn-success w-100">Launch App</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <div class="carousel-indicators"></div>
+      <!-- Domma Invoicing Card -->
+      <div class="col-4 d-flex">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="text-center">
+              <span data-icon="document-add" data-icon-size="48" class="text-secondary"></span>
+              <h3 class="card-title mt-2">Domma Invoicing</h3>
+              <span class="badge badge-secondary mb-3">Coming Soon</span>
+            </div>
+            <p class="card-text small">Complete invoicing solution for freelancers and small businesses with client
+              management and PDF export.</p>
+            <ul class="app-features-list small">
+              <li>Create & manage invoices</li>
+              <li>Client database with full CRUD</li>
+              <li>Professional PDF export</li>
+            </ul>
+            <div class="mt-auto pt-3">
+              <div class="app-tech-stack mb-3">
+                <span class="badge badge-secondary-soft me-1">Domma.models</span>
+                <span class="badge badge-secondary-soft me-1">Domma.tables</span>
+              </div>
+              <div class="app-actions">
+                <a href="#" class="btn btn-secondary w-100 disabled">Coming Soon</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -547,47 +264,7 @@
 <!-- Layout system will inject footer here -->
 
 <script>
-  // Initialize carousel when DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
-    // Initialize the carousel
-    const carousel = Domma.elements.carousel('#miniappsCarousel', {
-      autoplay: true,
-      interval: 6000,           // 6 seconds per slide
-      pauseOnHover: true,       // Pause when user hovers
-      loop: true,               // Continuous loop
-      animation: 'slide',       // Slide transition
-      showArrows: true,
-      showIndicators: true,
-      onChange: ({index}) => {
-        // Sync small cards when carousel changes
-        Domma('.miniapp-card').removeClass('active');
-        Domma('.miniapp-card').eq(index).addClass('active');
-      }
-    });
-
-    // Sync carousel when small cards are clicked
-    Domma('.miniapp-card').on('click', function () {
-      const card = Domma(this);
-
-      // Don't navigate to "Coming Soon" apps
-      if (card.hasClass('miniapp-card-coming-soon')) {
-        return;
-      }
-
-      const index = parseInt(card.attr('data-app-index'), 10);
-
-      // Update active state immediately
-      Domma('.miniapp-card').removeClass('active');
-      card.addClass('active');
-
-      // Navigate carousel
-      carousel.goTo(index);
-
-      // Pause auto-rotation for 10 seconds after manual interaction
-      carousel.pause();
-      setTimeout(() => carousel.play(), 10000);
-    });
-
     // Initialize the "Why MiniApps?" accordion
     Domma.elements.accordion('#whyMiniapps', {
       multiExpand: false,
