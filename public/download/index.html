@@ -685,18 +685,61 @@
         console.warn('Could not load build info:', err);
       });
 
-    // Load and display kickstart.tar.gz size
-    fetch('../../dist/kickstart.tar.gz')
-      .then(r => r.blob())
-      .then(blob => {
-        const sizeKB = Math.round(blob.size / 1024);
-        const sizeEl = document.getElementById('kickstart-size');
-        if (sizeEl) {
-          sizeEl.textContent = `~${sizeKB} KB`;
-        }
+    // Load kickstart metadata and update download links
+    fetch('../../dist/kickstart-latest.json')
+      .then(r => r.json())
+      .then(metadata => {
+        const {files, timestamp, buildDate} = metadata;
+
+        // Update all kickstart download links with timestamped filenames
+        const linkMap = {
+          'kickstart.tar.gz': files.alias,
+          'kickstart-minimal.tar.gz': files.minimal,
+          'kickstart-essentials.tar.gz': files.essentials,
+          'kickstart-full.tar.gz': files.full,
+          'kickstart-data-focused.tar.gz': files.dataFocused
+        };
+
+        // Update all download links
+        document.querySelectorAll('a[download]').forEach(link => {
+          const href = link.getAttribute('href');
+          Object.keys(linkMap).forEach(oldFile => {
+            if (href.includes(oldFile)) {
+              const newHref = href.replace(oldFile, linkMap[oldFile]);
+              link.setAttribute('href', newHref);
+            }
+          });
+        });
+
+        // Load and display kickstart size using the alias file
+        fetch(`../../dist/${files.alias}`)
+          .then(r => r.blob())
+          .then(blob => {
+            const sizeKB = Math.round(blob.size / 1024);
+            const sizeEl = document.getElementById('kickstart-size');
+            if (sizeEl) {
+              sizeEl.textContent = `~${sizeKB} KB`;
+            }
+          })
+          .catch(err => {
+            console.error('Could not load kickstart size:', err);
+          });
       })
       .catch(err => {
-        console.warn('Could not load kickstart.tar.gz size:', err);
+        console.error('Could not load kickstart metadata:', err);
+        // Fallback to old behavior if metadata not available
+        fetch('../../dist/kickstart.tar.gz')
+          .then(r => r.blob())
+          .then(blob => {
+            const sizeKB = Math.round(blob.size / 1024);
+            const sizeEl = document.getElementById('kickstart-size');
+            if (sizeEl) {
+              sizeEl.textContent = `~${sizeKB} KB`;
+            }
+          })
+          .catch(err => {
+            console.error('Could not load kickstart.tar.gz size:', err);
+          });
       });
   });
 </script>

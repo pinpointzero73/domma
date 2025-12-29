@@ -15,7 +15,7 @@
     "build:archives": "node scripts/build-archives.js",
     "build:info": "node scripts/build-info.js",
     "build:metadata": "node scripts/copy-metadata.js",
-    "build:kickstart": "node scripts/build-kickstart-zip.js",
+    "build:kickstart": "npm run build:js && npm run build:info && node scripts/build-kickstart-zip.js",
     "build:miniapps": "node scripts/build-miniapp.js && node scripts/copy-miniapps.js",
     "build:miniapp:garage": "node scripts/build-miniapp.js garage",
     "generate:bundles": "node scripts/generate-bundles.js",
