@@ -207,6 +207,10 @@ const GarageApp = {
         this.showAlert(error.message || 'Registration failed', 'error');
       }
     });
+
+    // Set initial visibility state (login visible, register hidden)
+    $('#loginFormContainer').show();
+    $('#registerFormContainer').hide();
   },
 
   /**
