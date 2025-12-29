@@ -199,7 +199,7 @@ export class FolderManager {
     // Count from ALL documents, not filtered ones
     if (!this.app || !this.app.allDocuments) return 0;
     return this.app.allDocuments.filter(doc => {
-      const docFolderId = doc.folder_id === null ? null : parseInt(doc.folder_id);
+      const docFolderId = doc.folder_id === null ? null : doc.folder_id; // MongoDB ObjectId is a string
       return docFolderId === folderId;
     }).length;
   }

@@ -290,7 +290,6 @@ export class ErrorHandler {
     if (window.Domma && window.Domma.elements) {
       await window.Domma.elements.alert(message, {title});
     } else {
-      console.log(`${title}: ${message}`);
     }
   }
 }

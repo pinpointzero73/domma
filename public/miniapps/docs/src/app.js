@@ -35,8 +35,6 @@ const DocsApp = {
    * Initialize the application
    */
   async init() {
-    console.log('Initializing DocsApp...');
-    console.log('API URL:', this.apiUrl);
 
     // Initialize Domma.auth
     Domma.auth.init({apiUrl: this.apiUrl});
@@ -81,7 +79,6 @@ const DocsApp = {
       Domma.icons.scan();
     }
 
-    console.log('DocsApp initialized');
   },
 
   /**
@@ -91,10 +88,7 @@ const DocsApp = {
     // Initialize centralized auth components
     this.initAuthComponents();
 
-    // Logout buttons (both banner and app section)
-    $('#logoutBtn, #logoutBtnBanner').on('click', () => {
-      Domma.auth.logout();
-    });
+    // Logout is now handled by the navbar in layout.js
 
     // New document button
     $('#newDocBtn').on('click', () => {
@@ -146,7 +140,7 @@ const DocsApp = {
         if (menuButton) {
           e.stopPropagation();
           e.preventDefault();
-          const docId = parseInt(menuButton.getAttribute('data-id'));
+          const docId = menuButton.getAttribute('data-id'); // MongoDB ObjectId is a string
           this.showDocumentCardMenu(menuButton, docId);
           return;
         }
@@ -154,7 +148,7 @@ const DocsApp = {
         // Otherwise, handle card click to open document
         const card = e.target.closest('.doc-card');
         if (card && !e.target.closest('.btn-doc-menu')) {
-          const docId = parseInt(card.getAttribute('data-id'));
+          const docId = card.getAttribute('data-id'); // MongoDB ObjectId is a string
           this.openDocument(docId);
         }
       });
@@ -398,7 +392,6 @@ const DocsApp = {
    * Handle login
    */
   async handleLogin() {
-    console.log('User logged in');
     await this.loadDocuments();
 
     // Initialize folder manager
@@ -412,7 +405,6 @@ const DocsApp = {
    * Handle logout
    */
   handleLogout() {
-    console.log('User logged out');
     this.clearState();
     this.showAuth();
   },
@@ -421,7 +413,6 @@ const DocsApp = {
    * Handle token expiry
    */
   handleTokenExpired() {
-    console.log('Token expired');
     this.saveDrafts();
     this.showAlert('Session expired. Please login again.', 'error');
     this.showAuth();
@@ -477,7 +468,6 @@ const DocsApp = {
   showAuth() {
     $('#authSection').css('display', 'block');
     $('#appSection').css('display', 'none');
-    $('#userInfoBanner').css('display', 'none');
 
     // Scan icons
     if (Domma.icons) {
@@ -491,14 +481,6 @@ const DocsApp = {
   showApp() {
     $('#authSection').css('display', 'none');
     $('#appSection').css('display', 'block');
-    $('#userInfoBanner').css('display', 'flex');
-
-    // Update user email in both banner and app section
-    const user = Domma.auth.getUser();
-    if (user) {
-      $('#userEmailBanner').text(user.email);
-      $('#userEmail').text(user.email);
-    }
 
     this.showDocumentList();
 
@@ -511,7 +493,6 @@ const DocsApp = {
    * Load documents from API
    */
   async loadDocuments() {
-    console.log('Loading documents...');
 
     try {
       const response = await fetch(`${this.apiUrl}/documents`, {
@@ -529,7 +510,6 @@ const DocsApp = {
       // Cache to localStorage
       S.set('domma-docs:list-cache', this.documents);
 
-      console.log(`Loaded ${this.documents.length} documents`);
     } catch (error) {
       console.error('Failed to load documents:', error);
 
@@ -656,21 +636,17 @@ const DocsApp = {
       const data = await response.json();
       let fetchedDocuments = data.documents || [];
 
-      console.log('Filtering by folderId:', folderId, 'type:', typeof folderId);
-      console.log('All documents:', fetchedDocuments.length);
-      console.log('Sample doc folder_id:', fetchedDocuments[0]?.folder_id, 'type:', typeof fetchedDocuments[0]?.folder_id);
 
       // Always store ALL documents for badge counts
       this.allDocuments = fetchedDocuments;
 
       // Filter client-side if folder specified
       if (folderId !== null) {
-        // Parse folder_id to int for comparison (API might return as string)
+        // Compare folder IDs as strings (MongoDB ObjectIds)
         this.documents = fetchedDocuments.filter(doc => {
-          const docFolderId = doc.folder_id === null ? null : parseInt(doc.folder_id);
+          const docFolderId = doc.folder_id === null ? null : doc.folder_id;
           return docFolderId === folderId;
         });
-        console.log('Filtered documents:', this.documents.length);
       } else {
         this.documents = fetchedDocuments;
       }
@@ -838,7 +814,6 @@ const DocsApp = {
 
     if (!title) return;
 
-    console.log('Creating new document:', title);
 
     try {
       const response = await fetch(`${this.apiUrl}/documents`, {
@@ -931,7 +906,6 @@ const DocsApp = {
         if (card) {
           e.stopPropagation();
           const templateId = card.getAttribute('data-template-id');
-          console.log('Template selected:', templateId);
           modalContainer.removeEventListener('click', templateClickHandler);
           modalContainer.removeEventListener('click', overlayClickHandler);
           document.removeEventListener('keydown', escHandler);
@@ -943,7 +917,6 @@ const DocsApp = {
       // Click handler for overlay (close)
       const overlayClickHandler = (e) => {
         if (e.target === modalContainer) {
-          console.log('Overlay clicked - closing');
           modalContainer.removeEventListener('click', templateClickHandler);
           modalContainer.removeEventListener('click', overlayClickHandler);
           document.removeEventListener('keydown', escHandler);
@@ -955,7 +928,6 @@ const DocsApp = {
       // ESC key handler
       const escHandler = (e) => {
         if (e.key === 'Escape') {
-          console.log('ESC pressed - closing');
           modalContainer.removeEventListener('click', templateClickHandler);
           modalContainer.removeEventListener('click', overlayClickHandler);
           document.removeEventListener('keydown', escHandler);
@@ -970,7 +942,6 @@ const DocsApp = {
     });
 
     const templateId = await templatePromise;
-    console.log('Template promise resolved with:', templateId);
     if (templateId) {
       await this.createDocumentFromTemplate(templateId);
     }
@@ -994,7 +965,6 @@ const DocsApp = {
 
     if (!title) return;
 
-    console.log('Creating document from template:', template.name);
 
     try {
       const response = await fetch(`${this.apiUrl}/documents`, {
@@ -1309,7 +1279,6 @@ const DocsApp = {
 
     if (!title) return;
 
-    console.log('Duplicating document:', originalDoc.title);
 
     try {
       const response = await fetch(`${this.apiUrl}/documents`, {
@@ -1407,7 +1376,6 @@ const DocsApp = {
 
     const moved = await this.folderManager.showMoveToFolderModal(this.currentDocId);
     if (moved) {
-      console.log('Document moved successfully');
     }
   },
 
@@ -1585,7 +1553,6 @@ const DocsApp = {
             document.execCommand('insertHTML', false, `<a href="${url}" target="_blank">${text}</a>`);
           }
         });
-        console.log('✓ Link button dialog configured');
       } else {
         console.warn('Link button not found');
       }
@@ -1611,12 +1578,10 @@ const DocsApp = {
             document.execCommand('insertHTML', false, `<img src="${url}" alt="Image" style="max-width: 100%;">`);
           }
         });
-        console.log('✓ Image button dialog configured');
       } else {
         console.warn('Image button not found');
       }
 
-      console.log('✓ Editor dialogs configured to use Domma Dialog');
     }, 100);
   },
 
@@ -1624,7 +1589,6 @@ const DocsApp = {
    * Open document in editor
    */
   async openDocument(docId) {
-    console.log('Opening document:', docId);
 
     this.currentDocId = docId;
     const doc = this.documents.find(d => d.id === docId);
@@ -1691,14 +1655,11 @@ const DocsApp = {
           'contextMenu',
           'imageResize'
         ]);
-        console.log('✓ Editor extensions applied successfully');
       } catch (err) {
         console.error('✗ Failed to apply editor extensions:', err);
       }
     } else {
       console.error('✗ EditorExtensions not available!');
-      console.log('window.Domma:', window.Domma);
-      console.log('window.DommaEditorExtensions:', window.DommaEditorExtensions);
     }
 
     // Listen for selection changes to update stats
@@ -1745,7 +1706,6 @@ const DocsApp = {
    */
   initTooltips() {
     setTimeout(() => {
-      console.log('Initializing tooltips...');
 
       if (!Domma || !Domma.elements || !Domma.elements.tooltip) {
         console.error('Domma.elements.tooltip is not available!');
@@ -1798,7 +1758,6 @@ const DocsApp = {
         }
       });
 
-      console.log(`Tooltips initialized: ${tooltipCount} tooltips added`);
     }, 300);
   },
 
@@ -1950,7 +1909,6 @@ const DocsApp = {
   async saveToBackend() {
     if (!this.currentDocId || !this.editor) return;
 
-    console.log('Saving to backend...');
     this.updateSaveIndicator('saving');
 
     // Show fullscreen loader
@@ -1984,7 +1942,6 @@ const DocsApp = {
       });
 
       this.updateSaveIndicator('saved');
-      console.log('Saved successfully');
 
       // Destroy loader and show success toast
       loader.destroy();
@@ -2096,7 +2053,6 @@ const DocsApp = {
       timestamp: Date.now()
     });
 
-    console.log('Draft saved to localStorage');
   },
 
   /**
@@ -2150,7 +2106,6 @@ const DocsApp = {
 
     if (!confirmed) return;
 
-    console.log('Deleting document:', docId);
 
     try {
       const response = await fetch(`${this.apiUrl}/documents/${docId}`, {
@@ -2312,7 +2267,6 @@ const DocsApp = {
     const content = this.editor.getValue();
     const title = $('#documentTitle').val();
 
-    console.log('Exporting as PDF:', title);
 
     // Create hidden iframe
     const iframe = document.createElement('iframe');
@@ -2366,7 +2320,6 @@ const DocsApp = {
     const content = this.editor.getValue();
     const title = $('#documentTitle').val();
 
-    console.log('Exporting as HTML:', title);
 
     const html = `<!DOCTYPE html>
 <html lang="en">
@@ -2400,7 +2353,6 @@ const DocsApp = {
     const content = this.editor.getValue();
     const title = $('#documentTitle').val();
 
-    console.log('Exporting as Markdown:', title);
 
     // Convert HTML to Markdown
     let markdown = `# ${title}\n\n`;
@@ -2621,7 +2573,6 @@ function initWhenReady() {
     return;
   }
 
-  console.log('✓ All dependencies loaded, initializing app...');
   DocsApp.init();
 }
 

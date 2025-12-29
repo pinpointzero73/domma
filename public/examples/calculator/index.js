@@ -166,9 +166,20 @@
             currentInput = expression;
             updateDisplay();
         } else {
-            // In basic mode, simple percentage conversion
+          // In basic mode, calculate percentage based on context
             const current = parseFloat(currentInput);
+
+          // If there's a pending operation, calculate percentage of previous value
+          if (operation && previousInput !== '') {
+            const prev = parseFloat(previousInput);
+            // Convert current number to percentage of previous number
+            // e.g., 100 + 10% → 10% of 100 = 10
+            currentInput = String(prev * (current / 100));
+          } else {
+            // No operation pending, simple percentage conversion
             currentInput = String(current / 100);
+          }
+
             updateDisplay();
         }
     }

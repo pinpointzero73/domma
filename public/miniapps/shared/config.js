@@ -1,26 +1,31 @@
 /**
  * Shared configuration for Domma MiniApps
- * Build-time variables replaced by Rollup
+ * Uses runtime environment detection (no build-time replacement needed)
  *
  * @module miniapps/shared/config
  */
 
+// Detect environment at runtime based on hostname
+const isLocal = typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1');
+
 export const config = {
   /**
    * Backend API base URL
-   *
-   * Development: http://localhost:3000/api
-   * Production: https://domma.dcbw-it.co.uk:3000/api
+   * Automatically detects environment:
+   * - localhost: http://localhost:3000/api
+   * - production: /api (relative to current domain)
    *
    * @type {string}
    */
-  apiUrl: '%%API_URL%%',
+  apiUrl: isLocal ? 'http://localhost:3000/api' : '/api',
 
   /**
    * Current environment: 'development' | 'production'
    * @type {string}
    */
-  environment: '%%NODE_ENV%%',
+  environment: isLocal ? 'development' : 'production',
 
   /**
    * Application version from package.json
@@ -29,19 +34,19 @@ export const config = {
   version: '%%APP_VERSION%%',
 
   /**
-   * Check if running in development
+   * Check if running in development (localhost)
    * @returns {boolean}
    */
   isDevelopment() {
-    return this.environment === 'development';
+    return isLocal;
   },
 
   /**
-   * Check if running in production
+   * Check if running in production (not localhost)
    * @returns {boolean}
    */
   isProduction() {
-    return this.environment === 'production';
+    return !isLocal;
   }
 };
 

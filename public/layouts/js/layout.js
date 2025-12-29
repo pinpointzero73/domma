@@ -107,6 +107,13 @@ import {SidebarModule} from './modules/sidebar.js';
             FeaturesModule.init(presetConfig.features);
         }
 
+        // Load analytics tracker (for page view tracking with IP address)
+        const analyticsScript = document.createElement('script');
+        analyticsScript.src = PathResolver.resolve('assets/js/analytics.js', depth);
+        analyticsScript.async = true;
+        document.head.appendChild(analyticsScript);
+        console.log('[Domma Layout] Analytics tracker loaded');
+
         console.log('[Domma Layout] Initialization complete');
 
     } catch (error) {
@@ -525,7 +532,9 @@ import {SidebarModule} from './modules/sidebar.js';
                 // Get user for role checking
                 const user = Domma.auth?.getUser();
                 const pathParts = window.location.pathname.split('/').filter(Boolean);
-                const levelsUp = pathParts.length - 1;
+                // Calculate levels up correctly: for /miniapps/garage/, pathParts = ['miniapps', 'garage']
+                // We need 2 levels up (../../) to reach root, so use pathParts.length directly
+                const levelsUp = pathParts.length;
                 const adminPath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'admin/index.html' : 'admin/index.html';
 
                 // Add Admin link at the start if user is admin
