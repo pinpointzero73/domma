@@ -249,7 +249,9 @@ export class FolderManager {
    * @param {number|null} parentId - Parent folder ID or null for root
    */
   async createFolder(parentId = null) {
-    const folderName = prompt('Enter folder name:');
+    const folderName = await window.Domma.elements.prompt('Enter folder name:', {
+      defaultValue: ''
+    });
     if (!folderName || !folderName.trim()) return;
 
     try {
@@ -297,7 +299,9 @@ export class FolderManager {
     const folder = this.folders.find(f => f.id === folderId);
     if (!folder) return;
 
-    const newName = prompt('Edit folder name:', folder.name);
+    const newName = await window.Domma.elements.prompt('Edit folder name:', {
+      defaultValue: folder.name
+    });
     if (!newName || !newName.trim() || newName === folder.name) return;
 
     try {
@@ -438,6 +442,137 @@ export class FolderManager {
       console.error('Failed to move document:', error);
       window.Domma.elements.toast('Failed to move document', {type: 'error'});
     }
+  }
+
+  /**
+   * Show modal to move document to a folder
+   * @param {string} documentId - Document ID
+   * @returns {Promise<boolean>} True if moved, false if cancelled
+   */
+  async showMoveToFolderModal(documentId) {
+    if (!this.app || !this.app.allDocuments) {
+      console.error('App or documents not available');
+      return false;
+    }
+
+    // Find the document to get its current folder
+    const document = this.app.allDocuments.find(d => d.id === documentId);
+    if (!document) {
+      console.error('Document not found');
+      return false;
+    }
+
+    const currentFolderId = document.folder_id;
+
+    // Build folder select options with hierarchy
+    let optionsHTML = '<option value="">No Folder (Root)</option>';
+
+    this.folders.forEach(folder => {
+      const indent = this._getFolderDepth(folder.id);
+      const prefix = '&nbsp;&nbsp;'.repeat(indent) + (indent > 0 ? '└ ' : '');
+      const selected = folder.id === currentFolderId ? 'selected' : '';
+      optionsHTML += `<option value="${folder.id}" ${selected}>${prefix}${this.escapeHtml(folder.name)}</option>`;
+    });
+
+    // Create modal content with dropdown
+    const modalContent = `
+      <div style="padding: 1rem;">
+        <p style="margin-bottom: 1rem; color: #374151;">Move "${this.escapeHtml(document.title)}" to:</p>
+        <select id="folder-select" class="form-control" style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 1rem;">
+          ${optionsHTML}
+        </select>
+      </div>
+    `;
+
+    // Show modal using Domma.elements factory mode
+    return new Promise((resolve) => {
+      const modal = window.Domma.elements.modal({
+        title: 'Move to Folder',
+        content: modalContent,
+        size: 'small',
+        buttons: [
+          {id: 'cancel', text: 'Cancel', variant: 'secondary'},
+          {id: 'move', text: 'Move', variant: 'primary'}
+        ],
+        onButtonClick: async (buttonId, modalInstance) => {
+          if (buttonId === 'cancel') {
+            resolve(false);
+            return;
+          }
+
+          if (buttonId === 'move') {
+            const selectEl = window.document.querySelector('#folder-select');
+            if (!selectEl) {
+              resolve(false);
+              return;
+            }
+
+            const targetFolderId = selectEl.value === '' ? null : selectEl.value;
+
+            // Don't move if same folder
+            if (targetFolderId === currentFolderId) {
+              window.Domma.elements.toast('Document is already in this folder', {type: 'info'});
+              resolve(false);
+              return;
+            }
+
+            // Move the document
+            try {
+              const response = await fetch(`${this.apiUrl}/documents/${documentId}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  ...window.Domma.auth.getHeaders()
+                },
+                body: JSON.stringify({
+                  folder_id: targetFolderId
+                })
+              });
+
+              if (!response.ok) {
+                throw new Error('Failed to move document');
+              }
+
+              // Refresh the app
+              if (this.app.loadDocuments) {
+                await this.app.loadDocuments();
+              }
+              await this.refreshBadges();
+
+              window.Domma.elements.toast('Document moved successfully', {type: 'success'});
+              resolve(true);
+
+            } catch (error) {
+              console.error('Failed to move document:', error);
+              window.Domma.elements.toast('Failed to move document', {type: 'error'});
+              resolve(false);
+            }
+          }
+        }
+      });
+
+      // Open the modal
+      modal.open();
+    });
+  }
+
+  /**
+   * Get folder depth (level in hierarchy)
+   * @param {string} folderId - Folder ID
+   * @returns {number} Depth level
+   */
+  _getFolderDepth(folderId) {
+    let depth = 0;
+    let currentId = folderId;
+
+    while (currentId) {
+      const folder = this.folders.find(f => f.id === currentId);
+      if (!folder || !folder.parent_id) break;
+      currentId = folder.parent_id;
+      depth++;
+    }
+
+    return depth;
   }
 
   /**

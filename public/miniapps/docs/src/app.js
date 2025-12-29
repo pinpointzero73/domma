@@ -1795,10 +1795,12 @@ const DocsApp = {
       img.style.cursor = 'pointer';
 
       // Make image resizable by dragging
-      img.addEventListener('click', (e) => {
+      img.addEventListener('click', async (e) => {
         e.preventDefault();
         const currentWidth = img.width || img.naturalWidth;
-        const newWidth = prompt('Enter image width (in pixels or %):', currentWidth);
+        const newWidth = await Domma.elements.prompt('Enter image width (in pixels or %):', {
+          defaultValue: currentWidth.toString()
+        });
 
         if (newWidth) {
           if (newWidth.includes('%')) {

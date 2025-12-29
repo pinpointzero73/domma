@@ -80,7 +80,7 @@ garage-prod:
 	NODE_ENV=production npm run build:miniapp:garage
 
 docs:
-	NODE_ENV=development npm run build:miniapp:docs
+	NODE_ENV=development node scripts/build-miniapp.js docs
 
 miniapps:
 	NODE_ENV=development npm run build:miniapps
