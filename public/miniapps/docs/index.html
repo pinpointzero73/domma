@@ -151,12 +151,65 @@
       .app-header {
           background: white;
           border-radius: 12px;
-          padding: 1.5rem 2rem;
+          padding: 2rem;
           margin-bottom: 2rem;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+          text-align: center;
+      }
+
+      .app-header h1 {
+          margin: 0 0 0.5rem;
+          color: #1f2937;
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: center;
+          gap: 0.75rem;
+      }
+
+      .app-header p {
+          color: #6b7280;
+          margin: 0;
+      }
+
+      #userInfoBanner {
+          display: none;
+          align-items: center;
+          gap: 1rem;
+          padding: 1rem 1.5rem;
+          background: #f9fafb;
+          border-radius: 8px;
+          margin-top: 1rem;
+      }
+
+      #userInfoBanner .user-email {
+          flex: 1;
+          color: #374151;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+      }
+
+      #userInfoBanner .logout-btn {
+          padding: 0.5rem 1rem;
+          background: #ef4444;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          font-size: 0.875rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+      }
+
+      #userInfoBanner .logout-btn:hover {
+          background: #dc2626;
+      }
+
+      #authSection {
+          max-width: 480px;
+          margin: 0 auto;
       }
 
       .app-title {
@@ -1925,26 +1978,19 @@
 
 <!-- Layout system will inject navbar here -->
 
-<main>
-  <!-- App Section -->
-  <div id="appSection" style="display: none;">
-    <!-- App Header -->
-    <div class="container" style="max-width: 1200px;">
-      <div class="app-header">
-        <h1 class="app-title">
-          <span data-icon="document" data-icon-size="28"></span>
-          Domma Docs
-        </h1>
-        <div class="user-info">
-          <div class="user-email">
-            <span data-icon="user" data-icon-size="16"></span>
-            <span id="userEmail"></span>
-          </div>
-          <button type="button" class="logout-btn" id="logoutBtn" data-tooltip="Logout">Logout</button>
-        </div>
+<main class="container" style="max-width: 900px; padding-top: 2rem; padding-bottom: 2rem;">
+  <!-- Authentication Section (shown when not logged in) -->
+  <div id="authSection">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>Welcome to Domma Docs</h2>
+        <p>Please use the Login button in the navigation bar to access your documents.</p>
       </div>
     </div>
+  </div>
 
+  <!-- App Section -->
+  <div id="appSection" style="display: none;">
     <!-- Document List View -->
     <div id="documentListView" class="container" style="max-width: 1200px;">
       <div class="list-header">

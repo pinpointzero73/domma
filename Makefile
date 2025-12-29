@@ -1,17 +1,17 @@
 # Domma Development Makefile
 # Makes local development builds easier with proper environment settings
 
-.PHONY: help build build-dev build-prod dev prod garage garage-prod docs miniapps clean
+.PHONY: help build build-dev build-prod dev garage garage-prod docs miniapps clean
 
 # Default target
 help:
 	@echo "Domma Development Build Commands"
 	@echo "================================="
 	@echo ""
-	@echo "Main Builds:"
-	@echo "  make dev            - Full development build (everything in dev mode)"
-	@echo "  make prod           - Full production build (everything in prod mode)"
-	@echo "  make build          - Alias for 'make prod'"
+	@echo "Development Workflow:"
+	@echo "  make dev            - Start dev server with watch/live reload"
+	@echo "  make build-dev      - Build everything once (development mode)"
+	@echo "  make build-prod     - Build everything once (production mode)"
 	@echo ""
 	@echo "MiniApps:"
 	@echo "  make garage         - Build garage app (development mode)"
@@ -28,8 +28,17 @@ help:
 	@echo "  make watch-garage   - Watch garage app for changes (requires nodemon)"
 	@echo ""
 
-# Full builds
+# Development server (watch mode with live reload)
 dev:
+	@echo "🔥 Starting development server..."
+	@echo "   - Live reload enabled"
+	@echo "   - Console.log preserved"
+	@echo "   - API: http://localhost:3000/api"
+	@echo ""
+	npm run dev
+
+# Full builds
+build-dev:
 	@echo "🔧 Building everything in DEVELOPMENT mode..."
 	@echo ""
 	NODE_ENV=development npm run build
@@ -39,7 +48,7 @@ dev:
 	@echo "   - API URL: http://localhost:3000/api"
 	@echo "   - Source maps enabled"
 
-prod:
+build-prod:
 	@echo "🚀 Building everything in PRODUCTION mode..."
 	@echo ""
 	NODE_ENV=production npm run build
@@ -49,7 +58,9 @@ prod:
 	@echo "   - API URL: /api"
 	@echo "   - Minified and optimized"
 
-build: prod
+# Legacy aliases
+build: build-prod
+prod: build-prod
 
 # Core Domma
 core:

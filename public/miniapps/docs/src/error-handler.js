@@ -169,6 +169,7 @@ export class ErrorHandler {
    */
   async checkConnection(apiUrl) {
     try {
+      // Try health endpoint first, fallback to API root if 404
       const response = await fetch(`${apiUrl}/../health`, {
         method: 'GET',
         headers: {
@@ -177,13 +178,21 @@ export class ErrorHandler {
         signal: AbortSignal.timeout(5000) // 5 second timeout
       });
 
+      // If health endpoint exists, use it
       if (response.ok) {
         this.updateConnectionStatus('online');
         return true;
-      } else {
-        this.updateConnectionStatus('error');
-        return false;
       }
+
+      // If 404, health endpoint doesn't exist - treat as online (backend exists but no health endpoint)
+      if (response.status === 404) {
+        this.updateConnectionStatus('online');
+        return true;
+      }
+
+      // Other errors indicate connectivity issues
+      this.updateConnectionStatus('error');
+      return false;
     } catch (error) {
       this.updateConnectionStatus('offline');
       return false;
@@ -281,7 +290,6 @@ export class ErrorHandler {
     if (window.Domma && window.Domma.elements) {
       await window.Domma.elements.alert(message, {title});
     } else {
-      console.log(`${title}: ${message}`);
     }
   }
 }

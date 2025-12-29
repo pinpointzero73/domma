@@ -35,8 +35,6 @@ const GarageApp = {
    * Initialize the application
    */
   async init() {
-    console.log('Initializing My Garage app...');
-
     // Initialize Domma.auth module
     Domma.auth.init({
       apiUrl: this.apiUrl
@@ -80,8 +78,6 @@ const GarageApp = {
     if (Domma.icons) {
       Domma.icons.scan();
     }
-
-    console.log('My Garage initialized successfully');
   },
 
   /**
@@ -90,7 +86,6 @@ const GarageApp = {
   showAuth() {
     $('#authSection').css('display', 'block');
     $('#appSection').css('display', 'none');
-    $('#userInfo').css('display', 'none');
   },
 
   /**
@@ -99,12 +94,6 @@ const GarageApp = {
   async showApp() {
     $('#authSection').css('display', 'none');
     $('#appSection').css('display', 'block');
-    $('#userInfo').css('display', 'flex');
-
-    const user = Domma.auth.getUser();
-    if (user) {
-      $('#userEmail').text(user.email);
-    }
 
     // Load user's vehicles
     await this.loadHistory();
@@ -115,17 +104,7 @@ const GarageApp = {
    * Setup event listeners
    */
   setupEventListeners() {
-    // Initialize centralized auth components
-    this.initAuthComponents();
-
-    // Logout button
-    const $logoutBtn = $('#logoutBtn');
-    if ($logoutBtn.length > 0) {
-      $logoutBtn.on('click', () => {
-        Domma.auth.logout();
-        // Success handled by auth event listener
-      });
-    }
+    // Logout is now handled by the navbar in layout.js
 
     // Search form
     const $searchForm = $('#searchForm');
@@ -156,58 +135,13 @@ const GarageApp = {
     $(document).on('click', '.save-vehicle-btn, .remove-vehicle-btn', function (e) {
       e.preventDefault();
       const $btn = $(this);
-      const vehicleId = parseInt($btn.attr('data-vehicle-id'), 10);
+      const vehicleId = $btn.attr('data-vehicle-id'); // MongoDB ObjectId is a string, not an integer
       const currentlySaved = $btn.attr('data-is-saved') === 'true';
       // Toggle the save state
       GarageApp.toggleSaveVehicle(vehicleId, !currentlySaved);
     });
   },
 
-  /**
-   * Initialize centralized auth components
-   */
-  initAuthComponents() {
-    // Create auth tabs
-    Domma.auth.createAuthTabs('#authTabs', {
-      activeTab: 'login',
-      onChange: (tab) => {
-        // Show/hide forms based on active tab
-        const loginContainer = document.getElementById('loginFormContainer');
-        const registerContainer = document.getElementById('registerFormContainer');
-
-        if (loginContainer && registerContainer) {
-          loginContainer.style.display = tab === 'login' ? 'block' : 'none';
-          registerContainer.style.display = tab === 'register' ? 'block' : 'none';
-        }
-      }
-    });
-
-    // Create login form
-    Domma.auth.createLoginForm('#loginFormContainer', {
-      showLabels: true,
-      onSuccess: (user) => {
-        // Success handled by auth event listener
-        // Display welcome message
-        this.showAlert(`Welcome back, ${user.name || user.email}!`, 'success');
-      },
-      onError: (error) => {
-        this.showAlert(error.message || 'Login failed', 'error');
-      }
-    });
-
-    // Create register form
-    Domma.auth.createRegisterForm('#registerFormContainer', {
-      showLabels: true,
-      onSuccess: (user) => {
-        // Success handled by auth event listener
-        // Display welcome message
-        this.showAlert(`Welcome to My Garage, ${user.name || user.email}!`, 'success');
-      },
-      onError: (error) => {
-        this.showAlert(error.message || 'Registration failed', 'error');
-      }
-    });
-  },
 
   /**
    * Handle vehicle search
@@ -423,12 +357,10 @@ const GarageApp = {
    */
   async loadGarage() {
     if (!Domma.auth.isAuthenticated()) {
-      console.log('Not authenticated, skipping garage load');
       return;
     }
 
     const $garageList = $('#garageList');
-    console.log('Loading My Garage...');
 
     try {
       const response = await fetch(`${this.apiUrl}/dvla/vehicles/saved`, {
@@ -442,7 +374,6 @@ const GarageApp = {
 
       const data = await response.json();
       this.garageVehicles = data.vehicles || [];
-      console.log(`Loaded ${this.garageVehicles.length} saved vehicles:`, this.garageVehicles);
 
       // Set up search listener (only once)
       const $searchInput = $('#garageSearch');
