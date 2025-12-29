@@ -91,8 +91,8 @@ const DocsApp = {
     // Initialize centralized auth components
     this.initAuthComponents();
 
-    // Logout button
-    $('#logoutBtn').on('click', () => {
+    // Logout buttons (both banner and app section)
+    $('#logoutBtn, #logoutBtnBanner').on('click', () => {
       Domma.auth.logout();
     });
 
@@ -475,37 +475,13 @@ const DocsApp = {
    * Show auth message (user must login via navbar)
    */
   showAuth() {
-    const appSection = document.getElementById('appSection');
-    if (appSection) {
-      appSection.style.display = 'none';
-    }
+    $('#authSection').css('display', 'block');
+    $('#appSection').css('display', 'none');
+    $('#userInfoBanner').css('display', 'none');
 
-    // Show message to login via navbar using safe DOM methods
-    const main = document.querySelector('main');
-    if (main && !document.getElementById('loginMessage')) {
-      const messageDiv = document.createElement('div');
-      messageDiv.id = 'loginMessage';
-      messageDiv.style.cssText = 'text-align: center; padding: 4rem 2rem; max-width: 600px; margin: 0 auto;';
-
-      const heading = document.createElement('h2');
-      heading.style.marginBottom = '1rem';
-      heading.textContent = 'Welcome to Domma Docs';
-
-      const para = document.createElement('p');
-      para.style.cssText = 'color: #666; margin-bottom: 2rem;';
-      para.textContent = 'Please use the Login button in the navigation bar to access your documents.';
-
-      const icon = document.createElement('span');
-      icon.setAttribute('data-icon', 'document');
-      icon.setAttribute('data-icon-size', '64');
-      icon.style.opacity = '0.3';
-
-      messageDiv.appendChild(heading);
-      messageDiv.appendChild(para);
-      messageDiv.appendChild(icon);
-      main.insertBefore(messageDiv, main.firstChild);
-
-      if (Domma.icons) Domma.icons.scan();
+    // Scan icons
+    if (Domma.icons) {
+      Domma.icons.scan();
     }
   },
 
@@ -513,20 +489,14 @@ const DocsApp = {
    * Show app section
    */
   showApp() {
-    // Hide login message if exists
-    const loginMessage = document.getElementById('loginMessage');
-    if (loginMessage) {
-      loginMessage.remove();
-    }
+    $('#authSection').css('display', 'none');
+    $('#appSection').css('display', 'block');
+    $('#userInfoBanner').css('display', 'flex');
 
-    const appSection = document.getElementById('appSection');
-    if (appSection) {
-      appSection.style.display = 'block';
-    }
-
-    // Update user email
+    // Update user email in both banner and app section
     const user = Domma.auth.getUser();
     if (user) {
+      $('#userEmailBanner').text(user.email);
       $('#userEmail').text(user.email);
     }
 

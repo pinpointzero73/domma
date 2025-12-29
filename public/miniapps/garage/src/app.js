@@ -115,9 +115,6 @@ const GarageApp = {
    * Setup event listeners
    */
   setupEventListeners() {
-    // Initialize centralized auth components
-    this.initAuthComponents();
-
     // Logout button
     const $logoutBtn = $('#logoutBtn');
     if ($logoutBtn.length > 0) {
@@ -163,55 +160,6 @@ const GarageApp = {
     });
   },
 
-  /**
-   * Initialize centralized auth components
-   */
-  initAuthComponents() {
-    // Create auth tabs
-    Domma.auth.createAuthTabs('#authTabs', {
-      activeTab: 'login',
-      onChange: (tab) => {
-        // Show/hide forms based on active tab
-        const loginContainer = document.getElementById('loginFormContainer');
-        const registerContainer = document.getElementById('registerFormContainer');
-
-        if (loginContainer && registerContainer) {
-          loginContainer.style.display = tab === 'login' ? 'block' : 'none';
-          registerContainer.style.display = tab === 'register' ? 'block' : 'none';
-        }
-      }
-    });
-
-    // Create login form
-    Domma.auth.createLoginForm('#loginFormContainer', {
-      showLabels: true,
-      onSuccess: (user) => {
-        // Success handled by auth event listener
-        // Display welcome message
-        this.showAlert(`Welcome back, ${user.name || user.email}!`, 'success');
-      },
-      onError: (error) => {
-        this.showAlert(error.message || 'Login failed', 'error');
-      }
-    });
-
-    // Create register form
-    Domma.auth.createRegisterForm('#registerFormContainer', {
-      showLabels: true,
-      onSuccess: (user) => {
-        // Success handled by auth event listener
-        // Display welcome message
-        this.showAlert(`Welcome to My Garage, ${user.name || user.email}!`, 'success');
-      },
-      onError: (error) => {
-        this.showAlert(error.message || 'Registration failed', 'error');
-      }
-    });
-
-    // Set initial visibility state (login visible, register hidden)
-    $('#loginFormContainer').show();
-    $('#registerFormContainer').hide();
-  },
 
   /**
    * Handle vehicle search
