@@ -18,6 +18,47 @@ modern UI components in one cohesive package.
 
 ## Installation
 
+### Via npm (Recommended)
+
+To install Domma-js in your project:
+
+```bash
+npm install domma-js@alpha
+```
+
+Then, import it into your JavaScript:
+
+```javascript
+import Domma, { $, _, M, D } from 'domma-js';
+```
+
+Or use CommonJS:
+
+```javascript
+const Domma = require('domma-js');
+const { $, _, M, D } = Domma;
+```
+
+### Via jsDelivr CDN
+
+For quick integration, you can directly include Domma-js from jsDelivr in your HTML. Always specify the version to
+ensure stability.
+
+```html
+<!-- CSS (include these in your <head>) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/domma.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/grid.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/elements.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/themes/domma-themes.css">
+
+<!-- JavaScript (include before your closing </body> tag) -->
+<script src="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/domma.min.js"></script>
+```
+
+### Local Files (UMD and ES Module)
+
+You can also download the distribution files and host them yourself.
+
 **Browser (UMD):**
 
 ```html

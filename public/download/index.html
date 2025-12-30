@@ -476,23 +476,41 @@
       <h2 class="text-xl font-semibold">Quick Start via CDN</h2>
     </div>
     <div class="card-body">
-      <p class="mb-4">Include Domma directly in your HTML:</p>
-      <div class="code code-block language-javascript">
-  <span class="comment">
-  &lt;!-- CSS (in this order) --&gt;
-  </span>
-        <br/>
-        &lt;link rel="stylesheet" href="path/to/domma.css"&gt;<br/>
-        &lt;link rel="stylesheet" href="path/to/grid.css"&gt;<br/>
-        &lt;link rel="stylesheet" href="path/to/elements.css"&gt;<br/>
-        &lt;link rel="stylesheet" href="path/to/domma-themes.css"&gt;<br/><br/>
-        <span class="comment">&lt;!-- JavaScript --&gt;</span><br/>
-        &lt;script src="path/to/domma.min.js"&gt;&lt;/script&gt;<br/><br/>
-        <span class="comment">&lt;!-- Ready to use! --&gt;</span><br/>
-        &lt;script&gt;<br>
-        &nbsp;&nbsp; $('.btn').on('click', () =&gt; console.log('Clicked!'));<br/>
-        &nbsp;&nbsp; Domma.theme.init({ autoDetect: true });<br/>
+      <p class="mb-4">Include Domma-js directly in your HTML from jsDelivr. Always specify the version to ensure
+        stability:</p>
+      <div class="code code-block language-markup">
+        &lt;!-- CSS (in your &lt;head&gt; section, in this order) --&gt;
+        &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/domma.css"&gt;
+        &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/grid.css"&gt;
+        &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/elements.css"&gt;
+        &lt;link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/themes/domma-themes.css"&gt;
+
+        &lt;!-- JavaScript (before your closing &lt;/body&gt; tag) --&gt;
+        &lt;script src="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/domma.min.js"&gt;&lt;/script&gt;
+
+        &lt;!-- Example usage --&gt;
+        &lt;script&gt;
+        // Wait for DOM to be ready
+        $(() => {
+        // Domma is now available globally
+        $('.btn').on('click', () => console.log('Clicked!'));
+        Domma.theme.init({ autoDetect: true });
+        });
         &lt;/script&gt;
+      </div>
+      <h3 class="text-xl font-semibold mt-6">Install via npm/yarn</h3>
+      <p class="mb-4">For modern projects, install Domma-js as a dependency:</p>
+      <div class="code code-block language-bash">
+        npm install domma-js@alpha
+      </div>
+      <p class="mt-2 mb-4">Or with Yarn:</p>
+      <div class="code code-block language-bash">
+        yarn add domma-js@alpha
+      </div>
+      <p class="mt-4">Then, import it into your JavaScript:</p>
+      <div class="code code-block language-javascript">
+        import Domma, { $, _, M, D } from 'domma-js';
       </div>
     </div>
   </section>
