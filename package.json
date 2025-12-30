@@ -12,9 +12,9 @@
     "public/dist/bundles/",
     "public/dist/elements.css",
     "public/dist/grid.css",
-    "public/dist/syntax.css",
-    "assets/types/",
-    "LICENSE",
+          "public/dist/syntax.css",
+          "public/dist/themes/",
+          "assets/types/",    "LICENSE",
     "README.md"
   ],
   "repository": {
