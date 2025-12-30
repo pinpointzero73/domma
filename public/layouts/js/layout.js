@@ -8,6 +8,7 @@ import {PathResolver} from './modules/path-resolver.js';
 import {TemplateLoader} from './modules/template-loader.js';
 import {FeaturesModule} from './modules/features.js';
 import {SidebarModule} from './modules/sidebar.js';
+import {ConsentModule} from './modules/consent.js';
 
 (async function () {
     // Wait for DOM
@@ -106,6 +107,9 @@ import {SidebarModule} from './modules/sidebar.js';
         if (presetConfig.features) {
             FeaturesModule.init(presetConfig.features);
         }
+
+        // Initialize consent banner
+        ConsentModule.init();
 
         // Load analytics tracker (for page view tracking with IP address)
         const analyticsScript = document.createElement('script');
@@ -476,6 +480,69 @@ import {SidebarModule} from './modules/sidebar.js';
             flex-direction: column;
             gap: 1rem;
             text-align: center;
+          }
+        }
+
+        /* Consent Banner */
+        .consent-banner {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: 9999;
+          background: var(--dm-surface, #fff);
+          border-top: 1px solid var(--dm-border, #dee2e6);
+          box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+          padding: 1rem 2rem;
+          animation: slideUp 0.3s ease;
+        }
+
+        .consent-content {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          max-width: 1200px;
+          margin: 0 auto;
+          gap: 2rem;
+        }
+
+        .consent-message {
+          flex: 1;
+          font-size: 0.9rem;
+          color: var(--dm-text, #212529);
+        }
+
+        .consent-actions {
+          display: flex;
+          gap: 0.75rem;
+          flex-shrink: 0;
+        }
+
+        @keyframes slideDown {
+          from {
+            transform: translateY(0);
+            opacity: 1;
+          }
+          to {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .consent-banner {
+            padding: 1rem;
+          }
+          .consent-content {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+          }
+          .consent-actions {
+            width: 100%;
+          }
+          .consent-actions .btn {
+            width: 100%;
           }
         }
       </style>

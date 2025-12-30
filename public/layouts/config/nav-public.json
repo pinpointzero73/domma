@@ -28,6 +28,11 @@
       "page": "faq"
     },
     {
+      "text": "Privacy Policy",
+      "url": "privacy-policy/index.html",
+      "page": "privacy-policy"
+    },
+    {
       "text": "Blog",
       "url": "blog/index.html",
       "page": "blog"

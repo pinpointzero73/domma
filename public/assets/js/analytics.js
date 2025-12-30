@@ -11,6 +11,19 @@
   const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
   const apiUrl = isLocal ? 'http://localhost:3000/api' : '/api';
 
+  // Check if user has given consent
+  function hasConsent() {
+    const consent = localStorage.getItem('domma:cookie-consent-accepted');
+    if (!consent) return false;
+
+    try {
+      const data = JSON.parse(consent);
+      return data.accepted === true;
+    } catch {
+      return false;
+    }
+  }
+
   // Get page information
   function getPageData() {
     return {
@@ -27,6 +40,12 @@
 
   // Send page view to backend
   async function trackPageView() {
+    // Only track if consent given
+    if (!hasConsent()) {
+      console.log('[Analytics] Consent not given, skipping page view tracking');
+      return;
+    }
+
     try {
       const pageData = getPageData();
 
