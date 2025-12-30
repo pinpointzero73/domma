@@ -36,14 +36,6 @@
           margin-top: auto;
       }
 
-      .search-card {
-          background: white;
-          border-radius: 12px;
-          padding: 2rem;
-          margin-bottom: 2rem;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      }
-
       .search-form {
           display: flex;
           flex-direction: column;
@@ -122,39 +114,84 @@
           margin: 0;
       }
 
-      .tabs {
+      /* Search card container - centers and constrains width */
+      .search-card-container {
+          max-width: 600px;
+          margin: 0 auto;
+      }
+
+      @media (max-width: 768px) {
+          .search-card-container {
+              max-width: 100%;
+          }
+      }
+
+      /* Tabs container - centered and wider than search card */
+      .tabs-container {
+          max-width: 800px;
+          margin: 0 auto 1.5rem;
+      }
+
+      /* Pill-style tabs */
+      .tabs-pills {
           display: flex;
           gap: 0.5rem;
-          margin-bottom: 1.5rem;
-          border-bottom: 2px solid #e5e7eb;
+          padding: 0.5rem;
+          background-color: var(--dm-gray-100);
+          border-radius: var(--dm-radius-lg);
       }
 
-      .tab {
+      .tab-pill {
+          flex: 1;
           padding: 0.75rem 1.5rem;
-          background: none;
+          background: transparent;
           border: none;
-          border-bottom: 3px solid transparent;
-          color: #6b7280;
+          border-radius: var(--dm-radius-md);
+          color: var(--dm-text-secondary);
           font-weight: 600;
           cursor: pointer;
-          transition: all 0.2s;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
       }
 
-      .tab:hover {
+      .tab-pill:hover:not(.active) {
+          background-color: var(--dm-surface-raised);
           color: var(--dm-primary);
       }
 
-      .tab.active {
+      .tab-pill.active {
+          background-color: var(--dm-white);
           color: var(--dm-primary);
-          border-bottom-color: var(--dm-primary);
+          box-shadow: var(--dm-shadow-sm);
+      }
+
+      @media (max-width: 768px) {
+          .tabs-container {
+              max-width: 100%;
+          }
+
+          .tabs-pills {
+              flex-direction: column;
+          }
       }
 
       .tab-content {
           display: none;
+          max-width: 720px;
+          margin: 0 auto;
       }
 
       .tab-content.active {
           display: block;
+      }
+
+      @media (max-width: 768px) {
+          .tab-content {
+              max-width: 100%;
+          }
       }
 
       .vehicle-card {
@@ -559,7 +596,7 @@
 
 <!-- Layout system will inject navbar here -->
 
-<main class="container" style="max-width: 900px; padding-top: 2rem; padding-bottom: 2rem;">
+<main class="container-fluid" style="padding-top: 2rem; padding-bottom: 2rem;">
   <!-- Authentication Section (shown when not logged in) -->
   <div id="authSection">
     <div class="auth-card">
@@ -573,44 +610,50 @@
   <!-- App Section (shown when logged in) -->
   <div id="appSection">
     <!-- Search Card -->
-    <div class="search-card">
-      <form class="search-form" id="searchForm">
-        <div class="search-input-group">
-          <span class="search-icon" data-icon="search" data-icon-size="24"></span>
-          <input
-              type="text"
-              class="search-input"
-              id="regInput"
-              placeholder="e.g. AB12CDE"
-              pattern="[A-Za-z0-9]{2,8}"
-              maxlength="8"
-              required
-              autocomplete="off">
+    <div class="search-card-container">
+      <section class="card card-hover mb-4">
+        <div class="card-body">
+          <form class="search-form" id="searchForm">
+            <div class="search-input-group">
+              <span class="search-icon" data-icon="search" data-icon-size="24"></span>
+              <input
+                  type="text"
+                  class="search-input"
+                  id="regInput"
+                  placeholder="e.g. AB12CDE"
+                  pattern="[A-Za-z0-9]{2,8}"
+                  maxlength="8"
+                  required
+                  autocomplete="off">
+            </div>
+            <button type="submit" class="search-btn" id="searchBtn">
+              Search
+            </button>
+          </form>
+          <p class="search-hint">Enter a UK vehicle registration number (e.g. AB12CDE)</p>
         </div>
-        <button type="submit" class="search-btn" id="searchBtn">
-          Search
-        </button>
-      </form>
-      <p class="search-hint">Enter a UK vehicle registration number (e.g. AB12CDE)</p>
+      </section>
     </div>
 
     <!-- Alert Container -->
     <div id="alertContainer"></div>
 
     <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab active" data-tab="results">
-        <span data-icon="document" data-icon-size="18"></span>
-        Results
-      </button>
-      <button class="tab" data-tab="garage">
-        <span data-icon="car" data-icon-size="18"></span>
-        My Garage
-      </button>
-      <button class="tab" data-tab="history">
-        <span data-icon="clock" data-icon-size="18"></span>
-        History
-      </button>
+    <div class="tabs-container">
+      <div class="tabs-pills">
+        <button class="tab-pill active" data-tab="results">
+          <span data-icon="document" data-icon-size="18"></span>
+          Results
+        </button>
+        <button class="tab-pill" data-tab="garage">
+          <span data-icon="car" data-icon-size="18"></span>
+          My Garage
+        </button>
+        <button class="tab-pill" data-tab="history">
+          <span data-icon="clock" data-icon-size="18"></span>
+          History
+        </button>
+      </div>
     </div>
 
     <!-- Results Tab -->

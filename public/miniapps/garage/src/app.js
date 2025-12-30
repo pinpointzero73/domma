@@ -116,7 +116,7 @@ const GarageApp = {
     }
 
     // Tab switching (Results/My Garage/History)
-    $('.tab').each(function () {
+    $('.tab-pill').each(function () {
       $(this).on('click', function () {
         const tabName = $(this).attr('data-tab');
         GarageApp.switchTab(tabName);
@@ -706,7 +706,7 @@ const GarageApp = {
    */
   async switchTab(tabName) {
     // Update tab buttons
-    $('.tab').each(function () {
+    $('.tab-pill').each(function () {
       const $this = $(this);
       if ($this.attr('data-tab') === tabName) {
         $this.addClass('active');
