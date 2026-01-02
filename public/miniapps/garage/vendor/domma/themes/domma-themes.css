@@ -1,9 +1,9 @@
 /*!
- * Domma Themes v0.3.0a
+ * Domma Themes v0.3.0-alpha.0
  * Dynamic Object Manipulation & Modeling API
- * (c) 2025 Darryl Waterhouse & DCBW-IT
- * Built: 2025-12-29T16:29:05.602Z
- * Commit: 8a467f0
+ * (c) 2026 Darryl Waterhouse & DCBW-IT
+ * Built: 2026-01-02T14:32:25.353Z
+ * Commit: bc8e519
  */
 
 /**
@@ -2687,7 +2687,7 @@
     --dm-surface-overlay: #f8f9fa;
 
     /* Text - Dark colors for readability on light */
-    --dm-text: #212529;
+    --dm-text: #1a1a1a; /* Even darker for better contrast */
     --dm-text-secondary: #495057;
     --dm-text-muted: #6c757d;
     --dm-text-disabled: #adb5bd;
@@ -2700,8 +2700,8 @@
 
 
     --dm-primary: #78909c;
-    --dm-primary-hover: #8a9fa9;
-    --dm-primary-active: #9caeb6;
+    --dm-primary-hover: #546e7a;
+    --dm-primary-active: #455a64;
     --dm-primary-light: rgba(120, 144, 156, 0.15);
     --dm-primary-dark: #607d8b;
 

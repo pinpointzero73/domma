@@ -19,7 +19,7 @@
     --dm-surface-overlay: #f8f9fa;
 
     /* Text - Dark colors for readability on light */
-    --dm-text: #212529;
+    --dm-text: #1a1a1a; /* Even darker for better contrast */
     --dm-text-secondary: #495057;
     --dm-text-muted: #6c757d;
     --dm-text-disabled: #adb5bd;
@@ -32,8 +32,8 @@
 
 
     --dm-primary: #78909c;
-    --dm-primary-hover: #8a9fa9;
-    --dm-primary-active: #9caeb6;
+    --dm-primary-hover: #546e7a;
+    --dm-primary-active: #455a64;
     --dm-primary-light: rgba(120, 144, 156, 0.15);
     --dm-primary-dark: #607d8b;
 

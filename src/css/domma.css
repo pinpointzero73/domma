@@ -369,11 +369,12 @@ body {
 a {
     color: var(--dm-primary);
     text-decoration: none;
+    transition: color 0.2s ease;
 }
 
 a:hover {
     color: var(--dm-primary-hover);
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 code, pre {
@@ -1383,6 +1384,91 @@ code, pre {
 }
 
 /* ============================================
+   GLOW UTILITIES
+   ============================================ */
+
+.glow-sm {
+    text-shadow: var(--dm-glow-sm);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow {
+    text-shadow: var(--dm-glow);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow-md {
+    text-shadow: var(--dm-glow-md);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow-lg {
+    text-shadow: var(--dm-glow-lg);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow-xl {
+    text-shadow: var(--dm-glow-xl);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow-primary {
+    text-shadow: var(--dm-glow-primary);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow-secondary {
+    text-shadow: var(--dm-glow-secondary);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow-success {
+    text-shadow: var(--dm-glow-success);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow-warning {
+    text-shadow: var(--dm-glow-warning);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow-danger {
+    text-shadow: var(--dm-glow-danger);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow-info {
+    text-shadow: var(--dm-glow-info);
+    transition: text-shadow 0.3s ease;
+}
+
+/* Hover variants */
+.glow-hover:hover {
+    text-shadow: var(--dm-glow);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow-primary-hover:hover {
+    text-shadow: var(--dm-glow-primary);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow-success-hover:hover {
+    text-shadow: var(--dm-glow-success);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow-warning-hover:hover {
+    text-shadow: var(--dm-glow-warning);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow-danger-hover:hover {
+    text-shadow: var(--dm-glow-danger);
+    transition: text-shadow 0.3s ease;
+}
+
+/* ============================================
    SIZE UTILITIES
    ============================================ */
 
@@ -2303,4 +2389,20 @@ code, pre {
     --dm-black-t30: rgba(0, 0, 0, 0.3);
     --dm-black-t50: rgba(0, 0, 0, 0.5);
     --dm-black-t70: rgba(0, 0, 0, 0.7);
+
+    /* ================================================
+       GLOW EFFECTS
+       ================================================ */
+    --dm-glow-sm: 0 0 8px rgba(255, 255, 255, 0.3);
+    --dm-glow: 0 0 15px rgba(255, 255, 255, 0.5);
+    --dm-glow-md: 0 0 20px rgba(255, 255, 255, 0.6);
+    --dm-glow-lg: 0 0 30px rgba(255, 255, 255, 0.7);
+    --dm-glow-xl: 0 0 40px rgba(255, 255, 255, 0.8);
+
+    --dm-glow-primary: 0 0 20px rgba(59, 130, 246, 0.6);
+    --dm-glow-secondary: 0 0 20px rgba(139, 92, 246, 0.6);
+    --dm-glow-success: 0 0 20px rgba(34, 197, 94, 0.6);
+    --dm-glow-warning: 0 0 20px rgba(245, 158, 11, 0.6);
+    --dm-glow-danger: 0 0 20px rgba(239, 68, 68, 0.6);
+    --dm-glow-info: 0 0 20px rgba(14, 165, 233, 0.6);
 }

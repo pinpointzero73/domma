@@ -463,6 +463,15 @@ export const ui = {
     'map-pin': {
         viewBox: '0 0 24 24',
         path: 'M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z M12 13a3 3 0 100-6 3 3 0 000 6z',
+      stroke: 'currentColor',
+      fill: 'none',
+      strokeWidth: 2,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round'
+    },
+  'help-circle': {
+    viewBox: '0 0 24 24',
+    path: 'M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3 M12 17h.01',
         stroke: 'currentColor',
         fill: 'none',
         strokeWidth: 2,

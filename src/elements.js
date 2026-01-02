@@ -5616,6 +5616,149 @@ class Pillbox extends Component {
  */
 
 // ============================================
+// Timeline Component  
+// ============================================
+
+/**
+ * Timeline Component - Data-driven timeline with multiple layouts
+ * Features: Vertical/horizontal layouts, responsive design, animations, theming
+ */
+class Timeline extends Component {
+    static defaults = {
+        items: [],
+        layout: 'vertical', // 'vertical', 'horizontal', 'centered'
+        animation: true,
+        animationDelay: 100,
+        responsive: true,
+        clickable: false,
+        theme: 'default', // 'default', 'minimal', 'corporate'
+        onItemClick: null,
+        yearWidth: '80px',
+        contentMaxWidth: '600px'
+    };
+
+    constructor(selector, options = {}) {
+        super(selector, options);
+        this._init();
+    }
+
+    _init() {
+        if (!this.element) return;
+
+        this.element.classList.add('dm-timeline', `dm-timeline-${this.options.layout}`);
+
+        if (this.options.theme !== 'default') {
+            this.element.classList.add(`dm-timeline-${this.options.theme}`);
+        }
+
+        this._renderItems();
+        this._attachEvents();
+
+        if (this.options.animation) {
+            this._animateItems();
+        }
+    }
+
+    _renderItems() {
+        const items = this.options.items;
+        if (!Array.isArray(items) || items.length === 0) return;
+
+        this.element.innerHTML = '';
+
+        items.forEach((item, index) => {
+            const itemEl = document.createElement('div');
+            itemEl.className = 'dm-timeline-item';
+            itemEl.setAttribute('data-index', index);
+
+            if (this.options.animation) {
+                itemEl.style.opacity = '0';
+                itemEl.style.transform = 'translateY(20px)';
+                itemEl.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            }
+
+            itemEl.innerHTML = `
+                <div class="dm-timeline-year">${this._escapeHtml(item.year || '')}</div>
+                <div class="dm-timeline-content">
+                    <h4 class="dm-timeline-title">${this._escapeHtml(item.title || '')}</h4>
+                    <p class="dm-timeline-description">${this._escapeHtml(item.description || '')}</p>
+                </div>
+            `;
+
+            this.element.appendChild(itemEl);
+        });
+    }
+
+    _attachEvents() {
+        if (!this.options.clickable) return;
+
+        this._addEventListener(this.element, 'click', (e) => {
+            const itemEl = e.target.closest('.dm-timeline-item');
+            if (itemEl) {
+                const index = parseInt(itemEl.getAttribute('data-index'), 10);
+                const item = this.options.items[index];
+                if (item && this.options.onItemClick) {
+                    this.options.onItemClick(item, index, itemEl);
+                }
+            }
+        });
+    }
+
+    _animateItems() {
+        const items = this.element.querySelectorAll('.dm-timeline-item');
+        items.forEach((item, index) => {
+            setTimeout(() => {
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0)';
+            }, index * this.options.animationDelay);
+        });
+    }
+
+    _escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Public API methods
+    setItems(items) {
+        this.options.items = items;
+        this._renderItems();
+        if (this.options.animation) {
+            this._animateItems();
+        }
+        return this;
+    }
+
+    addItem(item) {
+        this.options.items.push(item);
+        this._renderItems();
+        if (this.options.animation) {
+            this._animateItems();
+        }
+        return this;
+    }
+
+    getItems() {
+        return [...this.options.items];
+    }
+
+    setLayout(layout) {
+        this.element.classList.remove(`dm-timeline-${this.options.layout}`);
+        this.options.layout = layout;
+        this.element.classList.add(`dm-timeline-${layout}`);
+        return this;
+    }
+
+    refresh() {
+        this._renderItems();
+        if (this.options.animation) {
+            this._animateItems();
+        }
+        return this;
+    }
+}
+
+// ============================================
 // Elements Module Export
 // ============================================
 
@@ -5805,6 +5948,14 @@ export const elements = {
 
     treeView(selector, options = {}) {
         const instance = new TreeView(selector, options);
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
+    timeline(selector, options = {}) {
+        const instance = new Timeline(selector, options);
         if (instance.element) {
             this._instances.set(instance.element, instance);
         }
