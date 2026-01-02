@@ -107,6 +107,11 @@
       "slug": "timer"
     },
     {
+      "text": "Timeline",
+      "url": "../timeline/index.html",
+      "slug": "timeline"
+    },
+    {
       "text": "Toast",
       "url": "../toast/index.html",
       "slug": "toast"

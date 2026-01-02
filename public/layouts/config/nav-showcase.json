@@ -160,6 +160,11 @@
           "section": "timer"
         },
         {
+          "text": "Timeline",
+          "url": "showcase/elements/timeline/index.html",
+          "section": "timeline"
+        },
+        {
           "text": "Toast",
           "url": "showcase/elements/toast/index.html",
           "section": "toast"

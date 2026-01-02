@@ -247,3 +247,4 @@ For detailed module documentation, see:
 - **Showcase development**: [public/showcase/CLAUDE.md](./public/showcase/CLAUDE.md)
 - **Full documentation index**: [Documentation Structure](#documentation-structure) section above
 - Use the innate Domma grid system where possible
+- Adding an element should automatically trigger full documentation and a showcase page replete with examples and a tutorial
