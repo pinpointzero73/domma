@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glow Effects - Domma Showcase</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../css/domma-showcase.css">
+
+  <style>
+      .demo-dark {
+          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+          padding: 3rem;
+          border-radius: 8px;
+          text-align: center;
+          color: white;
+      }
+
+      .demo-text {
+          font-size: 2rem;
+          font-weight: 600;
+          margin: 1rem 0;
+      }
+  </style>
+</head>
+<body class="dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
+
+<!-- Hero Section -->
+<section class="hero hero-gradient-primary hero-lg">
+  <h1>Glow Effects</h1>
+  <p>Text and box glow effects to add emphasis and visual interest to your UI</p>
+  <p class="mt-4"><code>.glow .glow-primary .glow-hover</code></p>
+</section>
+
+<!-- Main Content -->
+<main class="container py-8">
+
+  <!-- Text Glow Sizes -->
+  <section class="card mb-6" data-section="text-glow-sizes">
+    <div class="card-body">
+      <h2 class="card-title">Text Glow Sizes</h2>
+      <p class="text-muted mb-4">
+        Different glow intensities for various emphasis levels
+      </p>
+      <div class="demo-dark mb-4">
+        <p class="demo-text glow-sm">Small Glow</p>
+        <p class="demo-text glow">Default Glow</p>
+        <p class="demo-text glow-md">Medium Glow</p>
+        <p class="demo-text glow-lg">Large Glow</p>
+        <p class="demo-text glow-xl">Extra Large Glow</p>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;h1 class="glow-sm">Small Glow&lt;/h1>
+&lt;h1 class="glow">Default Glow&lt;/h1>
+&lt;h1 class="glow-md">Medium Glow&lt;/h1>
+&lt;h1 class="glow-lg">Large Glow&lt;/h1>
+&lt;h1 class="glow-xl">Extra Large Glow&lt;/h1></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Colour Variants -->
+  <section class="card mb-6" data-section="color-variants">
+    <div class="card-body">
+      <h2 class="card-title">Colour Variants</h2>
+      <p class="text-muted mb-4">
+        Theme-aware glow colours for different contexts
+      </p>
+      <div class="row g-4 mb-4">
+        <div class="col-lg-4 col-md-6">
+          <div class="card" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+            <div class="card-body text-center py-5">
+              <h3 class="glow-primary" style="color: white; margin: 0;">Primary</h3>
+              <code class="mt-3 d-block"
+                    style="background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.9); padding: 0.25rem 0.5rem; border-radius: 4px;">.glow-primary</code>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="card" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+            <div class="card-body text-center py-5">
+              <h3 class="glow-secondary" style="color: white; margin: 0;">Secondary</h3>
+              <code class="mt-3 d-block"
+                    style="background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.9); padding: 0.25rem 0.5rem; border-radius: 4px;">.glow-secondary</code>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="card" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+            <div class="card-body text-center py-5">
+              <h3 class="glow-success" style="color: white; margin: 0;">Success</h3>
+              <code class="mt-3 d-block"
+                    style="background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.9); padding: 0.25rem 0.5rem; border-radius: 4px;">.glow-success</code>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="card" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+            <div class="card-body text-center py-5">
+              <h3 class="glow-warning" style="color: white; margin: 0;">Warning</h3>
+              <code class="mt-3 d-block"
+                    style="background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.9); padding: 0.25rem 0.5rem; border-radius: 4px;">.glow-warning</code>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="card" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+            <div class="card-body text-center py-5">
+              <h3 class="glow-danger" style="color: white; margin: 0;">Danger</h3>
+              <code class="mt-3 d-block"
+                    style="background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.9); padding: 0.25rem 0.5rem; border-radius: 4px;">.glow-danger</code>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="card" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+            <div class="card-body text-center py-5">
+              <h3 class="glow-info" style="color: white; margin: 0;">Info</h3>
+              <code class="mt-3 d-block"
+                    style="background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.9); padding: 0.25rem 0.5rem; border-radius: 4px;">.glow-info</code>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;h1 class="glow-primary">Primary Glow&lt;/h1>
+&lt;h1 class="glow-success">Success Glow&lt;/h1>
+&lt;h1 class="glow-danger">Danger Glow&lt;/h1></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hover Effects -->
+  <section class="card mb-6" data-section="hover-effects">
+    <div class="card-body">
+      <h2 class="card-title">Hover Effects</h2>
+      <p class="text-muted mb-4">
+        Add glow on hover for interactive elements
+      </p>
+      <div class="demo-dark mb-4">
+        <div class="row g-4 text-center">
+          <div class="col-lg-2 col-md-4 col-6">
+            <h3 class="glow-hover" style="cursor: pointer; color: white; margin: 1rem 0;">Default</h3>
+            <code
+                style="background: rgba(0,0,0,0.6); color: rgba(255,255,255,0.95); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.75rem;">.glow-hover</code>
+          </div>
+          <div class="col-lg-2 col-md-4 col-6">
+            <h3 class="glow-primary-hover" style="cursor: pointer; color: white; margin: 1rem 0;">Primary</h3>
+            <code
+                style="background: rgba(0,0,0,0.6); color: rgba(255,255,255,0.95); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.75rem;">.glow-primary-hover</code>
+          </div>
+          <div class="col-lg-2 col-md-4 col-6">
+            <h3 class="glow-secondary-hover" style="cursor: pointer; color: white; margin: 1rem 0;">Secondary</h3>
+            <code
+                style="background: rgba(0,0,0,0.6); color: rgba(255,255,255,0.95); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.75rem;">.glow-secondary-hover</code>
+          </div>
+          <div class="col-lg-2 col-md-4 col-6">
+            <h3 class="glow-success-hover" style="cursor: pointer; color: white; margin: 1rem 0;">Success</h3>
+            <code
+                style="background: rgba(0,0,0,0.6); color: rgba(255,255,255,0.95); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.75rem;">.glow-success-hover</code>
+          </div>
+          <div class="col-lg-2 col-md-4 col-6">
+            <h3 class="glow-warning-hover" style="cursor: pointer; color: white; margin: 1rem 0;">Warning</h3>
+            <code
+                style="background: rgba(0,0,0,0.6); color: rgba(255,255,255,0.95); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.75rem;">.glow-warning-hover</code>
+          </div>
+          <div class="col-lg-2 col-md-4 col-6">
+            <h3 class="glow-danger-hover" style="cursor: pointer; color: white; margin: 1rem 0;">Danger</h3>
+            <code
+                style="background: rgba(0,0,0,0.6); color: rgba(255,255,255,0.95); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.75rem;">.glow-danger-hover</code>
+          </div>
+        </div>
+        <div class="row g-4 text-center mt-2">
+          <div class="col-12">
+            <h3 class="glow-info-hover" style="cursor: pointer; color: white; margin: 1rem 0;">Info Hover</h3>
+            <code
+                style="background: rgba(0,0,0,0.6); color: rgba(255,255,255,0.95); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.75rem;">.glow-info-hover</code>
+          </div>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;button class="glow-hover">Hover for Glow&lt;/button>
+&lt;a href="#" class="glow-primary-hover">Primary on Hover&lt;/a>
+&lt;h1 class="glow-success-hover">Success on Hover&lt;/h1></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Practical Examples -->
+  <section class="card mb-6" data-section="practical-examples">
+    <div class="card-body">
+      <h2 class="card-title">Practical Examples</h2>
+      <p class="text-muted mb-4">
+        Real-world use cases for glow effects
+      </p>
+
+      <!-- Hero Title -->
+      <div class="mb-5">
+        <h3>Hero Title</h3>
+        <div class="demo-dark mb-3">
+          <h1 class="glow-lg glow-primary" style="font-size: 3rem; margin: 0; color: white;">
+            Welcome to the Future
+          </h1>
+          <p style="opacity: 0.8; margin-top: 1rem;">Transform your ideas into reality</p>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="mb-5">
+        <h3>Navigation Links</h3>
+        <div class="demo-dark mb-3">
+          <nav style="display: flex; gap: 2rem; justify-content: center;">
+            <a href="#" class="glow-hover" style="color: white; text-decoration: none;">Home</a>
+            <a href="#" class="glow-hover" style="color: white; text-decoration: none;">About</a>
+            <a href="#" class="glow-primary-hover" style="color: var(--dm-primary); text-decoration: none;">Features</a>
+            <a href="#" class="glow-hover" style="color: white; text-decoration: none;">Contact</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Call to Action -->
+      <div class="mb-5">
+        <h3>Call to Action Button</h3>
+        <div class="demo-dark mb-3">
+          <button class="btn btn-primary btn-lg glow-primary glow-hover"
+                  style="font-size: 1.25rem; padding: 1rem 2rem;">
+            Get Started Now
+          </button>
+        </div>
+      </div>
+
+      <!-- Badge/Label -->
+      <div class="mb-5">
+        <h3>Status Badges</h3>
+        <div class="demo-dark mb-3">
+                        <span class="badge badge-success glow-success" style="font-size: 1rem; padding: 0.5rem 1rem;">
+                            LIVE
+                        </span>
+          <span class="badge badge-warning glow-warning mx-3" style="font-size: 1rem; padding: 0.5rem 1rem;">
+                            BETA
+                        </span>
+          <span class="badge badge-danger glow-danger" style="font-size: 1rem; padding: 0.5rem 1rem;">
+                            HOT
+                        </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CSS Variables -->
+  <section class="card mb-6" data-section="css-variables">
+    <div class="card-body">
+      <h2 class="card-title">CSS Variables</h2>
+      <p class="text-muted mb-4">
+        Customize glow effects using CSS custom properties
+      </p>
+
+      <div class="code-example mb-4">
+<pre><code class="language-css">/* Default glow variables */
+:root {
+    --dm-glow-sm: 0 0 8px rgba(255, 255, 255, 0.3);
+    --dm-glow: 0 0 15px rgba(255, 255, 255, 0.5);
+    --dm-glow-md: 0 0 20px rgba(255, 255, 255, 0.6);
+    --dm-glow-lg: 0 0 30px rgba(255, 255, 255, 0.7);
+    --dm-glow-xl: 0 0 40px rgba(255, 255, 255, 0.8);
+    
+    /* Colour variants */
+    --dm-glow-primary: 0 0 20px rgba(59, 130, 246, 0.6);
+    --dm-glow-success: 0 0 20px rgba(34, 197, 94, 0.6);
+    --dm-glow-danger: 0 0 20px rgba(239, 68, 68, 0.6);
+}
+
+/* Custom glow */
+.custom-glow {
+    text-shadow: 0 0 25px rgba(147, 51, 234, 0.8);
+}</code></pre>
+      </div>
+
+      <h3>Custom Example</h3>
+      <div class="demo-dark mb-3">
+        <h2 style="color: #9333ea; text-shadow: 0 0 25px rgba(147, 51, 234, 0.8);">
+          Custom Purple Glow
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reference -->
+  <section class="card" data-section="reference">
+    <div class="card-body">
+      <h2 class="card-title">Class Reference</h2>
+
+      <h3 class="mt-4">Size Classes</h3>
+      <ul>
+        <li><code>.glow-sm</code> - Small glow effect (8px)</li>
+        <li><code>.glow</code> - Default glow effect (15px)</li>
+        <li><code>.glow-md</code> - Medium glow effect (20px)</li>
+        <li><code>.glow-lg</code> - Large glow effect (30px)</li>
+        <li><code>.glow-xl</code> - Extra large glow effect (40px)</li>
+      </ul>
+
+      <h3 class="mt-4">Colour Classes</h3>
+      <ul>
+        <li><code>.glow-primary</code> - Primary theme colour glow</li>
+        <li><code>.glow-secondary</code> - Secondary theme colour glow</li>
+        <li><code>.glow-success</code> - Success/green glow</li>
+        <li><code>.glow-warning</code> - Warning/yellow glow</li>
+        <li><code>.glow-danger</code> - Danger/red glow</li>
+        <li><code>.glow-info</code> - Info/blue glow</li>
+      </ul>
+
+      <h3 class="mt-4">Hover Classes</h3>
+      <ul>
+        <li><code>.glow-hover</code> - Default glow on hover</li>
+        <li><code>.glow-primary-hover</code> - Primary glow on hover</li>
+        <li><code>.glow-success-hover</code> - Success glow on hover</li>
+        <li><code>.glow-warning-hover</code> - Warning glow on hover</li>
+        <li><code>.glow-danger-hover</code> - Danger glow on hover</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<!-- Domma JavaScript -->
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    // Scan for icons
+    if (typeof Domma !== 'undefined' && Domma.icons) {
+      Domma.icons.scan();
+    }
+  });
+</script>
+</body>
+</html>

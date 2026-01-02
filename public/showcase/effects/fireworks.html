@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fireworks Effects - Domma Showcase</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../css/domma-showcase.css">
+
+  <style>
+      .demo-box {
+          min-height: 300px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          overflow: hidden;
+      }
+
+      .dark-demo-box {
+          background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      }
+
+      .celebration-btn {
+          z-index: 10;
+      }
+  </style>
+</head>
+<body class="dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
+
+<!-- Hero Section -->
+<section class="hero hero-gradient-primary hero-lg">
+  <h1>Fireworks Effects</h1>
+  <p>CSS-only animated fireworks for celebrations and special moments</p>
+  <p class="mt-4"><code>.firework .firework-burst .firework-sparkle</code></p>
+</section>
+
+<!-- Main Content -->
+<main class="container py-8">
+
+  <!-- Burst Effect -->
+  <section class="card mb-6" data-section="burst-effect">
+    <div class="card-body">
+      <h2 class="card-title">Burst Effect</h2>
+      <p class="text-muted mb-4">
+        Expanding particle burst animation using multiple radial gradients
+      </p>
+      <div class="demo-box mb-4"
+           style="background: linear-gradient(to bottom, #000428, #004e92); min-height: 400px; position: relative; overflow: hidden;">
+        <div id="firework-demo-1" style="position: absolute; inset: 0;">
+          <!-- Particles will be generated here -->
+        </div>
+        <div
+            style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+          <button onclick="launchFirework('firework-demo-1', 'celebration')" class="btn btn-warning btn-sm">
+            Celebration
+          </button>
+          <button onclick="launchFirework('firework-demo-1', 'special')" class="btn btn-light btn-sm">Special</button>
+          <button onclick="launchFirework('firework-demo-1', 'birthday')" class="btn btn-primary btn-sm">Birthday
+          </button>
+          <button onclick="launchFirework('firework-demo-1', 'romance')" class="btn btn-danger btn-sm">Romance</button>
+          <button onclick="launchFirework('firework-demo-1', 'success')" class="btn btn-success btn-sm">Success</button>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;div class="firework firework-burst">
+    &lt;div class="firework-launch">&lt;/div>
+    &lt;div class="firework-particles">&lt;/div>
+&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Theme Variants -->
+  <section class="card mb-6" data-section="theme-variants">
+    <div class="card-body">
+      <h2 class="card-title">Theme Variants</h2>
+      <p class="text-muted mb-4">
+        Different colour themes for various occasions
+      </p>
+      <div class="demo-box mb-4"
+           style="background: linear-gradient(to bottom, #1a1a2e, #0f0f1e); min-height: 400px; position: relative; overflow: hidden;">
+        <div id="firework-demo-2" style="position: absolute; inset: 0;">
+          <!-- Particles will be generated here -->
+        </div>
+        <div
+            style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 10; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 500px;">
+          <button onclick="launchFirework('firework-demo-2', 'winter')" class="btn btn-info btn-sm">Winter</button>
+          <button onclick="launchFirework('firework-demo-2', 'christmas')" class="btn btn-danger btn-sm">Christmas
+          </button>
+          <button onclick="launchFirework('firework-demo-2', 'newyear')" class="btn btn-warning btn-sm">New Year
+          </button>
+          <button onclick="launchFirework('firework-demo-2', 'patriotic')" class="btn btn-primary btn-sm">Patriotic
+          </button>
+          <button onclick="launchFirework('firework-demo-2', 'sunset')" class="btn btn-warning btn-sm">Sunset</button>
+          <button onclick="launchFirework('firework-demo-2', 'ocean')" class="btn btn-info btn-sm">Ocean</button>
+          <button onclick="launchFirework('firework-demo-2', 'purple')" class="btn btn-secondary btn-sm">Purple</button>
+          <button onclick="launchFirework('firework-demo-2', 'special')" class="btn btn-light btn-sm">Special</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Multiple Fireworks Display -->
+  <section class="card mb-6" data-section="multiple-display">
+    <div class="card-body">
+      <h2 class="card-title">Grand Display</h2>
+      <p class="text-muted mb-4">
+        Launch multiple fireworks with different themes simultaneously
+      </p>
+      <div class="demo-box mb-4"
+           style="background: linear-gradient(to bottom, #000428, #004e92); min-height: 500px; position: relative; overflow: hidden;">
+        <div id="firework-demo-3" style="position: absolute; inset: 0;">
+          <!-- Multiple firework containers -->
+        </div>
+        <div
+            style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+          <button onclick="launchMultipleFireworks('firework-demo-3', 'mixed', 8)" class="btn btn-primary btn-lg">
+            🎆 Grand Display (8)
+          </button>
+          <button onclick="launchMultipleFireworks('firework-demo-3', 'celebration', 5)" class="btn btn-warning">
+            🎊 Celebration (5)
+          </button>
+          <button onclick="launchMultipleFireworks('firework-demo-3', 'newyear', 10)" class="btn btn-light">
+            ✨ New Year (10)
+          </button>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-javascript">// Launch multiple fireworks
+function launchMultipleFireworks(containerId, theme, count) {
+    const themes = ['celebration', 'special', 'birthday', 'newyear'];
+    
+    for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+            const currentTheme = theme === 'mixed' ? 
+                themes[Math.floor(Math.random() * themes.length)] : theme;
+            const position = 20 + Math.random() * 60;
+            launchFirework(containerId, currentTheme, position);
+        }, i * 300 + Math.random() * 200);
+    }
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Colour Variants -->
+  <section class="card mb-6" data-section="color-variants">
+    <div class="card-body">
+      <h2 class="card-title">Colour Variants</h2>
+      <p class="text-muted mb-4">
+        Click each card to launch themed fireworks
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-4">
+        <div class="card bg-gradient-to-br from-gray-900 to-gray-800"
+             style="min-height: 300px; position: relative; cursor: pointer; overflow: hidden;"
+             onclick="launchFirework('color-primary', 'patriotic', 50)">
+          <div id="color-primary" style="position: absolute; inset: 0;"></div>
+          <div class="card-body d-flex flex-column justify-content-end"
+               style="position: relative; z-index: 10; pointer-events: none;">
+            <h4 class="text-white mb-2">Patriotic</h4>
+            <p class="text-white-50 small mb-0">Red, White & Blue</p>
+            <code class="mt-2"
+                  style="background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.9); padding: 0.5rem; border-radius: 4px; display: inline-block;">Click
+              to launch</code>
+          </div>
+        </div>
+        <div class="card bg-gradient-to-br from-purple-900 to-purple-800"
+             style="min-height: 300px; position: relative; cursor: pointer; overflow: hidden;"
+             onclick="launchFirework('color-secondary', 'purple', 50)">
+          <div id="color-secondary" style="position: absolute; inset: 0;"></div>
+          <div class="card-body d-flex flex-column justify-content-end"
+               style="position: relative; z-index: 10; pointer-events: none;">
+            <h4 class="text-white mb-2">Purple Magic</h4>
+            <p class="text-white-50 small mb-0">Purple & White</p>
+            <code class="mt-2"
+                  style="background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.9); padding: 0.5rem; border-radius: 4px; display: inline-block;">Click
+              to launch</code>
+          </div>
+        </div>
+        <div class="card bg-gradient-to-br from-green-900 to-green-800"
+             style="min-height: 300px; position: relative; cursor: pointer; overflow: hidden;"
+             onclick="launchFirework('color-success', 'success', 50)">
+          <div id="color-success" style="position: absolute; inset: 0;"></div>
+          <div class="card-body d-flex flex-column justify-content-end"
+               style="position: relative; z-index: 10; pointer-events: none;">
+            <h4 class="text-white mb-2">Success</h4>
+            <p class="text-white-50 small mb-0">Green & Gold</p>
+            <code class="mt-2"
+                  style="background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.9); padding: 0.5rem; border-radius: 4px; display: inline-block;">Click
+              to launch</code>
+          </div>
+        </div>
+        <div class="card bg-gradient-to-br from-yellow-900 to-yellow-800"
+             style="min-height: 300px; position: relative; cursor: pointer; overflow: hidden;"
+             onclick="launchFirework('color-warning', 'celebration', 50)">
+          <div id="color-warning" style="position: absolute; inset: 0;"></div>
+          <div class="card-body d-flex flex-column justify-content-end"
+               style="position: relative; z-index: 10; pointer-events: none;">
+            <h4 class="text-white mb-2">Celebration</h4>
+            <p class="text-white-50 small mb-0">Gold & Yellow</p>
+            <code class="mt-2"
+                  style="background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.9); padding: 0.5rem; border-radius: 4px; display: inline-block;">Click
+              to launch</code>
+          </div>
+        </div>
+        <div class="card bg-gradient-to-br from-red-900 to-pink-900"
+             style="min-height: 300px; position: relative; cursor: pointer; overflow: hidden;"
+             onclick="launchFirework('color-danger', 'romance', 50)">
+          <div id="color-danger" style="position: absolute; inset: 0;"></div>
+          <div class="card-body d-flex flex-column justify-content-end"
+               style="position: relative; z-index: 10; pointer-events: none;">
+            <h4 class="text-white mb-2">Romance</h4>
+            <p class="text-white-50 small mb-0">Red & Pink</p>
+            <code class="mt-2"
+                  style="background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.9); padding: 0.5rem; border-radius: 4px; display: inline-block;">Click
+              to launch</code>
+          </div>
+        </div>
+        <div class="card bg-gradient-to-br from-blue-900 to-cyan-900"
+             style="min-height: 300px; position: relative; cursor: pointer; overflow: hidden;"
+             onclick="launchFirework('color-info', 'ocean', 50)">
+          <div id="color-info" style="position: absolute; inset: 0;"></div>
+          <div class="card-body d-flex flex-column justify-content-end"
+               style="position: relative; z-index: 10; pointer-events: none;">
+            <h4 class="text-white mb-2">Ocean</h4>
+            <p class="text-white-50 small mb-0">Blue & Cyan</p>
+            <code class="mt-2"
+                  style="background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.9); padding: 0.5rem; border-radius: 4px; display: inline-block;">Click
+              to launch</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Full width rainbow card -->
+      <div class="card bg-gradient-to-br from-purple-900 via-pink-900 to-indigo-900"
+           style="min-height: 350px; position: relative; cursor: pointer; overflow: hidden;"
+           onclick="launchMultipleFireworks('color-rainbow', 'mixed', 5)">
+        <div id="color-rainbow" style="position: absolute; inset: 0;"></div>
+        <div class="card-body d-flex flex-column justify-content-center align-items-center"
+             style="position: relative; z-index: 10; pointer-events: none;">
+          <h3 class="text-white mb-3">🌈 Rainbow Spectacular</h3>
+          <p class="text-white-50 mb-3">Multiple themes in one grand display</p>
+          <code
+              style="background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.9); padding: 0.75rem 1.5rem; border-radius: 4px; font-size: 1.1rem;">Click
+            for spectacular display</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Continuous Animation -->
+  <section class="card mb-6" data-section="continuous-animation">
+    <div class="card-body">
+      <h2 class="card-title">Continuous Animation</h2>
+      <p class="text-muted mb-4">
+        Loop the fireworks animation infinitely for ongoing celebrations
+      </p>
+      <div class="demo-box dark-demo-box mb-4" style="min-height: 400px; position: relative;">
+        <div id="continuous-demo" style="position: absolute; inset: 0;"></div>
+        <div
+            style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; gap: 10px;">
+          <button onclick="startContinuousDisplay('continuous-demo')" class="btn btn-primary btn-sm">Start Display
+          </button>
+          <button onclick="stopContinuousDisplay()" class="btn btn-secondary btn-sm">Stop Display</button>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-javascript">// Start continuous fireworks display
+startContinuousDisplay('container-id');
+
+// Stop the display
+stopContinuousDisplay();</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hover Trigger -->
+  <section class="card mb-6" data-section="hover-trigger">
+    <div class="card-body">
+      <h2 class="card-title">Hover Trigger</h2>
+      <p class="text-muted mb-4">
+        Trigger fireworks animation on hover for interactive elements
+      </p>
+      <div class="demo-box mb-4" style="min-height: 400px; position: relative;">
+        <div id="hover-demo" style="position: absolute; inset: 0;"></div>
+        <button id="hover-btn"
+                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;"
+                class="btn btn-primary btn-lg celebration-btn">
+          🎉 Hover to Celebrate!
+        </button>
+      </div>
+      <div class="code-example">
+<pre><code class="language-javascript">// Add hover trigger to button
+button.addEventListener('mouseenter', () => {
+    launchFirework('container-id', 'celebration');
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Click to Launch -->
+  <section class="card mb-6" data-section="click-to-launch">
+    <div class="card-body">
+      <h2 class="card-title">Click to Launch</h2>
+      <p class="text-muted mb-4">
+        Click anywhere on the canvas to launch fireworks at that position
+      </p>
+      <div class="demo-box dark-demo-box mb-4" style="min-height: 400px; position: relative; cursor: crosshair;">
+        <div id="click-demo" style="position: absolute; inset: 0;"></div>
+        <div
+            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; z-index: 5;">
+          <p style="color: rgba(255,255,255,0.5); font-size: 1.2rem;">Click anywhere to launch fireworks</p>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-javascript">// Click to launch at mouse position
+container.addEventListener('click', (e) => {
+    const rect = container.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    launchFirework('container-id', 'celebration', x);
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Usage Examples -->
+  <section class="card mb-6" data-section="usage-examples">
+    <div class="card-body">
+      <h2 class="card-title">Usage Examples</h2>
+      <p class="text-muted mb-4">
+        Real-world applications of fireworks effects
+      </p>
+
+      <h3 class="mt-4">Success Message</h3>
+      <div class="alert alert-success mb-4" style="position: relative; min-height: 150px;">
+        <div id="success-demo" style="position: absolute; inset: 0;"></div>
+        <div style="position: relative; z-index: 10;">
+          <strong>Congratulations!</strong> Your form was submitted successfully.
+          <button onclick="launchFirework('success-demo', 'success', 80)" class="btn btn-sm btn-success float-end">
+            Celebrate
+          </button>
+        </div>
+      </div>
+
+      <h3 class="mt-4">Achievement Badge</h3>
+      <div class="text-center mb-4" style="min-height: 200px; position: relative;">
+        <div id="achievement-demo" style="position: absolute; inset: 0;"></div>
+        <div class="badge badge-lg badge-warning p-4"
+             style="position: relative; font-size: 1.2rem; z-index: 10; cursor: pointer;"
+             onclick="launchMultipleFireworks('achievement-demo', 'celebration', 2)">
+          🏆 Achievement Unlocked! (Click me!)
+        </div>
+      </div>
+
+      <h3 class="mt-4">Celebration Button</h3>
+      <div class="text-center" style="min-height: 200px; position: relative;">
+        <div id="celebrate-demo" style="position: absolute; inset: 0;"></div>
+        <button class="btn btn-primary btn-lg" style="position: relative; z-index: 10;" id="celebrate-btn">
+          Complete Purchase
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CSS Reference -->
+  <section class="card mb-6" data-section="css-reference">
+    <div class="card-body">
+      <h2 class="card-title">CSS Classes Reference</h2>
+
+      <h3 class="mt-4">Base Classes</h3>
+      <ul>
+        <li><code>.firework</code> - Base firework container</li>
+        <li><code>.firework-burst</code> - Expanding particle burst effect</li>
+        <li><code>.firework-sparkle</code> - Twinkling stars effect</li>
+        <li><code>.firework-trail</code> - Falling particle trail effect</li>
+      </ul>
+
+      <h3 class="mt-4">Size Modifiers</h3>
+      <ul>
+        <li><code>.firework-sm</code> - Small size (100px)</li>
+        <li><code>.firework-md</code> - Medium size (300px)</li>
+        <li><code>.firework-lg</code> - Large size (400px)</li>
+        <li><code>.firework-xl</code> - Extra large size (500px)</li>
+      </ul>
+
+      <h3 class="mt-4">Colour Modifiers</h3>
+      <ul>
+        <li><code>.firework-primary</code> - Primary theme colours</li>
+        <li><code>.firework-success</code> - Success theme colours</li>
+        <li><code>.firework-rainbow</code> - Rainbow colours</li>
+      </ul>
+
+      <h3 class="mt-4">Behavior Modifiers</h3>
+      <ul>
+        <li><code>.firework-continuous</code> - Loop animation infinitely</li>
+        <li><code>.firework-on-hover</code> - Trigger on hover</li>
+      </ul>
+
+      <h3 class="mt-4">CSS Variables</h3>
+      <ul>
+        <li><code>--dm-fw-duration</code> - Animation duration (default: 1.5s)</li>
+        <li><code>--dm-fw-delay</code> - Animation delay (default: 0s)</li>
+        <li><code>--dm-fw-color-1</code> through <code>--dm-fw-color-8</code> - Custom colours</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<!-- Domma JavaScript -->
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  // Proper fireworks implementation with individual particles
+  function launchFirework(containerId, theme = 'celebration', position = 50, particleCount = 200) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // DON'T clear container - allow multiple fireworks
+    // Create individual container for this firework
+    const fireworkContainer = document.createElement('div');
+    fireworkContainer.style.cssText = `
+                position: absolute;
+                bottom: 0;
+                left: ${position}%;
+                width: 10px;
+                height: 100%;
+                transform: translateX(-50%);
+            `;
+    container.appendChild(fireworkContainer);
+
+    // Create rocket trail going up
+    const rocket = document.createElement('div');
+    rocket.style.cssText = `
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 3px;
+                height: 10px;
+                background: linear-gradient(to top, transparent, #ffa500, #fff);
+                box-shadow: 0 0 10px #ffa500;
+                animation: rocket-launch 1s ease-out forwards;
+                z-index: 100;
+            `;
+    fireworkContainer.appendChild(rocket);
+
+    // After rocket reaches top, create explosion
+    setTimeout(() => {
+      rocket.remove();
+      createExplosion(fireworkContainer, theme, particleCount);
+      // Clean up the entire firework container after animation completes
+      // Shorter cleanup for multiple fireworks to improve performance
+      const containerCleanup = particleCount > 100 ? 3000 : 2500;
+      setTimeout(() => {
+        fireworkContainer.remove();
+      }, containerCleanup);
+    }, 1000);
+  }
+
+  function createExplosion(container, theme = 'celebration', particleCount = 200) {
+    // Dynamic particle count based on context
+
+    // Themed color palettes
+    const themes = {
+      celebration: ['#ffd700', '#ffed4e', '#fff59d', '#ffecb3'], // Gold/yellow
+      special: ['#ffd700', '#ffed4e', '#c0c0c0', '#e0e0e0', '#ffffff'], // Gold & silver
+      birthday: ['#ff1744', '#ff5252', '#2196f3', '#64b5f6', '#ffffff'], // Red, blue, white
+      romance: ['#ff1744', '#ff69b4', '#ff8a95', '#ffc1cc', '#ffffff'], // Reds & pinks
+      success: ['#4caf50', '#8bc34a', '#ffd700', '#ffeb3b'], // Green & gold
+      winter: ['#2196f3', '#64b5f6', '#bbdefb', '#ffffff', '#e1f5fe'], // Blues & white
+      christmas: ['#ff1744', '#f44336', '#4caf50', '#66bb6a', '#ffd700'], // Red, green, gold
+      newyear: ['#ffd700', '#ffed4e', '#ffffff', '#c0c0c0', '#e0e0e0'], // Gold, silver, white
+      patriotic: ['#ff1744', '#ffffff', '#2196f3', '#1976d2'], // Red, white, blue
+      sunset: ['#ff6b35', '#ff8c42', '#ffd23f', '#ffaa00', '#ff7043'], // Orange/yellow
+      ocean: ['#006994', '#2196f3', '#40e0d0', '#00bcd4', '#ffffff'], // Ocean blues
+      purple: ['#9c27b0', '#ba68c8', '#ce93d8', '#e1bee7', '#ffffff'] // Purple monochrome
+    };
+
+    const colors = themes[theme] || themes.celebration;
+
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      // Random angle for more natural distribution
+      const angle = Math.random() * Math.PI * 2;
+      const velocity = 80 + Math.random() * 150; // Increased explosion speeds
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const particleSize = 3 + Math.random() * 4; // Larger particles
+
+      particle.style.cssText = `
+                    position: absolute;
+                    top: 20%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: ${particleSize}px;
+                    height: ${particleSize}px;
+                    background: ${color};
+                    border-radius: 50%;
+                    box-shadow: 0 0 ${particleSize * 3}px ${color}, 0 0 ${particleSize * 6}px ${color};
+                    pointer-events: none;
+                    z-index: 50;
+                `;
+
+      // Simple explosion outward - no complex falling
+      const endX = Math.cos(angle) * velocity;
+      const endY = Math.sin(angle) * velocity;
+
+      particle.animate([
+        {
+          transform: 'translate(-50%, 0) scale(0)',
+          opacity: 0
+        },
+        {
+          // Quick burst
+          transform: 'translate(-50%, 0) scale(1)',
+          opacity: 1,
+          offset: 0.1
+        },
+        {
+          // Explode outward
+          transform: `translate(calc(-50% + ${endX}px), ${endY}px) scale(1.2)`,
+          opacity: 1,
+          offset: 0.3
+        },
+        {
+          // Continue outward and start fading
+          transform: `translate(calc(-50% + ${endX * 1.5}px), ${endY * 1.5}px) scale(1)`,
+          opacity: 0.8,
+          offset: 0.5
+        },
+        {
+          // Fade out in place
+          transform: `translate(calc(-50% + ${endX * 1.8}px), ${endY * 1.8}px) scale(0.8)`,
+          opacity: 0.4,
+          offset: 0.7
+        },
+        {
+          // Almost gone
+          transform: `translate(calc(-50% + ${endX * 2}px), ${endY * 2}px) scale(0.5)`,
+          opacity: 0.1,
+          offset: 0.9
+        },
+        {
+          // Gone
+          transform: `translate(calc(-50% + ${endX * 2}px), ${endY * 2}px) scale(0.3)`,
+          opacity: 0
+        }
+      ], {
+        duration: particleCount > 100 ? 2500 : 2000, // Shorter duration for multiple fireworks
+        easing: 'cubic-bezier(0, 0.5, 0.5, 1)',
+        fill: 'forwards'
+      });
+
+      container.appendChild(particle);
+
+      // Remove particle after animation - shorter cleanup for multiple fireworks
+      const cleanupDelay = particleCount > 100 ? 2500 : 2000;
+      setTimeout(() => particle.remove(), cleanupDelay);
+    }
+
+    // Add sparkle trails - scale with particle count
+    const sparkleCount = Math.max(5, Math.floor(particleCount / 20));
+    for (let i = 0; i < sparkleCount; i++) {
+      setTimeout(() => {
+        const sparkle = document.createElement('div');
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 50 + Math.random() * 100;
+
+        sparkle.style.cssText = `
+                        position: absolute;
+                        top: 20%;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        width: 2px;
+                        height: 2px;
+                        background: #fff;
+                        border-radius: 50%;
+                        box-shadow: 0 0 4px #fff;
+                        pointer-events: none;
+                        z-index: 50;
+                    `;
+
+        sparkle.animate([
+          {
+            transform: 'translate(-50%, 0) scale(1)',
+            opacity: 1
+          },
+          {
+            transform: `translate(calc(-50% + ${Math.cos(angle) * distance}px), ${Math.sin(angle) * distance}px) scale(0)`,
+            opacity: 0
+          }
+        ], {
+          duration: particleCount > 100 ? 1000 : 800,
+          easing: 'ease-out',
+          fill: 'forwards'
+        });
+
+        container.appendChild(sparkle);
+        const sparkleCleanup = particleCount > 100 ? 1000 : 800;
+        setTimeout(() => sparkle.remove(), sparkleCleanup);
+      }, i * 50);
+    }
+  }
+
+  // Launch multiple fireworks function
+  function launchMultipleFireworks(containerId = 'firework-demo-3', theme = 'mixed', count = 5) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // Clear any existing fireworks for a fresh display
+    container.innerHTML = '';
+
+    // Calculate optimal particle count based on total fireworks
+    // Formula: More fireworks = fewer particles each for better performance
+    const particleCount = Math.max(50, Math.min(200, Math.floor(300 / count)));
+
+    // If mixed theme, use random themes
+    const themes = ['celebration', 'special', 'birthday', 'newyear', 'christmas', 'valentine', 'ocean', 'purple', 'patriotic', 'sunset', 'romance', 'success', 'winter'];
+
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        const currentTheme = theme === 'mixed' ? themes[Math.floor(Math.random() * themes.length)] : theme;
+        const position = 20 + Math.random() * 60; // Random position between 20% and 80%
+        launchFirework(containerId, currentTheme, position, particleCount);
+      }, i * 300 + Math.random() * 200);
+    }
+  }
+
+  // Continuous display functionality
+  let continuousInterval = null;
+
+  function startContinuousDisplay(containerId = 'continuous-container') {
+    if (continuousInterval) return;
+
+    // Launch immediately with optimized count
+    launchMultipleFireworks(containerId, 'mixed', 3);
+
+    // Then launch every 2 seconds with smaller displays for performance
+    continuousInterval = setInterval(() => {
+      const count = Math.floor(Math.random() * 2) + 2; // 2-3 fireworks for continuous display
+      launchMultipleFireworks(containerId, 'mixed', count);
+    }, 2000);
+  }
+
+  function stopContinuousDisplay() {
+    if (continuousInterval) {
+      clearInterval(continuousInterval);
+      continuousInterval = null;
+    }
+  }
+
+  // Add CSS for rocket launch animation
+  if (!document.getElementById('firework-styles')) {
+    const style = document.createElement('style');
+    style.id = 'firework-styles';
+    style.textContent = `
+                @keyframes rocket-launch {
+                    0% {
+                        bottom: 0;
+                        opacity: 1;
+                    }
+                    100% {
+                        bottom: 80%;
+                        opacity: 0;
+                    }
+                }
+            `;
+    document.head.appendChild(style);
+  }
+
+  // Restart animations on button click for demo
+  document.addEventListener('DOMContentLoaded', () => {
+    // Add click to restart for demo boxes
+    document.querySelectorAll('.demo-box').forEach(box => {
+      box.style.cursor = 'pointer';
+      box.addEventListener('click', () => {
+        const fireworks = box.querySelectorAll('.firework');
+        fireworks.forEach(fw => {
+          // If it has the new structure
+          const launch = fw.querySelector('.firework-launch');
+          const particles = fw.querySelector('.firework-particles');
+
+          if (launch && particles) {
+            // Clone and replace to restart animations
+            const newLaunch = launch.cloneNode(true);
+            const newParticles = particles.cloneNode(true);
+            launch.parentNode.replaceChild(newLaunch, launch);
+            particles.parentNode.replaceChild(newParticles, particles);
+          } else {
+            // Old structure - just clone the whole thing
+            const newFw = fw.cloneNode(true);
+            fw.parentNode.replaceChild(newFw, fw);
+          }
+        });
+      });
+    });
+
+    // Celebrate button example
+    const celebrateBtn = document.getElementById('celebrate-btn');
+    if (celebrateBtn) {
+      celebrateBtn.addEventListener('click', () => {
+        // Launch multiple celebration fireworks
+        launchMultipleFireworks('celebrate-demo', 'celebration', 5);
+
+        // Change button text temporarily
+        const originalText = celebrateBtn.textContent;
+        celebrateBtn.textContent = '🎉 Purchase Complete!';
+        celebrateBtn.disabled = true;
+
+        setTimeout(() => {
+          celebrateBtn.textContent = originalText;
+          celebrateBtn.disabled = false;
+        }, 3000);
+      });
+    }
+
+    // Add hover trigger
+    const hoverBtn = document.getElementById('hover-btn');
+    if (hoverBtn) {
+      hoverBtn.addEventListener('mouseenter', () => {
+        launchFirework('hover-demo', 'celebration', 50);
+      });
+    }
+
+    // Add click to launch
+    const clickDemo = document.getElementById('click-demo');
+    if (clickDemo && clickDemo.parentElement) {
+      clickDemo.parentElement.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'BUTTON') {
+          const rect = clickDemo.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const themes = ['celebration', 'birthday', 'newyear', 'patriotic', 'christmas', 'valentine', 'special', 'ocean'];
+          const theme = themes[Math.floor(Math.random() * themes.length)];
+          launchFirework('click-demo', theme, x);
+        }
+      });
+    }
+
+    // Initialize syntax highlighting if available
+    if (typeof Domma !== 'undefined' && Domma.syntax && typeof Domma.syntax.highlightAll === 'function') {
+      Domma.syntax.highlightAll();
+    }
+
+    // Scan for icons
+    if (typeof Domma !== 'undefined' && Domma.icons) {
+      Domma.icons.scan();
+    }
+  });
+</script>
+</body>
+</html>

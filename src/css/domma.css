@@ -257,6 +257,44 @@
     --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
     --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
 
+    /* Glow effects - STRONG AND VIBRANT */
+    --dm-glow-sm: 0 0 15px rgba(59, 130, 246, 0.8),
+    0 0 30px rgba(59, 130, 246, 0.6);
+    --dm-glow: 0 0 20px rgba(59, 130, 246, 0.9),
+    0 0 40px rgba(59, 130, 246, 0.7),
+    0 0 60px rgba(59, 130, 246, 0.5);
+    --dm-glow-md: 0 0 25px rgba(59, 130, 246, 1),
+    0 0 50px rgba(59, 130, 246, 0.8),
+    0 0 75px rgba(59, 130, 246, 0.6);
+    --dm-glow-lg: 0 0 30px rgba(59, 130, 246, 1),
+    0 0 60px rgba(59, 130, 246, 0.9),
+    0 0 90px rgba(59, 130, 246, 0.7),
+    0 0 120px rgba(59, 130, 246, 0.5);
+    --dm-glow-xl: 0 0 40px rgba(59, 130, 246, 1),
+    0 0 80px rgba(59, 130, 246, 0.9),
+    0 0 120px rgba(59, 130, 246, 0.7),
+    0 0 160px rgba(59, 130, 246, 0.5);
+
+    /* Colour-specific glows - INTENSE */
+    --dm-glow-primary: 0 0 20px rgba(59, 130, 246, 1),
+    0 0 40px rgba(59, 130, 246, 0.8),
+    0 0 60px rgba(59, 130, 246, 0.6);
+    --dm-glow-secondary: 0 0 20px rgba(139, 92, 246, 1),
+    0 0 40px rgba(139, 92, 246, 0.8),
+    0 0 60px rgba(139, 92, 246, 0.6);
+    --dm-glow-success: 0 0 20px rgba(34, 197, 94, 1),
+    0 0 40px rgba(34, 197, 94, 0.8),
+    0 0 60px rgba(34, 197, 94, 0.6);
+    --dm-glow-warning: 0 0 20px rgba(245, 158, 11, 1),
+    0 0 40px rgba(245, 158, 11, 0.8),
+    0 0 60px rgba(245, 158, 11, 0.6);
+    --dm-glow-danger: 0 0 20px rgba(239, 68, 68, 1),
+    0 0 40px rgba(239, 68, 68, 0.8),
+    0 0 60px rgba(239, 68, 68, 0.6);
+    --dm-glow-info: 0 0 20px rgba(14, 165, 233, 1),
+    0 0 40px rgba(14, 165, 233, 0.8),
+    0 0 60px rgba(14, 165, 233, 0.6);
+
     /* ================================================
        TRANSPARENCY & OPACITY
        ================================================ */
@@ -1466,6 +1504,505 @@ code, pre {
 .glow-danger-hover:hover {
     text-shadow: var(--dm-glow-danger);
     transition: text-shadow 0.3s ease;
+}
+
+.glow-secondary-hover:hover {
+    text-shadow: var(--dm-glow-secondary);
+    transition: text-shadow 0.3s ease;
+}
+
+.glow-info-hover:hover {
+    text-shadow: var(--dm-glow-info);
+    transition: text-shadow 0.3s ease;
+}
+
+/* ============================================
+   FIREWORKS EFFECTS
+   Realistic particle-based fireworks animations
+   ============================================ */
+
+/* Firework CSS Variables */
+:root {
+    --dm-fw-launch-height: 200px;
+    --dm-fw-explosion-size: 150px;
+    --dm-fw-particle-size: 2px;
+    --dm-fw-duration: 3s;
+    --dm-fw-delay: 0s;
+
+    /* Default firework colours - bright, vibrant colours */
+    --dm-fw-color-1: #ffeb3b; /* Bright Yellow */
+    --dm-fw-color-2: #ff4444; /* Bright Red */
+    --dm-fw-color-3: #44ffdd; /* Cyan */
+    --dm-fw-color-4: #4488ff; /* Bright Blue */
+    --dm-fw-color-5: #ff8844; /* Orange */
+    --dm-fw-color-6: #ff44ff; /* Magenta */
+    --dm-fw-color-7: #44ff88; /* Lime */
+    --dm-fw-color-8: #ffff88; /* Light Yellow */
+}
+
+/* Base firework container */
+.firework {
+    position: relative;
+    display: inline-block;
+    pointer-events: none;
+    width: var(--dm-fw-explosion-size);
+    height: calc(var(--dm-fw-launch-height) + var(--dm-fw-explosion-size));
+    overflow: visible;
+}
+
+/* Rocket trail that launches upward */
+.firework-launch {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 3px;
+    height: 8px;
+    background: linear-gradient(to top, transparent, #ffa500, #fff);
+    transform: translateX(-50%);
+    animation: dm-fw-launch 1s ease-out forwards;
+}
+
+.firework-launch::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    width: 2px;
+    height: 20px;
+    background: linear-gradient(to top, transparent, rgba(255, 165, 0, 0.3));
+    transform: translateX(-50%);
+    filter: blur(2px);
+}
+
+/* Explosion particles */
+.firework-particles {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: var(--dm-fw-explosion-size);
+    height: var(--dm-fw-explosion-size);
+    transform: translateX(-50%);
+    opacity: 0;
+    animation-delay: 1s; /* Wait for launch */
+}
+
+/* Main burst - creates many particles using box-shadow */
+.firework-burst .firework-particles::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--dm-fw-particle-size);
+    height: var(--dm-fw-particle-size);
+    background: var(--dm-fw-color-1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: dm-fw-explode 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    box-shadow: /* Ring 1 - 8 particles at 30° intervals */ 0 0 3px var(--dm-fw-color-1),
+    0 -20px 0 0 var(--dm-fw-color-1),
+    14px -14px 0 0 var(--dm-fw-color-2),
+    20px 0 0 0 var(--dm-fw-color-3),
+    14px 14px 0 0 var(--dm-fw-color-4),
+    0 20px 0 0 var(--dm-fw-color-5),
+    -14px 14px 0 0 var(--dm-fw-color-6),
+    -20px 0 0 0 var(--dm-fw-color-7),
+    -14px -14px 0 0 var(--dm-fw-color-8),
+        /* Ring 2 - 12 particles */ 0 -35px 0 0 var(--dm-fw-color-2),
+    17px -30px 0 0 var(--dm-fw-color-3),
+    30px -17px 0 0 var(--dm-fw-color-4),
+    35px 0 0 0 var(--dm-fw-color-5),
+    30px 17px 0 0 var(--dm-fw-color-6),
+    17px 30px 0 0 var(--dm-fw-color-7),
+    0 35px 0 0 var(--dm-fw-color-8),
+    -17px 30px 0 0 var(--dm-fw-color-1),
+    -30px 17px 0 0 var(--dm-fw-color-2),
+    -35px 0 0 0 var(--dm-fw-color-3),
+    -30px -17px 0 0 var(--dm-fw-color-4),
+    -17px -30px 0 0 var(--dm-fw-color-5),
+        /* Ring 3 - 16 particles */ 0 -50px 0 0 var(--dm-fw-color-6),
+    19px -46px 0 0 var(--dm-fw-color-7),
+    35px -35px 0 0 var(--dm-fw-color-8),
+    46px -19px 0 0 var(--dm-fw-color-1),
+    50px 0 0 0 var(--dm-fw-color-2),
+    46px 19px 0 0 var(--dm-fw-color-3),
+    35px 35px 0 0 var(--dm-fw-color-4),
+    19px 46px 0 0 var(--dm-fw-color-5),
+    0 50px 0 0 var(--dm-fw-color-6),
+    -19px 46px 0 0 var(--dm-fw-color-7),
+    -35px 35px 0 0 var(--dm-fw-color-8),
+    -46px 19px 0 0 var(--dm-fw-color-1),
+    -50px 0 0 0 var(--dm-fw-color-2),
+    -46px -19px 0 0 var(--dm-fw-color-3),
+    -35px -35px 0 0 var(--dm-fw-color-4),
+    -19px -46px 0 0 var(--dm-fw-color-5);
+}
+
+/* Secondary layer for more particles and trailing effect */
+.firework-burst .firework-particles::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(var(--dm-fw-particle-size) * 0.8);
+    height: calc(var(--dm-fw-particle-size) * 0.8);
+    background: var(--dm-fw-color-3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: dm-fw-explode-secondary 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    box-shadow: /* Offset particles for depth */ 0 0 2px var(--dm-fw-color-3),
+    10px -25px 0 0 var(--dm-fw-color-4),
+    25px -10px 0 0 var(--dm-fw-color-5),
+    25px 10px 0 0 var(--dm-fw-color-6),
+    10px 25px 0 0 var(--dm-fw-color-7),
+    -10px 25px 0 0 var(--dm-fw-color-8),
+    -25px 10px 0 0 var(--dm-fw-color-1),
+    -25px -10px 0 0 var(--dm-fw-color-2),
+    -10px -25px 0 0 var(--dm-fw-color-3),
+        /* Extra sparkles */ 8px -42px 0 0 var(--dm-fw-color-4),
+    42px -8px 0 0 var(--dm-fw-color-5),
+    42px 8px 0 0 var(--dm-fw-color-6),
+    8px 42px 0 0 var(--dm-fw-color-7),
+    -8px 42px 0 0 var(--dm-fw-color-8),
+    -42px 8px 0 0 var(--dm-fw-color-1),
+    -42px -8px 0 0 var(--dm-fw-color-2),
+    -8px -42px 0 0 var(--dm-fw-color-3);
+}
+
+/* Sparkle animation - twinkling particles */
+.firework-sparkle::before {
+    width: 2px;
+    height: 2px;
+    background: white;
+    box-shadow: /* Create sparkle pattern */ 0 0 3px 1px rgba(255, 255, 255, 0.8),
+    10px -10px 0 0 var(--dm-fw-color-1),
+    10px -10px 3px 1px var(--dm-fw-color-1),
+    -10px -10px 0 0 var(--dm-fw-color-2),
+    -10px -10px 3px 1px var(--dm-fw-color-2),
+    -10px 10px 0 0 var(--dm-fw-color-3),
+    -10px 10px 3px 1px var(--dm-fw-color-3),
+    10px 10px 0 0 var(--dm-fw-color-4),
+    10px 10px 3px 1px var(--dm-fw-color-4),
+    20px 0 0 0 var(--dm-fw-color-5),
+    20px 0 3px 1px var(--dm-fw-color-5),
+    -20px 0 0 0 var(--dm-fw-color-6),
+    -20px 0 3px 1px var(--dm-fw-color-6),
+    0 20px 0 0 var(--dm-fw-color-7),
+    0 20px 3px 1px var(--dm-fw-color-7),
+    0 -20px 0 0 var(--dm-fw-color-8),
+    0 -20px 3px 1px var(--dm-fw-color-8);
+    animation: dm-firework-sparkle var(--dm-fw-duration) ease-out forwards;
+    animation-delay: var(--dm-fw-delay);
+    opacity: 0;
+}
+
+.firework-sparkle::after {
+    width: 2px;
+    height: 2px;
+    background: white;
+    box-shadow: /* Secondary sparkle layer */ 15px -15px 0 0 var(--dm-fw-color-1),
+    15px -15px 4px 2px rgba(255, 235, 59, 0.5),
+    -15px -15px 0 0 var(--dm-fw-color-3),
+    -15px -15px 4px 2px rgba(78, 205, 196, 0.5),
+    -15px 15px 0 0 var(--dm-fw-color-5),
+    -15px 15px 4px 2px rgba(243, 156, 18, 0.5),
+    15px 15px 0 0 var(--dm-fw-color-7),
+    15px 15px 4px 2px rgba(253, 121, 168, 0.5);
+    animation: dm-firework-sparkle-alt var(--dm-fw-duration) ease-out forwards;
+    animation-delay: calc(var(--dm-fw-delay) + 0.2s);
+    opacity: 0;
+}
+
+/* Trail animation - launch and falling particles */
+.firework-trail::before {
+    width: 3px;
+    height: 3px;
+    background: var(--dm-fw-color-1);
+    box-shadow: 0 0 10px 2px var(--dm-fw-color-1),
+    0 5px 2px 0 rgba(255, 235, 59, 0.8),
+    0 10px 2px 0 rgba(255, 235, 59, 0.6),
+    0 15px 2px 0 rgba(255, 235, 59, 0.4),
+    0 20px 2px 0 rgba(255, 235, 59, 0.2);
+    animation: dm-firework-launch var(--dm-fw-duration) ease-out forwards;
+    animation-delay: var(--dm-fw-delay);
+}
+
+/* Size variants */
+.firework-sm::before,
+.firework-sm::after {
+    width: var(--dm-fw-size-sm);
+    height: var(--dm-fw-size-sm);
+}
+
+.firework-md::before,
+.firework-md::after {
+    width: var(--dm-fw-size-md);
+    height: var(--dm-fw-size-md);
+}
+
+.firework-lg::before,
+.firework-lg::after {
+    width: var(--dm-fw-size-lg);
+    height: var(--dm-fw-size-lg);
+}
+
+.firework-xl::before,
+.firework-xl::after {
+    width: var(--dm-fw-size-xl);
+    height: var(--dm-fw-size-xl);
+}
+
+/* Colour variants */
+.firework-primary {
+    --dm-fw-color-1: var(--dm-primary);
+    --dm-fw-color-2: var(--dm-primary-light);
+    --dm-fw-color-3: var(--dm-primary-dark);
+    --dm-fw-color-4: var(--dm-primary);
+    --dm-fw-color-5: var(--dm-primary);
+    --dm-fw-color-6: var(--dm-primary-light);
+    --dm-fw-color-7: var(--dm-primary-dark);
+    --dm-fw-color-8: var(--dm-primary);
+}
+
+.firework-secondary {
+    --dm-fw-color-1: var(--dm-secondary);
+    --dm-fw-color-2: var(--dm-secondary-light);
+    --dm-fw-color-3: var(--dm-secondary-dark);
+    --dm-fw-color-4: var(--dm-secondary);
+    --dm-fw-color-5: var(--dm-secondary);
+    --dm-fw-color-6: var(--dm-secondary-light);
+    --dm-fw-color-7: var(--dm-secondary-dark);
+    --dm-fw-color-8: var(--dm-secondary);
+}
+
+.firework-success {
+    --dm-fw-color-1: var(--dm-success);
+    --dm-fw-color-2: var(--dm-success-light);
+    --dm-fw-color-3: var(--dm-success-dark);
+    --dm-fw-color-4: var(--dm-success);
+    --dm-fw-color-5: var(--dm-success);
+    --dm-fw-color-6: var(--dm-success-light);
+    --dm-fw-color-7: var(--dm-success-dark);
+    --dm-fw-color-8: var(--dm-success);
+}
+
+.firework-warning {
+    --dm-fw-color-1: var(--dm-warning);
+    --dm-fw-color-2: var(--dm-warning-light);
+    --dm-fw-color-3: var(--dm-warning-dark);
+    --dm-fw-color-4: var(--dm-warning);
+    --dm-fw-color-5: var(--dm-warning);
+    --dm-fw-color-6: var(--dm-warning-light);
+    --dm-fw-color-7: var(--dm-warning-dark);
+    --dm-fw-color-8: var(--dm-warning);
+}
+
+.firework-danger {
+    --dm-fw-color-1: var(--dm-danger);
+    --dm-fw-color-2: var(--dm-danger-light);
+    --dm-fw-color-3: var(--dm-danger-dark);
+    --dm-fw-color-4: var(--dm-danger);
+    --dm-fw-color-5: var(--dm-danger);
+    --dm-fw-color-6: var(--dm-danger-light);
+    --dm-fw-color-7: var(--dm-danger-dark);
+    --dm-fw-color-8: var(--dm-danger);
+}
+
+.firework-info {
+    --dm-fw-color-1: var(--dm-info);
+    --dm-fw-color-2: var(--dm-info-light);
+    --dm-fw-color-3: var(--dm-info-dark);
+    --dm-fw-color-4: var(--dm-info);
+    --dm-fw-color-5: var(--dm-info);
+    --dm-fw-color-6: var(--dm-info-light);
+    --dm-fw-color-7: var(--dm-info-dark);
+    --dm-fw-color-8: var(--dm-info);
+}
+
+.firework-rainbow {
+    --dm-fw-color-1: #ff0000;
+    --dm-fw-color-2: #ff7f00;
+    --dm-fw-color-3: #ffff00;
+    --dm-fw-color-4: #00ff00;
+    --dm-fw-color-5: #0000ff;
+    --dm-fw-color-6: #4b0082;
+    --dm-fw-color-7: #9400d3;
+    --dm-fw-color-8: #ff1493;
+}
+
+/* Continuous animation */
+.firework-continuous::before,
+.firework-continuous::after {
+    animation-iteration-count: infinite;
+}
+
+/* Trigger on hover */
+.firework-on-hover {
+    position: relative;
+}
+
+.firework-on-hover::before,
+.firework-on-hover::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--dm-fw-size);
+    height: var(--dm-fw-size);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.firework-on-hover:hover::before {
+    background: var(--dm-fw-color-1);
+    box-shadow: /* Inner ring - 8 particles */ 0 -30px 0 1px var(--dm-fw-color-1),
+    21px -21px 0 1px var(--dm-fw-color-2),
+    30px 0 0 1px var(--dm-fw-color-3),
+    21px 21px 0 1px var(--dm-fw-color-4),
+    0 30px 0 1px var(--dm-fw-color-5),
+    -21px 21px 0 1px var(--dm-fw-color-6),
+    -30px 0 0 1px var(--dm-fw-color-7),
+    -21px -21px 0 1px var(--dm-fw-color-8),
+        /* Outer ring */ 0 -50px 0 0 var(--dm-fw-color-2),
+    35px -35px 0 0 var(--dm-fw-color-3),
+    50px 0 0 0 var(--dm-fw-color-4),
+    35px 35px 0 0 var(--dm-fw-color-5),
+    0 50px 0 0 var(--dm-fw-color-6),
+    -35px 35px 0 0 var(--dm-fw-color-7),
+    -50px 0 0 0 var(--dm-fw-color-8),
+    -35px -35px 0 0 var(--dm-fw-color-1);
+    animation: dm-firework-burst 1.5s ease-out forwards;
+}
+
+.firework-on-hover:hover::after {
+    background: var(--dm-fw-color-3);
+    box-shadow: 15px -40px 0 0 var(--dm-fw-color-1),
+    40px -15px 0 0 var(--dm-fw-color-3),
+    40px 15px 0 0 var(--dm-fw-color-5),
+    15px 40px 0 0 var(--dm-fw-color-7),
+    -15px 40px 0 0 var(--dm-fw-color-2),
+    -40px 15px 0 0 var(--dm-fw-color-4),
+    -40px -15px 0 0 var(--dm-fw-color-6),
+    -15px -40px 0 0 var(--dm-fw-color-8);
+    animation: dm-firework-burst-secondary 1.5s ease-out forwards;
+}
+
+/* Keyframe Animations */
+
+/* Launch animation - rocket goes up */
+@keyframes dm-fw-launch {
+    0% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-50%) translateY(calc(-1 * var(--dm-fw-launch-height)));
+        opacity: 0;
+    }
+}
+
+/* Main explosion - particles burst outward then fall with gravity */
+@keyframes dm-fw-explode {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+    5% {
+        transform: translate(-50%, -50%) scale(0.1);
+        opacity: 1;
+    }
+    25% {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(3.5) translateY(10px);
+        opacity: 0.9;
+    }
+    75% {
+        transform: translate(-50%, -50%) scale(4) translateY(40px);
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(4.5) translateY(100px);
+        opacity: 0;
+    }
+}
+
+/* Secondary explosion with slight delay and rotation */
+@keyframes dm-fw-explode-secondary {
+    0% {
+        transform: translate(-50%, -50%) scale(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        transform: translate(-50%, -50%) scale(0.2) rotate(45deg);
+        opacity: 1;
+    }
+    30% {
+        transform: translate(-50%, -50%) scale(2.2) rotate(90deg);
+        opacity: 1;
+    }
+    55% {
+        transform: translate(-50%, -50%) scale(3.2) rotate(135deg) translateY(15px);
+        opacity: 0.8;
+    }
+    80% {
+        transform: translate(-50%, -50%) scale(3.8) rotate(180deg) translateY(50px);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(4.2) rotate(225deg) translateY(120px);
+        opacity: 0;
+    }
+}
+
+/* Sparkle animation for twinkling effect */
+@keyframes dm-fw-sparkle {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0;
+    }
+    10% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 1;
+    }
+    90% {
+        transform: translate(-50%, -50%) scale(2) translateY(30px);
+        opacity: 0;
+    }
+}
+
+/* Crackle effect - small rapid sparkles */
+@keyframes dm-fw-crackle {
+    0%, 100% {
+        opacity: 0;
+    }
+    25%, 75% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Multiple fireworks container */
+.fireworks-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.fireworks-container .firework {
+    position: absolute;
 }
 
 /* ============================================

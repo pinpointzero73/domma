@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shadow Effects - Domma Showcase</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../css/domma-showcase.css">
+
+  <style>
+      .shadow-demo {
+          background: white;
+          padding: 2rem;
+          border-radius: 8px;
+          margin-bottom: 2rem;
+          text-align: center;
+      }
+
+      .shadow-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 2rem;
+          margin: 2rem 0;
+      }
+
+      .shadow-box {
+          background: white;
+          padding: 2rem;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 150px;
+      }
+
+      .dark-bg {
+          background: #1e293b;
+          padding: 2rem;
+          border-radius: 8px;
+      }
+
+      .elevation-demo {
+          background: white;
+          padding: 2rem;
+          border-radius: 8px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+      }
+
+      .elevation-demo:hover {
+          transform: translateY(-2px);
+      }
+  </style>
+</head>
+<body class="dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
+
+<!-- Hero Section -->
+<section class="hero hero-gradient-primary hero-lg">
+  <h1>Shadow Effects</h1>
+  <p>Box shadows and elevation utilities for depth and visual hierarchy</p>
+  <p class="mt-4"><code>.shadow .shadow-lg .shadow-inner</code></p>
+</section>
+
+<!-- Main Content -->
+<main class="container py-8">
+
+  <!-- Basic Shadows -->
+  <section class="card mb-6" data-section="basic-shadows">
+    <div class="card-body">
+      <h2 class="card-title">Basic Shadows</h2>
+      <p class="text-muted mb-4">
+        Standard box shadow utilities for adding depth to elements
+      </p>
+      <div class="shadow-grid">
+        <div class="shadow-box shadow-none">
+          <div>
+            <code>.shadow-none</code>
+            <p class="text-muted mt-2 mb-0">No shadow</p>
+          </div>
+        </div>
+        <div class="shadow-box shadow-sm">
+          <div>
+            <code>.shadow-sm</code>
+            <p class="text-muted mt-2 mb-0">Small shadow</p>
+          </div>
+        </div>
+        <div class="shadow-box shadow">
+          <div>
+            <code>.shadow</code>
+            <p class="text-muted mt-2 mb-0">Default shadow</p>
+          </div>
+        </div>
+        <div class="shadow-box shadow-md">
+          <div>
+            <code>.shadow-md</code>
+            <p class="text-muted mt-2 mb-0">Medium shadow</p>
+          </div>
+        </div>
+        <div class="shadow-box shadow-lg">
+          <div>
+            <code>.shadow-lg</code>
+            <p class="text-muted mt-2 mb-0">Large shadow</p>
+          </div>
+        </div>
+        <div class="shadow-box shadow-xl">
+          <div>
+            <code>.shadow-xl</code>
+            <p class="text-muted mt-2 mb-0">Extra large</p>
+          </div>
+        </div>
+        <div class="shadow-box shadow-2xl">
+          <div>
+            <code>.shadow-2xl</code>
+            <p class="text-muted mt-2 mb-0">2X large</p>
+          </div>
+        </div>
+        <div class="shadow-box shadow-3xl">
+          <div>
+            <code>.shadow-3xl</code>
+            <p class="text-muted mt-2 mb-0">3X large</p>
+          </div>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;div class="shadow-sm">Small shadow&lt;/div>
+&lt;div class="shadow">Default shadow&lt;/div>
+&lt;div class="shadow-lg">Large shadow&lt;/div>
+&lt;div class="shadow-xl">Extra large shadow&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Inner Shadows -->
+  <section class="card mb-6" data-section="inner-shadows">
+    <div class="card-body">
+      <h2 class="card-title">Inner Shadows</h2>
+      <p class="text-muted mb-4">
+        Inset shadows for creating depth within elements
+      </p>
+      <div class="shadow-grid">
+        <div class="shadow-box shadow-inner-sm">
+          <div>
+            <code>.shadow-inner-sm</code>
+            <p class="text-muted mt-2 mb-0">Small inner</p>
+          </div>
+        </div>
+        <div class="shadow-box shadow-inner">
+          <div>
+            <code>.shadow-inner</code>
+            <p class="text-muted mt-2 mb-0">Default inner</p>
+          </div>
+        </div>
+        <div class="shadow-box shadow-inner-md">
+          <div>
+            <code>.shadow-inner-md</code>
+            <p class="text-muted mt-2 mb-0">Medium inner</p>
+          </div>
+        </div>
+        <div class="shadow-box shadow-inner-lg">
+          <div>
+            <code>.shadow-inner-lg</code>
+            <p class="text-muted mt-2 mb-0">Large inner</p>
+          </div>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;div class="shadow-inner">Inner shadow for depth&lt;/div>
+&lt;input class="form-control shadow-inner" placeholder="Input with inner shadow"></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coloured Shadows -->
+  <section class="card mb-6" data-section="coloured-shadows">
+    <div class="card-body">
+      <h2 class="card-title">Coloured Shadows</h2>
+      <p class="text-muted mb-4">
+        Theme-aware coloured shadows for visual emphasis
+      </p>
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+          <div class="card shadow-primary">
+            <div class="card-body text-center py-5">
+              <h4 class="text-primary mb-3">Primary</h4>
+              <code>.shadow-primary</code>
+              <p class="text-muted mt-3 mb-0">Primary colour shadow for brand emphasis</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="card shadow-secondary">
+            <div class="card-body text-center py-5">
+              <h4 class="text-secondary mb-3">Secondary</h4>
+              <code>.shadow-secondary</code>
+              <p class="text-muted mt-3 mb-0">Secondary colour shadow for supporting elements</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="card shadow-success">
+            <div class="card-body text-center py-5">
+              <h4 class="text-success mb-3">Success</h4>
+              <code>.shadow-success</code>
+              <p class="text-muted mt-3 mb-0">Success colour shadow for positive states</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="card shadow-warning">
+            <div class="card-body text-center py-5">
+              <h4 class="text-warning mb-3">Warning</h4>
+              <code>.shadow-warning</code>
+              <p class="text-muted mt-3 mb-0">Warning colour shadow for caution states</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="card shadow-danger">
+            <div class="card-body text-center py-5">
+              <h4 class="text-danger mb-3">Danger</h4>
+              <code>.shadow-danger</code>
+              <p class="text-muted mt-3 mb-0">Danger colour shadow for error states</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="card shadow-info">
+            <div class="card-body text-center py-5">
+              <h4 class="text-info mb-3">Info</h4>
+              <code>.shadow-info</code>
+              <p class="text-muted mt-3 mb-0">Info colour shadow for informational elements</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;div class="card shadow-primary">Primary shadow&lt;/div>
+&lt;button class="btn btn-success shadow-success">Success button&lt;/button>
+&lt;div class="alert alert-danger shadow-danger">Danger alert&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Elevation System -->
+  <section class="card mb-6" data-section="elevation-system">
+    <div class="card-body">
+      <h2 class="card-title">Material Design Elevation</h2>
+      <p class="text-muted mb-4">
+        Elevation levels inspired by Material Design principles
+      </p>
+      <div class="shadow-grid">
+        <div class="elevation-demo elevation-0">
+          <div>
+            <code>.elevation-0</code>
+            <p class="text-muted mt-2 mb-0">Flat (0dp)</p>
+          </div>
+        </div>
+        <div class="elevation-demo elevation-1">
+          <div>
+            <code>.elevation-1</code>
+            <p class="text-muted mt-2 mb-0">1dp elevation</p>
+          </div>
+        </div>
+        <div class="elevation-demo elevation-2">
+          <div>
+            <code>.elevation-2</code>
+            <p class="text-muted mt-2 mb-0">2dp elevation</p>
+          </div>
+        </div>
+        <div class="elevation-demo elevation-3">
+          <div>
+            <code>.elevation-3</code>
+            <p class="text-muted mt-2 mb-0">3dp elevation</p>
+          </div>
+        </div>
+        <div class="elevation-demo elevation-4">
+          <div>
+            <code>.elevation-4</code>
+            <p class="text-muted mt-2 mb-0">4dp elevation</p>
+          </div>
+        </div>
+        <div class="elevation-demo elevation-5">
+          <div>
+            <code>.elevation-5</code>
+            <p class="text-muted mt-2 mb-0">5dp elevation</p>
+          </div>
+        </div>
+      </div>
+      <p class="text-muted mt-4">
+        <strong>Note:</strong> Hover over elevation cards to see the lift effect
+      </p>
+    </div>
+  </section>
+
+  <!-- Hover Effects -->
+  <section class="card mb-6" data-section="hover-effects">
+    <div class="card-body">
+      <h2 class="card-title">Shadow Hover Effects</h2>
+      <p class="text-muted mb-4">
+        Add shadow on hover for interactive feedback
+      </p>
+      <div class="shadow-grid">
+        <div class="shadow-box shadow-hover">
+          <div>
+            <code>.shadow-hover</code>
+            <p class="text-muted mt-2 mb-0">Shadow on hover</p>
+          </div>
+        </div>
+        <div class="shadow-box shadow-lg-hover">
+          <div>
+            <code>.shadow-lg-hover</code>
+            <p class="text-muted mt-2 mb-0">Large on hover</p>
+          </div>
+        </div>
+        <div class="shadow-box shadow-lift-hover">
+          <div>
+            <code>.shadow-lift-hover</code>
+            <p class="text-muted mt-2 mb-0">Lift on hover</p>
+          </div>
+        </div>
+        <div class="shadow-box shadow-none-hover shadow-lg">
+          <div>
+            <code>.shadow-none-hover</code>
+            <p class="text-muted mt-2 mb-0">Remove on hover</p>
+          </div>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;button class="btn shadow-hover">Hover for shadow&lt;/button>
+&lt;div class="card shadow-lift-hover">Card lifts on hover&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Practical Examples -->
+  <section class="card mb-6" data-section="practical-examples">
+    <div class="card-body">
+      <h2 class="card-title">Practical Examples</h2>
+      <p class="text-muted mb-4">
+        Real-world use cases for shadow effects
+      </p>
+
+      <!-- Card with Shadow -->
+      <div class="mb-5">
+        <h3>Cards with Depth</h3>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="card shadow">
+              <div class="card-body">
+                <h4 class="card-title">Standard Card</h4>
+                <p class="card-text">Default shadow for cards</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card shadow-lg shadow-lift-hover">
+              <div class="card-body">
+                <h4 class="card-title">Interactive Card</h4>
+                <p class="card-text">Lifts on hover interaction</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card elevation-3">
+              <div class="card-body">
+                <h4 class="card-title">Elevated Card</h4>
+                <p class="card-text">Material Design elevation</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating Action Button -->
+      <div class="mb-5">
+        <h3>Floating Action Button</h3>
+        <div class="text-center p-4">
+          <button class="btn btn-primary btn-circle elevation-3 shadow-lift-hover"
+                  style="width: 56px; height: 56px; border-radius: 50%; font-size: 24px;">
+            +
+          </button>
+        </div>
+      </div>
+
+      <!-- Input with Inner Shadow -->
+      <div class="mb-5">
+        <h3>Form Fields</h3>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Standard Input</label>
+            <input type="text" class="form-control" placeholder="Normal input">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Inset Input</label>
+            <input type="text" class="form-control shadow-inner" placeholder="Input with inner shadow">
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal/Dialog Shadow -->
+      <div class="mb-5">
+        <h3>Modal Dialog</h3>
+        <div class="dark-bg">
+          <div class="card shadow-2xl" style="max-width: 500px; margin: 0 auto;">
+            <div class="card-header">
+              <h4 class="mb-0">Modal Title</h4>
+            </div>
+            <div class="card-body">
+              <p>Modals use extra large shadows to separate from background</p>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-primary shadow-hover">Action</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CSS Variables -->
+  <section class="card mb-6" data-section="css-variables">
+    <div class="card-body">
+      <h2 class="card-title">CSS Variables</h2>
+      <p class="text-muted mb-4">
+        Customize shadows using CSS custom properties
+      </p>
+
+      <div class="code-example mb-4">
+<pre><code class="language-css">/* Shadow variables */
+:root {
+    --dm-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --dm-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --dm-shadow-md: 0 6px 12px rgba(0, 0, 0, 0.1);
+    --dm-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+    --dm-shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
+    --dm-shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.2);
+    
+    /* Coloured shadows */
+    --dm-shadow-primary: 0 10px 25px rgba(59, 130, 246, 0.3);
+    --dm-shadow-success: 0 10px 25px rgba(34, 197, 94, 0.3);
+    --dm-shadow-danger: 0 10px 25px rgba(239, 68, 68, 0.3);
+}
+
+/* Custom shadow */
+.custom-shadow {
+    box-shadow: 0 15px 35px rgba(147, 51, 234, 0.4);
+}</code></pre>
+      </div>
+
+      <h3>Custom Example</h3>
+      <div class="shadow-box" style="box-shadow: 0 15px 35px rgba(147, 51, 234, 0.4);">
+        <div>
+          <strong>Custom Purple Shadow</strong>
+          <p class="text-muted mt-2 mb-0">box-shadow: 0 15px 35px rgba(147, 51, 234, 0.4)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reference -->
+  <section class="card" data-section="reference">
+    <div class="card-body">
+      <h2 class="card-title">Class Reference</h2>
+
+      <h3 class="mt-4">Basic Shadow Classes</h3>
+      <ul>
+        <li><code>.shadow-none</code> - Remove shadow</li>
+        <li><code>.shadow-sm</code> - Small shadow</li>
+        <li><code>.shadow</code> - Default shadow</li>
+        <li><code>.shadow-md</code> - Medium shadow</li>
+        <li><code>.shadow-lg</code> - Large shadow</li>
+        <li><code>.shadow-xl</code> - Extra large shadow</li>
+        <li><code>.shadow-2xl</code> - 2X large shadow</li>
+        <li><code>.shadow-3xl</code> - 3X large shadow</li>
+      </ul>
+
+      <h3 class="mt-4">Inner Shadow Classes</h3>
+      <ul>
+        <li><code>.shadow-inner-sm</code> - Small inner shadow</li>
+        <li><code>.shadow-inner</code> - Default inner shadow</li>
+        <li><code>.shadow-inner-md</code> - Medium inner shadow</li>
+        <li><code>.shadow-inner-lg</code> - Large inner shadow</li>
+      </ul>
+
+      <h3 class="mt-4">Coloured Shadow Classes</h3>
+      <ul>
+        <li><code>.shadow-primary</code> - Primary colour shadow</li>
+        <li><code>.shadow-secondary</code> - Secondary colour shadow</li>
+        <li><code>.shadow-success</code> - Success colour shadow</li>
+        <li><code>.shadow-warning</code> - Warning colour shadow</li>
+        <li><code>.shadow-danger</code> - Danger colour shadow</li>
+        <li><code>.shadow-info</code> - Info colour shadow</li>
+      </ul>
+
+      <h3 class="mt-4">Elevation Classes</h3>
+      <ul>
+        <li><code>.elevation-0</code> - No elevation (flat)</li>
+        <li><code>.elevation-1</code> - 1dp elevation</li>
+        <li><code>.elevation-2</code> - 2dp elevation</li>
+        <li><code>.elevation-3</code> - 3dp elevation</li>
+        <li><code>.elevation-4</code> - 4dp elevation</li>
+        <li><code>.elevation-5</code> - 5dp elevation</li>
+      </ul>
+
+      <h3 class="mt-4">Hover Classes</h3>
+      <ul>
+        <li><code>.shadow-hover</code> - Add shadow on hover</li>
+        <li><code>.shadow-lg-hover</code> - Large shadow on hover</li>
+        <li><code>.shadow-lift-hover</code> - Lift effect with shadow on hover</li>
+        <li><code>.shadow-none-hover</code> - Remove shadow on hover</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<!-- Domma JavaScript -->
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    // Scan for icons
+    if (typeof Domma !== 'undefined' && Domma.icons) {
+      Domma.icons.scan();
+    }
+  });
+</script>
+</body>
+</html>

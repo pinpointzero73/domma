@@ -422,6 +422,10 @@
       <div class="feature-icon" data-icon="sun" data-icon-size="42"></div>
       <div class="feature-label">Themes</div>
     </a>
+    <a href="showcase/effects/index.html" class="feature card-hover">
+      <div class="feature-icon glow-primary" data-icon="zap" data-icon-size="42"></div>
+      <div class="feature-label">Effects</div>
+    </a>
   </div>
 
   <div class="splash-carousel">
@@ -560,9 +564,21 @@ Domma.theme.set('dark');
 Domma.theme.setVariant('ocean');</pre>
         </div>
 
-        <!-- 12. HTTP Client -->
+        <!-- 12. Visual Effects -->
         <div class="carousel-slide">
           <span class="slide-number">12</span>
+          <h3 class="slide-title">Visual Effects</h3>
+          <p class="slide-description">
+            CSS-powered glow, fireworks, and shadow effects. Pure CSS implementation for performance.
+          </p>
+          <pre class="code-block language-html">&lt;h1 class="glow-primary"&gt;Glowing Title&lt;/h1&gt;
+&lt;button class="firework-on-hover"&gt;Celebrate!&lt;/button&gt;
+&lt;div class="shadow-xl elevation-3"&gt;Elevated&lt;/div&gt;</pre>
+        </div>
+
+        <!-- 13. HTTP Client -->
+        <div class="carousel-slide">
+          <span class="slide-number">13</span>
           <h3 class="slide-title">HTTP Client</h3>
           <p class="slide-description">
             Fetch-based HTTP client with promise API. GET, POST, PUT, DELETE with automatic JSON handling.
@@ -572,9 +588,9 @@ await Domma.http.post('/api/users', { name: 'Alice' });
 await Domma.http.delete('/api/users/1');</pre>
         </div>
 
-        <!-- 13. Storage Wrapper -->
+        <!-- 14. Storage Wrapper -->
         <div class="carousel-slide">
-          <span class="slide-number">13</span>
+          <span class="slide-number">14</span>
           <h3 class="slide-title">Storage Wrapper</h3>
           <p class="slide-description">
             localStorage wrapper with auto JSON serialisation, namespaced keys, and graceful fallbacks.
@@ -584,9 +600,9 @@ const user = S.get('user'); // Auto-parsed
 S.keys(); S.has('user'); S.clear();</pre>
         </div>
 
-        <!-- 14. Model Persistence -->
+        <!-- 15. Model Persistence -->
         <div class="carousel-slide">
-          <span class="slide-number">14</span>
+          <span class="slide-number">15</span>
           <h3 class="slide-title">Model Persistence</h3>
           <p class="slide-description">
             Models auto-save to localStorage. Load state on page refresh, reset to defaults anytime.
@@ -597,9 +613,9 @@ S.keys(); S.has('user'); S.clear();</pre>
 settings.reset(true); // Clear storage too</pre>
         </div>
 
-        <!-- 15. Comprehensive Tests -->
+        <!-- 16. Comprehensive Tests -->
         <div class="carousel-slide">
-          <span class="slide-number">15</span>
+          <span class="slide-number">16</span>
           <h3 class="slide-title">100+ Unit Tests</h3>
           <p class="slide-description">
             Comprehensive test suite covering all modules: DOM, utils, dates, models, storage, tables,
@@ -610,9 +626,9 @@ open tests/test.html
 # DOM, Utils, Dates, Models, Storage...</pre>
         </div>
 
-        <!-- 16. CSS Grid System -->
+        <!-- 17. CSS Grid System -->
         <div class="carousel-slide">
-          <span class="slide-number">16</span>
+          <span class="slide-number">17</span>
           <h3 class="slide-title">CSS Grid System</h3>
           <p class="slide-description">
             Bootstrap-style 12-column grid plus modern CSS Grid utilities. Mobile-first, responsive
@@ -624,9 +640,9 @@ open tests/test.html
 &lt;/div&gt;</pre>
         </div>
 
-        <!-- 17. BYOS - Bring Your Own Styles -->
+        <!-- 18. BYOS - Bring Your Own Styles -->
         <div class="carousel-slide">
-          <span class="slide-number">17</span>
+          <span class="slide-number">18</span>
           <h3 class="slide-title">CSS-Free Usage</h3>
           <p class="slide-description">
             Use Domma's JS with your own CSS framework. Disable theming entirely for Bootstrap, Tailwind, or
@@ -780,6 +796,19 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
           <li>200+ SVG icons</li>
           <li>15 categorised sets</li>
           <li>Automatic scanning & injection</li>
+        </ul>
+      </div>
+    </a>
+
+    <a href="showcase/effects/index.html" class="card module-card card-hover">
+      <div class="card-body">
+        <div class="module-icon glow-primary" data-icon="zap" data-icon-size="48"></div>
+        <h3 class="card-title">Effects</h3>
+        <p class="card-text">CSS-powered visual effects including glow, fireworks, and shadows.</p>
+        <ul class="module-features">
+          <li>Glow & text shadows</li>
+          <li>Fireworks animations</li>
+          <li>Shadow & elevation utilities</li>
         </ul>
       </div>
     </a>

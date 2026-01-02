@@ -808,6 +808,86 @@ Domma.utils.random(1, 10);
 
 ---
 
+## Effects
+
+CSS-powered visual effects for enhanced UI interactions. All effects are pure CSS implementations that work seamlessly
+with Domma's theme system.
+
+### Glow Effects
+
+Text and box shadow effects that create a luminous appearance:
+
+```html
+<!-- Size variants -->
+<h1 class="glow-sm">Small Glow</h1>
+<h1 class="glow">Default Glow</h1>
+<h1 class="glow-lg">Large Glow</h1>
+<h1 class="glow-xl">Extra Large Glow</h1>
+
+<!-- Color variants -->
+<h1 class="glow-primary">Primary Color</h1>
+<h1 class="glow-success">Success Color</h1>
+<h1 class="glow-danger">Danger Color</h1>
+
+<!-- Hover effects -->
+<button class="glow-hover">Glow on Hover</button>
+<a class="glow-primary-hover">Primary Glow on Hover</a>
+```
+
+### Fireworks
+
+Animated particle effects for celebrations and special moments:
+
+```html
+<!-- Effect types -->
+<div class="firework firework-burst"></div>
+<div class="firework firework-sparkle"></div>
+<div class="firework firework-trail"></div>
+
+<!-- Sizes -->
+<div class="firework firework-burst firework-sm"></div>
+<div class="firework firework-burst firework-lg"></div>
+
+<!-- Behaviors -->
+<div class="firework firework-burst firework-continuous"></div>
+<button class="firework-on-hover">Hover to Celebrate!</button>
+
+<!-- Colors -->
+<div class="firework firework-burst firework-primary"></div>
+<div class="firework firework-burst firework-rainbow"></div>
+```
+
+### Shadows
+
+Box shadow and elevation utilities for depth and visual hierarchy:
+
+```html
+<!-- Basic shadows -->
+<div class="shadow-sm">Small Shadow</div>
+<div class="shadow">Default Shadow</div>
+<div class="shadow-lg">Large Shadow</div>
+<div class="shadow-xl">Extra Large Shadow</div>
+
+<!-- Inner shadows -->
+<div class="shadow-inner">Inner Shadow</div>
+<input class="form-control shadow-inner" />
+
+<!-- Colored shadows -->
+<div class="shadow-primary">Primary Shadow</div>
+<div class="shadow-success">Success Shadow</div>
+
+<!-- Material Design elevation -->
+<div class="elevation-1">1dp Elevation</div>
+<div class="elevation-3">3dp Elevation</div>
+<div class="elevation-5">5dp Elevation</div>
+
+<!-- Hover effects -->
+<div class="shadow-hover">Shadow on Hover</div>
+<div class="shadow-lift-hover">Lift with Shadow on Hover</div>
+```
+
+---
+
 ## Elements (`Domma.elements`)
 
 UI component library providing 25+ interactive elements including modals, tabs, carousels, tooltips, and more.

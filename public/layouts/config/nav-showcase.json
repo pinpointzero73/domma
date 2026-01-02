@@ -202,6 +202,31 @@
       ]
     },
     {
+      "text": "Effects",
+      "items": [
+        {
+          "text": "Overview",
+          "url": "showcase/effects/index.html",
+          "section": "effects"
+        },
+        {
+          "text": "Glow",
+          "url": "showcase/effects/glow.html",
+          "section": "effects-glow"
+        },
+        {
+          "text": "Fireworks",
+          "url": "showcase/effects/fireworks.html",
+          "section": "effects-fireworks"
+        },
+        {
+          "text": "Shadows",
+          "url": "showcase/effects/shadows.html",
+          "section": "effects-shadows"
+        }
+      ]
+    },
+    {
       "text": "Tools",
       "items": [
         {
