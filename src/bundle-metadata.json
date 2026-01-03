@@ -114,7 +114,8 @@
       ],
       "cssOptional": [
         "grid",
-        "themes"
+        "themes",
+        "grayve"
       ]
     },
     "tables": {
@@ -133,7 +134,8 @@
       ],
       "cssOptional": [
         "grid",
-        "themes"
+        "themes",
+        "grayve"
       ]
     },
     "config": {
@@ -153,7 +155,8 @@
       ],
       "cssOptional": [
         "grid",
-        "themes"
+        "themes",
+        "grayve"
       ]
     }
   },
@@ -181,6 +184,12 @@
       "file": "themes/domma-themes.css",
       "size": 37,
       "description": "Light/dark + colour variants"
+    },
+    "grayve": {
+      "name": "Grayve Theme",
+      "file": "themes/grayve.css",
+      "size": 5,
+      "description": "Bootswatch Slate theme adaptation"
     }
   },
   "presets": {
@@ -219,7 +228,8 @@
         "domma",
         "grid",
         "elements",
-        "themes"
+        "themes",
+        "grayve"
       ],
       "cssSize": 155
     },
@@ -245,7 +255,8 @@
         "domma",
         "grid",
         "elements",
-        "themes"
+        "themes",
+        "grayve"
       ],
       "cssSize": 155
     },
@@ -266,9 +277,37 @@
         "domma",
         "grid",
         "elements",
-        "themes"
+        "themes",
+        "grayve"
       ],
       "cssSize": 155
+    },
+    "grayve": {
+      "name": "Grayve Theme Preset",
+      "description": "Preset with Bootswatch Slate theme",
+      "modules": [
+        "utils",
+        "dom",
+        "storage",
+        "icons",
+        "elements",
+        "config",
+        "http",
+        "dates",
+        "models",
+        "tables",
+        "theme"
+      ],
+      "estimatedSize": 258,
+      "useCase": "Applications using all features with Grayve theme",
+      "cssFiles": [
+        "domma",
+        "grid",
+        "elements",
+        "themes",
+        "grayve"
+      ],
+      "cssSize": 160
     },
     "no-ui": {
       "name": "No-UI",
