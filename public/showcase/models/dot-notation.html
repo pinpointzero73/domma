@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dot Notation with Models - Domma Showcase</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="/showcase/css/domma-showcase.css">
+  <style>
+      .example-section {
+          margin-bottom: 2rem;
+          padding: 1.5rem;
+          background: var(--dm-color-bg);
+          border-radius: 8px;
+      }
+
+      .example-title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+          color: var(--dm-color-primary);
+      }
+
+      .form-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1rem;
+      }
+
+      .nested-display {
+          background: var(--dm-color-bg-secondary);
+          padding: 1rem;
+          border-radius: 4px;
+          font-family: monospace;
+          white-space: pre-wrap;
+          max-height: 300px;
+          overflow-y: auto;
+      }
+
+      .validation-message {
+          margin-top: 0.5rem;
+          padding: 0.5rem;
+          border-radius: 4px;
+      }
+
+      .validation-success {
+          background: var(--dm-color-success-bg);
+          color: var(--dm-color-success);
+          border: 1px solid var(--dm-color-success);
+      }
+
+      .validation-error {
+          background: var(--dm-color-danger-bg);
+          color: var(--dm-color-danger);
+          border: 1px solid var(--dm-color-danger);
+      }
+
+      .helper-box {
+          background: var(--dm-color-info-bg);
+          border-left: 4px solid var(--dm-color-info);
+          padding: 1rem;
+          margin: 1rem 0;
+      }
+  </style>
+</head>
+<body data-layout="showcase" data-layout-variant="subpage">
+<!-- Hero Section -->
+<div class="hero hero-gradient-primary models-hero-style">
+  <h1>Dot Notation with Models</h1>
+  <p>Working with nested data in Domma Models using dot notation for forms</p>
+  <p><code>M</code> + <code>_</code> utilities</p>
+</div>
+
+<div class="container py-8">
+
+  <!-- Introduction -->
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Using Dot Notation in Forms</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">While Domma Models store flat key-value pairs, you can work with nested data structures by
+        combining Models with utility functions. This enables dot notation in forms through <code>_.get()</code> and
+        <code>_.set()</code> utilities.</p>
+
+      <div class="helper-box">
+        <strong>Key Concept:</strong> Store nested objects as model values, then use utility functions and custom
+        formatters/parsers to handle dot notation paths when binding to forms.
+      </div>
+    </div>
+  </section>
+
+  <!-- Example 1: Basic Nested Data -->
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Example 1: Basic Nested Data Access</h2>
+    </div>
+    <div class="card-body">
+      <div class="example-section">
+        <h3 class="example-title">Storing and Accessing Nested Data</h3>
+
+        <pre class="code-block language-javascript mb-4">// Create model with nested object values
+const userModel = M.create({
+    profile: { type: 'object', default: {} },
+    address: { type: 'object', default: {} }
+});
+
+// Set nested data
+userModel.set('profile', {
+    firstName: 'John',
+    lastName: 'Doe',
+    bio: 'Software developer'
+});
+
+userModel.set('address', {
+    street: '123 Main St',
+    city: 'New York',
+    zip: '10001'
+});
+
+// Access nested properties using utilities
+const city = _.get(userModel.get('address'), 'city');
+console.log('City:', city);  // 'New York'
+
+// Update nested property
+const address = userModel.get('address');
+_.set(address, 'city', 'Boston');
+userModel.set('address', address);  // Trigger change events</pre>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <h4 class="font-semibold mb-2">Try It:</h4>
+            <button class="btn btn-primary mb-2" id="ex1-init">Initialize Model</button>
+            <button class="btn btn-success mb-2" id="ex1-update">Update City to Boston</button>
+            <button class="btn btn-info" id="ex1-get">Get Nested Values</button>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-2">Model State:</h4>
+            <div class="nested-display" id="ex1-display">Click "Initialize Model" to start</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Example 2: Form Binding Helper -->
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Example 2: Form Binding with Dot Notation</h2>
+    </div>
+    <div class="card-body">
+      <div class="example-section">
+        <h3 class="example-title">Helper Function for Nested Binding</h3>
+
+        <pre class="code-block language-javascript mb-4">// Helper function for binding nested properties
+function bindNested(model, field, path, selector, options = {}) {
+    M.bind(model, field, selector, {
+        ...options,
+        format: (data) => _.get(data, path, ''),
+        parse: (value) => {
+            const data = model.get(field) || {};
+            _.set(data, path, value);
+            return data;
+        }
+    });
+}
+
+// Create form model
+const formModel = M.create({
+    userData: { type: 'object', default: {} }
+});
+
+// Bind form inputs with dot notation paths
+bindNested(formModel, 'userData', 'user.name', '#user-name', { twoWay: true });
+bindNested(formModel, 'userData', 'user.email', '#user-email', { twoWay: true });
+bindNested(formModel, 'userData', 'address.city', '#address-city', { twoWay: true });</pre>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <h4 class="font-semibold mb-3">Form Inputs:</h4>
+            <div class="form-group">
+              <label class="form-label">User Name (user.name)</label>
+              <input type="text" id="user-name" class="form-input" placeholder="Enter name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email (user.email)</label>
+              <input type="email" id="user-email" class="form-input" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+              <label class="form-label">City (address.city)</label>
+              <input type="text" id="address-city" class="form-input" placeholder="Enter city">
+            </div>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-3">Live Model Data:</h4>
+            <div class="nested-display" id="ex2-display">{}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Example 3: Complete Registration Form -->
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Example 3: Complete Registration Form</h2>
+    </div>
+    <div class="card-body">
+      <div class="example-section">
+        <h3 class="example-title">Full Form with Validation</h3>
+
+        <form id="registration-form">
+          <div class="form-grid mb-4">
+            <div class="form-group">
+              <label class="form-label">First Name *</label>
+              <input type="text" name="personal.firstName" class="form-input" placeholder="John" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name *</label>
+              <input type="text" name="personal.lastName" class="form-input" placeholder="Doe" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email *</label>
+              <input type="email" name="personal.email" class="form-input" placeholder="john@example.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone</label>
+              <input type="tel" name="personal.phone" class="form-input" placeholder="+1 234 567 8900">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Street Address</label>
+              <input type="text" name="address.street" class="form-input" placeholder="123 Main St">
+            </div>
+            <div class="form-group">
+              <label class="form-label">City *</label>
+              <input type="text" name="address.city" class="form-input" placeholder="New York" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">State/Province</label>
+              <input type="text" name="address.state" class="form-input" placeholder="NY">
+            </div>
+            <div class="form-group">
+              <label class="form-label">ZIP/Postal Code</label>
+              <input type="text" name="address.zip" class="form-input" placeholder="10001">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Country *</label>
+              <select name="address.country" class="form-select" required>
+                <option value="">Select Country</option>
+                <option value="US">United States</option>
+                <option value="CA">Canada</option>
+                <option value="GB">United Kingdom</option>
+                <option value="AU">Australia</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Account Type</label>
+              <select name="account.type" class="form-select">
+                <option value="personal">Personal</option>
+                <option value="business">Business</option>
+                <option value="premium">Premium</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">
+                <input type="checkbox" name="account.newsletter" value="true">
+                Subscribe to newsletter
+              </label>
+            </div>
+            <div class="form-group">
+              <label class="form-label">
+                <input type="checkbox" name="account.terms" value="true" required>
+                I agree to the terms and conditions *
+              </label>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <button type="submit" class="btn btn-primary">Submit Registration</button>
+            <button type="button" class="btn btn-secondary" id="reset-form">Reset Form</button>
+            <button type="button" class="btn btn-info" id="populate-form">Populate Sample Data</button>
+          </div>
+        </form>
+
+        <div class="validation-message mt-4" id="validation-message" style="display: none;"></div>
+
+        <div class="mt-4">
+          <h4 class="font-semibold mb-2">Serialized Form Data (with dot notation):</h4>
+          <div class="nested-display" id="ex3-display">Submit the form to see the data structure</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Example 4: Auto-serialization -->
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Example 4: Form Auto-Serialization</h2>
+    </div>
+    <div class="card-body">
+            <pre class="code-block language-javascript mb-4">// Utility to serialize form with dot notation support
+function serializeFormWithDotNotation(formSelector) {
+    const data = {};
+    
+    $(formSelector).find('input, select, textarea').each(function() {
+        const element = $(this);
+        const name = element.attr('name');
+        if (!name) return;
+        
+        let value;
+        if (element.attr('type') === 'checkbox') {
+            value = element.prop('checked');
+        } else if (element.attr('type') === 'radio') {
+            if (element.prop('checked')) {
+                value = element.val();
+            } else {
+                return; // Skip unchecked radio
+            }
+        } else {
+            value = element.val();
+        }
+        
+        // Use _.set to handle dot notation
+        _.set(data, name, value);
+    });
+    
+    return data;
+}
+
+// Usage
+const formData = serializeFormWithDotNotation('#my-form');
+// Returns nested object: { user: { name: '...', email: '...' }, address: { ... } }</pre>
+
+      <div class="helper-box">
+        <strong>Pro Tip:</strong> You can use HTML5 data attributes or name attributes with dot notation to
+        automatically structure your form data. The serialization function will parse these paths and create the
+        appropriate nested object structure.
+      </div>
+    </div>
+  </section>
+
+  <!-- Best Practices -->
+  <section class="card">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Best Practices</h2>
+    </div>
+    <div class="card-body">
+      <ul class="list-disc list-inside space-y-2">
+        <li><strong>Use consistent naming:</strong> Stick to a naming convention like <code>section.field</code>
+          throughout your forms
+        </li>
+        <li><strong>Validate nested data:</strong> Use custom validation functions that can check nested properties with
+          <code>_.get()</code></li>
+        <li><strong>Create reusable helpers:</strong> Build utility functions like <code>bindNested()</code> for common
+          patterns
+        </li>
+        <li><strong>Leverage persistence:</strong> Models with nested data can still use the <code>persist</code> option
+          for localStorage
+        </li>
+        <li><strong>Handle undefined paths:</strong> Always provide default values when using <code>_.get()</code> to
+          avoid errors
+        </li>
+        <li><strong>Trigger change events:</strong> After modifying nested data, always <code>set()</code> the parent
+          object to trigger model change events
+        </li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+  // Helper function for nested binding
+  function bindNested(model, field, path, selector, options = {}) {
+    // Ensure we have a DOM element, not a jQuery object
+    const element = typeof selector === 'string' ?
+      document.querySelector(selector) :
+      (selector.jquery ? selector[0] : selector);
+
+    return M.bind(model, field, element, {
+      ...options,
+      format: (data) => _.get(data, path, ''),
+      parse: (value) => {
+        const data = model.get(field) || {};
+        _.set(data, path, value);
+        return data;
+      }
+    });
+  }
+
+  // Utility to serialize form with dot notation
+  function serializeFormWithDotNotation(formSelector) {
+    const data = {};
+
+    $(formSelector).find('input, select, textarea').each(function () {
+      const element = $(this);
+      const name = element.attr('name');
+      if (!name) return;
+
+      let value;
+      if (element.attr('type') === 'checkbox') {
+        value = element.prop('checked');
+      } else if (element.attr('type') === 'radio') {
+        if (element.prop('checked')) {
+          value = element.val();
+        } else {
+          return;
+        }
+      } else {
+        value = element.val();
+      }
+
+      _.set(data, name, value);
+    });
+
+    return data;
+  }
+
+  // Example 1: Basic Nested Data
+  let ex1Model;
+
+  $('#ex1-init').on('click', () => {
+    ex1Model = M.create({
+      profile: {type: 'object', default: {}},
+      address: {type: 'object', default: {}}
+    });
+
+    ex1Model.set('profile', {
+      firstName: 'John',
+      lastName: 'Doe',
+      bio: 'Software developer'
+    });
+
+    ex1Model.set('address', {
+      street: '123 Main St',
+      city: 'New York',
+      zip: '10001'
+    });
+
+    ex1Model.onChange(() => {
+      $('#ex1-display').text(JSON.stringify(ex1Model.toJSON(), null, 2));
+    });
+
+    $('#ex1-display').text(JSON.stringify(ex1Model.toJSON(), null, 2));
+  });
+
+  $('#ex1-update').on('click', () => {
+    if (!ex1Model) {
+      alert('Please initialize the model first');
+      return;
+    }
+
+    const address = ex1Model.get('address');
+    _.set(address, 'city', 'Boston');
+    ex1Model.set('address', address);
+  });
+
+  $('#ex1-get').on('click', () => {
+    if (!ex1Model) {
+      alert('Please initialize the model first');
+      return;
+    }
+
+    const city = _.get(ex1Model.get('address'), 'city');
+    const firstName = _.get(ex1Model.get('profile'), 'firstName');
+
+    alert(`First Name: ${firstName}\nCity: ${city}`);
+  });
+
+  // Example 2: Form Binding
+  const ex2Model = M.create({
+    userData: {type: 'object', default: {}}
+  });
+
+  // Bind inputs with nested paths
+  bindNested(ex2Model, 'userData', 'user.name', '#user-name', {twoWay: true});
+  bindNested(ex2Model, 'userData', 'user.email', '#user-email', {twoWay: true});
+  bindNested(ex2Model, 'userData', 'address.city', '#address-city', {twoWay: true});
+
+  // Display updates
+  ex2Model.onChange(() => {
+    $('#ex2-display').text(JSON.stringify(ex2Model.get('userData'), null, 2));
+  });
+
+  // Example 3: Registration Form
+  const registrationModel = M.create({
+    formData: {
+      type: 'object',
+      default: {},
+      validate: (data) => {
+        const errors = [];
+
+        if (!_.get(data, 'personal.firstName')) {
+          errors.push('First name is required');
+        }
+        if (!_.get(data, 'personal.lastName')) {
+          errors.push('Last name is required');
+        }
+        if (!_.get(data, 'personal.email')?.includes('@')) {
+          errors.push('Valid email is required');
+        }
+        if (!_.get(data, 'address.city')) {
+          errors.push('City is required');
+        }
+        if (!_.get(data, 'address.country')) {
+          errors.push('Country is required');
+        }
+        if (!_.get(data, 'account.terms')) {
+          errors.push('You must agree to the terms and conditions');
+        }
+
+        return errors.length > 0 ? errors.join(', ') : true;
+      }
+    }
+  });
+
+  // Bind all form fields
+  $('#registration-form input, #registration-form select').each(function () {
+    const element = this; // Use the DOM element directly
+    const name = element.getAttribute('name');
+    if (!name) return;
+
+    bindNested(registrationModel, 'formData', name, element, {twoWay: true});
+  });
+
+  // Handle form submission
+  $('#registration-form').on('submit', (e) => {
+    e.preventDefault();
+
+    const validation = registrationModel.validate();
+    const validationMsg = $('#validation-message');
+
+    if (validation.valid) {
+      const data = serializeFormWithDotNotation('#registration-form');
+      $('#ex3-display').text(JSON.stringify(data, null, 2));
+
+      validationMsg
+        .removeClass('validation-error')
+        .addClass('validation-success')
+        .text('✓ Form is valid! Check the serialized data below.')
+        .show();
+    } else {
+      validationMsg
+        .removeClass('validation-success')
+        .addClass('validation-error')
+        .text('✗ Validation failed: ' + validation.errors[0].error)
+        .show();
+    }
+  });
+
+  // Reset form
+  $('#reset-form').on('click', () => {
+    $('#registration-form')[0].reset();
+    registrationModel.set('formData', {});
+    $('#ex3-display').text('Submit the form to see the data structure');
+    $('#validation-message').hide();
+  });
+
+  // Populate sample data
+  $('#populate-form').on('click', () => {
+    const sampleData = {
+      personal: {
+        firstName: 'Jane',
+        lastName: 'Smith',
+        email: 'jane.smith@example.com',
+        phone: '+1 555 123 4567'
+      },
+      address: {
+        street: '456 Oak Avenue',
+        city: 'San Francisco',
+        state: 'CA',
+        zip: '94102',
+        country: 'US'
+      },
+      account: {
+        type: 'premium',
+        newsletter: true,
+        terms: true
+      }
+    };
+
+    // Set values in form using dot notation paths
+    function setFormValues(obj, prefix = '') {
+      for (const [key, value] of Object.entries(obj)) {
+        const path = prefix ? `${prefix}.${key}` : key;
+        if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+          setFormValues(value, path);
+        } else {
+          const input = document.querySelector(`[name="${path}"]`);
+          if (input) {
+            if (input.type === 'checkbox') {
+              input.checked = value;
+            } else {
+              input.value = value;
+            }
+          }
+        }
+      }
+    }
+
+    setFormValues(sampleData);
+
+    // Update model
+    registrationModel.set('formData', sampleData);
+    $('#validation-message').hide();
+  });
+</script>
+
+<!-- Layout system for header/footer -->
+<script type="module" src="../../layouts/js/layout.js"></script>
+</body>
+</html>

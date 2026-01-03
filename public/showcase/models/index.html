@@ -274,6 +274,13 @@ const schema = {
         <div class="card-body">
             <p class="mb-4">Automatically sync model data with DOM elements.</p>
 
+          <div class="alert alert-info mb-4">
+            <strong>Working with Nested Data?</strong> Check out our <a href="dot-notation.html"
+                                                                        class="text-info underline">Dot Notation with
+            Forms</a> guide for handling complex nested structures using <code>_.get()</code> and <code>_.set()</code>
+            utilities.
+          </div>
+
             <pre class="code-block language-javascript">const user = M.create({
     name: { type: 'string' },
     email: { type: 'string' }
