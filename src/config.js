@@ -143,6 +143,7 @@ export const configEngine = {
             carousel: elements.carousel,
             dropdown: elements.dropdown,
             badge: elements.badge,
+            cookieConsent: elements.cookieConsent,
             backToTop: elements.backToTop,
             buttonGroup: elements.buttonGroup,
             loader: elements.loader,

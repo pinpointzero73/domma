@@ -1,130 +1,145 @@
 {
-  "title": "All Elements",
-  "items": [
+  "type": "grouped",
+  "groups": [
     {
-      "text": "Accordion",
-      "url": "../accordion/index.html",
-      "slug": "accordion"
+      "title": "UI Components",
+      "items": [
+        {
+          "text": "Alarm",
+          "url": "../alarm/index.html",
+          "slug": "alarm"
+        },
+        {
+          "text": "Back to Top",
+          "url": "../back-to-top/index.html",
+          "slug": "back-to-top"
+        },
+        {
+          "text": "Cookie Consent",
+          "url": "../cookie-consent/index.html",
+          "slug": "cookie-consent"
+        },
+        {
+          "text": "Desktop Notification",
+          "url": "../notification/index.html",
+          "slug": "notification"
+        },
+        {
+          "text": "Loader",
+          "url": "../loader/index.html",
+          "slug": "loader"
+        },
+        {
+          "text": "Timer",
+          "url": "../timer/index.html",
+          "slug": "timer"
+        },
+        {
+          "text": "Toast",
+          "url": "../toast/index.html",
+          "slug": "toast"
+        }
+      ]
     },
     {
-      "text": "Alarm",
-      "url": "../alarm/index.html",
-      "slug": "alarm"
-    },
-    {
-      "text": "Autocomplete",
-      "url": "../autocomplete/index.html",
-      "slug": "autocomplete"
-    },
-    {
-      "text": "Back to Top",
-      "url": "../back-to-top/index.html",
-      "slug": "back-to-top"
-    },
-    {
-      "text": "Badge",
-      "url": "../badge/index.html",
-      "slug": "badge"
-    },
-    {
-      "text": "Breadcrumbs",
-      "url": "../breadcrumbs/index.html",
-      "slug": "breadcrumbs"
-    },
-    {
-      "text": "Button Group",
-      "url": "../button-group/index.html",
-      "slug": "button-group"
-    },
-    {
-      "text": "Card",
-      "url": "../card/index.html",
-      "slug": "card"
-    },
-    {
-      "text": "Carousel",
-      "url": "../carousel/index.html",
-      "slug": "carousel"
-    },
-    {
-      "text": "Dialog",
-      "url": "../dialog/index.html",
-      "slug": "dialog"
-    },
-    {
-      "text": "Dropdown",
-      "url": "../dropdown/index.html",
-      "slug": "dropdown"
-    },
-    {
-      "text": "Editor",
-      "url": "../editor/index.html",
-      "slug": "editor"
-    },
-    {
-      "text": "Forms",
-      "url": "../forms/index.html",
-      "slug": "forms"
-    },
-    {
-      "text": "Jumbotron",
-      "url": "../jumbotron/index.html",
-      "slug": "jumbotron"
-    },
-    {
-      "text": "Loader",
-      "url": "../loader/index.html",
-      "slug": "loader"
-    },
-    {
-      "text": "Modal",
-      "url": "../modal/index.html",
-      "slug": "modal"
-    },
-    {
-      "text": "Navbar",
-      "url": "../navbar/index.html",
-      "slug": "navbar"
-    },
-    {
-      "text": "Notification",
-      "url": "../notification/index.html",
-      "slug": "notification"
-    },
-    {
-      "text": "Pillbox",
-      "url": "../pillbox/index.html",
-      "slug": "pillbox"
-    },
-    {
-      "text": "Tabs",
-      "url": "../tabs/index.html",
-      "slug": "tabs"
-    },
-    {
-      "text": "Timer",
-      "url": "../timer/index.html",
-      "slug": "timer"
-    },
-    {
-      "text": "Timeline",
-      "url": "../timeline/index.html",
-      "slug": "timeline"
-    },
-    {
-      "text": "Toast",
-      "url": "../toast/index.html",
-      "slug": "toast"
-    },
-    {
-      "text": "Tooltip",
-      "url": "../tooltip/index.html",
-      "slug": "tooltip"
-    },
-    {
-      "text": "TreeView",
-      "url": "../treeview/index.html",
-      "slug": "treeview"
+      "title": "Elements",
+      "items": [
+        {
+          "text": "Accordion",
+          "url": "../accordion/index.html",
+          "slug": "accordion"
+        },
+        {
+          "text": "Autocomplete",
+          "url": "../autocomplete/index.html",
+          "slug": "autocomplete"
+        },
+        {
+          "text": "Badge",
+          "url": "../badge/index.html",
+          "slug": "badge"
+        },
+        {
+          "text": "Breadcrumbs",
+          "url": "../breadcrumbs/index.html",
+          "slug": "breadcrumbs"
+        },
+        {
+          "text": "Button Group",
+          "url": "../button-group/index.html",
+          "slug": "button-group"
+        },
+        {
+          "text": "Card",
+          "url": "../card/index.html",
+          "slug": "card"
+        },
+        {
+          "text": "Carousel",
+          "url": "../carousel/index.html",
+          "slug": "carousel"
+        },
+        {
+          "text": "Dialog",
+          "url": "../dialog/index.html",
+          "slug": "dialog"
+        },
+        {
+          "text": "Dropdown",
+          "url": "../dropdown/index.html",
+          "slug": "dropdown"
+        },
+        {
+          "text": "Editor",
+          "url": "../editor/index.html",
+          "slug": "editor"
+        },
+        {
+          "text": "Forms",
+          "url": "../forms/index.html",
+          "slug": "forms"
+        },
+        {
+          "text": "Jumbotron",
+          "url": "../jumbotron/index.html",
+          "slug": "jumbotron"
+        },
+        {
+          "text": "Modal",
+          "url": "../modal/index.html",
+          "slug": "modal"
+        },
+        {
+          "text": "Navbar",
+          "url": "../navbar/index.html",
+          "slug": "navbar"
+        },
+        {
+          "text": "Pillbox",
+          "url": "../pillbox/index.html",
+          "slug": "pillbox"
+        },
+        {
+          "text": "Tabs",
+          "url": "../tabs/index.html",
+          "slug": "tabs"
+        },
+        {
+          "text": "Timeline",
+          "url": "../timeline/index.html",
+          "slug": "timeline"
+        },
+        {
+          "text": "Tooltip",
+          "url": "../tooltip/index.html",
+          "slug": "tooltip"
+        },
+        {
+          "text": "TreeView",
+          "url": "../treeview/index.html",
+          "slug": "treeview"
+        }
+      ]
     }
   ]
 }

@@ -17,6 +17,13 @@
         "url": "privacy-policy/index.html"
       },
       {
+        "text": "Cookie Settings",
+        "url": "#",
+        "attributes": {
+          "data-cookie-consent-open": "true"
+        }
+      },
+      {
         "text": "Blog",
         "url": "blog/index.html"
       }

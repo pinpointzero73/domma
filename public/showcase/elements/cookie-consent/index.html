@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookie Consent - Domma Elements</title>
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+  <link rel="stylesheet" href="../../../dist/domma.css">
+  <link rel="stylesheet" href="../../../dist/elements.css">
+  <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
+</head>
+<body class="dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<main class="container py-8">
+
+  <!-- SECTION 1: Overview -->
+  <section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+      <h1 class="text-3xl font-semibold m-0">Cookie Consent</h1>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        GDPR-compliant cookie consent management with full customization options. The Cookie Consent component provides
+        a flexible, user-friendly interface for managing cookie preferences with support for multiple categories,
+        persistence, and customizable styling.
+      </p>
+
+      <h4 class="category-title">Key Features</h4>
+      <ul class="mb-4">
+        <li>GDPR and CCPA compliant cookie management</li>
+        <li>Customizable cookie categories (necessary, performance, marketing, etc.)</li>
+        <li>Multiple position and layout options</li>
+        <li>localStorage persistence with configurable expiry</li>
+        <li>Light and dark theme support</li>
+        <li>Config Engine compatible for declarative setup</li>
+        <li>Promise-based API for programmatic control</li>
+        <li>Reopen trigger support for preference management</li>
+      </ul>
+
+      <h4 class="category-title">When to Use Cookie Consent</h4>
+      <ul class="mb-4">
+        <li><strong>Legal Compliance</strong>: Required for GDPR compliance in EU regions</li>
+        <li><strong>User Privacy</strong>: Giving users control over their data</li>
+        <li><strong>Analytics Management</strong>: Conditional loading of tracking scripts</li>
+        <li><strong>Marketing Tools</strong>: Managing third-party advertising cookies</li>
+        <li><strong>Personalization</strong>: Storing user preferences with consent</li>
+      </ul>
+
+      <h4 class="category-title">Basic Usage</h4>
+      <pre class="code-block language-javascript">// Initialize cookie consent
+const consent = Domma.elements.cookieConsent({
+    message: 'We use cookies to improve your experience.',
+    privacyPolicyUrl: '/privacy',
+    onAccept: (preferences) => {
+        console.log('Cookies accepted:', preferences);
+    }
+});
+
+// Show the consent bar
+consent.show();</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 2: Basic Examples -->
+  <section class="card mb-6" data-section="Basic Examples">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Basic Examples</h2>
+    </div>
+    <div class="card-body">
+      <h4 class="category-title">Example 1: Simple Consent Bar</h4>
+      <p class="mb-2">
+        Simple cookie consent bar at the bottom of the page with default settings.
+      </p>
+
+      <div class="demo-area mb-4">
+        <button class="btn btn-primary" onclick="showBasicConsent()">Show Basic Consent</button>
+        <button class="btn btn-outline" onclick="resetBasicConsent()">Reset Consent</button>
+      </div>
+
+      <div class="bg-gray-100 p-4 rounded mb-4 font-mono text-sm" id="basic-status">
+        Status: <span id="basic-state">Not initialized</span><br>
+        Preferences: <span id="basic-prefs">{}</span>
+      </div>
+
+      <pre class="code-block language-javascript">// Basic cookie consent
+const consent = Domma.elements.cookieConsent({
+    message: 'We use cookies to improve your experience.',
+    privacyPolicyUrl: '/privacy',
+    storageKey: 'demo-basic-consent',
+    autoShow: false,
+    onAccept: (preferences) => {
+        console.log('Cookies accepted:', preferences);
+    }
+});
+
+consent.show();</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 3: Custom Categories -->
+  <section class="card mb-6" data-section="Custom Categories">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Custom Categories</h2>
+    </div>
+    <div class="card-body">
+      <h4 class="category-title">Granular Cookie Control</h4>
+      <p class="mb-2">
+        Cookie consent with customizable categories for granular control.
+      </p>
+
+      <div class="demo-area mb-4">
+        <button class="btn btn-primary" onclick="showCustomCategories()">Show Custom Categories</button>
+        <button class="btn btn-outline" onclick="resetCustomCategories()">Reset Consent</button>
+      </div>
+
+      <div class="bg-gray-100 p-4 rounded mb-4 font-mono text-sm" id="custom-status">
+        Status: <span id="custom-state">Not initialized</span><br>
+        Preferences: <span id="custom-prefs">{}</span>
+      </div>
+
+      <pre class="code-block language-javascript">// Custom categories
+const consent = Domma.elements.cookieConsent({
+    categories: {
+        necessary: {
+            label: 'Essential Cookies',
+            description: 'Required for core functionality.',
+            required: true
+        },
+        performance: {
+            label: 'Performance Cookies',
+            description: 'Help us improve site speed.',
+            required: false
+        },
+        marketing: {
+            label: 'Marketing Cookies',
+            description: 'Used for targeted advertising.',
+            required: false
+        }
+    },
+    onAccept: (preferences) => {
+        // Handle category-specific preferences
+        if (preferences.performance) {
+            // Enable performance tracking
+        }
+        if (preferences.marketing) {
+            // Enable marketing cookies
+        }
+    }
+});</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 4: Position & Layout -->
+  <section class="card mb-6" data-section="Position & Layout">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Position & Layout Variants</h2>
+    </div>
+    <div class="card-body">
+      <h4 class="category-title">Position Options</h4>
+      <p class="mb-2">
+        Different positions and layouts for the cookie consent UI.
+      </p>
+
+      <div class="demo-area mb-4">
+        <button class="btn btn-outline" onclick="showPosition('bottom', 'bar')">Bottom Bar</button>
+        <button class="btn btn-outline" onclick="showPosition('top', 'bar')">Top Bar</button>
+        <button class="btn btn-outline" onclick="showPosition('bottom-left', 'box')">Bottom Left Box</button>
+        <button class="btn btn-outline" onclick="showPosition('bottom-right', 'box')">Bottom Right Box</button>
+        <button class="btn btn-outline" onclick="showPosition('center-modal', 'modal')">Center Modal</button>
+      </div>
+
+      <pre class="code-block language-javascript">// Position variants
+Domma.elements.cookieConsent({
+    position: 'bottom-right',  // or 'top', 'bottom-left', 'center-modal'
+    layout: 'box',             // or 'bar', 'modal'
+    theme: 'dark',             // or 'light', 'auto'
+    animation: true,
+    backdrop: true             // For modal layout
+});</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 5: Config Engine -->
+  <section class="card mb-6" data-section="Config Engine">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Config Engine Integration</h2>
+    </div>
+    <div class="card-body">
+      <h4 class="category-title">Declarative Setup</h4>
+      <p class="mb-2">
+        Initialize cookie consent using Domma's declarative config engine.
+      </p>
+
+      <div class="demo-area mb-4">
+        <button class="btn btn-primary" onclick="showConfigExample()">Show Config Example</button>
+      </div>
+
+      <pre class="code-block language-javascript">// Using Config Engine
+$.setup({
+    'body': {
+        component: 'cookieConsent',
+        options: {
+            message: 'This site uses cookies...',
+            categories: {
+                analytics: {
+                    label: 'Analytics',
+                    description: 'Help us understand usage',
+                    required: false
+                }
+            },
+            privacyPolicyUrl: '/privacy-policy',
+            position: 'bottom',
+            theme: 'dark',
+            onAccept: (preferences) => {
+                console.log('Configured consent accepted:', preferences);
+            }
+        }
+    }
+});</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 6: API Methods -->
+  <section class="card mb-6" data-section="API Methods">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">API Methods</h2>
+    </div>
+    <div class="card-body">
+      <h4 class="category-title">Programmatic Control</h4>
+      <p class="mb-2">
+        Full programmatic control of the cookie consent component.
+      </p>
+
+      <div class="demo-area mb-4">
+        <button class="btn btn-outline" onclick="apiShow()">show()</button>
+        <button class="btn btn-outline" onclick="apiHide()">hide()</button>
+        <button class="btn btn-outline" onclick="apiAccept()">accept()</button>
+        <button class="btn btn-outline" onclick="apiReject()">reject()</button>
+        <button class="btn btn-outline" onclick="apiCustomize()">showCustomize()</button>
+        <button class="btn btn-outline" onclick="apiGetState()">getState()</button>
+        <button class="btn btn-outline" onclick="apiGetPrefs()">getPreferences()</button>
+        <button class="btn btn-outline" onclick="apiReset()">reset()</button>
+      </div>
+
+      <div class="bg-gray-100 p-4 rounded mb-4 font-mono text-sm" id="api-output">
+        API output will appear here...
+      </div>
+
+      <pre class="code-block language-javascript">// API Methods
+const consent = Domma.elements.cookieConsent(options);
+
+consent.show();              // Show consent UI
+consent.hide();              // Hide consent UI
+consent.accept();            // Accept all cookies
+consent.reject();            // Reject non-essential cookies
+consent.showCustomize();     // Open preferences modal
+consent.getState();          // Get current state
+consent.getPreferences();    // Get cookie preferences
+consent.isAccepted('analytics'); // Check specific category
+consent.reset();             // Clear saved preferences
+consent.destroy();           // Remove component</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 7: Reopen Trigger -->
+  <section class="card mb-6" data-section="Reopen Trigger">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Reopen Trigger</h2>
+    </div>
+    <div class="card-body">
+      <h4 class="category-title">User-Initiated Preference Management</h4>
+      <p class="mb-2">
+        Allow users to reopen cookie preferences after initial consent.
+      </p>
+
+      <div class="demo-area mb-4 p-4">
+        <p>Click here to <a href="#" data-cookie-consent-open class="text-primary">manage cookie preferences</a></p>
+      </div>
+
+      <pre class="code-block language-javascript">// Reopen trigger
+Domma.elements.cookieConsent({
+    reopenSelector: '[data-cookie-consent-open]',
+    // ... other options
+});
+
+// In HTML:
+&lt;a href="#" data-cookie-consent-open&gt;Cookie Settings&lt;/a&gt;</pre>
+    </div>
+  </section>
+
+</main>
+
+<script src="../../../dist/domma.min.js"></script>
+<script>
+  // Global consent instances
+  let basicConsent, customConsent, positionConsent, apiConsent;
+
+  // Basic consent example
+  function showBasicConsent() {
+    if (basicConsent) basicConsent.destroy();
+
+    basicConsent = Domma.elements.cookieConsent({
+      message: 'We use cookies to improve your experience on our site.',
+      privacyPolicyUrl: '#',
+      storageKey: 'demo-basic-consent',
+      autoShow: false,
+      onAccept: (preferences) => {
+        updateBasicStatus();
+      },
+      onReject: () => {
+        updateBasicStatus();
+      },
+      onChange: () => {
+        updateBasicStatus();
+      }
+    });
+
+    basicConsent.show();
+    updateBasicStatus();
+  }
+
+  function resetBasicConsent() {
+    if (basicConsent) {
+      basicConsent.reset();
+      basicConsent.show();
+      updateBasicStatus();
+    }
+  }
+
+  function updateBasicStatus() {
+    if (basicConsent) {
+      $('#basic-state').text(basicConsent.getState());
+      $('#basic-prefs').text(JSON.stringify(basicConsent.getPreferences(), null, 2));
+    }
+  }
+
+  // Custom categories example
+  function showCustomCategories() {
+    if (customConsent) customConsent.destroy();
+
+    customConsent = Domma.elements.cookieConsent({
+      message: 'We value your privacy. Choose which cookies you allow.',
+      categories: {
+        necessary: {
+          label: 'Essential Cookies',
+          description: 'These cookies are required for the website to function properly.',
+          required: true
+        },
+        performance: {
+          label: 'Performance Cookies',
+          description: 'These cookies help us understand how you interact with our website.',
+          required: false
+        },
+        marketing: {
+          label: 'Marketing Cookies',
+          description: 'These cookies are used to deliver personalized advertisements.',
+          required: false
+        }
+      },
+      privacyPolicyUrl: '#',
+      storageKey: 'demo-custom-consent',
+      autoShow: false,
+      onAccept: (preferences) => {
+        updateCustomStatus();
+      },
+      onChange: () => {
+        updateCustomStatus();
+      }
+    });
+
+    customConsent.show();
+    updateCustomStatus();
+  }
+
+  function resetCustomCategories() {
+    if (customConsent) {
+      customConsent.reset();
+      customConsent.show();
+      updateCustomStatus();
+    }
+  }
+
+  function updateCustomStatus() {
+    if (customConsent) {
+      $('#custom-state').text(customConsent.getState());
+      $('#custom-prefs').text(JSON.stringify(customConsent.getPreferences(), null, 2));
+    }
+  }
+
+  // Position examples
+  function showPosition(position, layout) {
+    if (positionConsent) positionConsent.destroy();
+
+    const theme = position === 'top' || position === 'bottom' ? 'dark' : 'light';
+
+    positionConsent = Domma.elements.cookieConsent({
+      message: `This is a ${position} ${layout} consent.`,
+      position: position,
+      layout: layout,
+      theme: theme,
+      backdrop: layout === 'modal',
+      privacyPolicyUrl: '#',
+      storageKey: 'demo-position-consent',
+      autoShow: false
+    });
+
+    positionConsent.show();
+  }
+
+  // Config example
+  function showConfigExample() {
+    $.setup({
+      'body': {
+        component: 'cookieConsent',
+        options: {
+          message: 'This consent was created using the Config Engine.',
+          position: 'bottom-left',
+          layout: 'box',
+          theme: 'dark',
+          privacyPolicyUrl: '#',
+          cookiePolicyUrl: '#',
+          storageKey: 'demo-config-consent',
+          autoShow: true
+        }
+      }
+    });
+  }
+
+  // API example
+  function initApiExample() {
+    if (!apiConsent) {
+      apiConsent = Domma.elements.cookieConsent({
+        message: 'API Example - Control this consent programmatically.',
+        position: 'bottom-right',
+        layout: 'box',
+        privacyPolicyUrl: '#',
+        storageKey: 'demo-api-consent',
+        autoShow: false,
+        reopenSelector: '[data-cookie-consent-open]'
+      });
+    }
+  }
+
+  function apiShow() {
+    initApiExample();
+    apiConsent.show();
+    $('#api-output').text('Called: show()');
+  }
+
+  function apiHide() {
+    initApiExample();
+    apiConsent.hide();
+    $('#api-output').text('Called: hide()');
+  }
+
+  function apiAccept() {
+    initApiExample();
+    apiConsent.accept();
+    $('#api-output').text('Called: accept()\nState: ' + apiConsent.getState());
+  }
+
+  function apiReject() {
+    initApiExample();
+    apiConsent.reject();
+    $('#api-output').text('Called: reject()\nState: ' + apiConsent.getState());
+  }
+
+  function apiCustomize() {
+    initApiExample();
+    apiConsent.showCustomize();
+    $('#api-output').text('Called: showCustomize()');
+  }
+
+  function apiGetState() {
+    initApiExample();
+    const state = apiConsent.getState();
+    $('#api-output').text('State: ' + state);
+  }
+
+  function apiGetPrefs() {
+    initApiExample();
+    const prefs = apiConsent.getPreferences();
+    $('#api-output').text('Preferences:\n' + JSON.stringify(prefs, null, 2));
+  }
+
+  function apiReset() {
+    initApiExample();
+    apiConsent.reset();
+    $('#api-output').text('Called: reset()\nState: ' + apiConsent.getState());
+  }
+
+  // Initialize API example for reopen trigger
+  $(document).ready(() => {
+    initApiExample();
+  });
+</script>
+
+<!-- Syntax highlighting -->
+<script src="../../../dist/domma-syntax.min.js"></script>
+<!-- Layout system -->
+<script type="module" src="../../../layouts/js/layout.js"></script>
+</body>
+</html>

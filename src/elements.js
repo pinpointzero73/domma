@@ -3161,6 +3161,508 @@ class Carousel extends Component {
 }
 
 // ============================================
+// CookieConsent Component
+// ============================================
+
+class CookieConsent extends Component {
+    static defaults = {
+        // Text content
+        message: 'We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking "Accept All", you consent to our use of cookies.',
+        acceptAllText: 'Accept All',
+        rejectAllText: 'Reject All',
+        customizeText: 'Customize',
+        savePreferencesText: 'Save Preferences',
+        privacyPolicyText: 'Privacy Policy',
+        privacyPolicyUrl: '/privacy-policy',
+        cookiePolicyText: 'Cookie Policy',
+        cookiePolicyUrl: null,
+
+        // Cookie categories (for customize modal)
+        categories: {
+            necessary: {
+                label: 'Necessary Cookies',
+                description: 'These cookies are essential for the website to function properly.',
+                required: true
+            },
+            functional: {
+                label: 'Functional Cookies',
+                description: 'These cookies enable personalized features and functionality.',
+                required: false
+            },
+            analytics: {
+                label: 'Analytics Cookies',
+                description: 'These cookies help us understand how visitors interact with our website.',
+                required: false
+            },
+            marketing: {
+                label: 'Marketing Cookies',
+                description: 'These cookies are used to deliver relevant ads and marketing campaigns.',
+                required: false
+            }
+        },
+
+        // Appearance
+        position: 'bottom',     // 'bottom', 'top', 'bottom-left', 'bottom-right', 'center-modal'
+        theme: 'light',         // 'light', 'dark', 'auto' (follows system)
+        layout: 'bar',          // 'bar', 'box', 'modal'
+        animation: true,
+        backdrop: false,        // Show backdrop for modal layout
+
+        // Behavior
+        autoShow: true,         // Auto show on first visit
+        hideAfterAction: true,  // Hide after user makes a choice
+        reopenSelector: '[data-cookie-consent-open]', // Selector for reopen triggers
+        storageKey: 'domma-cookie-consent',
+        storageDuration: 365,   // Days to remember consent
+
+        // Compliance
+        defaultState: 'undecided', // 'accepted', 'rejected', 'undecided'
+        requireExplicitConsent: true, // GDPR compliance mode
+
+        // Callbacks
+        onAccept: null,         // (categories) => {}
+        onReject: null,         // () => {}
+        onCustomize: null,      // (categories) => {}
+        onChange: null,         // (state, categories) => {}
+        onShow: null,
+        onHide: null
+    };
+
+    constructor(options = {}) {
+        super(null, options);  // No selector needed
+        this._state = null;
+        this._preferences = {};
+        this._customizeModal = null;
+        this._isVisible = false;
+        this._init();
+    }
+
+    _init() {
+        // Load saved preferences
+        this._loadPreferences();
+
+        // Create consent UI
+        this._createUI();
+
+        // Setup event handlers
+        this._setupEventHandlers();
+
+        // Auto show if needed
+        if (this.options.autoShow && !this._hasConsented()) {
+            this.show();
+        }
+
+        // Setup reopen triggers
+        this._setupReopenTriggers();
+    }
+
+    _loadPreferences() {
+        const stored = Domma.storage.get(this.options.storageKey);
+        if (stored && stored.timestamp) {
+            const daysSinceConsent = (Date.now() - stored.timestamp) / (1000 * 60 * 60 * 24);
+            if (daysSinceConsent <= this.options.storageDuration) {
+                this._state = stored.state;
+                this._preferences = stored.preferences || {};
+                return;
+            }
+        }
+
+        // Set default state
+        this._state = this.options.defaultState;
+        this._preferences = {};
+
+        // Set default preferences based on requireExplicitConsent
+        Object.keys(this.options.categories).forEach(key => {
+            const category = this.options.categories[key];
+            this._preferences[key] = category.required || !this.options.requireExplicitConsent;
+        });
+    }
+
+    _savePreferences() {
+        Domma.storage.set(this.options.storageKey, {
+            state: this._state,
+            preferences: this._preferences,
+            timestamp: Date.now()
+        });
+    }
+
+    _hasConsented() {
+        return this._state === 'accepted' || this._state === 'rejected' || this._state === 'customized';
+    }
+
+    _createUI() {
+        // Create main container
+        this.element = document.createElement('div');
+        this.element.className = `dm-cookie-consent dm-cookie-consent-${this.options.position} dm-cookie-consent-${this.options.layout} dm-cookie-consent-${this.options.theme}`;
+        this.element.setAttribute('role', 'dialog');
+        this.element.setAttribute('aria-label', 'Cookie consent');
+        this.element.style.display = 'none';
+
+        if (this.options.animation) {
+            this.element.classList.add('dm-cookie-consent-animated');
+        }
+
+        // Build content based on layout
+        let html = '<div class="dm-cookie-consent-content">';
+
+        // Message
+        html += `<div class="dm-cookie-consent-message">${this.options.message}`;
+
+        // Add policy links
+        const links = [];
+        if (this.options.privacyPolicyUrl) {
+            links.push(`<a href="${this.options.privacyPolicyUrl}" target="_blank" rel="noopener">${this.options.privacyPolicyText}</a>`);
+        }
+        if (this.options.cookiePolicyUrl) {
+            links.push(`<a href="${this.options.cookiePolicyUrl}" target="_blank" rel="noopener">${this.options.cookiePolicyText}</a>`);
+        }
+        if (links.length > 0) {
+            html += ` ${links.join(' | ')}`;
+        }
+
+        html += '</div>';
+
+        // Buttons
+        html += '<div class="dm-cookie-consent-buttons">';
+
+        if (Object.keys(this.options.categories).length > 1) {
+            html += `<button type="button" class="btn btn-outline dm-cookie-consent-customize">${this.options.customizeText}</button>`;
+        }
+
+        html += `<button type="button" class="btn btn-outline dm-cookie-consent-reject">${this.options.rejectAllText}</button>`;
+        html += `<button type="button" class="btn btn-primary dm-cookie-consent-accept">${this.options.acceptAllText}</button>`;
+
+        html += '</div></div>';
+
+        // Add backdrop if needed
+        if (this.options.backdrop && this.options.layout === 'modal') {
+            html = `<div class="dm-cookie-consent-backdrop"></div>${html}`;
+        }
+
+        this.element.innerHTML = html;
+        document.body.appendChild(this.element);
+    }
+
+    _createCustomizeModal() {
+        if (this._customizeModal) return;
+
+        this._customizeModal = document.createElement('div');
+        this._customizeModal.className = 'dm-cookie-consent-modal';
+        this._customizeModal.setAttribute('role', 'dialog');
+        this._customizeModal.setAttribute('aria-label', 'Customize cookie preferences');
+
+        let html = '<div class="dm-cookie-consent-modal-content">';
+        html += '<div class="dm-cookie-consent-modal-header">';
+        html += '<h3>Cookie Preferences</h3>';
+        html += '<button type="button" class="dm-cookie-consent-modal-close" aria-label="Close">&times;</button>';
+        html += '</div>';
+
+        html += '<div class="dm-cookie-consent-modal-body">';
+
+        // Category toggles
+        Object.entries(this.options.categories).forEach(([key, category]) => {
+            const checked = this._preferences[key] ? 'checked' : '';
+            const disabled = category.required ? 'disabled' : '';
+
+            html += `<div class="dm-cookie-consent-category">`;
+            html += `<label class="dm-cookie-consent-category-label">`;
+            html += `<input type="checkbox" class="dm-cookie-consent-category-toggle" data-category="${key}" ${checked} ${disabled}>`;
+            html += `<div class="dm-cookie-consent-category-info">`;
+            html += `<div class="dm-cookie-consent-category-name">${category.label}`;
+            if (category.required) {
+                html += ' <span class="dm-cookie-consent-required">(Required)</span>';
+            }
+            html += '</div>';
+            html += `<div class="dm-cookie-consent-category-description">${category.description}</div>`;
+            html += '</div></label></div>';
+        });
+
+        html += '</div>';
+
+        html += '<div class="dm-cookie-consent-modal-footer">';
+        html += `<button type="button" class="btn btn-outline dm-cookie-consent-modal-cancel">Cancel</button>`;
+        html += `<button type="button" class="btn btn-primary dm-cookie-consent-modal-save">${this.options.savePreferencesText}</button>`;
+        html += '</div></div>';
+
+        // Add backdrop
+        html = `<div class="dm-cookie-consent-modal-backdrop"></div>${html}`;
+
+        this._customizeModal.innerHTML = html;
+        document.body.appendChild(this._customizeModal);
+
+        // Setup modal event handlers
+        this._setupModalHandlers();
+    }
+
+    _setupEventHandlers() {
+        // Accept button
+        const acceptBtn = this.element.querySelector('.dm-cookie-consent-accept');
+        if (acceptBtn) {
+            acceptBtn.addEventListener('click', () => this.accept());
+        }
+
+        // Reject button
+        const rejectBtn = this.element.querySelector('.dm-cookie-consent-reject');
+        if (rejectBtn) {
+            rejectBtn.addEventListener('click', () => this.reject());
+        }
+
+        // Customize button
+        const customizeBtn = this.element.querySelector('.dm-cookie-consent-customize');
+        if (customizeBtn) {
+            customizeBtn.addEventListener('click', () => this.showCustomize());
+        }
+
+        // Backdrop click (for modal layout)
+        if (this.options.backdrop && this.options.layout === 'modal') {
+            const backdrop = this.element.querySelector('.dm-cookie-consent-backdrop');
+            if (backdrop) {
+                backdrop.addEventListener('click', () => {
+                    if (!this.options.requireExplicitConsent) {
+                        this.hide();
+                    }
+                });
+            }
+        }
+    }
+
+    _setupModalHandlers() {
+        if (!this._customizeModal) return;
+
+        // Close button
+        const closeBtn = this._customizeModal.querySelector('.dm-cookie-consent-modal-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.hideCustomize());
+        }
+
+        // Cancel button
+        const cancelBtn = this._customizeModal.querySelector('.dm-cookie-consent-modal-cancel');
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => this.hideCustomize());
+        }
+
+        // Save button
+        const saveBtn = this._customizeModal.querySelector('.dm-cookie-consent-modal-save');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', () => this.saveCustomPreferences());
+        }
+
+        // Backdrop click
+        const backdrop = this._customizeModal.querySelector('.dm-cookie-consent-modal-backdrop');
+        if (backdrop) {
+            backdrop.addEventListener('click', () => this.hideCustomize());
+        }
+    }
+
+    _setupReopenTriggers() {
+        if (!this.options.reopenSelector) return;
+
+        document.addEventListener('click', (e) => {
+            const trigger = e.target.closest(this.options.reopenSelector);
+            if (trigger) {
+                e.preventDefault();
+                this.show();
+            }
+        });
+    }
+
+    show() {
+        if (this._isVisible) return;
+
+        this.element.style.display = '';
+
+        if (this.options.animation) {
+            requestAnimationFrame(() => {
+                this.element.classList.add('dm-cookie-consent-visible');
+            });
+        } else {
+            this.element.classList.add('dm-cookie-consent-visible');
+        }
+
+        this._isVisible = true;
+
+        if (this.options.onShow) {
+            this.options.onShow.call(this);
+        }
+    }
+
+    hide() {
+        if (!this._isVisible) return;
+
+        const cleanup = () => {
+            this.element.style.display = 'none';
+            this._isVisible = false;
+
+            if (this.options.onHide) {
+                this.options.onHide.call(this);
+            }
+        };
+
+        if (this.options.animation) {
+            this.element.classList.remove('dm-cookie-consent-visible');
+            setTimeout(cleanup, 300);
+        } else {
+            this.element.classList.remove('dm-cookie-consent-visible');
+            cleanup();
+        }
+    }
+
+    accept() {
+        // Accept all categories
+        Object.keys(this.options.categories).forEach(key => {
+            this._preferences[key] = true;
+        });
+
+        this._state = 'accepted';
+        this._savePreferences();
+
+        if (this.options.onAccept) {
+            this.options.onAccept.call(this, this._preferences);
+        }
+
+        if (this.options.onChange) {
+            this.options.onChange.call(this, this._state, this._preferences);
+        }
+
+        if (this.options.hideAfterAction) {
+            this.hide();
+        }
+    }
+
+    reject() {
+        // Reject all non-necessary categories
+        Object.entries(this.options.categories).forEach(([key, category]) => {
+            this._preferences[key] = category.required;
+        });
+
+        this._state = 'rejected';
+        this._savePreferences();
+
+        if (this.options.onReject) {
+            this.options.onReject.call(this);
+        }
+
+        if (this.options.onChange) {
+            this.options.onChange.call(this, this._state, this._preferences);
+        }
+
+        if (this.options.hideAfterAction) {
+            this.hide();
+        }
+    }
+
+    showCustomize() {
+        this._createCustomizeModal();
+
+        // Update toggles to match current preferences
+        this._customizeModal.querySelectorAll('.dm-cookie-consent-category-toggle').forEach(toggle => {
+            const category = toggle.dataset.category;
+            toggle.checked = this._preferences[category] || false;
+        });
+
+        this._customizeModal.style.display = 'flex';
+
+        if (this.options.animation) {
+            requestAnimationFrame(() => {
+                this._customizeModal.classList.add('dm-cookie-consent-modal-visible');
+            });
+        } else {
+            this._customizeModal.classList.add('dm-cookie-consent-modal-visible');
+        }
+
+        if (this.options.onCustomize) {
+            this.options.onCustomize.call(this, this._preferences);
+        }
+    }
+
+    hideCustomize() {
+        if (!this._customizeModal) return;
+
+        const cleanup = () => {
+            this._customizeModal.style.display = 'none';
+        };
+
+        if (this.options.animation) {
+            this._customizeModal.classList.remove('dm-cookie-consent-modal-visible');
+            setTimeout(cleanup, 300);
+        } else {
+            this._customizeModal.classList.remove('dm-cookie-consent-modal-visible');
+            cleanup();
+        }
+    }
+
+    saveCustomPreferences() {
+        // Update preferences from toggles
+        this._customizeModal.querySelectorAll('.dm-cookie-consent-category-toggle').forEach(toggle => {
+            const category = toggle.dataset.category;
+            this._preferences[category] = toggle.checked;
+        });
+
+        this._state = 'customized';
+        this._savePreferences();
+
+        this.hideCustomize();
+
+        if (this.options.onAccept) {
+            this.options.onAccept.call(this, this._preferences);
+        }
+
+        if (this.options.onChange) {
+            this.options.onChange.call(this, this._state, this._preferences);
+        }
+
+        if (this.options.hideAfterAction) {
+            this.hide();
+        }
+    }
+
+    getState() {
+        return this._state;
+    }
+
+    getPreferences() {
+        return {...this._preferences};
+    }
+
+    isAccepted(category = null) {
+        if (category) {
+            return this._preferences[category] === true;
+        }
+        return this._state === 'accepted' || this._state === 'customized';
+    }
+
+    reset() {
+        this._state = this.options.defaultState;
+        this._preferences = {};
+
+        Object.keys(this.options.categories).forEach(key => {
+            const category = this.options.categories[key];
+            this._preferences[key] = category.required || !this.options.requireExplicitConsent;
+        });
+
+        Domma.storage.remove(this.options.storageKey);
+
+        if (this.options.onChange) {
+            this.options.onChange.call(this, this._state, this._preferences);
+        }
+    }
+
+    destroy() {
+        this.hide();
+        this.hideCustomize();
+
+        if (this.element) {
+            this.element.remove();
+            this.element = null;
+        }
+
+        if (this._customizeModal) {
+            this._customizeModal.remove();
+            this._customizeModal = null;
+        }
+    }
+}
+
 // BackToTop Component
 // ============================================
 
@@ -5852,6 +6354,16 @@ export const elements = {
         if (instance.element) {
             this._instances.set(instance.element, instance);
         }
+        return instance;
+    },
+
+    cookieConsent(options = {}) {
+        // Singleton pattern - only one cookie consent per page
+        if (this._instances.has('cookieConsent')) {
+            return this._instances.get('cookieConsent');
+        }
+        const instance = new CookieConsent(options);
+        this._instances.set('cookieConsent', instance);
         return instance;
     },
 

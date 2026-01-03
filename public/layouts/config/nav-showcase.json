@@ -52,6 +52,64 @@
       ]
     },
     {
+      "text": "UI",
+      "items": [
+        {
+          "text": "Alarm",
+          "url": "showcase/elements/alarm/index.html",
+          "section": "alarm"
+        },
+        {
+          "text": "Back to Top",
+          "url": "showcase/elements/back-to-top/index.html",
+          "section": "back-to-top"
+        },
+        {
+          "text": "Cookie Consent",
+          "url": "showcase/elements/cookie-consent/index.html",
+          "section": "cookie-consent"
+        },
+        {
+          "text": "Desktop Notification",
+          "url": "showcase/elements/notification/index.html",
+          "section": "notification"
+        },
+        {
+          "text": "Loader",
+          "url": "showcase/elements/loader/index.html",
+          "section": "loader"
+        },
+        {
+          "text": "Timer",
+          "url": "showcase/elements/timer/index.html",
+          "section": "timer"
+        },
+        {
+          "text": "Toast",
+          "url": "showcase/elements/toast/index.html",
+          "section": "toast"
+        },
+        {
+          "divider": true
+        },
+        {
+          "text": "Grid",
+          "url": "showcase/grid/index.html",
+          "section": "grid"
+        },
+        {
+          "text": "Icons",
+          "url": "showcase/icons/index.html",
+          "section": "icons"
+        },
+        {
+          "text": "Themes",
+          "url": "showcase/themes/index.html",
+          "section": "themes"
+        }
+      ]
+    },
+    {
       "text": "Elements",
       "items": [
         {
@@ -60,19 +118,9 @@
           "section": "accordion"
         },
         {
-          "text": "Alarm",
-          "url": "showcase/elements/alarm/index.html",
-          "section": "alarm"
-        },
-        {
           "text": "Autocomplete",
           "url": "showcase/elements/autocomplete/index.html",
           "section": "autocomplete"
-        },
-        {
-          "text": "Back to Top",
-          "url": "showcase/elements/back-to-top/index.html",
-          "section": "back-to-top"
         },
         {
           "text": "Badge",
@@ -125,11 +173,6 @@
           "section": "jumbotron"
         },
         {
-          "text": "Loader",
-          "url": "showcase/elements/loader/index.html",
-          "section": "loader"
-        },
-        {
           "text": "Modal",
           "url": "showcase/elements/modal/index.html",
           "section": "modal"
@@ -138,11 +181,6 @@
           "text": "Navbar",
           "url": "showcase/elements/navbar/index.html",
           "section": "navbar"
-        },
-        {
-          "text": "Notification",
-          "url": "showcase/elements/notification/index.html",
-          "section": "notification"
         },
         {
           "text": "Pillbox",
@@ -155,19 +193,9 @@
           "section": "tabs"
         },
         {
-          "text": "Timer",
-          "url": "showcase/elements/timer/index.html",
-          "section": "timer"
-        },
-        {
           "text": "Timeline",
           "url": "showcase/elements/timeline/index.html",
           "section": "timeline"
-        },
-        {
-          "text": "Toast",
-          "url": "showcase/elements/toast/index.html",
-          "section": "toast"
         },
         {
           "text": "Tooltip",
@@ -178,26 +206,6 @@
           "text": "TreeView",
           "url": "showcase/elements/treeview/index.html",
           "section": "treeview"
-        }
-      ]
-    },
-    {
-      "text": "UI",
-      "items": [
-        {
-          "text": "Grid",
-          "url": "showcase/grid/index.html",
-          "section": "grid"
-        },
-        {
-          "text": "Icons",
-          "url": "showcase/icons/index.html",
-          "section": "icons"
-        },
-        {
-          "text": "Themes",
-          "url": "showcase/themes/index.html",
-          "section": "themes"
         }
       ]
     },

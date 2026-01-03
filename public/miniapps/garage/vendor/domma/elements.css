@@ -2,8 +2,8 @@
  * Domma Elements CSS v0.3.1-alpha
  * Dynamic Object Manipulation & Modeling API
  * (c) 2026 Darryl Waterhouse & DCBW-IT
- * Built: 2026-01-03T14:13:02.369Z
- * Commit: c4dfbc1
+ * Built: 2026-01-03T15:40:05.439Z
+ * Commit: c208fd1
  */
 
 /**
@@ -5014,4 +5014,297 @@ code {
 [data-theme="dark"] .dm-timeline-corporate .dm-timeline-content {
     background: var(--dm-slate-800);
     border-color: var(--dm-slate-600);
+}
+
+/* ==============================================
+   Cookie Consent Component
+   ============================================== */
+
+.dm-cookie-consent {
+    position: fixed;
+    z-index: 9999;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Position variants */
+.dm-cookie-consent-bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.dm-cookie-consent-top {
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.dm-cookie-consent-bottom-left {
+    bottom: 20px;
+    left: 20px;
+    max-width: 400px;
+}
+
+.dm-cookie-consent-bottom-right {
+    bottom: 20px;
+    right: 20px;
+    max-width: 400px;
+}
+
+.dm-cookie-consent-center-modal {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 600px;
+    width: 90%;
+}
+
+/* Layout variants */
+.dm-cookie-consent-bar .dm-cookie-consent-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    gap: 20px;
+}
+
+.dm-cookie-consent-box .dm-cookie-consent-content {
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dm-cookie-consent-modal .dm-cookie-consent-content {
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Theme variants */
+.dm-cookie-consent-light .dm-cookie-consent-content {
+    background: white;
+    color: #333;
+    border: 1px solid #e5e5e5;
+}
+
+.dm-cookie-consent-light a {
+    color: var(--dm-primary);
+}
+
+.dm-cookie-consent-dark .dm-cookie-consent-content {
+    background: #1f2937;
+    color: #f3f4f6;
+    border: 1px solid #374151;
+}
+
+.dm-cookie-consent-dark a {
+    color: #60a5fa;
+}
+
+/* Message styles */
+.dm-cookie-consent-message {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.dm-cookie-consent-message a {
+    text-decoration: underline;
+    margin: 0 4px;
+}
+
+.dm-cookie-consent-message a:hover {
+    opacity: 0.8;
+}
+
+/* Button styles */
+.dm-cookie-consent-buttons {
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+/* Animation */
+.dm-cookie-consent-animated {
+    transition: all 0.3s ease;
+}
+
+.dm-cookie-consent-bottom.dm-cookie-consent-animated:not(.dm-cookie-consent-visible) {
+    transform: translateY(100%);
+}
+
+.dm-cookie-consent-top.dm-cookie-consent-animated:not(.dm-cookie-consent-visible) {
+    transform: translateY(-100%);
+}
+
+.dm-cookie-consent-bottom-left.dm-cookie-consent-animated:not(.dm-cookie-consent-visible),
+.dm-cookie-consent-bottom-right.dm-cookie-consent-animated:not(.dm-cookie-consent-visible) {
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+.dm-cookie-consent-center-modal.dm-cookie-consent-animated:not(.dm-cookie-consent-visible) {
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0;
+}
+
+/* Backdrop */
+.dm-cookie-consent-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+/* Customize Modal */
+.dm-cookie-consent-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+
+.dm-cookie-consent-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.dm-cookie-consent-modal-content {
+    position: relative;
+    background: white;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.dm-cookie-consent-modal-header {
+    padding: 24px;
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dm-cookie-consent-modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.dm-cookie-consent-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.dm-cookie-consent-modal-close:hover {
+    background: #f5f5f5;
+}
+
+.dm-cookie-consent-modal-body {
+    padding: 24px;
+}
+
+.dm-cookie-consent-category {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.dm-cookie-consent-category:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.dm-cookie-consent-category-label {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+}
+
+.dm-cookie-consent-category-toggle {
+    margin-right: 12px;
+    margin-top: 2px;
+}
+
+.dm-cookie-consent-category-toggle:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.dm-cookie-consent-category-info {
+    flex: 1;
+}
+
+.dm-cookie-consent-category-name {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.dm-cookie-consent-required {
+    color: #666;
+    font-size: 12px;
+}
+
+.dm-cookie-consent-category-description {
+    color: #666;
+    font-size: 13px;
+}
+
+.dm-cookie-consent-modal-footer {
+    padding: 24px;
+    border-top: 1px solid #e5e5e5;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .dm-cookie-consent-bar .dm-cookie-consent-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .dm-cookie-consent-message {
+        margin-right: 0;
+        margin-bottom: 16px;
+    }
+
+    .dm-cookie-consent-buttons {
+        flex-direction: column;
+    }
+
+    .dm-cookie-consent-bottom-left,
+    .dm-cookie-consent-bottom-right {
+        left: 10px;
+        right: 10px;
+        max-width: none;
+    }
 }

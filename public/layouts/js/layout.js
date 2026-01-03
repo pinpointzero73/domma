@@ -98,6 +98,9 @@ import {ConsentModule} from './modules/consent.js';
             await renderFooter(presetConfig.footer, data, configBase);
         }
 
+        // Initialize cookie consent
+        await initCookieConsent();
+
         // Initialize sidebar
         if (presetConfig.sidebar) {
             SidebarModule.init(presetConfig.sidebar);
@@ -727,6 +730,71 @@ import {ConsentModule} from './modules/consent.js';
     }
 
     /**
+     * Initialize cookie consent
+     */
+    async function initCookieConsent() {
+        try {
+            // Check if Domma elements is available
+            if (typeof Domma === 'undefined' || !Domma.elements || !Domma.elements.cookieConsent) {
+                console.log('[Domma Layout] Cookie consent not available');
+                return;
+            }
+
+            // Check if we already have consent stored
+            const consentKey = 'domma-cookie-consent';
+            const existingConsent = localStorage.getItem(consentKey);
+
+            // Initialize cookie consent
+            const consent = Domma.elements.cookieConsent({
+                message: 'We use cookies to enhance your browsing experience and analyze site usage. By continuing to use this site, you consent to our use of cookies.',
+                categories: {
+                    necessary: {
+                        label: 'Essential Cookies',
+                        description: 'Required for the website to function properly.',
+                        required: true
+                    },
+                    analytics: {
+                        label: 'Analytics Cookies',
+                        description: 'Help us understand how visitors interact with our website.',
+                        required: false
+                    },
+                    preferences: {
+                        label: 'Preference Cookies',
+                        description: 'Remember your settings and preferences.',
+                        required: false
+                    }
+                },
+                privacyPolicyUrl: '/privacy',
+                cookiePolicyUrl: '/cookies',
+                position: 'bottom',
+                layout: 'bar',
+                theme: 'dark',
+                storageKey: consentKey,
+                storageDuration: 365, // 1 year
+                reopenSelector: '[data-cookie-consent-open]',
+                onAccept: (preferences) => {
+                    console.log('[Domma Layout] Cookie consent accepted:', preferences);
+                    // Enable analytics if accepted
+                    if (preferences.analytics) {
+                        // Enable Google Analytics or other tracking
+                        console.log('[Domma Layout] Analytics cookies enabled');
+                    }
+                },
+                onReject: () => {
+                    console.log('[Domma Layout] Cookie consent rejected');
+                },
+                onChange: (preferences) => {
+                    console.log('[Domma Layout] Cookie preferences changed:', preferences);
+                }
+            });
+
+            console.log('[Domma Layout] Cookie consent initialized');
+        } catch (error) {
+            console.error('[Domma Layout] Cookie consent init failed:', error);
+        }
+    }
+
+    /**
      * Set active state on dropdown toggles
      */
     function setActiveDropdown() {
@@ -765,9 +833,16 @@ import {ConsentModule} from './modules/consent.js';
             // Handle different footer layouts
             if (config.layout === 'nav') {
                 // Public footer with navigation
-                const navLinks = config.content.nav.map(item =>
-                    `<a href="${item.url}">${item.text}</a>`
-                ).join('\n        ');
+                const navLinks = config.content.nav.map(item => {
+                    // Build attributes string if present
+                    let attrs = '';
+                    if (item.attributes) {
+                        attrs = Object.entries(item.attributes)
+                          .map(([key, value]) => `${key}="${value}"`)
+                          .join(' ');
+                    }
+                    return `<a href="${item.url}"${attrs ? ' ' + attrs : ''}>${item.text}</a>`;
+                }).join('\n        ');
 
                 html = `
 <footer class="${config.class}">
