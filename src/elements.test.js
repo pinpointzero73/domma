@@ -130,10 +130,209 @@ describe('Domma.elements - UI Components', () => {
     expect(typeof tooltip.show).toBe('function');
   });
 
-  it('card() should create a card instance', () => {
-    testContainer.innerHTML = '<div id="test-card"></div>';
-    const card = Domma.elements.card('#test-card');
-    expect(card).not.toBeNull();
+  describe('Card', () => {
+    it('card() should create a card instance', () => {
+      // Safe: hardcoded test fixture HTML, not user input
+      testContainer.innerHTML = '<div id="test-card" class="card"><div class="card-body">Content</div></div>';
+      const card = Domma.elements.card('#test-card');
+      expect(card).not.toBeNull();
+    });
+
+    it('card() with collapsible option should add collapse icon', () => {
+      // Safe: hardcoded test fixture HTML
+      testContainer.innerHTML = `
+        <div id="collapsible-card" class="card">
+          <div class="card-header"><h3>Title</h3></div>
+          <div class="card-body">Content</div>
+        </div>
+      `;
+      const card = Domma.elements.card('#collapsible-card', {collapsible: true});
+
+      expect(card.element.classList.contains('card-collapsible')).toBe(true);
+      const icon = card.element.querySelector('.card-collapse-icon');
+      expect(icon).not.toBeNull();
+      const contentWrapper = card.element.querySelector('.card-header-content');
+      expect(contentWrapper).not.toBeNull();
+    });
+
+    it('card() should collapse and expand', async () => {
+      // Safe: hardcoded test fixture HTML
+      testContainer.innerHTML = `
+        <div id="toggle-card" class="card">
+          <div class="card-header"><h3>Title</h3></div>
+          <div class="card-body">Content</div>
+        </div>
+      `;
+      const card = Domma.elements.card('#toggle-card', {collapsible: true});
+
+      // Initially expanded
+      expect(card.isCollapsed()).toBe(false);
+
+      // Collapse
+      card.collapse();
+      await vi.advanceTimersByTimeAsync(10);
+      expect(card.isCollapsed()).toBe(true);
+      expect(card.element.classList.contains('card-collapsed')).toBe(true);
+
+      // Expand
+      card.expand();
+      await vi.advanceTimersByTimeAsync(10);
+      expect(card.isCollapsed()).toBe(false);
+      expect(card.element.classList.contains('card-collapsed')).toBe(false);
+    });
+
+    it('card() toggle() should switch collapsed state', async () => {
+      // Safe: hardcoded test fixture HTML
+      testContainer.innerHTML = `
+        <div id="toggle-test-card" class="card">
+          <div class="card-header"><h3>Title</h3></div>
+          <div class="card-body">Content</div>
+        </div>
+      `;
+      const card = Domma.elements.card('#toggle-test-card', {collapsible: true});
+
+      expect(card.isCollapsed()).toBe(false);
+
+      card.toggle();
+      await vi.advanceTimersByTimeAsync(10);
+      expect(card.isCollapsed()).toBe(true);
+
+      card.toggle();
+      await vi.advanceTimersByTimeAsync(10);
+      expect(card.isCollapsed()).toBe(false);
+    });
+
+    it('card() should fire onCollapse and onExpand callbacks', async () => {
+      const onCollapseSpy = vi.fn();
+      const onExpandSpy = vi.fn();
+
+      // Safe: hardcoded test fixture HTML
+      testContainer.innerHTML = `
+        <div id="callback-card" class="card">
+          <div class="card-header"><h3>Title</h3></div>
+          <div class="card-body">Content</div>
+        </div>
+      `;
+      const card = Domma.elements.card('#callback-card', {
+        collapsible: true,
+        onCollapse: onCollapseSpy,
+        onExpand: onExpandSpy
+      });
+
+      card.collapse();
+      await vi.advanceTimersByTimeAsync(10);
+      expect(onCollapseSpy).toHaveBeenCalledWith(card);
+
+      card.expand();
+      await vi.advanceTimersByTimeAsync(10);
+      expect(onExpandSpy).toHaveBeenCalledWith(card);
+    });
+
+    it('card() should start collapsed if collapsed option is true', () => {
+      // Safe: hardcoded test fixture HTML
+      testContainer.innerHTML = `
+        <div id="initially-collapsed-card" class="card">
+          <div class="card-header"><h3>Title</h3></div>
+          <div class="card-body">Content</div>
+        </div>
+      `;
+      const card = Domma.elements.card('#initially-collapsed-card', {
+        collapsible: true,
+        collapsed: true
+      });
+
+      expect(card.isCollapsed()).toBe(true);
+      expect(card.element.classList.contains('card-collapsed')).toBe(true);
+    });
+
+    it('card() should persist state to localStorage with element ID', async () => {
+      // Safe: hardcoded test fixture HTML
+      testContainer.innerHTML = `
+        <div id="persist-card" class="card">
+          <div class="card-header"><h3>Title</h3></div>
+          <div class="card-body">Content</div>
+        </div>
+      `;
+      const card = Domma.elements.card('#persist-card', {collapsible: true});
+
+      // Collapse and check localStorage
+      card.collapse();
+      await vi.advanceTimersByTimeAsync(10);
+
+      const stored = Domma.storage.get('domma-card-persist-card');
+      expect(stored).not.toBeNull();
+      expect(stored.collapsed).toBe(true);
+
+      // Expand and check localStorage updated
+      card.expand();
+      await vi.advanceTimersByTimeAsync(10);
+
+      const storedAfter = Domma.storage.get('domma-card-persist-card');
+      expect(storedAfter.collapsed).toBe(false);
+    });
+
+    it('card() should use custom persistKey when provided', async () => {
+      // Safe: hardcoded test fixture HTML
+      testContainer.innerHTML = `
+        <div class="card">
+          <div class="card-header"><h3>Title</h3></div>
+          <div class="card-body">Content</div>
+        </div>
+      `;
+      const card = Domma.elements.card(testContainer.querySelector('.card'), {
+        collapsible: true,
+        persistKey: 'my-custom-key'
+      });
+
+      card.collapse();
+      await vi.advanceTimersByTimeAsync(10);
+
+      const stored = Domma.storage.get('my-custom-key');
+      expect(stored).not.toBeNull();
+      expect(stored.collapsed).toBe(true);
+    });
+
+    it('card() should restore collapsed state from localStorage', () => {
+      // Pre-populate localStorage
+      Domma.storage.set('domma-card-restore-card', {collapsed: true});
+
+      // Safe: hardcoded test fixture HTML
+      testContainer.innerHTML = `
+        <div id="restore-card" class="card">
+          <div class="card-header"><h3>Title</h3></div>
+          <div class="card-body">Content</div>
+        </div>
+      `;
+      const card = Domma.elements.card('#restore-card', {collapsible: true});
+
+      // Should be collapsed based on localStorage
+      expect(card.isCollapsed()).toBe(true);
+      expect(card.element.classList.contains('card-collapsed')).toBe(true);
+    });
+
+    it('card() clicking header should toggle collapse', async () => {
+      // Safe: hardcoded test fixture HTML
+      testContainer.innerHTML = `
+        <div id="click-card" class="card">
+          <div class="card-header"><h3>Title</h3></div>
+          <div class="card-body">Content</div>
+        </div>
+      `;
+      const card = Domma.elements.card('#click-card', {collapsible: true});
+      const header = card.element.querySelector('.card-header');
+
+      expect(card.isCollapsed()).toBe(false);
+
+      // Click to collapse
+      header.click();
+      await vi.advanceTimersByTimeAsync(10);
+      expect(card.isCollapsed()).toBe(true);
+
+      // Click to expand
+      header.click();
+      await vi.advanceTimersByTimeAsync(10);
+      expect(card.isCollapsed()).toBe(false);
+    });
   });
 
   it('buttonGroup() should create a button group instance', () => {
