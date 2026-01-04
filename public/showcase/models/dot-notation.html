@@ -161,7 +161,7 @@ function bindNested(model, field, path, selector, options = {}) {
         ...options,
         format: (data) => _.get(data, path, ''),
         parse: (value) => {
-            const data = model.get(field) || {};
+            const data = _.cloneDeep(model.get(field) || {});
             _.set(data, path, value);
             return data;
         }
@@ -385,7 +385,7 @@ const formData = serializeFormWithDotNotation('#my-form');
       ...options,
       format: (data) => _.get(data, path, ''),
       parse: (value) => {
-        const data = model.get(field) || {};
+        const data = _.cloneDeep(model.get(field) || {});
         _.set(data, path, value);
         return data;
       }
