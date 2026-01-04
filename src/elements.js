@@ -21,12 +21,19 @@ class Card extends Component {
         animationDuration: 200,
         onHover: null,
         onLeave: null,
-        onClick: null
+        onClick: null,
+        collapsible: false,
+        collapsed: false,
+        persistKey: null,
+        collapseIcon: 'chevron-down',
+        onCollapse: null,
+        onExpand: null
     };
 
     constructor(selector, options = {}) {
         super(selector, options);
         this._init();
+        this._initCollapsible();
     }
 
     _init() {
@@ -82,6 +89,110 @@ class Card extends Component {
         this.options.shadow = size;
         this._applyShadow(size);
         return this;
+    }
+
+    _initCollapsible() {
+        if (!this.options.collapsible) return;
+
+        this.element.classList.add('card-collapsible');
+        this._addCollapseIcon();
+        this._bindHeaderClick();
+        this._restoreState();
+    }
+
+    _addCollapseIcon() {
+        const header = this.element.querySelector('.card-header');
+        if (!header) return;
+
+        // Wrap existing children in a content span
+        const contentWrapper = document.createElement('span');
+        contentWrapper.className = 'card-header-content';
+        while (header.firstChild) {
+            contentWrapper.appendChild(header.firstChild);
+        }
+        header.appendChild(contentWrapper);
+
+        // Add icon span
+        const iconWrapper = document.createElement('span');
+        iconWrapper.className = 'card-collapse-icon';
+        const iconSvg = Domma.icons.render(this.options.collapseIcon, {size: 16});
+        iconWrapper.appendChild(iconSvg);
+        header.appendChild(iconWrapper);
+    }
+
+    _bindHeaderClick() {
+        const header = this.element.querySelector('.card-header');
+        if (!header) return;
+
+        this._addEventListener(header, 'click', () => this.toggle());
+    }
+
+    _getStorageKey() {
+        return this.options.persistKey ||
+          (this.element.id ? `domma-card-${this.element.id}` : null);
+    }
+
+    _restoreState() {
+        const key = this._getStorageKey();
+        if (key) {
+            const saved = Domma.storage.get(key);
+            if (saved?.collapsed) {
+                this._setCollapsed(true, false);
+                return;
+            }
+        }
+        // Apply initial collapsed option if no saved state
+        if (this.options.collapsed) {
+            this._setCollapsed(true, false);
+        }
+    }
+
+    _saveState() {
+        const key = this._getStorageKey();
+        if (key) {
+            Domma.storage.set(key, {collapsed: this.isCollapsed()});
+        }
+    }
+
+    _setCollapsed(collapsed, save = true) {
+        const body = this.element.querySelector('.card-body');
+        if (!body) return;
+
+        if (collapsed) {
+            body.style.height = body.scrollHeight + 'px';
+            body.offsetHeight; // Force reflow
+            body.style.height = '0';
+            this.element.classList.add('card-collapsed');
+            if (this.options.onCollapse) this.options.onCollapse(this);
+        } else {
+            this.element.classList.remove('card-collapsed');
+            body.style.height = body.scrollHeight + 'px';
+            setTimeout(() => {
+                body.style.height = 'auto';
+            }, 200);
+            if (this.options.onExpand) this.options.onExpand(this);
+        }
+
+        if (save) this._saveState();
+    }
+
+    collapse() {
+        this._setCollapsed(true);
+        return this;
+    }
+
+    expand() {
+        this._setCollapsed(false);
+        return this;
+    }
+
+    toggle() {
+        this._setCollapsed(!this.isCollapsed());
+        return this;
+    }
+
+    isCollapsed() {
+        return this.element.classList.contains('card-collapsed');
     }
 }
 

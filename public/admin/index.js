@@ -470,9 +470,361 @@ $(() => {
   });
 
   // ============================================
-  // 13. Initialize
+  // 13. Email Management
   // ============================================
+  let emailData = [];
+  let filteredEmailData = [];
+  let currentEmailPage = 1;
+  const emailsPerPage = 20;
+  let emailSearchQuery = '';
+  let emailStatusFilter = '';
+  let emailTypeFilter = '';
+  let emailDateFilter = '';
+
+  async function loadEmailStats() {
+    try {
+      const response = await Domma.http.get(`${apiUrl}/emails/stats`, {
+        headers: {Authorization: `Bearer ${Domma.auth.token}`}
+      });
+
+      if (response.success) {
+        const {stats} = response.data;
+        let totalEmails = 0;
+        let contactEmails = 0;
+        let sentEmails = 0;
+        let failedEmails = 0;
+        let pendingEmails = 0;
+
+        stats.forEach(stat => {
+          totalEmails += stat.total;
+          if (stat._id === 'contact') {
+            contactEmails = stat.total;
+          }
+          stat.stats.forEach(statusStat => {
+            if (statusStat.status === 'sent') sentEmails += statusStat.count;
+            if (statusStat.status === 'failed') failedEmails += statusStat.count;
+            if (statusStat.status === 'pending') pendingEmails += statusStat.count;
+          });
+        });
+
+        $('#stat-total-emails').text(totalEmails);
+        $('#stat-contact-emails').text(contactEmails);
+        $('#stat-pending-emails').text(pendingEmails);
+        $('#stat-sent-emails').text(`${sentEmails} sent`);
+        $('#stat-failed-emails').text(`${failedEmails} failed`);
+      }
+    } catch (error) {
+      console.error('[Admin] Failed to load email stats:', error);
+    }
+  }
+
+  async function loadEmails() {
+    try {
+      const params = new URLSearchParams({
+        limit: 100, // Load more to handle client-side filtering
+        offset: 0,
+        type: emailTypeFilter || 'contact' // Default to contact emails
+      });
+
+      if (emailStatusFilter) params.append('status', emailStatusFilter);
+      if (emailDateFilter) params.append('startDate', emailDateFilter);
+
+      console.log('[Admin] Loading emails with params:', Object.fromEntries(params));
+
+      const response = await Domma.http.get(`${apiUrl}/emails?${params}`, {
+        headers: {Authorization: `Bearer ${Domma.auth.token}`}
+      });
+
+      console.log('[Admin] Emails response:', response);
+
+      if (response.success) {
+        emailData = response.data || [];
+        applyEmailFilters();
+        renderEmailsTable();
+        updateEmailPagination();
+      }
+    } catch (error) {
+      console.error('[Admin] Failed to load emails:', error);
+      Domma.elements.toast('Failed to load emails', {type: 'error'});
+    }
+  }
+
+  function applyEmailFilters() {
+    filteredEmailData = emailData.filter(email => {
+      const searchMatch = !emailSearchQuery ||
+        email.metadata?.contactName?.toLowerCase().includes(emailSearchQuery.toLowerCase()) ||
+        email.metadata?.contactEmail?.toLowerCase().includes(emailSearchQuery.toLowerCase()) ||
+        email.metadata?.contactCompany?.toLowerCase().includes(emailSearchQuery.toLowerCase()) ||
+        email.from?.email?.toLowerCase().includes(emailSearchQuery.toLowerCase());
+
+      return searchMatch;
+    });
+  }
+
+  function renderEmailsTable() {
+    const startIndex = (currentEmailPage - 1) * emailsPerPage;
+    const endIndex = startIndex + emailsPerPage;
+    const pageEmails = filteredEmailData.slice(startIndex, endIndex);
+
+    console.log('[Admin] Rendering emails table, pageEmails:', pageEmails);
+
+    const tableData = pageEmails.map(email => {
+      const contactInfo = {
+        name: email.metadata?.contactName || email.from?.name || 'Unknown',
+        email: email.metadata?.contactEmail || email.from?.email || '',
+        company: email.metadata?.contactCompany || '',
+        phone: email.metadata?.contactPhone || ''
+      };
+
+      const projectType = email.metadata?.projectType ?
+        formatProjectType(email.metadata.projectType) : 'N/A';
+
+      // Return plain text status for proper badge rendering
+      const statusText = email.status || 'pending';
+      const submitted = new Date(email.createdAt).toLocaleDateString('en-GB', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      return {
+        name: contactInfo.name,
+        email: contactInfo.email,
+        phone: contactInfo.phone || 'N/A',
+        company: contactInfo.company || 'N/A',
+        projectType: projectType,
+        status: statusText,
+        submitted: submitted,
+        actions: 'View | Archive',
+        emailId: email._id
+      };
+    });
+
+    console.log('[Admin] Email table data:', tableData);
+
+    // Destroy existing table if it exists and create new one
+    const existingTable = Domma.tables.get('#emails-table');
+    if (existingTable) {
+      Domma.tables.destroy('#emails-table');
+    }
+
+    Domma.tables.create('#emails-table', {
+      data: tableData,
+      columns: [
+        {key: 'name', title: 'Name', sortable: true},
+        {key: 'email', title: 'Email', sortable: true},
+        {key: 'phone', title: 'Phone'},
+        {key: 'company', title: 'Company', sortable: true},
+        {key: 'projectType', title: 'Project Type', sortable: true},
+        {
+          key: 'status', title: 'Status', sortable: true, renderer: (value) => {
+            const statusMap = {
+              pending: '<span class="badge badge-warning">Pending</span>',
+              sent: '<span class="badge badge-success">Sent</span>',
+              failed: '<span class="badge badge-danger">Failed</span>',
+              delivered: '<span class="badge badge-success">Delivered</span>',
+              read: '<span class="badge badge-info">Read</span>'
+            };
+            return statusMap[value] || `<span class="badge badge-secondary">${_.capitalize(value)}</span>`;
+          }
+        },
+        {key: 'submitted', title: 'Submitted', sortable: true},
+        {key: 'actions', title: 'Actions'}
+      ],
+      pagination: false,
+      striped: true,
+      responsive: true,
+      exportPanel: true,
+      exportOptions: ['text', 'csv', 'excel', 'json'],
+      columnToggle: true,
+      regexSearch: true
+    });
+  }
+
+  function formatProjectType(type) {
+    const types = {
+      'legacy-modernisation': 'Legacy Modernisation',
+      'greenfield': 'Greenfield Development',
+      'consulting': 'Technical Consulting',
+      'fractional-cto': 'Fractional CTO',
+      'other': 'Other'
+    };
+    return types[type] || _.capitalize(type);
+  }
+
+  function formatEmailStatus(status) {
+    const statusMap = {
+      pending: '<span class="badge badge-warning">Pending</span>',
+      sent: '<span class="badge badge-success">Sent</span>',
+      failed: '<span class="badge badge-danger">Failed</span>',
+      delivered: '<span class="badge badge-success">Delivered</span>',
+      read: '<span class="badge badge-info">Read</span>'
+    };
+    return statusMap[status] || `<span class="badge badge-secondary">${_.capitalize(status)}</span>`;
+  }
+
+  function updateEmailPagination() {
+    const totalEmails = filteredEmailData.length;
+    const totalPages = Math.ceil(totalEmails / emailsPerPage);
+    const startIndex = (currentEmailPage - 1) * emailsPerPage;
+    const endIndex = Math.min(startIndex + emailsPerPage, totalEmails);
+
+    $('#emails-info').text(`Showing ${startIndex + 1}-${endIndex} of ${totalEmails} emails`);
+
+    $('#emails-prev').prop('disabled', currentEmailPage <= 1);
+    $('#emails-next').prop('disabled', currentEmailPage >= totalPages);
+  }
+
+  // Email Actions
+  window.viewEmailDetails = async function (emailId) {
+    try {
+      const response = await Domma.http.get(`${apiUrl}/emails/${emailId}`, {
+        headers: {Authorization: `Bearer ${Domma.auth.token}`}
+      });
+
+      if (response.success) {
+        const email = response.data;
+        const details = `
+Subject: ${email.subject}
+
+From: ${email.from.email}
+To: ${email.to[0].email}
+Status: ${_.capitalize(email.status)}
+Created: ${new Date(email.createdAt).toLocaleString('en-GB')}
+
+Project Details:
+${email.metadata?.details || 'No details available'}
+        `.trim();
+
+        await Domma.elements.alert(details, {
+          title: 'Email Details',
+          size: 'large'
+        });
+      }
+    } catch (error) {
+      console.error('[Admin] Failed to load email details:', error);
+      Domma.elements.toast('Failed to load email details', {type: 'error'});
+    }
+  };
+
+  window.retryEmail = async function (emailId) {
+    const confirmed = await Domma.elements.confirm('Retry sending this email?');
+    if (!confirmed) return;
+
+    try {
+      const response = await Domma.http.post(`${apiUrl}/emails/${emailId}/retry`, {}, {
+        headers: {Authorization: `Bearer ${Domma.auth.token}`}
+      });
+
+      if (response.success) {
+        Domma.elements.toast('Email queued for retry', {type: 'success'});
+        loadEmails();
+        loadEmailStats();
+      }
+    } catch (error) {
+      console.error('[Admin] Failed to retry email:', error);
+      Domma.elements.toast('Failed to retry email', {type: 'error'});
+    }
+  };
+
+  window.archiveEmail = async function (emailId) {
+    const confirmed = await Domma.elements.confirm('Archive this email?');
+    if (!confirmed) return;
+
+    try {
+      const response = await Domma.http.patch(`${apiUrl}/emails/${emailId}/archive`,
+        {archived: true},
+        {headers: {Authorization: `Bearer ${Domma.auth.token}`}}
+      );
+
+      if (response.success) {
+        Domma.elements.toast('Email archived successfully', {type: 'success'});
+        loadEmails();
+        loadEmailStats();
+      }
+    } catch (error) {
+      console.error('[Admin] Failed to archive email:', error);
+      Domma.elements.toast('Failed to archive email', {type: 'error'});
+    }
+  };
+
+  // Email Search and Filters
+  const emailSearchDebounced = _.debounce(() => {
+    emailSearchQuery = $('#email-search').val().trim();
+    currentEmailPage = 1;
+    applyEmailFilters();
+    renderEmailsTable();
+    updateEmailPagination();
+  }, 500);
+
+  $('#email-search').on('input', emailSearchDebounced);
+
+  $('#email-status-filter').on('change', () => {
+    emailStatusFilter = $('#email-status-filter').val();
+    currentEmailPage = 1;
+    loadEmails();
+  });
+
+  $('#email-type-filter').on('change', () => {
+    emailTypeFilter = $('#email-type-filter').val();
+    currentEmailPage = 1;
+    loadEmails();
+  });
+
+  $('#email-date-filter').on('change', () => {
+    emailDateFilter = $('#email-date-filter').val();
+    currentEmailPage = 1;
+    loadEmails();
+  });
+
+  $('#refresh-emails').on('click', () => {
+    loadEmails();
+    loadEmailStats();
+  });
+
+  // Email Pagination
+  $('#emails-prev').on('click', () => {
+    if (currentEmailPage > 1) {
+      currentEmailPage--;
+      renderEmailsTable();
+      updateEmailPagination();
+    }
+  });
+
+  $('#emails-next').on('click', () => {
+    const totalPages = Math.ceil(filteredEmailData.length / emailsPerPage);
+    if (currentEmailPage < totalPages) {
+      currentEmailPage++;
+      renderEmailsTable();
+      updateEmailPagination();
+    }
+  });
+
+  // ============================================
+  // 14. Initialize Collapsible Cards
+  // ============================================
+  function initializeCollapsibleCards() {
+    const cards = document.querySelectorAll('[data-collapsible="true"]');
+    cards.forEach(card => {
+      try {
+        Domma.elements.card(card, {collapsible: true});
+        console.log('[Admin] Initialized collapsible card:', card);
+      } catch (error) {
+        console.error('[Admin] Failed to initialize collapsible card:', error);
+      }
+    });
+    console.log(`[Admin] Initialized ${cards.length} collapsible cards`);
+  }
+
+  // ============================================
+  // 15. Initialize
+  // ============================================
+  initializeCollapsibleCards();
   loadStats();
   loadAnalytics();
   loadUsers();
+  loadEmails();
+  loadEmailStats();
 });

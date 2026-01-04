@@ -250,6 +250,40 @@
     text-decoration: none;
 }
 
+/* Collapsible card styles */
+.card-collapsible .card-header {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+}
+
+.card-header-content {
+    flex: 1;
+}
+
+.card-collapse-icon {
+    transition: transform var(--dm-transition-normal);
+    flex-shrink: 0;
+    margin-left: var(--dm-space-2);
+}
+
+.card-collapsed .card-collapse-icon {
+    transform: rotate(-90deg);
+}
+
+.card-collapsible .card-body {
+    overflow: hidden;
+    transition: height var(--dm-transition-normal);
+}
+
+.card-collapsed .card-body {
+    height: 0 !important;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 
 /* ============================================
    MODAL

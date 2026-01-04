@@ -29,9 +29,9 @@
 <div class="container py-8">
 
   <!-- Statistics Cards Row -->
-  <div class="grid grid-cols-4 gap-6 mb-6" id="stats-cards">
+  <div class="grid grid-cols-5 gap-4 mb-6" id="stats-cards">
     <!-- Total Users Card -->
-    <div class="card">
+    <div class="card" data-collapsible="true">
       <div class="card-body">
         <h3 class="card-title text-sm text-gray-600 mb-2">Total Users</h3>
         <p class="text-3xl font-bold mb-2" id="stat-total-users">-</p>
@@ -44,7 +44,7 @@
     </div>
 
     <!-- Today's Activity Card -->
-    <div class="card">
+    <div class="card" data-collapsible="true">
       <div class="card-body">
         <h3 class="card-title text-sm text-gray-600 mb-2">Today's Activity</h3>
         <p class="text-sm mb-2">
@@ -56,7 +56,7 @@
     </div>
 
     <!-- Content Stats Card -->
-    <div class="card">
+    <div class="card" data-collapsible="true">
       <div class="card-body">
         <h3 class="card-title text-sm text-gray-600 mb-2">Total Content</h3>
         <p class="text-sm mb-2">
@@ -67,8 +67,24 @@
       </div>
     </div>
 
+    <!-- Email Stats Card -->
+    <div class="card" data-collapsible="true">
+      <div class="card-body">
+        <h3 class="card-title text-sm text-gray-600 mb-2">Email Communications</h3>
+        <p class="text-sm mb-2">
+          <strong id="stat-total-emails">0</strong> Total Emails<br>
+          <strong id="stat-contact-emails">0</strong> Contact Forms<br>
+          <strong id="stat-pending-emails">0</strong> Pending
+        </p>
+        <p class="text-xs text-gray-500">
+          <span class="badge badge-success" id="stat-sent-emails">0 sent</span>
+          <span class="badge badge-danger" id="stat-failed-emails">0 failed</span>
+        </p>
+      </div>
+    </div>
+
     <!-- This Month Card -->
-    <div class="card">
+    <div class="card" data-collapsible="true">
       <div class="card-body">
         <h3 class="card-title text-sm text-gray-600 mb-2">This Month</h3>
         <p class="text-3xl font-bold mb-2" id="stat-month-signups">-</p>
@@ -81,7 +97,7 @@
 
     <!-- Charts Row -->
     <!-- Signup Trend Chart -->
-    <div class="card">
+    <div class="card" data-collapsible="true">
       <div class="card-header">
         <h2 class="card-title">7-Day Signup Trend</h2>
       </div>
@@ -91,7 +107,7 @@
     </div>
 
     <!-- Page Views Trend Chart -->
-    <div class="card">
+    <div class="card" data-collapsible="true">
       <div class="card-header">
         <h2 class="card-title">7-Day Page Views Trend</h2>
       </div>
@@ -102,7 +118,7 @@
   </div>
 
   <!-- Top Pages Table -->
-  <div class="card mb-6">
+  <div class="card mb-6" data-collapsible="true">
     <div class="card-header">
       <h2 class="card-title">Top Pages (Last 7 Days)</h2>
     </div>
@@ -112,7 +128,7 @@
   </div>
 
   <!-- Users Table -->
-  <div class="card">
+  <div class="card mb-6" data-collapsible="true">
     <div class="card-header">
       <h2 class="card-title">All Users</h2>
     </div>
@@ -137,6 +153,57 @@
 
       <!-- Users Table -->
       <table id="users-table" class="table"></table>
+    </div>
+  </div>
+
+  <!-- Contact Emails Table -->
+  <div class="card" data-collapsible="true">
+    <div class="card-header">
+      <h2 class="card-title">Contact Form Submissions</h2>
+    </div>
+    <div class="card-body">
+      <!-- Search and Filters -->
+      <div class="grid grid-cols-12 gap-4 mb-4">
+        <div class="col-span-4">
+          <input type="text" id="email-search" class="form-input" placeholder="Search by name, email, or company...">
+        </div>
+        <div class="col-span-2">
+          <select id="email-status-filter" class="form-input">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="sent">Sent</option>
+            <option value="failed">Failed</option>
+          </select>
+        </div>
+        <div class="col-span-2">
+          <select id="email-type-filter" class="form-input">
+            <option value="">All Types</option>
+            <option value="contact">Contact Forms</option>
+            <option value="notification">Notifications</option>
+            <option value="newsletter">Newsletter</option>
+          </select>
+        </div>
+        <div class="col-span-2">
+          <input type="date" id="email-date-filter" class="form-input" title="Filter by date">
+        </div>
+        <div class="col-span-2">
+          <button id="refresh-emails" class="btn btn-primary btn-block">Refresh</button>
+        </div>
+      </div>
+
+      <!-- Emails Table -->
+      <table id="emails-table" class="table"></table>
+
+      <!-- Pagination -->
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <div>
+          <small id="emails-info" class="text-gray-600">Showing 0 of 0 emails</small>
+        </div>
+        <div>
+          <button id="emails-prev" class="btn btn-outline-primary btn-sm mr-2" disabled>Previous</button>
+          <button id="emails-next" class="btn btn-outline-primary btn-sm" disabled>Next</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

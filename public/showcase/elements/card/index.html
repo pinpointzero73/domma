@@ -341,6 +341,25 @@ const productCard = Domma.elements.card('#product-card', {
                     </div>
                 </div>
             </div>
+
+          <h4 class="category-title">Example 9: Collapsible Card</h4>
+          <p class="mb-2">Card with collapsible content. Click the header to toggle, state persists via
+            localStorage:</p>
+          <div class="demo-area">
+            <div id="collapsible-demo" class="card" class="card-max-w-500">
+              <div class="card-header">
+                <h3 class="m-0">Click to Collapse</h3>
+              </div>
+              <div class="card-body">
+                <p class="card-text">This content can be collapsed by clicking the header. The chevron icon indicates
+                  the current state.</p>
+                <p class="card-text">The collapsed/expanded state is remembered via localStorage, so it persists across
+                  page reloads.</p>
+                <p class="card-text mb-0">Try collapsing this card and refreshing the page to see it remember your
+                  choice!</p>
+              </div>
+            </div>
+          </div>
         </div>
     </section>
 
@@ -888,6 +907,13 @@ $.setup({
         ['#grid-card-1', '#grid-card-2', '#grid-card-3'].forEach(id => {
             Domma.elements.card(id, {hover: true});
         });
+
+      // Collapsible card demo
+      Domma.elements.card('#collapsible-demo', {
+        collapsible: true,
+        onCollapse: () => console.log('Card collapsed'),
+        onExpand: () => console.log('Card expanded')
+      });
 
         // Config Engine demo
         $.setup({
