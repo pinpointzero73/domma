@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wizard Debug Test</title>
+  <link rel="stylesheet" href="public/dist/domma.css">
+  <link rel="stylesheet" href="public/dist/elements.css">
+  <style>
+      body {
+          padding: 20px;
+          font-family: system-ui, sans-serif;
+      }
+
+      .debug-log {
+          background: #f5f5f5;
+          padding: 15px;
+          margin: 20px 0;
+          border-radius: 4px;
+          max-height: 300px;
+          overflow-y: auto;
+          font-family: monospace;
+          font-size: 12px;
+      }
+
+      .debug-entry {
+          margin: 2px 0;
+      }
+
+      .debug-error {
+          color: red;
+      }
+
+      .debug-success {
+          color: green;
+      }
+
+      .debug-info {
+          color: blue;
+      }
+
+      .form-debug {
+          background: #e8f4fd;
+          padding: 10px;
+          margin: 10px 0;
+          border-radius: 4px;
+          border-left: 4px solid #007bff;
+      }
+  </style>
+</head>
+<body>
+<h1>Wizard Debug Test</h1>
+<p>This page tests the wizard functionality with comprehensive debugging output.</p>
+
+<div id="debug-log" class="debug-log"></div>
+
+<div id="wizard-test"></div>
+
+<script src="public/dist/domma.min.js"></script>
+<script>
+  // Debug logging system
+  const debugLog = document.getElementById('debug-log');
+  let logCounter = 0;
+
+  function log(message, type = 'info') {
+    logCounter++;
+    const entry = document.createElement('div');
+    entry.className = `debug-entry debug-${type}`;
+    entry.innerHTML = `[${logCounter.toString().padStart(3, '0')}] ${new Date().toLocaleTimeString()}: ${message}`;
+    debugLog.appendChild(entry);
+    debugLog.scrollTop = debugLog.scrollHeight;
+    console.log(`[DEBUG ${type.toUpperCase()}]`, message);
+  }
+
+  function logObject(obj, label = 'Object') {
+    log(`${label}: ${JSON.stringify(obj, null, 2)}`, 'info');
+  }
+
+  function logFormData(formElement) {
+    if (!formElement) {
+      log('Form element is null/undefined!', 'error');
+      return;
+    }
+
+    const formData = new FormData(formElement);
+    const data = {};
+    for (let [key, value] of formData.entries()) {
+      data[key] = value;
+    }
+
+    log(`Form data extracted:`, 'info');
+    logObject(data, 'FormData');
+
+    // Also test the getFormData function directly
+    try {
+      // We need to call the function that's supposed to be available in wizard
+      const inputs = formElement.querySelectorAll('input, select, textarea');
+      log(`Found ${inputs.length} form inputs`, 'info');
+
+      inputs.forEach((input, idx) => {
+        log(`Input ${idx}: name="${input.name}", type="${input.type}", value="${input.value}"`, 'info');
+      });
+
+    } catch (error) {
+      log(`Error testing form inputs: ${error.message}`, 'error');
+    }
+  }
+
+  // Test wizard functionality
+  log('Starting wizard debug test...', 'info');
+
+  try {
+    // Check if Domma.forms is available
+    if (!Domma.forms) {
+      log('ERROR: Domma.forms is not available!', 'error');
+      throw new Error('Domma.forms module not loaded');
+    }
+
+    log('Domma.forms module is available', 'success');
+    log(`Available methods: ${Object.keys(Domma.forms).join(', ')}`, 'info');
+
+    // Test schema
+    const wizardSchema = {
+      steps: [
+        {
+          title: 'Personal Info',
+          fields: [
+            {
+              name: 'name',
+              type: 'text',
+              label: 'Full Name',
+              required: true,
+              validation: {
+                minLength: 2,
+                maxLength: 50
+              }
+            },
+            {
+              name: 'email',
+              type: 'email',
+              label: 'Email Address',
+              required: true,
+              validation: {
+                email: true
+              }
+            }
+          ]
+        },
+        {
+          title: 'Account Details',
+          fields: [
+            {
+              name: 'username',
+              type: 'text',
+              label: 'Username',
+              required: true,
+              validation: {
+                minLength: 3,
+                maxLength: 20,
+                pattern: '^[a-zA-Z0-9_]+$'
+              }
+            },
+            {
+              name: 'password',
+              type: 'password',
+              label: 'Password',
+              required: true,
+              validation: {
+                minLength: 8
+              }
+            },
+            {
+              name: 'confirmPassword',
+              type: 'password',
+              label: 'Confirm Password',
+              required: true,
+              validation: {
+                confirmPassword: 'password'
+              }
+            }
+          ]
+        }
+      ]
+    };
+
+    log('Schema created successfully', 'success');
+    logObject(wizardSchema, 'Wizard Schema');
+
+    // Create wizard with extensive debugging
+    const wizard = Domma.forms.wizard('#wizard-test', {
+      schema: wizardSchema,
+      onStepChange: (step, data) => {
+        log(`Step changed to: ${step}`, 'success');
+        logObject(data, 'Step Data');
+      },
+      onValidation: (isValid, errors, step) => {
+        log(`Validation result - Step ${step}: ${isValid ? 'VALID' : 'INVALID'}`, isValid ? 'success' : 'error');
+        if (errors && errors.length > 0) {
+          logObject(errors, 'Validation Errors');
+        }
+      },
+      onSubmit: (data) => {
+        log('Wizard submitted successfully!', 'success');
+        logObject(data, 'Final Data');
+
+        // Test model integration with persistence
+        log('Testing model integration...', 'info');
+        try {
+          const userModel = Domma.models.create({
+            name: {type: 'string'},
+            email: {type: 'email'},
+            username: {type: 'string'}
+          }, data, {
+            persist: 'debug-wizard-user'
+          });
+
+          userModel.save();
+          log('Data saved to model with localStorage persistence', 'success');
+
+          // Test retrieval
+          const saved = Domma.storage.get('debug-wizard-user');
+          logObject(saved, 'Retrieved from localStorage');
+        } catch (modelError) {
+          log(`Model integration error: ${modelError.message}`, 'error');
+        }
+      },
+      onError: (error) => {
+        log(`Wizard error: ${error}`, 'error');
+      }
+    });
+
+    if (!wizard) {
+      log('ERROR: Wizard creation returned null/undefined!', 'error');
+      throw new Error('Wizard creation failed');
+    }
+
+    log('Wizard created successfully', 'success');
+    log(`Wizard methods: ${Object.keys(wizard).join(', ')}`, 'info');
+
+    // Add event listeners to debug button clicks
+    setTimeout(() => {
+      const wizardElement = document.querySelector('#wizard-test .wizard');
+      if (wizardElement) {
+        log('Wizard element found in DOM', 'success');
+
+        const nextButton = wizardElement.querySelector('.wizard-next');
+        const prevButton = wizardElement.querySelector('.wizard-prev');
+        const submitButton = wizardElement.querySelector('.wizard-submit');
+
+        log(`Found buttons - Next: ${!!nextButton}, Prev: ${!!prevButton}, Submit: ${!!submitButton}`, 'info');
+
+        if (nextButton) {
+          log('Adding click listener to Next button', 'info');
+          nextButton.addEventListener('click', (e) => {
+            log('Next button clicked!', 'info');
+            log(`Event prevented: ${e.defaultPrevented}`, 'info');
+
+            // Get current form
+            const currentForm = wizardElement.querySelector('.wizard-step.active form');
+            if (currentForm) {
+              log('Found active form, extracting data...', 'info');
+              logFormData(currentForm);
+            } else {
+              log('No active form found!', 'error');
+            }
+          });
+        }
+
+        if (prevButton) {
+          prevButton.addEventListener('click', (e) => {
+            log('Previous button clicked!', 'info');
+          });
+        }
+
+        if (submitButton) {
+          submitButton.addEventListener('click', (e) => {
+            log('Submit button clicked!', 'info');
+          });
+        }
+
+        // Also monitor all form inputs for changes
+        wizardElement.addEventListener('input', (e) => {
+          log(`Input changed: ${e.target.name} = "${e.target.value}"`, 'info');
+        });
+
+        wizardElement.addEventListener('change', (e) => {
+          log(`Input changed (change event): ${e.target.name} = "${e.target.value}"`, 'info');
+        });
+
+      } else {
+        log('ERROR: Wizard element not found in DOM!', 'error');
+      }
+    }, 100);
+
+  } catch (error) {
+    log(`Fatal error: ${error.message}`, 'error');
+    log(`Stack: ${error.stack}`, 'error');
+  }
+
+  // Add CSS to make debug more visible
+  const style = document.createElement('style');
+  style.textContent = `
+            .wizard-step { margin-bottom: 20px; }
+            .wizard-nav { margin-top: 20px; }
+            .wizard-nav button { margin-right: 10px; }
+            .form-group { margin-bottom: 15px; }
+            .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+            .form-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+            .error { color: red; font-size: 12px; margin-top: 5px; }
+        `;
+  document.head.appendChild(style);
+
+</script>
+</body>
+</html>

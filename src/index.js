@@ -6,6 +6,7 @@ import {models} from './models.js';
 import {DesktopNotification, elements} from './elements.js';
 import {dates} from './dates.js';
 import {tables} from './tables.js';
+import {forms} from './forms.js';
 import {theme} from './theme.js';
 import {icons} from './icons.js';
 import {storage} from './storage.js';
@@ -61,6 +62,7 @@ Domma.models = models;
 Domma.elements = elements;
 Domma.dates = dates;
 Domma.tables = tables;
+Domma.forms = forms;
 Domma.theme = theme;
 Domma.icons = icons;
 Domma.storage = storage;
@@ -76,6 +78,7 @@ const M = models;
 const D = dates;
 const S = storage;
 const A = auth;
+const F = forms;
 
 // Attach aliases to Domma
 Domma.M = M;
@@ -92,7 +95,8 @@ if (typeof window !== 'undefined') {
     window.D = D;
     window.S = S;
     window.A = A;
+    window.F = F;
 }
 
 export default Domma;
-export {Domma, $, _, M, D, S, A};
+export {Domma, $, _, M, D, S, A, F};

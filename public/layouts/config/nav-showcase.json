@@ -106,6 +106,14 @@
           "text": "Themes",
           "url": "showcase/themes/index.html",
           "section": "themes"
+        },
+        {
+          "divider": true
+        },
+        {
+          "text": "Forms",
+          "url": "showcase/forms/index.html",
+          "section": "forms"
         }
       ]
     },
@@ -163,11 +171,6 @@
           "section": "editor"
         },
         {
-          "text": "Forms",
-          "url": "showcase/elements/forms/index.html",
-          "section": "forms"
-        },
-        {
           "text": "Jumbotron",
           "url": "showcase/elements/jumbotron/index.html",
           "section": "jumbotron"
@@ -218,14 +221,29 @@
           "section": "effects"
         },
         {
-          "text": "Glow",
-          "url": "showcase/effects/glow.html",
-          "section": "effects-glow"
+          "text": "Animations",
+          "url": "showcase/effects/animations.html",
+          "section": "effects-animations"
+        },
+        {
+          "text": "Filters",
+          "url": "showcase/effects/filters.html",
+          "section": "effects-filters"
         },
         {
           "text": "Fireworks",
           "url": "showcase/effects/fireworks.html",
           "section": "effects-fireworks"
+        },
+        {
+          "text": "Glow",
+          "url": "showcase/effects/glow.html",
+          "section": "effects-glow"
+        },
+        {
+          "text": "Gradients",
+          "url": "showcase/effects/gradients.html",
+          "section": "effects-gradients"
         },
         {
           "text": "Shadows",
@@ -251,6 +269,11 @@
           "text": "Editor",
           "url": "showcase/elements/editor/index.html",
           "section": "editor"
+        },
+        {
+          "text": "Form Generation",
+          "url": "showcase/forms/index.html",
+          "section": "forms"
         },
         {
           "text": "Print to PDF",

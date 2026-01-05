@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filters - Domma Showcase</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../css/domma-showcase.css">
+
+  <style>
+      .filter-demo {
+          background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+          color: white;
+          padding: 2rem;
+          border-radius: 8px;
+          text-align: center;
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 1rem 0;
+      }
+
+      .filter-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 1.5rem;
+          margin: 2rem 0;
+      }
+
+      .image-demo {
+          width: 100%;
+          height: 200px;
+          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect fill="%233b82f6" width="400" height="200"/><circle fill="%2310b981" cx="100" cy="100" r="50"/><circle fill="%23f59e0b" cx="200" cy="100" r="50"/><circle fill="%23ef4444" cx="300" cy="100" r="50"/></svg>') center/cover;
+          border-radius: 8px;
+      }
+
+      .backdrop-demo {
+          position: relative;
+          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect fill="%233b82f6" width="400" height="200"/><circle fill="%2310b981" cx="100" cy="100" r="50"/><circle fill="%23f59e0b" cx="200" cy="100" r="50"/><circle fill="%23ef4444" cx="300" cy="100" r="50"/></svg>') center/cover;
+          height: 200px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
+
+      .backdrop-overlay {
+          padding: 2rem;
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.1);
+          color: white;
+          font-weight: 600;
+      }
+  </style>
+</head>
+<body class="dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
+
+<!-- Hero Section -->
+<section class="hero hero-gradient-primary hero-lg">
+  <h1>Filters</h1>
+  <p>CSS filter effects for images, elements, and backdrop blur effects</p>
+  <p class="mt-4"><code>.blur .grayscale .brightness-125</code></p>
+</section>
+
+<!-- Main Content -->
+<main class="container py-8">
+
+  <!-- Blur Filters -->
+  <section class="card mb-6" data-section="blur">
+    <div class="card-body">
+      <h2 class="card-title">Blur Filters</h2>
+      <p class="text-muted mb-4">
+        Apply blur effects with varying intensities
+      </p>
+      <div class="filter-grid mb-4">
+        <div>
+          <div class="image-demo blur-none"></div>
+          <p class="text-center mt-2">No Blur</p>
+        </div>
+        <div>
+          <div class="image-demo blur-sm"></div>
+          <p class="text-center mt-2">Blur SM</p>
+        </div>
+        <div>
+          <div class="image-demo blur"></div>
+          <p class="text-center mt-2">Blur</p>
+        </div>
+        <div>
+          <div class="image-demo blur-lg"></div>
+          <p class="text-center mt-2">Blur LG</p>
+        </div>
+        <div>
+          <div class="image-demo blur-xl"></div>
+          <p class="text-center mt-2">Blur XL</p>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;img src="image.jpg" class="blur-sm">
+&lt;img src="image.jpg" class="blur">
+&lt;img src="image.jpg" class="blur-lg">
+&lt;img src="image.jpg" class="blur-xl"></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Brightness & Contrast -->
+  <section class="card mb-6" data-section="brightness-contrast">
+    <div class="card-body">
+      <h2 class="card-title">Brightness & Contrast</h2>
+      <p class="text-muted mb-4">
+        Adjust brightness and contrast levels
+      </p>
+      <div class="filter-grid mb-4">
+        <div>
+          <div class="image-demo brightness-50"></div>
+          <p class="text-center mt-2">Brightness 50%</p>
+        </div>
+        <div>
+          <div class="image-demo brightness-100"></div>
+          <p class="text-center mt-2">Brightness 100%</p>
+        </div>
+        <div>
+          <div class="image-demo brightness-150"></div>
+          <p class="text-center mt-2">Brightness 150%</p>
+        </div>
+        <div>
+          <div class="image-demo contrast-50"></div>
+          <p class="text-center mt-2">Contrast 50%</p>
+        </div>
+        <div>
+          <div class="image-demo contrast-150"></div>
+          <p class="text-center mt-2">Contrast 150%</p>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;img src="image.jpg" class="brightness-150">
+&lt;img src="image.jpg" class="contrast-125"></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grayscale & Sepia -->
+  <section class="card mb-6" data-section="grayscale-sepia">
+    <div class="card-body">
+      <h2 class="card-title">Grayscale & Sepia</h2>
+      <p class="text-muted mb-4">
+        Remove colour or add vintage sepia tone
+      </p>
+      <div class="filter-grid mb-4">
+        <div>
+          <div class="image-demo"></div>
+          <p class="text-center mt-2">Original</p>
+        </div>
+        <div>
+          <div class="image-demo grayscale-50"></div>
+          <p class="text-center mt-2">Grayscale 50%</p>
+        </div>
+        <div>
+          <div class="image-demo grayscale"></div>
+          <p class="text-center mt-2">Grayscale 100%</p>
+        </div>
+        <div>
+          <div class="image-demo sepia-50"></div>
+          <p class="text-center mt-2">Sepia 50%</p>
+        </div>
+        <div>
+          <div class="image-demo sepia"></div>
+          <p class="text-center mt-2">Sepia 100%</p>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;img src="image.jpg" class="grayscale">
+&lt;img src="image.jpg" class="sepia"></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Saturate & Hue Rotate -->
+  <section class="card mb-6" data-section="saturate-hue">
+    <div class="card-body">
+      <h2 class="card-title">Saturate & Hue Rotate</h2>
+      <p class="text-muted mb-4">
+        Adjust colour saturation and rotate hues
+      </p>
+      <div class="filter-grid mb-4">
+        <div>
+          <div class="image-demo saturate-0"></div>
+          <p class="text-center mt-2">Saturate 0%</p>
+        </div>
+        <div>
+          <div class="image-demo saturate-100"></div>
+          <p class="text-center mt-2">Saturate 100%</p>
+        </div>
+        <div>
+          <div class="image-demo saturate-200"></div>
+          <p class="text-center mt-2">Saturate 200%</p>
+        </div>
+        <div>
+          <div class="image-demo hue-rotate-90"></div>
+          <p class="text-center mt-2">Hue Rotate 90°</p>
+        </div>
+        <div>
+          <div class="image-demo hue-rotate-180"></div>
+          <p class="text-center mt-2">Hue Rotate 180°</p>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;img src="image.jpg" class="saturate-150">
+&lt;img src="image.jpg" class="hue-rotate-90"></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Invert -->
+  <section class="card mb-6" data-section="invert">
+    <div class="card-body">
+      <h2 class="card-title">Invert</h2>
+      <p class="text-muted mb-4">
+        Invert colours for negative effect
+      </p>
+      <div class="filter-grid mb-4">
+        <div>
+          <div class="image-demo"></div>
+          <p class="text-center mt-2">Original</p>
+        </div>
+        <div>
+          <div class="image-demo invert-50"></div>
+          <p class="text-center mt-2">Invert 50%</p>
+        </div>
+        <div>
+          <div class="image-demo invert"></div>
+          <p class="text-center mt-2">Invert 100%</p>
+        </div>
+      </div>
+      <div class="code-example">
+        <pre><code class="language-html">&lt;img src="image.jpg" class="invert"></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Drop Shadow -->
+  <section class="card mb-6" data-section="drop-shadow">
+    <div class="card-body">
+      <h2 class="card-title">Drop Shadow</h2>
+      <p class="text-muted mb-4">
+        Add shadows to non-rectangular elements (unlike box-shadow)
+      </p>
+      <div class="filter-grid mb-4">
+        <div class="filter-demo drop-shadow-sm">Drop Shadow SM</div>
+        <div class="filter-demo drop-shadow">Drop Shadow</div>
+        <div class="filter-demo drop-shadow-md">Drop Shadow MD</div>
+        <div class="filter-demo drop-shadow-lg">Drop Shadow LG</div>
+        <div class="filter-demo drop-shadow-xl">Drop Shadow XL</div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;img src="icon.svg" class="drop-shadow-lg">
+&lt;div class="drop-shadow-xl">Elevated Element&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Backdrop Blur -->
+  <section class="card mb-6" data-section="backdrop-blur">
+    <div class="card-body">
+      <h2 class="card-title">Backdrop Blur</h2>
+      <p class="text-muted mb-4">
+        Blur the background behind an element (glassmorphism effect)
+      </p>
+      <div class="filter-grid mb-4">
+        <div class="backdrop-demo">
+          <div class="backdrop-overlay backdrop-blur-sm">Backdrop Blur SM</div>
+        </div>
+        <div class="backdrop-demo">
+          <div class="backdrop-overlay backdrop-blur">Backdrop Blur</div>
+        </div>
+        <div class="backdrop-demo">
+          <div class="backdrop-overlay backdrop-blur-lg">Backdrop Blur LG</div>
+        </div>
+        <div class="backdrop-demo">
+          <div class="backdrop-overlay backdrop-blur-xl">Backdrop Blur XL</div>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;div class="backdrop-blur">
+    &lt;!-- Content with blurred background -->
+&lt;/div>
+
+&lt;!-- Glassmorphism Card -->
+&lt;div class="card backdrop-blur-lg" style="background: rgba(255,255,255,0.1);">
+    &lt;div class="card-body">
+        Semi-transparent with blurred backdrop
+    &lt;/div>
+&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Combined Filter Presets -->
+  <section class="card mb-6" data-section="presets">
+    <div class="card-body">
+      <h2 class="card-title">Combined Filter Presets</h2>
+      <p class="text-muted mb-4">
+        Pre-configured combinations of multiple filters
+      </p>
+      <div class="filter-grid mb-4">
+        <div>
+          <div class="image-demo"></div>
+          <p class="text-center mt-2">Original</p>
+        </div>
+        <div>
+          <div class="image-demo filter-vintage"></div>
+          <p class="text-center mt-2">Vintage</p>
+        </div>
+        <div>
+          <div class="image-demo filter-dramatic"></div>
+          <p class="text-center mt-2">Dramatic</p>
+        </div>
+        <div>
+          <div class="image-demo filter-soft"></div>
+          <p class="text-center mt-2">Soft</p>
+        </div>
+        <div>
+          <div class="image-demo filter-cold"></div>
+          <p class="text-center mt-2">Cold</p>
+        </div>
+        <div>
+          <div class="image-demo filter-warm"></div>
+          <p class="text-center mt-2">Warm</p>
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;img src="photo.jpg" class="filter-vintage">
+&lt;img src="photo.jpg" class="filter-dramatic">
+&lt;img src="photo.jpg" class="filter-soft"></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Usage Examples -->
+  <section class="card mb-6" data-section="usage">
+    <div class="card-body">
+      <h2 class="card-title">Usage Examples</h2>
+      <p class="text-muted mb-4">
+        Practical applications of CSS filters
+      </p>
+      <div class="code-example">
+<pre><code class="language-html">&lt;!-- Inactive/Disabled State -->
+&lt;img src="icon.svg" class="grayscale opacity-50">
+
+&lt;!-- Glassmorphism Card -->
+&lt;div class="card backdrop-blur-lg bg-white-t10">
+    &lt;div class="card-body">Frosted Glass Effect&lt;/div>
+&lt;/div>
+
+&lt;!-- Image Gallery with Hover Effect -->
+&lt;img src="photo.jpg" class="grayscale hover:grayscale-0">
+
+&lt;!-- Loading State -->
+&lt;div class="blur-sm animate-pulse">Loading...&lt;/div>
+
+&lt;!-- Dramatic Hero Image -->
+&lt;section class="hero filter-dramatic brightness-90">
+    &lt;h1>Bold Statement&lt;/h1>
+&lt;/section></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Custom Filters -->
+  <section class="card mb-6" data-section="custom">
+    <div class="card-body">
+      <h2 class="card-title">Creating Custom Filters</h2>
+      <p class="text-muted mb-4">
+        Combine multiple filter functions for unique effects
+      </p>
+      <div class="code-example">
+<pre><code class="language-css">/* Custom Filter Combination */
+.my-custom-filter {
+    filter: brightness(1.1) contrast(1.2) saturate(1.3);
+}
+
+/* Dynamic Filter with CSS Variable */
+.interactive-filter {
+    filter: blur(var(--blur-amount, 0px));
+    transition: filter 0.3s ease;
+}
+
+.interactive-filter:hover {
+    --blur-amount: 8px;
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Performance & Browser Support -->
+  <section class="card mb-6" data-section="support">
+    <div class="card-body">
+      <h2 class="card-title">Performance & Browser Support</h2>
+      <h3 class="mt-4">Browser Support</h3>
+      <ul>
+        <li><strong>filter</strong> - All modern browsers</li>
+        <li><strong>backdrop-filter</strong> - All modern browsers (requires <code>-webkit-</code> prefix in some)</li>
+        <li><strong>Fallback</strong> - Filters gracefully degrade if not supported</li>
+      </ul>
+      <h3 class="mt-4">Performance Tips</h3>
+      <ul>
+        <li><strong>Use sparingly</strong> - Filters can be computationally expensive</li>
+        <li><strong>Avoid animations</strong> - Don't animate filter values excessively</li>
+        <li><strong>will-change</strong> - Add <code>will-change: filter</code> for frequently filtered elements</li>
+        <li><strong>Test performance</strong> - Always test on lower-end devices</li>
+        <li><strong>backdrop-filter</strong> - Particularly expensive; use only when necessary</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<!-- Domma JavaScript -->
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    // Scan for icons
+    if (typeof Domma !== 'undefined' && Domma.icons) {
+      Domma.icons.scan();
+    }
+
+    // Scan and highlight code blocks
+    if (typeof Domma !== 'undefined' && Domma.syntax) {
+      Domma.syntax.scan();
+    }
+  });
+</script>
+</body>
+</html>

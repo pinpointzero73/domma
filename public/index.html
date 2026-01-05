@@ -576,9 +576,22 @@ Domma.theme.setVariant('ocean');</pre>
 &lt;div class="shadow-xl elevation-3"&gt;Elevated&lt;/div&gt;</pre>
         </div>
 
-        <!-- 13. HTTP Client -->
+        <!-- 13. Forms Module -->
         <div class="carousel-slide">
           <span class="slide-number">13</span>
+          <h3 class="slide-title">Forms Module</h3>
+          <p class="slide-description">
+            Schema-driven form generation with validation, wizards, and complete CRUD operations.
+          </p>
+          <pre class="code-block language-javascript">const form = Domma.forms.create(schema, data, {
+  onSubmit: (data) => console.log('Submitted:', data)
+});
+form.renderTo('#form-container');</pre>
+        </div>
+
+        <!-- 14. HTTP Client -->
+        <div class="carousel-slide">
+          <span class="slide-number">14</span>
           <h3 class="slide-title">HTTP Client</h3>
           <p class="slide-description">
             Fetch-based HTTP client with promise API. GET, POST, PUT, DELETE with automatic JSON handling.
@@ -588,9 +601,9 @@ await Domma.http.post('/api/users', { name: 'Alice' });
 await Domma.http.delete('/api/users/1');</pre>
         </div>
 
-        <!-- 14. Storage Wrapper -->
+        <!-- 15. Storage Wrapper -->
         <div class="carousel-slide">
-          <span class="slide-number">14</span>
+          <span class="slide-number">15</span>
           <h3 class="slide-title">Storage Wrapper</h3>
           <p class="slide-description">
             localStorage wrapper with auto JSON serialisation, namespaced keys, and graceful fallbacks.
@@ -600,9 +613,9 @@ const user = S.get('user'); // Auto-parsed
 S.keys(); S.has('user'); S.clear();</pre>
         </div>
 
-        <!-- 15. Model Persistence -->
+        <!-- 16. Model Persistence -->
         <div class="carousel-slide">
-          <span class="slide-number">15</span>
+          <span class="slide-number">16</span>
           <h3 class="slide-title">Model Persistence</h3>
           <p class="slide-description">
             Models auto-save to localStorage. Load state on page refresh, reset to defaults anytime.
@@ -613,9 +626,9 @@ S.keys(); S.has('user'); S.clear();</pre>
 settings.reset(true); // Clear storage too</pre>
         </div>
 
-        <!-- 16. Comprehensive Tests -->
+        <!-- 17. Comprehensive Tests -->
         <div class="carousel-slide">
-          <span class="slide-number">16</span>
+          <span class="slide-number">17</span>
           <h3 class="slide-title">100+ Unit Tests</h3>
           <p class="slide-description">
             Comprehensive test suite covering all modules: DOM, utils, dates, models, storage, tables,
@@ -626,9 +639,9 @@ open tests/test.html
 # DOM, Utils, Dates, Models, Storage...</pre>
         </div>
 
-        <!-- 17. CSS Grid System -->
+        <!-- 18. CSS Grid System -->
         <div class="carousel-slide">
-          <span class="slide-number">17</span>
+          <span class="slide-number">18</span>
           <h3 class="slide-title">CSS Grid System</h3>
           <p class="slide-description">
             Bootstrap-style 12-column grid plus modern CSS Grid utilities. Mobile-first, responsive
@@ -640,9 +653,9 @@ open tests/test.html
 &lt;/div&gt;</pre>
         </div>
 
-        <!-- 18. BYOS - Bring Your Own Styles -->
+        <!-- 19. BYOS - Bring Your Own Styles -->
         <div class="carousel-slide">
-          <span class="slide-number">18</span>
+          <span class="slide-number">19</span>
           <h3 class="slide-title">CSS-Free Usage</h3>
           <p class="slide-description">
             Use Domma's JS with your own CSS framework. Disable theming entirely for Bootstrap, Tailwind, or
@@ -812,6 +825,19 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
         </ul>
       </div>
     </a>
+
+    <a href="showcase/forms/index.html" class="card module-card card-hover">
+      <div class="card-body">
+        <div class="module-icon" data-icon="document-add" data-icon-size="48"></div>
+        <h3 class="card-title">Forms</h3>
+        <p class="card-text">Schema-driven form generation with validation, wizards, and complete CRUD operations.</p>
+        <ul class="module-features">
+          <li>Schema-based forms</li>
+          <li>Validation & wizards</li>
+          <li>Model integration & CRUD</li>
+        </ul>
+      </div>
+    </a>
   </div>
   <br/>
   <br/>
@@ -907,6 +933,35 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
         }
       }
     });
+
+    // Stagger animations for splash page elements
+    const animateElements = (selector, delay = 100, initialTransform = 'translateY(20px)') => {
+      const $elements = $(selector);
+
+      // Set initial state
+      $elements.css({
+        opacity: '0',
+        transform: initialTransform,
+        transition: 'opacity 0.6s ease, transform 0.6s ease'
+      });
+
+      // Animate in with stagger effect
+      $elements.each((index, element) => {
+        setTimeout(() => {
+          $(element).css({
+            opacity: '1',
+            transform: 'translateY(0)'
+          });
+        }, index * delay);
+      });
+    };
+
+    // Apply stagger animations to page sections
+    animateElements('.feature', 100);                    // 12 features
+    animateElements('.module-card', 80);                 // 13 module cards
+    animateElements('.splash-carousel', 150);            // Carousel (single element)
+    animateElements('.cta-group', 200);                  // CTA buttons
+    animateElements('.miniapps-grid .col', 120);        // MiniApps cards
 
     // Scan for data-icon attributes
     Domma.icons.scan();

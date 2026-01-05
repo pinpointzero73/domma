@@ -1,5 +1,6 @@
 import {dom} from './dom.js';
 import {elements} from './elements.js';
+import {forms} from './forms.js';
 import {utils} from './utils.js';
 
 export const configEngine = {
@@ -153,11 +154,22 @@ export const configEngine = {
             timer: elements.timer,
             alarm: elements.alarm,
             autocomplete: elements.autocomplete,
-            pillbox: elements.pillbox
+            pillbox: elements.pillbox,
+            form: forms.create
         };
 
         const factory = componentMap[componentType];
         if (factory) {
+            // Special handling for forms which requires schema and data
+            if (componentType === 'form') {
+                if (!options.schema) {
+                    console.error('Forms component requires a schema option');
+                    return null;
+                }
+                const formInstance = factory(options.schema, options.data || {}, options);
+                formInstance.renderTo(selector);
+                return formInstance;
+            }
             return factory.call(elements, selector, options);
         } else {
             console.warn(`Unknown component type: ${componentType}`);

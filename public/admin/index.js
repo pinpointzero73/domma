@@ -334,9 +334,17 @@ $(() => {
                 title: 'Actions',
                 sortable: false,
                 render: (userId) => `
-                  <button class="btn btn-sm btn-primary change-role-btn" data-user-id="${userId}">
-                    Change Role
-                  </button>
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary edit-user-btn" data-user-id="${userId}" title="Edit User">
+                      Edit
+                    </button>
+                    <button class="btn btn-outline-warning change-role-btn" data-user-id="${userId}" title="Change Role">
+                      Role
+                    </button>
+                    <button class="btn btn-outline-danger delete-user-btn" data-user-id="${userId}" title="Delete User">
+                      Delete
+                    </button>
+                  </div>
                 `
               }
             ],
@@ -361,6 +369,16 @@ $(() => {
         $('body').on('click', '.change-role-btn', function () {
           const userId = $(this).attr('data-user-id');
           showRoleModal(userId);
+        });
+
+        $('body').on('click', '.edit-user-btn', function () {
+          const userId = $(this).attr('data-user-id');
+          showEditUserModal(userId);
+        });
+
+        $('body').on('click', '.delete-user-btn', function () {
+          const userId = $(this).attr('data-user-id');
+          showDeleteUserConfirmation(userId);
         });
       } else {
         usersTable.setData(tableData);
@@ -447,7 +465,205 @@ $(() => {
   }
 
   // ============================================
-  // 12. Search and Filter
+  // 12. Edit User Modal (Schema-Driven)
+  // ============================================
+
+  // User schema for form generation
+  const userSchema = {
+    name: {
+      type: 'string',
+      label: 'Full Name',
+      required: true,
+      minLength: 2,
+      maxLength: 100,
+      formConfig: {
+        placeholder: 'Enter user\'s full name'
+      }
+    },
+    email: {
+      type: 'email',
+      label: 'Email Address',
+      required: true,
+      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      formConfig: {
+        placeholder: 'user@example.com'
+      }
+    },
+    role: {
+      type: 'select',
+      label: 'User Role',
+      required: true,
+      options: [
+        {value: 'guest', label: 'Guest'},
+        {value: 'subscriber', label: 'Subscriber'},
+        {value: 'admin', label: 'Administrator'}
+      ],
+      formConfig: {
+        helperText: 'Select the appropriate role for this user'
+      }
+    }
+  };
+
+  async function showEditUserModal(userId) {
+    console.log('[Admin] Opening schema-driven edit modal for user ID:', userId);
+
+    // Find user in table data
+    const tableData = usersTable.getData();
+    const user = tableData.find(u => u.id == userId);
+
+    if (!user) {
+      console.error('[Admin] User not found in table data');
+      Domma.elements.toast('User not found', {type: 'error'});
+      return;
+    }
+
+    console.log('[Admin] Found user for editing:', user);
+
+    // Prepare initial form data
+    const initialData = {
+      name: user.name || '',
+      email: user.email,
+      role: user.role
+    };
+
+    try {
+      // Create and open schema-driven modal form
+      const modal = Domma.forms.modal(userSchema, initialData, {
+        title: `Edit User: ${user.email}`,
+        size: 'medium',
+        saveText: 'Update User',
+        layout: 'stacked',
+        sections: [
+          {
+            title: 'User Information',
+            fields: ['name', 'email', 'role']
+          }
+        ],
+        onSave: async (formData, formInstance) => {
+          console.log('[Admin] Saving user changes:', formData);
+
+          // Send update request
+          const fetchResponse = await fetch(`${apiUrl}/admin/users/${userId}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${Domma.auth.token}`
+            },
+            body: JSON.stringify(formData)
+          });
+
+          const response = await fetchResponse.json();
+          console.log('[Admin] User update response:', response);
+
+          if (!fetchResponse.ok || !response.success) {
+            throw new Error(response.message || 'Failed to update user');
+          }
+
+          Domma.elements.toast('User updated successfully!', {type: 'success'});
+          loadUsers(); // Refresh table
+          loadStats(); // Refresh stats in case role changed
+        },
+        onError: (error, formData, formInstance) => {
+          console.error('[Admin] Failed to update user:', error);
+          Domma.elements.toast('Error: ' + error.message, {type: 'error'});
+        }
+      });
+
+      // Open the modal
+      modal.open();
+
+    } catch (error) {
+      console.error('[Admin] Failed to create edit modal:', error);
+      Domma.elements.toast('Failed to open edit form', {type: 'error'});
+    }
+  }
+
+  // ============================================
+  // 13. Delete User Confirmation
+  // ============================================
+  async function showDeleteUserConfirmation(userId) {
+    console.log('[Admin] Opening delete confirmation for user ID:', userId);
+
+    // Find user in table data
+    const tableData = usersTable.getData();
+    const user = tableData.find(u => u.id == userId);
+
+    if (!user) {
+      console.error('[Admin] User not found in table data');
+      Domma.elements.toast('User not found', {type: 'error'});
+      return;
+    }
+
+    console.log('[Admin] Found user for deletion:', user);
+
+    // First confirmation - general warning
+    const firstConfirm = await Domma.elements.confirm(
+      `Are you sure you want to delete this user?\n\nUser: ${user.email}\nName: ${user.name || 'N/A'}\nRole: ${_.capitalize(user.role)}\nContent: ${user.stats}\n\nThis action cannot be undone.`,
+      {
+        title: 'Confirm User Deletion',
+        confirmText: 'Yes, Delete',
+        cancelText: 'Cancel',
+        type: 'warning'
+      }
+    );
+
+    if (!firstConfirm) {
+      console.log('[Admin] User deletion cancelled at first confirmation');
+      return;
+    }
+
+    // Second confirmation - final warning with typed confirmation
+    const typeConfirm = await Domma.elements.prompt(
+      `FINAL WARNING: This will permanently delete the user "${user.email}".\n\nType "DELETE" to confirm:`,
+      {
+        title: 'Final Deletion Confirmation',
+        inputPlaceholder: 'Type DELETE to confirm',
+        confirmText: 'Delete User',
+        cancelText: 'Cancel'
+      }
+    );
+
+    if (!typeConfirm || typeConfirm.toUpperCase() !== 'DELETE') {
+      Domma.elements.toast('User deletion cancelled', {type: 'info'});
+      return;
+    }
+
+    console.log('[Admin] User deletion confirmed, proceeding...');
+
+    try {
+      const fetchResponse = await fetch(`${apiUrl}/admin/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${Domma.auth.token}`
+        }
+      });
+
+      const response = await fetchResponse.json();
+
+      console.log('[Admin] User deletion response:', response);
+
+      if (!fetchResponse.ok || !response.success) {
+        throw new Error(response.message || 'Failed to delete user');
+      }
+
+      // Show success with content info
+      const contentInfo = response.data?.contentRemaining;
+      let message = 'User deleted successfully!';
+      if (contentInfo && (contentInfo.documents || contentInfo.invoices || contentInfo.vehicles)) {
+        message += `\n\nOrphaned content: ${contentInfo.documents || 0} documents, ${contentInfo.invoices || 0} invoices, ${contentInfo.vehicles || 0} vehicles`;
+      }
+
+      Domma.elements.toast(message, {type: 'success'});
+      loadUsers(); // Refresh table
+      loadStats(); // Refresh stats
+    } catch (error) {
+      console.error('[Admin] Failed to delete user:', error);
+      Domma.elements.toast('Error: ' + error.message, {type: 'error'});
+    }
+  }
+
+  // ============================================
+  // 14. Search and Filter
   // ============================================
   const searchDebounced = _.debounce(() => {
     searchQuery = $('#user-search').val().trim();

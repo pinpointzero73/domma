@@ -62,6 +62,15 @@ function escapeHtml(str) {
 }
 
 /**
+ * Escape special regex characters
+ * @param {string} str - String to escape
+ * @returns {string} Escaped string for use in regex
+ */
+function escapeRegExp(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
  * Tokenize code using sequential replacement with placeholders
  * @param {string} code - Code to tokenize
  * @param {string} language - Language identifier
@@ -98,13 +107,17 @@ function tokenize(code, language) {
         });
     }
 
-    // Escape remaining non-tokenized content
-    html = escapeHtml(html);
-
-    // Replace all placeholders with actual HTML
+  // Replace all placeholders with actual HTML first
     for (const {placeholder, html: tokenHtml} of placeholders) {
-        html = html.replace(new RegExp(placeholder, 'g'), tokenHtml);
+      html = html.replace(new RegExp(escapeRegExp(placeholder), 'g'), tokenHtml);
     }
+
+  // Then escape any remaining non-tokenized content
+  // We need to be careful to only escape content outside of our spans
+  html = html.replace(/(?<!<[^>]*>)([&<>"])(?![^<]*<\/span>)/g, (match) => {
+    const entities = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'};
+    return entities[match] || match;
+  });
 
     return html;
 }

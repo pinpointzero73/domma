@@ -1,0 +1,2338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forms - Domma Showcase</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../dist/syntax.css">
+  <link rel="stylesheet" href="../../showcase/css/domma-showcase.css">
+  <style>
+      .forms-demo {
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          padding: 1.5rem;
+          margin: 1rem 0;
+          background: var(--bg-light);
+      }
+
+      .forms-demo h4 {
+          margin-top: 0;
+          color: var(--text-primary);
+      }
+
+      .forms-output {
+          background: var(--bg-darker);
+          border-radius: 4px;
+          padding: 1rem;
+          font-family: 'Courier New', monospace;
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+          white-space: pre-wrap;
+          max-height: 200px;
+          overflow-y: auto;
+      }
+
+      .forms-controls {
+          display: flex;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+          flex-wrap: wrap;
+      }
+
+      .wizard-progress {
+          background: var(--bg-light);
+          border-radius: 10px;
+          height: 8px;
+          overflow: hidden;
+          margin-bottom: 1rem;
+      }
+
+      .wizard-progress-bar {
+          background: var(--primary-color);
+          height: 100%;
+          transition: width 0.3s ease;
+      }
+
+      .crud-demo-table {
+          margin-top: 1rem;
+      }
+
+      .mock-data-info {
+          background: var(--warning-bg);
+          color: var(--warning-text);
+          padding: 0.75rem;
+          border-radius: 4px;
+          margin-bottom: 1rem;
+          font-size: 0.9rem;
+      }
+
+      .reference-group {
+          background: var(--bg-light);
+          padding: 1rem;
+          border-radius: 6px;
+          border: 1px solid var(--border-color);
+      }
+
+      .reference-group h4 {
+          color: var(--text-primary);
+          margin-bottom: 0.5rem;
+      }
+
+      .reference-group ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+      }
+
+      .reference-group li {
+          padding: 0.25rem 0;
+          border-bottom: 1px solid var(--border-light);
+      }
+
+      .reference-group li:last-child {
+          border-bottom: none;
+      }
+
+      .reference-group code {
+          background: var(--bg-darker);
+          padding: 0.125rem 0.25rem;
+          border-radius: 3px;
+          font-size: 0.85rem;
+          color: var(--text-primary);
+      }
+
+      /* Compact Forms Reference Styles */
+      .forms-reference {
+          background: var(--dm-color-surface-light);
+          border-radius: 8px;
+          padding: 1rem;
+          margin: 1rem 0;
+          border: 1px solid var(--dm-color-border);
+      }
+
+      .forms-reference h2 {
+          text-align: center;
+          margin-bottom: 1rem;
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: var(--dm-color-primary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+      }
+
+      .reference-card {
+          background: var(--dm-color-surface);
+          border: 1px solid var(--dm-color-border);
+          border-radius: 6px;
+          padding: 0.75rem;
+          margin-bottom: 0.75rem;
+          transition: all 0.2s ease;
+      }
+
+      .reference-card:hover {
+          border-color: var(--dm-color-primary);
+          box-shadow: 0 2px 8px rgba(var(--dm-color-primary-rgb), 0.1);
+      }
+
+      .reference-header {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 0.5rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 1px solid var(--dm-color-border);
+      }
+
+      .reference-header .icon {
+          width: 18px;
+          height: 18px;
+          color: var(--dm-color-primary);
+      }
+
+      .reference-header h3 {
+          font-size: 1rem;
+          font-weight: 600;
+          color: var(--dm-color-text);
+          margin: 0;
+      }
+
+      .reference-body {
+          padding: 0;
+      }
+
+      .reference-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 0.5rem;
+      }
+
+      .reference-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0.4rem 0.6rem;
+          background: var(--dm-color-surface-light);
+          border: 1px solid var(--dm-color-border-light);
+          border-radius: 4px;
+          transition: all 0.15s ease;
+      }
+
+      .reference-item:hover {
+          background: var(--dm-color-surface-lighter);
+          border-color: var(--dm-color-primary-light);
+      }
+
+      .reference-item code {
+          font-family: var(--dm-font-mono);
+          font-weight: 600;
+          color: var(--dm-color-primary);
+          font-size: 0.8rem;
+          margin: 0;
+          padding: 0;
+          background: transparent;
+      }
+
+      .reference-item span {
+          color: var(--dm-color-text-muted);
+          font-size: 0.75rem;
+          flex: 1;
+          margin-left: 0.5rem;
+      }
+
+      .copy-btn {
+          background: var(--dm-color-primary-light);
+          border: none;
+          border-radius: 3px;
+          padding: 0.25rem;
+          cursor: pointer;
+          opacity: 0.7;
+          transition: all 0.15s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 24px;
+          height: 24px;
+      }
+
+      .copy-btn:hover {
+          opacity: 1;
+          background: var(--dm-color-primary);
+      }
+
+      .copy-btn span {
+          width: 14px;
+          height: 14px;
+          color: white;
+          margin: 0;
+      }
+
+      .example-section {
+          margin-bottom: 0.75rem;
+      }
+
+      .example-section h4 {
+          font-size: 0.9rem;
+          font-weight: 600;
+          margin-bottom: 0.4rem;
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+      }
+
+      .example-section pre {
+          background: var(--dm-color-surface-darker);
+          border: 1px solid var(--dm-color-border);
+          border-radius: 4px;
+          padding: 0.6rem;
+          margin: 0.4rem 0 0 0;
+          font-size: 0.75rem;
+          line-height: 1.3;
+          overflow-x: auto;
+      }
+
+      .reference-card-title {
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: var(--dm-color-text);
+          margin: 0;
+      }
+
+      .reference-types-row {
+          display: grid;
+          grid-template-columns: auto 1fr auto;
+          gap: 1rem;
+          align-items: center;
+          padding: 0.75rem 0;
+          border-bottom: 1px solid var(--dm-color-border-light);
+      }
+
+      .reference-types-row:last-child {
+          border-bottom: none;
+      }
+
+      .type-name {
+          font-family: var(--dm-font-mono);
+          font-weight: 600;
+          color: var(--dm-color-primary);
+          font-size: 0.9rem;
+          min-width: 80px;
+      }
+
+      .type-description {
+          color: var(--dm-color-text-muted);
+          font-size: 0.85rem;
+      }
+
+      .type-example {
+          background: var(--dm-color-surface-darker);
+          border: 1px solid var(--dm-color-border);
+          border-radius: 4px;
+          padding: 0.25rem 0.5rem;
+          font-family: var(--dm-font-mono);
+          font-size: 0.75rem;
+          color: var(--dm-color-text);
+          cursor: pointer;
+          transition: all 0.2s ease;
+          max-width: 180px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+      }
+
+      .type-example:hover {
+          background: var(--dm-color-primary);
+          color: white;
+          transform: scale(1.02);
+      }
+
+      .compact-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+          gap: 0.75rem;
+      }
+
+      .compact-item {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          padding: 0.6rem 0.8rem;
+          background: var(--dm-color-surface-light);
+          border: 1px solid var(--dm-color-border);
+          border-radius: 6px;
+          transition: all 0.2s ease;
+          text-align: center;
+      }
+
+      .compact-item:hover {
+          border-color: var(--dm-color-primary);
+          background: var(--dm-color-primary);
+          color: white;
+          transform: translateY(-1px);
+      }
+
+      .compact-item:hover code,
+      .compact-item:hover span {
+          color: white;
+      }
+
+      .compact-item code {
+          font-weight: 600;
+          color: var(--dm-color-primary);
+          font-size: 0.85rem;
+      }
+
+      .compact-item span {
+          color: var(--dm-color-text-muted);
+          font-size: 0.7rem;
+      }
+
+      .code-example {
+          background: var(--dm-color-surface-darker);
+          border: 1px solid var(--dm-color-border);
+          border-radius: 6px;
+          padding: 1rem;
+          margin-top: 1rem;
+          position: relative;
+      }
+
+      .copy-btn {
+          position: absolute;
+          top: 0.5rem;
+          right: 0.5rem;
+          background: var(--dm-color-primary);
+          color: white;
+          border: none;
+          border-radius: 4px;
+          padding: 0.25rem 0.5rem;
+          font-size: 0.7rem;
+          cursor: pointer;
+          opacity: 0;
+          transition: all 0.2s ease;
+      }
+
+      .code-example:hover .copy-btn {
+          opacity: 1;
+      }
+
+      .copy-btn:hover {
+          background: var(--dm-color-primary-darker);
+      }
+
+      .quick-examples-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 1rem;
+      }
+
+      .quick-example-card {
+          background: var(--dm-color-surface);
+          border: 1px solid var(--dm-color-border);
+          border-radius: 6px;
+          padding: 1rem;
+      }
+
+      .quick-example-title {
+          font-weight: 600;
+          color: var(--dm-color-text);
+          margin-bottom: 0.5rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+      }
+  </style>
+</head>
+<body data-layout="showcase" data-layout-variant="subpage">
+
+<!-- Hero Section -->
+<div class="hero hero-gradient-primary hero-forms-style">
+  <h1>Form Generation</h1>
+  <p>Schema-driven forms with validation, modals, wizards, and complete CRUD operations.</p>
+  <p><code>Domma.forms</code></p>
+</div>
+
+<div class="container py-8" id="forms-showcase-content">
+
+  <!-- Overview Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+    <!-- Column 1: Core Forms -->
+    <div class="space-y-6">
+      <h2 class="text-xl font-semibold mb-4">Core Forms</h2>
+
+      <!-- Basic Form Generation -->
+      <section class="card mb-6" data-section="Basic Form Generation" data-collapsible="true">
+        <div class="card-header">
+          <h2 class="text-xl font-semibold">Basic Form Generation</h2>
+        </div>
+        <div class="card-body">
+          <p class="mb-4">Generate forms automatically from schema definitions with built-in validation and type
+            mapping.</p>
+
+          <pre class="code-block language-javascript">// Define a schema
+const userSchema = {
+    name: {
+        type: 'string',
+        label: 'Full Name',
+        required: true,
+        minLength: 2
+    },
+    email: {
+        type: 'email',
+        label: 'Email Address',
+        required: true,
+        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    },
+    age: {
+        type: 'number',
+        label: 'Age',
+        min: 18,
+        max: 120
+    },
+    role: {
+        type: 'select',
+        label: 'Role',
+        options: [
+            { value: 'user', label: 'User' },
+            { value: 'admin', label: 'Administrator' }
+        ]
+    },
+    newsletter: {
+        type: 'boolean',
+        label: 'Subscribe to Newsletter'
+    }
+};
+
+// Create form
+const form = Domma.forms.create(userSchema, initialData, {
+    onSubmit: (data, formInstance) => {
+        console.log('Form submitted:', data);
+    }
+});
+
+// Render to DOM
+form.renderTo('#form-container');</pre>
+
+          <div class="forms-demo">
+            <h4>Try It - Basic Form</h4>
+            <div class="forms-controls">
+              <button class="btn btn-primary btn-sm" id="generate-basic-form">
+                <span data-icon="plus" data-icon-size="16"></span>
+                Generate Form
+              </button>
+              <button class="btn btn-secondary btn-sm" id="clear-basic-form">
+                <span data-icon="trash" data-icon-size="16"></span>
+                Clear
+              </button>
+            </div>
+            <div id="basic-form-container"></div>
+            <div class="forms-output" id="basic-form-output">Click "Generate Form" to see the schema-driven form...
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Form Layouts -->
+      <section class="card mb-6" data-section="Form Layouts" data-collapsible="true">
+        <div class="card-header">
+          <h2 class="text-xl font-semibold">Form Layouts</h2>
+        </div>
+        <div class="card-body">
+          <p class="mb-4">Support for different layout styles: stacked, grid, and inline layouts with customizable
+            sections.</p>
+
+          <pre class="code-block language-javascript">// Grid layout with sections
+const profileForm = Domma.forms.create(schema, data, {
+    layout: 'grid',
+    columns: 2,
+    sections: [
+        {
+            title: 'Personal Information',
+            fields: ['name', 'email', 'phone']
+        },
+        {
+            title: 'Account Settings', 
+            fields: ['role', 'newsletter', 'notifications']
+        }
+    ]
+});</pre>
+
+          <div class="forms-demo">
+            <h4>Try It - Layout Styles</h4>
+            <div class="forms-controls">
+              <button class="btn btn-primary btn-sm" id="layout-stacked">
+                <span data-icon="layout" data-icon-size="16"></span>
+                Stacked
+              </button>
+              <button class="btn btn-success btn-sm" id="layout-grid">
+                <span data-icon="grid" data-icon-size="16"></span>
+                Grid (2-col)
+              </button>
+              <button class="btn btn-info btn-sm" id="layout-sections">
+                <span data-icon="folder-open" data-icon-size="16"></span>
+                With Sections
+              </button>
+              <button class="btn btn-secondary btn-sm" id="clear-layout-form">
+                <span data-icon="trash" data-icon-size="16"></span>
+                Clear
+              </button>
+            </div>
+            <div id="layout-form-container"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Modal Forms -->
+      <section class="card mb-6" data-section="Modal Forms" data-collapsible="true">
+        <div class="card-header">
+          <h2 class="text-xl font-semibold">Modal Forms</h2>
+        </div>
+        <div class="card-body">
+          <p class="mb-4">Create professional modal forms with automatic event handling and error management.</p>
+
+          <pre class="code-block language-javascript">// Modal form
+const modal = Domma.forms.modal(userSchema, userData, {
+    title: 'Edit User Profile',
+    size: 'medium',
+    saveText: 'Update Profile',
+    onSave: async (formData, formInstance) => {
+        // Handle form submission
+        await updateUserProfile(formData);
+    },
+    onError: (error, formData, formInstance) => {
+        console.error('Form error:', error);
+    }
+});
+
+modal.open();</pre>
+
+          <div class="forms-demo">
+            <h4>Try It - Modal Forms</h4>
+            <div class="forms-controls">
+              <button class="btn btn-primary btn-sm" id="open-edit-modal">
+                <span data-icon="edit" data-icon-size="16"></span>
+                Edit User Modal
+              </button>
+              <button class="btn btn-success btn-sm" id="open-create-modal">
+                <span data-icon="plus" data-icon-size="16"></span>
+                Create User Modal
+              </button>
+            </div>
+            <div class="forms-output" id="modal-form-output">Click a button to open a modal form...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Wizard Component -->
+      <section class="card mb-6" data-section="Wizard Component" data-collapsible="true">
+        <div class="card-header">
+          <h2 class="text-xl font-semibold">Multi-Step Wizard</h2>
+        </div>
+        <div class="card-body">
+          <p class="mb-4">Create multi-step workflows with progress tracking and step validation.</p>
+
+          <pre class="code-block language-javascript">// Multi-step wizard
+const wizard = Domma.forms.wizard([
+    {
+        title: 'Account Details',
+        description: 'Basic account information',
+        schema: {
+            username: { type: 'string', required: true },
+            email: { type: 'email', required: true }
+        }
+    },
+    {
+        title: 'Profile Information',
+        description: 'Tell us about yourself',
+        schema: {
+            name: { type: 'string', required: true },
+            bio: { type: 'textarea' }
+        }
+    },
+    {
+        title: 'Preferences',
+        description: 'Customize your experience',
+        schema: {
+            theme: { type: 'select', options: ['light', 'dark'] },
+            notifications: { type: 'boolean' }
+        }
+    }
+], {}, {
+    title: 'Account Setup Wizard',
+    onComplete: async (allData, formInstance) => {
+        console.log('Wizard completed:', allData);
+    }
+});
+
+wizard.open();</pre>
+
+          <div class="forms-demo">
+            <h4>Try It - Registration Wizard</h4>
+            <div class="forms-controls">
+              <button class="btn btn-primary btn-sm" id="open-wizard">
+                <span data-icon="chevron-right" data-icon-size="16"></span>
+                Start Registration Wizard
+              </button>
+            </div>
+            <div id="wizard-container" style="margin-top: 1rem; display: none;"></div>
+            <div class="forms-output" id="wizard-output">Click "Start Registration Wizard" to begin...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CRUD Helper -->
+      <section class="card mb-6" data-section="CRUD Helper" data-collapsible="true">
+        <div class="card-header">
+          <h2 class="text-xl font-semibold">Complete CRUD Operations</h2>
+        </div>
+        <div class="card-body">
+          <p class="mb-4">Zero-configuration CRUD interfaces with automatic table generation and form modals.</p>
+
+          <pre class="code-block language-javascript">// Complete CRUD setup
+const userCrud = Domma.forms.crud({
+    schema: userSchema,
+    endpoint: '/api/users',
+    tableSelector: '#users-table',
+    title: 'Manage Users',
+    primaryKey: 'id',
+    displayField: 'name',
+    onSuccess: (message) => console.log(message),
+    onError: (error) => console.error(error)
+});
+
+// Initialize CRUD interface
+await userCrud.init();</pre>
+
+          <div class="forms-demo">
+            <h4>Try It - CRUD Operations (Mock Data)</h4>
+            <div class="mock-data-info">
+              <strong>Note:</strong> This demo uses mock data and simulated API calls. In a real application, this would
+              connect to your backend API.
+            </div>
+            <div class="forms-controls">
+              <button class="btn btn-success btn-sm crud-add-btn">
+                <span data-icon="plus" data-icon-size="16"></span>
+                Add User
+              </button>
+              <button class="btn btn-secondary btn-sm crud-refresh-btn">
+                <span data-icon="refresh" data-icon-size="16"></span>
+                Refresh
+              </button>
+            </div>
+            <div id="crud-users-table" class="crud-demo-table"></div>
+            <div class="forms-output" id="crud-output">CRUD operations will be logged here...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Validation Examples -->
+      <section class="card mb-6" data-section="Validation Examples" data-collapsible="true">
+        <div class="card-header">
+          <h2 class="text-xl font-semibold">Validation & Error Handling</h2>
+        </div>
+        <div class="card-body">
+          <p class="mb-4">Built-in and custom validators with real-time feedback and comprehensive error handling.</p>
+
+          <pre class="code-block language-javascript">// Schema with various validation rules
+const validationSchema = {
+    username: {
+        type: 'string',
+        required: true,
+        minLength: 3,
+        maxLength: 20,
+        pattern: /^[a-zA-Z0-9_]+$/,
+        formConfig: {
+            hint: 'Only letters, numbers, and underscores'
+        }
+    },
+    password: {
+        type: 'password',
+        required: true,
+        minLength: 8,
+        validate: (value) => {
+            if (!/[A-Z]/.test(value)) return 'Must contain uppercase letter';
+            if (!/[0-9]/.test(value)) return 'Must contain number';
+            return true;
+        }
+    },
+    confirmPassword: {
+        type: 'password',
+        required: true,
+        validate: (value, allData) => {
+            return value === allData.password || 'Passwords do not match';
+        }
+    },
+    age: {
+        type: 'number',
+        min: 13,
+        max: 120,
+        validate: (value) => {
+            if (value < 18) return 'Must be 18 or older for full access';
+            return true;
+        }
+    }
+};</pre>
+
+          <div class="forms-demo">
+            <h4>Try It - Form Validation</h4>
+            <div class="forms-controls">
+              <button class="btn btn-primary btn-sm" id="generate-validation-form">
+                <span data-icon="check" data-icon-size="16"></span>
+                Generate Validation Form
+              </button>
+              <button class="btn btn-secondary btn-sm" id="clear-validation-form">
+                <span data-icon="trash" data-icon-size="16"></span>
+                Clear
+              </button>
+            </div>
+            <div id="validation-form-container"></div>
+            <div class="forms-output" id="validation-output">Form validation results will appear here...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Model Integration -->
+      <section class="card mb-6" data-section="Model Integration" data-collapsible="true">
+        <div class="card-header">
+          <h2 class="text-xl font-semibold">Integration with Domma Models</h2>
+        </div>
+        <div class="card-body">
+          <p class="mb-4">Seamless integration with Domma's reactive model system for two-way data binding and
+            persistence.</p>
+
+          <pre class="code-block language-javascript">// Create model with persistence
+const userModel = M.create(userSchema, initialData, {
+    persist: 'user-profile'  // Auto-save to localStorage
+});
+
+// Form automatically binds to model
+const form = Domma.forms.create(userSchema, userModel.get(), {
+    model: userModel,  // Two-way binding
+    onSubmit: (data, formInstance) => {
+        userModel.set(data);  // Updates model and saves to storage
+    }
+});
+
+// Listen for model changes
+userModel.onChange((changes) => {
+    console.log('Model updated:', changes);
+});</pre>
+
+          <div class="forms-demo">
+            <h4>Try It - Model Integration</h4>
+            <div class="forms-controls">
+              <button class="btn btn-primary btn-sm" id="create-model-form">
+                <span data-icon="database" data-icon-size="16"></span>
+                Create Model Form
+              </button>
+              <button class="btn btn-info btn-sm" id="load-saved-data">
+                <span data-icon="download" data-icon-size="16"></span>
+                Load Saved Data
+              </button>
+              <button class="btn btn-warning btn-sm" id="clear-saved-data">
+                <span data-icon="trash" data-icon-size="16"></span>
+                Clear Storage
+              </button>
+            </div>
+            <div id="model-form-container"></div>
+            <div class="forms-output" id="model-output">Model changes and persistence will be logged here...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Complete Forms Reference -->
+      <section class="card mb-6" data-section="Complete Forms Reference" data-collapsible="true">
+        <div class="card-header">
+          <h2 class="text-xl font-semibold">Complete Forms Reference</h2>
+        </div>
+        <div class="card-body">
+          <!-- Compact Forms Reference with Domma Icons -->
+          <div class="container mx-auto p-2">
+            <div class="text-center mb-4">
+              <h2 class="text-xl font-bold text-primary mb-1 flex items-center justify-center gap-2">
+                <span data-icon="document" class="text-lg"></span>
+                Domma Forms Reference
+                <span data-icon="zap" class="text-lg"></span>
+              </h2>
+              <p class="text-muted text-sm">Complete API reference for schema-driven form generation</p>
+            </div>
+
+            <!-- Field Types Section -->
+            <div class="reference-card mb-6">
+              <div class="reference-header">
+                <span data-icon="edit" class="icon"></span>
+                <h3>Field Types</h3>
+              </div>
+              <div class="reference-body">
+                <div class="reference-grid">
+                  <div class="reference-item">
+                    <code>string</code>
+                    <span>Text input</span>
+                    <button class="copy-btn" onclick="copyToClipboard('string')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>email</code>
+                    <span>Email input</span>
+                    <button class="copy-btn" onclick="copyToClipboard('email')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>password</code>
+                    <span>Password input</span>
+                    <button class="copy-btn" onclick="copyToClipboard('password')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>number</code>
+                    <span>Number input</span>
+                    <button class="copy-btn" onclick="copyToClipboard('number')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>boolean</code>
+                    <span>Checkbox</span>
+                    <button class="copy-btn" onclick="copyToClipboard('boolean')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>textarea</code>
+                    <span>Multi-line text</span>
+                    <button class="copy-btn" onclick="copyToClipboard('textarea')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>select</code>
+                    <span>Dropdown</span>
+                    <button class="copy-btn" onclick="copyToClipboard('select')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>radio</code>
+                    <span>Radio group</span>
+                    <button class="copy-btn" onclick="copyToClipboard('radio')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>checkbox-group</code>
+                    <span>Multi-select</span>
+                    <button class="copy-btn" onclick="copyToClipboard('checkbox-group')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>file</code>
+                    <span>File upload</span>
+                    <button class="copy-btn" onclick="copyToClipboard('file')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>date</code>
+                    <span>Date picker</span>
+                    <button class="copy-btn" onclick="copyToClipboard('date')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>datetime</code>
+                    <span>Date + time</span>
+                    <button class="copy-btn" onclick="copyToClipboard('datetime')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Validation Rules Section -->
+            <div class="reference-card mb-6">
+              <div class="reference-header">
+                <span data-icon="zap" class="icon"></span>
+                <h3>Validation Rules</h3>
+              </div>
+              <div class="reference-body">
+                <div class="reference-grid">
+                  <div class="reference-item">
+                    <code>required</code>
+                    <span>Field is required</span>
+                    <button class="copy-btn" onclick="copyToClipboard('required: true')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>minLength</code>
+                    <span>Min characters</span>
+                    <button class="copy-btn" onclick="copyToClipboard('minLength: 3')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>maxLength</code>
+                    <span>Max characters</span>
+                    <button class="copy-btn" onclick="copyToClipboard('maxLength: 100')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>min/max</code>
+                    <span>Numeric range</span>
+                    <button class="copy-btn" onclick="copyToClipboard('min: 0, max: 100')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>pattern</code>
+                    <span>Regex validation</span>
+                    <button class="copy-btn" onclick="copyToClipboard('pattern: /^[A-Za-z]+$/')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>validate</code>
+                    <span>Custom function</span>
+                    <button class="copy-btn" onclick="copyToClipboard('validate: (value) => value !== \'test\'')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Configuration Section -->
+            <div class="reference-card mb-6">
+              <div class="reference-header">
+                <span data-icon="grid" class="icon"></span>
+                <h3>Layout & Configuration</h3>
+              </div>
+              <div class="reference-body">
+                <div class="reference-grid">
+                  <div class="reference-item">
+                    <code>layout: 'stacked'</code>
+                    <span>Vertical layout</span>
+                    <button class="copy-btn" onclick="copyToClipboard('layout: \'stacked\'')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>layout: 'grid'</code>
+                    <span>Grid layout</span>
+                    <button class="copy-btn" onclick="copyToClipboard('layout: \'grid\'')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>layout: 'inline'</code>
+                    <span>Horizontal layout</span>
+                    <button class="copy-btn" onclick="copyToClipboard('layout: \'inline\'')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>columns: 2</code>
+                    <span>Grid columns</span>
+                    <button class="copy-btn" onclick="copyToClipboard('columns: 2')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>submitText</code>
+                    <span>Submit button text</span>
+                    <button class="copy-btn" onclick="copyToClipboard('submitText: \'Save Changes\'')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <div class="reference-item">
+                    <code>showSubmitButton</code>
+                    <span>Show/hide submit</span>
+                    <button class="copy-btn" onclick="copyToClipboard('showSubmitButton: false')">
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- OLD CONTENT TO CLEAN UP -->
+            <div class="mb-8" style="display: none;">
+              <h3 class="cheat-sheet-title">⚠️ Validation Rules</h3>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">🔒 Built-in Rules</h4>
+                <div class="cheat-sheet-grid">
+                  <div class="cheat-sheet-item">
+                    <code>required</code>
+                    <span>Field is required</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>minLength</code>
+                    <span>Min characters</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>maxLength</code>
+                    <span>Max characters</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>min/max</code>
+                    <span>Numeric range</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>pattern</code>
+                    <span>Regex validation</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>validate</code>
+                    <span>Custom function</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">⚡ Custom Validation</h4>
+                <div class="cheat-sheet-example">
+                        <pre class="code-block language-javascript">validate: (value, allData) => {
+  if (value.includes('test')) {
+    return 'Cannot contain "test"';
+  }
+  return true; // or Promise for async
+}</pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Configuration -->
+            <div class="mb-8">
+              <h3 class="cheat-sheet-title">🎛️ Form Configuration</h3>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">📋 Layout Options</h4>
+                <div class="cheat-sheet-grid">
+                  <div class="cheat-sheet-item">
+                    <code>stacked</code>
+                    <span>Vertical layout</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>grid</code>
+                    <span>Grid layout</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>inline</code>
+                    <span>Horizontal layout</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>columns</code>
+                    <span>Grid columns (2-3)</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>sections</code>
+                    <span>Field grouping</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">🔘 Button Options</h4>
+                <div class="cheat-sheet-grid">
+                  <div class="cheat-sheet-item">
+                    <code>showSubmitButton</code>
+                    <span>Show/hide submit</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>submitText</code>
+                    <span>Submit button text</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>resetText</code>
+                    <span>Reset button text</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>buttonAlignment</code>
+                    <span>Button position</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Field Configuration -->
+            <div class="mb-8">
+              <h3 class="cheat-sheet-title">🏷️ Field Configuration</h3>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">📝 Field Properties</h4>
+                <div class="cheat-sheet-grid">
+                  <div class="cheat-sheet-item">
+                    <code>type</code>
+                    <span>Field input type</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>label</code>
+                    <span>Display label</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>required</code>
+                    <span>Required field</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>default</code>
+                    <span>Default value</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>options</code>
+                    <span>Select/radio options</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>validate</code>
+                    <span>Validation function</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">⚙️ Form Config</h4>
+                <div class="cheat-sheet-grid">
+                  <div class="cheat-sheet-item">
+                    <code>placeholder</code>
+                    <span>Input placeholder</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>helperText</code>
+                    <span>Help description</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>hint</code>
+                    <span>Validation hint</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>disabled</code>
+                    <span>Disable field</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>readonly</code>
+                    <span>Read-only field</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>span</code>
+                    <span>Grid column span</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>rows</code>
+                    <span>Textarea rows</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>showIf</code>
+                    <span>Conditional display</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">📄 Example Field</h4>
+                <div class="cheat-sheet-example">
+                        <pre class="code-block language-javascript">email: {
+  type: 'email',
+  label: 'Email Address',
+  required: true,
+  formConfig: {
+    placeholder: 'user@example.com',
+    helperText: 'We'll never share your email'
+  }
+}</pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- API Methods -->
+            <div class="mb-8">
+              <h3 class="cheat-sheet-title">🔧 API Methods</h3>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">📋 FormBuilder Methods</h4>
+                <div class="cheat-sheet-grid">
+                  <div class="cheat-sheet-item">
+                    <code>render()</code>
+                    <span>Get HTML string</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>renderTo()</code>
+                    <span>Render to element</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>validate()</code>
+                    <span>Validate form</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>getFormData()</code>
+                    <span>Get current data</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>setData()</code>
+                    <span>Set form data</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>reset()</code>
+                    <span>Reset form</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>setFieldError()</code>
+                    <span>Show field error</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>clearErrors()</code>
+                    <span>Clear all errors</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">🗂️ CRUD Methods</h4>
+                <div class="cheat-sheet-grid">
+                  <div class="cheat-sheet-item">
+                    <code>init()</code>
+                    <span>Initialize CRUD</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>loadData()</code>
+                    <span>Load from API</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>refresh()</code>
+                    <span>Refresh table</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>create()</code>
+                    <span>Open create modal</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>edit(id)</code>
+                    <span>Open edit modal</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>delete(id)</code>
+                    <span>Delete with confirm</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>getData()</code>
+                    <span>Get current data</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>getTable()</code>
+                    <span>Get table instance</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Event Callbacks -->
+            <div class="mb-8">
+              <h3 class="cheat-sheet-title">⚡ Event Callbacks</h3>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">📝 Form Events</h4>
+                <div class="cheat-sheet-grid">
+                  <div class="cheat-sheet-item">
+                    <code>onSubmit</code>
+                    <span>Form submission</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>onValidationError</code>
+                    <span>Validation failed</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>onChange</code>
+                    <span>Field changed</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>onError</code>
+                    <span>General error</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">🪟 Modal/Wizard Events</h4>
+                <div class="cheat-sheet-grid">
+                  <div class="cheat-sheet-item">
+                    <code>onSave</code>
+                    <span>Modal save</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>onComplete</code>
+                    <span>Wizard complete</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>onStepChange</code>
+                    <span>Wizard step change</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>onOpen</code>
+                    <span>Modal opened</span>
+                  </div>
+                  <div class="cheat-sheet-item">
+                    <code>onClose</code>
+                    <span>Modal closed</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Examples -->
+            <div class="mb-8">
+              <h3 class="cheat-sheet-title">🚀 Quick Examples</h3>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">📋 Basic Form</h4>
+                <div class="cheat-sheet-example">
+                        <pre class="code-block language-javascript">const form = Domma.forms.create(schema, data, {
+  onSubmit: (data) => console.log('Submitted:', data)
+});
+form.renderTo('#container');</pre>
+                </div>
+              </div>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">🪟 Modal Form</h4>
+                <div class="cheat-sheet-example">
+                        <pre class="code-block language-javascript">const modal = Domma.forms.modal(schema, data, {
+  title: 'Edit Item',
+  onSave: async (data) => await api.save(data)
+});
+modal.open();</pre>
+                </div>
+              </div>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">🧙 Wizard Form</h4>
+                <div class="cheat-sheet-example">
+                        <pre class="code-block language-javascript">const wizard = Domma.forms.wizard(steps, data, {
+  title: 'Multi-Step Form',
+  onComplete: (data) => console.log('Done:', data)
+});
+wizard.open();</pre>
+                </div>
+              </div>
+
+              <div class="cheat-sheet-section">
+                <h4 class="cheat-sheet-group-title">🗂️ CRUD Setup</h4>
+                <div class="cheat-sheet-example">
+                        <pre class="code-block language-javascript">const crud = Domma.forms.crud({
+  schema: userSchema,
+  endpoint: '/api/users',
+  tableSelector: '#users-table'
+});
+await crud.init();</pre>
+                </div>
+              </div>
+
+              <!-- FormConfig Options Section -->
+              <div class="reference-card mb-6">
+                <div class="reference-header">
+                  <span data-icon="star" class="icon"></span>
+                  <h3>FormConfig Options</h3>
+                </div>
+                <div class="reference-body">
+                  <div class="reference-grid">
+                    <div class="reference-item">
+                      <code>placeholder</code>
+                      <span>Input placeholder</span>
+                      <button class="copy-btn"
+                              onclick="copyToClipboard('formConfig: { placeholder: \'Enter text...\' }')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>helperText</code>
+                      <span>Help description</span>
+                      <button class="copy-btn"
+                              onclick="copyToClipboard('formConfig: { helperText: \'This helps you\' }')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>hint</code>
+                      <span>Validation hint</span>
+                      <button class="copy-btn" onclick="copyToClipboard('formConfig: { hint: \'Required field\' }')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>disabled</code>
+                      <span>Disable field</span>
+                      <button class="copy-btn" onclick="copyToClipboard('formConfig: { disabled: true }')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>readonly</code>
+                      <span>Read-only field</span>
+                      <button class="copy-btn" onclick="copyToClipboard('formConfig: { readonly: true }')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>span</code>
+                      <span>Grid column span</span>
+                      <button class="copy-btn" onclick="copyToClipboard('formConfig: { span: 2 }')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- API Methods Section -->
+              <div class="reference-card mb-6">
+                <div class="reference-header">
+                  <span data-icon="box" class="icon"></span>
+                  <h3>API Methods</h3>
+                </div>
+                <div class="reference-body">
+                  <div class="reference-grid">
+                    <div class="reference-item">
+                      <code>form.render()</code>
+                      <span>Get HTML string</span>
+                      <button class="copy-btn" onclick="copyToClipboard('const html = form.render();')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>form.renderTo()</code>
+                      <span>Render to element</span>
+                      <button class="copy-btn" onclick="copyToClipboard('form.renderTo(\'#container\');')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>form.validate()</code>
+                      <span>Validate form</span>
+                      <button class="copy-btn" onclick="copyToClipboard('const isValid = form.validate();')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>form.getFormData()</code>
+                      <span>Get current data</span>
+                      <button class="copy-btn" onclick="copyToClipboard('const data = form.getFormData();')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>form.setData()</code>
+                      <span>Set form data</span>
+                      <button class="copy-btn" onclick="copyToClipboard('form.setData(newData);')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>form.reset()</code>
+                      <span>Reset form</span>
+                      <button class="copy-btn" onclick="copyToClipboard('form.reset();')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Event Callbacks Section -->
+              <div class="reference-card mb-6">
+                <div class="reference-header">
+                  <span data-icon="zap" class="icon"></span>
+                  <h3>Event Callbacks</h3>
+                </div>
+                <div class="reference-body">
+                  <div class="reference-grid">
+                    <div class="reference-item">
+                      <code>onSubmit</code>
+                      <span>Form submission</span>
+                      <button class="copy-btn" onclick="copyToClipboard('onSubmit: (data) => console.log(data)')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>onValidationError</code>
+                      <span>Validation failed</span>
+                      <button class="copy-btn"
+                              onclick="copyToClipboard('onValidationError: (errors) => console.error(errors)')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>onChange</code>
+                      <span>Field changed</span>
+                      <button class="copy-btn" onclick="copyToClipboard('onChange: (data) => console.log(data)')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>onError</code>
+                      <span>General error</span>
+                      <button class="copy-btn" onclick="copyToClipboard('onError: (error) => console.error(error)')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>onSave</code>
+                      <span>Modal save event</span>
+                      <button class="copy-btn"
+                              onclick="copyToClipboard('onSave: async (data) => await api.save(data)')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                    <div class="reference-item">
+                      <code>onComplete</code>
+                      <span>Wizard completion</span>
+                      <button class="copy-btn"
+                              onclick="copyToClipboard('onComplete: (data) => console.log(\'Completed:\', data)')">
+                        <span data-icon="copy"></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Examples Section -->
+              <div class="reference-card">
+                <div class="reference-header">
+                  <span data-icon="document" class="icon"></span>
+                  <h3>Quick Examples</h3>
+                </div>
+                <div class="reference-body">
+                  <!-- Basic Form Example -->
+                  <div class="example-section mb-4">
+                    <h4 class="font-semibold text-primary mb-2 flex items-center gap-2">
+                      <span data-icon="edit"></span>
+                      Basic Form
+                    </h4>
+                    <button class="copy-btn mb-2" onclick="copyCodeExample(this)">
+                      <span data-icon="copy"></span> Copy
+                    </button>
+                    <pre class="code-block language-javascript">const form = Domma.forms.create({
+  name: { type: 'string', required: true },
+  email: { type: 'email', required: true }
+}, {}, {
+  onSubmit: (data) => console.log(data)
+});
+form.renderTo('#container');</pre>
+                  </div>
+
+                  <!-- Modal Form Example -->
+                  <div class="example-section mb-4">
+                    <h4 class="font-semibold text-primary mb-2 flex items-center gap-2">
+                      <span data-icon="external-link"></span>
+                      Modal Form
+                    </h4>
+                    <button class="copy-btn mb-2" onclick="copyCodeExample(this)">
+                      <span data-icon="copy"></span> Copy
+                    </button>
+                    <pre class="code-block language-javascript">const modal = Domma.forms.modal(schema, data, {
+  title: 'Edit User',
+  onSave: async (data) => await api.save(data)
+});
+modal.open();</pre>
+                  </div>
+
+                  <!-- Wizard Example -->
+                  <div class="example-section mb-4">
+                    <h4 class="font-semibold text-primary mb-2 flex items-center gap-2">
+                      <span data-icon="star"></span>
+                      Wizard
+                    </h4>
+                    <button class="copy-btn mb-2" onclick="copyCodeExample(this)">
+                      <span data-icon="copy"></span> Copy
+                    </button>
+                    <pre class="code-block language-javascript">const wizard = Domma.forms.wizard(steps, data, {
+  title: 'Setup Wizard',
+  onComplete: async (data) => await api.setup(data)
+});
+wizard.open();</pre>
+                  </div>
+
+                  <!-- CRUD Example -->
+                  <div class="example-section">
+                    <h4 class="font-semibold text-primary mb-2 flex items-center gap-2">
+                      <span data-icon="database"></span>
+                      CRUD Interface
+                    </h4>
+                    <button class="copy-btn mb-2" onclick="copyCodeExample(this)">
+                      <span data-icon="copy"></span> Copy
+                    </button>
+                    <pre class="code-block language-javascript">const crud = Domma.forms.crud({
+  schema: userSchema,
+  endpoint: '/api/users',
+  tableSelector: '#users-table'
+});
+await crud.init();</pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+      </section>
+
+    </div>
+
+    <script type="module" src="../../layouts/js/layout.js"></script>
+    <script src="../../dist/domma.min.js"></script>
+    <script>
+      // Forms showcase interactive examples
+      $(() => {
+        console.log('[Forms Showcase] Initializing...');
+
+        // Initialize syntax highlighting
+        if (Domma.syntax) {
+          Domma.syntax.scan();
+          console.log('[Forms Showcase] Syntax highlighting initialized');
+        }
+
+        // Common schemas for examples
+        const userSchema = {
+          name: {
+            type: 'string',
+            label: 'Full Name',
+            required: true,
+            minLength: 2,
+            formConfig: {
+              placeholder: 'Enter your full name'
+            }
+          },
+          email: {
+            type: 'email',
+            label: 'Email Address',
+            required: true,
+            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            formConfig: {
+              placeholder: 'user@example.com'
+            }
+          },
+          age: {
+            type: 'number',
+            label: 'Age',
+            min: 18,
+            max: 120,
+            formConfig: {
+              helperText: 'Must be between 18 and 120'
+            }
+          },
+          role: {
+            type: 'select',
+            label: 'Role',
+            options: [
+              {value: 'user', label: 'User'},
+              {value: 'moderator', label: 'Moderator'},
+              {value: 'admin', label: 'Administrator'}
+            ],
+            default: 'user'
+          },
+          newsletter: {
+            type: 'boolean',
+            label: 'Subscribe to Newsletter',
+            default: false
+          }
+        };
+
+        const sampleData = {
+          name: 'Alice Johnson',
+          email: 'alice@example.com',
+          age: 28,
+          role: 'user',
+          newsletter: true
+        };
+
+        // Log function for outputs
+        function logToOutput(selector, message) {
+          const output = $(selector);
+          if (output.length === 0) {
+            console.warn('Output element not found:', selector);
+            return;
+          }
+          const timestamp = new Date().toLocaleTimeString();
+          output.text(output.text() + `[${timestamp}] ${message}\n`);
+          if (output[0]) {
+            output.scrollTop(output[0].scrollHeight);
+          }
+        }
+
+        // Basic Form Generation
+        $('#generate-basic-form').on('click', () => {
+          try {
+            const form = Domma.forms.create(userSchema, sampleData, {
+              layout: 'grid',
+              columns: 2,
+              onSubmit: (data, formInstance) => {
+                logToOutput('#basic-form-output', 'Form submitted: ' + JSON.stringify(data, null, 2));
+              },
+              onValidationError: (errors, formInstance) => {
+                logToOutput('#basic-form-output', 'Validation errors: ' + JSON.stringify(errors, null, 2));
+              }
+            });
+
+            // Wrap form in a card
+            $('#basic-form-container').html(`
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Generated Basic Form</h4>
+                    </div>
+                    <div class="card-body" id="basic-form-wrapper">
+                    </div>
+                </div>
+            `);
+            form.renderTo('#basic-form-wrapper');
+            logToOutput('#basic-form-output', 'Form generated successfully!');
+          } catch (error) {
+            logToOutput('#basic-form-output', 'Error: ' + error.message);
+          }
+        });
+
+        $('#clear-basic-form').on('click', () => {
+          $('#basic-form-container').empty();
+          $('#basic-form-output').text('Cleared. Click "Generate Form" to create a new form...');
+        });
+
+        // Helper function to render layout forms with card wrapper
+        function renderLayoutForm(form, layoutType) {
+          $('#layout-form-container').html(`
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">${layoutType} Layout Demo</h4>
+                </div>
+                <div class="card-body" id="layout-form-wrapper">
+                </div>
+            </div>
+        `);
+          form.renderTo('#layout-form-wrapper');
+        }
+
+        // Form Layouts
+        $('#layout-stacked').on('click', () => {
+          try {
+            const form = Domma.forms.create(userSchema, sampleData, {
+              layout: 'grid',
+              columns: 2
+            });
+            renderLayoutForm(form, 'Stacked');
+          } catch (error) {
+            console.error('Layout error:', error);
+          }
+        });
+
+        $('#layout-grid').on('click', () => {
+          try {
+            const form = Domma.forms.create(userSchema, sampleData, {
+              layout: 'grid',
+              columns: 2
+            });
+            renderLayoutForm(form, 'Grid (2-col)');
+          } catch (error) {
+            console.error('Layout error:', error);
+          }
+        });
+
+        $('#layout-sections').on('click', () => {
+          try {
+            const form = Domma.forms.create(userSchema, sampleData, {
+              layout: 'grid',
+              columns: 2,
+              sections: [
+                {
+                  title: 'Personal Information',
+                  fields: ['name', 'email', 'age']
+                },
+                {
+                  title: 'Account Settings',
+                  fields: ['role', 'newsletter']
+                }
+              ]
+            });
+            renderLayoutForm(form, 'With Sections');
+          } catch (error) {
+            console.error('Layout error:', error);
+          }
+        });
+
+        $('#clear-layout-form').on('click', () => {
+          $('#layout-form-container').empty();
+        });
+
+        // Modal Forms
+        $('#open-edit-modal').on('click', () => {
+          try {
+            const modal = Domma.forms.modal(userSchema, sampleData, {
+              title: 'Edit User Profile',
+              size: 'medium',
+              saveText: 'Update Profile',
+              onSave: async (formData, formInstance) => {
+                logToOutput('#modal-form-output', 'User updated: ' + JSON.stringify(formData, null, 2));
+              },
+              onError: (error, formData, formInstance) => {
+                logToOutput('#modal-form-output', 'Error: ' + error.message);
+              }
+            });
+            modal.open();
+          } catch (error) {
+            logToOutput('#modal-form-output', 'Modal error: ' + error.message);
+          }
+        });
+
+        $('#open-create-modal').on('click', () => {
+          try {
+            const modal = Domma.forms.modal(userSchema, {}, {
+              title: 'Create New User',
+              size: 'medium',
+              saveText: 'Create User',
+              onSave: async (formData, formInstance) => {
+                logToOutput('#modal-form-output', 'User created: ' + JSON.stringify(formData, null, 2));
+              },
+              onError: (error, formData, formInstance) => {
+                logToOutput('#modal-form-output', 'Error: ' + error.message);
+              }
+            });
+            modal.open();
+          } catch (error) {
+            logToOutput('#modal-form-output', 'Modal error: ' + error.message);
+          }
+        });
+
+        // Wizard Component
+        $('#open-wizard').on('click', () => {
+          try {
+            // Show the wizard container
+            $('#wizard-container').show();
+
+            const wizard = Domma.forms.wizard('#wizard-container', {
+              schema: {
+                steps: [
+                  {
+                    title: 'Account Details',
+                    description: 'Basic account information',
+                    fields: [
+                      {
+                        name: 'username',
+                        type: 'text',
+                        label: 'Username',
+                        required: true,
+                        validation: {
+                          minLength: 3
+                        }
+                      },
+                      {
+                        name: 'email',
+                        type: 'email',
+                        label: 'Email Address',
+                        required: true
+                      }
+                    ]
+                  },
+                  {
+                    title: 'Profile Information',
+                    description: 'Tell us about yourself',
+                    fields: [
+                      {
+                        name: 'name',
+                        type: 'text',
+                        label: 'Full Name',
+                        required: true
+                      },
+                      {
+                        name: 'bio',
+                        type: 'textarea',
+                        label: 'Biography',
+                        formConfig: {
+                          rows: 3
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    title: 'Preferences',
+                    description: 'Customize your experience',
+                    fields: [
+                      {
+                        name: 'theme',
+                        type: 'select',
+                        label: 'Theme',
+                        options: [
+                          {value: 'light', label: 'Light'},
+                          {value: 'dark', label: 'Dark'}
+                        ]
+                      },
+                      {
+                        name: 'notifications',
+                        type: 'checkbox',
+                        label: 'Enable Notifications'
+                      }
+                    ]
+                  }
+                ]
+              },
+              finishText: 'Complete Registration',
+              onSubmit: (allData) => {
+                logToOutput('#wizard-output', 'Wizard completed! Data: ' + JSON.stringify(allData, null, 2));
+                $('#wizard-container').hide();
+              },
+              onStepChange: (step, data) => {
+                logToOutput('#wizard-output', `Moved to step ${step + 1}: ${JSON.stringify(data, null, 2)}`);
+              },
+              onValidation: (isValid, errors, step) => {
+                if (!isValid) {
+                  logToOutput('#wizard-output', `Validation failed on step ${step + 1}: ${errors.join(', ')}`);
+                }
+              },
+              onError: (error) => {
+                logToOutput('#wizard-output', 'Wizard error: ' + error.message);
+              }
+            });
+
+            logToOutput('#wizard-output', 'Wizard created successfully! Use the navigation buttons to proceed.');
+          } catch (error) {
+            logToOutput('#wizard-output', 'Wizard error: ' + error.message);
+            console.error('Wizard creation error:', error);
+          }
+        });
+
+        // Mock CRUD Data
+        let mockUsers = [
+          {id: 1, name: 'Alice Johnson', email: 'alice@example.com', role: 'admin', age: 28},
+          {id: 2, name: 'Bob Smith', email: 'bob@example.com', role: 'user', age: 34},
+          {id: 3, name: 'Carol White', email: 'carol@example.com', role: 'moderator', age: 29}
+        ];
+        let nextId = 4;
+
+        // Mock CRUD Helper (simplified version)
+        let crudTable = null;
+
+        function initMockCrud() {
+          // Create table
+          const columns = [
+            {key: 'id', title: 'ID', sortable: true, width: '60px'},
+            {key: 'name', title: 'Name', sortable: true},
+            {key: 'email', title: 'Email', sortable: true},
+            {key: 'role', title: 'Role', sortable: true},
+            {key: 'age', title: 'Age', sortable: true},
+            {
+              key: 'actions',
+              title: 'Actions',
+              sortable: false,
+              render: (value, row) => `
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-primary crud-edit-btn" data-id="${row.id}">
+                            <span data-icon="edit" data-icon-size="16"></span>
+                            Edit
+                        </button>
+                        <button class="btn btn-outline-danger crud-delete-btn" data-id="${row.id}">
+                            <span data-icon="trash" data-icon-size="16"></span>
+                            Delete
+                        </button>
+                    </div>
+                `
+            }
+          ];
+
+          crudTable = Domma.tables.create('#crud-users-table', {
+            data: mockUsers,
+            columns,
+            pagination: true,
+            pageSize: 10,
+            striped: true,
+            exportPanel: true
+          });
+
+          logToOutput('#crud-output', 'CRUD table initialized with ' + mockUsers.length + ' users');
+        }
+
+        // CRUD Event Handlers
+        $('.crud-add-btn').on('click', () => {
+          try {
+            const modal = Domma.forms.modal(userSchema, {}, {
+              title: 'Add New User',
+              saveText: 'Add User',
+              onSave: async (formData) => {
+                const newUser = {...formData, id: nextId++};
+                mockUsers.push(newUser);
+                if (crudTable) {
+                  crudTable.setData([...mockUsers]);
+                }
+                logToOutput('#crud-output', 'User added: ' + JSON.stringify(newUser));
+              }
+            });
+            modal.open();
+          } catch (error) {
+            logToOutput('#crud-output', 'Add user error: ' + error.message);
+          }
+        });
+
+        $('.crud-refresh-btn').on('click', () => {
+          if (crudTable) {
+            crudTable.setData([...mockUsers]);
+            logToOutput('#crud-output', 'Table refreshed');
+          }
+        });
+
+        // Event delegation for edit/delete buttons
+        $(document).on('click', '.crud-edit-btn', function () {
+          const userId = parseInt($(this).attr('data-id'));
+          const user = mockUsers.find(u => u.id === userId);
+          if (user) {
+            try {
+              const modal = Domma.forms.modal(userSchema, user, {
+                title: `Edit User: ${user.name}`,
+                saveText: 'Update User',
+                onSave: async (formData) => {
+                  const index = mockUsers.findIndex(u => u.id === userId);
+                  if (index !== -1) {
+                    mockUsers[index] = {...mockUsers[index], ...formData};
+                    if (crudTable) {
+                      crudTable.setData([...mockUsers]);
+                    }
+                    logToOutput('#crud-output', 'User updated: ' + JSON.stringify(mockUsers[index]));
+                  }
+                }
+              });
+              modal.open();
+            } catch (error) {
+              logToOutput('#crud-output', 'Edit user error: ' + error.message);
+            }
+          }
+        });
+
+        $(document).on('click', '.crud-delete-btn', async function () {
+          const userId = parseInt($(this).attr('data-id'));
+          const user = mockUsers.find(u => u.id === userId);
+          if (user) {
+            const confirmed = await Domma.elements.confirm(
+              `Delete user "${user.name}"?\n\nThis action cannot be undone.`,
+              {title: 'Confirm Delete', confirmText: 'Delete'}
+            );
+
+            if (confirmed) {
+              const index = mockUsers.findIndex(u => u.id === userId);
+              if (index !== -1) {
+                mockUsers.splice(index, 1);
+                if (crudTable) {
+                  crudTable.setData([...mockUsers]);
+                }
+                logToOutput('#crud-output', 'User deleted: ' + user.name);
+              }
+            }
+          }
+        });
+
+        // Initialize CRUD on page load
+        initMockCrud();
+
+        // Validation Form
+        const validationSchema = {
+          username: {
+            type: 'string',
+            label: 'Username',
+            required: true,
+            minLength: 3,
+            maxLength: 20,
+            pattern: /^[a-zA-Z0-9_]+$/,
+            formConfig: {
+              hint: 'Only letters, numbers, and underscores',
+              placeholder: 'Enter username'
+            },
+            validate: (value) => {
+              if (value.toLowerCase().includes('admin')) {
+                return 'Username cannot contain "admin"';
+              }
+              if (value.toLowerCase().includes('test')) {
+                return 'Username cannot contain "test"';
+              }
+              return true;
+            }
+          },
+          email: {
+            type: 'email',
+            label: 'Email Address',
+            required: true,
+            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            formConfig: {
+              hint: 'Enter a valid email address',
+              placeholder: 'user@example.com'
+            },
+            validate: (value) => {
+              if (value.includes('spam')) {
+                return 'Email cannot contain "spam"';
+              }
+              return true;
+            }
+          },
+          age: {
+            type: 'number',
+            label: 'Age',
+            required: true,
+            min: 13,
+            max: 120,
+            formConfig: {
+              hint: 'Must be between 13 and 120',
+              placeholder: 'Enter your age'
+            },
+            validate: (value) => {
+              const num = parseInt(value);
+              if (num < 13) return 'Must be at least 13 years old';
+              if (num > 120) return 'Age cannot exceed 120';
+              if (num >= 13 && num < 18) return 'Warning: Under 18 requires parental consent';
+              return true;
+            }
+          },
+          password: {
+            type: 'password',
+            label: 'Password',
+            required: true,
+            minLength: 8,
+            formConfig: {
+              hint: 'At least 8 characters with uppercase, number, and special character',
+              placeholder: 'Enter secure password'
+            },
+            validate: (value) => {
+              if (!/[A-Z]/.test(value)) return 'Must contain uppercase letter';
+              if (!/[a-z]/.test(value)) return 'Must contain lowercase letter';
+              if (!/[0-9]/.test(value)) return 'Must contain number';
+              if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) return 'Must contain special character';
+              return true;
+            }
+          },
+          confirmPassword: {
+            type: 'password',
+            label: 'Confirm Password',
+            required: true,
+            formConfig: {
+              hint: 'Re-enter the password above',
+              placeholder: 'Confirm password'
+            },
+            validate: (value, allData) => {
+              if (!value) return 'Password confirmation is required';
+              return value === allData.password || 'Passwords do not match';
+            }
+          }
+        };
+
+        $('#generate-validation-form').on('click', () => {
+          try {
+            const form = Domma.forms.create(validationSchema, {}, {
+              validationMode: 'blur',
+              layout: 'grid',
+              columns: 2,
+              onSubmit: (data, formInstance) => {
+                logToOutput('#validation-output', 'Validation form submitted: ' + JSON.stringify(data, null, 2));
+              },
+              onValidationError: (errors, formInstance) => {
+                logToOutput('#validation-output', 'Validation errors: ' + JSON.stringify(errors, null, 2));
+              }
+            });
+
+            // Wrap form in a card
+            $('#validation-form-container').html(`
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Interactive Validation Form</h4>
+                    </div>
+                    <div class="card-body" id="validation-form-wrapper">
+                    </div>
+                </div>
+            `);
+            form.renderTo('#validation-form-wrapper');
+            logToOutput('#validation-output', 'Validation form generated. Try entering invalid data to see validation in action.');
+          } catch (error) {
+            logToOutput('#validation-output', 'Error: ' + error.message);
+          }
+        });
+
+        $('#clear-validation-form').on('click', () => {
+          $('#validation-form-container').empty();
+          $('#validation-output').text('Cleared. Click "Generate Validation Form" to create a new form...');
+        });
+
+        // Model Integration
+        let userModel = null;
+
+        $('#create-model-form').on('click', () => {
+          try {
+            // Create model with persistence
+            userModel = M.create(userSchema, sampleData, {
+              persist: 'forms-showcase-user'
+            });
+
+            // Listen for model changes
+            userModel.onChange((changes) => {
+              logToOutput('#model-output', 'Model changed: ' + JSON.stringify(changes, null, 2));
+            });
+
+            const form = Domma.forms.create(userSchema, userModel.get(), {
+              layout: 'grid',
+              columns: 2,
+              onSubmit: (data, formInstance) => {
+                userModel.set(data);
+                userModel.save(); // Explicitly save to localStorage
+                logToOutput('#model-output', 'Form submitted and model updated: ' + JSON.stringify(data, null, 2));
+                logToOutput('#model-output', 'Data automatically saved to localStorage with key: forms-showcase-user');
+              },
+              onChange: (data, formInstance) => {
+                // Auto-save on field changes for real-time persistence
+                userModel.set(data);
+                userModel.save();
+              }
+            });
+
+            // Wrap form in a card
+            $('#model-form-container').html(`
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Model Integration Form</h4>
+                        <small class="text-muted">Changes automatically sync to localStorage</small>
+                    </div>
+                    <div class="card-body" id="model-form-wrapper">
+                    </div>
+                </div>
+            `);
+            form.renderTo('#model-form-wrapper');
+            logToOutput('#model-output', 'Model form created with persistence. Data will be saved to localStorage.');
+          } catch (error) {
+            logToOutput('#model-output', 'Error: ' + error.message);
+          }
+        });
+
+        $('#load-saved-data').on('click', () => {
+          if (userModel) {
+            userModel.load();
+            logToOutput('#model-output', 'Data loaded from localStorage: ' + JSON.stringify(userModel.get(), null, 2));
+          } else {
+            logToOutput('#model-output', 'No model created yet. Create a form first.');
+          }
+        });
+
+        $('#clear-saved-data').on('click', () => {
+          if (userModel) {
+            userModel.clearStorage();
+            logToOutput('#model-output', 'Saved data cleared from localStorage.');
+          } else {
+            S.remove('forms-showcase-user');
+            logToOutput('#model-output', 'Storage cleared manually.');
+          }
+        });
+
+        // Make all cards collapsible using accordion component
+        try {
+          const cards = $('.card[data-section]');
+          if (cards.length > 0) {
+            // Generate array of all card indices for initial open state
+            const allIndices = Array.from({length: cards.length}, (_, i) => i);
+
+            // Initialize accordion on the container holding all cards
+            const accordion = Domma.elements.accordion('#forms-showcase-content', {
+              collapsible: true,    // Enable collapsible functionality
+              multiExpand: true,    // Allow multiple sections to be open
+              animation: true,      // Smooth collapse/expand animation
+              activeIndex: allIndices, // All sections open by default
+              onChange: (activeIndexes, accordionInstance) => {
+                console.log('Accordion state changed. Active sections:', activeIndexes);
+              }
+            });
+
+            console.log('[Forms Showcase] Made', cards.length, 'cards collapsible');
+          }
+        } catch (error) {
+          console.warn('[Forms Showcase] Failed to initialize collapsible cards:', error);
+        }
+
+        // Copy functionality for reference guide
+        window.copyToClipboard = async function (text) {
+          try {
+            await navigator.clipboard.writeText(text);
+            // Show brief success indicator
+            Domma.elements.toast('Copied to clipboard!', {type: 'success', duration: 2000});
+          } catch (err) {
+            console.error('Failed to copy:', err);
+            Domma.elements.toast('Failed to copy', {type: 'error', duration: 2000});
+          }
+        };
+
+        window.copyCodeExample = function (button) {
+          const codeBlock = button.nextElementSibling.querySelector('code') ||
+            button.nextElementSibling;
+          const text = codeBlock.textContent;
+          copyToClipboard(text);
+        };
+
+        console.log('[Forms Showcase] Initialized successfully!');
+      });
+    </script>
+
+</body>
+</html>

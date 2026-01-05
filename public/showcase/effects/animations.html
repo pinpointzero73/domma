@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animations - Domma Showcase</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../css/domma-showcase.css">
+
+  <style>
+      .demo-box {
+          background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
+          color: white;
+          padding: 2rem;
+          border-radius: 8px;
+          text-align: center;
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 1rem 0;
+      }
+
+      .demo-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 1.5rem;
+          margin: 2rem 0;
+      }
+
+      .demo-trigger:hover {
+          cursor: pointer;
+      }
+  </style>
+</head>
+<body class="dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
+
+<!-- Hero Section -->
+<section class="hero hero-gradient-primary hero-lg">
+  <h1>Animations</h1>
+  <p>Keyframe animations and transitions for entrance effects, micro-interactions, and UI feedback</p>
+  <p class="mt-4"><code>.animate-fade-in .animate-bounce .animate-spin</code></p>
+</section>
+
+<!-- Main Content -->
+<main class="container py-8">
+
+  <!-- Interactive Note -->
+  <div class="alert alert-info mb-6">
+    <strong>💡 Interactive Demo:</strong> Click any animation box to replay the effect!
+  </div>
+
+  <!-- Fade Animations -->
+  <section class="card mb-6" data-section="fade-animations">
+    <div class="card-body">
+      <h2 class="card-title">Fade Animations</h2>
+      <p class="text-muted mb-4">
+        Smooth opacity-based entrance and exit effects
+      </p>
+      <div class="demo-grid mb-4">
+        <div class="demo-box animate-fade-in">Fade In</div>
+        <div class="demo-box animate-fade-in-up">Fade In Up</div>
+        <div class="demo-box animate-fade-in-down">Fade In Down</div>
+        <div class="demo-box animate-fade-in-left">Fade In Left</div>
+        <div class="demo-box animate-fade-in-right">Fade In Right</div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;div class="animate-fade-in">Fade In&lt;/div>
+&lt;div class="animate-fade-in-up">Fade In Up&lt;/div>
+&lt;div class="animate-fade-in-down">Fade In Down&lt;/div>
+&lt;div class="animate-fade-in-left">Fade In Left&lt;/div>
+&lt;div class="animate-fade-in-right">Fade In Right&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide Animations -->
+  <section class="card mb-6" data-section="slide-animations">
+    <div class="card-body">
+      <h2 class="card-title">Slide Animations</h2>
+      <p class="text-muted mb-4">
+        Full-distance slide-in effects from screen edges
+      </p>
+      <div class="demo-grid mb-4">
+        <div class="demo-box animate-slide-in-up">Slide In Up</div>
+        <div class="demo-box animate-slide-in-down">Slide In Down</div>
+        <div class="demo-box animate-slide-in-left">Slide In Left</div>
+        <div class="demo-box animate-slide-in-right">Slide In Right</div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;div class="animate-slide-in-up">Slide In Up&lt;/div>
+&lt;div class="animate-slide-in-down">Slide In Down&lt;/div>
+&lt;div class="animate-slide-in-left">Slide In Left&lt;/div>
+&lt;div class="animate-slide-in-right">Slide In Right&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Zoom & Rotate Animations -->
+  <section class="card mb-6" data-section="zoom-rotate">
+    <div class="card-body">
+      <h2 class="card-title">Zoom & Rotate Animations</h2>
+      <p class="text-muted mb-4">
+        Scale and rotation-based entrance effects
+      </p>
+      <div class="demo-grid mb-4">
+        <div class="demo-box animate-zoom-in">Zoom In</div>
+        <div class="demo-box animate-rotate-in">Rotate In</div>
+        <div class="demo-box animate-flip">Flip</div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;div class="animate-zoom-in">Zoom In&lt;/div>
+&lt;div class="animate-rotate-in">Rotate In&lt;/div>
+&lt;div class="animate-flip">Flip&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Attention Seekers -->
+  <section class="card mb-6" data-section="attention">
+    <div class="card-body">
+      <h2 class="card-title">Attention Seekers</h2>
+      <p class="text-muted mb-4">
+        Looping animations for drawing user attention
+      </p>
+      <div class="demo-grid mb-4">
+        <div class="demo-box animate-bounce animate-infinite">Bounce</div>
+        <div class="demo-box animate-pulse animate-infinite">Pulse</div>
+        <div class="demo-box animate-shake">Shake</div>
+        <div class="demo-box animate-spin animate-infinite">Spin</div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;div class="animate-bounce animate-infinite">Bounce&lt;/div>
+&lt;div class="animate-pulse animate-infinite">Pulse&lt;/div>
+&lt;div class="animate-shake">Shake&lt;/div>
+&lt;div class="animate-spin animate-infinite">Spin&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Animation Control -->
+  <section class="card mb-6" data-section="animation-control">
+    <div class="card-body">
+      <h2 class="card-title">Animation Control</h2>
+      <p class="text-muted mb-4">
+        Modify duration, delay, and iteration count
+      </p>
+      <div class="demo-grid mb-4">
+        <div class="demo-box animate-fade-in-up animate-duration-fast">Fast (0.3s)</div>
+        <div class="demo-box animate-fade-in-up animate-duration-normal">Normal (0.6s)</div>
+        <div class="demo-box animate-fade-in-up animate-duration-slow">Slow (1s)</div>
+        <div class="demo-box animate-fade-in-up animate-duration-slower">Slower (2s)</div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;!-- Duration Control -->
+&lt;div class="animate-fade-in animate-duration-fast">Fast&lt;/div>
+&lt;div class="animate-fade-in animate-duration-slow">Slow&lt;/div>
+
+&lt;!-- Delay Control -->
+&lt;div class="animate-fade-in animate-delay-300">Delayed&lt;/div>
+
+&lt;!-- Iteration Control -->
+&lt;div class="animate-bounce animate-infinite">Infinite&lt;/div>
+&lt;div class="animate-bounce animate-once">Once&lt;/div>
+&lt;div class="animate-bounce animate-repeat-3">3 Times&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hover Animations -->
+  <section class="card mb-6" data-section="hover-animations">
+    <div class="card-body">
+      <h2 class="card-title">Hover Animations</h2>
+      <p class="text-muted mb-4">
+        Trigger animations on hover for interactive feedback
+      </p>
+      <div class="demo-grid mb-4">
+        <div class="demo-box demo-trigger animate-bounce-hover">Hover to Bounce</div>
+        <div class="demo-box demo-trigger animate-pulse-hover">Hover to Pulse</div>
+        <div class="demo-box demo-trigger animate-shake-hover">Hover to Shake</div>
+        <div class="demo-box demo-trigger animate-spin-hover">Hover to Spin</div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;button class="animate-bounce-hover">Hover to Bounce&lt;/button>
+&lt;div class="animate-pulse-hover">Hover to Pulse&lt;/div>
+&lt;div class="animate-shake-hover">Hover to Shake&lt;/div>
+&lt;div class="animate-spin-hover">Hover to Spin&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stagger Animations -->
+  <section class="card mb-6" data-section="stagger">
+    <div class="card-body">
+      <h2 class="card-title">Stagger Animations</h2>
+      <p class="text-muted mb-4">
+        Create cascading entrance effects using delay classes
+      </p>
+      <div class="demo-grid mb-4">
+        <div class="demo-box animate-fade-in-up">Item 1</div>
+        <div class="demo-box animate-fade-in-up animate-delay-100">Item 2</div>
+        <div class="demo-box animate-fade-in-up animate-delay-200">Item 3</div>
+        <div class="demo-box animate-fade-in-up animate-delay-300">Item 4</div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;div class="animate-fade-in-up">Item 1&lt;/div>
+&lt;div class="animate-fade-in-up animate-delay-100">Item 2&lt;/div>
+&lt;div class="animate-fade-in-up animate-delay-200">Item 3&lt;/div>
+&lt;div class="animate-fade-in-up animate-delay-300">Item 4&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- CSS Variables -->
+  <section class="card mb-6" data-section="css-variables">
+    <div class="card-body">
+      <h2 class="card-title">CSS Variables</h2>
+      <p class="text-muted mb-4">
+        Customize animations using CSS custom properties
+      </p>
+      <div class="code-example">
+<pre><code class="language-css">/* Animation Variables */
+:root {
+    --dm-animate-duration: 1s;
+    --dm-animate-delay: 0s;
+    --dm-animate-timing: ease;
+}
+
+/* Custom Duration */
+.my-element {
+    --dm-animate-duration: 2s;
+}
+
+/* Custom Timing Function */
+.my-element {
+    --dm-animate-timing: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Usage Examples -->
+  <section class="card mb-6" data-section="usage">
+    <div class="card-body">
+      <h2 class="card-title">Usage Examples</h2>
+      <p class="text-muted mb-4">
+        Practical examples of animation usage
+      </p>
+      <div class="code-example">
+<pre><code class="language-html">&lt;!-- Page Load Entrance -->
+&lt;div class="hero animate-fade-in-up">
+    &lt;h1>Welcome!&lt;/h1>
+&lt;/div>
+
+&lt;!-- Button Feedback -->
+&lt;button class="btn animate-shake-hover">Delete&lt;/button>
+
+&lt;!-- Loading Indicator -->
+&lt;div class="loader animate-spin animate-infinite">⟳&lt;/div>
+
+&lt;!-- Alert Notification -->
+&lt;div class="alert animate-bounce animate-repeat-3">
+    New message received!
+&lt;/div>
+
+&lt;!-- Card Grid with Stagger -->
+&lt;div class="card animate-fade-in-up">Card 1&lt;/div>
+&lt;div class="card animate-fade-in-up animate-delay-100">Card 2&lt;/div>
+&lt;div class="card animate-fade-in-up animate-delay-200">Card 3&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Performance Tips -->
+  <section class="card mb-6" data-section="performance">
+    <div class="card-body">
+      <h2 class="card-title">Performance Tips</h2>
+      <ul>
+        <li><strong>Use transform and opacity</strong> - These properties are GPU-accelerated</li>
+        <li><strong>Limit simultaneous animations</strong> - Too many at once can cause jank</li>
+        <li><strong>Remove animations after completion</strong> - Use JavaScript to clean up if needed</li>
+        <li><strong>Test on lower-end devices</strong> - Ensure smooth performance across devices</li>
+        <li><strong>Respect prefers-reduced-motion</strong> - Consider users with motion sensitivity</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<!-- Domma JavaScript -->
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    // Scan for icons
+    if (typeof Domma !== 'undefined' && Domma.icons) {
+      Domma.icons.scan();
+    }
+
+    // Scan and highlight code blocks
+    if (typeof Domma !== 'undefined' && Domma.syntax) {
+      Domma.syntax.scan();
+    }
+
+    // Make non-infinite animations retriggerable by clicking
+    $('.demo-box').not('.animate-infinite').on('click', function () {
+      const $box = $(this);
+      const classes = $box.attr('class');
+
+      // Remove and re-add animation classes to retrigger
+      $box.attr('class', 'demo-box');
+
+      // Use setTimeout to ensure CSS registers the change
+      setTimeout(() => {
+        $box.attr('class', classes);
+      }, 10);
+    });
+
+    // Add cursor pointer to clickable boxes
+    $('<style>.demo-box:not(.animate-infinite) { cursor: pointer; }</style>').appendTo('head');
+  });
+</script>
+</body>
+</html>

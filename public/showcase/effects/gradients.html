@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gradients - Domma Showcase</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../css/domma-showcase.css">
+
+  <style>
+      .gradient-demo {
+          padding: 3rem;
+          border-radius: 8px;
+          text-align: center;
+          color: white;
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 1rem 0;
+      }
+
+      .gradient-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1.5rem;
+          margin: 2rem 0;
+      }
+
+      .text-demo {
+          font-size: 3rem;
+          font-weight: 800;
+          margin: 1rem 0;
+      }
+  </style>
+</head>
+<body class="dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
+
+<!-- Hero Section -->
+<section class="hero hero-gradient-primary hero-lg">
+  <h1>Gradients</h1>
+  <p>Dynamic gradient backgrounds and text effects for modern, vibrant UIs</p>
+  <p class="mt-4"><code>.bg-gradient-sunset .text-gradient-ocean</code></p>
+</section>
+
+<!-- Main Content -->
+<main class="container py-8">
+
+  <!-- Theme Gradients -->
+  <section class="card mb-6" data-section="theme-gradients">
+    <div class="card-body">
+      <h2 class="card-title">Theme Gradients</h2>
+      <p class="text-muted mb-4">
+        Gradients based on Domma theme colours
+      </p>
+      <div class="gradient-grid mb-4">
+        <div class="gradient-demo bg-gradient-primary">Primary</div>
+        <div class="gradient-demo bg-gradient-secondary">Secondary</div>
+        <div class="gradient-demo bg-gradient-success">Success</div>
+        <div class="gradient-demo bg-gradient-danger">Danger</div>
+        <div class="gradient-demo bg-gradient-warning">Warning</div>
+        <div class="gradient-demo bg-gradient-info">Info</div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-gradient-primary">Primary&lt;/div>
+&lt;div class="bg-gradient-secondary">Secondary&lt;/div>
+&lt;div class="bg-gradient-success">Success&lt;/div>
+&lt;div class="bg-gradient-danger">Danger&lt;/div>
+&lt;div class="bg-gradient-warning">Warning&lt;/div>
+&lt;div class="bg-gradient-info">Info&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Named Gradient Presets -->
+  <section class="card mb-6" data-section="named-presets">
+    <div class="card-body">
+      <h2 class="card-title">Named Gradient Presets</h2>
+      <p class="text-muted mb-4">
+        Beautiful pre-designed gradient combinations
+      </p>
+      <div class="gradient-grid mb-4">
+        <div class="gradient-demo bg-gradient-sunset">Sunset</div>
+        <div class="gradient-demo bg-gradient-ocean">Ocean</div>
+        <div class="gradient-demo bg-gradient-purple">Purple</div>
+        <div class="gradient-demo bg-gradient-rose">Rose</div>
+        <div class="gradient-demo bg-gradient-forest">Forest</div>
+        <div class="gradient-demo bg-gradient-night">Night</div>
+        <div class="gradient-demo bg-gradient-warm">Warm</div>
+        <div class="gradient-demo bg-gradient-cool">Cool</div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-gradient-sunset">Sunset&lt;/div>
+&lt;div class="bg-gradient-ocean">Ocean&lt;/div>
+&lt;div class="bg-gradient-purple">Purple&lt;/div>
+&lt;div class="bg-gradient-rose">Rose&lt;/div>
+&lt;div class="bg-gradient-forest">Forest&lt;/div>
+&lt;div class="bg-gradient-night">Night&lt;/div>
+&lt;div class="bg-gradient-warm">Warm&lt;/div>
+&lt;div class="bg-gradient-cool">Cool&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Directional Gradients -->
+  <section class="card mb-6" data-section="directional">
+    <div class="card-body">
+      <h2 class="card-title">Directional Gradients</h2>
+      <p class="text-muted mb-4">
+        Control gradient direction with utility classes
+      </p>
+      <div class="gradient-grid mb-4">
+        <div class="gradient-demo bg-gradient-to-t" style="--dm-gradient-from: #3b82f6; --dm-gradient-to: #8b5cf6;">To
+          Top
+        </div>
+        <div class="gradient-demo bg-gradient-to-r" style="--dm-gradient-from: #3b82f6; --dm-gradient-to: #8b5cf6;">To
+          Right
+        </div>
+        <div class="gradient-demo bg-gradient-to-b" style="--dm-gradient-from: #3b82f6; --dm-gradient-to: #8b5cf6;">To
+          Bottom
+        </div>
+        <div class="gradient-demo bg-gradient-to-l" style="--dm-gradient-from: #3b82f6; --dm-gradient-to: #8b5cf6;">To
+          Left
+        </div>
+        <div class="gradient-demo bg-gradient-to-tr" style="--dm-gradient-from: #3b82f6; --dm-gradient-to: #8b5cf6;">To
+          Top Right
+        </div>
+        <div class="gradient-demo bg-gradient-to-br" style="--dm-gradient-from: #3b82f6; --dm-gradient-to: #8b5cf6;">To
+          Bottom Right
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;!-- Use CSS variables for custom colours -->
+&lt;div class="bg-gradient-to-r" style="--dm-gradient-from: #3b82f6; --dm-gradient-to: #8b5cf6;">
+    To Right
+&lt;/div>
+
+&lt;div class="bg-gradient-to-br" style="--dm-gradient-from: #10b981; --dm-gradient-to: #0ea5e9;">
+    To Bottom Right
+&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Radial Gradients -->
+  <section class="card mb-6" data-section="radial">
+    <div class="card-body">
+      <h2 class="card-title">Radial Gradients</h2>
+      <p class="text-muted mb-4">
+        Circular gradient patterns radiating from center
+      </p>
+      <div class="gradient-grid mb-4">
+        <div class="gradient-demo bg-gradient-radial" style="--dm-gradient-from: #3b82f6; --dm-gradient-to: #1e293b;">
+          Radial
+        </div>
+        <div class="gradient-demo bg-gradient-radial" style="--dm-gradient-from: #10b981; --dm-gradient-to: #064e3b;">
+          Radial Green
+        </div>
+        <div class="gradient-demo bg-gradient-radial" style="--dm-gradient-from: #f59e0b; --dm-gradient-to: #7c2d12;">
+          Radial Orange
+        </div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-gradient-radial" style="--dm-gradient-from: #3b82f6; --dm-gradient-to: #1e293b;">
+    Radial Gradient
+&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Animated Gradients -->
+  <section class="card mb-6" data-section="animated">
+    <div class="card-body">
+      <h2 class="card-title">Animated Gradients</h2>
+      <p class="text-muted mb-4">
+        Moving gradients with background-position animation
+      </p>
+      <div class="gradient-grid mb-4">
+        <div class="gradient-demo bg-gradient-sunset bg-gradient-animated">Animated Sunset</div>
+        <div class="gradient-demo bg-gradient-ocean bg-gradient-animated">Animated Ocean</div>
+        <div class="gradient-demo bg-gradient-purple bg-gradient-animated">Animated Purple</div>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-gradient-sunset bg-gradient-animated">
+    Animated Gradient
+&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Text Gradients -->
+  <section class="card mb-6" data-section="text-gradients">
+    <div class="card-body">
+      <h2 class="card-title">Text Gradients</h2>
+      <p class="text-muted mb-4">
+        Apply gradients to text with background-clip
+      </p>
+      <div class="text-center mb-4">
+        <h1 class="text-demo text-gradient">Gradient Text</h1>
+        <h1 class="text-demo text-gradient-primary">Primary Gradient</h1>
+        <h1 class="text-demo text-gradient-sunset">Sunset Gradient</h1>
+        <h1 class="text-demo text-gradient-ocean">Ocean Gradient</h1>
+        <h1 class="text-demo text-gradient-purple">Purple Gradient</h1>
+      </div>
+      <div class="code-example">
+<pre><code class="language-html">&lt;h1 class="text-gradient">Gradient Text&lt;/h1>
+&lt;h1 class="text-gradient-sunset">Sunset Gradient&lt;/h1>
+&lt;h1 class="text-gradient-ocean">Ocean Gradient&lt;/h1></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- CSS Variables -->
+  <section class="card mb-6" data-section="css-variables">
+    <div class="card-body">
+      <h2 class="card-title">Custom Gradients with CSS Variables</h2>
+      <p class="text-muted mb-4">
+        Create custom gradients using CSS custom properties
+      </p>
+      <div class="code-example">
+<pre><code class="language-css">/* Define custom gradient colours */
+.my-element {
+    --dm-gradient-from: #ff6b6b;
+    --dm-gradient-to: #4ecdc4;
+}
+
+/* Use with directional classes */
+&lt;div class="bg-gradient-to-r my-element">
+    Custom Gradient
+&lt;/div>
+
+/* Override in inline styles */
+&lt;div class="bg-gradient-to-br"
+     style="--dm-gradient-from: #667eea; --dm-gradient-to: #764ba2;">
+    Inline Custom Gradient
+&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Usage Examples -->
+  <section class="card mb-6" data-section="usage">
+    <div class="card-body">
+      <h2 class="card-title">Usage Examples</h2>
+      <p class="text-muted mb-4">
+        Practical applications of gradients
+      </p>
+      <div class="code-example">
+<pre><code class="language-html">&lt;!-- Hero Section -->
+&lt;section class="hero bg-gradient-sunset">
+    &lt;h1 class="text-white">Welcome!&lt;/h1>
+&lt;/section>
+
+&lt;!-- Button with Gradient -->
+&lt;button class="btn bg-gradient-primary">
+    Get Started
+&lt;/button>
+
+&lt;!-- Card with Gradient Background -->
+&lt;div class="card bg-gradient-ocean">
+    &lt;div class="card-body">
+        &lt;h3>Premium Feature&lt;/h3>
+    &lt;/div>
+&lt;/div>
+
+&lt;!-- Gradient Text Logo -->
+&lt;h1 class="text-gradient-purple">
+    Brand Name
+&lt;/h1>
+
+&lt;!-- Animated Background -->
+&lt;div class="bg-gradient-cool bg-gradient-animated">
+    &lt;p>Moving gradient background&lt;/p>
+&lt;/div></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Browser Support -->
+  <section class="card mb-6" data-section="browser-support">
+    <div class="card-body">
+      <h2 class="card-title">Browser Support</h2>
+      <ul>
+        <li><strong>Linear & Radial Gradients</strong> - All modern browsers</li>
+        <li><strong>Text Gradients</strong> - Requires <code>-webkit-background-clip</code> (widely supported)</li>
+        <li><strong>Animated Gradients</strong> - All browsers with CSS animation support</li>
+        <li><strong>Fallback</strong> - Always provide a solid colour fallback for older browsers</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<!-- Domma JavaScript -->
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    // Scan for icons
+    if (typeof Domma !== 'undefined' && Domma.icons) {
+      Domma.icons.scan();
+    }
+
+    // Scan and highlight code blocks
+    if (typeof Domma !== 'undefined' && Domma.syntax) {
+      Domma.syntax.scan();
+    }
+  });
+</script>
+</body>
+</html>
