@@ -238,6 +238,225 @@ public/
 - Do not run a server as I am running one
 - Audit your own work and reiterate where possible
 
+## Domma Features Reference
+
+This comprehensive list covers ALL Domma features. **Always check this list before implementing features manually.**
+
+### JavaScript Modules
+
+#### DOM Manipulation (`$` / `Domma()`)
+
+- 90+ jQuery-compatible methods
+- Traversal: `find()`, `children()`, `parent()`, `parents()`, `closest()`, `siblings()`, `next()`, `prev()`, etc.
+- Content: `html()`, `text()`, `val()`
+- Attributes: `attr()`, `removeAttr()`, `prop()`, `removeProp()`, `data()`, `removeData()`
+- CSS/Classes: `css()`, `addClass()`, `removeClass()`, `toggleClass()`, `hasClass()`
+- Manipulation: `append()`, `prepend()`, `after()`, `before()`, `wrap()`, `unwrap()`, `remove()`, `clone()`, etc.
+- Events: `on()`, `off()`, `one()`, `trigger()`, `hover()` + all event shortcuts
+- Effects: `show()`, `hide()`, `toggle()`, `fadeIn()`, `fadeOut()`, `fadeToggle()`, `slideUp()`, `slideDown()`,
+  `slideToggle()`, `animate()`
+- Dimensions: `width()`, `height()`, `innerWidth()`, `innerHeight()`, `outerWidth()`, `outerHeight()`, `offset()`,
+  `position()`, `scrollTop()`, `scrollLeft()`
+
+#### Utils (`_` / `Domma.utils`)
+
+- 120+ Lodash-compatible utilities
+- Array: `chunk()`, `compact()`, `difference()`, `flatten()`, `uniq()`, `zip()`, `intersection()`, `union()`, etc.
+- Collection: `each()`, `filter()`, `find()`, `groupBy()`, `keyBy()`, `map()`, `orderBy()`, `sortBy()`, `reduce()`, etc.
+- Function: `debounce()`, `throttle()`, `memoize()`, `once()`, `curry()`, `partial()`, `flow()`, `compose()`, `chain()`
+- Object: `get()`, `set()`, `has()`, `pick()`, `omit()`, `merge()`, `cloneDeep()`, `mapKeys()`, `mapValues()`, etc.
+- Lang: `isArray()`, `isObject()`, `isFunction()`, `isEmpty()`, `isEqual()`, etc.
+- String: `camelCase()`, `kebabCase()`, `snakeCase()`, `capitalize()`, `truncate()`, etc.
+- Math: `sum()`, `mean()`, `max()`, `min()`, `clamp()`, `random()`
+- Template: `template()`, `render()` (Mustache-style with `{{}}`, `{{#if}}`, `{{#each}}`, `{{> partial}}`)
+- Browser: `copyToClipboard()`
+
+#### Dates (`D()` / `Domma.dates`)
+
+- Moment.js-style API
+- Create: `D()`, `D('2025-12-25')`, `D(timestamp)`
+- Manipulate: `add()`, `subtract()`, `startOf()`, `endOf()`, `set()`
+- Format: `format()`, `toISOString()`, `unix()`
+- Getters: `year()`, `month()`, `date()`, `day()`, `hour()`, `minute()`, `second()`
+- Compare: `isBefore()`, `isAfter()`, `isSame()`, `isBetween()`, `diff()`
+- Relative: `fromNow()`, `from()`, `toNow()`, `to()`
+
+#### Models (`M` / `Domma.models`)
+
+- Reactive data models with validation
+- Pub/Sub: `subscribe()`, `publish()`, `unsubscribe()`, `once()`
+- Model: `create()`, `get()`, `set()`, `toJSON()`, `validate()`, `onChange()`, `reset()`
+- Persistence: `save()`, `load()`, `clearStorage()`, `isPersisted()`
+- DOM Binding: `M.bind()`, `M.unbind()` (two-way binding)
+- Types: `M.types.string`, `M.types.number`, `M.types.boolean`, `M.types.array`, `M.types.object`, `M.types.date`
+
+#### Elements (`Domma.elements`)
+
+- **19 UI Components:**
+  - Modal - `modal()` with backdrop, keyboard, animation options
+  - Tabs - `tabs()` with active index, onChange
+  - Accordion - `accordion()` with multiExpand
+  - Tooltip - `tooltip()` with positioning, triggers
+  - Carousel - `carousel()` with autoplay, interval, loop
+  - Card - `card()` with hover, clickable, **collapsible** (with localStorage persistence)
+  - Dropdown - `dropdown()` with positioning
+  - Toast - Static `toast()` method with types
+  - Dialog - Promise-based `alert()`, `confirm()`, `prompt()`
+  - Loader - `loader()` with types (spinner, dots, pulse, bars)
+  - Badge - `badge()` component
+  - BackToTop - `backToTop()` with scroll behavior
+  - ButtonGroup - `buttonGroup()` for radio/checkbox groups
+  - Breadcrumbs - `breadcrumbs()` with separators
+  - Navbar - `navbar()` responsive navigation
+  - DesktopNotification - Browser notifications wrapper
+  - Timer - `timer()` countdown with visual display
+  - Alarm - `alarm()` scheduled alerts with persistence
+  - Jumbotron - CSS-only hero sections with multiple variants
+
+- **Form Components:**
+  - Autocomplete - `autocomplete()` with data/dataSource, highlighting, keyboard nav
+  - Pillbox - `pillbox()` multi-select tag input with validation
+
+#### Tables (`Domma.tables`)
+
+- DataTable-like functionality
+- Features: Sorting, filtering, pagination, search, row selection
+- Export: `toCSV()`, `toJSON()`, `download()`
+- Striping: Named color variants or custom colors
+- Methods: `setData()`, `addRow()`, `updateRow()`, `removeRow()`, `search()`, `filter()`, `sort()`
+
+#### Forms (`Domma.forms`)
+
+- Schema-driven form generation
+- **Components:**
+  - FormBuilder - `create()` with validation, layouts (stacked/grid/inline)
+  - Modal Forms - `modal()` with save/error handling
+  - Wizard - `wizard()` multi-step forms
+  - CRUD Helper - `crud()` complete CRUD with API integration
+- **Features:**
+  - Input types: string, email, password, number, date, select, textarea, radio, checkbox-group, file, etc.
+  - Validation: required, minLength, maxLength, pattern, custom validators, async validation
+  - Layouts: stacked, grid (2/3 columns), inline, sections
+  - Model integration: Two-way binding with reactive models
+
+#### Config (`$.setup()` / `Domma.setup`)
+
+- Declarative configuration engine
+- **Features:**
+  - Component auto-initialization (16 supported components)
+  - Event binding with delegation
+  - Initial state configuration
+  - Mutable config: `$.update()`, `$.config()`, `$.reset()`
+
+#### HTTP (`Domma.http`)
+
+- Fetch-based HTTP client
+- Methods: `get()`, `post()`, `put()`, `delete()`
+- Auto JSON handling
+- Promise-based API
+
+#### Storage (`S` / `Domma.storage`)
+
+- localStorage wrapper with auto JSON serialization
+- Methods: `get()`, `set()`, `remove()`, `has()`, `clear()`, `keys()`
+- Features: Namespaced keys (`domma:` prefix), size tracking, graceful fallbacks
+
+#### Theme (`Domma.theme`)
+
+- Dynamic theme management
+- 10+ built-in themes with light/dark variants
+- Methods: `init()`, `set()`, `setVariant()`, `toggle()`
+- Auto system preference detection
+- Persistence to localStorage
+
+#### Icons (`Domma.icons`)
+
+- 200+ SVG icons in 15 categories
+- Methods: `render()`, `inject()`, `scan()` (auto-scan `data-icon` attributes)
+- Customizable size and color
+
+### CSS Features
+
+#### Base Utilities (domma.css)
+
+- **Typography:** Font families, sizes, weights, line heights
+- **Spacing:** Margin/padding utilities (`.m-*`, `.p-*`, `.mt-*`, `.mb-*`, etc.)
+- **Display:** `.d-block`, `.d-inline`, `.d-flex`, `.d-grid`, `.d-none`
+- **Colors:** Full color palette (slate, blue, green, red, amber, sky, etc.)
+- **Effects:**
+  - Glow: `.glow-primary`, `.glow-success`, `.glow-danger`, etc.
+  - Shadows: `.shadow-sm`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`
+  - Elevation: `.elevation-1` through `.elevation-5`
+  - Fireworks: `.firework-on-click`, `.firework-on-hover`, `.firework-sparkle`
+  - Text effects: `.text-shadow-sm`, `.text-shadow-md`, `.text-shadow-lg`
+
+#### Grid System (grid.css)
+
+- **Bootstrap-style Grid:** 12-column responsive grid with `.row`, `.col-*`, breakpoints (sm, md, lg, xl)
+- **CSS Grid Utilities:** `.grid`, `.grid-cols-*`, `.gap-*`, `.auto-fill`, `.auto-fit`
+- **Flexbox:** `.flex`, `.flex-row`, `.flex-col`, `.justify-*`, `.align-*`, `.flex-wrap`
+
+#### Elements (elements.css)
+
+- 19 UI components with full styling
+- Buttons, Cards, Modals, Forms, Tables, Navigation, etc.
+- Responsive and theme-aware
+
+#### Themes (domma-themes.css)
+
+- 10+ pre-built themes
+- Light/dark variants for each
+- Named themes: charcoal, ocean, forest, sunset, etc.
+
+### Tools Bundle
+
+#### Theme Roller
+
+- Visual theme customization tool
+- Live preview and export
+
+#### Page Roller
+
+- Page builder tool
+- Component library and layout management
+
+#### Editor
+
+- Content editor with rich text
+- Export to multiple formats
+
+#### Print-to-PDF
+
+- Print and PDF export functionality
+
+### Advanced Features
+
+#### Stagger Animations
+
+- **IMPORTANT:** Built-in stagger animations for entrance effects
+- Used for cascading element appearances
+- Check documentation before implementing manually
+
+#### Animation Utilities
+
+- Fireworks animations (`.firework-*`)
+- Glow effects (`.glow-*`)
+- Fade/slide effects via JavaScript API
+
+#### Accessibility
+
+- ARIA support throughout
+- Keyboard navigation for all interactive components
+- Reduced motion support (`prefers-reduced-motion`)
+- Screen reader friendly
+
+#### Performance
+
+- Lazy loading support
+- Event delegation
+- Debounce/throttle utilities
+- Component cleanup (`destroy()` methods)
+
 ## Quick Reference
 
 For detailed module documentation, see:
