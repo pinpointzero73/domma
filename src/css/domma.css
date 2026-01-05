@@ -3238,75 +3238,146 @@ code, pre {
 /* Animation Classes */
 
 .animate-fade-in {
-    animation: dm-fade-in var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-fade-in;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-fade-out {
-    animation: dm-fade-out var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-fade-out;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-fade-in-up {
-    animation: dm-fade-in-up var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-fade-in-up;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-fade-in-down {
-    animation: dm-fade-in-down var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-fade-in-down;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-fade-in-left {
-    animation: dm-fade-in-left var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-fade-in-left;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-fade-in-right {
-    animation: dm-fade-in-right var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-fade-in-right;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-slide-in-up {
-    animation: dm-slide-in-up var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-slide-in-up;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-slide-in-down {
-    animation: dm-slide-in-down var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-slide-in-down;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-slide-in-left {
-    animation: dm-slide-in-left var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-slide-in-left;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-slide-in-right {
-    animation: dm-slide-in-right var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-slide-in-right;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-zoom-in {
-    animation: dm-zoom-in var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-zoom-in;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-zoom-out {
-    animation: dm-zoom-out var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-zoom-out;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-bounce {
-    animation: dm-bounce var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-bounce;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-pulse {
-    animation: dm-pulse var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-pulse;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-shake {
-    animation: dm-shake 0.5s ease both;
+    animation-name: dm-shake;
+    animation-duration: 0.5s;
+    animation-timing-function: ease;
+    animation-fill-mode: both;
 }
 
 .animate-spin {
-    animation: dm-spin var(--dm-animate-duration) linear var(--dm-animate-delay) both;
+    animation-name: dm-spin;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: linear;
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-rotate-in {
-    animation: dm-rotate-in var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-rotate-in;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 .animate-flip {
-    animation: dm-flip var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+    animation-name: dm-flip;
+    animation-duration: var(--dm-animate-duration, 1s);
+    animation-timing-function: var(--dm-animate-timing, ease);
+    animation-delay: var(--dm-animate-delay, 0s);
+    animation-fill-mode: both;
 }
 
 /* Animation Control Classes */
@@ -3370,23 +3441,38 @@ code, pre {
 /* Hover Animations */
 
 .animate-fade-in-hover:hover {
-    animation: dm-fade-in 0.3s ease both;
+    animation-name: dm-fade-in;
+    animation-duration: 0.3s;
+    animation-timing-function: ease;
+    animation-fill-mode: both;
 }
 
 .animate-bounce-hover:hover {
-    animation: dm-bounce 0.6s ease both;
+    animation-name: dm-bounce;
+    animation-duration: 0.6s;
+    animation-timing-function: ease;
+    animation-fill-mode: both;
 }
 
 .animate-pulse-hover:hover {
-    animation: dm-pulse 1s ease both;
+    animation-name: dm-pulse;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+    animation-fill-mode: both;
 }
 
 .animate-shake-hover:hover {
-    animation: dm-shake 0.5s ease both;
+    animation-name: dm-shake;
+    animation-duration: 0.5s;
+    animation-timing-function: ease;
+    animation-fill-mode: both;
 }
 
 .animate-spin-hover:hover {
-    animation: dm-spin 1s linear both;
+    animation-name: dm-spin;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
 }
 
 /* ============================================

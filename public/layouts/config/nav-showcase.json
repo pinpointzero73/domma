@@ -112,7 +112,7 @@
         },
         {
           "text": "Forms",
-          "url": "showcase/forms/index.html",
+          "url": "showcase/elements/forms/index.html",
           "section": "forms"
         }
       ]
@@ -279,6 +279,11 @@
           "text": "Print to PDF",
           "url": "showcase/print-to-pdf/index.html",
           "section": "print-to-pdf"
+        },
+        {
+          "text": "API Reference",
+          "url": "showcase/reference/index.html",
+          "section": "reference"
         }
       ]
     },
