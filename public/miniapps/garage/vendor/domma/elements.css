@@ -1,9 +1,9 @@
 /*!
- * Domma Elements CSS v0.3.1-alpha
+ * Domma Elements CSS v0.5.0-alpha
  * Dynamic Object Manipulation & Modeling API
  * (c) 2026 Darryl Waterhouse & DCBW-IT
- * Built: 2026-01-03T15:40:05.439Z
- * Commit: c208fd1
+ * Built: 2026-01-05T15:59:35.310Z
+ * Commit: 516cae8
  */
 
 /**
@@ -256,6 +256,40 @@
 
 .card.namespace-card:hover {
     text-decoration: none;
+}
+
+/* Collapsible card styles */
+.card-collapsible .card-header {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+}
+
+.card-header-content {
+    flex: 1;
+}
+
+.card-collapse-icon {
+    transition: transform var(--dm-transition-normal);
+    flex-shrink: 0;
+    margin-left: var(--dm-space-2);
+}
+
+.card-collapsed .card-collapse-icon {
+    transform: rotate(-90deg);
+}
+
+.card-collapsible .card-body {
+    overflow: hidden;
+    transition: height var(--dm-transition-normal);
+}
+
+.card-collapsed .card-body {
+    height: 0 !important;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 

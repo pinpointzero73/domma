@@ -2344,6 +2344,43 @@ code, pre {
     color: var(--dm-warning);
 }
 
+/* Validation State Container Classes */
+.has-success .form-input,
+.has-success .form-select,
+.has-success .form-textarea {
+    border-color: var(--dm-success);
+}
+
+.has-success .form-input:focus,
+.has-success .form-select:focus,
+.has-success .form-textarea:focus {
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+}
+
+.has-error .form-input,
+.has-error .form-select,
+.has-error .form-textarea {
+    border-color: var(--dm-danger);
+}
+
+.has-error .form-input:focus,
+.has-error .form-select:focus,
+.has-error .form-textarea:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.has-warning .form-input,
+.has-warning .form-select,
+.has-warning .form-textarea {
+    border-color: var(--dm-warning);
+}
+
+.has-warning .form-input:focus,
+.has-warning .form-select:focus,
+.has-warning .form-textarea:focus {
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
 /* Input Sizes */
 .form-input-sm,
 .form-select-sm,
@@ -2722,6 +2759,63 @@ code, pre {
     cursor: pointer;
 }
 
+/* Form Sections */
+.domma-form-section {
+    border: 1px solid var(--dm-border, var(--dm-gray-200));
+    border-radius: var(--dm-radius-lg);
+    padding: var(--dm-space-6);
+    margin-bottom: var(--dm-space-6);
+    background-color: var(--dm-surface, var(--dm-white));
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.15s ease;
+}
+
+.domma-form-section:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.domma-form-section-title {
+    font-size: var(--dm-font-size-lg);
+    font-weight: var(--dm-font-weight-semibold);
+    color: var(--dm-primary);
+    margin: 0 0 var(--dm-space-4) 0;
+    padding: 0 var(--dm-space-4);
+    border-bottom: 2px solid var(--dm-primary);
+    display: inline-block;
+    background-color: var(--dm-surface, var(--dm-white));
+    position: relative;
+    top: calc(-1 * var(--dm-space-6) - 1px);
+    left: 0;
+    border-radius: var(--dm-radius-md) var(--dm-radius-md) 0 0;
+}
+
+.domma-form-section-content {
+    margin-top: calc(-1 * var(--dm-space-2));
+}
+
+/* Dark theme adjustments */
+.dm-theme-dark .domma-form-section {
+    background-color: var(--dm-gray-800);
+    border-color: var(--dm-gray-700);
+}
+
+.dm-theme-dark .domma-form-section-title {
+    background-color: var(--dm-gray-800);
+    color: var(--dm-primary-light, var(--dm-blue-400));
+    border-color: var(--dm-primary-light, var(--dm-blue-400));
+}
+
+/* Compact form sections */
+.domma-form-section.compact {
+    padding: var(--dm-space-4);
+    margin-bottom: var(--dm-space-4);
+}
+
+.domma-form-section.compact .domma-form-section-title {
+    font-size: var(--dm-font-size-base);
+    top: calc(-1 * var(--dm-space-4) - 1px);
+}
+
 /* ============================================
    COMPONENT: Badge
    ============================================ */
@@ -2942,4 +3036,857 @@ code, pre {
     --dm-glow-warning: 0 0 20px rgba(245, 158, 11, 0.6);
     --dm-glow-danger: 0 0 20px rgba(239, 68, 68, 0.6);
     --dm-glow-info: 0 0 20px rgba(14, 165, 233, 0.6);
+
+    /* ================================================
+       ANIMATION VARIABLES
+       ================================================ */
+    --dm-animate-duration: 1s;
+    --dm-animate-delay: 0s;
+    --dm-animate-timing: ease;
+}
+
+/* ============================================
+   ANIMATION UTILITIES
+   ============================================ */
+
+/* Animation Keyframes */
+
+@keyframes dm-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes dm-fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes dm-fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes dm-fade-in-down {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes dm-fade-in-left {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes dm-fade-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes dm-slide-in-up {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes dm-slide-in-down {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes dm-slide-in-left {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes dm-slide-in-right {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes dm-zoom-in {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes dm-zoom-out {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+}
+
+@keyframes dm-bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-20px);
+    }
+    60% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes dm-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes dm-shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-5px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(5px);
+    }
+}
+
+@keyframes dm-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dm-rotate-in {
+    from {
+        opacity: 0;
+        transform: rotate(-180deg) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: rotate(0) scale(1);
+    }
+}
+
+@keyframes dm-flip {
+    from {
+        transform: perspective(400px) rotateY(90deg);
+        opacity: 0;
+    }
+    to {
+        transform: perspective(400px) rotateY(0);
+        opacity: 1;
+    }
+}
+
+/* Animation Classes */
+
+.animate-fade-in {
+    animation: dm-fade-in var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-fade-out {
+    animation: dm-fade-out var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-fade-in-up {
+    animation: dm-fade-in-up var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-fade-in-down {
+    animation: dm-fade-in-down var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-fade-in-left {
+    animation: dm-fade-in-left var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-fade-in-right {
+    animation: dm-fade-in-right var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-slide-in-up {
+    animation: dm-slide-in-up var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-slide-in-down {
+    animation: dm-slide-in-down var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-slide-in-left {
+    animation: dm-slide-in-left var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-slide-in-right {
+    animation: dm-slide-in-right var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-zoom-in {
+    animation: dm-zoom-in var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-zoom-out {
+    animation: dm-zoom-out var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-bounce {
+    animation: dm-bounce var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-pulse {
+    animation: dm-pulse var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-shake {
+    animation: dm-shake 0.5s ease both;
+}
+
+.animate-spin {
+    animation: dm-spin var(--dm-animate-duration) linear var(--dm-animate-delay) both;
+}
+
+.animate-rotate-in {
+    animation: dm-rotate-in var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+.animate-flip {
+    animation: dm-flip var(--dm-animate-duration) var(--dm-animate-timing) var(--dm-animate-delay) both;
+}
+
+/* Animation Control Classes */
+
+.animate-infinite {
+    animation-iteration-count: infinite;
+}
+
+.animate-once {
+    animation-iteration-count: 1;
+}
+
+.animate-repeat-2 {
+    animation-iteration-count: 2;
+}
+
+.animate-repeat-3 {
+    animation-iteration-count: 3;
+}
+
+/* Animation Durations */
+
+.animate-duration-fast {
+    --dm-animate-duration: 0.3s;
+}
+
+.animate-duration-normal {
+    --dm-animate-duration: 0.6s;
+}
+
+.animate-duration-slow {
+    --dm-animate-duration: 1s;
+}
+
+.animate-duration-slower {
+    --dm-animate-duration: 2s;
+}
+
+/* Animation Delays */
+
+.animate-delay-100 {
+    --dm-animate-delay: 0.1s;
+}
+
+.animate-delay-200 {
+    --dm-animate-delay: 0.2s;
+}
+
+.animate-delay-300 {
+    --dm-animate-delay: 0.3s;
+}
+
+.animate-delay-500 {
+    --dm-animate-delay: 0.5s;
+}
+
+.animate-delay-1000 {
+    --dm-animate-delay: 1s;
+}
+
+/* Hover Animations */
+
+.animate-fade-in-hover:hover {
+    animation: dm-fade-in 0.3s ease both;
+}
+
+.animate-bounce-hover:hover {
+    animation: dm-bounce 0.6s ease both;
+}
+
+.animate-pulse-hover:hover {
+    animation: dm-pulse 1s ease both;
+}
+
+.animate-shake-hover:hover {
+    animation: dm-shake 0.5s ease both;
+}
+
+.animate-spin-hover:hover {
+    animation: dm-spin 1s linear both;
+}
+
+/* ============================================
+   GRADIENT UTILITIES
+   ============================================ */
+
+/* Background Gradients */
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
+}
+
+.bg-gradient-secondary {
+    background: linear-gradient(135deg, var(--dm-secondary) 0%, var(--dm-secondary-dark) 100%);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, var(--dm-success) 0%, var(--dm-success-dark) 100%);
+}
+
+.bg-gradient-danger {
+    background: linear-gradient(135deg, var(--dm-danger) 0%, var(--dm-danger-dark) 100%);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, var(--dm-warning) 0%, var(--dm-warning-dark) 100%);
+}
+
+.bg-gradient-info {
+    background: linear-gradient(135deg, var(--dm-info) 0%, var(--dm-info-dark) 100%);
+}
+
+/* Directional Gradients */
+
+.bg-gradient-to-t {
+    background: linear-gradient(to top, var(--dm-gradient-from, transparent), var(--dm-gradient-to, transparent));
+}
+
+.bg-gradient-to-tr {
+    background: linear-gradient(to top right, var(--dm-gradient-from, transparent), var(--dm-gradient-to, transparent));
+}
+
+.bg-gradient-to-r {
+    background: linear-gradient(to right, var(--dm-gradient-from, transparent), var(--dm-gradient-to, transparent));
+}
+
+.bg-gradient-to-br {
+    background: linear-gradient(to bottom right, var(--dm-gradient-from, transparent), var(--dm-gradient-to, transparent));
+}
+
+.bg-gradient-to-b {
+    background: linear-gradient(to bottom, var(--dm-gradient-from, transparent), var(--dm-gradient-to, transparent));
+}
+
+.bg-gradient-to-bl {
+    background: linear-gradient(to bottom left, var(--dm-gradient-from, transparent), var(--dm-gradient-to, transparent));
+}
+
+.bg-gradient-to-l {
+    background: linear-gradient(to left, var(--dm-gradient-from, transparent), var(--dm-gradient-to, transparent));
+}
+
+.bg-gradient-to-tl {
+    background: linear-gradient(to top left, var(--dm-gradient-from, transparent), var(--dm-gradient-to, transparent));
+}
+
+/* Radial Gradients */
+
+.bg-gradient-radial {
+    background: radial-gradient(circle, var(--dm-gradient-from, transparent), var(--dm-gradient-to, transparent));
+}
+
+/* Named Gradient Presets */
+
+.bg-gradient-purple {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-blue {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+}
+
+.bg-gradient-green {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.bg-gradient-sunset {
+    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+}
+
+.bg-gradient-ocean {
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+}
+
+.bg-gradient-rose {
+    background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+}
+
+.bg-gradient-forest {
+    background: linear-gradient(135deg, #10b981 0%, #065f46 100%);
+}
+
+.bg-gradient-night {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+.bg-gradient-warm {
+    background: linear-gradient(135deg, #f59e0b 0%, #f97316 0%, #dc2626 100%);
+}
+
+.bg-gradient-cool {
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 0%, #8b5cf6 100%);
+}
+
+/* Animated Gradients */
+
+@keyframes dm-gradient-shift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.bg-gradient-animated {
+    background-size: 200% 200%;
+    animation: dm-gradient-shift 3s ease infinite;
+}
+
+/* Text Gradients */
+
+.text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-secondary) 100%);
+}
+
+.text-gradient-primary {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
+}
+
+.text-gradient-sunset {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+}
+
+.text-gradient-ocean {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+}
+
+.text-gradient-purple {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* ============================================
+   FILTER UTILITIES
+   ============================================ */
+
+/* Blur */
+
+.blur-none {
+    filter: blur(0);
+}
+
+.blur-sm {
+    filter: blur(4px);
+}
+
+.blur {
+    filter: blur(8px);
+}
+
+.blur-md {
+    filter: blur(12px);
+}
+
+.blur-lg {
+    filter: blur(16px);
+}
+
+.blur-xl {
+    filter: blur(24px);
+}
+
+.blur-2xl {
+    filter: blur(40px);
+}
+
+.blur-3xl {
+    filter: blur(64px);
+}
+
+/* Brightness */
+
+.brightness-0 {
+    filter: brightness(0);
+}
+
+.brightness-50 {
+    filter: brightness(0.5);
+}
+
+.brightness-75 {
+    filter: brightness(0.75);
+}
+
+.brightness-90 {
+    filter: brightness(0.9);
+}
+
+.brightness-100 {
+    filter: brightness(1);
+}
+
+.brightness-110 {
+    filter: brightness(1.1);
+}
+
+.brightness-125 {
+    filter: brightness(1.25);
+}
+
+.brightness-150 {
+    filter: brightness(1.5);
+}
+
+.brightness-200 {
+    filter: brightness(2);
+}
+
+/* Contrast */
+
+.contrast-0 {
+    filter: contrast(0);
+}
+
+.contrast-50 {
+    filter: contrast(0.5);
+}
+
+.contrast-75 {
+    filter: contrast(0.75);
+}
+
+.contrast-100 {
+    filter: contrast(1);
+}
+
+.contrast-125 {
+    filter: contrast(1.25);
+}
+
+.contrast-150 {
+    filter: contrast(1.5);
+}
+
+.contrast-200 {
+    filter: contrast(2);
+}
+
+/* Grayscale */
+
+.grayscale-0 {
+    filter: grayscale(0);
+}
+
+.grayscale {
+    filter: grayscale(1);
+}
+
+.grayscale-50 {
+    filter: grayscale(0.5);
+}
+
+/* Hue Rotate */
+
+.hue-rotate-15 {
+    filter: hue-rotate(15deg);
+}
+
+.hue-rotate-30 {
+    filter: hue-rotate(30deg);
+}
+
+.hue-rotate-60 {
+    filter: hue-rotate(60deg);
+}
+
+.hue-rotate-90 {
+    filter: hue-rotate(90deg);
+}
+
+.hue-rotate-180 {
+    filter: hue-rotate(180deg);
+}
+
+/* Invert */
+
+.invert-0 {
+    filter: invert(0);
+}
+
+.invert {
+    filter: invert(1);
+}
+
+.invert-50 {
+    filter: invert(0.5);
+}
+
+/* Saturate */
+
+.saturate-0 {
+    filter: saturate(0);
+}
+
+.saturate-50 {
+    filter: saturate(0.5);
+}
+
+.saturate-100 {
+    filter: saturate(1);
+}
+
+.saturate-150 {
+    filter: saturate(1.5);
+}
+
+.saturate-200 {
+    filter: saturate(2);
+}
+
+/* Sepia */
+
+.sepia-0 {
+    filter: sepia(0);
+}
+
+.sepia {
+    filter: sepia(1);
+}
+
+.sepia-50 {
+    filter: sepia(0.5);
+}
+
+/* Drop Shadow */
+
+.drop-shadow-sm {
+    filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.05));
+}
+
+.drop-shadow {
+    filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06));
+}
+
+.drop-shadow-md {
+    filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06));
+}
+
+.drop-shadow-lg {
+    filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
+}
+
+.drop-shadow-xl {
+    filter: drop-shadow(0 20px 13px rgb(0 0 0 / 0.03)) drop-shadow(0 8px 5px rgb(0 0 0 / 0.08));
+}
+
+.drop-shadow-2xl {
+    filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15));
+}
+
+.drop-shadow-none {
+    filter: drop-shadow(0 0 #0000);
+}
+
+/* Backdrop Blur */
+
+.backdrop-blur-none {
+    backdrop-filter: blur(0);
+}
+
+.backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+}
+
+.backdrop-blur {
+    backdrop-filter: blur(8px);
+}
+
+.backdrop-blur-md {
+    backdrop-filter: blur(12px);
+}
+
+.backdrop-blur-lg {
+    backdrop-filter: blur(16px);
+}
+
+.backdrop-blur-xl {
+    backdrop-filter: blur(24px);
+}
+
+.backdrop-blur-2xl {
+    backdrop-filter: blur(40px);
+}
+
+.backdrop-blur-3xl {
+    backdrop-filter: blur(64px);
+}
+
+/* Backdrop Brightness */
+
+.backdrop-brightness-50 {
+    backdrop-filter: brightness(0.5);
+}
+
+.backdrop-brightness-75 {
+    backdrop-filter: brightness(0.75);
+}
+
+.backdrop-brightness-90 {
+    backdrop-filter: brightness(0.9);
+}
+
+.backdrop-brightness-100 {
+    backdrop-filter: brightness(1);
+}
+
+.backdrop-brightness-110 {
+    backdrop-filter: brightness(1.1);
+}
+
+.backdrop-brightness-125 {
+    backdrop-filter: brightness(1.25);
+}
+
+.backdrop-brightness-150 {
+    backdrop-filter: brightness(1.5);
+}
+
+/* Backdrop Saturate */
+
+.backdrop-saturate-0 {
+    backdrop-filter: saturate(0);
+}
+
+.backdrop-saturate-50 {
+    backdrop-filter: saturate(0.5);
+}
+
+.backdrop-saturate-100 {
+    backdrop-filter: saturate(1);
+}
+
+.backdrop-saturate-150 {
+    backdrop-filter: saturate(1.5);
+}
+
+.backdrop-saturate-200 {
+    backdrop-filter: saturate(2);
+}
+
+/* Combined Filter Presets */
+
+.filter-none {
+    filter: none;
+}
+
+.filter-vintage {
+    filter: sepia(0.5) contrast(1.2) brightness(0.9);
+}
+
+.filter-dramatic {
+    filter: contrast(1.5) saturate(1.3);
+}
+
+.filter-soft {
+    filter: blur(2px) brightness(1.1);
+}
+
+.filter-cold {
+    filter: saturate(0.8) hue-rotate(15deg);
+}
+
+.filter-warm {
+    filter: saturate(1.2) hue-rotate(-15deg);
 }

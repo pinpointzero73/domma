@@ -1,9 +1,9 @@
 /*!
- * Domma Core CSS v0.3.1-alpha
+ * Domma Core CSS v0.5.0-alpha
  * Dynamic Object Manipulation & Modeling API
  * (c) 2026 Darryl Waterhouse & DCBW-IT
- * Built: 2026-01-03T15:40:05.419Z
- * Commit: c208fd1
+ * Built: 2026-01-05T15:59:35.296Z
+ * Commit: 516cae8
  */
 
 /**
@@ -2352,6 +2352,43 @@ code, pre {
     color: var(--dm-warning);
 }
 
+/* Validation State Container Classes */
+.has-success .form-input,
+.has-success .form-select,
+.has-success .form-textarea {
+    border-color: var(--dm-success);
+}
+
+.has-success .form-input:focus,
+.has-success .form-select:focus,
+.has-success .form-textarea:focus {
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+}
+
+.has-error .form-input,
+.has-error .form-select,
+.has-error .form-textarea {
+    border-color: var(--dm-danger);
+}
+
+.has-error .form-input:focus,
+.has-error .form-select:focus,
+.has-error .form-textarea:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.has-warning .form-input,
+.has-warning .form-select,
+.has-warning .form-textarea {
+    border-color: var(--dm-warning);
+}
+
+.has-warning .form-input:focus,
+.has-warning .form-select:focus,
+.has-warning .form-textarea:focus {
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
 /* Input Sizes */
 .form-input-sm,
 .form-select-sm,
@@ -2728,6 +2765,63 @@ code, pre {
 .form-input[type="number"]::-webkit-outer-spin-button {
     opacity: 1;
     cursor: pointer;
+}
+
+/* Form Sections */
+.domma-form-section {
+    border: 1px solid var(--dm-border, var(--dm-gray-200));
+    border-radius: var(--dm-radius-lg);
+    padding: var(--dm-space-6);
+    margin-bottom: var(--dm-space-6);
+    background-color: var(--dm-surface, var(--dm-white));
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.15s ease;
+}
+
+.domma-form-section:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.domma-form-section-title {
+    font-size: var(--dm-font-size-lg);
+    font-weight: var(--dm-font-weight-semibold);
+    color: var(--dm-primary);
+    margin: 0 0 var(--dm-space-4) 0;
+    padding: 0 var(--dm-space-4);
+    border-bottom: 2px solid var(--dm-primary);
+    display: inline-block;
+    background-color: var(--dm-surface, var(--dm-white));
+    position: relative;
+    top: calc(-1 * var(--dm-space-6) - 1px);
+    left: 0;
+    border-radius: var(--dm-radius-md) var(--dm-radius-md) 0 0;
+}
+
+.domma-form-section-content {
+    margin-top: calc(-1 * var(--dm-space-2));
+}
+
+/* Dark theme adjustments */
+.dm-theme-dark .domma-form-section {
+    background-color: var(--dm-gray-800);
+    border-color: var(--dm-gray-700);
+}
+
+.dm-theme-dark .domma-form-section-title {
+    background-color: var(--dm-gray-800);
+    color: var(--dm-primary-light, var(--dm-blue-400));
+    border-color: var(--dm-primary-light, var(--dm-blue-400));
+}
+
+/* Compact form sections */
+.domma-form-section.compact {
+    padding: var(--dm-space-4);
+    margin-bottom: var(--dm-space-4);
+}
+
+.domma-form-section.compact .domma-form-section-title {
+    font-size: var(--dm-font-size-base);
+    top: calc(-1 * var(--dm-space-4) - 1px);
 }
 
 /* ============================================
