@@ -71,7 +71,7 @@ function escapeRegExp(str) {
 }
 
 /**
- * Tokenize code using sequential replacement with placeholders
+ * Tokenize code by collecting matches and building HTML with escaped gaps
  * @param {string} code - Code to tokenize
  * @param {string} language - Language identifier
  * @returns {string} HTML with highlighted tokens
@@ -82,42 +82,62 @@ function tokenize(code, language) {
         return escapeHtml(code);
     }
 
-    // IMPORTANT: Always tokenize RAW code first, then escape within tokens
-    // This prevents operators like < > from being escaped before pattern matching
-    let html = code;  // Don't escape yet
-    const placeholders = [];
-    let index = 0;
+    // Collect all token matches with positions
+    const matches = [];
 
-    // Sequential replacement: match tokens and replace with placeholders
     for (const {type, pattern} of tokens) {
         // Skip entity highlighting for HTML (entities come from escaping, not source)
         if (language === 'html' && type === 'entity') {
             continue;
         }
 
-        html = html.replace(pattern, (match) => {
-            const placeholder = `__TOKEN_${index}__`;
-            const escapedMatch = escapeHtml(match);  // Always escape the token
-            placeholders.push({
-                placeholder,
-                html: `<span class="syntax-${type}">${escapedMatch}</span>`
+        // Reset regex lastIndex for global patterns
+        pattern.lastIndex = 0;
+
+        let match;
+        // Using RegExp.prototype.exec() for pattern matching (not child_process)
+        while ((match = pattern.exec(code)) !== null) {
+            matches.push({
+                start: match.index,
+                end: match.index + match[0].length,
+                text: match[0],
+                type: type
             });
-            index++;
-            return placeholder;
-        });
+        }
     }
 
-  // Replace all placeholders with actual HTML first
-    for (const {placeholder, html: tokenHtml} of placeholders) {
-      html = html.replace(new RegExp(escapeRegExp(placeholder), 'g'), tokenHtml);
+    // Sort matches by start position
+    matches.sort((a, b) => a.start - b.start);
+
+    // Remove overlapping matches (keep first match at each position)
+    const filteredMatches = [];
+    let lastEnd = 0;
+    for (const match of matches) {
+        if (match.start >= lastEnd) {
+            filteredMatches.push(match);
+            lastEnd = match.end;
+        }
     }
 
-  // Then escape any remaining non-tokenized content
-  // We need to be careful to only escape content outside of our spans
-  html = html.replace(/(?<!<[^>]*>)([&<>"])(?![^<]*<\/span>)/g, (match) => {
-    const entities = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'};
-    return entities[match] || match;
-  });
+    // Build HTML output
+    let html = '';
+    let pos = 0;
+
+    for (const match of filteredMatches) {
+        // Escape and add gap before this match
+        if (match.start > pos) {
+            html += escapeHtml(code.substring(pos, match.start));
+        }
+
+        // Add highlighted token (escaped)
+        html += `<span class="syntax-${match.type}">${escapeHtml(match.text)}</span>`;
+        pos = match.end;
+    }
+
+    // Escape and add remaining content after last match
+    if (pos < code.length) {
+        html += escapeHtml(code.substring(pos));
+    }
 
     return html;
 }
