@@ -12,6 +12,18 @@ import {icons} from './icons.js';
 import {storage} from './storage.js';
 import {auth} from './auth.js';
 
+// Cloaking - hide page immediately to prevent FOUC
+let cloakEnabled = true;
+if (typeof document !== 'undefined' && document.body) {
+    document.body.classList.add('dm-cloaked');
+} else if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        if (cloakEnabled) {
+            document.body.classList.add('dm-cloaked');
+        }
+    });
+}
+
 const Domma = (selector, context) => dom(selector, context);
 
 // Version and build info (injected at build time by Rollup)
@@ -28,6 +40,15 @@ Domma.buildInfo = {
 Domma.http = http;
 Domma.utils = utils;
 Domma.setup = (config) => {
+    // Handle cloak configuration (default: enabled)
+    if (config.cloak === false) {
+        cloakEnabled = false;
+        if (typeof document !== 'undefined' && document.body) {
+            document.body.classList.remove('dm-cloaked');
+            document.body.classList.add('dm-ready');
+        }
+    }
+
     // Handle theme configuration
     // noStyles: true disables all Domma theming (for BYOS - Bring Your Own Styles)
     if (config.noStyles) {
@@ -100,3 +121,18 @@ if (typeof window !== 'undefined') {
 
 export default Domma;
 export {Domma, $, _, M, D, S, A, F};
+
+// Reveal page after Domma is ready
+if (typeof document !== 'undefined') {
+    const reveal = () => {
+        if (cloakEnabled && document.body.classList.contains('dm-cloaked')) {
+            document.body.classList.add('dm-ready');
+        }
+    };
+
+    if (document.readyState === 'complete') {
+        setTimeout(reveal, 0);
+    } else {
+        window.addEventListener('load', reveal);
+    }
+}

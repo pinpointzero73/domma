@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Contact Manager - Domma MiniApp</title>
+  <meta name="description"
+        content="Contact management system with Forma schema-driven forms and offline sync capability">
+
+  <!-- Domma Core Styles -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+
+  <!-- App Styles -->
+  <style>
+      :root {
+          --nexus-primary: #3b82f6;
+          --nexus-secondary: #64748b;
+          --nexus-success: #10b981;
+          --nexus-warning: #f59e0b;
+          --nexus-danger: #ef4444;
+          --nexus-info: #06b6d4;
+      }
+
+      body {
+          background: var(--dm-slate-50);
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+      }
+
+      main {
+          flex: 1;
+          padding: 2rem 0;
+      }
+
+      /* App Layout */
+      .app-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 1rem;
+      }
+
+      .app-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 2rem;
+          flex-wrap: wrap;
+          gap: 1rem;
+      }
+
+      .app-title {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          font-size: 1.875rem;
+          font-weight: 700;
+          color: var(--dm-slate-900);
+          margin: 0;
+      }
+
+      .app-status {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          font-size: 0.875rem;
+          color: var(--dm-slate-600);
+      }
+
+      .connection-status.online {
+          color: var(--nexus-success);
+      }
+
+      .connection-status.offline {
+          color: var(--nexus-warning);
+      }
+
+      .sync-status.has-pending {
+          color: var(--nexus-warning);
+      }
+
+      /* Navigation Tabs */
+      .tab-nav {
+          display: flex;
+          gap: 0.5rem;
+          margin-bottom: 2rem;
+          border-bottom: 2px solid var(--dm-slate-200);
+      }
+
+      .tab-nav button {
+          padding: 0.75rem 1.5rem;
+          background: none;
+          border: none;
+          border-bottom: 3px solid transparent;
+          font-weight: 500;
+          color: var(--dm-slate-600);
+          cursor: pointer;
+          transition: all 0.2s;
+      }
+
+      .tab-nav button:hover {
+          color: var(--dm-slate-900);
+          background: var(--dm-slate-100);
+      }
+
+      .tab-nav button.active {
+          color: var(--nexus-primary);
+          border-bottom-color: var(--nexus-primary);
+          background: var(--dm-blue-50);
+      }
+
+      /* Toolbar */
+      .toolbar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+          flex-wrap: wrap;
+      }
+
+      .toolbar-left {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          flex: 1;
+      }
+
+      .toolbar-right {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+      }
+
+      .search-group {
+          position: relative;
+          width: 100%;
+          max-width: 400px;
+      }
+
+      .search-group .icon {
+          position: absolute;
+          left: 0.75rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--dm-slate-400);
+          pointer-events: none;
+      }
+
+      .search-group input {
+          padding-left: 2.25rem;
+      }
+
+      /* Content Areas */
+      .tab-content {
+          display: none;
+      }
+
+      .tab-content.active {
+          display: block;
+      }
+
+      /* Contact Cards */
+      .contact-card {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1rem;
+          background: white;
+          border: 1px solid var(--dm-slate-200);
+          border-radius: 8px;
+          margin-bottom: 0.75rem;
+          transition: all 0.2s;
+      }
+
+      .contact-card:hover {
+          border-color: var(--nexus-primary);
+          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+      }
+
+      .contact-avatar {
+          width: 48px;
+          height: 48px;
+          background: var(--nexus-primary);
+          color: white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+          font-size: 1.125rem;
+          flex-shrink: 0;
+      }
+
+      .contact-info {
+          flex: 1;
+          min-width: 0;
+      }
+
+      .contact-name {
+          font-weight: 600;
+          color: var(--dm-slate-900);
+          margin-bottom: 0.25rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+      }
+
+      .contact-name .favourite {
+          color: var(--nexus-warning);
+      }
+
+      .contact-details {
+          color: var(--dm-slate-600);
+          font-size: 0.875rem;
+      }
+
+      .contact-email {
+          margin-bottom: 0.125rem;
+      }
+
+      .contact-company, .contact-phone {
+          margin-bottom: 0.125rem;
+      }
+
+      .contact-tags {
+          margin-top: 0.5rem;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.25rem;
+      }
+
+      .tag {
+          padding: 0.125rem 0.5rem;
+          background: var(--dm-slate-100);
+          color: var(--dm-slate-700);
+          font-size: 0.75rem;
+          border-radius: 12px;
+      }
+
+      .contact-actions {
+          display: flex;
+          gap: 0.5rem;
+          flex-shrink: 0;
+      }
+
+      /* Group Cards */
+      .group-card {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1rem;
+          background: white;
+          border: 1px solid var(--dm-slate-200);
+          border-radius: 8px;
+          margin-bottom: 0.75rem;
+          transition: all 0.2s;
+      }
+
+      .group-card:hover {
+          border-color: var(--nexus-primary);
+          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+      }
+
+      .group-color {
+          width: 16px;
+          height: 48px;
+          border-radius: 8px;
+          flex-shrink: 0;
+      }
+
+      .group-info {
+          flex: 1;
+          min-width: 0;
+      }
+
+      .group-name {
+          font-weight: 600;
+          color: var(--dm-slate-900);
+          margin-bottom: 0.25rem;
+      }
+
+      .group-details {
+          color: var(--dm-slate-600);
+          font-size: 0.875rem;
+          display: flex;
+          gap: 1rem;
+      }
+
+      .group-description {
+          color: var(--dm-slate-500);
+          font-size: 0.875rem;
+          margin-top: 0.25rem;
+      }
+
+      .group-actions {
+          display: flex;
+          gap: 0.5rem;
+          flex-shrink: 0;
+      }
+
+      /* Card Styling - Rounded boxes with drop shadows */
+      #contacts-table, #groups-table {
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+          border: 1px solid var(--dm-slate-200);
+          overflow: hidden;
+          margin-bottom: 1.5rem;
+          padding: 1.5rem;
+      }
+
+      /* Table specific styling to work with card */
+      #contacts-table, #groups-table {
+          border-collapse: separate;
+          border-spacing: 0;
+      }
+
+      #contacts-table thead th, #groups-table thead th {
+          background: var(--dm-slate-50);
+          border-bottom: 1px solid var(--dm-slate-200);
+          padding: 1rem;
+          font-weight: 600;
+          color: var(--dm-slate-700);
+      }
+
+      #contacts-table tbody td, #groups-table tbody td {
+          padding: 1rem;
+          border-bottom: 1px solid var(--dm-slate-100);
+      }
+
+      #contacts-table tbody tr:last-child td, #groups-table tbody tr:last-child td {
+          border-bottom: none;
+      }
+
+      #contacts-table tbody tr:hover, #groups-table tbody tr:hover {
+          background: var(--dm-slate-50);
+      }
+
+      /* Groups list card styling */
+      #groups-list {
+          padding: 1rem;
+      }
+
+      #groups-list:empty {
+          padding: 0;
+      }
+
+      /* Empty States */
+      .empty-state {
+          text-align: center;
+          padding: 3rem 1rem;
+          color: var(--dm-slate-500);
+      }
+
+      .empty-state .icon {
+          font-size: 3rem;
+          color: var(--dm-slate-300);
+          margin-bottom: 1rem;
+      }
+
+      .empty-state h3 {
+          font-size: 1.25rem;
+          color: var(--dm-slate-700);
+          margin-bottom: 0.5rem;
+      }
+
+      .empty-state p {
+          margin-bottom: 1.5rem;
+      }
+
+      /* Loading Overlay */
+      .loading-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(255, 255, 255, 0.8);
+          display: none;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+      }
+
+      .loading-overlay.active {
+          display: flex;
+      }
+
+      .loading-spinner {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1.5rem;
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .spinner {
+          width: 24px;
+          height: 24px;
+          border: 3px solid var(--dm-slate-200);
+          border-radius: 50%;
+          border-top-color: var(--nexus-primary);
+          animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+          to {
+              transform: rotate(360deg);
+          }
+      }
+
+      .spinning {
+          animation: spin 1s linear infinite;
+      }
+
+      /* Login Prompt */
+      .login-prompt {
+          text-align: center;
+          padding: 3rem 1rem;
+          max-width: 400px;
+          margin: 2rem auto;
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      .login-prompt .icon {
+          font-size: 3rem;
+          color: var(--nexus-primary);
+          margin-bottom: 1rem;
+      }
+
+      .login-prompt h2 {
+          margin-bottom: 0.5rem;
+          color: var(--dm-slate-900);
+      }
+
+      .login-prompt p {
+          color: var(--dm-slate-600);
+          margin-bottom: 2rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+          .app-header {
+              flex-direction: column;
+              align-items: flex-start;
+          }
+
+          .toolbar {
+              flex-direction: column;
+              align-items: stretch;
+          }
+
+          .toolbar-left {
+              flex-direction: column;
+          }
+
+          .search-group {
+              max-width: none;
+          }
+
+          .contact-card, .group-card {
+              flex-direction: column;
+              align-items: flex-start;
+              text-align: left;
+          }
+
+          .contact-actions, .group-actions {
+              align-self: stretch;
+              justify-content: center;
+          }
+      }
+  </style>
+</head>
+
+<body data-layout="public" data-theme="default">
+<main>
+  <div class="app-container">
+    <!-- Login Prompt (shown when not authenticated) -->
+    <div id="login-prompt" class="login-prompt" style="display: none;">
+      <span data-icon="users" class="icon"></span>
+      <h2>Nexus Contact Manager</h2>
+      <p>Please use the <strong>Login</strong> button in the navigation bar to access your contacts.</p>
+    </div>
+
+    <!-- Main App Content (shown when authenticated) -->
+    <div id="main-content" style="display: block;">
+      <!-- App Header -->
+      <header class="app-header">
+        <h1 class="app-title">
+          <span data-icon="users" class="icon"></span>
+          Nexus Contact Manager
+        </h1>
+        <div class="app-status">
+          <div id="connection-status" class="connection-status">
+            <span data-icon="wifi" class="icon"></span>
+            Online
+          </div>
+          <div id="sync-status" class="sync-status">
+            <span data-icon="check" class="icon"></span>
+            Synced
+          </div>
+        </div>
+      </header>
+
+      <!-- Navigation Tabs -->
+      <nav class="tab-nav">
+        <button data-tab="contacts" class="active">
+          <span data-icon="user" class="icon"></span>
+          Contacts
+        </button>
+        <button data-tab="groups">
+          <span data-icon="users" class="icon"></span>
+          Groups
+        </button>
+      </nav>
+
+      <!-- Contacts View -->
+      <div id="contacts-view" class="tab-content active">
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <div class="toolbar-right">
+            <button id="add-contact-btn" class="btn btn-primary">
+              <span data-icon="plus" class="icon"></span>
+              Add Contact
+            </button>
+          </div>
+        </div>
+
+        <!-- Contacts Table -->
+        <table id="contacts-table" class="table">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Company</th>
+            <th>Groups</th>
+            <th>Tags</th>
+            <th>Favourite</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Groups View -->
+      <div id="groups-view" class="tab-content">
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <h3>Contact Groups</h3>
+          </div>
+          <div class="toolbar-right">
+            <button id="add-group-btn" class="btn btn-primary">
+              <span data-icon="plus" class="icon"></span>
+              Add Group
+            </button>
+          </div>
+        </div>
+
+        <!-- Groups Table -->
+        <table id="groups-table" class="table">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Contact Count</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="toolbar" style="margin-top: 2rem; border-top: 1px solid var(--dm-slate-200); padding-top: 1rem;">
+        <div class="toolbar-left"></div>
+        <div class="toolbar-right">
+          <button id="import-btn" class="btn btn-secondary">
+            <span data-icon="upload" class="icon"></span>
+            Import
+          </button>
+          <button id="settings-btn" class="btn btn-secondary">
+            <span data-icon="settings" class="icon"></span>
+            Settings
+          </button>
+          <button id="sync-btn" class="btn btn-secondary">
+            <span data-icon="refresh-cw" class="icon"></span>
+            Sync
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <span>Loading...</span>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <p>
+        Powered by
+        <strong>Forma</strong> (Domma Form Generator) •
+        <strong>Vault</strong> (Backend Storage) •
+        <strong>Cache</strong> (Offline Support)
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- Domma Full Bundle - includes all functionality including forms -->
+<script src="../../dist/domma.min.js"></script>
+
+<!-- Layout System -->
+<script type="module" src="../../layouts/js/layout.js"></script>
+
+<!-- App Scripts -->
+<script src="./dist/app.min.js"></script>
+</body>
+</html>

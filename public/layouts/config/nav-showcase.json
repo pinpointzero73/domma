@@ -191,6 +191,11 @@
           "section": "pillbox"
         },
         {
+          "text": "Slideover",
+          "url": "showcase/elements/slideover/index.html",
+          "section": "slideover"
+        },
+        {
           "text": "Tabs",
           "url": "showcase/elements/tabs/index.html",
           "section": "tabs"
@@ -319,11 +324,31 @@
           "text": "Markdown Editor",
           "url": "examples/markdown/index.html",
           "section": "markdown"
+        }
+      ]
+    },
+    {
+      "text": "MiniApps",
+      "items": [
+        {
+          "text": "My Garage",
+          "url": "miniapps/garage/index.html",
+          "section": "garage"
         },
         {
-          "text": "Contact Management",
-          "url": "examples/contacts/index.html",
-          "section": "contacts"
+          "text": "Domma Docs",
+          "url": "miniapps/docs/index.html",
+          "section": "docs"
+        },
+        {
+          "text": "Invoicing System",
+          "url": "miniapps/invoicing/index.html",
+          "section": "invoicing"
+        },
+        {
+          "text": "Nexus Contact Manager",
+          "url": "miniapps/nexus/index.html",
+          "section": "nexus"
         }
       ]
     }

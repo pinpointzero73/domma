@@ -312,6 +312,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Timer - `timer()` countdown with visual display
   - Alarm - `alarm()` scheduled alerts with persistence
   - Jumbotron - CSS-only hero sections with multiple variants
+  - Slideover - `slideover()` panel overlays from screen edges
 
 - **Form Components:**
   - Autocomplete - `autocomplete()` with data/dataSource, highlighting, keyboard nav
@@ -467,3 +468,4 @@ For detailed module documentation, see:
 - **Full documentation index**: [Documentation Structure](#documentation-structure) section above
 - Use the innate Domma grid system where possible
 - Adding an element should automatically trigger full documentation and a showcase page replete with examples and a tutorial
+- Always use the Domma Ecosystem where possible

@@ -177,6 +177,14 @@ Accessed via `Domma.elements`:
     - **Gradients (New)**: `.jumbotron-gradient-purple`, `.jumbotron-gradient-blue`, `.jumbotron-gradient-green`,
       `.jumbotron-gradient-sunset`, `.jumbotron-gradient-ocean`, `.jumbotron-gradient-rose`,
       `.jumbotron-gradient-forest`, `.jumbotron-gradient-night`
+- **Slideover**: Panel overlays that slide in from screen edges
+    -
+    `elements.slideover(selector, { position, size, backdrop, backdropClose, keyboard, closeOnEscape, animation, animationDuration, title, content, closable, closeIcon, onOpen, onClose, onClosed })` →
+    `open()`, `close()`, `toggle()`, `isOpen()`, `setTitle()`, `setContent()`, `setSize()`, `setPosition()`, `destroy()`
+    - Positions: `'left'`, `'right'`, `'top'`, `'bottom'`
+    - Sizes: `'sm'`, `'md'`, `'lg'`, `'xl'`, `'full'`, or custom (e.g., `'400px'`)
+    - Factory method: `Slideover.create({ title, content, position, size, ... })`
+    - Form schema integration supported
 - **BackToTop**: `elements.backToTop(selector, { showAfter, duration, position, offset, target, onShow, onHide })` →
   `scroll()`, `show()`, `hide()`, `toggle()`, `isVisible()`, `getButton()`, `destroy()`
 - **ButtonGroup**: `elements.buttonGroup(selector, { mode, activeClass, allowEmpty, onChange })` →

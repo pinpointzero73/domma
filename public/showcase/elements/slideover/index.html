@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slideover - Domma Elements</title>
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+  <link rel="stylesheet" href="../../../dist/domma.css">
+  <link rel="stylesheet" href="../../../dist/elements.css">
+  <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
+  <style>
+      .dm-slideover-header {
+          padding: 20px;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
+
+      .dm-slideover-title {
+          margin: 0;
+          font-size: 1.25rem;
+          font-weight: 600;
+      }
+
+      .dm-slideover-close {
+          background: none;
+          border: none;
+          font-size: 24px;
+          cursor: pointer;
+          padding: 0;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+          transition: background-color 0.2s;
+      }
+
+      .dm-slideover-close:hover {
+          background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      .dm-slideover-body {
+          padding: 20px;
+          flex: 1;
+          overflow-y: auto;
+      }
+
+      .demo-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+      }
+  </style>
+</head>
+<body class="dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<main class="container py-8">
+
+  <!-- SECTION 1: Overview -->
+  <section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+      <h1 class="text-3xl font-semibold m-0">Slideover</h1>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Slideovers are panel overlays that slide in from the edge of the screen, providing contextual information
+        or actions without completely obscuring the main content. Unlike modals which appear in the center,
+        slideovers maintain spatial context and are ideal for secondary tasks, filters, or navigation.
+      </p>
+
+      <h4 class="category-title">Key Features</h4>
+      <ul class="mb-4">
+        <li>Four directional positions: left, right, top, bottom</li>
+        <li>Multiple size variants (sm, md, lg, xl, full) or custom sizes</li>
+        <li>Semi-transparent backdrop with optional click-to-close</li>
+        <li>Smooth slide animations from edges</li>
+        <li>Keyboard navigation with Escape key</li>
+        <li>Factory method for dynamic creation</li>
+        <li>Form schema integration support</li>
+        <li>Event callbacks for lifecycle management</li>
+      </ul>
+
+      <h4 class="category-title">When to Use Slideovers</h4>
+      <ul class="mb-4">
+        <li><strong>Filters & Settings</strong>: Advanced filters, configuration panels, preferences</li>
+        <li><strong>Detail Views</strong>: User profiles, product details, metadata panels</li>
+        <li><strong>Forms</strong>: Quick edits, creation forms, data entry without leaving context</li>
+        <li><strong>Navigation</strong>: Mobile menus, navigation panels, table of contents</li>
+        <li><strong>Shopping Carts</strong>: Cart summary, checkout panels</li>
+        <li><strong>Notifications</strong>: Activity feeds, notification panels</li>
+      </ul>
+
+      <h4 class="category-title">Basic Usage</h4>
+      <pre class="code-block language-javascript">
+// Factory method (recommended)
+const slideover = Domma.elements.slideover({
+    title: 'My Slideover',
+    content: '&lt;p&gt;Slideover content goes here.&lt;/p&gt;',
+    position: 'right',  // 'left', 'right', 'top', 'bottom'
+    size: 'lg',         // 'sm', 'md', 'lg', 'xl', 'full', or custom (e.g., '400px')
+    backdrop: true,
+    backdropClose: true,
+    keyboard: true
+});
+
+// Open the slideover
+slideover.open();
+
+// Control methods
+slideover.close();
+slideover.toggle();
+slideover.isOpen();
+slideover.setTitle('New Title');
+slideover.setContent('&lt;p&gt;Updated content&lt;/p&gt;');
+slideover.setSize('xl');
+slideover.setPosition('left');
+</pre>
+
+      <h4 class="category-title">HTML Structure (Existing Element)</h4>
+      <pre class="code-block language-html">
+&lt;div id="my-slideover"&gt;
+    &lt;div class="dm-slideover-header"&gt;
+        &lt;h5 class="dm-slideover-title"&gt;Slideover Title&lt;/h5&gt;
+        &lt;button class="dm-slideover-close" data-dismiss="slideover"&gt;&times;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="dm-slideover-body"&gt;
+        Slideover content goes here.
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const slideover = Domma.elements.slideover('#my-slideover', {
+    position: 'right',
+    size: 'lg'
+});
+
+slideover.open();
+&lt;/script&gt;
+</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 2: Position Variants -->
+  <section class="card mb-6" data-section="Position Variants">
+    <div class="card-header">
+      <h2 class="m-0">Position Variants</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Slideovers can slide in from any edge of the screen. Choose the position that best fits your layout
+        and user workflow.
+      </p>
+
+      <div class="demo-grid">
+        <button class="btn btn-primary" onclick="demoPositionRight()">
+          <span data-icon="arrow-left" data-icon-size="16"></span> Right (Default)
+        </button>
+        <button class="btn btn-primary" onclick="demoPositionLeft()">
+          <span data-icon="arrow-right" data-icon-size="16"></span> Left
+        </button>
+        <button class="btn btn-primary" onclick="demoPositionTop()">
+          <span data-icon="arrow-down" data-icon-size="16"></span> Top
+        </button>
+        <button class="btn btn-primary" onclick="demoPositionBottom()">
+          <span data-icon="arrow-up" data-icon-size="16"></span> Bottom
+        </button>
+      </div>
+
+      <pre class="code-block language-javascript">
+// Right (default)
+const slideoverRight = Domma.elements.slideover({
+    title: 'Right Slideover',
+    content: '&lt;p&gt;Slides in from the right side.&lt;/p&gt;',
+    position: 'right'
+});
+
+// Left
+const slideoverLeft = Domma.elements.slideover({
+    title: 'Left Slideover',
+    content: '&lt;p&gt;Slides in from the left side.&lt;/p&gt;',
+    position: 'left'
+});
+
+// Top
+const slideoverTop = Domma.elements.slideover({
+    title: 'Top Slideover',
+    content: '&lt;p&gt;Slides down from the top.&lt;/p&gt;',
+    position: 'top'
+});
+
+// Bottom
+const slideoverBottom = Domma.elements.slideover({
+    title: 'Bottom Slideover',
+    content: '&lt;p&gt;Slides up from the bottom.&lt;/p&gt;',
+    position: 'bottom'
+});
+</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 3: Size Variants -->
+  <section class="card mb-6" data-section="Size Variants">
+    <div class="card-header">
+      <h2 class="m-0">Size Variants</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Control the width (for left/right) or height (for top/bottom) using predefined sizes or custom values.
+      </p>
+
+      <div class="demo-grid">
+        <button class="btn btn-secondary" onclick="demoSizeSmall()">Small (25%)</button>
+        <button class="btn btn-secondary" onclick="demoSizeMedium()">Medium (50%)</button>
+        <button class="btn btn-secondary" onclick="demoSizeLarge()">Large (75%)</button>
+        <button class="btn btn-secondary" onclick="demoSizeXL()">XL (90%)</button>
+        <button class="btn btn-secondary" onclick="demoSizeFull()">Full (100%)</button>
+        <button class="btn btn-secondary" onclick="demoSizeCustom()">Custom (400px)</button>
+      </div>
+
+      <pre class="code-block language-javascript">
+// Predefined sizes
+const small = Domma.elements.slideover({
+    title: 'Small Slideover',
+    content: '&lt;p&gt;25% width&lt;/p&gt;',
+    size: 'sm'
+});
+
+const medium = Domma.elements.slideover({
+    title: 'Medium Slideover',
+    content: '&lt;p&gt;50% width&lt;/p&gt;',
+    size: 'md'
+});
+
+const large = Domma.elements.slideover({
+    title: 'Large Slideover',
+    content: '&lt;p&gt;75% width&lt;/p&gt;',
+    size: 'lg'
+});
+
+// Custom size
+const custom = Domma.elements.slideover({
+    title: 'Custom Slideover',
+    content: '&lt;p&gt;400px width&lt;/p&gt;',
+    size: '400px'  // Can use px, rem, em, %
+});
+</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 4: Advanced Features -->
+  <section class="card mb-6" data-section="Advanced Features">
+    <div class="card-header">
+      <h2 class="m-0">Advanced Features</h2>
+    </div>
+    <div class="card-body">
+      <h4 class="category-title">Backdrop Options</h4>
+      <p class="mb-3">Control backdrop appearance and click behavior.</p>
+
+      <div class="demo-grid">
+        <button class="btn btn-outline" onclick="demoNoBackdrop()">No Backdrop</button>
+        <button class="btn btn-outline" onclick="demoBackdropNoClose()">Backdrop, No Close</button>
+      </div>
+
+      <pre class="code-block language-javascript">
+// No backdrop
+const noBackdrop = Domma.elements.slideover({
+    title: 'No Backdrop',
+    content: '&lt;p&gt;No overlay behind the slideover.&lt;/p&gt;',
+    backdrop: false
+});
+
+// Backdrop but can't close by clicking it
+const backdropNoClose = Domma.elements.slideover({
+    title: 'Backdrop, No Close',
+    content: '&lt;p&gt;Must use X button to close.&lt;/p&gt;',
+    backdrop: true,
+    backdropClose: false
+});
+</pre>
+
+      <h4 class="category-title mt-5">Non-Closable Slideover</h4>
+      <p class="mb-3">Remove the X button and require programmatic closing.</p>
+
+      <button class="btn btn-warning mb-3" onclick="demoNonClosable()">Non-Closable Slideover</button>
+
+      <pre class="code-block language-javascript">
+const nonClosable = Domma.elements.slideover({
+    title: 'Non-Closable',
+    content: `
+        &lt;p&gt;This slideover has no X button.&lt;/p&gt;
+        &lt;button onclick="currentSlideover.close()" class="btn"&gt;
+            Close Programmatically
+        &lt;/button&gt;
+    `,
+    closable: false,
+    backdropClose: false,
+    keyboard: false  // Disable Escape key too
+});
+</pre>
+
+      <h4 class="category-title mt-5">Event Callbacks</h4>
+      <p class="mb-3">Hook into slideover lifecycle events.</p>
+
+      <button class="btn btn-success mb-3" onclick="demoCallbacks()">Test Callbacks</button>
+      <div id="callback-log" class="p-3 bg-gray-100 rounded mb-3"
+           style="min-height: 80px; font-family: monospace; font-size: 0.875rem;"></div>
+
+      <pre class="code-block language-javascript">
+const slideover = Domma.elements.slideover({
+    title: 'Callbacks Demo',
+    content: '&lt;p&gt;Watch the log for callback messages.&lt;/p&gt;',
+    onOpen: (instance) => {
+        console.log('Slideover opened!', instance);
+    },
+    onClose: (instance) => {
+        console.log('Slideover is closing...', instance);
+    },
+    onClosed: (instance) => {
+        console.log('Slideover fully closed!', instance);
+    }
+});
+</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 5: Form Integration -->
+  <section class="card mb-6" data-section="Form Integration">
+    <div class="card-header">
+      <h2 class="m-0">Form Integration</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Slideovers are excellent for forms - they keep context while allowing focused data entry.
+      </p>
+
+      <button class="btn btn-primary mb-3" onclick="demoFormContent()">Contact Form</button>
+
+      <pre class="code-block language-javascript">
+const formSlideover = Domma.elements.slideover({
+    title: 'Contact Form',
+    content: `
+        &lt;form id="contact-form"&gt;
+            &lt;div class="mb-3"&gt;
+                &lt;label class="form-label"&gt;Name&lt;/label&gt;
+                &lt;input type="text" name="name" class="form-control" required&gt;
+            &lt;/div&gt;
+            &lt;div class="mb-3"&gt;
+                &lt;label class="form-label"&gt;Email&lt;/label&gt;
+                &lt;input type="email" name="email" class="form-control" required&gt;
+            &lt;/div&gt;
+            &lt;div class="mb-3"&gt;
+                &lt;label class="form-label"&gt;Message&lt;/label&gt;
+                &lt;textarea name="message" rows="4" class="form-control"&gt;&lt;/textarea&gt;
+            &lt;/div&gt;
+            &lt;button type="submit" class="btn btn-primary"&gt;Send&lt;/button&gt;
+            &lt;button type="button" class="btn btn-secondary" onclick="currentSlideover.close()"&gt;Cancel&lt;/button&gt;
+        &lt;/form&gt;
+    `,
+    size: 'md',
+    onOpen: () => {
+        $('#contact-form').on('submit', function(e) {
+            e.preventDefault();
+            alert('Form submitted!');
+            formSlideover.close();
+        });
+    }
+});
+</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 6: Programmatic Control -->
+  <section class="card mb-6" data-section="Programmatic Control">
+    <div class="card-header">
+      <h2 class="m-0">Programmatic Control</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Slideovers can be controlled and modified after creation.
+      </p>
+
+      <button class="btn btn-primary mb-3" onclick="demoProgrammatic()">Open Control Panel</button>
+
+      <pre class="code-block language-javascript">
+let slideover = Domma.elements.slideover({
+    title: 'Control Panel',
+    content: `
+        &lt;p&gt;Use the buttons to modify this slideover:&lt;/p&gt;
+        &lt;button onclick="currentSlideover.setTitle('Updated Title')"&gt;Change Title&lt;/button&gt;
+        &lt;button onclick="currentSlideover.setContent('&lt;p&gt;New content!&lt;/p&gt;')"&gt;Change Content&lt;/button&gt;
+        &lt;button onclick="currentSlideover.setSize('sm')"&gt;Small&lt;/button&gt;
+        &lt;button onclick="currentSlideover.setSize('xl')"&gt;Extra Large&lt;/button&gt;
+        &lt;button onclick="currentSlideover.setPosition('left')"&gt;Move Left&lt;/button&gt;
+        &lt;button onclick="currentSlideover.setPosition('right')"&gt;Move Right&lt;/button&gt;
+        &lt;p&gt;Is open: &lt;span id="status"&gt;?&lt;/span&gt;&lt;/p&gt;
+    `,
+    position: 'right'
+});
+
+// Check state
+console.log(slideover.isOpen());  // false
+
+// Open/close/toggle
+slideover.open();
+slideover.close();
+slideover.toggle();
+
+// Modify content
+slideover.setTitle('New Title');
+slideover.setContent('&lt;p&gt;Updated!&lt;/p&gt;');
+
+// Change size and position
+slideover.setSize('md');
+slideover.setPosition('left');
+
+// Clean up
+slideover.destroy();
+</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 7: API Reference -->
+  <section class="card mb-6" data-section="API Reference">
+    <div class="card-header">
+      <h2 class="m-0">API Reference</h2>
+    </div>
+    <div class="card-body">
+      <h4 class="category-title">Factory Method</h4>
+      <pre class="code-block language-javascript">
+Domma.elements.slideover(options)
+</pre>
+
+      <h4 class="category-title mt-4">Constructor</h4>
+      <pre class="code-block language-javascript">
+Domma.elements.slideover(selector, options)
+</pre>
+
+      <h4 class="category-title mt-4">Options</h4>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Option</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>position</code></td>
+          <td>String</td>
+          <td>'right'</td>
+          <td>Position: 'left', 'right', 'top', 'bottom'</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td>String</td>
+          <td>'lg'</td>
+          <td>Size: 'sm', 'md', 'lg', 'xl', 'full', or custom (e.g., '400px')</td>
+        </tr>
+        <tr>
+          <td><code>backdrop</code></td>
+          <td>Boolean</td>
+          <td>true</td>
+          <td>Show semi-transparent backdrop</td>
+        </tr>
+        <tr>
+          <td><code>backdropClose</code></td>
+          <td>Boolean</td>
+          <td>true</td>
+          <td>Close when clicking backdrop</td>
+        </tr>
+        <tr>
+          <td><code>keyboard</code></td>
+          <td>Boolean</td>
+          <td>true</td>
+          <td>Enable keyboard shortcuts</td>
+        </tr>
+        <tr>
+          <td><code>closeOnEscape</code></td>
+          <td>Boolean</td>
+          <td>true</td>
+          <td>Close on Escape key</td>
+        </tr>
+        <tr>
+          <td><code>animation</code></td>
+          <td>Boolean</td>
+          <td>true</td>
+          <td>Enable slide animation</td>
+        </tr>
+        <tr>
+          <td><code>animationDuration</code></td>
+          <td>Number</td>
+          <td>300</td>
+          <td>Animation duration in milliseconds</td>
+        </tr>
+        <tr>
+          <td><code>title</code></td>
+          <td>String</td>
+          <td>''</td>
+          <td>Slideover title (factory method only)</td>
+        </tr>
+        <tr>
+          <td><code>content</code></td>
+          <td>String|Element</td>
+          <td>''</td>
+          <td>Slideover content (factory method only)</td>
+        </tr>
+        <tr>
+          <td><code>closable</code></td>
+          <td>Boolean</td>
+          <td>true</td>
+          <td>Show close button</td>
+        </tr>
+        <tr>
+          <td><code>closeIcon</code></td>
+          <td>String</td>
+          <td>'x'</td>
+          <td>Icon name for close button</td>
+        </tr>
+        <tr>
+          <td><code>customSizes</code></td>
+          <td>Object</td>
+          <td>{}</td>
+          <td>Custom size definitions</td>
+        </tr>
+        <tr>
+          <td><code>onOpen</code></td>
+          <td>Function</td>
+          <td>null</td>
+          <td>Callback when slideover opens</td>
+        </tr>
+        <tr>
+          <td><code>onClose</code></td>
+          <td>Function</td>
+          <td>null</td>
+          <td>Callback when slideover starts closing</td>
+        </tr>
+        <tr>
+          <td><code>onClosed</code></td>
+          <td>Function</td>
+          <td>null</td>
+          <td>Callback when slideover fully closed</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <h4 class="category-title mt-4">Methods</h4>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Method</th>
+          <th>Returns</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>open()</code></td>
+          <td>this</td>
+          <td>Opens the slideover</td>
+        </tr>
+        <tr>
+          <td><code>close()</code></td>
+          <td>this</td>
+          <td>Closes the slideover</td>
+        </tr>
+        <tr>
+          <td><code>toggle()</code></td>
+          <td>this</td>
+          <td>Toggles slideover open/closed</td>
+        </tr>
+        <tr>
+          <td><code>isOpen()</code></td>
+          <td>Boolean</td>
+          <td>Returns true if slideover is open</td>
+        </tr>
+        <tr>
+          <td><code>setTitle(title)</code></td>
+          <td>this</td>
+          <td>Updates the slideover title</td>
+        </tr>
+        <tr>
+          <td><code>setContent(content)</code></td>
+          <td>this</td>
+          <td>Updates the slideover content (string or element)</td>
+        </tr>
+        <tr>
+          <td><code>setSize(size)</code></td>
+          <td>this</td>
+          <td>Changes the slideover size</td>
+        </tr>
+        <tr>
+          <td><code>setPosition(position)</code></td>
+          <td>this</td>
+          <td>Changes the slideover position</td>
+        </tr>
+        <tr>
+          <td><code>destroy()</code></td>
+          <td>void</td>
+          <td>Destroys the slideover and cleans up</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<script src="../../../dist/domma.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+  let currentSlideover = null;
+
+  // Position demos
+  function demoPositionRight() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'Right Slideover',
+      content: '<p>This slideover slides in from the right side of the screen.</p><p>This is the default position and works well for detail panels, filters, and forms.</p>',
+      position: 'right',
+      size: 'lg'
+    });
+    currentSlideover.open();
+  }
+
+  function demoPositionLeft() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'Left Slideover',
+      content: '<p>This slideover slides in from the left side of the screen.</p><p>Great for navigation menus and table of contents.</p>',
+      position: 'left',
+      size: 'md'
+    });
+    currentSlideover.open();
+  }
+
+  function demoPositionTop() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'Top Slideover',
+      content: '<p>This slideover slides down from the top of the screen.</p><p>Perfect for notification panels or headers.</p>',
+      position: 'top',
+      size: 'sm'
+    });
+    currentSlideover.open();
+  }
+
+  function demoPositionBottom() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'Bottom Slideover',
+      content: '<p>This slideover slides up from the bottom of the screen.</p><p>Ideal for shopping carts or action sheets.</p>',
+      position: 'bottom',
+      size: 'md'
+    });
+    currentSlideover.open();
+  }
+
+  // Size demos
+  function demoSizeSmall() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'Small Slideover (25%)',
+      content: '<p>This is a small slideover, taking up 25% of the screen width.</p>',
+      size: 'sm'
+    });
+    currentSlideover.open();
+  }
+
+  function demoSizeMedium() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'Medium Slideover (50%)',
+      content: '<p>This is a medium slideover, taking up 50% of the screen width.</p>',
+      size: 'md'
+    });
+    currentSlideover.open();
+  }
+
+  function demoSizeLarge() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'Large Slideover (75%)',
+      content: '<p>This is a large slideover, taking up 75% of the screen width.</p>',
+      size: 'lg'
+    });
+    currentSlideover.open();
+  }
+
+  function demoSizeXL() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'Extra Large Slideover (90%)',
+      content: '<p>This is an extra large slideover, taking up 90% of the screen width.</p>',
+      size: 'xl'
+    });
+    currentSlideover.open();
+  }
+
+  function demoSizeFull() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'Full Slideover (100%)',
+      content: '<p>This is a full slideover, taking up 100% of the screen width.</p><p>Acts like a full-screen panel.</p>',
+      size: 'full'
+    });
+    currentSlideover.open();
+  }
+
+  function demoSizeCustom() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'Custom Size (400px)',
+      content: '<p>This slideover has a custom width of exactly 400 pixels.</p><p>You can use px, rem, em, or % for custom sizes.</p>',
+      size: '400px'
+    });
+    currentSlideover.open();
+  }
+
+  // Advanced features
+  function demoNoBackdrop() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'No Backdrop',
+      content: '<p>This slideover has no backdrop overlay.</p><p>The main content remains fully visible and interactive.</p>',
+      backdrop: false
+    });
+    currentSlideover.open();
+  }
+
+  function demoBackdropNoClose() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'Backdrop, No Close',
+      content: '<p>This slideover has a backdrop but you cannot close it by clicking the backdrop.</p><p>You must use the X button to close.</p>',
+      backdrop: true,
+      backdropClose: false
+    });
+    currentSlideover.open();
+  }
+
+  function demoNonClosable() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'Non-Closable Slideover',
+      content: `
+                <p>This slideover has no X button and cannot be closed with the backdrop or Escape key.</p>
+                <p>It must be closed programmatically:</p>
+                <button onclick="currentSlideover.close()" class="btn btn-primary">Close Programmatically</button>
+            `,
+      closable: false,
+      backdropClose: false,
+      keyboard: false
+    });
+    currentSlideover.open();
+  }
+
+  function demoCallbacks() {
+    const logEl = $('#callback-log');
+    logEl.html('');
+
+    function log(message) {
+      const time = new Date().toLocaleTimeString();
+      logEl.append(`<div>[${time}] ${message}</div>`);
+    }
+
+    currentSlideover = Domma.elements.slideover({
+      title: 'Callback Demo',
+      content: '<p>Watch the log below for callback messages!</p><p>Try opening and closing this slideover multiple times.</p>',
+      onOpen: () => {
+        log('🎉 <strong>onOpen</strong> - Slideover opened!');
+      },
+      onClose: () => {
+        log('🔄 <strong>onClose</strong> - Slideover is closing...');
+      },
+      onClosed: () => {
+        log('✅ <strong>onClosed</strong> - Slideover fully closed!');
+      }
+    });
+
+    log('📝 Slideover created, opening now...');
+    currentSlideover.open();
+  }
+
+  function demoFormContent() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'Contact Form',
+      content: `
+                <form id="contact-form" class="p-0">
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Subject</label>
+                        <input type="text" name="subject" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message</label>
+                        <textarea name="message" rows="6" class="form-control" required></textarea>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <span data-icon="send" data-icon-size="16"></span> Send Message
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="currentSlideover.close()">Cancel</button>
+                    </div>
+                </form>
+            `,
+      size: 'md',
+      onOpen: () => {
+        $('#contact-form').on('submit', function (e) {
+          e.preventDefault();
+          Domma.elements.toast('Form submitted successfully!', {type: 'success'});
+          currentSlideover.close();
+        });
+      }
+    });
+    currentSlideover.open();
+  }
+
+  function demoProgrammatic() {
+    currentSlideover = Domma.elements.slideover({
+      title: 'Programmatic Control',
+      content: `
+                <p class="mb-4">Use the buttons below to modify this slideover:</p>
+                <div class="d-flex flex-column gap-2 mb-4">
+                    <button onclick="currentSlideover.setTitle('🎯 Title Updated!')" class="btn btn-sm btn-outline">Change Title</button>
+                    <button onclick="currentSlideover.setContent('<div class=\\'p-4 bg-success text-white rounded\\'><h4>Content Updated!</h4><p>The content was changed dynamically.</p></div>')" class="btn btn-sm btn-outline">Change Content</button>
+                    <hr>
+                    <button onclick="currentSlideover.setSize('sm')" class="btn btn-sm btn-secondary">Size: Small</button>
+                    <button onclick="currentSlideover.setSize('md')" class="btn btn-sm btn-secondary">Size: Medium</button>
+                    <button onclick="currentSlideover.setSize('lg')" class="btn btn-sm btn-secondary">Size: Large</button>
+                    <button onclick="currentSlideover.setSize('xl')" class="btn btn-sm btn-secondary">Size: XL</button>
+                    <hr>
+                    <button onclick="currentSlideover.setPosition('left')" class="btn btn-sm btn-primary">Position: Left</button>
+                    <button onclick="currentSlideover.setPosition('right')" class="btn btn-sm btn-primary">Position: Right</button>
+                    <button onclick="currentSlideover.setPosition('top')" class="btn btn-sm btn-primary">Position: Top</button>
+                    <button onclick="currentSlideover.setPosition('bottom')" class="btn btn-sm btn-primary">Position: Bottom</button>
+                </div>
+                <div class="alert alert-info">
+                    <strong>Is Open:</strong> <span id="is-open-status" class="font-mono">?</span>
+                </div>
+            `,
+      position: 'right',
+      size: 'md',
+      onOpen: () => {
+        // Update status every 500ms
+        const interval = setInterval(() => {
+          const statusEl = document.getElementById('is-open-status');
+          if (statusEl && currentSlideover) {
+            statusEl.textContent = currentSlideover.isOpen() ? 'true ✅' : 'false ❌';
+          } else {
+            clearInterval(interval);
+          }
+        }, 500);
+      }
+    });
+    currentSlideover.open();
+  }
+
+  // Initialize Domma features
+  $.setup({
+    scanIcons: true
+  });
+</script>
+
+</body>
+</html>

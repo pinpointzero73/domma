@@ -11,6 +11,7 @@ Accessed via `Domma.elements` - provides 25+ UI components including modals, tab
 ### Interactive Components
 
 - **Modal** - Dialog overlays
+- **Slideover** - Panel overlays that slide from screen edges
 - **Tabs** - Tabbed content panels
 - **Accordion** - Collapsible content sections
 - **Carousel** - Image/content sliders
@@ -93,6 +94,35 @@ modal.toggle();
 if (modal.isOpen()) {
     console.log('Modal is open');
 }
+```
+
+### Slideover Example
+
+```javascript
+// Factory method (recommended)
+const slideover = Domma.elements.slideover({
+    title: 'Settings Panel',
+    content: '<p>Panel content goes here.</p>',
+    position: 'right',  // 'left', 'right', 'top', 'bottom'
+    size: 'lg',         // 'sm', 'md', 'lg', 'xl', 'full', or custom (e.g., '400px')
+    backdrop: true,
+    backdropClose: true,
+    keyboard: true,
+    onOpen: () => console.log('Opened'),
+    onClose: () => console.log('Closed')
+});
+
+// Control slideover
+slideover.open();
+slideover.close();
+slideover.toggle();
+slideover.isOpen();
+
+// Modify on the fly
+slideover.setTitle('New Title');
+slideover.setContent('<p>Updated content</p>');
+slideover.setSize('md');
+slideover.setPosition('left');
 ```
 
 ### Tabs Example
@@ -178,7 +208,7 @@ $.setup({
 `breadcrumbs`, `navbar`, `notification`, `timer`, `alarm`
 
 **Not Supported via Config:**
-`toast`, `dialog`, `jumbotron`, `autocomplete`, `pillbox`, `editor`, `themeRoller`, `pageRoller`
+`toast`, `dialog`, `jumbotron`, `autocomplete`, `pillbox`, `slideover`, `editor`, `themeRoller`, `pageRoller`
 
 ## Showcase Example Template
 
@@ -224,6 +254,7 @@ $.setup({
 Each UI component has its own showcase folder with examples:
 
 - `modal/` - Modal dialog examples
+- `slideover/` - Slideover panel examples
 - `tabs/` - Tabbed interface examples
 - `accordion/` - Accordion panel examples
 - `carousel/` - Carousel slider examples

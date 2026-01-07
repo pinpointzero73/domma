@@ -6229,6 +6229,559 @@ class Pillbox extends Component {
  */
 
 // ============================================
+// Slideover Component
+// ============================================
+
+class Slideover extends Component {
+    static defaults = {
+        position: 'right',
+        size: 'lg',
+        backdrop: true,
+        backdropClose: true,
+        keyboard: true,
+        animation: true,
+        animationDuration: 300,
+        closeOnEscape: true,
+        title: '',
+        content: '',
+        closable: true,
+        closeIcon: 'x',
+        headerClass: '',
+        bodyClass: '',
+        footerClass: '',
+        customSizes: {},
+        onOpen: null,
+        onClose: null,
+        onClosed: null
+    };
+
+    constructor(selector, options = {}) {
+        super(selector, options);
+        this._isOpen = false;
+        this._backdrop = null;
+        this._originalBodyOverflow = null;
+        this._keydownHandler = null;
+        this._init();
+    }
+
+    _init() {
+        if (!this.element) return;
+
+        this._setupElement();
+        this._bindEvents();
+    }
+
+    _setupElement() {
+        const el = this.element;
+        const opts = this.options;
+
+        // Ensure the element has proper structure
+        el.classList.add('dm-slideover');
+        el.style.position = 'fixed';
+        el.style.top = '0';
+        el.style.height = '100vh';
+        el.style.backgroundColor = 'white';
+        el.style.boxShadow = this._getBoxShadow();
+        el.style.zIndex = '9999';
+        el.style.display = 'none';
+        el.style.flexDirection = 'column';
+        el.style.overflow = 'hidden';
+
+        this._applyPosition();
+        this._applySize();
+        this._applyAnimation();
+    }
+
+    _applyPosition() {
+        const el = this.element;
+        const position = this.options.position;
+
+        el.classList.remove('dm-slideover-left', 'dm-slideover-right', 'dm-slideover-top', 'dm-slideover-bottom');
+        el.classList.add(`dm-slideover-${position}`);
+
+        switch (position) {
+            case 'left':
+                el.style.left = '-100%';
+                el.style.right = 'auto';
+                el.style.top = '0';
+                el.style.bottom = '0';
+                el.style.width = this._getSizeValue();
+                el.style.height = '100vh';
+                break;
+            case 'right':
+                el.style.right = '-100%';
+                el.style.left = 'auto';
+                el.style.top = '0';
+                el.style.bottom = '0';
+                el.style.width = this._getSizeValue();
+                el.style.height = '100vh';
+                break;
+            case 'top':
+                el.style.top = '-100%';
+                el.style.bottom = 'auto';
+                el.style.left = '0';
+                el.style.right = '0';
+                el.style.width = '100vw';
+                el.style.height = this._getSizeValue();
+                break;
+            case 'bottom':
+                el.style.bottom = '-100%';
+                el.style.top = 'auto';
+                el.style.left = '0';
+                el.style.right = '0';
+                el.style.width = '100vw';
+                el.style.height = this._getSizeValue();
+                break;
+        }
+    }
+
+    _applySize() {
+        const sizeValue = this._getSizeValue();
+        const position = this.options.position;
+
+        if (['left', 'right'].includes(position)) {
+            this.element.style.width = sizeValue;
+        } else {
+            this.element.style.height = sizeValue;
+        }
+    }
+
+    _getSizeValue() {
+        const {size, customSizes} = this.options;
+
+        // Check for custom size first
+        if (customSizes && customSizes[size]) {
+            return customSizes[size];
+        }
+
+        // Built-in sizes
+        const sizes = {
+            sm: '25%',
+            md: '50%',
+            lg: '75%',
+            xl: '90%',
+            full: '100%'
+        };
+
+        // If size is a direct value (e.g., '400px', '60%'), use it
+        if (typeof size === 'string' && (size.includes('px') || size.includes('%') || size.includes('rem') || size.includes('em'))) {
+            return size;
+        }
+
+        return sizes[size] || sizes.lg;
+    }
+
+    _applyAnimation() {
+        if (this.options.animation) {
+            this.element.style.transition = `all ${this.options.animationDuration}ms ease`;
+        } else {
+            this.element.style.transition = 'none';
+        }
+    }
+
+    _getBoxShadow() {
+        const position = this.options.position;
+        switch (position) {
+            case 'left':
+                return '2px 0 8px rgba(0,0,0,0.15)';
+            case 'right':
+                return '-2px 0 8px rgba(0,0,0,0.15)';
+            case 'top':
+                return '0 2px 8px rgba(0,0,0,0.15)';
+            case 'bottom':
+                return '0 -2px 8px rgba(0,0,0,0.15)';
+            default:
+                return '-2px 0 8px rgba(0,0,0,0.15)';
+        }
+    }
+
+    _bindEvents() {
+        if (this.options.closable) {
+            // Close button
+            const closeBtn = this.element.querySelector('[data-dismiss="slideover"], .dm-slideover-close');
+            if (closeBtn) {
+                this._addEventListener(closeBtn, 'click', () => this.close());
+            }
+        }
+
+        // Handle keyboard events
+        this._keydownHandler = (e) => {
+            if (this._isOpen && this.options.keyboard && e.key === 'Escape') {
+                if (this.options.closeOnEscape) {
+                    this.close();
+                }
+            }
+        };
+    }
+
+    _createBackdrop() {
+        if (!this.options.backdrop) return;
+
+        this._backdrop = document.createElement('div');
+        this._backdrop.className = 'dm-slideover-backdrop';
+        this._backdrop.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+            display: none;
+            transition: opacity ${this.options.animationDuration}ms ease;
+            opacity: 0;
+        `;
+
+        if (this.options.backdropClose) {
+            this._backdrop.addEventListener('click', () => this.close());
+        }
+
+        document.body.appendChild(this._backdrop);
+    }
+
+    _showBackdrop() {
+        if (!this._backdrop) return;
+        this._backdrop.style.display = 'block';
+        requestAnimationFrame(() => {
+            this._backdrop.style.opacity = '1';
+        });
+    }
+
+    _hideBackdrop() {
+        if (!this._backdrop) return;
+        this._backdrop.style.opacity = '0';
+        setTimeout(() => {
+            if (this._backdrop) {
+                this._backdrop.style.display = 'none';
+            }
+        }, this.options.animationDuration);
+    }
+
+    _getOpenPosition() {
+        const position = this.options.position;
+        switch (position) {
+            case 'left':
+                return {left: '0', right: 'auto'};
+            case 'right':
+                return {right: '0', left: 'auto'};
+            case 'top':
+                return {top: '0', bottom: 'auto'};
+            case 'bottom':
+                return {bottom: '0', top: 'auto'};
+        }
+    }
+
+    open() {
+        if (this._isOpen) return this;
+
+        const el = this.element;
+        if (!el) return this;
+
+        // Create backdrop if needed
+        if (this.options.backdrop && !this._backdrop) {
+            this._createBackdrop();
+        }
+
+        // Store original body overflow and prevent scrolling
+        this._originalBodyOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+
+        // Show backdrop
+        this._showBackdrop();
+
+        // Show slideover
+        el.style.display = 'flex';
+
+        // Apply open position with animation
+        const openPos = this._getOpenPosition();
+        requestAnimationFrame(() => {
+            Object.assign(el.style, openPos);
+        });
+
+        // Add keyboard event listener
+        if (this.options.keyboard) {
+            document.addEventListener('keydown', this._keydownHandler);
+        }
+
+        this._isOpen = true;
+
+        // Call onOpen callback after animation
+        setTimeout(() => {
+            if (this.options.onOpen) {
+                this.options.onOpen(this);
+            }
+            // Create form if schema exists and form hasn't been created yet
+            this._createForm();
+        }, this.options.animationDuration);
+
+        return this;
+    }
+
+    _createForm() {
+        if (!this._schema || this._formaForm || !window.Domma || !window.Domma.forms || !window.Domma.forms.create) {
+            return;
+        }
+
+        try {
+            console.log('📝 Creating Forma form with schema:', this._schema);
+
+            // Convert Forma schema format to Domma forms format
+            let formSchema = this._schema;
+            if (this._schema.fields && Array.isArray(this._schema.fields)) {
+                // Convert from Forma format {fields: []} to Domma format {fieldName: fieldDef}
+                formSchema = {};
+                for (const fieldDef of this._schema.fields) {
+                    if (fieldDef.name) {
+                        formSchema[fieldDef.name] = {
+                            type: fieldDef.type || 'string',
+                            label: fieldDef.label,
+                            required: fieldDef.required || false,
+                            default: fieldDef.defaultValue,
+                            min: fieldDef.validation?.minLength,
+                            max: fieldDef.validation?.maxLength,
+                            pattern: fieldDef.validation?.pattern ? new RegExp(fieldDef.validation.pattern) : undefined,
+                            options: fieldDef.options,
+                            formConfig: {
+                                placeholder: fieldDef.placeholder,
+                                hint: fieldDef.help,
+                                rows: fieldDef.rows,
+                                accept: fieldDef.accept,
+                                multiple: fieldDef.multiple
+                            }
+                        };
+                    }
+                }
+                console.log('📝 Converted schema:', formSchema);
+            }
+
+            // Enhanced form options for better styling
+            const formOptions = {
+                onSubmit: (formData, formInstance) => {
+                    console.log('📝 Schema form submitted:', formData);
+                    if (this._onSave) {
+                        this._onSave(formData, formInstance, this);
+                    }
+                    return false; // Prevent default form submission
+                },
+                onCancel: () => {
+                    console.log('📝 Schema form cancelled');
+                    this.close();
+                },
+                // Better form styling
+                layout: 'stacked',
+                showLabels: true,
+                showHelperText: true,
+                showHints: true,
+                cssFramework: 'domma',
+                className: 'domma-form',
+                fieldClassName: 'col-6 mb-3',
+                labelClassName: 'form-label',
+                inputClassName: 'form-input',
+                errorClassName: 'form-error',
+                helperClassName: 'form-helper-text',
+                hintClassName: 'form-hint'
+            };
+
+            // Create FormBuilder instance with enhanced styling options
+            this._formaForm = window.Domma.forms.create(formSchema, this._data || {}, formOptions);
+
+            // Render form into the schema container
+            this._formaForm.renderTo('#schema-form-container');
+
+            console.log('📝 Forma form created and rendered successfully');
+        } catch (error) {
+            console.error('📝 Failed to create Forma form:', error);
+            // Fallback to basic content
+            const bodyEl = this.element.querySelector('.dm-slideover-body');
+            if (bodyEl) {
+                bodyEl.innerHTML = '<p>Form creation failed. Please try again.</p>';
+            }
+        }
+    }
+
+    close() {
+        if (!this._isOpen) return this;
+
+        const el = this.element;
+        if (!el) return this;
+
+        // Call onClose callback
+        if (this.options.onClose) {
+            this.options.onClose(this);
+        }
+
+        // Hide slideover with animation
+        this._applyPosition(); // Reset to closed position
+
+        // Hide backdrop
+        this._hideBackdrop();
+
+        // Restore body overflow
+        if (this._originalBodyOverflow !== null) {
+            document.body.style.overflow = this._originalBodyOverflow;
+        }
+
+        // Remove keyboard event listener
+        if (this._keydownHandler) {
+            document.removeEventListener('keydown', this._keydownHandler);
+        }
+
+        // Clean up form if it exists
+        if (this._formaForm) {
+            try {
+                if (this._formaForm.destroy) {
+                    this._formaForm.destroy();
+                }
+                this._formaForm = null;
+                // Clear form container
+                const formContainer = el.querySelector('#schema-form-container');
+                if (formContainer) {
+                    formContainer.innerHTML = '';
+                }
+            } catch (error) {
+                console.warn('Error cleaning up form:', error);
+            }
+        }
+
+        // Hide element after animation
+        setTimeout(() => {
+            el.style.display = 'none';
+            this._isOpen = false;
+
+            // Call onClosed callback
+            if (this.options.onClosed) {
+                this.options.onClosed(this);
+            }
+        }, this.options.animationDuration);
+
+        return this;
+    }
+
+    toggle() {
+        return this._isOpen ? this.close() : this.open();
+    }
+
+    isOpen() {
+        return this._isOpen;
+    }
+
+    setTitle(title) {
+        const titleEl = this.element.querySelector('.dm-slideover-header .dm-slideover-title');
+        if (titleEl) {
+            titleEl.textContent = title;
+        }
+        return this;
+    }
+
+    setContent(content) {
+        const bodyEl = this.element.querySelector('.dm-slideover-body');
+        if (bodyEl) {
+            if (typeof content === 'string') {
+                bodyEl.innerHTML = content;
+            } else if (content instanceof Element) {
+                bodyEl.innerHTML = '';
+                bodyEl.appendChild(content);
+            }
+        }
+        return this;
+    }
+
+    setSize(size) {
+        this.options.size = size;
+        this._applySize();
+        return this;
+    }
+
+    setPosition(position) {
+        this.options.position = position;
+        this.element.style.boxShadow = this._getBoxShadow();
+        this._applyPosition();
+        return this;
+    }
+
+    destroy() {
+        this.close();
+
+        // Remove backdrop
+        if (this._backdrop) {
+            this._backdrop.remove();
+            this._backdrop = null;
+        }
+
+        // Remove keyboard handler
+        if (this._keydownHandler) {
+            document.removeEventListener('keydown', this._keydownHandler);
+        }
+
+        super.destroy();
+    }
+
+    // Static factory method for creating slideover with content or schema
+    static create(options = {}) {
+        const slideover = document.createElement('div');
+        slideover.className = 'dm-slideover';
+
+        const {title, content, schema, data = {}, closable = true, closeIcon = 'x', onSave} = options;
+
+        // Build structure
+        let html = '';
+
+        // Header
+        if (title || closable) {
+            html += '<div class="dm-slideover-header">';
+            if (title) {
+                html += `<h5 class="dm-slideover-title">${title}</h5>`;
+            }
+            if (closable) {
+                html += `<button type="button" class="btn btn-ghost-secondary dm-slideover-close" data-dismiss="slideover" aria-label="Close">`;
+                if (window.Domma && window.Domma.icons) {
+                    html += Domma.icons.render(closeIcon, {size: 20}).outerHTML;
+                } else {
+                    html += '&times;';
+                }
+                html += '</button>';
+            }
+            html += '</div>';
+        }
+
+        // Body
+        html += '<div class="dm-slideover-body">';
+        if (schema) {
+            // Create form container for schema-driven form with proper layout
+            html += '<div class="container-fluid p-4">';
+            html += '<div class="card">';
+            html += '<div class="card-body p-4">';
+            html += '<div class="row g-3" id="schema-form-container"></div>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+        } else if (content) {
+            html += typeof content === 'string' ? content : '';
+        }
+        html += '</div>';
+
+        slideover.innerHTML = html;
+        document.body.appendChild(slideover);
+
+        // If content is an element, append it properly
+        if (content instanceof Element && !schema) {
+            const bodyEl = slideover.querySelector('.dm-slideover-body');
+            bodyEl.innerHTML = '';
+            bodyEl.appendChild(content);
+        }
+
+        const instance = new Slideover(slideover, options);
+
+        // Store schema and data for form creation on open
+        instance._schema = schema;
+        instance._data = data;
+        instance._onSave = onSave;
+
+        return instance;
+    }
+}
+
+// ============================================
 // Timeline Component  
 // ============================================
 
@@ -6571,6 +7124,28 @@ export const elements = {
 
     treeView(selector, options = {}) {
         const instance = new TreeView(selector, options);
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
+    slideover(selectorOrOptions, options = {}) {
+        // Support factory mode: first arg is plain object (for Slideover.create)
+        if (typeof selectorOrOptions === 'object' &&
+          !selectorOrOptions.nodeType &&
+          typeof selectorOrOptions !== 'string') {
+
+            // Check if it contains schema - if so, it's a schema-driven slideover
+            if (selectorOrOptions.schema) {
+                return Slideover.create(selectorOrOptions);
+            }
+
+            return Slideover.create(selectorOrOptions);
+        }
+
+        // Traditional selector mode
+        const instance = new Slideover(selectorOrOptions, options);
         if (instance.element) {
             this._instances.set(instance.element, instance);
         }

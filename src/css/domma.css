@@ -3976,3 +3976,15 @@ code, pre {
 .filter-warm {
     filter: saturate(1.2) hue-rotate(-15deg);
 }
+
+/* ================================================
+   CLOAKING - Prevent flash of unstyled content
+   ================================================ */
+body.dm-cloaked {
+    opacity: 0;
+}
+
+body.dm-cloaked.dm-ready {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}

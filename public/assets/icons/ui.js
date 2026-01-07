@@ -446,6 +446,15 @@ export const ui = {
         viewBox: '0 0 24 24',
         path: 'M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15',
         stroke: 'currentColor',
+      fill: 'none',
+      strokeWidth: 2,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round'
+    },
+  'sync': {
+    viewBox: '0 0 24 24',
+    path: 'M1 4v6h6m16 10v-6h-6M2 20l6-6M22 4l-6 6M9 12l2 2 4-4',
+    stroke: 'currentColor',
         fill: 'none',
         strokeWidth: 2,
         strokeLinecap: 'round',

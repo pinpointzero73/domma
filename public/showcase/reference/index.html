@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../../dist/grid.css">
   <link rel="stylesheet" href="../../dist/elements.css">
   <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-  <link rel="stylesheet" href="../../showcase/css/domma-showcase.css">
+  <link rel="stylesheet" href="../css/domma-showcase.css">
   <style>
       .reference-grid {
           display: grid;
@@ -19,24 +19,24 @@
       }
 
       .reference-card {
-          background: var(--dm-color-surface);
-          border: 1px solid var(--dm-color-border);
-          border-radius: var(--dm-border-radius);
+          background: var(--dm-surface);
+          border: 1px solid var(--dm-border);
+          border-radius: var(--dm-radius-lg);
           overflow: hidden;
           transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
 
       .reference-card:hover {
           transform: translateY(-2px);
-          box-shadow: 0 4px 12px var(--dm-color-shadow);
+          box-shadow: var(--dm-shadow-lg);
       }
 
       .reference-header {
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          background: var(--dm-color-primary);
-          color: var(--dm-color-primary-contrast);
+          background: var(--dm-primary);
+          color: var(--dm-text-inverse);
           padding: 0.75rem 1rem;
       }
 
@@ -62,7 +62,7 @@
           align-items: center;
           padding: 0.4rem 0.5rem;
           margin: 0.25rem 0;
-          background: var(--dm-color-surface-variant);
+          background: var(--dm-surface-raised);
           border-radius: 4px;
           font-family: monospace;
           font-size: 0.8rem;
@@ -70,18 +70,18 @@
 
       .method-name {
           font-weight: 600;
-          color: var(--dm-color-primary);
+          color: var(--dm-primary);
       }
 
       .method-desc {
-          color: var(--dm-color-text-secondary);
+          color: var(--dm-text-secondary);
           font-size: 0.75rem;
           text-align: right;
       }
 
       .alias-badge {
-          background: var(--dm-color-accent);
-          color: var(--dm-color-accent-contrast);
+          background: var(--dm-secondary);
+          color: var(--dm-text-inverse);
           padding: 0.2rem 0.5rem;
           border-radius: 12px;
           font-size: 0.7rem;
@@ -92,7 +92,7 @@
       .copy-btn {
           background: none;
           border: none;
-          color: var(--dm-color-text-secondary);
+          color: var(--dm-text-secondary);
           cursor: pointer;
           padding: 0.2rem;
           border-radius: 3px;
@@ -100,35 +100,35 @@
       }
 
       .copy-btn:hover {
-          background: var(--dm-color-surface-hover);
+          background: var(--dm-hover-bg);
       }
 
       .quick-example {
-          background: var(--dm-color-surface-code);
-          border: 1px solid var(--dm-color-border);
+          background: var(--dm-surface-overlay);
+          border: 1px solid var(--dm-border);
           border-radius: 4px;
           padding: 0.5rem;
           margin: 0.5rem 0;
           font-family: monospace;
           font-size: 0.75rem;
-          color: var(--dm-color-text);
+          color: var(--dm-text);
       }
 
       .section-intro {
           text-align: center;
           margin: 2rem 0;
           padding: 1.5rem;
-          background: var(--dm-color-surface-variant);
-          border-radius: var(--dm-border-radius-lg);
+          background: var(--dm-surface-raised);
+          border-radius: var(--dm-radius-2xl);
       }
 
       .hero-reference {
-          background: linear-gradient(135deg, var(--dm-color-primary), var(--dm-color-secondary));
+          background: linear-gradient(135deg, var(--dm-primary), var(--dm-secondary));
           color: white;
           padding: 3rem 2rem;
           text-align: center;
           margin-bottom: 2rem;
-          border-radius: var(--dm-border-radius-lg);
+          border-radius: var(--dm-radius-2xl);
       }
 
       .hero-reference h1 {
@@ -143,15 +143,15 @@
       }
   </style>
 </head>
-<body data-layout="showcase" data-layout-variant="subpage">
+<body class="dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
+
+<main class="container py-8">
 
 <div class="hero-reference">
   <h1><span data-icon="zap" class="icon"></span> Domma Reference</h1>
   <p>Complete API cheat sheet for rapid development</p>
   <p><strong>Zero dependencies • jQuery compatible • 100% TypeScript</strong></p>
 </div>
-
-<div class="container py-4">
 
   <!-- Aliases Section -->
   <div class="section-intro">
@@ -681,9 +681,10 @@
     </div>
   </div>
 
-</div>
+</main>
 
 <script src="../../dist/domma.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
 <script>
   // Copy functionality
   $('.copy-btn').on('click', function (e) {
@@ -741,6 +742,11 @@
 
   console.log('🚀 Domma Reference loaded!');
   console.log('Try: $(".reference-card").addClass("highlighted")');
+
+  // Initialize Domma features
+  $.setup({
+    scanIcons: true
+  });
 </script>
 
 </body>

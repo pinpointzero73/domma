@@ -2,8 +2,8 @@
  * Domma Core CSS v0.5.0-alpha
  * Dynamic Object Manipulation & Modeling API
  * (c) 2026 Darryl Waterhouse & DCBW-IT
- * Built: 2026-01-06T09:11:08.394Z
- * Commit: 9300fab
+ * Built: 2026-01-06T23:53:45.374Z
+ * Commit: ae6bb6c
  */
 
 /**
@@ -3983,4 +3983,16 @@ code, pre {
 
 .filter-warm {
     filter: saturate(1.2) hue-rotate(-15deg);
+}
+
+/* ================================================
+   CLOAKING - Prevent flash of unstyled content
+   ================================================ */
+body.dm-cloaked {
+    opacity: 0;
+}
+
+body.dm-cloaked.dm-ready {
+    opacity: 1;
+    transition: opacity 0.3s ease;
 }

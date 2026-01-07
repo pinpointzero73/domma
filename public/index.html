@@ -78,10 +78,36 @@
 
       .features {
           display: flex;
-          gap: 1.5rem;
+          gap: 2rem;
           flex-wrap: wrap;
           justify-content: center;
           margin-bottom: 2rem;
+      }
+
+      .feature-group {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+      }
+
+      .feature-group-label {
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: rgba(255, 255, 255, 0.6);
+          padding: 0.25rem 0.75rem;
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .feature-group-items {
+          display: flex;
+          gap: 1rem;
+          flex-wrap: wrap;
+          justify-content: center;
       }
 
       .feature {
@@ -92,12 +118,27 @@
           min-width: 120px;
           text-decoration: none;
           color: inherit;
-          transition: transform 0.2s ease, background 0.2s ease;
       }
 
       .feature:hover {
-          transform: translateY(-3px);
-          background: var(--dm-white-t15);
+          animation: pulse 1.5s ease-in-out infinite;
+          color: white;
+      }
+
+      .feature:hover .feature-icon,
+      .feature:hover .feature-label {
+          color: white;
+      }
+
+      @keyframes pulse {
+          0%, 100% {
+              transform: scale(1);
+              box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3);
+          }
+          50% {
+              transform: scale(1.05);
+              box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+          }
       }
 
       .feature-icon {
@@ -113,8 +154,8 @@
 
       .splash-carousel {
           width: 100%;
-          max-width: 800px;
-          margin-bottom: 1rem;
+          max-width: 1200px;
+          margin: 0 auto 1rem;
       }
 
       .splash-carousel .carousel {
@@ -125,7 +166,7 @@
       }
 
       .splash-carousel .carousel-slide {
-          padding: 2.5rem 3rem;
+          padding: 4rem 3rem;
           text-align: center;
       }
 
@@ -254,6 +295,13 @@
           color: #333;
           display: flex;
           flex-direction: column;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+          transition: box-shadow 0.3s ease, transform 0.3s ease;
+      }
+
+      .module-card:hover {
+          box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1);
+          transform: translateY(-2px);
       }
 
       .module-card .card-body {
@@ -378,54 +426,101 @@
   </div>
 
   <div class="features">
-    <a href="showcase/config/index.html" class="feature card-hover">
-      <div class="feature-icon" data-icon="settings" data-icon-size="42"></div>
-      <div class="feature-label">Config</div>
-    </a>
-    <a href="showcase/dom/index.html" class="feature card-hover">
-      <div class="feature-icon">$</div>
-      <div class="feature-label">DOM</div>
-    </a>
-    <a href="showcase/utils/index.html" class="feature card-hover">
-      <div class="feature-icon">_</div>
-      <div class="feature-label">Utils</div>
-    </a>
-    <a href="showcase/dates/index.html" class="feature card-hover">
-      <div class="feature-icon" data-icon="calendar" data-icon-size="42"></div>
-      <div class="feature-label">Dates</div>
-    </a>
-    <a href="showcase/models/index.html" class="feature card-hover">
-      <div class="feature-icon" data-icon="database" data-icon-size="42"></div>
-      <div class="feature-label">Models</div>
-    </a>
-    <a href="showcase/elements/index.html" class="feature card-hover">
-      <div class="feature-icon" data-icon="layout" data-icon-size="42"></div>
-      <div class="feature-label">Elements</div>
-    </a>
-    <a href="showcase/storage/index.html" class="feature card-hover">
-      <div class="feature-icon" data-icon="save" data-icon-size="42"></div>
-      <div class="feature-label">Storage</div>
-    </a>
-    <a href="showcase/tables/index.html" class="feature card-hover">
-      <div class="feature-icon" data-icon="grid" data-icon-size="42"></div>
-      <div class="feature-label">Tables</div>
-    </a>
-    <a href="showcase/http/index.html" class="feature card-hover">
-      <div class="feature-icon" data-icon="globe" data-icon-size="42"></div>
-      <div class="feature-label">HTTP</div>
-    </a>
-    <a href="showcase/icons/index.html" class="feature card-hover">
-      <div class="feature-icon" data-icon="image" data-icon-size="42"></div>
-      <div class="feature-label">Icons</div>
-    </a>
-    <a href="showcase/themes/index.html" class="feature card-hover">
-      <div class="feature-icon" data-icon="sun" data-icon-size="42"></div>
-      <div class="feature-label">Themes</div>
-    </a>
-    <a href="showcase/effects/index.html" class="feature card-hover">
-      <div class="feature-icon glow-primary" data-icon="zap" data-icon-size="42"></div>
-      <div class="feature-label">Effects</div>
-    </a>
+    <!-- Core Foundation -->
+    <div class="feature-group">
+      <div class="feature-group-label">Core</div>
+      <div class="feature-group-items">
+        <a href="showcase/dom/index.html" class="feature">
+          <div class="feature-icon">$</div>
+          <div class="feature-label">DOM</div>
+        </a>
+        <a href="showcase/utils/index.html" class="feature">
+          <div class="feature-icon">_</div>
+          <div class="feature-label">Utils</div>
+        </a>
+        <a href="showcase/config/index.html" class="feature">
+          <div class="feature-icon" data-icon="settings" data-icon-size="42"></div>
+          <div class="feature-label">Config</div>
+        </a>
+        <a href="showcase/storage/index.html" class="feature">
+          <div class="feature-icon" data-icon="save" data-icon-size="42"></div>
+          <div class="feature-label">Storage</div>
+        </a>
+        <a href="showcase/http/index.html" class="feature">
+          <div class="feature-icon" data-icon="globe" data-icon-size="42"></div>
+          <div class="feature-label">HTTP</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Data Management -->
+    <div class="feature-group">
+      <div class="feature-group-label">Data</div>
+      <div class="feature-group-items">
+        <a href="showcase/dates/index.html" class="feature">
+          <div class="feature-icon" data-icon="calendar" data-icon-size="42"></div>
+          <div class="feature-label">Dates</div>
+        </a>
+        <a href="showcase/models/index.html" class="feature">
+          <div class="feature-icon" data-icon="database" data-icon-size="42"></div>
+          <div class="feature-label">Models</div>
+        </a>
+        <a href="showcase/forms/index.html" class="feature">
+          <div class="feature-icon" data-icon="document-add" data-icon-size="42"></div>
+          <div class="feature-label">Forms</div>
+        </a>
+        <a href="showcase/tables/index.html" class="feature">
+          <div class="feature-icon" data-icon="grid" data-icon-size="42"></div>
+          <div class="feature-label">Tables</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- UI & Styling -->
+    <div class="feature-group">
+      <div class="feature-group-label">UI</div>
+      <div class="feature-group-items">
+        <a href="showcase/elements/index.html" class="feature">
+          <div class="feature-icon" data-icon="layout" data-icon-size="42"></div>
+          <div class="feature-label">Elements</div>
+        </a>
+        <a href="showcase/icons/index.html" class="feature">
+          <div class="feature-icon" data-icon="image" data-icon-size="42"></div>
+          <div class="feature-label">Icons</div>
+        </a>
+        <a href="showcase/themes/index.html" class="feature">
+          <div class="feature-icon" data-icon="sun" data-icon-size="42"></div>
+          <div class="feature-label">Themes</div>
+        </a>
+        <a href="showcase/effects/index.html" class="feature">
+          <div class="feature-icon glow-primary" data-icon="zap" data-icon-size="42"></div>
+          <div class="feature-label">Effects</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Tools -->
+    <div class="feature-group">
+      <div class="feature-group-label">Tools</div>
+      <div class="feature-group-items">
+        <a href="showcase/theme-roller/index.html" class="feature">
+          <div class="feature-icon" data-icon="palette" data-icon-size="42"></div>
+          <div class="feature-label">Theme Roller</div>
+        </a>
+        <a href="showcase/page-roller/index.html" class="feature">
+          <div class="feature-icon" data-icon="box" data-icon-size="42"></div>
+          <div class="feature-label">Page Roller</div>
+        </a>
+        <a href="showcase/elements/editor/index.html" class="feature">
+          <div class="feature-icon" data-icon="edit" data-icon-size="42"></div>
+          <div class="feature-label">Editor</div>
+        </a>
+        <a href="showcase/print-to-pdf/index.html" class="feature">
+          <div class="feature-icon" data-icon="download" data-icon-size="42"></div>
+          <div class="feature-label">Print PDF</div>
+        </a>
+      </div>
+    </div>
   </div>
 
   <div class="splash-carousel">

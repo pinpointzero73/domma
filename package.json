@@ -60,6 +60,7 @@
     "dotenv": "^17.2.3",
     "jsdom": "^24.1.0",
     "live-server": "^1.2.0",
+    "puppeteer": "^24.34.0",
     "rollup": "^4.28.0",
     "rollup-plugin-obfuscator": "^1.1.0",
     "vitest": "^4.0.16"
