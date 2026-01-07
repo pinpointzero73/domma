@@ -371,12 +371,12 @@ class NexusStorage {
     const config = {
       method: options.method || 'GET',
       headers: {
-        'Content-Type': 'application/json',
         ...(this.token && {'Authorization': `Bearer ${this.token}`})
       }
     };
 
     if (options.body) {
+      config.headers['Content-Type'] = 'application/json';
       config.body = JSON.stringify(options.body);
     }
 

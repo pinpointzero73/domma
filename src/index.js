@@ -100,12 +100,14 @@ const D = dates;
 const S = storage;
 const A = auth;
 const F = forms;
+const H = http;
 
 // Attach aliases to Domma
 Domma.M = M;
 Domma.D = D;
 Domma.S = S;
 Domma.A = A;
+Domma.H = H;
 
 // Expose globally if needed
 if (typeof window !== 'undefined') {
@@ -117,10 +119,11 @@ if (typeof window !== 'undefined') {
     window.S = S;
     window.A = A;
     window.F = F;
+    window.H = H;
 }
 
 export default Domma;
-export {Domma, $, _, M, D, S, A, F};
+export {Domma, $, _, M, D, S, A, F, H};
 
 // Reveal page after Domma is ready
 if (typeof document !== 'undefined') {

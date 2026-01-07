@@ -140,8 +140,13 @@ export const contactSchema = {
       label: 'Groups',
       type: 'multiselect',
       required: false,
+      multiple: true,
       options: [], // Will be populated dynamically
-      placeholder: 'Select groups',
+      placeholder: 'Select one or more groups',
+      help: 'Choose groups to organize this contact',
+      validation: {
+        maxItems: 10
+      },
       grid: 'col-md-6'
     },
     {
