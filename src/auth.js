@@ -168,6 +168,10 @@ export const auth = {
     };
   },
 
+  getApiUrl() {
+    return this.apiUrl;
+  },
+
   /**
    * Get current user role
    * @returns {string|null} Role ('admin', 'subscriber', 'guest') or null
