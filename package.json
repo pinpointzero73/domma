@@ -39,8 +39,7 @@
     "generate:bundles": "node scripts/generate-bundles.js",
     "test:vitest": "vitest",
     "test": "vitest",
-    "cypress:run": "cypress run",
-    "showcase": "live-server public --port=3001 --open=/showcase/index.html"
+    "cypress:run": "cypress run"
   },
   "keywords": [
     "dom",
