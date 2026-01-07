@@ -5,6 +5,7 @@
 
 import {utils} from './utils.js';
 import {icons} from './icons.js';
+import {storage} from './storage.js';
 
 /**
  * Table Instance Class
@@ -108,6 +109,10 @@ class TableInstance {
             // Regex search toggle
             regexSearch: false,
 
+            // Settings persistence
+            persistSettings: false,        // Enable persistence of column visibility, sorting, page size
+            storageKey: null,              // Custom storage key (defaults to table element id)
+
             // Callbacks
             onSort: null,
             onFilter: null,
@@ -147,6 +152,11 @@ class TableInstance {
             filterOptions: col.filterOptions || null,
             visible: col.visible !== false
         }));
+
+        // Load saved settings if persistence is enabled
+        if (this.options.persistSettings) {
+            this._loadSettings();
+        }
 
         this._init();
     }
@@ -316,6 +326,7 @@ class TableInstance {
         this._sorts = [{column, direction}];
         this._applyFiltersAndSort();
         this.render();
+        this._saveSettings();
         if (this.options.onSort) {
             this.options.onSort({column, direction, sorts: this._sorts});
         }
@@ -326,6 +337,7 @@ class TableInstance {
         this._sorts = sorts;
         this._applyFiltersAndSort();
         this.render();
+        this._saveSettings();
         if (this.options.onSort) {
             this.options.onSort({sorts: this._sorts});
         }
@@ -336,6 +348,7 @@ class TableInstance {
         this._sorts = [];
         this._applyFiltersAndSort();
         this.render();
+        this._saveSettings();
         return this;
     }
 
@@ -529,6 +542,7 @@ class TableInstance {
         this._pageSize = size;
         this._currentPage = 1;
         this.render();
+        this._saveSettings();
         return this;
     }
 
@@ -657,6 +671,76 @@ class TableInstance {
     }
 
     // ============================================
+    // Settings Persistence
+    // ============================================
+
+    _getStorageKey() {
+        return this.options.storageKey ||
+          (this.element.id ? `domma-table-${this.element.id}` : 'domma-table-default');
+    }
+
+    _loadSettings() {
+        try {
+            const key = this._getStorageKey();
+            const saved = storage.get(key);
+
+            if (saved && saved.columns) {
+                // Apply saved column visibility
+                saved.columns.forEach(savedCol => {
+                    const col = this._columns.find(c => c.key === savedCol.key);
+                    if (col) {
+                        col.visible = savedCol.visible;
+                        if (savedCol.width) {
+                            col.width = savedCol.width;
+                        }
+                    }
+                });
+            }
+
+            // Load other saved settings
+            if (saved && saved.pageSize && this.options.pagination) {
+                this._pageSize = saved.pageSize;
+                this.options.pageSize = saved.pageSize;
+            }
+
+            if (saved && saved.sorts && this.options.sortable) {
+                this._sorts = saved.sorts;
+            }
+        } catch (error) {
+            console.warn('Failed to load table settings:', error);
+        }
+    }
+
+    _saveSettings() {
+        if (!this.options.persistSettings) return;
+
+        try {
+            const key = this._getStorageKey();
+            const settings = {
+                columns: this._columns.map(col => ({
+                    key: col.key,
+                    visible: col.visible,
+                    width: col.width
+                })),
+                pageSize: this._pageSize,
+                sorts: this._sorts,
+                timestamp: Date.now()
+            };
+
+            storage.set(key, settings);
+        } catch (error) {
+            console.warn('Failed to save table settings:', error);
+        }
+    }
+
+    clearSettings() {
+        if (this.options.persistSettings) {
+            const key = this._getStorageKey();
+            storage.remove(key);
+        }
+    }
+
+    // ============================================
     // Column Management
     // ============================================
 
@@ -665,6 +749,7 @@ class TableInstance {
         if (col) {
             col.visible = true;
             this.render();
+            this._saveSettings();
         }
         return this;
     }
@@ -674,6 +759,7 @@ class TableInstance {
         if (col) {
             col.visible = false;
             this.render();
+            this._saveSettings();
         }
         return this;
     }
@@ -683,6 +769,7 @@ class TableInstance {
         if (col) {
             col.visible = !col.visible;
             this.render();
+            this._saveSettings();
         }
         return this;
     }
@@ -938,7 +1025,8 @@ class TableInstance {
         const visibleColumns = this._columns.filter(c => c.visible);
         const pageData = this._getPageData();
 
-        // Clear existing
+        // Clear existing - first restore SVG icons to data-icon attributes
+        this._restoreIconsBeforeRebuild();
         this.element.innerHTML = '';
         this._clearEventListeners();
 
@@ -1050,6 +1138,8 @@ class TableInstance {
                     // Re-render table but keep dropdown open
                     this._columnDropdownOpen = true;
                     this.render();
+                    // Save settings when column visibility changes
+                    this._saveSettings();
                 });
 
                 item.appendChild(labelText);
@@ -1493,6 +1583,32 @@ class TableInstance {
             }
         }
         this._eventListeners.clear();
+    }
+
+    _restoreIconsBeforeRebuild() {
+        // Find all processed SVG icons and replace them with data-icon attributes
+        const processedIcons = this.element.querySelectorAll('svg[data-icon-processed="true"][data-original-icon]');
+
+        processedIcons.forEach(svg => {
+            const originalIconName = svg.getAttribute('data-original-icon');
+            if (originalIconName) {
+                // Create a replacement element with the original data-icon attribute
+                const replacement = document.createElement('span');
+                replacement.setAttribute('data-icon', originalIconName);
+
+                // Copy any additional data attributes from the original if they exist
+                const iconSize = svg.getAttribute('data-icon-size');
+                const iconColor = svg.getAttribute('data-icon-color') || svg.getAttribute('data-icon-colour');
+                const iconClass = svg.getAttribute('data-icon-class');
+
+                if (iconSize) replacement.setAttribute('data-icon-size', iconSize);
+                if (iconColor) replacement.setAttribute('data-icon-colour', iconColor);
+                if (iconClass) replacement.setAttribute('data-icon-class', iconClass);
+
+                // Replace the SVG with the data-icon element
+                svg.replaceWith(replacement);
+            }
+        });
     }
 
     on(event, callback) {

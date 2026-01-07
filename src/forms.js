@@ -42,9 +42,9 @@ function getFormData(formElement) {
 }
 
 /**
- * FormBuilder Class - Generates forms from Model schemas
+ * Forma Class - Generates forms from Model schemas
  */
-class FormBuilder {
+class Forma {
   static defaults = {
     layout: 'stacked',     // 'stacked', 'grid', 'inline'
     columns: 2,            // For grid layout
@@ -60,7 +60,8 @@ class FormBuilder {
     inputClassName: 'form-input',
     errorClassName: 'form-error',
     helperClassName: 'form-helper-text',
-    hintClassName: 'form-hint'
+    hintClassName: 'form-hint',
+    cardWrapper: false      // Wrap form in a card container
   };
 
   // Type-to-input mapping
@@ -86,7 +87,7 @@ class FormBuilder {
   constructor(schema, data = {}, options = {}) {
     this.schema = schema;
     this.data = {...data};
-    this.options = {...FormBuilder.defaults, ...options};
+    this.options = {...Forma.defaults, ...options};
     this.model = null;
     this.errors = {};
     this.touched = new Set();
@@ -138,7 +139,7 @@ class FormBuilder {
    * Build the complete form structure
    */
   _buildForm() {
-    const {className, layout, columns} = this.options;
+    const {className, layout, columns, cardWrapper} = this.options;
 
     let formClass = className;
     if (layout === 'grid') {
@@ -149,7 +150,14 @@ class FormBuilder {
       formClass += ' domma-form-inline';
     }
 
-    let html = `<form class="${formClass}" novalidate>`;
+    let html = '';
+
+    // Add card wrapper if enabled
+    if (cardWrapper) {
+      html += '<div class="card"><div class="card-body">';
+    }
+
+    html += `<form class="${formClass}" novalidate>`;
 
     // Process sections if defined
     if (this.options.sections && Array.isArray(this.options.sections)) {
@@ -183,6 +191,12 @@ class FormBuilder {
     }
 
     html += '</form>';
+
+    // Close card wrapper if enabled
+    if (cardWrapper) {
+      html += '</div></div>';
+    }
+    
     return html;
   }
 
@@ -325,6 +339,10 @@ class FormBuilder {
       case 'select':
         return this._buildSelect(fieldName, fieldDef, attrs, value);
 
+      case 'multiselect':
+        attrs.multiple = true;
+        return this._buildSelect(fieldName, fieldDef, attrs, value);
+
       case 'textarea':
         const rows = formConfig.rows || 3;
         return `<textarea ${attrString} rows="${rows}">${this.utils.escapeHtml(value)}</textarea>`;
@@ -352,7 +370,7 @@ class FormBuilder {
         return `<input type="file" ${attrString} accept="${accept}" ${multiple}>`;
 
       default:
-        const inputType = FormBuilder.inputTypes[type] || 'text';
+        const inputType = Forma.inputTypes[type] || 'text';
         const escapedValue = this.utils.escapeHtml(value);
         return `<input type="${inputType}" ${attrString} value="${escapedValue}">`;
     }
@@ -374,13 +392,14 @@ class FormBuilder {
     }
 
     const options = fieldDef.options || [];
+    const selectedValues = Array.isArray(currentValue) ? currentValue : [currentValue];
 
     for (const option of options) {
       if (typeof option === 'string') {
-        const selected = option === currentValue ? 'selected' : '';
+        const selected = selectedValues.includes(option) ? 'selected' : '';
         html += `<option value="${option}" ${selected}>${this.utils.capitalize(option)}</option>`;
       } else if (typeof option === 'object') {
-        const selected = option.value === currentValue ? 'selected' : '';
+        const selected = selectedValues.includes(option.value) ? 'selected' : '';
         html += `<option value="${option.value}" ${selected}>${option.label}</option>`;
       }
     }
@@ -717,14 +736,14 @@ export const forms = {
    * Create a new form builder instance
    */
   create(schema, data = {}, options = {}) {
-    return new FormBuilder(schema, data, options);
+    return new Forma(schema, data, options);
   },
 
   /**
    * Render form into element
    */
   render(selector, schema, data = {}, options = {}) {
-    const form = new FormBuilder(schema, data, options);
+    const form = new Forma(schema, data, options);
     return form.renderTo(selector);
   },
 
@@ -780,6 +799,9 @@ export const forms = {
           if (checked) formData[name] = value;
         } else if (type === 'number' || type === 'range') {
           formData[name] = value === '' ? null : Number(value);
+        } else if (input.tagName === 'SELECT' && input.hasAttribute('multiple')) {
+          // Handle multiselect - collect all selected options as array
+          formData[name] = Array.from(input.selectedOptions).map(option => option.value).filter(val => val);
         } else {
           formData[name] = value;
         }
@@ -790,7 +812,7 @@ export const forms = {
 
     function renderStep(stepIndex) {
       const step = steps[stepIndex];
-      const form = new FormBuilder(step.fields, stepData, {
+      const form = new Forma(step.fields, stepData, {
         ...wizardOptions,
         layout: step.layout || wizardOptions.layout || 'stacked',
         showSubmitButton: false // Wizard has its own buttons
@@ -837,7 +859,7 @@ export const forms = {
       // Bind form events for current step
       const formElement = wizardElement.querySelector('form');
       if (formElement) {
-        const currentForm = new FormBuilder(steps[currentStep].fields, stepData, {
+        const currentForm = new Forma(steps[currentStep].fields, stepData, {
           ...wizardOptions,
           showSubmitButton: false // Wizard has its own buttons
         });
@@ -873,7 +895,7 @@ export const forms = {
           Object.assign(stepData, formData);
 
           // Validate current step with proper form element
-          const currentForm = new FormBuilder(steps[currentStep].fields, stepData, {
+          const currentForm = new Forma(steps[currentStep].fields, stepData, {
             ...wizardOptions,
             showSubmitButton: false // Wizard has its own buttons
           });
@@ -911,7 +933,7 @@ export const forms = {
           Object.assign(stepData, formData);
 
           // Validate final step with proper form element
-          const currentForm = new FormBuilder(steps[currentStep].fields, stepData, {
+          const currentForm = new Forma(steps[currentStep].fields, stepData, {
             ...wizardOptions,
             showSubmitButton: false // Wizard has its own buttons
           });
@@ -983,7 +1005,7 @@ export const forms = {
       validate: () => {
         const formElement = wizardElement?.querySelector('form');
         if (formElement) {
-          const currentForm = new FormBuilder(steps[currentStep].fields, stepData, {
+          const currentForm = new Forma(steps[currentStep].fields, stepData, {
             ...wizardOptions,
             showSubmitButton: false
           });
@@ -1004,7 +1026,7 @@ export const forms = {
     const formId = `form-${Date.now()}`;
     let modal = null;
 
-    const form = new FormBuilder(schema, data, {
+    const form = new Forma(schema, data, {
       ...options,
       showSubmitButton: false, // Modal has its own buttons
       onSubmit: async (formData, formInstance) => {
@@ -1152,7 +1174,7 @@ export const forms = {
           const token = window.Domma?.auth?.token;
           const authHeaders = token ? {Authorization: `Bearer ${token}`} : {};
 
-          const response = await window.Domma.http.get(`${apiUrl}${endpoint}`, {
+          const response = await window.Domma.http.get(endpoint, {
             headers: {...headers, ...authHeaders}
           });
 
@@ -1186,11 +1208,11 @@ export const forms = {
           sortable: false,
           render: (value, row) => `
                         <div class="btn-group btn-group-sm">
-                            <button class="btn btn-outline-primary crud-edit-btn" data-id="${row[primaryKey]}">
+                            <button class="btn btn-primary crud-edit-btn" data-id="${row[primaryKey]}">
                                 <i class="icon-edit" data-icon="edit" style="width: 16px; height: 16px; margin-right: 4px;"></i>
                                 Edit
                             </button>
-                            <button class="btn btn-outline-danger crud-delete-btn" data-id="${row[primaryKey]}">
+                            <button class="btn btn-danger crud-delete-btn" data-id="${row[primaryKey]}">
                                 <i class="icon-trash" data-icon="trash" style="width: 16px; height: 16px; margin-right: 4px;"></i>
                                 Delete
                             </button>
@@ -1209,7 +1231,9 @@ export const forms = {
           exportPanel: true,
           exportOptions: ['text', 'csv', 'excel', 'json'],
           columnToggle: true,
-          regexSearch: true
+          regexSearch: true,
+          persistSettings: true,
+          storageKey: `domma-crud-${title.toLowerCase().replace(/\s+/g, '-')}`
         });
 
         // Initialize icons in the action buttons
@@ -1229,6 +1253,7 @@ export const forms = {
                 class: 'inline-icon'
               });
               if (svgIcon) {
+                element.innerHTML = ''; // Clear existing content
                 element.appendChild(svgIcon);
               }
             }
@@ -1271,7 +1296,7 @@ export const forms = {
       async create() {
         const modal = forms.modal(schema, {}, {
           title: `Create New ${title.slice(7)}`, // Remove "Manage " prefix
-          size: 'medium',
+          size: 'xl',
           saveText: 'Create',
           showSubmitButton: false, // Modal has its own buttons
           onSave: async (formData) => {
@@ -1280,7 +1305,7 @@ export const forms = {
               const token = window.Domma?.auth?.token;
               const authHeaders = token ? {Authorization: `Bearer ${token}`} : {};
 
-              const response = await window.Domma.http.post(`${apiUrl}${endpoint}`, formData, {
+              const response = await window.Domma.http.post(endpoint, formData, {
                 headers: {...headers, ...authHeaders}
               });
 
@@ -1310,7 +1335,7 @@ export const forms = {
 
         const modal = forms.modal(schema, item, {
           title: `Edit ${item[displayField] || 'Item'}`,
-          size: 'medium',
+          size: 'xl',
           saveText: 'Update',
           showSubmitButton: false, // Modal has its own buttons
           onSave: async (formData) => {
@@ -1319,7 +1344,7 @@ export const forms = {
               const token = window.Domma?.auth?.token;
               const authHeaders = token ? {Authorization: `Bearer ${token}`} : {};
 
-              const response = await window.Domma.http.patch(`${apiUrl}${endpoint}/${id}`, formData, {
+              const response = await window.Domma.http.put(`${endpoint}/${id}`, formData, {
                 headers: {...headers, ...authHeaders}
               });
 
@@ -1364,7 +1389,7 @@ export const forms = {
           const token = window.Domma?.auth?.token;
           const authHeaders = token ? {Authorization: `Bearer ${token}`} : {};
 
-          const response = await window.Domma.http.delete(`${apiUrl}${endpoint}/${id}`, {
+          const response = await window.Domma.http.delete(`${endpoint}/${id}`, {
             headers: {...headers, ...authHeaders}
           });
 
