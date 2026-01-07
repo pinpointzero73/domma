@@ -409,7 +409,13 @@ class Forma {
   }
 
   /**
-   * Build radio button group
+   * Constructs the HTML structure for a radio group based on provided field definitions and attributes.
+   *
+   * @return {string} A string containing the generated HTML markup for the radio group with proper styling classes.
+   * @param fieldName
+   * @param fieldDef
+   * @param attrs
+   * @param currentValue
    */
   _buildRadioGroup(fieldName, fieldDef, attrs, currentValue) {
     const options = fieldDef.options || [];
