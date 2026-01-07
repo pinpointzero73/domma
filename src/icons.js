@@ -175,10 +175,17 @@ class IconRegistry {
             return 0;
         }
 
-        const elements = root.querySelectorAll('[data-icon]');
+      const elements = root.querySelectorAll('[data-icon]:not([data-icon-processed]):not([data-icon-processing])');
         let count = 0;
 
         elements.forEach(el => {
+          // Skip if already processed or is already an SVG
+          if (el.tagName.toLowerCase() === 'svg' ||
+            el.hasAttribute('data-icon-processed') ||
+            el.querySelector('svg')) {
+            return;
+          }
+
             const name = el.dataset.icon;
             const size = parseInt(el.dataset.iconSize, 10) || 24;
             const colour = el.dataset.iconColour || el.dataset.iconColor || null;
@@ -192,8 +199,17 @@ class IconRegistry {
                     svg.classList.add(...existingClasses.split(' ').filter(c => c));
                 }
 
+              // Mark SVG as processed with metadata - CRITICAL: Keep data-icon attribute
+              svg.setAttribute('data-icon', name);
+              svg.setAttribute('data-icon-processed', 'true');
+              svg.setAttribute('data-original-icon', name);
+              svg.setAttribute('data-icon-converted', Date.now().toString());
+
                 el.replaceWith(svg);
                 count++;
+            } else {
+              // Mark as processed even if render failed
+              el.setAttribute('data-icon-processed', 'true');
             }
         });
 
