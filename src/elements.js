@@ -440,7 +440,7 @@ const ModalFactory = {
     _zIndexBase: 1050,
     _activeModals: [],
     _defaults: {
-        size: 'medium',
+        size: 'large',
         title: '',
         content: '',
         buttons: [{id: 'close', text: 'Close', variant: 'secondary'}],
