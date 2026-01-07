@@ -3,13 +3,13 @@ export const http = {
         const options = {
             method,
             headers: {
-                'Content-Type': 'application/json',
                 ...config.headers
             },
             ...config
         };
 
         if (data && method !== 'GET' && method !== 'HEAD') {
+            options.headers['Content-Type'] = 'application/json';
             options.body = JSON.stringify(data);
         }
 
@@ -37,7 +37,19 @@ export const http = {
         return this.request('PUT', url, data, config);
     },
 
+    patch(url, data, config) {
+        return this.request('PATCH', url, data, config);
+    },
+
     delete(url, config) {
-        return this.request('DELETE', url, null, config);
+        return this.request('DELETE', url, {delete: true}, config);
+    },
+
+    head(url, config) {
+        return this.request('HEAD', url, null, config);
+    },
+
+    options(url, config) {
+        return this.request('OPTIONS', url, null, config);
     }
 };
