@@ -308,7 +308,13 @@ class Forma {
   }
 
   /**
-   * Build input element based on type
+   * Builds an HTML input element based on the provided field definition and options.
+   *
+   * @param {string} fieldName - The name of the field, used as the 'name' attribute for the input.
+   * @param {Object} fieldDef - The field definition containing configuration details such as min, max, pattern, etc.
+   * @param {Object} inputOptions - Options to customize the input element including type, value, required, disabled, placeholder, etc.
+   *
+   * @return {string} A string representing the HTML input element with appropriate attributes and content based on the specified type.
    */
   _buildInput(fieldName, fieldDef, inputOptions) {
     const {type, value, required, disabled, placeholder} = inputOptions;
@@ -377,7 +383,13 @@ class Forma {
   }
 
   /**
-   * Build select dropdown
+   * Constructs the HTML select element based on field definition and current value.
+   *
+   * @param fieldName
+   * @param {Object} fieldDef - The field definition containing options, required status, and other attributes.
+   * @param attrs
+   * @param currentValue
+   * @return {string} A string representing the generated HTML `<select>` element with appropriate options.
    */
   _buildSelect(fieldName, fieldDef, attrs, currentValue) {
     const attrString = Object.entries(attrs)
