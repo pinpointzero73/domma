@@ -7,7 +7,7 @@
 
 $(() => {
   // Load configuration
-  Domma.http.get('./domma.config.json').then(config => {
+  Domma.http.get('/domma.config.json').then(config => {
     // Initialise theme
     if (config.theme) {
       Domma.theme.init({

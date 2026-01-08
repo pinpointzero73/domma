@@ -25,10 +25,10 @@ const Domma = (selector, context) => dom(selector, context);
 /* eslint-disable no-undef */
 Domma.version = __BUILD_VERSION__;
 Domma.buildInfo = {
-  version: __BUILD_VERSION__,
-  built: __BUILD_DATE__,
-  commit: __BUILD_COMMIT__,
-  preset: 'grayve'
+    version: __BUILD_VERSION__,
+    built: __BUILD_DATE__,
+    commit: __BUILD_COMMIT__,
+    preset: 'grayve'
 };
 /* eslint-enable no-undef */
 
@@ -47,25 +47,25 @@ Domma.theme = theme;
 
 // Configuration methods (from config module)
 Domma.setup = (config) => {
-  // Handle theme configuration
-  if (config.noStyles && Domma.theme) {
-    Domma.theme.init({disabled: true});
-  } else if ((config.theme || config.themeVariant || config.autoDetectTheme) && Domma.theme) {
-    Domma.theme.init({
-      theme: config.theme,
-      variant: config.themeVariant,
-      autoDetect: config.autoDetectTheme,
-      persist: config.persistTheme !== false
-    });
-  }
+    // Handle theme configuration
+    if (config.noStyles && Domma.theme) {
+        Domma.theme.init({disabled: true});
+    } else if ((config.theme || config.themeVariant || config.autoDetectTheme) && Domma.theme) {
+        Domma.theme.init({
+            theme: config.theme,
+            variant: config.themeVariant,
+            autoDetect: config.autoDetectTheme,
+            persist: config.persistTheme !== false
+        });
+    }
 
-  // Scan for icons if enabled
-  if (config.scanIcons && Domma.icons) {
-    Domma.icons.scan();
-  }
+    // Scan for icons if enabled
+    if (config.scanIcons && Domma.icons) {
+        Domma.icons.scan();
+    }
 
-  // Process component configuration
-  return config.process(config);
+    // Process component configuration
+    return config.process(config);
 };
 
 Domma.update = (selector, changes) => config.update(selector, changes);
@@ -88,12 +88,12 @@ Domma.M = M;
 
 // Expose globally if needed
 if (typeof window !== 'undefined') {
-  window.Domma = Domma;
-  window._ = _;
-  window.$ = $;
-  window.S = S;
-  window.D = D;
-  window.M = M;
+    window.Domma = Domma;
+    window._ = _;
+    window.$ = $;
+    window.S = S;
+    window.D = D;
+    window.M = M;
 }
 
 export default Domma;
