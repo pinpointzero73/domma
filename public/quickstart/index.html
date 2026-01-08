@@ -160,6 +160,9 @@
       <div><span class="command-prompt">$</span> npm install domma-js</div>
       <div><span class="command-prompt">$</span> npx domma init</div>
     </div>
+    <p class="text-center mt-3" style="opacity: 0.8;">
+      Opens browser with 5 working pages!
+    </p>
   </div>
 </section>
 
@@ -172,13 +175,13 @@
     <div class="d-flex align-items-start">
       <span class="step-number">1</span>
       <div class="flex-grow-1">
-        <h3 class="h4 mb-3">Create Your Project</h3>
+        <h3 class="h4 mb-3">Initialise Your Project</h3>
         <div class="command-block">
           <span class="command-prompt">$</span> mkdir my-app && cd my-app<br>
           <span class="command-prompt">$</span> npm init -y
         </div>
         <p class="text-secondary mt-3">
-          <strong>What happens:</strong> Creates a new directory and initializes npm package.json
+          <strong>What happens:</strong> Creates a new project folder and package.json
         </p>
       </div>
     </div>
@@ -194,7 +197,7 @@
           <span class="command-prompt">$</span> npm install domma-js
         </div>
         <p class="text-secondary mt-3">
-          <strong>What happens:</strong> Downloads Domma (~260KB minified) with zero dependencies
+          <strong>What happens:</strong> Downloads Domma from npm (~260KB minified)
         </p>
       </div>
     </div>
@@ -205,12 +208,12 @@
     <div class="d-flex align-items-start">
       <span class="step-number">3</span>
       <div class="flex-grow-1">
-        <h3 class="h4 mb-3">Initialize Your Site <span class="badge-time">⚡ 5 seconds</span></h3>
+        <h3 class="h4 mb-3">Generate Your Site <span class="badge-time">⚡ Ready!</span></h3>
         <div class="command-block">
           <span class="command-prompt">$</span> npx domma init
         </div>
         <p class="text-secondary mt-3">
-          <strong>What happens:</strong> Creates complete project structure with 5 working pages
+          <strong>What happens:</strong> Creates 5 pages, navbar, footer, config - then opens in browser!
         </p>
 
         <div class="result-preview">
@@ -250,7 +253,7 @@
     </p>
     <p class="text-secondary mb-6">
       Everything is ready to use - navbar, footer, theming, grid, components.<br>
-      Customize via <code>domma.config.json</code> or dive into the code.
+      Customise via <code>domma.config.json</code> or dive into the code.
     </p>
     <div class="d-flex justify-content-center gap-3">
       <a href="http://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md" class="btn btn-lg btn-primary"
@@ -321,7 +324,7 @@
 &lt;/html&gt;</pre>
         <p class="text-secondary mt-3 mb-0">
           <strong>Note:</strong> For production, use the npm workflow above for better performance and bundle
-          optimization.
+          optimisation.
         </p>
       </div>
     </div>
@@ -418,13 +421,13 @@
 <script src="../dist/domma.min.js"></script>
 <script src="../dist/domma-syntax.min.js"></script>
 
-<!-- Initialize -->
+<!-- Initialise -->
 <script>
   $(() => {
-  // Initialize theme
+    // Initialise theme
   Domma.theme.init({theme: 'charcoal-dark', persist: true});
 
-  // Initialize navbar
+    // Initialise navbar
   Domma.elements.navbar('#main-nav', {
     brand: {
       text: 'Domma QuickStart',

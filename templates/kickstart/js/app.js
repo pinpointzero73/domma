@@ -7,7 +7,7 @@
 
 (async function () {
   // Load configuration
-  const response = await fetch('/domma.config.json');
+  const response = await fetch('./domma.config.json');
   const config = await response.json();
 
   // Initialize theme

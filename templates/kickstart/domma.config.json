@@ -19,12 +19,32 @@
 "url": "/"
 },
 "items": [
-{"text": "Home", "url": "/", "active": true},
-{"text": "About", "url": "/about/"},
-{"text": "Contact", "url": "/contact/"},
-{"text": "Blog", "url": "/blog/"},
-{"text": "Docs", "url": "/docs/"},
-{"text": "QuickStart", "url": "https://github.com/dcbw-it/domma#quick-start-with-cli-recommended", "badge": "New"}
+{
+"text": "Home",
+"url": "/",
+"active": true
+},
+{
+"text": "About",
+"url": "/about/"
+},
+{
+"text": "Contact",
+"url": "/contact/"
+},
+{
+"text": "Blog",
+"url": "/blog/"
+},
+{
+"text": "Docs",
+"url": "/docs/"
+},
+{
+"text": "QuickStart",
+"url": "https://github.com/dcbw-it/domma#quick-start-with-cli-recommended",
+"badge": "New"
+}
 ],
 "variant": "dark",
 "position": "sticky",
@@ -33,9 +53,18 @@
 "footer": {
 "copyright": "© {{year}} {{projectName}}. All rights reserved.",
 "links": [
-{"text": "Privacy Policy", "url": "#privacy"},
-{"text": "Terms of Service", "url": "#terms"},
-{"text": "Contact Us", "url": "/contact/"}
+{
+"text": "Privacy Policy",
+"url": "#privacy"
+},
+{
+"text": "Terms of Service",
+"url": "#terms"
+},
+{
+"text": "Contact Us",
+"url": "/contact/"
+}
 ]
 },
 "features": {
