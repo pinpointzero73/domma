@@ -347,8 +347,10 @@
         },
         {
           "text": "Nexus Contact Manager",
-          "url": "miniapps/nexus/index.html",
-          "section": "nexus"
+          "url": "#",
+          "section": "nexus",
+          "disabled": true,
+          "badge": "Coming Soon"
         }
       ]
     }
