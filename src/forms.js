@@ -1212,18 +1212,32 @@ export const forms = {
           key: 'actions',
           title: 'Actions',
           sortable: false,
-          render: (value, row) => `
+          render: (value, row) => {
+            const editIcon = window.Domma.icons.html('edit', {
+              size: 16,
+              class: 'inline-icon',
+              colour: '#a5d8ff',
+              attrs: {style: 'margin-right: 4px;'}
+            });
+            const trashIcon = window.Domma.icons.html('trash', {
+              size: 16,
+              class: 'inline-icon',
+              colour: '#ffacac',
+              attrs: {style: 'margin-right: 4px;'}
+            });
+            return `
                         <div class="btn-group btn-group-sm">
                             <button class="btn btn-primary crud-edit-btn" data-id="${row[primaryKey]}">
-                                <i class="icon-edit" data-icon="edit" style="width: 16px; height: 16px; margin-right: 4px;"></i>
+                                ${editIcon}
                                 Edit
                             </button>
                             <button class="btn btn-danger crud-delete-btn" data-id="${row[primaryKey]}">
-                                <i class="icon-trash" data-icon="trash" style="width: 16px; height: 16px; margin-right: 4px;"></i>
+                                ${trashIcon}
                                 Delete
                             </button>
                         </div>
                     `
+          }
         });
 
         table = window.Domma.tables.create(tableSelector, {
