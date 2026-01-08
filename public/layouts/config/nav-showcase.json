@@ -2,6 +2,29 @@
   "type": "dropdowns",
   "items": [
     {
+      "text": "Get Started",
+      "items": [
+        {
+          "text": "QuickStart",
+          "url": "quickstart/index.html",
+          "section": "quickstart",
+          "badge": "New"
+        },
+        {
+          "text": "GitHub",
+          "url": "https://github.com/dcbw-it/domma",
+          "section": "github",
+          "external": true
+        },
+        {
+          "text": "Documentation",
+          "url": "https://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md",
+          "section": "docs",
+          "external": true
+        }
+      ]
+    },
+    {
       "text": "Core",
       "items": [
         {

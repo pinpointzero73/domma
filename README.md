@@ -18,15 +18,33 @@ modern UI components in one cohesive package.
 
 ## Installation
 
-### Via npm (Recommended)
+### Quick Start with CLI (Recommended)
 
-To install Domma-js in your project:
+Get a complete project structure with 5 sample pages in seconds:
 
 ```bash
-npm install domma-js@alpha
+npm init -y
+npm install domma-js
+npx domma init
 ```
 
-Then, import it into your JavaScript:
+This creates:
+
+- ✅ Complete project structure with 5 sample pages
+- ✅ JSON configuration (`domma.config.json`)
+- ✅ Navbar and footer (configured via JSON)
+- ✅ Theme system with 16+ themes
+- ✅ All features ready to use
+
+### Via npm (Manual Setup)
+
+Install Domma in your project:
+
+```bash
+npm install domma-js
+```
+
+Then import it:
 
 ```javascript
 import Domma, { $, _, M, D } from 'domma-js';
@@ -39,37 +57,22 @@ const Domma = require('domma-js');
 const { $, _, M, D } = Domma;
 ```
 
-### Via jsDelivr CDN
+### Via CDN
 
-For quick integration, you can directly include Domma-js from jsDelivr in your HTML. Always specify the version to
-ensure stability.
-
-```html
-<!-- CSS (include these in your <head>) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/domma.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/grid.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/elements.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/themes/domma-themes.css">
-
-<!-- JavaScript (include before your closing </body> tag) -->
-<script src="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-a/public/dist/domma.min.js"></script>
-```
-
-### Local Files (UMD and ES Module)
-
-You can also download the distribution files and host them yourself.
-
-**Browser (UMD):**
+For quick prototyping without npm:
 
 ```html
-<script src="dist/domma.min.js"></script>
+<!-- CSS -->
+<link rel="stylesheet" href="https://unpkg.com/domma-js/public/dist/domma.css">
+<link rel="stylesheet" href="https://unpkg.com/domma-js/public/dist/grid.css">
+<link rel="stylesheet" href="https://unpkg.com/domma-js/public/dist/elements.css">
+<link rel="stylesheet" href="https://unpkg.com/domma-js/public/dist/themes/domma-themes.css">
+
+<!-- JavaScript -->
+<script src="https://unpkg.com/domma-js/public/dist/domma.min.js"></script>
 ```
 
-**ES Module:**
-
-```javascript
-import Domma, { $, _, M, D } from './dist/domma.esm.js';
-```
+**[Try the CDN Quickstart](./public/quickstart/index.html)** - Single-file example ready to download
 
 ## Short Aliases
 

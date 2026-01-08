@@ -2,6 +2,12 @@
   "type": "flat",
   "items": [
     {
+      "text": "QuickStart",
+      "url": "quickstart/index.html",
+      "page": "quickstart",
+      "badge": "New"
+    },
+    {
       "text": "Showcase",
       "url": "showcase/index.html",
       "page": "showcase"

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domma QuickStart - Up and Running in 30 Seconds</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="alternate icon" href="../assets/logo/domma-icon.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+      rel="stylesheet">
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../dist/domma.css">
+  <link rel="stylesheet" href="../dist/grid.css">
+  <link rel="stylesheet" href="../dist/elements.css">
+  <link rel="stylesheet" href="../dist/syntax.css">
+  <link rel="stylesheet" href="../dist/themes/domma-themes.css">
+
+  <style>
+      body {
+          font-family: 'Roboto', sans-serif;
+      }
+
+      .hero-quickstart {
+          background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
+          color: white;
+          padding: 4rem 2rem;
+          text-align: center;
+      }
+
+      .hero-logo {
+          font-size: 3.5rem;
+          font-weight: 800;
+          letter-spacing: -0.05em;
+          margin-bottom: 1rem;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.75) 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+      }
+
+      .hero-tagline {
+          font-size: 2rem;
+          font-weight: 300;
+          margin-bottom: 0.5rem;
+      }
+
+      .hero-subtitle {
+          font-size: 1.1rem;
+          opacity: 0.9;
+          margin-bottom: 2.5rem;
+      }
+
+      .step-number {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 2.5rem;
+          height: 2.5rem;
+          border-radius: 50%;
+          background: var(--dm-primary);
+          color: white;
+          font-weight: 700;
+          font-size: 1.25rem;
+          margin-right: 1rem;
+      }
+
+      .command-block {
+          background: var(--dm-gray-900);
+          color: var(--dm-gray-100);
+          padding: 1.5rem;
+          border-radius: var(--dm-radius-md);
+          font-family: 'Roboto Mono', monospace;
+          font-size: 1.1rem;
+          margin: 1rem 0;
+          position: relative;
+          overflow-x: auto;
+      }
+
+      .command-prompt {
+          color: var(--dm-success);
+          margin-right: 0.5rem;
+      }
+
+      .step-card {
+          background: var(--dm-surface);
+          border: 1px solid var(--dm-border);
+          border-radius: var(--dm-radius-lg);
+          padding: 2rem;
+          margin-bottom: 2rem;
+          transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .step-card:hover {
+          transform: translateY(-4px);
+          box-shadow: var(--dm-shadow-lg);
+      }
+
+      .result-preview {
+          background: var(--dm-surface-raised);
+          border: 2px dashed var(--dm-border);
+          border-radius: var(--dm-radius-md);
+          padding: 1.5rem;
+          margin-top: 1rem;
+      }
+
+      .file-list {
+          font-family: 'Roboto Mono', monospace;
+          font-size: 0.9rem;
+          line-height: 1.8;
+      }
+
+      .file-icon {
+          color: var(--dm-primary);
+          margin-right: 0.5rem;
+      }
+
+      .badge-time {
+          display: inline-block;
+          background: var(--dm-success);
+          color: white;
+          padding: 0.25rem 0.75rem;
+          border-radius: 20px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          margin-left: 0.5rem;
+      }
+
+      .cdn-section {
+          background: linear-gradient(135deg, var(--dm-surface) 0%, var(--dm-surface-raised) 100%);
+          border: 1px solid var(--dm-border);
+          border-radius: var(--dm-radius-lg);
+          padding: 2rem;
+      }
+
+      pre code {
+          font-family: 'Roboto Mono', monospace;
+      }
+  </style>
+</head>
+<body class="dm-theme-charcoal-dark">
+<!-- Navigation -->
+<nav id="main-nav"></nav>
+
+<!-- Hero Section -->
+<section class="hero-quickstart">
+  <div class="container">
+    <div class="hero-logo">Domma</div>
+    <h1 class="hero-tagline">Up and Running in 30 Seconds</h1>
+    <p class="hero-subtitle">
+      Zero configuration. No decisions. Just three commands.
+    </p>
+    <div class="command-block" style="max-width: 600px; margin: 0 auto; text-align: left;">
+      <div><span class="command-prompt">$</span> npm init -y</div>
+      <div><span class="command-prompt">$</span> npm install domma-js</div>
+      <div><span class="command-prompt">$</span> npx domma init</div>
+    </div>
+  </div>
+</section>
+
+<!-- Three Steps -->
+<section class="container py-8">
+  <h2 class="text-center mb-6">How It Works</h2>
+
+  <!-- Step 1 -->
+  <div class="step-card">
+    <div class="d-flex align-items-start">
+      <span class="step-number">1</span>
+      <div class="flex-grow-1">
+        <h3 class="h4 mb-3">Create Your Project</h3>
+        <div class="command-block">
+          <span class="command-prompt">$</span> mkdir my-app && cd my-app<br>
+          <span class="command-prompt">$</span> npm init -y
+        </div>
+        <p class="text-secondary mt-3">
+          <strong>What happens:</strong> Creates a new directory and initializes npm package.json
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step-card">
+    <div class="d-flex align-items-start">
+      <span class="step-number">2</span>
+      <div class="flex-grow-1">
+        <h3 class="h4 mb-3">Install Domma</h3>
+        <div class="command-block">
+          <span class="command-prompt">$</span> npm install domma-js
+        </div>
+        <p class="text-secondary mt-3">
+          <strong>What happens:</strong> Downloads Domma (~260KB minified) with zero dependencies
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step-card">
+    <div class="d-flex align-items-start">
+      <span class="step-number">3</span>
+      <div class="flex-grow-1">
+        <h3 class="h4 mb-3">Initialize Your Site <span class="badge-time">⚡ 5 seconds</span></h3>
+        <div class="command-block">
+          <span class="command-prompt">$</span> npx domma init
+        </div>
+        <p class="text-secondary mt-3">
+          <strong>What happens:</strong> Creates complete project structure with 5 working pages
+        </p>
+
+        <div class="result-preview">
+          <h4 class="h6 mb-3">✓ You Get:</h4>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <div class="file-list">
+                <div><span class="file-icon" data-icon="home"></span> index.html</div>
+                <div><span class="file-icon" data-icon="user"></span> about/index.html</div>
+                <div><span class="file-icon" data-icon="mail"></span> contact/index.html</div>
+                <div><span class="file-icon" data-icon="book"></span> blog/index.html</div>
+                <div><span class="file-icon" data-icon="file-text"></span> docs/index.html</div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <ul class="list-unstyled mb-0">
+                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Navbar (JSON-configured)</li>
+                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Footer (JSON-configured)</li>
+                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> 16+ Themes ready</li>
+                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Icons, Grid, Components</li>
+                <li class="mb-0"><span data-icon="check" class="text-success me-2"></span> Mobile responsive</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Next Steps -->
+<section class="bg-surface py-8">
+  <div class="container text-center">
+    <h2 class="mb-4">You're Done! 🎉</h2>
+    <p class="lead mb-4">
+      Open <code>index.html</code> in your browser to see your new site.
+    </p>
+    <p class="text-secondary mb-6">
+      Everything is ready to use - navbar, footer, theming, grid, components.<br>
+      Customize via <code>domma.config.json</code> or dive into the code.
+    </p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="https://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md" class="btn btn-lg btn-primary"
+         target="_blank">
+        <span data-icon="book"></span> Read the Docs
+      </a>
+      <a href="https://github.com/dcbw-it/domma" class="btn btn-lg btn-outline-primary" target="_blank">
+        <span data-icon="github"></span> View on GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CDN Alternative -->
+<section class="container py-8">
+  <h2 class="text-center mb-6">Just Want to Try It?</h2>
+  <p class="text-center text-secondary mb-6">
+    Skip npm and use Domma from a CDN - single HTML file, no build tools.
+  </p>
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10">
+      <div class="cdn-section">
+        <h3 class="h5 mb-4">Copy-Paste Ready:</h3>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;link rel="stylesheet" href="https://unpkg.com/domma-js/public/dist/domma.css"&gt;
+  &lt;link rel="stylesheet" href="https://unpkg.com/domma-js/public/dist/elements.css"&gt;
+&lt;/head&gt;
+&lt;body class="dm-theme-charcoal-dark"&gt;
+  &lt;nav id="nav"&gt;&lt;/nav&gt;
+  &lt;main class="container py-6"&gt;
+    &lt;h1&gt;Hello Domma!&lt;/h1&gt;
+    &lt;button class="btn btn-primary" onclick="showToast()"&gt;Click Me&lt;/button&gt;
+  &lt;/main&gt;
+
+  &lt;script src="https://unpkg.com/domma-js/public/dist/domma.min.js"&gt;&lt;/script&gt;
+  &lt;script&gt;
+    Domma.theme.init({ theme: 'charcoal-dark' });
+    Domma.elements.navbar('#nav', {
+      brand: { text: 'My App' },
+      items: [{ text: 'Home', url: '/' }]
+    });
+    function showToast() {
+      Domma.elements.toast({ message: 'Hello! 🎉', type: 'success' });
+    }
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        <p class="text-secondary mt-3 mb-0">
+          <strong>Note:</strong> For production, use the npm workflow above for better performance and bundle
+          optimization.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-surface border-top py-6 mt-8">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-12 col-md-6">
+        <h4 class="h5 mb-3">Domma.js</h4>
+        <p class="text-muted mb-3">
+          Dynamic Object Manipulation & Modeling API<br>
+          Up and running in 30 seconds
+        </p>
+        <p class="text-muted text-sm">
+          © 2024 Domma.js. All rights reserved.
+        </p>
+      </div>
+      <div class="col-12 col-md-3">
+        <h5 class="h6 mb-3">Quick Links</h5>
+        <nav class="d-flex flex-column gap-2">
+          <a href="../showcase/" class="text-muted text-decoration-none hover:text-primary">Showcase</a>
+          <a href="https://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md"
+             class="text-muted text-decoration-none hover:text-primary" target="_blank">Documentation</a>
+          <a href="https://github.com/dcbw-it/domma/blob/main/docs/API.md"
+             class="text-muted text-decoration-none hover:text-primary" target="_blank">API Reference</a>
+        </nav>
+      </div>
+      <div class="col-12 col-md-3">
+        <h5 class="h6 mb-3">Community</h5>
+        <nav class="d-flex flex-column gap-2">
+          <a href="https://github.com/dcbw-it/domma" class="text-muted text-decoration-none hover:text-primary"
+             target="_blank">
+            <span data-icon="github" class="me-2"></span>GitHub
+          </a>
+          <a href="https://github.com/dcbw-it/domma/issues" class="text-muted text-decoration-none hover:text-primary"
+             target="_blank">
+            <span data-icon="alert-circle" class="me-2"></span>Report Issues
+          </a>
+          <a href="https://github.com/dcbw-it/domma/discussions"
+             class="text-muted text-decoration-none hover:text-primary" target="_blank">
+            <span data-icon="message-circle" class="me-2"></span>Discussions
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Domma JavaScript -->
+<script src="../dist/domma.min.js"></script>
+<script src="../dist/domma-syntax.min.js"></script>
+
+<!-- Initialize -->
+<script>
+  // Initialize theme
+  Domma.theme.init({theme: 'charcoal-dark', persist: true});
+
+  // Initialize navbar
+  Domma.elements.navbar('#main-nav', {
+    brand: {
+      text: 'Domma QuickStart',
+      url: '/quickstart/'
+    },
+    items: [
+      {text: 'Home', url: '/quickstart/', active: true},
+      {text: 'Get Started', url: 'https://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md', target: '_blank'},
+      {text: 'Showcase', url: '../showcase/'},
+      {text: 'GitHub', url: 'https://github.com/dcbw-it/domma', target: '_blank'}
+    ],
+    variant: 'dark',
+    position: 'sticky'
+  });
+
+  // Scan for icons
+  Domma.icons.scan();
+
+  // Add back-to-top button
+  Domma.elements.backToTop();
+
+  console.log('✓ Domma QuickStart loaded');
+</script>
+</body>
+</html>
