@@ -191,28 +191,33 @@
 
 <!-- Form Handling -->
 <script>
-  document.getElementById('contact-form').addEventListener('submit', function (e) {
-    e.preventDefault();
+  $(() => {
+    // Handle contact form submission
+    $('#contact-form').on('submit', function (e) {
+      e.preventDefault();
 
-    // Get form values
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const subject = document.getElementById('subject').value;
-    const message = document.getElementById('message').value;
+      // Get form values using Domma
+      const formData = {
+        name: $('#name').val(),
+        email: $('#email').val(),
+        subject: $('#subject').val(),
+        message: $('#message').val()
+      };
 
-    // Show success message (in a real app, send to backend)
-    Domma.elements.toast({
-      message: 'Thank you! Your message has been sent successfully.',
-      type: 'success',
-      duration: 5000
+      // Show success message (in a real app, send to backend)
+      Domma.elements.toast({
+        message: 'Thank you! Your message has been sent successfully.',
+        type: 'success',
+        duration: 5000
+      });
+
+      // Reset form
+      $(this)[0].reset();
     });
 
-    // Reset form
-    this.reset();
+    // Initialize accordion
+    Domma.elements.accordion('#faq-accordion');
   });
-
-  // Initialize accordion
-  Domma.elements.accordion('#faq-accordion');
 </script>
 </body>
 </html>

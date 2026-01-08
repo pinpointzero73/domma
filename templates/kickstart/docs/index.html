@@ -281,23 +281,25 @@ Domma.theme.get();  // 'ocean-dark'</code></pre>
 
 <!-- Page-specific scripts -->
 <script>
-  // Initialize tabs
-  Domma.elements.tabs('#install-tabs');
+  $(() => {
+    // Initialize tabs
+    Domma.elements.tabs('#install-tabs');
 
-  // Initialize accordion
-  Domma.elements.accordion('#docs-faq');
+    // Initialize accordion
+    Domma.elements.accordion('#docs-faq');
 
-  // Smooth scroll for sidebar links
-  document.querySelectorAll('.docs-sidebar a').forEach(link => {
-    link.addEventListener('click', function (e) {
+    // Smooth scroll for sidebar links
+    $('.docs-sidebar a').on('click', function (e) {
       e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({behavior: 'smooth'});
+      const targetId = $(this).attr('href');
+      const $target = $(targetId);
+
+      if ($target.length) {
+        $target[0].scrollIntoView({behavior: 'smooth'});
 
         // Update active state
-        document.querySelectorAll('.docs-sidebar .nav-link').forEach(l => l.classList.remove('active'));
-        this.classList.add('active');
+        $('.docs-sidebar .nav-link').removeClass('active');
+        $(this).addClass('active');
       }
     });
   });
