@@ -8,7 +8,7 @@ const STORAGE_KEY = 'domma-theme';
 const STORAGE_VARIANT_KEY = 'domma-theme-variant'; // Legacy key for migration
 const CLASS_PREFIX = 'dm-theme-';
 
-// List of all 16 available themes
+// List of all available themes
 const AVAILABLE_THEMES = [
     'ocean-light', 'ocean-dark',
     'forest-light', 'forest-dark',
@@ -17,7 +17,8 @@ const AVAILABLE_THEMES = [
     'lemon-light', 'lemon-dark',
     'silver-light', 'silver-dark',
     'charcoal-light', 'charcoal-dark',
-    'christmas-light', 'christmas-dark'
+    'christmas-light', 'christmas-dark',
+    'grayve'
 ];
 
 // Default theme

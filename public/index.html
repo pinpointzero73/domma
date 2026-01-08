@@ -381,7 +381,7 @@
 
   </style>
 </head>
-<body class="dm-theme-charcoal-dark" data-layout="splash">
+<body class="dm-theme-grayve dm-cloaked" data-layout="splash">
 
 <nav id="main-navbar"></nav>
 
@@ -1029,6 +1029,14 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
       }
     });
 
+    // Initialize theme engine with Grayve theme persistence
+    if (typeof Domma !== 'undefined' && Domma.theme) {
+      Domma.theme.init({
+        theme: 'grayve',
+        persist: true,
+        autoDetect: false
+      });
+    }
 
     // Stagger animations for splash page elements
     const animateElements = (selector, delay = 100, initialTransform = 'translateY(20px)') => {

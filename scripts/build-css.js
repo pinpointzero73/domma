@@ -49,7 +49,9 @@ const themeFiles = [
   'public/assets/themes/charcoal-dark.css',
   // Christmas themes
   'public/assets/themes/christmas-light.css',
-  'public/assets/themes/christmas-dark.css'
+  'public/assets/themes/christmas-dark.css',
+  // Custom themes
+  'public/dist/themes/grayve.css'
 ];
 
 // Build banner

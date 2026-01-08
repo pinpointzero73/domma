@@ -49,7 +49,7 @@
       }
   </style>
 </head>
-<body data-layout="public" data-theme="default">
+<body class="dm-cloaked" data-layout="public" data-theme="default">
 
 <!-- Layout system will inject navbar here -->
 
@@ -158,27 +158,47 @@
   </section>
 
   <!-- Getting Started Section -->
-  <section class="getting-started my-5">
-    <div class="card">
-      <div class="card-body">
-        <h2 class="card-title">Getting Started</h2>
-        <p>All miniApps are built with the Domma framework and demonstrate real-world usage patterns:</p>
-        <div class="row mt-4">
-          <div class="col-12 col-md-4">
-            <h4><span data-icon="zap" data-icon-size="20"></span> Use Directly</h4>
+  <section class="container getting-started my-5 p-5 my-4 rounded hero-gradient-primary text-white">
+    <h2 class="text-center">Getting Started</h2>
+    <p class="text-center">All miniApps are built with the Domma framework and demonstrate real-world usage
+      patterns:</p>
+
+    <div class="grid grid-cols-3 mt-4 gap-2">
+      <!--      <div class="col-12 col-md-4">-->
+      <div class="card h-100">
+        <div class="card-header">
+          <h4 class="card-title text-center text-gray-900"><span data-icon="zap" data-icon-size="20"></span> Use
+            Directly</h4>
+        </div>
+        <div class="card-body text-dark">
             <p>Click "Launch App" to use the hosted versions immediately - no installation required.</p>
           </div>
-          <div class="col-12 col-md-4">
-            <h4><span data-icon="download" data-icon-size="20"></span> Self-Host</h4>
+      </div>
+      <!--      </div>-->
+      <!--      <div class="col-12 col-md-4">-->
+      <div class="card h-100">
+        <div class="card-header">
+          <h4 class="card-title text-center text-gray-900"><span data-icon="download" data-icon-size="20"></span>
+            Self-Host</h4>
+        </div>
+        <div class="card-body text-dark">
             <p>Clone the repositories and host on your own infrastructure for complete control.</p>
           </div>
-          <div class="col-12 col-md-4">
-            <h4><span data-icon="code" data-icon-size="20"></span> Customise</h4>
+      </div>
+      <!--      </div>-->
+      <!--      <div class="col-12 col-md-4">-->
+      <div class="card h-100">
+        <div class="card-header">
+          <h4 class="card-title text-center text-gray-900"><span data-icon="code" data-icon-size="20"></span> Customise
+          </h4>
+        </div>
+        <div class="card-body text-dark">
             <p>Fork the code and adapt it to your specific needs. MIT licensed and open source.</p>
           </div>
         </div>
-      </div>
+      <!--      </div>-->
     </div>
+
   </section>
 
   <!-- Features Section -->
