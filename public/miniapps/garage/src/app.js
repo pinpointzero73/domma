@@ -3,10 +3,13 @@
  * Vehicle management with DVLA integration, caching, and saved vehicles
  */
 
-import config from '../../shared/config.js';
+// Detect environment at runtime
+const isLocal = typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1');
 
 const GarageApp = {
-  apiUrl: config.apiUrl,
+  apiUrl: isLocal ? 'http://localhost:3000/api' : '/api',
   currentVehicle: null,
   garageVehicles: [], // Store all garage vehicles for filtering
   rateLimiter: {

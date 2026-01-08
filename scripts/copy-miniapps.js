@@ -49,7 +49,7 @@ const distDir = path.join(__dirname, '../public/dist');
 const miniAppsDir = path.join(__dirname, '../public/miniapps');
 
 // MiniApps that need Domma files
-const miniApps = ['garage'];
+const miniApps = [];
 
 // Files to copy
 const filesToCopy = [
