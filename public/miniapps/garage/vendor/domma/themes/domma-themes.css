@@ -1,9 +1,9 @@
 /*!
- * Domma Themes v0.5.0-alpha
+ * Domma Themes v0.7.2-alpha
  * Dynamic Object Manipulation & Modeling API
  * (c) 2026 Darryl Waterhouse & DCBW-IT
- * Built: 2026-01-08T09:15:49.994Z
- * Commit: ad86642
+ * Built: 2026-01-08T15:02:28.608Z
+ * Commit: 59f511d
  */
 
 /**
@@ -3466,7 +3466,6 @@
     --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
 
 }
-
 .dm-theme-grayve {
     color-scheme: dark; /* Slate is typically a dark theme */
 
