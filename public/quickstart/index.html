@@ -253,11 +253,11 @@
       Customize via <code>domma.config.json</code> or dive into the code.
     </p>
     <div class="d-flex justify-content-center gap-3">
-      <a href="https://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md" class="btn btn-lg btn-primary"
+      <a href="http://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md" class="btn btn-lg btn-primary"
          target="_blank">
         <span data-icon="book"></span> Read the Docs
       </a>
-      <a href="https://github.com/dcbw-it/domma" class="btn btn-lg btn-outline-primary" target="_blank">
+      <a href="http://github.com/dcbw-it/domma" class="btn btn-lg btn-outline-primary" target="_blank">
         <span data-icon="github"></span> View on GitHub
       </a>
     </div>
@@ -275,7 +275,7 @@
     <div class="col-12 col-lg-10">
       <div class="cdn-section">
         <h3 class="h5 mb-4">Copy-Paste Ready:</h3>
-        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+        <pre class="code-block language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
   &lt;link rel="stylesheet" href="https://unpkg.com/domma-js/public/dist/domma.css"&gt;
@@ -285,22 +285,40 @@
   &lt;nav id="nav"&gt;&lt;/nav&gt;
   &lt;main class="container py-6"&gt;
     &lt;h1&gt;Hello Domma!&lt;/h1&gt;
-    &lt;button class="btn btn-primary" onclick="showToast()"&gt;Click Me&lt;/button&gt;
+    &lt;button class="btn btn-primary" id="toast-btn"&gt;Click Me&lt;/button&gt;
   &lt;/main&gt;
 
   &lt;script src="https://unpkg.com/domma-js/public/dist/domma.min.js"&gt;&lt;/script&gt;
   &lt;script&gt;
-    Domma.theme.init({ theme: 'charcoal-dark' });
-    Domma.elements.navbar('#nav', {
-      brand: { text: 'My App' },
-      items: [{ text: 'Home', url: '/' }]
+    $(() =&gt; {
+      // Use Domma Config for declarative setup
+      $.setup({
+        'body': {
+          component: 'theme',
+          options: { theme: 'charcoal-dark', persist: true }
+        },
+        '#nav': {
+          component: 'navbar',
+          options: {
+            brand: { text: 'My App' },
+            items: [{ text: 'Home', url: '/' }]
+          }
+        },
+        '#toast-btn': {
+          events: {
+            click: () =&gt; {
+              Domma.elements.toast.success('Hello! 🎉', {
+                position: 'top-center',
+                duration: 3000
+              });
+            }
+          }
+        }
+      });
     });
-    function showToast() {
-      Domma.elements.toast({ message: 'Hello! 🎉', type: 'success' });
-    }
   &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;</code></pre>
+&lt;/html&gt;</pre>
         <p class="text-secondary mt-3 mb-0">
           <strong>Note:</strong> For production, use the npm workflow above for better performance and bundle
           optimization.
@@ -311,45 +329,86 @@
 </section>
 
 <!-- Footer -->
-<footer class="bg-surface border-top py-6 mt-8">
+<footer class="bg-gray-900 text-gray-100 py-6 mt-8">
   <div class="container">
-    <div class="row g-4">
-      <div class="col-12 col-md-6">
-        <h4 class="h5 mb-3">Domma.js</h4>
-        <p class="text-muted mb-3">
-          Dynamic Object Manipulation & Modeling API<br>
-          Up and running in 30 seconds
-        </p>
-        <p class="text-muted text-sm">
-          © 2024 Domma.js. All rights reserved.
-        </p>
+    <div class="grid grid-cols-6 gap-8 align-items-center">
+      <!-- Branding -->
+      <div>
+        <a href="/" class="d-flex align-items-center text-decoration-none mb-2">
+          <span data-icon="box" style="width: 32px; height: 32px; color: var(--dm-primary);"></span>
+          <div class="ms-2">
+            <div class="text-white font-weight-bold">Domma.js</div>
+            <div class="text-muted text-xs">v0.7.0-alpha</div>
+          </div>
+        </a>
+        <div class="text-xs text-gray-500 mt-2">Built: <span id="build-date"></span></div>
+        <div class="text-xs text-gray-500">~260KB min</div>
       </div>
-      <div class="col-12 col-md-3">
-        <h5 class="h6 mb-3">Quick Links</h5>
-        <nav class="d-flex flex-column gap-2">
-          <a href="../showcase/" class="text-muted text-decoration-none hover:text-primary">Showcase</a>
-          <a href="https://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md"
-             class="text-muted text-decoration-none hover:text-primary" target="_blank">Documentation</a>
-          <a href="https://github.com/dcbw-it/domma/blob/main/docs/API.md"
-             class="text-muted text-decoration-none hover:text-primary" target="_blank">API Reference</a>
-        </nav>
+
+      <!-- Resources -->
+      <div>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="../showcase/" class="btn btn-sm btn-outline-secondary">
+            <span data-icon="grid" style="width: 14px; height: 14px;"></span> Showcase
+          </a>
+          <a href="http://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md"
+             class="btn btn-sm btn-outline-secondary" target="_blank">
+            <span data-icon="book" style="width: 14px; height: 14px;"></span> Docs
+          </a>
+          <a href="http://github.com/dcbw-it/domma/blob/main/docs/API.md" class="btn btn-sm btn-outline-secondary"
+             target="_blank">
+            <span data-icon="code" style="width: 14px; height: 14px;"></span> API
+          </a>
+        </div>
       </div>
-      <div class="col-12 col-md-3">
-        <h5 class="h6 mb-3">Community</h5>
-        <nav class="d-flex flex-column gap-2">
-          <a href="https://github.com/dcbw-it/domma" class="text-muted text-decoration-none hover:text-primary"
-             target="_blank">
-            <span data-icon="github" class="me-2"></span>GitHub
+
+      <!-- Community -->
+      <div>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="http://github.com/dcbw-it/domma" class="btn btn-sm btn-outline-primary" target="_blank">
+            <span data-icon="github" style="width: 14px; height: 14px;"></span> GitHub
           </a>
-          <a href="https://github.com/dcbw-it/domma/issues" class="text-muted text-decoration-none hover:text-primary"
-             target="_blank">
-            <span data-icon="alert-circle" class="me-2"></span>Report Issues
+          <a href="http://www.npmjs.com/package/domma-js" class="btn btn-sm btn-outline-danger" target="_blank">
+            <span data-icon="package" style="width: 14px; height: 14px;"></span> npm
           </a>
-          <a href="https://github.com/dcbw-it/domma/discussions"
-             class="text-muted text-decoration-none hover:text-primary" target="_blank">
-            <span data-icon="message-circle" class="me-2"></span>Discussions
+        </div>
+      </div>
+
+      <!-- DCBW IT -->
+      <div>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="http://www.dcbw-it.co.uk/" class="btn btn-sm btn-outline-info" target="_blank">
+            <span data-icon="globe" style="width: 14px; height: 14px;"></span> DCBW IT
           </a>
-        </nav>
+          <a href="http://www.dcbw-it.co.uk/services" class="btn btn-sm btn-outline-info" target="_blank">
+            <span data-icon="briefcase" style="width: 14px; height: 14px;"></span> Services
+          </a>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="text-center">
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+          <span class="badge bg-success">Zero deps</span>
+          <span class="badge bg-primary">ES Modules</span>
+          <span class="badge bg-info">MIT License</span>
+        </div>
+      </div>
+
+      <!-- Copyright & Social -->
+      <div class="text-end">
+        <div class="text-xs text-gray-500 mb-2">© 2024 DCBW IT</div>
+        <div class="d-flex gap-3 justify-content-end">
+          <a href="http://github.com/dcbw-it/domma" class="text-gray-500 hover:text-primary" target="_blank">
+            <span data-icon="github" style="width: 20px; height: 20px;"></span>
+          </a>
+          <a href="http://www.npmjs.com/package/domma-js" class="text-gray-500 hover:text-primary" target="_blank">
+            <span data-icon="package" style="width: 20px; height: 20px;"></span>
+          </a>
+          <a href="http://twitter.com/dcbw_it" class="text-gray-500 hover:text-primary" target="_blank">
+            <span data-icon="twitter" style="width: 20px; height: 20px;"></span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -361,6 +420,7 @@
 
 <!-- Initialize -->
 <script>
+  $(() => {
   // Initialize theme
   Domma.theme.init({theme: 'charcoal-dark', persist: true});
 
@@ -368,13 +428,13 @@
   Domma.elements.navbar('#main-nav', {
     brand: {
       text: 'Domma QuickStart',
-      url: '/quickstart/'
+      url: '/'
     },
     items: [
       {text: 'Home', url: '/quickstart/', active: true},
-      {text: 'Get Started', url: 'https://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md', target: '_blank'},
+      {text: 'Get Started', url: 'http://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md', target: '_blank'},
       {text: 'Showcase', url: '../showcase/'},
-      {text: 'GitHub', url: 'https://github.com/dcbw-it/domma', target: '_blank'}
+      {text: 'GitHub', url: 'http://github.com/dcbw-it/domma', target: '_blank'}
     ],
     variant: 'dark',
     position: 'sticky'
@@ -386,7 +446,56 @@
   // Add back-to-top button
   Domma.elements.backToTop();
 
+    // Set build date
+    const buildDate = D().format('D MMMM YYYY');
+    $('#build-date').text(buildDate);
+
+    // Use Domma Config to setup code copy
+    $.setup({
+      '.code-block': {
+        init: (el) => {
+          // Wrap code block
+          if (el.parentElement?.classList.contains('code-block-wrapper')) return;
+
+          const wrapper = document.createElement('div');
+          wrapper.className = 'code-block-wrapper';
+          el.parentNode.insertBefore(wrapper, el);
+          wrapper.appendChild(el);
+
+          const btn = document.createElement('button');
+          btn.className = 'code-block-copy';
+          btn.setAttribute('data-icon', 'copy');
+          wrapper.appendChild(btn);
+
+          // Scan icon
+          Domma.icons.inject(btn.querySelector('[data-icon]'));
+
+          // Add click event directly to button
+          $(btn).on('click', async function () {
+            const text = el.textContent;
+            await _.copyToClipboard(text);
+
+            btn.classList.add('copied');
+            btn.setAttribute('data-icon', 'check');
+            Domma.icons.inject(btn.querySelector('[data-icon]'));
+
+            Domma.elements.toast.success('Code copied!', {
+              position: 'bottom-center',
+              duration: 2000
+            });
+
+            setTimeout(() => {
+              btn.classList.remove('copied');
+              btn.setAttribute('data-icon', 'copy');
+              Domma.icons.inject(btn.querySelector('[data-icon]'));
+            }, 2000);
+          });
+        }
+      }
+    });
+
   console.log('✓ Domma QuickStart loaded');
+  });
 </script>
 </body>
 </html>
