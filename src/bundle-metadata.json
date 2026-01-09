@@ -190,6 +190,12 @@
       "file": "themes/grayve.css",
       "size": 5,
       "description": "Bootswatch Slate theme adaptation"
+    },
+    "core": {
+      "name": "Core Theme",
+      "file": "themes/core.css",
+      "size": 1,
+      "description": "Light-only theme inspired by Flux UI"
     }
   },
   "presets": {
