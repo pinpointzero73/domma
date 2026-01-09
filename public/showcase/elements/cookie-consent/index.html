@@ -62,7 +62,48 @@ consent.show();</pre>
     </div>
   </section>
 
-  <!-- SECTION 2: Basic Examples -->
+  <!-- SECTION 2: Getting Started -->
+  <section class="card mb-6" data-section="Getting Started">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+    <div class="card-body">
+      <p class="mb-6 text-gray-600">Add GDPR-compliant cookie consent to your page in two simple steps</p>
+
+      <h3 class="category-title-style">Step 1: Include Domma</h3>
+      <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;!-- CSS --&gt;
+&lt;link rel="stylesheet" href="dist/domma.css"&gt;
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;
+
+&lt;!-- JavaScript --&gt;
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Step 2: Initialize Cookie Consent</h3>
+      <p class="mb-4 text-gray-600">Call <code>Domma.elements.cookieConsent()</code> to create and show the consent banner:</p>
+      <div class="code-block language-javascript mb-6">
+        <pre><code>const consent = Domma.elements.cookieConsent({
+    message: 'We use cookies to improve your experience.',
+    privacyPolicyUrl: '/privacy-policy',
+    autoShow: true,   // Automatically show on page load
+    onAccept: (preferences) => {
+        // User accepted cookies
+        console.log('Accepted:', preferences);
+    },
+    onReject: () => {
+        // User rejected cookies
+        console.log('Cookies rejected');
+    }
+});</code></pre>
+      </div>
+
+      <div class="alert alert-info">
+        <strong>Note:</strong> The cookie consent component auto-generates the consent UI (no HTML required). It handles storage of user preferences in localStorage, respects user choices, and provides callbacks for when cookies are accepted or rejected. Set <code>autoShow: true</code> to display automatically on page load.
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: Basic Examples -->
   <section class="card mb-6" data-section="Basic Examples">
     <div class="card-header">
       <h2 class="text-xl font-semibold m-0">Basic Examples</h2>

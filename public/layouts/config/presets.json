@@ -22,7 +22,7 @@
         }
       ]
     },
-    "footer": "footer-showcase",
+    "footer": "footer-landing",
     "sidebar": {
       "enabled": false
     },

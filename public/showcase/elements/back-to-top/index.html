@@ -45,6 +45,43 @@ const backToTop = Domma.elements.backToTop('#back-to-top', {
     </div>
 </section>
 
+<section class="card mb-6" data-section="Getting Started">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+    <div class="card-body">
+        <p class="mb-6 text-gray-600">Add a back to top button to your page in three simple steps</p>
+
+        <h3 class="category-title-style">Step 1: Add Button Element</h3>
+        <p class="mb-4 text-gray-600">Create a button element with a class and unique ID:</p>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;button id="back-to-top" class="back-to-top-btn"&gt;↑&lt;/button&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title-style">Step 2: Include Domma</h3>
+        <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;!-- CSS --&gt;
+&lt;link rel="stylesheet" href="dist/domma.css"&gt;
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;
+
+&lt;!-- JavaScript --&gt;
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title-style">Step 3: Initialize the Button</h3>
+        <p class="mb-4 text-gray-600">Call <code>Domma.elements.backToTop()</code> to activate the button:</p>
+        <div class="code-block language-javascript mb-6">
+            <pre><code>Domma.elements.backToTop('#back-to-top', {
+    showAfter: 300,   // Show after scrolling 300px
+    duration: 500     // Scroll animation duration in ms
+});</code></pre>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>Note:</strong> The back to top button automatically shows/hides based on scroll position and smoothly animates scrolling to the top when clicked. The component handles all scroll event listeners and positioning.
+        </div>
+    </div>
+</section>
+
 <section class="card mb-6" data-section="Quick Start">
     <div class="card-header">
         <h2 class="text-xl font-semibold m-0">Quick Start</h2>

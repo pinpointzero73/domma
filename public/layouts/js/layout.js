@@ -828,6 +828,34 @@ import {ConsentModule} from './modules/consent.js';
             const response = await fetch(configBase + configName + '.json');
             const config = await response.json();
 
+            // Check if this uses the Domma Footer Element component
+            if (config.type === 'element') {
+                // Create footer container
+                const footerId = 'domma-footer-element';
+                const footerDiv = document.createElement('div');
+                footerDiv.id = footerId;
+                document.body.appendChild(footerDiv);
+
+                // Process copyright template
+                const footerOptions = {
+                    ...config,
+                    copyright: processTemplate(config.copyright || '', data)
+                };
+
+                // Remove 'type' from options (not a valid Domma.elements.footer option)
+                delete footerOptions.type;
+
+                // Initialize Domma Footer Element
+                if (typeof Domma !== 'undefined' && Domma.elements && Domma.elements.footer) {
+                    Domma.elements.footer(`#${footerId}`, footerOptions);
+                    console.log('[Domma Layout] Footer Element rendered');
+                } else {
+                    console.error('[Domma Layout] Domma.elements.footer not available');
+                }
+                return;
+            }
+
+            // Legacy footer layouts
             let html;
 
             // Handle different footer layouts

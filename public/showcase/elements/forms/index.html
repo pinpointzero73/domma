@@ -45,6 +45,54 @@
     </div>
 </section>
 
+<section class="card mb-6" data-section="Getting Started">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+    <div class="card-body">
+        <p class="mb-6 text-gray-600">Add styled form controls to your page in two simple steps</p>
+
+        <h3 class="category-title-style">Step 1: Include Domma CSS</h3>
+        <p class="mb-4 text-gray-600">Add Domma CSS to your page:</p>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;!-- CSS --&gt;
+&lt;link rel="stylesheet" href="dist/domma.css"&gt;
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title-style">Step 2: Add Form HTML</h3>
+        <p class="mb-4 text-gray-600">Use form classes with standard HTML elements:</p>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;form&gt;
+    &lt;!-- Text input --&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Email&lt;/label&gt;
+        &lt;input type="email" class="form-input" placeholder="you@example.com"&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Password input --&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Password&lt;/label&gt;
+        &lt;input type="password" class="form-input"&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Checkbox --&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label class="checkbox"&gt;
+            &lt;input type="checkbox"&gt;
+            &lt;span&gt;Remember me&lt;/span&gt;
+        &lt;/label&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Submit button --&gt;
+    &lt;button type="submit" class="btn btn-primary"&gt;Sign In&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>Note:</strong> Domma forms are CSS-only and work with native HTML form elements (no JavaScript required). Simply add the appropriate classes to your HTML. For advanced form generation and validation, see the <code>Domma.forms</code> module which provides schema-driven form building.
+        </div>
+    </div>
+</section>
+
 <section class="card mb-6" data-section="Quick Start">
     <div class="card-header">
         <h2 class="text-xl font-semibold m-0">Quick Start</h2>

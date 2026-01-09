@@ -25,6 +25,66 @@
     <!-- Main Content Container -->
     <main class="container py-8">
         <div class="showcase-content">
+            <!-- Getting Started -->
+            <section class="card mb-6" data-section="Getting Started">
+                <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+                <div class="card-body">
+                    <p class="mb-6 text-gray-600">Add a timeline to your page in three simple steps</p>
+
+                    <h3 class="category-title-style">Step 1: Add Container Element</h3>
+                    <p class="mb-4 text-gray-600">Create a container div for the timeline:</p>
+                    <div class="code-block language-html mb-6">
+                        <pre><code>&lt;div id="my-timeline"&gt;&lt;/div&gt;</code></pre>
+                    </div>
+
+                    <h3 class="category-title-style">Step 2: Include Domma</h3>
+                    <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
+                    <div class="code-block language-html mb-6">
+                        <pre><code>&lt;!-- CSS --&gt;
+&lt;link rel="stylesheet" href="dist/domma.css"&gt;
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;
+
+&lt;!-- JavaScript --&gt;
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+                    </div>
+
+                    <h3 class="category-title-style">Step 3: Initialize the Timeline</h3>
+                    <p class="mb-4 text-gray-600">Call <code>Domma.elements.timeline()</code> with your timeline data:</p>
+                    <div class="code-block language-javascript mb-6">
+                        <pre><code>// Prepare your timeline data
+const events = [
+    {
+        year: '2020',
+        title: 'Project Start',
+        description: 'Initial planning began'
+    },
+    {
+        year: '2021',
+        title: 'Beta Release',
+        description: 'First public beta with core features'
+    },
+    {
+        year: '2022',
+        title: 'Version 1.0',
+        description: 'Stable release'
+    }
+];
+
+// Initialize the timeline
+Domma.elements.timeline('#my-timeline', {
+    items: events,           // Timeline data array
+    layout: 'vertical',      // 'vertical' or 'centered'
+    animation: true,         // Animate items on scroll
+    animationDelay: 100      // Delay between items (ms)
+});</code></pre>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <strong>Note:</strong> The timeline auto-generates the complete UI from your data array (no HTML structure required). Each item needs at least a <code>title</code>. Optional fields include <code>year</code>, <code>description</code>, <code>icon</code>, and <code>image</code>.
+                    </div>
+                </div>
+            </section>
+
             <!-- Basic Timeline -->
             <section class="card mb-6" data-section="basic-timeline">
                 <div class="card-body">

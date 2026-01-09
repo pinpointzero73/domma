@@ -44,6 +44,40 @@
     </div>
   </section>
 
+  <section class="card mb-6" data-section="Getting Started">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+    <div class="card-body">
+      <p class="mb-6 text-gray-600">Add badges to your page in two simple steps</p>
+
+      <h3 class="category-title-style">Step 1: Include Domma CSS</h3>
+      <p class="mb-4 text-gray-600">Add Domma CSS to your page:</p>
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;!-- CSS --&gt;
+&lt;link rel="stylesheet" href="dist/domma.css"&gt;
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Step 2: Add Badge HTML</h3>
+      <p class="mb-4 text-gray-600">Use <code>&lt;span&gt;</code> elements with badge classes:</p>
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;span class="badge"&gt;Default&lt;/span&gt;
+&lt;span class="badge badge-primary"&gt;Primary&lt;/span&gt;
+&lt;span class="badge badge-success"&gt;Success&lt;/span&gt;
+&lt;span class="badge badge-danger"&gt;Urgent&lt;/span&gt;
+
+&lt;!-- Small size --&gt;
+&lt;span class="badge badge-sm badge-primary"&gt;Small&lt;/span&gt;
+
+&lt;!-- Pill style for tags --&gt;
+&lt;span class="badge badge-pill badge-info"&gt;Tag&lt;/span&gt;</code></pre>
+      </div>
+
+      <div class="alert alert-info">
+        <strong>Note:</strong> Badges are CSS-only components and require no JavaScript. Simply add the badge classes to your HTML elements. For dynamic updates (e.g., notification counts), use JavaScript to modify the badge text or visibility.
+      </div>
+    </div>
+  </section>
+
   <section class="card mb-6" data-section="Quick Start">
     <div class="card-header">
       <h2 class="text-xl font-semibold m-0">Quick Start</h2>

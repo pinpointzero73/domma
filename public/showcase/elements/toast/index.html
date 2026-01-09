@@ -45,6 +45,54 @@ Domma.elements.toast('Operation successful!', {
     </div>
 </section>
 
+<section class="card mb-6" data-section="Getting Started">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+    <div class="card-body">
+        <p class="mb-6 text-gray-600">Add toast notifications to your page in two simple steps</p>
+
+        <h3 class="category-title-style">Step 1: Include Domma</h3>
+        <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;!-- CSS --&gt;
+&lt;link rel="stylesheet" href="dist/domma.css"&gt;
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;
+
+&lt;!-- JavaScript --&gt;
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title-style">Step 2: Show Toast Notifications</h3>
+        <p class="mb-4 text-gray-600">Call <code>Domma.elements.toast()</code> to display notifications:</p>
+        <div class="code-block language-javascript mb-6">
+            <pre><code>// Success notification
+Domma.elements.toast('Operation successful!', {
+    type: 'success',       // 'success', 'error', 'warning', 'info'
+    duration: 3000,        // Auto-dismiss after 3 seconds
+    position: 'top-right'  // Position on screen
+});
+
+// Error notification
+Domma.elements.toast('Something went wrong!', {
+    type: 'error',
+    duration: 5000
+});
+
+// With custom action button
+Domma.elements.toast('File uploaded', {
+    type: 'info',
+    action: 'View',
+    onAction: () => {
+        console.log('Action clicked');
+    }
+});</code></pre>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>Note:</strong> Toast is a static method that auto-generates and positions notification popups (no HTML required). Toasts auto-dismiss after the specified duration and automatically stack if multiple are shown. Supports 9 position options: top-left, top-center, top-right, center-left, center, center-right, bottom-left, bottom-center, bottom-right.
+        </div>
+    </div>
+</section>
+
 <section class="card mb-6" data-section="Quick Start">
     <div class="card-header">
         <h2 class="text-xl font-semibold m-0">Quick Start</h2>

@@ -68,6 +68,55 @@ Domma.elements.pillbox('#custom-tags', {
         </div>
     </section>
 
+    <section class="card mb-6" data-section="Getting Started">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+        <div class="card-body">
+            <p class="mb-6 text-gray-600">Add a multi-select tag input to your page in three simple steps</p>
+
+            <h3 class="category-title-style">Step 1: Add Input Element</h3>
+            <p class="mb-4 text-gray-600">Create a text input that will be transformed into a pillbox:</p>
+            <div class="code-block language-html mb-6">
+                <pre><code>&lt;input type="text" id="my-tags" placeholder="Select tags..."&gt;</code></pre>
+            </div>
+
+            <h3 class="category-title-style">Step 2: Include Domma</h3>
+            <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
+            <div class="code-block language-html mb-6">
+                <pre><code>&lt;!-- CSS --&gt;
+&lt;link rel="stylesheet" href="dist/domma.css"&gt;
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;
+
+&lt;!-- JavaScript --&gt;
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+            </div>
+
+            <h3 class="category-title-style">Step 3: Initialize the Pillbox</h3>
+            <p class="mb-4 text-gray-600">Call <code>Domma.elements.pillbox()</code> to transform the input:</p>
+            <div class="code-block language-javascript mb-6">
+                <pre><code>// Select from predefined options
+Domma.elements.pillbox('#my-tags', {
+    data: ['JavaScript', 'Python', 'Java', 'C++', 'Ruby', 'Go'],
+    value: ['JavaScript'],   // Initially selected
+    maxItems: 5,             // Limit selections
+    onChange: (values) => {
+        console.log('Selected:', values);
+    }
+});
+
+// Or allow users to create custom tags
+Domma.elements.pillbox('#my-tags', {
+    data: ['React', 'Vue', 'Angular'],
+    creatable: true,         // Allow custom entries
+    duplicates: false        // Prevent duplicates
+});</code></pre>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Note:</strong> The pillbox component transforms a regular text input into a multi-select tag interface. It auto-generates the dropdown and pills UI. Use backspace to remove the last tag, arrow keys to navigate, and Enter to add selections.
+            </div>
+        </div>
+    </section>
+
     <section class="card mb-6" data-section="Quick Start">
         <div class="card-header">
             <h2 class="text-xl font-semibold m-0">Quick Start</h2>

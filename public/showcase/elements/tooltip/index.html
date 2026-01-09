@@ -48,6 +48,55 @@ const tooltip = Domma.elements.tooltip('#my-button', {
     </div>
 </section>
 
+<section class="card mb-6" data-section="Getting Started">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+    <div class="card-body">
+        <p class="mb-6 text-gray-600">Add tooltips to your elements in three simple steps</p>
+
+        <h3 class="category-title-style">Step 1: Add HTML Element</h3>
+        <p class="mb-4 text-gray-600">Create any HTML element that will trigger the tooltip:</p>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;button id="my-button" class="btn btn-primary"&gt;Hover Me&lt;/button&gt;
+&lt;span id="help-icon"&gt;?&lt;/span&gt;
+&lt;a id="info-link" href="#"&gt;Learn more&lt;/a&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title-style">Step 2: Include Domma</h3>
+        <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;!-- CSS --&gt;
+&lt;link rel="stylesheet" href="dist/domma.css"&gt;
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;
+
+&lt;!-- JavaScript --&gt;
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title-style">Step 3: Initialize the Tooltip</h3>
+        <p class="mb-4 text-gray-600">Call <code>Domma.elements.tooltip()</code> to attach a tooltip:</p>
+        <div class="code-block language-javascript mb-6">
+            <pre><code>// Hover tooltip
+Domma.elements.tooltip('#my-button', {
+    content: 'Helpful information appears here',
+    position: 'top',       // 'top', 'bottom', 'left', 'right'
+    trigger: 'hover',      // 'hover', 'click', 'focus'
+    delay: 200             // Delay before showing (ms)
+});
+
+// Click tooltip with HTML content
+Domma.elements.tooltip('#help-icon', {
+    content: '&lt;strong&gt;Tip:&lt;/strong&gt; Click to continue',
+    trigger: 'click',
+    position: 'bottom'
+});</code></pre>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>Note:</strong> The tooltip auto-generates and positions the tooltip popup (no HTML required). Tooltips intelligently adjust position if near viewport edges. Use <code>setContent()</code> to update tooltip text dynamically.
+        </div>
+    </div>
+</section>
+
 <section class="card mb-6" data-section="Quick Start">
     <div class="card-header">
         <h2 class="text-xl font-semibold m-0">Quick Start</h2>

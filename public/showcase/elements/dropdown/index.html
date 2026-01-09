@@ -55,6 +55,52 @@ const dropdown = Domma.elements.dropdown('#my-button', {
     </div>
 </section>
 
+<section class="card mb-6" data-section="Getting Started">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+    <div class="card-body">
+        <p class="mb-6 text-gray-600">Add a dropdown menu to your page in three simple steps</p>
+
+        <h3 class="category-title-style">Step 1: Add Trigger Button</h3>
+        <p class="mb-4 text-gray-600">Create a button that will trigger the dropdown:</p>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;button id="my-dropdown" class="btn btn-primary"&gt;Actions&lt;/button&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title-style">Step 2: Include Domma</h3>
+        <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;!-- CSS --&gt;
+&lt;link rel="stylesheet" href="dist/domma.css"&gt;
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;
+
+&lt;!-- JavaScript --&gt;
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title-style">Step 3: Initialize the Dropdown</h3>
+        <p class="mb-4 text-gray-600">Call <code>Domma.elements.dropdown()</code> with menu items:</p>
+        <div class="code-block language-javascript mb-6">
+            <pre><code>Domma.elements.dropdown('#my-dropdown', {
+    items: [
+        { text: 'Edit', value: 'edit' },
+        { text: 'Duplicate', value: 'duplicate' },
+        { divider: true },  // Add separator line
+        { text: 'Delete', value: 'delete', class: 'text-danger' }
+    ],
+    trigger: 'click',       // Show on click
+    position: 'bottom-start', // Position below button
+    onSelect: (item) => {
+        console.log('Selected:', item.value);
+    }
+});</code></pre>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>Note:</strong> The dropdown auto-generates the menu from the items array (no HTML menu required). It handles positioning, keyboard navigation, and automatically closes when clicking outside. Use <code>divider: true</code> for separator lines.
+        </div>
+    </div>
+</section>
+
 <section class="card mb-6" data-section="Quick Start">
     <div class="card-header">
         <h2 class="text-xl font-semibold m-0">Quick Start</h2>

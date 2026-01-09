@@ -98,7 +98,67 @@ tree.refresh();        // Re-render tree
     </div>
   </section>
 
-  <!-- SECTION 2: Basic Tree -->
+  <!-- SECTION 2: Getting Started -->
+  <section class="card mb-6" data-section="Getting Started">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+    <div class="card-body">
+      <p class="mb-6 text-gray-600">Add a hierarchical tree view to your page in three simple steps</p>
+
+      <h3 class="category-title-style">Step 1: Add Container Element</h3>
+      <p class="mb-4 text-gray-600">Create a container div for the tree:</p>
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;div id="my-tree"&gt;&lt;/div&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Step 2: Include Domma</h3>
+      <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;!-- CSS --&gt;
+&lt;link rel="stylesheet" href="dist/domma.css"&gt;
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;
+
+&lt;!-- JavaScript --&gt;
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Step 3: Initialize the TreeView</h3>
+      <p class="mb-4 text-gray-600">Call <code>Domma.elements.treeView()</code> with hierarchical data:</p>
+      <div class="code-block language-javascript mb-6">
+        <pre><code>// Prepare hierarchical data (flat structure with parent_id)
+const folders = [
+    { id: 1, name: 'Documents', parent_id: null },
+    { id: 2, name: 'Work', parent_id: 1 },
+    { id: 3, name: 'Personal', parent_id: 1 },
+    { id: 4, name: 'Projects', parent_id: 2 },
+    { id: 5, name: 'Reports', parent_id: 2 }
+];
+
+// Initialize the tree
+const tree = Domma.elements.treeView('#my-tree', {
+    data: folders,           // Hierarchical data array
+    expandedByDefault: true, // Start with nodes expanded
+    selectable: true,        // Allow node selection
+    onSelect: (nodeId, node) => {
+        console.log('Selected:', node.name);
+    },
+    onExpand: (nodeId) => {
+        console.log('Node expanded:', nodeId);
+    }
+});
+
+// Programmatic control
+tree.expandAll();    // Expand all nodes
+tree.collapseAll();  // Collapse all nodes
+tree.select(nodeId); // Select a node</code></pre>
+      </div>
+
+      <div class="alert alert-info">
+        <strong>Note:</strong> The treeview auto-generates the complete tree UI from your data array (no HTML structure required). Data must include <code>id</code>, <code>name</code>, and <code>parent_id</code> fields. Root nodes have <code>parent_id: null</code>. The component automatically builds the hierarchy and handles expand/collapse.
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: Basic Tree -->
   <section class="card mb-6" data-section="Basic Tree">
     <div class="card-header">
       <h2 class="text-xl font-semibold m-0">Basic Tree</h2>

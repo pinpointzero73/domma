@@ -79,6 +79,58 @@ Domma.elements.editor('#editor', {
         </div>
     </section>
 
+    <section class="card mb-6" data-section="Getting Started">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+        <div class="card-body">
+            <p class="mb-6 text-gray-600">Add a content editor to your page in three simple steps</p>
+
+            <h3 class="category-title-style">Step 1: Add Container Element</h3>
+            <p class="mb-4 text-gray-600">Create a container div for the editor:</p>
+            <div class="code-block language-html mb-6">
+                <pre><code>&lt;div id="my-editor"&gt;&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3 class="category-title-style">Step 2: Include Domma and Tools Bundle</h3>
+            <p class="mb-4 text-gray-600">Add Domma CSS/JS and the tools bundle (includes editor):</p>
+            <div class="code-block language-html mb-6">
+                <pre><code>&lt;!-- CSS --&gt;
+&lt;link rel="stylesheet" href="dist/domma.css"&gt;
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;
+&lt;link rel="stylesheet" href="dist/domma-tools.css"&gt;
+
+&lt;!-- JavaScript --&gt;
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;
+&lt;script src="dist/domma-tools.min.js"&gt;&lt;/script&gt;</code></pre>
+            </div>
+
+            <h3 class="category-title-style">Step 3: Initialize the Editor</h3>
+            <p class="mb-4 text-gray-600">Call <code>Domma.elements.editor()</code> to create the editor:</p>
+            <div class="code-block language-javascript mb-6">
+                <pre><code>// Simple text editor
+Domma.elements.editor('#my-editor', {
+    mode: 'text',           // 'text', 'rich', or 'code'
+    placeholder: 'Start typing...',
+    autosave: true,         // Auto-save as you type
+    storage: 'my-content'   // localStorage key
+});
+
+// Or rich text (WYSIWYG) editor
+Domma.elements.editor('#my-editor', {
+    mode: 'rich',
+    toolbar: [
+        ['bold', 'italic', 'underline'],
+        ['link', 'image'],
+        ['heading', 'quote']
+    ]
+});</code></pre>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Note:</strong> The editor auto-generates the complete UI (no HTML required). It supports three modes: text (textarea), rich (WYSIWYG), and code (syntax highlighting). The editor requires the <code>domma-tools.min.js</code> bundle which includes the editor component.
+            </div>
+        </div>
+    </section>
+
     <section class="card mb-6" data-section="Text Mode">
         <div class="card-header">
             <h2 class="text-xl font-semibold m-0">Text Mode</h2>
