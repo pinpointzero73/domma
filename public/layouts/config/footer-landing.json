@@ -1,0 +1,55 @@
+{
+  "type": "element",
+  "layout": "columns",
+  "variant": "dark",
+  "position": "static",
+  "brand": {
+    "text": "Domma",
+    "url": "index.html",
+    "description": "Dynamic Object Manipulation & Modeling API - A lightweight, zero-dependency JavaScript framework"
+  },
+  "columns": [
+    {
+      "title": "Product",
+      "links": [
+        { "text": "Features", "url": "#features" },
+        { "text": "Showcase", "url": "showcase/index.html" },
+        { "text": "Examples", "url": "examples/index.html" },
+        { "text": "MiniApps", "url": "miniapps/index.html" },
+        { "text": "Download", "url": "download/index.html" }
+      ]
+    },
+    {
+      "title": "Resources",
+      "links": [
+        { "text": "QuickStart Guide", "url": "quickstart/index.html" },
+        { "text": "Documentation", "url": "https://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md", "external": true },
+        { "text": "API Reference", "url": "showcase/reference/index.html" },
+        { "text": "GitHub", "url": "https://github.com/dcbw-it/domma", "external": true }
+      ]
+    },
+    {
+      "title": "Company",
+      "links": [
+        { "text": "About Us", "url": "about/index.html" },
+        { "text": "Blog", "url": "blog/index.html" },
+        { "text": "FAQs", "url": "faq/index.html" },
+        { "text": "Feedback", "url": "feedback/index.html" }
+      ]
+    },
+    {
+      "title": "Legal",
+      "links": [
+        { "text": "Privacy Policy", "url": "privacy-policy/index.html" },
+        { "text": "Cookie Settings", "url": "#", "attributes": { "data-cookie-consent-open": "true" } },
+        { "text": "Terms of Service", "url": "#" }
+      ]
+    }
+  ],
+  "social": [
+    { "icon": "github", "url": "https://github.com/dcbw-it/domma", "label": "GitHub" },
+    { "icon": "twitter", "url": "#", "label": "Twitter" },
+    { "icon": "linkedin", "url": "#", "label": "LinkedIn" }
+  ],
+  "copyright": "© {{year}} Darryl Waterhouse & DCBW-IT. All rights reserved."
+}
