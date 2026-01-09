@@ -18,7 +18,8 @@ const AVAILABLE_THEMES = [
     'silver-light', 'silver-dark',
     'charcoal-light', 'charcoal-dark',
     'christmas-light', 'christmas-dark',
-    'grayve'
+    'grayve',
+    'core-light'
 ];
 
 // Default theme
