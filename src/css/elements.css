@@ -1807,6 +1807,13 @@ code {
     background: var(--dm-hover-bg, rgba(0, 0, 0, 0.05));
 }
 
+.navbar-dropdown-divider {
+    height: 1px;
+    margin: 0.5rem 0;
+    background: var(--dm-border-color, rgba(0, 0, 0, 0.1));
+    list-style: none;
+}
+
 /* Dark navbar dropdown styles */
 .navbar-dark .navbar-dropdown-menu {
     background: var(--dm-gray-800);
@@ -1820,6 +1827,10 @@ code {
 .navbar-dark .navbar-dropdown-item:hover {
     background: var(--dm-gray-700);
     color: var(--dm-white);
+}
+
+.navbar-dark .navbar-dropdown-divider {
+    background: var(--dm-gray-700);
 }
 
 /* Pill button styles (for Download button) */

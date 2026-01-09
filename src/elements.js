@@ -4932,7 +4932,11 @@ class Navbar extends Component {
                 </button>`;
                 html += '<ul class="navbar-dropdown-menu">';
                 item.items.forEach((subItem, subIndex) => {
-                    html += `<li><a href="${subItem.url || '#'}" class="navbar-dropdown-item" data-index="${index}" data-subindex="${subIndex}">${subItem.text}</a></li>`;
+                    if (subItem.divider) {
+                        html += `<li class="navbar-dropdown-divider"></li>`;
+                    } else {
+                        html += `<li><a href="${subItem.url || '#'}" class="navbar-dropdown-item" data-index="${index}" data-subindex="${subIndex}">${subItem.text}</a></li>`;
+                    }
                 });
                 html += '</ul>';
                 html += '</li>';
