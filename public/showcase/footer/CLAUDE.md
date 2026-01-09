@@ -338,6 +338,106 @@ Use columns to organize links by product or brand.
 5. **Copyright current** - Use `{year: true}` for automatic year updates
 6. **Theme matching** - Choose variant that complements page theme
 
+---
+
+## Layout System Integration ✨
+
+The Footer component can be integrated into the **Domma Layout System** for site-wide footer management. This eliminates the need to manually add footer code to every page.
+
+### Benefits of Layout System Integration
+
+| Manual Approach | Layout System + Footer Element |
+|----------------|-------------------------------|
+| Copy footer HTML to every page | Single JSON configuration file |
+| Update copyright in 50+ files | Update once, applies everywhere |
+| No template variables | Auto-replace `{{year}}`, `{{version}}` |
+| Fixed content | Dynamic updates via API methods |
+| Inconsistent across pages | Guaranteed consistency |
+
+### How It Works
+
+**1. Create Footer Configuration** (`/layouts/config/footer-mysite.json`):
+```json
+{
+  "type": "element",
+  "layout": "columns",
+  "variant": "dark",
+  "brand": {
+    "text": "Domma",
+    "url": "index.html",
+    "description": "Dynamic Object Manipulation & Modeling API"
+  },
+  "columns": [
+    {
+      "title": "Product",
+      "links": [
+        { "text": "Features", "url": "#features" },
+        { "text": "Showcase", "url": "showcase/index.html" }
+      ]
+    },
+    {
+      "title": "Resources",
+      "links": [
+        { "text": "Documentation", "url": "#", "external": true }
+      ]
+    }
+  ],
+  "social": [
+    { "icon": "github", "url": "https://github.com/...", "label": "GitHub" },
+    { "icon": "twitter", "url": "#", "label": "Twitter" },
+    { "icon": "linkedin", "url": "#", "label": "LinkedIn" }
+  ],
+  "copyright": "© {{year}} Darryl Waterhouse & DCBW-IT. All rights reserved."
+}
+```
+
+**2. Reference in Preset** (`/layouts/config/presets.json`):
+```json
+{
+  "splash": {
+    "navbar": { /* ... */ },
+    "footer": "footer-mysite",  // References the config above
+    "sidebar": { "enabled": false }
+  }
+}
+```
+
+**3. Use Preset on Page:**
+```html
+<body data-layout="splash">
+  <!-- Footer automatically rendered here -->
+</body>
+```
+
+### Template Variables
+
+The layout system automatically replaces template variables in footer configs:
+
+- `{{year}}` → `2026` (current year)
+- `{{version}}` → `0.7.6-alpha` (Domma version)
+- `{{buildDate}}` → `09/01/2026 11:28` (build timestamp)
+
+**Example:**
+```json
+{
+  "copyright": "© {{year}} My Company. Version {{version}}"
+}
+```
+
+Becomes: `© 2026 My Company. Version 0.7.6-alpha`
+
+### Real-World Example
+
+The Domma landing page (`index.html`) uses this approach:
+
+- **Config:** `/layouts/config/footer-landing.json`
+- **Preset:** `"footer": "footer-landing"` in `splash` preset
+- **Result:** Professional 4-column footer with social icons, auto-updated copyright
+
+**See:** `/layouts/CLAUDE.md` for complete Layout System documentation
+
+---
+
 ## Related Components
 
 - **Navbar** - Top navigation bar (complements footer)
@@ -346,6 +446,7 @@ Use columns to organize links by product or brand.
 
 ## Related Documentation
 
+- [Layout System](../../layouts/CLAUDE.md) - **NEW:** Site-wide footer management
 - [Elements Showcase](../elements/CLAUDE.md)
 - [Showcase Meta Guide](../CLAUDE.md)
 - [API Reference](../../docs/API.md)
