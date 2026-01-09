@@ -84,7 +84,7 @@ Domma's CSS follows a proper build process with single source of truth:
 src/css/
 ├── domma.css           # Base styles, typography, utilities
 ├── grid.css            # Grid system (Bootstrap + CSS Grid)
-└── elements.css        # UI components - 21 components
+└── elements.css        # UI components - 22 components
 ```
 
 **Production Files (built):**
@@ -128,11 +128,11 @@ npm run build:css  # Builds src/css/* → public/dist/*
   - Responsive containers
   - Flexbox utilities
 
-- **elements.css** - UI components (21 total)
+- **elements.css** - UI components (22 total)
   - Buttons, Cards, Modals, Tabs, Accordion
   - Tooltip, Table, Form elements, Badges, Pills
   - Alert, Code blocks, Pagination, Navbar, Sidebar
-  - Footer, Jumbotron, Carousel, Dialog, Slideover, Dropdown
+  - Footer, Jumbotron, Carousel, Dialog, Slideover, Dropdown, Progression
 
 - **domma-themes.css** - Visual styling
   - Theme color definitions
@@ -292,7 +292,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 
 #### Elements (`Domma.elements`)
 
-- **21 UI Components:**
+- **22 UI Components:**
   - Modal - `modal()` with backdrop, keyboard, animation options
   - Tabs - `tabs()` with active index, onChange
   - Accordion - `accordion()` with multiExpand
@@ -315,6 +315,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Alarm - `alarm()` scheduled alerts with persistence
   - Jumbotron - CSS-only hero sections with multiple variants
   - Slideover - `slideover()` panel overlays from screen edges
+  - Progression - `progression()` unified timeline/roadmap component with dual modes, status tracking
 
 - **Form Components:**
   - Autocomplete - `autocomplete()` with data/dataSource, highlighting, keyboard nav
@@ -401,8 +402,8 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 
 #### Elements (elements.css)
 
-- 21 UI components with full styling
-- Buttons, Cards, Modals, Forms, Tables, Navigation (Navbar, Sidebar, Footer), etc.
+- 22 UI components with full styling
+- Buttons, Cards, Modals, Forms, Tables, Navigation (Navbar, Sidebar, Footer), Progression, etc.
 - Responsive and theme-aware
 
 #### Themes (domma-themes.css)

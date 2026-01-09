@@ -744,8 +744,18 @@ const result = await Domma.http.post('/api/users', {
 ```
 
 ### `put(url, data, config)`
+Full resource replacement.
 ```javascript
-await Domma.http.put('/api/users/1', { name: 'Updated' });
+await Domma.http.put('/api/users/1', {
+    name: 'Updated',
+    email: 'updated@example.com'
+});
+```
+
+### `patch(url, data, config)`
+Partial resource update (only specified fields).
+```javascript
+await Domma.http.patch('/api/users/1', { name: 'Updated' });
 ```
 
 ### `delete(url, config)`
@@ -1576,6 +1586,199 @@ const footer = Domma.elements.footer('#footer', {
 
 // Update later
 footer.setCopyright('© 2026 New Company Name');
+```
+
+---
+
+### Progression
+
+Unified component combining Timeline (chronological events) and Roadmap (status-driven milestones) with dual-mode functionality. Supports both traditional timeline visualization and interactive project roadmap tracking.
+
+**Timeline Mode** - Display chronological events:
+
+```javascript
+const timeline = Domma.elements.progression('#timeline', {
+    mode: 'timeline',
+    layout: 'vertical',
+    theme: 'default',
+    items: [
+        { year: '2024', title: 'Company Founded', description: 'Started with a vision' },
+        { year: '2025', title: 'First Product Launch', description: 'Released v1.0' },
+        { year: '2026', title: 'Series A Funding', description: 'Raised $10M' }
+    ]
+});
+```
+
+**Roadmap Mode** - Track project milestones with statuses:
+
+```javascript
+const roadmap = Domma.elements.progression('#roadmap', {
+    mode: 'roadmap',
+    layout: 'vertical',
+    theme: 'modern',
+    showProgress: true,
+    statusIcons: true,
+    items: [
+        {
+            id: 'phase1',
+            title: 'Research & Planning',
+            status: 'completed',
+            date: 'Q1 2026',
+            description: 'Market research and requirements gathering',
+            priority: 'high'
+        },
+        {
+            id: 'phase2',
+            title: 'Development',
+            status: 'in-progress',
+            date: 'Q2 2026',
+            description: 'Core feature implementation',
+            progress: 65,
+            tags: ['backend', 'frontend'],
+            assignee: 'Engineering Team'
+        },
+        {
+            id: 'phase3',
+            title: 'Testing & QA',
+            status: 'planned',
+            date: 'Q3 2026',
+            priority: 'medium'
+        }
+    ]
+});
+```
+
+#### `elements.progression(selector, options)`
+
+Creates a Progression instance.
+
+**Common Options:**
+
+| Option      | Type     | Default      | Description                                    |
+|-------------|----------|--------------|------------------------------------------------|
+| `mode`      | String   | `'timeline'` | Component mode: `'timeline'` or `'roadmap'`    |
+| `items`     | Array    | `[]`         | Items to display                               |
+| `layout`    | String   | `'vertical'` | Layout: `'vertical'`, `'horizontal'`, `'centered'` |
+| `theme`     | String   | `'default'`  | Theme: `'default'`, `'minimal'`, `'corporate'`, `'modern'` |
+| `animation` | Boolean  | `true`       | Enable entrance animations                     |
+
+**Roadmap-Specific Options:**
+
+| Option               | Type     | Default       | Description                                |
+|----------------------|----------|---------------|--------------------------------------------|
+| `showProgress`       | Boolean  | `true`        | Show overall progress bar                  |
+| `progressPosition`   | String   | `'top'`       | Progress bar position: `'top'` or `'bottom'` |
+| `statusIcons`        | Boolean  | `true`        | Show status icons in markers               |
+| `allowStatusChange`  | Boolean  | `false`       | Enable interactive status changes          |
+| `currentItem`        | String   | `null`        | ID of currently active item                |
+| `icons`              | Object   | Default set   | Custom icons for each status               |
+| `onStatusChange`     | Function | `null`        | Callback when item status changes          |
+
+**Timeline Item Structure:**
+
+```javascript
+{
+    year: '2024',           // Display year/date
+    title: 'Event Title',   // Event title
+    description: 'Details', // Optional description
+    icon: 'icon-name'       // Optional icon name
+}
+```
+
+**Roadmap Item Structure:**
+
+```javascript
+{
+    id: 'milestone-1',              // Unique identifier (required)
+    title: 'Milestone Title',       // Milestone title
+    status: 'in-progress',          // Status (required for roadmap)
+    date: 'Q2 2026',                // Display date/timeframe
+    description: 'Details',         // Optional description
+    progress: 45,                   // Optional progress (0-100)
+    priority: 'high',               // Optional: 'low', 'medium', 'high', 'critical'
+    tags: ['backend', 'api'],       // Optional tags array
+    assignee: 'Team Name'           // Optional assignee
+}
+```
+
+**Status Types:**
+
+- `'planned'` - Not started (gray marker)
+- `'in-progress'` - Currently active (blue marker with pulse animation)
+- `'completed'` - Finished (green marker with checkmark)
+- `'blocked'` - Impeded (red marker with alert icon)
+- `'cancelled'` - Abandoned (gray marker with X icon)
+
+#### Methods
+
+**Common Methods:**
+
+```javascript
+progression.setItems(items)         // Replace all items
+progression.addItem(item)           // Add single item
+progression.updateItem(id, changes) // Update specific item
+progression.removeItem(id)          // Remove item by ID
+progression.destroy()               // Cleanup and remove
+```
+
+**Roadmap-Specific Methods:**
+
+```javascript
+progression.setStatus(id, status)      // Change item status
+progression.getProgress()              // Get overall completion %
+progression.markComplete(id)           // Set status to 'completed'
+progression.markInProgress(id)         // Set status to 'in-progress'
+progression.markPlanned(id)            // Set status to 'planned'
+progression.markBlocked(id)            // Set status to 'blocked'
+progression.getItemsByStatus(status)   // Filter items by status
+progression.setCurrent(id)             // Set current active item
+```
+
+#### Backwards Compatibility
+
+The `timeline()` function is deprecated but remains fully functional as an alias:
+
+```javascript
+// Deprecated (still works)
+const timeline = Domma.elements.timeline(selector, options);
+
+// Recommended
+const timeline = Domma.elements.progression(selector, { mode: 'timeline', ...options });
+```
+
+#### Interactive Roadmap Example
+
+```javascript
+const roadmap = Domma.elements.progression('#project-roadmap', {
+    mode: 'roadmap',
+    layout: 'vertical',
+    theme: 'modern',
+    showProgress: true,
+    allowStatusChange: true,
+    onStatusChange: (item, oldStatus, newStatus) => {
+        console.log(`${item.title} changed from ${oldStatus} to ${newStatus}`);
+
+        // Auto-advance when marking complete
+        if (newStatus === 'completed') {
+            const nextPlanned = roadmap.getItemsByStatus('planned')[0];
+            if (nextPlanned) {
+                roadmap.markInProgress(nextPlanned.id);
+            }
+        }
+    },
+    items: [
+        { id: 'design', title: 'Design Phase', status: 'completed', date: 'Jan 2026' },
+        { id: 'dev', title: 'Development', status: 'in-progress', date: 'Feb-Apr 2026', progress: 70 },
+        { id: 'test', title: 'Testing', status: 'planned', date: 'May 2026' },
+        { id: 'deploy', title: 'Deployment', status: 'planned', date: 'Jun 2026' }
+    ]
+});
+
+// Programmatically update roadmap
+roadmap.setStatus('dev', 'completed');
+roadmap.markInProgress('test');
+
+console.log(`Overall progress: ${roadmap.getProgress()}%`);
 ```
 
 ---

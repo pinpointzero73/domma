@@ -225,6 +225,12 @@
           "section": "pillbox"
         },
         {
+          "text": "Progression",
+          "url": "showcase/elements/progression/index.html",
+          "section": "progression",
+          "badge": "New"
+        },
+        {
           "text": "Sidebar",
           "url": "showcase/sidebar/index.html",
           "section": "sidebar"
@@ -242,7 +248,8 @@
         {
           "text": "Timeline",
           "url": "showcase/elements/timeline/index.html",
-          "section": "timeline"
+          "section": "timeline",
+          "badge": "Deprecated"
         },
         {
           "text": "Tooltip",

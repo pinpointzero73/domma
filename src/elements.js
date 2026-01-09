@@ -7671,6 +7671,477 @@ class Timeline extends Component {
 }
 
 // ============================================
+// Progression Component (Timeline + Roadmap)
+// ============================================
+
+/**
+ * Progression Component - Unified timeline and roadmap component
+ * Features: Timeline mode (chronological events), Roadmap mode (status-driven milestones)
+ * Layouts: vertical, horizontal, centered
+ * Backwards compatible with Timeline component
+ */
+class Progression extends Component {
+    static defaults = {
+        // Core options (shared)
+        mode: 'timeline',           // 'timeline' | 'roadmap'
+        items: [],
+        layout: 'vertical',         // 'vertical' | 'horizontal' | 'centered'
+        animation: true,
+        animationDelay: 100,
+        responsive: true,
+        theme: 'default',           // 'default' | 'minimal' | 'corporate' | 'modern'
+        clickable: false,
+        onItemClick: null,
+
+        // Timeline-specific options
+        yearWidth: '80px',
+        contentMaxWidth: '600px',
+        dateFormat: 'YYYY',
+        showConnector: true,
+
+        // Roadmap-specific options
+        showProgress: true,
+        progressPosition: 'top',    // 'top' | 'bottom' | 'none'
+        statusIcons: true,
+        allowStatusChange: false,
+        onStatusChange: null,
+        currentItem: null,
+        completedAnimation: true,
+        icons: {
+            planned: 'circle',
+            'in-progress': 'clock',
+            completed: 'check-circle',
+            blocked: 'alert-circle',
+            cancelled: 'x-circle'
+        },
+        colors: {
+            planned: 'var(--dm-gray-400)',
+            'in-progress': 'var(--dm-primary)',
+            completed: 'var(--dm-success)',
+            blocked: 'var(--dm-danger)',
+            cancelled: 'var(--dm-gray-500)'
+        }
+    };
+
+    constructor(selector, options = {}) {
+        super(selector, options);
+        this._init();
+    }
+
+    _init() {
+        if (!this.element) return;
+
+        // Add base classes
+        this.element.classList.add('dm-progression', `dm-progression-${this.options.mode}`, `dm-progression-${this.options.layout}`);
+
+        // Add theme class
+        if (this.options.theme !== 'default') {
+            this.element.classList.add(`dm-progression-${this.options.theme}`);
+        }
+
+        // Backwards compatibility - also add dm-timeline classes
+        if (this.options.mode === 'timeline') {
+            this.element.classList.add('dm-timeline', `dm-timeline-${this.options.layout}`);
+            if (this.options.theme !== 'default') {
+                this.element.classList.add(`dm-timeline-${this.options.theme}`);
+            }
+        }
+
+        this._renderItems();
+        this._attachEvents();
+
+        if (this.options.animation) {
+            this._animateItems();
+        }
+    }
+
+    _renderItems() {
+        const items = this.options.items;
+        if (!Array.isArray(items) || items.length === 0) return;
+
+        this.element.innerHTML = '';
+
+        // Render progress bar for roadmap mode
+        if (this.options.mode === 'roadmap' && this.options.showProgress && this.options.progressPosition === 'top') {
+            this._renderProgressBar();
+        }
+
+        // Render items based on mode
+        items.forEach((item, index) => {
+            const itemEl = this.options.mode === 'roadmap'
+                ? this._renderRoadmapItem(item, index)
+                : this._renderTimelineItem(item, index);
+
+            this.element.appendChild(itemEl);
+        });
+
+        // Progress bar at bottom
+        if (this.options.mode === 'roadmap' && this.options.showProgress && this.options.progressPosition === 'bottom') {
+            this._renderProgressBar();
+        }
+    }
+
+    _renderTimelineItem(item, index) {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'dm-progression-item dm-timeline-item';
+        itemEl.setAttribute('data-index', index);
+
+        if (this.options.animation) {
+            itemEl.style.opacity = '0';
+            itemEl.style.transform = 'translateY(20px)';
+            itemEl.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        }
+
+        itemEl.innerHTML = `
+            <div class="dm-progression-marker dm-timeline-year">${this._escapeHtml(item.year || item.date || '')}</div>
+            <div class="dm-progression-content dm-timeline-content">
+                <h4 class="dm-progression-title dm-timeline-title">${this._escapeHtml(item.title || '')}</h4>
+                <p class="dm-progression-description dm-timeline-description">${this._escapeHtml(item.description || '')}</p>
+            </div>
+        `;
+
+        return itemEl;
+    }
+
+    _renderRoadmapItem(item, index) {
+        const itemEl = document.createElement('div');
+        const status = item.status || 'planned';
+        const isCurrent = this.options.currentItem === item.id || this.options.currentItem === index;
+
+        itemEl.className = `dm-progression-item dm-progression-status-${status}${isCurrent ? ' dm-progression-current' : ''}`;
+        itemEl.setAttribute('data-index', index);
+        itemEl.setAttribute('data-id', item.id || index);
+        itemEl.setAttribute('data-status', status);
+
+        if (this.options.animation) {
+            itemEl.style.opacity = '0';
+            itemEl.style.transform = 'translateY(20px)';
+            itemEl.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        }
+
+        // Build marker HTML
+        let markerHtml = `<div class="dm-progression-marker dm-progression-status-marker">`;
+        if (this.options.statusIcons && this.options.icons[status]) {
+            markerHtml += `<span class="dm-progression-status-icon" data-icon="${this.options.icons[status]}"></span>`;
+        } else {
+            markerHtml += `<span class="dm-progression-status-dot"></span>`;
+        }
+        markerHtml += `</div>`;
+
+        // Build content HTML
+        let contentHtml = `<div class="dm-progression-content">`;
+
+        // Date/phase
+        if (item.date) {
+            contentHtml += `<div class="dm-progression-date">${this._escapeHtml(item.date)}</div>`;
+        }
+
+        // Title
+        contentHtml += `<h4 class="dm-progression-title">${this._escapeHtml(item.title || '')}</h4>`;
+
+        // Description
+        if (item.description) {
+            contentHtml += `<p class="dm-progression-description">${this._escapeHtml(item.description)}</p>`;
+        }
+
+        // Progress bar for in-progress items
+        if (status === 'in-progress' && typeof item.progress === 'number') {
+            contentHtml += `
+                <div class="dm-progression-item-progress">
+                    <div class="dm-progression-item-progress-bar" style="width: ${Math.min(100, Math.max(0, item.progress))}%"></div>
+                </div>
+                <div class="dm-progression-item-progress-text">${item.progress}%</div>
+            `;
+        }
+
+        // Priority badge
+        if (item.priority) {
+            contentHtml += `<span class="dm-progression-priority dm-progression-priority-${item.priority}">${this._escapeHtml(item.priority)}</span>`;
+        }
+
+        // Tags
+        if (item.tags && Array.isArray(item.tags) && item.tags.length > 0) {
+            contentHtml += `<div class="dm-progression-tags">`;
+            item.tags.forEach(tag => {
+                contentHtml += `<span class="dm-progression-tag">${this._escapeHtml(tag)}</span>`;
+            });
+            contentHtml += `</div>`;
+        }
+
+        // Assignee
+        if (item.assignee) {
+            contentHtml += `<div class="dm-progression-assignee">${this._escapeHtml(item.assignee)}</div>`;
+        }
+
+        contentHtml += `</div>`;
+
+        itemEl.innerHTML = markerHtml + contentHtml;
+
+        return itemEl;
+    }
+
+    _renderProgressBar() {
+        const progress = this.getProgress();
+        const progressEl = document.createElement('div');
+        progressEl.className = 'dm-progression-progress';
+        progressEl.innerHTML = `
+            <div class="dm-progression-progress-bar" style="width: ${progress}%"></div>
+            <div class="dm-progression-progress-text">${Math.round(progress)}% Complete</div>
+        `;
+        this.element.appendChild(progressEl);
+    }
+
+    _attachEvents() {
+        if (!this.options.clickable) return;
+
+        this._addEventListener(this.element, 'click', (e) => {
+            const itemEl = e.target.closest('.dm-progression-item');
+            if (itemEl) {
+                const index = parseInt(itemEl.getAttribute('data-index'), 10);
+                const item = this.options.items[index];
+                if (item && this.options.onItemClick) {
+                    this.options.onItemClick(item, index, itemEl);
+                }
+            }
+        });
+
+        // Handle interactive status change
+        if (this.options.mode === 'roadmap' && this.options.allowStatusChange) {
+            this._addEventListener(this.element, 'click', (e) => {
+                const marker = e.target.closest('.dm-progression-marker');
+                if (marker) {
+                    const itemEl = marker.closest('.dm-progression-item');
+                    const index = parseInt(itemEl.getAttribute('data-index'), 10);
+                    const item = this.options.items[index];
+                    if (item && item.status !== 'completed') {
+                        this._cycleStatus(item, index);
+                    }
+                }
+            });
+        }
+    }
+
+    _cycleStatus(item, index) {
+        const statusCycle = ['planned', 'in-progress', 'completed'];
+        const currentIndex = statusCycle.indexOf(item.status || 'planned');
+        const newStatus = statusCycle[(currentIndex + 1) % statusCycle.length];
+        this.setStatus(index, newStatus);
+    }
+
+    _animateItems() {
+        const items = this.element.querySelectorAll('.dm-progression-item');
+        items.forEach((item, index) => {
+            setTimeout(() => {
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0)';
+            }, index * this.options.animationDelay);
+        });
+    }
+
+    _escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    _findItemIndex(indexOrId) {
+        if (typeof indexOrId === 'number') {
+            return indexOrId;
+        }
+        return this.options.items.findIndex(item => item.id === indexOrId);
+    }
+
+    // Public API methods (Timeline mode + shared)
+    setItems(items) {
+        this.options.items = items;
+        this._renderItems();
+        if (this.options.animation) {
+            this._animateItems();
+        }
+        return this;
+    }
+
+    addItem(item) {
+        this.options.items.push(item);
+        this._renderItems();
+        if (this.options.animation) {
+            this._animateItems();
+        }
+        return this;
+    }
+
+    getItems() {
+        return [...this.options.items];
+    }
+
+    getItem(indexOrId) {
+        const index = this._findItemIndex(indexOrId);
+        return index >= 0 ? {...this.options.items[index]} : null;
+    }
+
+    updateItem(indexOrId, data) {
+        const index = this._findItemIndex(indexOrId);
+        if (index >= 0) {
+            this.options.items[index] = {...this.options.items[index], ...data};
+            this._renderItems();
+            if (this.options.animation) {
+                this._animateItems();
+            }
+        }
+        return this;
+    }
+
+    removeItem(indexOrId) {
+        const index = this._findItemIndex(indexOrId);
+        if (index >= 0) {
+            this.options.items.splice(index, 1);
+            this._renderItems();
+            if (this.options.animation) {
+                this._animateItems();
+            }
+        }
+        return this;
+    }
+
+    setLayout(layout) {
+        this.element.classList.remove(`dm-progression-${this.options.layout}`);
+        if (this.options.mode === 'timeline') {
+            this.element.classList.remove(`dm-timeline-${this.options.layout}`);
+        }
+        this.options.layout = layout;
+        this.element.classList.add(`dm-progression-${layout}`);
+        if (this.options.mode === 'timeline') {
+            this.element.classList.add(`dm-timeline-${layout}`);
+        }
+        return this;
+    }
+
+    setTheme(theme) {
+        if (this.options.theme !== 'default') {
+            this.element.classList.remove(`dm-progression-${this.options.theme}`);
+            if (this.options.mode === 'timeline') {
+                this.element.classList.remove(`dm-timeline-${this.options.theme}`);
+            }
+        }
+        this.options.theme = theme;
+        if (theme !== 'default') {
+            this.element.classList.add(`dm-progression-${theme}`);
+            if (this.options.mode === 'timeline') {
+                this.element.classList.add(`dm-timeline-${theme}`);
+            }
+        }
+        return this;
+    }
+
+    setMode(mode) {
+        // Remove current mode classes
+        this.element.classList.remove(`dm-progression-${this.options.mode}`);
+        if (this.options.mode === 'timeline') {
+            this.element.classList.remove('dm-timeline', `dm-timeline-${this.options.layout}`);
+            if (this.options.theme !== 'default') {
+                this.element.classList.remove(`dm-timeline-${this.options.theme}`);
+            }
+        }
+
+        // Set new mode
+        this.options.mode = mode;
+        this.element.classList.add(`dm-progression-${mode}`);
+
+        // Add timeline compatibility classes if in timeline mode
+        if (mode === 'timeline') {
+            this.element.classList.add('dm-timeline', `dm-timeline-${this.options.layout}`);
+            if (this.options.theme !== 'default') {
+                this.element.classList.add(`dm-timeline-${this.options.theme}`);
+            }
+        }
+
+        this._renderItems();
+        if (this.options.animation) {
+            this._animateItems();
+        }
+        return this;
+    }
+
+    getMode() {
+        return this.options.mode;
+    }
+
+    refresh() {
+        this._renderItems();
+        if (this.options.animation) {
+            this._animateItems();
+        }
+        return this;
+    }
+
+    // Roadmap-specific methods
+    setStatus(indexOrId, status) {
+        const index = this._findItemIndex(indexOrId);
+        if (index >= 0) {
+            const oldStatus = this.options.items[index].status;
+            this.options.items[index].status = status;
+
+            if (this.options.onStatusChange) {
+                this.options.onStatusChange(this.options.items[index], oldStatus, status);
+            }
+
+            this._renderItems();
+            if (this.options.animation) {
+                this._animateItems();
+            }
+        }
+        return this;
+    }
+
+    getStatus(indexOrId) {
+        const item = this.getItem(indexOrId);
+        return item ? item.status : null;
+    }
+
+    getItemsByStatus(status) {
+        return this.options.items.filter(item => item.status === status);
+    }
+
+    setCurrent(indexOrId) {
+        const index = this._findItemIndex(indexOrId);
+        if (index >= 0) {
+            this.options.currentItem = this.options.items[index].id || index;
+            this._renderItems();
+            if (this.options.animation) {
+                this._animateItems();
+            }
+        }
+        return this;
+    }
+
+    getCurrent() {
+        if (this.options.currentItem === null) return null;
+        return this.getItem(this.options.currentItem);
+    }
+
+    getProgress() {
+        if (this.options.mode !== 'roadmap' || this.options.items.length === 0) {
+            return 0;
+        }
+
+        const completed = this.options.items.filter(item => item.status === 'completed').length;
+        return Math.round((completed / this.options.items.length) * 100);
+    }
+
+    markComplete(indexOrId) {
+        return this.setStatus(indexOrId, 'completed');
+    }
+
+    markInProgress(indexOrId) {
+        return this.setStatus(indexOrId, 'in-progress');
+    }
+
+    markBlocked(indexOrId) {
+        return this.setStatus(indexOrId, 'blocked');
+    }
+}
+
+// ============================================
 // Elements Module Export
 // ============================================
 
@@ -7914,12 +8385,23 @@ export const elements = {
         return instance;
     },
 
-    timeline(selector, options = {}) {
-        const instance = new Timeline(selector, options);
+    progression(selector, options = {}) {
+        const instance = new Progression(selector, options);
         if (instance.element) {
             this._instances.set(instance.element, instance);
         }
         return instance;
+    },
+
+    timeline(selector, options = {}) {
+        // Backwards compatible alias for progression({ mode: 'timeline' })
+        // Deprecation warning in development mode
+        if (typeof Domma !== 'undefined' && Domma.config?.deprecationWarnings !== false && typeof console !== 'undefined') {
+            console.warn('Domma: timeline() is deprecated. Use progression({ mode: "timeline" }) instead.');
+        }
+
+        // Use Progression component with timeline mode
+        return this.progression(selector, { mode: 'timeline', ...options });
     },
 
     // Toast wrapper - callable as function or use static methods

@@ -257,6 +257,18 @@ Accessed via `Domma.elements`:
     - Sizes: `'small'`, `'medium'`, `'large'`
     - Features: Searchable dropdown, validation (max items, duplicates, custom), keyboard support (Backspace to remove)
     - Model Integration: Supports two-way binding with `model` and `modelKey` options for reactive array synchronisation
+- **Progression**: Unified timeline and roadmap component with dual-mode functionality
+  -
+  `elements.progression(selector, { mode, items, layout, theme, animation, showProgress, progressPosition, statusIcons, allowStatusChange, currentItem, icons, onStatusChange })` →
+  `setItems()`, `addItem()`, `updateItem()`, `removeItem()`, `setStatus()`, `getProgress()`, `markComplete()`, `markInProgress()`, `markPlanned()`, `markBlocked()`, `getItemsByStatus()`, `setCurrent()`, `destroy()`
+    - Modes: `'timeline'` (chronological events) or `'roadmap'` (status-driven milestones)
+    - Layouts: `'vertical'`, `'horizontal'`, `'centered'`
+    - Themes: `'default'`, `'minimal'`, `'corporate'`, `'modern'`
+    - Timeline Items: `{ year, title, description, icon }`
+    - Roadmap Items: `{ id, title, status, date, description, progress, priority, tags, assignee }`
+    - Status Types: `'planned'`, `'in-progress'`, `'completed'`, `'blocked'`, `'cancelled'`
+    - Features: Progress bars, status indicators with pulse animations, priority badges, interactive status changes
+    - Backwards Compatible: `elements.timeline()` is an alias for `progression({ mode: 'timeline' })`
 
 ### tables.js - DataTable-like functionality
 

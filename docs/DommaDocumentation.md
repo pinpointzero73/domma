@@ -769,9 +769,22 @@ const response = await Domma.http.post('https://api.example.com/users', {
 
 ### PUT Request
 
+Full resource replacement:
+
 ```javascript
 const response = await Domma.http.put('https://api.example.com/users/1', {
-    name: 'John Updated'
+    name: 'John Updated',
+    email: 'john.updated@example.com'
+});
+```
+
+### PATCH Request
+
+Partial update (only specified fields):
+
+```javascript
+const response = await Domma.http.patch('https://api.example.com/users/1', {
+    name: 'John Updated'  // Only updates name, other fields unchanged
 });
 ```
 

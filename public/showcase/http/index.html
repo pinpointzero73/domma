@@ -66,7 +66,12 @@
         <tr>
           <td><span class="http-method-badge http-method-put">PUT</span></td>
           <td><code>http.put(url, data, config)</code></td>
-          <td>Send data to update a resource</td>
+          <td>Send data to fully replace a resource</td>
+        </tr>
+        <tr>
+          <td><span class="http-method-badge http-method-patch">PATCH</span></td>
+          <td><code>http.patch(url, data, config)</code></td>
+          <td>Send data to partially update a resource</td>
         </tr>
         <tr>
           <td><span class="http-method-badge http-method-delete">DELETE</span></td>
@@ -199,6 +204,50 @@ const posts = await Domma.http.get(
         <div>
           <label class="form-label">Response:</label>
           <div class="http-response-area" id="put-response">Click "Update Post" to see the response...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PATCH Demo -->
+  <section class="card mb-6" data-section="PATCH Partial Update">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">
+        <span class="http-method-badge http-method-patch">PATCH</span>
+        Partial Update
+      </h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">Update only specific fields without replacing the entire resource:</p>
+
+      <div class="alert alert-info mb-4">
+        <strong>PUT vs PATCH:</strong>
+        <code>PUT</code> replaces the entire resource, while <code>PATCH</code> only updates the specified fields.
+        Use PATCH for efficiency when updating single fields.
+      </div>
+
+      <div class="http-demo-grid">
+        <div>
+          <div class="form-group mb-3">
+            <label class="form-label">Update Title Only</label>
+            <input type="text" class="form-input" id="patch-title" value="Patched Title">
+          </div>
+                    <pre class="code-block language-javascript mb-4">// Only update the title field
+const patched = await Domma.http.patch(
+    'https://jsonplaceholder.typicode.com/posts/1',
+    {
+        title: 'Patched Title'
+        // Other fields (body, userId) remain unchanged
+    }
+);</pre>
+          <button class="btn btn-info" id="demo-patch">
+            <span data-icon="edit" data-icon-size="16"></span>
+            Patch Post
+          </button>
+        </div>
+        <div>
+          <label class="form-label">Response:</label>
+          <div class="http-response-area" id="patch-response">Click "Patch Post" to see the response...</div>
         </div>
       </div>
     </div>
@@ -714,6 +763,23 @@ Domma.http.get('/api/data')
       });
       output.removeClass('loading error').text(formatJson(result));
       Domma.elements.toast.success('Post updated successfully!');
+    } catch (err) {
+      output.removeClass('loading').addClass('error').text('Error: ' + err.message);
+    }
+  });
+
+  // PATCH Demo
+  $('#demo-patch').on('click', async () => {
+    const output = $('#patch-response');
+    const title = $('#patch-title').val();
+    output.addClass('loading').text('Patching...');
+
+    try {
+      const result = await Domma.http.patch('https://jsonplaceholder.typicode.com/posts/1', {
+        title: title
+      });
+      output.removeClass('loading error').text(formatJson(result));
+      Domma.elements.toast.success('Post patched successfully! Only title field was updated.');
     } catch (err) {
       output.removeClass('loading').addClass('error').text('Error: ' + err.message);
     }

@@ -24,6 +24,24 @@
 
     <!-- Main Content Container -->
     <main class="container py-8">
+        <!-- Deprecation Notice -->
+        <div class="alert alert-warning mb-6" style="border-left: 4px solid var(--dm-warning, #f59e0b);">
+            <h3 style="margin-top: 0; color: var(--dm-warning, #f59e0b);">⚠️ Component Deprecated</h3>
+            <p class="mb-2">
+                The <code>timeline()</code> component has been superseded by the new unified
+                <strong>Progression</strong> component, which combines Timeline and Roadmap functionality.
+            </p>
+            <p class="mb-3">
+                <strong>Good news:</strong> Your existing timeline code continues to work! The <code>timeline()</code>
+                method is now an alias for <code>progression({ mode: 'timeline' })</code>.
+            </p>
+            <p class="mb-0">
+                <a href="../progression/index.html" class="btn btn-warning">
+                    View Progression Component →
+                </a>
+            </p>
+        </div>
+
         <div class="showcase-content">
             <!-- Getting Started -->
             <section class="card mb-6" data-section="Getting Started">

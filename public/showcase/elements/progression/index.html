@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progression - Elements - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<!-- Hero Section -->
+<section class="hero hero-gradient-primary hero-lg elements-hero-style">
+    <h1>Progression</h1>
+    <p>Unified timeline and roadmap component with status tracking, progress visualization, and multiple layouts</p>
+    <p class="mt-4"><code>Domma.elements.progression()</code></p>
+</section>
+
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Progression</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                The Progression component unifies Timeline and Roadmap functionality into a single, powerful component.
+                Switch between <strong>timeline mode</strong> (chronological events) and <strong>roadmap mode</strong>
+                (status-driven milestones) to visualize progress and plans.
+            </p>
+
+            <h3 class="category-title-style">Key Features</h3>
+            <ul class="feature-list mb-4">
+                <li><strong>Dual Modes</strong> - Timeline (chronological) and Roadmap (status-driven)</li>
+                <li><strong>Status Tracking</strong> - Planned, in-progress, completed, blocked states</li>
+                <li><strong>Progress Visualization</strong> - Overall progress bar with percentage</li>
+                <li><strong>Multiple Layouts</strong> - Vertical, horizontal, centered</li>
+                <li><strong>Priority Levels</strong> - Low, medium, high, critical badges</li>
+                <li><strong>Tags & Metadata</strong> - Categorize with tags, assignees, dates</li>
+                <li><strong>Themes</strong> - Default, minimal, corporate, modern</li>
+                <li><strong>Backwards Compatible</strong> - Timeline component still works</li>
+            </ul>
+
+            <h3 class="category-title-style">Basic Usage</h3>
+            <div class="code-block language-javascript">
+                <pre><code>// Timeline mode
+const timeline = Domma.elements.progression('#timeline', {
+    mode: 'timeline',
+    items: [
+        { year: '2024', title: 'Launch', description: 'Product launch' }
+    ]
+});
+
+// Roadmap mode
+const roadmap = Domma.elements.progression('#roadmap', {
+    mode: 'roadmap',
+    items: [
+        {
+            id: 'milestone-1',
+            title: 'Feature X',
+            status: 'in-progress',
+            progress: 45,
+            date: 'Q2 2026'
+        }
+    ],
+    showProgress: true
+});</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Timeline Mode">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Timeline Mode</h2></div>
+        <div class="card-body">
+            <p class="mb-4">Timeline mode displays chronological events - perfect for history, milestones, and event sequences.</p>
+
+            <h3 class="category-title-style">Example Timeline</h3>
+            <div class="demo-area mb-4">
+                <div id="timeline-demo"></div>
+            </div>
+
+            <div class="code-block language-javascript">
+                <pre><code>Domma.elements.progression('#timeline-demo', {
+    mode: 'timeline',
+    items: [
+        { year: '2020', title: 'Founded', description: 'Company established' },
+        { year: '2021', title: 'Series A', description: 'Raised $5M funding' },
+        { year: '2022', title: 'Product Launch', description: 'Released v1.0' },
+        { year: '2023', title: 'Expansion', description: 'Opened 3 new offices' },
+        { year: '2024', title: 'IPO', description: 'Went public on NASDAQ' }
+    ],
+    layout: 'vertical',
+    theme: 'default'
+});</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Roadmap Mode">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Roadmap Mode</h2></div>
+        <div class="card-body">
+            <p class="mb-4">Roadmap mode tracks project milestones with status indicators, progress tracking, and metadata.</p>
+
+            <h3 class="category-title-style">Example Roadmap</h3>
+            <div class="demo-area mb-4">
+                <div id="roadmap-demo"></div>
+            </div>
+
+            <div class="code-block language-javascript">
+                <pre><code>Domma.elements.progression('#roadmap-demo', {
+    mode: 'roadmap',
+    items: [
+        {
+            id: 'research',
+            title: 'Market Research',
+            status: 'completed',
+            date: 'Q1 2026',
+            tags: ['research', 'planning']
+        },
+        {
+            id: 'design',
+            title: 'UI/UX Design',
+            status: 'completed',
+            date: 'Q1 2026',
+            priority: 'high',
+            assignee: 'Design Team'
+        },
+        {
+            id: 'backend',
+            title: 'Backend Development',
+            status: 'in-progress',
+            date: 'Q2 2026',
+            progress: 65,
+            priority: 'critical',
+            tags: ['backend', 'api'],
+            assignee: 'Engineering Team'
+        },
+        {
+            id: 'frontend',
+            title: 'Frontend Development',
+            status: 'in-progress',
+            date: 'Q2 2026',
+            progress: 40,
+            priority: 'high',
+            tags: ['frontend', 'ui'],
+            assignee: 'Frontend Team'
+        },
+        {
+            id: 'testing',
+            title: 'QA & Testing',
+            status: 'planned',
+            date: 'Q3 2026',
+            priority: 'medium',
+            tags: ['testing', 'qa']
+        },
+        {
+            id: 'launch',
+            title: 'Product Launch',
+            status: 'planned',
+            date: 'Q4 2026',
+            priority: 'critical',
+            tags: ['launch', 'marketing']
+        }
+    ],
+    showProgress: true,
+    progressPosition: 'top'
+});</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Layouts">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Layouts</h2></div>
+        <div class="card-body">
+            <p class="mb-4">Progression supports three layouts: vertical (default), horizontal (scrollable), and centered (alternating).</p>
+
+            <h3 class="category-title-style">Centered Layout</h3>
+            <div class="demo-area mb-4">
+                <div id="layout-centered"></div>
+            </div>
+
+            <div class="code-block language-javascript">
+                <pre><code>Domma.elements.progression('#layout-centered', {
+    mode: 'timeline',
+    layout: 'centered',
+    items: [...]
+});</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Interactive Roadmap">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Interactive Roadmap</h2></div>
+        <div class="card-body">
+            <p class="mb-4">Enable <code>allowStatusChange: true</code> to allow users to cycle through statuses by clicking markers.</p>
+
+            <div class="demo-area mb-4">
+                <div id="interactive-roadmap"></div>
+                <p class="text-sm text-muted mt-2">Click on status markers to cycle: planned → in-progress → completed</p>
+            </div>
+
+            <div class="code-block language-javascript">
+                <pre><code>Domma.elements.progression('#interactive-roadmap', {
+    mode: 'roadmap',
+    allowStatusChange: true,
+    onStatusChange: (item, oldStatus, newStatus) => {
+        console.log(`${item.title}: ${oldStatus} → ${newStatus}`);
+    },
+    items: [...]
+});</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="API Reference">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">API Reference</h2></div>
+        <div class="card-body">
+            <h3 class="category-title-style">Options</h3>
+            <div class="option-table-accordion">
+                <table class="api-table-accordion">
+                    <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><code>mode</code></td>
+                        <td>String</td>
+                        <td><code>'timeline'</code></td>
+                        <td>'timeline' or 'roadmap'</td>
+                    </tr>
+                    <tr>
+                        <td><code>items</code></td>
+                        <td>Array</td>
+                        <td><code>[]</code></td>
+                        <td>Array of item objects</td>
+                    </tr>
+                    <tr>
+                        <td><code>layout</code></td>
+                        <td>String</td>
+                        <td><code>'vertical'</code></td>
+                        <td>'vertical', 'horizontal', 'centered'</td>
+                    </tr>
+                    <tr>
+                        <td><code>theme</code></td>
+                        <td>String</td>
+                        <td><code>'default'</code></td>
+                        <td>'default', 'minimal', 'corporate', 'modern'</td>
+                    </tr>
+                    <tr>
+                        <td><code>showProgress</code></td>
+                        <td>Boolean</td>
+                        <td><code>true</code></td>
+                        <td>Show progress bar (roadmap mode)</td>
+                    </tr>
+                    <tr>
+                        <td><code>progressPosition</code></td>
+                        <td>String</td>
+                        <td><code>'top'</code></td>
+                        <td>'top', 'bottom', 'none'</td>
+                    </tr>
+                    <tr>
+                        <td><code>allowStatusChange</code></td>
+                        <td>Boolean</td>
+                        <td><code>false</code></td>
+                        <td>Interactive status updates</td>
+                    </tr>
+                    <tr>
+                        <td><code>onStatusChange</code></td>
+                        <td>Function</td>
+                        <td><code>null</code></td>
+                        <td>Callback: (item, oldStatus, newStatus)</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="category-title-style mt-4">Methods</h3>
+            <div class="option-table-accordion">
+                <table class="api-table-accordion">
+                    <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><code>setItems(items)</code></td>
+                        <td>Replace all items</td>
+                    </tr>
+                    <tr>
+                        <td><code>addItem(item)</code></td>
+                        <td>Add single item</td>
+                    </tr>
+                    <tr>
+                        <td><code>updateItem(id, data)</code></td>
+                        <td>Update specific item</td>
+                    </tr>
+                    <tr>
+                        <td><code>removeItem(id)</code></td>
+                        <td>Remove item</td>
+                    </tr>
+                    <tr>
+                        <td><code>setStatus(id, status)</code></td>
+                        <td>Update item status (roadmap)</td>
+                    </tr>
+                    <tr>
+                        <td><code>getProgress()</code></td>
+                        <td>Get overall progress percentage</td>
+                    </tr>
+                    <tr>
+                        <td><code>markComplete(id)</code></td>
+                        <td>Mark item as completed</td>
+                    </tr>
+                    <tr>
+                        <td><code>markInProgress(id)</code></td>
+                        <td>Mark item as in-progress</td>
+                    </tr>
+                    <tr>
+                        <td><code>setCurrent(id)</code></td>
+                        <td>Highlight current item</td>
+                    </tr>
+                    <tr>
+                        <td><code>setMode(mode)</code></td>
+                        <td>Switch between timeline/roadmap</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Migration from Timeline">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Migration from Timeline</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                The <code>timeline()</code> component is now an alias for <code>progression({ mode: 'timeline' })</code>.
+                Your existing timeline code continues to work, but we recommend migrating to the new API.
+            </p>
+
+            <h3 class="category-title-style">Old (Still Works)</h3>
+            <div class="code-block language-javascript mb-4">
+                <pre><code>Domma.elements.timeline('#my-timeline', {
+    items: [{ year: '2024', title: 'Event', description: '...' }]
+});</code></pre>
+            </div>
+
+            <h3 class="category-title-style">New (Recommended)</h3>
+            <div class="code-block language-javascript">
+                <pre><code>Domma.elements.progression('#my-timeline', {
+    mode: 'timeline',
+    items: [{ year: '2024', title: 'Event', description: '...' }]
+});</code></pre>
+            </div>
+
+            <div class="alert alert-info mt-4">
+                <strong>Note:</strong> The old <code>timeline()</code> method will show a deprecation warning in development mode.
+                All CSS classes (<code>.dm-timeline-*</code>) remain supported for backwards compatibility.
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Related">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Related Elements</h2></div>
+        <div class="card-body">
+            <div class="grid grid-cols-1 grid-auto-fit-250 gap-4">
+                <a href="../tabs/index.html" class="card card-hover no-underline text-inherit">
+                    <div class="card-body">
+                        <h3 class="card-title">Tabs</h3>
+                        <p class="card-text">Organize content into tabbed panels</p>
+                    </div>
+                </a>
+                <a href="../accordion/index.html" class="card card-hover no-underline text-inherit">
+                    <div class="card-body">
+                        <h3 class="card-title">Accordion</h3>
+                        <p class="card-text">Collapsible content sections</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+    // Timeline mode demo
+    Domma.elements.progression('#timeline-demo', {
+        mode: 'timeline',
+        items: [
+            { year: '2020', title: 'Founded', description: 'Company established with mission to innovate' },
+            { year: '2021', title: 'Series A', description: 'Raised $5M funding from top investors' },
+            { year: '2022', title: 'Product Launch', description: 'Released v1.0 to enthusiastic response' },
+            { year: '2023', title: 'Expansion', description: 'Opened 3 new offices across continents' },
+            { year: '2024', title: 'IPO', description: 'Went public on NASDAQ with strong debut' }
+        ],
+        layout: 'vertical',
+        theme: 'default',
+        animation: true
+    });
+
+    // Roadmap mode demo
+    Domma.elements.progression('#roadmap-demo', {
+        mode: 'roadmap',
+        items: [
+            {
+                id: 'research',
+                title: 'Market Research',
+                description: 'Comprehensive market analysis and user research',
+                status: 'completed',
+                date: 'Q1 2026',
+                tags: ['research', 'planning']
+            },
+            {
+                id: 'design',
+                title: 'UI/UX Design',
+                description: 'Design system and user interface mockups',
+                status: 'completed',
+                date: 'Q1 2026',
+                priority: 'high',
+                assignee: 'Design Team'
+            },
+            {
+                id: 'backend',
+                title: 'Backend Development',
+                description: 'API development and database architecture',
+                status: 'in-progress',
+                date: 'Q2 2026',
+                progress: 65,
+                priority: 'critical',
+                tags: ['backend', 'api'],
+                assignee: 'Engineering Team'
+            },
+            {
+                id: 'frontend',
+                title: 'Frontend Development',
+                description: 'React components and responsive layouts',
+                status: 'in-progress',
+                date: 'Q2 2026',
+                progress: 40,
+                priority: 'high',
+                tags: ['frontend', 'ui'],
+                assignee: 'Frontend Team'
+            },
+            {
+                id: 'testing',
+                title: 'QA & Testing',
+                description: 'Automated testing and quality assurance',
+                status: 'planned',
+                date: 'Q3 2026',
+                priority: 'medium',
+                tags: ['testing', 'qa']
+            },
+            {
+                id: 'launch',
+                title: 'Product Launch',
+                description: 'Marketing campaign and public release',
+                status: 'planned',
+                date: 'Q4 2026',
+                priority: 'critical',
+                tags: ['launch', 'marketing']
+            }
+        ],
+        showProgress: true,
+        progressPosition: 'top',
+        animation: true
+    });
+
+    // Centered layout demo
+    Domma.elements.progression('#layout-centered', {
+        mode: 'timeline',
+        layout: 'centered',
+        items: [
+            { year: '2023', title: 'Alpha Release', description: 'Internal testing phase' },
+            { year: '2024', title: 'Beta Launch', description: 'Public beta with early adopters' },
+            { year: '2025', title: 'Full Release', description: 'General availability worldwide' }
+        ],
+        theme: 'minimal',
+        animation: true
+    });
+
+    // Interactive roadmap demo
+    Domma.elements.progression('#interactive-roadmap', {
+        mode: 'roadmap',
+        items: [
+            { id: 'phase1', title: 'Phase 1: Planning', status: 'completed', date: 'Jan 2026' },
+            { id: 'phase2', title: 'Phase 2: Development', status: 'in-progress', date: 'Feb-Apr 2026', progress: 50 },
+            { id: 'phase3', title: 'Phase 3: Testing', status: 'planned', date: 'May 2026' },
+            { id: 'phase4', title: 'Phase 4: Deployment', status: 'planned', date: 'Jun 2026' }
+        ],
+        allowStatusChange: true,
+        showProgress: true,
+        onStatusChange: (item, oldStatus, newStatus) => {
+            console.log(`Status changed: ${item.title} from ${oldStatus} to ${newStatus}`);
+        },
+        animation: true
+    });
+</script>
+
+</body>
+</html>

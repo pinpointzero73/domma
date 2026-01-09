@@ -617,6 +617,11 @@
     color: var(--dm-warning);
 }
 
+.http-method-patch {
+    background: color-mix(in srgb, #8b5cf6 20%, transparent);
+    color: #8b5cf6;
+}
+
 .http-method-delete {
     background: color-mix(in srgb, var(--dm-danger) 20%, transparent);
     color: var(--dm-danger);

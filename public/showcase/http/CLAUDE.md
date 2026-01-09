@@ -19,9 +19,16 @@ const newUser = await Domma.http.post('/api/users', {
     email: 'alice@example.com'
 });
 
-// PUT request (update)
+// PUT request (full update - replaces entire resource)
 const updated = await Domma.http.put('/api/users/123', {
-    name: 'Alice Smith'
+    name: 'Alice Smith',
+    email: 'alice.smith@example.com',
+    role: 'admin'
+});
+
+// PATCH request (partial update - modifies specific fields)
+const patched = await Domma.http.patch('/api/users/123', {
+    name: 'Alice Smith'  // Only update the name field
 });
 
 // DELETE request
@@ -141,9 +148,14 @@ async function getUser(id) {
     return await Domma.http.get(`/api/users/${id}`);
 }
 
-// Update
+// Update (full replacement)
 async function updateUser(id, userData) {
     return await Domma.http.put(`/api/users/${id}`, userData);
+}
+
+// Update (partial - only specified fields)
+async function patchUser(id, changes) {
+    return await Domma.http.patch(`/api/users/${id}`, changes);
 }
 
 // Delete
@@ -151,6 +163,45 @@ async function deleteUser(id) {
     await Domma.http.delete(`/api/users/${id}`);
 }
 ```
+
+### PUT vs PATCH - Understanding the Difference
+
+**PUT** - Full resource replacement:
+```javascript
+// PUT replaces the ENTIRE resource
+// Missing fields will be removed or set to defaults
+await Domma.http.put('/api/users/123', {
+    name: 'Alice Smith',
+    email: 'alice.smith@example.com',
+    role: 'admin',
+    department: 'Engineering'
+});
+```
+
+**PATCH** - Partial update:
+```javascript
+// PATCH only updates specified fields
+// Other fields remain unchanged
+await Domma.http.patch('/api/users/123', {
+    name: 'Alice Smith'  // Only name changes, email/role/department unchanged
+});
+
+// Common PATCH use cases:
+// 1. Update single field (e.g., toggle status)
+await Domma.http.patch(`/api/tasks/${id}`, { completed: true });
+
+// 2. Increment counters
+await Domma.http.patch(`/api/posts/${id}`, { views: post.views + 1 });
+
+// 3. Update preferences without loading full profile
+await Domma.http.patch('/api/user/settings', { theme: 'dark' });
+```
+
+**When to use which:**
+- Use **PUT** when you have the complete resource and want to replace it
+- Use **PATCH** when you only want to update specific fields
+- **PATCH** is more efficient for single-field updates (less data transferred)
+- **PATCH** prevents accidental data loss from incomplete PUT requests
 
 ### Form Submission
 

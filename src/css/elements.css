@@ -5629,6 +5629,384 @@ code {
 }
 
 /* ==============================================
+   Progression Component (Timeline + Roadmap)
+   ============================================== */
+
+/* Base Progression styles */
+.dm-progression {
+    width: 100%;
+    position: relative;
+}
+
+.dm-progression-item {
+    display: flex;
+    gap: var(--dm-space-4);
+    position: relative;
+    margin-bottom: var(--dm-space-6);
+}
+
+.dm-progression-marker {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: var(--dm-font-size-sm);
+    z-index: 2;
+}
+
+.dm-progression-content {
+    flex-grow: 1;
+    background: var(--dm-surface, #fff);
+    border: 1px solid var(--dm-border-color, #e0e0e0);
+    border-radius: var(--dm-radius-md);
+    padding: var(--dm-space-4);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+}
+
+.dm-progression-title {
+    margin: 0 0 var(--dm-space-2);
+    font-size: var(--dm-font-size-lg);
+    font-weight: 600;
+    color: var(--dm-text-primary);
+}
+
+.dm-progression-description {
+    margin: 0;
+    font-size: var(--dm-font-size-base);
+    color: var(--dm-text-secondary);
+    line-height: 1.6;
+}
+
+/* Vertical layout (default) */
+.dm-progression-vertical .dm-progression-item::before {
+    content: '';
+    position: absolute;
+    left: 2rem;
+    top: 3rem;
+    bottom: -1.5rem;
+    width: 2px;
+    background: var(--dm-border-color, #e0e0e0);
+    z-index: 1;
+}
+
+.dm-progression-vertical .dm-progression-item:last-child::before {
+    display: none;
+}
+
+/* Centered layout */
+.dm-progression-centered {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.dm-progression-centered .dm-progression-item {
+    width: 100%;
+}
+
+.dm-progression-centered .dm-progression-item:nth-child(odd) {
+    flex-direction: row;
+}
+
+.dm-progression-centered .dm-progression-item:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+/* Horizontal layout */
+.dm-progression-horizontal {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: var(--dm-space-4);
+}
+
+.dm-progression-horizontal .dm-progression-item {
+    flex-direction: column;
+    min-width: 250px;
+    margin-right: var(--dm-space-4);
+    margin-bottom: 0;
+}
+
+/* Progress bar (Roadmap mode) */
+.dm-progression-progress {
+    margin-bottom: var(--dm-space-6);
+    padding: var(--dm-space-4);
+    background: var(--dm-surface, #fff);
+    border-radius: var(--dm-radius-md);
+    border: 1px solid var(--dm-border-color, #e0e0e0);
+}
+
+.dm-progression-progress-bar {
+    height: 8px;
+    background: linear-gradient(90deg, var(--dm-success, #22c55e), var(--dm-primary, #3b82f6));
+    border-radius: var(--dm-radius-full);
+    transition: width 0.6s ease;
+    margin-bottom: var(--dm-space-2);
+}
+
+.dm-progression-progress-text {
+    font-size: var(--dm-font-size-sm);
+    color: var(--dm-text-secondary);
+    font-weight: 500;
+}
+
+/* Roadmap-specific styles */
+.dm-progression-status-marker {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.dm-progression-status-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: block;
+}
+
+.dm-progression-status-icon {
+    font-size: 20px;
+}
+
+/* Status colours */
+.dm-progression-status-planned .dm-progression-status-marker {
+    background: var(--dm-gray-100);
+    border: 2px solid var(--dm-gray-400);
+}
+
+.dm-progression-status-planned .dm-progression-status-dot {
+    background: var(--dm-gray-400);
+}
+
+.dm-progression-status-in-progress .dm-progression-status-marker {
+    background: var(--dm-primary-light, rgba(59, 130, 246, 0.1));
+    border: 2px solid var(--dm-primary, #3b82f6);
+    position: relative;
+}
+
+.dm-progression-status-in-progress .dm-progression-status-marker::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 2px solid var(--dm-primary, #3b82f6);
+    border-radius: 50%;
+    animation: progressPulse 2s infinite;
+}
+
+@keyframes progressPulse {
+    0%, 100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0;
+        transform: scale(1.3);
+    }
+}
+
+.dm-progression-status-in-progress .dm-progression-status-dot {
+    background: var(--dm-primary, #3b82f6);
+}
+
+.dm-progression-status-completed .dm-progression-status-marker {
+    background: var(--dm-success-light, rgba(34, 197, 94, 0.1));
+    border: 2px solid var(--dm-success, #22c55e);
+}
+
+.dm-progression-status-completed .dm-progression-status-dot {
+    background: var(--dm-success, #22c55e);
+}
+
+.dm-progression-status-blocked .dm-progression-status-marker {
+    background: var(--dm-danger-light, rgba(239, 68, 68, 0.1));
+    border: 2px solid var(--dm-danger, #ef4444);
+}
+
+.dm-progression-status-blocked .dm-progression-status-dot {
+    background: var(--dm-danger, #ef4444);
+}
+
+.dm-progression-status-cancelled .dm-progression-status-marker {
+    background: var(--dm-gray-100);
+    border: 2px solid var(--dm-gray-500);
+    opacity: 0.6;
+}
+
+.dm-progression-status-cancelled .dm-progression-status-dot {
+    background: var(--dm-gray-500);
+}
+
+/* Date/phase display */
+.dm-progression-date {
+    font-size: var(--dm-font-size-sm);
+    color: var(--dm-text-tertiary);
+    font-weight: 500;
+    margin-bottom: var(--dm-space-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Item progress bar */
+.dm-progression-item-progress {
+    height: 6px;
+    background: var(--dm-gray-200);
+    border-radius: var(--dm-radius-full);
+    overflow: hidden;
+    margin-top: var(--dm-space-3);
+}
+
+.dm-progression-item-progress-bar {
+    height: 100%;
+    background: var(--dm-primary, #3b82f6);
+    border-radius: var(--dm-radius-full);
+    transition: width 0.3s ease;
+}
+
+.dm-progression-item-progress-text {
+    font-size: var(--dm-font-size-xs);
+    color: var(--dm-text-tertiary);
+    margin-top: var(--dm-space-1);
+}
+
+/* Priority badges */
+.dm-progression-priority {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: var(--dm-radius-full);
+    font-size: var(--dm-font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: var(--dm-space-2);
+}
+
+.dm-progression-priority-low {
+    background: var(--dm-gray-200);
+    color: var(--dm-gray-700);
+}
+
+.dm-progression-priority-medium {
+    background: var(--dm-info-light, rgba(59, 130, 246, 0.1));
+    color: var(--dm-info, #3b82f6);
+}
+
+.dm-progression-priority-high {
+    background: var(--dm-warning-light, rgba(245, 158, 11, 0.1));
+    color: var(--dm-warning, #f59e0b);
+}
+
+.dm-progression-priority-critical {
+    background: var(--dm-danger-light, rgba(239, 68, 68, 0.1));
+    color: var(--dm-danger, #ef4444);
+}
+
+/* Tags */
+.dm-progression-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--dm-space-2);
+    margin-top: var(--dm-space-3);
+}
+
+.dm-progression-tag {
+    background: var(--dm-primary-light, rgba(59, 130, 246, 0.1));
+    color: var(--dm-primary, #3b82f6);
+    padding: 2px 8px;
+    border-radius: var(--dm-radius-sm);
+    font-size: var(--dm-font-size-xs);
+    font-weight: 500;
+}
+
+/* Assignee */
+.dm-progression-assignee {
+    font-size: var(--dm-font-size-sm);
+    color: var(--dm-text-tertiary);
+    margin-top: var(--dm-space-2);
+    font-style: italic;
+}
+
+/* Current item highlight */
+.dm-progression-current .dm-progression-content {
+    border-color: var(--dm-primary, #3b82f6);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+/* Themes */
+.dm-progression-minimal .dm-progression-content {
+    background: var(--dm-gray-50);
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.dm-progression-corporate .dm-progression-content {
+    background: var(--dm-slate-50);
+    border-color: var(--dm-slate-200);
+}
+
+.dm-progression-modern .dm-progression-content {
+    background: linear-gradient(135deg, var(--dm-surface, #fff) 0%, var(--dm-gray-50) 100%);
+    border-color: var(--dm-border-color, #e0e0e0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .dm-progression-content {
+    background: var(--dm-slate-800);
+    border-color: var(--dm-slate-700);
+    color: var(--dm-slate-100);
+}
+
+[data-theme="dark"] .dm-progression-title {
+    color: var(--dm-slate-100);
+}
+
+[data-theme="dark"] .dm-progression-description {
+    color: var(--dm-slate-300);
+}
+
+[data-theme="dark"] .dm-progression-minimal .dm-progression-content {
+    background: var(--dm-slate-900);
+    border-color: transparent;
+}
+
+[data-theme="dark"] .dm-progression-corporate .dm-progression-content {
+    background: var(--dm-slate-800);
+    border-color: var(--dm-slate-600);
+}
+
+[data-theme="dark"] .dm-progression-modern .dm-progression-content {
+    background: linear-gradient(135deg, var(--dm-slate-800) 0%, var(--dm-slate-900) 100%);
+}
+
+[data-theme="dark"] .dm-progression-item-progress {
+    background: var(--dm-slate-700);
+}
+
+[data-theme="dark"] .dm-progression-progress {
+    background: var(--dm-slate-800);
+    border-color: var(--dm-slate-700);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .dm-progression-centered .dm-progression-item:nth-child(even) {
+        flex-direction: row;
+    }
+
+    .dm-progression-horizontal {
+        flex-direction: column;
+    }
+
+    .dm-progression-horizontal .dm-progression-item {
+        min-width: 100%;
+        margin-right: 0;
+        margin-bottom: var(--dm-space-4);
+    }
+}
+
+/* ==============================================
    Cookie Consent Component
    ============================================== */
 
