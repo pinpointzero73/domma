@@ -84,7 +84,7 @@ Domma's CSS follows a proper build process with single source of truth:
 src/css/
 ├── domma.css           # Base styles, typography, utilities
 ├── grid.css            # Grid system (Bootstrap + CSS Grid)
-└── elements.css        # UI components - 19 components
+└── elements.css        # UI components - 21 components
 ```
 
 **Production Files (built):**
@@ -128,11 +128,11 @@ npm run build:css  # Builds src/css/* → public/dist/*
   - Responsive containers
   - Flexbox utilities
 
-- **elements.css** - UI components (19 total)
+- **elements.css** - UI components (21 total)
   - Buttons, Cards, Modals, Tabs, Accordion
   - Tooltip, Table, Form elements, Badges, Pills
-  - Alert, Code blocks, Pagination, Navbar, Footer
-  - Jumbotron, Carousel, Dialog, Sidebar
+  - Alert, Code blocks, Pagination, Navbar, Sidebar
+  - Footer, Jumbotron, Carousel, Dialog, Slideover, Dropdown
 
 - **domma-themes.css** - Visual styling
   - Theme color definitions
@@ -292,7 +292,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 
 #### Elements (`Domma.elements`)
 
-- **19 UI Components:**
+- **21 UI Components:**
   - Modal - `modal()` with backdrop, keyboard, animation options
   - Tabs - `tabs()` with active index, onChange
   - Accordion - `accordion()` with multiExpand
@@ -308,6 +308,8 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - ButtonGroup - `buttonGroup()` for radio/checkbox groups
   - Breadcrumbs - `breadcrumbs()` with separators
   - Navbar - `navbar()` responsive navigation
+  - Sidebar - `sidebar()` with unlimited depth nesting, mobile drawer, state persistence
+  - Footer - `footer()` with three layout modes (simple, columns, minimal) and theme variants
   - DesktopNotification - Browser notifications wrapper
   - Timer - `timer()` countdown with visual display
   - Alarm - `alarm()` scheduled alerts with persistence
@@ -399,8 +401,8 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 
 #### Elements (elements.css)
 
-- 19 UI components with full styling
-- Buttons, Cards, Modals, Forms, Tables, Navigation, etc.
+- 21 UI components with full styling
+- Buttons, Cards, Modals, Forms, Tables, Navigation (Navbar, Sidebar, Footer), etc.
 - Responsive and theme-aware
 
 #### Themes (domma-themes.css)
