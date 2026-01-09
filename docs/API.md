@@ -1277,14 +1277,317 @@ if (userData) {
 
 ---
 
+### Sidebar
+
+Create responsive navigation sidebars with unlimited depth nesting, mobile drawer functionality, and state persistence.
+
+**HTML Structure:**
+
+```html
+<!-- Container for sidebar -->
+<aside id="sidebar"></aside>
+```
+
+#### `elements.sidebar(selector, options)`
+
+Creates a sidebar navigation instance. The sidebar supports unlimited depth nesting for menu items.
+
+**Basic Example:**
+
+```javascript
+const sidebar = Domma.elements.sidebar('#sidebar', {
+    position: 'left',
+    fixed: true,
+    width: '250px',
+    header: {
+        title: 'Navigation',
+        toggle: true
+    },
+    items: [
+        { text: 'Dashboard', url: '/', icon: 'layout', section: 'dashboard' },
+        { text: 'Users', url: '/users', icon: 'users', section: 'users' },
+        {
+            text: 'Settings',
+            icon: 'settings',
+            items: [  // Nested submenu
+                { text: 'General', url: '/settings/general' },
+                { text: 'Security', url: '/settings/security' }
+            ]
+        }
+    ],
+    variant: 'dark',
+    activeSection: 'dashboard'
+});
+```
+
+**Options:**
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `position` | String | `'left'` | Sidebar position: `'left'` or `'right'` |
+| `fixed` | Boolean | `true` | Fixed or static positioning |
+| `width` | String | `'250px'` | Sidebar width |
+| `top` | String | `'0'` | Top offset (e.g., `'60px'` for navbar) |
+| `header` | Object | `null` | Header config: `{title, toggle, icon}` |
+| `items` | Array | `[]` | Navigation items (see Item Structure) |
+| `footer` | Object | `null` | Footer content: `{text, html}` |
+| `variant` | String | `'dark'` | Theme: `'light'` or `'dark'` |
+| `collapsible` | Boolean | `true` | Enable mobile toggle |
+| `collapseAt` | Number | `768` | Mobile breakpoint (px) |
+| `activeSection` | String | `null` | Active section identifier |
+| `expandedSections` | Array | `[]` | Initially expanded sections |
+| `persistExpanded` | Boolean | `false` | Persist expanded state |
+| `persistKey` | String | `null` | localStorage key |
+| `animationDuration` | Number | `200` | Animation duration (ms) |
+| `onItemClick` | Function | `null` | Click handler: `(item, path, event) => {}` |
+| `onToggle` | Function | `null` | Toggle handler: `(isOpen) => {}` |
+| `onExpand` | Function | `null` | Expand handler: `(itemPath) => {}` |
+| `onCollapse` | Function | `null` | Collapse handler: `(itemPath) => {}` |
+
+**Item Structure:**
+
+```javascript
+// Regular link
+{ text: 'Dashboard', url: '/', icon: 'layout', section: 'dashboard' }
+
+// With badge
+{ text: 'Inbox', url: '/inbox', icon: 'mail', badge: '12' }
+
+// Divider
+{ divider: true }
+
+// Section heading
+{ heading: 'ADMIN' }
+
+// Nested menu (unlimited depth)
+{
+    text: 'Settings',
+    icon: 'settings',
+    items: [
+        { text: 'General', url: '#' },
+        {
+            text: 'Advanced',
+            items: [  // Level 3
+                { text: 'API', url: '#' },
+                {
+                    text: 'Security',
+                    items: [  // Level 4 (unlimited!)
+                        { text: 'Policies', url: '#' }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
+
+**Methods:**
+
+- `open()` - Open sidebar (mobile)
+- `close()` - Close sidebar (mobile)
+- `toggle()` - Toggle sidebar state (mobile)
+- `isOpen()` - Returns `true` if sidebar is open
+- `setActive(section)` - Set active section
+- `setItems(items)` - Replace navigation items
+- `addItem(item, index)` - Add navigation item
+- `removeItem(index)` - Remove navigation item
+- `expandAll()` - Expand all nested menus
+- `collapseAll()` - Collapse all nested menus
+- `destroy()` - Remove event listeners and cleanup
+
+**Example - Admin Panel:**
+
+```javascript
+const sidebar = Domma.elements.sidebar('#admin-sidebar', {
+    position: 'left',
+    fixed: true,
+    width: '250px',
+    top: '60px',  // Below navbar
+    header: {
+        title: 'Admin Panel',
+        toggle: true
+    },
+    items: [
+        { text: 'Overview', url: '/admin/', icon: 'layout', section: 'overview' },
+        { text: 'Users', url: '/admin/users/', icon: 'users', section: 'users', badge: '42' },
+        { text: 'Settings', url: '/admin/settings/', icon: 'settings', section: 'settings' }
+    ],
+    variant: 'dark',
+    collapsible: true,
+    activeSection: 'overview',
+    persistExpanded: true,
+    persistKey: 'admin-sidebar-state'
+});
+```
+
+**Example - Dynamic Updates:**
+
+```javascript
+// Update active section
+sidebar.setActive('users');
+
+// Add new item
+sidebar.addItem({ text: 'Reports', url: '/reports', icon: 'file-text' });
+
+// Replace all items
+sidebar.setItems([
+    { text: 'New Dashboard', url: '/new' }
+]);
+
+// Mobile control
+sidebar.open();   // Open drawer on mobile
+sidebar.close();  // Close drawer
+sidebar.toggle(); // Toggle state
+```
+
+---
+
+### Footer
+
+Create responsive page footers with multiple layout modes and theme variants.
+
+**HTML Structure:**
+
+```html
+<!-- Container for footer -->
+<footer id="footer"></footer>
+```
+
+#### `elements.footer(selector, options)`
+
+Creates a footer instance. Supports three layout modes: simple, columns, and minimal.
+
+**Simple Layout Example:**
+
+```javascript
+const footer = Domma.elements.footer('#footer', {
+    layout: 'simple',
+    variant: 'light',
+    brand: {
+        text: 'Domma',
+        logo: '/assets/logo.svg',
+        url: '/'
+    },
+    links: [
+        { text: 'Features', url: '/features' },
+        { text: 'Pricing', url: '/pricing' },
+        { text: 'About', url: '/about' }
+    ],
+    social: [
+        { icon: 'github', url: 'https://github.com', label: 'GitHub' },
+        { icon: 'twitter', url: 'https://twitter.com', label: 'Twitter' }
+    ],
+    copyright: '© 2026 Domma. All rights reserved.'
+});
+```
+
+**Options:**
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `variant` | String | `'light'` | Theme: `'light'`, `'dark'`, or `'transparent'` |
+| `layout` | String | `'simple'` | Layout: `'simple'`, `'columns'`, or `'minimal'` |
+| `brand` | Object | `null` | Brand config: `{text, logo, url}` |
+| `columns` | Array | `[]` | Multi-column layout (see below) |
+| `links` | Array | `[]` | Simple link list |
+| `social` | Array | `[]` | Social media icons |
+| `copyright` | String/Object | `null` | Copyright text or `{text, year}` |
+| `className` | String | `''` | Additional CSS classes |
+| `position` | String | `'static'` | Position: `'static'`, `'fixed'`, or `'sticky'` |
+
+**Columns Layout Example:**
+
+```javascript
+Domma.elements.footer('#footer', {
+    layout: 'columns',
+    variant: 'dark',
+    brand: {
+        text: 'Domma Framework',
+        logo: '/assets/logo.svg'
+    },
+    columns: [
+        {
+            title: 'Product',
+            links: [
+                { text: 'Features', url: '/features' },
+                { text: 'Pricing', url: '/pricing' },
+                { text: 'Changelog', url: '/changelog' }
+            ]
+        },
+        {
+            title: 'Resources',
+            links: [
+                { text: 'Documentation', url: '/docs' },
+                { text: 'API Reference', url: '/api' },
+                { text: 'Examples', url: '/examples' }
+            ]
+        },
+        {
+            title: 'Company',
+            links: [
+                { text: 'About', url: '/about' },
+                { text: 'Blog', url: '/blog' },
+                { text: 'Contact', url: '/contact' }
+            ]
+        }
+    ],
+    social: [
+        { icon: 'github', url: '#', label: 'GitHub' },
+        { icon: 'twitter', url: '#', label: 'Twitter' }
+    ],
+    copyright: '© 2026 Domma. All rights reserved.'
+});
+```
+
+**Minimal Layout Example:**
+
+```javascript
+Domma.elements.footer('#footer', {
+    layout: 'minimal',
+    variant: 'light',
+    copyright: '© 2026 Domma',
+    social: [
+        { icon: 'github', url: '#', label: 'GitHub' },
+        { icon: 'twitter', url: '#', label: 'Twitter' },
+        { icon: 'linkedin', url: '#', label: 'LinkedIn' }
+    ]
+});
+```
+
+**Methods:**
+
+- `setBrand(brand)` - Update brand information
+- `setLinks(links)` - Update links array
+- `setColumns(columns)` - Update columns array
+- `setSocial(social)` - Update social links
+- `setCopyright(copyright)` - Update copyright text
+- `destroy()` - Remove event listeners and cleanup
+
+**Example - Dynamic Copyright:**
+
+```javascript
+const footer = Domma.elements.footer('#footer', {
+    layout: 'simple',
+    copyright: {
+        text: 'Domma Framework',
+        year: true  // Automatically uses current year
+    }
+});
+
+// Update later
+footer.setCopyright('© 2026 New Company Name');
+```
+
+---
+
 ### Other UI Components
 
-The Elements namespace includes 25+ additional components. For complete documentation, see:
+The Elements namespace includes 27+ additional components. For complete documentation, see:
 
 - **Interactive**: `tabs`, `accordion`, `carousel`, `dropdown`, `tooltip`
 - **Forms**: `autocomplete`, `pillbox`, `buttonGroup`
 - **Feedback**: `toast`, `dialog`, `loader`, `badge`, `notification`
-- **Navigation**: `navbar`, `breadcrumbs`, `backToTop`
+- **Navigation**: `navbar`, `sidebar`, `footer`, `breadcrumbs`, `backToTop`
 - **Utilities**: `timer`, `alarm`, `card`
 - **Tools**: `editor`, `themeRoller`, `pageRoller` (in tools bundle)
 
