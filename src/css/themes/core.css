@@ -1,0 +1,23 @@
+:root {
+    --dm-core-background: #ffffff;
+    --dm-core-text: #212529;
+    --dm-core-border: #dee2e6;
+    --dm-core-primary: #0d6efd;
+    --dm-core-success: #198754;
+    --dm-core-warning: #ffc107;
+    --dm-core-danger: #dc3545;
+    --dm-core-info: #0dcaf0;
+}
+
+.dm-theme-core-light {
+    --dm-background: var(--dm-core-background);
+    --dm-text: var(--dm-core-text);
+    --dm-border: var(--dm-core-border);
+    --dm-primary: var(--dm-core-primary);
+    --dm-success: var(--dm-core-success);
+    --dm-warning: var(--dm-core-warning);
+    --dm-danger: var(--dm-core-danger);
+    --dm-info: var(--dm-core-info);
+
+    /* Component specific overrides can go here */
+}
