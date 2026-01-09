@@ -24,6 +24,12 @@
       "badge": "New"
     },
     {
+      "text": "Feedback",
+      "url": "feedback/index.html",
+      "page": "feedback",
+      "badge": "New"
+    },
+    {
       "text": "About Us",
       "url": "about/index.html",
       "page": "about"

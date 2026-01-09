@@ -3,6 +3,58 @@
  */
 
 /* ============================================
+   Admin Layout
+   ============================================ */
+
+/* Note: Sidebar styling is now handled by Domma.elements.sidebar() component */
+
+.admin-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-main {
+    flex: 1;
+    margin-left: 250px; /* Space for fixed sidebar */
+    min-height: 100vh;
+}
+
+.admin-header {
+    background: white;
+    padding: 2rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.admin-header h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.75rem;
+}
+
+.admin-header p {
+    margin: 0;
+    color: #6c757d;
+}
+
+.admin-content {
+    padding: 2rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .admin-main {
+        margin-left: 0; /* No sidebar margin on mobile */
+    }
+
+    .admin-header {
+        padding: 1rem;
+    }
+
+    .admin-content {
+        padding: 1rem;
+    }
+}
+
+/* ============================================
    Statistics Cards
    ============================================ */
 #stats-cards .card {

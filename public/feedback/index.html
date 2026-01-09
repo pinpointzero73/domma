@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback - Domma</title>
+  <meta name="description" content="Share your feedback about Domma - report bugs, request features, or tell us what you think">
+
+  <!-- Domma Core Styles -->
+  <link rel="stylesheet" href="../dist/domma.css">
+  <link rel="stylesheet" href="../dist/grid.css">
+  <link rel="stylesheet" href="../dist/elements.css">
+  <link rel="stylesheet" href="../dist/themes/domma-themes.css">
+</head>
+<body class="dm-cloaked" data-layout="public" data-theme="default">
+
+<!-- Feedback Hero -->
+<div class="jumbotron jumbotron-primary jumbotron-center">
+  <div class="jumbotron-content">
+    <h1 class="jumbotron-title">Share Your Feedback</h1>
+    <p class="jumbotron-subtitle">Help us improve Domma by sharing your thoughts, reporting bugs, or requesting features</p>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div class="container py-8">
+  <div class="grid grid-cols-12 gap-6">
+    <!-- Feedback Form -->
+    <div class="col-span-8">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Feedback Form</h2>
+        </div>
+        <div class="card-body">
+          <div id="feedback-form"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar Info -->
+    <div class="col-span-4">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3 class="card-title">Why Your Feedback Matters</h3>
+        </div>
+        <div class="card-body">
+          <p>Your feedback helps us:</p>
+          <ul class="list-disc pl-4">
+            <li>Fix bugs and improve stability</li>
+            <li>Prioritise new features</li>
+            <li>Enhance documentation</li>
+            <li>Build a better developer experience</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Feedback Categories</h3>
+        </div>
+        <div class="card-body">
+          <dl>
+            <dt class="font-bold">Bug Report</dt>
+            <dd class="mb-2 text-sm text-gray-600">Found a problem? Let us know!</dd>
+
+            <dt class="font-bold">Feature Request</dt>
+            <dd class="mb-2 text-sm text-gray-600">Suggest new functionality</dd>
+
+            <dt class="font-bold">Documentation</dt>
+            <dd class="mb-2 text-sm text-gray-600">Help us improve our docs</dd>
+
+            <dt class="font-bold">General Feedback</dt>
+            <dd class="mb-2 text-sm text-gray-600">Share your thoughts</dd>
+
+            <dt class="font-bold">Praise</dt>
+            <dd class="mb-2 text-sm text-gray-600">Tell us what you love!</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Domma Framework -->
+<script src="../dist/domma.min.js"></script>
+<!-- Layout System -->
+<script type="module" src="../layouts/js/layout.js"></script>
+<!-- Feedback Form Logic -->
+<script type="module" src="index.js"></script>
+</body>
+</html>

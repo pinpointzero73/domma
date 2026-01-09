@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .demo-container {
+            position: relative;
+            min-height: 400px;
+            border: 2px dashed var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            overflow: hidden;
+        }
+
+        .demo-content {
+            padding: 2rem;
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+        }
+
+        .demo-content.with-sidebar {
+            margin-left: 250px;
+        }
+
+        @media (max-width: 768px) {
+            .demo-content.with-sidebar {
+                margin-left: 0;
+            }
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
+
+<section class="hero hero-gradient-primary hero-lg">
+    <h1>Sidebar Component</h1>
+    <p>
+        JSON-configurable navigation sidebar with unlimited depth nesting, mobile toggle, and theme variants.
+        Perfect for admin panels, documentation sites, and applications with complex navigation.
+    </p>
+    <p class="mt-4">
+        <code>Domma.elements.sidebar('#element', { ... })</code>
+    </p>
+</section>
+
+<main class="container py-8">
+
+    <!-- Overview Section -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">Features</h2>
+        <div class="feature-grid">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3 text-primary" data-icon="layers" data-size="32"></div>
+                    <h3 class="card-title">Unlimited Nesting</h3>
+                    <p class="card-text">Recursive submenu rendering supports infinite depth with proper indentation and animations.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3 text-success" data-icon="smartphone" data-size="32"></div>
+                    <h3 class="card-title">Mobile Responsive</h3>
+                    <p class="card-text">Slide-out drawer with overlay on mobile devices. Configurable breakpoint.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3 text-info" data-icon="save" data-size="32"></div>
+                    <h3 class="card-title">State Persistence</h3>
+                    <p class="card-text">Remember expanded submenus using localStorage for seamless user experience.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3 text-warning" data-icon="layout" data-size="32"></div>
+                    <h3 class="card-title">Flexible Positioning</h3>
+                    <p class="card-text">Fixed or static positioning, left or right alignment, custom width and top offset.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Getting Started -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">Getting Started</h2>
+        <p class="mb-6 text-gray-600">Add a sidebar to your page in three simple steps</p>
+
+        <h3 class="text-xl font-semibold mb-3">Step 1: Add HTML Container</h3>
+        <p class="mb-4 text-gray-600">Add an <code>&lt;aside&gt;</code> element to your page where you want the sidebar to appear:</p>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;aside id="my-sidebar">&lt;/aside>
+
+&lt;main class="content">
+    &lt;!-- Your page content -->
+&lt;/main></code></pre>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">Step 2: Include Domma</h3>
+        <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;!-- CSS -->
+&lt;link rel="stylesheet" href="dist/domma.css">
+&lt;link rel="stylesheet" href="dist/elements.css">
+
+&lt;!-- JavaScript -->
+&lt;script src="dist/domma.min.js">&lt;/script></code></pre>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">Step 3: Initialize the Sidebar</h3>
+        <p class="mb-4 text-gray-600">Call <code>Domma.elements.sidebar()</code> with your navigation items:</p>
+        <div class="code-block language-javascript mb-6">
+            <pre><code>Domma.elements.sidebar('#my-sidebar', {
+    items: [
+        { text: 'Home', url: '/', icon: 'home' },
+        { text: 'About', url: '/about', icon: 'info' },
+        { text: 'Contact', url: '/contact', icon: 'mail' }
+    ]
+});</code></pre>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>Note:</strong> The sidebar component will automatically generate all HTML structure, styling, and interactivity. You only need to provide the empty container element and configuration options.
+        </div>
+    </section>
+
+    <!-- Basic Example -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">Basic Example</h2>
+        <p class="mb-6 text-gray-600">A simple sidebar with icon navigation</p>
+
+        <div class="demo-container mb-6">
+            <aside id="sidebar-basic"></aside>
+            <div class="demo-content with-sidebar">
+                <h3>Main Content Area</h3>
+                <p>The sidebar is fixed to the left. Try clicking the navigation items!</p>
+                <button id="toggle-basic" class="btn btn-primary mt-4">Toggle Sidebar (Mobile)</button>
+            </div>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
+        <div class="code-block language-javascript">
+            <pre><code>const sidebar = Domma.elements.sidebar('#sidebar-basic', {
+    position: 'left',
+    fixed: true,
+    width: '250px',
+    top: '60px',
+    header: {
+        title: 'Navigation',
+        toggle: true
+    },
+    items: [
+        { text: 'Dashboard', url: '#dashboard', icon: 'layout', section: 'dashboard' },
+        { text: 'Users', url: '#users', icon: 'users', section: 'users' },
+        { text: 'Settings', url: '#settings', icon: 'settings', section: 'settings' }
+    ],
+    variant: 'dark',
+    activeSection: 'dashboard'
+});</code></pre>
+        </div>
+    </section>
+
+    <!-- Nested Menus -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">Nested Menus</h2>
+        <p class="mb-6 text-gray-600">Unlimited depth with collapsible submenus</p>
+
+        <div class="demo-container mb-6">
+            <aside id="sidebar-nested"></aside>
+            <div class="demo-content with-sidebar">
+                <h3>Multi-Level Navigation</h3>
+                <p>Click on items with arrows to expand/collapse submenus. The component supports unlimited nesting depth.</p>
+                <button id="expand-all" class="btn btn-primary mt-4 mr-2">Expand All</button>
+                <button id="collapse-all" class="btn btn-secondary mt-4">Collapse All</button>
+            </div>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
+        <div class="code-block language-javascript">
+            <pre><code>const sidebar = Domma.elements.sidebar('#sidebar-nested', {
+    items: [
+        { text: 'Dashboard', url: '#', icon: 'layout' },
+        {
+            text: 'Products',
+            icon: 'box',
+            items: [
+                { text: 'All Products', url: '#products' },
+                { text: 'Categories', url: '#categories' },
+                {
+                    text: 'Advanced',
+                    items: [
+                        { text: 'Import', url: '#import' },
+                        { text: 'Export', url: '#export' }
+                    ]
+                }
+            ]
+        },
+        { divider: true },
+        { heading: 'SYSTEM' },
+        { text: 'Settings', url: '#settings', icon: 'settings' }
+    ]
+});</code></pre>
+        </div>
+    </section>
+
+    <!-- With Badges -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">Navigation with Badges</h2>
+        <p class="mb-6 text-gray-600">Add badges to show counts or status</p>
+
+        <div class="demo-container mb-6">
+            <aside id="sidebar-badges"></aside>
+            <div class="demo-content with-sidebar">
+                <h3>Notification Badges</h3>
+                <p>Badges can display counts, status, or notifications.</p>
+            </div>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
+        <div class="code-block language-javascript">
+            <pre><code>Domma.elements.sidebar('#sidebar-badges', {
+    items: [
+        { text: 'Inbox', url: '#inbox', icon: 'mail', badge: '12' },
+        { text: 'Notifications', url: '#notifications', icon: 'bell', badge: '3' },
+        { text: 'Messages', url: '#messages', icon: 'message-square', badge: '99+' }
+    ]
+});</code></pre>
+        </div>
+    </section>
+
+    <!-- Light Theme -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">Light Theme Variant</h2>
+        <p class="mb-6 text-gray-600">Switch between light and dark themes</p>
+
+        <div class="demo-container mb-6">
+            <aside id="sidebar-light"></aside>
+            <div class="demo-content with-sidebar">
+                <h3>Light Sidebar Theme</h3>
+                <p>The sidebar component adapts to light or dark theme variants.</p>
+            </div>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
+        <div class="code-block language-javascript">
+            <pre><code>Domma.elements.sidebar('#sidebar-light', {
+    variant: 'light',  // or 'dark'
+    items: [/* ... */]
+});</code></pre>
+        </div>
+    </section>
+
+    <!-- Persistence Example -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">State Persistence</h2>
+        <p class="mb-6 text-gray-600">Remember expanded menus across page reloads</p>
+
+        <div class="demo-container mb-6">
+            <aside id="sidebar-persist"></aside>
+            <div class="demo-content with-sidebar">
+                <h3>Persistent State</h3>
+                <p>Expand some menus, then reload the page. The expanded state will be remembered!</p>
+                <button id="reload-demo" class="btn btn-primary mt-4">Reload Page</button>
+            </div>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
+        <div class="code-block language-javascript">
+            <pre><code>Domma.elements.sidebar('#sidebar-persist', {
+    persistExpanded: true,
+    persistKey: 'my-app-sidebar',  // Unique key for this sidebar
+    items: [/* ... */]
+});</code></pre>
+        </div>
+    </section>
+
+    <!-- API Reference -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">API Reference</h2>
+
+        <h3 class="text-xl font-semibold mb-3">Options</h3>
+        <div class="table-responsive mb-6">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>position</code></td>
+                        <td>String</td>
+                        <td>'left'</td>
+                        <td>'left' or 'right'</td>
+                    </tr>
+                    <tr>
+                        <td><code>fixed</code></td>
+                        <td>Boolean</td>
+                        <td>true</td>
+                        <td>Fixed or static positioning</td>
+                    </tr>
+                    <tr>
+                        <td><code>width</code></td>
+                        <td>String</td>
+                        <td>'250px'</td>
+                        <td>Sidebar width</td>
+                    </tr>
+                    <tr>
+                        <td><code>top</code></td>
+                        <td>String</td>
+                        <td>'0'</td>
+                        <td>Top offset (e.g., '60px' for navbar)</td>
+                    </tr>
+                    <tr>
+                        <td><code>header</code></td>
+                        <td>Object</td>
+                        <td>null</td>
+                        <td>{ title, toggle, icon }</td>
+                    </tr>
+                    <tr>
+                        <td><code>items</code></td>
+                        <td>Array</td>
+                        <td>[]</td>
+                        <td>Navigation items</td>
+                    </tr>
+                    <tr>
+                        <td><code>footer</code></td>
+                        <td>Object</td>
+                        <td>null</td>
+                        <td>{ text, html }</td>
+                    </tr>
+                    <tr>
+                        <td><code>variant</code></td>
+                        <td>String</td>
+                        <td>'dark'</td>
+                        <td>'light' or 'dark'</td>
+                    </tr>
+                    <tr>
+                        <td><code>collapsible</code></td>
+                        <td>Boolean</td>
+                        <td>true</td>
+                        <td>Mobile toggle behaviour</td>
+                    </tr>
+                    <tr>
+                        <td><code>collapseAt</code></td>
+                        <td>Number</td>
+                        <td>768</td>
+                        <td>Breakpoint (px)</td>
+                    </tr>
+                    <tr>
+                        <td><code>activeSection</code></td>
+                        <td>String</td>
+                        <td>null</td>
+                        <td>Current active section</td>
+                    </tr>
+                    <tr>
+                        <td><code>persistExpanded</code></td>
+                        <td>Boolean</td>
+                        <td>false</td>
+                        <td>Persist expanded state</td>
+                    </tr>
+                    <tr>
+                        <td><code>persistKey</code></td>
+                        <td>String</td>
+                        <td>null</td>
+                        <td>localStorage key</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">Methods</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>open()</code></td>
+                        <td>Open sidebar (mobile)</td>
+                    </tr>
+                    <tr>
+                        <td><code>close()</code></td>
+                        <td>Close sidebar (mobile)</td>
+                    </tr>
+                    <tr>
+                        <td><code>toggle()</code></td>
+                        <td>Toggle sidebar (mobile)</td>
+                    </tr>
+                    <tr>
+                        <td><code>isOpen()</code></td>
+                        <td>Check if sidebar is open</td>
+                    </tr>
+                    <tr>
+                        <td><code>setActive(section)</code></td>
+                        <td>Set active section</td>
+                    </tr>
+                    <tr>
+                        <td><code>setItems(items)</code></td>
+                        <td>Replace all items</td>
+                    </tr>
+                    <tr>
+                        <td><code>addItem(item, index)</code></td>
+                        <td>Add item at index</td>
+                    </tr>
+                    <tr>
+                        <td><code>removeItem(index)</code></td>
+                        <td>Remove item at index</td>
+                    </tr>
+                    <tr>
+                        <td><code>expandAll()</code></td>
+                        <td>Expand all submenus</td>
+                    </tr>
+                    <tr>
+                        <td><code>collapseAll()</code></td>
+                        <td>Collapse all submenus</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Configuration Engine Integration -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">Configuration Engine Integration</h2>
+        <p class="mb-6 text-gray-600">Use <code>$.setup()</code> for declarative initialization</p>
+
+        <div class="code-block language-javascript">
+            <pre><code>$.setup({
+    '#my-sidebar': {
+        component: 'sidebar',
+        options: {
+            variant: 'dark',
+            items: [
+                { text: 'Home', url: '/', icon: 'home' },
+                { text: 'About', url: '/about', icon: 'info' }
+            ],
+            activeSection: 'home'
+        }
+    }
+});</code></pre>
+        </div>
+    </section>
+
+</main>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+    // Wait for Domma to load
+    document.addEventListener('DOMContentLoaded', () => {
+        // Basic Example
+        const sidebarBasic = Domma.elements.sidebar('#sidebar-basic', {
+            position: 'left',
+            fixed: true,
+            width: '250px',
+            top: '60px',
+            header: {
+                title: 'Navigation',
+                toggle: true
+            },
+            items: [
+                { text: 'Dashboard', url: '#dashboard', icon: 'layout', section: 'dashboard' },
+                { text: 'Users', url: '#users', icon: 'users', section: 'users' },
+                { text: 'Reports', url: '#reports', icon: 'chart-bar', section: 'reports' },
+                { text: 'Settings', url: '#settings', icon: 'settings', section: 'settings' }
+            ],
+            variant: 'dark',
+            activeSection: 'dashboard'
+        });
+
+        $('#toggle-basic').on('click', () => sidebarBasic.toggle());
+
+        // Nested Example
+        const sidebarNested = Domma.elements.sidebar('#sidebar-nested', {
+            position: 'left',
+            fixed: true,
+            width: '250px',
+            top: '60px',
+            header: { title: 'Multi-Level Menu' },
+            items: [
+                { text: 'Dashboard', url: '#', icon: 'layout' },
+                {
+                    text: 'Products',
+                    icon: 'box',
+                    items: [
+                        { text: 'All Products', url: '#products' },
+                        { text: 'Categories', url: '#categories' },
+                        {
+                            text: 'Advanced',
+                            items: [
+                                { text: 'Import', url: '#import' },
+                                { text: 'Export', url: '#export' },
+                                {
+                                    text: 'Tools',
+                                    items: [
+                                        { text: 'Bulk Edit', url: '#bulk-edit' },
+                                        { text: 'Price Update', url: '#price-update' }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    text: 'Orders',
+                    icon: 'cart',
+                    items: [
+                        { text: 'All Orders', url: '#orders' },
+                        { text: 'Pending', url: '#pending' },
+                        { text: 'Completed', url: '#completed' }
+                    ]
+                },
+                { divider: true },
+                { heading: 'SYSTEM' },
+                { text: 'Settings', url: '#settings', icon: 'settings' },
+                { text: 'Help', url: '#help', icon: 'help-circle' }
+            ],
+            variant: 'dark'
+        });
+
+        $('#expand-all').on('click', () => sidebarNested.expandAll());
+        $('#collapse-all').on('click', () => sidebarNested.collapseAll());
+
+        // Badges Example
+        Domma.elements.sidebar('#sidebar-badges', {
+            position: 'left',
+            fixed: true,
+            width: '250px',
+            top: '60px',
+            header: { title: 'Notifications' },
+            items: [
+                { text: 'Inbox', url: '#inbox', icon: 'mail', badge: '12' },
+                { text: 'Notifications', url: '#notifications', icon: 'bell', badge: '3' },
+                { text: 'Messages', url: '#messages', icon: 'message-square', badge: '99+' },
+                { text: 'Tasks', url: '#tasks', icon: 'check-square', badge: '5' }
+            ],
+            variant: 'dark'
+        });
+
+        // Light Theme Example
+        Domma.elements.sidebar('#sidebar-light', {
+            position: 'left',
+            fixed: true,
+            width: '250px',
+            top: '60px',
+            header: { title: 'Light Theme' },
+            items: [
+                { text: 'Home', url: '#', icon: 'home' },
+                { text: 'Profile', url: '#profile', icon: 'user' },
+                { text: 'Settings', url: '#settings', icon: 'settings' }
+            ],
+            variant: 'light'
+        });
+
+        // Persistence Example
+        Domma.elements.sidebar('#sidebar-persist', {
+            position: 'left',
+            fixed: true,
+            width: '250px',
+            top: '60px',
+            header: { title: 'Persistent State' },
+            items: [
+                { text: 'Dashboard', url: '#', icon: 'layout' },
+                {
+                    text: 'Menu 1',
+                    icon: 'folder',
+                    items: [
+                        { text: 'Item 1.1', url: '#' },
+                        { text: 'Item 1.2', url: '#' }
+                    ]
+                },
+                {
+                    text: 'Menu 2',
+                    icon: 'folder',
+                    items: [
+                        { text: 'Item 2.1', url: '#' },
+                        { text: 'Item 2.2', url: '#' }
+                    ]
+                }
+            ],
+            variant: 'dark',
+            persistExpanded: true,
+            persistKey: 'showcase-sidebar-persist'
+        });
+
+        $('#reload-demo').on('click', () => location.reload());
+
+        // Scan for icons
+        Domma.icons.scan();
+    });
+</script>
+
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+
+</body>
+</html>

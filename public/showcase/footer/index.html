@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footer - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .demo-container {
+            border: 2px dashed var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+
+        .demo-page {
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .demo-main {
+            flex: 1;
+            padding: 2rem;
+            background: var(--dm-gray-50, #f8f9fa);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
+
+<section class="hero hero-gradient-primary hero-lg">
+    <h1>Footer Component</h1>
+    <p>
+        Flexible, responsive footer with three layout modes (simple, columns, minimal) and theme variants.
+        Perfect for completing your page layout with branding, links, and social media.
+    </p>
+    <p class="mt-4">
+        <code>Domma.elements.footer('#element', { ... })</code>
+    </p>
+</section>
+
+<main class="container py-8">
+
+    <!-- Overview Section -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">Features</h2>
+        <div class="feature-grid">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3 text-primary" data-icon="layout" data-size="32"></div>
+                    <h3 class="card-title">Three Layouts</h3>
+                    <p class="card-text">Simple horizontal, multi-column grid, or minimal centered layouts.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3 text-success" data-icon="smartphone" data-size="32"></div>
+                    <h3 class="card-title">Fully Responsive</h3>
+                    <p class="card-text">Mobile-first design adapts seamlessly to all screen sizes.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3 text-info" data-icon="share-2" data-size="32"></div>
+                    <h3 class="card-title">Social Icons</h3>
+                    <p class="card-text">Integrated social media links with Domma icon system.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3 text-warning" data-icon="sun" data-size="32"></div>
+                    <h3 class="card-title">Theme Variants</h3>
+                    <p class="card-text">Light, dark, and transparent themes with automatic color adaptation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Getting Started -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">Getting Started</h2>
+        <p class="mb-6 text-gray-600">Add a footer to your page in three simple steps</p>
+
+        <h3 class="text-xl font-semibold mb-3">Step 1: Add HTML Container</h3>
+        <p class="mb-4 text-gray-600">Add a <code>&lt;footer&gt;</code> element to your page, typically at the bottom:</p>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;body>
+    &lt;main class="content">
+        &lt;!-- Your page content -->
+    &lt;/main>
+
+    &lt;footer id="site-footer">&lt;/footer>
+&lt;/body></code></pre>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">Step 2: Include Domma</h3>
+        <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;!-- CSS -->
+&lt;link rel="stylesheet" href="dist/domma.css">
+&lt;link rel="stylesheet" href="dist/elements.css">
+
+&lt;!-- JavaScript -->
+&lt;script src="dist/domma.min.js">&lt;/script></code></pre>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">Step 3: Initialize the Footer</h3>
+        <p class="mb-4 text-gray-600">Call <code>Domma.elements.footer()</code> with your content:</p>
+        <div class="code-block language-javascript mb-6">
+            <pre><code>Domma.elements.footer('#site-footer', {
+    layout: 'simple',
+    brand: { text: 'My Site' },
+    links: [
+        { text: 'About', url: '/about' },
+        { text: 'Contact', url: '/contact' }
+    ],
+    copyright: '© 2026 My Site'
+});</code></pre>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>Note:</strong> The footer component will automatically generate all HTML structure, styling, and layout. You only need to provide the empty container element and configuration options.
+        </div>
+    </section>
+
+    <!-- Simple Layout -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">Simple Layout</h2>
+        <p class="mb-6 text-gray-600">Horizontal footer with brand, links, social icons, and copyright</p>
+
+        <div class="demo-container">
+            <div class="demo-page">
+                <div class="demo-main">
+                    <h3>Main Content</h3>
+                    <p>Simple layout is perfect for landing pages and marketing sites.</p>
+                </div>
+                <footer id="footer-simple"></footer>
+            </div>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
+        <div class="code-block language-javascript">
+        <pre><code>Domma.elements.footer('#footer', {
+    layout: 'simple',
+    variant: 'light',
+    brand: {
+        text: 'Domma',
+        logo: '/assets/logo.svg',
+        url: '/'
+    },
+    links: [
+        { text: 'Features', url: '/features' },
+        { text: 'Pricing', url: '/pricing' },
+        { text: 'About', url: '/about' },
+        { text: 'Contact', url: '/contact' }
+    ],
+    social: [
+        { icon: 'github', url: 'https://github.com', label: 'GitHub' },
+        { icon: 'twitter', url: 'https://twitter.com', label: 'Twitter' }
+    ],
+    copyright: '© 2026 Domma. All rights reserved.'
+});</code></pre>
+        </div>
+    </section>
+
+    <!-- Columns Layout -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">Columns Layout</h2>
+        <p class="mb-6 text-gray-600">Multi-column grid with organized link sections</p>
+
+        <div class="demo-container">
+            <div class="demo-page">
+                <div class="demo-main">
+                    <h3>Main Content</h3>
+                    <p>Columns layout is ideal for comprehensive footers with many links.</p>
+                </div>
+                <footer id="footer-columns"></footer>
+            </div>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
+        <div class="code-block language-javascript">
+        <pre><code>Domma.elements.footer('#footer', {
+    layout: 'columns',
+    variant: 'dark',
+    brand: {
+        text: 'Domma Framework',
+        logo: '/assets/logo.svg'
+    },
+    columns: [
+        {
+            title: 'Product',
+            links: [
+                { text: 'Features', url: '/features' },
+                { text: 'Pricing', url: '/pricing' },
+                { text: 'Changelog', url: '/changelog' }
+            ]
+        },
+        {
+            title: 'Resources',
+            links: [
+                { text: 'Documentation', url: '/docs' },
+                { text: 'API Reference', url: '/api' },
+                { text: 'Examples', url: '/examples' }
+            ]
+        },
+        {
+            title: 'Company',
+            links: [
+                { text: 'About', url: '/about' },
+                { text: 'Blog', url: '/blog' },
+                { text: 'Contact', url: '/contact' }
+            ]
+        }
+    ],
+    social: [
+        { icon: 'github', url: '#', label: 'GitHub' },
+        { icon: 'twitter', url: '#', label: 'Twitter' }
+    ],
+    copyright: '© 2026 Domma. All rights reserved.'
+});</code></pre>
+        </div>
+    </section>
+
+    <!-- Minimal Layout -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">Minimal Layout</h2>
+        <p class="mb-6 text-gray-600">Centered minimal footer with copyright and social links</p>
+
+        <div class="demo-container">
+            <div class="demo-page">
+                <div class="demo-main">
+                    <h3>Main Content</h3>
+                    <p>Minimal layout is perfect for clean, simple pages.</p>
+                </div>
+                <footer id="footer-minimal"></footer>
+            </div>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
+        <div class="code-block language-javascript">
+        <pre><code>Domma.elements.footer('#footer', {
+    layout: 'minimal',
+    variant: 'light',
+    copyright: '© 2026 Domma',
+    social: [
+        { icon: 'github', url: '#', label: 'GitHub' },
+        { icon: 'twitter', url: '#', label: 'Twitter' },
+        { icon: 'linkedin', url: '#', label: 'LinkedIn' }
+    ]
+});</code></pre>
+        </div>
+    </section>
+
+    <!-- Dark Theme -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">Dark Theme Variant</h2>
+        <p class="mb-6 text-gray-600">Footer with dark background</p>
+
+        <div class="demo-container">
+            <div class="demo-page">
+                <div class="demo-main">
+                    <h3>Main Content</h3>
+                    <p>Dark variant works great with light-themed pages.</p>
+                </div>
+                <footer id="footer-dark"></footer>
+            </div>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
+        <div class="code-block language-javascript">
+        <pre><code>Domma.elements.footer('#footer', {
+    variant: 'dark',  // 'light', 'dark', or 'transparent'
+    layout: 'simple',
+    // ... other options
+});</code></pre>
+        </div>
+    </section>
+
+    <!-- API Reference -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">API Reference</h2>
+
+        <h3 class="text-xl font-semibold mb-3">Options</h3>
+        <div class="table-responsive mb-6">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>variant</code></td>
+                        <td>String</td>
+                        <td>'light'</td>
+                        <td>'light', 'dark', or 'transparent'</td>
+                    </tr>
+                    <tr>
+                        <td><code>layout</code></td>
+                        <td>String</td>
+                        <td>'simple'</td>
+                        <td>'simple', 'columns', or 'minimal'</td>
+                    </tr>
+                    <tr>
+                        <td><code>brand</code></td>
+                        <td>Object</td>
+                        <td>null</td>
+                        <td>{ text, logo, url }</td>
+                    </tr>
+                    <tr>
+                        <td><code>columns</code></td>
+                        <td>Array</td>
+                        <td>[]</td>
+                        <td>Multi-column layout</td>
+                    </tr>
+                    <tr>
+                        <td><code>links</code></td>
+                        <td>Array</td>
+                        <td>[]</td>
+                        <td>Simple link list</td>
+                    </tr>
+                    <tr>
+                        <td><code>social</code></td>
+                        <td>Array</td>
+                        <td>[]</td>
+                        <td>Social media icons</td>
+                    </tr>
+                    <tr>
+                        <td><code>copyright</code></td>
+                        <td>String/Object</td>
+                        <td>null</td>
+                        <td>Copyright text or {text, year}</td>
+                    </tr>
+                    <tr>
+                        <td><code>position</code></td>
+                        <td>String</td>
+                        <td>'static'</td>
+                        <td>'static', 'fixed', or 'sticky'</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-3">Methods</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>setBrand(brand)</code></td>
+                        <td>Update brand information</td>
+                    </tr>
+                    <tr>
+                        <td><code>setLinks(links)</code></td>
+                        <td>Update links array</td>
+                    </tr>
+                    <tr>
+                        <td><code>setColumns(columns)</code></td>
+                        <td>Update columns array</td>
+                    </tr>
+                    <tr>
+                        <td><code>setSocial(social)</code></td>
+                        <td>Update social links</td>
+                    </tr>
+                    <tr>
+                        <td><code>setCopyright(copyright)</code></td>
+                        <td>Update copyright text</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Configuration Engine Integration -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-4">Configuration Engine Integration</h2>
+        <p class="mb-6 text-gray-600">Use <code>$.setup()</code> for declarative initialization</p>
+
+        <div class="code-block language-javascript">
+        <pre><code>$.setup({
+    '#site-footer': {
+        component: 'footer',
+        options: {
+            layout: 'columns',
+            variant: 'dark',
+            brand: { text: 'My App', logo: '/logo.svg' },
+            columns: [/* ... */],
+            copyright: '© 2026 My App'
+        }
+    }
+});</code></pre>
+        </div>
+    </section>
+
+</main>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+    // Wait for Domma to load
+    document.addEventListener('DOMContentLoaded', () => {
+        // Simple Layout
+        Domma.elements.footer('#footer-simple', {
+            layout: 'simple',
+            variant: 'light',
+            brand: {
+                text: 'Domma',
+                url: '/'
+            },
+            links: [
+                { text: 'Features', url: '#features' },
+                { text: 'Pricing', url: '#pricing' },
+                { text: 'About', url: '#about' },
+                { text: 'Contact', url: '#contact' }
+            ],
+            social: [
+                { icon: 'github', url: 'https://github.com', label: 'GitHub' },
+                { icon: 'twitter', url: 'https://twitter.com', label: 'Twitter' },
+                { icon: 'linkedin', url: 'https://linkedin.com', label: 'LinkedIn' }
+            ],
+            copyright: '© 2026 Domma. All rights reserved.'
+        });
+
+        // Columns Layout
+        Domma.elements.footer('#footer-columns', {
+            layout: 'columns',
+            variant: 'dark',
+            brand: {
+                text: 'Domma Framework'
+            },
+            columns: [
+                {
+                    title: 'Product',
+                    links: [
+                        { text: 'Features', url: '#' },
+                        { text: 'Pricing', url: '#' },
+                        { text: 'Changelog', url: '#' },
+                        { text: 'Roadmap', url: '#' }
+                    ]
+                },
+                {
+                    title: 'Resources',
+                    links: [
+                        { text: 'Documentation', url: '#' },
+                        { text: 'API Reference', url: '#' },
+                        { text: 'Examples', url: '#' },
+                        { text: 'Tutorials', url: '#' }
+                    ]
+                },
+                {
+                    title: 'Company',
+                    links: [
+                        { text: 'About', url: '#' },
+                        { text: 'Blog', url: '#' },
+                        { text: 'Contact', url: '#' },
+                        { text: 'Careers', url: '#' }
+                    ]
+                },
+                {
+                    title: 'Legal',
+                    links: [
+                        { text: 'Privacy', url: '#' },
+                        { text: 'Terms', url: '#' },
+                        { text: 'Security', url: '#' }
+                    ]
+                }
+            ],
+            social: [
+                { icon: 'github', url: '#', label: 'GitHub' },
+                { icon: 'twitter', url: '#', label: 'Twitter' },
+                { icon: 'linkedin', url: '#', label: 'LinkedIn' },
+                { icon: 'youtube', url: '#', label: 'YouTube' }
+            ],
+            copyright: '© 2026 Domma. All rights reserved.'
+        });
+
+        // Minimal Layout
+        Domma.elements.footer('#footer-minimal', {
+            layout: 'minimal',
+            variant: 'light',
+            copyright: '© 2026 Domma',
+            social: [
+                { icon: 'github', url: '#', label: 'GitHub' },
+                { icon: 'twitter', url: '#', label: 'Twitter' },
+                { icon: 'linkedin', url: '#', label: 'LinkedIn' }
+            ]
+        });
+
+        // Dark Theme Example
+        Domma.elements.footer('#footer-dark', {
+            layout: 'simple',
+            variant: 'dark',
+            brand: {
+                text: 'Domma'
+            },
+            links: [
+                { text: 'Home', url: '#' },
+                { text: 'Features', url: '#' },
+                { text: 'Docs', url: '#' }
+            ],
+            social: [
+                { icon: 'github', url: '#', label: 'GitHub' },
+                { icon: 'twitter', url: '#', label: 'Twitter' }
+            ],
+            copyright: '© 2026 Domma'
+        });
+
+        // Scan for icons
+        Domma.icons.scan();
+    });
+</script>
+
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+
+</body>
+</html>

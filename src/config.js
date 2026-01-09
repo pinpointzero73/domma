@@ -150,6 +150,8 @@ export const configEngine = {
             loader: elements.loader,
             breadcrumbs: elements.breadcrumbs,
             navbar: elements.navbar,
+            sidebar: elements.sidebar,
+            footer: elements.footer,
             notification: elements.notification,
             timer: elements.timer,
             alarm: elements.alarm,

@@ -11,6 +11,12 @@
           "badge": "New"
         },
         {
+          "text": "Feedback",
+          "url": "feedback/index.html",
+          "section": "feedback",
+          "badge": "New"
+        },
+        {
           "text": "GitHub",
           "url": "https://github.com/dcbw-it/domma",
           "section": "github",
@@ -194,6 +200,11 @@
           "section": "editor"
         },
         {
+          "text": "Footer",
+          "url": "showcase/footer/index.html",
+          "section": "footer"
+        },
+        {
           "text": "Jumbotron",
           "url": "showcase/elements/jumbotron/index.html",
           "section": "jumbotron"
@@ -212,6 +223,11 @@
           "text": "Pillbox",
           "url": "showcase/elements/pillbox/index.html",
           "section": "pillbox"
+        },
+        {
+          "text": "Sidebar",
+          "url": "showcase/sidebar/index.html",
+          "section": "sidebar"
         },
         {
           "text": "Slideover",

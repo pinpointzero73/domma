@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Dashboard - Admin - Domma</title>
+  <meta name="description" content="Manage user feedback submissions">
+
+  <!-- Domma Core Styles -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+
+  <!-- Admin Custom Styles -->
+  <link rel="stylesheet" href="../index.css">
+</head>
+<body class="dm-cloaked" data-theme="default">
+
+<!-- Admin Layout Wrapper -->
+<div class="admin-wrapper">
+  <!-- Sidebar -->
+  <aside id="admin-sidebar" class="admin-sidebar"></aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <!-- Page Header -->
+    <div class="admin-header">
+      <h1>Feedback Dashboard</h1>
+      <p>Manage user feedback submissions and track improvement suggestions</p>
+    </div>
+
+    <!-- Page Content -->
+    <div class="admin-content">
+
+      <!-- Statistics Cards Row -->
+      <div class="grid grid-cols-4 gap-4 mb-6" id="stats-cards">
+        <!-- Total Feedback Card -->
+        <div class="card" data-collapsible="true">
+          <div class="card-body">
+            <h3 class="card-title text-sm text-gray-600 mb-2">Total Feedback</h3>
+            <p class="text-3xl font-bold mb-2" id="stat-total">-</p>
+            <p class="text-xs text-gray-500">All time submissions</p>
+          </div>
+        </div>
+
+        <!-- New Feedback Card -->
+        <div class="card" data-collapsible="true">
+          <div class="card-body">
+            <h3 class="card-title text-sm text-gray-600 mb-2">New Feedback</h3>
+            <p class="text-3xl font-bold mb-2" id="stat-new">-</p>
+            <p class="text-xs text-gray-500">Awaiting review</p>
+          </div>
+        </div>
+
+        <!-- Average Rating Card -->
+        <div class="card" data-collapsible="true">
+          <div class="card-body">
+            <h3 class="card-title text-sm text-gray-600 mb-2">Average Rating</h3>
+            <p class="text-3xl font-bold mb-2" id="stat-rating">-</p>
+            <p class="text-xs text-gray-500">
+              <span id="stat-rating-count">0</span> ratings
+            </p>
+          </div>
+        </div>
+
+        <!-- By Category Card -->
+        <div class="card" data-collapsible="true">
+          <div class="card-body">
+            <h3 class="card-title text-sm text-gray-600 mb-2">Top Category</h3>
+            <p class="text-sm mb-2" id="stat-top-category">
+              <strong>-</strong>
+            </p>
+            <p class="text-xs text-gray-500" id="stat-categories-summary">-</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback Table -->
+      <div class="card mb-6" data-collapsible="true">
+        <div class="card-header">
+          <h2 class="card-title">All Feedback</h2>
+        </div>
+        <div class="card-body">
+          <!-- Search and Filters -->
+          <div class="grid grid-cols-12 gap-4 mb-4">
+            <div class="col-span-4">
+              <input type="text" id="feedback-search" class="form-input" placeholder="Search feedback...">
+            </div>
+            <div class="col-span-2">
+              <select id="status-filter" class="form-input">
+                <option value="">All Status</option>
+                <option value="new">New</option>
+                <option value="reviewed">Reviewed</option>
+                <option value="in-progress">In Progress</option>
+                <option value="resolved">Resolved</option>
+                <option value="archived">Archived</option>
+              </select>
+            </div>
+            <div class="col-span-3">
+              <select id="category-filter" class="form-input">
+                <option value="">All Categories</option>
+                <option value="bug-report">Bug Report</option>
+                <option value="feature-request">Feature Request</option>
+                <option value="documentation">Documentation</option>
+                <option value="general">General Feedback</option>
+                <option value="praise">Praise</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="col-span-3">
+              <button id="refresh-feedback" class="btn btn-primary btn-block">Refresh</button>
+            </div>
+          </div>
+
+          <!-- Feedback Table -->
+          <table id="feedback-table" class="table"></table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Domma Framework -->
+<script src="../../dist/domma.min.js"></script>
+<!-- Layout System -->
+<script type="module" src="../../layouts/js/layout.js"></script>
+<!-- Admin Page Logic -->
+<script type="module" src="index.js"></script>
+</body>
+</html>

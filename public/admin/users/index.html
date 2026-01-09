@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users Dashboard - Admin - Domma</title>
+  <meta name="description" content="Manage system users">
+
+  <!-- Domma Core Styles -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+
+  <!-- Admin Custom Styles -->
+  <link rel="stylesheet" href="../index.css">
+</head>
+<body class="dm-cloaked" data-theme="default">
+
+<!-- Admin Layout Wrapper -->
+<div class="admin-wrapper">
+  <!-- Sidebar -->
+  <aside id="admin-sidebar" class="admin-sidebar"></aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <!-- Page Header -->
+    <div class="admin-header">
+      <h1>Users Dashboard</h1>
+      <p>Manage user accounts, roles, and permissions</p>
+    </div>
+
+    <!-- Page Content -->
+    <div class="admin-content">
+
+      <!-- Statistics Cards Row -->
+      <div class="grid grid-cols-3 gap-4 mb-6" id="stats-cards">
+        <!-- Total Users Card -->
+        <div class="card" data-collapsible="true">
+          <div class="card-body">
+            <h3 class="card-title text-sm text-gray-600 mb-2">Total Users</h3>
+            <p class="text-3xl font-bold mb-2" id="stat-total-users">-</p>
+            <p class="text-xs text-gray-500">
+              <span class="badge badge-danger" id="stat-role-admin">0 admin</span>
+              <span class="badge badge-primary" id="stat-role-subscriber">0 subscriber</span>
+              <span class="badge badge-secondary" id="stat-role-guest">0 guest</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Recent Signups Card -->
+        <div class="card" data-collapsible="true">
+          <div class="card-body">
+            <h3 class="card-title text-sm text-gray-600 mb-2">Recent Signups</h3>
+            <p class="text-sm mb-2">
+              <strong id="stat-today-signups">0</strong> Today<br>
+              <strong id="stat-week-signups">0</strong> This Week<br>
+              <strong id="stat-month-signups">0</strong> This Month
+            </p>
+          </div>
+        </div>
+
+        <!-- User Content Card -->
+        <div class="card" data-collapsible="true">
+          <div class="card-body">
+            <h3 class="card-title text-sm text-gray-600 mb-2">Total Content</h3>
+            <p class="text-sm mb-2">
+              <strong id="stat-documents">0</strong> Documents<br>
+              <strong id="stat-invoices">0</strong> Invoices<br>
+              <strong id="stat-vehicles">0</strong> Vehicles
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users Table -->
+      <div class="card" data-collapsible="true">
+        <div class="card-header">
+          <h2 class="card-title">All Users</h2>
+        </div>
+        <div class="card-body">
+          <!-- Search and Filters -->
+          <div class="grid grid-cols-12 gap-4 mb-4">
+            <div class="col-span-6">
+              <input type="text" id="user-search" class="form-input" placeholder="Search by email or name...">
+            </div>
+            <div class="col-span-3">
+              <select id="role-filter" class="form-input">
+                <option value="">All Roles</option>
+                <option value="admin">Admin</option>
+                <option value="subscriber">Subscriber</option>
+                <option value="guest">Guest</option>
+              </select>
+            </div>
+            <div class="col-span-3">
+              <button id="refresh-users" class="btn btn-primary btn-block">Refresh</button>
+            </div>
+          </div>
+
+          <!-- Users Table -->
+          <table id="users-table" class="table"></table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Domma Framework -->
+<script src="../../dist/domma.min.js"></script>
+<!-- Layout System -->
+<script type="module" src="../../layouts/js/layout.js"></script>
+<!-- Admin Page Logic -->
+<script type="module" src="index.js"></script>
+</body>
+</html>
