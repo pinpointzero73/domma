@@ -166,19 +166,7 @@ $(() => {
                             key: 'actions',
                             title: 'Actions',
                             sortable: false,
-                            render: (userId) => `
-                                <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-outline-primary edit-user-btn" data-user-id="${userId}">
-                                        Edit
-                                    </button>
-                                    <button class="btn btn-outline-warning change-role-btn" data-user-id="${userId}">
-                                        Role
-                                    </button>
-                                    <button class="btn btn-outline-danger delete-user-btn" data-user-id="${userId}">
-                                        Delete
-                                    </button>
-                                </div>
-                            `
+                            render: (userId) => returnUserActions(userId)
                         }
                     ],
                     pagination: true,
@@ -214,6 +202,21 @@ $(() => {
             console.error('[Admin] Failed to load users:', error);
             Domma.elements.toast('Error loading users: ' + error.message, { type: 'error' });
         }
+    }
+
+    function returnUserActions(userId) {
+        return `
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-warning edit-user-btn" data-user-id="${userId}">
+                        <span data-icon="edit" data-icon-size="16"></span>
+                        Edit
+                    </button>
+                    <button class="btn btn-danger delete-user-btn" data-user-id="${userId}">
+                        <span data-icon="trash" data-icon-size="16"></span>
+                        Delete
+                    </button>
+                </div>
+            `;
     }
 
     // ============================================

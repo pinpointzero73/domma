@@ -192,13 +192,16 @@ $(() => {
                             sortable: false,
                             render: (id) => `
                                 <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-outline-primary view-feedback-btn" data-id="${id}">
+                                    <button class="btn btn-primary view-feedback-btn" data-id="${id}">
+                                        <span data-icon="eye" data-icon-size="16"></span>
                                         View
                                     </button>
-                                    <button class="btn btn-outline-warning edit-feedback-btn" data-id="${id}">
+                                    <button class="btn btn-warning edit-feedback-btn" data-id="${id}">
+                                        <span data-icon="edit" data-icon-size="16"></span>
                                         Edit
                                     </button>
-                                    <button class="btn btn-outline-danger delete-feedback-btn" data-id="${id}">
+                                    <button class="btn btn-danger delete-feedback-btn" data-id="${id}">
+                                        <span data-icon="trash" data-icon-size="16"></span>
                                         Delete
                                     </button>
                                 </div>
