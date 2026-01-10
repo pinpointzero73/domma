@@ -59,7 +59,7 @@
             }
           ]
         },
-        "footer": "footer-showcase",
+        "footer": "footer-landing",
         "sidebar": {
           "enabled": false
         },
@@ -95,7 +95,7 @@
             }
           ]
         },
-        "footer": "footer-showcase",
+        "footer": "footer-landing",
         "sidebar": {
           "enabled": true,
           "autoGenerate": true,
@@ -135,7 +135,7 @@
             }
           ]
         },
-        "footer": "footer-showcase",
+        "footer": "footer-landing",
         "sidebar": {
           "enabled": true,
           "autoGenerate": true,
@@ -177,7 +177,7 @@
         }
       ]
     },
-    "footer": "footer-showcase",
+    "footer": "footer-landing",
     "sidebar": {
       "enabled": false
     },
