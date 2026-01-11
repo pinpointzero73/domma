@@ -123,8 +123,13 @@ import {ConsentModule} from './modules/consent.js';
 
         console.log('[Domma Layout] Initialization complete');
 
+        // Reveal cloaked content
+        document.body.classList.add('dm-ready');
+
     } catch (error) {
         console.error('[Domma Layout] Initialization error:', error);
+        // Reveal content even on error
+        document.body.classList.add('dm-ready');
     }
 
     /**
