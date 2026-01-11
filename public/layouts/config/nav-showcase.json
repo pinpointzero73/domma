@@ -404,6 +404,31 @@
           "badge": "Coming Soon"
         }
       ]
+    },
+    {
+      "text": "Resources",
+      "items": [
+        {
+          "text": "About Us",
+          "url": "about/index.html",
+          "section": "about"
+        },
+        {
+          "text": "Blog",
+          "url": "blog/index.html",
+          "section": "blog"
+        },
+        {
+          "text": "FAQs",
+          "url": "faq/index.html",
+          "section": "faq"
+        },
+        {
+          "text": "Privacy Policy",
+          "url": "privacy-policy/index.html",
+          "section": "privacy-policy"
+        }
+      ]
     }
   ]
 }
