@@ -80,7 +80,7 @@ import {ConsentModule} from './modules/consent.js';
 
         // Render navbar
         if (presetConfig.navbar) {
-            await renderNavbar(presetConfig.navbar, data);
+            await renderNavbar(presetConfig.navbar, data, presetConfig);
         }
 
         // Render theme controls
@@ -557,7 +557,7 @@ import {ConsentModule} from './modules/consent.js';
     /**
      * Render navbar
      */
-    async function renderNavbar(config, data) {
+    async function renderNavbar(config, data, presetConfig) {
         try {
             // Check if navbar already exists in HTML
             const navbarExists = document.getElementById('main-navbar');
