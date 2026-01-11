@@ -517,8 +517,7 @@ document.getElementById('form').addEventListener('submit', (e) => {
         </p>
 
       <h4 class="category-title-style">Form Validation with $.setup()</h4>
-        <pre class="code-block language-javascript">
-$.setup({
+        <pre class="code-block language-javascript">$.setup({
     '#registration-form': {
         initial: {
             data: { touched: {}, errors: {} }
@@ -595,12 +594,10 @@ $.setup({
             }, 300)
         }
     }
-});
-</pre>
+});</pre>
 
       <h4 class="category-title-style">Auto-Save Draft</h4>
-        <pre class="code-block language-javascript">
-$.setup({
+        <pre class="code-block language-javascript">$.setup({
     '#article-form': {
         initial: {
             data: { saveTimer: null, lastSaved: null }
@@ -623,12 +620,10 @@ $.setup({
             }, 2000)
         }
     }
-});
-</pre>
+});</pre>
 
       <h4 class="category-title-style">Dynamic Form Fields</h4>
-        <pre class="code-block language-javascript">
-$.setup({
+        <pre class="code-block language-javascript">$.setup({
     '#contact-form': {
         events: {
             'click #add-phone': (e, $form) => {
@@ -653,12 +648,10 @@ $.setup({
             }
         }
     }
-});
-</pre>
+});</pre>
 
       <h4 class="category-title-style">Multi-Step Form</h4>
-        <pre class="code-block language-javascript">
-$.setup({
+        <pre class="code-block language-javascript">$.setup({
     '#wizard-form': {
         initial: {
             data: { currentStep: 1, totalSteps: 3, formData: {} }
@@ -699,8 +692,7 @@ $.setup({
             }
         }
     }
-});
-</pre>
+});</pre>
 
       <h4 class="category-title-style">Benefits of Hybrid Approach</h4>
         <ul class="mb-4">

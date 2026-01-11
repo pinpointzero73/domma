@@ -279,8 +279,7 @@ const accordion = Domma.elements.accordion('#accordion', {
             </p>
 
             <h4 class="category-title-style">Single Accordion Setup</h4>
-            <pre class="code-block language-javascript">
-$.setup({
+            <pre class="code-block language-javascript">$.setup({
     '#my-accordion': {
         component: 'accordion',
         options: {
@@ -289,12 +288,10 @@ $.setup({
             animation: 'slide'
         }
     }
-});
-</pre>
+});</pre>
 
             <h4 class="category-title-style">Multiple Accordions at Once</h4>
-            <pre class="code-block language-javascript">
-// Configure all FAQ accordions site-wide
+            <pre class="code-block language-javascript">// Configure all FAQ accordions site-wide
 $.setup({
     '.faq-accordion': {
         component: 'accordion',
@@ -315,12 +312,10 @@ $.setup({
             multiExpand: true  // Allow multiple sections open
         }
     }
-});
-</pre>
+});</pre>
 
             <h4 class="category-title-style">With Initial State & Events</h4>
-            <pre class="code-block language-javascript">
-$.setup({
+            <pre class="code-block language-javascript">$.setup({
     '#product-details': {
         component: 'accordion',
         options: {
@@ -340,8 +335,7 @@ $.setup({
             }
         }
     }
-});
-</pre>
+});</pre>
 
             <h4 class="category-title-style">Benefits of Declarative Config</h4>
             <ul class="list-disc list-inside mb-4">
@@ -356,8 +350,7 @@ $.setup({
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">Programmatic (Traditional)</p>
-                    <pre class="code-block language-javascript">
-// Scattered throughout code
+                    <pre class="code-block language-javascript">// Scattered throughout code
 const acc1 = Domma.elements.accordion(
     '#accordion-1',
     {multiExpand: false}
@@ -370,8 +363,7 @@ const acc2 = Domma.elements.accordion(
                 </div>
                 <div>
                     <p class="font-semibold mb-2">Declarative (Recommended)</p>
-                    <pre class="code-block language-javascript">
-// Clean, centralized config
+                    <pre class="code-block language-javascript">// Clean, centralized config
 $.setup({
     '#accordion-1': {
         component: 'accordion',
