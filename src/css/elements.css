@@ -1521,6 +1521,50 @@ code {
     display: block;
 }
 
+/* Hamburger icon - three lines */
+.navbar-toggle-icon {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: currentColor;
+    position: relative;
+    transition: background 0.2s ease;
+}
+
+.navbar-toggle-icon::before,
+.navbar-toggle-icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.2s ease;
+}
+
+.navbar-toggle-icon::before {
+    top: -7px;
+}
+
+.navbar-toggle-icon::after {
+    top: 7px;
+}
+
+/* Animate to X when expanded */
+.navbar-toggle[aria-expanded="true"] .navbar-toggle-icon {
+    background: transparent;
+}
+
+.navbar-toggle[aria-expanded="true"] .navbar-toggle-icon::before {
+    transform: rotate(45deg);
+    top: 0;
+}
+
+.navbar-toggle[aria-expanded="true"] .navbar-toggle-icon::after {
+    transform: rotate(-45deg);
+    top: 0;
+}
+
 .navbar-nav {
     display: flex;
     flex-wrap: wrap;
@@ -1619,6 +1663,13 @@ code {
     color: var(--dm-white);
 }
 
+/* Navbar collapse container */
+.navbar-collapse {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
 /* Responsive navbar - tablet */
 @media (max-width: 1200px) {
     .navbar {
@@ -1644,24 +1695,30 @@ code {
         order: 2;
     }
 
-    .navbar-nav {
+    .navbar-collapse {
         display: none;
         width: 100%;
         order: 3;
         flex-direction: column;
-        gap: 0;
         padding-top: var(--dm-space-3);
-        border-top: 1px solid var(--dm-gray-200);
+        border-top: 1px solid var(--dm-border);
+    }
+
+    .navbar-collapse.show {
+        display: flex;
+    }
+
+    .navbar-dark .navbar-collapse {
+        border-top-color: var(--dm-gray-700);
+    }
+
+    .navbar-nav {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        gap: 0;
         max-height: 60vh;
         overflow-y: auto;
-    }
-
-    .navbar-dark .navbar-nav {
-        border-top-color: var(--dm-gray-800);
-    }
-
-    .navbar-nav.open {
-        display: flex;
     }
 
     .navbar-nav li {
