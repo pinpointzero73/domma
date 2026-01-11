@@ -607,16 +607,6 @@ import {ConsentModule} from './modules/consent.js';
                 const levelsUp = pathParts.length;
                 const adminPath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'admin/index.html' : 'admin/index.html';
 
-                // Add Download if configured
-                const downloadAction = config.actions?.find(a => a.text.toLowerCase() === 'download');
-                if (downloadAction) {
-                    navItems.push({
-                        text: 'Download',
-                        url: downloadAction.url,
-                        icon: 'download'
-                    });
-                }
-
                 // Add existing nav items from config (only navigation items, not Login/Logout)
                 if (config.items && config.items.length > 0) {
                     navItems.push(...config.items);

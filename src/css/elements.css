@@ -1733,7 +1733,8 @@ code {
     /* Horizontal navigation on desktop */
     .navbar-nav {
         flex-direction: row;
-        width: auto;
+        flex: 1;
+        justify-content: center;
         gap: var(--dm-space-1);
         align-items: center;
         max-height: none;

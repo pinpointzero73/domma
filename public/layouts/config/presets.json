@@ -9,18 +9,7 @@
       },
       "items": "nav-showcase",
       "variant": null,
-      "actions": [
-        {
-          "text": "Download",
-          "url": "download/index.html",
-          "class": "pill pill-light"
-        },
-        {
-          "text": "Login",
-          "url": "login/index.html",
-          "class": "pill pill-primary"
-        }
-      ]
+      "actions": []
     },
     "footer": "footer-landing",
     "sidebar": {
@@ -51,13 +40,7 @@
           },
           "items": "nav-showcase",
           "variant": null,
-          "actions": [
-            {
-              "text": "Download",
-              "url": "../download/index.html",
-              "class": "pill pill-light"
-            }
-          ]
+          "actions": []
         },
         "footer": "footer-landing",
         "sidebar": {
@@ -87,13 +70,7 @@
           },
           "items": "nav-showcase",
           "variant": null,
-          "actions": [
-            {
-              "text": "Download",
-              "url": "../../download/index.html",
-              "class": "pill pill-light"
-            }
-          ]
+          "actions": []
         },
         "footer": "footer-landing",
         "sidebar": {
@@ -127,13 +104,7 @@
           },
           "items": "nav-showcase",
           "variant": null,
-          "actions": [
-            {
-              "text": "Download",
-              "url": "../../../download/index.html",
-              "class": "pill pill-light"
-            }
-          ]
+          "actions": []
         },
         "footer": "footer-landing",
         "sidebar": {
@@ -169,13 +140,7 @@
       },
       "items": "nav-showcase",
       "variant": null,
-      "actions": [
-        {
-          "text": "Login",
-          "url": "../login/index.html",
-          "class": "pill pill-primary"
-        }
-      ]
+      "actions": []
     },
     "footer": "footer-landing",
     "sidebar": {

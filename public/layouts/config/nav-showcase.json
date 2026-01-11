@@ -5,6 +5,11 @@
       "text": "Get Started",
       "items": [
         {
+          "text": "Download",
+          "url": "download/index.html",
+          "section": "download"
+        },
+        {
           "text": "QuickStart",
           "url": "quickstart/index.html",
           "section": "quickstart",
