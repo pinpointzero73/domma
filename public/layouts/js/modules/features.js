@@ -25,7 +25,7 @@ export const FeaturesModule = {
     featureHandlers: {
         'back-to-top': () => {
             if (typeof Domma !== 'undefined' && Domma.elements?.backToTop) {
-                Domma.elements.backToTop('body', {
+                Domma.elements.backToTop(null, {
                     duration: 300,
                     showAfter: window.innerHeight
                 });
