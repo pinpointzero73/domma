@@ -617,27 +617,13 @@ import {ConsentModule} from './modules/consent.js';
                     });
                 }
 
-                // Add existing nav items from config
+                // Add existing nav items from config (only navigation items, not Login/Logout)
                 if (config.items && config.items.length > 0) {
                     navItems.push(...config.items);
                 }
 
-                // Add Login/Logout at the end
+                // Prepare actions for the right side
                 const loginPath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'login/index.html' : 'login/index.html';
-
-                if (user) {
-                    navItems.push({
-                        text: 'Logout',
-                        url: '#',
-                        icon: 'log-out'
-                    });
-                } else {
-                    navItems.push({
-                        text: 'Login/Register',
-                        url: loginPath,
-                        icon: 'user'
-                    });
-                }
 
                 Domma.elements.navbar('#main-navbar', {
                     brand: {text: config.brand?.text || 'Domma', url: config.brand?.url || '/'},
@@ -646,16 +632,7 @@ import {ConsentModule} from './modules/consent.js';
                     position: 'static',
                     collapseAt: 992,
                     onItemClick: (item, index, e) => {
-                        // Handle Logout click
-                        if (item.text === 'Logout') {
-                            Domma.auth.logout();
-                            const homePath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'index.html' : 'index.html';
-                            window.location.href = homePath;
-                        } else if (item.url && item.url !== '#') {
-                            // For all other items with URLs (Login, Download, etc), navigate manually
-                            // because navbar component prevents default when onItemClick is defined
-                            window.location.href = item.url;
-                        }
+                        // Handled below in manual actions injection
                     }
                 });
 
@@ -719,37 +696,61 @@ import {ConsentModule} from './modules/consent.js';
                     $brandContainer.get(0).appendChild(userInfoEl);
                 }
 
-                // Add theme selector inline in navbar if configured
-                if (presetConfig.theme && presetConfig.theme.variantSelector) {
-                    const navbarActions = document.querySelector('#main-navbar .navbar-nav');
-                    if (navbarActions) {
-                        // Create inline theme selector
+                // Inject navbar actions (Login/Logout + Theme Selector) on the right side
+                const $navbarCollapse = $('#main-navbar .navbar-collapse');
+                if ($navbarCollapse.length) {
+                    // Create or get navbar-actions div
+                    let $navbarActions = $('#main-navbar .navbar-actions');
+                    if (!$navbarActions.length) {
+                        $navbarCollapse.get(0).insertAdjacentHTML('beforeend', '<div class="navbar-actions"></div>');
+                        $navbarActions = $('#main-navbar .navbar-actions');
+                    }
+
+                    // Add Login/Logout link
+                    const loginLogoutHtml = user
+                        ? `<a href="#" class="navbar-action-link" id="navbar-logout">Logout</a>`
+                        : `<a href="${loginPath}" class="navbar-action-link">Login/Register</a>`;
+                    $navbarActions.get(0).insertAdjacentHTML('beforeend', loginLogoutHtml);
+
+                    // Bind logout handler
+                    if (user) {
+                        const $logoutLink = $('#navbar-logout');
+                        if ($logoutLink.length) {
+                            $logoutLink.on('click', (e) => {
+                                e.preventDefault();
+                                Domma.auth.logout();
+                                const homePath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'index.html' : 'index.html';
+                                window.location.href = homePath;
+                            });
+                        }
+                    }
+
+                    // Add theme selector if configured
+                    if (presetConfig.theme && presetConfig.theme.variantSelector) {
                         const themeSelectorHtml = `
-                            <li class="navbar-theme-selector">
-                                <div class="variant-selector variant-selector-inline" id="variant-selector">
-                                    <button class="variant-trigger" data-tooltip="Theme variants (16)"></button>
-                                    <div class="variant-options">
-                                        <button class="variant-dot variant-dot-ocean-light" data-theme="ocean-light" data-tooltip="Ocean Light ☀️"></button>
-                                        <button class="variant-dot variant-dot-ocean-dark" data-theme="ocean-dark" data-tooltip="Ocean Dark 🌙"></button>
-                                        <button class="variant-dot variant-dot-forest-light" data-theme="forest-light" data-tooltip="Forest Light ☀️"></button>
-                                        <button class="variant-dot variant-dot-forest-dark" data-theme="forest-dark" data-tooltip="Forest Dark 🌙"></button>
-                                        <button class="variant-dot variant-dot-sunset-light" data-theme="sunset-light" data-tooltip="Sunset Light ☀️"></button>
-                                        <button class="variant-dot variant-dot-sunset-dark" data-theme="sunset-dark" data-tooltip="Sunset Dark 🌙"></button>
-                                        <button class="variant-dot variant-dot-royal-light" data-theme="royal-light" data-tooltip="Royal Light ☀️"></button>
-                                        <button class="variant-dot variant-dot-royal-dark" data-theme="royal-dark" data-tooltip="Royal Dark 🌙"></button>
-                                        <button class="variant-dot variant-dot-lemon-light" data-theme="lemon-light" data-tooltip="Lemon Light ☀️"></button>
-                                        <button class="variant-dot variant-dot-lemon-dark" data-theme="lemon-dark" data-tooltip="Lemon Dark 🌙"></button>
-                                        <button class="variant-dot variant-dot-silver-light" data-theme="silver-light" data-tooltip="Silver Light ☀️"></button>
-                                        <button class="variant-dot variant-dot-silver-dark" data-theme="silver-dark" data-tooltip="Silver Dark 🌙"></button>
-                                        <button class="variant-dot variant-dot-charcoal-light" data-theme="charcoal-light" data-tooltip="Charcoal Light ☀️"></button>
-                                        <button class="variant-dot variant-dot-charcoal-dark" data-theme="charcoal-dark" data-tooltip="Charcoal Dark 🌙"></button>
-                                        <button class="variant-dot variant-dot-christmas-light" data-theme="christmas-light" data-tooltip="Christmas Light ☀️"></button>
-                                        <button class="variant-dot variant-dot-christmas-dark" data-theme="christmas-dark" data-tooltip="Christmas Dark 🌙"></button>
-                                    </div>
+                            <div class="variant-selector variant-selector-inline" id="variant-selector">
+                                <button class="variant-trigger" data-tooltip="Theme variants (16)"></button>
+                                <div class="variant-options">
+                                    <button class="variant-dot variant-dot-ocean-light" data-theme="ocean-light" data-tooltip="Ocean Light ☀️"></button>
+                                    <button class="variant-dot variant-dot-ocean-dark" data-theme="ocean-dark" data-tooltip="Ocean Dark 🌙"></button>
+                                    <button class="variant-dot variant-dot-forest-light" data-theme="forest-light" data-tooltip="Forest Light ☀️"></button>
+                                    <button class="variant-dot variant-dot-forest-dark" data-theme="forest-dark" data-tooltip="Forest Dark 🌙"></button>
+                                    <button class="variant-dot variant-dot-sunset-light" data-theme="sunset-light" data-tooltip="Sunset Light ☀️"></button>
+                                    <button class="variant-dot variant-dot-sunset-dark" data-theme="sunset-dark" data-tooltip="Sunset Dark 🌙"></button>
+                                    <button class="variant-dot variant-dot-royal-light" data-theme="royal-light" data-tooltip="Royal Light ☀️"></button>
+                                    <button class="variant-dot variant-dot-royal-dark" data-theme="royal-dark" data-tooltip="Royal Dark 🌙"></button>
+                                    <button class="variant-dot variant-dot-lemon-light" data-theme="lemon-light" data-tooltip="Lemon Light ☀️"></button>
+                                    <button class="variant-dot variant-dot-lemon-dark" data-theme="lemon-dark" data-tooltip="Lemon Dark 🌙"></button>
+                                    <button class="variant-dot variant-dot-silver-light" data-theme="silver-light" data-tooltip="Silver Light ☀️"></button>
+                                    <button class="variant-dot variant-dot-silver-dark" data-theme="silver-dark" data-tooltip="Silver Dark 🌙"></button>
+                                    <button class="variant-dot variant-dot-charcoal-light" data-theme="charcoal-light" data-tooltip="Charcoal Light ☀️"></button>
+                                    <button class="variant-dot variant-dot-charcoal-dark" data-theme="charcoal-dark" data-tooltip="Charcoal Dark 🌙"></button>
+                                    <button class="variant-dot variant-dot-christmas-light" data-theme="christmas-light" data-tooltip="Christmas Light ☀️"></button>
+                                    <button class="variant-dot variant-dot-christmas-dark" data-theme="christmas-dark" data-tooltip="Christmas Dark 🌙"></button>
                                 </div>
-                            </li>
+                            </div>
                         `;
-                        navbarActions.insertAdjacentHTML('beforeend', themeSelectorHtml);
+                        $navbarActions.get(0).insertAdjacentHTML('beforeend', themeSelectorHtml);
                         // Initialize the variant selector after injection
                         setTimeout(() => initVariantSelector(), 100);
                     }
