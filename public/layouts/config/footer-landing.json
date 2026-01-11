@@ -51,5 +51,5 @@
     { "icon": "twitter", "url": "#", "label": "Twitter" },
     { "icon": "linkedin", "url": "#", "label": "LinkedIn" }
   ],
-  "copyright": "© {{year}} Darryl Waterhouse & DCBW-IT. All rights reserved."
+  "copyright": "© {{year}} Darryl Waterhouse & <a href=\"https://dcbw-it.com\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: inherit; text-decoration: underline;\">DCBW-IT</a>. All rights reserved."
 }

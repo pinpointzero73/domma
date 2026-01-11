@@ -36,6 +36,7 @@ const AdminSidebar = {
             position: 'left',
             fixed: true,
             width: '250px',
+            collapsedWidth: '60px',
             top: '60px', // Below the navbar
             header: {
                 title: 'Admin Panel',
@@ -45,8 +46,13 @@ const AdminSidebar = {
             items: this.items,
             variant: 'dark',
             collapsible: true,
+            collapsibleDesktop: true,         // Enable desktop collapse
+            persistCollapsed: true,            // Save collapse state
+            persistCollapseKey: 'admin-sidebar',
             collapseAt: 768,
             activeSection: currentSection,
+            push: true,                      // Push content instead of overlay
+            contentSelector: '.admin-main',   // Push the main content area
             onItemClick: (item, path, event) => {
                 console.log('Navigating to:', item.text, item.url);
                 // Allow default link behavior

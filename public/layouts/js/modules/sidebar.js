@@ -1,8 +1,10 @@
 /**
  * Sidebar Module
- * Auto-generates navigation sidebar from page sections
+ * Auto-generates navigation sidebar from page sections using Domma.elements.sidebar()
  */
 export const SidebarModule = {
+    sidebarInstance: null,
+
     /**
      * Initialize sidebar
      * @param {Object} config - Sidebar configuration
@@ -19,13 +21,42 @@ export const SidebarModule = {
                 return;
             }
 
-            // Render sidebar
-            this.renderSidebar(items, config);
+            // Create container element
+            this.createContainer();
 
-            // Initialise scroll spy if enabled
-            if (config.scrollSpy !== false) {
-                this.initScrollSpy(items);
-            }
+            // Initialize Domma.elements.sidebar() with push mode and scroll-spy
+            this.sidebarInstance = window.Domma.elements.sidebar('#page-sidebar', {
+                position: 'left',
+                fixed: true,
+                push: true,
+                contentSelector: '.container',
+                top: '64px',              // Navbar height offset
+                width: '220px',
+                collapsedWidth: '60px',
+                header: { title: 'Contents' },
+                items: items.map(item => ({
+                    text: item.title,
+                    url: `#${item.id}`,
+                    section: item.id
+                })),
+                variant: 'dark',
+                scrollSpy: true,
+                scrollSpyOffset: '-100px 0px -50% 0px',
+                scrollSpyThreshold: 0.5,
+                collapsible: true,
+                collapsibleDesktop: true,  // Enable desktop collapse
+                persistCollapsed: true,     // Save collapse state
+                persistCollapseKey: 'layout-sidebar',
+                collapseAt: 576,
+                onItemClick: (item, path, event) => {
+                    event.preventDefault();
+                    const target = document.getElementById(item.section);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        history.pushState(null, null, `#${item.section}`);
+                    }
+                }
+            });
 
             console.log('[Domma Layout] Sidebar rendered with', items.length, 'items');
         } catch (error) {
@@ -73,204 +104,26 @@ export const SidebarModule = {
     },
 
     /**
-     * Render sidebar HTML
-     * @param {Array} items - Sidebar items
-     * @param {Object} config - Sidebar configuration
+     * Create container element for sidebar
      */
-    renderSidebar(items, config) {
-        const html = `
-<aside id="page-sidebar" class="page-sidebar">
-    <nav class="sidebar-nav">
-        <div class="sidebar-header">Contents</div>
-        <ul class="sidebar-list">
-            ${items.map((item, index) => `
-                <li class="sidebar-item ${index === 0 ? 'active' : ''}">
-                    <a href="#${item.id}" class="sidebar-link" data-section-id="${item.id}">
-                        ${this.escapeHtml(item.title)}
-                    </a>
-                </li>
-            `).join('')}
-        </ul>
-    </nav>
-</aside>`;
-
-        // Insert sidebar after navbar or at start of body
-        const navbar = document.querySelector('nav');
-        if (navbar && navbar.nextSibling) {
-            navbar.insertAdjacentHTML('afterend', html);
-        } else {
-            document.body.insertAdjacentHTML('afterbegin', html);
+    createContainer() {
+        // Remove existing sidebar if present
+        const existing = document.getElementById('page-sidebar');
+        if (existing) {
+            existing.remove();
         }
 
-        // Add styles
-        this.injectStyles();
+        // Create new container
+        const navbar = document.querySelector('nav');
+        const container = document.createElement('aside');
+        container.id = 'page-sidebar';
 
-        // Add click handlers
-        this.attachHandlers();
-    },
-
-    /**
-     * Inject sidebar CSS
-     */
-    injectStyles() {
-        if (document.getElementById('sidebar-styles')) return;
-
-        const styles = `
-<style id="sidebar-styles">
-.page-sidebar {
-    position: fixed;
-    left: 2px;
-    bottom: 8px;
-    width: 220px;
-    max-height: 400px;
-    overflow-y: auto;
-    background: var(--dm-surface, #fff);
-    border: 1px solid var(--dm-border, #dee2e6);
-    border-radius: var(--dm-radius, 0.375rem);
-    padding: 1rem;
-    z-index: 100;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.sidebar-header {
-    font-weight: 600;
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--dm-gray-600, #6c757d);
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--dm-border, #dee2e6);
-}
-
-.sidebar-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar-item {
-    margin-bottom: 0.25rem;
-}
-
-.sidebar-link {
-    display: block;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
-    color: var(--dm-text, #212529);
-    text-decoration: none;
-    border-radius: var(--dm-radius-sm, 0.25rem);
-    transition: all 0.15s ease;
-}
-
-.sidebar-link:hover {
-    background: var(--dm-hover-bg, rgba(0,0,0,0.04));
-    color: var(--dm-primary, #6495ED);
-}
-
-.sidebar-item.active .sidebar-link {
-    background: var(--dm-primary, #6495ED);
-    color: white;
-    font-weight: 500;
-}
-
-/* Adjust on smaller screens */
-@media (max-width: 992px) {
-    .page-sidebar {
-        left: 0.5rem;
-        bottom: 0.5rem;
-        width: 180px;
-        max-height: 300px;
-    }
-}
-
-@media (max-width: 576px) {
-    .page-sidebar {
-        display: none;
-    }
-}
-
-/* Scrollbar styling */
-.page-sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-
-.page-sidebar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.page-sidebar::-webkit-scrollbar-thumb {
-    background: var(--dm-gray-400, #adb5bd);
-    border-radius: 3px;
-}
-
-.page-sidebar::-webkit-scrollbar-thumb:hover {
-    background: var(--dm-gray-500, #6c757d);
-}
-</style>`;
-
-        document.head.insertAdjacentHTML('beforeend', styles);
-    },
-
-    /**
-     * Attach event handlers
-     */
-    attachHandlers() {
-        // Smooth scroll to sections
-        document.querySelectorAll('.sidebar-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = link.getAttribute('data-section-id');
-                const target = document.getElementById(targetId);
-
-                if (target) {
-                    // Use smooth scroll
-                    target.scrollIntoView({behavior: 'smooth', block: 'start'});
-
-                    // Update active state
-                    document.querySelectorAll('.sidebar-item').forEach(item => {
-                        item.classList.remove('active');
-                    });
-                    link.closest('.sidebar-item').classList.add('active');
-
-                    // Update URL without jumping
-                    history.pushState(null, null, `#${targetId}`);
-                }
-            });
-        });
-    },
-
-    /**
-     * Initialize scroll spy
-     * @param {Array} items - Sidebar items
-     */
-    initScrollSpy(items) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Update active state
-                    const id = entry.target.id;
-                    document.querySelectorAll('.sidebar-item').forEach(item => {
-                        item.classList.remove('active');
-                    });
-
-                    const activeLink = document.querySelector(`.sidebar-link[data-section-id="${id}"]`);
-                    if (activeLink) {
-                        activeLink.closest('.sidebar-item').classList.add('active');
-                    }
-                }
-            });
-        }, {
-            threshold: 0.5,
-            rootMargin: '-100px 0px -50% 0px'
-        });
-
-        // Observe all sections
-        items.forEach(item => {
-            if (item.element) {
-                observer.observe(item.element);
-            }
-        });
+        // Insert after navbar or at start of body
+        if (navbar && navbar.nextSibling) {
+            navbar.insertAdjacentElement('afterend', container);
+        } else {
+            document.body.insertAdjacentElement('afterbegin', container);
+        }
     },
 
     /**

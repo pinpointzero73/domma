@@ -775,7 +775,7 @@
           font-weight: 500;
       }
 
-      /* Folder Sidebar Layout */
+      /* Document list layout - folder sidebar now uses Domma.elements.sidebar() */
       .document-list-layout {
           display: grid;
           grid-template-columns: 280px 1fr;
@@ -783,249 +783,19 @@
           align-items: start;
       }
 
-      .folder-sidebar {
-          background: white;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 1rem;
-          height: fit-content;
-          max-height: calc(100vh - 200px);
-          overflow-y: auto;
-          position: sticky;
-          top: 20px;
-      }
-
-      .folder-list {
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-      }
-
+      /* Minimal folder item hover/active styles for "All Documents" */
       .folder-item {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 0.5rem 1rem;
-          border-radius: 6px;
           cursor: pointer;
-          transition: all 0.2s;
-          position: relative;
+          transition: background 0.15s;
       }
 
       .folder-item:hover {
-          background: #f3f4f6;
+          background: rgba(0, 0, 0, 0.04);
       }
 
       .folder-item.active {
           background: #eff6ff;
           color: var(--dm-primary);
-          font-weight: 500;
-      }
-
-      .folder-item.all-documents {
-          border-bottom: 1px solid #e5e7eb;
-          margin-bottom: 0.5rem;
-          padding-bottom: 0.75rem;
-      }
-
-      .folder-content {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          flex: 1;
-      }
-
-      .folder-icon {
-          color: #6b7280;
-          display: flex;
-          align-items: center;
-      }
-
-      .folder-item.active .folder-icon {
-          color: var(--dm-primary);
-      }
-
-      .folder-name {
-          font-size: 0.875rem;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          flex: 1;
-      }
-
-      .folder-badge {
-          background: var(--dm-primary);
-          color: white;
-          font-size: 0.75rem;
-          font-weight: 600;
-          padding: 0.125rem 0.5rem;
-          border-radius: 12px;
-          min-width: 1.5rem;
-          text-align: center;
-          margin-left: auto;
-      }
-
-      /* Edit/Create Folder Modal */
-      .edit-folder-modal {
-          background: white;
-          padding: 2rem;
-          border-radius: 8px;
-          max-width: 500px;
-          width: 90%;
-      }
-
-      .edit-folder-modal h3 {
-          margin: 0 0 1.5rem 0;
-          font-size: 1.25rem;
-          color: #1f2937;
-      }
-
-      .form-group {
-          margin-bottom: 1rem;
-      }
-
-      .form-group label {
-          display: block;
-          margin-bottom: 0.5rem;
-          font-weight: 500;
-          color: #374151;
-          font-size: 0.875rem;
-      }
-
-      .form-control {
-          width: 100%;
-          padding: 0.5rem;
-          border: 1px solid #d1d5db;
-          border-radius: 4px;
-          font-size: 0.875rem;
-      }
-
-      .form-control:focus {
-          outline: none;
-          border-color: var(--dm-primary);
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-      }
-
-      .modal-actions {
-          display: flex;
-          justify-content: flex-end;
-          gap: 0.75rem;
-          margin-top: 1.5rem;
-      }
-
-      .btn-cancel, .btn-save, .btn-create {
-          padding: 0.5rem 1rem;
-          border: none;
-          border-radius: 4px;
-          font-size: 0.875rem;
-          cursor: pointer;
-          transition: all 0.2s;
-      }
-
-      .btn-cancel {
-          background: #f3f4f6;
-          color: #374151;
-      }
-
-      .btn-cancel:hover {
-          background: #e5e7eb;
-      }
-
-      .btn-save, .btn-create {
-          background: var(--dm-primary);
-          color: white;
-      }
-
-      .btn-save:hover, .btn-create:hover {
-          opacity: 0.9;
-      }
-
-      .folder-toggle {
-          background: transparent;
-          border: none;
-          color: #6b7280;
-          cursor: pointer;
-          padding: 0;
-          width: 20px;
-          height: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: transform 0.2s;
-      }
-
-      .folder-toggle.expanded {
-          transform: rotate(0deg);
-      }
-
-      .folder-toggle:not(.expanded) {
-          transform: rotate(-90deg);
-      }
-
-      .folder-spacer {
-          width: 20px;
-          display: inline-block;
-      }
-
-      .folder-children {
-          margin-left: 0;
-      }
-
-      .folder-item-actions {
-          display: flex;
-          align-items: center;
-          gap: 0.25rem;
-          opacity: 0;
-          transition: opacity 0.2s;
-      }
-
-      .folder-item:hover .folder-item-actions {
-          opacity: 1;
-      }
-
-      .btn-folder-action {
-          background: transparent;
-          border: none;
-          color: #6b7280;
-          cursor: pointer;
-          padding: 0.25rem;
-          border-radius: 4px;
-          transition: all 0.2s;
-          display: flex;
-          align-items: center;
-      }
-
-      .btn-folder-action:hover {
-          background: white;
-          color: var(--dm-primary);
-      }
-
-      .folder-actions-bottom {
-          margin-top: 1rem;
-          padding-top: 1rem;
-          border-top: 1px solid #e5e7eb;
-      }
-
-      .btn-new-folder {
-          width: 100%;
-          padding: 0.5rem 1rem;
-          background: white;
-          color: var(--dm-primary);
-          border: 1px solid var(--dm-primary);
-          border-radius: 6px;
-          cursor: pointer;
-          font-size: 0.875rem;
-          font-weight: 500;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          transition: all 0.2s;
-      }
-
-      .btn-new-folder:hover {
-          background: var(--dm-primary);
-          color: white;
       }
 
       /* Version History */

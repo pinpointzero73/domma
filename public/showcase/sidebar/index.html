@@ -366,6 +366,18 @@
                         <td>Breakpoint (px)</td>
                     </tr>
                     <tr>
+                        <td><code>push</code></td>
+                        <td>Boolean</td>
+                        <td>true</td>
+                        <td>Push content instead of overlay when sidebar opens</td>
+                    </tr>
+                    <tr>
+                        <td><code>contentSelector</code></td>
+                        <td>String</td>
+                        <td>'.main-content'</td>
+                        <td>CSS selector for content element to push (when push: true)</td>
+                    </tr>
+                    <tr>
                         <td><code>activeSection</code></td>
                         <td>String</td>
                         <td>null</td>
@@ -487,7 +499,9 @@
                 { text: 'Settings', url: '#settings', icon: 'settings', section: 'settings' }
             ],
             variant: 'dark',
-            activeSection: 'dashboard'
+            activeSection: 'dashboard',
+            push: true,                      // Push content instead of overlay
+            contentSelector: '.demo-content'  // Element to push
         });
 
         $('#toggle-basic').on('click', () => sidebarBasic.toggle());

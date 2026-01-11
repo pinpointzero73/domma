@@ -5124,6 +5124,17 @@ class Sidebar extends Component {
         persistExpanded: false,     // Persist expanded state to localStorage
         persistKey: null,           // Storage key for persistence
         animationDuration: 200,     // Animation duration in ms
+        push: true,                 // Push content instead of overlay
+        contentSelector: '.main-content', // Element to push when sidebar opens
+        scrollSpy: false,           // Enable scroll-spy active tracking
+        scrollSpyOffset: '-100px 0px -50% 0px', // IntersectionObserver rootMargin
+        scrollSpyThreshold: 0.5,    // Intersection threshold
+        floating: false,            // Bottom-left floating position
+        customContent: null,        // HTML to inject instead of items
+        collapsibleDesktop: false,  // Enable desktop collapse (icon-only mode)
+        collapsedWidth: '60px',     // Width when collapsed
+        persistCollapsed: false,    // Save collapsed state to localStorage
+        persistCollapseKey: null,   // localStorage key for collapsed state
         onItemClick: null,          // Click callback (item, index, event)
         onToggle: null,             // Toggle callback (isOpen)
         onExpand: null,             // Submenu expand callback (item, depth)
@@ -5133,6 +5144,7 @@ class Sidebar extends Component {
     constructor(selector, options = {}) {
         super(selector, options);
         this._isOpen = false;
+        this._isCollapsed = false;
         this._expandedItems = new Set(this.options.expandedSections || []);
         this._init();
     }
@@ -5140,13 +5152,50 @@ class Sidebar extends Component {
     _init() {
         if (!this.element) return;
         this._loadExpandedState();
+        this._loadCollapsedState();
+        this._findContentElement();
         this._render();
         this._bindEvents();
         this._scanIcons();
+        this._handleInitialPushState();
+
+        // Initialize scroll-spy if enabled
+        if (this.options.scrollSpy) {
+            this._initScrollSpy();
+        }
+
+        // Create floating toggle if initially collapsed
+        if (this._isCollapsed && this.options.collapsibleDesktop) {
+            // Wait for next tick to ensure DOM is ready
+            setTimeout(() => {
+                this._createFloatingToggle();
+            }, 0);
+        }
+    }
+
+    _findContentElement() {
+        if (this.options.push && this.options.contentSelector) {
+            this._contentElement = document.querySelector(this.options.contentSelector);
+            if (!this._contentElement) {
+                console.warn(`[Sidebar] Push mode enabled but content element "${this.options.contentSelector}" not found`);
+            }
+        }
+    }
+
+    _handleInitialPushState() {
+        // For non-collapsible or desktop sidebars that are always visible, apply push immediately
+        if (this.options.push && this._contentElement) {
+            const isDesktop = window.innerWidth >= this.options.collapseAt;
+            const alwaysVisible = !this.options.collapsible || isDesktop;
+
+            if (alwaysVisible) {
+                this._applyPush();
+            }
+        }
     }
 
     _render() {
-        const {position, fixed, width, top, header, items, footer, variant, collapsible} = this.options;
+        const {position, fixed, width, top, header, items, footer, variant, collapsible, collapsibleDesktop, collapsedWidth} = this.options;
 
         // Set up sidebar element
         this.element.className = 'sidebar';
@@ -5157,9 +5206,23 @@ class Sidebar extends Component {
             this.element.classList.add('sidebar-fixed');
         }
 
+        // Enable desktop collapse mode
+        if (collapsibleDesktop) {
+            this.element.classList.add('sidebar-desktop-collapsible');
+        }
+
+        // Apply collapsed state if loaded from storage
+        if (this._isCollapsed && collapsibleDesktop) {
+            this.element.classList.add('sidebar-collapsed');
+        }
+
         // Apply custom styles
         if (width) {
+            this.element.style.setProperty('--sidebar-width', width);
             this.element.style.width = width;
+        }
+        if (collapsedWidth) {
+            this.element.style.setProperty('--sidebar-collapsed-width', collapsedWidth);
         }
         if (top && fixed) {
             this.element.style.top = top;
@@ -5182,9 +5245,13 @@ class Sidebar extends Component {
                 html += `<h3 class="sidebar-header-title">${header.title}</h3>`;
             }
             if (collapsible && header.toggle !== false) {
+                // Use appropriate icon based on collapse state and position
+                const collapseIcon = this.options.position === 'right' ? 'chevron-right' : 'chevron-left';
+                const currentIcon = (this._isCollapsed && collapsibleDesktop) ? 'chevron-right' : collapseIcon;
+
                 html += `
                     <button class="sidebar-toggle-btn" aria-label="Toggle sidebar" aria-expanded="${this._isOpen}">
-                        <span data-icon="menu" data-size="20"></span>
+                        <span class="sidebar-toggle-icon" data-icon="${currentIcon}" data-size="20"></span>
                     </button>
                 `;
             }
@@ -5213,6 +5280,7 @@ class Sidebar extends Component {
         this._toggle = this.element.querySelector('.sidebar-toggle-btn');
         this._nav = this.element.querySelector('.sidebar-nav');
         this._overlay = null; // Created on demand
+        this._floatingToggle = null; // Created when collapsed
     }
 
     _renderItems(items, depth = 0, parentPath = '') {
@@ -5278,11 +5346,20 @@ class Sidebar extends Component {
     }
 
     _bindEvents() {
-        // Mobile toggle button
+        // Toggle button - handles both mobile open/close and desktop collapse
         if (this._toggle) {
             this._addEventListener(this._toggle, 'click', (e) => {
                 e.stopPropagation();
-                this.toggle();
+
+                const isDesktop = window.innerWidth >= this.options.collapseAt;
+
+                // Desktop: toggle collapse/expand if collapsibleDesktop enabled
+                if (isDesktop && this.options.collapsibleDesktop) {
+                    this.toggleCollapse();
+                } else {
+                    // Mobile: toggle open/close
+                    this.toggle();
+                }
             });
         }
 
@@ -5457,6 +5534,69 @@ class Sidebar extends Component {
         }
     }
 
+    _loadCollapsedState() {
+        if (!this.options.persistCollapsed || !this.options.persistCollapseKey) return;
+
+        try {
+            const key = `domma:sidebar:collapsed:${this.options.persistCollapseKey}`;
+            const stored = localStorage.getItem(key);
+            if (stored !== null) {
+                this._isCollapsed = stored === 'true';
+            }
+        } catch (e) {
+            console.warn('Failed to load sidebar collapsed state:', e);
+        }
+    }
+
+    _saveCollapsedState() {
+        if (!this.options.persistCollapsed || !this.options.persistCollapseKey) return;
+
+        try {
+            const key = `domma:sidebar:collapsed:${this.options.persistCollapseKey}`;
+            localStorage.setItem(key, this._isCollapsed.toString());
+        } catch (e) {
+            console.warn('Failed to save sidebar collapsed state:', e);
+        }
+    }
+
+    _initScrollSpy() {
+        // Collect all sections that have corresponding sidebar items
+        const sectionsToObserve = [];
+        const links = this.element.querySelectorAll('.sidebar-link[data-section]');
+
+        links.forEach(link => {
+            const sectionId = link.dataset.section;
+            const section = document.getElementById(sectionId);
+            if (section) {
+                sectionsToObserve.push({ element: section, id: sectionId, link });
+            }
+        });
+
+        if (sectionsToObserve.length === 0) return;
+
+        // Create IntersectionObserver
+        this._scrollSpyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Find the link for this section
+                    const sectionData = sectionsToObserve.find(s => s.element === entry.target);
+                    if (sectionData) {
+                        // Update active state
+                        this.setActive(sectionData.id);
+                    }
+                }
+            });
+        }, {
+            threshold: this.options.scrollSpyThreshold,
+            rootMargin: this.options.scrollSpyOffset
+        });
+
+        // Observe all sections
+        sectionsToObserve.forEach(({ element }) => {
+            this._scrollSpyObserver.observe(element);
+        });
+    }
+
     _createOverlay() {
         if (this._overlay) return;
 
@@ -5476,6 +5616,23 @@ class Sidebar extends Component {
         }
     }
 
+    _applyPush() {
+        if (!this.options.push || !this._contentElement) return;
+
+        const pushClass = this.options.position === 'right'
+            ? 'sidebar-push-active-right'
+            : 'sidebar-push-active';
+
+        this._contentElement.classList.add(pushClass);
+        this._contentElement.style.setProperty('--sidebar-push-width', this.options.width);
+    }
+
+    _removePush() {
+        if (!this.options.push || !this._contentElement) return;
+
+        this._contentElement.classList.remove('sidebar-push-active', 'sidebar-push-active-right');
+    }
+
     // Public API
 
     open() {
@@ -5492,6 +5649,9 @@ class Sidebar extends Component {
         if (window.innerWidth < this.options.collapseAt) {
             this._createOverlay();
         }
+
+        // Apply push to content element
+        this._applyPush();
 
         if (this.options.onToggle) {
             this.options.onToggle(true);
@@ -5512,6 +5672,9 @@ class Sidebar extends Component {
 
         this._removeOverlay();
 
+        // Remove push from content element
+        this._removePush();
+
         if (this.options.onToggle) {
             this.options.onToggle(false);
         }
@@ -5525,6 +5688,117 @@ class Sidebar extends Component {
 
     isOpen() {
         return this._isOpen;
+    }
+
+    collapse() {
+        if (!this.options.collapsibleDesktop || this._isCollapsed) return this;
+
+        this._isCollapsed = true;
+        this.element.classList.add('sidebar-collapsed');
+        this._saveCollapsedState();
+
+        // Create floating toggle button
+        this._createFloatingToggle();
+
+        // Remove content push
+        this._removePush();
+
+        if (this.options.onCollapse) {
+            this.options.onCollapse();
+        }
+
+        return this;
+    }
+
+    expand() {
+        if (!this.options.collapsibleDesktop || !this._isCollapsed) return this;
+
+        this._isCollapsed = false;
+        this.element.classList.remove('sidebar-collapsed');
+        this._saveCollapsedState();
+
+        // Remove floating toggle button
+        this._removeFloatingToggle();
+
+        // Re-apply content push
+        this._applyPush();
+
+        // Update toggle icon back to chevron-left (collapse icon)
+        const collapseIcon = this.options.position === 'right' ? 'chevron-right' : 'chevron-left';
+        this._updateToggleIcon(collapseIcon);
+
+        if (this.options.onExpand) {
+            this.options.onExpand();
+        }
+
+        return this;
+    }
+
+    _createFloatingToggle() {
+        // Don't create if already exists
+        if (this._floatingToggle) return;
+
+        // Create floating button
+        this._floatingToggle = document.createElement('button');
+        this._floatingToggle.className = 'sidebar-floating-toggle show';
+
+        // Position based on sidebar position
+        if (this.options.position === 'right') {
+            this._floatingToggle.classList.add('right');
+        }
+
+        // Set icon based on position
+        const icon = this.options.position === 'right' ? 'chevron-left' : 'chevron-right';
+        this._floatingToggle.innerHTML = `<span data-icon="${icon}" data-size="20"></span>`;
+
+        // Add click handler to expand sidebar
+        this._floatingToggle.addEventListener('click', () => {
+            this.expand();
+        });
+
+        // Append to body
+        document.body.appendChild(this._floatingToggle);
+
+        // Scan icons
+        if (typeof window.Domma !== 'undefined' && window.Domma.icons && window.Domma.icons.scan) {
+            window.Domma.icons.scan(this._floatingToggle);
+        }
+    }
+
+    _removeFloatingToggle() {
+        if (this._floatingToggle) {
+            this._floatingToggle.remove();
+            this._floatingToggle = null;
+        }
+    }
+
+    _updateToggleIcon(iconName) {
+        if (!this._toggle) return;
+
+        const iconElement = this._toggle.querySelector('.sidebar-toggle-icon');
+        if (iconElement) {
+            iconElement.setAttribute('data-icon', iconName);
+            // Re-scan icons to update the SVG
+            if (typeof window.Domma !== 'undefined' && window.Domma.icons && window.Domma.icons.scan) {
+                window.Domma.icons.scan(this._toggle);
+            }
+        }
+    }
+
+    destroy() {
+        // Clean up floating toggle
+        this._removeFloatingToggle();
+
+        // Call parent destroy
+        super.destroy();
+    }
+
+    toggleCollapse() {
+        return this._isCollapsed ? this.expand() : this.collapse();
+    }
+
+    isCollapsed() {
+        return this._isCollapsed;
     }
 
     setActive(section) {
@@ -5600,6 +5874,12 @@ class Sidebar extends Component {
     }
 
     destroy() {
+        // Disconnect scroll-spy observer
+        if (this._scrollSpyObserver) {
+            this._scrollSpyObserver.disconnect();
+            this._scrollSpyObserver = null;
+        }
+
         this._removeOverlay();
         super.destroy();
     }
@@ -5726,6 +6006,9 @@ class Footer extends Component {
             }
             if (brand.text) {
                 html += `<p class="footer-brand-text">${brand.text}</p>`;
+            }
+            if (brand.description) {
+                html += `<p class="footer-brand-description">${brand.description}</p>`;
             }
             html += '</div>';
         }

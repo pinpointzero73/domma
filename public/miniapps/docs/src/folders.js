@@ -54,34 +54,37 @@ export class FolderManager {
   }
 
   /**
-   * Initialise TreeView component
+   * Initialise TreeView component wrapped in Sidebar
    * @private
    */
   _initTreeView() {
-    const sidebar = document.getElementById('folderSidebar');
-    if (!sidebar) return;
+    const sidebarEl = document.getElementById('folderSidebar');
+    if (!sidebarEl) return;
 
-    // Create container for tree
-    sidebar.innerHTML = `
-      <div class="folder-list">
-        <div class="folder-item all-documents ${this.currentFolderId === null ? 'active' : ''}"
-             data-folder-id="null">
-          <div class="folder-content">
-            <span class="folder-icon" data-icon="folder-open" data-icon-size="18"></span>
-            <span class="folder-name">All Documents</span>
-          </div>
+    // Create sidebar with header and footer, custom content area
+    this.sidebar = window.Domma.elements.sidebar('#folderSidebar', {
+      position: 'left',
+      fixed: false,              // Uses grid layout, not fixed
+      width: '100%',
+      header: { title: 'Folders' },
+      variant: 'light',
+      collapsible: true,
+      collapseAt: 768,
+      customContent: `
+        <div class="folder-item all-documents ${this.currentFolderId === null ? 'active' : ''}" data-folder-id="null" style="display: flex; align-items: center; padding: 0.5rem 0.75rem; cursor: pointer; border-radius: 0.25rem; transition: background 0.15s;">
+          <span data-icon="folder-open" data-icon-size="18" style="margin-right: 0.5rem;"></span>
+          <span>All Documents</span>
         </div>
         <div id="folderTree"></div>
-        <div class="folder-actions-bottom">
-          <button class="btn-new-folder" id="btnNewFolder">
-            <span data-icon="plus" data-icon-size="16"></span>
-            New Folder
-          </button>
-        </div>
-      </div>
-    `;
+      `,
+      footer: {
+        html: `<button class="btn btn-outline-primary w-full" id="btnNewFolder" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+          <span data-icon="plus" data-icon-size="16"></span> New Folder
+        </button>`
+      }
+    });
 
-    // Initialize TreeView component
+    // Initialize TreeView within sidebar content area
     this.treeView = window.Domma.elements.treeView('#folderTree', {
       data: this.folders,
       idKey: 'id',
@@ -149,10 +152,15 @@ export class FolderManager {
     });
 
     // Setup listener for "All Documents" option
-    const allDocsItem = sidebar.querySelector('.all-documents');
+    const allDocsItem = sidebarEl.querySelector('.all-documents');
     if (allDocsItem) {
       allDocsItem.addEventListener('click', () => {
         this.selectFolder(null);
+        // Update visual active state
+        sidebarEl.querySelectorAll('.folder-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        allDocsItem.classList.add('active');
       });
     }
 

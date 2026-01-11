@@ -3242,8 +3242,10 @@ code {
     border-right: 1px solid var(--dm-border, #dee2e6);
     overflow-y: auto;
     overflow-x: hidden;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, width 0.3s ease;
     z-index: 100;
+    --sidebar-width: 250px;
+    --sidebar-collapsed-width: 60px;
 }
 
 /* Fixed positioning - Mobile: hidden off-screen by default */
@@ -3582,13 +3584,101 @@ code {
         transform: translateX(0);
     }
 
-    /* Desktop: Hide toggle button */
+    /* Desktop: Hide toggle button (unless desktop collapsible) */
     .sidebar-toggle-btn {
         display: none;
     }
 
+    /* Show toggle button on desktop when collapsibleDesktop enabled */
+    .sidebar.sidebar-desktop-collapsible .sidebar-toggle-btn {
+        display: flex;
+    }
+
     /* Desktop: Hide overlay */
     .sidebar-overlay {
+        display: none;
+    }
+
+    /* Desktop collapsed state - Fully hidden */
+    .sidebar.sidebar-collapsed {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.sidebar-collapsed.sidebar-right {
+        transform: translateX(100%);
+    }
+
+    /* Floating toggle button - appears when sidebar is collapsed */
+    .sidebar-floating-toggle {
+        position: fixed;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        z-index: 1001;
+        display: none; /* Hidden by default */
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: var(--dm-primary, #007bff);
+        color: var(--dm-white, #fff);
+        border: none;
+        border-radius: 0 var(--dm-radius-md, 0.375rem) var(--dm-radius-md, 0.375rem) 0;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: var(--dm-shadow-lg, 0 4px 12px rgba(0,0,0,0.15));
+    }
+
+    .sidebar-floating-toggle:hover {
+        background: var(--dm-primary-dark, #0056b3);
+        width: 48px;
+        box-shadow: var(--dm-shadow-xl, 0 8px 20px rgba(0,0,0,0.2));
+    }
+
+    .sidebar-floating-toggle.show {
+        display: flex;
+    }
+
+    .sidebar-floating-toggle.right {
+        left: auto;
+        right: 0;
+        border-radius: var(--dm-radius-md, 0.375rem) 0 0 var(--dm-radius-md, 0.375rem);
+    }
+}
+
+/* ============================================
+   Floating Sidebar Variant
+   (bottom-left positioned sidebar)
+   ============================================ */
+.sidebar-floating {
+    position: fixed;
+    left: 2px;
+    bottom: 8px;
+    top: auto !important;
+    height: auto;
+    max-height: 400px;
+    width: 220px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+}
+
+.sidebar-floating .sidebar-header {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+@media (max-width: 992px) {
+    .sidebar-floating {
+        left: 0.5rem;
+        bottom: 0.5rem;
+        width: 180px;
+        max-height: 300px;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar-floating {
         display: none;
     }
 }
@@ -3782,6 +3872,33 @@ code {
     color: rgba(255, 255, 255, 0.8);
 }
 
+/* ============================================
+   SIDEBAR - PUSH MODE
+   ============================================ */
+
+/* Content wrapper when sidebar pushes it (left position) */
+.sidebar-push-active {
+    margin-left: var(--sidebar-push-width, 250px);
+    transition: margin-left var(--dm-transition-normal, 0.3s) ease;
+}
+
+/* Content wrapper when sidebar pushes it (right position) */
+.sidebar-push-active-right {
+    margin-right: var(--sidebar-push-width, 250px);
+    margin-left: 0;
+    transition: margin-right var(--dm-transition-normal, 0.3s) ease;
+}
+
+/* Mobile: Allow custom push width for mobile */
+@media (max-width: 768px) {
+    .sidebar-push-active {
+        margin-left: var(--sidebar-push-width-mobile, var(--sidebar-push-width, 250px));
+    }
+
+    .sidebar-push-active-right {
+        margin-right: var(--sidebar-push-width-mobile, var(--sidebar-push-width, 250px));
+    }
+}
 
 
 /* ============================================
@@ -3940,6 +4057,15 @@ code {
     line-height: 1.6;
 }
 
+.footer-column-brand .footer-brand-description {
+    display: block;
+    margin: var(--dm-space-2, 0.5rem) 0 0;
+    color: var(--dm-text-muted, #6c757d);
+    font-size: var(--dm-font-size-sm, 0.875rem);
+    line-height: 1.5;
+    opacity: 0.8;
+}
+
 .footer-column-title {
     margin: 0 0 var(--dm-space-3, 0.75rem);
     font-size: var(--dm-font-size-base, 1rem);
@@ -4025,6 +4151,10 @@ code {
     color: var(--dm-white, #fff);
 }
 
+.footer-dark .footer-brand-description {
+    color: var(--dm-gray-300, #dee2e6);
+}
+
 .footer-dark .footer-link {
     color: var(--dm-gray-400, #adb5bd);
 }
@@ -4102,7 +4232,7 @@ code {
 
     /* Desktop: Multi-column grid */
     .footer-columns .footer-columns-content {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: var(--dm-space-6, 1.5rem);
     }
 
