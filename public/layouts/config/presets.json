@@ -1,13 +1,13 @@
 {
   "splash": {
     "navbar": {
-      "type": "flat",
+      "type": "dropdowns",
       "brand": {
         "text": "Domma",
         "url": "index.html",
         "showVersion": true
       },
-      "items": "nav-public",
+      "items": "nav-showcase",
       "variant": null,
       "actions": [
         {

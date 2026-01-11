@@ -607,16 +607,7 @@ import {ConsentModule} from './modules/consent.js';
                 const levelsUp = pathParts.length;
                 const adminPath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'admin/index.html' : 'admin/index.html';
 
-                // Add Admin link at the start if user is admin
-                if (user && Domma.auth?.isAdmin()) {
-                    navItems.push({
-                        text: 'Admin',
-                        url: adminPath,
-                        icon: 'settings'
-                    });
-                }
-
-                // Add Download after Admin if configured
+                // Add Download if configured
                 const downloadAction = config.actions?.find(a => a.text.toLowerCase() === 'download');
                 if (downloadAction) {
                     navItems.push({
@@ -694,9 +685,26 @@ import {ConsentModule} from './modules/consent.js';
                         guest: 'badge-secondary'
                     }[userRole] || 'badge-secondary';
 
-                    const userInfoEl = document.createElement('span');
+                    // Create clickable link for admin users, span for others
+                    const isAdmin = userRole === 'admin';
+                    const userInfoEl = document.createElement(isAdmin ? 'a' : 'span');
                     userInfoEl.className = 'navbar-user-info';
-                    userInfoEl.style.cssText = 'margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem;';
+
+                    // Set href for admin users
+                    if (isAdmin) {
+                        userInfoEl.href = adminPath;
+                        userInfoEl.style.cssText = 'margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit; cursor: pointer; transition: background 0.2s ease;';
+
+                        // Add hover effect
+                        userInfoEl.addEventListener('mouseenter', () => {
+                            userInfoEl.style.background = 'rgba(255,255,255,0.2)';
+                        });
+                        userInfoEl.addEventListener('mouseleave', () => {
+                            userInfoEl.style.background = 'rgba(255,255,255,0.1)';
+                        });
+                    } else {
+                        userInfoEl.style.cssText = 'margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem;';
+                    }
 
                     const nameSpan = document.createElement('span');
                     nameSpan.textContent = `Hello, ${userName}`;
@@ -709,6 +717,42 @@ import {ConsentModule} from './modules/consent.js';
                     userInfoEl.appendChild(nameSpan);
                     userInfoEl.appendChild(badge);
                     $brandContainer.get(0).appendChild(userInfoEl);
+                }
+
+                // Add theme selector inline in navbar if configured
+                if (presetConfig.theme && presetConfig.theme.variantSelector) {
+                    const navbarActions = document.querySelector('#main-navbar .navbar-nav');
+                    if (navbarActions) {
+                        // Create inline theme selector
+                        const themeSelectorHtml = `
+                            <li class="navbar-theme-selector">
+                                <div class="variant-selector variant-selector-inline" id="variant-selector">
+                                    <button class="variant-trigger" data-tooltip="Theme variants (16)"></button>
+                                    <div class="variant-options">
+                                        <button class="variant-dot variant-dot-ocean-light" data-theme="ocean-light" data-tooltip="Ocean Light ☀️"></button>
+                                        <button class="variant-dot variant-dot-ocean-dark" data-theme="ocean-dark" data-tooltip="Ocean Dark 🌙"></button>
+                                        <button class="variant-dot variant-dot-forest-light" data-theme="forest-light" data-tooltip="Forest Light ☀️"></button>
+                                        <button class="variant-dot variant-dot-forest-dark" data-theme="forest-dark" data-tooltip="Forest Dark 🌙"></button>
+                                        <button class="variant-dot variant-dot-sunset-light" data-theme="sunset-light" data-tooltip="Sunset Light ☀️"></button>
+                                        <button class="variant-dot variant-dot-sunset-dark" data-theme="sunset-dark" data-tooltip="Sunset Dark 🌙"></button>
+                                        <button class="variant-dot variant-dot-royal-light" data-theme="royal-light" data-tooltip="Royal Light ☀️"></button>
+                                        <button class="variant-dot variant-dot-royal-dark" data-theme="royal-dark" data-tooltip="Royal Dark 🌙"></button>
+                                        <button class="variant-dot variant-dot-lemon-light" data-theme="lemon-light" data-tooltip="Lemon Light ☀️"></button>
+                                        <button class="variant-dot variant-dot-lemon-dark" data-theme="lemon-dark" data-tooltip="Lemon Dark 🌙"></button>
+                                        <button class="variant-dot variant-dot-silver-light" data-theme="silver-light" data-tooltip="Silver Light ☀️"></button>
+                                        <button class="variant-dot variant-dot-silver-dark" data-theme="silver-dark" data-tooltip="Silver Dark 🌙"></button>
+                                        <button class="variant-dot variant-dot-charcoal-light" data-theme="charcoal-light" data-tooltip="Charcoal Light ☀️"></button>
+                                        <button class="variant-dot variant-dot-charcoal-dark" data-theme="charcoal-dark" data-tooltip="Charcoal Dark 🌙"></button>
+                                        <button class="variant-dot variant-dot-christmas-light" data-theme="christmas-light" data-tooltip="Christmas Light ☀️"></button>
+                                        <button class="variant-dot variant-dot-christmas-dark" data-theme="christmas-dark" data-tooltip="Christmas Dark 🌙"></button>
+                                    </div>
+                                </div>
+                            </li>
+                        `;
+                        navbarActions.insertAdjacentHTML('beforeend', themeSelectorHtml);
+                        // Initialize the variant selector after injection
+                        setTimeout(() => initVariantSelector(), 100);
+                    }
                 }
 
                 // Set up auth state listeners to reload page on auth changes
@@ -903,18 +947,14 @@ import {ConsentModule} from './modules/consent.js';
 
     /**
      * Render theme controls
+     * Note: Theme selector is now injected inline in navbar during navbar rendering
+     * This function is kept for backwards compatibility but does nothing
      */
     async function renderThemeControls(config) {
         try {
-            // Load and inject variant selector if enabled
-            if (config.variantSelector) {
-                const variantTemplate = await TemplateLoader.load('variant-selector');
-                const variantHtml = variantTemplate({});
-                document.body.insertAdjacentHTML('afterbegin', variantHtml);
-                initVariantSelector();
-            }
-
-            console.log('[Domma Layout] Theme controls rendered');
+            // Theme selector is now rendered inline in navbar
+            // Skip rendering here to avoid duplicates
+            console.log('[Domma Layout] Theme controls skipped (rendered inline in navbar)');
         } catch (error) {
             console.error('[Domma Layout] Theme controls render failed:', error);
         }
