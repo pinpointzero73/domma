@@ -24,9 +24,33 @@
           align-items: center;
           justify-content: center;
           text-align: center;
-          padding: 3rem 2rem 2rem 2rem;
+          padding: 3rem 1rem 2rem 1rem; /* Reduced horizontal padding on mobile */
           background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
           color: var(--dm-white);
+          overflow-x: hidden; /* Prevent horizontal scroll */
+      }
+
+      .splash-hero-grid {
+          display: grid;
+          grid-template-columns: 1fr; /* Single column on mobile */
+          gap: 2rem; /* Smaller gap on mobile */
+          max-width: 1200px;
+          width: 100%; /* Ensure full width */
+          margin: 0 auto 2rem;
+          padding: 0 1rem; /* Add horizontal padding */
+          box-sizing: border-box;
+      }
+
+      @media (min-width: 769px) {
+          .splash-hero {
+              padding: 3rem 2rem 2rem 2rem; /* Desktop: more padding */
+          }
+
+          .splash-hero-grid {
+              grid-template-columns: auto 1fr; /* Two columns on desktop */
+              gap: 3rem; /* Larger gap on desktop */
+              align-items: center;
+          }
       }
 
       .hero-logo {
@@ -365,8 +389,7 @@
 <nav id="main-navbar"></nav>
 
 <section class="splash-hero">
-  <div
-      style="display: grid; grid-template-columns: auto 1fr; gap: 3rem; max-width: 1200px; margin: 0 auto 2rem; align-items: center;">
+  <div class="splash-hero-grid">
     <!-- Left column: Logo, heading, and backronym -->
     <div>
       <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;">
