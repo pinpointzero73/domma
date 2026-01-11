@@ -97,9 +97,9 @@ const backToTop = Domma.elements.backToTop('#back-to-top', {
         <h3 class="category-title">Simple Back to Top Button</h3>
         <div class="demo-area mb-4">
             <p class="text-center text-muted mb-3">Scroll down this demo area to see the button appear</p>
-          <div class="scrollable-demo-area-400"
-                 id="quick-demo-container">
-            <div class="scroll-content-1200">
+          <div class="demo-scroll-container"
+                 id="quick-demo-container" style="height: 400px; overflow-y: auto; border: 1px solid var(--dm-color-border, #e0e0e0); border-radius: 0.5rem; padding: 1.5rem; position: relative;">
+            <div style="min-height: 1200px;">
                     <p><strong>Scroll down...</strong></p>
               <p class="mt-300">Keep scrolling...</p>
               <p class="mt-300">Almost there...</p>
@@ -131,9 +131,9 @@ Domma.elements.backToTop('#back-to-top', {
         <p class="mb-4">Build a back to top button with custom styling and callbacks.</p>
 
         <div class="demo-area">
-          <div class="scrollable-demo-area-400"
-                 id="tutorial-container">
-                <div style="height: 1500px;">
+          <div class="demo-scroll-container"
+                 id="tutorial-container" style="height: 400px; overflow-y: auto; border: 1px solid var(--dm-color-border, #e0e0e0); border-radius: 0.5rem; position: relative;">
+                <div style="min-height: 1500px; padding: 1.5rem;">
                     <h3 class="text-2xl font-semibold mb-4">Implementation Guide</h3>
                     <p class="mb-6 text-gray-600">Scroll down to see the custom back to top button with callbacks tracking visibility state...</p>
                   <div class="mt-200">
@@ -196,9 +196,9 @@ const backToTop = Domma.elements.backToTop('#back-to-top', {
                 <button id="show-bottom-right" class="btn btn-outline btn-sm">Bottom Right</button>
                 <button id="show-bottom-left" class="btn btn-outline btn-sm">Bottom Left</button>
             </div>
-          <div class="scrollable-demo-area-300"
-                 id="position-demo">
-            <div class="scroll-content-800">
+          <div class="demo-scroll-container"
+                 id="position-demo" style="height: 300px; overflow-y: auto; border: 1px solid var(--dm-color-border, #e0e0e0); border-radius: 0.5rem; padding: 1.5rem; position: relative;">
+            <div style="min-height: 800px;">
                     <p>Scroll to see buttons at different positions...</p>
               <p class="mt-200">Bottom right button appears first</p>
               <p class="mt-300">You should see the buttons now</p>
@@ -210,9 +210,9 @@ const backToTop = Domma.elements.backToTop('#back-to-top', {
 
         <h3 class="category-title">Custom Duration</h3>
         <div class="demo-area mb-4">
-          <div class="scrollable-demo-area-300"
-                 id="duration-demo">
-            <div class="scroll-content-1000">
+          <div class="demo-scroll-container"
+                 id="duration-demo" style="height: 300px; overflow-y: auto; border: 1px solid var(--dm-color-border, #e0e0e0); border-radius: 0.5rem; padding: 1.5rem; position: relative;">
+            <div style="min-height: 1000px;">
                     <p>Try different scroll speeds...</p>
                     <div class="flex gap-2 mt-4">
                         <button class="btn btn-sm btn-outline" onclick="durationBtn.scroll(200)">Fast (200ms)</button>
@@ -232,9 +232,9 @@ const backToTop = Domma.elements.backToTop('#back-to-top', {
                 <button id="prog-toggle" class="btn btn-outline btn-sm">Toggle</button>
                 <button id="prog-scroll" class="btn btn-outline btn-sm">Scroll to Top</button>
             </div>
-          <div class="scrollable-demo-area-300"
-                 id="programmatic-demo">
-            <div class="scroll-content-800">
+          <div class="demo-scroll-container"
+                 id="programmatic-demo" style="height: 300px; overflow-y: auto; border: 1px solid var(--dm-color-border, #e0e0e0); border-radius: 0.5rem; padding: 1.5rem; position: relative;">
+            <div style="min-height: 800px;">
                     <p>Use buttons above to control the back to top button</p>
               <p class="mt-600">Scroll position tracked</p>
                 </div>
