@@ -355,6 +355,14 @@
       "text": "Examples",
       "items": [
         {
+          "text": "Overview",
+          "url": "examples/index.html",
+          "section": "examples"
+        },
+        {
+          "divider": true
+        },
+        {
           "text": "Todo List",
           "url": "examples/todo/index.html",
           "section": "todo"
@@ -389,6 +397,14 @@
     {
       "text": "MiniApps",
       "items": [
+        {
+          "text": "Overview",
+          "url": "miniapps/index.html",
+          "section": "miniapps"
+        },
+        {
+          "divider": true
+        },
         {
           "text": "My Garage",
           "url": "miniapps/garage/index.html",
