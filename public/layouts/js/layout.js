@@ -80,7 +80,7 @@ import {ConsentModule} from './modules/consent.js';
 
         // Render navbar
         if (presetConfig.navbar) {
-            await renderNavbar(presetConfig.navbar, data);
+            await renderNavbar(presetConfig.navbar, data, presetConfig);
         }
 
         // Render theme controls
@@ -123,8 +123,13 @@ import {ConsentModule} from './modules/consent.js';
 
         console.log('[Domma Layout] Initialization complete');
 
+        // Reveal cloaked content
+        document.body.classList.add('dm-ready');
+
     } catch (error) {
         console.error('[Domma Layout] Initialization error:', error);
+        // Reveal content even on error
+        document.body.classList.add('dm-ready');
     }
 
     /**
@@ -350,6 +355,16 @@ import {ConsentModule} from './modules/consent.js';
           opacity: 1;
         }
 
+        /* Variant selector inline override */
+        .variant-selector.variant-selector-inline {
+          position: static !important;
+          top: auto !important;
+          right: auto !important;
+          transform: none !important;
+          display: flex;
+          align-items: center;
+        }
+
         /* Version displays */
         .navbar-brand-text {
           display: inline-flex;
@@ -555,9 +570,99 @@ import {ConsentModule} from './modules/consent.js';
     }
 
     /**
+     * Render theme selector action
+     */
+    function renderThemeSelector(action, container) {
+        const position = action.position || 'inline';
+        const selectorClass = position === 'inline' ? 'variant-selector variant-selector-inline' : 'variant-selector';
+
+        const themeSelectorHtml = `
+            <div class="${selectorClass}" id="variant-selector">
+                <button class="variant-trigger" data-tooltip="Theme variants (16)"></button>
+                <div class="variant-options">
+                    <button class="variant-dot variant-dot-ocean-light" data-theme="ocean-light" data-tooltip="Ocean Light ☀️"></button>
+                    <button class="variant-dot variant-dot-ocean-dark" data-theme="ocean-dark" data-tooltip="Ocean Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-forest-light" data-theme="forest-light" data-tooltip="Forest Light ☀️"></button>
+                    <button class="variant-dot variant-dot-forest-dark" data-theme="forest-dark" data-tooltip="Forest Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-sunset-light" data-theme="sunset-light" data-tooltip="Sunset Light ☀️"></button>
+                    <button class="variant-dot variant-dot-sunset-dark" data-theme="sunset-dark" data-tooltip="Sunset Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-royal-light" data-theme="royal-light" data-tooltip="Royal Light ☀️"></button>
+                    <button class="variant-dot variant-dot-royal-dark" data-theme="royal-dark" data-tooltip="Royal Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-lemon-light" data-theme="lemon-light" data-tooltip="Lemon Light ☀️"></button>
+                    <button class="variant-dot variant-dot-lemon-dark" data-theme="lemon-dark" data-tooltip="Lemon Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-silver-light" data-theme="silver-light" data-tooltip="Silver Light ☀️"></button>
+                    <button class="variant-dot variant-dot-silver-dark" data-theme="silver-dark" data-tooltip="Silver Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-charcoal-light" data-theme="charcoal-light" data-tooltip="Charcoal Light ☀️"></button>
+                    <button class="variant-dot variant-dot-charcoal-dark" data-theme="charcoal-dark" data-tooltip="Charcoal Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-christmas-light" data-theme="christmas-light" data-tooltip="Christmas Light ☀️"></button>
+                    <button class="variant-dot variant-dot-christmas-dark" data-theme="christmas-dark" data-tooltip="Christmas Dark 🌙"></button>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', themeSelectorHtml);
+        setTimeout(() => initVariantSelector(), 100);
+    }
+
+    /**
+     * Render auth actions (Login/Register/Logout)
+     */
+    async function renderAuthActions(action, container, data) {
+        const { levelsUp, user } = data;
+        const loginPath = action.loginUrl || (levelsUp > 0 ? '../'.repeat(levelsUp) + 'login/index.html' : 'login/index.html');
+
+        // Add Login/Logout link
+        const loginLogoutHtml = user
+            ? `<a href="#" class="navbar-action-link" id="navbar-logout">Logout</a>`
+            : `<a href="${loginPath}" class="navbar-action-link">Login/Register</a>`;
+        container.insertAdjacentHTML('beforeend', loginLogoutHtml);
+
+        // Bind logout handler
+        if (user) {
+            const $logoutLink = $('#navbar-logout');
+            if ($logoutLink.length) {
+                $logoutLink.on('click', (e) => {
+                    e.preventDefault();
+                    Domma.auth.logout();
+                    const homePath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'index.html' : 'index.html';
+                    window.location.href = homePath;
+                });
+            }
+        }
+    }
+
+    /**
+     * Render custom button action
+     */
+    function renderCustomButton(action, container) {
+        const buttonHtml = `<a href="${action.url || '#'}" class="navbar-action-link ${action.class || ''}">${action.text || 'Button'}</a>`;
+        container.insertAdjacentHTML('beforeend', buttonHtml);
+    }
+
+    /**
+     * Render all navbar actions from config
+     */
+    async function renderNavbarActions(actionsConfig, container, data) {
+        if (!actionsConfig || actionsConfig.length === 0) return;
+
+        for (const action of actionsConfig) {
+            switch (action.type) {
+                case 'theme-selector':
+                    renderThemeSelector(action, container);
+                    break;
+                case 'auth':
+                    await renderAuthActions(action, container, data);
+                    break;
+                case 'button':
+                    renderCustomButton(action, container);
+                    break;
+            }
+        }
+    }
+
+    /**
      * Render navbar
      */
-    async function renderNavbar(config, data) {
+    async function renderNavbar(config, data, presetConfig) {
         try {
             // Check if navbar already exists in HTML
             const navbarExists = document.getElementById('main-navbar');
@@ -607,65 +712,20 @@ import {ConsentModule} from './modules/consent.js';
                 const levelsUp = pathParts.length;
                 const adminPath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'admin/index.html' : 'admin/index.html';
 
-                // Add Admin link at the start if user is admin
-                if (user && Domma.auth?.isAdmin()) {
-                    navItems.push({
-                        text: 'Admin',
-                        url: adminPath,
-                        icon: 'settings'
-                    });
-                }
-
-                // Add Download after Admin if configured
-                const downloadAction = config.actions?.find(a => a.text.toLowerCase() === 'download');
-                if (downloadAction) {
-                    navItems.push({
-                        text: 'Download',
-                        url: downloadAction.url,
-                        icon: 'download'
-                    });
-                }
-
-                // Add existing nav items from config
+                // Add existing nav items from config (only navigation items, not Login/Logout)
                 if (config.items && config.items.length > 0) {
                     navItems.push(...config.items);
                 }
 
-                // Add Login/Logout at the end
+                // Prepare actions for the right side
                 const loginPath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'login/index.html' : 'login/index.html';
-
-                if (user) {
-                    navItems.push({
-                        text: 'Logout',
-                        url: '#',
-                        icon: 'log-out'
-                    });
-                } else {
-                    navItems.push({
-                        text: 'Login/Register',
-                        url: loginPath,
-                        icon: 'user'
-                    });
-                }
 
                 Domma.elements.navbar('#main-navbar', {
                     brand: {text: config.brand?.text || 'Domma', url: config.brand?.url || '/'},
                     items: navItems,
                     variant: config.variant || 'dark',
                     position: 'static',
-                    collapseAt: 992,
-                    onItemClick: (item, index, e) => {
-                        // Handle Logout click
-                        if (item.text === 'Logout') {
-                            Domma.auth.logout();
-                            const homePath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'index.html' : 'index.html';
-                            window.location.href = homePath;
-                        } else if (item.url && item.url !== '#') {
-                            // For all other items with URLs (Login, Download, etc), navigate manually
-                            // because navbar component prevents default when onItemClick is defined
-                            window.location.href = item.url;
-                        }
-                    }
+                    collapseAt: 992
                 });
 
                 // Customise brand section with logo + version
@@ -694,9 +754,26 @@ import {ConsentModule} from './modules/consent.js';
                         guest: 'badge-secondary'
                     }[userRole] || 'badge-secondary';
 
-                    const userInfoEl = document.createElement('span');
+                    // Create clickable link for admin users, span for others
+                    const isAdmin = userRole === 'admin';
+                    const userInfoEl = document.createElement(isAdmin ? 'a' : 'span');
                     userInfoEl.className = 'navbar-user-info';
-                    userInfoEl.style.cssText = 'margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem;';
+
+                    // Set href for admin users
+                    if (isAdmin) {
+                        userInfoEl.href = adminPath;
+                        userInfoEl.style.cssText = 'margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit; cursor: pointer; transition: background 0.2s ease;';
+
+                        // Add hover effect
+                        userInfoEl.addEventListener('mouseenter', () => {
+                            userInfoEl.style.background = 'rgba(255,255,255,0.2)';
+                        });
+                        userInfoEl.addEventListener('mouseleave', () => {
+                            userInfoEl.style.background = 'rgba(255,255,255,0.1)';
+                        });
+                    } else {
+                        userInfoEl.style.cssText = 'margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem;';
+                    }
 
                     const nameSpan = document.createElement('span');
                     nameSpan.textContent = `Hello, ${userName}`;
@@ -709,6 +786,35 @@ import {ConsentModule} from './modules/consent.js';
                     userInfoEl.appendChild(nameSpan);
                     userInfoEl.appendChild(badge);
                     $brandContainer.get(0).appendChild(userInfoEl);
+                }
+
+                // Inject navbar actions (config-driven or legacy fallback)
+                const $navbarCollapse = $('#main-navbar .navbar-collapse');
+                if ($navbarCollapse.length) {
+                    // Create or get navbar-actions div
+                    let $navbarActions = $('#main-navbar .navbar-actions');
+                    if (!$navbarActions.length) {
+                        $navbarCollapse.get(0).insertAdjacentHTML('beforeend', '<div class="navbar-actions"></div>');
+                        $navbarActions = $('#main-navbar .navbar-actions');
+                    }
+
+                    // Determine actions from config or use legacy fallback
+                    let actions = config.actions || [];
+
+                    // Legacy fallback: if no config.actions, build from old structure
+                    if (actions.length === 0) {
+                        // Always add auth action (Login/Register/Logout)
+                        actions.push({ type: 'auth', loginUrl: loginPath });
+
+                        // Add theme selector if configured in legacy structure
+                        if (presetConfig.theme && presetConfig.theme.variantSelector) {
+                            const position = presetConfig.theme.position === 'fixed-right' ? 'fixed-right' : 'inline';
+                            actions.push({ type: 'theme-selector', position });
+                        }
+                    }
+
+                    // Render all actions from config
+                    await renderNavbarActions(actions, $navbarActions.get(0), { levelsUp, user });
                 }
 
                 // Set up auth state listeners to reload page on auth changes
@@ -903,18 +1009,14 @@ import {ConsentModule} from './modules/consent.js';
 
     /**
      * Render theme controls
+     * Note: Theme selector is now injected inline in navbar during navbar rendering
+     * This function is kept for backwards compatibility but does nothing
      */
     async function renderThemeControls(config) {
         try {
-            // Load and inject variant selector if enabled
-            if (config.variantSelector) {
-                const variantTemplate = await TemplateLoader.load('variant-selector');
-                const variantHtml = variantTemplate({});
-                document.body.insertAdjacentHTML('afterbegin', variantHtml);
-                initVariantSelector();
-            }
-
-            console.log('[Domma Layout] Theme controls rendered');
+            // Theme selector is now rendered inline in navbar
+            // Skip rendering here to avoid duplicates
+            console.log('[Domma Layout] Theme controls skipped (rendered inline in navbar)');
         } catch (error) {
             console.error('[Domma Layout] Theme controls render failed:', error);
         }

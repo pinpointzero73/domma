@@ -3783,7 +3783,7 @@ class BackToTop extends Component {
         duration: 300,          // Scroll animation duration in ms
         position: 'bottom-right', // Position: bottom-right, bottom-left
         offset: 16,             // Distance from edge in px
-        target: null,           // Existing button selector (null = create new)
+        target: null,           // Scroll container to monitor (null = window)
         zIndex: 1000,
         onShow: null,
         onHide: null,
@@ -3794,21 +3794,31 @@ class BackToTop extends Component {
         super(selector, options);
         this._isVisible = false;
         this._isScrolling = false;
+        this._scrollContainer = null;
         this._init();
     }
 
     _init() {
-        this._setupButton();
+        this._setupScrollContainer();  // Setup container FIRST
+        this._setupButton();           // Then button (which calls _applyStyles)
         this._bindEvents();
         this._checkVisibility();
     }
 
-    _setupButton() {
-        // Use existing button or create new one
+    _setupScrollContainer() {
+        // Set up scroll container from options.target
         if (this.options.target) {
-            this._button = typeof this.options.target === 'string'
+            this._scrollContainer = typeof this.options.target === 'string'
                 ? document.querySelector(this.options.target)
                 : this.options.target;
+        }
+        // If no target specified, monitor window scroll (default behavior)
+    }
+
+    _setupButton() {
+        // Use existing button from selector parameter
+        if (this.element) {
+            this._button = this.element;
             this._created = false;
         } else {
             this._button = this._createButton();
@@ -3835,7 +3845,7 @@ class BackToTop extends Component {
         const isLeft = position === 'bottom-left';
 
         const styles = {
-            position: 'fixed',
+            position: this._scrollContainer ? 'absolute' : 'fixed',
             bottom: `${offset}px`,
             [isLeft ? 'left' : 'right']: `${offset}px`,
             padding: '0.5rem',
@@ -3882,9 +3892,10 @@ class BackToTop extends Component {
     }
 
     _bindEvents() {
-        // Scroll listener
+        // Attach scroll listener to container or window
+        const scrollTarget = this._scrollContainer || window;
         this._scrollHandler = () => this._checkVisibility();
-        window.addEventListener('scroll', this._scrollHandler, {passive: true});
+        scrollTarget.addEventListener('scroll', this._scrollHandler, {passive: true});
 
         // Click handler
         this._addEventListener(this._button, 'click', (e) => {
@@ -3894,8 +3905,12 @@ class BackToTop extends Component {
     }
 
     _checkVisibility() {
-        const threshold = this.options.showAfter ?? window.innerHeight;
-        const shouldShow = window.scrollY > threshold;
+        const threshold = this.options.showAfter ?? (this._scrollContainer ? this._scrollContainer.clientHeight : window.innerHeight);
+        const scrollY = this._scrollContainer
+            ? this._scrollContainer.scrollTop
+            : window.scrollY;
+
+        const shouldShow = scrollY > threshold;
 
         if (shouldShow && !this._isVisible) {
             this.show();
@@ -3904,7 +3919,7 @@ class BackToTop extends Component {
         }
 
         if (this.options.onScroll) {
-            this.options.onScroll({scrollY: window.scrollY, isVisible: this._isVisible});
+            this.options.onScroll({scrollY, isVisible: this._isVisible});
         }
     }
 
@@ -3912,7 +3927,9 @@ class BackToTop extends Component {
         if (this._isScrolling) return this;
 
         this._isScrolling = true;
-        const start = window.scrollY;
+        const start = this._scrollContainer
+            ? this._scrollContainer.scrollTop
+            : window.scrollY;
         const startTime = performance.now();
         const duration = this.options.duration;
 
@@ -3924,7 +3941,11 @@ class BackToTop extends Component {
             const progress = Math.min(elapsed / duration, 1);
             const eased = easeOutQuad(progress);
 
-            window.scrollTo(0, start * (1 - eased));
+            if (this._scrollContainer) {
+                this._scrollContainer.scrollTop = start * (1 - eased);
+            } else {
+                window.scrollTo(0, start * (1 - eased));
+            }
 
             if (progress < 1) {
                 requestAnimationFrame(animate);
