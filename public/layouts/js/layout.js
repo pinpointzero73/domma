@@ -350,6 +350,16 @@ import {ConsentModule} from './modules/consent.js';
           opacity: 1;
         }
 
+        /* Variant selector inline override */
+        .variant-selector.variant-selector-inline {
+          position: static !important;
+          top: auto !important;
+          right: auto !important;
+          transform: none !important;
+          display: flex;
+          align-items: center;
+        }
+
         /* Version displays */
         .navbar-brand-text {
           display: inline-flex;
@@ -555,6 +565,96 @@ import {ConsentModule} from './modules/consent.js';
     }
 
     /**
+     * Render theme selector action
+     */
+    function renderThemeSelector(action, container) {
+        const position = action.position || 'inline';
+        const selectorClass = position === 'inline' ? 'variant-selector variant-selector-inline' : 'variant-selector';
+
+        const themeSelectorHtml = `
+            <div class="${selectorClass}" id="variant-selector">
+                <button class="variant-trigger" data-tooltip="Theme variants (16)"></button>
+                <div class="variant-options">
+                    <button class="variant-dot variant-dot-ocean-light" data-theme="ocean-light" data-tooltip="Ocean Light ☀️"></button>
+                    <button class="variant-dot variant-dot-ocean-dark" data-theme="ocean-dark" data-tooltip="Ocean Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-forest-light" data-theme="forest-light" data-tooltip="Forest Light ☀️"></button>
+                    <button class="variant-dot variant-dot-forest-dark" data-theme="forest-dark" data-tooltip="Forest Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-sunset-light" data-theme="sunset-light" data-tooltip="Sunset Light ☀️"></button>
+                    <button class="variant-dot variant-dot-sunset-dark" data-theme="sunset-dark" data-tooltip="Sunset Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-royal-light" data-theme="royal-light" data-tooltip="Royal Light ☀️"></button>
+                    <button class="variant-dot variant-dot-royal-dark" data-theme="royal-dark" data-tooltip="Royal Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-lemon-light" data-theme="lemon-light" data-tooltip="Lemon Light ☀️"></button>
+                    <button class="variant-dot variant-dot-lemon-dark" data-theme="lemon-dark" data-tooltip="Lemon Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-silver-light" data-theme="silver-light" data-tooltip="Silver Light ☀️"></button>
+                    <button class="variant-dot variant-dot-silver-dark" data-theme="silver-dark" data-tooltip="Silver Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-charcoal-light" data-theme="charcoal-light" data-tooltip="Charcoal Light ☀️"></button>
+                    <button class="variant-dot variant-dot-charcoal-dark" data-theme="charcoal-dark" data-tooltip="Charcoal Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-christmas-light" data-theme="christmas-light" data-tooltip="Christmas Light ☀️"></button>
+                    <button class="variant-dot variant-dot-christmas-dark" data-theme="christmas-dark" data-tooltip="Christmas Dark 🌙"></button>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', themeSelectorHtml);
+        setTimeout(() => initVariantSelector(), 100);
+    }
+
+    /**
+     * Render auth actions (Login/Register/Logout)
+     */
+    async function renderAuthActions(action, container, data) {
+        const { levelsUp, user } = data;
+        const loginPath = action.loginUrl || (levelsUp > 0 ? '../'.repeat(levelsUp) + 'login/index.html' : 'login/index.html');
+
+        // Add Login/Logout link
+        const loginLogoutHtml = user
+            ? `<a href="#" class="navbar-action-link" id="navbar-logout">Logout</a>`
+            : `<a href="${loginPath}" class="navbar-action-link">Login/Register</a>`;
+        container.insertAdjacentHTML('beforeend', loginLogoutHtml);
+
+        // Bind logout handler
+        if (user) {
+            const $logoutLink = $('#navbar-logout');
+            if ($logoutLink.length) {
+                $logoutLink.on('click', (e) => {
+                    e.preventDefault();
+                    Domma.auth.logout();
+                    const homePath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'index.html' : 'index.html';
+                    window.location.href = homePath;
+                });
+            }
+        }
+    }
+
+    /**
+     * Render custom button action
+     */
+    function renderCustomButton(action, container) {
+        const buttonHtml = `<a href="${action.url || '#'}" class="navbar-action-link ${action.class || ''}">${action.text || 'Button'}</a>`;
+        container.insertAdjacentHTML('beforeend', buttonHtml);
+    }
+
+    /**
+     * Render all navbar actions from config
+     */
+    async function renderNavbarActions(actionsConfig, container, data) {
+        if (!actionsConfig || actionsConfig.length === 0) return;
+
+        for (const action of actionsConfig) {
+            switch (action.type) {
+                case 'theme-selector':
+                    renderThemeSelector(action, container);
+                    break;
+                case 'auth':
+                    await renderAuthActions(action, container, data);
+                    break;
+                case 'button':
+                    renderCustomButton(action, container);
+                    break;
+            }
+        }
+    }
+
+    /**
      * Render navbar
      */
     async function renderNavbar(config, data, presetConfig) {
@@ -620,10 +720,7 @@ import {ConsentModule} from './modules/consent.js';
                     items: navItems,
                     variant: config.variant || 'dark',
                     position: 'static',
-                    collapseAt: 992,
-                    onItemClick: (item, index, e) => {
-                        // Handled below in manual actions injection
-                    }
+                    collapseAt: 992
                 });
 
                 // Customise brand section with logo + version
@@ -686,7 +783,7 @@ import {ConsentModule} from './modules/consent.js';
                     $brandContainer.get(0).appendChild(userInfoEl);
                 }
 
-                // Inject navbar actions (Login/Logout + Theme Selector) on the right side
+                // Inject navbar actions (config-driven or legacy fallback)
                 const $navbarCollapse = $('#main-navbar .navbar-collapse');
                 if ($navbarCollapse.length) {
                     // Create or get navbar-actions div
@@ -696,54 +793,23 @@ import {ConsentModule} from './modules/consent.js';
                         $navbarActions = $('#main-navbar .navbar-actions');
                     }
 
-                    // Add Login/Logout link
-                    const loginLogoutHtml = user
-                        ? `<a href="#" class="navbar-action-link" id="navbar-logout">Logout</a>`
-                        : `<a href="${loginPath}" class="navbar-action-link">Login/Register</a>`;
-                    $navbarActions.get(0).insertAdjacentHTML('beforeend', loginLogoutHtml);
+                    // Determine actions from config or use legacy fallback
+                    let actions = config.actions || [];
 
-                    // Bind logout handler
-                    if (user) {
-                        const $logoutLink = $('#navbar-logout');
-                        if ($logoutLink.length) {
-                            $logoutLink.on('click', (e) => {
-                                e.preventDefault();
-                                Domma.auth.logout();
-                                const homePath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'index.html' : 'index.html';
-                                window.location.href = homePath;
-                            });
+                    // Legacy fallback: if no config.actions, build from old structure
+                    if (actions.length === 0) {
+                        // Always add auth action (Login/Register/Logout)
+                        actions.push({ type: 'auth', loginUrl: loginPath });
+
+                        // Add theme selector if configured in legacy structure
+                        if (presetConfig.theme && presetConfig.theme.variantSelector) {
+                            const position = presetConfig.theme.position === 'fixed-right' ? 'fixed-right' : 'inline';
+                            actions.push({ type: 'theme-selector', position });
                         }
                     }
 
-                    // Add theme selector if configured
-                    if (presetConfig.theme && presetConfig.theme.variantSelector) {
-                        const themeSelectorHtml = `
-                            <div class="variant-selector variant-selector-inline" id="variant-selector">
-                                <button class="variant-trigger" data-tooltip="Theme variants (16)"></button>
-                                <div class="variant-options">
-                                    <button class="variant-dot variant-dot-ocean-light" data-theme="ocean-light" data-tooltip="Ocean Light ☀️"></button>
-                                    <button class="variant-dot variant-dot-ocean-dark" data-theme="ocean-dark" data-tooltip="Ocean Dark 🌙"></button>
-                                    <button class="variant-dot variant-dot-forest-light" data-theme="forest-light" data-tooltip="Forest Light ☀️"></button>
-                                    <button class="variant-dot variant-dot-forest-dark" data-theme="forest-dark" data-tooltip="Forest Dark 🌙"></button>
-                                    <button class="variant-dot variant-dot-sunset-light" data-theme="sunset-light" data-tooltip="Sunset Light ☀️"></button>
-                                    <button class="variant-dot variant-dot-sunset-dark" data-theme="sunset-dark" data-tooltip="Sunset Dark 🌙"></button>
-                                    <button class="variant-dot variant-dot-royal-light" data-theme="royal-light" data-tooltip="Royal Light ☀️"></button>
-                                    <button class="variant-dot variant-dot-royal-dark" data-theme="royal-dark" data-tooltip="Royal Dark 🌙"></button>
-                                    <button class="variant-dot variant-dot-lemon-light" data-theme="lemon-light" data-tooltip="Lemon Light ☀️"></button>
-                                    <button class="variant-dot variant-dot-lemon-dark" data-theme="lemon-dark" data-tooltip="Lemon Dark 🌙"></button>
-                                    <button class="variant-dot variant-dot-silver-light" data-theme="silver-light" data-tooltip="Silver Light ☀️"></button>
-                                    <button class="variant-dot variant-dot-silver-dark" data-theme="silver-dark" data-tooltip="Silver Dark 🌙"></button>
-                                    <button class="variant-dot variant-dot-charcoal-light" data-theme="charcoal-light" data-tooltip="Charcoal Light ☀️"></button>
-                                    <button class="variant-dot variant-dot-charcoal-dark" data-theme="charcoal-dark" data-tooltip="Charcoal Dark 🌙"></button>
-                                    <button class="variant-dot variant-dot-christmas-light" data-theme="christmas-light" data-tooltip="Christmas Light ☀️"></button>
-                                    <button class="variant-dot variant-dot-christmas-dark" data-theme="christmas-dark" data-tooltip="Christmas Dark 🌙"></button>
-                                </div>
-                            </div>
-                        `;
-                        $navbarActions.get(0).insertAdjacentHTML('beforeend', themeSelectorHtml);
-                        // Initialize the variant selector after injection
-                        setTimeout(() => initVariantSelector(), 100);
-                    }
+                    // Render all actions from config
+                    await renderNavbarActions(actions, $navbarActions.get(0), { levelsUp, user });
                 }
 
                 // Set up auth state listeners to reload page on auth changes

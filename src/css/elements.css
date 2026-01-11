@@ -1702,6 +1702,13 @@ code {
     border-top-color: var(--dm-gray-700);
 }
 
+/* Navbar actions - base mobile styles */
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--dm-space-3);
+}
+
 /* ============================================
    NAVBAR - DESKTOP ENHANCEMENTS
    ============================================ */
@@ -1745,11 +1752,8 @@ code {
         width: auto;
     }
 
-    /* Navbar actions - aligned to the right */
+    /* Navbar actions - desktop override: push to right */
     .navbar-actions {
-        display: flex;
-        align-items: center;
-        gap: var(--dm-space-3);
         margin-left: auto;
     }
 

@@ -9,7 +9,10 @@
       },
       "items": "nav-showcase",
       "variant": null,
-      "actions": []
+      "actions": [
+        { "type": "auth", "loginUrl": "login/index.html" },
+        { "type": "theme-selector", "position": "inline" }
+      ]
     },
     "footer": "footer-landing",
     "sidebar": {
@@ -40,7 +43,10 @@
           },
           "items": "nav-showcase",
           "variant": null,
-          "actions": []
+          "actions": [
+            { "type": "auth", "loginUrl": "../login/index.html" },
+            { "type": "theme-selector", "position": "inline" }
+          ]
         },
         "footer": "footer-landing",
         "sidebar": {
@@ -70,7 +76,10 @@
           },
           "items": "nav-showcase",
           "variant": null,
-          "actions": []
+          "actions": [
+            { "type": "auth", "loginUrl": "../../login/index.html" },
+            { "type": "theme-selector", "position": "inline" }
+          ]
         },
         "footer": "footer-landing",
         "sidebar": {
@@ -104,7 +113,10 @@
           },
           "items": "nav-showcase",
           "variant": null,
-          "actions": []
+          "actions": [
+            { "type": "auth", "loginUrl": "../../../login/index.html" },
+            { "type": "theme-selector", "position": "inline" }
+          ]
         },
         "footer": "footer-landing",
         "sidebar": {
@@ -140,7 +152,10 @@
       },
       "items": "nav-showcase",
       "variant": null,
-      "actions": []
+      "actions": [
+        { "type": "auth", "loginUrl": "../login/index.html" },
+        { "type": "theme-selector", "position": "inline" }
+      ]
     },
     "footer": "footer-landing",
     "sidebar": {
