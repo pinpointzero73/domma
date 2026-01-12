@@ -293,35 +293,73 @@
             });
         }
 
-        // Build slideover content
+        // Build slideover content as DOM element
         function buildPostContent(post, index) {
-            // Sanitize HTML content from backend using DOMPurify
-            const sanitizedContent = DOMPurify.sanitize(post.content);
-            const title = escapeHtml(post.title);
-            const date = escapeHtml(formatDate(post.date));
-            const readTime = escapeHtml(post.readTime);
-            const tags = post.tags.map(tag => `<span class="blog-tag">${escapeHtml(tag)}</span>`).join('');
+            const container = document.createElement('div');
 
-            return `
-                <div class="post-reader-header">
-                    <span class="post-reader-date">${date} · ${readTime}</span>
-                    <h1 class="post-reader-title">${title}</h1>
-                    <div class="post-reader-tags">
-                        ${tags}
-                    </div>
-                </div>
-                <article class="post-reader-content">
-                    ${sanitizedContent}
-                </article>
-                <nav class="post-reader-nav">
-                    <button class="post-nav-btn" id="prev-post" ${index === 0 ? 'disabled' : ''}>
-                        ← Previous
-                    </button>
-                    <button class="post-nav-btn" id="next-post" ${index === posts.length - 1 ? 'disabled' : ''}>
-                        Next →
-                    </button>
-                </nav>
-            `;
+            // Header
+            const header = document.createElement('div');
+            header.className = 'post-reader-header';
+
+            const dateSpan = document.createElement('span');
+            dateSpan.className = 'post-reader-date';
+            dateSpan.textContent = `${formatDate(post.date)} · ${post.readTime}`;
+
+            const title = document.createElement('h1');
+            title.className = 'post-reader-title';
+            title.textContent = post.title;
+
+            const tagsDiv = document.createElement('div');
+            tagsDiv.className = 'post-reader-tags';
+            post.tags.forEach(tag => {
+                const tagSpan = document.createElement('span');
+                tagSpan.className = 'blog-tag';
+                tagSpan.textContent = tag;
+                tagsDiv.appendChild(tagSpan);
+            });
+
+            header.appendChild(dateSpan);
+            header.appendChild(title);
+            header.appendChild(tagsDiv);
+
+            // Content
+            const content = document.createElement('article');
+            content.className = 'post-reader-content';
+            content.innerHTML = DOMPurify.sanitize(post.content);
+
+            // Navigation
+            const nav = document.createElement('nav');
+            nav.className = 'post-reader-nav';
+
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'post-nav-btn';
+            prevBtn.setAttribute('data-nav', 'prev');
+            prevBtn.textContent = '← Previous';
+            if (index === 0) {
+                prevBtn.disabled = true;
+            } else {
+                prevBtn.onclick = () => openPost(index - 1);
+            }
+
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'post-nav-btn';
+            nextBtn.setAttribute('data-nav', 'next');
+            nextBtn.textContent = 'Next →';
+            if (index === posts.length - 1) {
+                nextBtn.disabled = true;
+            } else {
+                nextBtn.onclick = () => openPost(index + 1);
+            }
+
+            nav.appendChild(prevBtn);
+            nav.appendChild(nextBtn);
+
+            // Assemble
+            container.appendChild(header);
+            container.appendChild(content);
+            container.appendChild(nav);
+
+            return container;
         }
 
         // Open post in slideover
@@ -329,34 +367,22 @@
             currentPostIndex = index;
             const post = posts[index];
 
+            const content = buildPostContent(post, index);
+
             if (!slideover) {
                 // Create slideover on first use
                 slideover = Domma.elements.slideover({
                     position: 'right',
                     size: 'lg',
-                    content: buildPostContent(post, index),
+                    content: content,
                     backdrop: true,
                     backdropClose: true,
                     keyboard: true
                 });
             } else {
                 // Update existing slideover
-                slideover.setContent(buildPostContent(post, index));
+                slideover.setContent(content);
             }
-
-            // Attach navigation handlers after content is set
-            setTimeout(() => {
-                const prevBtn = document.getElementById('prev-post');
-                const nextBtn = document.getElementById('next-post');
-
-                if (prevBtn) {
-                    prevBtn.onclick = () => openPost(currentPostIndex - 1);
-                }
-
-                if (nextBtn) {
-                    nextBtn.onclick = () => openPost(currentPostIndex + 1);
-                }
-            }, 100);
 
             slideover.open();
         }
