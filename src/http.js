@@ -70,7 +70,10 @@ export const http = {
             }
             return await response.json();
         } catch (error) {
-            console.error('Domma HTTP Error:', error);
+            // Only log if not silent (useful for expected errors like 401 auth checks)
+            if (!config.silent) {
+                console.error('Domma HTTP Error:', error);
+            }
             throw error;
         }
     },

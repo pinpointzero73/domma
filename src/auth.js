@@ -234,7 +234,8 @@ export const auth = {
 
     try {
       const response = await http.get(`${this.apiUrl}/auth/me`, {
-        headers: this.getHeaders()
+        headers: this.getHeaders(),
+        silent: true  // Don't log 401 errors - expected when user not logged in
       });
 
       if (!response.success || !response.user) {
