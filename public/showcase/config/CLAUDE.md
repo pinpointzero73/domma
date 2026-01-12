@@ -65,7 +65,7 @@ These require direct instantiation:
 
 - `toast` - Use `Domma.elements.toast()`
 - `dialog` - Use `Domma.elements.alert()`, `.confirm()`, `.prompt()`
-- `jumbotron` - CSS-only component (no JavaScript)
+- `hero` - CSS-only component (no JavaScript)
 - `forms` - Documentation only (native HTML forms)
 - `autocomplete` - Initialise directly
 - `pillbox` - Initialise directly

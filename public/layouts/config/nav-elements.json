@@ -100,9 +100,9 @@
           "slug": "forms"
         },
         {
-          "text": "Jumbotron",
-          "url": "../jumbotron/index.html",
-          "slug": "jumbotron"
+          "text": "Hero",
+          "url": "../hero/index.html",
+          "slug": "hero"
         },
         {
           "text": "Modal",

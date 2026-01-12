@@ -218,9 +218,9 @@
           "section": "footer"
         },
         {
-          "text": "Jumbotron",
-          "url": "showcase/elements/jumbotron/index.html",
-          "section": "jumbotron"
+          "text": "Hero",
+          "url": "showcase/elements/hero/index.html",
+          "section": "hero"
         },
         {
           "text": "Modal",

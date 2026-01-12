@@ -327,15 +327,15 @@
 </header>
 
 <div class="weather-container">
-    <!-- Jumbotron with download links -->
-    <div class="jumbotron jumbotron-center">
-        <div class="jumbotron-content">
-            <div class="jumbotron-title">Interactive Weather App Example</div>
-            <div class="jumbotron-subtitle">A comprehensive weather application demonstrating HTTP requests, API
+    <!-- hero with download links -->
+    <div class="hero hero-center">
+        <div class="hero-content">
+            <div class="hero-title">Interactive Weather App Example</div>
+            <div class="hero-subtitle">A comprehensive weather application demonstrating HTTP requests, API
                 integration, storage management, and geolocation. Search any city worldwide or use your current location
                 to get real-time weather data and forecasts.
             </div>
-            <div class="jumbotron-actions">
+            <div class="hero-actions">
                 <a href="index.html" download="weather-example.html" class="btn btn-primary">
                     <span data-icon="download" data-icon-size="18"></span>
                     Download HTML
@@ -345,7 +345,7 @@
                     Download JavaScript
                 </a>
             </div>
-            <p class="jumbotron-note">Both files are required for the example to work</p>
+            <p class="hero-note">Both files are required for the example to work</p>
         </div>
     </div>
 
@@ -438,6 +438,9 @@
 </div>
 
 <!-- Load Domma framework -->
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
 <script src="../../dist/domma.min.js"></script>
 <!-- Load layout system -->
 <script type="module" src="../../layouts/js/layout.js"></script>

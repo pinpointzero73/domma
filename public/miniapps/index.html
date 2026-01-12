@@ -17,6 +17,9 @@
   <script type="module" src="../layouts/js/layout.js"></script>
 
   <!-- Domma Core -->
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
   <script src="../dist/domma.min.js" defer></script>
 
   <style>
@@ -55,9 +58,9 @@
 
 <main class="container">
   <!-- Hero Section -->
-  <section class="jumbotron jumbotron-center mt-5">
-    <h1 class="jumbotron-title">Domma MiniApps</h1>
-    <p class="jumbotron-subtitle">Powerful, standalone applications built with the Domma framework</p>
+  <section class="hero hero-center mt-5">
+    <h1 class="hero-title">Domma MiniApps</h1>
+    <p class="hero-subtitle">Powerful, standalone applications built with the Domma framework</p>
     <p class="lead mt-3">Real-world applications demonstrating the full capabilities of Domma.<br/>
       Each app is production-ready, fully functional, and open source.</p>
   </section>

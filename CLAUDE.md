@@ -132,7 +132,7 @@ npm run build:css  # Builds src/css/* → public/dist/*
   - Buttons, Cards, Modals, Tabs, Accordion
   - Tooltip, Table, Form elements, Badges, Pills
   - Alert, Code blocks, Pagination, Navbar, Sidebar
-  - Footer, Jumbotron, Carousel, Dialog, Slideover, Dropdown, Progression
+  - Footer, hero, Carousel, Dialog, Slideover, Dropdown, Progression
 
 - **domma-themes.css** - Visual styling
   - Theme color definitions
@@ -313,7 +313,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - DesktopNotification - Browser notifications wrapper
   - Timer - `timer()` countdown with visual display
   - Alarm - `alarm()` scheduled alerts with persistence
-  - Jumbotron - CSS-only hero sections with multiple variants
+  - hero - CSS-only hero sections with multiple variants
   - Slideover - `slideover()` panel overlays from screen edges
   - Progression - `progression()` unified timeline/roadmap component with dual modes, status tracking
 

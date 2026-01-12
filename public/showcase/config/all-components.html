@@ -104,7 +104,7 @@
         <code class="text-danger">toast</code>
         <code class="text-danger">dialog</code>
         <code class="text-danger">treeView</code>
-        <code class="text-danger">jumbotron</code>
+        <code class="text-danger">hero</code>
         <code class="text-danger">themeRoller</code>
         <code class="text-danger">pageRoller</code>
         <code class="text-danger">editor</code>
@@ -755,12 +755,12 @@ const tree = Domma.elements.treeView('#tree', {
 });</pre>
         </div>
 
-        <!-- Jumbotron -->
+        <!-- hero -->
         <div>
-          <h4 class="text-danger">jumbotron</h4>
+          <h4 class="text-danger">hero</h4>
           <p class="text-sm text-muted mb-2"><strong>Why:</strong> CSS-only component (no JavaScript)</p>
           <pre class="code-block language-html text-xs"><!-- Use HTML + CSS classes -->
-<div class="jumbotron jumbotron-primary">
+<div class="hero hero-primary">
   <h1>Hero Section</h1>
 </div></pre>
         </div>
@@ -812,6 +812,9 @@ const editor = Domma.elements.editor('#editor');</pre>
   </section>
 
 </div>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
 
 <script src="../../dist/domma.min.js"></script>
 <script src="../../dist/domma-syntax.min.js"></script>

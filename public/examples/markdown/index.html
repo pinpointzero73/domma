@@ -251,14 +251,14 @@
 </header>
 
 <div class="container">
-    <!-- Jumbotron -->
-    <div class="jumbotron jumbotron-center">
-        <div class="jumbotron-content">
-            <div class="jumbotron-title">Markdown Editor Example</div>
-            <div class="jumbotron-subtitle">A real-time markdown editor with live preview, Storage persistence, and
+    <!-- hero -->
+    <div class="hero hero-center">
+        <div class="hero-content">
+            <div class="hero-title">Markdown Editor Example</div>
+            <div class="hero-subtitle">A real-time markdown editor with live preview, Storage persistence, and
                 syntax helpers using Domma's Utils, Storage, and DOM manipulation.
             </div>
-            <div class="jumbotron-actions">
+            <div class="hero-actions">
                 <a href="index.html" download="markdown-example.html" class="btn btn-primary">
                     <span data-icon="download" data-icon-size="18"></span>
                     Download HTML
@@ -268,7 +268,7 @@
                     Download JavaScript
                 </a>
             </div>
-            <p class="jumbotron-note">Both files are required for the example to work</p>
+            <p class="hero-note">Both files are required for the example to work</p>
         </div>
     </div>
 
@@ -370,6 +370,9 @@ Start typing your markdown here...
 </div>
 
 <!-- Scripts -->
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
 <script src="../../dist/domma.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script src="index.js"></script>

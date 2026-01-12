@@ -158,25 +158,25 @@ Accessed via `Domma.elements`:
 - **Carousel**:
   `elements.carousel(selector, { autoplay, interval, pauseOnHover, loop, animation, showArrows, showIndicators, onChange })` →
   `next()`, `prev()`, `goTo()`, `play()`, `pause()`, `getIndex()`, `getSlide()`
-- **Jumbotron**: CSS-only component with Tailwind-inspired utilities for modern hero sections
-    - **Base**: `.jumbotron`, `.jumbotron-content`, `.jumbotron-title`, `.jumbotron-subtitle`, `.jumbotron-actions`,
-      `.jumbotron-note`
-    - **Themes**: `.jumbotron-primary`, `.jumbotron-dark`
-    - **Layouts**: `.jumbotron-center`, `.jumbotron-cover`, `.jumbotron-overlay`, `.jumbotron-fluid`, `.jumbotron-full`
-    - **Sizes**: `.jumbotron-sm`, `.jumbotron-lg`
-    - **Split Layouts (New)**: `.jumbotron-split`, `.jumbotron-split-reverse`, `.jumbotron-split-60-40`,
-      `.jumbotron-split-70-30`, `.jumbotron-split-40-60`, `.jumbotron-split-30-70`, `.jumbotron-text`,
-      `.jumbotron-media`
-    - **Enhanced Overlays (New)**: `.jumbotron-overlay-light`, `.jumbotron-overlay-dark`, `.jumbotron-overlay-darker`,
-      `.jumbotron-overlay-gradient`, `.jumbotron-overlay-gradient-reverse`
-    - **Badges (New)**: `.jumbotron-badge`, `.jumbotron-badge-secondary`, `.jumbotron-badge-success`,
-      `.jumbotron-badge-warning`, `.jumbotron-badge-danger`, `.jumbotron-badge-info`, `.jumbotron-badge-outline`,
-      `.jumbotron-badge-icon`
-    - **Responsive Utilities (New)**: `.jumbotron-title-responsive`, `.jumbotron-subtitle-responsive`,
-      `.jumbotron-responsive`, `.jumbotron-hide-mobile`, `.jumbotron-show-mobile`, `.jumbotron-center-mobile`
-    - **Gradients (New)**: `.jumbotron-gradient-purple`, `.jumbotron-gradient-blue`, `.jumbotron-gradient-green`,
-      `.jumbotron-gradient-sunset`, `.jumbotron-gradient-ocean`, `.jumbotron-gradient-rose`,
-      `.jumbotron-gradient-forest`, `.jumbotron-gradient-night`
+- **hero**: CSS-only component with Tailwind-inspired utilities for modern hero sections
+    - **Base**: `.hero`, `.hero-content`, `.hero-title`, `.hero-subtitle`, `.hero-actions`,
+      `.hero-note`
+    - **Themes**: `.hero-primary`, `.hero-dark`
+    - **Layouts**: `.hero-center`, `.hero-cover`, `.hero-overlay`, `.hero-fluid`, `.hero-full`
+    - **Sizes**: `.hero-sm`, `.hero-lg`
+    - **Split Layouts (New)**: `.hero-split`, `.hero-split-reverse`, `.hero-split-60-40`,
+      `.hero-split-70-30`, `.hero-split-40-60`, `.hero-split-30-70`, `.hero-text`,
+      `.hero-media`
+    - **Enhanced Overlays (New)**: `.hero-overlay-light`, `.hero-overlay-dark`, `.hero-overlay-darker`,
+      `.hero-overlay-gradient`, `.hero-overlay-gradient-reverse`
+    - **Badges (New)**: `.hero-badge`, `.hero-badge-secondary`, `.hero-badge-success`,
+      `.hero-badge-warning`, `.hero-badge-danger`, `.hero-badge-info`, `.hero-badge-outline`,
+      `.hero-badge-icon`
+    - **Responsive Utilities (New)**: `.hero-title-responsive`, `.hero-subtitle-responsive`,
+      `.hero-responsive`, `.hero-hide-mobile`, `.hero-show-mobile`, `.hero-center-mobile`
+    - **Gradients (New)**: `.hero-gradient-purple`, `.hero-gradient-blue`, `.hero-gradient-green`,
+      `.hero-gradient-sunset`, `.hero-gradient-ocean`, `.hero-gradient-rose`,
+      `.hero-gradient-forest`, `.hero-gradient-night`
 - **Slideover**: Panel overlays that slide in from screen edges
     -
     `elements.slideover(selector, { position, size, backdrop, backdropClose, keyboard, closeOnEscape, animation, animationDuration, title, content, closable, closeIcon, onOpen, onClose, onClosed })` →
@@ -321,7 +321,7 @@ $.setup({
 
 - `toast` - Use static method: `Domma.elements.toast()`
 - `dialog` - Use static methods: `Domma.elements.alert()`, `.confirm()`, `.prompt()`
-- `jumbotron` - CSS-only component (no JavaScript)
+- `hero` - CSS-only component (no JavaScript)
 - `forms` - Documentation only (native HTML forms)
 
 **Mutable Configuration** - update, retrieve, or reset configuration after setup:

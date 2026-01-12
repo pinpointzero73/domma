@@ -19,7 +19,7 @@ This document provides a complete reference for all UI components available in `
 13. [Pagination](#pagination)
 14. [Navbar](#navbar)
 15. [Footer](#footer)
-16. [Jumbotron](#jumbotron)
+16. [hero](#hero)
 17. [Carousel](#carousel)
 18. [Dialog](#dialog)
 19. [Sidebar](#sidebar)
@@ -472,42 +472,42 @@ Simple footer container.
 
 ---
 
-## Jumbotron
+## hero
 
 Hero/banner section.
 
-**Base Class:** `.jumbotron`
+**Base Class:** `.hero`
 
 **Structure:**
 
-- `.jumbotron-content` - Content container (max-width: 800px)
-- `.jumbotron-title` - Main heading
-- `.jumbotron-subtitle` - Secondary text
-- `.jumbotron-actions` - Button group
+- `.hero-content` - Content container (max-width: 800px)
+- `.hero-title` - Main heading
+- `.hero-subtitle` - Secondary text
+- `.hero-actions` - Button group
 
 **Variants:**
 
-- `.jumbotron-center` - Centered content
-- `.jumbotron-fluid` - Full-width
-- `.jumbotron-dark` - Dark theme
-- `.jumbotron-primary` - Primary gradient
-- `.jumbotron-cover` - Background image support
-- `.jumbotron-overlay` - Dark overlay
+- `.hero-center` - Centered content
+- `.hero-fluid` - Full-width
+- `.hero-dark` - Dark theme
+- `.hero-primary` - Primary gradient
+- `.hero-cover` - Background image support
+- `.hero-overlay` - Dark overlay
 
 **Sizes:**
 
-- `.jumbotron-sm` - Small padding
-- `.jumbotron-lg` - Large padding
-- `.jumbotron-full` - Full viewport height
+- `.hero-sm` - Small padding
+- `.hero-lg` - Large padding
+- `.hero-full` - Full viewport height
 
 **Example:**
 
 ```html
-<div class="jumbotron jumbotron-center">
-    <div class="jumbotron-content">
-        <div class="jumbotron-title">Welcome to Domma</div>
-        <div class="jumbotron-subtitle">A modern JavaScript framework</div>
-        <div class="jumbotron-actions">
+<div class="hero hero-center">
+    <div class="hero-content">
+        <div class="hero-title">Welcome to Domma</div>
+        <div class="hero-subtitle">A modern JavaScript framework</div>
+        <div class="hero-actions">
             <a href="#" class="btn btn-primary">Get Started</a>
             <a href="#" class="btn btn-secondary">Learn More</a>
         </div>

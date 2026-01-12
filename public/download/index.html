@@ -13,12 +13,12 @@
 </head>
 <body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
 <main class="container py-8">
-  <div class="jumbotron primary-center hero-gradient-primary download-hero-style">
-    <div class="jumbotron-content">
-      <h1 class="jumbotron-title">Download Domma</h1>
-      <p class="jumbotron-subtitle">Get the latest version of Domma and start building modern web applications with zero
+  <div class="hero primary-center hero-gradient-primary download-hero-style">
+    <div class="hero-content">
+      <h1 class="hero-title">Download Domma</h1>
+      <p class="hero-subtitle">Get the latest version of Domma and start building modern web applications with zero
         dependencies.</p>
-      <p class="jumbotron-content">
+      <p class="hero-content">
         <span class="version-badge-style text-right text-xl" id="current-version"></span>
         <span class="text-sm">December 2025</span>
       </p>
@@ -292,7 +292,7 @@
           <div class="download-icon-style" data-icon="box" data-icon-size="48"></div>
           <h3 class="text-xl font-semibold mb-2">elements.css</h3>
           <p class="download-description-text">
-            19 UI components: buttons, cards, modals, tabs, jumbotron, carousel, and more.
+            19 UI components: buttons, cards, modals, tabs, hero, carousel, and more.
           </p>
           <p class="download-size-text" id="elements-size">~28 KB</p>
           <a href="https://cdn.jsdelivr.net/npm/domma-js@0.3.0-alpha.0/public/dist/elements.css" download
@@ -666,6 +666,9 @@
     </div>
   </section>
 </main>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
 
 <script src="../../dist/domma.min.js"></script>
 <script src="../../dist/domma-syntax.min.js"></script>

@@ -49,7 +49,7 @@ Accessed via `Domma.elements` - provides 25+ UI components including modals, tab
 ### Layout Components
 
 - **Card** - Content cards
-- **Jumbotron** - Hero sections (CSS-only)
+- **hero** - Hero sections (CSS-only)
 
 ## Component Usage Patterns
 
@@ -208,7 +208,7 @@ $.setup({
 `breadcrumbs`, `navbar`, `notification`, `timer`, `alarm`
 
 **Not Supported via Config:**
-`toast`, `dialog`, `jumbotron`, `autocomplete`, `pillbox`, `slideover`, `editor`, `themeRoller`, `pageRoller`
+`toast`, `dialog`, `hero`, `autocomplete`, `pillbox`, `slideover`, `editor`, `themeRoller`, `pageRoller`
 
 ## Showcase Example Template
 

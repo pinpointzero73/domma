@@ -314,13 +314,13 @@
 
 <div class="calculator-container">
     <!-- Download card -->
-    <div class="jumbotron jumbotron-center">
-        <div class="jumbotron-content">
-            <div class="jumbotron-title">Interactive Calculator Example</div>
-            <div class="jumbotron-subtitle">A fully functional calculator demonstrating Domma's DOM querying, event
+    <div class="hero hero-center">
+        <div class="hero-content">
+            <div class="hero-title">Interactive Calculator Example</div>
+            <div class="hero-subtitle">A fully functional calculator demonstrating Domma's DOM querying, event
                 handling, and dynamic updates. Supports keyboard input and basic arithmetic operations.
             </div>
-            <div class="jumbotron-actions">
+            <div class="hero-actions">
                 <a href="index.html" download="calculator-example.html" class="btn btn-primary">
                     <span data-icon="download" data-icon-size="18"></span>
                     Download HTML
@@ -330,7 +330,7 @@
                     Download JavaScript
                 </a>
             </div>
-            <p class="jumbotron-note">Both files are required for the example to work</p>
+            <p class="hero-note">Both files are required for the example to work</p>
         </div>
     </div>
 
@@ -445,6 +445,9 @@
 </div>
 
 <!-- Load Domma framework -->
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
 <script src="../../dist/domma.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script src="index.js"></script>
