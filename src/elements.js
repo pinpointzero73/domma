@@ -4968,7 +4968,11 @@ class Navbar extends Component {
                     if (subItem.divider) {
                         html += `<li class="navbar-dropdown-divider"></li>`;
                     } else {
-                        html += `<li><a href="${subItem.url || '#'}" class="navbar-dropdown-item" data-index="${index}" data-subindex="${subIndex}">${subItem.text}</a></li>`;
+                        // Check if URL is external (starts with http:// or https://) or has external flag
+                        const url = subItem.url || '#';
+                        const isExternal = subItem.external || url.startsWith('http://') || url.startsWith('https://');
+                        const target = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+                        html += `<li><a href="${url}" class="navbar-dropdown-item" data-index="${index}" data-subindex="${subIndex}"${target}>${subItem.text}</a></li>`;
                     }
                 });
                 html += '</ul>';

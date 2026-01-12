@@ -57,7 +57,12 @@ export const PathResolver = {
         const resolveItem = (item) => {
             const resolved = {...item};
             if (resolved.url) {
-                resolved.url = base + resolved.url;
+                // If URL is absolute or external, return as-is
+                if (resolved.url.startsWith('/') || resolved.url.startsWith('http://') || resolved.url.startsWith('https://')) {
+                    // Keep URL unchanged
+                } else {
+                    resolved.url = base + resolved.url;
+                }
             }
             if (resolved.items) {
                 resolved.items = resolved.items.map(resolveItem);
