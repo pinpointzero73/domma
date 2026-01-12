@@ -58,7 +58,7 @@
       #authTabs {
           margin-bottom: 2rem;
           display: flex;
-          justify-content: center;
+          justify-content: flex-end;
           gap: 1rem;
       }
 
@@ -137,7 +137,10 @@
     </div>
 
     <!-- Auth Tabs -->
-    <div id="authTabs"></div>
+    <div id="authTabs">
+      <button class="auth-tab-pill active" data-tab="login">Login</button>
+      <button class="auth-tab-pill" data-tab="register">Register</button>
+    </div>
 
     <!-- Login Form -->
     <div id="loginFormContainer"></div>
@@ -177,72 +180,95 @@
     document.body.appendChild(errorDiv);
   } else {
     $(() => {
-      // Initialize auth module
-      // Use localhost API for local dev, relative path for production
-      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      Domma.auth.init({
-        apiUrl: isLocal ? 'http://localhost:3000/api' : '/api'
-      });
+      try {
+        console.log('[Login] Starting initialization...');
 
-      // Check if already logged in
-      if (Domma.auth.isAuthenticated()) {
-        window.location.href = '../index.html';
-        return;
+        // Initialize auth module
+        console.log('[Login] Initializing auth module...');
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        Domma.auth.init({
+          apiUrl: isLocal ? 'http://localhost:3000/api' : '/api'
+        });
+
+        // Check if already logged in
+        if (Domma.auth.isAuthenticated()) {
+          console.log('[Login] User already authenticated, redirecting...');
+          window.location.href = '../index.html';
+          return;
+        }
+
+        // Tabs already exist in HTML - just bind event handlers
+        console.log('[Login] Setting up tab event handlers...');
+        $('#authTabs .auth-tab-pill').on('click', function () {
+          const tab = $(this).attr('data-tab');
+          console.log('[Login] Tab clicked:', tab);
+
+          // Update active state
+          $('#authTabs .auth-tab-pill').removeClass('active');
+          $(this).addClass('active');
+
+          // Show/hide forms
+          if (tab === 'login') {
+            $('#loginFormContainer').css('display', 'block');
+            $('#registerFormContainer').css('display', 'none');
+          } else {
+            $('#loginFormContainer').css('display', 'none');
+            $('#registerFormContainer').css('display', 'block');
+          }
+        });
+
+        // Create login form
+        console.log('[Login] Creating login form...');
+        try {
+          Domma.auth.createLoginForm('#loginFormContainer', {
+            showLabels: true,
+            onSuccess: () => {
+              window.location.href = '../index.html';
+            },
+            onError: (error) => {
+              Domma.elements.toast(error.message || 'Login failed', {type: 'error'});
+            }
+          });
+        } catch (e) {
+          console.error('[Login] Failed to create login form:', e);
+          Domma.elements.toast('Failed to initialise login form', {type: 'error'});
+        }
+
+        // Create register form
+        console.log('[Login] Creating register form...');
+        try {
+          Domma.auth.createRegisterForm('#registerFormContainer', {
+            showLabels: true,
+            onSuccess: () => {
+              window.location.href = '../index.html';
+            },
+            onError: (error) => {
+              Domma.elements.toast(error.message || 'Registration failed', {type: 'error'});
+            }
+          });
+        } catch (e) {
+          console.error('[Login] Failed to create register form:', e);
+          Domma.elements.toast('Failed to initialise registration form', {type: 'error'});
+        }
+
+        // Set initial visibility using CSS (show login, hide register)
+        console.log('[Login] Setting initial form visibility...');
+        $('#loginFormContainer').css('display', 'block');
+        $('#registerFormContainer').css('display', 'none');
+
+        // Scan icons
+        console.log('[Login] Scanning icons...');
+        if (Domma.icons) {
+          Domma.icons.scan();
+        }
+
+        console.log('[Login] Initialization complete');
+      } catch (error) {
+        console.error('[Login] Initialization failed:', error);
+        if (Domma.elements && Domma.elements.toast) {
+          Domma.elements.toast('Initialization failed. Please refresh the page.', {type: 'error'});
+        }
       }
-
-      // Create custom pill-style tabs
-      const tabsHtml = `
-      <button class="auth-tab-pill active" data-tab="login">Login</button>
-      <button class="auth-tab-pill" data-tab="register">Register</button>
-    `;
-      $('#authTabs').html(tabsHtml);
-
-      // Handle tab switching
-      $('#authTabs .auth-tab-pill').on('click', function () {
-        const tab = $(this).attr('data-tab');
-
-        // Update active state
-        $('#authTabs .auth-tab-pill').removeClass('active');
-        $(this).addClass('active');
-
-        // Show/hide forms
-        if (tab === 'login') {
-          $('#loginFormContainer').css('display', 'block');
-          $('#registerFormContainer').css('display', 'none');
-        } else {
-          $('#loginFormContainer').css('display', 'none');
-          $('#registerFormContainer').css('display', 'block');
-        }
-      });
-
-      // Create login form
-      Domma.auth.createLoginForm('#loginFormContainer', {
-        showLabels: true,
-        onSuccess: () => {
-          window.location.href = '../index.html';
-        },
-        onError: (error) => {
-          Domma.elements.toast(error.message || 'Login failed', {type: 'error'});
-        }
-      });
-
-      // Create register form
-      Domma.auth.createRegisterForm('#registerFormContainer', {
-        showLabels: true,
-        onSuccess: () => {
-          window.location.href = '../index.html';
-        },
-        onError: (error) => {
-          Domma.elements.toast(error.message || 'Registration failed', {type: 'error'});
-        }
-      });
-
-      // Set initial visibility using CSS (show login, hide register)
-      $('#loginFormContainer').css('display', 'block');
-      $('#registerFormContainer').css('display', 'none');
-
-      // Scan icons
-      Domma.icons.scan();
     });
   }
 </script>

@@ -500,6 +500,27 @@ class RegisterForm extends Component {
                         minlength="${opts.minPasswordLength}"
                         required>
                 </div>
+                <div class="form-group">
+                    ${opts.showLabels ? '<label class="form-label">Confirm Password</label>' : ''}
+                    <input
+                        type="password"
+                        class="form-input"
+                        name="confirmPassword"
+                        placeholder="Re-enter your password"
+                        minlength="${opts.minPasswordLength}"
+                        required>
+                </div>
+                <!-- Honeypot field - hidden from users, bots will fill it -->
+                <div class="form-group" style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+                    <label for="website">Website</label>
+                    <input
+                        type="text"
+                        class="form-input"
+                        name="website"
+                        id="website"
+                        tabindex="-1"
+                        autocomplete="off">
+                </div>
                 <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1rem;">${opts.buttonText}</button>
             </form>
         `;
@@ -511,6 +532,26 @@ class RegisterForm extends Component {
     const name = form.querySelector('[name="name"]').value;
     const email = form.querySelector('[name="email"]').value;
     const password = form.querySelector('[name="password"]').value;
+    const confirmPassword = form.querySelector('[name="confirmPassword"]').value;
+    const website = form.querySelector('[name="website"]').value;
+
+    // Honeypot check - if website field is filled, it's likely a bot
+    if (website) {
+      console.warn('[Auth] Honeypot triggered - possible bot detected');
+      // Silently fail or show generic error to not alert the bot
+      if (this.options.onError) {
+        this.options.onError(new Error('Registration failed. Please try again.'));
+      }
+      return;
+    }
+
+    // Password confirmation check
+    if (password !== confirmPassword) {
+      if (this.options.onError) {
+        this.options.onError(new Error('Passwords do not match. Please try again.'));
+      }
+      return;
+    }
 
     if (this.options.onSubmit) {
       this.options.onSubmit(email, password, name);
