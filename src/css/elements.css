@@ -4763,6 +4763,47 @@ code {
     background-color: var(--dm-info);
 }
 
+/* Toast internal structure */
+.domma-toast-icon {
+    flex-shrink: 0;
+    margin-right: 0.75rem;
+}
+
+.domma-toast-content {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.domma-toast-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.domma-toast-message {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.domma-toast-close {
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-left: 0.75rem;
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.15s;
+}
+
+.domma-toast-close:hover {
+    opacity: 1;
+}
+
+.domma-toast-close svg {
+    display: block;
+}
+
 
 /* ============================================
    BACK TO TOP BUTTON

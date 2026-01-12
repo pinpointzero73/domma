@@ -1729,21 +1729,21 @@ class ToastInstance {
         // Close button
         if (opts.closable) {
             const closeBtn = document.createElement('button');
-            closeBtn.innerHTML = '&times;';
-            closeBtn.style.cssText = `
-                background: none;
-                border: none;
-                color: inherit;
-                font-size: 20px;
-                cursor: pointer;
-                opacity: 0.7;
-                padding: 0;
-                line-height: 1;
-                flex-shrink: 0;
-                transition: opacity 150ms;
-            `;
-            closeBtn.addEventListener('mouseenter', () => closeBtn.style.opacity = '1');
-            closeBtn.addEventListener('mouseleave', () => closeBtn.style.opacity = '0.7');
+            closeBtn.className = 'domma-toast-close';
+            closeBtn.setAttribute('aria-label', 'Close');
+
+            // Use Domma icon if available
+            if (typeof window !== 'undefined' && window.Domma && window.Domma.icons) {
+                const icon = window.Domma.icons.render('close', { size: 16 });
+                if (icon) {
+                    closeBtn.appendChild(icon);
+                } else {
+                    closeBtn.textContent = '×';
+                }
+            } else {
+                closeBtn.textContent = '×';
+            }
+
             closeBtn.addEventListener('click', () => this.close());
             this._element.appendChild(closeBtn);
         }
