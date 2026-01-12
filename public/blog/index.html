@@ -111,6 +111,86 @@
             margin: 0 0 1rem;
             color: var(--dm-gray-700);
         }
+
+        .blog-loading {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            color: var(--dm-gray-600);
+            font-size: 1.1rem;
+        }
+
+        /* Slideover post content styles */
+        .post-reader-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid var(--dm-border, #e5e7eb);
+        }
+
+        .post-reader-date {
+            color: var(--dm-gray-500);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .post-reader-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 1rem;
+            color: var(--dm-text);
+            line-height: 1.3;
+        }
+
+        .post-reader-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-reader-content {
+            padding: 2rem;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            color: var(--dm-text);
+        }
+
+        .post-reader-content p {
+            margin: 0 0 1.5rem;
+        }
+
+        .post-reader-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .post-reader-nav {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--dm-border, #e5e7eb);
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .post-nav-btn {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--dm-border, #e5e7eb);
+            background: var(--dm-white);
+            color: var(--dm-text);
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .post-nav-btn:hover:not(:disabled) {
+            background: var(--dm-gray-100);
+            border-color: var(--dm-gray-300);
+        }
+
+        .post-nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body class="dm-cloaked dm-theme-charcoal-dark" data-layout="public">
@@ -121,77 +201,9 @@
 </header>
 
 <section class="blog-section">
-    <div class="blog-grid">
-        <article class="blog-card">
-            <div class="blog-card-image">
-                <span data-icon="book-open" data-icon-size="48"></span>
-            </div>
-            <div class="blog-card-body">
-                <div class="blog-card-meta">
-                    <span>Dec 7, 2025</span>
-                    <span>5 min read</span>
-                </div>
-                <h2 class="blog-card-title"><a href="#">Introducing Domma 1.0</a></h2>
-                <p class="blog-card-excerpt">We're excited to announce the release of Domma 1.0, a lightweight JavaScript framework that combines the best of jQuery, Lodash, and modern UI components.</p>
-                <div class="blog-card-tags">
-                    <span class="blog-tag">Release</span>
-                    <span class="blog-tag">Announcement</span>
-                </div>
-            </div>
-        </article>
-
-        <article class="blog-card">
-            <div class="blog-card-image">
-                <span data-icon="code" data-icon-size="48"></span>
-            </div>
-            <div class="blog-card-body">
-                <div class="blog-card-meta">
-                    <span>Dec 5, 2025</span>
-                    <span>8 min read</span>
-                </div>
-                <h2 class="blog-card-title"><a href="#">Getting Started with Reactive Models</a></h2>
-                <p class="blog-card-excerpt">Learn how to use Domma's reactive model system to create data-driven applications with automatic DOM updates and validation.</p>
-                <div class="blog-card-tags">
-                    <span class="blog-tag">Tutorial</span>
-                    <span class="blog-tag">Models</span>
-                </div>
-            </div>
-        </article>
-
-        <article class="blog-card">
-            <div class="blog-card-image">
-                <span data-icon="layout" data-icon-size="48"></span>
-            </div>
-            <div class="blog-card-body">
-                <div class="blog-card-meta">
-                    <span>Dec 3, 2025</span>
-                    <span>6 min read</span>
-                </div>
-                <h2 class="blog-card-title"><a href="#">Building Dynamic UIs with Elements</a></h2>
-                <p class="blog-card-excerpt">Explore Domma's UI component library including modals, tabs, accordions, carousels, and more with practical examples.</p>
-                <div class="blog-card-tags">
-                    <span class="blog-tag">Tutorial</span>
-                    <span class="blog-tag">UI</span>
-                </div>
-            </div>
-        </article>
-
-        <article class="blog-card">
-            <div class="blog-card-image">
-                <span data-icon="zap" data-icon-size="48"></span>
-            </div>
-            <div class="blog-card-body">
-                <div class="blog-card-meta">
-                    <span>Dec 1, 2025</span>
-                    <span>4 min read</span>
-                </div>
-                <h2 class="blog-card-title"><a href="#">Why Zero Dependencies Matter</a></h2>
-                <p class="blog-card-excerpt">In an age of npm bloat, we explain our philosophy of keeping Domma dependency-free and what it means for your projects.</p>
-                <div class="blog-card-tags">
-                    <span class="blog-tag">Philosophy</span>
-                </div>
-            </div>
-        </article>
+    <!-- Loading state (replaced by cards once loaded) -->
+    <div class="blog-grid" id="blog-grid">
+        <div class="blog-loading">Loading articles...</div>
     </div>
 
     <div class="coming-soon" style="margin-top: 3rem;">
@@ -206,6 +218,167 @@
 <script src="../dist/domma.min.js"></script>
 <script type="module" src="../layouts/js/layout.js"></script>
 <script>
+    // Blog post management
+    (async function() {
+        let posts = [];
+        let currentPostIndex = 0;
+        let slideover = null;
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Escape HTML for safe display
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Render blog cards
+        function renderCards(posts) {
+            const grid = document.getElementById('blog-grid');
+
+            if (!posts || posts.length === 0) {
+                grid.innerHTML = '<div class="blog-loading">No articles found.</div>';
+                return;
+            }
+
+            // Build cards with escaped content
+            const cardsHtml = posts.map((post, index) => {
+                const title = escapeHtml(post.title);
+                const excerpt = escapeHtml(post.excerpt);
+                const date = escapeHtml(formatDate(post.date));
+                const readTime = escapeHtml(post.readTime);
+                const icon = escapeHtml(post.icon || 'book-open');
+                const tags = post.tags.map(tag => `<span class="blog-tag">${escapeHtml(tag)}</span>`).join('');
+
+                return `
+                    <article class="blog-card" data-post-index="${index}" style="cursor: pointer;">
+                        <div class="blog-card-image">
+                            <span data-icon="${icon}" data-icon-size="48"></span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="blog-card-meta">
+                                <span>${date}</span>
+                                <span>${readTime}</span>
+                            </div>
+                            <h2 class="blog-card-title"><a href="#" onclick="return false;">${title}</a></h2>
+                            <p class="blog-card-excerpt">${excerpt}</p>
+                            <div class="blog-card-tags">
+                                ${tags}
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            grid.innerHTML = cardsHtml;
+
+            // Scan for icons after rendering
+            Domma.icons.scan();
+
+            // Add click handlers
+            document.querySelectorAll('.blog-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const index = parseInt(card.dataset.postIndex);
+                    openPost(index);
+                });
+            });
+        }
+
+        // Build slideover content
+        function buildPostContent(post, index) {
+            // Sanitize HTML content from backend using DOMPurify
+            const sanitizedContent = DOMPurify.sanitize(post.content);
+            const title = escapeHtml(post.title);
+            const date = escapeHtml(formatDate(post.date));
+            const readTime = escapeHtml(post.readTime);
+            const tags = post.tags.map(tag => `<span class="blog-tag">${escapeHtml(tag)}</span>`).join('');
+
+            return `
+                <div class="post-reader-header">
+                    <span class="post-reader-date">${date} · ${readTime}</span>
+                    <h1 class="post-reader-title">${title}</h1>
+                    <div class="post-reader-tags">
+                        ${tags}
+                    </div>
+                </div>
+                <article class="post-reader-content">
+                    ${sanitizedContent}
+                </article>
+                <nav class="post-reader-nav">
+                    <button class="post-nav-btn" id="prev-post" ${index === 0 ? 'disabled' : ''}>
+                        ← Previous
+                    </button>
+                    <button class="post-nav-btn" id="next-post" ${index === posts.length - 1 ? 'disabled' : ''}>
+                        Next →
+                    </button>
+                </nav>
+            `;
+        }
+
+        // Open post in slideover
+        function openPost(index) {
+            currentPostIndex = index;
+            const post = posts[index];
+
+            if (!slideover) {
+                // Create slideover on first use
+                slideover = Domma.elements.slideover({
+                    position: 'right',
+                    size: 'lg',
+                    content: buildPostContent(post, index),
+                    backdrop: true,
+                    backdropClose: true,
+                    keyboard: true
+                });
+            } else {
+                // Update existing slideover
+                slideover.setContent(buildPostContent(post, index));
+            }
+
+            // Attach navigation handlers after content is set
+            setTimeout(() => {
+                const prevBtn = document.getElementById('prev-post');
+                const nextBtn = document.getElementById('next-post');
+
+                if (prevBtn) {
+                    prevBtn.onclick = () => openPost(currentPostIndex - 1);
+                }
+
+                if (nextBtn) {
+                    nextBtn.onclick = () => openPost(currentPostIndex + 1);
+                }
+            }, 100);
+
+            slideover.open();
+        }
+
+        // Fetch posts from API
+        try {
+            const API_URL = 'http://localhost:3000/api/posts';
+            const response = await Domma.http.get(API_URL);
+
+            if (response.success && response.data) {
+                posts = response.data;
+                renderCards(posts);
+            } else {
+                document.getElementById('blog-grid').innerHTML = '<div class="blog-loading">Failed to load articles.</div>';
+            }
+        } catch (error) {
+            console.error('Failed to fetch blog posts:', error);
+            document.getElementById('blog-grid').innerHTML = '<div class="blog-loading">Unable to connect to the server. Please try again later.</div>';
+        }
+    })();
+
+    // Scan for icons
     Domma.icons.scan();
 </script>
 </body>
