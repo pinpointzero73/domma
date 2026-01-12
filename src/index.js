@@ -11,6 +11,7 @@ import {theme} from './theme.js';
 import {icons} from './icons.js';
 import {storage} from './storage.js';
 import {auth} from './auth.js';
+import sanitizeModule from './sanitize.js';
 
 // Cloaking - hide page immediately to prevent FOUC
 let cloakEnabled = true;
@@ -88,6 +89,7 @@ Domma.theme = theme;
 Domma.icons = icons;
 Domma.storage = storage;
 Domma.auth = auth;
+Domma.sanitize = sanitizeModule;
 
 // Expose DesktopNotification class for static method access
 Domma.DesktopNotification = DesktopNotification;

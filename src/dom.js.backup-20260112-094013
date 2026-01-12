@@ -365,43 +365,16 @@ class DommaCollection {
     }
 
     /**
-     * Get or set inner HTML with automatic XSS protection.
-     *
-     * SECURITY: Content is sanitized by default to prevent XSS attacks.
-     * Use {safe: false} option only for TRUSTED server content.
-     *
-     * @param {string} [content] - HTML content to set
-     * @param {Object} [options] - Sanitization options
-     * @param {boolean} [options.safe=true] - Sanitize content (true = safe, false = raw)
-     * @param {string} [options.preset='default'] - Preset: 'default', 'strict', 'basic'
-     * @param {Array} [options.allowedTags] - Custom allowed HTML tags
-     * @param {Array} [options.allowedAttrs] - Custom allowed attributes
+     * Get or set inner HTML.
+     * @param {string} [content]
      * @returns {string|DommaCollection}
-     *
-     * @example
-     * // Safe by default (sanitized)
-     * $('#content').html(userInput);
-     *
-     * // Unsafe - for TRUSTED content only
-     * $('#content').html(trustedServerHtml, {safe: false});
-     *
-     * // Strict mode - only basic formatting
-     * $('#content').html(userBio, {preset: 'strict'});
      */
-    html(content, options = {}) {
+    html(content) {
         if (content === undefined) {
-            const firstEl = this.elements[0];
-            return firstEl ? firstEl.innerHTML : '';
+            return this.elements[0] ? this.elements[0].innerHTML : '';
         }
-        const shouldSanitize = options.safe !== false;
-        if (shouldSanitize) {
-            content = sanitizeModule.sanitize(content, options);
-        }
-        return this.each((i, el) => {
-            el.innerHTML = content;
-        });
+        return this.each((i, el) => { el.innerHTML = content; });
     }
-
 
     /**
      * Get or set text content.

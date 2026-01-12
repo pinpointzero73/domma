@@ -1040,7 +1040,7 @@ class Tooltip extends Component {
         this._tooltip.className = 'domma-tooltip';
 
         if (opts.html) {
-            this._tooltip.innerHTML = sanitizeModule.sanitize(String(opts.content));
+            this._tooltip.innerHTML = opts.content;
         } else {
             this._tooltip.textContent = opts.content;
         }
@@ -1668,7 +1668,7 @@ class ToastInstance {
         if (opts.icon) {
             const iconWrapper = document.createElement('div');
             iconWrapper.className = 'domma-toast-icon';
-            iconWrapper.innerHTML = sanitizeModule.sanitize(String(opts.icon), {preset: 'basic'});
+            iconWrapper.innerHTML = opts.icon;
             this._element.appendChild(iconWrapper);
         }
 
@@ -1686,8 +1686,7 @@ class ToastInstance {
         const messageEl = document.createElement('div');
         messageEl.className = 'domma-toast-message';
         if (opts.html) {
-            // Sanitize HTML content before inserting
-            messageEl.innerHTML = sanitizeModule.sanitize(String(message));
+            messageEl.innerHTML = message;
         } else {
             messageEl.textContent = message;
         }
@@ -3505,7 +3504,6 @@ class CookieConsent extends Component {
         // Add backdrop
         html = `<div class="dm-cookie-consent-modal-backdrop"></div>${html}`;
 
-        // Note: html is internally generated, not user input - safe to use directly
         this._customizeModal.innerHTML = html;
         document.body.appendChild(this._customizeModal);
 
@@ -7739,7 +7737,7 @@ class Slideover extends Component {
         const bodyEl = this.element.querySelector('.dm-slideover-body');
         if (bodyEl) {
             if (typeof content === 'string') {
-                bodyEl.innerHTML = sanitizeModule.sanitize(String(content));
+                bodyEl.innerHTML = content;
             } else if (content instanceof Element) {
                 bodyEl.innerHTML = '';
                 bodyEl.appendChild(content);
