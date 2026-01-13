@@ -110,7 +110,7 @@
   <ul>
     <li><strong>Page Views:</strong> URL, page title, referrer, timestamp</li>
     <li><strong>Browser Information:</strong> User agent, screen resolution, viewport size</li>
-    <li><strong>IP Address:</strong> Automatically captured by our server for analytics and security purposes</li>
+    <li><strong>IP Address:</strong> Automatically anonymised before storage (last octet masked for IPv4, last 80 bits for IPv6) for analytics and security purposes</li>
     <li><strong>User Preferences:</strong> Theme selection, UI settings, and other preferences stored in your browser's
       localStorage
     </li>
@@ -143,8 +143,8 @@
   </p>
   <ul>
     <li>
-      <strong>Backend Server:</strong> Analytics data (page views, browser info, IP addresses) is stored
-      on our secure backend server. This data is retained for up to 90 days for analysis purposes.
+      <strong>Backend Server:</strong> Analytics data (page views, browser info, anonymised IP addresses) is stored
+      on our secure backend server. This data is <strong>automatically deleted after 90 days</strong> in compliance with GDPR storage limitation requirements.
     </li>
     <li>
       <strong>Your Browser (localStorage):</strong> User preferences (theme, settings, consent information)
@@ -156,32 +156,139 @@
     We do not use traditional cookies. All persistent data is stored using the Web Storage API (localStorage).
   </p>
 
-  <h2>Your Rights & Choices</h2>
+  <h2>Your Rights Under GDPR</h2>
   <p>
-    You have the following rights regarding your data:
+    Domma is fully compliant with the General Data Protection Regulation (GDPR). If you are in the European Economic
+    Area (EEA), you have the following data protection rights which you can exercise at any time:
+  </p>
+
+  <div class="info-card">
+    <h3>Self-Service GDPR Tools</h3>
+    <p>
+      For registered users, we provide self-service tools to exercise your GDPR rights instantly without needing to
+      contact us. All tools require authentication and are accessible through your account dashboard.
+    </p>
+  </div>
+
+  <h3>1. Right of Access (GDPR Art. 15)</h3>
+  <p>
+    You have the right to know what personal data we hold about you and how we process it.
   </p>
   <ul>
     <li>
-      <strong>Right to Access:</strong> You can request a copy of the analytics data we've collected
-      about your visits by contacting us.
-    </li>
-    <li>
-      <strong>Right to Deletion:</strong> You can request deletion of your analytics data by contacting us.
-      We will remove your data from our systems within 30 days.
-    </li>
-    <li>
-      <strong>Right to Opt-Out:</strong> You can opt-out of analytics tracking by:
+      <strong>For Registered Users:</strong> Log in to your account and visit the <strong>Privacy Dashboard</strong>
+      to view a complete summary of all data we hold about you, including:
       <ul>
-        <li>Clearing your localStorage (which removes consent)</li>
-        <li>Using browser extensions to block requests to <code>/api/analytics</code></li>
-        <li>Browsing in private/incognito mode</li>
+        <li>Profile information (name, email, role, account creation date)</li>
+        <li>Page view history (anonymised)</li>
+        <li>Blog posts (if applicable)</li>
+        <li>Contact submissions and feedback</li>
+        <li>Session activity</li>
       </ul>
+      <strong>API Endpoint:</strong> <code>GET /api/gdpr/data-summary</code> (requires authentication)
     </li>
     <li>
-      <strong>Right to Clear Preferences:</strong> You can clear all locally stored preferences at any time
-      through your browser's developer tools or by clearing site data.
+      <strong>For Non-Registered Users:</strong> Contact us at privacy@dcbw-it.co.uk with your request. We will
+      provide you with a summary of any data we can identify as yours within 30 days.
     </li>
   </ul>
+
+  <h3>2. Right to Data Portability (GDPR Art. 20)</h3>
+  <p>
+    You have the right to receive a copy of your personal data in a structured, commonly used, and machine-readable format.
+  </p>
+  <ul>
+    <li>
+      <strong>For Registered Users:</strong> Log in to your account and visit the <strong>Privacy Dashboard</strong>.
+      Click <strong>"Export My Data"</strong> to download a complete JSON file containing all your personal data.
+      The export includes:
+      <ul>
+        <li>User profile information</li>
+        <li>All page views associated with your account</li>
+        <li>Blog posts you've created</li>
+        <li>Contact submissions and feedback</li>
+        <li>Metadata (export date, format version, GDPR article reference)</li>
+      </ul>
+      The exported data is in JSON format, making it easy to import into other systems.<br>
+      <strong>API Endpoint:</strong> <code>GET /api/gdpr/export</code> (requires authentication)
+    </li>
+    <li>
+      <strong>For Non-Registered Users:</strong> Contact us at privacy@dcbw-it.co.uk to request a data export.
+    </li>
+  </ul>
+
+  <h3>3. Right to Erasure / "Right to be Forgotten" (GDPR Art. 17)</h3>
+  <p>
+    You have the right to request deletion of your personal data from our systems.
+  </p>
+  <ul>
+    <li>
+      <strong>For Registered Users:</strong> Log in to your account and visit the <strong>Privacy Dashboard</strong>.
+      Click <strong>"Delete My Account"</strong> to permanently delete your account and all associated data.
+      <ul>
+        <li><strong>What gets deleted:</strong> User account, page views, blog posts (or anonymised)</li>
+        <li><strong>What gets anonymised:</strong> Contact submissions and feedback (content retained for service improvement, but personally identifiable information is removed)</li>
+        <li><strong>Confirmation required:</strong> You must confirm your email address and provide your password</li>
+        <li><strong>This action is irreversible</strong> - all data is permanently deleted and cannot be recovered</li>
+      </ul>
+      <strong>API Endpoint:</strong> <code>DELETE /api/gdpr/delete-account</code> (requires authentication + password confirmation)
+    </li>
+    <li>
+      <strong>For Non-Registered Users:</strong> Contact us at privacy@dcbw-it.co.uk to request data deletion. We will
+      process your request within 30 days.
+    </li>
+  </ul>
+
+  <h3>4. Right to Object / Opt-Out of Tracking</h3>
+  <p>
+    You have the right to object to the processing of your personal data for analytics purposes.
+  </p>
+  <ul>
+    <li>
+      <strong>Do Not Track (DNT):</strong> We respect the Do Not Track browser setting. If you enable DNT in your
+      browser, we will not track your browsing activity or collect analytics data. No action required on our part.
+    </li>
+    <li>
+      <strong>Cookie Consent:</strong> Reject analytics cookies through our cookie consent banner (appears on first visit).
+      You can change your preferences at any time by clicking "Cookie Settings" in the footer.
+    </li>
+    <li>
+      <strong>Clear Local Storage:</strong> Clear your browser's localStorage to remove all locally stored preferences
+      and consent information.
+    </li>
+    <li>
+      <strong>Private Browsing:</strong> Use your browser's private/incognito mode to prevent tracking.
+    </li>
+  </ul>
+
+  <h3>5. Right to Rectification</h3>
+  <p>
+    If you believe any personal data we hold about you is inaccurate or incomplete, you have the right to request correction.
+  </p>
+  <ul>
+    <li><strong>For Registered Users:</strong> Update your profile information through your account settings.</li>
+    <li><strong>For Non-Registered Users:</strong> Contact us at privacy@dcbw-it.co.uk with the correction request.</li>
+  </ul>
+
+  <h3>6. Right to Restriction of Processing</h3>
+  <p>
+    You have the right to request that we restrict the processing of your personal data in certain circumstances.
+    Contact us at privacy@dcbw-it.co.uk to discuss your specific situation.
+  </p>
+
+  <div class="info-card">
+    <h3>Additional Privacy Protections</h3>
+    <p>
+      Beyond GDPR requirements, Domma implements the following privacy-first practices:
+    </p>
+    <ul style="margin-bottom: 0;">
+      <li><strong>IP Anonymisation:</strong> All IP addresses are automatically anonymised before storage (GDPR Art. 5(1)(c) - Data minimisation)</li>
+      <li><strong>90-Day Auto-Deletion:</strong> Analytics data is automatically deleted after 90 days (GDPR Art. 5(1)(e) - Storage limitation)</li>
+      <li><strong>DNT Respect:</strong> We honour the Do Not Track browser setting</li>
+      <li><strong>No Third-Party Tracking:</strong> We do not share your data with advertisers or third-party trackers</li>
+      <li><strong>Minimal Data Collection:</strong> We only collect data necessary for service improvement</li>
+    </ul>
+  </div>
 
   <h2>Data Security</h2>
   <p>
@@ -204,6 +311,12 @@
     Continued use of Domma after changes to this policy constitutes acceptance of the updated terms.
   </p>
 
+  <h2>Cookies and Tracking Technologies</h2>
+  <p>
+    For detailed information about how we use cookies and similar tracking technologies, please see our
+    <a href="../cookie-policy/">Cookie Policy</a>.
+  </p>
+
   <h2>Contact Us</h2>
   <p>
     If you have questions about this Privacy Policy or wish to exercise your data rights, please contact us:
@@ -211,10 +324,13 @@
   <ul>
     <li><strong>Email:</strong> privacy@dcbw-it.co.uk</li>
     <li><strong>Website:</strong> <a href="../about/index.html">About Us</a></li>
+    <li><strong>Cookie Policy:</strong> <a href="../cookie-policy/">View Cookie Policy</a></li>
+    <li><strong>Feedback:</strong> <a href="../feedback/">Send Feedback</a></li>
   </ul>
 
   <p class="last-updated">
-    <strong>Last updated:</strong> 30 December 2025
+    <strong>Last updated:</strong> January 2026<br>
+    <strong>Version:</strong> 2.0 (GDPR Enhanced)
   </p>
 </section>
 

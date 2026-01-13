@@ -40,6 +40,12 @@
 
   // Send page view to backend
   async function trackPageView() {
+    // Check Do Not Track browser setting
+    if (navigator.doNotTrack === '1' || window.doNotTrack === '1') {
+      console.log('[Analytics] DNT enabled, respecting user privacy preference');
+      return;
+    }
+
     // Only track if consent given
     if (!hasConsent()) {
       console.log('[Analytics] Consent not given, skipping page view tracking');

@@ -3336,6 +3336,8 @@ class CookieConsent extends Component {
         // Compliance
         defaultState: 'undecided', // 'accepted', 'rejected', 'undecided'
         requireExplicitConsent: true, // GDPR compliance mode
+        consentVersion: '1.0',  // Version of consent - bump when privacy policy changes
+        onVersionMismatch: null, // (oldVersion, newVersion) => {} - called when version mismatch detected
 
         // Callbacks
         onAccept: null,         // (categories) => {}
@@ -3379,6 +3381,26 @@ class CookieConsent extends Component {
         if (stored && stored.timestamp) {
             const daysSinceConsent = (Date.now() - stored.timestamp) / (1000 * 60 * 60 * 24);
             if (daysSinceConsent <= this.options.storageDuration) {
+                // Check consent version match
+                if (stored.version && stored.version !== this.options.consentVersion) {
+                    // Version mismatch - privacy policy may have changed, require re-consent
+                    this._state = 'undecided';
+                    this._preferences = {};
+
+                    // Set default preferences
+                    Object.keys(this.options.categories).forEach(key => {
+                        const category = this.options.categories[key];
+                        this._preferences[key] = category.required || !this.options.requireExplicitConsent;
+                    });
+
+                    // Notify about version mismatch
+                    if (this.options.onVersionMismatch) {
+                        this.options.onVersionMismatch(stored.version, this.options.consentVersion);
+                    }
+
+                    return;
+                }
+
                 this._state = stored.state;
                 this._preferences = stored.preferences || {};
                 return;
@@ -3400,7 +3422,8 @@ class CookieConsent extends Component {
         Domma.storage.set(this.options.storageKey, {
             state: this._state,
             preferences: this._preferences,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            version: this.options.consentVersion
         });
     }
 
