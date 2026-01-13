@@ -67,13 +67,19 @@ consult that folder's CLAUDE.md for detailed information.
 
 ## Aliases
 
-| Full Path       | Alias | Global     | Description                |
-|-----------------|-------|------------|----------------------------|
-| `Domma()`       | `$`   | `window.$` | DOM selection/manipulation |
-| `Domma.utils`   | `_`   | `window._` | Utility functions          |
-| `Domma.models`  | `M`   | `window.M` | Reactive models & pub/sub  |
-| `Domma.dates()` | `D()` | `window.D` | Date manipulation          |
-| `Domma.storage` | `S`   | `window.S` | localStorage wrapper       |
+| Full Path        | Alias | Global     | Description                |
+|------------------|-------|------------|----------------------------|
+| `Domma()`        | `$`   | `window.$` | DOM selection/manipulation |
+| `Domma.utils`    | `_`   | `window._` | Utility functions          |
+| `Domma.models`   | `M`   | `window.M` | Reactive models & pub/sub  |
+| `Domma.dates()`  | `D()` | `window.D` | Date manipulation          |
+| `Domma.storage`  | `S`   | `window.S` | localStorage wrapper       |
+| `Domma.auth`     | `A`   | `window.A` | Authentication module      |
+| `Domma.forms`    | `F`   | `window.F` | Form builder               |
+| `Domma.http`     | `H`   | `window.H` | HTTP client                |
+| `Domma.elements` | `E`   | `window.E` | UI components              |
+| `Domma.icons`    | `I`   | `window.I` | SVG icon system            |
+| `Domma.tables`   | `T`   | `window.T` | DataTable functionality    |
 
 ## CSS Architecture
 

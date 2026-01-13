@@ -10,6 +10,15 @@ Domma provides short aliases for convenience, similar to jQuery's `$` and Lodash
 |-----------|-------|---------|
 | `Domma` | `$` | DOM selection and manipulation |
 | `Domma.utils` | `_` | Utility functions |
+| `Domma.models` | `M` | Reactive models & pub/sub |
+| `Domma.dates()` | `D()` | Date manipulation |
+| `Domma.storage` | `S` | localStorage wrapper |
+| `Domma.auth` | `A` | Authentication module |
+| `Domma.forms` | `F` | Form builder |
+| `Domma.http` | `H` | HTTP client |
+| `Domma.elements` | `E` | UI components |
+| `Domma.icons` | `I` | SVG icon system |
+| `Domma.tables` | `T` | DataTable functionality |
 
 ### Usage
 
@@ -17,10 +26,16 @@ Domma provides short aliases for convenience, similar to jQuery's `$` and Lodash
 ```html
 <script src="dist/domma.min.js"></script>
 <script>
-    // All three are available globally
-    Domma('#app').addClass('active');
-    $('#app').addClass('active');
-    _.debounce(fn, 100);
+    // All aliases are available globally
+    $('#app').addClass('active');              // $ = Domma (DOM)
+    _.debounce(fn, 100);                        // _ = utils
+    M.create(schema, data);                     // M = models
+    D().format('YYYY-MM-DD');                   // D = dates
+    S.set('key', 'value');                      // S = storage
+    H.get('/api/data');                         // H = http
+    E.modal('#myModal');                        // E = elements
+    I.scan();                                   // I = icons
+    T.create('#table', { columns, data });      // T = tables
 </script>
 ```
 
@@ -30,11 +45,13 @@ Domma provides short aliases for convenience, similar to jQuery's `$` and Lodash
 import Domma from 'domma';
 
 // Named imports with aliases
-import { $, _ } from 'domma';
+import { $, _, M, D, S, A, F, H, E, I, T } from 'domma';
 
 // Use short form
 $('#app').addClass('active');
 _.chunk([1, 2, 3, 4], 2);
+E.modal('#modal');
+I.scan();
 
 // Or full names
 Domma('#app').addClass('active');

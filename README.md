@@ -76,12 +76,19 @@ For quick prototyping without npm:
 
 ## Short Aliases
 
-| Namespace | Full Path      | Alias | Description                   |
-|-----------|----------------|-------|-------------------------------|
-| DOM       | `Domma()`      | `$`   | jQuery-style DOM manipulation |
-| Utils     | `Domma.utils`  | `_`   | Lodash-style utilities        |
-| Models    | `Domma.models` | `M`   | Reactive models & pub/sub     |
-| Dates     | `Domma.dates`  | `D`   | Date manipulation             |
+| Namespace | Full Path         | Alias | Description                   |
+|-----------|-------------------|-------|-------------------------------|
+| DOM       | `Domma()`         | `$`   | jQuery-style DOM manipulation |
+| Utils     | `Domma.utils`     | `_`   | Lodash-style utilities        |
+| Models    | `Domma.models`    | `M`   | Reactive models & pub/sub     |
+| Dates     | `Domma.dates`     | `D`   | Date manipulation             |
+| Storage   | `Domma.storage`   | `S`   | localStorage wrapper          |
+| Auth      | `Domma.auth`      | `A`   | Authentication module         |
+| Forms     | `Domma.forms`     | `F`   | Form builder                  |
+| HTTP      | `Domma.http`      | `H`   | HTTP client                   |
+| Elements  | `Domma.elements`  | `E`   | UI components                 |
+| Icons     | `Domma.icons`     | `I`   | SVG icon system               |
+| Tables    | `Domma.tables`    | `T`   | DataTable functionality       |
 
 ## Quick Start
 

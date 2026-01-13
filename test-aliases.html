@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Domma Aliases</title>
+    <script src="public/dist/domma.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>Alias Test</h1>
+        <pre id="results"></pre>
+    </div>
+
+    <script>
+        // Test all aliases
+        const tests = [];
+
+        // Test $
+        try {
+            $('#app').addClass('test');
+            tests.push('✓ $ (Domma) works');
+        } catch (e) {
+            tests.push('✗ $ (Domma) failed: ' + e.message);
+        }
+
+        // Test _
+        try {
+            const result = _.chunk([1, 2, 3, 4], 2);
+            tests.push('✓ _ (utils) works');
+        } catch (e) {
+            tests.push('✗ _ (utils) failed: ' + e.message);
+        }
+
+        // Test M
+        try {
+            const model = M.create({name: {type: 'string'}});
+            tests.push('✓ M (models) works');
+        } catch (e) {
+            tests.push('✗ M (models) failed: ' + e.message);
+        }
+
+        // Test D
+        try {
+            const date = D().format('YYYY-MM-DD');
+            tests.push('✓ D (dates) works');
+        } catch (e) {
+            tests.push('✗ D (dates) failed: ' + e.message);
+        }
+
+        // Test S
+        try {
+            S.set('test', 'value');
+            const val = S.get('test');
+            tests.push('✓ S (storage) works');
+        } catch (e) {
+            tests.push('✗ S (storage) failed: ' + e.message);
+        }
+
+        // Test A
+        try {
+            if (typeof A !== 'undefined' && A.login) {
+                tests.push('✓ A (auth) works');
+            } else {
+                tests.push('⚠ A (auth) exists but may not be fully initialized');
+            }
+        } catch (e) {
+            tests.push('✗ A (auth) failed: ' + e.message);
+        }
+
+        // Test F
+        try {
+            if (typeof F !== 'undefined' && F.create) {
+                tests.push('✓ F (forms) works');
+            } else {
+                tests.push('✗ F (forms) missing or incomplete');
+            }
+        } catch (e) {
+            tests.push('✗ F (forms) failed: ' + e.message);
+        }
+
+        // Test Domma.F (fix check)
+        try {
+            if (typeof Domma.F !== 'undefined' && Domma.F.create) {
+                tests.push('✓ Domma.F (forms) works - FIX VERIFIED');
+            } else {
+                tests.push('✗ Domma.F (forms) missing - FIX FAILED');
+            }
+        } catch (e) {
+            tests.push('✗ Domma.F (forms) failed: ' + e.message);
+        }
+
+        // Test H
+        try {
+            if (typeof H !== 'undefined' && H.get) {
+                tests.push('✓ H (http) works');
+            } else {
+                tests.push('✗ H (http) missing or incomplete');
+            }
+        } catch (e) {
+            tests.push('✗ H (http) failed: ' + e.message);
+        }
+
+        // Test E (NEW)
+        try {
+            if (typeof E !== 'undefined' && E.modal) {
+                tests.push('✓ E (elements) works - NEW ALIAS');
+            } else {
+                tests.push('✗ E (elements) missing or incomplete');
+            }
+        } catch (e) {
+            tests.push('✗ E (elements) failed: ' + e.message);
+        }
+
+        // Test I (NEW)
+        try {
+            if (typeof I !== 'undefined' && I.scan) {
+                tests.push('✓ I (icons) works - NEW ALIAS');
+            } else {
+                tests.push('✗ I (icons) missing or incomplete');
+            }
+        } catch (e) {
+            tests.push('✗ I (icons) failed: ' + e.message);
+        }
+
+        // Test T (NEW)
+        try {
+            if (typeof T !== 'undefined' && T.create) {
+                tests.push('✓ T (tables) works - NEW ALIAS');
+            } else {
+                tests.push('✗ T (tables) missing or incomplete');
+            }
+        } catch (e) {
+            tests.push('✗ T (tables) failed: ' + e.message);
+        }
+
+        // Display results using textContent (safe from XSS)
+        document.getElementById('results').textContent = tests.join('\n');
+
+        console.log('Alias Test Results:');
+        tests.forEach(test => console.log(test));
+    </script>
+</body>
+</html>

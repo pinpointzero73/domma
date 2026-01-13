@@ -103,13 +103,20 @@ const S = storage;
 const A = auth;
 const F = forms;
 const H = http;
+const E = elements;
+const I = icons;
+const T = tables;
 
 // Attach aliases to Domma
 Domma.M = M;
 Domma.D = D;
 Domma.S = S;
 Domma.A = A;
+Domma.F = F;
 Domma.H = H;
+Domma.E = E;
+Domma.I = I;
+Domma.T = T;
 
 // Expose globally if needed
 if (typeof window !== 'undefined') {
@@ -122,10 +129,13 @@ if (typeof window !== 'undefined') {
     window.A = A;
     window.F = F;
     window.H = H;
+    window.E = E;
+    window.I = I;
+    window.T = T;
 }
 
 export default Domma;
-export {Domma, $, _, M, D, S, A, F, H};
+export {Domma, $, _, M, D, S, A, F, H, E, I, T};
 
 // Reveal page after Domma is ready
 if (typeof document !== 'undefined') {
