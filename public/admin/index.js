@@ -15,8 +15,8 @@ $(() => {
     return; // Auth failed, user redirected
   }
 
-  // Initialise sidebar with current section
-  AdminSidebar.init('overview');
+  // Initialise sidebar with current section and API URL for badge counts
+  AdminSidebar.init('overview', apiUrl);
 
   // ============================================
   // 2. Fetch Statistics

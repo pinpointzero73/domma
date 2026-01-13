@@ -296,8 +296,8 @@ async function init() {
     // Get current user for permissions
     currentUser = AdminAuth.getUser();
 
-    // Initialise sidebar
-    AdminSidebar.init('blog');
+    // Initialise sidebar with badge counts
+    AdminSidebar.init('blog', apiUrl);
 
     // Scan for icons
     Domma.icons.scan();

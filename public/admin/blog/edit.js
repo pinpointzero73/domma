@@ -286,8 +286,8 @@ async function init() {
         return; // Auth failed, user redirected
     }
 
-    // Initialise sidebar
-    AdminSidebar.init('blog');
+    // Initialise sidebar with badge counts
+    AdminSidebar.init('blog', apiUrl);
 
     // Scan for icons
     Domma.icons.scan();

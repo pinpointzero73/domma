@@ -6,20 +6,22 @@
 
 const AdminSidebar = {
     items: [
-        { text: 'Overview', url: '/admin/index.html', icon: 'layout', section: 'overview', roles: ['admin'] },
-        { text: 'Users', url: '/admin/users/index.html', icon: 'users', section: 'users', roles: ['admin'] },
-        { text: 'Contact Forms', url: '/admin/contact-forms/index.html', icon: 'mail', section: 'contact-forms', roles: ['admin'] },
-        { text: 'Feedback', url: '/admin/feedback/index.html', icon: 'message-square', section: 'feedback', roles: ['admin'] },
-        { text: 'Blog', url: '/admin/blog/index.html', icon: 'file-text', section: 'blog', roles: ['admin', 'editor'] }
+        { text: 'Overview', url: '/admin/index.html', icon: 'layout', section: 'overview', roles: ['admin'], badge: null },
+        { text: 'Users', url: '/admin/users/index.html', icon: 'users', section: 'users', roles: ['admin'], badge: null },
+        { text: 'Contact Forms', url: '/admin/contact-forms/index.html', icon: 'mail', section: 'contact-forms', roles: ['admin'], badge: null },
+        { text: 'Feedback', url: '/admin/feedback/index.html', icon: 'message-square', section: 'feedback', roles: ['admin'], badge: null },
+        { text: 'Blog', url: '/admin/blog/index.html', icon: 'file-text', section: 'blog', roles: ['admin', 'editor'], badge: null }
     ],
 
     sidebarInstance: null,
+    apiUrl: null,
 
     /**
      * Initialise sidebar using Domma.elements.sidebar()
      * @param {string} currentSection - The current active section
+     * @param {string} apiUrl - The API base URL (optional, for loading badge counts)
      */
-    init(currentSection) {
+    init(currentSection, apiUrl = null) {
         const container = document.getElementById('admin-sidebar');
         if (!container) {
             console.error('[AdminSidebar] Container #admin-sidebar not found');
@@ -31,6 +33,9 @@ const AdminSidebar = {
             console.error('[AdminSidebar] Domma.elements.sidebar is not available');
             return;
         }
+
+        // Store API URL for later use
+        this.apiUrl = apiUrl;
 
         // Get current user for role-based filtering
         const user = Domma.auth.getUser();
@@ -68,6 +73,92 @@ const AdminSidebar = {
                 // Allow default link behavior
             }
         });
+
+        // Load badge counts if apiUrl provided
+        if (apiUrl) {
+            this.loadBadgeCounts();
+        }
+    },
+
+    /**
+     * Load badge counts from API
+     * Fetches counts for each section and updates badges
+     */
+    async loadBadgeCounts() {
+        if (!this.apiUrl) {
+            console.warn('[AdminSidebar] No API URL provided, skipping badge count load');
+            return;
+        }
+
+        try {
+            // Import AdminAuth to get auth headers
+            const AdminAuth = (await import('./admin-auth.js')).default;
+
+            const response = await Domma.http.get(`${this.apiUrl}/admin/sidebar-counts`, {
+                headers: AdminAuth.getAuthHeaders()
+            });
+
+            if (response.success && response.counts) {
+                this.updateBadges(response.counts);
+            }
+        } catch (error) {
+            console.error('[AdminSidebar] Failed to load badge counts:', error);
+            // Don't show toast error, badges are optional enhancement
+        }
+    },
+
+    /**
+     * Update sidebar badges with counts
+     * @param {object} counts - Object with counts keyed by section
+     */
+    updateBadges(counts) {
+        // Map API counts to section identifiers
+        const badgeMap = {
+            'users': counts.users,
+            'contact-forms': counts.contactForms,
+            'feedback': counts.feedback,
+            'blog': counts.blog
+        };
+
+        // Update items with badge values
+        this.items.forEach(item => {
+            if (item.section && badgeMap[item.section] !== undefined) {
+                item.badge = badgeMap[item.section];
+            }
+        });
+
+        // Update the DOM badges directly
+        Object.keys(badgeMap).forEach(section => {
+            const count = badgeMap[section];
+            const link = document.querySelector(`[data-section="${section}"]`);
+
+            if (link) {
+                // Find existing badge or create new one
+                let badge = link.querySelector('.sidebar-badge');
+
+                if (count > 0) {
+                    if (!badge) {
+                        // Create badge element
+                        badge = document.createElement('span');
+                        badge.className = 'sidebar-badge';
+
+                        // Insert before text or at the end
+                        const text = link.querySelector('.sidebar-text');
+                        if (text && text.nextSibling) {
+                            link.insertBefore(badge, text.nextSibling);
+                        } else {
+                            link.appendChild(badge);
+                        }
+                    }
+                    badge.textContent = count;
+                } else if (badge) {
+                    // Remove badge if count is 0
+                    badge.remove();
+                }
+            }
+        });
+
+        console.log('[AdminSidebar] Updated badges:', badgeMap);
     },
 
     /**

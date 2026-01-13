@@ -16,7 +16,7 @@ $(() => {
     }
 
     // Initialise sidebar with current section
-    AdminSidebar.init('feedback');
+    AdminSidebar.init('feedback', apiUrl);
 
     // ============================================
     // 2. Initialise Collapsible Cards

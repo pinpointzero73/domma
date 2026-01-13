@@ -16,7 +16,7 @@ $(() => {
     }
 
     // Initialise sidebar with current section
-    AdminSidebar.init('contact-forms');
+    AdminSidebar.init('contact-forms', apiUrl);
 
     // ============================================
     // 2. Initialise Collapsible Cards
