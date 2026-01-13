@@ -85,45 +85,34 @@ $(() => {
     async function loadEmails() {
         try {
             const params = new URLSearchParams({
-                limit: 25,
-                type: emailTypeFilter || 'contact'
+                limit: 25
             });
 
             if (emailSearchQuery) params.append('search', emailSearchQuery);
-            if (emailStatusFilter) params.append('status', emailStatusFilter);
-            if (emailDateFilter) params.append('startDate', emailDateFilter);
 
-            const response = await Domma.http.get(`${apiUrl}/emails?${params}`, {
+            const response = await Domma.http.get(`${apiUrl}/admin/contact-submissions?${params}`, {
                 headers: AdminAuth.getAuthHeaders()
             });
 
             if (response.success) {
-                const emailData = response.data || [];
+                const submissions = response.data || [];
 
                 // Transform data for table
-                const tableData = emailData.map(email => {
-                    const contactInfo = {
-                        name: email.metadata?.contactName || email.from?.name || 'Unknown',
-                        email: email.metadata?.contactEmail || email.from?.email || '',
-                        company: email.metadata?.contactCompany || '',
-                        phone: email.metadata?.contactPhone || ''
-                    };
+                const tableData = submissions.map(submission => {
+                    const projectType = submission.projectType ?
+                        formatProjectType(submission.projectType) : 'N/A';
 
-                    const projectType = email.metadata?.projectType ?
-                        formatProjectType(email.metadata.projectType) : 'N/A';
-
-                    const statusText = email.status || 'pending';
-                    const submitted = Domma.dates(email.createdAt).format('DD MMM YYYY HH:mm');
+                    const submitted = Domma.dates(submission.submittedAt || submission.createdAt).format('DD MMM YYYY HH:mm');
 
                     return {
-                        name: contactInfo.name,
-                        email: contactInfo.email,
-                        phone: contactInfo.phone || 'N/A',
-                        company: contactInfo.company || 'N/A',
+                        name: submission.name,
+                        email: submission.email,
+                        phone: submission.phone || 'N/A',
+                        company: submission.company || 'N/A',
                         projectType: projectType,
-                        status: statusText,
+                        subject: submission.subject || 'N/A',
                         submitted: submitted,
-                        emailId: email._id
+                        submissionId: submission._id
                     };
                 });
 
@@ -136,38 +125,20 @@ $(() => {
                             { key: 'email', title: 'Email', sortable: true },
                             { key: 'phone', title: 'Phone' },
                             { key: 'company', title: 'Company', sortable: true },
+                            { key: 'subject', title: 'Subject', sortable: true },
                             { key: 'projectType', title: 'Project Type', sortable: true },
-                            {
-                                key: 'status',
-                                title: 'Status',
-                                sortable: true,
-                                render: (value) => {
-                                    const statusMap = {
-                                        pending: '<span class="badge badge-warning">Pending</span>',
-                                        sent: '<span class="badge badge-success">Sent</span>',
-                                        failed: '<span class="badge badge-danger">Failed</span>',
-                                        delivered: '<span class="badge badge-success">Delivered</span>',
-                                        read: '<span class="badge badge-info">Read</span>'
-                                    };
-                                    return statusMap[value] || `<span class="badge badge-secondary">${_.capitalize(value)}</span>`;
-                                }
-                            },
                             { key: 'submitted', title: 'Submitted', sortable: true },
                             {
-                                key: 'emailId',
+                                key: 'submissionId',
                                 title: 'Actions',
                                 sortable: false,
-                                render: (emailId) => `
+                                render: (submissionId) => `
                                     <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-primary view-email-btn" data-email-id="${emailId}">
+                                        <button class="btn btn-primary view-submission-btn" data-submission-id="${submissionId}">
                                             <span data-icon="eye" data-icon-size="16"></span>
                                             View
                                         </button>
-                                        <button class="btn btn-warning edit-email-btn" data-email-id="${emailId}">
-                                            <span data-icon="edit" data-icon-size="16"></span>
-                                            Edit
-                                        </button>
-                                        <button class="btn btn-danger delete-email-btn" data-email-id="${emailId}">
+                                        <button class="btn btn-danger delete-submission-btn" data-submission-id="${submissionId}">
                                             <span data-icon="trash" data-icon-size="16"></span>
                                             Delete
                                         </button>
@@ -186,16 +157,12 @@ $(() => {
                     });
 
                     // Attach event handlers ONCE via delegation
-                    $('body').on('click', '.view-email-btn', function () {
-                        viewEmailDetails($(this).attr('data-email-id'));
+                    $('body').on('click', '.view-submission-btn', function () {
+                        viewSubmissionDetails($(this).attr('data-submission-id'));
                     });
 
-                    $('body').on('click', '.edit-email-btn', function () {
-                        editEmail($(this).attr('data-email-id'));
-                    });
-
-                    $('body').on('click', '.delete-email-btn', function () {
-                        deleteEmail($(this).attr('data-email-id'));
+                    $('body').on('click', '.delete-submission-btn', function () {
+                        deleteSubmission($(this).attr('data-submission-id'));
                     });
                 } else {
                     emailsTable.setData(tableData);
@@ -218,175 +185,61 @@ $(() => {
         return types[type] || _.capitalize(type);
     }
 
-    // Email Actions
-    async function viewEmailDetails(emailId) {
+    // Submission Actions
+    async function viewSubmissionDetails(submissionId) {
         try {
-            const response = await Domma.http.get(`${apiUrl}/emails/${emailId}`, {
+            const response = await Domma.http.get(`${apiUrl}/admin/contact-submissions/${submissionId}`, {
                 headers: AdminAuth.getAuthHeaders()
             });
 
             if (response.success) {
-                const email = response.data;
+                const submission = response.data;
                 const details = `
-**Subject:** ${email.subject}
+**Name:** ${submission.name}
+**Email:** ${submission.email}
+**Phone:** ${submission.phone || 'Not provided'}
+**Company:** ${submission.company || 'Not provided'}
 
-**From:** ${email.from.email}
-**To:** ${email.to[0].email}
-**Status:** ${_.capitalize(email.status)}
-**Created:** ${Domma.dates(email.createdAt).format('DD MMM YYYY HH:mm')}
+**Subject:** ${submission.subject || 'No subject'}
+**Project Type:** ${formatProjectType(submission.projectType)}
 
-**Project Details:**
-${email.metadata?.details || 'No details available'}
+**Message:**
+${submission.message || 'No message'}
+
+**Budget:** ${submission.budget || 'Not specified'}
+**Timeline:** ${submission.timeline || 'Not specified'}
+
+**Submitted:** ${Domma.dates(submission.submittedAt || submission.createdAt).format('DD MMM YYYY HH:mm')}
                 `.trim();
 
                 await Domma.elements.alert(details, {
-                    title: 'Email Details',
+                    title: 'Contact Submission Details',
                     size: 'large'
                 });
             }
         } catch (error) {
-            console.error('[Admin] Failed to load email details:', error);
-            Domma.elements.toast('Failed to load email details', { type: 'error' });
+            console.error('[Admin] Failed to load submission details:', error);
+            Domma.elements.toast('Failed to load submission details', { type: 'error' });
         }
     }
 
-    async function editEmail(emailId) {
-        try {
-            const response = await Domma.http.get(`${apiUrl}/emails/${emailId}`, {
-                headers: AdminAuth.getAuthHeaders()
-            });
-
-            if (!response.success) {
-                throw new Error(response.message || 'Failed to load email');
-            }
-
-            const email = response.data;
-            const contactEmail = email.metadata?.contactEmail || email.from?.email || 'Unknown';
-
-            // Email edit schema
-            const emailSchema = {
-                status: {
-                    type: 'select',
-                    label: 'Email Status',
-                    required: true,
-                    options: [
-                        { value: 'pending', label: 'Pending' },
-                        { value: 'sent', label: 'Sent' },
-                        { value: 'failed', label: 'Failed' },
-                        { value: 'delivered', label: 'Delivered' },
-                        { value: 'read', label: 'Read' }
-                    ],
-                    formConfig: {
-                        helperText: 'Update the email delivery status'
-                    }
-                }
-            };
-
-            const initialData = {
-                status: email.status
-            };
-
-            // Create modal with custom retry button if status is failed
-            const modalConfig = {
-                title: `Edit Email: ${contactEmail}`,
-                size: 'medium',
-                saveText: 'Update Email',
-                layout: 'stacked',
-                sections: [
-                    {
-                        title: 'Email Status',
-                        fields: ['status']
-                    }
-                ],
-                onSave: async (formData) => {
-                    const updateResponse = await Domma.http.patch(
-                        `${apiUrl}/emails/${emailId}`,
-                        formData,
-                        { headers: AdminAuth.getAuthHeaders() }
-                    );
-
-                    if (!updateResponse.success) {
-                        throw new Error(updateResponse.message || 'Failed to update email');
-                    }
-
-                    Domma.elements.toast('Email updated successfully', { type: 'success' });
-                    loadEmails();
-                    loadEmailStats();
-                },
-                onError: (error) => {
-                    console.error('[Admin] Failed to update email:', error);
-                    Domma.elements.toast('Error: ' + error.message, { type: 'error' });
-                }
-            };
-
-            // Add custom footer if email is failed
-            if (email.status === 'failed') {
-                modalConfig.customFooter = (modal) => {
-                    return `
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-warning" id="retry-failed-email">
-                                <span data-icon="refresh-cw" data-icon-size="16"></span>
-                                Retry Failed Email
-                            </button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Update Email</button>
-                        </div>
-                    `;
-                };
-            }
-
-            const modal = Domma.forms.modal(emailSchema, initialData, modalConfig);
-            modal.open();
-
-            // Attach retry handler if failed
-            if (email.status === 'failed') {
-                $('#retry-failed-email').on('click', async () => {
-                    const confirmed = await Domma.elements.confirm('Retry sending this failed email?');
-                    if (!confirmed) return;
-
-                    try {
-                        const retryResponse = await Domma.http.post(
-                            `${apiUrl}/emails/${emailId}/retry`,
-                            {},
-                            { headers: AdminAuth.getAuthHeaders() }
-                        );
-
-                        if (retryResponse.success) {
-                            Domma.elements.toast('Email queued for retry', { type: 'success' });
-                            modal.close();
-                            loadEmails();
-                            loadEmailStats();
-                        }
-                    } catch (error) {
-                        console.error('[Admin] Failed to retry email:', error);
-                        Domma.elements.toast('Failed to retry email', { type: 'error' });
-                    }
-                });
-            }
-
-        } catch (error) {
-            console.error('[Admin] Failed to edit email:', error);
-            Domma.elements.toast('Failed to load email for editing', { type: 'error' });
-        }
-    }
-
-    async function deleteEmail(emailId) {
-        const confirmed = await Domma.elements.confirm('Are you sure you want to delete this email?\n\nThis action cannot be undone.');
+    async function deleteSubmission(submissionId) {
+        const confirmed = await Domma.elements.confirm('Are you sure you want to delete this contact submission?\n\nThis action cannot be undone.');
         if (!confirmed) return;
 
         try {
-            const response = await Domma.http.delete(`${apiUrl}/emails/${emailId}`, {
+            const response = await Domma.http.delete(`${apiUrl}/admin/contact-submissions/${submissionId}`, {
                 headers: AdminAuth.getAuthHeaders()
             });
 
             if (response.success) {
-                Domma.elements.toast('Email deleted successfully', { type: 'success' });
+                Domma.elements.toast('Contact submission deleted successfully', { type: 'success' });
                 loadEmails();
                 loadEmailStats();
             }
         } catch (error) {
-            console.error('[Admin] Failed to delete email:', error);
-            Domma.elements.toast('Failed to delete email', { type: 'error' });
+            console.error('[Admin] Failed to delete submission:', error);
+            Domma.elements.toast('Failed to delete submission', { type: 'error' });
         }
     }
 
