@@ -6,10 +6,11 @@
 
 const AdminSidebar = {
     items: [
-        { text: 'Overview', url: '/admin/index.html', icon: 'layout', section: 'overview' },
-        { text: 'Users', url: '/admin/users/index.html', icon: 'users', section: 'users' },
-        { text: 'Contact Forms', url: '/admin/contact-forms/index.html', icon: 'mail', section: 'contact-forms' },
-        { text: 'Feedback', url: '/admin/feedback/index.html', icon: 'message-square', section: 'feedback' }
+        { text: 'Overview', url: '/admin/index.html', icon: 'layout', section: 'overview', roles: ['admin'] },
+        { text: 'Users', url: '/admin/users/index.html', icon: 'users', section: 'users', roles: ['admin'] },
+        { text: 'Contact Forms', url: '/admin/contact-forms/index.html', icon: 'mail', section: 'contact-forms', roles: ['admin'] },
+        { text: 'Feedback', url: '/admin/feedback/index.html', icon: 'message-square', section: 'feedback', roles: ['admin'] },
+        { text: 'Blog', url: '/admin/blog/index.html', icon: 'file-text', section: 'blog', roles: ['admin', 'editor'] }
     ],
 
     sidebarInstance: null,
@@ -31,6 +32,15 @@ const AdminSidebar = {
             return;
         }
 
+        // Get current user for role-based filtering
+        const user = Domma.auth.getUser();
+        const userRole = user?.role || 'guest';
+
+        // Filter items based on user role
+        const filteredItems = this.items.filter(item => {
+            return !item.roles || item.roles.includes(userRole);
+        });
+
         // Create sidebar using Domma component
         this.sidebarInstance = Domma.elements.sidebar('#admin-sidebar', {
             position: 'left',
@@ -39,11 +49,11 @@ const AdminSidebar = {
             collapsedWidth: '60px',
             top: '60px', // Below the navbar
             header: {
-                title: 'Admin Panel',
+                title: userRole === 'editor' ? 'Editor Panel' : 'Admin Panel',
                 toggle: true,
                 icon: null
             },
-            items: this.items,
+            items: filteredItems,
             variant: 'dark',
             collapsible: true,
             collapsibleDesktop: true,         // Enable desktop collapse

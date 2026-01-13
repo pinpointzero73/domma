@@ -7,23 +7,27 @@ const AdminAuth = {
     /**
      * Initialise admin authentication
      * @param {string} apiUrl - The API URL
-     * @returns {boolean} True if user is authenticated as admin, false otherwise
+     * @param {Array<string>} allowedRoles - Roles allowed to access (default: ['admin'])
+     * @returns {boolean} True if user is authenticated with allowed role, false otherwise
      */
-    init(apiUrl) {
+    init(apiUrl, allowedRoles = ['admin']) {
         // Initialise Domma auth
         Domma.auth.init({ apiUrl });
 
-        // Check if user is admin
-        if (!Domma.auth.isAdmin()) {
-            console.warn('[Admin] Access denied - not an admin user');
-            Domma.elements.alert('Access Denied. Admin privileges required.\n\nPlease log in as an admin user first.')
+        // Get current user
+        const user = Domma.auth.getUser();
+
+        if (!user || !allowedRoles.includes(user.role)) {
+            const rolesList = allowedRoles.join(' or ');
+            console.warn(`[Admin] Access denied - user role '${user?.role || 'unknown'}' not in allowed roles: ${rolesList}`);
+            Domma.elements.alert(`Access Denied. ${rolesList.charAt(0).toUpperCase() + rolesList.slice(1)} privileges required.\n\nPlease log in with appropriate privileges.`)
                 .then(() => {
                     window.location.href = '/login/index.html';
                 });
             return false;
         }
 
-        console.log('[Admin] Access granted - user is admin');
+        console.log(`[Admin] Access granted - user role: ${user.role}`);
         return true;
     },
 
