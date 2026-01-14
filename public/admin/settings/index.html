@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Settings - Admin Dashboard</title>
+  <meta name="description" content="Manage your admin settings and preferences">
+
+  <!-- Domma Core Styles -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+
+  <!-- Admin Custom Styles -->
+  <link rel="stylesheet" href="../index.css">
+</head>
+<body class="dm-cloaked" data-layout="public" data-theme="default">
+
+<!-- Admin Layout Wrapper -->
+<div class="admin-wrapper">
+  <!-- Sidebar -->
+  <aside id="admin-sidebar" class="admin-sidebar"></aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <!-- Page Header -->
+    <div class="admin-header">
+      <h1><span data-icon="settings" data-icon-size="32"></span> My Settings</h1>
+      <p>Manage your admin account settings and preferences</p>
+    </div>
+
+    <!-- Page Content -->
+    <div class="admin-content">
+
+      <!-- Settings Sections -->
+      <div class="grid grid-cols-1 gap-6">
+
+        <!-- Profile Settings Card -->
+        <div class="card" data-collapsible="true">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span data-icon="user" data-icon-size="20"></span> Profile Settings
+            </h2>
+          </div>
+          <div class="card-body">
+            <form id="profile-form" class="grid grid-cols-2 gap-4">
+              <div>
+                <label for="displayName" class="form-label">Display Name</label>
+                <input type="text" id="displayName" name="displayName" class="form-input" placeholder="Your display name">
+              </div>
+              <div>
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" id="phone" name="phone" class="form-input" placeholder="+44 7123 456789">
+              </div>
+              <div class="col-span-2">
+                <label for="bio" class="form-label">Bio</label>
+                <textarea id="bio" name="bio" class="form-input" rows="3" maxlength="500" placeholder="Tell us about yourself..."></textarea>
+                <small class="text-muted">Maximum 500 characters</small>
+              </div>
+              <div>
+                <label for="location" class="form-label">Location</label>
+                <input type="text" id="location" name="location" class="form-input" placeholder="London, UK">
+              </div>
+              <div>
+                <label for="website" class="form-label">Website</label>
+                <input type="url" id="website" name="website" class="form-input" placeholder="https://example.com">
+              </div>
+              <div class="col-span-2">
+                <button type="submit" class="btn btn-primary">
+                  <span data-icon="save" data-icon-size="18"></span> Save Profile
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Preferences Card -->
+        <div class="card" data-collapsible="true">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span data-icon="sliders" data-icon-size="20"></span> Preferences
+            </h2>
+          </div>
+          <div class="card-body">
+            <form id="preferences-form" class="grid grid-cols-2 gap-4">
+              <div>
+                <label for="theme" class="form-label">Theme</label>
+                <select id="theme" name="theme" class="form-input">
+                  <option value="system">System Default</option>
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                  <option value="charcoal">Charcoal</option>
+                  <option value="ocean">Ocean</option>
+                  <option value="forest">Forest</option>
+                  <option value="sunset">Sunset</option>
+                </select>
+              </div>
+              <div>
+                <label for="language" class="form-label">Language</label>
+                <select id="language" name="language" class="form-input">
+                  <option value="en-GB">English (UK)</option>
+                  <option value="en-US">English (US)</option>
+                  <option value="fr-FR">Français</option>
+                  <option value="de-DE">Deutsch</option>
+                  <option value="es-ES">Español</option>
+                </select>
+              </div>
+              <div>
+                <label for="timezone" class="form-label">Timezone</label>
+                <select id="timezone" name="timezone" class="form-input">
+                  <option value="Europe/London">Europe/London (GMT)</option>
+                  <option value="Europe/Paris">Europe/Paris (CET)</option>
+                  <option value="America/New_York">America/New_York (EST)</option>
+                  <option value="America/Los_Angeles">America/Los_Angeles (PST)</option>
+                  <option value="Asia/Tokyo">Asia/Tokyo (JST)</option>
+                </select>
+              </div>
+              <div>
+                <label for="timeFormat" class="form-label">Time Format</label>
+                <select id="timeFormat" name="timeFormat" class="form-input">
+                  <option value="24h">24-hour (14:30)</option>
+                  <option value="12h">12-hour (2:30 PM)</option>
+                </select>
+              </div>
+              <div class="col-span-2">
+                <label for="dateFormat" class="form-label">Date Format</label>
+                <select id="dateFormat" name="dateFormat" class="form-input">
+                  <option value="DD/MM/YYYY">DD/MM/YYYY (14/01/2026)</option>
+                  <option value="MM/DD/YYYY">MM/DD/YYYY (01/14/2026)</option>
+                  <option value="YYYY-MM-DD">YYYY-MM-DD (2026-01-14)</option>
+                </select>
+              </div>
+              <div class="col-span-2">
+                <button type="submit" class="btn btn-primary">
+                  <span data-icon="save" data-icon-size="18"></span> Save Preferences
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Notifications Card -->
+        <div class="card" data-collapsible="true">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span data-icon="bell" data-icon-size="20"></span> Notifications
+            </h2>
+          </div>
+          <div class="card-body">
+            <form id="notifications-form">
+              <div class="mb-4">
+                <h4 class="mb-3">Email Notifications</h4>
+                <div class="form-check mb-2">
+                  <input type="checkbox" id="emailEnabled" name="email.enabled" class="form-check-input">
+                  <label for="emailEnabled" class="form-check-label">Enable email notifications</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input type="checkbox" id="emailMarketing" name="email.marketing" class="form-check-input">
+                  <label for="emailMarketing" class="form-check-label">Marketing emails</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input type="checkbox" id="emailProductUpdates" name="email.productUpdates" class="form-check-input">
+                  <label for="emailProductUpdates" class="form-check-label">Product updates</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input type="checkbox" id="emailSecurityAlerts" name="email.securityAlerts" class="form-check-input">
+                  <label for="emailSecurityAlerts" class="form-check-label">Security alerts</label>
+                </div>
+              </div>
+              <div class="mb-4">
+                <h4 class="mb-3">Push Notifications</h4>
+                <div class="form-check mb-2">
+                  <input type="checkbox" id="pushEnabled" name="push.enabled" class="form-check-input">
+                  <label for="pushEnabled" class="form-check-label">Enable push notifications</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input type="checkbox" id="pushDocumentUpdates" name="push.documentUpdates" class="form-check-input">
+                  <label for="pushDocumentUpdates" class="form-check-label">Document updates</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input type="checkbox" id="pushMentions" name="push.mentions" class="form-check-input">
+                  <label for="pushMentions" class="form-check-label">Mentions</label>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                <span data-icon="save" data-icon-size="18"></span> Save Notifications
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Privacy Settings Card -->
+        <div class="card" data-collapsible="true">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span data-icon="shield" data-icon-size="20"></span> Privacy Settings
+            </h2>
+          </div>
+          <div class="card-body">
+            <form id="privacy-form">
+              <div class="form-check mb-3">
+                <input type="checkbox" id="showEmail" name="showEmail" class="form-check-input">
+                <label for="showEmail" class="form-check-label">Show my email to other users</label>
+              </div>
+              <div class="form-check mb-3">
+                <input type="checkbox" id="showActivity" name="showActivity" class="form-check-input">
+                <label for="showActivity" class="form-check-label">Show my activity status</label>
+              </div>
+              <div class="form-check mb-3">
+                <input type="checkbox" id="analyticsOptOut" name="analyticsOptOut" class="form-check-input">
+                <label for="analyticsOptOut" class="form-check-label">Opt out of analytics tracking</label>
+              </div>
+              <div class="form-check mb-3">
+                <input type="checkbox" id="allowDataExport" name="allowDataExport" class="form-check-input">
+                <label for="allowDataExport" class="form-check-label">Allow data export (GDPR)</label>
+              </div>
+              <div class="mb-4">
+                <label for="dataRetentionDays" class="form-label">Data Retention (days)</label>
+                <input type="number" id="dataRetentionDays" name="dataRetentionDays" class="form-input" min="30" max="365" value="90">
+                <small class="text-muted">How long to keep activity logs (30-365 days)</small>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                <span data-icon="save" data-icon-size="18"></span> Save Privacy Settings
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<!-- Domma Framework -->
+<script src="../../dist/domma.min.js"></script>
+<!-- Layout System -->
+<script type="module" src="../../layouts/js/layout.js"></script>
+<!-- Admin Page Logic -->
+<script type="module" src="index.js"></script>
+</body>
+</html>

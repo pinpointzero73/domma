@@ -10,7 +10,11 @@ const AdminSidebar = {
         { text: 'Users', url: '/admin/users/index.html', icon: 'users', section: 'users', roles: ['admin'], badge: null },
         { text: 'Contact Forms', url: '/admin/contact-forms/index.html', icon: 'mail', section: 'contact-forms', roles: ['admin'], badge: null },
         { text: 'Feedback', url: '/admin/feedback/index.html', icon: 'message-square', section: 'feedback', roles: ['admin'], badge: null },
-        { text: 'Blog', url: '/admin/blog/index.html', icon: 'file-text', section: 'blog', roles: ['admin', 'editor'], badge: null }
+        { text: 'Blog', url: '/admin/blog/index.html', icon: 'file-text', section: 'blog', roles: ['admin', 'editor'], badge: null },
+        // Admin self-management
+        { text: 'My Settings', url: '/admin/settings/index.html', icon: 'settings', section: 'settings', roles: ['admin'], badge: null },
+        { text: 'My Privileges', url: '/admin/privileges/index.html', icon: 'key', section: 'privileges', roles: ['admin'], badge: null },
+        { text: 'Impersonate User', url: '/admin/impersonate/index.html', icon: 'user-check', section: 'impersonate', roles: ['admin'], badge: null }
     ],
 
     sidebarInstance: null,
@@ -22,8 +26,8 @@ const AdminSidebar = {
      * @param {string} apiUrl - The API base URL (optional, for loading badge counts)
      */
     init(currentSection, apiUrl = null) {
-        const container = document.getElementById('admin-sidebar');
-        if (!container) {
+        const $container = $('#admin-sidebar');
+        if ($container.length === 0) {
             console.error('[AdminSidebar] Container #admin-sidebar not found');
             return;
         }
@@ -127,33 +131,32 @@ const AdminSidebar = {
             }
         });
 
-        // Update the DOM badges directly
+        // Update the DOM badges directly using Domma
         Object.keys(badgeMap).forEach(section => {
             const count = badgeMap[section];
-            const link = document.querySelector(`[data-section="${section}"]`);
+            const $link = $(`[data-section="${section}"]`);
 
-            if (link) {
+            if ($link.length > 0) {
                 // Find existing badge or create new one
-                let badge = link.querySelector('.sidebar-badge');
+                let $badge = $link.find('.sidebar-badge');
 
                 if (count > 0) {
-                    if (!badge) {
+                    if ($badge.length === 0) {
                         // Create badge element
-                        badge = document.createElement('span');
-                        badge.className = 'sidebar-badge';
-
-                        // Insert before text or at the end
-                        const text = link.querySelector('.sidebar-text');
-                        if (text && text.nextSibling) {
-                            link.insertBefore(badge, text.nextSibling);
+                        const badgeHtml = '<span class="sidebar-badge"></span>';
+                        const $text = $link.find('.sidebar-text');
+                        if ($text.length > 0) {
+                            $text.after(badgeHtml);
+                            $badge = $link.find('.sidebar-badge');
                         } else {
-                            link.appendChild(badge);
+                            $link.append(badgeHtml);
+                            $badge = $link.find('.sidebar-badge');
                         }
                     }
-                    badge.textContent = count;
-                } else if (badge) {
+                    $badge.text(count);
+                } else if ($badge.length > 0) {
                     // Remove badge if count is 0
-                    badge.remove();
+                    $badge.remove();
                 }
             }
         });

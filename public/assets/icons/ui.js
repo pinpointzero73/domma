@@ -486,6 +486,24 @@ export const ui = {
         strokeWidth: 2,
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
+    },
+    'sliders': {
+        viewBox: '0 0 24 24',
+        path: 'M4 21v-7m0-4V3m8 18v-9m0-4V3m8 18v-5m0-4V3M1 14h6m2-6h6m2 8h6',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'user-check': {
+        viewBox: '0 0 24 24',
+        path: 'M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m16-13l2 2 4-4M13 7a4 4 0 11-8 0 4 4 0 018 0z',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
     }
 };
 

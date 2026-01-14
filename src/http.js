@@ -1,37 +1,4 @@
 export const http = {
-    _csrfToken: null,
-    _csrfEndpoint: '/api/csrf-token',
-
-    /**
-     * Get CSRF token (cached)
-     * @returns {Promise<string>} CSRF token
-     */
-    async getCsrfToken() {
-        if (this._csrfToken) {
-            return this._csrfToken;
-        }
-
-        try {
-            const response = await fetch(this._csrfEndpoint, {
-                method: 'GET',
-                credentials: 'include' // Include cookies
-            });
-            const data = await response.json();
-            this._csrfToken = data.csrfToken;
-            return this._csrfToken;
-        } catch (error) {
-            console.warn('Failed to fetch CSRF token:', error);
-            return null;
-        }
-    },
-
-    /**
-     * Clear cached CSRF token (useful after logout or token expiry)
-     */
-    clearCsrfToken() {
-        this._csrfToken = null;
-    },
-
     async request(method, url, data = null, config = {}) {
         const options = {
             method,
@@ -42,15 +9,6 @@ export const http = {
             ...config
         };
 
-        // Add CSRF token for state-changing requests
-        const stateChangingMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
-        if (stateChangingMethods.includes(method)) {
-            const csrfToken = await this.getCsrfToken();
-            if (csrfToken) {
-                options.headers['x-csrf-token'] = csrfToken;
-            }
-        }
-
         if (data && method !== 'GET' && method !== 'HEAD') {
             options.headers['Content-Type'] = 'application/json';
             options.body = JSON.stringify(data);
@@ -59,14 +17,21 @@ export const http = {
         try {
             const response = await fetch(url, options);
 
-            // If CSRF token is invalid, clear it and retry once
-            if (response.status === 403 && this._csrfToken) {
-                this.clearCsrfToken();
-                return this.request(method, url, data, config);
-            }
-
             if (!response.ok) {
-                throw new Error(`HTTP Error: ${response.status}`);
+                // Try to parse error response body
+                let errorMessage = `HTTP Error: ${response.status}`;
+                try {
+                    const errorBody = await response.json();
+                    if (errorBody.message) {
+                        errorMessage = errorBody.message;
+                    } else if (errorBody.error) {
+                        errorMessage = errorBody.error;
+                    }
+                } catch (e) {
+                    // If response is not JSON, use status text
+                    errorMessage = `HTTP Error: ${response.status} ${response.statusText}`;
+                }
+                throw new Error(errorMessage);
             }
             return await response.json();
         } catch (error) {

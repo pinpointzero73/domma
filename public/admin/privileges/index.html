@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Privileges - Admin Dashboard</title>
+  <meta name="description" content="Manage your admin privileges">
+
+  <!-- Domma Core Styles -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+
+  <!-- Admin Custom Styles -->
+  <link rel="stylesheet" href="../index.css">
+</head>
+<body class="dm-cloaked" data-layout="public" data-theme="default">
+
+<!-- Admin Layout Wrapper -->
+<div class="admin-wrapper">
+  <!-- Sidebar -->
+  <aside id="admin-sidebar" class="admin-sidebar"></aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <!-- Page Header -->
+    <div class="admin-header">
+      <h1><span data-icon="key" data-icon-size="32"></span> My Privileges</h1>
+      <p>View and manage your admin privileges</p>
+    </div>
+
+    <!-- Page Content -->
+    <div class="admin-content">
+
+      <div class="grid grid-cols-1 gap-6">
+
+        <!-- Grant New Privilege Card -->
+        <div class="card" data-collapsible="true">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span data-icon="plus" data-icon-size="20"></span> Grant New Privilege
+            </h2>
+          </div>
+          <div class="card-body">
+            <form id="grant-privilege-form" class="grid grid-cols-2 gap-4">
+              <div>
+                <label for="privilege" class="form-label">Privilege Name *</label>
+                <input type="text" id="privilege" name="privilege" class="form-input" placeholder="e.g., beta_access, advanced_features" required>
+                <small class="text-muted">Underscore-separated identifier (e.g., beta_access)</small>
+              </div>
+              <div>
+                <label for="expiresAt" class="form-label">Expires At (Optional)</label>
+                <input type="datetime-local" id="expiresAt" name="expiresAt" class="form-input">
+                <small class="text-muted">Leave empty for permanent privilege</small>
+              </div>
+              <div class="col-span-2">
+                <label for="reason" class="form-label">Reason for Self-Granting *</label>
+                <textarea id="reason" name="reason" class="form-input" rows="3" minlength="10" required placeholder="Explain why you need this privilege (minimum 10 characters)..."></textarea>
+                <small class="text-muted">Required for audit trail - minimum 10 characters</small>
+              </div>
+              <div class="col-span-2">
+                <button type="submit" class="btn btn-primary">
+                  <span data-icon="plus" data-icon-size="18"></span> Grant Privilege
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Current Privileges Card -->
+        <div class="card" data-collapsible="true">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span data-icon="list" data-icon-size="20"></span> Current Privileges
+            </h2>
+          </div>
+          <div class="card-body">
+            <div id="privileges-loading" class="text-center py-5">
+              <span data-icon="loader" data-icon-size="32" class="spinning"></span>
+              <p class="mt-3">Loading privileges...</p>
+            </div>
+            <div id="privileges-list" style="display: none;"></div>
+            <div id="privileges-empty" style="display: none;" class="text-center py-5 text-muted">
+              <span data-icon="info" data-icon-size="48"></span>
+              <p class="mt-3">You don't have any active privileges.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Privilege Activity Log Card -->
+        <div class="card" data-collapsible="true">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span data-icon="clock" data-icon-size="20"></span> Privilege Activity
+            </h2>
+          </div>
+          <div class="card-body">
+            <div id="activity-loading" class="text-center py-5">
+              <span data-icon="loader" data-icon-size="32" class="spinning"></span>
+              <p class="mt-3">Loading activity...</p>
+            </div>
+            <div id="activity-list" style="display: none;"></div>
+            <div id="activity-empty" style="display: none;" class="text-center py-5 text-muted">
+              <span data-icon="info" data-icon-size="48"></span>
+              <p class="mt-3">No privilege activity recorded.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<!-- Domma Framework -->
+<script src="../../dist/domma.min.js"></script>
+<!-- Layout System -->
+<script type="module" src="../../layouts/js/layout.js"></script>
+<!-- Admin Page Logic -->
+<script type="module" src="index.js"></script>
+</body>
+</html>
