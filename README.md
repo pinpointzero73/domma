@@ -2,7 +2,7 @@
 
 **D**ynamic **O**bject **M**anipulation & **M**odeling **A**PI
 
-🌐 **[Live Demo & Showcase](http://domma.dcbw-it.co.uk/)** | 📦 [npm](https://www.npmjs.com/package/domma-js) | 📚 [Documentation](http://domma.dcbw-it.co.uk/showcase/)
+🌐 **[Live Demo & Showcase](https://dommajs.org/)** | 📦 [npm](https://www.npmjs.com/package/domma-js) | 📚 [Documentation](https://dommajs.org/showcase/)
 
 A lightweight, zero-dependency JavaScript framework combining jQuery-style DOM manipulation, Lodash utilities, and
 modern UI components in one cohesive package.
@@ -82,12 +82,12 @@ For quick prototyping without npm:
 
 ## Live Demo
 
-🚀 **[Try Domma Online](http://domma.dcbw-it.co.uk/)** - Interactive showcase with 40+ examples
+🚀 **[Try Domma Online](https://dommajs.org/)** - Interactive showcase with 40+ examples
 
 Explore all features:
-- **[Showcase](http://domma.dcbw-it.co.uk/showcase/)** - Component examples and tutorials
-- **[MiniApps](http://domma.dcbw-it.co.uk/miniapps/)** - Real-world applications
-- **[Download](http://domma.dcbw-it.co.uk/showcase/download/)** - Preset bundles and archives
+- **[Showcase](https://dommajs.org/showcase/)** - Component examples and tutorials
+- **[MiniApps](https://dommajs.org/miniapps/)** - Real-world applications
+- **[Download](https://dommajs.org/showcase/download/)** - Preset bundles and archives
 
 ## Short Aliases
 
@@ -638,7 +638,7 @@ npm run showcase
 
 Real-world, production-ready applications built with Domma.
 
-🚀 **[Explore All MiniApps](http://domma.dcbw-it.co.uk/miniapps/)** - Try them live!
+🚀 **[Explore All MiniApps](https://dommajs.org/miniapps/)** - Try them live!
 
 ### My Garage
 
@@ -647,7 +647,7 @@ Vehicle management system with DVLA integration for UK registration lookups.
 - Look up any UK vehicle by registration number
 - Display MOT and tax status
 - Save vehicle history with Domma.storage
-- **Try it:** [My Garage Live](http://domma.dcbw-it.co.uk/miniapps/garage/)
+- **Try it:** [My Garage Live](https://dommajs.org/miniapps/garage/)
 
 ### Domma Docs
 
@@ -657,7 +657,7 @@ Powerful document editor with rich text formatting and export capabilities.
 - Document management (save, open, delete)
 - Export to PDF, HTML, and Markdown
 - Auto-save with Domma.storage
-- **Try it:** [Domma Docs Live](http://domma.dcbw-it.co.uk/miniapps/docs/)
+- **Try it:** [Domma Docs Live](https://dommajs.org/miniapps/docs/)
 
 ### Nexus
 
@@ -666,7 +666,7 @@ Project management and collaboration platform.
 - Task tracking and assignment
 - Team collaboration tools
 - Real-time updates
-- **Try it:** [Nexus Live](http://domma.dcbw-it.co.uk/miniapps/nexus/)
+- **Try it:** [Nexus Live](https://dommajs.org/miniapps/nexus/)
 
 ## Documentation
 

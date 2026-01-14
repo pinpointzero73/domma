@@ -179,7 +179,7 @@ const MyApp = {
 # Development (default) - uses http://localhost:3001/api
 npm run build:miniapp:garage
 
-# Production - uses https://domma.dcbw-it.co.uk:3000/api
+# Production - uses https://dommajs.org/api
 NODE_ENV=production npm run build:miniapp:garage
 
 # Custom API URL
@@ -196,7 +196,7 @@ API_URL=https://staging.example.com/api npm run build:miniapp:garage
 #### Environment URLs
 
 - **Development**: `http://localhost:3000/api`
-- **Production**: `https://domma.dcbw-it.co.uk:3000/api`
+- **Production**: `https://dommajs.org/api`
 
 Configuration values are replaced at build time, so there's no runtime overhead or exposed configuration in the browser.
 
