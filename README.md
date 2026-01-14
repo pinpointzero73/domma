@@ -2,19 +2,27 @@
 
 **D**ynamic **O**bject **M**anipulation & **M**odeling **A**PI
 
+🌐 **[Live Demo & Showcase](http://domma.dcbw-it.co.uk/)** | 📦 [npm](https://www.npmjs.com/package/domma-js) | 📚 [Documentation](http://domma.dcbw-it.co.uk/showcase/)
+
 A lightweight, zero-dependency JavaScript framework combining jQuery-style DOM manipulation, Lodash utilities, and
 modern UI components in one cohesive package.
 
 ## Features
 
-- **DOM Manipulation** - jQuery-compatible API with 90+ methods
-- **Utilities** - 120+ Lodash-compatible utility functions
-- **Dates** - Moment.js-style chainable date manipulation
-- **Models** - Reactive data models with pub/sub events
-- **Elements** - UI components (modals, tabs, accordions, tooltips)
-- **Tables** - DataTable-like functionality (sort, filter, paginate, export)
-- **HTTP Client** - Simple async HTTP requests
-- **Config Engine** - Declarative JSON-based behavior configuration
+- **DOM Manipulation** (`$`) - jQuery-compatible API with 90+ methods
+- **Utilities** (`_`) - 120+ Lodash-compatible utility functions with function composition
+- **Dates** (`D`) - Moment.js-style chainable date manipulation
+- **Models** (`M`) - Reactive data models with pub/sub events and two-way DOM binding
+- **Elements** (`E`) - 28 UI components (modals, tabs, carousels, navbars, slideovers, and more)
+- **Tables** (`T`) - DataTable-like functionality (sort, filter, paginate, export to CSV/JSON)
+- **Forms** (`F`) - Schema-driven form generation with validation, wizards, and CRUD helpers
+- **Icons** (`I`) - 200+ SVG icons in 15 categories with auto-scan
+- **HTTP Client** (`H`) - Simple async HTTP requests with JSON handling
+- **Storage** (`S`) - localStorage wrapper with auto JSON serialization
+- **Themes** - 10+ built-in themes with light/dark variants and system detection
+- **Config Engine** - Declarative JSON-based behavior configuration with mutable API
+- **CSS Features** - Utility classes (glow, shadows, elevation, fireworks, grid)
+- **Developer Tools** - Theme Roller, Page Roller, Editor, Print-to-PDF
 
 ## Installation
 
@@ -72,7 +80,14 @@ For quick prototyping without npm:
 <script src="https://unpkg.com/domma-js/public/dist/domma.min.js"></script>
 ```
 
-**[Try the CDN Quickstart](./public/quickstart/index.html)** - Single-file example ready to download
+## Live Demo
+
+🚀 **[Try Domma Online](http://domma.dcbw-it.co.uk/)** - Interactive showcase with 40+ examples
+
+Explore all features:
+- **[Showcase](http://domma.dcbw-it.co.uk/showcase/)** - Component examples and tutorials
+- **[MiniApps](http://domma.dcbw-it.co.uk/miniapps/)** - Real-world applications
+- **[Download](http://domma.dcbw-it.co.uk/showcase/download/)** - Preset bundles and archives
 
 ## Short Aliases
 
@@ -89,6 +104,24 @@ For quick prototyping without npm:
 | Elements  | `Domma.elements`  | `E`   | UI components                 |
 | Icons     | `Domma.icons`     | `I`   | SVG icon system               |
 | Tables    | `Domma.tables`    | `T`   | DataTable functionality       |
+
+## Bundle Options
+
+Choose the right bundle for your needs:
+
+| Bundle | Size | Includes |
+|--------|------|----------|
+| **full** | 390KB | All modules and components |
+| **minimal** | 163KB | DOM, utils, dates - zero UI |
+| **essentials** | 328KB | Core + models, elements, config |
+| **data-focused** | 190KB | Core + models, tables, http, storage |
+| **no-ui** | 41KB | Core utilities only (DOM + utils) |
+
+```javascript
+// Use specific bundles via CDN
+<script src="https://unpkg.com/domma-js/public/dist/domma-minimal.min.js"></script>
+<script src="https://unpkg.com/domma-js/public/dist/domma-essentials.min.js"></script>
+```
 
 ## Quick Start
 
@@ -132,10 +165,112 @@ const table = Domma.tables.create('#users', {
 });
 ```
 
+## CSS Features
+
+Domma includes comprehensive utility classes for rapid UI development.
+
+**Glow Effects:**
+```html
+<button class="btn glow-primary">Primary Glow</button>
+<div class="card glow-success">Success Glow</div>
+```
+
+**Shadows & Elevation:**
+```html
+<div class="shadow-sm">Small shadow</div>
+<div class="shadow-md">Medium shadow</div>
+<div class="elevation-3">Elevated card</div>
+```
+
+**Firework Animations:**
+```html
+<button class="firework-on-click">Click Me!</button>
+<div class="firework-sparkle">Sparkle Effect</div>
+```
+
+**Grid System:**
+```html
+<!-- Bootstrap-style 12-column grid -->
+<div class="row">
+    <div class="col-md-6">Half width</div>
+    <div class="col-md-6">Half width</div>
+</div>
+
+<!-- CSS Grid utilities -->
+<div class="grid grid-cols-3 gap-4">
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+</div>
+```
+
+## Themes
+
+10+ built-in themes with light/dark variants and automatic system detection.
+
+```javascript
+// Initialize with theme
+Domma.theme.init({ theme: 'ocean-dark' });
+
+// Change theme dynamically
+Domma.theme.set('forest-light');
+
+// Toggle between light/dark
+Domma.theme.toggle();
+
+// Auto-detect system preference
+Domma.theme.init({ autoDetect: true });
+```
+
+**Available Themes:**
+- charcoal (light/dark)
+- ocean (light/dark)
+- forest (light/dark)
+- sunset (light/dark)
+- lavender (light/dark)
+- crimson (light/dark)
+- slate (light/dark)
+- amber (light/dark)
+- teal (light/dark)
+- rose (light/dark)
+
+## Developer Tools
+
+Domma includes powerful developer tools in a separate bundle.
+
+```html
+<!-- Load tools bundle -->
+<script src="dist/domma-tools.min.js"></script>
+```
+
+**Theme Roller** - Visual theme customization tool:
+```javascript
+Domma.themeRoller.open();
+```
+
+**Page Roller** - Drag-and-drop page builder:
+```javascript
+Domma.pageRoller.init();
+```
+
+**Editor** - Rich content editor with export:
+```javascript
+Domma.editor.create('#editor', {
+    toolbar: ['bold', 'italic', 'heading', 'list'],
+    onSave: (content) => console.log(content)
+});
+```
+
+**Print-to-PDF** - Export any element to PDF:
+```javascript
+Domma.printToPDF('#content', { filename: 'export.pdf' });
+```
+
 ## Config Engine
 
-Define behavior declaratively with JSON:
+Define behavior declaratively with JSON configuration.
 
+**Basic Setup:**
 ```javascript
 $.setup({
     '#header': {
@@ -157,6 +292,26 @@ $.setup({
     }
 });
 ```
+
+**Mutable Configuration API:**
+```javascript
+// Update existing configuration
+$.update('#my-modal', {
+    options: { backdrop: false }  // Deep merges with existing config
+});
+
+// Retrieve configuration
+const config = $.config('#my-modal');
+console.log(config);
+
+// Reset/destroy configuration
+$.reset('#my-modal');  // Removes component and unbinds events
+```
+
+**Supported Components (16 total):**
+- card, modal, tabs, accordion, tooltip, carousel, dropdown
+- badge, backToTop, buttonGroup, loader, breadcrumbs, navbar
+- notification, timer, alarm
 
 ## Namespaces
 
@@ -265,36 +420,77 @@ M.bind(user, 'name', '#name-input', { twoWay: true });
 M.bind(user, 'name', '#display', { format: v => `Hello, ${v}!` });
 ```
 
-### Elements (`Domma.elements`)
+### Elements (`E` or `Domma.elements`)
 
-UI components with JavaScript interactivity.
+28 production-ready UI components with JavaScript interactivity.
+
+**Dialogs & Overlays:**
+- `modal()` - Modal dialogs with backdrop
+- `dialog` - Promise-based alert/confirm/prompt
+- `toast()` - Toast notifications (static method)
+- `slideover()` - Panel overlays from screen edges
+- `dropdown()` - Dropdown menus
+
+**Navigation:**
+- `tabs()` - Tabbed navigation
+- `navbar()` - Responsive navigation bar
+- `sidebar()` - Sidebar with unlimited nesting
+- `breadcrumbs()` - Navigation breadcrumbs
+- `backToTop()` - Scroll-to-top button
+
+**Content Display:**
+- `card()` - Cards with hover and collapsible support
+- `accordion()` - Expandable/collapsible sections
+- `carousel()` - Image/content carousels
+- `hero` - Hero sections (CSS-only)
+- `footer()` - Footer with 3 layout modes
+
+**Form Inputs:**
+- `autocomplete()` - Input with suggestions
+- `pillbox()` - Multi-select tag input
+- `buttonGroup()` - Radio/checkbox button groups
+
+**Feedback & Indicators:**
+- `loader()` - Loading indicators (spinner, dots, pulse, bars)
+- `badge()` - Badge/notification indicators
+- `tooltip()` - Hover tooltips
+- `notification()` - Desktop notifications
+- `cookieConsent()` - Cookie consent banner
+
+**Data & Visualization:**
+- `treeView()` - Hierarchical tree display
+- `progression()` - Timeline/roadmap component
+- `timer()` - Countdown timer
+- `alarm()` - Scheduled alerts
 
 ```javascript
 // Modal
-const modal = Domma.elements.modal('#dialog', {
-    backdrop: true,
-    keyboard: true,
-    onOpen: () => console.log('Opened')
-});
+const modal = E.modal('#dialog', { backdrop: true });
 modal.open();
-modal.close();
 
 // Tabs
-const tabs = Domma.elements.tabs('#product-tabs', {
-    activeIndex: 0,
+const tabs = E.tabs('#product-tabs', {
     onChange: (index) => loadContent(index)
 });
 
-// Accordion
-const accordion = Domma.elements.accordion('#faq', {
-    multiExpand: false
+// Autocomplete with async data
+E.autocomplete('#search', {
+    dataSource: async (query) => {
+        const res = await fetch(`/api/search?q=${query}`);
+        return res.json();
+    },
+    onSelect: (item) => console.log(item)
 });
 
-// Tooltip
-Domma.elements.tooltip('.help-icon', {
-    content: 'Click for help',
-    position: 'top'
+// Sidebar with nesting
+E.sidebar('#main-nav', {
+    mobileBreakpoint: 768,
+    persist: true  // Remember state
 });
+
+// Promise-based dialog
+const confirmed = await E.confirm('Delete this item?');
+if (confirmed) deleteItem();
 ```
 
 ### Tables (`Domma.tables`)
@@ -332,6 +528,102 @@ table.download('csv', 'users.csv');
 table.toJSON();
 ```
 
+### Forms (`F` or `Domma.forms`)
+
+Schema-driven form generation with validation, wizards, and CRUD helpers.
+
+```javascript
+// Schema-driven form
+const form = F.create('#user-form', {
+    fields: [
+        { name: 'name', type: 'string', label: 'Full Name', required: true },
+        { name: 'email', type: 'email', label: 'Email', required: true },
+        { name: 'age', type: 'number', label: 'Age', min: 18, max: 120 },
+        { name: 'role', type: 'select', label: 'Role', options: ['Admin', 'User'] }
+    ],
+    layout: 'grid',      // 'stacked', 'inline', or 'grid'
+    onSubmit: (data) => console.log(data)
+});
+
+// Multi-step wizard
+const wizard = F.wizard('#registration', {
+    steps: [
+        { title: 'Account', fields: [/*...*/] },
+        { title: 'Profile', fields: [/*...*/] },
+        { title: 'Confirm', fields: [/*...*/] }
+    ],
+    onComplete: (data) => saveUser(data)
+});
+
+// CRUD helper
+const crud = F.crud({
+    apiUrl: '/api/users',
+    fields: schema,
+    table: '#users-table'
+});
+```
+
+### Icons (`I` or `Domma.icons`)
+
+200+ SVG icons in 15 categories with declarative and imperative APIs.
+
+```javascript
+// Declarative (auto-scan on load)
+<button data-icon="check">Save</button>
+<span data-icon="user" data-icon-size="24"></span>
+
+// Manual scan after DOM updates
+I.scan();
+
+// Programmatic rendering
+const html = I.render('settings', { size: 32, color: '#007bff' });
+$('#icon-container').html(html);
+
+// Inject into existing element
+I.inject('#my-icon', 'star');
+```
+
+**Categories:** actions, arrows, communication, devices, editor, files, hardware, media, navigation, notifications, social, status, toggle, ui, weather
+
+### HTTP (`H` or `Domma.http`)
+
+Simple async HTTP client with automatic JSON handling.
+
+```javascript
+// GET request
+const users = await H.get('/api/users');
+
+// POST with data
+const response = await H.post('/api/users', {
+    name: 'Alice',
+    email: 'alice@example.com'
+});
+
+// PUT and DELETE
+await H.put('/api/users/1', updates);
+await H.delete('/api/users/1');
+```
+
+### Storage (`S` or `Domma.storage`)
+
+localStorage wrapper with automatic JSON serialization.
+
+```javascript
+// Store data (auto-serializes)
+S.set('user', { name: 'Alice', role: 'admin' });
+S.set('preferences', { theme: 'dark', lang: 'en' });
+
+// Retrieve (auto-parses)
+const user = S.get('user');           // Returns object
+const theme = S.get('theme', 'light'); // With default
+
+// Other methods
+S.has('user');       // Check existence
+S.remove('user');    // Delete key
+S.keys();            // List all Domma keys
+S.clear();           // Clear all Domma data
+```
+
 ## Demo & Showcase
 
 ```bash
@@ -344,7 +636,9 @@ npm run showcase
 
 ## MiniApps
 
-Real-world, production-ready applications built with Domma:
+Real-world, production-ready applications built with Domma.
+
+🚀 **[Explore All MiniApps](http://domma.dcbw-it.co.uk/miniapps/)** - Try them live!
 
 ### My Garage
 
@@ -353,8 +647,7 @@ Vehicle management system with DVLA integration for UK registration lookups.
 - Look up any UK vehicle by registration number
 - Display MOT and tax status
 - Save vehicle history with Domma.storage
-- **Status:** Coming Soon
-- **Repository:** [domma-garage](https://github.com/yourusername/domma-garage)
+- **Try it:** [My Garage Live](http://domma.dcbw-it.co.uk/miniapps/garage/)
 
 ### Domma Docs
 
@@ -364,22 +657,16 @@ Powerful document editor with rich text formatting and export capabilities.
 - Document management (save, open, delete)
 - Export to PDF, HTML, and Markdown
 - Auto-save with Domma.storage
-- **Status:** Coming Soon
-- **Repository:** [domma-docs](https://github.com/yourusername/domma-docs)
+- **Try it:** [Domma Docs Live](http://domma.dcbw-it.co.uk/miniapps/docs/)
 
-### Invoicing System
+### Nexus
 
-Complete invoicing solution for freelancers and small businesses.
+Project management and collaboration platform.
 
-- Create and manage invoices with line items
-- Client database with full CRUD operations
-- Invoice tracking and status management
-- Professional PDF export
-- Dashboard and reporting
-- **Status:** Coming Soon
-- **Repository:** [domma-invoicing](https://github.com/yourusername/domma-invoicing)
-
-**Learn More:** Visit the [MiniApps Hub](./public/miniapps/index.html) to explore all available applications.
+- Task tracking and assignment
+- Team collaboration tools
+- Real-time updates
+- **Try it:** [Nexus Live](http://domma.dcbw-it.co.uk/miniapps/nexus/)
 
 ## Documentation
 
@@ -432,7 +719,15 @@ NODE_ENV=production npm run build   # Production build
 
 ## Bundle Size
 
-~125KB minified (includes all namespaces)
+| Bundle | Size | Description |
+|--------|------|-------------|
+| **full** | 390KB | Complete framework with all modules |
+| **minimal** | 163KB | DOM + Utils + Dates only |
+| **essentials** | 328KB | Core + Models + Elements + Config |
+| **data-focused** | 190KB | Core + Models + Tables + HTTP + Storage |
+| **no-ui** | 41KB | Core utilities without UI components |
+
+All sizes are minified. Choose the bundle that fits your needs!
 
 ## Browser Support
 
