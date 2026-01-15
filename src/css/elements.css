@@ -3396,7 +3396,7 @@ code {
 }
 
 .sidebar-dark .sidebar-link.active {
-    color: var(--dm-primary-light, #66b2ff);
+    color: #eaeaea;
     background: rgba(102, 178, 255, 0.15);
     border-left-color: var(--dm-primary-light, #66b2ff);
 }

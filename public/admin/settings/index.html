@@ -46,6 +46,45 @@
           <div class="card-body">
             <form id="profile-form" class="grid grid-cols-2 gap-4">
               <div>
+                <label for="name" class="form-label">Name</label>
+                <input type="text" id="name" name="name" class="form-input" placeholder="Your full name">
+              </div>
+              <div>
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" name="email" class="form-input" placeholder="your@email.com">
+                <small class="text-muted">Changing email requires verification</small>
+              </div>
+
+              <!-- Email Verification Code Section (hidden by default) -->
+              <div id="email-verification-section" class="col-span-2" style="display: none;">
+                <div class="alert alert-info">
+                  <div class="mb-3">
+                    <strong>Email Verification Required</strong>
+                    <p class="mt-1">An 8-digit verification code has been sent to <strong id="pending-email"></strong></p>
+                    <p class="text-sm text-muted">Code expires: <span id="code-expiry"></span></p>
+                  </div>
+                  <div class="grid grid-cols-2 gap-3">
+                    <div>
+                      <label for="verification-code" class="form-label">Verification Code</label>
+                      <input
+                        type="text"
+                        id="verification-code"
+                        class="form-input"
+                        placeholder="A1B2C3D4"
+                        maxlength="8"
+                        pattern="[A-Fa-f0-9]{8}"
+                        style="font-family: 'Courier New', monospace; font-size: 1.2rem; letter-spacing: 3px; text-transform: uppercase;">
+                      <small class="text-muted">Enter the 8-character code from your email</small>
+                    </div>
+                    <div class="flex items-end">
+                      <button type="button" id="verify-code-btn" class="btn btn-success">
+                        <span data-icon="check" data-icon-size="18"></span> Verify Code
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
                 <label for="displayName" class="form-label">Display Name</label>
                 <input type="text" id="displayName" name="displayName" class="form-input" placeholder="Your display name">
               </div>
