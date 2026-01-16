@@ -123,8 +123,8 @@ async function handleInit() {
   // Copy all templates with variable substitution
   copyTemplatesRecursive(templatesDir, process.cwd(), vars);
 
-  // Copy Domma dist files to frontend/dist
-  const frontendDistDir = join(process.cwd(), 'frontend', 'dist');
+  // Copy Domma dist files to frontend/dist/domma
+  const frontendDistDir = join(process.cwd(), 'frontend', 'dist', 'domma');
   console.log(`\n  Copying Domma distribution files...\n`);
 
   if (!existsSync(frontendDistDir)) {
@@ -232,7 +232,7 @@ async function handleAddPage() {
  * Create a new page from template
  */
 function createPage(pageName) {
-  const pagesDir = join(process.cwd(), 'frontend', 'pages', pageName);
+  const pagesDir = join(process.cwd(), 'pages', pageName);
 
   if (existsSync(pagesDir)) {
     console.error(`\n  ✗ Page "${pageName}" already exists`);
@@ -289,7 +289,7 @@ function createPage(pageName) {
   writeFileSync(join(pagesDir, 'index.html'), html);
   writeFileSync(join(pagesDir, `${pageName}.js`), js);
 
-  console.log(`\n  ✓ Page created: frontend/pages/${pageName}/`);
+  console.log(`\n  ✓ Page created: pages/${pageName}/`);
   console.log(`    - index.html`);
   console.log(`    - ${pageName}.js\n`);
   console.log(`  Don't forget to add it to your navbar in domma.config.json!\n`);

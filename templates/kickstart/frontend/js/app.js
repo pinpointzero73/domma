@@ -6,11 +6,12 @@
  */
 
 $(() => {
-  // Determine config path based on page depth
+  // Determine config path based on page location
   // Root pages (pages/index.html) need ../domma.config.json
   // Sub-pages (pages/about/index.html) need ../../domma.config.json
-  const pathDepth = window.location.pathname.split('/').filter(Boolean).length;
-  const configPath = pathDepth > 2 ? '../../domma.config.json' : '../domma.config.json';
+  const pathname = window.location.pathname;
+  const isSubPage = pathname.match(/\/pages\/[^/]+\//) !== null;
+  const configPath = isSubPage ? '../../domma.config.json' : '../domma.config.json';
 
   // Load configuration
   Domma.http.get(configPath).then(config => {

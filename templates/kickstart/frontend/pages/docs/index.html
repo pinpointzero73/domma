@@ -6,11 +6,11 @@
   <title>Documentation - {{projectName}}</title>
 
   <!-- Domma CSS -->
-  <link rel="stylesheet" href="../../dist/domma.css">
-  <link rel="stylesheet" href="../../dist/grid.css">
-  <link rel="stylesheet" href="../../dist/elements.css">
-  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-  <link rel="stylesheet" href="../../dist/syntax.css">
+  <link rel="stylesheet" href="../../dist/domma/domma.css">
+  <link rel="stylesheet" href="../../dist/domma/grid.css">
+  <link rel="stylesheet" href="../../dist/domma/elements.css">
+  <link rel="stylesheet" href="../../dist/domma/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../dist/domma/syntax.css">
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="../../css/custom.css">
@@ -272,9 +272,12 @@ Domma.theme.get();  // 'ocean-dark'</code></pre>
 <!-- Footer -->
 <footer class="page-footer"></footer>
 
+<!-- Security: DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
+
 <!-- Domma JavaScript -->
-<script src="../../dist/domma.min.js"></script>
-<script src="../../dist/domma-syntax.min.js"></script>
+<script src="../../dist/domma/domma.min.js"></script>
+<script src="../../dist/domma/domma-syntax.min.js"></script>
 
 <!-- App Initialization -->
 <script src="../../js/app.js"></script>
