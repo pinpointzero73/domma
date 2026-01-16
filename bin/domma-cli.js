@@ -9,6 +9,11 @@ import {stdin as input, stdout as output} from 'process';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Read version from package.json
+const packageJsonPath = join(__dirname, '..', 'package.json');
+const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
+const VERSION = packageJson.version;
+
 const THEMES = [
   'charcoal-dark', 'ocean-dark', 'forest-dark', 'sunset-light',
   'silver-light', 'ocean-light', 'forest-light', 'sunset-dark',
@@ -20,29 +25,33 @@ const args = process.argv.slice(2);
 const command = args[0];
 
 // Command routing
-// Check if first arg is a flag (starts with --)
-if (command && command.startsWith('--')) {
-  // Treat flags as init command
-  handleInit();
-} else {
-  switch (command) {
-    case 'init':
-    case undefined:
+switch (command) {
+  case 'init':
+  case undefined:
+    handleInit();
+    break;
+  case 'add':
+    handleAdd();
+    break;
+  case 'version':
+  case '--version':
+  case '-v':
+    showVersion();
+    break;
+  case 'help':
+  case '--help':
+  case '-h':
+    showHelp();
+    break;
+  default:
+    // Check if it's a --flag for init
+    if (command && command.startsWith('--')) {
       handleInit();
-      break;
-    case 'add':
-      handleAdd();
-      break;
-    case 'help':
-    case '--help':
-    case '-h':
-      showHelp();
-      break;
-    default:
+    } else {
       console.error(`Unknown command: ${command}`);
       showHelp();
       process.exit(1);
-  }
+    }
 }
 
 /**
@@ -56,6 +65,7 @@ async function handleInit() {
 ╔═══════════════════════════════════════╗
 ║                                       ║
 ║       Welcome to Domma CLI!           ║
+║            v${VERSION.padEnd(24)}║
 ║                                       ║
 ╚═══════════════════════════════════════╝
 
@@ -188,7 +198,7 @@ async function handleAdd() {
  */
 async function handleAddPage() {
   const quickMode = args.includes('--quick');
-  let pageName = args[2];
+  let pagePath = args[2];
 
   // Check if we're in a Domma project
   const configPath = join(process.cwd(), 'domma.config.json');
@@ -198,22 +208,23 @@ async function handleAddPage() {
     process.exit(1);
   }
 
-  if (!pageName && quickMode) {
-    console.error('Page name required with --quick flag');
-    console.log('Usage: npx domma-js add page <name> --quick');
+  if (!pagePath && quickMode) {
+    console.error('Page path required with --quick flag');
+    console.log('Usage: npx domma-js add page <path> --quick');
+    console.log('Example: npx domma-js add page frontend/pages/dashboard --quick');
     process.exit(1);
   }
 
   if (!quickMode) {
     const rl = readline.createInterface({input, output});
 
-    if (!pageName) {
-      const nameAnswer = await rl.question('  Page name: ');
-      pageName = nameAnswer.trim();
+    if (!pagePath) {
+      const pathAnswer = await rl.question('  Page path (e.g., frontend/pages/dashboard): ');
+      pagePath = pathAnswer.trim();
     }
 
-    if (!pageName) {
-      console.error('  ✗ Page name is required');
+    if (!pagePath) {
+      console.error('  ✗ Page path is required');
       rl.close();
       process.exit(1);
     }
@@ -221,26 +232,35 @@ async function handleAddPage() {
     rl.close();
   }
 
-  // Validate and sanitize page name
-  pageName = pageName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+  // Parse the path to extract directory and page name
+  const pathParts = pagePath.split('/').filter(p => p.length > 0);
+  const pageName = pathParts[pathParts.length - 1].toLowerCase().replace(/[^a-z0-9-]/g, '-');
+  const pageDir = pathParts.slice(0, -1).join('/');
 
   // Create page
-  createPage(pageName);
+  createPage(pageDir, pageName);
 }
 
 /**
  * Create a new page from template
  */
-function createPage(pageName) {
-  const pagesDir = join(process.cwd(), 'pages', pageName);
+function createPage(pageDir, pageName) {
+  // Build full path
+  const fullPath = pageDir ? join(process.cwd(), pageDir, pageName) : join(process.cwd(), pageName);
 
-  if (existsSync(pagesDir)) {
-    console.error(`\n  ✗ Page "${pageName}" already exists`);
+  if (existsSync(fullPath)) {
+    console.error(`\n  ✗ Page "${pageName}" already exists at this location`);
     process.exit(1);
   }
 
   // Create directory
-  mkdirSync(pagesDir, {recursive: true});
+  mkdirSync(fullPath, {recursive: true});
+
+  // Calculate depth for relative paths
+  // Count how many folders deep we are from project root
+  const pathSegments = pageDir ? pageDir.split('/').filter(p => p.length > 0) : [];
+  const depth = pathSegments.length + 1; // +1 for the page folder itself
+  const parentPath = '../'.repeat(depth);
 
   // Get templates
   const pageTemplateDir = join(__dirname, '..', 'templates', 'page-template');
@@ -251,7 +271,7 @@ function createPage(pageName) {
   }
 
   // Read templates
-  const htmlTemplate = readFileSync(join(pageTemplateDir, 'page.html'), 'utf-8');
+  let htmlTemplate = readFileSync(join(pageTemplateDir, 'page.html'), 'utf-8');
   const jsTemplate = readFileSync(join(pageTemplateDir, 'page.js'), 'utf-8');
 
   // Get project config for theme
@@ -265,6 +285,13 @@ function createPage(pageName) {
       // Use default theme
     }
   }
+
+  // Adjust paths in template based on depth
+  // Template has ../../ by default (depth 2)
+  // We need to replace with the correct depth
+  htmlTemplate = htmlTemplate.replaceAll('../../dist/domma/', `${parentPath}dist/domma/`);
+  htmlTemplate = htmlTemplate.replaceAll('../../css/', `${parentPath}css/`);
+  htmlTemplate = htmlTemplate.replaceAll('../../js/', `${parentPath}js/`);
 
   // Variable substitution
   const titleCase = pageName.split('-').map(w =>
@@ -286,12 +313,14 @@ function createPage(pageName) {
   }
 
   // Write files
-  writeFileSync(join(pagesDir, 'index.html'), html);
-  writeFileSync(join(pagesDir, `${pageName}.js`), js);
+  writeFileSync(join(fullPath, 'index.html'), html);
+  writeFileSync(join(fullPath, `${pageName}.js`), js);
 
-  console.log(`\n  ✓ Page created: pages/${pageName}/`);
+  const displayPath = pageDir ? `${pageDir}/${pageName}` : pageName;
+  console.log(`\n  ✓ Page created: ${displayPath}/`);
   console.log(`    - index.html`);
-  console.log(`    - ${pageName}.js\n`);
+  console.log(`    - ${pageName}.js`);
+  console.log(`    Depth: ${depth} (using ${parentPath})\n`);
   console.log(`  Don't forget to add it to your navbar in domma.config.json!\n`);
 }
 
@@ -329,25 +358,39 @@ function copyTemplatesRecursive(srcDir, destDir, vars) {
 }
 
 /**
+ * Show version information
+ */
+function showVersion() {
+  console.log(`domma-js v${VERSION}`);
+}
+
+/**
  * Show help information
  */
 function showHelp() {
   console.log(`
-Domma CLI - Project scaffolding and management
+Domma CLI v${VERSION} - Project scaffolding and management
 
 Commands:
   npx domma-js              Initialize a new Domma project
   npx domma-js init         Initialize a new Domma project
-  npx domma-js add page <name>  Add a new page
+  npx domma-js add page <path>  Add a new page at specified path
     --quick                 Skip interactive prompts
 
 Options:
   --help, -h               Show this help message
+  --version, -v            Show version number
 
 Examples:
   npx domma-js                     # Interactive project setup
   npx domma-js --quick             # Quick project setup with defaults
-  npx domma-js add page dashboard  # Add a dashboard page (interactive)
-  npx domma-js add page faq --quick  # Add FAQ page (non-interactive)
+
+  # Add pages at different paths:
+  npx domma-js add page admin                      # Root level (admin/)
+  npx domma-js add page pages/dashboard            # One level deep (pages/dashboard/)
+  npx domma-js add page frontend/pages/profile     # Two levels deep (frontend/pages/profile/)
+  npx domma-js add page src/views/settings --quick # Quick mode (non-interactive)
+
+Note: Paths are automatically calculated based on folder depth
 `);
 }
