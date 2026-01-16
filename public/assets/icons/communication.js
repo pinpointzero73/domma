@@ -155,25 +155,25 @@ export const communication = {
     },
     'rss': {
         viewBox: '0 0 24 24',
-      path: 'M4 11a9 9 0 919 9M4 4a16 16 0 0116 16M5 20a1 1 0 100-2 1 1 0 000 2z',
-      stroke: 'currentColor',
-      fill: 'none',
-      strokeWidth: 2,
-      strokeLinecap: 'round',
-      strokeLinejoin: 'round'
+        path: 'M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0116 16M5 20a1 1 0 100-2 1 1 0 000 2z',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
     },
-  'wifi': {
-    viewBox: '0 0 24 24',
-    path: 'M12 20h.01M2 8.82a15 15 0 0120 0M5 12.859a10 10 0 0114 0M8.5 16.429a5 5 0 017 0',
-    stroke: 'currentColor',
-    fill: 'none',
-    strokeWidth: 2,
-    strokeLinecap: 'round',
-    strokeLinejoin: 'round'
-  },
-  'wifi-off': {
-    viewBox: '0 0 24 24',
-    path: 'M1 1l22 22M16.72 11.06A10.94 10.94 0 0119 12.55M5 12.55a10.94 10.94 0 015.17-2.39m3.64.46a10.88 10.88 0 012.69 1.92M8.5 16.429a5 5 0 013.5-1.43M12 20h.01',
+    'wifi': {
+        viewBox: '0 0 24 24',
+        path: 'M12 20h.01M2 8.82a15 15 0 0120 0M5 12.859a10 10 0 0114 0M8.5 16.429a5 5 0 017 0',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'wifi-off': {
+        viewBox: '0 0 24 24',
+        path: 'M1 1l22 22M16.72 11.06A10.94 10.94 0 0119 12.55M5 12.55a10.94 10.94 0 015.17-2.39m3.64.46a10.88 10.88 0 012.69 1.92M8.5 16.429a5 5 0 013.5-1.43M12 20h.01',
         stroke: 'currentColor',
         fill: 'none',
         strokeWidth: 2,

@@ -178,8 +178,8 @@
             firstCategory = false;
         });
 
-        tabList.html(navHtml);
-        gallery.html(panelsHtml);
+        tabList.html(navHtml, {safe: false});
+        gallery.html(panelsHtml, {safe: false});
 
         // Update stats
         $('#total-icons').text(totalIcons);

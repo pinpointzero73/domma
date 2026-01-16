@@ -696,6 +696,14 @@
     border-bottom: 1px solid var(--dm-border);
     padding: 1rem 0;
     margin-bottom: 2rem;
+    transition: margin-left 0.3s ease;
+}
+
+/* Account for sidebar when active */
+body:has(.container.sidebar-push-active) .icons-controls-bar,
+body:has(.container.sidebar-push-active) .page-header {
+    margin-left: 220px;
+    transition: margin-left 0.3s ease;
 }
 
 .icons-controls-inner {
