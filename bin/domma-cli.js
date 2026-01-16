@@ -20,23 +20,29 @@ const args = process.argv.slice(2);
 const command = args[0];
 
 // Command routing
-switch (command) {
-  case 'init':
-  case undefined:
-    handleInit();
-    break;
-  case 'add':
-    handleAdd();
-    break;
-  case 'help':
-  case '--help':
-  case '-h':
-    showHelp();
-    break;
-  default:
-    console.error(`Unknown command: ${command}`);
-    showHelp();
-    process.exit(1);
+// Check if first arg is a flag (starts with --)
+if (command && command.startsWith('--')) {
+  // Treat flags as init command
+  handleInit();
+} else {
+  switch (command) {
+    case 'init':
+    case undefined:
+      handleInit();
+      break;
+    case 'add':
+      handleAdd();
+      break;
+    case 'help':
+    case '--help':
+    case '-h':
+      showHelp();
+      break;
+    default:
+      console.error(`Unknown command: ${command}`);
+      showHelp();
+      process.exit(1);
+  }
 }
 
 /**
