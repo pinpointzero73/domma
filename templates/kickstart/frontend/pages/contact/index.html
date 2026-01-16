@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - {{projectName}}</title>
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../../css/custom.css">
+</head>
+<body class="dm-theme-{{theme}}">
+<!-- Navigation -->
+<nav id="main-navbar"></nav>
+
+<!-- Page Header -->
+<section class="container py-6">
+  <h1 class="display-2 mb-3">Get in Touch</h1>
+  <p class="lead text-secondary">
+    Have a question? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+  </p>
+</section>
+
+<!-- Contact Content -->
+<section class="container py-4">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Contact Form -->
+    <div class="lg:col-span-2">
+      <div class="card shadow-md">
+        <div class="card-body">
+          <h2 class="h4 mb-4">Send us a Message</h2>
+
+          <form id="contact-form">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="name" class="form-label">Name *</label>
+                <input type="text" id="name" class="form-control" required>
+              </div>
+
+              <div>
+                <label for="email" class="form-label">Email *</label>
+                <input type="email" id="email" class="form-control" required>
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="subject" class="form-label">Subject *</label>
+                <input type="text" id="subject" class="form-control" required>
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="message" class="form-label">Message *</label>
+                <textarea id="message" class="form-control" rows="6" required></textarea>
+              </div>
+
+              <div class="md:col-span-2">
+                <button type="submit" class="btn btn-primary btn-lg">
+                  <span data-icon="send"></span> Send Message
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="col-12 col-lg-4">
+      <!-- Address Card -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h3 class="h5 mb-4">
+            <span data-icon="map-pin" class="me-2"></span> Location
+          </h3>
+          <p class="mb-2">123 Example Street</p>
+          <p class="mb-2">Suite 100</p>
+          <p class="mb-0">City, State 12345</p>
+        </div>
+      </div>
+
+      <!-- Contact Details -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h3 class="h5 mb-4">
+            <span data-icon="mail" class="me-2"></span> Contact Details
+          </h3>
+          <p class="mb-2">
+            <strong>Email:</strong><br>
+            <a href="mailto:hello@example.com">hello@example.com</a>
+          </p>
+          <p class="mb-0">
+            <strong>Phone:</strong><br>
+            <a href="tel:+1234567890">+1 (234) 567-890</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Social Links -->
+      <div class="card">
+        <div class="card-body">
+          <h3 class="h5 mb-4">
+            <span data-icon="share-2" class="me-2"></span> Follow Us
+          </h3>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="#" class="btn btn-outline-primary">
+              <span data-icon="github"></span> GitHub
+            </a>
+            <a href="#" class="btn btn-outline-primary">
+              <span data-icon="twitter"></span> Twitter
+            </a>
+            <a href="#" class="btn btn-outline-primary">
+              <span data-icon="linkedin"></span> LinkedIn
+            </a>
+            <a href="#" class="btn btn-outline-primary">
+              <span data-icon="youtube"></span> YouTube
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="bg-surface py-6">
+  <div class="container">
+    <h2 class="text-center mb-6">Frequently Asked Questions</h2>
+
+    <div class="d-flex justify-content-center">
+      <div style="max-width: 800px; width: 100%;">
+        <div class="accordion" id="faq-accordion">
+          <!-- FAQ 1 -->
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                What is the response time?
+              </button>
+            </h3>
+            <div id="faq1" class="accordion-collapse collapse show">
+              <div class="accordion-body">
+                We typically respond to all enquiries within 24-48 hours during business days.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                Do you offer support?
+              </button>
+            </h3>
+            <div id="faq2" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Yes! We offer community support through GitHub Issues and email support for enterprise clients.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                Can I contribute to the project?
+              </button>
+            </h3>
+            <div id="faq3" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Absolutely! We welcome contributions. Check out our GitHub repository for contribution guidelines.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="page-footer"></footer>
+
+<!-- Domma JavaScript -->
+<script src="../../dist/domma.min.js"></script>
+
+<!-- App Initialization -->
+<script src="../../js/app.js"></script>
+
+<!-- Form Handling -->
+<!-- Page-specific Initialization -->
+<script src="contact.js"></script>
+</body>
+</html>

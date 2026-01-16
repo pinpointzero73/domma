@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import {existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync} from 'fs';
+import {existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync, cpSync} from 'fs';
 import {dirname, join, relative} from 'path';
 import {fileURLToPath} from 'url';
 import * as readline from 'readline/promises';
@@ -10,24 +10,43 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const THEMES = [
-  'charcoal-dark',
-  'ocean-dark',
-  'forest-dark',
-  'sunset-light',
-  'silver-light',
-  'ocean-light',
-  'forest-light',
-  'sunset-dark',
-  'royal-dark',
-  'lemon-light'
+  'charcoal-dark', 'ocean-dark', 'forest-dark', 'sunset-light',
+  'silver-light', 'ocean-light', 'forest-light', 'sunset-dark',
+  'royal-dark', 'lemon-light'
 ];
 
 // Parse command-line arguments
 const args = process.argv.slice(2);
-const quickMode = args.includes('--quick');
+const command = args[0];
 
-// ASCII Art Banner
-console.log(`
+// Command routing
+switch (command) {
+  case 'init':
+  case undefined:
+    handleInit();
+    break;
+  case 'add':
+    handleAdd();
+    break;
+  case 'help':
+  case '--help':
+  case '-h':
+    showHelp();
+    break;
+  default:
+    console.error(`Unknown command: ${command}`);
+    showHelp();
+    process.exit(1);
+}
+
+/**
+ * Handle project initialisation
+ */
+async function handleInit() {
+  const quickMode = args.includes('--quick');
+
+  // ASCII Art Banner
+  console.log(`
 ╔═══════════════════════════════════════╗
 ║                                       ║
 ║       Welcome to Domma CLI!           ║
@@ -37,7 +56,6 @@ console.log(`
   Let's set up your project.
 `);
 
-async function main() {
   let projectName = 'my-app';
   let theme = 'charcoal-dark';
   let includeThemeSelector = false;
@@ -78,6 +96,7 @@ async function main() {
 
   // Find templates directory
   const templatesDir = join(__dirname, '..', 'templates', 'kickstart');
+  const distDir = join(__dirname, '..', 'public', 'dist');
 
   if (!existsSync(templatesDir)) {
     console.error(`\n  ✗ Error: Templates directory not found at ${templatesDir}`);
@@ -98,15 +117,180 @@ async function main() {
   // Copy all templates with variable substitution
   copyTemplatesRecursive(templatesDir, process.cwd(), vars);
 
+  // Copy Domma dist files to frontend/dist
+  const frontendDistDir = join(process.cwd(), 'frontend', 'dist');
+  console.log(`\n  Copying Domma distribution files...\n`);
+
+  if (!existsSync(frontendDistDir)) {
+    mkdirSync(frontendDistDir, {recursive: true});
+  }
+
+  // Copy required dist files
+  const distFiles = [
+    'domma.min.js',
+    'domma.css',
+    'grid.css',
+    'elements.css',
+    'syntax.css',
+    'domma-syntax.min.js'
+  ];
+
+  for (const file of distFiles) {
+    const srcPath = join(distDir, file);
+    const destPath = join(frontendDistDir, file);
+    if (existsSync(srcPath)) {
+      cpSync(srcPath, destPath);
+      console.log(`  ✓ Copied ${file}`);
+    }
+  }
+
+  // Copy themes folder
+  const themesDir = join(distDir, 'themes');
+  const destThemesDir = join(frontendDistDir, 'themes');
+  if (existsSync(themesDir)) {
+    cpSync(themesDir, destThemesDir, {recursive: true});
+    console.log(`  ✓ Copied themes/`);
+  }
+
   console.log(`\n  ✓ Done! Your project "${projectName}" is ready.\n`);
   console.log(`  Next steps:`);
-  console.log(`    1. Open index.html in your browser`);
+  console.log(`    1. Open frontend/pages/index.html in your browser`);
   console.log(`    2. Edit domma.config.json to customise`);
-  console.log(`    3. Read the docs: https://github.com/dcbw-it/domma\n`);
+  console.log(`    3. Add new pages: npx domma-js add page <name>`);
+  console.log(`    4. Read the docs: https://github.com/dcbw-it/domma\n`);
 }
 
 /**
- * Recursively copy templates with variable substitution
+ * Handle 'add' sub-commands
+ */
+async function handleAdd() {
+  const subCommand = args[1];
+
+  switch (subCommand) {
+    case 'page':
+      await handleAddPage();
+      break;
+    default:
+      console.error(`Unknown add command: ${subCommand}`);
+      console.log('Usage: npx domma-js add page <name>');
+      process.exit(1);
+  }
+}
+
+/**
+ * Handle adding a new page
+ */
+async function handleAddPage() {
+  const quickMode = args.includes('--quick');
+  let pageName = args[2];
+
+  // Check if we're in a Domma project
+  const configPath = join(process.cwd(), 'domma.config.json');
+  if (!existsSync(configPath)) {
+    console.error('\n  ✗ Error: Not in a Domma project directory');
+    console.error('  Run this command from your project root (where domma.config.json is located)\n');
+    process.exit(1);
+  }
+
+  if (!pageName && quickMode) {
+    console.error('Page name required with --quick flag');
+    console.log('Usage: npx domma-js add page <name> --quick');
+    process.exit(1);
+  }
+
+  if (!quickMode) {
+    const rl = readline.createInterface({input, output});
+
+    if (!pageName) {
+      const nameAnswer = await rl.question('  Page name: ');
+      pageName = nameAnswer.trim();
+    }
+
+    if (!pageName) {
+      console.error('  ✗ Page name is required');
+      rl.close();
+      process.exit(1);
+    }
+
+    rl.close();
+  }
+
+  // Validate and sanitize page name
+  pageName = pageName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+
+  // Create page
+  createPage(pageName);
+}
+
+/**
+ * Create a new page from template
+ */
+function createPage(pageName) {
+  const pagesDir = join(process.cwd(), 'frontend', 'pages', pageName);
+
+  if (existsSync(pagesDir)) {
+    console.error(`\n  ✗ Page "${pageName}" already exists`);
+    process.exit(1);
+  }
+
+  // Create directory
+  mkdirSync(pagesDir, {recursive: true});
+
+  // Get templates
+  const pageTemplateDir = join(__dirname, '..', 'templates', 'page-template');
+
+  if (!existsSync(pageTemplateDir)) {
+    console.error(`\n  ✗ Error: Page template not found at ${pageTemplateDir}`);
+    process.exit(1);
+  }
+
+  // Read templates
+  const htmlTemplate = readFileSync(join(pageTemplateDir, 'page.html'), 'utf-8');
+  const jsTemplate = readFileSync(join(pageTemplateDir, 'page.js'), 'utf-8');
+
+  // Get project config for theme
+  let theme = 'charcoal-dark';
+  const configPath = join(process.cwd(), 'domma.config.json');
+  if (existsSync(configPath)) {
+    try {
+      const config = JSON.parse(readFileSync(configPath, 'utf-8'));
+      theme = config.theme?.default || theme;
+    } catch (e) {
+      // Use default theme
+    }
+  }
+
+  // Variable substitution
+  const titleCase = pageName.split('-').map(w =>
+    w.charAt(0).toUpperCase() + w.slice(1)
+  ).join(' ');
+
+  const vars = {
+    '{{pageName}}': pageName,
+    '{{pageTitle}}': titleCase,
+    '{{theme}}': theme
+  };
+
+  let html = htmlTemplate;
+  let js = jsTemplate;
+
+  for (const [key, value] of Object.entries(vars)) {
+    html = html.replaceAll(key, value);
+    js = js.replaceAll(key, value);
+  }
+
+  // Write files
+  writeFileSync(join(pagesDir, 'index.html'), html);
+  writeFileSync(join(pagesDir, `${pageName}.js`), js);
+
+  console.log(`\n  ✓ Page created: frontend/pages/${pageName}/`);
+  console.log(`    - index.html`);
+  console.log(`    - ${pageName}.js\n`);
+  console.log(`  Don't forget to add it to your navbar in domma.config.json!\n`);
+}
+
+/**
+ * Copy templates recursively with variable substitution
  */
 function copyTemplatesRecursive(srcDir, destDir, vars) {
   const items = readdirSync(srcDir);
@@ -138,7 +322,26 @@ function copyTemplatesRecursive(srcDir, destDir, vars) {
   }
 }
 
-main().catch((error) => {
-  console.error(`\n  ✗ Error: ${error.message}`);
-  process.exit(1);
-});
+/**
+ * Show help information
+ */
+function showHelp() {
+  console.log(`
+Domma CLI - Project scaffolding and management
+
+Commands:
+  npx domma-js              Initialize a new Domma project
+  npx domma-js init         Initialize a new Domma project
+  npx domma-js add page <name>  Add a new page
+    --quick                 Skip interactive prompts
+
+Options:
+  --help, -h               Show this help message
+
+Examples:
+  npx domma-js                     # Interactive project setup
+  npx domma-js --quick             # Quick project setup with defaults
+  npx domma-js add page dashboard  # Add a dashboard page (interactive)
+  npx domma-js add page faq --quick  # Add FAQ page (non-interactive)
+`);
+}

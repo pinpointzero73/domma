@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation - {{projectName}}</title>
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../dist/syntax.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../../css/custom.css">
+
+  <style>
+      .docs-sidebar {
+          position: sticky;
+          top: 80px;
+          max-height: calc(100vh - 100px);
+          overflow-y: auto;
+      }
+
+      .docs-sidebar .nav-link {
+          padding: var(--dm-space-2) var(--dm-space-3);
+          color: var(--dm-text-secondary);
+          border-left: 2px solid transparent;
+          transition: all 0.2s;
+      }
+
+      .docs-sidebar .nav-link:hover {
+          color: var(--dm-primary);
+          background: var(--dm-surface-raised);
+      }
+
+      .docs-sidebar .nav-link.active {
+          color: var(--dm-primary);
+          border-left-color: var(--dm-primary);
+          background: var(--dm-surface-raised);
+      }
+  </style>
+</head>
+<body class="dm-theme-{{theme}}">
+<!-- Navigation -->
+<nav id="main-navbar"></nav>
+
+<!-- Documentation Layout -->
+<div class="container-fluid py-6">
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+    <!-- Sidebar Navigation -->
+    <aside>
+      <div class="docs-sidebar">
+        <h2 class="h5 mb-3">Documentation</h2>
+        <nav class="nav flex-column">
+          <a href="#getting-started" class="nav-link active">Getting Started</a>
+          <a href="#installation" class="nav-link">Installation</a>
+          <a href="#configuration" class="nav-link">Configuration</a>
+          <a href="#components" class="nav-link">Components</a>
+          <a href="#theming" class="nav-link">Theming</a>
+          <a href="#api" class="nav-link">API Reference</a>
+          <a href="#faq" class="nav-link">FAQ</a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lg:col-span-3">
+      <!-- Getting Started -->
+      <section id="getting-started" class="mb-8">
+        <h1 class="display-4 mb-4">Getting Started</h1>
+        <p class="lead">
+          Welcome to {{projectName}}! This guide will help you get up and running quickly.
+        </p>
+      </section>
+
+      <!-- Installation -->
+      <section id="installation" class="mb-8">
+        <h2 class="h3 mb-4">Installation</h2>
+
+        <div id="install-tabs" class="tabs mb-4">
+          <ul class="tabs-nav">
+            <li><a href="#npm-tab" class="active">npm</a></li>
+            <li><a href="#yarn-tab">Yarn</a></li>
+            <li><a href="#cdn-tab">CDN</a></li>
+          </ul>
+
+          <div class="tabs-content">
+            <!-- npm Tab -->
+            <div id="npm-tab" class="tabs-pane active">
+              <p>Install via npm:</p>
+              <pre><code class="language-bash">npm install domma-js</code></pre>
+            </div>
+
+            <!-- Yarn Tab -->
+            <div id="yarn-tab" class="tabs-pane">
+              <p>Install via Yarn:</p>
+              <pre><code class="language-bash">yarn add domma-js</code></pre>
+            </div>
+
+            <!-- CDN Tab -->
+            <div id="cdn-tab" class="tabs-pane">
+              <p>Include from CDN:</p>
+              <pre><code class="language-html">&lt;link rel="stylesheet" href="https://unpkg.com/domma-js/dist/domma.css"&gt;
+&lt;script src="https://unpkg.com/domma-js/dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Configuration -->
+      <section id="configuration" class="mb-8">
+        <h2 class="h3 mb-4">Configuration</h2>
+        <p>
+          Configure your project using the <code>domma.config.json</code> file:
+        </p>
+
+        <pre><code class="language-json">{
+  "theme": {
+    "default": "charcoal-dark",
+    "persist": true
+  },
+  "navbar": {
+    "brand": { "text": "My App" },
+    "items": [
+      { "text": "Home", "url": "/" }
+    ]
+  }
+}</code></pre>
+
+        <div class="alert alert-info mt-4">
+          <span data-icon="info" class="me-2"></span>
+          <strong>Tip:</strong> You can override any configuration value programmatically using JavaScript.
+        </div>
+      </section>
+
+      <!-- Components -->
+      <section id="components" class="mb-8">
+        <h2 class="h3 mb-4">Components</h2>
+        <p>
+          Domma includes 19+ UI components out of the box. Here are some examples:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+          <div class="card shadow-md">
+            <div class="card-body">
+              <h3 class="h5 mb-2">Buttons</h3>
+              <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-primary">Primary</button>
+                <button class="btn btn-secondary">Secondary</button>
+                <button class="btn btn-success">Success</button>
+                <button class="btn btn-danger">Danger</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow-md">
+            <div class="card-body">
+              <h3 class="h5 mb-2">Badges</h3>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="badge badge-primary">Primary</span>
+                <span class="badge badge-success">Success</span>
+                <span class="badge badge-warning">Warning</span>
+                <span class="badge badge-danger">Danger</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Theming -->
+      <section id="theming" class="mb-8">
+        <h2 class="h3 mb-4">Theming</h2>
+        <p>
+          Customize your theme by overriding CSS variables:
+        </p>
+
+        <pre><code class="language-css">:root {
+  --dm-primary: #3b82f6;
+  --dm-primary-hover: #2563eb;
+}</code></pre>
+
+        <p class="mt-3">
+          Or use one of the 16+ built-in themes:
+        </p>
+
+        <pre><code class="language-javascript">Domma.theme.set('ocean-dark');</code></pre>
+      </section>
+
+      <!-- API Reference -->
+      <section id="api" class="mb-8">
+        <h2 class="h3 mb-4">API Reference</h2>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3 class="h5 mb-3">Domma ($ alias)</h3>
+            <p class="text-secondary mb-3">jQuery-compatible DOM manipulation</p>
+            <pre><code class="language-javascript">$('#element').addClass('active');
+$('.items').each((el) => console.log(el));</code></pre>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3 class="h5 mb-3">Domma.utils (_ alias)</h3>
+            <p class="text-secondary mb-3">Lodash-compatible utilities</p>
+            <pre><code class="language-javascript">_.chunk([1, 2, 3, 4], 2);  // [[1, 2], [3, 4]]
+_.debounce(fn, 300);</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h3 class="h5 mb-3">Domma.theme</h3>
+            <p class="text-secondary mb-3">Theme management</p>
+            <pre><code class="language-javascript">Domma.theme.init({ theme: 'ocean-dark' });
+Domma.theme.get();  // 'ocean-dark'</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq" class="mb-8">
+        <h2 class="h3 mb-4">Frequently Asked Questions</h2>
+
+        <div class="accordion" id="docs-faq">
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                Is Domma production-ready?
+              </button>
+            </h3>
+            <div id="faq1" class="accordion-collapse collapse show">
+              <div class="accordion-body">
+                Yes! Domma is actively maintained and used in production applications.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                What browsers are supported?
+              </button>
+            </h3>
+            <div id="faq2" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Domma supports all modern browsers (Chrome, Firefox, Safari, Edge). IE11 is not supported.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                Can I use Domma with React/Vue/Angular?
+              </button>
+            </h3>
+            <div id="faq3" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Yes! While Domma works standalone, you can integrate it with any framework for utilities and theming.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="page-footer"></footer>
+
+<!-- Domma JavaScript -->
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+
+<!-- App Initialization -->
+<script src="../../js/app.js"></script>
+
+<!-- Page-specific scripts -->
+<!-- Page-specific Initialization -->
+<script src="docs.js"></script>
+</body>
+</html>

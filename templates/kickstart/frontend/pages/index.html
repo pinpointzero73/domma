@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{projectName}} - Home</title>
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../dist/domma.css">
+  <link rel="stylesheet" href="../dist/grid.css">
+  <link rel="stylesheet" href="../dist/elements.css">
+  <link rel="stylesheet" href="../dist/themes/domma-themes.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../css/custom.css">
+</head>
+<body class="dm-cloaked dm-theme-{{theme}}">
+<!-- Navigation (initialized by app.js) -->
+<nav id="main-navbar"></nav>
+
+<!-- Hero Section -->
+<section class="hero hero-gradient-primary text-center py-8">
+  <div class="container">
+    <h1 class="display-1 mb-4">Welcome to {{projectName}}</h1>
+    <p class="lead mb-6">
+      A modern web project powered by Domma - the lightweight JavaScript framework
+      with zero dependencies.
+    </p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="docs/" class="btn btn-lg btn-primary">
+        <span data-icon="book"></span> Get Started
+      </a>
+      <a href="https://github.com/dcbw-it/domma" class="btn btn-lg btn-outline-primary" target="_blank">
+        <span data-icon="github"></span> View on GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="container py-8">
+  <h2 class="text-center mb-6">Key Features</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- Feature 1 -->
+    <div class="card hover shadow-md h-100">
+        <div class="card-body text-center">
+          <div class="mb-4" style="font-size: 3rem; color: var(--dm-primary);">
+            <span data-icon="zap"></span>
+          </div>
+          <h3 class="h4 mb-3">Lightning Fast</h3>
+          <p class="text-secondary">
+            Zero dependencies and optimized for performance.
+            Get up and running in minutes.
+          </p>
+        </div>
+      </div>
+
+    <!-- Feature 2 -->
+    <div class="card hover shadow-md h-100">
+        <div class="card-body text-center">
+          <div class="mb-4" style="font-size: 3rem; color: var(--dm-primary);">
+            <span data-icon="layers"></span>
+          </div>
+          <h3 class="h4 mb-3">Feature Complete</h3>
+          <p class="text-secondary">
+            DOM manipulation, utilities, reactive models, UI components,
+            and more in one package.
+          </p>
+        </div>
+      </div>
+
+    <!-- Feature 3 -->
+    <div class="card hover shadow-md h-100">
+        <div class="card-body text-center">
+          <div class="mb-4" style="font-size: 3rem; color: var(--dm-primary);">
+            <span data-icon="palette"></span>
+          </div>
+          <h3 class="h4 mb-3">Beautiful Themes</h3>
+          <p class="text-secondary">
+            16+ built-in themes with light/dark variants.
+            Fully customizable with CSS variables.
+          </p>
+        </div>
+      </div>
+
+    <!-- Feature 4 -->
+    <div class="card hover shadow-md h-100">
+        <div class="card-body text-center">
+          <div class="mb-4" style="font-size: 3rem; color: var(--dm-primary);">
+            <span data-icon="code"></span>
+          </div>
+          <h3 class="h4 mb-3">Developer Friendly</h3>
+          <p class="text-secondary">
+            jQuery-like syntax, Lodash utilities, and comprehensive
+            TypeScript definitions.
+          </p>
+        </div>
+      </div>
+
+    <!-- Feature 5 -->
+    <div class="card hover shadow-md h-100">
+        <div class="card-body text-center">
+          <div class="mb-4" style="font-size: 3rem; color: var(--dm-primary);">
+            <span data-icon="smartphone"></span>
+          </div>
+          <h3 class="h4 mb-3">Fully Responsive</h3>
+          <p class="text-secondary">
+            Bootstrap-compatible grid system with CSS Grid utilities.
+            Mobile-first design.
+          </p>
+        </div>
+      </div>
+
+    <!-- Feature 6 -->
+    <div class="card hover shadow-md h-100">
+        <div class="card-body text-center">
+          <div class="mb-4" style="font-size: 3rem; color: var(--dm-primary);">
+            <span data-icon="settings"></span>
+          </div>
+          <h3 class="h4 mb-3">JSON Configured</h3>
+          <p class="text-secondary">
+            Single config file drives navbar, footer, theme, and features.
+            No complex setup needed.
+          </p>
+        </div>
+      </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="bg-surface py-8">
+  <div class="container text-center">
+    <h2 class="mb-4">Ready to Get Started?</h2>
+    <p class="lead mb-6">
+      Check out the documentation to learn more about what Domma can do.
+    </p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="docs/" class="btn btn-lg btn-primary">
+        Read the Docs
+      </a>
+      <a href="https://github.com/dcbw-it/domma" class="btn btn-lg btn-outline-primary" target="_blank">
+        View on GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="page-footer"></footer>
+
+<!-- Domma JavaScript -->
+<script src="../dist/domma.min.js"></script>
+
+<!-- Global App Initialization -->
+<script src="../js/app.js"></script>
+
+<!-- Page-specific Initialization -->
+<script src="index.js"></script>
+</body>
+</html>

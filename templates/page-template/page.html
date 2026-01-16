@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{pageTitle}} - My Project</title>
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../../css/custom.css">
+</head>
+<body class="dm-cloaked dm-theme-{{theme}}">
+<!-- Navigation -->
+<nav id="main-navbar"></nav>
+
+<!-- Page Header -->
+<section class="container py-6">
+  <h1 class="display-2 mb-3">{{pageTitle}}</h1>
+  <p class="lead text-secondary">
+    Welcome to the {{pageTitle}} page.
+  </p>
+</section>
+
+<!-- Main Content -->
+<section class="container py-4">
+  <div class="card shadow-md">
+    <div class="card-body">
+      <h2 class="h4 mb-3">Content</h2>
+      <p>Add your content here.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="page-footer"></footer>
+
+<!-- Domma JavaScript -->
+<script src="../../dist/domma.min.js"></script>
+
+<!-- Global App Initialization -->
+<script src="../../js/app.js"></script>
+
+<!-- Page-specific Initialization -->
+<script src="{{pageName}}.js"></script>
+</body>
+</html>

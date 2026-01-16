@@ -13,30 +13,30 @@
   "navbar": {
     "brand": {
       "text": "{{projectName}}",
-      "logo": "frontend/assets/logo/placeholder.svg",
-      "url": "/frontend/pages/"
+      "logo": "assets/logo/placeholder.svg",
+      "url": "/"
     },
     "items": [
       {
         "text": "Home",
-        "url": "/frontend/pages/",
+        "url": "/",
         "active": true
       },
       {
         "text": "About",
-        "url": "/frontend/pages/about/"
+        "url": "/about/"
       },
       {
         "text": "Contact",
-        "url": "/frontend/pages/contact/"
+        "url": "/contact/"
       },
       {
         "text": "Blog",
-        "url": "/frontend/pages/blog/"
+        "url": "/blog/"
       },
       {
         "text": "Docs",
-        "url": "/frontend/pages/docs/"
+        "url": "/docs/"
       },
       {
         "text": "QuickStart",
@@ -53,19 +53,15 @@
     "links": [
       {
         "text": "Privacy Policy",
-        "url": "/frontend/pages/privacy/"
-      },
-      {
-        "text": "Cookie Policy",
-        "url": "/frontend/pages/cookies/"
+        "url": "#privacy"
       },
       {
         "text": "Terms of Service",
-        "url": "/frontend/pages/terms/"
+        "url": "#terms"
       },
       {
         "text": "Contact Us",
-        "url": "/frontend/pages/contact/"
+        "url": "/contact/"
       }
     ]
   },
