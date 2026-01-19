@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toast Web Component Test</title>
+    <link rel="stylesheet" href="public/dist/domma.css">
+    <link rel="stylesheet" href="public/dist/elements.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 { color: #1f2937; margin-bottom: 30px; }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+        button:hover { transform: translateY(-1px); }
+        button:active { transform: translateY(0); }
+        .btn-default { background: #6b7280; color: white; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-error { background: #ef4444; color: white; }
+        .btn-warning { background: #f59e0b; color: white; }
+        .btn-info { background: #3b82f6; color: white; }
+        .btn-action { background: #8b5cf6; color: white; }
+        .section {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            margin-top: 0;
+            color: #374151;
+            font-size: 18px;
+        }
+        code {
+            background: #1f2937;
+            color: #10b981;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎉 Toast Web Component Test</h1>
+
+    <div class="section">
+        <h2>Basic Types</h2>
+        <div class="button-grid">
+            <button class="btn-default" onclick="showDefault()">Default Toast</button>
+            <button class="btn-success" onclick="showSuccess()">Success Toast</button>
+            <button class="btn-error" onclick="showError()">Error Toast</button>
+            <button class="btn-warning" onclick="showWarning()">Warning Toast</button>
+            <button class="btn-info" onclick="showInfo()">Info Toast</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>With Titles</h2>
+        <div class="button-grid">
+            <button class="btn-success" onclick="showWithTitle()">Toast with Title</button>
+            <button class="btn-action" onclick="showLongMessage()">Long Message</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Positions</h2>
+        <div class="button-grid">
+            <button class="btn-info" onclick="showTopRight()">Top Right</button>
+            <button class="btn-info" onclick="showTopLeft()">Top Left</button>
+            <button class="btn-info" onclick="showBottomRight()">Bottom Right</button>
+            <button class="btn-info" onclick="showBottomLeft()">Bottom Left</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Features</h2>
+        <div class="button-grid">
+            <button class="btn-action" onclick="showWithActions()">With Actions</button>
+            <button class="btn-warning" onclick="showPersistent()">Persistent (no auto-close)</button>
+            <button class="btn-default" onclick="showNoProgress()">No Progress Bar</button>
+            <button class="btn-error" onclick="closeAll()">Close All Toasts</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Multiple Toasts</h2>
+        <div class="button-grid">
+            <button class="btn-action" onclick="showMultiple()">Show 5 Toasts</button>
+            <button class="btn-success" onclick="showSequence()">Show Sequence (1/sec)</button>
+        </div>
+    </div>
+
+    <script src="public/dist/domma.min.js"></script>
+    <script>
+        console.log('Domma loaded:', typeof Domma !== 'undefined');
+        console.log('Toast available:', typeof Domma.elements.toast !== 'undefined');
+
+        function showDefault() {
+            Domma.elements.toast.show('This is a default toast message');
+        }
+
+        function showSuccess() {
+            Domma.elements.toast.success('Operation completed successfully!');
+        }
+
+        function showError() {
+            Domma.elements.toast.error('An error occurred while processing your request');
+        }
+
+        function showWarning() {
+            Domma.elements.toast.warning('Please be careful with this action');
+        }
+
+        function showInfo() {
+            Domma.elements.toast.info('Here is some helpful information for you');
+        }
+
+        function showWithTitle() {
+            Domma.elements.toast.success('Profile updated successfully', {
+                title: 'Success!'
+            });
+        }
+
+        function showLongMessage() {
+            Domma.elements.toast.info(
+                'This is a much longer toast message that demonstrates how the component handles multiple lines of text gracefully without breaking the layout',
+                { title: 'Long Message Example' }
+            );
+        }
+
+        function showTopRight() {
+            Domma.elements.toast('Top right position (default)', { position: 'top-right' });
+        }
+
+        function showTopLeft() {
+            Domma.elements.toast('Top left position', { position: 'top-left' });
+        }
+
+        function showBottomRight() {
+            Domma.elements.toast('Bottom right position', { position: 'bottom-right' });
+        }
+
+        function showBottomLeft() {
+            Domma.elements.toast('Bottom left position', { position: 'bottom-left' });
+        }
+
+        function showWithActions() {
+            Domma.elements.toast.success('Would you like to undo this action?', {
+                title: 'Item Deleted',
+                actions: [
+                    { label: 'Undo', primary: true },
+                    { label: 'Dismiss' }
+                ]
+            });
+        }
+
+        function showPersistent() {
+            Domma.elements.toast.warning('This toast will not auto-dismiss. Click the X to close it.', {
+                title: 'Persistent Toast',
+                duration: 0
+            });
+        }
+
+        function showNoProgress() {
+            Domma.elements.toast('This toast has no progress bar', {
+                showProgress: false
+            });
+        }
+
+        function closeAll() {
+            Domma.elements.toast.closeAll();
+        }
+
+        function showMultiple() {
+            for (let i = 1; i <= 5; i++) {
+                setTimeout(() => {
+                    Domma.elements.toast.info(`Toast notification #${i}`);
+                }, i * 100);
+            }
+        }
+
+        function showSequence() {
+            const messages = [
+                { type: 'info', msg: 'Starting process...' },
+                { type: 'success', msg: 'Step 1 complete' },
+                { type: 'success', msg: 'Step 2 complete' },
+                { type: 'success', msg: 'Step 3 complete' },
+                { type: 'success', msg: 'All done!' }
+            ];
+
+            messages.forEach((item, i) => {
+                setTimeout(() => {
+                    Domma.elements.toast[item.type](item.msg);
+                }, i * 1000);
+            });
+        }
+
+        // Show welcome toast on load
+        setTimeout(() => {
+            Domma.elements.toast.success('Toast Web Component loaded successfully!', {
+                title: 'Welcome! 👋'
+            });
+        }, 500);
+    </script>
+</body>
+</html>

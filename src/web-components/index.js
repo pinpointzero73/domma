@@ -7,13 +7,19 @@ import { DommaBadge } from './components/domma-badge.js';
 import { DommaTooltip } from './components/domma-tooltip.js';
 import { DommaLoader } from './components/domma-loader.js';
 import { DommaBackToTop } from './components/domma-back-to-top.js';
+import { DommaToast } from './components/domma-toast.js';
+import { DommaModal } from './components/domma-modal.js';
+import { DommaCard } from './components/domma-card.js';
 
 // Component registry
 const components = {
     'domma-badge': DommaBadge,
     'domma-tooltip': DommaTooltip,
     'domma-loader': DommaLoader,
-    'domma-back-to-top': DommaBackToTop
+    'domma-back-to-top': DommaBackToTop,
+    'domma-toast': DommaToast,
+    'domma-modal': DommaModal,
+    'domma-card': DommaCard
 };
 
 /**
@@ -54,9 +60,9 @@ export { DommaBadge } from './components/domma-badge.js';
 export { DommaTooltip } from './components/domma-tooltip.js';
 export { DommaLoader } from './components/domma-loader.js';
 export { DommaBackToTop } from './components/domma-back-to-top.js';
-// export { DommaToast } from './components/domma-toast.js';
-// export { DommaModal } from './components/domma-modal.js';
-// export { DommaCard } from './components/domma-card.js';
+export { DommaToast } from './components/domma-toast.js';
+export { DommaModal } from './components/domma-modal.js';
+export { DommaCard } from './components/domma-card.js';
 
 // Wrappers
 export * from './wrappers/legacy-wrappers.js';

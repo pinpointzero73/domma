@@ -9,12 +9,16 @@ import Component from './component.js';
 import TreeView from './treeview.js';
 import sanitizeModule from './sanitize.js';
 
-// Web Component wrappers for Phase 1 components
+// Web Component wrappers for Phase 1 & 2 components
 import {
     createBadgeWrapper,
     createTooltipWrapper,
     createLoaderWrapper,
-    createBackToTopWrapper
+    createBackToTopWrapper,
+    ToastWrapper,
+    createModalWrapper,
+    ModalFactoryWrapper,
+    createCardWrapper
 } from './web-components/wrappers/legacy-wrappers.js';
 
 // ============================================
@@ -4988,8 +4992,9 @@ class Navbar extends Component {
             if (item.items && item.items.length > 0) {
                 // Dropdown
                 html += `<li class="navbar-item navbar-dropdown">`;
+                const dropdownIconHTML = item.icon ? `<span data-icon="${item.icon}" data-size="18" style="margin-right: 6px; vertical-align: middle;"></span>` : '';
                 html += `<button class="navbar-link navbar-dropdown-toggle" data-index="${index}">
-                    ${item.text}
+                    ${dropdownIconHTML}${item.text}
                     <svg class="navbar-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M6 9l6 6 6-6"/>
                     </svg>
@@ -5003,7 +5008,8 @@ class Navbar extends Component {
                         const url = subItem.url || '#';
                         const isExternal = subItem.external || url.startsWith('http://') || url.startsWith('https://');
                         const target = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
-                        html += `<li><a href="${url}" class="navbar-dropdown-item" data-index="${index}" data-subindex="${subIndex}"${target}>${subItem.text}</a></li>`;
+                        const iconHTML = subItem.icon ? `<span data-icon="${subItem.icon}" data-size="16" style="margin-right: 6px; vertical-align: middle;"></span>` : '';
+                        html += `<li><a href="${url}" class="navbar-dropdown-item" data-index="${index}" data-subindex="${subIndex}"${target}>${iconHTML}${subItem.text}</a></li>`;
                     }
                 });
                 html += '</ul>';
@@ -5011,7 +5017,8 @@ class Navbar extends Component {
             } else {
                 // Regular item
                 html += `<li class="navbar-item">`;
-                html += `<a href="${item.url || '#'}" class="navbar-link${item.active ? ' active' : ''}" data-index="${index}">${item.text}</a>`;
+                const iconHTML = item.icon ? `<span data-icon="${item.icon}" data-size="18" style="margin-right: 6px; vertical-align: middle;"></span>` : '';
+                html += `<a href="${item.url || '#'}" class="navbar-link${item.active ? ' active' : ''}" data-index="${index}">${iconHTML}${item.text}</a>`;
                 html += '</li>';
             }
         });
@@ -5023,7 +5030,8 @@ class Navbar extends Component {
             html += '<div class="navbar-actions">';
             actions.forEach((action, index) => {
                 const variant = action.variant || 'primary';
-                html += `<a href="${action.url || '#'}" class="navbar-action dm-btn dm-btn-${variant}" data-action="${index}">${action.text}</a>`;
+                const actionIconHTML = action.icon ? `<span data-icon="${action.icon}" data-size="16" style="margin-right: 6px; vertical-align: middle;"></span>` : '';
+                html += `<a href="${action.url || '#'}" class="navbar-action dm-btn dm-btn-${variant}" data-action="${index}">${actionIconHTML}${action.text}</a>`;
             });
             html += '</div>';
         }
@@ -5036,6 +5044,15 @@ class Navbar extends Component {
         // Store references
         this._toggle = this.element.querySelector('.navbar-toggle');
         this._collapse = this.element.querySelector('.navbar-collapse');
+
+        // Scan icons
+        this._scanIcons();
+    }
+
+    _scanIcons() {
+        if (typeof window.Domma !== 'undefined' && window.Domma.icons && window.Domma.icons.scan) {
+            window.Domma.icons.scan(this.element);
+        }
     }
 
     _bindEvents() {
@@ -6019,7 +6036,8 @@ class Footer extends Component {
         if (links && links.length > 0) {
             html += '<nav class="footer-nav">';
             links.forEach(link => {
-                html += `<a href="${link.url || '#'}" class="footer-link">${link.text}</a>`;
+                const iconHTML = link.icon ? `<span data-icon="${link.icon}" data-size="16" style="margin-right: 6px; vertical-align: middle;"></span>` : '';
+                html += `<a href="${link.url || '#'}" class="footer-link">${iconHTML}${link.text}</a>`;
             });
             html += '</nav>';
         }
@@ -6069,7 +6087,8 @@ class Footer extends Component {
             if (column.links && column.links.length > 0) {
                 html += '<ul class="footer-column-links">';
                 column.links.forEach(link => {
-                    html += `<li><a href="${link.url || '#'}" class="footer-column-link">${link.text}</a></li>`;
+                    const iconHTML = link.icon ? `<span data-icon="${link.icon}" data-size="16" style="margin-right: 6px; vertical-align: middle;"></span>` : '';
+                    html += `<li><a href="${link.url || '#'}" class="footer-column-link">${iconHTML}${link.text}</a></li>`;
                 });
                 html += '</ul>';
             }
@@ -8500,27 +8519,29 @@ export const elements = {
     _instances: new Map(),
 
     card(selector, options = {}) {
-        const instance = new Card(selector, options);
-        if (instance.element) {
-            this._instances.set(instance.element, instance);
+        // Use Web Component wrapper (maintains backwards compatibility)
+        const result = createCardWrapper(selector, options);
+        if (result && result.element) {
+            this._instances.set(result.element, result);
         }
-        return instance;
+        return result;
     },
 
     modal(selectorOrOptions, options = {}) {
         // Detect factory mode: first arg is plain object (not string, not DOM element)
+        // Use Web Component wrappers (maintains backwards compatibility)
         if (typeof selectorOrOptions === 'object' &&
           !selectorOrOptions.nodeType &&
           typeof selectorOrOptions !== 'string') {
-            return ModalFactory.createModal(selectorOrOptions);
+            return ModalFactoryWrapper.createModal(selectorOrOptions);
         }
 
         // Traditional selector mode
-        const instance = new Modal(selectorOrOptions, options);
-        if (instance.element) {
-            this._instances.set(instance.element, instance);
+        const result = createModalWrapper(selectorOrOptions, options);
+        if (result && result.element) {
+            this._instances.set(result.element, result);
         }
-        return instance;
+        return result;
     },
 
     tabs(selector, options = {}) {
@@ -8822,16 +8843,16 @@ export const elements = {
         return this.progression(selector, { mode: 'timeline', ...options });
     },
 
-    // Toast wrapper - callable as function or use static methods
+    // Toast wrapper - callable as function or use static methods (Web Component)
     toast: Object.assign(
-        (message, options = {}) => Toast.show(message, options),
+        (message, options = {}) => ToastWrapper.show(message, options),
         {
-            show: Toast.show.bind(Toast),
-            success: Toast.success.bind(Toast),
-            error: Toast.error.bind(Toast),
-            warning: Toast.warning.bind(Toast),
-            info: Toast.info.bind(Toast),
-            closeAll: Toast.closeAll.bind(Toast)
+            show: ToastWrapper.show.bind(ToastWrapper),
+            success: ToastWrapper.success.bind(ToastWrapper),
+            error: ToastWrapper.error.bind(ToastWrapper),
+            warning: ToastWrapper.warning.bind(ToastWrapper),
+            info: ToastWrapper.info.bind(ToastWrapper),
+            closeAll: ToastWrapper.closeAll.bind(ToastWrapper)
         }
     ),
 
@@ -8842,9 +8863,9 @@ export const elements = {
     confirm: Dialog.confirm.bind(Dialog),
     prompt: Dialog.prompt.bind(Dialog),
 
-    // Modal factory methods
-    createModal: ModalFactory.createModal.bind(ModalFactory),
-    showModal: ModalFactory.showModal.bind(ModalFactory),
+    // Modal factory methods (Web Component)
+    createModal: ModalFactoryWrapper.createModal.bind(ModalFactoryWrapper),
+    showModal: ModalFactoryWrapper.showModal.bind(ModalFactoryWrapper),
 
     // Note: themeRoller() and pageRoller() are in domma-tools.min.js
     // Load that bundle to enable: Domma.elements.themeRoller(), Domma.elements.pageRoller()
