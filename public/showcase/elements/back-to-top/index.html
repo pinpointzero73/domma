@@ -121,6 +121,296 @@ Domma.elements.backToTop('#back-to-top', {
     </div>
 </section>
 
+<section class="card mb-6" data-section="Web Components">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Native Web Component</h2>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-info mb-4">
+            <strong>Modern Standard:</strong> BackToTop is now available as a native Web Component with Shadow DOM encapsulation.
+            Use either the traditional API (above) or the native <code>&lt;domma-back-to-top&gt;</code> tag below for better style isolation and framework compatibility.
+        </div>
+
+        <h3 class="category-title">Native Tag Syntax</h3>
+        <p class="mb-4">Use the native <code>&lt;domma-back-to-top&gt;</code> Web Component directly in HTML with attributes for configuration:</p>
+
+        <div class="code-block language-html mb-4">
+            <pre><code>&lt;!-- Basic Web Component --&gt;
+&lt;domma-back-to-top&gt;&lt;/domma-back-to-top&gt;
+
+&lt;!-- Configured Web Component --&gt;
+&lt;domma-back-to-top
+    show-after="400"
+    duration="500"
+    position="bottom-left"
+    offset="20"
+&gt;&lt;/domma-back-to-top&gt;
+
+&lt;!-- With Scroll Container --&gt;
+&lt;domma-back-to-top
+    target="#scrollable-content"
+    show-after="300"
+&gt;&lt;/domma-back-to-top&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title">Live Web Component Demo</h3>
+        <div class="demo-area mb-4">
+            <p class="text-center text-muted mb-3">Scroll down to see the native Web Component appear</p>
+            <div class="demo-scroll-container"
+                 id="wc-demo-container"
+                 style="height: 400px; overflow-y: auto; border: 1px solid var(--dm-color-border, #e0e0e0); border-radius: 0.5rem; padding: 1.5rem; position: relative;">
+                <div style="min-height: 1200px;">
+                    <p><strong>Web Component Example</strong></p>
+                    <p class="mt-200">This uses <code>&lt;domma-back-to-top&gt;</code> tag</p>
+                    <p class="mt-300">Shadow DOM provides style isolation</p>
+                    <p class="mt-300">Reactive attribute updates supported</p>
+                </div>
+            </div>
+            <domma-back-to-top
+                id="wc-demo-btn"
+                show-after="200"
+                duration="500"
+                position="bottom-right"
+                offset="16"
+            ></domma-back-to-top>
+        </div>
+
+        <h3 class="category-title">Available Attributes</h3>
+        <div class="option-table mb-4">
+            <table>
+                <thead>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>show-after</code></td>
+                    <td>Number</td>
+                    <td>viewport height</td>
+                    <td>Pixels to scroll before showing</td>
+                </tr>
+                <tr>
+                    <td><code>duration</code></td>
+                    <td>Number</td>
+                    <td><code>300</code></td>
+                    <td>Scroll animation duration in ms</td>
+                </tr>
+                <tr>
+                    <td><code>position</code></td>
+                    <td>String</td>
+                    <td><code>'bottom-right'</code></td>
+                    <td>Position: bottom-right, bottom-left</td>
+                </tr>
+                <tr>
+                    <td><code>offset</code></td>
+                    <td>Number</td>
+                    <td><code>16</code></td>
+                    <td>Distance from screen edge in px</td>
+                </tr>
+                <tr>
+                    <td><code>target</code></td>
+                    <td>String</td>
+                    <td><code>window</code></td>
+                    <td>CSS selector for scroll container</td>
+                </tr>
+                <tr>
+                    <td><code>z-index</code></td>
+                    <td>Number</td>
+                    <td><code>1000</code></td>
+                    <td>Z-index for stacking context</td>
+                </tr>
+                <tr>
+                    <td><code>visible</code></td>
+                    <td>Boolean</td>
+                    <td><code>false</code></td>
+                    <td>Initial visibility state</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="category-title">JavaScript API</h3>
+        <p class="mb-4">Access the Web Component instance and call methods programmatically:</p>
+        <div class="code-block language-javascript mb-4">
+            <pre><code>// Get the Web Component element
+const btn = document.querySelector('domma-back-to-top');
+
+// Call methods
+btn.scroll();              // Scroll to top
+btn.show();                // Show button immediately
+btn.hide();                // Hide button
+btn.toggle();              // Toggle visibility
+btn.isVisible();           // Check visibility → boolean
+btn.getButton();           // Get button element
+
+// Update attributes programmatically
+btn.setShowAfter(500);     // Change threshold
+btn.setPosition('bottom-left'); // Change position
+btn.setOffset(24);         // Change offset
+
+// Listen for events
+btn.addEventListener('show', (e) => {
+    console.log('Button appeared');
+});
+
+btn.addEventListener('hide', (e) => {
+    console.log('Button hidden');
+});</code></pre>
+        </div>
+
+        <h3 class="category-title">Reactive Attributes Demo</h3>
+        <div class="demo-area text-center mb-4">
+            <div class="flex gap-2 justify-center mb-3">
+                <button id="wc-change-position" class="btn btn-sm btn-outline">Toggle Position</button>
+                <button id="wc-change-offset" class="btn btn-sm btn-outline">Change Offset</button>
+                <button id="wc-manual-show" class="btn btn-sm btn-outline">Force Show</button>
+            </div>
+            <div class="demo-scroll-container"
+                 id="reactive-demo"
+                 style="height: 300px; overflow-y: auto; border: 1px solid var(--dm-color-border, #e0e0e0); border-radius: 0.5rem; padding: 1.5rem; position: relative;">
+                <div style="min-height: 800px;">
+                    <p>Attributes update reactively!</p>
+                    <p class="mt-300">Try the buttons above</p>
+                </div>
+            </div>
+            <domma-back-to-top
+                id="reactive-btn"
+                show-after="200"
+                duration="400"
+            ></domma-back-to-top>
+        </div>
+
+        <h3 class="category-title">Event Handling</h3>
+        <div class="code-block language-javascript mb-4">
+            <pre><code>&lt;domma-back-to-top id="my-btn"&gt;&lt;/domma-back-to-top&gt;
+
+&lt;script&gt;
+const btn = document.getElementById('my-btn');
+
+// Listen for show event
+btn.addEventListener('show', (e) => {
+    console.log('Button became visible');
+    document.getElementById('status').textContent = 'Visible';
+});
+
+// Listen for hide event
+btn.addEventListener('hide', (e) => {
+    console.log('Button became hidden');
+    document.getElementById('status').textContent = 'Hidden';
+});
+&lt;/script&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title">Benefits of Web Components</h3>
+        <div class="alert alert-success">
+            <ul class="mb-0">
+                <li><strong>Shadow DOM Isolation:</strong> Styles don't leak in or out</li>
+                <li><strong>Native Browser API:</strong> No framework required</li>
+                <li><strong>Reactive Attributes:</strong> Changes update automatically</li>
+                <li><strong>Framework Agnostic:</strong> Works with React, Vue, Angular, Svelte</li>
+                <li><strong>Custom Events:</strong> Standard DOM event system</li>
+                <li><strong>Backwards Compatible:</strong> Traditional API still available</li>
+            </ul>
+        </div>
+
+        <h3 class="category-title">Using with Frameworks</h3>
+
+        <h4 class="text-lg font-semibold mt-4 mb-2">React</h4>
+        <div class="code-block language-javascript mb-4">
+            <pre><code>import { useRef, useEffect } from 'react';
+
+function MyComponent() {
+    const btnRef = useRef(null);
+
+    useEffect(() => {
+        const btn = btnRef.current;
+
+        const handleShow = () => console.log('Visible');
+        btn.addEventListener('show', handleShow);
+
+        return () => btn.removeEventListener('show', handleShow);
+    }, []);
+
+    return &lt;domma-back-to-top ref={btnRef} show-after="300" /&gt;;
+}</code></pre>
+        </div>
+
+        <h4 class="text-lg font-semibold mt-4 mb-2">Vue</h4>
+        <div class="code-block language-javascript mb-4">
+            <pre><code>&lt;template&gt;
+    &lt;domma-back-to-top
+        ref="backToTop"
+        :show-after="300"
+        :duration="500"
+        @show="onShow"
+        @hide="onHide"
+    &gt;&lt;/domma-back-to-top&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+    methods: {
+        onShow() { console.log('Visible'); },
+        onHide() { console.log('Hidden'); }
+    },
+    mounted() {
+        this.$refs.backToTop.scroll();
+    }
+};
+&lt;/script&gt;</code></pre>
+        </div>
+
+        <h4 class="text-lg font-semibold mt-4 mb-2">Angular</h4>
+        <div class="code-block language-javascript mb-4">
+            <pre><code>import { Component, ViewChild, ElementRef } from '@angular/core';
+
+@Component({
+    selector: 'app-my-component',
+    template: `
+        &lt;domma-back-to-top
+            #backToTop
+            show-after="300"
+            (show)="onShow()"
+            (hide)="onHide()"
+        &gt;&lt;/domma-back-to-top&gt;
+    `
+})
+export class MyComponent {
+    @ViewChild('backToTop') backToTop!: ElementRef;
+
+    onShow() { console.log('Visible'); }
+    onHide() { console.log('Hidden'); }
+
+    scrollToTop() {
+        this.backToTop.nativeElement.scroll();
+    }
+}</code></pre>
+        </div>
+
+        <h3 class="category-title">CSS Part Customization</h3>
+        <p class="mb-4">Customize Web Component styles using CSS <code>::part()</code> selectors:</p>
+        <div class="code-block language-css mb-4">
+            <pre><code>/* Target the button inside Shadow DOM */
+domma-back-to-top::part(button) {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+domma-back-to-top::part(button):hover {
+    transform: translateY(-2px) scale(1.15);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}</code></pre>
+        </div>
+    </div>
+</section>
+
 <section class="card mb-6" data-section="Tutorial">
     <div class="card-header">
         <h2 class="text-xl font-semibold m-0">Tutorial</h2>
@@ -490,6 +780,35 @@ $.setup({
     document.getElementById('prog-hide').addEventListener('click', () => programmaticBtn.hide());
     document.getElementById('prog-toggle').addEventListener('click', () => programmaticBtn.toggle());
     document.getElementById('prog-scroll').addEventListener('click', () => programmaticBtn.scroll(400));
+
+    // Web Component Demos
+    // Main Web Component demo - get the element and set its target
+    const wcDemoBtn = document.getElementById('wc-demo-btn');
+    if (wcDemoBtn) {
+        wcDemoBtn.setAttribute('target', '#wc-demo-container');
+    }
+
+    // Reactive attributes demo
+    const reactiveBtn = document.getElementById('reactive-btn');
+    if (reactiveBtn) {
+        reactiveBtn.setAttribute('target', '#reactive-demo');
+
+        let currentPosition = 'bottom-right';
+        document.getElementById('wc-change-position').addEventListener('click', () => {
+            currentPosition = currentPosition === 'bottom-right' ? 'bottom-left' : 'bottom-right';
+            reactiveBtn.setPosition(currentPosition);
+        });
+
+        let currentOffset = 16;
+        document.getElementById('wc-change-offset').addEventListener('click', () => {
+            currentOffset = currentOffset === 16 ? 32 : 16;
+            reactiveBtn.setOffset(currentOffset);
+        });
+
+        document.getElementById('wc-manual-show').addEventListener('click', () => {
+            reactiveBtn.show();
+        });
+    }
 </script>
 
 </body>

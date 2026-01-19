@@ -13,6 +13,10 @@ import {storage} from './storage.js';
 import {auth} from './auth.js';
 import sanitizeModule from './sanitize.js';
 
+// Register Web Components (Badge, Tooltip, Loader, BackToTop)
+import {registerComponents} from './web-components/index.js';
+registerComponents();
+
 // Cloaking - hide page immediately to prevent FOUC
 let cloakEnabled = true;
 if (typeof document !== 'undefined' && document.body) {

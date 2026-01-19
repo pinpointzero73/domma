@@ -75,7 +75,169 @@ loader.toggle();
     </div>
 </section>
 
-<!-- SECTION 2: QUICK START -->
+<!-- SECTION 2: WEB COMPONENTS -->
+<section class="card mb-6" data-section="Web Components">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Web Components</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Domma Loader is now available as a native Web Component! Use modern <code>&lt;domma-loader&gt;</code> tags
+            or the traditional wrapper API - both work identically with zero breaking changes.
+        </p>
+
+        <h3 class="category-title">Direct Web Component Usage - Animation Types</h3>
+        <p class="text-muted mb-2">All four loader animations available as custom elements:</p>
+        <div class="demo-area mb-4" style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center;">
+            <div style="width: 100px; height: 100px; position: relative; border: 1px solid var(--dm-border); border-radius: 8px;">
+                <domma-loader type="spinner" size="medium" color="primary"></domma-loader>
+                <p style="text-align: center; margin-top: 0.5rem; font-size: 0.75rem;">Spinner</p>
+            </div>
+            <div style="width: 100px; height: 100px; position: relative; border: 1px solid var(--dm-border); border-radius: 8px;">
+                <domma-loader type="dots" size="medium" color="success"></domma-loader>
+                <p style="text-align: center; margin-top: 0.5rem; font-size: 0.75rem;">Dots</p>
+            </div>
+            <div style="width: 100px; height: 100px; position: relative; border: 1px solid var(--dm-border); border-radius: 8px;">
+                <domma-loader type="pulse" size="medium" color="info"></domma-loader>
+                <p style="text-align: center; margin-top: 0.5rem; font-size: 0.75rem;">Pulse</p>
+            </div>
+            <div style="width: 100px; height: 100px; position: relative; border: 1px solid var(--dm-border); border-radius: 8px;">
+                <domma-loader type="bars" size="medium" color="warning"></domma-loader>
+                <p style="text-align: center; margin-top: 0.5rem; font-size: 0.75rem;">Bars</p>
+            </div>
+        </div>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;!-- Container with loader --&gt;
+&lt;div style="position: relative; width: 100px; height: 100px;"&gt;
+    &lt;domma-loader type="spinner" size="medium" color="primary"&gt;&lt;/domma-loader&gt;
+&lt;/div&gt;
+
+&lt;domma-loader type="dots" size="medium" color="success"&gt;&lt;/domma-loader&gt;
+&lt;domma-loader type="pulse" size="medium" color="info"&gt;&lt;/domma-loader&gt;
+&lt;domma-loader type="bars" size="medium" color="warning"&gt;&lt;/domma-loader&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title">Size Variants</h3>
+        <p class="text-muted mb-2">Choose from predefined sizes or use custom pixel values:</p>
+        <div class="demo-area mb-4" style="display: flex; gap: 2rem; align-items: center; justify-content: center;">
+            <div style="width: 80px; height: 80px; position: relative; border: 1px solid var(--dm-border); border-radius: 8px;">
+                <domma-loader type="spinner" size="small" color="primary"></domma-loader>
+            </div>
+            <div style="width: 120px; height: 120px; position: relative; border: 1px solid var(--dm-border); border-radius: 8px;">
+                <domma-loader type="spinner" size="medium" color="primary"></domma-loader>
+            </div>
+            <div style="width: 160px; height: 160px; position: relative; border: 1px solid var(--dm-border); border-radius: 8px;">
+                <domma-loader type="spinner" size="large" color="primary"></domma-loader>
+            </div>
+        </div>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;domma-loader type="spinner" size="small" color="primary"&gt;&lt;/domma-loader&gt;
+&lt;domma-loader type="spinner" size="medium" color="primary"&gt;&lt;/domma-loader&gt;
+&lt;domma-loader type="spinner" size="large" color="primary"&gt;&lt;/domma-loader&gt;
+
+&lt;!-- Custom size in pixels --&gt;
+&lt;domma-loader type="spinner" size="80" color="primary"&gt;&lt;/domma-loader&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title">With Loading Text</h3>
+        <div class="demo-area mb-4" style="display: flex; gap: 2rem; justify-content: center;">
+            <div style="width: 200px; height: 150px; position: relative; border: 1px solid var(--dm-border); border-radius: 8px;">
+                <domma-loader type="spinner" size="medium" color="primary" text="Loading..."></domma-loader>
+            </div>
+            <div style="width: 200px; height: 150px; position: relative; border: 1px solid var(--dm-border); border-radius: 8px;">
+                <domma-loader type="dots" size="medium" color="success" text="Please wait"></domma-loader>
+            </div>
+        </div>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;domma-loader type="spinner" size="medium" color="primary" text="Loading..."&gt;&lt;/domma-loader&gt;
+&lt;domma-loader type="dots" size="medium" color="success" text="Please wait"&gt;&lt;/domma-loader&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title">Overlay Mode</h3>
+        <p class="text-muted mb-2">Cover entire container with a dark backdrop:</p>
+        <div class="demo-area mb-4" style="justify-content: center;">
+            <div style="width: 300px; height: 200px; position: relative; border: 1px solid var(--dm-border); border-radius: 8px; background: var(--dm-bg-secondary);">
+                <p style="padding: 1rem;">Content behind the overlay</p>
+                <domma-loader type="spinner" size="large" color="white" text="Loading..." overlay></domma-loader>
+            </div>
+        </div>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;div style="position: relative; width: 300px; height: 200px;"&gt;
+    &lt;p&gt;Content behind overlay&lt;/p&gt;
+    &lt;domma-loader type="spinner" size="large" color="white" text="Loading..." overlay&gt;&lt;/domma-loader&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title">Programmatic API</h3>
+        <p class="text-muted mb-2">Control loader visibility and appearance dynamically:</p>
+        <div class="demo-area mb-4" style="flex-direction: column; align-items: center;">
+            <div style="width: 200px; height: 150px; position: relative; border: 1px solid var(--dm-border); border-radius: 8px; margin-bottom: 1rem;">
+                <domma-loader id="programmable-loader" type="spinner" size="medium" color="primary" text="Loading..." visible="false"></domma-loader>
+            </div>
+            <div>
+                <button class="btn btn-sm btn-primary" onclick="showProgrammableLoader()">Show</button>
+                <button class="btn btn-sm btn-secondary" onclick="hideProgrammableLoader()">Hide</button>
+                <button class="btn btn-sm btn-info" onclick="toggleProgrammableLoader()">Toggle</button>
+                <button class="btn btn-sm btn-success" onclick="changeLoaderType()">Change Type</button>
+            </div>
+        </div>
+        <div class="code-block language-javascript mb-6">
+            <pre><code>const loader = document.querySelector('domma-loader');
+
+// Show/hide control
+loader.show();
+loader.hide();
+loader.toggle();
+
+// Check state
+if (loader.isVisible()) {
+    console.log('Loader is visible');
+}
+
+// Update properties
+loader.setText('Processing...');
+loader.setType('dots');
+loader.setSize('large');
+loader.setColor('success');</code></pre>
+        </div>
+
+        <h3 class="category-title">Wrapper API (Backwards Compatible)</h3>
+        <p class="mb-4 text-muted">
+            Existing code continues to work unchanged! The wrapper API uses Web Components internally:
+        </p>
+        <div class="demo-area mb-4" style="justify-content: center;">
+            <div id="wrapper-loader-demo" style="width: 200px; height: 150px; position: relative; border: 1px solid var(--dm-border); border-radius: 8px;"></div>
+        </div>
+        <div class="code-block language-javascript mb-6">
+            <pre><code>// Traditional approach - still works!
+const loader = Domma.elements.loader('#my-container', {
+    type: 'dots',
+    size: 'large',
+    color: 'success',
+    text: 'Loading data...',
+    overlay: false
+});
+
+// Same API as before
+loader.show();
+loader.hide();
+loader.setText('Updated text');
+loader.destroy();</code></pre>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>💡 Benefits of Web Components:</strong>
+            <ul class="mt-2 mb-0">
+                <li><strong>Encapsulation</strong> - Loader styles isolated via Shadow DOM</li>
+                <li><strong>Four Animation Types</strong> - Spinner, dots, pulse, and bars</li>
+                <li><strong>Flexible</strong> - Works standalone or in overlay mode</li>
+                <li><strong>Backwards Compatible</strong> - Existing code works without changes</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 3: QUICK START -->
 <section class="card mb-6" data-section="Quick Start">
     <div class="card-header">
         <h2 class="text-xl font-semibold m-0">Quick Start</h2>
@@ -1241,6 +1403,51 @@ $.setup({
                     setTimeout(() => loader.hide(), 2000);
                 }
             }
+        }
+    });
+
+    // Web Components Section JavaScript
+    const loaderTypes = ['spinner', 'dots', 'pulse', 'bars'];
+    let currentTypeIndex = 0;
+
+    window.showProgrammableLoader = function() {
+        const loader = document.getElementById('programmable-loader');
+        loader.show();
+    };
+
+    window.hideProgrammableLoader = function() {
+        const loader = document.getElementById('programmable-loader');
+        loader.hide();
+    };
+
+    window.toggleProgrammableLoader = function() {
+        const loader = document.getElementById('programmable-loader');
+        loader.toggle();
+    };
+
+    window.changeLoaderType = function() {
+        const loader = document.getElementById('programmable-loader');
+        currentTypeIndex = (currentTypeIndex + 1) % loaderTypes.length;
+        const newType = loaderTypes[currentTypeIndex];
+        loader.setType(newType);
+        loader.setText(`Type: ${newType}`);
+        loader.show();
+    };
+</script>
+
+<script type="module">
+    import { createLoaderWrapper } from '../../../src/web-components/wrappers/legacy-wrappers.js';
+
+    // Web Components - Wrapper API demo
+    window.addEventListener('DOMContentLoaded', () => {
+        if (document.getElementById('wrapper-loader-demo')) {
+            createLoaderWrapper('#wrapper-loader-demo', {
+                type: 'dots',
+                size: 'large',
+                color: 'success',
+                text: 'Wrapper API!',
+                visible: true
+            });
         }
     });
 </script>

@@ -102,6 +102,156 @@ Domma.elements.tooltip('#help-icon', {
     </div>
 </section>
 
+<section class="card mb-6" data-section="Web Components">
+    <div class="card-header">
+        <h2 class="text-xl font-semibold m-0">Web Components</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-4">
+            Domma Tooltip is now available as a native Web Component! Use modern <code>&lt;domma-tooltip&gt;</code> tags
+            or the traditional wrapper API - both work identically with zero breaking changes.
+        </p>
+
+        <h3 class="category-title-style">Direct Web Component Usage</h3>
+        <p class="mb-4 text-gray-600">Wrap trigger elements in <code>&lt;domma-tooltip&gt;</code> tags:</p>
+        <div class="demo-area mb-4 text-center">
+            <domma-tooltip content="Top tooltip" position="top">
+                <button class="btn btn-primary">Top</button>
+            </domma-tooltip>
+            <domma-tooltip content="Bottom tooltip" position="bottom">
+                <button class="btn btn-primary">Bottom</button>
+            </domma-tooltip>
+            <domma-tooltip content="Left tooltip" position="left">
+                <button class="btn btn-primary">Left</button>
+            </domma-tooltip>
+            <domma-tooltip content="Right tooltip" position="right">
+                <button class="btn btn-primary">Right</button>
+            </domma-tooltip>
+        </div>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;domma-tooltip content="Top tooltip" position="top"&gt;
+    &lt;button class="btn btn-primary"&gt;Top&lt;/button&gt;
+&lt;/domma-tooltip&gt;
+
+&lt;domma-tooltip content="Bottom tooltip" position="bottom"&gt;
+    &lt;button class="btn btn-primary"&gt;Bottom&lt;/button&gt;
+&lt;/domma-tooltip&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title-style">Trigger Types</h3>
+        <div class="demo-area mb-4 text-center">
+            <domma-tooltip content="Hover trigger (default)" trigger="hover">
+                <button class="btn btn-outline">Hover</button>
+            </domma-tooltip>
+            <domma-tooltip content="Click trigger" trigger="click">
+                <button class="btn btn-outline">Click</button>
+            </domma-tooltip>
+            <domma-tooltip content="Focus trigger" trigger="focus">
+                <input type="text" class="form-input tooltip-input-width-150" placeholder="Focus me">
+            </domma-tooltip>
+        </div>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;domma-tooltip content="Hover trigger" trigger="hover"&gt;
+    &lt;button&gt;Hover&lt;/button&gt;
+&lt;/domma-tooltip&gt;
+
+&lt;domma-tooltip content="Click trigger" trigger="click"&gt;
+    &lt;button&gt;Click&lt;/button&gt;
+&lt;/domma-tooltip&gt;
+
+&lt;domma-tooltip content="Focus trigger" trigger="focus"&gt;
+    &lt;input type="text" placeholder="Focus me"&gt;
+&lt;/domma-tooltip&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title-style">Delay Configuration</h3>
+        <p class="mb-4 text-gray-600">Control show and hide delays:</p>
+        <div class="demo-area mb-4 text-center">
+            <domma-tooltip content="Instant tooltip" delay="0">
+                <button class="btn btn-secondary">No Delay</button>
+            </domma-tooltip>
+            <domma-tooltip content="Delayed tooltip" delay="500">
+                <button class="btn btn-secondary">500ms Delay</button>
+            </domma-tooltip>
+            <domma-tooltip content="Slow hide" delay="0" hide-delay="1000">
+                <button class="btn btn-secondary">Slow Hide</button>
+            </domma-tooltip>
+        </div>
+        <div class="code-block language-html mb-6">
+            <pre><code>&lt;domma-tooltip content="Instant" delay="0"&gt;
+    &lt;button&gt;No Delay&lt;/button&gt;
+&lt;/domma-tooltip&gt;
+
+&lt;domma-tooltip content="Delayed" delay="500" hide-delay="300"&gt;
+    &lt;button&gt;With Delays&lt;/button&gt;
+&lt;/domma-tooltip&gt;</code></pre>
+        </div>
+
+        <h3 class="category-title-style">Programmatic API</h3>
+        <p class="mb-4 text-gray-600">Web Components support dynamic updates:</p>
+        <div class="demo-area mb-4 text-center">
+            <domma-tooltip id="programmable-tooltip" content="Initial content" position="top">
+                <button class="btn btn-info">Hover & Click Button Below</button>
+            </domma-tooltip>
+            <br><br>
+            <button class="btn btn-sm btn-primary" onclick="updateTooltipContent()">Update Content</button>
+            <button class="btn btn-sm btn-secondary" onclick="changeTooltipPosition()">Change Position</button>
+        </div>
+        <div class="code-block language-javascript mb-6">
+            <pre><code>const tooltip = document.querySelector('domma-tooltip');
+
+// Update content
+tooltip.setContent('New tooltip text!');
+
+// Update position
+tooltip.setPosition('bottom');
+
+// Show/hide programmatically
+tooltip.show();
+tooltip.hide();
+tooltip.toggle();
+
+// Check visibility
+if (tooltip.isVisible()) {
+    console.log('Tooltip is showing');
+}</code></pre>
+        </div>
+
+        <h3 class="category-title-style">Wrapper API (Backwards Compatible)</h3>
+        <p class="mb-4 text-gray-600">
+            Existing code continues to work unchanged! The wrapper API uses Web Components internally:
+        </p>
+        <div class="demo-area mb-4 text-center">
+            <button id="wrapper-tooltip-btn" class="btn btn-success">Wrapper Tooltip</button>
+        </div>
+        <div class="code-block language-javascript mb-6">
+            <pre><code>// Traditional approach - still works!
+const tooltip = Domma.elements.tooltip('#my-element', {
+    content: 'Helpful information here',
+    position: 'top',
+    trigger: 'hover',
+    delay: 200
+});
+
+// Same API as before
+tooltip.show();
+tooltip.hide();
+tooltip.setContent('Updated text');
+tooltip.destroy();</code></pre>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>💡 Benefits of Web Components:</strong>
+            <ul class="mt-2 mb-0">
+                <li><strong>Encapsulation</strong> - Tooltip styles isolated via Shadow DOM</li>
+                <li><strong>Smart Positioning</strong> - Auto-adjusts to avoid viewport edges</li>
+                <li><strong>Standards-based</strong> - Native browser API, future-proof</li>
+                <li><strong>Backwards Compatible</strong> - Existing code works without changes</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
 <section class="card mb-6" data-section="Quick Start">
     <div class="card-header">
         <h2 class="text-xl font-semibold m-0">Quick Start</h2>
@@ -351,41 +501,78 @@ $.setup({
 <script src="../../../dist/domma.min.js"></script>
 <script src="../../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../../layouts/js/layout.js"></script>
-<script>
-    Domma.elements.tooltip('#quick-hover', {
-        content: 'This appears on hover',
-        position: 'top'
-    });
+<script type="module">
+    import { createTooltipWrapper } from '../../../src/web-components/wrappers/legacy-wrappers.js';
 
-    Domma.elements.tooltip('#username-help', {
-        content: 'Username must be 3-20 characters',
-        position: 'right'
-    });
+    // Web Components - Programmatic API demo
+    const positions = ['top', 'bottom', 'left', 'right'];
+    let currentPosIndex = 0;
+    const tooltipContents = [
+        'Updated content!',
+        'New tooltip text!',
+        'Changed again!',
+        'Back to original'
+    ];
+    let contentIndex = 0;
 
-    Domma.elements.tooltip('#password-help', {
-        content: 'Password must be at least 8 characters',
-        position: 'right'
-    });
+    window.updateTooltipContent = function() {
+        const tooltip = document.getElementById('programmable-tooltip');
+        contentIndex = (contentIndex + 1) % tooltipContents.length;
+        tooltip.setContent(tooltipContents[contentIndex]);
+    };
 
-    Domma.elements.tooltip('#pos-top', {content: 'Tooltip on top', position: 'top'});
-    Domma.elements.tooltip('#pos-bottom', {content: 'Tooltip on bottom', position: 'bottom'});
-    Domma.elements.tooltip('#pos-left', {content: 'Tooltip on left', position: 'left'});
-    Domma.elements.tooltip('#pos-right', {content: 'Tooltip on right', position: 'right'});
+    window.changeTooltipPosition = function() {
+        const tooltip = document.getElementById('programmable-tooltip');
+        currentPosIndex = (currentPosIndex + 1) % positions.length;
+        tooltip.setPosition(positions[currentPosIndex]);
+    };
 
-    Domma.elements.tooltip('#trigger-hover', {content: 'Shown on hover', trigger: 'hover'});
-    Domma.elements.tooltip('#trigger-click', {content: 'Shown on click', trigger: 'click'});
-    Domma.elements.tooltip('#trigger-focus', {content: 'Shown on focus', trigger: 'focus'});
+    // Web Components - Wrapper API demo
+    $(() => {
+        if (document.getElementById('wrapper-tooltip-btn')) {
+            createTooltipWrapper('#wrapper-tooltip-btn', {
+                content: 'This uses the wrapper API!',
+                position: 'top',
+                trigger: 'hover'
+            });
+        }
 
-    let hoverCount = 0;
-    const dynamicTip = Domma.elements.tooltip('#dynamic-tooltip', {
-        content: 'Hover count: 0',
-        position: 'top'
-    });
+        // Original showcase examples
+        Domma.elements.tooltip('#quick-hover', {
+            content: 'This appears on hover',
+            position: 'top'
+        });
 
-    $('#dynamic-tooltip').on('mouseenter', () => {
-        hoverCount++;
-        $('#hover-count').text(hoverCount);
-        dynamicTip.setContent(`Hover count: ${hoverCount}`);
+        Domma.elements.tooltip('#username-help', {
+            content: 'Username must be 3-20 characters',
+            position: 'right'
+        });
+
+        Domma.elements.tooltip('#password-help', {
+            content: 'Password must be at least 8 characters',
+            position: 'right'
+        });
+
+        Domma.elements.tooltip('#pos-top', {content: 'Tooltip on top', position: 'top'});
+        Domma.elements.tooltip('#pos-bottom', {content: 'Tooltip on bottom', position: 'bottom'});
+        Domma.elements.tooltip('#pos-left', {content: 'Tooltip on left', position: 'left'});
+        Domma.elements.tooltip('#pos-right', {content: 'Tooltip on right', position: 'right'});
+
+        Domma.elements.tooltip('#trigger-hover', {content: 'Shown on hover', trigger: 'hover'});
+        Domma.elements.tooltip('#trigger-click', {content: 'Shown on click', trigger: 'click'});
+        Domma.elements.tooltip('#trigger-focus', {content: 'Shown on focus', trigger: 'focus'});
+
+        let hoverCount = 0;
+        const dynamicTip = Domma.elements.tooltip('#dynamic-tooltip', {
+            content: 'Hover count: 0',
+            position: 'top'
+        });
+
+        $('#dynamic-tooltip').on('mouseenter', () => {
+            hoverCount++;
+            $('#hover-count').text(hoverCount);
+            dynamicTip.setContent(`Hover count: ${hoverCount}`);
+        });
     });
 </script>
 

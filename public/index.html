@@ -142,6 +142,10 @@
           min-width: 120px;
           text-decoration: none;
           color: inherit;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
       }
 
       .feature:hover {
@@ -169,6 +173,15 @@
           font-size: 1.75rem;
           font-weight: 700;
           margin-bottom: 0.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 42px;
+      }
+
+      .feature-icon svg {
+          width: 42px;
+          height: 42px;
       }
 
       .feature-label {
@@ -947,9 +960,9 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
     <p class="lead">Production-ready applications built with Domma</p>
   </div>
 
-  <div class="row g-4 mb-4 flex-nowrap">
+  <div class="row g-4 mb-4">
     <!-- My Garage Preview -->
-    <div class="col">
+    <div class="col-12 col-md-6 col-lg-4">
       <div class="card h-100 card-hover" data-tooltip="Manage your vehicle fleet with DVLA API integration">
         <div class="card-body">
           <div class="text-center mb-3">
@@ -967,7 +980,7 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
     </div>
 
     <!-- Document Editor Preview -->
-    <div class="col">
+    <div class="col-12 col-md-6 col-lg-4">
       <div class="card h-100 card-hover" data-tooltip="Rich text editor with version history and export features">
         <div class="card-body">
           <div class="text-center mb-3">
@@ -985,7 +998,7 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
     </div>
 
     <!-- Invoicing Preview -->
-    <div class="col">
+    <div class="col-12 col-md-6 col-lg-4">
       <div class="card h-100 card-hover" data-tooltip="Professional invoicing with client management - launching soon">
         <div class="card-body">
           <div class="text-center mb-3">

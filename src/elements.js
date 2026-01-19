@@ -9,6 +9,14 @@ import Component from './component.js';
 import TreeView from './treeview.js';
 import sanitizeModule from './sanitize.js';
 
+// Web Component wrappers for Phase 1 components
+import {
+    createBadgeWrapper,
+    createTooltipWrapper,
+    createLoaderWrapper,
+    createBackToTopWrapper
+} from './web-components/wrappers/legacy-wrappers.js';
+
 // ============================================
 // Card Component
 // ============================================
@@ -8532,37 +8540,35 @@ export const elements = {
     },
 
     tooltip(selector, options = {}) {
-        // Support multiple elements
-        const selectorElements = typeof selector === 'string'
-            ? document.querySelectorAll(selector)
-            : [selector];
+        // Use Web Component wrapper (maintains backwards compatibility)
+        const result = createTooltipWrapper(selector, options);
 
-        const instances = [];
-
-        for (const el of selectorElements) {
-            const instance = new Tooltip(el, options);
-            this._instances.set(el, instance);
-            instances.push(instance);
+        // Store instances for lifecycle management
+        if (Array.isArray(result)) {
+            result.forEach(instance => {
+                if (instance.element) {
+                    this._instances.set(instance.element, instance);
+                }
+            });
+        } else if (result && result.element) {
+            this._instances.set(result.element, result);
         }
 
-        return instances.length === 1 ? instances[0] : instances;
+        return result;
     },
 
     badge(selector, options = {}) {
-        // Support multiple elements
-        const selectorElements = typeof selector === 'string'
-            ? document.querySelectorAll(selector)
-            : [selector];
+        // Use Web Component wrapper (maintains backwards compatibility)
+        // Note: Badge wrapper doesn't support multiple elements like the original
+        // It wraps a single element at a time
+        const result = createBadgeWrapper(selector, options);
 
-        const instances = [];
-
-        for (const el of selectorElements) {
-            const instance = new Badge(el, options);
-            this._instances.set(el, instance);
-            instances.push(instance);
+        // Store instance for lifecycle management
+        if (result && result.element) {
+            this._instances.set(result.element, result);
         }
 
-        return instances.length === 1 ? instances[0] : instances;
+        return result;
     },
 
     dropdown(selector, options = {}) {
@@ -8592,8 +8598,14 @@ export const elements = {
     },
 
     backToTop(selector, options = {}) {
-        const instance = new BackToTop(selector, options);
-        this._instances.set('backToTop', instance);
+        // Use Web Component wrapper (maintains backwards compatibility)
+        const instance = createBackToTopWrapper(selector, options);
+
+        // Store instance for lifecycle management
+        if (instance && instance.element) {
+            this._instances.set('backToTop', instance);
+        }
+
         return instance;
     },
 
@@ -8615,17 +8627,80 @@ export const elements = {
     },
 
     loader(selector, options = {}) {
-        const instance = new Loader(selector, options);
-        if (instance.element) {
+        // Use Web Component wrapper (maintains backwards compatibility)
+        const instance = createLoaderWrapper(selector, options);
+
+        // Store instance for lifecycle management
+        if (instance && instance.element) {
             this._instances.set(instance.element, instance);
         }
+
         return instance;
     },
 
     // Static loader methods for convenience
-    showLoader: Loader.show.bind(Loader),
-    hideLoader: Loader.hide.bind(Loader),
-    fullscreenLoader: Loader.fullscreen.bind(Loader),
+    showLoader(selector, options = {}) {
+        const el = typeof selector === 'string'
+            ? document.querySelector(selector)
+            : selector;
+
+        if (!el) return null;
+
+        // Check if loader already exists
+        let instance = this._instances.get(el);
+        if (!instance) {
+            instance = createLoaderWrapper(el, { ...options, visible: true });
+            this._instances.set(el, instance);
+        } else {
+            instance.show();
+        }
+
+        return instance;
+    },
+
+    hideLoader(selector) {
+        const el = typeof selector === 'string'
+            ? document.querySelector(selector)
+            : selector;
+
+        const instance = this._instances.get(el);
+        if (instance && instance.hide) {
+            instance.hide();
+        }
+    },
+
+    fullscreenLoader(text = 'Loading...', options = {}) {
+        let container = document.getElementById('dm-loader-fullscreen');
+
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'dm-loader-fullscreen';
+            container.style.cssText = `
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+            `;
+            document.body.appendChild(container);
+        }
+
+        const instance = createLoaderWrapper(container, {
+            type: options.type || 'spinner',
+            size: options.size || 'large',
+            color: options.color || 'white',
+            text,
+            overlay: false,
+            centered: false,
+            visible: true
+        });
+
+        container.style.display = 'flex';
+        this._instances.set(container, instance);
+        return instance;
+    },
 
     breadcrumbs(selector, options = {}) {
         const instance = new Breadcrumbs(selector, options);

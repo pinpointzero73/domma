@@ -83,6 +83,132 @@
     </div>
   </section>
 
+  <section class="card mb-6" data-section="Web Components">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Web Components</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Domma Badge is now available as a native Web Component! Use modern <code>&lt;domma-badge&gt;</code> tags
+        or the traditional wrapper API - both work identically with zero breaking changes.
+      </p>
+
+      <h3 class="category-title-style">Direct Web Component Usage</h3>
+      <p class="mb-4 text-gray-600">Use custom HTML elements for clean, semantic markup:</p>
+      <div class="demo-area badge-text-center mb-4">
+        <domma-badge variant="primary">Primary</domma-badge>
+        <domma-badge variant="secondary">Secondary</domma-badge>
+        <domma-badge variant="success">Success</domma-badge>
+        <domma-badge variant="danger">Danger</domma-badge>
+        <domma-badge variant="warning">Warning</domma-badge>
+        <domma-badge variant="info">Info</domma-badge>
+      </div>
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;domma-badge variant="primary"&gt;Primary&lt;/domma-badge&gt;
+&lt;domma-badge variant="success"&gt;Success&lt;/domma-badge&gt;
+&lt;domma-badge variant="danger"&gt;Danger&lt;/domma-badge&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Size Variants</h3>
+      <div class="demo-area badge-text-center mb-4">
+        <domma-badge variant="primary" size="small">Small</domma-badge>
+        <domma-badge variant="primary" size="medium">Medium</domma-badge>
+        <domma-badge variant="primary" size="large">Large</domma-badge>
+      </div>
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;domma-badge variant="primary" size="small"&gt;Small&lt;/domma-badge&gt;
+&lt;domma-badge variant="primary" size="medium"&gt;Medium&lt;/domma-badge&gt;
+&lt;domma-badge variant="primary" size="large"&gt;Large&lt;/domma-badge&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Pill & Outline Styles</h3>
+      <div class="demo-area badge-text-center mb-4">
+        <domma-badge variant="primary" pill>Pill Badge</domma-badge>
+        <domma-badge variant="success" outline>Outline</domma-badge>
+        <domma-badge variant="danger" pill outline>Pill Outline</domma-badge>
+      </div>
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;domma-badge variant="primary" pill&gt;Pill Badge&lt;/domma-badge&gt;
+&lt;domma-badge variant="success" outline&gt;Outline&lt;/domma-badge&gt;
+&lt;domma-badge variant="danger" pill outline&gt;Pill Outline&lt;/domma-badge&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Removable Badges</h3>
+      <p class="mb-4 text-gray-600">Click the × to remove:</p>
+      <div class="demo-area badge-text-center mb-4" id="removable-demo">
+        <domma-badge variant="primary" removable>JavaScript</domma-badge>
+        <domma-badge variant="success" removable>CSS</domma-badge>
+        <domma-badge variant="info" removable pill>HTML</domma-badge>
+        <domma-badge variant="warning" removable pill>TypeScript</domma-badge>
+      </div>
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;domma-badge variant="primary" removable&gt;JavaScript&lt;/domma-badge&gt;
+&lt;domma-badge variant="success" removable&gt;CSS&lt;/domma-badge&gt;
+
+&lt;script&gt;
+// Listen for remove event
+document.querySelector('domma-badge').addEventListener('remove', (e) => {
+    console.log('Badge removed!');
+});
+&lt;/script&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Programmatic API</h3>
+      <p class="mb-4 text-gray-600">Web Components support dynamic updates:</p>
+      <div class="demo-area badge-text-center mb-4">
+        <domma-badge id="programmable-badge" variant="primary">Click button to change</domma-badge>
+        <button class="btn btn-sm btn-primary" onclick="changeVariant()">Change Variant</button>
+      </div>
+      <div class="code-block language-javascript mb-6">
+        <pre><code>const badge = document.querySelector('domma-badge');
+
+// Update variant
+badge.setVariant('success');
+
+// Update text
+badge.setText('Updated!');
+
+// Update size
+badge.setSize('large');
+
+// Chain methods
+badge.setVariant('danger').setText('Error!').setSize('small');</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Wrapper API (Backwards Compatible)</h3>
+      <p class="mb-4 text-gray-600">
+        Existing code continues to work unchanged! The wrapper API uses Web Components internally:
+      </p>
+      <div class="demo-area badge-text-center mb-4">
+        <span id="wrapper-badge-1">Wrapper Badge</span>
+      </div>
+      <div class="code-block language-javascript mb-6">
+        <pre><code>// Traditional approach - still works!
+const badge = Domma.elements.badge('#my-badge', {
+    variant: 'success',
+    size: 'large',
+    pill: true,
+    removable: true
+});
+
+// Same API as before
+badge.setVariant('danger');
+badge.setText('Updated!');
+badge.destroy();</code></pre>
+      </div>
+
+      <div class="alert alert-info">
+        <strong>💡 Benefits of Web Components:</strong>
+        <ul class="mt-2 mb-0">
+          <li><strong>Encapsulation</strong> - Styles and behaviour isolated via Shadow DOM</li>
+          <li><strong>Reusability</strong> - Use anywhere without framework dependencies</li>
+          <li><strong>Standards-based</strong> - Native browser API, future-proof</li>
+          <li><strong>Backwards Compatible</strong> - Existing code works without changes</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <section class="card mb-6" data-section="Quick Start">
     <div class="card-header">
       <h2 class="text-xl font-semibold m-0">Quick Start</h2>
@@ -420,7 +546,12 @@ function updateBadge(count) {
 <script src="../../../dist/domma.min.js"></script>
 <script src="../../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../../layouts/js/layout.js"></script>
-<script>
+<script type="module">
+  import { createBadgeWrapper } from '../../../src/web-components/wrappers/legacy-wrappers.js';
+
+  // Make functions globally accessible
+  window.changeVariant = changeVariant;
+
   $(() => {
     // Tutorial
     document.getElementById('clear-notifications').addEventListener('click', () => {
@@ -428,6 +559,27 @@ function updateBadge(count) {
       badge.textContent = '0';
       badge.style.display = 'none';
     });
+
+    // Web Components - Programmatic API demo
+    const variants = ['primary', 'secondary', 'success', 'danger', 'warning', 'info'];
+    let currentIndex = 0;
+
+    window.changeVariant = function() {
+      const badge = document.getElementById('programmable-badge');
+      currentIndex = (currentIndex + 1) % variants.length;
+      const newVariant = variants[currentIndex];
+      badge.setVariant(newVariant);
+      badge.setText(`Changed to ${newVariant}!`);
+    };
+
+    // Web Components - Wrapper API demo
+    if (document.getElementById('wrapper-badge-1')) {
+      createBadgeWrapper('#wrapper-badge-1', {
+        variant: 'info',
+        size: 'large',
+        pill: true
+      });
+    }
   });
 </script>
 
