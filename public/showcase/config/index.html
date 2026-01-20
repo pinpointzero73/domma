@@ -162,6 +162,111 @@ $.setup({
         </div>
     </section>
 
+    <!-- DOMReady Initialisation -->
+    <section class="card mb-6" data-section="DOMReady Initialisation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">DOMReady Initialisation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The config engine automatically handles DOMContentLoaded, with support for global and per-selector initialisation callbacks.</p>
+
+            <h4 class="category-title-config">Automatic DOMContentLoaded Detection</h4>
+            <pre class="code-block language-javascript mb-4">// Config automatically waits for DOM if needed
+$.setup({
+    '#my-element': {
+        component: 'card',
+        options: { collapsible: true }
+    }
+});
+// ✅ If DOM is loading: queued for DOMContentLoaded
+// ✅ If DOM is ready: executes immediately</pre>
+
+            <h4 class="category-title-config">Global $init Callback</h4>
+            <p class="mb-2">Use <code>$init</code> for code that should run once when all configs are processed:</p>
+            <pre class="code-block language-javascript mb-4">$.setup({
+    $init() {
+        // Runs once after all selectors are configured
+        console.log('Config engine initialised!');
+        Domma.icons.scan(); // Scan for icons
+        Domma.theme.init(); // Initialise theme
+    },
+
+    '#modal': {
+        component: 'modal',
+        options: { backdrop: true }
+    },
+
+    '#tabs': {
+        component: 'tabs',
+        options: { activeIndex: 0 }
+    }
+});</pre>
+
+            <h4 class="category-title-config">Per-Selector init Callbacks</h4>
+            <p class="mb-2">Each selector can have its own initialisation callback that receives the DommaCollection:</p>
+            <pre class="code-block language-javascript mb-4">$.setup({
+    '#user-card': {
+        init($el) {
+            // Runs when this selector is configured
+            // Receives DommaCollection as first argument
+            console.log('User card initialised:', $el);
+
+            // Fetch and populate data
+            const userId = $el.data('user-id');
+            loadUserData(userId).then(data => {
+                $el.find('.name').text(data.name);
+                $el.find('.avatar').attr('src', data.avatar);
+            });
+        },
+        component: 'card',
+        options: { hoverable: true }
+    },
+
+    '#status-indicator': {
+        init($el) {
+            // Check server status on init
+            checkServerStatus().then(online => {
+                $el.addClass(online ? 'online' : 'offline');
+            });
+        },
+        initial: {
+            text: 'Checking...'
+        }
+    }
+});</pre>
+
+            <h4 class="category-title-config">Standalone ready() Helper</h4>
+            <p class="mb-2">For manual DOMReady callbacks outside of config:</p>
+            <pre class="code-block language-javascript mb-4">// Standard method
+Domma.ready(() => {
+    console.log('DOM is ready!');
+    // Your initialisation code
+});
+
+// Alias
+$.ready(() => {
+    console.log('This also works!');
+});
+
+// Executes immediately if DOM is already ready
+// Otherwise waits for DOMContentLoaded</pre>
+
+            <div class="try-section-config">
+                <h5 class="font-semibold mb-3">Try it</h5>
+                <div class="flex gap-4 items-center mb-3">
+                    <div id="demo-init-status" class="p-4 rounded demo-update-box-style">
+                        Waiting for initialisation...
+                    </div>
+                </div>
+                <p class="text-sm text-muted">Check the console for initialisation logs.</p>
+            </div>
+
+            <div class="alert alert-info mt-4">
+                <strong>Zero Boilerplate:</strong> No need for manual <code>DOMContentLoaded</code> listeners. The config engine handles everything automatically!
+            </div>
+        </div>
+    </section>
+
     <!-- Initial State -->
     <section class="card mb-6" data-section="Initial State">
         <div class="card-header">
@@ -450,6 +555,44 @@ $.reset();
                         resets all.
                     </td>
                 </tr>
+                <tr>
+                    <td><code>$.ready(callback)</code></td>
+                    <td>Register a callback to run when DOM is ready. Executes immediately if DOM is already ready,
+                        otherwise waits for DOMContentLoaded. Also available as <code>Domma.ready()</code>.
+                    </td>
+                </tr>
+            </table>
+
+            <h4 class="category-title-config mt-4">Configuration Properties</h4>
+            <table class="api-table-config">
+                <tr>
+                    <th class="w-200px">Property</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>$init</code></td>
+                    <td>Global initialisation callback. Runs once when all configs are processed, after DOM is ready.</td>
+                </tr>
+                <tr>
+                    <td><code>init</code></td>
+                    <td>Per-selector initialisation callback. Receives DommaCollection as first argument. Runs when this selector's config is processed.</td>
+                </tr>
+                <tr>
+                    <td><code>component</code></td>
+                    <td>Component type to initialise (e.g., 'modal', 'card', 'tabs'). See supported components list above.</td>
+                </tr>
+                <tr>
+                    <td><code>options</code></td>
+                    <td>Component-specific options object passed to the component factory.</td>
+                </tr>
+                <tr>
+                    <td><code>initial</code></td>
+                    <td>Initial state properties (css, text, html, addClass, removeClass, toggleClass, attr).</td>
+                </tr>
+                <tr>
+                    <td><code>events</code></td>
+                    <td>Event handlers object. Keys are event names, values are handler functions or action objects.</td>
+                </tr>
             </table>
         </div>
     </section>
@@ -570,6 +713,30 @@ $.reset();
                 }
             }
         }
+    });
+
+    // Demo: DOMReady initialisation
+    $.setup({
+        $init() {
+            console.log('✅ $init callback executed - all configs processed');
+            $('#demo-init-status')
+                .html('<strong style="color: #10b981;">✓ Initialised!</strong><br>$init callback executed successfully')
+                .css({ 'background': '#d1fae5', 'color': '#065f46' });
+        },
+
+        '#demo-init-status': {
+            init($el) {
+                console.log('✅ Per-selector init callback for #demo-init-status', $el);
+                setTimeout(() => {
+                    $el.append('<br><small>Per-selector init also ran!</small>');
+                }, 500);
+            }
+        }
+    });
+
+    // Also demonstrate ready() helper
+    $.ready(() => {
+        console.log('✅ $.ready() callback executed');
     });
 </script>
 </body>

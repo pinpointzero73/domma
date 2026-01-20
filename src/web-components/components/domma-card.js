@@ -347,6 +347,54 @@ export class DommaCard extends DommaElement {
         }
         return this;
     }
+
+    setContent(content) {
+        // Find or create card body in light DOM (slotted content)
+        let bodySlot = this.querySelector('[slot="body"]');
+
+        if (!bodySlot) {
+            // Create a slotted body element if it doesn't exist
+            bodySlot = document.createElement('div');
+            bodySlot.setAttribute('slot', 'body');
+            bodySlot.className = 'card-body';
+            this.appendChild(bodySlot);
+        }
+
+        // XSS Protection: Sanitize HTML using DOMPurify wrapper (Domma.sanitize.sanitize)
+        const sanitizedContent = (typeof Domma !== 'undefined' && Domma.sanitize && typeof Domma.sanitize.sanitize === 'function')
+            ? Domma.sanitize.sanitize(content)
+            : content;
+        bodySlot.innerHTML = sanitizedContent;
+
+        // Scan for icons if available
+        if (typeof Domma !== 'undefined' && Domma.icons && typeof Domma.icons.scan === 'function') {
+            Domma.icons.scan(bodySlot);
+        }
+
+        return this;
+    }
+
+    getBody() {
+        // Return the slotted body element (or create one if needed)
+        let bodySlot = this.querySelector('[slot="body"]');
+        if (!bodySlot) {
+            bodySlot = document.createElement('div');
+            bodySlot.setAttribute('slot', 'body');
+            bodySlot.className = 'card-body';
+            this.appendChild(bodySlot);
+        }
+        return bodySlot;
+    }
+
+    updateHeight() {
+        // Recalculate height if card is collapsible and expanded
+        if (this._options.collapsible && !this.isCollapsed() && this._bodyWrapper) {
+            this._bodyWrapper.style.height = 'auto';
+            const height = this._bodyWrapper.scrollHeight;
+            this._bodyWrapper.style.height = height + 'px';
+        }
+        return this;
+    }
 }
 
 if (!customElements.get('domma-card')) {

@@ -84,6 +84,9 @@ Domma.config = (selector) => configEngine.config(selector);
 // Configuration reset/destroy method
 Domma.reset = (selector) => configEngine.reset(selector);
 
+// DOMReady helper method
+Domma.ready = (callback) => configEngine.ready(callback);
+
 Domma.models = models;
 Domma.elements = elements;
 Domma.dates = dates;

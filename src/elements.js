@@ -40,13 +40,66 @@ class Card extends Component {
         persistKey: null,
         collapseIcon: 'chevron-down',
         onCollapse: null,
-        onExpand: null
+        onExpand: null,
+        // HTML generation options
+        title: null,
+        icon: null,
+        content: '',
+        color: null
     };
 
     constructor(selector, options = {}) {
         super(selector, options);
+
+        // Generate HTML if title or content provided
+        if (options.title || options.content) {
+            this._render();
+        }
+
         this._init();
         this._initCollapsible();
+    }
+
+    /**
+     * Generate card HTML structure (DataCard-style)
+     */
+    _render() {
+        if (!this.element) return;
+
+        const iconHtml = this.options.icon
+            ? `<span data-icon="${this.options.icon}" class="card-title-icon"></span>`
+            : '';
+        const colorClass = this.options.color ? `card-${this.options.color}` : '';
+        const collapsibleClass = this.options.collapsible ? 'card-collapsible' : '';
+        const collapsedClass = this.options.collapsed ? 'card-collapsed' : '';
+
+        const headerHtml = this.options.title
+            ? `<div class="card-header">
+                <div class="card-header-content">
+                    <h4 class="card-title">${iconHtml}${Domma.utils.escapeHtml(this.options.title)}</h4>
+                </div>
+            </div>`
+            : '';
+
+        const bodyHtml = `<div class="card-body">${this.options.content}</div>`;
+
+        const cardHtml = `<div class="card ${collapsibleClass} ${collapsedClass} ${colorClass}">
+            ${headerHtml}
+            ${bodyHtml}
+        </div>`;
+
+        // Use Domma's sanitize function for safe HTML insertion
+        this.element.innerHTML = (Domma.sanitize && typeof Domma.sanitize.sanitize === 'function')
+            ? Domma.sanitize.sanitize(cardHtml)
+            : cardHtml;
+
+        // Update element reference to the inner card div
+        this.element = this.element.querySelector('.card');
+
+        // Scan for icons
+        if (Domma.icons && typeof Domma.icons.scan === 'function') {
+            Domma.icons.scan(this.element);
+        }
     }
 
     _init() {
@@ -206,6 +259,49 @@ class Card extends Component {
 
     isCollapsed() {
         return this.element.classList.contains('card-collapsed');
+    }
+
+    /**
+     * Set card body content
+     * @param {string} content - HTML content
+     * @returns {this}
+     */
+    setContent(content) {
+        const body = this.element.querySelector('.card-body');
+        if (body) {
+            body.innerHTML = (Domma.sanitize && typeof Domma.sanitize.sanitize === 'function')
+                ? Domma.sanitize.sanitize(content)
+                : content;
+            // Rescan icons after content update
+            if (Domma.icons && typeof Domma.icons.scan === 'function') {
+                Domma.icons.scan(body);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Get card body element
+     * @returns {HTMLElement|null}
+     */
+    getBody() {
+        return this.element.querySelector('.card-body');
+    }
+
+    /**
+     * Update card body height (call after dynamic content changes)
+     * @returns {this}
+     */
+    updateHeight() {
+        if (!this.isCollapsed()) {
+            const body = this.element.querySelector('.card-body');
+            if (body) {
+                body.style.height = 'auto';
+                const height = body.scrollHeight;
+                body.style.height = height + 'px';
+            }
+        }
+        return this;
     }
 }
 

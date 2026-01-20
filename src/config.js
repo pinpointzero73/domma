@@ -8,19 +8,59 @@ export const configEngine = {
     _configs: new Map(),        // selector -> config object
     _components: new Map(),     // selector -> component instance
     _eventHandlers: new Map(),  // selector -> Map(event -> handler)
+    _initCallbacks: [],         // Array of init callbacks
+    _domReady: false,           // Track if DOM is ready
+    _autoWrap: true,            // Auto-wrap in DOMContentLoaded
 
     /**
      * Process initial configuration
      * @param {Object} config - Configuration object keyed by selector
+     * @param {Object} [options] - Processing options
+     * @param {boolean} [options.autoWrap=true] - Automatically wrap in DOMContentLoaded
      */
-    process(config) {
+    process(config, options = {}) {
         if (!config || typeof config !== 'object') return;
+
+        const autoWrap = options.autoWrap !== undefined ? options.autoWrap : this._autoWrap;
+
+        // Check if we should wrap in DOMContentLoaded
+        const shouldWait = autoWrap && !this._domReady && document.readyState === 'loading';
+
+        if (shouldWait) {
+            // Queue for when DOM is ready
+            document.addEventListener('DOMContentLoaded', () => {
+                this._domReady = true;
+                this._processConfig(config);
+            }, { once: true });
+            return;
+        }
+
+        this._processConfig(config);
+    },
+
+    /**
+     * Internal config processing (after DOM ready check)
+     * @private
+     */
+    _processConfig(config) {
+        // Process global init callback first
+        if (config.$init && typeof config.$init === 'function') {
+            this._initCallbacks.push(config.$init);
+            config.$init();
+            delete config.$init;
+        }
 
         Object.keys(config).forEach(selector => {
             const rules = config[selector];
 
             // Store a deep copy of the config
             this._configs.set(selector, utils.cloneDeep(rules));
+
+            // Handle init callback for this selector
+            if (rules.init && typeof rules.init === 'function') {
+                const domElements = dom(selector);
+                rules.init.call(domElements, domElements);
+            }
 
             const domElements = dom(selector);
 
@@ -302,5 +342,29 @@ export const configEngine = {
             if (action.toggleClass) $el.toggleClass(action.toggleClass);
             if (action.log) console.log(action.log);
         });
+    },
+
+    /**
+     * Register a callback to run when DOM is ready
+     * @param {Function} callback - Function to execute when DOM is ready
+     * @returns {void}
+     */
+    ready(callback) {
+        if (typeof callback !== 'function') {
+            console.warn('ready() requires a function');
+            return;
+        }
+
+        // If DOM is already ready, execute immediately
+        if (this._domReady || document.readyState === 'complete' || document.readyState === 'interactive') {
+            callback();
+            return;
+        }
+
+        // Otherwise, wait for DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', () => {
+            this._domReady = true;
+            callback();
+        }, { once: true });
     }
 };

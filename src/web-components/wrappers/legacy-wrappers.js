@@ -900,6 +900,20 @@ export function createCardWrapper(selector, options = {}) {
             return this;
         },
 
+        setContent(content) {
+            webComponent.setContent(content);
+            return this;
+        },
+
+        getBody() {
+            return webComponent.getBody();
+        },
+
+        updateHeight() {
+            webComponent.updateHeight();
+            return this;
+        },
+
         destroy() {
             webComponent.destroy();
         }

@@ -51,7 +51,7 @@
             </ul>
 
             <h4 class="category-title">Basic Usage</h4>
-            <pre class="code-block language-javascript">// HTML structure
+            <pre class="code-block language-javascript">// Option 1: Enhance existing HTML
 &lt;div id="my-card" class="card"&gt;
     &lt;div class="card-header"&gt;Card Header&lt;/div&gt;
     &lt;div class="card-body"&gt;
@@ -61,10 +61,17 @@
     &lt;div class="card-footer"&gt;Card Footer&lt;/div&gt;
 &lt;/div&gt;
 
-// JavaScript (optional - for hover/click effects)
 const card = Domma.elements.card('#my-card', {
     hover: true,
     clickable: false
+});
+
+// Option 2: Generate HTML from options (NEW!)
+const generatedCard = Domma.elements.card('#container', {
+    title: 'Card Title',
+    icon: 'info',
+    content: '&lt;p&gt;Card content goes here.&lt;/p&gt;',
+    collapsible: true
 });</pre>
         </div>
     </section>
@@ -354,6 +361,160 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
         </div>
     </section>
 
+    <!-- SECTION 9.5: HTML Generation (DataCard-style) -->
+    <section class="card mb-6" data-section="HTML Generation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">HTML Generation (DataCard-style)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                The Card component can now generate its HTML structure automatically from options, perfect for
+                creating cards dynamically from data. This provides a "DataCard"-style API while maintaining
+                backwards compatibility with existing HTML-based usage.
+            </p>
+
+            <h4 class="category-title">Example 1: Generated Card with Title and Content</h4>
+            <p class="mb-2">Create a card entirely from JavaScript options:</p>
+            <pre class="code-block language-javascript">Domma.elements.card('#generated-card', {
+    title: 'Generated Card',
+    content: '&lt;p&gt;This card was created entirely from JavaScript options.&lt;/p&gt;',
+    collapsible: true
+});</pre>
+
+            <div class="demo-area mb-4">
+              <div id="generated-card" class="card-max-w-500"></div>
+            </div>
+
+            <h4 class="category-title">Example 2: Card with Icon</h4>
+            <p class="mb-2">Add an icon to the card title:</p>
+            <pre class="code-block language-javascript">Domma.elements.card('#icon-card', {
+    title: 'Settings',
+    icon: 'settings',
+    content: '&lt;p&gt;Configure your application settings here.&lt;/p&gt;',
+    collapsible: true
+});</pre>
+
+            <div class="demo-area mb-4">
+              <div id="icon-card" class="card-max-w-500"></div>
+            </div>
+
+            <h4 class="category-title">Example 3: Colored Card Variant</h4>
+            <p class="mb-2">Apply a color variant to the card:</p>
+            <pre class="code-block language-javascript">Domma.elements.card('#colored-card', {
+    title: 'Important Notice',
+    icon: 'alert',
+    color: 'primary',
+    content: '&lt;p&gt;This card uses the primary color variant.&lt;/p&gt;',
+    collapsible: true
+});</pre>
+
+            <div class="demo-area mb-4">
+              <div id="colored-card" class="card-max-w-500"></div>
+            </div>
+
+            <h4 class="category-title">Example 4: Initially Collapsed Card</h4>
+            <p class="mb-2">Create a card that starts collapsed:</p>
+            <pre class="code-block language-javascript">Domma.elements.card('#collapsed-card', {
+    title: 'Click to Expand',
+    icon: 'info',
+    collapsed: true,
+    collapsible: true,
+    content: '&lt;p&gt;This card was initially collapsed.&lt;/p&gt;'
+});</pre>
+
+            <div class="demo-area mb-4">
+              <div id="collapsed-card" class="card-max-w-500"></div>
+            </div>
+
+            <h4 class="category-title">Example 5: Programmatic Control</h4>
+            <p class="mb-2">Control card state with JavaScript methods:</p>
+            <pre class="code-block language-javascript">const card = Domma.elements.card('#controlled-card', {
+    title: 'Controlled Card',
+    icon: 'box',
+    collapsible: true,
+    content: '&lt;p&gt;Use the buttons to control this card.&lt;/p&gt;'
+});
+
+// Control methods
+$('#expand-btn').on('click', () =&gt; card.expand());
+$('#collapse-btn').on('click', () =&gt; card.collapse());
+$('#toggle-btn').on('click', () =&gt; card.toggle());</pre>
+
+            <div class="demo-area mb-4">
+              <div id="controlled-card" class="card-max-w-500"></div>
+              <div class="flex gap-2 mt-3">
+                <button id="expand-btn" class="btn btn-sm btn-primary">Expand</button>
+                <button id="collapse-btn" class="btn btn-sm btn-secondary">Collapse</button>
+                <button id="toggle-btn" class="btn btn-sm btn-outline">Toggle</button>
+              </div>
+            </div>
+
+            <h4 class="category-title">Example 6: Dynamic Content Updates</h4>
+            <p class="mb-2">Update card content dynamically using setContent():</p>
+            <pre class="code-block language-javascript">const card = Domma.elements.card('#dynamic-card', {
+    title: 'Dynamic Content',
+    icon: 'refresh',
+    collapsible: true,
+    content: '&lt;p&gt;Click the button to update this content.&lt;/p&gt;'
+});
+
+$('#update-btn').on('click', () =&gt; {
+    const timestamp = new Date().toLocaleTimeString();
+    card.setContent(`&lt;p&gt;Content updated at ${timestamp}&lt;/p&gt;`);
+    card.updateHeight(); // Adjust height after content change
+});</pre>
+
+            <div class="demo-area mb-4">
+              <div id="dynamic-card" class="card-max-w-500"></div>
+              <button id="update-btn" class="btn btn-sm btn-primary mt-3">Update Content</button>
+            </div>
+
+            <h4 class="category-title">Example 7: Loading Data into Generated Cards</h4>
+            <p class="mb-2">Perfect for dashboard widgets that load data asynchronously:</p>
+            <pre class="code-block language-javascript">// Create card with loading state
+const statsCard = Domma.elements.card('#stats-card', {
+    title: 'User Statistics',
+    icon: 'database',
+    collapsible: true,
+    content: '&lt;div class="text-center"&gt;Loading...&lt;/div&gt;'
+});
+
+// Simulate async data load
+setTimeout(() =&gt; {
+    const content = `
+        &lt;div class="grid grid-cols-2 gap-3"&gt;
+            &lt;div&gt;&lt;strong&gt;Total Users:&lt;/strong&gt; 1,234&lt;/div&gt;
+            &lt;div&gt;&lt;strong&gt;Active:&lt;/strong&gt; 987&lt;/div&gt;
+            &lt;div&gt;&lt;strong&gt;New Today:&lt;/strong&gt; 42&lt;/div&gt;
+            &lt;div&gt;&lt;strong&gt;Growth:&lt;/strong&gt; +12%&lt;/div&gt;
+        &lt;/div&gt;
+    `;
+    statsCard.setContent(content);
+    statsCard.updateHeight();
+}, 1500);</pre>
+
+            <div class="demo-area mb-4">
+              <div id="stats-card" class="card-max-w-500"></div>
+            </div>
+
+            <h4 class="category-title">Backwards Compatibility</h4>
+            <p class="mb-4">
+                The enhancement is fully backwards compatible. Existing HTML-based card usage continues to work:
+            </p>
+            <pre class="code-block language-javascript">// Still works - enhances existing HTML
+&lt;div id="existing-card" class="card"&gt;
+    &lt;div class="card-body"&gt;Existing HTML&lt;/div&gt;
+&lt;/div&gt;
+
+Domma.elements.card('#existing-card', { hover: true });</pre>
+
+            <p class="mb-0">
+                The Card component automatically detects whether to generate HTML (when <code>title</code> or
+                <code>content</code> options are provided) or enhance existing HTML.
+            </p>
+        </div>
+    </section>
+
     <!-- SECTION 5: Best Practices -->
     <section class="card mb-6" data-section="Best Practices">
         <div class="card-header">
@@ -481,6 +642,60 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
                     <td><code>null</code></td>
                     <td>Callback function when card is clicked (requires <code>clickable: true</code>)</td>
                 </tr>
+                <tr>
+                    <td><code>collapsible</code></td>
+                    <td>Boolean</td>
+                    <td><code>false</code></td>
+                    <td>Enable collapsible functionality with header click to toggle</td>
+                </tr>
+                <tr>
+                    <td><code>collapsed</code></td>
+                    <td>Boolean</td>
+                    <td><code>false</code></td>
+                    <td>Initial collapsed state (requires <code>collapsible: true</code>)</td>
+                </tr>
+                <tr>
+                    <td><code>persistKey</code></td>
+                    <td>String</td>
+                    <td><code>null</code></td>
+                    <td>localStorage key for persisting collapsed state</td>
+                </tr>
+                <tr>
+                    <td><code>onCollapse</code></td>
+                    <td>Function</td>
+                    <td><code>null</code></td>
+                    <td>Callback when card is collapsed</td>
+                </tr>
+                <tr>
+                    <td><code>onExpand</code></td>
+                    <td>Function</td>
+                    <td><code>null</code></td>
+                    <td>Callback when card is expanded</td>
+                </tr>
+                <tr>
+                    <td><code>title</code></td>
+                    <td>String</td>
+                    <td><code>null</code></td>
+                    <td>Card title (triggers HTML generation if provided)</td>
+                </tr>
+                <tr>
+                    <td><code>icon</code></td>
+                    <td>String</td>
+                    <td><code>null</code></td>
+                    <td>Icon name to display next to title</td>
+                </tr>
+                <tr>
+                    <td><code>content</code></td>
+                    <td>String</td>
+                    <td><code>''</code></td>
+                    <td>Card body HTML content (triggers HTML generation if <code>title</code> or <code>content</code> provided)</td>
+                </tr>
+                <tr>
+                    <td><code>color</code></td>
+                    <td>String</td>
+                    <td><code>null</code></td>
+                    <td>Color variant (e.g., 'primary', 'secondary', 'success')</td>
+                </tr>
             </table>
 
             <h4 class="category-title">Methods</h4>
@@ -490,6 +705,48 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
                     <th>Parameters</th>
                     <th>Returns</th>
                     <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>expand()</code></td>
+                    <td>None</td>
+                    <td>this</td>
+                    <td>Expand a collapsed card</td>
+                </tr>
+                <tr>
+                    <td><code>collapse()</code></td>
+                    <td>None</td>
+                    <td>this</td>
+                    <td>Collapse an expanded card</td>
+                </tr>
+                <tr>
+                    <td><code>toggle()</code></td>
+                    <td>None</td>
+                    <td>this</td>
+                    <td>Toggle between collapsed and expanded states</td>
+                </tr>
+                <tr>
+                    <td><code>isCollapsed()</code></td>
+                    <td>None</td>
+                    <td>Boolean</td>
+                    <td>Returns true if card is currently collapsed</td>
+                </tr>
+                <tr>
+                    <td><code>setContent(content)</code></td>
+                    <td>String (HTML)</td>
+                    <td>this</td>
+                    <td>Update the card body content (HTML is sanitized)</td>
+                </tr>
+                <tr>
+                    <td><code>getBody()</code></td>
+                    <td>None</td>
+                    <td>HTMLElement</td>
+                    <td>Get the card body element</td>
+                </tr>
+                <tr>
+                    <td><code>updateHeight()</code></td>
+                    <td>None</td>
+                    <td>this</td>
+                    <td>Recalculate card height after dynamic content changes</td>
                 </tr>
                 <tr>
                     <td><code>destroy()</code></td>
@@ -540,6 +797,10 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
                     <td>Primary heading within card body</td>
                 </tr>
                 <tr>
+                    <td><code>.card-title-icon</code></td>
+                    <td>Icon displayed next to card title</td>
+                </tr>
+                <tr>
                     <td><code>.card-subtitle</code></td>
                     <td>Secondary heading with muted colour</td>
                 </tr>
@@ -554,6 +815,14 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
                 <tr>
                     <td><code>.card-primary</code></td>
                     <td>Card with primary colour border and themed header</td>
+                </tr>
+                <tr>
+                    <td><code>.card-collapsible</code></td>
+                    <td>Enables collapsible functionality with smooth transitions</td>
+                </tr>
+                <tr>
+                    <td><code>.card-collapsed</code></td>
+                    <td>Applied when card is in collapsed state</td>
                 </tr>
             </table>
         </div>
@@ -910,6 +1179,89 @@ $.setup({
                 }
             }
         });
+
+        // HTML Generation Examples
+
+        // Example 1: Basic generated card
+        Domma.elements.card('#generated-card', {
+            title: 'Generated Card',
+            content: '<p>This card was created entirely from JavaScript options.</p>',
+            collapsible: true
+        });
+
+        // Example 2: Card with icon
+        Domma.elements.card('#icon-card', {
+            title: 'Settings',
+            icon: 'settings',
+            content: '<p>Configure your application settings here.</p>',
+            collapsible: true
+        });
+
+        // Example 3: Colored card
+        Domma.elements.card('#colored-card', {
+            title: 'Important Notice',
+            icon: 'alert',
+            color: 'primary',
+            content: '<p>This card uses the primary color variant.</p>',
+            collapsible: true
+        });
+
+        // Example 4: Initially collapsed
+        Domma.elements.card('#collapsed-card', {
+            title: 'Click to Expand',
+            icon: 'info',
+            collapsed: true,
+            collapsible: true,
+            content: '<p>This card was initially collapsed.</p>'
+        });
+
+        // Example 5: Programmatic control
+        const controlledCard = Domma.elements.card('#controlled-card', {
+            title: 'Controlled Card',
+            icon: 'box',
+            collapsible: true,
+            content: '<p>Use the buttons to control this card.</p>'
+        });
+
+        $('#expand-btn').on('click', () => controlledCard.expand());
+        $('#collapse-btn').on('click', () => controlledCard.collapse());
+        $('#toggle-btn').on('click', () => controlledCard.toggle());
+
+        // Example 6: Dynamic content
+        const dynamicCard = Domma.elements.card('#dynamic-card', {
+            title: 'Dynamic Content',
+            icon: 'refresh',
+            collapsible: true,
+            content: '<p>Click the button to update this content.</p>'
+        });
+
+        $('#update-btn').on('click', () => {
+            const timestamp = new Date().toLocaleTimeString();
+            dynamicCard.setContent(`<p>Content updated at ${timestamp}</p>`);
+            dynamicCard.updateHeight();
+        });
+
+        // Example 7: Loading data
+        const statsCard = Domma.elements.card('#stats-card', {
+            title: 'User Statistics',
+            icon: 'database',
+            collapsible: true,
+            content: '<div class="text-center">Loading...</div>'
+        });
+
+        // Simulate async data load
+        setTimeout(() => {
+            const content = `
+                <div class="grid grid-cols-2 gap-3">
+                    <div><strong>Total Users:</strong> 1,234</div>
+                    <div><strong>Active:</strong> 987</div>
+                    <div><strong>New Today:</strong> 42</div>
+                    <div><strong>Growth:</strong> +12%</div>
+                </div>
+            `;
+            statsCard.setContent(content);
+            statsCard.updateHeight();
+        }, 1500);
     });
 </script>
 </body>
