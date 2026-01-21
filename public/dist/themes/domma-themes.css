@@ -1,0 +1,3681 @@
+/*!
+ * Domma Themes v0.9.18
+ * Dynamic Object Manipulation & Modeling API
+ * (c) 2026 Darryl Waterhouse & DCBW-IT
+ * Built: 2026-01-21T12:21:54.896Z
+ * Commit: b6695e0
+ */
+
+/**
+ * Domma Theme Base
+ * Shared design tokens: spacing, typography, radii, shadows, transitions
+ */
+
+:root {
+    /* ================================================
+       SPACING SCALE
+       ================================================ */
+    --dm-space-0: 0;
+    --dm-space-1: 0.25rem; /* 4px */
+    --dm-space-2: 0.5rem; /* 8px */
+    --dm-space-3: 0.75rem; /* 12px */
+    --dm-space-4: 1rem; /* 16px */
+    --dm-space-5: 1.25rem; /* 20px */
+    --dm-space-6: 1.5rem; /* 24px */
+    --dm-space-8: 2rem; /* 32px */
+    --dm-space-10: 2.5rem; /* 40px */
+    --dm-space-12: 3rem; /* 48px */
+    --dm-space-16: 4rem; /* 64px */
+    --dm-space-20: 5rem; /* 80px */
+    --dm-space-24: 6rem; /* 96px */
+
+    /* ================================================
+       TYPOGRAPHY
+       ================================================ */
+    --dm-font-sans: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --dm-font-serif: Georgia, Cambria, 'Times New Roman', Times, serif;
+    --dm-font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Menlo, Consolas, monospace;
+
+    /* Font Sizes */
+    --dm-text-xs: 0.75rem; /* 12px */
+    --dm-text-sm: 0.875rem; /* 14px */
+    --dm-text-base: 1rem; /* 16px */
+    --dm-text-lg: 1.125rem; /* 18px */
+    --dm-text-xl: 1.25rem; /* 20px */
+    --dm-text-2xl: 1.5rem; /* 24px */
+    --dm-text-3xl: 1.875rem; /* 30px */
+    --dm-text-4xl: 2.25rem; /* 36px */
+    --dm-text-5xl: 3rem; /* 48px */
+
+    /* Line Heights */
+    --dm-leading-none: 1;
+    --dm-leading-tight: 1.25;
+    --dm-leading-snug: 1.375;
+    --dm-leading-normal: 1.5;
+    --dm-leading-relaxed: 1.625;
+    --dm-leading-loose: 2;
+
+    /* Font Weights */
+    --dm-font-light: 300;
+    --dm-font-normal: 400;
+    --dm-font-medium: 500;
+    --dm-font-semibold: 600;
+    --dm-font-bold: 700;
+
+    /* Letter Spacing */
+    --dm-tracking-tighter: -0.05em;
+    --dm-tracking-tight: -0.025em;
+    --dm-tracking-normal: 0;
+    --dm-tracking-wide: 0.025em;
+    --dm-tracking-wider: 0.05em;
+    --dm-tracking-widest: 0.1em;
+
+    /* ================================================
+       BORDER RADIUS
+       ================================================ */
+    --dm-radius-none: 0;
+    --dm-radius-sm: 0.125rem; /* 2px */
+    --dm-radius-md: 0.25rem; /* 4px */
+    --dm-radius-lg: 0.5rem; /* 8px */
+    --dm-radius-xl: 0.75rem; /* 12px */
+    --dm-radius-2xl: 1rem; /* 16px */
+    --dm-radius-full: 9999px;
+
+    /* ================================================
+       SHADOWS
+       ================================================ */
+    --dm-shadow-none: none;
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* ================================================
+       TRANSITIONS
+       ================================================ */
+    --dm-transition-fast: 150ms ease;
+    --dm-transition-normal: 200ms ease;
+    --dm-transition-slow: 300ms ease;
+    --dm-transition-slower: 500ms ease;
+
+    /* Timing Functions */
+    --dm-ease-linear: linear;
+    --dm-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --dm-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --dm-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --dm-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* ================================================
+       Z-INDEX SCALE
+       ================================================ */
+    --dm-z-0: 0;
+    --dm-z-10: 10;
+    --dm-z-20: 20;
+    --dm-z-30: 30;
+    --dm-z-40: 40;
+    --dm-z-50: 50;
+    --dm-z-dropdown: 1000;
+    --dm-z-sticky: 1020;
+    --dm-z-fixed: 1030;
+    --dm-z-modal-backdrop: 1040;
+    --dm-z-modal: 1050;
+    --dm-z-popover: 1060;
+    --dm-z-tooltip: 1070;
+    --dm-z-toast: 1080;
+
+    /* ================================================
+       BREAKPOINTS (for reference)
+       ================================================ */
+    --dm-breakpoint-sm: 640px;
+    --dm-breakpoint-md: 768px;
+    --dm-breakpoint-lg: 1024px;
+    --dm-breakpoint-xl: 1280px;
+    --dm-breakpoint-2xl: 1536px;
+
+    /* ================================================
+       CONTAINER WIDTHS
+       ================================================ */
+    --dm-container-sm: 640px;
+    --dm-container-md: 768px;
+    --dm-container-lg: 1024px;
+    --dm-container-xl: 1280px;
+
+    /* ================================================
+       OPACITY
+       ================================================ */
+    --dm-opacity-0: 0;
+    --dm-opacity-5: 0.05;
+    --dm-opacity-10: 0.1;
+    --dm-opacity-20: 0.2;
+    --dm-opacity-25: 0.25;
+    --dm-opacity-30: 0.3;
+    --dm-opacity-40: 0.4;
+    --dm-opacity-50: 0.5;
+    --dm-opacity-60: 0.6;
+    --dm-opacity-70: 0.7;
+    --dm-opacity-75: 0.75;
+    --dm-opacity-80: 0.8;
+    --dm-opacity-90: 0.9;
+    --dm-opacity-95: 0.95;
+    --dm-opacity-100: 1;
+}
+
+/* ================================================
+   ICON UTILITIES
+   ================================================ */
+.dm-icon {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.dm-icon-xs {
+    width: 12px;
+    height: 12px;
+}
+
+.dm-icon-sm {
+    width: 16px;
+    height: 16px;
+}
+
+.dm-icon-md {
+    width: 24px;
+    height: 24px;
+}
+
+.dm-icon-lg {
+    width: 32px;
+    height: 32px;
+}
+
+.dm-icon-xl {
+    width: 48px;
+    height: 48px;
+}
+
+.dm-icon-2xl {
+    width: 64px;
+    height: 64px;
+}
+
+/* Icon colour utilities (use theme colours) */
+.dm-icon-primary {
+    color: var(--dm-primary);
+}
+
+.dm-icon-secondary {
+    color: var(--dm-secondary);
+}
+
+.dm-icon-success {
+    color: var(--dm-success);
+}
+
+.dm-icon-danger {
+    color: var(--dm-danger);
+}
+
+.dm-icon-warning {
+    color: var(--dm-warning);
+}
+
+.dm-icon-info {
+    color: var(--dm-info);
+}
+
+.dm-icon-muted {
+    color: var(--dm-text-muted);
+}
+
+/* Spinner animation */
+@keyframes dm-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.dm-icon-spin {
+    animation: dm-spin 1s linear infinite;
+}
+
+/* Pulse animation for notifications */
+@keyframes dm-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.dm-icon-pulse {
+    animation: dm-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Bounce animation */
+@keyframes dm-bounce {
+    0%, 100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
+
+.dm-icon-bounce {
+    animation: dm-bounce 1s infinite;
+}
+
+/**
+ * Domma Ocean Light Theme
+ * Cool blue colour palette inspired by the sea
+ * Light mode variant - light backgrounds with dark ocean accents
+ */
+
+.dm-theme-ocean-light {
+    color-scheme: light;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Dark Mode Base
+       ================================================ */
+
+    /* Backgrounds - Dark slate/charcoal backgrounds */
+    --dm-background: #0f172a; /* slate-900 */
+    --dm-background-alt: #1e293b; /* slate-800 */
+    --dm-surface: #1e293b; /* slate-800 */
+    --dm-surface-raised: #334155; /* slate-700 */
+    --dm-surface-overlay: #334155; /* slate-700 */
+
+    /* Text - Light colors for readability on dark */
+    --dm-text: #e2e8f0; /* slate-200 */
+    --dm-text-secondary: #94a3b8; /* slate-400 */
+    --dm-text-muted: #64748b; /* slate-500 */
+    --dm-text-disabled: #475569; /* slate-600 */
+    --dm-text-inverse: #0f172a; /* slate-900 */
+
+    /* Borders - Subtle on dark backgrounds */
+    --dm-border: #334155; /* slate-700 */
+    --dm-border-light: #1e293b; /* slate-800 */
+    --dm-border-dark: #475569; /* slate-600 */
+
+    /* ================================================
+       OCEAN ACCENT COLORS - Bright for dark mode
+       ================================================ */
+
+    /* Primary - Bright cyan/blue for visibility */
+    --dm-primary: #48cae4;
+    --dm-primary-hover: #5cd2e8;
+    --dm-primary-active: #70daec;
+    --dm-primary-light: rgba(72, 202, 228, 0.15);
+    --dm-primary-dark: #00b4d8;
+
+    /* Secondary - Light slate blue */
+    --dm-secondary: #90e0ef;
+    --dm-secondary-hover: #a6e7f2;
+    --dm-secondary-active: #bceef5;
+    --dm-secondary-light: rgba(144, 224, 239, 0.15);
+    --dm-secondary-dark: #48cae4;
+
+    /* Success - Bright teal/green */
+    --dm-success: #52e3b8;
+    --dm-success-hover: #66e7c1;
+    --dm-success-active: #7aebca;
+    --dm-success-light: rgba(82, 227, 184, 0.15);
+    --dm-success-dark: #06d6a0;
+
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
+
+    /* Warning - Bright amber (standard dark mode) */
+    --dm-warning: #fbbf24; /* amber-400 */
+    --dm-warning-hover: #fcd34d; /* amber-300 */
+    --dm-warning-active: #fde68a; /* amber-200 */
+    --dm-warning-text: #78350f; /* amber-950 */
+    --dm-warning-light: rgba(251, 191, 36, 0.15);
+    --dm-warning-dark: #f59e0b; /* amber-500 */
+
+    /* Info - Bright ocean cyan */
+    --dm-info: #90e0ef;
+    --dm-info-hover: #a6e7f2;
+    --dm-info-active: #bceef5;
+    --dm-info-light: rgba(144, 224, 239, 0.15);
+    --dm-info-dark: #48cae4;
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-active-bg: rgba(0, 0, 0, 0.08);
+    --dm-selected-bg: rgba(0, 119, 182, 0.15);
+    --dm-focus-ring: 0 0 0 3px rgba(0, 119, 182, 0.3);
+    --dm-border-focus: #0077b6;
+    --dm-disabled-opacity: 0.65;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-sm);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-focus-shadow: var(--dm-focus-ring);
+    --dm-input-disabled-bg: #e9ecef;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(0, 0, 0, 0.02);
+    --dm-table-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.5);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #212529;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+    --dm-tab-active-border: #0077b6;
+    --dm-tab-active-text: #0077b6;
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #ffffff;
+
+    /* Progress */
+    --dm-progress-bg: #e9ecef;
+    --dm-progress-bar: #0077b6;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #f1f1f1;
+    --dm-scrollbar-thumb: #c1c1c1;
+    --dm-scrollbar-thumb-hover: #a8a8a8;
+
+    /* Code */
+    --dm-code-bg: #f8f9fa;
+    --dm-code-text: #e83e8c;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Standard for light mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* ================================================
+       ELEVATION / DEPTH
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+
+    /* ================================================
+       ACCENT/SELECTION COLORS
+       ================================================ */
+    --dm-accent-1: #90e0ef; /* Light cyan */
+    --dm-accent-2: #00b4d8; /* Bright cyan */
+    --dm-accent-3: #0096c7; /* Medium blue */
+    --dm-accent-4: #023e8a; /* Deep blue */
+}
+
+/**
+ * Domma Ocean Dark Theme
+ * Cool blue colour palette inspired by the sea
+ * Dark mode variant - dark backgrounds with bright ocean accents
+ */
+
+.dm-theme-ocean-dark {
+    color-scheme: dark;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Light Mode Base
+       ================================================ */
+
+    /* Backgrounds - Light/white backgrounds */
+    --dm-background: #ffffff;
+    --dm-background-alt: #f8f9fa;
+    --dm-surface: #ffffff;
+    --dm-surface-raised: #f1f3f5;
+    --dm-surface-overlay: #f8f9fa;
+
+    /* Text - Dark colors for readability on light */
+    --dm-text: #212529;
+    --dm-text-secondary: #495057;
+    --dm-text-muted: #6c757d;
+    --dm-text-disabled: #adb5bd;
+    --dm-text-inverse: #ffffff;
+
+    /* Borders - Subtle on light backgrounds */
+    --dm-border: #dee2e6;
+    --dm-border-light: #e9ecef;
+    --dm-border-dark: #ced4da;
+
+    /* ================================================
+       OCEAN ACCENT COLORS - Dark/rich for light mode
+       ================================================ */
+
+    /* Primary - Rich ocean blue for contrast */
+    --dm-primary: #0077b6;
+    --dm-primary-hover: #0096c7;
+    --dm-primary-active: #00b4d8;
+    --dm-primary-light: #caf0f8;
+    --dm-primary-dark: #023e8a;
+
+    /* Secondary - Slate blue */
+    --dm-secondary: #457b9d;
+    --dm-secondary-hover: #5a8fad;
+    --dm-secondary-active: #6ea3bd;
+    --dm-secondary-light: #e8f4f8;
+    --dm-secondary-dark: #1d3557;
+
+    /* Success - Ocean-tinted teal */
+    --dm-success: #06d6a0;
+    --dm-success-hover: #1fe0ac;
+    --dm-success-active: #39eab7;
+    --dm-success-light: #d4f5ed;
+    --dm-success-dark: #05a87d;
+
+    /* Danger - Standard red */
+    --dm-danger: #dc3545;
+    --dm-danger-hover: #bb2d3b;
+    --dm-danger-active: #b02a37;
+    --dm-danger-light: #f8d7da;
+    --dm-danger-dark: #842029;
+
+    /* Warning - Standard amber */
+    --dm-warning: #ffc107;
+    --dm-warning-hover: #ffca2c;
+    --dm-warning-active: #ffcd39;
+    --dm-warning-light: #fff3cd;
+    --dm-warning-dark: #664d03;
+    --dm-warning-text: #664d03;
+
+    /* Info - Light cyan */
+    --dm-info: #48cae4;
+    --dm-info-hover: #5cd2e8;
+    --dm-info-active: #70daec;
+    --dm-info-light: #daf4f9;
+    --dm-info-dark: #00b4d8;
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(255, 255, 255, 0.07);
+    --dm-active-bg: rgba(255, 255, 255, 0.1);
+    --dm-selected-bg: rgba(72, 202, 228, 0.2);
+    --dm-focus-ring: 0 0 0 3px rgba(72, 202, 228, 0.35);
+    --dm-border-focus: #48cae4;
+    --dm-disabled-opacity: 0.4;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-md);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-focus-shadow: var(--dm-focus-ring);
+    --dm-input-disabled-bg: #1e293b; /* slate-800 */
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #0f172a; /* slate-900 */
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+    --dm-tab-active-border: #48cae4;
+    --dm-tab-active-text: #48cae4;
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #0f172a;
+
+    /* Progress */
+    --dm-progress-bg: #334155; /* slate-700 */
+    --dm-progress-bar: #48cae4;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #1e293b;
+    --dm-scrollbar-thumb: #475569;
+    --dm-scrollbar-thumb-hover: #64748b;
+
+    /* Code */
+    --dm-code-bg: #0f172a; /* slate-900 */
+    --dm-code-text: #fca5a5; /* red-300 */
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Subtle for dark mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* ================================================
+       ACCENT/SELECTION COLORS
+       ================================================ */
+    --dm-accent-1: #90e0ef; /* Light cyan */
+    --dm-accent-2: #00b4d8; /* Bright cyan */
+    --dm-accent-3: #0096c7; /* Medium blue */
+    --dm-accent-4: #023e8a; /* Deep blue */
+}
+
+/**
+ * Domma Forest Light Theme
+ * Natural green colour palette inspired by nature
+ * Light mode variant - light backgrounds with rich forest greens
+ */
+
+.dm-theme-forest-light {
+    color-scheme: light;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Dark Mode Base
+       ================================================ */
+
+    /* Backgrounds - Dark slate/charcoal backgrounds */
+    --dm-background: #0f172a; /* slate-900 */
+    --dm-background-alt: #1e293b; /* slate-800 */
+    --dm-surface: #1e293b; /* slate-800 */
+    --dm-surface-raised: #334155; /* slate-700 */
+    --dm-surface-overlay: #334155; /* slate-700 */
+
+    /* Text - Light colors for readability on dark */
+    --dm-text: #e2e8f0; /* slate-200 */
+    --dm-text-secondary: #94a3b8; /* slate-400 */
+    --dm-text-muted: #64748b; /* slate-500 */
+    --dm-text-disabled: #475569; /* slate-600 */
+    --dm-text-inverse: #0f172a; /* slate-900 */
+
+    /* Borders - Subtle on dark backgrounds */
+    --dm-border: #334155; /* slate-700 */
+    --dm-border-light: #1e293b; /* slate-800 */
+    --dm-border-dark: #475569; /* slate-600 */
+
+    /* ================================================
+       FOREST ACCENT COLORS - Bright greens for dark mode
+       ================================================ */
+
+    /* Primary - Bright forest green */
+    --dm-primary: #74c69d;
+    --dm-primary-hover: #88d0ac;
+    --dm-primary-active: #9cdabb;
+    --dm-primary-light: rgba(116, 198, 157, 0.15);
+    --dm-primary-dark: #52b788;
+
+    --dm-secondary: #a3b899;
+    --dm-secondary-hover: #b2c4a9;
+    --dm-secondary-active: #c1d0b9;
+    --dm-secondary-light: rgba(163, 184, 153, 0.15);
+    --dm-secondary-dark: #7d9273;
+
+    --dm-success: #95d5b2;
+    --dm-success-light: rgba(149, 213, 178, 0.15);
+
+    --dm-info: #95d5b2;
+    --dm-info-light: rgba(149, 213, 178, 0.15);
+
+    --dm-warning: #e9c38e;
+    --dm-warning-light: rgba(233, 195, 142, 0.15);
+    --dm-warning-text: #e9c38e;
+
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-active-bg: rgba(0, 0, 0, 0.08);
+    --dm-selected-bg: rgba(45, 106, 79, 0.15);
+    --dm-focus-ring: 0 0 0 3px rgba(45, 106, 79, 0.3);
+    --dm-border-focus: #2d6a4f;
+    --dm-disabled-opacity: 0.65;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-sm);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-focus-shadow: var(--dm-focus-ring);
+    --dm-input-disabled-bg: #e9ecef;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(0, 0, 0, 0.02);
+    --dm-table-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.5);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #212529;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+    --dm-tab-active-border: #2d6a4f;
+    --dm-tab-active-text: #2d6a4f;
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #ffffff;
+
+    /* Progress */
+    --dm-progress-bg: #e9ecef;
+    --dm-progress-bar: #2d6a4f;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #f1f1f1;
+    --dm-scrollbar-thumb: #c1c1c1;
+    --dm-scrollbar-thumb-hover: #a8a8a8;
+
+    /* Code */
+    --dm-code-bg: #f8f9fa;
+    --dm-code-text: #e83e8c;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Standard for light mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* ================================================
+       ELEVATION / DEPTH
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+}
+
+/**
+ * Domma Forest Dark Theme
+ * Natural green colour palette inspired by nature
+ * Dark mode variant - dark backgrounds with bright forest greens
+ */
+
+.dm-theme-forest-dark {
+    color-scheme: dark;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Light Mode Base
+       ================================================ */
+
+    /* Backgrounds - Light/white backgrounds */
+    --dm-background: #ffffff;
+    --dm-background-alt: #f8f9fa;
+    --dm-surface: #ffffff;
+    --dm-surface-raised: #f1f3f5;
+    --dm-surface-overlay: #f8f9fa;
+
+    /* Text - Dark colors for readability on light */
+    --dm-text: #212529;
+    --dm-text-secondary: #495057;
+    --dm-text-muted: #6c757d;
+    --dm-text-disabled: #adb5bd;
+    --dm-text-inverse: #ffffff;
+
+    /* Borders - Subtle on light backgrounds */
+    --dm-border: #dee2e6;
+    --dm-border-light: #e9ecef;
+    --dm-border-dark: #ced4da;
+
+    /* ================================================
+       FOREST ACCENT COLORS - Rich greens for light mode
+       ================================================ */
+
+    /* PRIMARY COLOURS - Forest Green */
+    --dm-primary: #2d6a4f;
+    --dm-primary-hover: #40916c;
+    --dm-primary-active: #52b788;
+    --dm-primary-light: #d8f3dc;
+    --dm-primary-dark: #1b4332;
+
+    /* Focus ring with forest colour */
+    --dm-focus-ring: 0 0 0 3px rgba(45, 106, 79, 0.3);
+    --dm-border-focus: #2d6a4f;
+
+    /* ================================================
+       SECONDARY COLOURS - Earth Brown
+       ================================================ */
+    --dm-secondary: #6b705c;
+    --dm-secondary-hover: #7d826d;
+    --dm-secondary-active: #8f937e;
+    --dm-secondary-light: #f0efe9;
+    --dm-secondary-dark: #52554a;
+
+    /* ================================================
+       STATUS COLOURS - Nature-tinted
+       ================================================ */
+    --dm-success: #40916c;
+    --dm-success-hover: #52b788;
+    --dm-success-active: #74c69d;
+    --dm-success-light: #d8f3dc;
+    --dm-success-dark: #2d6a4f;
+
+    --dm-info: #588157;
+    --dm-info-hover: #6b9669;
+    --dm-info-active: #7eab7c;
+    --dm-info-light: #e2f0e1;
+    --dm-info-dark: #3a5a40;
+
+    --dm-warning: #dda15e;
+    --dm-warning-hover: #e3b276;
+    --dm-warning-active: #e9c38e;
+    --dm-warning-light: #faf3e7;
+    --dm-warning-dark: #bc6c25;
+    --dm-warning-text: #bc6c25;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #95d5b2; /* Mint */
+    --dm-accent-2: #74c69d; /* Sage */
+    --dm-accent-3: #52b788; /* Emerald */
+    --dm-accent-4: #1b4332; /* Pine */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(255, 255, 255, 0.07);
+    --dm-active-bg: rgba(255, 255, 255, 0.1);
+    --dm-selected-bg: rgba(116, 198, 157, 0.2);
+    --dm-focus-ring: 0 0 0 3px rgba(116, 198, 157, 0.35);
+    --dm-border-focus: #74c69d;
+    --dm-disabled-opacity: 0.4;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-md);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-focus-shadow: var(--dm-focus-ring);
+    --dm-input-disabled-bg: #1e293b;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #0f172a;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+    --dm-tab-active-border: #74c69d;
+    --dm-tab-active-text: #74c69d;
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #0f172a;
+
+    /* Progress */
+    --dm-progress-bg: #334155;
+    --dm-progress-bar: #74c69d;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #1e293b;
+    --dm-scrollbar-thumb: #475569;
+    --dm-scrollbar-thumb-hover: #64748b;
+
+    /* Code */
+    --dm-code-bg: #0f172a;
+    --dm-code-text: #fca5a5;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Subtle for dark mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* Accents */
+    --dm-accent-1: #95d5b2;
+    --dm-accent-2: #74c69d;
+    --dm-accent-3: #52b788;
+    --dm-accent-4: #1b4332;
+}
+
+/**
+ * Domma Sunset Light Theme
+ * Soft, warm terracotta and peach tones
+ * Light mode variant - light backgrounds with warm sunset tones
+ */
+
+.dm-theme-sunset-light {
+    color-scheme: light;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Light Mode Base
+       ================================================ */
+
+    /* Backgrounds - Light/white backgrounds */
+    --dm-background: #ffffff;
+    --dm-background-alt: #f8f9fa;
+    --dm-surface: #ffffff;
+    --dm-surface-raised: #f1f3f5;
+    --dm-surface-overlay: #f8f9fa;
+
+    /* Text - Dark colors for readability on light */
+    --dm-text: #212529;
+    --dm-text-secondary: #495057;
+    --dm-text-muted: #6c757d;
+    --dm-text-disabled: #adb5bd;
+    --dm-text-inverse: #ffffff;
+
+    /* Borders - Subtle on light backgrounds */
+    --dm-border: #dee2e6;
+    --dm-border-light: #e9ecef;
+    --dm-border-dark: #ced4da;
+
+
+    --dm-primary: #da9d82;
+    --dm-primary-hover: #e0ac94;
+    --dm-primary-active: #e6bba6;
+    --dm-primary-light: rgba(218, 157, 130, 0.15);
+    --dm-primary-dark: #d08c6f;
+
+    --dm-secondary: #c2a2aa;
+    --dm-secondary-hover: #cdb0b7;
+    --dm-secondary-active: #d8bec4;
+    --dm-secondary-light: rgba(194, 162, 170, 0.15);
+    --dm-secondary-dark: #b5919a;
+
+    --dm-success: #9cbe91;
+    --dm-success-light: rgba(156, 190, 145, 0.15);
+
+    --dm-info: #afc1cd;
+    --dm-info-light: rgba(175, 193, 205, 0.15);
+
+    --dm-warning: #e2c484;
+    --dm-warning-light: rgba(226, 196, 132, 0.15);
+    --dm-warning-text: #e2c484;
+
+    --dm-danger: #da8282;
+    --dm-danger-light: rgba(218, 130, 130, 0.15);
+
+    --dm-focus-ring: 0 0 0 3px rgba(218, 157, 130, 0.35);
+    --dm-selected-bg: rgba(218, 157, 130, 0.2);
+    --dm-tab-active-border: #da9d82;
+    --dm-tab-active-text: #da9d82;
+    --dm-progress-bar: #da9d82;
+
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-active-bg: rgba(0, 0, 0, 0.08);
+    --dm-selected-bg: rgba(198, 123, 92, 0.12);
+    --dm-focus-ring: 0 0 0 3px rgba(198, 123, 92, 0.3);
+    --dm-border-focus: #c67b5c;
+    --dm-disabled-opacity: 0.65;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-sm);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-focus-shadow: var(--dm-focus-ring);
+    --dm-input-disabled-bg: #e9ecef;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(0, 0, 0, 0.02);
+    --dm-table-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.5);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #212529;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+    --dm-tab-active-border: #c67b5c;
+    --dm-tab-active-text: #a66349;
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #ffffff;
+
+    /* Progress */
+    --dm-progress-bg: #e9ecef;
+    --dm-progress-bar: #c67b5c;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #f1f1f1;
+    --dm-scrollbar-thumb: #c1c1c1;
+    --dm-scrollbar-thumb-hover: #a8a8a8;
+
+    /* Code */
+    --dm-code-bg: #f8f9fa;
+    --dm-code-text: #e83e8c;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Standard for light mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* ================================================
+       ELEVATION / DEPTH
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+}
+
+/**
+ * Domma Sunset Dark Theme
+ * Soft, warm terracotta and peach tones
+ * Dark mode variant
+ */
+
+.dm-theme-sunset-dark {
+    color-scheme: dark;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Dark Mode Base
+       ================================================ */
+
+    /* Backgrounds - Dark slate/charcoal backgrounds */
+    --dm-background: #0f172a; /* slate-900 */
+    --dm-background-alt: #1e293b; /* slate-800 */
+    --dm-surface: #1e293b; /* slate-800 */
+    --dm-surface-raised: #334155; /* slate-700 */
+    --dm-surface-overlay: #334155; /* slate-700 */
+
+    /* Text - Light colors for readability on dark */
+    --dm-text: #e2e8f0; /* slate-200 */
+    --dm-text-secondary: #94a3b8; /* slate-400 */
+    --dm-text-muted: #64748b; /* slate-500 */
+    --dm-text-disabled: #475569; /* slate-600 */
+    --dm-text-inverse: #0f172a; /* slate-900 */
+
+    /* Borders - Subtle on dark backgrounds */
+    --dm-border: #334155; /* slate-700 */
+    --dm-border-light: #1e293b; /* slate-800 */
+    --dm-border-dark: #475569; /* slate-600 */
+
+    /* ================================================
+       SUNSET ACCENT COLORS - Warm tones for light mode
+       ================================================ */
+
+    /* PRIMARY COLOURS - Soft Terracotta */
+    --dm-primary: #c67b5c;
+    --dm-primary-hover: #d08c6f;
+    --dm-primary-active: #da9d82;
+    --dm-primary-light: #faf3f0;
+    --dm-primary-dark: #a66349;
+
+    /* Focus ring with soft sunset colour */
+    --dm-focus-ring: 0 0 0 3px rgba(198, 123, 92, 0.3);
+    --dm-border-focus: #c67b5c;
+
+    /* ================================================
+       SECONDARY COLOURS - Dusty Rose
+       ================================================ */
+    --dm-secondary: #a8808a;
+    --dm-secondary-hover: #b5919a;
+    --dm-secondary-active: #c2a2aa;
+    --dm-secondary-light: #f8f3f4;
+    --dm-secondary-dark: #8a6670;
+
+    /* ================================================
+       STATUS COLOURS - Muted tones
+       ================================================ */
+    --dm-success: #7a9e6d;
+    --dm-success-hover: #8bae7f;
+    --dm-success-active: #9cbe91;
+    --dm-success-light: #f2f6f0;
+    --dm-success-dark: #628256;
+
+    --dm-info: #8fa5b5;
+    --dm-info-hover: #9fb3c1;
+    --dm-info-active: #afc1cd;
+    --dm-info-light: #f3f6f8;
+    --dm-info-dark: #708694;
+
+    --dm-warning: #d4a85c;
+    --dm-warning-hover: #dbb670;
+    --dm-warning-active: #e2c484;
+    --dm-warning-light: #faf6ef;
+    --dm-warning-dark: #b58e45;
+    --dm-warning-text: #8a6b30;
+
+    --dm-danger: #c45c5c;
+    --dm-danger-hover: #cf6f6f;
+    --dm-danger-active: #da8282;
+    --dm-danger-light: #faf0f0;
+    --dm-danger-dark: #a54848;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #e8c9a8; /* Soft peach */
+    --dm-accent-2: #d4a88a; /* Warm sand */
+    --dm-accent-3: #c67b5c; /* Terracotta */
+    --dm-accent-4: #a66349; /* Clay */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(255, 255, 255, 0.07);
+    --dm-active-bg: rgba(255, 255, 255, 0.1);
+    --dm-disabled-opacity: 0.4;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-md);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #1e293b;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #0f172a;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #0f172a;
+
+    /* Progress */
+    --dm-progress-bg: #334155;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #1e293b;
+    --dm-scrollbar-thumb: #475569;
+    --dm-scrollbar-thumb-hover: #64748b;
+
+    /* Code */
+    --dm-code-bg: #0f172a;
+    --dm-code-text: #fca5a5;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Subtle for dark mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+}
+/**
+ * Domma Royal Light Theme
+ * Rich royal blue colour palette
+ * Light mode variant
+ */
+
+.dm-theme-royal-light {
+    color-scheme: light;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Light Mode Base
+       ================================================ */
+
+    /* Backgrounds - Light/white backgrounds */
+    --dm-background: #ffffff;
+    --dm-background-alt: #f8f9fa;
+    --dm-surface: #ffffff;
+    --dm-surface-raised: #f1f3f5;
+    --dm-surface-overlay: #f8f9fa;
+
+    /* Text - Dark colors for readability on light */
+    --dm-text: #212529;
+    --dm-text-secondary: #495057;
+    --dm-text-muted: #6c757d;
+    --dm-text-disabled: #adb5bd;
+    --dm-text-inverse: #ffffff;
+
+    /* Borders - Subtle on light backgrounds */
+    --dm-border: #dee2e6;
+    --dm-border-light: #e9ecef;
+    --dm-border-dark: #ced4da;
+
+
+    --dm-primary: #6495ed;
+    --dm-primary-hover: #79a5f0;
+    --dm-primary-active: #8eb5f3;
+    --dm-primary-light: rgba(100, 149, 237, 0.15);
+    --dm-primary-dark: #4169e1;
+
+    --dm-secondary: #9370db;
+    --dm-secondary-hover: #a384e0;
+    --dm-secondary-active: #b398e5;
+    --dm-secondary-light: rgba(147, 112, 219, 0.15);
+    --dm-secondary-dark: #6a5acd;
+
+    --dm-success: #50fa7b;
+    --dm-success-light: rgba(80, 250, 123, 0.15);
+
+    --dm-info: #87ceeb;
+    --dm-info-light: rgba(135, 206, 235, 0.15);
+
+    --dm-focus-ring: 0 0 0 3px rgba(100, 149, 237, 0.35);
+    --dm-selected-bg: rgba(100, 149, 237, 0.2);
+    --dm-tab-active-border: #6495ed;
+    --dm-tab-active-text: #6495ed;
+    --dm-progress-bar: #6495ed;
+
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-active-bg: rgba(0, 0, 0, 0.08);
+    --dm-disabled-opacity: 0.65;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-sm);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #e9ecef;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(0, 0, 0, 0.02);
+    --dm-table-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.5);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #212529;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #ffffff;
+
+    /* Progress */
+    --dm-progress-bg: #e9ecef;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #f1f1f1;
+    --dm-scrollbar-thumb: #c1c1c1;
+    --dm-scrollbar-thumb-hover: #a8a8a8;
+
+    /* Code */
+    --dm-code-bg: #f8f9fa;
+    --dm-code-text: #e83e8c;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Standard for light mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* ================================================
+       ELEVATION / DEPTH
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+
+}
+/**
+ * Domma Royal Dark Theme
+ * Rich royal blue colour palette
+ * Dark mode variant
+ */
+
+.dm-theme-royal-dark {
+    color-scheme: dark;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Dark Mode Base
+       ================================================ */
+
+    /* Backgrounds - Dark slate/charcoal backgrounds */
+    --dm-background: #0f172a; /* slate-900 */
+    --dm-background-alt: #1e293b; /* slate-800 */
+    --dm-surface: #1e293b; /* slate-800 */
+    --dm-surface-raised: #334155; /* slate-700 */
+    --dm-surface-overlay: #334155; /* slate-700 */
+
+    /* Text - Light colors for readability on dark */
+    --dm-text: #e2e8f0; /* slate-200 */
+    --dm-text-secondary: #94a3b8; /* slate-400 */
+    --dm-text-muted: #64748b; /* slate-500 */
+    --dm-text-disabled: #475569; /* slate-600 */
+    --dm-text-inverse: #0f172a; /* slate-900 */
+
+    /* Borders - Subtle on dark backgrounds */
+    --dm-border: #334155; /* slate-700 */
+    --dm-border-light: #1e293b; /* slate-800 */
+    --dm-border-dark: #475569; /* slate-600 */
+
+
+    /* ================================================
+       PRIMARY COLOURS - Royal Blue
+       ================================================ */
+    --dm-primary: #4169e1;
+    --dm-primary-hover: #5a7de6;
+    --dm-primary-active: #7391eb;
+    --dm-primary-light: #e8edfc;
+    --dm-primary-dark: #2c4a9e;
+
+    /* Focus ring with royal colour */
+    --dm-focus-ring: 0 0 0 3px rgba(65, 105, 225, 0.3);
+    --dm-border-focus: #4169e1;
+
+    /* ================================================
+       SECONDARY COLOURS - Purple Blue
+       ================================================ */
+    --dm-secondary: #6a5acd;
+    --dm-secondary-hover: #7d6fd4;
+    --dm-secondary-active: #9084db;
+    --dm-secondary-light: #f0eefa;
+    --dm-secondary-dark: #483d8b;
+
+    /* ================================================
+       STATUS COLOURS - Royal-tinted
+       ================================================ */
+    --dm-success: #32cd32;
+    --dm-success-hover: #4ad34a;
+    --dm-success-active: #62d962;
+    --dm-success-light: #e6f9e6;
+    --dm-success-dark: #228b22;
+
+    --dm-info: #6495ed;
+    --dm-info-hover: #79a5f0;
+    --dm-info-active: #8eb5f3;
+    --dm-info-light: #ebf1fd;
+    --dm-info-dark: #4169e1;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #b0c4de; /* Light steel blue */
+    --dm-accent-2: #6495ed; /* Cornflower blue */
+    --dm-accent-3: #4169e1; /* Royal blue */
+    --dm-accent-4: #191970; /* Midnight blue */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(65, 105, 225, 0.15);
+    --dm-tab-active-border: #4169e1;
+    --dm-tab-active-text: #4169e1;
+    --dm-progress-bar: #4169e1;
+
+    /* Danger - Standard red */
+    --dm-danger: #dc3545;
+    --dm-danger-hover: #bb2d3b;
+    --dm-danger-active: #b02a37;
+    --dm-danger-light: #f8d7da;
+    --dm-danger-dark: #842029;
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(255, 255, 255, 0.07);
+    --dm-active-bg: rgba(255, 255, 255, 0.1);
+    --dm-disabled-opacity: 0.4;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-md);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #1e293b;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #0f172a;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #0f172a;
+
+    /* Progress */
+    --dm-progress-bg: #334155;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #1e293b;
+    --dm-scrollbar-thumb: #475569;
+    --dm-scrollbar-thumb-hover: #64748b;
+
+    /* Code */
+    --dm-code-bg: #0f172a;
+    --dm-code-text: #fca5a5;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Subtle for dark mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+}
+/**
+ * Domma Lemon Light Theme
+ * Soft, subtle yellow colour palette
+ * Light mode variant
+ */
+
+.dm-theme-lemon-light {
+    color-scheme: light;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Light Mode Base
+       ================================================ */
+
+    /* Backgrounds - Light/white backgrounds */
+    --dm-background: #ffffff;
+    --dm-background-alt: #f8f9fa;
+    --dm-surface: #ffffff;
+    --dm-surface-raised: #f1f3f5;
+    --dm-surface-overlay: #f8f9fa;
+
+    /* Text - Dark colors for readability on light */
+    --dm-text: #212529;
+    --dm-text-secondary: #495057;
+    --dm-text-muted: #6c757d;
+    --dm-text-disabled: #adb5bd;
+    --dm-text-inverse: #ffffff;
+
+    /* Borders - Subtle on light backgrounds */
+    --dm-border: #dee2e6;
+    --dm-border-light: #e9ecef;
+    --dm-border-dark: #ced4da;
+
+
+    --dm-primary: #d4c06a;
+    --dm-primary-hover: #dfcc7c;
+    --dm-primary-active: #ead88e;
+    --dm-primary-light: rgba(212, 192, 106, 0.15);
+    --dm-primary-dark: #c9b458;
+
+    --dm-secondary: #b6b1a1;
+    --dm-secondary-hover: #c4bfb0;
+    --dm-secondary-active: #d2cdbf;
+    --dm-secondary-light: rgba(182, 177, 161, 0.15);
+    --dm-secondary-dark: #9a9583;
+
+    --dm-success: #a1c277;
+    --dm-success-light: rgba(161, 194, 119, 0.15);
+
+    --dm-info: #90bbcd;
+    --dm-info-light: rgba(144, 187, 205, 0.15);
+
+    --dm-warning: #e2c46d;
+    --dm-warning-light: rgba(226, 196, 109, 0.15);
+    --dm-warning-text: #e2c46d;
+
+    --dm-focus-ring: 0 0 0 3px rgba(212, 192, 106, 0.35);
+    --dm-selected-bg: rgba(212, 192, 106, 0.2);
+    --dm-tab-active-border: #d4c06a;
+    --dm-tab-active-text: #d4c06a;
+    --dm-progress-bar: #d4c06a;
+
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-active-bg: rgba(0, 0, 0, 0.08);
+    --dm-disabled-opacity: 0.65;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-sm);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #e9ecef;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(0, 0, 0, 0.02);
+    --dm-table-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.5);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #212529;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #ffffff;
+
+    /* Progress */
+    --dm-progress-bg: #e9ecef;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #f1f1f1;
+    --dm-scrollbar-thumb: #c1c1c1;
+    --dm-scrollbar-thumb-hover: #a8a8a8;
+
+    /* Code */
+    --dm-code-bg: #f8f9fa;
+    --dm-code-text: #e83e8c;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Standard for light mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* ================================================
+       ELEVATION / DEPTH
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+
+}
+/**
+ * Domma Lemon Dark Theme
+ * Soft, subtle yellow colour palette
+ * Dark mode variant
+ */
+
+.dm-theme-lemon-dark {
+    color-scheme: dark;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Dark Mode Base
+       ================================================ */
+
+    /* Backgrounds - Dark slate/charcoal backgrounds */
+    --dm-background: #0f172a; /* slate-900 */
+    --dm-background-alt: #1e293b; /* slate-800 */
+    --dm-surface: #1e293b; /* slate-800 */
+    --dm-surface-raised: #334155; /* slate-700 */
+    --dm-surface-overlay: #334155; /* slate-700 */
+
+    /* Text - Light colors for readability on dark */
+    --dm-text: #e2e8f0; /* slate-200 */
+    --dm-text-secondary: #94a3b8; /* slate-400 */
+    --dm-text-muted: #64748b; /* slate-500 */
+    --dm-text-disabled: #475569; /* slate-600 */
+    --dm-text-inverse: #0f172a; /* slate-900 */
+
+    /* Borders - Subtle on dark backgrounds */
+    --dm-border: #334155; /* slate-700 */
+    --dm-border-light: #1e293b; /* slate-800 */
+    --dm-border-dark: #475569; /* slate-600 */
+
+
+    /* ================================================
+       PRIMARY COLOURS - Muted Golden Yellow
+       ================================================ */
+    --dm-primary: #c9b458;
+    --dm-primary-hover: #d4c06a;
+    --dm-primary-active: #dfcc7c;
+    --dm-primary-light: #faf8f0;
+    --dm-primary-dark: #a89740;
+
+    /* Focus ring with subtle lemon colour */
+    --dm-focus-ring: 0 0 0 3px rgba(201, 180, 88, 0.3);
+    --dm-border-focus: #c9b458;
+
+    /* ================================================
+       SECONDARY COLOURS - Warm Stone
+       ================================================ */
+    --dm-secondary: #9a9583;
+    --dm-secondary-hover: #a8a392;
+    --dm-secondary-active: #b6b1a1;
+    --dm-secondary-light: #f5f4f1;
+    --dm-secondary-dark: #7a766a;
+
+    /* ================================================
+       STATUS COLOURS - Muted tones
+       ================================================ */
+    --dm-success: #7da453;
+    --dm-success-hover: #8fb365;
+    --dm-success-active: #a1c277;
+    --dm-success-light: #f2f7ed;
+    --dm-success-dark: #658840;
+
+    --dm-info: #6a9fb5;
+    --dm-info-hover: #7dadc1;
+    --dm-info-active: #90bbcd;
+    --dm-info-light: #f0f6f8;
+    --dm-info-dark: #527d91;
+
+    --dm-warning: #d4a843;
+    --dm-warning-hover: #dbb658;
+    --dm-warning-active: #e2c46d;
+    --dm-warning-light: #faf6ec;
+    --dm-warning-dark: #b08a30;
+    --dm-warning-text: #8a6b20;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #e8e2c8; /* Pale straw */
+    --dm-accent-2: #d4cba8; /* Soft wheat */
+    --dm-accent-3: #c9b458; /* Muted gold */
+    --dm-accent-4: #a89740; /* Dark honey */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(201, 180, 88, 0.15);
+    --dm-tab-active-border: #c9b458;
+    --dm-tab-active-text: #8a7530;
+    --dm-progress-bar: #c9b458;
+
+    /* Danger - Standard red */
+    --dm-danger: #dc3545;
+    --dm-danger-hover: #bb2d3b;
+    --dm-danger-active: #b02a37;
+    --dm-danger-light: #f8d7da;
+    --dm-danger-dark: #842029;
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(255, 255, 255, 0.07);
+    --dm-active-bg: rgba(255, 255, 255, 0.1);
+    --dm-disabled-opacity: 0.4;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-md);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #1e293b;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #0f172a;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #0f172a;
+
+    /* Progress */
+    --dm-progress-bg: #334155;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #1e293b;
+    --dm-scrollbar-thumb: #475569;
+    --dm-scrollbar-thumb-hover: #64748b;
+
+    /* Code */
+    --dm-code-bg: #0f172a;
+    --dm-code-text: #fca5a5;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Subtle for dark mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+}
+/**
+ * Domma Silver Light Theme
+ * Light gray/silver colour palette
+ * Light mode variant
+ */
+
+.dm-theme-silver-light {
+    color-scheme: light;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Light Mode Base
+       ================================================ */
+
+    /* Backgrounds - Light/white backgrounds */
+    --dm-background: #ffffff;
+    --dm-background-alt: #f8f9fa;
+    --dm-surface: #ffffff;
+    --dm-surface-raised: #f1f3f5;
+    --dm-surface-overlay: #f8f9fa;
+
+    /* Text - Dark colors for readability on light */
+    --dm-text: #212529;
+    --dm-text-secondary: #495057;
+    --dm-text-muted: #6c757d;
+    --dm-text-disabled: #adb5bd;
+    --dm-text-inverse: #ffffff;
+
+    /* Borders - Subtle on light backgrounds */
+    --dm-border: #dee2e6;
+    --dm-border-light: #e9ecef;
+    --dm-border-dark: #ced4da;
+
+
+    --dm-primary: #a0aec0;
+    --dm-primary-hover: #b0bac9;
+    --dm-primary-active: #c0c6d2;
+    --dm-primary-light: rgba(160, 174, 192, 0.15);
+    --dm-primary-dark: #718096;
+
+    --dm-secondary: #cbd5e0;
+    --dm-secondary-hover: #d5dce6;
+    --dm-secondary-active: #dfe3ec;
+    --dm-secondary-light: rgba(203, 213, 224, 0.15);
+    --dm-secondary-dark: #a0aec0;
+
+    --dm-success: #9ae6b4;
+    --dm-success-light: rgba(154, 230, 180, 0.15);
+
+    --dm-info: #90cdf4;
+    --dm-info-light: rgba(144, 205, 244, 0.15);
+
+    --dm-focus-ring: 0 0 0 3px rgba(160, 174, 192, 0.35);
+    --dm-selected-bg: rgba(160, 174, 192, 0.2);
+    --dm-tab-active-border: #a0aec0;
+    --dm-tab-active-text: #a0aec0;
+    --dm-progress-bar: #a0aec0;
+
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-active-bg: rgba(0, 0, 0, 0.08);
+    --dm-disabled-opacity: 0.65;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-sm);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #e9ecef;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(0, 0, 0, 0.02);
+    --dm-table-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.5);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #212529;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #ffffff;
+
+    /* Progress */
+    --dm-progress-bg: #e9ecef;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #f1f1f1;
+    --dm-scrollbar-thumb: #c1c1c1;
+    --dm-scrollbar-thumb-hover: #a8a8a8;
+
+    /* Code */
+    --dm-code-bg: #f8f9fa;
+    --dm-code-text: #e83e8c;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Standard for light mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* ================================================
+       ELEVATION / DEPTH
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+
+}
+/**
+ * Domma Silver Dark Theme
+ * Light gray/silver colour palette
+ * Dark mode variant
+ */
+
+.dm-theme-silver-dark {
+    color-scheme: dark;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Dark Mode Base
+       ================================================ */
+
+    /* Backgrounds - Dark slate/charcoal backgrounds */
+    --dm-background: #0f172a; /* slate-900 */
+    --dm-background-alt: #1e293b; /* slate-800 */
+    --dm-surface: #1e293b; /* slate-800 */
+    --dm-surface-raised: #334155; /* slate-700 */
+    --dm-surface-overlay: #334155; /* slate-700 */
+
+    /* Text - Light colors for readability on dark */
+    --dm-text: #e2e8f0; /* slate-200 */
+    --dm-text-secondary: #94a3b8; /* slate-400 */
+    --dm-text-muted: #64748b; /* slate-500 */
+    --dm-text-disabled: #475569; /* slate-600 */
+    --dm-text-inverse: #0f172a; /* slate-900 */
+
+    /* Borders - Subtle on dark backgrounds */
+    --dm-border: #334155; /* slate-700 */
+    --dm-border-light: #1e293b; /* slate-800 */
+    --dm-border-dark: #475569; /* slate-600 */
+
+
+    /* ================================================
+       PRIMARY COLOURS - Silver Gray
+       ================================================ */
+    --dm-primary: #708090;
+    --dm-primary-hover: #84929f;
+    --dm-primary-active: #98a4ae;
+    --dm-primary-light: #f0f2f4;
+    --dm-primary-dark: #4a5568;
+
+    /* Focus ring with silver colour */
+    --dm-focus-ring: 0 0 0 3px rgba(112, 128, 144, 0.3);
+    --dm-border-focus: #708090;
+
+    /* ================================================
+       SECONDARY COLOURS - Cool Gray
+       ================================================ */
+    --dm-secondary: #a0aec0;
+    --dm-secondary-hover: #b0bac9;
+    --dm-secondary-active: #c0c6d2;
+    --dm-secondary-light: #f7f8fa;
+    --dm-secondary-dark: #718096;
+
+    /* ================================================
+       STATUS COLOURS - Neutral-tinted
+       ================================================ */
+    --dm-success: #68d391;
+    --dm-success-hover: #7cdaa0;
+    --dm-success-active: #90e1af;
+    --dm-success-light: #f0faf4;
+    --dm-success-dark: #48bb78;
+
+    --dm-info: #63b3ed;
+    --dm-info-hover: #79bff0;
+    --dm-info-active: #8fcbf3;
+    --dm-info-light: #ebf8ff;
+    --dm-info-dark: #4299e1;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #e2e8f0; /* Light slate */
+    --dm-accent-2: #cbd5e0; /* Cool gray */
+    --dm-accent-3: #a0aec0; /* Gray blue */
+    --dm-accent-4: #4a5568; /* Dark slate */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(112, 128, 144, 0.12);
+    --dm-tab-active-border: #708090;
+    --dm-tab-active-text: #4a5568;
+    --dm-progress-bar: #708090;
+
+    /* Danger - Standard red */
+    --dm-danger: #dc3545;
+    --dm-danger-hover: #bb2d3b;
+    --dm-danger-active: #b02a37;
+    --dm-danger-light: #f8d7da;
+    --dm-danger-dark: #842029;
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(255, 255, 255, 0.07);
+    --dm-active-bg: rgba(255, 255, 255, 0.1);
+    --dm-disabled-opacity: 0.4;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-md);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #1e293b;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #0f172a;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #0f172a;
+
+    /* Progress */
+    --dm-progress-bg: #334155;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #1e293b;
+    --dm-scrollbar-thumb: #475569;
+    --dm-scrollbar-thumb-hover: #64748b;
+
+    /* Code */
+    --dm-code-bg: #0f172a;
+    --dm-code-text: #fca5a5;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Subtle for dark mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+}
+/**
+ * Domma Charcoal Light Theme
+ * Dark gray/charcoal colour palette
+ * Light mode variant
+ */
+
+.dm-theme-charcoal-light {
+    color-scheme: light;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Light Mode Base
+       ================================================ */
+
+    /* Backgrounds - Light/white backgrounds */
+    --dm-background: #ffffff;
+    --dm-background-alt: #f8f9fa;
+    --dm-surface: #ffffff;
+    --dm-surface-raised: #f1f3f5;
+    --dm-surface-overlay: #f8f9fa;
+
+    /* Text - Dark colors for readability on light */
+    --dm-text: #1a1a1a; /* Even darker for better contrast */
+    --dm-text-secondary: #495057;
+    --dm-text-muted: #6c757d;
+    --dm-text-disabled: #adb5bd;
+    --dm-text-inverse: #ffffff;
+
+    /* Borders - Subtle on light backgrounds */
+    --dm-border: #dee2e6;
+    --dm-border-light: #e9ecef;
+    --dm-border-dark: #ced4da;
+
+
+    --dm-primary: #78909c;
+    --dm-primary-hover: #546e7a;
+    --dm-primary-active: #455a64;
+    --dm-primary-light: rgba(120, 144, 156, 0.15);
+    --dm-primary-dark: #607d8b;
+
+    --dm-secondary: #90a4ae;
+    --dm-secondary-hover: #a1b3bb;
+    --dm-secondary-active: #b2c2c8;
+    --dm-secondary-light: rgba(144, 164, 174, 0.15);
+    --dm-secondary-dark: #78909c;
+
+    --dm-success: #81c784;
+    --dm-success-light: rgba(129, 199, 132, 0.15);
+
+    --dm-info: #64b5f6;
+    --dm-info-light: rgba(100, 181, 246, 0.15);
+
+    --dm-focus-ring: 0 0 0 3px rgba(120, 144, 156, 0.35);
+    --dm-selected-bg: rgba(120, 144, 156, 0.2);
+    --dm-tab-active-border: #78909c;
+    --dm-tab-active-text: #78909c;
+    --dm-progress-bar: #78909c;
+
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-active-bg: rgba(0, 0, 0, 0.08);
+    --dm-disabled-opacity: 0.65;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-sm);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #e9ecef;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(0, 0, 0, 0.02);
+    --dm-table-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.5);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #212529;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #ffffff;
+
+    /* Progress */
+    --dm-progress-bg: #e9ecef;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #f1f1f1;
+    --dm-scrollbar-thumb: #c1c1c1;
+    --dm-scrollbar-thumb-hover: #a8a8a8;
+
+    /* Code */
+    --dm-code-bg: #f8f9fa;
+    --dm-code-text: #e83e8c;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Standard for light mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* ================================================
+       ELEVATION / DEPTH
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+
+}
+/**
+ * Domma Charcoal Dark Theme
+ * Dark gray/charcoal colour palette
+ * Dark mode variant - Default theme for Domma v0.5.0a
+ */
+
+.dm-theme-charcoal-dark {
+    color-scheme: dark;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Dark Mode Base
+       ================================================ */
+
+    /* Backgrounds - Dark slate/charcoal backgrounds */
+    --dm-background: #0f172a; /* slate-900 */
+    --dm-background-alt: #1e293b; /* slate-800 */
+    --dm-surface: #1e293b; /* slate-800 */
+    --dm-surface-raised: #334155; /* slate-700 */
+    --dm-surface-overlay: #334155; /* slate-700 */
+
+    /* Text - Light colors for readability on dark */
+    --dm-text: #e2e8f0; /* slate-200 */
+    --dm-text-secondary: #94a3b8; /* slate-400 */
+    --dm-text-muted: #64748b; /* slate-500 */
+    --dm-text-disabled: #475569; /* slate-600 */
+    --dm-text-inverse: #0f172a; /* slate-900 */
+
+    /* Borders - Subtle on dark backgrounds */
+    --dm-border: #334155; /* slate-700 */
+    --dm-border-light: #1e293b; /* slate-800 */
+    --dm-border-dark: #475569; /* slate-600 */
+
+
+    /* ================================================
+       PRIMARY COLOURS - Charcoal Gray
+       ================================================ */
+    --dm-primary: #36454f;
+    --dm-primary-hover: #4a5d69;
+    --dm-primary-active: #5e7583;
+    --dm-primary-light: #e8ebed;
+    --dm-primary-dark: #1c2428;
+
+    /* Focus ring with charcoal colour */
+    --dm-focus-ring: 0 0 0 3px rgba(54, 69, 79, 0.3);
+    --dm-border-focus: #36454f;
+
+    /* ================================================
+       SECONDARY COLOURS - Slate
+       ================================================ */
+    --dm-secondary: #5f6f7a;
+    --dm-secondary-hover: #738290;
+    --dm-secondary-active: #8795a0;
+    --dm-secondary-light: #f0f2f3;
+    --dm-secondary-dark: #3d4a52;
+
+    /* ================================================
+       STATUS COLOURS - Neutral-tinted
+       ================================================ */
+    --dm-success: #4caf50;
+    --dm-success-hover: #61b965;
+    --dm-success-active: #76c37a;
+    --dm-success-light: #e8f5e9;
+    --dm-success-dark: #388e3c;
+
+    --dm-info: #2196f3;
+    --dm-info-hover: #42a5f5;
+    --dm-info-active: #64b5f6;
+    --dm-info-light: #e3f2fd;
+    --dm-info-dark: #1976d2;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #78909c; /* Blue gray */
+    --dm-accent-2: #607d8b; /* Gray blue */
+    --dm-accent-3: #455a64; /* Dark blue gray */
+    --dm-accent-4: #263238; /* Charcoal */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(54, 69, 79, 0.12);
+    --dm-tab-active-border: #36454f;
+    --dm-tab-active-text: #1c2428;
+    --dm-progress-bar: #36454f;
+
+    /* Danger - Standard red */
+    --dm-danger: #dc3545;
+    --dm-danger-hover: #bb2d3b;
+    --dm-danger-active: #b02a37;
+    --dm-danger-light: #f8d7da;
+    --dm-danger-dark: #842029;
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(255, 255, 255, 0.07);
+    --dm-active-bg: rgba(255, 255, 255, 0.1);
+    --dm-disabled-opacity: 0.4;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-md);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #1e293b;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #0f172a;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #0f172a;
+
+    /* Progress */
+    --dm-progress-bg: #334155;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #1e293b;
+    --dm-scrollbar-thumb: #475569;
+    --dm-scrollbar-thumb-hover: #64748b;
+
+    /* Code */
+    --dm-code-bg: #0f172a;
+    --dm-code-text: #fca5a5;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Subtle for dark mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+}
+/**
+ * Domma Christmas Light Theme
+ * Traditional festive colour palette: red, green, gold
+ * Light mode variant
+ */
+
+.dm-theme-christmas-light {
+    color-scheme: light;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Light Mode Base
+       ================================================ */
+
+    /* Backgrounds - Light/white backgrounds */
+    --dm-background: #ffffff;
+    --dm-background-alt: #f8f9fa;
+    --dm-surface: #ffffff;
+    --dm-surface-raised: #f1f3f5;
+    --dm-surface-overlay: #f8f9fa;
+
+    /* Text - Dark colors for readability on light */
+    --dm-text: #212529;
+    --dm-text-secondary: #495057;
+    --dm-text-muted: #6c757d;
+    --dm-text-disabled: #adb5bd;
+    --dm-text-inverse: #ffffff;
+
+    /* Borders - Subtle on light backgrounds */
+    --dm-border: #dee2e6;
+    --dm-border-light: #e9ecef;
+    --dm-border-dark: #ced4da;
+
+
+    --dm-primary: #ef5566;
+    --dm-primary-hover: #f16d7a;
+    --dm-primary-active: #f3858e;
+    --dm-primary-light: rgba(239, 85, 102, 0.15);
+    --dm-primary-dark: #e43a56;
+
+    --dm-secondary: #5cb85c;
+    --dm-secondary-hover: #6dc46d;
+    --dm-secondary-active: #7ed07e;
+    --dm-secondary-light: rgba(92, 184, 92, 0.15);
+    --dm-secondary-dark: #4cae4c;
+
+    --dm-success: #6dd66d;
+    --dm-success-light: rgba(109, 214, 109, 0.15);
+
+    --dm-info: #a8d5e5;
+    --dm-info-light: rgba(168, 213, 229, 0.15);
+
+    --dm-warning: #f0d264;
+    --dm-warning-light: rgba(240, 210, 100, 0.15);
+    --dm-warning-text: #f0d264;
+
+    --dm-danger: #ef6b6b;
+    --dm-danger-light: rgba(239, 107, 107, 0.15);
+
+    /* Gold accents pop nicely on dark */
+    --dm-accent-1: #f0d264;
+    --dm-accent-2: #ef6b6b;
+    --dm-accent-3: #6dd66d;
+    --dm-accent-4: #e0e0e0;
+
+    --dm-focus-ring: 0 0 0 3px rgba(239, 85, 102, 0.35);
+    --dm-selected-bg: rgba(239, 85, 102, 0.2);
+    --dm-tab-active-border: #ef5566;
+    --dm-tab-active-text: #ef5566;
+    --dm-progress-bar: #ef5566;
+
+    /* Danger - Bright red (standard dark mode) */
+    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger-hover: #f87171; /* red-400 */
+    --dm-danger-active: #fca5a5; /* red-300 */
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626; /* red-600 */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-active-bg: rgba(0, 0, 0, 0.08);
+    --dm-disabled-opacity: 0.65;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-sm);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #e9ecef;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(0, 0, 0, 0.02);
+    --dm-table-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.5);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #212529;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #ffffff;
+
+    /* Progress */
+    --dm-progress-bg: #e9ecef;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #f1f1f1;
+    --dm-scrollbar-thumb: #c1c1c1;
+    --dm-scrollbar-thumb-hover: #a8a8a8;
+
+    /* Code */
+    --dm-code-bg: #f8f9fa;
+    --dm-code-text: #e83e8c;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Standard for light mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* ================================================
+       ELEVATION / DEPTH
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+
+}
+/**
+ * Domma Christmas Dark Theme
+ * Traditional festive colour palette: red, green, gold
+ * Dark mode variant
+ */
+
+.dm-theme-christmas-dark {
+    color-scheme: dark;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Dark Mode Base
+       ================================================ */
+
+    /* Backgrounds - Dark slate/charcoal backgrounds */
+    --dm-background: #0f172a; /* slate-900 */
+    --dm-background-alt: #1e293b; /* slate-800 */
+    --dm-surface: #1e293b; /* slate-800 */
+    --dm-surface-raised: #334155; /* slate-700 */
+    --dm-surface-overlay: #334155; /* slate-700 */
+
+    /* Text - Light colors for readability on dark */
+    --dm-text: #e2e8f0; /* slate-200 */
+    --dm-text-secondary: #94a3b8; /* slate-400 */
+    --dm-text-muted: #64748b; /* slate-500 */
+    --dm-text-disabled: #475569; /* slate-600 */
+    --dm-text-inverse: #0f172a; /* slate-900 */
+
+    /* Borders - Subtle on dark backgrounds */
+    --dm-border: #334155; /* slate-700 */
+    --dm-border-light: #1e293b; /* slate-800 */
+    --dm-border-dark: #475569; /* slate-600 */
+
+
+    /* ================================================
+       PRIMARY COLOURS - Christmas Red
+       ================================================ */
+    --dm-primary: #c41e3a;
+    --dm-primary-hover: #d42c48;
+    --dm-primary-active: #e43a56;
+    --dm-primary-light: #fce4e8;
+    --dm-primary-dark: #9a1830;
+
+    /* Focus ring with festive red */
+    --dm-focus-ring: 0 0 0 3px rgba(196, 30, 58, 0.3);
+    --dm-border-focus: #c41e3a;
+
+    /* ================================================
+       SECONDARY COLOURS - Christmas Green
+       ================================================ */
+    --dm-secondary: #165b33;
+    --dm-secondary-hover: #1e7a45;
+    --dm-secondary-active: #269957;
+    --dm-secondary-light: #e3f2e9;
+    --dm-secondary-dark: #0f3d23;
+
+    /* ================================================
+       STATUS COLOURS - Festive tinted
+       ================================================ */
+    --dm-success: #228b22;
+    --dm-success-hover: #2ea02e;
+    --dm-success-active: #3ab53a;
+    --dm-success-light: #e6f4e6;
+    --dm-success-dark: #1a6b1a;
+
+    --dm-info: #a8d5e5;
+    --dm-info-hover: #b8dde9;
+    --dm-info-active: #c8e5ed;
+    --dm-info-light: #f0f9fc;
+    --dm-info-dark: #6bb8d1;
+
+    --dm-warning: #d4af37;
+    --dm-warning-hover: #dabb4f;
+    --dm-warning-active: #e0c767;
+    --dm-warning-light: #faf6e7;
+    --dm-warning-dark: #b8962d;
+    --dm-warning-text: #8b7021;
+
+    --dm-danger: #bb2528;
+    --dm-danger-hover: #cc3336;
+    --dm-danger-active: #dd4144;
+    --dm-danger-light: #fce8e8;
+    --dm-danger-dark: #991e20;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #d4af37; /* Gold */
+    --dm-accent-2: #bb2528; /* Holly Berry */
+    --dm-accent-3: #228b22; /* Pine Green */
+    --dm-accent-4: #f5f5f5; /* Snow White */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(196, 30, 58, 0.12);
+    --dm-tab-active-border: #c41e3a;
+    --dm-tab-active-text: #c41e3a;
+    --dm-progress-bar: #c41e3a;
+
+    /* Danger - Standard red */
+    --dm-danger: #dc3545;
+    --dm-danger-hover: #bb2d3b;
+    --dm-danger-active: #b02a37;
+    --dm-danger-light: #f8d7da;
+    --dm-danger-dark: #842029;
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(255, 255, 255, 0.07);
+    --dm-active-bg: rgba(255, 255, 255, 0.1);
+    --dm-disabled-opacity: 0.4;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-md);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #1e293b;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #0f172a;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #0f172a;
+
+    /* Progress */
+    --dm-progress-bg: #334155;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #1e293b;
+    --dm-scrollbar-thumb: #475569;
+    --dm-scrollbar-thumb-hover: #64748b;
+
+    /* Code */
+    --dm-code-bg: #0f172a;
+    --dm-code-text: #fca5a5;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Subtle for dark mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+}
+.dm-theme-grayve {
+    color-scheme: dark; /* Slate is typically a dark theme */
+
+    /* Tailwind-based color palette - adapting for grayve */
+    /* Slate (using bootswatch values) */
+    --dm-slate-50: #F8F9FA; /* Off-white */
+    --dm-slate-100: #E9ECEF;
+    --dm-slate-200: #DEE2E6;
+    --dm-slate-300: #CED4DA;
+    --dm-slate-400: #ADB5BD;
+    --dm-slate-500: #6C757D; /* Medium Gray */
+    --dm-slate-600: #495057;
+    --dm-slate-700: #343A40;
+    --dm-slate-800: #212529;
+    --dm-slate-900: #1a1e21; /* Dark Gray */
+    --dm-slate-950: #141619; /* Very Dark Gray */
+
+    /* Blues (for primary/info, etc.) */
+    --dm-blue-50: #e0f7fa;
+    --dm-blue-100: #b2ebf2;
+    --dm-blue-200: #80deea;
+    --dm-blue-300: #4dd0e1;
+    --dm-blue-400: #26c6da;
+    --dm-blue-500: #00bcd4; /* Bootswatch primary might be close to this or lighter */
+    --dm-blue-600: #00acc1;
+    --dm-blue-700: #0097a7;
+    --dm-blue-800: #00838f;
+    --dm-blue-900: #006064;
+    --dm-blue-950: #004d40;
+
+    /* Green (Success) */
+    --dm-green-500: #28a745;
+    --dm-green-400: #49cc61;
+    --dm-green-300: #6fd180;
+    --dm-green-600: #218838;
+
+    /* Red (Danger) */
+    --dm-red-500: #dc3545;
+    --dm-red-400: #e35a67;
+    --dm-red-300: #eb808a;
+    --dm-red-600: #c82333;
+
+    /* Amber (Warning) */
+    --dm-amber-500: #ffc107;
+    --dm-amber-400: #ffcd38;
+    --dm-amber-300: #ffd865;
+    --dm-amber-600: #e0a800;
+
+    /* Sky (Info - often similar to primary but distinct) */
+    --dm-sky-500: #17a2b8;
+    --dm-sky-400: #26d2e9;
+    --dm-sky-300: #51daec;
+    --dm-sky-600: #138496;
+
+    /* Semantic colors */
+    --dm-background: var(--dm-slate-900);
+    --dm-background-alt: var(--dm-slate-800);
+    --dm-surface: var(--dm-slate-800);
+    --dm-surface-raised: var(--dm-slate-700);
+    --dm-surface-overlay: rgba(0, 0, 0, 0.7);
+
+    /* Text */
+    --dm-text: var(--dm-slate-200);
+    --dm-text-secondary: var(--dm-slate-400);
+    --dm-text-muted: var(--dm-slate-500);
+    --dm-text-disabled: var(--dm-slate-600);
+    --dm-text-inverse: var(--dm-slate-900);
+
+    /* Borders */
+    --dm-border: var(--dm-slate-700);
+    --dm-border-light: var(--dm-slate-800);
+    --dm-border-dark: var(--dm-slate-600);
+    --dm-border-focus: var(--dm-blue-500); /* Use a vibrant blue for focus */
+    --dm-focus-ring: rgba(0, 188, 212, 0.3); /* Based on dm-blue-500 */
+    --dm-focus-ring-danger: rgba(220, 53, 69, 0.3); /* Based on dm-red-500 */
+
+    /* Interactive States */
+    --dm-hover-bg: rgba(255, 255, 255, 0.07);
+    --dm-active-bg: rgba(255, 255, 255, 0.1);
+    --dm-selected-bg: var(--dm-blue-600);
+    --dm-disabled-opacity: 0.4;
+
+    /* Brand Colors */
+    --dm-primary: var(--dm-blue-500);
+    --dm-primary-dark: var(--dm-blue-700);
+    --dm-primary-light: var(--dm-blue-300);
+    --dm-primary-hover: var(--dm-blue-400);
+    --dm-primary-active: var(--dm-blue-600);
+
+    --dm-secondary: var(--dm-slate-500);
+    --dm-secondary-hover: var(--dm-slate-400);
+    --dm-secondary-active: var(--dm-slate-300);
+
+    /* Status Colors */
+    --dm-success: var(--dm-green-500);
+    --dm-success-hover: var(--dm-green-400);
+    --dm-success-active: var(--dm-green-600);
+    --dm-success-light: rgba(40, 167, 69, 0.2);
+    --dm-success-dark: var(--dm-green-600);
+
+    --dm-danger: var(--dm-red-500);
+    --dm-danger-hover: var(--dm-red-400);
+    --dm-danger-active: var(--dm-red-600);
+    --dm-danger-light: rgba(220, 53, 69, 0.2);
+    --dm-danger-dark: var(--dm-red-600);
+
+    --dm-warning: var(--dm-amber-400);
+    --dm-warning-hover: var(--dm-amber-300);
+    --dm-warning-active: var(--dm-amber-500);
+    --dm-warning-text: var(--dm-amber-900);
+    --dm-warning-light: rgba(255, 193, 7, 0.2);
+    --dm-warning-dark: var(--dm-amber-600);
+
+    --dm-info: var(--dm-sky-500);
+    --dm-info-hover: var(--dm-sky-400);
+    --dm-info-active: var(--dm-sky-600);
+    --dm-info-light: rgba(23, 162, 184, 0.2);
+    --dm-info-dark: var(--dm-sky-600);
+
+    /* Background Tints */
+    --dm-primary-bg: rgba(0, 188, 212, 0.15);
+    --dm-secondary-bg: rgba(108, 117, 125, 0.15);
+    --dm-success-bg: rgba(40, 167, 69, 0.15);
+    --dm-danger-bg: rgba(220, 53, 69, 0.15);
+    --dm-warning-bg: rgba(255, 193, 7, 0.15);
+    --dm-info-bg: rgba(23, 162, 184, 0.15);
+
+    /* Semantic Surface Colors */
+    --dm-surface-secondary: var(--dm-slate-900);
+    --dm-card-bg: var(--dm-slate-800);
+    --dm-card-border: var(--dm-slate-700);
+
+    /* Legacy color names (kept for backwards compatibility) */
+    --dm-light: var(--dm-slate-200);
+    --dm-dark: var(--dm-slate-800);
+    --dm-white: #ffffff;
+    --dm-black: #000000;
+
+    /* Grays (mapped to Slate) */
+    --dm-gray-50: var(--dm-slate-50);
+    --dm-gray-100: var(--dm-slate-100);
+    --dm-gray-200: var(--dm-slate-200);
+    --dm-gray-300: var(--dm-slate-300);
+    --dm-gray-400: var(--dm-slate-400);
+    --dm-gray-500: var(--dm-slate-500);
+    --dm-gray-600: var(--dm-slate-600);
+    --dm-gray-700: var(--dm-slate-700);
+    --dm-gray-800: var(--dm-slate-800);
+    --dm-gray-900: var(--dm-slate-900);
+    --dm-gray-950: var(--dm-slate-950);
+
+    /* Component-specific variables */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: var(--dm-slate-800);
+
+    --dm-table-border: var(--dm-border);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    --dm-autocomplete-bg: var(--dm-surface);
+    --dm-autocomplete-border: var(--dm-border);
+    --dm-autocomplete-shadow: var(--dm-shadow-md);
+    --dm-autocomplete-item-hover: var(--dm-hover-bg);
+    --dm-autocomplete-item-active: var(--dm-selected-bg);
+    --dm-autocomplete-highlight: var(--dm-primary-light);
+
+    --dm-pillbox-bg: var(--dm-surface);
+    --dm-pillbox-border: var(--dm-border);
+    --dm-pill-bg: var(--dm-gray-700); /* Darker pill background for dark theme */
+    --dm-pill-color: var(--dm-text);
+    --dm-pill-hover-bg: var(--dm-gray-600);
+
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+    --dm-tab-active-border: var(--dm-primary);
+    --dm-tab-active-text: var(--dm-primary);
+
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+}
+
+/* Syntax highlighting tokens for grayve (assuming similar to dark theme) */
+.dm-theme-grayve .code-block .syntax-keyword {
+    color: #c792ea; /* Purple */
+    font-weight: 500;
+}
+
+.dm-theme-grayve .code-block .syntax-string,
+.dm-theme-grayve .code-block .syntax-template-string {
+    color: #c3e88d; /* Green */
+}
+
+.dm-theme-grayve .code-block .syntax-function {
+    color: #82aaff; /* Light Blue */
+}

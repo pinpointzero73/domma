@@ -1,0 +1,438 @@
+/*!
+ * Domma Tools CSS v0.8.0b
+ * Dynamic Object Manipulation & Modeling API
+ * (c) 2025 Darryl Waterhouse & DCBW-IT
+ * Built: 2025-12-16T10:05:30.315Z
+ * Commit: 002e339
+ */
+
+/*!
+ * Domma Tools CSS
+ * Styles for Theme Roller, Page Roller, and Editor components
+ */
+
+/* ============================================
+   BUTTON ALIASES FOR TOOLS
+   ============================================ */
+
+/* Tools use .dm-btn as alias for .btn from elements.css */
+.dm-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    border-radius: var(--dm-radius-md);
+    font-size: var(--dm-text-sm);
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--dm-transition-base);
+    background: var(--dm-surface);
+    color: var(--dm-text);
+    border-color: var(--dm-border);
+}
+
+.dm-btn:hover:not(:disabled) {
+    background: var(--dm-hover-bg);
+}
+
+.dm-btn:focus {
+    outline: none;
+    box-shadow: var(--dm-focus-ring);
+}
+
+.dm-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.dm-btn-primary {
+    background: var(--dm-primary);
+    color: var(--dm-white);
+    border-color: var(--dm-primary);
+}
+
+.dm-btn-primary:hover:not(:disabled) {
+    background: var(--dm-primary-hover);
+}
+
+.dm-btn-secondary {
+    background: var(--dm-secondary);
+    color: var(--dm-white);
+    border-color: var(--dm-secondary);
+}
+
+.dm-btn-secondary:hover:not(:disabled) {
+    background: var(--dm-secondary-hover);
+}
+
+/* ============================================
+   THEME ROLLER
+   ============================================ */
+
+/* Container */
+.dm-theme-roller {
+    background: var(--dm-surface);
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-xl);
+    overflow: hidden;
+}
+
+/* Header */
+.dm-theme-roller-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: var(--dm-background-alt);
+    border-bottom: 1px solid var(--dm-border);
+}
+
+.dm-theme-roller-title {
+    font-size: var(--dm-text-xl);
+    font-weight: 600;
+    margin: 0;
+    color: var(--dm-text);
+}
+
+.dm-theme-roller-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* Theme Toggle Buttons */
+.dm-theme-toggle {
+    display: flex;
+    background: var(--dm-gray-200);
+    border-radius: var(--dm-radius-full);
+    padding: 0.25rem;
+}
+
+.dm-theme-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--dm-radius-full);
+    background: transparent;
+    color: var(--dm-text-muted);
+    cursor: pointer;
+    font-size: var(--dm-text-sm);
+    font-weight: 500;
+    transition: all var(--dm-transition-fast);
+}
+
+.dm-theme-btn:hover {
+    color: var(--dm-text);
+}
+
+.dm-theme-btn.active {
+    background: var(--dm-primary);
+    color: var(--dm-white);
+}
+
+/* Presets */
+.dm-theme-roller-presets {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--dm-border);
+    flex-wrap: wrap;
+}
+
+.dm-presets-label {
+    font-size: var(--dm-text-sm);
+    color: var(--dm-text-muted);
+    margin-right: 0.5rem;
+}
+
+.dm-preset-btn {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-full);
+    background: var(--dm-surface);
+    color: var(--dm-text-secondary);
+    cursor: pointer;
+    font-size: var(--dm-text-xs);
+    font-weight: 500;
+    transition: all var(--dm-transition-fast);
+}
+
+.dm-preset-btn:hover {
+    border-color: var(--dm-primary);
+    color: var(--dm-primary);
+}
+
+.dm-preset-btn.active {
+    background: var(--dm-primary);
+    border-color: var(--dm-primary);
+    color: var(--dm-white);
+}
+
+/* Sections (Accordion) */
+.dm-theme-roller-sections {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.dm-theme-roller-sections .accordion-item {
+    border-bottom: 1px solid var(--dm-border);
+}
+
+.dm-theme-roller-sections .accordion-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: var(--dm-surface);
+    cursor: pointer;
+    font-weight: 500;
+    transition: background var(--dm-transition-fast);
+}
+
+.dm-theme-roller-sections .accordion-header:hover {
+    background: var(--dm-hover-bg);
+}
+
+.dm-theme-roller-sections .accordion-content {
+    padding: 1rem 1.5rem;
+    background: var(--dm-background-alt);
+}
+
+/* Variable Groups */
+.dm-var-group {
+    margin-bottom: 1.5rem;
+}
+
+.dm-var-group:last-child {
+    margin-bottom: 0;
+}
+
+.dm-var-group-title {
+    font-size: var(--dm-text-sm);
+    font-weight: 600;
+    color: var(--dm-text-secondary);
+    margin: 0 0 0.75rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.dm-var-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+/* Variable Items */
+.dm-var-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.dm-var-item label {
+    font-size: var(--dm-text-xs);
+    color: var(--dm-text-muted);
+    font-weight: 500;
+}
+
+/* Color Input */
+.dm-var-color .dm-color-input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.dm-color-input-wrapper input[type="color"] {
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--dm-border);
+    border-radius: var(--dm-radius-md);
+    cursor: pointer;
+    padding: 0;
+    background: none;
+}
+
+.dm-color-input-wrapper input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 2px;
+}
+
+.dm-color-input-wrapper input[type="color"]::-webkit-color-swatch {
+    border-radius: 2px;
+    border: none;
+}
+
+.dm-color-text {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-md);
+    font-family: var(--dm-font-mono);
+    font-size: var(--dm-text-sm);
+    background: var(--dm-surface);
+    color: var(--dm-text);
+    text-transform: uppercase;
+}
+
+.dm-color-text:focus {
+    outline: none;
+    border-color: var(--dm-primary);
+}
+
+/* Size/Range Input */
+.dm-var-size .dm-size-input-wrapper,
+.dm-var-transition .dm-size-input-wrapper,
+.dm-var-opacity .dm-size-input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.dm-size-input-wrapper input[type="range"] {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--dm-gray-300);
+    appearance: none;
+    cursor: pointer;
+}
+
+.dm-size-input-wrapper input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--dm-primary);
+    cursor: pointer;
+    transition: transform var(--dm-transition-fast);
+}
+
+.dm-size-input-wrapper input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.dm-size-input-wrapper input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--dm-primary);
+    cursor: pointer;
+    border: none;
+    transition: transform var(--dm-transition-fast);
+}
+
+.dm-size-input-wrapper input[type="range"]::-moz-range-thumb:hover {
+    transform: scale(1.2);
+}
+
+.dm-size-value {
+    min-width: 60px;
+    text-align: right;
+    font-family: var(--dm-font-mono);
+    font-size: var(--dm-text-xs);
+    color: var(--dm-text-muted);
+}
+
+/* Select Input */
+.dm-var-select select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-md);
+    background: var(--dm-surface);
+    color: var(--dm-text);
+    font-size: var(--dm-text-sm);
+    cursor: pointer;
+}
+
+.dm-var-select select:focus {
+    outline: none;
+    border-color: var(--dm-primary);
+}
+
+/* Preview Section */
+.dm-theme-roller-preview {
+    padding: 1.5rem;
+    border-top: 1px solid var(--dm-border);
+    background: var(--dm-surface);
+}
+
+.dm-theme-roller-preview h4 {
+    font-size: var(--dm-text-sm);
+    font-weight: 600;
+    color: var(--dm-text-secondary);
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Actions */
+.dm-theme-roller-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--dm-border);
+    background: var(--dm-background-alt);
+    flex-wrap: wrap;
+}
+
+.dm-theme-roller-actions .btn,
+.dm-theme-roller-actions button {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+}
+
+/* ============================================
+   PAGE ROLLER
+   ============================================ */
+
+/* Page Roller uses standard Domma classes from elements.css */
+/* Any custom Page Roller specific styling goes here */
+
+.dm-page-roller {
+    /* Container styling if needed */
+}
+
+/* ============================================
+   EDITOR
+   ============================================ */
+
+/* Editor uses standard Domma classes from elements.css */
+/* Any custom Editor specific styling goes here */
+
+.dm-editor {
+    /* Container styling if needed */
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .dm-var-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dm-theme-roller-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .dm-theme-roller-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .dm-theme-roller-actions {
+        flex-direction: column;
+    }
+
+    .dm-theme-roller-actions .btn,
+    .dm-theme-roller-actions button {
+        width: 100%;
+    }
+}

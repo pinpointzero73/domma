@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026_01_21_12_22",
+  "buildDate": "2026-01-21T12:22:14.644Z",
+  "files": {
+    "minimal": "kickstart-minimal_2026_01_21_12_22.tar.gz",
+    "essentials": "kickstart-essentials_2026_01_21_12_22.tar.gz",
+    "full": "kickstart-full_2026_01_21_12_22.tar.gz",
+    "dataFocused": "kickstart-data-focused_2026_01_21_12_22.tar.gz",
+    "alias": "kickstart_2026_01_21_12_22.tar.gz"
+  }
+}
