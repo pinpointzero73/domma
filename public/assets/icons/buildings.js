@@ -4,6 +4,17 @@
  */
 
 export const buildings = {
+    // Generic
+    'building': {
+        viewBox: '0 0 24 24',
+        path: 'M3 21h18M5 21V7l7-4 7 4v14M9 21v-4h6v4M9 9h.01M15 9h.01M9 13h.01M15 13h.01',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+
     // Residential
     'house': {
         viewBox: '0 0 24 24',

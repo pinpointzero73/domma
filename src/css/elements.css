@@ -947,38 +947,66 @@ textarea:not([class])::placeholder {
 
 .input-group-icon > .input-group-addon {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    z-index: 1;
+    top: 0;
+    bottom: 0;
     display: flex;
     align-items: center;
-    color: var(--dm-gray-500);
+    justify-content: center;
+    pointer-events: none;
+    z-index: 1;
+    color: var(--dm-gray-600);
+    background-color: var(--dm-gray-100);
+    padding: 0 var(--dm-space-3);
 }
 
 .input-group-icon > .input-group-addon-left {
-    left: var(--dm-space-3);
+    left: 0;
+    border-right: 1px solid var(--dm-border, var(--dm-gray-300));
+    border-top-left-radius: var(--dm-radius-md);
+    border-bottom-left-radius: var(--dm-radius-md);
 }
 
 .input-group-icon > .input-group-addon-right {
-    right: var(--dm-space-3);
+    right: 0;
+    border-left: 1px solid var(--dm-border, var(--dm-gray-300));
+    border-top-right-radius: var(--dm-radius-md);
+    border-bottom-right-radius: var(--dm-radius-md);
+}
+
+/* Dark theme variants */
+[class*="-dark"] .input-group-icon > .input-group-addon {
+    color: var(--dm-gray-400);
+    background-color: var(--dm-gray-800);
+    border-color: var(--dm-gray-600);
 }
 
 /* Adjust input padding when icon is present */
 .input-group-icon.has-addon-left > .form-input,
-.input-group-icon.has-addon-left > input {
-    padding-left: 2.75rem;
+.input-group-icon.has-addon-left > .form-select,
+.input-group-icon.has-addon-left > .form-textarea,
+.input-group-icon.has-addon-left > input,
+.input-group-icon.has-addon-left > select,
+.input-group-icon.has-addon-left > textarea {
+    padding-left: 3.5rem;
 }
 
 .input-group-icon.has-addon-right > .form-input,
-.input-group-icon.has-addon-right > input {
-    padding-right: 2.75rem;
+.input-group-icon.has-addon-right > .form-select,
+.input-group-icon.has-addon-right > .form-textarea,
+.input-group-icon.has-addon-right > input,
+.input-group-icon.has-addon-right > select,
+.input-group-icon.has-addon-right > textarea {
+    padding-right: 3.5rem;
 }
 
 .input-group-icon.has-addon-left.has-addon-right > .form-input,
-.input-group-icon.has-addon-left.has-addon-right > input {
-    padding-left: 2.75rem;
-    padding-right: 2.75rem;
+.input-group-icon.has-addon-left.has-addon-right > .form-select,
+.input-group-icon.has-addon-left.has-addon-right > .form-textarea,
+.input-group-icon.has-addon-left.has-addon-right > input,
+.input-group-icon.has-addon-left.has-addon-right > select,
+.input-group-icon.has-addon-left.has-addon-right > textarea {
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
 }
 
 /* Prepend/Append style (addon outside input) */
@@ -1057,21 +1085,21 @@ textarea:not([class])::placeholder {
 }
 
 .input-group-sm.input-group-icon.has-addon-left > .form-input,
-.input-group-sm.input-group-icon.has-addon-left > input {
-    padding-left: 2rem;
+.input-group-sm.input-group-icon.has-addon-left > .form-select,
+.input-group-sm.input-group-icon.has-addon-left > .form-textarea,
+.input-group-sm.input-group-icon.has-addon-left > input,
+.input-group-sm.input-group-icon.has-addon-left > select,
+.input-group-sm.input-group-icon.has-addon-left > textarea {
+    padding-left: 2.75rem;
 }
 
 .input-group-sm.input-group-icon.has-addon-right > .form-input,
-.input-group-sm.input-group-icon.has-addon-right > input {
-    padding-right: 2rem;
-}
-
-.input-group-sm .input-group-addon-left {
-    left: var(--dm-space-2);
-}
-
-.input-group-sm .input-group-addon-right {
-    right: var(--dm-space-2);
+.input-group-sm.input-group-icon.has-addon-right > .form-select,
+.input-group-sm.input-group-icon.has-addon-right > .form-textarea,
+.input-group-sm.input-group-icon.has-addon-right > input,
+.input-group-sm.input-group-icon.has-addon-right > select,
+.input-group-sm.input-group-icon.has-addon-right > textarea {
+    padding-right: 2.75rem;
 }
 
 .input-group-lg .input-group-text {
@@ -1086,21 +1114,21 @@ textarea:not([class])::placeholder {
 }
 
 .input-group-lg.input-group-icon.has-addon-left > .form-input,
-.input-group-lg.input-group-icon.has-addon-left > input {
-    padding-left: 3.5rem;
+.input-group-lg.input-group-icon.has-addon-left > .form-select,
+.input-group-lg.input-group-icon.has-addon-left > .form-textarea,
+.input-group-lg.input-group-icon.has-addon-left > input,
+.input-group-lg.input-group-icon.has-addon-left > select,
+.input-group-lg.input-group-icon.has-addon-left > textarea {
+    padding-left: 4rem;
 }
 
 .input-group-lg.input-group-icon.has-addon-right > .form-input,
-.input-group-lg.input-group-icon.has-addon-right > input {
-    padding-right: 3.5rem;
-}
-
-.input-group-lg .input-group-addon-left {
-    left: var(--dm-space-4);
-}
-
-.input-group-lg .input-group-addon-right {
-    right: var(--dm-space-4);
+.input-group-lg.input-group-icon.has-addon-right > .form-select,
+.input-group-lg.input-group-icon.has-addon-right > .form-textarea,
+.input-group-lg.input-group-icon.has-addon-right > input,
+.input-group-lg.input-group-icon.has-addon-right > select,
+.input-group-lg.input-group-icon.has-addon-right > textarea {
+    padding-right: 4rem;
 }
 
 /* Dark theme support */
@@ -1108,10 +1136,6 @@ textarea:not([class])::placeholder {
     color: var(--dm-gray-300);
     background-color: var(--dm-gray-800);
     border-color: var(--dm-gray-600);
-}
-
-[class*="-dark"].input-group-icon > .input-group-addon {
-    color: var(--dm-gray-400);
 }
 
 /* Focus state - highlight addon when input is focused */
