@@ -170,20 +170,26 @@ class Card extends Component {
         const header = this.element.querySelector('.card-header');
         if (!header) return;
 
-        // Wrap existing children in a content span
-        const contentWrapper = document.createElement('span');
-        contentWrapper.className = 'card-header-content';
-        while (header.firstChild) {
-            contentWrapper.appendChild(header.firstChild);
+        // Check if content wrapper already exists (from _render)
+        let contentWrapper = header.querySelector('.card-header-content');
+        if (!contentWrapper) {
+            // Wrap existing children in a content span
+            contentWrapper = document.createElement('span');
+            contentWrapper.className = 'card-header-content';
+            while (header.firstChild) {
+                contentWrapper.appendChild(header.firstChild);
+            }
+            header.appendChild(contentWrapper);
         }
-        header.appendChild(contentWrapper);
 
-        // Add icon span
-        const iconWrapper = document.createElement('span');
-        iconWrapper.className = 'card-collapse-icon';
-        const iconSvg = Domma.icons.render(this.options.collapseIcon, {size: 16});
-        iconWrapper.appendChild(iconSvg);
-        header.appendChild(iconWrapper);
+        // Add icon span (only if it doesn't exist)
+        if (!header.querySelector('.card-collapse-icon')) {
+            const iconWrapper = document.createElement('span');
+            iconWrapper.className = 'card-collapse-icon';
+            const iconSvg = Domma.icons.render(this.options.collapseIcon, {size: 16});
+            iconWrapper.appendChild(iconSvg);
+            header.appendChild(iconWrapper);
+        }
     }
 
     _bindHeaderClick() {

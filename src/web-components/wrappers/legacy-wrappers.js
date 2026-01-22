@@ -849,6 +849,40 @@ export function createCardWrapper(selector, options = {}) {
         }
     }
 
+    // Create header from title/icon options if provided
+    if (options.title) {
+        const header = document.createElement('div');
+        header.setAttribute('slot', 'header');
+        header.className = 'card-header';
+
+        const titleElement = document.createElement('h4');
+        titleElement.className = 'card-title';
+
+        if (options.icon) {
+            const iconSpan = document.createElement('span');
+            iconSpan.setAttribute('data-icon', options.icon);
+            iconSpan.className = 'card-title-icon';
+            titleElement.appendChild(iconSpan);
+        }
+
+        titleElement.appendChild(document.createTextNode(options.title));
+        header.appendChild(titleElement);
+        webComponent.appendChild(header);
+    }
+
+    // Create body from content option if provided
+    if (options.content) {
+        const body = document.createElement('div');
+        body.setAttribute('slot', 'body');
+        body.className = 'card-body';
+        // Use Domma sanitization if available
+        const sanitizedContent = (typeof Domma !== 'undefined' && Domma.sanitize && typeof Domma.sanitize.sanitize === 'function')
+            ? Domma.sanitize.sanitize(options.content)
+            : options.content;
+        body.innerHTML = sanitizedContent;
+        webComponent.appendChild(body);
+    }
+
     // Move child elements into web component
     // Preserve card-header, card-body, card-footer structure
     const children = Array.from(element.children);

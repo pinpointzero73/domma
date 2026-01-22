@@ -1,11 +1,11 @@
 {
   "version": "0.9.18",
-  "built": "21/01/2026 13:23",
-  "commit": "550a26d",
+  "built": "22/01/2026 09:36",
+  "commit": "24afcaa",
   "bundles": {
     "full": {
-      "size": 434,
-      "sizeFormatted": "434KB"
+      "size": 435,
+      "sizeFormatted": "435KB"
     },
     "minimal": {
       "size": 165,
