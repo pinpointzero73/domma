@@ -42,6 +42,7 @@ export class DommaCard extends DommaElement {
                 border: 1px solid var(--dm-border, #e5e7eb);
                 border-radius: 8px;
                 overflow: hidden;
+                margin-bottom: 1.5rem;
                 transition: transform var(--animation-duration, 200ms) ease,
                            box-shadow var(--animation-duration, 200ms) ease;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -91,12 +92,14 @@ export class DommaCard extends DommaElement {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding: 1rem 1.5rem;
+                padding: 0;
                 border-bottom: 1px solid var(--dm-border, #e5e7eb);
+                background: var(--dm-surface-subtle, #f9fafb);
             }
 
             .card-header-content {
                 flex: 1;
+                background: var(--dm-surface-subtle, #f9fafb);
             }
 
             .card-collapse-icon {
@@ -105,6 +108,8 @@ export class DommaCard extends DommaElement {
                 align-items: center;
                 transition: transform 200ms ease;
                 color: var(--dm-text-muted, #6b7280);
+                background: var(--dm-surface-subtle, #f9fafb);
+                padding: 1rem 1.5rem;
             }
 
             :host([collapsed]) .card-collapse-icon {
