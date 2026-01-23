@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's New - Domma Changelog</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/logo/domma-icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="../dist/domma.css">
+    <link rel="stylesheet" href="../dist/elements.css">
+    <link rel="stylesheet" href="../dist/themes/domma-themes.css">
+    <style>
+        .content-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        #progression-container {
+            margin: 3rem 0;
+        }
+
+        .loading-message {
+            text-align: center;
+            padding: 3rem;
+            color: var(--dm-gray-600);
+            font-size: 1.1rem;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 3rem;
+            color: var(--dm-danger);
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="public">
+
+<header class="page-header">
+    <h1>What's New</h1>
+    <p>Release history and changelog for Domma framework</p>
+</header>
+
+<section class="content-section">
+    <div id="progression-container">
+        <div class="loading-message">Loading release history...</div>
+    </div>
+</section>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<script src="../dist/domma.min.js"></script>
+<script type="module" src="../layouts/js/layout.js"></script>
+<script>
+    // Initialize icons
+    Domma.icons.scan();
+
+    // Load and display release progression
+    fetch('../data/releases.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to load release data');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const container = document.getElementById('progression-container');
+            container.textContent = ''; // Clear loading message
+
+            // Initialize Progression component in timeline mode
+            const progression = Domma.elements.progression('#progression-container', {
+                mode: 'timeline',
+                layout: 'centered',
+                theme: 'modern',
+                animation: true,
+                animationDelay: 150,
+                items: data.releases
+            });
+
+            // Store latest version in localStorage (mark as seen)
+            if (data.latestVersion) {
+                Domma.storage.set('lastSeenVersion', data.latestVersion);
+            }
+        })
+        .catch(error => {
+            console.error('Error loading release data:', error);
+            const container = document.getElementById('progression-container');
+            container.textContent = ''; // Clear existing content
+
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = 'Failed to load release history. Please try again later.';
+            container.appendChild(errorDiv);
+        });
+</script>
+</body>
+</html>

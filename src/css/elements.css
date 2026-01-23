@@ -1188,6 +1188,20 @@ textarea:not([class])::placeholder {
     color: var(--dm-white);
 }
 
+/* Pulse animation for new content indicators */
+.badge-pulse {
+    animation: badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(var(--dm-info-rgb), 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(var(--dm-info-rgb), 0);
+    }
+}
+
 
 /* ============================================
    PILL
@@ -5711,49 +5725,8 @@ code {
     /* Default styles already applied above */
 }
 
-/* Centered Layout - Mobile default: left-aligned */
-.dm-timeline-centered::before {
-    content: '';
-    position: absolute;
-    left: 30px; /* Mobile default: left-aligned line */
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--dm-gray-300);
-    transform: none;
-}
-
-.dm-timeline-centered .dm-timeline-item {
-    width: 100%; /* Mobile default: full width */
-    left: 0;
-    padding-left: var(--dm-space-16); /* Mobile: space for left line */
-    padding-right: 0;
-    justify-content: flex-start;
-}
-
-.dm-timeline-centered .dm-timeline-item:nth-child(even) {
-    width: 100%; /* Mobile: same as odd items */
-    left: 0;
-    padding-left: var(--dm-space-16);
-    padding-right: 0;
-    justify-content: flex-start;
-}
-
-.dm-timeline-centered .dm-timeline-year {
-    order: 0; /* Mobile: year badge on left */
-    margin-right: var(--dm-space-6);
-    margin-left: 0;
-    position: absolute;
-    left: 0;
-}
-
-.dm-timeline-centered .dm-timeline-item:nth-child(even) .dm-timeline-year {
-    order: 0; /* Mobile: same as odd items */
-    margin-right: var(--dm-space-6);
-    margin-left: 0;
-    position: absolute;
-    left: 0;
-}
+/* Centered Layout - DEPRECATED: Use dm-progression-centered instead */
+/* Old timeline-centered styles removed - progression uses CSS Grid */
 
 /* Horizontal Layout */
 .dm-timeline-horizontal {
@@ -5801,52 +5774,7 @@ code {
 }
 
 /* Desktop (≥769px) - Timeline/Progression centered enhancements */
-@media (min-width: 769px) {
-    .dm-timeline-centered::before {
-        left: 50%; /* Center line on desktop */
-        transform: translateX(-50%);
-    }
-
-    .dm-timeline-centered .dm-timeline-item {
-        width: 50%; /* Half width for alternating layout */
-        left: 0;
-        padding-left: 0;
-        padding-right: var(--dm-space-8);
-        justify-content: flex-end;
-    }
-
-    .dm-timeline-centered .dm-timeline-item:nth-child(even) {
-        left: 50%;
-        padding-left: var(--dm-space-8);
-        padding-right: 0;
-        justify-content: flex-start;
-    }
-
-    .dm-timeline-centered .dm-timeline-year {
-        order: 1;
-        margin-right: 0;
-        margin-left: var(--dm-space-6);
-        position: relative;
-        left: auto;
-        width: 80px;
-    }
-
-    .dm-timeline-horizontal {
-        flex-direction: column;
-    }
-
-    .dm-timeline-horizontal .dm-timeline-item {
-        flex-direction: row;
-        min-width: auto;
-        margin-bottom: var(--dm-space-6);
-    }
-
-    .dm-timeline-horizontal .dm-timeline-year {
-        margin-bottom: 0;
-        margin-right: var(--dm-space-4);
-        width: 100px;
-    }
-}
+/* DEPRECATED: Old timeline-centered desktop styles removed - progression uses CSS Grid */
 
 /* Dark Theme Support */
 [data-theme="dark"] .dm-timeline-content {
@@ -5944,18 +5872,73 @@ code {
 .dm-progression-centered {
     max-width: 1200px;
     margin: 0 auto;
+    position: relative;
 }
 
+/* Central divider line */
+.dm-progression-centered::before {
+    content: '';
+    position: absolute;
+    left: 30px; /* Mobile default */
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--dm-gray-300);
+    transform: none;
+    z-index: 0;
+}
+
+@media (min-width: 769px) {
+    .dm-progression-centered::before {
+        left: 50%; /* Center line on desktop */
+        transform: translateX(-50%);
+    }
+}
+
+/* Centered grid: simple 5-column layout */
 .dm-progression-centered .dm-progression-item {
+    display: grid;
+    /* [left content] [left marker] [center gap] [right marker] [right content] */
+    grid-template-columns: 1fr 120px 20px 120px 1fr;
+    column-gap: var(--dm-space-4, 1rem);
+    align-items: start;
     width: 100%;
+    position: relative;
+    z-index: 1;
 }
 
-.dm-progression-centered .dm-progression-item:nth-child(odd) {
-    flex-direction: row;
+/* Odd items: content in col 1, marker in col 2 */
+.dm-progression-centered .dm-progression-item:nth-child(odd) .dm-progression-content {
+    grid-column: 1;
+    grid-row: 1; /* Force same row as marker */
+    justify-self: end;
+    align-self: start;
+    margin-right: 0; /* Gap handled by column-gap */
 }
 
-.dm-progression-centered .dm-progression-item:nth-child(even) {
-    flex-direction: row-reverse;
+.dm-progression-centered .dm-progression-item:nth-child(odd) .dm-progression-marker {
+    grid-column: 2;
+    grid-row: 1; /* Force same row as content */
+    justify-self: center;
+    align-self: start;
+    margin-right: 0;
+}
+
+/* Even items: marker in col 4, content in col 5 */
+.dm-progression-centered .dm-progression-item:nth-child(even) .dm-progression-marker {
+    grid-column: 4;
+    grid-row: 1; /* Force same row as content */
+    justify-self: center;
+    align-self: start;
+    margin-right: 0;
+}
+
+.dm-progression-centered .dm-progression-item:nth-child(even) .dm-progression-content {
+    grid-column: 5;
+    grid-row: 1; /* Force same row as marker */
+    justify-self: start;
+    align-self: start;
+    margin-left: 0; /* Gap handled by column-gap */
 }
 
 /* Horizontal layout */
@@ -6237,10 +6220,6 @@ code {
 
 /* Desktop (≥769px) - Progression enhancements */
 @media (min-width: 769px) {
-    .dm-progression-centered .dm-progression-item:nth-child(even) {
-        flex-direction: row-reverse; /* Alternate direction on desktop */
-    }
-
     .dm-progression-horizontal {
         flex-direction: row; /* Horizontal on desktop */
     }

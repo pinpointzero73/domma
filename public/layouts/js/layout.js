@@ -788,6 +788,33 @@ import {ConsentModule} from './modules/consent.js';
                     $brandContainer.get(0).appendChild(userInfoEl);
                 }
 
+                // Add "What's New?" pill (visible to all visitors)
+                if ($brandContainer.length) {
+                    const changelogPill = document.createElement('a');
+                    changelogPill.href = levelsUp > 0 ? '../'.repeat(levelsUp) + 'changelog/' : 'changelog/';
+                    changelogPill.className = 'navbar-changelog-pill';
+                    changelogPill.style.cssText = 'margin-left: 1rem; text-decoration: none;';
+
+                    const pillBadge = document.createElement('span');
+                    pillBadge.className = 'badge badge-info';
+                    pillBadge.textContent = "What's New?";
+                    changelogPill.appendChild(pillBadge);
+
+                    // Check for new releases (pulse animation)
+                    const lastSeen = localStorage.getItem('domma:lastSeenVersion');
+                    const dataPath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'data/releases.json' : 'data/releases.json';
+                    fetch(dataPath)
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.latestVersion && data.latestVersion !== lastSeen) {
+                                pillBadge.classList.add('badge-pulse');
+                            }
+                        })
+                        .catch(() => {}); // Fail silently
+
+                    $brandContainer.get(0).appendChild(changelogPill);
+                }
+
                 // Inject navbar actions (config-driven or legacy fallback)
                 const $navbarCollapse = $('#main-navbar .navbar-collapse');
                 if ($navbarCollapse.length) {

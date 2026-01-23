@@ -1,0 +1,35 @@
+{
+  "releases": [
+    {
+      "year": "v0.10.1",
+      "title": "Post-Install CLI & Documentation",
+      "description": "Added post-install script with CLI tooling (domma-cli.js), comprehensive AI assistance setup documentation (AI_ASSISTANCE_SETUP.md), and automated environment configuration. Enhanced developer onboarding experience with 509 lines of new tooling infrastructure.",
+      "date": "2026-01-23"
+    },
+    {
+      "year": "v0.10.0",
+      "title": "Blueprints System & Developer Documentation",
+      "description": "Major release introducing the Blueprints system for unified schema management across Models, Forms, and CRUD operations. Added comprehensive Blueprints.md documentation (1,334 lines), enhanced CLAUDE.md developer guide, updated TypeScript definitions for Models, and improved Kickstart templates. Rebuilt all distribution bundles with latest changes.",
+      "date": "2026-01-23"
+    },
+    {
+      "year": "Jan 22-23",
+      "title": "Build System Updates",
+      "description": "Multiple distribution bundle rebuilds with updated build metadata, version synchronisation, and archive regeneration. Maintained consistency across all bundle variants (minimal, essentials, data-focused, full, complete, grayve) and module formats (ESM, minified).",
+      "date": "2026-01-22"
+    },
+    {
+      "year": "Jan 21",
+      "title": "CDN Distribution Foundation",
+      "description": "Established public/dist folder structure for CDN distribution with initial bundle archives. Updated .gitignore for better build artefact management. Set up infrastructure for seamless CDN delivery of Domma framework files.",
+      "date": "2026-01-21"
+    },
+    {
+      "year": "v0.9.x",
+      "title": "Previous Releases",
+      "description": "Earlier releases focusing on core framework development, component library expansion, and ecosystem maturity. Established DOM manipulation API, utilities, reactive models, UI components, and comprehensive theming system.",
+      "date": "2025-12"
+    }
+  ],
+  "latestVersion": "v0.10.1"
+}
