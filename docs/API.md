@@ -29,7 +29,7 @@ Domma provides short aliases for convenience, similar to jQuery's `$` and Lodash
     // All aliases are available globally
     $('#app').addClass('active');              // $ = Domma (DOM)
     _.debounce(fn, 100);                        // _ = utils
-    M.create(schema, data);                     // M = models
+    M.create(blueprint, data);                     // M = models
     D().format('YYYY-MM-DD');                   // D = dates
     S.set('key', 'value');                      // S = storage
     H.get('/api/data');                         // H = http
@@ -1812,3 +1812,48 @@ The Elements namespace includes 27+ additional components. For complete document
 - **Tools**: `editor`, `themeRoller`, `pageRoller` (in tools bundle)
 
 See [DommaDocumentation.md](./DommaDocumentation.md#elements) for full component reference.
+
+---
+
+## Blueprints
+
+Domma's unified schema system - define your data structure once and use it everywhere.
+
+**See [Blueprints.md](./Blueprints.md) for comprehensive documentation including:**
+
+- Blueprint anatomy and field types
+- Validation options (built-in and custom)
+- Blueprint composition (`M.extend()`, `M.pick()`, `M.omit()`)
+- Integration with Models, Forms, and CRUD
+- Step-by-step tutorial
+- Real-world examples
+
+**Quick Example:**
+
+```javascript
+// Define blueprint once
+const userBlueprint = {
+    name: { type: 'string', required: true, minLength: 2 },
+    email: { type: 'email', required: true },
+    age: { type: 'number', min: 0, max: 120 }
+};
+
+// Use in Models
+const user = M.create(userBlueprint, { name: 'Alice', email: 'alice@example.com' });
+
+// Use in Forms
+const form = Domma.forms.create(userBlueprint, {
+    container: '#form',
+    onSubmit: (data) => console.log(data)
+});
+
+// Use in CRUD
+Domma.forms.crud('#crud', userBlueprint, {
+    apiUrl: '/api/users'
+});
+```
+
+**See also:**
+- [Models Showcase](../public/showcase/models/) - Reactive model examples
+- [Forms Showcase](../public/showcase/forms/) - Form generation examples
+- [Blueprints Showcase](../public/showcase/blueprints/) - Interactive blueprint demos

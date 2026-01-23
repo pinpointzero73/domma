@@ -60,7 +60,7 @@ garage/
     └── app.min.js
 ```
 
-**Schema-Driven Approach (Nexus):**
+**Blueprint-Driven Approach (Nexus):**
 
 ```
 nexus/
@@ -68,7 +68,7 @@ nexus/
 ├── src/
 │   ├── app.js              # NexusApp class (458 lines)
 │   ├── storage.js          # NexusStorage with offline sync
-│   └── schemas.js          # Form schemas (Forma-style)
+│   └── blueprints.js          # Form blueprints (Forma-style)
 └── dist/
     └── app.min.js
 ```
@@ -339,10 +339,10 @@ async loadData() {
 **Use for form-based CRUD applications:**
 
 ```javascript
-import { contactSchema } from './schemas.js';
+import { contactBlueprint } from './blueprints.js';
 
-// Initialise CRUD with schema
-const crud = Domma.forms.crud('#crudContainer', contactSchema, {
+// Initialise CRUD with blueprint
+const crud = Domma.forms.crud('#crudContainer', contactBlueprint, {
   apiUrl: `${config.apiUrl}/contacts`,
   onCreate: (data) => console.log('Created:', data),
   onUpdate: (data) => console.log('Updated:', data),
@@ -350,17 +350,17 @@ const crud = Domma.forms.crud('#crudContainer', contactSchema, {
 });
 
 // CRUD automatically handles:
-// - Form generation from schema
+// - Form generation from blueprint
 // - Validation
 // - API calls (GET, POST, PUT, DELETE)
 // - Loading states
 // - Error handling
 ```
 
-**Schema Example:**
+**Blueprint Example:**
 
 ```javascript
-export const contactSchema = {
+export const contactBlueprint = {
   title: 'Contact',
   apiUrl: '/contacts',  // Relative to config.apiUrl
   fields: [

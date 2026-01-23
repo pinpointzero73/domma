@@ -739,7 +739,7 @@ import {ConsentModule} from './modules/consent.js';
               ${config.brand?.text || 'Domma'}
               ${config.brand?.showVersion ? `<span class="header-version">v${data.version}</span>` : ''}
             </span>
-          `);
+          `, {safe: false});
                 }
 
                 // Add user name and role badge next to brand if logged in

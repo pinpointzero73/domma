@@ -412,7 +412,7 @@
 
 <header class="page-header">
   <h1>Form Generation</h1>
-  <p>Schema-driven forms with validation, modals, wizards, and complete CRUD operations.</p>
+  <p>Blueprint-driven forms with validation, modals, wizards, and complete CRUD operations.</p>
 </header>
 
 <div class="container py-8" id="forms-showcase-content">
@@ -430,11 +430,11 @@
           <h2 class="text-xl font-semibold">Basic Form Generation</h2>
         </div>
         <div class="card-body">
-          <p class="mb-4">Generate forms automatically from schema definitions with built-in validation and type
+          <p class="mb-4">Generate forms automatically from blueprint definitions with built-in validation and type
             mapping.</p>
 
-          <pre class="code-block language-javascript">// Define a schema
-const userSchema = {
+          <pre class="code-block language-javascript">// Define a blueprint
+const userBlueprint = {
     name: {
         type: 'string',
         label: 'Full Name',
@@ -468,7 +468,7 @@ const userSchema = {
 };
 
 // Create form
-const form = Domma.forms.create(userSchema, initialData, {
+const form = Domma.forms.create(userBlueprint, initialData, {
     onSubmit: (data, formInstance) => {
         console.log('Form submitted:', data);
     }
@@ -490,7 +490,7 @@ form.renderTo('#form-container');</pre>
               </button>
             </div>
             <div id="basic-form-container"></div>
-            <div class="forms-output" id="basic-form-output">Click "Generate Form" to see the schema-driven form...
+            <div class="forms-output" id="basic-form-output">Click "Generate Form" to see the blueprint-driven form...
             </div>
           </div>
         </div>
@@ -506,7 +506,7 @@ form.renderTo('#form-container');</pre>
             sections.</p>
 
           <pre class="code-block language-javascript">// Grid layout with sections
-const profileForm = Domma.forms.create(schema, data, {
+const profileForm = Domma.forms.create(blueprint, data, {
     layout: 'grid',
     columns: 2,
     sections: [
@@ -555,7 +555,7 @@ const profileForm = Domma.forms.create(schema, data, {
           <p class="mb-4">Create professional modal forms with automatic event handling and error management.</p>
 
           <pre class="code-block language-javascript">// Modal form
-const modal = Domma.forms.modal(userSchema, userData, {
+const modal = Domma.forms.modal(userBlueprint, userData, {
     title: 'Edit User Profile',
     size: 'medium',
     saveText: 'Update Profile',
@@ -600,7 +600,7 @@ const wizard = Domma.forms.wizard([
     {
         title: 'Account Details',
         description: 'Basic account information',
-        schema: {
+        blueprint: {
             username: { type: 'string', required: true },
             email: { type: 'email', required: true }
         }
@@ -608,7 +608,7 @@ const wizard = Domma.forms.wizard([
     {
         title: 'Profile Information',
         description: 'Tell us about yourself',
-        schema: {
+        blueprint: {
             name: { type: 'string', required: true },
             bio: { type: 'textarea' }
         }
@@ -616,7 +616,7 @@ const wizard = Domma.forms.wizard([
     {
         title: 'Preferences',
         description: 'Customize your experience',
-        schema: {
+        blueprint: {
             theme: { type: 'select', options: ['light', 'dark'] },
             notifications: { type: 'boolean' }
         }
@@ -654,7 +654,7 @@ wizard.open();</pre>
 
           <pre class="code-block language-javascript">// Complete CRUD setup
 const userCrud = Domma.forms.crud({
-    schema: userSchema,
+    blueprint: userBlueprint,
     endpoint: '/api/users',
     tableSelector: '#users-table',
     title: 'Manage Users',
@@ -697,8 +697,8 @@ await userCrud.init();</pre>
         <div class="card-body">
           <p class="mb-4">Built-in and custom validators with real-time feedback and comprehensive error handling.</p>
 
-          <pre class="code-block language-javascript">// Schema with various validation rules
-const validationSchema = {
+          <pre class="code-block language-javascript">// Blueprint with various validation rules
+const validationBlueprint = {
     username: {
         type: 'string',
         required: true,
@@ -765,12 +765,12 @@ const validationSchema = {
             persistence.</p>
 
           <pre class="code-block language-javascript">// Create model with persistence
-const userModel = M.create(userSchema, initialData, {
+const userModel = M.create(userBlueprint, initialData, {
     persist: 'user-profile'  // Auto-save to localStorage
 });
 
 // Form automatically binds to model
-const form = Domma.forms.create(userSchema, userModel.get(), {
+const form = Domma.forms.create(userBlueprint, userModel.get(), {
     model: userModel,  // Two-way binding
     onSubmit: (data, formInstance) => {
         userModel.set(data);  // Updates model and saves to storage
@@ -818,7 +818,7 @@ userModel.onChange((changes) => {
                 Domma Forms Reference
                 <span data-icon="zap" class="text-lg"></span>
               </h2>
-              <p class="text-muted text-sm">Complete API reference for schema-driven form generation</p>
+              <p class="text-muted text-sm">Complete API reference for blueprint-driven form generation</p>
             </div>
 
             <!-- Field Types Section -->
@@ -1226,7 +1226,7 @@ form.renderTo('#container');</pre>
                     <button class="copy-btn mb-2" onclick="copyCodeExample(this)">
                       <span data-icon="copy"></span> Copy
                     </button>
-                    <pre class="code-block language-javascript">const modal = Domma.forms.modal(schema, data, {
+                    <pre class="code-block language-javascript">const modal = Domma.forms.modal(blueprint, data, {
   title: 'Edit User',
   onSave: async (data) => await api.save(data)
 });
@@ -1259,7 +1259,7 @@ wizard.open();</pre>
                       <span data-icon="copy"></span> Copy
                     </button>
                     <pre class="code-block language-javascript">const crud = Domma.forms.crud({
-  schema: userSchema,
+  blueprint: userBlueprint,
   endpoint: '/api/users',
   tableSelector: '#users-table'
 });
@@ -1290,8 +1290,8 @@ await crud.init();</pre>
           console.log('[Forms Showcase] Syntax highlighting initialized');
         }
 
-        // Common schemas for examples
-        const userSchema = {
+        // Common blueprints for examples
+        const userBlueprint = {
           name: {
             type: 'string',
             label: 'Full Name',
@@ -1361,7 +1361,7 @@ await crud.init();</pre>
         // Basic Form Generation
         $('#generate-basic-form').on('click', () => {
           try {
-            const form = Domma.forms.create(userSchema, sampleData, {
+            const form = Domma.forms.create(userBlueprint, sampleData, {
               layout: 'grid',
               columns: 2,
               onSubmit: (data, formInstance) => {
@@ -1411,7 +1411,7 @@ await crud.init();</pre>
         // Form Layouts
         $('#layout-stacked').on('click', () => {
           try {
-            const form = Domma.forms.create(userSchema, sampleData, {
+            const form = Domma.forms.create(userBlueprint, sampleData, {
               layout: 'grid',
               columns: 2
             });
@@ -1423,7 +1423,7 @@ await crud.init();</pre>
 
         $('#layout-grid').on('click', () => {
           try {
-            const form = Domma.forms.create(userSchema, sampleData, {
+            const form = Domma.forms.create(userBlueprint, sampleData, {
               layout: 'grid',
               columns: 2
             });
@@ -1435,7 +1435,7 @@ await crud.init();</pre>
 
         $('#layout-sections').on('click', () => {
           try {
-            const form = Domma.forms.create(userSchema, sampleData, {
+            const form = Domma.forms.create(userBlueprint, sampleData, {
               layout: 'grid',
               columns: 2,
               sections: [
@@ -1462,7 +1462,7 @@ await crud.init();</pre>
         // Modal Forms
         $('#open-edit-modal').on('click', () => {
           try {
-            const modal = Domma.forms.modal(userSchema, sampleData, {
+            const modal = Domma.forms.modal(userBlueprint, sampleData, {
               title: 'Edit User Profile',
               size: 'medium',
               saveText: 'Update Profile',
@@ -1481,7 +1481,7 @@ await crud.init();</pre>
 
         $('#open-create-modal').on('click', () => {
           try {
-            const modal = Domma.forms.modal(userSchema, {}, {
+            const modal = Domma.forms.modal(userBlueprint, {}, {
               title: 'Create New User',
               size: 'medium',
               saveText: 'Create User',
@@ -1505,7 +1505,7 @@ await crud.init();</pre>
             $('#wizard-container').show();
 
             const wizard = Domma.forms.wizard('#wizard-container', {
-              schema: {
+              blueprint: {
                 steps: [
                   {
                     title: 'Account Details',
@@ -1650,7 +1650,7 @@ await crud.init();</pre>
         // CRUD Event Handlers
         $('.crud-add-btn').on('click', () => {
           try {
-            const modal = Domma.forms.modal(userSchema, {}, {
+            const modal = Domma.forms.modal(userBlueprint, {}, {
               title: 'Add New User',
               saveText: 'Add User',
               onSave: async (formData) => {
@@ -1681,7 +1681,7 @@ await crud.init();</pre>
           const user = mockUsers.find(u => u.id === userId);
           if (user) {
             try {
-              const modal = Domma.forms.modal(userSchema, user, {
+              const modal = Domma.forms.modal(userBlueprint, user, {
                 title: `Edit User: ${user.name}`,
                 saveText: 'Update User',
                 onSave: async (formData) => {
@@ -1728,7 +1728,7 @@ await crud.init();</pre>
         initMockCrud();
 
         // Validation Form
-        const validationSchema = {
+        const validationBlueprint = {
           username: {
             type: 'string',
             label: 'Username',
@@ -1818,7 +1818,7 @@ await crud.init();</pre>
 
         $('#generate-validation-form').on('click', () => {
           try {
-            const form = Domma.forms.create(validationSchema, {}, {
+            const form = Domma.forms.create(validationBlueprint, {}, {
               validationMode: 'blur',
               layout: 'grid',
               columns: 2,
@@ -1858,7 +1858,7 @@ await crud.init();</pre>
         $('#create-model-form').on('click', () => {
           try {
             // Create model with persistence
-            userModel = M.create(userSchema, sampleData, {
+            userModel = M.create(userBlueprint, sampleData, {
               persist: 'forms-showcase-user'
             });
 
@@ -1867,7 +1867,7 @@ await crud.init();</pre>
               logToOutput('#model-output', 'Model changed: ' + JSON.stringify(changes, null, 2));
             });
 
-            const form = Domma.forms.create(userSchema, userModel.get(), {
+            const form = Domma.forms.create(userBlueprint, userModel.get(), {
               layout: 'grid',
               columns: 2,
               onSubmit: (data, formInstance) => {

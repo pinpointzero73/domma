@@ -67,19 +67,20 @@ consult that folder's CLAUDE.md for detailed information.
 
 ## Aliases
 
-| Full Path        | Alias | Global     | Description                |
-|------------------|-------|------------|----------------------------|
-| `Domma()`        | `$`   | `window.$` | DOM selection/manipulation |
-| `Domma.utils`    | `_`   | `window._` | Utility functions          |
-| `Domma.models`   | `M`   | `window.M` | Reactive models & pub/sub  |
-| `Domma.dates()`  | `D()` | `window.D` | Date manipulation          |
-| `Domma.storage`  | `S`   | `window.S` | localStorage wrapper       |
-| `Domma.auth`     | `A`   | `window.A` | Authentication module      |
-| `Domma.forms`    | `F`   | `window.F` | Form builder               |
-| `Domma.http`     | `H`   | `window.H` | HTTP client                |
-| `Domma.elements` | `E`   | `window.E` | UI components              |
-| `Domma.icons`    | `I`   | `window.I` | SVG icon system            |
-| `Domma.tables`   | `T`   | `window.T` | DataTable functionality    |
+| Full Path        | Alias | Global     | Description                      |
+|------------------|-------|------------|----------------------------------|
+| `Domma()`        | `$`   | `window.$` | DOM selection/manipulation       |
+| `Domma.utils`    | `_`   | `window._` | Utility functions                |
+| `Domma.models`   | `M`   | `window.M` | Reactive models & pub/sub        |
+| Blueprint        | `B`   | `window.B` | Blueprint composition (extend, pick, omit) |
+| `Domma.dates()`  | `D()` | `window.D` | Date manipulation                |
+| `Domma.storage`  | `S`   | `window.S` | localStorage wrapper             |
+| `Domma.auth`     | `A`   | `window.A` | Authentication module            |
+| `Domma.forms`    | `F`   | `window.F` | Form builder                     |
+| `Domma.http`     | `H`   | `window.H` | HTTP client                      |
+| `Domma.elements` | `E`   | `window.E` | UI components                    |
+| `Domma.icons`    | `I`   | `window.I` | SVG icon system                  |
+| `Domma.tables`   | `T`   | `window.T` | DataTable functionality          |
 
 ## CSS Architecture
 
@@ -287,6 +288,22 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - Compare: `isBefore()`, `isAfter()`, `isSame()`, `isBetween()`, `diff()`
 - Relative: `fromNow()`, `from()`, `toNow()`, `to()`
 
+#### Blueprints (`M.extend()`, `M.pick()`, `M.omit()`)
+
+- Unified schema system - define data structure once, use everywhere
+- Powers Models, Forms, and CRUD operations
+- **Composition:**
+  - `M.extend(blueprint1, blueprint2, ...)` - Merge multiple blueprints
+  - `M.pick(blueprint, ['field1', 'field2'])` - Extract specific fields
+  - `M.omit(blueprint, ['field1', 'field2'])` - Remove specific fields
+- **Type System:** `M.types.string`, `number`, `boolean`, `array`, `object`, `date`, `any`
+- **Validation:** required, min, max, minLength, maxLength, pattern, custom validators
+- **Integration:**
+  - Models: `M.create(blueprint)` - Reactive data models
+  - Forms: `Domma.forms.create(blueprint)` - Auto-generate forms
+  - CRUD: `Domma.forms.crud(selector, blueprint)` - Complete CRUD from single blueprint
+- **Documentation:** See [docs/Blueprints.md](./docs/Blueprints.md) for comprehensive guide
+
 #### Models (`M` / `Domma.models`)
 
 - Reactive data models with validation
@@ -337,7 +354,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 
 #### Forms (`Domma.forms`)
 
-- Schema-driven form generation
+- Blueprint-driven form generation
 - **Components:**
   - FormBuilder - `create()` with validation, layouts (stacked/grid/inline)
   - Modal Forms - `modal()` with save/error handling

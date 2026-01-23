@@ -132,6 +132,7 @@ class Forma {
     element.innerHTML = this.render();
     this.formElement = element.querySelector('form');
     this._bindEvents(element);
+    this._initTooltips(element);
     return element;
   }
 
@@ -255,6 +256,7 @@ class Forma {
     const placeholder = formConfig.placeholder || '';
     const hint = formConfig.hint || '';
     const helperText = formConfig.helperText || '';
+    const tooltip = formConfig.tooltip || '';
 
     // Handle column spanning for grid layouts
     const columnSpan = formConfig.span || 1;
@@ -276,7 +278,16 @@ class Forma {
     if (showLabels && label && type !== 'hidden' && type !== 'boolean') {
       const labelClass = this.options.labelClassName;
       const requiredMark = required ? ' <span class="text-danger">*</span>' : '';
-      html += `<label for="field-${fieldName}" class="${labelClass}">${label}${requiredMark}`;
+      const tooltipAttr = tooltip ? ` data-tooltip="${this.utils.escapeHtml(tooltip)}"` : '';
+      const tooltipClass = tooltip ? ' has-tooltip' : '';
+
+      html += `<label for="field-${fieldName}" class="${labelClass}${tooltipClass}"${tooltipAttr}>`;
+      html += `${label}${requiredMark}`;
+
+      // Tooltip icon
+      if (tooltip) {
+        html += ` <span class="tooltip-icon" data-icon="help-circle" style="display: inline-block; vertical-align: middle; opacity: 0.6; cursor: help;"></span>`;
+      }
 
       // Hint next to label
       if (showHints && hint) {
@@ -516,6 +527,28 @@ class Forma {
         this.reset();
       }
     });
+  }
+
+  /**
+   * Initialize tooltips on form labels
+   */
+  _initTooltips(container) {
+    // Scan for icons first (help-circle icon for tooltips)
+    if (window.Domma && window.Domma.icons && typeof window.Domma.icons.scan === 'function') {
+      window.Domma.icons.scan(container);
+    }
+
+    // Initialize tooltips on labels with data-tooltip attribute
+    if (window.Domma && window.Domma.elements && typeof window.Domma.elements.tooltip === 'function') {
+      const tooltipLabels = container.querySelectorAll('label[data-tooltip]');
+      tooltipLabels.forEach(label => {
+        window.Domma.elements.tooltip(label, {
+          position: 'top',
+          trigger: 'hover',
+          delay: { show: 200, hide: 0 }
+        });
+      });
+    }
   }
 
   /**

@@ -42,8 +42,8 @@ M.once('app:ready', () => {
 ### Creating Models
 
 ```javascript
-// Define schema
-const userSchema = {
+// Define blueprint
+const userBlueprint = {
     name: {
         type: M.types.string,
         required: true,
@@ -74,7 +74,7 @@ const userSchema = {
 };
 
 // Create model instance
-const user = M.create(userSchema, {
+const user = M.create(userBlueprint, {
     name: 'Alice',
     email: 'alice@example.com',
     age: 30
@@ -129,7 +129,7 @@ user.offChange(handler);
 
 ```javascript
 // Auto-save/load from localStorage
-const settings = M.create(schema, data, {
+const settings = M.create(blueprint, data, {
     persist: 'app-settings'  // Storage key
 });
 
@@ -152,7 +152,7 @@ if (settings.isPersisted()) {
 
 ```javascript
 // Two-way binding between model and DOM
-const user = M.create(userSchema);
+const user = M.create(userBlueprint);
 
 // Bind input to model field
 M.bind(user, 'name', '#name-input', {
@@ -212,12 +212,12 @@ M.types.any       // Any type
     <script src="../../../dist/domma.min.js"></script>
     <script>
         // Always use M alias for models
-        const userSchema = {
+        const userBlueprint = {
             name: {type: M.types.string, default: ''},
             email: {type: M.types.string, default: ''}
         };
 
-        const user = M.create(userSchema);
+        const user = M.create(userBlueprint);
 
         // Bind form inputs
         M.bind(user, 'name', '#name', {twoWay: true});
@@ -240,12 +240,12 @@ M.types.any       // Any type
 ### Form Handling with Models
 
 ```javascript
-const formSchema = {
+const formBlueprint = {
     username: {type: M.types.string, required: true},
     password: {type: M.types.string, required: true}
 };
 
-const formModel = M.create(formSchema);
+const formModel = M.create(formBlueprint);
 
 // Bind all form fields
 M.bind(formModel, 'username', '#username', {twoWay: true});
@@ -266,13 +266,13 @@ $('#form').on('submit', function(e) {
 ### Settings Panel with Persistence
 
 ```javascript
-const settingsSchema = {
+const settingsBlueprint = {
     theme: {type: M.types.string, default: 'light'},
     language: {type: M.types.string, default: 'en'},
     notifications: {type: M.types.boolean, default: true}
 };
 
-const settings = M.create(settingsSchema, {}, {
+const settings = M.create(settingsBlueprint, {}, {
     persist: 'user-settings'  // Auto-save/load
 });
 
@@ -311,3 +311,14 @@ M.on('user:login', (user) => {
 - [Showcase Meta Guide](../CLAUDE.md)
 - [Core Modules](../../../src/CLAUDE.md)
 - [API Reference](../../../docs/API.md)
+
+## Related Documentation
+
+- **[Blueprints Guide](../../../docs/Blueprints.md)** - Complete Blueprint reference and tutorial
+- [Models API Reference](../../../docs/API.md#models) - Full Models API documentation
+- [Forms Showcase](../forms/) - Blueprint-driven form generation
+- [Main Showcase](../index.html) - All showcases
+
+---
+
+**Note:** Models in Domma are created from Blueprints. See the [Blueprints documentation](../../../docs/Blueprints.md) for comprehensive schema definition guidance and validation options.

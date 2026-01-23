@@ -69,6 +69,12 @@
       "text": "Data",
       "items": [
         {
+          "text": "Blueprints",
+          "url": "showcase/blueprints/index.html",
+          "section": "blueprints",
+          "badge": "New"
+        },
+        {
           "text": "Dates",
           "url": "showcase/dates/index.html",
           "section": "dates"

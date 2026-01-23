@@ -302,10 +302,10 @@ $('#contact-form').on('submit', () => {
 
 ```javascript
 // Model with manual persistence
-const settings = M.create(schema, {}, {persist: 'app-settings'});
+const settings = M.create(blueprint, {}, {persist: 'app-settings'});
 
 // Or use storage directly
-const user = M.create(userSchema);
+const user = M.create(userBlueprint);
 
 user.onChange(() => {
     S.set('user', user.toJSON());

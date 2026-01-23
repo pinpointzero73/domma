@@ -3,7 +3,7 @@
  * Integrates with global Domma authentication system
  */
 
-import {contactSchema as fullContactSchema} from './schemas.js';
+import {contactBlueprint as fullContactBlueprint} from './blueprints.js';
 
 class NexusApp {
   constructor() {
@@ -12,11 +12,11 @@ class NexusApp {
     this.currentUser = null;
     this.authToken = null;
 
-    // Contact schema for CRUD - converted from comprehensive Forma schema
-    this.contactSchema = this.convertFormaSchemaToForms(fullContactSchema);
+    // Contact blueprint for CRUD - converted from comprehensive Forma blueprint
+    this.contactBlueprint = this.convertFormaBlueprintToForms(fullContactBlueprint);
 
-    // Group schema for CRUD - matches backend ContactGroup model
-    this.groupSchema = {
+    // Group blueprint for CRUD - matches backend ContactGroup model
+    this.groupBlueprint = {
       name: {
         type: 'string',
         label: 'Group Name',
@@ -51,12 +51,12 @@ class NexusApp {
     console.log('Nexus app initialized');
   }
 
-  // Convert Forma schema format to Domma.forms.crud format
-  convertFormaSchemaToForms(formaSchema) {
-    const formsCrudSchema = {};
+  // Convert Forma blueprint format to Domma.forms.crud format
+  convertFormaBlueprintToForms(formaBlueprint) {
+    const formsCrudBlueprint = {};
 
-    for (const field of formaSchema.fields) {
-      formsCrudSchema[field.name] = {
+    for (const field of formaBlueprint.fields) {
+      formsCrudBlueprint[field.name] = {
         type: this.mapFormaTypeToCrudType(field),
         label: field.label,
         required: field.required || false,
@@ -68,17 +68,17 @@ class NexusApp {
 
       // Handle special field types
       if (field.type === 'multiselect' && field.name === 'groups') {
-        formsCrudSchema[field.name].options = []; // Will be populated dynamically
-        formsCrudSchema[field.name].multiple = true;
+        formsCrudBlueprint[field.name].options = []; // Will be populated dynamically
+        formsCrudBlueprint[field.name].multiple = true;
         // Copy validation and help text if present
         if (field.validation) {
-          formsCrudSchema[field.name].validation = field.validation;
+          formsCrudBlueprint[field.name].validation = field.validation;
         }
         if (field.help) {
-          formsCrudSchema[field.name].help = field.help;
+          formsCrudBlueprint[field.name].help = field.help;
         }
         // Don't set dataType for multiselect - let the type mapping handle it
-        formsCrudSchema[field.name].transform = {
+        formsCrudBlueprint[field.name].transform = {
           toForm: (value) => {
             if (!value) return [];
             if (Array.isArray(value)) {
@@ -99,7 +99,7 @@ class NexusApp {
       }
 
       if (field.type === 'select' && field.options) {
-        formsCrudSchema[field.name].options = field.options.map(opt =>
+        formsCrudBlueprint[field.name].options = field.options.map(opt =>
           typeof opt === 'string' ? opt : opt.label || opt.value
         );
       }
@@ -107,15 +107,15 @@ class NexusApp {
       // Ensure boolean fields have proper type conversion
       if (field.type === 'checkbox') {
         // Using 'boolean' type will render proper checkbox and handle boolean values correctly
-        formsCrudSchema[field.name].type = 'boolean';
+        formsCrudBlueprint[field.name].type = 'boolean';
       }
 
       if (field.defaultValue) {
-        formsCrudSchema[field.name].default = field.defaultValue;
+        formsCrudBlueprint[field.name].default = field.defaultValue;
       }
     }
 
-    return formsCrudSchema;
+    return formsCrudBlueprint;
   }
 
   // Map Forma field types to Domma.forms.crud types with smart inference
@@ -153,7 +153,7 @@ class NexusApp {
     return smartMap[type] || 'string';
   }
 
-  // Populate groups options dynamically for the contact schema
+  // Populate groups options dynamically for the contact blueprint
   async populateGroupsOptions(isLocal) {
     try {
       const groupsEndpoint = isLocal ? 'http://localhost:3000/api/contacts/groups' : '/api/contacts/groups';
@@ -170,16 +170,16 @@ class NexusApp {
         const result = await response.json();
         const groups = result.data || [];
 
-        // Update the contact schema with actual group options
-        if (this.contactSchema.groups) {
+        // Update the contact blueprint with actual group options
+        if (this.contactBlueprint.groups) {
           // Domma.forms.crud multiselect expects simple string array or value/label objects
-          this.contactSchema.groups.options = groups.map(group => ({
+          this.contactBlueprint.groups.options = groups.map(group => ({
             value: group._id || group.id || group.toString(),
             label: group.name || `Group ${group._id || group.id}`
           }));
 
           console.log(`Loaded ${groups.length} groups for contact assignment:`, groups);
-          console.log('Groups options created:', this.contactSchema.groups.options);
+          console.log('Groups options created:', this.contactBlueprint.groups.options);
         }
       } else {
         console.warn('Could not load groups for contact assignment');
@@ -238,13 +238,13 @@ class NexusApp {
     try {
       const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-      // Load groups and populate contact schema groups options
+      // Load groups and populate contact blueprint groups options
       await this.populateGroupsOptions(isLocal);
 
       // Initialize Contacts CRUD
       const contactsEndpoint = isLocal ? 'http://localhost:3000/api/contacts' : '/api/contacts';
       this.contactsCrud = Domma.forms.crud({
-        schema: this.contactSchema,
+        blueprint: this.contactBlueprint,
         endpoint: contactsEndpoint,
         tableSelector: '#contacts-table',
         title: 'Manage Contacts',
@@ -276,7 +276,7 @@ class NexusApp {
       // Initialize Groups CRUD
       const groupsEndpoint = isLocal ? 'http://localhost:3000/api/contacts/groups' : '/api/contacts/groups';
       this.groupsCrud = Domma.forms.crud({
-        schema: this.groupSchema,
+        blueprint: this.groupBlueprint,
         endpoint: groupsEndpoint,
         tableSelector: '#groups-table',
         title: 'Manage Groups',

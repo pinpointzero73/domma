@@ -4,7 +4,7 @@ This file provides guidance for working with Forms module showcase examples and 
 
 ## Forms Module Overview
 
-Accessed via `Domma.forms` - provides schema-driven form generation with validation, modals, wizards, and complete CRUD
+Accessed via `Domma.forms` - provides blueprint-driven form generation with validation, modals, wizards, and complete CRUD
 operations.
 
 ## Core FormBuilder
@@ -12,8 +12,8 @@ operations.
 ### Basic Form Creation
 
 ```javascript
-// Define schema
-const userSchema = {
+// Define blueprint
+const userBlueprint = {
     name: {
         type: 'string',
         label: 'Full Name',
@@ -86,7 +86,7 @@ const userSchema = {
 };
 
 // Create form instance
-const form = Domma.forms.create(userSchema, initialData, {
+const form = Domma.forms.create(userBlueprint, initialData, {
     layout: 'stacked',  // 'stacked', 'grid', 'inline'
     onSubmit: (data, formInstance) => {
         console.log('Form submitted:', data);
@@ -102,7 +102,7 @@ form.renderTo('#form-container');
 
 ### Input Type Mapping
 
-The FormBuilder automatically maps schema types to HTML input types:
+The FormBuilder automatically maps blueprint types to HTML input types:
 
 ```javascript
 FormBuilder.inputTypes = {
@@ -134,23 +134,23 @@ FormBuilder.inputTypes = {
 
 ```javascript
 // Stacked layout (default)
-const form1 = Domma.forms.create(schema, data, {
+const form1 = Domma.forms.create(blueprint, data, {
     layout: 'stacked'
 });
 
 // Grid layout
-const form2 = Domma.forms.create(schema, data, {
+const form2 = Domma.forms.create(blueprint, data, {
     layout: 'grid',
     columns: 2  // or 3
 });
 
 // Inline layout
-const form3 = Domma.forms.create(schema, data, {
+const form3 = Domma.forms.create(blueprint, data, {
     layout: 'inline'
 });
 
 // Sections
-const form4 = Domma.forms.create(schema, data, {
+const form4 = Domma.forms.create(blueprint, data, {
     layout: 'grid',
     columns: 2,
     sections: [
@@ -169,8 +169,8 @@ const form4 = Domma.forms.create(schema, data, {
 ### Form Validation
 
 ```javascript
-// Schema validation rules
-const validationSchema = {
+// Blueprint validation rules
+const validationBlueprint = {
     username: {
         type: 'string',
         required: true,
@@ -214,7 +214,7 @@ const validationSchema = {
 };
 
 // Manual validation
-const form = Domma.forms.create(schema, data);
+const form = Domma.forms.create(blueprint, data);
 const isValid = form.validate();
 if (!isValid) {
     console.log('Validation errors:', form.errors);
@@ -225,7 +225,7 @@ if (!isValid) {
 
 ```javascript
 // Basic modal form
-const modal = Domma.forms.modal(userSchema, userData, {
+const modal = Domma.forms.modal(userBlueprint, userData, {
     title: 'Edit User Profile',
     size: 'medium',  // 'small', 'medium', 'large'
     saveText: 'Update Profile',
@@ -256,7 +256,7 @@ const wizard = Domma.forms.wizard([
     {
         title: 'Account Details',
         description: 'Basic account information',
-        schema: {
+        blueprint: {
             username: { type: 'string', required: true },
             email: { type: 'email', required: true }
         }
@@ -264,7 +264,7 @@ const wizard = Domma.forms.wizard([
     {
         title: 'Profile Information',
         description: 'Tell us about yourself',
-        schema: {
+        blueprint: {
             name: { type: 'string', required: true },
             bio: { type: 'textarea' },
             avatar: { type: 'file', formConfig: { accept: 'image/*' } }
@@ -274,7 +274,7 @@ const wizard = Domma.forms.wizard([
     {
         title: 'Preferences',
         description: 'Customize your experience',
-        schema: {
+        blueprint: {
             theme: {
                 type: 'select',
                 options: [
@@ -320,7 +320,7 @@ wizard.setStepData({});   // Update step data
 ```javascript
 // Complete CRUD setup
 const userCrud = Domma.forms.crud({
-    schema: userSchema,
+    blueprint: userBlueprint,
     endpoint: '/api/users',  // API endpoint
     tableSelector: '#users-table',
     title: 'Manage Users',
@@ -355,11 +355,11 @@ userCrud.updateItem(id, changes);   // Update local data
 userCrud.removeItem(id);            // Remove from local data
 ```
 
-### CRUD Schema Extensions
+### CRUD Blueprint Extensions
 
 ```javascript
 // Add table-specific rendering
-const crudSchema = {
+const crudBlueprint = {
     name: {
         type: 'string',
         label: 'Full Name',
@@ -397,12 +397,12 @@ const crudSchema = {
 
 ```javascript
 // Create model with persistence
-const userModel = M.create(userSchema, initialData, {
+const userModel = M.create(userBlueprint, initialData, {
     persist: 'user-profile'  // Auto-save to localStorage
 });
 
 // Form with model binding
-const form = Domma.forms.create(userSchema, userModel.get(), {
+const form = Domma.forms.create(userBlueprint, userModel.get(), {
     model: userModel,  // Enable two-way binding
     onSubmit: (data, formInstance) => {
         userModel.set(data);  // Updates model and localStorage
@@ -427,7 +427,7 @@ userModel.reset();          // Reset to initial state
 ### User Registration Form
 
 ```javascript
-const registrationSchema = {
+const registrationBlueprint = {
     username: {
         type: 'string',
         required: true,
@@ -464,7 +464,7 @@ const registrationSchema = {
     }
 };
 
-const form = Domma.forms.create(registrationSchema, {}, {
+const form = Domma.forms.create(registrationBlueprint, {}, {
     onSubmit: async (data, formInstance) => {
         try {
             await api.register(data);
@@ -479,7 +479,7 @@ const form = Domma.forms.create(registrationSchema, {}, {
 ### Settings Panel
 
 ```javascript
-const settingsSchema = {
+const settingsBlueprint = {
     profile: {
         name: { type: 'string', required: true },
         email: { type: 'email', required: true },
@@ -507,7 +507,7 @@ const settingsSchema = {
 };
 
 // Tabbed settings form
-const form = Domma.forms.create(settingsSchema, userData, {
+const form = Domma.forms.create(settingsBlueprint, userData, {
     layout: 'grid',
     sections: [
         {
@@ -529,7 +529,7 @@ const form = Domma.forms.create(settingsSchema, userData, {
 ### Contact Form
 
 ```javascript
-const contactSchema = {
+const contactBlueprint = {
     name: { type: 'string', required: true },
     email: { type: 'email', required: true },
     subject: {
@@ -550,7 +550,7 @@ const contactSchema = {
     urgent: { type: 'boolean', label: 'Urgent' }
 };
 
-const form = Domma.forms.create(contactSchema, {}, {
+const form = Domma.forms.create(contactBlueprint, {}, {
     onSubmit: async (data) => {
         await api.sendContactForm(data);
         Domma.elements.alert('Thank you! We\'ll get back to you soon.');
@@ -588,7 +588,7 @@ const form = Domma.forms.create(contactSchema, {}, {
 
     <script src="../../dist/domma.min.js"></script>
     <script>
-        const userSchema = {
+        const userBlueprint = {
             name: { type: 'string', required: true },
             email: { type: 'email', required: true },
             role: {
@@ -601,14 +601,14 @@ const form = Domma.forms.create(contactSchema, {}, {
         };
 
         // Basic form
-        const form = Domma.forms.create(userSchema, {}, {
+        const form = Domma.forms.create(userBlueprint, {}, {
             onSubmit: (data) => console.log('Submitted:', data)
         });
         form.renderTo('#registration-form');
 
         // Modal form
         $('#open-modal-form').on('click', () => {
-            const modal = Domma.forms.modal(userSchema, {}, {
+            const modal = Domma.forms.modal(userBlueprint, {}, {
                 title: 'User Registration',
                 onSave: async (data) => {
                     console.log('Modal form submitted:', data);
@@ -622,11 +622,11 @@ const form = Domma.forms.create(contactSchema, {}, {
             const wizard = Domma.forms.wizard([
                 {
                     title: 'Basic Info',
-                    schema: { name: { type: 'string', required: true } }
+                    blueprint: { name: { type: 'string', required: true } }
                 },
                 {
                     title: 'Account',
-                    schema: { email: { type: 'email', required: true } }
+                    blueprint: { email: { type: 'email', required: true } }
                 }
             ], {}, {
                 title: 'Registration Wizard',
@@ -644,7 +644,7 @@ const form = Domma.forms.create(contactSchema, {}, {
 ### Custom Field Renderers
 
 ```javascript
-const customSchema = {
+const customBlueprint = {
     tags: {
         type: 'custom',
         label: 'Tags',
@@ -663,7 +663,7 @@ const customSchema = {
 ### Conditional Fields
 
 ```javascript
-const conditionalSchema = {
+const conditionalBlueprint = {
     accountType: {
         type: 'select',
         options: [
@@ -684,7 +684,7 @@ const conditionalSchema = {
 ### File Upload Integration
 
 ```javascript
-const uploadSchema = {
+const uploadBlueprint = {
     avatar: {
         type: 'file',
         formConfig: {
@@ -708,7 +708,7 @@ const uploadSchema = {
 ## Error Handling
 
 ```javascript
-const form = Domma.forms.create(schema, data, {
+const form = Domma.forms.create(blueprint, data, {
     onSubmit: async (data, formInstance) => {
         try {
             await api.saveData(data);
@@ -739,3 +739,13 @@ const form = Domma.forms.create(schema, data, {
 - [Elements Module](../elements/CLAUDE.md)
 - [Core Modules](../../../src/CLAUDE.md)
 - [API Reference](../../../docs/API.md)
+## Related Documentation
+
+- **[Blueprints Guide](../../../docs/Blueprints.md)** - Complete Blueprint reference and tutorial
+- [Forms API Reference](../../../docs/API.md#forms) - Full Forms API documentation
+- [Models Showcase](../models/) - Reactive models with Blueprints
+- [Main Showcase](../index.html) - All showcases
+
+---
+
+**Note:** Forms in Domma are Blueprint-driven. See the [Blueprints documentation](../../../docs/Blueprints.md) for comprehensive schema definition guidance.

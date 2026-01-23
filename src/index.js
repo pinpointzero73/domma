@@ -113,6 +113,11 @@ const H = http;
 const E = elements;
 const I = icons;
 const T = tables;
+const B = {  // Blueprint composition methods
+    extend: models.extend.bind(models),
+    pick: models.pick.bind(models),
+    omit: models.omit.bind(models)
+};
 
 // Attach aliases to Domma
 Domma.M = M;
@@ -124,6 +129,7 @@ Domma.H = H;
 Domma.E = E;
 Domma.I = I;
 Domma.T = T;
+Domma.B = B;
 
 // Expose globally if needed
 if (typeof window !== 'undefined') {
@@ -139,10 +145,11 @@ if (typeof window !== 'undefined') {
     window.E = E;
     window.I = I;
     window.T = T;
+    window.B = B;
 }
 
 export default Domma;
-export {Domma, $, _, M, D, S, A, F, H, E, I, T};
+export {Domma, $, _, M, D, S, A, F, H, E, I, T, B};
 
 // Reveal page after Domma is ready
 if (typeof document !== 'undefined') {

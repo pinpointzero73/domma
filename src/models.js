@@ -467,6 +467,67 @@ export const models = {
         return new Model(schema, initialData, options);
     },
 
+    /**
+     * Extend a blueprint with additional fields
+     * @param {...Object} blueprints - Blueprints to merge (left-to-right)
+     * @returns {Object} - A new merged blueprint
+     */
+    extend(...blueprints) {
+        const result = {};
+
+        for (const blueprint of blueprints) {
+            for (const field in blueprint) {
+                if (Object.prototype.hasOwnProperty.call(blueprint, field)) {
+                    if (result[field] && utils.isPlainObject(result[field])) {
+                        // Deep merge field definitions
+                        result[field] = utils.merge(
+                            utils.cloneDeep(result[field]),
+                            utils.cloneDeep(blueprint[field])
+                        );
+                    } else {
+                        result[field] = utils.cloneDeep(blueprint[field]);
+                    }
+                }
+            }
+        }
+
+        return result;
+    },
+
+    /**
+     * Pick specific fields from a blueprint
+     * @param {Object} blueprint - Source blueprint
+     * @param {string[]} fields - Array of field names to pick
+     * @returns {Object} - New blueprint with only specified fields
+     */
+    pick(blueprint, fields) {
+        const result = {};
+
+        for (const field of fields) {
+            if (Object.prototype.hasOwnProperty.call(blueprint, field)) {
+                result[field] = utils.cloneDeep(blueprint[field]);
+            }
+        }
+
+        return result;
+    },
+
+    /**
+     * Omit specific fields from a blueprint
+     * @param {Object} blueprint - Source blueprint
+     * @param {string[]} fields - Array of field names to omit
+     * @returns {Object} - New blueprint without specified fields
+     */
+    omit(blueprint, fields) {
+        const result = utils.cloneDeep(blueprint);
+
+        for (const field of fields) {
+            delete result[field];
+        }
+
+        return result;
+    },
+
     // ============================================
     // Type Validators
     // ============================================

@@ -158,6 +158,15 @@ export interface Models {
     /** Create a new reactive model */
     create(schema: Schema, initialData?: Record<string, any>, options?: ModelOptions): Model;
 
+    /** Extend a blueprint with additional fields */
+    extend(...blueprints: Schema[]): Schema;
+
+    /** Pick specific fields from a blueprint */
+    pick(blueprint: Schema, fields: string[]): Schema;
+
+    /** Omit specific fields from a blueprint */
+    omit(blueprint: Schema, fields: string[]): Schema;
+
     // ============================================
     // Type Validators
     // ============================================

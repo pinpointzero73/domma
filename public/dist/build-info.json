@@ -1,19 +1,19 @@
 {
   "version": "0.9.18",
-  "built": "22/01/2026 11:50",
-  "commit": "c21988b",
+  "built": "23/01/2026 12:46",
+  "commit": "fa9d492",
   "bundles": {
     "full": {
-      "size": 435,
-      "sizeFormatted": "435KB"
+      "size": 436,
+      "sizeFormatted": "436KB"
     },
     "minimal": {
       "size": 165,
       "sizeFormatted": "165KB"
     },
     "essentials": {
-      "size": 373,
-      "sizeFormatted": "373KB"
+      "size": 374,
+      "sizeFormatted": "374KB"
     },
     "data-focused": {
       "size": 192,

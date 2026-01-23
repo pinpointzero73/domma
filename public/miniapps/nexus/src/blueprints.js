@@ -1,10 +1,10 @@
 /**
- * Nexus Contact Manager - Forma Schema Definitions
- * Defines form schemas for contact and group management
+ * Nexus Contact Manager - Forma Blueprint Definitions
+ * Defines form blueprints for contact and group management
  */
 
-// Contact Form Schema
-export const contactSchema = {
+// Contact Form Blueprint
+export const contactBlueprint = {
   title: 'Contact Information',
   description: 'Add or edit contact details',
   icon: 'user',
@@ -178,8 +178,8 @@ export const contactSchema = {
   }
 };
 
-// Group Form Schema
-export const groupSchema = {
+// Group Form Blueprint
+export const groupBlueprint = {
   title: 'Contact Group',
   description: 'Create or edit a contact group',
   icon: 'users',
@@ -268,8 +268,8 @@ export const groupSchema = {
   }
 };
 
-// Contact Search/Filter Schema
-export const contactFilterSchema = {
+// Contact Search/Filter Blueprint
+export const contactFilterBlueprint = {
   title: 'Filter Contacts',
   description: 'Search and filter your contacts',
   icon: 'search',
@@ -318,8 +318,8 @@ export const contactFilterSchema = {
   }
 };
 
-// Import Contacts Schema
-export const importSchema = {
+// Import Contacts Blueprint
+export const importBlueprint = {
   title: 'Import Contacts',
   description: 'Import contacts from CSV or vCard files',
   icon: 'upload',
@@ -395,10 +395,10 @@ export const importSchema = {
   }
 };
 
-// Export schema configurations for different form types
-export const schemas = {
-  contact: contactSchema,
-  group: groupSchema,
-  filter: contactFilterSchema,
-  import: importSchema
+// Export blueprint configurations for different form types
+export const blueprints = {
+  contact: contactBlueprint,
+  group: groupBlueprint,
+  filter: contactFilterBlueprint,
+  import: importBlueprint
 };

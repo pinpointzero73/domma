@@ -124,7 +124,7 @@ Accessed via `Domma.dates` or `D()`:
 Accessed via `Domma.models` or `M`:
 
 - **Pub/Sub**: `subscribe()`/`on()`, `publish()`/`emit()`, `unsubscribe()`/`off()`, `once()`
-- **Model Factory**: `create(schema, initialData, options)` returns a Model instance
+- **Model Factory**: `create(blueprint, initialData, options)` returns a Model instance
 - **Model Instance**: `get()`, `set()`, `toJSON()`, `validate()`, `onChange()`, `offChange()`, `reset()`
 - **Persistence**: `save()`, `load()`, `clearStorage()`, `isPersisted()`, `getPersistKey()`
 - **DOM Binding**: `M.bind(model, field, selector, options)`, `M.unbind()`
@@ -134,7 +134,7 @@ Accessed via `Domma.models` or `M`:
 **Model Persistence** - auto-save/load from localStorage:
 
 ```javascript
-const settings = M.create(schema, data, {persist: 'app-settings'});
+const settings = M.create(blueprint, data, {persist: 'app-settings'});
 // Auto-loads on creation, auto-saves on every change
 settings.save();           // Manual save
 settings.load();           // Manual reload
@@ -184,7 +184,7 @@ Accessed via `Domma.elements`:
     - Positions: `'left'`, `'right'`, `'top'`, `'bottom'`
     - Sizes: `'sm'`, `'md'`, `'lg'`, `'xl'`, `'full'`, or custom (e.g., `'400px'`)
     - Factory method: `Slideover.create({ title, content, position, size, ... })`
-    - Form schema integration supported
+    - Form blueprint integration supported
 - **BackToTop**: `elements.backToTop(selector, { showAfter, duration, position, offset, target, onShow, onHide })` →
   `scroll()`, `show()`, `hide()`, `toggle()`, `isVisible()`, `getButton()`, `destroy()`
 - **ButtonGroup**: `elements.buttonGroup(selector, { mode, activeClass, allowEmpty, onChange })` →
@@ -364,19 +364,20 @@ S.clear();                                         // Clear only Domma keys
 
 ## Aliases
 
-| Full Path        | Alias | Global     | Description                |
-|------------------|-------|------------|----------------------------|
-| `Domma()`        | `$`   | `window.$` | DOM selection/manipulation |
-| `Domma.utils`    | `_`   | `window._` | Utility functions          |
-| `Domma.models`   | `M`   | `window.M` | Reactive models & pub/sub  |
-| `Domma.dates()`  | `D()` | `window.D` | Date manipulation          |
-| `Domma.storage`  | `S`   | `window.S` | localStorage wrapper       |
-| `Domma.auth`     | `A`   | `window.A` | Authentication module      |
-| `Domma.forms`    | `F`   | `window.F` | Form builder               |
-| `Domma.http`     | `H`   | `window.H` | HTTP client                |
-| `Domma.elements` | `E`   | `window.E` | UI components              |
-| `Domma.icons`    | `I`   | `window.I` | SVG icon system            |
-| `Domma.tables`   | `T`   | `window.T` | DataTable functionality    |
+| Full Path        | Alias | Global     | Description                      |
+|------------------|-------|------------|----------------------------------|
+| `Domma()`        | `$`   | `window.$` | DOM selection/manipulation       |
+| `Domma.utils`    | `_`   | `window._` | Utility functions                |
+| `Domma.models`   | `M`   | `window.M` | Reactive models & pub/sub        |
+| Blueprint        | `B`   | `window.B` | Blueprint composition (extend, pick, omit) |
+| `Domma.dates()`  | `D()` | `window.D` | Date manipulation                |
+| `Domma.storage`  | `S`   | `window.S` | localStorage wrapper             |
+| `Domma.auth`     | `A`   | `window.A` | Authentication module            |
+| `Domma.forms`    | `F`   | `window.F` | Form builder                     |
+| `Domma.http`     | `H`   | `window.H` | HTTP client                      |
+| `Domma.elements` | `E`   | `window.E` | UI components                    |
+| `Domma.icons`    | `I`   | `window.I` | SVG icon system                  |
+| `Domma.tables`   | `T`   | `window.T` | DataTable functionality          |
 
 ## File Structure
 

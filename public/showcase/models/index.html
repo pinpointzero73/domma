@@ -97,9 +97,9 @@ M.on('cart:clear', handler);</pre>
             <h2 class="text-xl font-semibold">Reactive Models</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">Create reactive data models with schema validation and change detection.</p>
+            <p class="mb-4">Create reactive data models with blueprint validation and change detection.</p>
 
-            <pre class="code-block language-javascript">// Create a model with schema
+            <pre class="code-block language-javascript">// Create a model with blueprint
 const user = M.create({
     name: { type: 'string', required: true },
     email: {
@@ -206,10 +206,10 @@ const result = user.validate();
         </div>
     </section>
 
-    <!-- Schema Types -->
-    <section class="card mb-6" data-section="Schema Types">
+    <!-- Blueprint Types -->
+    <section class="card mb-6" data-section="Blueprint Types">
         <div class="card-header">
-            <h2 class="text-xl font-semibold">Schema Types</h2>
+            <h2 class="text-xl font-semibold">Blueprint Types</h2>
         </div>
         <div class="card-body">
             <p class="mb-4">Built-in type validators for common data types.</p>
@@ -223,8 +223,8 @@ M.types.object    // Plain objects
 M.types.date      // Date objects
 M.types.any       // Any type (no validation)
 
-// Schema options
-const schema = {
+// Blueprint options
+const blueprint = {
     // Basic type
     name: { type: 'string' },
 
@@ -567,7 +567,7 @@ navigator.clipboard.writeText(JSON.stringify(usersModel.get('users'), null, 2));
                         </div>
                     </div>
                     <div class="tab-panel" data-tab="types">
-                        <p class="text-muted mb-3">Built-in validators for schema definitions.</p>
+                        <p class="text-muted mb-3">Built-in validators for blueprint definitions.</p>
                         <div class="models-method-grid">
                             <span class="models-method-item">types.string</span>
                             <span class="models-method-item">types.number</span>

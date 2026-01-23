@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blueprints - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="/showcase/css/domma-showcase.css">
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+    <style>
+        .blueprint-code {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .result-pane {
+            background: var(--dm-bg-secondary, #f8f9fa);
+            border: 1px solid var(--dm-border, #dee2e6);
+            border-radius: 4px;
+            padding: 1.5rem;
+            min-height: 200px;
+        }
+
+        .model-state {
+            background: var(--dm-bg-tertiary, #e9ecef);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .model-state h4 {
+            margin-top: 0;
+            font-size: 0.9rem;
+        }
+
+        .model-state pre {
+            margin: 0;
+            background: #ffffff;
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+
+        .blueprint-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .blueprint-method {
+            background: var(--dm-primary-bg, #e7f3ff);
+            color: var(--dm-primary, #007bff);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="subpage">
+
+<header class="page-header">
+    <h1>Blueprints</h1>
+    <p>Unified schema system - define once, use everywhere for validation, forms, models, and CRUD.</p>
+</header>
+
+<div class="container py-8">
+
+    <!-- Overview -->
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">What are Blueprints?</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Blueprints are Domma's unified schema system. Define your data structure once, then use it everywhere:</p>
+
+            <div class="grid grid-cols-4 md:grid-cols-4 gap-4 mb-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <span data-icon="check-circle" data-size="32" class="text-success mb-2"></span>
+                        <h4 class="text-sm font-semibold">Validation</h4>
+                        <p class="text-xs text-muted">Built-in + custom</p>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-body">
+                        <span data-icon="layout" data-size="32" class="text-primary mb-2"></span>
+                        <h4 class="text-sm font-semibold">Forms</h4>
+                        <p class="text-xs text-muted">Auto-generation</p>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-body">
+                        <span data-icon="database" data-size="32" class="text-info mb-2"></span>
+                        <h4 class="text-sm font-semibold">Models</h4>
+                        <p class="text-xs text-muted">Reactive data</p>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-body">
+                        <span data-icon="grid" data-size="32" class="text-warning mb-2"></span>
+                        <h4 class="text-sm font-semibold">CRUD</h4>
+                        <p class="text-xs text-muted">Complete system</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <span data-icon="book" data-size="20"></span>
+                <strong>Full Documentation:</strong> See the <a href="../reference/index.html" class="alert-link">Reference Documentation</a> for comprehensive guide with tutorials and examples.
+            </div>
+        </div>
+    </section>
+
+    <!-- Blueprint Anatomy -->
+    <section class="card mb-6" data-section="Blueprint Anatomy">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Blueprint Anatomy</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">A blueprint is a JavaScript object defining field types, validation, and UI configuration.</p>
+
+            <pre class="code-block language-javascript">const userBlueprint = {
+    name: {
+        type: 'string',           // Field type
+        required: true,           // Validation
+        minLength: 2,
+        maxLength: 50,
+        label: 'Full Name',       // Form config
+        placeholder: 'Enter name'
+    },
+    email: {
+        type: 'email',
+        required: true,
+        label: 'Email Address',
+        validate: (value) => {    // Custom validator
+            return /\S+@\S+/.test(value) || 'Invalid email';
+        }
+    },
+    age: {
+        type: 'number',
+        min: 0,
+        max: 120,
+        label: 'Age'
+    },
+    active: {
+        type: 'boolean',
+        default: true,
+        label: 'Active User'
+    }
+};</pre>
+
+            <div class="mt-4">
+                <h4 class="font-semibold mb-2">Field Properties</h4>
+                <div class="blueprint-methods">
+                    <span class="blueprint-method">type</span>
+                    <span class="blueprint-method">required</span>
+                    <span class="blueprint-method">default</span>
+                    <span class="blueprint-method">min / max</span>
+                    <span class="blueprint-method">minLength / maxLength</span>
+                    <span class="blueprint-method">pattern</span>
+                    <span class="blueprint-method">validate</span>
+                    <span class="blueprint-method">label</span>
+                    <span class="blueprint-method">placeholder</span>
+                    <span class="blueprint-method">help</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Type System -->
+    <section class="card mb-6" data-section="Type System">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Built-in Types</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma provides 7 built-in types for common data structures:</p>
+
+            <div class="grid grid-cols-4 md:grid-cols-3 gap-3">
+                <div class="card">
+                    <div class="card-body">
+                        <code class="text-primary">M.types.string</code>
+                        <p class="text-xs text-muted mt-1">Text data</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <code class="text-primary">M.types.number</code>
+                        <p class="text-xs text-muted mt-1">Numeric values</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <code class="text-primary">M.types.boolean</code>
+                        <p class="text-xs text-muted mt-1">True/false</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <code class="text-primary">M.types.array</code>
+                        <p class="text-xs text-muted mt-1">Lists</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <code class="text-primary">M.types.object</code>
+                        <p class="text-xs text-muted mt-1">Nested data</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <code class="text-primary">M.types.date</code>
+                        <p class="text-xs text-muted mt-1">Timestamps</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <code class="text-primary">M.types.any</code>
+                        <p class="text-xs text-muted mt-1">No validation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blueprint Examples with Tabs -->
+    <section class="card mb-6" data-section="Examples">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Blueprint Examples</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Explore pre-built blueprints for common use cases.</p>
+
+            <div id="blueprint-tabs"></div>
+
+            <div id="blueprint-tab-content" class="mt-4">
+                <!-- Tab panels will be inserted here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Field Styling --><section class="card mb-6" data-section="Field Styling">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Field-Level Styling</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Control form layout and field appearance using <code>formConfig</code> properties.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="text-md font-semibold">Form-Level Options</h4>
+                    </div>
+                    <div class="card-body">
+                        <pre class="code-block language-javascript">F.render('#form', blueprint, {}, {
+    layout: 'grid',      // or 'stacked', 'inline'
+    columns: 2,          // 2 or 3 columns (grid only)
+    labelPosition: 'top', // or 'left', 'floating'
+    showLabels: true,
+    showHelperText: true
+});</pre>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="text-md font-semibold">Field-Level Options</h4>
+                    </div>
+                    <div class="card-body">
+                        <pre class="code-block language-javascript">fieldName: {
+    type: 'string',
+    required: true,
+    label: 'Field Label',
+    formConfig: {
+        span: 2,              // Span 2 columns
+        placeholder: 'Text',  // Placeholder
+        helperText: 'Help',   // Below field
+        hint: '(optional)',   // Next to label
+        tooltip: 'Info',      // Hover tooltip (NEW!)
+        disabled: false       // Disable field
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="font-semibold mb-2">Grid Layout Example</h4>
+            <p class="mb-3">Use <code>layout: 'grid'</code> with <code>columns: 2</code> and <code>formConfig.span</code> to control field width:</p>
+
+            <pre class="code-block language-javascript">const addressBlueprint = {
+    street: {
+        type: 'string',
+        required: true,
+        label: 'Street Address',
+        formConfig: { span: 2 }  // Full width (spans 2 columns)
+    },
+    city: {
+        type: 'string',
+        required: true,
+        label: 'City'
+        // No span = takes 1 column (left side)
+    },
+    postcode: {
+        type: 'string',
+        required: true,
+        label: 'Postcode'
+        // No span = takes 1 column (right side)
+    },
+    country: {
+        type: 'select',
+        options: ['UK', 'USA', 'Canada'],
+        label: 'Country',
+        formConfig: { span: 2 }  // Full width
+    }
+};
+
+// Render with grid layout
+F.render('#form', addressBlueprint, {}, {
+    layout: 'grid',
+    columns: 2
+});</pre>
+
+            <div class="alert alert-info mt-4">
+                <span data-icon="info" data-size="20"></span>
+                <strong>Tip:</strong> The <strong>Product (Grid)</strong> and <strong>User Profile (Grid)</strong> tabs above demonstrate grid layout with field spanning.
+            </div>
+        </div>
+    </section>
+
+    <!-- Blueprint → Form -->
+    <section class="card mb-6" data-section="Blueprint to Form">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Blueprint → Form Generation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Automatically generate forms from blueprints with full validation.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h4 class="font-semibold mb-2">Blueprint Definition</h4>
+                    <pre class="code-block language-javascript">const contactBlueprint = {
+    name: {
+        type: 'string',
+        required: true,
+        minLength: 2,
+        label: 'Full Name'
+    },
+    email: {
+        type: 'email',
+        required: true,
+        label: 'Email'
+    },
+    message: {
+        type: 'textarea',
+        required: true,
+        minLength: 10,
+        rows: 4,
+        label: 'Message'
+    }
+};
+
+// Generate and render form (one-step)
+F.render(
+    '#contact-form',    // selector
+    contactBlueprint,   // schema
+    {},                 // initial data
+    {                   // options
+        layout: 'stacked',
+        onSubmit: (data) => {
+            console.log(data);
+        }
+    }
+);</pre>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">Generated Form</h4>
+                    <div class="result-pane">
+                        <div id="contact-form"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blueprint → Model -->
+    <section class="card mb-6" data-section="Blueprint to Model">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Blueprint → Reactive Model</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Create reactive data models with automatic validation and change tracking.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h4 class="font-semibold mb-2">Code</h4>
+                    <pre class="code-block language-javascript">const user = M.create(userBlueprint, {
+    name: 'Alice',
+    email: 'alice@example.com',
+    age: 30
+});
+
+// Get values
+user.get('name');  // 'Alice'
+
+// Set values
+user.set('age', 31);
+
+// Validate
+const errors = user.validate();
+
+// Listen for changes
+user.onChange((event) => {
+    console.log(event);
+});</pre>
+
+                    <div class="mt-3">
+                        <h5 class="font-semibold mb-2">Try It</h5>
+                        <div class="form-group">
+                            <label class="form-label">Name</label>
+                            <input type="text" id="model-name" class="form-input" value="Alice">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" id="model-email" class="form-input" value="alice@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Age</label>
+                            <input type="number" id="model-age" class="form-input" value="30">
+                        </div>
+                        <button class="btn btn-primary btn-sm" id="validate-model">Validate</button>
+                        <button class="btn btn-secondary btn-sm" id="reset-model">Reset</button>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">Model State</h4>
+                    <div class="model-state">
+                        <h4>Current Data:</h4>
+                        <pre id="model-state-display">{}</pre>
+                    </div>
+                    <div class="model-state mt-3" id="validation-result" style="display: none;">
+                        <h4>Validation Result:</h4>
+                        <pre id="validation-display"></pre>
+                    </div>
+                    <div class="model-state mt-3">
+                        <h4>Change Log:</h4>
+                        <pre id="model-change-log">No changes yet</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blueprint Composition -->
+    <section class="card mb-6" data-section="Composition">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Blueprint Composition</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Combine, extend, and modify blueprints with composition methods.</p>
+
+            <div class="mb-4">
+                <h4 class="font-semibold mb-2">B.extend() - Merge Blueprints</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <pre class="code-block language-javascript">const base = {
+    name: { type: 'string' },
+    email: { type: 'email' }
+};
+
+const extended = {
+    email: { required: true },
+    age: { type: 'number' }
+};
+
+const result = B.extend(base, extended);
+// { name: {...}, email: {required: true}, age: {...} }</pre>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary mb-2" id="extend-demo">Run Example</button>
+                        <div class="result-pane" id="extend-result" style="display: none;">
+                            <h5>Result:</h5>
+                            <pre id="extend-result-code"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="font-semibold mb-2">B.pick() - Extract Fields</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <pre class="code-block language-javascript">const full = {
+    name: { type: 'string' },
+    email: { type: 'email' },
+    age: { type: 'number' },
+    role: { type: 'string' }
+};
+
+const subset = B.pick(full, ['name', 'email']);
+// { name: {...}, email: {...} }</pre>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary mb-2" id="pick-demo">Run Example</button>
+                        <div class="result-pane" id="pick-result" style="display: none;">
+                            <h5>Result:</h5>
+                            <pre id="pick-result-code"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="font-semibold mb-2">B.omit() - Remove Fields</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <pre class="code-block language-javascript">const admin = {
+    name: { type: 'string' },
+    email: { type: 'email' },
+    role: { type: 'string' },
+    permissions: { type: 'array' }
+};
+
+const public = B.omit(admin, ['permissions']);
+// { name: {...}, email: {...}, role: {...} }</pre>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary mb-2" id="omit-demo">Run Example</button>
+                        <div class="result-pane" id="omit-result" style="display: none;">
+                            <h5>Result:</h5>
+                            <pre id="omit-result-code"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Full CRUD -->
+    <section class="card mb-6" data-section="CRUD">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Full CRUD System</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Blueprints power complete CRUD interfaces with tables, forms, and API integration.</p>
+
+            <div class="alert alert-info mb-4">
+                <span data-icon="info" data-size="20"></span>
+                <strong>CRUD Examples:</strong> For complete CRUD demonstrations with blueprints, see the <a href="../forms/index.html" class="alert-link">Forms Showcase</a> which includes full CRUD functionality with API integration, table management, and modal forms.
+            </div>
+
+            <p class="mb-3">A typical CRUD setup with blueprints includes:</p>
+            <ul class="mb-3">
+                <li><strong>Data Table</strong> - Display records with sorting, filtering, pagination</li>
+                <li><strong>Create Form</strong> - Modal form generated from blueprint</li>
+                <li><strong>Edit Form</strong> - Pre-populated form for updating records</li>
+                <li><strong>Delete Confirmation</strong> - Safe deletion with confirmation</li>
+                <li><strong>Validation</strong> - Automatic validation from blueprint rules</li>
+                <li><strong>API Integration</strong> - RESTful API calls or localStorage persistence</li>
+            </ul>
+
+            <div class="alert alert-warning">
+                <span data-icon="external-link" data-size="20"></span>
+                <strong>See It In Action:</strong> Visit the <a href="../forms/index.html#crud-section" class="alert-link">Forms Showcase → CRUD Section</a> for live interactive examples.
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+// Pre-defined Blueprint Examples
+const blueprints = {
+    contact: {
+        name: { type: 'string', required: true, minLength: 2, label: 'Full Name', placeholder: 'Enter your full name' },
+        email: { type: 'email', required: true, label: 'Email Address', placeholder: 'you@example.com' },
+        message: { type: 'textarea', required: true, minLength: 10, rows: 4, label: 'Message', placeholder: 'Your message here...' }
+    },
+    registration: {
+        email: { type: 'email', required: true, label: 'Email Address' },
+        password: {
+            type: 'password',
+            required: true,
+            minLength: 8,
+            label: 'Password',
+            help: 'At least 8 characters',
+            validate: (value) => {
+                if (!/[A-Z]/.test(value)) return 'Need uppercase letter';
+                if (!/[0-9]/.test(value)) return 'Need a number';
+                return true;
+            }
+        },
+        confirmPassword: {
+            type: 'password',
+            required: true,
+            label: 'Confirm Password',
+            validate: (value, data) => {
+                return value === data.password || 'Passwords do not match';
+            }
+        },
+        agreeToTerms: {
+            type: 'boolean',
+            required: true,
+            label: 'I agree to the Terms of Service',
+            validate: (value) => value || 'You must accept the terms'
+        }
+    },
+    settings: {
+        notifications: { type: 'boolean', default: true, label: 'Email Notifications' },
+        theme: { type: 'select', options: ['light', 'dark', 'auto'], default: 'auto', label: 'Theme' },
+        language: {
+            type: 'radio',
+            options: [
+                { value: 'en', label: 'English' },
+                { value: 'es', label: 'Español' },
+                { value: 'fr', label: 'Français' }
+            ],
+            default: 'en',
+            label: 'Language'
+        }
+    },
+    product: {
+        name: {
+            type: 'string',
+            required: true,
+            maxLength: 100,
+            label: 'Product Name',
+            formConfig: {
+                span: 2,  // Span 2 columns in grid layout
+                tooltip: 'The display name of your product'
+            }
+        },
+        sku: {
+            type: 'string',
+            required: true,
+            pattern: /^[A-Z0-9-]+$/,
+            label: 'SKU',
+            formConfig: {
+                placeholder: 'e.g. PROD-001',
+                tooltip: 'Stock Keeping Unit - unique product identifier'
+            }
+        },
+        price: {
+            type: 'number',
+            required: true,
+            min: 0,
+            step: 0.01,
+            label: 'Price (£)',
+            formConfig: {
+                placeholder: '0.00',
+                tooltip: 'Product price in GBP'
+            }
+        },
+        category: {
+            type: 'select',
+            required: true,
+            options: ['Electronics', 'Clothing', 'Home'],
+            label: 'Category',
+            formConfig: {
+                tooltip: 'Product category for organisation'
+            }
+        },
+        stock: {
+            type: 'number',
+            required: true,
+            min: 0,
+            label: 'Stock Quantity',
+            formConfig: {
+                placeholder: '0',
+                tooltip: 'Current available inventory'
+            }
+        },
+        description: {
+            type: 'textarea',
+            required: true,
+            maxLength: 1000,
+            rows: 5,
+            label: 'Description',
+            formConfig: {
+                span: 2,  // Full width in 2-column grid
+                placeholder: 'Product description...',
+                helperText: 'Maximum 1000 characters',
+                tooltip: 'Detailed product description for customers'
+            }
+        },
+        inStock: {
+            type: 'boolean',
+            default: true,
+            label: 'In Stock',
+            formConfig: { span: 2 }  // Full width
+        }
+    },
+    userProfile: {
+        firstName: {
+            type: 'string',
+            required: true,
+            minLength: 2,
+            label: 'First Name',
+            formConfig: { placeholder: 'Enter first name' }
+        },
+        lastName: {
+            type: 'string',
+            required: true,
+            minLength: 2,
+            label: 'Last Name',
+            formConfig: { placeholder: 'Enter last name' }
+        },
+        email: {
+            type: 'email',
+            required: true,
+            label: 'Email Address',
+            formConfig: {
+                placeholder: 'you@example.com',
+                helperText: 'We will never share your email'
+            }
+        },
+        phone: {
+            type: 'tel',
+            label: 'Phone Number',
+            formConfig: { placeholder: '+44 20 1234 5678' }
+        },
+        bio: {
+            type: 'textarea',
+            rows: 4,
+            maxLength: 500,
+            label: 'Biography',
+            formConfig: {
+                span: 2,  // Full width
+                placeholder: 'Tell us about yourself...',
+                helperText: 'Maximum 500 characters'
+            }
+        },
+        website: {
+            type: 'url',
+            label: 'Website',
+            formConfig: {
+                placeholder: 'https://example.com',
+                hint: '(optional)'
+            }
+        },
+        role: {
+            type: 'select',
+            required: true,
+            options: ['Developer', 'Designer', 'Manager', 'Other'],
+            label: 'Role',
+            default: 'Developer'
+        },
+        newsletter: {
+            type: 'boolean',
+            label: 'Subscribe to newsletter',
+            default: false,
+            formConfig: { span: 2 }
+        }
+    }
+};
+
+// Initialize blueprint tabs - CREATE HTML FIRST!
+const tabItems = [
+    { label: 'Contact', value: 'contact' },
+    { label: 'Registration', value: 'registration' },
+    { label: 'Settings', value: 'settings' },
+    { label: 'Product (Grid)', value: 'product' },
+    { label: 'User Profile (Grid)', value: 'userProfile' }
+];
+
+// Build tabs HTML structure
+let tabsHTML = '<div class="tabs"><div class="tabs-nav">';
+tabItems.forEach((item, index) => {
+    tabsHTML += `<button class="tab-item${index === 0 ? ' active' : ''}" data-tab="${item.value}">${item.label}</button>`;
+});
+tabsHTML += '</div><div class="tabs-content">';
+tabItems.forEach((item, index) => {
+    tabsHTML += `<div class="tab-panel" data-panel="${item.value}" id="tab-${item.value}"></div>`;
+});
+tabsHTML += '</div></div>';
+
+// Sanitize and insert HTML
+$('#blueprint-tabs').html(DOMPurify.sanitize(tabsHTML), {safe: false});
+
+// NOW initialize the tabs component
+const tabsInstance = Domma.elements.tabs('#blueprint-tabs .tabs', {
+    animation: true,
+    onChange: (e) => {
+        const exampleKey = tabItems[e.index].value;
+        showBlueprintExample(exampleKey);
+    }
+});
+
+function showBlueprintExample(key) {
+    const blueprint = blueprints[key];
+    const container = $(`#tab-${key}`);
+
+    // Escape JSON for safe HTML insertion
+    const blueprintCode = JSON.stringify(blueprint, null, 2)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+    const html = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <h4 class="font-semibold mb-2">Blueprint Code</h4>
+                <pre class="blueprint-code">${blueprintCode}</pre>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-2">Generated Form</h4>
+                <div class="result-pane" id="form-${key}"></div>
+            </div>
+        </div>
+    `;
+
+    container.html(DOMPurify.sanitize(html), {safe: false});
+
+    // Generate and render form - ONE-STEP API
+    // Use grid layout for product and userProfile examples
+    const formLayout = (key === 'product' || key === 'userProfile') ? 'grid' : 'stacked';
+    const formColumns = 2;
+
+    F.render(`#form-${key}`, blueprint, {}, {
+        layout: formLayout,
+        columns: formColumns,
+        submitText: 'Submit',
+        onSubmit: (data) => {
+            Domma.elements.toast('Form submitted successfully!', { type: 'success' });
+            console.log('Submitted:', data);
+        },
+        onValidationError: (errors) => {
+            Domma.elements.toast('Please fix validation errors', { type: 'error' });
+            console.error('Validation errors:', errors);
+        }
+    });
+}
+
+// Show first example
+showBlueprintExample('contact');
+
+// Contact Form Example - ONE-STEP API
+const contactBlueprint = {
+    name: {
+        type: 'string',
+        required: true,
+        minLength: 2,
+        label: 'Full Name',
+        formConfig: {
+            tooltip: 'Enter your first and last name'
+        }
+    },
+    email: {
+        type: 'email',
+        required: true,
+        label: 'Email',
+        formConfig: {
+            tooltip: 'We\'ll never share your email with anyone'
+        }
+    },
+    message: {
+        type: 'textarea',
+        required: true,
+        minLength: 10,
+        rows: 4,
+        label: 'Message',
+        formConfig: {
+            tooltip: 'Let us know how we can help you'
+        }
+    }
+};
+
+F.render('#contact-form', contactBlueprint, {}, {
+    layout: 'stacked',
+    submitText: 'Send Message',
+    onSubmit: (data) => {
+        Domma.elements.toast('Message sent!', { type: 'success' });
+        console.log('Form submitted:', data);
+    },
+    onValidationError: (errors) => {
+        Domma.elements.toast('Please fix validation errors', { type: 'error' });
+        console.error('Validation errors:', errors);
+    }
+});
+
+// Reactive Model Demo
+const userBlueprint = {
+    name: { type: 'string', required: true, minLength: 2 },
+    email: { type: 'email', required: true },
+    age: { type: 'number', min: 0, max: 120 }
+};
+
+const userModel = M.create(userBlueprint, {
+    name: 'Alice',
+    email: 'alice@example.com',
+    age: 30
+});
+
+let changeLog = [];
+
+// Update state display
+function updateModelState() {
+    $('#model-state-display').text(JSON.stringify(userModel.toJSON(), null, 2));
+}
+
+// Manual binding - M.bind() doesn't work with standard HTML inputs
+$('#model-name').on('input', function() {
+    try {
+        userModel.set('name', $(this).val());
+    } catch (error) {
+        console.warn('Validation error (name):', error.message);
+    }
+});
+
+$('#model-email').on('input', function() {
+    try {
+        userModel.set('email', $(this).val());
+    } catch (error) {
+        console.warn('Validation error (email):', error.message);
+    }
+});
+
+$('#model-age').on('input', function() {
+    try {
+        const value = $(this).val();
+        userModel.set('age', value === '' ? null : parseInt(value, 10));
+    } catch (error) {
+        console.warn('Validation error (age):', error.message);
+    }
+});
+
+// Listen for changes
+userModel.onChange((event) => {
+    changeLog.push(`${event.field}: ${event.oldValue} → ${event.newValue}`);
+    $('#model-change-log').text(changeLog.join('\n'));
+    updateModelState();
+
+    // Update input if changed programmatically
+    if (event.field === 'name') $('#model-name').val(event.newValue);
+    if (event.field === 'email') $('#model-email').val(event.newValue);
+    if (event.field === 'age') $('#model-age').val(event.newValue);
+});
+
+updateModelState();
+
+// Validate button
+$('#validate-model').on('click', () => {
+    const errors = userModel.validate();
+
+    // Display validation result
+    if (errors && errors.length > 0) {
+        $('#validation-display').text(JSON.stringify(errors, null, 2));
+        $('#validation-result').show();
+        Domma.elements.toast('Validation errors found', { type: 'error' });
+    } else {
+        $('#validation-display').text('✓ All fields are valid');
+        $('#validation-result').show();
+        Domma.elements.toast('All fields valid!', { type: 'success' });
+    }
+});
+
+// Reset button
+$('#reset-model').on('click', () => {
+    userModel.reset();
+    changeLog = [];
+    $('#model-change-log').text('No changes yet');
+    $('#validation-result').hide();
+    updateModelState();
+});
+
+// Composition demos
+$('#extend-demo').on('click', () => {
+    const base = { name: { type: 'string' }, email: { type: 'email' } };
+    const extended = { email: { required: true }, age: { type: 'number' } };
+    const result = B.extend(base, extended);
+    $('#extend-result-code').text(JSON.stringify(result, null, 2));
+    $('#extend-result').show();
+});
+
+$('#pick-demo').on('click', () => {
+    const full = {
+        name: { type: 'string' },
+        email: { type: 'email' },
+        age: { type: 'number' },
+        role: { type: 'string' }
+    };
+    const result = B.pick(full, ['name', 'email']);
+    $('#pick-result-code').text(JSON.stringify(result, null, 2));
+    $('#pick-result').show();
+});
+
+$('#omit-demo').on('click', () => {
+    const admin = {
+        name: { type: 'string' },
+        email: { type: 'email' },
+        role: { type: 'string' },
+        permissions: { type: 'array' }
+    };
+    const result = B.omit(admin, ['permissions']);
+    $('#omit-result-code').text(JSON.stringify(result, null, 2));
+    $('#omit-result').show();
+});
+
+// Scan icons
+if (Domma.icons) {
+    Domma.icons.scan();
+}
+</script>
+</body>
+</html>

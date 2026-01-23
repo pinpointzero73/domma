@@ -15,7 +15,7 @@ modern UI components in one cohesive package.
 - **Models** (`M`) - Reactive data models with pub/sub events and two-way DOM binding
 - **Elements** (`E`) - 28 UI components (modals, tabs, carousels, navbars, slideovers, and more)
 - **Tables** (`T`) - DataTable-like functionality (sort, filter, paginate, export to CSV/JSON)
-- **Forms** (`F`) - Schema-driven form generation with validation, wizards, and CRUD helpers
+- **Forms** (`F`) - Blueprint-driven form generation with validation, wizards, and CRUD helpers
 - **Icons** (`I`) - 200+ SVG icons in 15 categories with auto-scan
 - **HTTP Client** (`H`) - Simple async HTTP requests with JSON handling
 - **Storage** (`S`) - localStorage wrapper with auto JSON serialization
@@ -69,16 +69,46 @@ const { $, _, M, D } = Domma;
 
 For quick prototyping without npm:
 
+**Option 1: Official CDN (Recommended)**
+
 ```html
-<!-- CSS -->
-<link rel="stylesheet" href="https://unpkg.com/domma-js/public/dist/domma.css">
-<link rel="stylesheet" href="https://unpkg.com/domma-js/public/dist/grid.css">
-<link rel="stylesheet" href="https://unpkg.com/domma-js/public/dist/elements.css">
-<link rel="stylesheet" href="https://unpkg.com/domma-js/public/dist/themes/domma-themes.css">
+<!-- CSS (Load in this order) -->
+<link rel="stylesheet" href="https://dommajs.org/dist/domma.css">
+<link rel="stylesheet" href="https://dommajs.org/dist/grid.css">
+<link rel="stylesheet" href="https://dommajs.org/dist/elements.css">
+<link rel="stylesheet" href="https://dommajs.org/dist/themes/domma-themes.css">
 
 <!-- JavaScript -->
-<script src="https://unpkg.com/domma-js/public/dist/domma.min.js"></script>
+<script src="https://dommajs.org/dist/domma.min.js"></script>
 ```
+
+**Option 2: unpkg CDN**
+
+```html
+<!-- CSS -->
+<link rel="stylesheet" href="https://unpkg.com/domma-js@latest/public/dist/domma.css">
+<link rel="stylesheet" href="https://unpkg.com/domma-js@latest/public/dist/grid.css">
+<link rel="stylesheet" href="https://unpkg.com/domma-js@latest/public/dist/elements.css">
+<link rel="stylesheet" href="https://unpkg.com/domma-js@latest/public/dist/themes/domma-themes.css">
+
+<!-- JavaScript -->
+<script src="https://unpkg.com/domma-js@latest/public/dist/domma.min.js"></script>
+```
+
+**Option 3: jsDelivr CDN**
+
+```html
+<!-- CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@latest/public/dist/domma.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@latest/public/dist/grid.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@latest/public/dist/elements.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/domma-js@latest/public/dist/themes/domma-themes.css">
+
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/domma-js@latest/public/dist/domma.min.js"></script>
+```
+
+> **Tip:** Replace `@latest` with a specific version (e.g., `@0.9.18`) for production to ensure stability.
 
 ## Live Demo
 
@@ -91,19 +121,20 @@ Explore all features:
 
 ## Short Aliases
 
-| Namespace | Full Path         | Alias | Description                   |
-|-----------|-------------------|-------|-------------------------------|
-| DOM       | `Domma()`         | `$`   | jQuery-style DOM manipulation |
-| Utils     | `Domma.utils`     | `_`   | Lodash-style utilities        |
-| Models    | `Domma.models`    | `M`   | Reactive models & pub/sub     |
-| Dates     | `Domma.dates`     | `D`   | Date manipulation             |
-| Storage   | `Domma.storage`   | `S`   | localStorage wrapper          |
-| Auth      | `Domma.auth`      | `A`   | Authentication module         |
-| Forms     | `Domma.forms`     | `F`   | Form builder                  |
-| HTTP      | `Domma.http`      | `H`   | HTTP client                   |
-| Elements  | `Domma.elements`  | `E`   | UI components                 |
-| Icons     | `Domma.icons`     | `I`   | SVG icon system               |
-| Tables    | `Domma.tables`    | `T`   | DataTable functionality       |
+| Namespace  | Full Path         | Alias | Description                              |
+|------------|-------------------|-------|------------------------------------------|
+| DOM        | `Domma()`         | `$`   | jQuery-style DOM manipulation            |
+| Utils      | `Domma.utils`     | `_`   | Lodash-style utilities                   |
+| Models     | `Domma.models`    | `M`   | Reactive models & pub/sub                |
+| Blueprints | Blueprint Methods | `B`   | Blueprint composition (extend, pick, omit) |
+| Dates      | `Domma.dates`     | `D`   | Date manipulation                        |
+| Storage    | `Domma.storage`   | `S`   | localStorage wrapper                     |
+| Auth       | `Domma.auth`      | `A`   | Authentication module                    |
+| Forms      | `Domma.forms`     | `F`   | Form builder                             |
+| HTTP       | `Domma.http`      | `H`   | HTTP client                              |
+| Elements   | `Domma.elements`  | `E`   | UI components                            |
+| Icons      | `Domma.icons`     | `I`   | SVG icon system                          |
+| Tables     | `Domma.tables`    | `T`   | DataTable functionality                  |
 
 ## Bundle Options
 
@@ -117,10 +148,20 @@ Choose the right bundle for your needs:
 | **data-focused** | 190KB | Core + models, tables, http, storage |
 | **no-ui** | 41KB | Core utilities only (DOM + utils) |
 
-```javascript
-// Use specific bundles via CDN
-<script src="https://unpkg.com/domma-js/public/dist/domma-minimal.min.js"></script>
-<script src="https://unpkg.com/domma-js/public/dist/domma-essentials.min.js"></script>
+```html
+<!-- Use specific bundles via CDN -->
+<!-- Minimal bundle (163KB) -->
+<script src="https://dommajs.org/dist/domma-minimal.min.js"></script>
+
+<!-- Essentials bundle (328KB) -->
+<script src="https://dommajs.org/dist/domma-essentials.min.js"></script>
+
+<!-- Data-focused bundle (190KB) -->
+<script src="https://dommajs.org/dist/domma-data-focused.min.js"></script>
+
+<!-- Via unpkg -->
+<script src="https://unpkg.com/domma-js@latest/public/dist/domma-minimal.min.js"></script>
+<script src="https://unpkg.com/domma-js@latest/public/dist/domma-essentials.min.js"></script>
 ```
 
 ## Quick Start
@@ -239,8 +280,11 @@ Domma.theme.init({ autoDetect: true });
 Domma includes powerful developer tools in a separate bundle.
 
 ```html
-<!-- Load tools bundle -->
-<script src="dist/domma-tools.min.js"></script>
+<!-- Load tools bundle via CDN -->
+<script src="https://dommajs.org/dist/domma-tools.min.js"></script>
+
+<!-- Or via unpkg -->
+<script src="https://unpkg.com/domma-js@latest/public/dist/domma-tools.min.js"></script>
 ```
 
 **Theme Roller** - Visual theme customization tool:
@@ -530,10 +574,10 @@ table.toJSON();
 
 ### Forms (`F` or `Domma.forms`)
 
-Schema-driven form generation with validation, wizards, and CRUD helpers.
+Blueprint-driven form generation with validation, wizards, and CRUD helpers.
 
 ```javascript
-// Schema-driven form
+// Blueprint-driven form
 const form = F.create('#user-form', {
     fields: [
         { name: 'name', type: 'string', label: 'Full Name', required: true },
@@ -558,7 +602,7 @@ const wizard = F.wizard('#registration', {
 // CRUD helper
 const crud = F.crud({
     apiUrl: '/api/users',
-    fields: schema,
+    fields: blueprint,
     table: '#users-table'
 });
 ```

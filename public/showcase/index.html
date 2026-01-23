@@ -107,7 +107,7 @@
                     <ul class="list-none p-0 mt-4">
                         <li class="py-1 text-gray-600 text-sm">Pub/Sub events</li>
                         <li class="py-1 text-gray-600 text-sm">Reactive data binding</li>
-                        <li class="py-1 text-gray-600 text-sm">Schema validation</li>
+                        <li class="py-1 text-gray-600 text-sm">Blueprint validation</li>
                         <li class="py-1 text-gray-600 text-sm">Two-way DOM binding</li>
                     </ul>
                 </div>
@@ -116,22 +116,40 @@
                 </div>
             </a>
 
+            <!-- Blueprints -->
+            <a href="blueprints/index.html" class="card card-hover namespace-card no-underline text-inherit">
+                <div class="card-body flex-1">
+                    <div class="namespace-icon mb-4 text-primary" data-icon="box"></div>
+                    <h3 class="card-title">Blueprints</h3>
+                    <p class="card-text">Unified schema system - define once, use everywhere for validation, forms, models, and CRUD.</p>
+                    <ul class="list-none p-0 mt-4">
+                        <li class="py-1 text-gray-600 text-sm">Single source of truth</li>
+                        <li class="py-1 text-gray-600 text-sm">Form generation</li>
+                        <li class="py-1 text-gray-600 text-sm">Model validation</li>
+                        <li class="py-1 text-gray-600 text-sm">Blueprint composition</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <code>M.create(blueprint) → Domma.forms.create(blueprint)</code>
+                </div>
+            </a>
+
             <!-- Forms -->
             <a href="forms/index.html" class="card card-hover namespace-card no-underline text-inherit">
                 <div class="card-body flex-1">
                     <div class="namespace-icon mb-4 text-primary" data-icon="document-add"></div>
                     <h3 class="card-title">Forms</h3>
-                    <p class="card-text">Schema-driven form generation with validation, modals, wizards, and complete
+                    <p class="card-text">Blueprint-driven form generation with validation, modals, wizards, and complete
                         CRUD operations.</p>
                     <ul class="list-none p-0 mt-4">
-                        <li class="py-1 text-gray-600 text-sm">Schema-driven generation</li>
+                        <li class="py-1 text-gray-600 text-sm">Blueprint-driven generation</li>
                         <li class="py-1 text-gray-600 text-sm">Automatic validation</li>
                         <li class="py-1 text-gray-600 text-sm">Modal & wizard support</li>
                         <li class="py-1 text-gray-600 text-sm">Complete CRUD helper</li>
                     </ul>
                 </div>
                 <div class="card-footer">
-                    <code>Domma.forms.create(schema, data, options)</code>
+                    <code>Domma.forms.create(blueprint, data, options)</code>
                     <div class="mt-3">
                       <button class="btn btn-sm btn-outline-primary" disabled>
                             <span data-icon="users" class="icon"></span>
