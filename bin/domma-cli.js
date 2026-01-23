@@ -33,6 +33,9 @@ switch (command) {
   case 'add':
     handleAdd();
     break;
+  case 'setup-ai':
+    handleSetupAI();
+    break;
   case 'version':
   case '--version':
   case '-v':
@@ -367,6 +370,97 @@ function showVersion() {
 /**
  * Show help information
  */
+/**
+ * Handle AI assistance setup
+ */
+async function handleSetupAI() {
+  const templatesDir = join(__dirname, '..', 'templates', 'kickstart');
+  const projectRoot = process.cwd();
+
+  console.log(`
+╔═══════════════════════════════════════╗
+║   Domma AI Assistance Setup           ║
+╚═══════════════════════════════════════╝
+
+This will copy AI assistance files to your project:
+  • CLAUDE.md - Framework reference guide
+  • .claude/ - Settings & code snippets
+  • blueprints/ - Reusable schemas (8 files)
+  • types/ - TypeScript definitions
+`);
+
+  const rl = readline.createInterface({input, output});
+  const answer = await rl.question('Continue? (Y/n): ');
+  rl.close();
+
+  if (answer.toLowerCase() === 'n' || answer.toLowerCase() === 'no') {
+    console.log('\nSetup cancelled.');
+    return;
+  }
+
+  console.log('\nCopying files...\n');
+
+  try {
+    let copied = 0;
+
+    // Copy CLAUDE.md
+    const claudeMd = join(templatesDir, 'CLAUDE.md');
+    const destClaudeMd = join(projectRoot, 'CLAUDE.md');
+    if (existsSync(claudeMd) && !existsSync(destClaudeMd)) {
+      cpSync(claudeMd, destClaudeMd);
+      console.log('  ✓ Created CLAUDE.md');
+      copied++;
+    } else if (existsSync(destClaudeMd)) {
+      console.log('  ⊘ CLAUDE.md already exists');
+    }
+
+    // Copy .claude/ directory
+    const claudeDir = join(templatesDir, '.claude');
+    const destClaudeDir = join(projectRoot, '.claude');
+    if (existsSync(claudeDir) && !existsSync(destClaudeDir)) {
+      cpSync(claudeDir, destClaudeDir, { recursive: true });
+      console.log('  ✓ Created .claude/ directory');
+      copied++;
+    } else if (existsSync(destClaudeDir)) {
+      console.log('  ⊘ .claude/ already exists');
+    }
+
+    // Copy blueprints/ directory
+    const blueprintsDir = join(templatesDir, 'blueprints');
+    const destBlueprintsDir = join(projectRoot, 'blueprints');
+    if (existsSync(blueprintsDir) && !existsSync(destBlueprintsDir)) {
+      cpSync(blueprintsDir, destBlueprintsDir, { recursive: true });
+      console.log('  ✓ Created blueprints/ directory');
+      copied++;
+    } else if (existsSync(destBlueprintsDir)) {
+      console.log('  ⊘ blueprints/ already exists');
+    }
+
+    // Copy types/ directory
+    const typesDir = join(templatesDir, 'frontend', 'types');
+    const destTypesDir = join(projectRoot, 'types');
+    if (existsSync(typesDir) && !existsSync(destTypesDir)) {
+      cpSync(typesDir, destTypesDir, { recursive: true });
+      console.log('  ✓ Created types/ directory');
+      copied++;
+    } else if (existsSync(destTypesDir)) {
+      console.log('  ⊘ types/ already exists');
+    }
+
+    if (copied > 0) {
+      console.log(`\n✓ Successfully added ${copied} AI assistance ${copied === 1 ? 'file' : 'files'}!`);
+      console.log('Claude Code will now have full context for your Domma project.\n');
+    } else {
+      console.log('\nAll AI assistance files already exist. Nothing to copy.\n');
+    }
+
+  } catch (error) {
+    console.error('\n✗ Error copying AI assistance files:', error.message);
+    console.error('You can manually copy them from node_modules/domma-js/templates/kickstart/\n');
+    process.exit(1);
+  }
+}
+
 function showHelp() {
   console.log(`
 Domma CLI v${VERSION} - Project scaffolding and management
@@ -375,6 +469,7 @@ Commands:
   npx domma-js              Initialize a new Domma project
   npx domma-js init         Initialize a new Domma project
   npx domma-js add page <path>  Add a new page at specified path
+  npx domma-js setup-ai     Add AI assistance files to existing project
     --quick                 Skip interactive prompts
 
 Options:
@@ -384,6 +479,7 @@ Options:
 Examples:
   npx domma-js                     # Interactive project setup
   npx domma-js --quick             # Quick project setup with defaults
+  npx domma-js setup-ai            # Add AI assistance to existing project
 
   # Add pages at different paths:
   npx domma-js add page admin                      # Root level (admin/)
