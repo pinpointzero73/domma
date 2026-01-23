@@ -1,7 +1,7 @@
 {
-  "version": "0.10.0",
-  "built": "23/01/2026 16:47",
-  "commit": "e2a2ded",
+  "version": "0.10.1",
+  "built": "23/01/2026 17:27",
+  "commit": "bab2e88",
   "bundles": {
     "full": {
       "size": 436,
