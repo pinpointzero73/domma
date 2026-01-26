@@ -298,6 +298,12 @@ class SchemaBuilder extends Component {
             dropdown.value = this.options.previewLayout;
         }
 
+        // Show preview by default if enabled
+        if (this.options.showPreview && this._refs.previewPanel) {
+            this._refs.previewPanel.style.display = 'flex';
+            this._refs.previewPanel.style.transform = 'translateX(0)';
+        }
+
         if (this.options.autoSave) {
             this._startAutoSave();
         }
@@ -324,7 +330,7 @@ class SchemaBuilder extends Component {
                         <h2 class="sb-title">Schema Builder</h2>
                     </div>
                     <div class="sb-header-right">
-                        <button class="btn btn-sm" data-action="toggle-preview"><span data-icon="eye"></span> Preview</button>
+                        <button class="btn btn-sm btn-primary" data-action="toggle-preview"><span data-icon="eye"></span> Preview</button>
                         <button class="btn btn-sm" data-action="import"><span data-icon="upload"></span> Import</button>
                         <button class="btn btn-primary btn-sm" data-action="export"><span data-icon="download"></span> Export</button>
                     </div>
@@ -704,7 +710,17 @@ class SchemaBuilder extends Component {
     }
 
     _renderPreview() {
-        if (!this.options.showPreview || !this._refs.previewForm) return;
+        // Skip if preview is disabled or elements don't exist yet
+        if (!this.options.showPreview) return;
+
+        // Re-query elements if refs are missing (can happen after render)
+        if (!this._refs.previewForm || !this._refs.previewState) {
+            this._refs.previewForm = this.element.querySelector('.sb-preview-form');
+            this._refs.previewState = this.element.querySelector('.sb-state-display');
+            this._refs.previewPanel = this.element.querySelector('.sb-preview-panel');
+        }
+
+        if (!this._refs.previewForm || !this._refs.previewState) return;
 
         if (this._previewForm && this._previewForm.destroy) {
             this._previewForm.destroy();
@@ -748,7 +764,37 @@ class SchemaBuilder extends Component {
                     layout: layout,
                     columns: columns,
                     submitText: 'Test Submit',
-                    showReset: false
+                    showReset: false,
+                    onSubmit: async (data) => {
+                        // Validate the form
+                        const isValid = this._previewForm.model.validate();
+
+                        if (isValid === true) {
+                            // Show success with submitted data
+                            if (typeof Domma !== 'undefined' && Domma.elements && Domma.elements.alert) {
+                                await Domma.elements.alert(
+                                    `<strong>✓ Validation Passed!</strong><br><br>Submitted Data:<br><pre style="text-align: left; margin-top: 10px;">${JSON.stringify(data, null, 2)}</pre>`,
+                                    { title: 'Form Submission Test' }
+                                );
+                            } else {
+                                alert('✓ Validation passed!\n\nSubmitted data:\n' + JSON.stringify(data, null, 2));
+                            }
+                        } else {
+                            // Show validation errors
+                            const errors = Object.entries(isValid)
+                                .map(([field, error]) => `• ${field}: ${error}`)
+                                .join('\n');
+
+                            if (typeof Domma !== 'undefined' && Domma.elements && Domma.elements.alert) {
+                                await Domma.elements.alert(
+                                    `<strong>✗ Validation Failed</strong><br><br>${errors.replace(/\n/g, '<br>')}`,
+                                    { title: 'Form Validation Errors' }
+                                );
+                            } else {
+                                alert('✗ Validation failed:\n\n' + errors);
+                            }
+                        }
+                    }
                 });
 
                 // Render form to the preview element
@@ -871,6 +917,14 @@ class SchemaBuilder extends Component {
         const prop = e.target.dataset.prop;
         let value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
 
+        // Convert number inputs to actual numbers
+        if (e.target.type === 'number' && value !== '') {
+            const num = parseFloat(value);
+            if (!isNaN(num)) {
+                value = num;
+            }
+        }
+
         // Handle nested properties (e.g., formConfig.columns)
         if (prop.includes('.')) {
             const parts = prop.split('.');
@@ -881,8 +935,8 @@ class SchemaBuilder extends Component {
                 field[parts[0]] = {};
             }
 
-            // Set nested property (convert to number if applicable)
-            field[parts[0]][parts[1]] = isNaN(value) ? value : parseInt(value);
+            // Set nested property
+            field[parts[0]][parts[1]] = value;
 
             this.updateField(this._selectedIndex, { [parts[0]]: field[parts[0]] });
         } else {
@@ -1093,7 +1147,11 @@ class SchemaBuilder extends Component {
     }
 
     _togglePreview() {
-        if (!this._refs.previewPanel) return;
+        if (!this._refs.previewPanel) {
+            // Re-query if not found
+            this._refs.previewPanel = this.element.querySelector('.sb-preview-panel');
+            if (!this._refs.previewPanel) return;
+        }
 
         const isVisible = this._refs.previewPanel.style.display !== 'none';
 
@@ -1106,10 +1164,13 @@ class SchemaBuilder extends Component {
         } else {
             // Show then slide in
             this._refs.previewPanel.style.display = 'flex';
+            // Force reflow
+            this._refs.previewPanel.offsetHeight;
             setTimeout(() => {
                 this._refs.previewPanel.style.transform = 'translateX(0)';
+                // Render after panel is visible
+                this._renderPreview();
             }, 10);
-            this._renderPreview();
         }
 
         return this;

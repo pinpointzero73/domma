@@ -1,35 +1,41 @@
 {
   "releases": [
     {
+      "year": "v0.10.2",
+      "title": "Schema Builder - Visual Blueprint Designer",
+      "description": "Build Domma Blueprints visually with drag-and-drop. Features 21 field types, live form preview with validation testing, 12-column grid layout support, and multi-format export to JavaScript, JSON, or TypeScript.",
+      "date": "2026-01-26"
+    },
+    {
       "year": "v0.10.1",
-      "title": "Post-Install CLI & Documentation",
-      "description": "Added post-install script with CLI tooling (domma-cli.js), comprehensive AI assistance setup documentation (AI_ASSISTANCE_SETUP.md), and automated environment configuration. Enhanced developer onboarding experience with 509 lines of new tooling infrastructure.",
+      "title": "Easier Project Setup",
+      "description": "New CLI tools and setup documentation make getting started faster. Run the post-install script to configure your environment automatically.",
       "date": "2026-01-23"
     },
     {
       "year": "v0.10.0",
-      "title": "Blueprints System & Developer Documentation",
-      "description": "Major release introducing the Blueprints system for unified schema management across Models, Forms, and CRUD operations. Added comprehensive Blueprints.md documentation (1,334 lines), enhanced CLAUDE.md developer guide, updated TypeScript definitions for Models, and improved Kickstart templates. Rebuilt all distribution bundles with latest changes.",
+      "title": "Blueprints - Define Once, Use Everywhere",
+      "description": "Major release introducing Blueprints for unified data schemas. Define your data structure once and use it with Models, Forms, and CRUD operations automatically.",
       "date": "2026-01-23"
     },
     {
       "year": "Jan 22-23",
       "title": "Build System Updates",
-      "description": "Multiple distribution bundle rebuilds with updated build metadata, version synchronisation, and archive regeneration. Maintained consistency across all bundle variants (minimal, essentials, data-focused, full, complete, grayve) and module formats (ESM, minified).",
+      "description": "Updated distribution bundles with improved build process and version consistency across all bundle variants.",
       "date": "2026-01-22"
     },
     {
       "year": "Jan 21",
-      "title": "CDN Distribution Foundation",
-      "description": "Established public/dist folder structure for CDN distribution with initial bundle archives. Updated .gitignore for better build artefact management. Set up infrastructure for seamless CDN delivery of Domma framework files.",
+      "title": "CDN Distribution Ready",
+      "description": "Framework now available via CDN for easier integration. Simply include the script tag and start using Domma in your projects.",
       "date": "2026-01-21"
     },
     {
       "year": "v0.9.x",
-      "title": "Previous Releases",
-      "description": "Earlier releases focusing on core framework development, component library expansion, and ecosystem maturity. Established DOM manipulation API, utilities, reactive models, UI components, and comprehensive theming system.",
+      "title": "Foundation Release",
+      "description": "Core framework with DOM manipulation, utilities, reactive models, UI components, and theming system.",
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.10.1"
+  "latestVersion": "v0.10.2"
 }

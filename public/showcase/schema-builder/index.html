@@ -76,123 +76,7 @@
     <!-- Usage Section -->
     <section class="mt-8" data-section="Usage">
         <h2 class="text-2xl font-bold mb-4">Usage</h2>
-        <div class="grid grid-cols-2 gap-4">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">JavaScript API</h3>
-                    <div class="code-block language-javascript">
-                        <span class="comment">// Create a Schema Builder instance</span>
-                        const builder = Domma.elements.schemaBuilder('#container', {
-                            theme: 'light',
-                            autoSave: true,
-                            showPreview: true,
-                            previewLayout: 'stacked'
-                        });
-
-                        <span class="comment">// Add fields programmatically</span>
-                        builder.addField('string', 0);
-                        builder.addField('email', 1);
-                        builder.addField('select', 2);
-
-                        <span class="comment">// Update field properties</span>
-                        builder.updateField(0, {
-                            required: true,
-                            minLength: 3,
-                            label: 'Username'
-                        });
-
-                        <span class="comment">// Export to multiple formats</span>
-                        const js = builder.exportJS();
-                        const json = builder.exportJSON();
-                        const ts = builder.exportTypeScript({
-                            interfaceName: 'UserData',
-                            comments: true
-                        });
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Blueprint Composition</h3>
-                    <div class="code-block language-javascript">
-                        <span class="comment">// Import existing blueprint</span>
-                        const userBlueprint = {
-                            username: { type: 'string', required: true },
-                            email: { type: 'email', required: true }
-                        };
-                        builder.importBlueprint(userBlueprint, 'User');
-
-                        <span class="comment">// Extend with M.extend</span>
-                        const extended = M.extend(
-                            userBlueprint,
-                            { role: { type: 'select', options: ['admin', 'user'] } }
-                        );
-                        builder.importBlueprint(extended, 'Extended User');
-
-                        <span class="comment">// Pick specific fields</span>
-                        const picked = M.pick(userBlueprint, ['email']);
-                        builder.importBlueprint(picked, 'Email Only');
-
-                        <span class="comment">// Save/Load templates</span>
-                        builder.saveTemplate('Contact Form');
-                        builder.loadTemplate('Contact Form');
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4 mt-4">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Field Management</h3>
-                    <div class="code-block language-javascript">
-                        <span class="comment">// Field operations</span>
-                        builder.removeField(1);
-                        builder.moveField(2, 0);
-                        builder.duplicateField(0);
-
-                        <span class="comment">// Get blueprint data</span>
-                        const blueprint = builder.getBlueprint();
-                        const fields = builder.getFields();
-
-                        <span class="comment">// Select field for editing</span>
-                        builder._selectField(0);
-
-                        <span class="comment">// Clear all fields</span>
-                        builder.newSchema('My New Schema');
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Export Examples</h3>
-                    <div class="code-block language-javascript">
-                        <span class="comment">// JavaScript object</span>
-                        const userBlueprint = {
-                            username: {
-                                type: 'string',
-                                required: true,
-                                minLength: 3,
-                                label: 'Username'
-                            }
-                        };
-
-                        <span class="comment">// TypeScript interface</span>
-                        interface UserData {
-                            username: string;  <span class="comment">// Username</span>
-                        }
-
-                        <span class="comment">// JSON for API/config</span>
-                        {
-                            "username": {
-                                "type": "string",
-                                "required": true
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="usage-tabs"></div>
     </section>
 
     <!-- Field Types Reference -->
@@ -303,6 +187,128 @@
     // Apply stagger animation to feature cards
     $('.page-roller-feature-card').each((index, card) => {
         $(card).css('animation-delay', `${index * 0.1}s`);
+    });
+
+    // Initialize Usage tabs
+    Domma.elements.tabs('#usage-tabs', {
+        tabs: [
+            {
+                id: 'api',
+                label: 'JavaScript API',
+                content: `
+                    <div class="code-block language-javascript">
+                        <span class="comment">// Create a Schema Builder instance</span>
+                        const builder = Domma.elements.schemaBuilder('#container', {
+                            theme: 'light',
+                            autoSave: true,
+                            showPreview: true,
+                            previewLayout: 'stacked'
+                        });
+
+                        <span class="comment">// Add fields programmatically</span>
+                        builder.addField('string', 0);
+                        builder.addField('email', 1);
+                        builder.addField('select', 2);
+
+                        <span class="comment">// Update field properties</span>
+                        builder.updateField(0, {
+                            required: true,
+                            minLength: 3,
+                            label: 'Username'
+                        });
+
+                        <span class="comment">// Export to multiple formats</span>
+                        const js = builder.exportJS();
+                        const json = builder.exportJSON();
+                        const ts = builder.exportTypeScript({
+                            interfaceName: 'UserData',
+                            comments: true
+                        });
+                    </div>
+                `
+            },
+            {
+                id: 'composition',
+                label: 'Blueprint Composition',
+                content: `
+                    <div class="code-block language-javascript">
+                        <span class="comment">// Import existing blueprint</span>
+                        const userBlueprint = {
+                            username: { type: 'string', required: true },
+                            email: { type: 'email', required: true }
+                        };
+                        builder.importBlueprint(userBlueprint, 'User');
+
+                        <span class="comment">// Extend with M.extend</span>
+                        const extended = M.extend(
+                            userBlueprint,
+                            { role: { type: 'select', options: ['admin', 'user'] } }
+                        );
+                        builder.importBlueprint(extended, 'Extended User');
+
+                        <span class="comment">// Pick specific fields</span>
+                        const picked = M.pick(userBlueprint, ['email']);
+                        builder.importBlueprint(picked, 'Email Only');
+
+                        <span class="comment">// Save/Load templates</span>
+                        builder.saveTemplate('Contact Form');
+                        builder.loadTemplate('Contact Form');
+                    </div>
+                `
+            },
+            {
+                id: 'management',
+                label: 'Field Management',
+                content: `
+                    <div class="code-block language-javascript">
+                        <span class="comment">// Field operations</span>
+                        builder.removeField(1);
+                        builder.moveField(2, 0);
+                        builder.duplicateField(0);
+
+                        <span class="comment">// Get blueprint data</span>
+                        const blueprint = builder.getBlueprint();
+                        const fields = builder.getFields();
+
+                        <span class="comment">// Select field for editing</span>
+                        builder._selectField(0);
+
+                        <span class="comment">// Clear all fields</span>
+                        builder.newSchema('My New Schema');
+                    </div>
+                `
+            },
+            {
+                id: 'export',
+                label: 'Export Examples',
+                content: `
+                    <div class="code-block language-javascript">
+                        <span class="comment">// JavaScript object</span>
+                        const userBlueprint = {
+                            username: {
+                                type: 'string',
+                                required: true,
+                                minLength: 3,
+                                label: 'Username'
+                            }
+                        };
+
+                        <span class="comment">// TypeScript interface</span>
+                        interface UserData {
+                            username: string;  <span class="comment">// Username</span>
+                        }
+
+                        <span class="comment">// JSON for API/config</span>
+                        {
+                            "username": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    </div>
+                `
+            }
+        ]
     });
 
     // Create Schema Builder instance

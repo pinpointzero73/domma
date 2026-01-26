@@ -1,7 +1,7 @@
 {
   "version": "0.10.2",
-  "built": "26/01/2026 11:05",
-  "commit": "5390a13",
+  "built": "26/01/2026 11:58",
+  "commit": "0bd915d",
   "bundles": {
     "full": {
       "size": 436,
@@ -24,8 +24,8 @@
       "sizeFormatted": "41KB"
     },
     "tools": {
-      "size": 200,
-      "sizeFormatted": "200KB"
+      "size": 201,
+      "sizeFormatted": "201KB"
     }
   }
 }

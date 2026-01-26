@@ -1866,7 +1866,19 @@
 }
 
 .sb-preview-form {
-    /* Styles for the generated form */
+    /* Add more vertical spacing between form fields */
+}
+
+.sb-preview-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.sb-preview-form .form-group:last-child {
+    margin-bottom: 1rem;
+}
+
+.sb-preview-form .btn {
+    margin-top: 0.5rem;
 }
 
 .sb-state-display {
