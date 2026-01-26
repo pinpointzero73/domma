@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schema Builder - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css?v=3">
+    <link rel="stylesheet" href="../../dist/grid.css?v=3">
+    <link rel="stylesheet" href="../../dist/elements.css?v=3">
+    <link rel="stylesheet" href="../../dist/domma-tools.css?v=3">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css?v=3">
+    <link rel="stylesheet" href="../css/domma-showcase.css?v=3">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
+
+<header class="page-header">
+    <h1>Schema Builder</h1>
+    <p>Build Domma Blueprints visually with drag-and-drop. Design form schemas, test validation, and export to JavaScript, JSON, or TypeScript.</p>
+</header>
+
+<main class="container py-8">
+    <!-- Features -->
+    <section class="mb-8" data-section="Features">
+        <h2 class="text-2xl font-bold mb-4 text-center">Features</h2>
+        <div class="page-roller-feature-grid">
+            <div class="page-roller-feature-card shadow-lg animate-fade-in-up">
+                <span data-icon="layers" data-icon-size="32"></span>
+                <h3>20+ Field Types</h3>
+                <p>Complete field library: string, number, email, password, date, select, textarea, file, and more.</p>
+            </div>
+            <div class="page-roller-feature-card shadow-lg animate-fade-in-up">
+                <span data-icon="move" data-icon-size="32"></span>
+                <h3>Drag & Drop</h3>
+                <p>Drag fields from the library to your schema. Reorder fields on the canvas with intuitive drag-and-drop.</p>
+            </div>
+            <div class="page-roller-feature-card shadow-lg animate-fade-in-up">
+                <span data-icon="edit" data-icon-size="32"></span>
+                <h3>Property Editor</h3>
+                <p>Configure field properties: type, validation rules, labels, placeholders, help text, and form layout options.</p>
+            </div>
+            <div class="page-roller-feature-card shadow-lg animate-fade-in-up">
+                <span data-icon="eye" data-icon-size="32"></span>
+                <h3>Live Preview</h3>
+                <p>See your form in real-time with validation testing. Display model state and test user input instantly.</p>
+            </div>
+            <div class="page-roller-feature-card shadow-lg animate-fade-in-up">
+                <span data-icon="download" data-icon-size="32"></span>
+                <h3>Multi-Format Export</h3>
+                <p>Export to JavaScript object literals, JSON, or TypeScript interfaces with proper type mappings.</p>
+            </div>
+            <div class="page-roller-feature-card shadow-lg animate-fade-in-up">
+                <span data-icon="box" data-icon-size="32"></span>
+                <h3>Blueprint Composition</h3>
+                <p>Import existing blueprints. Use M.extend, M.pick, M.omit operations to compose complex schemas.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schema Builder Component -->
+    <section data-section="Schema Builder">
+        <h2 class="text-2xl font-bold mb-4">Schema Builder</h2>
+        <div class="alert alert-info mb-4">
+            <h4>Quick Start Guide:</h4>
+            <ul class="list-disc pl-6 mt-2">
+                <li><strong>Add Fields:</strong> Click or drag field types from the left panel into the canvas</li>
+                <li><strong>Edit Properties:</strong> Click any field card in the canvas to open the property editor</li>
+                <li><strong>Configure:</strong> Set field name, type, required status, labels, and validation rules</li>
+                <li><strong>Test:</strong> Preview your form in real-time at the bottom (if enabled)</li>
+                <li><strong>Export:</strong> Click "Export" to get JavaScript, JSON, or TypeScript code</li>
+            </ul>
+        </div>
+        <div id="schema-builder-container" style="min-height: 600px;"></div>
+    </section>
+
+    <!-- Usage Section -->
+    <section class="mt-8" data-section="Usage">
+        <h2 class="text-2xl font-bold mb-4">Usage</h2>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">JavaScript API</h3>
+                    <div class="code-block language-javascript">
+                        <span class="comment">// Create a Schema Builder instance</span>
+                        const builder = Domma.elements.schemaBuilder('#container', {
+                            theme: 'light',
+                            autoSave: true,
+                            showPreview: true,
+                            previewLayout: 'stacked'
+                        });
+
+                        <span class="comment">// Add fields programmatically</span>
+                        builder.addField('string', 0);
+                        builder.addField('email', 1);
+                        builder.addField('select', 2);
+
+                        <span class="comment">// Update field properties</span>
+                        builder.updateField(0, {
+                            required: true,
+                            minLength: 3,
+                            label: 'Username'
+                        });
+
+                        <span class="comment">// Export to multiple formats</span>
+                        const js = builder.exportJS();
+                        const json = builder.exportJSON();
+                        const ts = builder.exportTypeScript({
+                            interfaceName: 'UserData',
+                            comments: true
+                        });
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Blueprint Composition</h3>
+                    <div class="code-block language-javascript">
+                        <span class="comment">// Import existing blueprint</span>
+                        const userBlueprint = {
+                            username: { type: 'string', required: true },
+                            email: { type: 'email', required: true }
+                        };
+                        builder.importBlueprint(userBlueprint, 'User');
+
+                        <span class="comment">// Extend with M.extend</span>
+                        const extended = M.extend(
+                            userBlueprint,
+                            { role: { type: 'select', options: ['admin', 'user'] } }
+                        );
+                        builder.importBlueprint(extended, 'Extended User');
+
+                        <span class="comment">// Pick specific fields</span>
+                        const picked = M.pick(userBlueprint, ['email']);
+                        builder.importBlueprint(picked, 'Email Only');
+
+                        <span class="comment">// Save/Load templates</span>
+                        builder.saveTemplate('Contact Form');
+                        builder.loadTemplate('Contact Form');
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Field Management</h3>
+                    <div class="code-block language-javascript">
+                        <span class="comment">// Field operations</span>
+                        builder.removeField(1);
+                        builder.moveField(2, 0);
+                        builder.duplicateField(0);
+
+                        <span class="comment">// Get blueprint data</span>
+                        const blueprint = builder.getBlueprint();
+                        const fields = builder.getFields();
+
+                        <span class="comment">// Select field for editing</span>
+                        builder._selectField(0);
+
+                        <span class="comment">// Clear all fields</span>
+                        builder.newSchema('My New Schema');
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Export Examples</h3>
+                    <div class="code-block language-javascript">
+                        <span class="comment">// JavaScript object</span>
+                        const userBlueprint = {
+                            username: {
+                                type: 'string',
+                                required: true,
+                                minLength: 3,
+                                label: 'Username'
+                            }
+                        };
+
+                        <span class="comment">// TypeScript interface</span>
+                        interface UserData {
+                            username: string;  <span class="comment">// Username</span>
+                        }
+
+                        <span class="comment">// JSON for API/config</span>
+                        {
+                            "username": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Field Types Reference -->
+    <section class="mt-8" data-section="Field Types">
+        <h2 class="text-2xl font-bold mb-4">Available Field Types</h2>
+        <div class="grid grid-cols-3 gap-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Basic Types</h3>
+                    <ul class="list-disc pl-4">
+                        <li><strong>string</strong> - Single-line text</li>
+                        <li><strong>number</strong> - Numeric input</li>
+                        <li><strong>boolean</strong> - True/false checkbox</li>
+                        <li><strong>textarea</strong> - Multi-line text</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Specialized Inputs</h3>
+                    <ul class="list-disc pl-4">
+                        <li><strong>email</strong> - Email validation</li>
+                        <li><strong>password</strong> - Password input</li>
+                        <li><strong>url</strong> - URL validation</li>
+                        <li><strong>tel</strong> - Phone number</li>
+                        <li><strong>color</strong> - Color picker</li>
+                        <li><strong>range</strong> - Slider input</li>
+                        <li><strong>hidden</strong> - Hidden field</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Selection & Advanced</h3>
+                    <ul class="list-disc pl-4">
+                        <li><strong>select</strong> - Dropdown select</li>
+                        <li><strong>multiselect</strong> - Multi-select</li>
+                        <li><strong>radio</strong> - Radio buttons</li>
+                        <li><strong>checkbox-group</strong> - Checkboxes</li>
+                        <li><strong>date</strong> - Date picker</li>
+                        <li><strong>datetime</strong> - Date & time</li>
+                        <li><strong>time</strong> - Time picker</li>
+                        <li><strong>file</strong> - File upload</li>
+                        <li><strong>array</strong> - Array type</li>
+                        <li><strong>object</strong> - Object type</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integration Examples -->
+    <section class="mt-8" data-section="Integration">
+        <h2 class="text-2xl font-bold mb-4">Integration with Domma</h2>
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Using Generated Blueprints</h3>
+                <div class="code-block language-javascript">
+                    <span class="comment">// 1. Build your blueprint in Schema Builder</span>
+                    <span class="comment">// 2. Export as JavaScript</span>
+                    const contactBlueprint = {
+                        name: { type: 'string', required: true, label: 'Full Name' },
+                        email: { type: 'email', required: true, label: 'Email Address' },
+                        message: { type: 'textarea', required: true, label: 'Message' }
+                    };
+
+                    <span class="comment">// 3. Use with Domma.forms to generate a form</span>
+                    const form = Domma.forms.create('#contact-form', {
+                        blueprint: contactBlueprint,
+                        layout: 'stacked',
+                        submitText: 'Send Message',
+                        onSubmit: async (data) => {
+                            console.log('Form data:', data);
+                            await Domma.http.post('/api/contact', data);
+                        }
+                    });
+
+                    <span class="comment">// 4. Or use with Domma.models for reactive data</span>
+                    const model = M.create(contactBlueprint, {
+                        name: '',
+                        email: '',
+                        message: ''
+                    });
+
+                    <span class="comment">// 5. Or use with CRUD helper for complete data management</span>
+                    Domma.forms.crud('#crud-container', {
+                        blueprint: contactBlueprint,
+                        endpoint: '/api/contacts',
+                        title: 'Contacts'
+                    });
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script src="../../dist/domma-tools.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+    // Initialize theme
+    Domma.theme.init({autoDetect: true});
+
+    // Scan icons
+    Domma.icons.scan();
+
+    // Apply stagger animation to feature cards
+    $('.page-roller-feature-card').each((index, card) => {
+        $(card).css('animation-delay', `${index * 0.1}s`);
+    });
+
+    // Create Schema Builder instance
+    const builder = Domma.elements.schemaBuilder('#schema-builder-container', {
+        theme: Domma.theme.get(),
+        autoSave: true,
+        showPreview: true,
+        previewLayout: 'stacked',
+        onChange: (fields) => {
+            console.log('Schema changed:', fields);
+        },
+        onExport: (format, data) => {
+            console.log(`Exported as ${format}:`, data);
+        }
+    });
+
+    // Try to load active schema from localStorage
+    const activeFields = SchemaTemplateManager.loadActive();
+    if (activeFields && activeFields.length > 0) {
+        builder._fields = activeFields;
+        builder._renderCanvas();
+        builder._renderPreview();
+    }
+
+    // Listen for theme changes
+    $(document.body).on('themechange', (e) => {
+        console.log('Theme changed to:', e.detail.theme);
+    });
+</script>
+
+</body>
+</html>
