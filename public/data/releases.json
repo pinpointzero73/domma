@@ -1,7 +1,7 @@
 {
   "releases": [
     {
-      "year": "v0.10.3",
+      "year": "v0.11.0",
       "title": "Schema Builder - Visual Blueprint Designer",
       "description": "Build Domma Blueprints visually with drag-and-drop. Features 21 field types, live form preview with validation testing, 12-column grid layout support, and multi-format export to JavaScript, JSON, or TypeScript.",
       "date": "2026-01-26"
