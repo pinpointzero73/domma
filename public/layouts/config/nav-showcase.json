@@ -339,6 +339,12 @@
           "section": "page-roller"
         },
         {
+          "text": "Schema Builder",
+          "url": "showcase/schema-builder/index.html",
+          "section": "schema-builder",
+          "badge": "New"
+        },
+        {
           "text": "Editor",
           "url": "showcase/elements/editor/index.html",
           "section": "editor"
