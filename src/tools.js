@@ -9,6 +9,7 @@
 
 import {ThemeRoller} from './theme-roller.js';
 import {PageRoller} from './page-roller.js';
+import {SchemaBuilder} from './schema-builder.js';
 import Editor from './editor.js';
 import PrintToPDF from './print-to-pdf.js';
 
@@ -24,6 +25,14 @@ const tools = {
 
     pageRoller(selector, options = {}) {
         const instance = new PageRoller(selector, options);
+        if (instance.element && typeof Domma !== 'undefined') {
+            Domma.elements._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
+    schemaBuilder(selector, options = {}) {
+        const instance = new SchemaBuilder(selector, options);
         if (instance.element && typeof Domma !== 'undefined') {
             Domma.elements._instances.set(instance.element, instance);
         }
@@ -51,6 +60,7 @@ const tools = {
 if (typeof Domma !== 'undefined' && Domma.elements) {
     Domma.elements.themeRoller = tools.themeRoller;
     Domma.elements.pageRoller = tools.pageRoller;
+    Domma.elements.schemaBuilder = tools.schemaBuilder;
     Domma.elements.editor = tools.editor;
     Domma.elements.printToPDF = tools.printToPDF;
 }
@@ -60,5 +70,5 @@ if (typeof window !== 'undefined') {
     window.DommaTools = tools;
 }
 
-export {tools, ThemeRoller, PageRoller, Editor, PrintToPDF};
+export {tools, ThemeRoller, PageRoller, SchemaBuilder, Editor, PrintToPDF};
 export default tools;
