@@ -113,3 +113,7 @@ kickstart:
 	@echo "   - Fresh JavaScript with current timestamps"
 	@echo "   - Each bundle includes info.json metadata"
 	@echo "   - Ready for distribution"
+
+# Making Live
+enliven:
+	git stash && git pull && make build
