@@ -116,4 +116,7 @@ kickstart:
 
 # Making Live
 enliven:
+	@echo ""
+	@echo "📦 Now stashing, pulling and building!"
 	git stash && git pull && make build
+	@echo "✅ We are live!"
