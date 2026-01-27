@@ -118,5 +118,8 @@ kickstart:
 enliven:
 	@echo ""
 	@echo "📦 Now stashing, pulling and building!"
+	@echo ""
 	git stash && git pull && make build
+	@echo ""
 	@echo "✅ We are live!"
+	@echo ""
