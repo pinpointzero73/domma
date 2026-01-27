@@ -62,6 +62,12 @@
           "text": "HTTP",
           "url": "showcase/http/index.html",
           "section": "http"
+        },
+        {
+          "text": "Integrations",
+          "url": "showcase/integrations/index.html",
+          "section": "integrations",
+          "badge": "New"
         }
       ]
     },

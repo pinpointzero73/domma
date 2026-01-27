@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrations - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="/showcase/css/domma-showcase.css">
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+    <style>
+        .data-flow-diagram {
+            background: var(--dm-bg-secondary, #f8f9fa);
+            border: 2px solid var(--dm-border, #dee2e6);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .flow-step {
+            display: inline-block;
+            background: var(--dm-primary-bg, #e7f3ff);
+            color: var(--dm-primary, #007bff);
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .flow-arrow {
+            display: inline-block;
+            color: var(--dm-text-secondary, #6c757d);
+            font-size: 1.5rem;
+            margin: 0 0.5rem;
+        }
+
+        .result-pane {
+            background: var(--dm-bg-secondary, #f8f9fa);
+            border: 1px solid var(--dm-border, #dee2e6);
+            border-radius: 4px;
+            padding: 1.5rem;
+            min-height: 200px;
+        }
+
+        .model-state {
+            background: var(--dm-bg-tertiary, #e9ecef);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .model-state h4 {
+            margin-top: 0;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .model-state pre {
+            margin: 0;
+            background: #ffffff;
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-size: 12px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .badge-counter {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge-counter .badge {
+            font-size: 0.875rem;
+        }
+
+        #theme-demo-container .card {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="subpage">
+
+<header class="page-header">
+    <h1>Integrations</h1>
+    <p>How Domma components work together - blueprint-centric architecture, data flow, and event coordination.</p>
+</header>
+
+<div class="container py-8">
+
+    <!-- Architecture Overview -->
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">How Domma Works Together</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma uses a <strong>blueprint-centric architecture</strong>. Define your data structure once in a Blueprint, then use it across Forms, Models, Tables, and CRUD operations.</p>
+
+            <div class="grid grid-cols-6 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <span data-icon="file-code" data-size="32" class="text-primary mb-2"></span>
+                        <h4 class="text-sm font-semibold">Blueprints</h4>
+                        <p class="text-xs text-muted">Schema definition</p>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-body">
+                        <span data-icon="database" data-size="32" class="text-success mb-2"></span>
+                        <h4 class="text-sm font-semibold">Models</h4>
+                        <p class="text-xs text-muted">Reactive data</p>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-body">
+                        <span data-icon="layout" data-size="32" class="text-info mb-2"></span>
+                        <h4 class="text-sm font-semibold">Forms</h4>
+                        <p class="text-xs text-muted">Auto-generated</p>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-body">
+                        <span data-icon="globe" data-size="32" class="text-warning mb-2"></span>
+                        <h4 class="text-sm font-semibold">HTTP</h4>
+                        <p class="text-xs text-muted">API sync</p>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-body">
+                        <span data-icon="save" data-size="32" class="text-secondary mb-2"></span>
+                        <h4 class="text-sm font-semibold">Storage</h4>
+                        <p class="text-xs text-muted">Persistence</p>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-body">
+                        <span data-icon="grid" data-size="32" class="text-danger mb-2"></span>
+                        <h4 class="text-sm font-semibold">Tables</h4>
+                        <p class="text-xs text-muted">Data display</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Flow Diagram -->
+    <section class="card mb-6" data-section="Data Flow">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Data Flow Diagram</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">This diagram shows how data flows through Domma components:</p>
+
+            <div class="data-flow-diagram">
+                <div class="flow-step">Blueprint</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">Forms / Models</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">Validation</div>
+                <br>
+                <div class="flow-arrow" style="transform: rotate(90deg); margin: 1rem 0;">↓</div>
+                <br>
+                <div class="flow-step">HTTP / Storage</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">Tables / DOM</div>
+            </div>
+
+            <div class="alert alert-info mt-4">
+                <strong>Key Concept:</strong> The Blueprint is the single source of truth. All components derive their behavior from it.
+            </div>
+        </div>
+    </section>
+
+    <!-- Blueprint-Centric Approach -->
+    <section class="card mb-6" data-section="Blueprint-Centric">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">The Blueprint-Centric Approach</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4"><strong>Define once, use everywhere.</strong> Create a single Blueprint and use it to power Forms, Models, and CRUD operations automatically.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h4 class="mb-3">Single Blueprint Definition</h4>
+                    <pre class="code-block language-javascript">const userBlueprint = {
+    name: {
+        type: 'string',
+        required: true,
+        minLength: 2,
+        label: 'Full Name'
+    },
+    email: {
+        type: 'email',
+        required: true,
+        label: 'Email Address'
+    },
+    age: {
+        type: 'number',
+        min: 18,
+        max: 125,
+        label: 'Age'
+    }
+};</pre>
+                </div>
+                <div>
+                    <h4 class="mb-3">Use Everywhere</h4>
+                    <pre class="code-block language-javascript">// Auto-generate a form
+const form = F.create(userBlueprint);
+
+// Create a reactive model
+const model = M.create(userBlueprint);
+
+// Full CRUD with one line
+F.crud('#app', userBlueprint, {
+    api: '/api/users'
+});</pre>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button class="btn btn-primary" id="demo-blueprint-btn">Try It: See All Three in Action</button>
+            </div>
+            <div class="result-pane mt-3" id="blueprint-demo-result" style="display: none;">
+                <div class="badge-counter mb-3">
+                    <button class="btn btn-sm btn-secondary" data-view="form">Form View</button>
+                    <button class="btn btn-sm btn-secondary" data-view="model">Model View</button>
+                    <button class="btn btn-sm btn-secondary" data-view="table">Table View</button>
+                </div>
+                <div id="blueprint-demo-content"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Flow Patterns -->
+    <section class="card mb-6" data-section="Data Patterns">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Data Flow Patterns</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Common integration patterns showing how data moves between components.</p>
+            <div id="data-flow-tabs"></div>
+        </div>
+    </section>
+
+    <!-- Event-Driven Communication -->
+    <section class="card mb-6" data-section="Events">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Event-Driven Communication</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Use Pub/Sub for decoupled component coordination. Components can communicate without direct references.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <h4 class="mb-3">Publisher</h4>
+                    <pre class="code-block language-javascript">// Component A publishes event
+M.publish('cart:updated', {
+    items: cartItems,
+    total: calculateTotal()
+});</pre>
+                </div>
+                <div>
+                    <h4 class="mb-3">Subscribers</h4>
+                    <pre class="code-block language-javascript">// Component B listens
+M.subscribe('cart:updated', (data) => {
+    updateBadge(data.items.length);
+});
+
+// Component C also listens
+M.subscribe('cart:updated', (data) => {
+    showNotification(`Cart updated`);
+});</pre>
+                </div>
+            </div>
+
+            <div class="alert alert-success mb-4">
+                <div class="badge-counter">
+                    <button class="btn btn-primary" id="add-to-cart-btn">Add to Cart</button>
+                    <span class="badge badge-danger" id="cart-badge">0</span>
+                    <span class="text-muted">← Watch the badge update via Pub/Sub</span>
+                </div>
+            </div>
+
+            <div id="event-notifications"></div>
+        </div>
+    </section>
+
+    <!-- CRUD in 3 Lines -->
+    <section class="card mb-6" data-section="CRUD">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">CRUD in 3 Lines</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The <code>F.crud()</code> method combines Forms, Models, Tables, and Validation into a complete CRUD interface with just one function call.</p>
+
+            <pre class="code-block language-javascript">F.crud('#users', userBlueprint, {
+    api: '/api/users',           // REST API endpoint
+    features: ['add', 'edit', 'delete', 'search']
+});</pre>
+
+            <p class="mt-3 mb-3">This single line creates:</p>
+            <ul class="mb-4">
+                <li>✓ Sortable, filterable data table</li>
+                <li>✓ Modal form for creating new records</li>
+                <li>✓ Edit functionality with pre-populated data</li>
+                <li>✓ Delete confirmation dialogs</li>
+                <li>✓ Built-in validation from the blueprint</li>
+                <li>✓ API or localStorage persistence</li>
+            </ul>
+
+            <div class="alert alert-info">
+                <strong>Pro Tip:</strong> Use <code>storage: 'storage-key'</code> instead of <code>api</code> for localStorage-backed CRUD with zero backend code.
+            </div>
+        </div>
+    </section>
+
+    <!-- Styling Integration -->
+    <section class="card mb-6" data-section="Styling">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Styling Integration</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma uses a modular CSS architecture with 4 files loaded in order:</p>
+
+            <pre class="code-block language-html">&lt;!-- 1. Base styles + utilities --&gt;
+&lt;link rel="stylesheet" href="dist/domma.css"&gt;
+
+&lt;!-- 2. Grid system (Bootstrap + CSS Grid) --&gt;
+&lt;link rel="stylesheet" href="dist/grid.css"&gt;
+
+&lt;!-- 3. UI components (22 elements) --&gt;
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;
+
+&lt;!-- 4. Theme system (10+ themes) --&gt;
+&lt;link rel="stylesheet" href="dist/themes/domma-themes.css"&gt;</pre>
+
+            <h4 class="mt-4 mb-3">Theme Integration</h4>
+            <p class="mb-3">All Domma components are theme-aware. Change the theme and everything updates together:</p>
+
+            <div class="mb-3">
+                <button class="btn btn-sm btn-primary" data-theme="light" data-variant="">Light</button>
+                <button class="btn btn-sm btn-primary" data-theme="dark" data-variant="">Dark</button>
+                <button class="btn btn-sm btn-primary" data-theme="light" data-variant="ocean">Ocean</button>
+                <button class="btn btn-sm btn-primary" data-theme="light" data-variant="forest">Forest</button>
+                <button class="btn btn-sm btn-primary" data-theme="light" data-variant="sunset">Sunset</button>
+                <button class="btn btn-sm btn-secondary" data-theme="reset">Reset</button>
+            </div>
+
+            <div id="theme-demo-container">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Card Component</h5>
+                            <p class="text-muted">Updates with theme</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <button class="btn btn-primary w-100">Button</button>
+                            <button class="btn btn-secondary w-100 mt-2">Secondary</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <input type="text" class="form-input" placeholder="Form input">
+                            <select class="form-select mt-2">
+                                <option>Option 1</option>
+                                <option>Option 2</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="mt-4 mb-3">Grid System</h4>
+            <p class="mb-3">Use Bootstrap-style grid or CSS Grid utilities:</p>
+            <pre class="code-block language-html">&lt;!-- Bootstrap-style --&gt;
+&lt;div class="row"&gt;
+    &lt;div class="col-md-6"&gt;Column 1&lt;/div&gt;
+    &lt;div class="col-md-6"&gt;Column 2&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- CSS Grid utilities --&gt;
+&lt;div class="grid grid-cols-2 gap-4"&gt;
+    &lt;div&gt;Column 1&lt;/div&gt;
+    &lt;div&gt;Column 2&lt;/div&gt;
+&lt;/div&gt;</pre>
+        </div>
+    </section>
+
+    <!-- Quick Reference -->
+    <section class="card mb-6" data-section="Reference">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Quick Integration Reference</h2>
+        </div>
+        <div class="card-body">
+            <div id="reference-tabs"></div>
+        </div>
+    </section>
+
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+// Wait for Domma to be ready
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Helper function to create tabs from config
+    function initTabsFromConfig(selector, tabsData) {
+        const tabsList = tabsData.map((tab, i) =>
+            `<li class="tab-item${i === 0 ? ' active' : ''}">${tab.label}</li>`
+        ).join('');
+
+        const tabsPanels = tabsData.map((tab, i) =>
+            `<div class="tab-panel${i === 0 ? ' active' : ''}" style="${i === 0 ? '' : 'display:none;'}">${tab.content}</div>`
+        ).join('');
+
+        $(selector).html(`
+            <div class="tabs">
+                <ul class="tab-list">${tabsList}</ul>
+                <div class="tab-content">${tabsPanels}</div>
+            </div>
+        `);
+
+        // Initialize tabs component
+        return Domma.elements.tabs(`${selector} .tabs`);
+    }
+
+    // Initialize Data Flow Patterns Tabs
+    initTabsFromConfig('#data-flow-tabs', [
+            {
+                id: 'form-model',
+                label: 'Form → Model',
+                content: `
+                    <h4 class="mb-3">Two-Way Binding</h4>
+                    <p>Forms can be automatically bound to Models for reactive updates:</p>
+                    <pre class="code-block language-javascript">const userModel = M.create(userBlueprint, {
+    name: 'John Doe',
+    email: 'john@example.com'
+});
+
+// Create form with model binding
+const form = F.create(userBlueprint, {}, {
+    model: userModel  // Two-way binding
+});
+
+// Changes in form update model automatically
+// Changes in model update form automatically</pre>
+                `
+            },
+            {
+                id: 'model-dom',
+                label: 'Model → DOM',
+                content: `
+                    <h4 class="mb-3">Reactive DOM Binding</h4>
+                    <p>Bind model properties directly to DOM elements:</p>
+                    <pre class="code-block language-javascript">const userModel = M.create(userBlueprint);
+
+// Bind model fields to DOM elements
+M.bind(userModel, 'name', '#display-name', {
+    twoWay: true  // Updates both ways
+});
+
+M.bind(userModel, 'email', '#display-email');
+
+// When model changes, DOM updates automatically
+userModel.set('name', 'Jane Smith');</pre>
+                `
+            },
+            {
+                id: 'model-http',
+                label: 'Model → HTTP',
+                content: `
+                    <h4 class="mb-3">API Synchronization</h4>
+                    <p>Sync models with REST APIs manually or use CRUD helper:</p>
+                    <pre class="code-block language-javascript">// Manual sync
+const user = M.create(userBlueprint);
+
+// Load from API
+const data = await H.get('/api/users/1');
+user.set(data);
+
+// Save to API
+const result = await H.put('/api/users/1',
+    user.toJSON()
+);
+
+// Or use CRUD helper for automatic sync
+F.crud('#users', userBlueprint, {
+    api: '/api/users'  // Handles all CRUD
+});</pre>
+                `
+            },
+            {
+                id: 'model-storage',
+                label: 'Model → Storage',
+                content: `
+                    <h4 class="mb-3">localStorage Persistence</h4>
+                    <p>Models can automatically persist to localStorage:</p>
+                    <pre class="code-block language-javascript">// Auto-persist model
+const settings = M.create(settingsBlueprint, {}, {
+    persist: 'user-settings',  // localStorage key
+    autoSave: true            // Save on every change
+});
+
+// Manual save/load
+settings.save();
+settings.load();
+
+// Check if persisted
+if (settings.isPersisted()) {
+    console.log('Settings saved');
+}</pre>
+                `
+            }
+        ]
+    );
+
+    // Initialize Quick Reference Tabs
+    initTabsFromConfig('#reference-tabs', [
+            {
+                id: 'blueprint-methods',
+                label: 'Blueprint Methods',
+                content: `
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <code class="badge badge-primary">M.extend()</code>
+                        <code class="badge badge-primary">M.pick()</code>
+                        <code class="badge badge-primary">M.omit()</code>
+                        <code class="badge badge-primary">M.types.string</code>
+                        <code class="badge badge-primary">M.types.number</code>
+                        <code class="badge badge-primary">M.types.email</code>
+                    </div>
+                    <p class="mt-3">See <a href="../blueprints/">Blueprints Showcase</a> for complete reference.</p>
+                `
+            },
+            {
+                id: 'model-methods',
+                label: 'Model Methods',
+                content: `
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <code class="badge badge-success">M.create()</code>
+                        <code class="badge badge-success">model.get()</code>
+                        <code class="badge badge-success">model.set()</code>
+                        <code class="badge badge-success">model.validate()</code>
+                        <code class="badge badge-success">M.bind()</code>
+                        <code class="badge badge-success">model.save()</code>
+                        <code class="badge badge-success">model.load()</code>
+                        <code class="badge badge-success">model.toJSON()</code>
+                        <code class="badge badge-success">model.reset()</code>
+                    </div>
+                    <p class="mt-3">See <a href="../models/">Models Showcase</a> for complete reference.</p>
+                `
+            },
+            {
+                id: 'form-methods',
+                label: 'Form Methods',
+                content: `
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <code class="badge badge-info">F.create()</code>
+                        <code class="badge badge-info">F.crud()</code>
+                        <code class="badge badge-info">F.modal()</code>
+                        <code class="badge badge-info">F.wizard()</code>
+                        <code class="badge badge-info">form.getData()</code>
+                        <code class="badge badge-info">form.setData()</code>
+                        <code class="badge badge-info">form.validate()</code>
+                        <code class="badge badge-info">form.reset()</code>
+                    </div>
+                    <p class="mt-3">See <a href="../forms/">Forms Showcase</a> for complete reference.</p>
+                `
+            },
+            {
+                id: 'event-methods',
+                label: 'Event Methods',
+                content: `
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <code class="badge badge-warning">M.subscribe()</code>
+                        <code class="badge badge-warning">M.publish()</code>
+                        <code class="badge badge-warning">M.unsubscribe()</code>
+                        <code class="badge badge-warning">M.once()</code>
+                        <code class="badge badge-warning">model.onChange()</code>
+                    </div>
+                    <p class="mt-3">See <a href="../models/">Models Showcase</a> for Pub/Sub examples.</p>
+                `
+            }
+        ]
+    );
+
+    // Blueprint Power Demo
+    const blueprintDemoBtn = $('#demo-blueprint-btn');
+    const blueprintResult = $('#blueprint-demo-result');
+    const blueprintContent = $('#blueprint-demo-content');
+    let currentView = 'form';
+
+    // Shared data storage for the demo
+    let demoData = [
+        { name: 'John Doe', email: 'john@example.com', age: 30 },
+        { name: 'Jane Smith', email: 'jane@example.com', age: 28 }
+    ];
+
+    let demoModel = null;
+    let demoTable = null;
+
+    const demoBlueprint = {
+        name: { type: 'string', required: true, label: 'Name', placeholder: 'Enter name' },
+        email: { type: 'email', required: true, label: 'Email', placeholder: 'you@example.com' },
+        age: { type: 'number', min: 18, max: 125, label: 'Age' }
+    };
+
+    blueprintDemoBtn.on('click', () => {
+        blueprintResult.show();
+        renderBlueprintView('form');
+    });
+
+    function renderBlueprintView(view) {
+        currentView = view;
+
+        // Update button states
+        $('[data-view]').removeClass('btn-primary').addClass('btn-secondary');
+        $(`[data-view="${view}"]`).removeClass('btn-secondary').addClass('btn-primary');
+
+        if (view === 'form') {
+            // Build HTML with container first
+            const html = `
+                <h4 class="font-semibold mb-3">Generated Form</h4>
+                <p class="text-muted mb-3">Fill out the form and submit to add data to the table →</p>
+                <div id="demo-form-container"></div>
+            `;
+
+            blueprintContent.html(DOMPurify.sanitize(html, {safe: false}));
+
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                F.render('#demo-form-container', demoBlueprint, {}, {
+                    layout: 'stacked',
+                    submitText: 'Add to Table',
+                    onSubmit: (data) => {
+                        // Add to shared data array
+                        demoData.push(data);
+
+                        // Update model if it exists
+                        if (demoModel) {
+                            demoModel.set(data);
+                        }
+
+                        // Show success and switch to table view
+                        Domma.elements.toast(`Added ${data.name} to table!`, { type: 'success' });
+                        console.log('Form data:', data);
+                        console.log('All data:', demoData);
+
+                        // Auto-switch to table view after 500ms
+                        setTimeout(() => {
+                            renderBlueprintView('table');
+                        }, 500);
+                    }
+                });
+            }, 10);
+        } else if (view === 'model') {
+            // Use latest data from array, or create default
+            const latestData = demoData.length > 0
+                ? demoData[demoData.length - 1]
+                : { name: 'John Doe', email: 'john@example.com', age: 30 };
+
+            // Create or update model
+            if (!demoModel) {
+                demoModel = M.create(demoBlueprint, latestData);
+            } else {
+                demoModel.set(latestData);
+            }
+
+            const html = `
+                <h4 class="font-semibold mb-3">Model State (JSON)</h4>
+                <p class="text-muted mb-3">This model reflects the latest form submission</p>
+                <pre style="background: #282c34; color: #abb2bf; padding: 1rem; border-radius: 4px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 13px;">${JSON.stringify(demoModel.toJSON(), null, 2)}</pre>
+                <p class="mt-3"><strong>Try it:</strong> Open browser console and type:</p>
+                <pre class="code-block language-javascript">// Change model property
+window.demoModel.set('name', 'Jane Smith');
+
+// Get a value
+window.demoModel.get('name');
+
+// Validate the model
+window.demoModel.validate();
+
+// Get all data as JSON
+window.demoModel.toJSON();</pre>
+            `;
+
+            blueprintContent.html(DOMPurify.sanitize(html, {safe: false}));
+            window.demoModel = demoModel;
+        } else if (view === 'table') {
+            // Build HTML with container
+            const html = `
+                <h4 class="font-semibold mb-3">Generated Table</h4>
+                <p class="text-muted mb-3">Showing ${demoData.length} record${demoData.length !== 1 ? 's' : ''} - Add more via the Form view</p>
+                <div id="demo-table-container"></div>
+            `;
+
+            blueprintContent.html(DOMPurify.sanitize(html, {safe: false}));
+
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                // Create table with all data
+                demoTable = Domma.tables.create('#demo-table-container', {
+                    columns: [
+                        { key: 'name', label: 'Name' },
+                        { key: 'email', label: 'Email' },
+                        { key: 'age', label: 'Age' }
+                    ],
+                    data: demoData,
+                    striped: true,
+                    hover: true,
+                    pagination: demoData.length > 5 ? true : false,
+                    itemsPerPage: 5
+                });
+            }, 10);
+        }
+    }
+
+    $('[data-view]').on('click', function() {
+        renderBlueprintView($(this).attr('data-view'));
+    });
+
+    // Event Bridge Demo
+    let cartCount = 0;
+    const cartBadge = $('#cart-badge');
+    const addToCartBtn = $('#add-to-cart-btn');
+    const notificationsContainer = $('#event-notifications');
+
+    M.subscribe('cart:updated', (data) => {
+        cartBadge.text(data.count);
+
+        // Show notification
+        const notification = $('<div class="alert alert-success mb-2"></div>')
+            .text(`Item added! Cart has ${data.count} item${data.count !== 1 ? 's' : ''}.`)
+            .hide()
+            .appendTo(notificationsContainer)
+            .fadeIn();
+
+        setTimeout(() => {
+            notification.fadeOut(() => notification.remove());
+        }, 3000);
+    });
+
+    addToCartBtn.on('click', () => {
+        cartCount++;
+        M.publish('cart:updated', { count: cartCount });
+    });
+
+    // Theme Demo
+    $('[data-theme]').on('click', function() {
+        const theme = $(this).attr('data-theme');
+        const variant = $(this).attr('data-variant');
+
+        if (theme === 'reset') {
+            Domma.theme.set('light');
+            Domma.theme.setVariant('');
+            Domma.elements.toast('Theme reset to Light', { type: 'success' });
+        } else {
+            Domma.theme.set(theme);
+            Domma.theme.setVariant(variant || '');
+
+            const themeName = variant ? _.capitalize(variant) : _.capitalize(theme);
+            Domma.elements.toast(`Theme changed to ${themeName}`, { type: 'success' });
+        }
+    });
+
+    // Scan for icons
+    Domma.icons.scan();
+});
+</script>
+
+</body>
+</html>
