@@ -443,257 +443,10 @@
   <!-- Feature cards (rendered dynamically from layouts/config/features.json) -->
   <div class="features" id="splash-features"></div>
 
+  <!-- Carousel slides (rendered dynamically from layouts/config/carousel-slides.json) -->
   <div class="splash-carousel">
     <div id="features-carousel" class="carousel">
-      <div class="carousel-track">
-        <!-- 1. Zero Dependencies -->
-        <div class="carousel-slide">
-          <span class="slide-number">1</span>
-          <h3 class="slide-title">Zero Dependencies</h3>
-          <p class="slide-description">
-            No external libraries required. Everything is self-contained in a single <span data-build-size>~250KB</span>
-            bundle.
-          </p>
-          <pre class="code-block language-html">&lt;script src="domma.min.js"&gt;&lt;/script&gt;
-// That's it. You're ready to go!</pre>
-        </div>
-
-        <!-- 2. jQuery-Style DOM -->
-        <div class="carousel-slide">
-          <span class="slide-number">2</span>
-          <h3 class="slide-title">jQuery-Style DOM API</h3>
-          <p class="slide-description">
-            Familiar $() syntax with 90+ chainable methods for traversal, manipulation, events, and effects.
-          </p>
-          <pre class="code-block language-javascript">$('.card').addClass('active')
-  .fadeIn(300)
-  .on('click', handler);</pre>
-        </div>
-
-        <!-- 3. Template Engine -->
-        <div class="carousel-slide">
-          <span class="slide-number">3</span>
-          <h3 class="slide-title">Template Engine</h3>
-          <p class="slide-description">
-            Mustache-style templates with loops, conditionals, partials, and auto-escaping built in.
-          </p>
-          <pre class="code-block language-javascript">const tmpl = _.template('Hello {{name}}!');
-tmpl({ name: 'World' }); // "Hello World!"
-_.render('{{#each items}}{{.}}{{/each}}', data);</pre>
-        </div>
-
-        <!-- 4. Lodash Utils -->
-        <div class="carousel-slide">
-          <span class="slide-number">4</span>
-          <h3 class="slide-title">Lodash-Compatible Utils</h3>
-          <p class="slide-description">
-            120+ utility functions for arrays, objects, strings, and functions &mdash; all via the _ alias.
-          </p>
-          <pre class="code-block language-javascript">const grouped = _.groupBy(users, 'role');
-const unique = _.uniqBy(items, 'id');
-const result = _.flow([fn1, fn2])(data);</pre>
-        </div>
-
-        <!-- 5. Moment-Style Dates -->
-        <div class="carousel-slide">
-          <span class="slide-number">5</span>
-          <h3 class="slide-title">Moment-Style Dates</h3>
-          <p class="slide-description">
-            Chainable date manipulation with formatting, parsing, comparison, and relative time.
-          </p>
-          <pre class="code-block language-javascript">D().add(7, 'days').format('MMM D, YYYY');
-D('2025-01-01').fromNow();
-D().startOf('month').isBefore(D());</pre>
-        </div>
-
-        <!-- 6. Reactive Models -->
-        <div class="carousel-slide">
-          <span class="slide-number">6</span>
-          <h3 class="slide-title">Reactive Models</h3>
-          <p class="slide-description">
-            Pub/sub events, schema validation, and two-way DOM binding for reactive data.
-          </p>
-          <pre class="code-block language-javascript">const user = M.create({ name: M.types.string });
-M.bind(user, 'name', '#input', { twoWay: true });
-user.onChange('name', val => console.log(val));</pre>
-        </div>
-
-        <!-- 7. UI Components -->
-        <div class="carousel-slide">
-          <span class="slide-number">7</span>
-          <h3 class="slide-title">UI Components</h3>
-          <p class="slide-description">
-            Ready-to-use modals, tabs, accordions, carousels, tooltips, and toasts.
-          </p>
-          <pre class="code-block language-javascript">const modal = Domma.elements.modal('#dialog');
-modal.open();
-Domma.elements.toast.success('Saved!');</pre>
-        </div>
-
-        <!-- 8. DataTable-Like Tables -->
-        <div class="carousel-slide">
-          <span class="slide-number">8</span>
-          <h3 class="slide-title">DataTable-Like Tables</h3>
-          <p class="slide-description">
-            Sorting, filtering, pagination, row selection, and CSV/JSON export built in.
-          </p>
-          <pre class="code-block language-javascript">const table = Domma.tables.create('#grid', {
-  data, columns, pagination: true
-});
-table.search('query').toCSV();</pre>
-        </div>
-
-        <!-- 9. Mutable Configuration -->
-        <div class="carousel-slide">
-          <span class="slide-number">9</span>
-          <h3 class="slide-title">Mutable Configuration</h3>
-          <p class="slide-description">
-            Setup once, update anytime. Inspect and reset configuration at runtime.
-          </p>
-          <pre class="code-block language-javascript">$.setup({ '#modal': { component: 'modal' } });
-$.update('#modal', { options: { backdrop: false } });
-$.config('#modal'); $.reset('#modal');</pre>
-        </div>
-
-        <!-- 10. 100+ SVG Icons -->
-        <div class="carousel-slide">
-          <span class="slide-number">10</span>
-          <h3 class="slide-title">100+ SVG Icons</h3>
-          <p class="slide-description">
-            Built-in icon library with render, inject, and scan modes. Customisable size and colour.
-          </p>
-          <pre class="code-block language-javascript">Domma.icons.render('search', { size: 24 });
-Domma.icons.inject('#icon-container', 'check');
-&lt;i data-icon="heart"&gt;&lt;/i&gt; // Auto-scanned</pre>
-        </div>
-
-        <!-- 11. Theme System -->
-        <div class="carousel-slide">
-          <span class="slide-number">11</span>
-          <h3 class="slide-title">Theme System</h3>
-          <p class="slide-description">
-            Light/dark modes with 8 colour variants. Auto-detects system preference and persists choices.
-          </p>
-          <pre class="code-block language-javascript">Domma.theme.init({ autoDetect: true });
-Domma.theme.set('dark');
-Domma.theme.setVariant('ocean');</pre>
-        </div>
-
-        <!-- 12. Visual Effects -->
-        <div class="carousel-slide">
-          <span class="slide-number">12</span>
-          <h3 class="slide-title">Visual Effects</h3>
-          <p class="slide-description">
-            CSS-powered glow, fireworks, and shadow effects. Pure CSS implementation for performance.
-          </p>
-          <pre class="code-block language-html">&lt;h1 class="glow-primary"&gt;Glowing Title&lt;/h1&gt;
-&lt;button class="firework-on-hover"&gt;Celebrate!&lt;/button&gt;
-&lt;div class="shadow-xl elevation-3"&gt;Elevated&lt;/div&gt;</pre>
-        </div>
-
-        <!-- 13. Forms Module -->
-        <div class="carousel-slide">
-          <span class="slide-number">13</span>
-          <h3 class="slide-title">Forms Module</h3>
-          <p class="slide-description">
-            Schema-driven form generation with validation, wizards, and complete CRUD operations.
-          </p>
-          <pre class="code-block language-javascript">const form = Domma.forms.create(schema, data, {
-  onSubmit: (data) => console.log('Submitted:', data)
-});
-form.renderTo('#form-container');</pre>
-        </div>
-
-        <!-- 14. HTTP Client -->
-        <div class="carousel-slide">
-          <span class="slide-number">14</span>
-          <h3 class="slide-title">HTTP Client</h3>
-          <p class="slide-description">
-            Fetch-based HTTP client with promise API. GET, POST, PUT, DELETE with automatic JSON handling.
-          </p>
-          <pre class="code-block language-javascript">const users = await Domma.http.get('/api/users');
-await Domma.http.post('/api/users', { name: 'Alice' });
-await Domma.http.delete('/api/users/1');</pre>
-        </div>
-
-        <!-- 15. Storage Wrapper -->
-        <div class="carousel-slide">
-          <span class="slide-number">15</span>
-          <h3 class="slide-title">Storage Wrapper</h3>
-          <p class="slide-description">
-            localStorage wrapper with auto JSON serialisation, namespaced keys, and graceful fallbacks.
-          </p>
-          <pre class="code-block language-javascript">S.set('user', { name: 'Alice', role: 'admin' });
-const user = S.get('user'); // Auto-parsed
-S.keys(); S.has('user'); S.clear();</pre>
-        </div>
-
-        <!-- 16. Model Persistence -->
-        <div class="carousel-slide">
-          <span class="slide-number">16</span>
-          <h3 class="slide-title">Model Persistence</h3>
-          <p class="slide-description">
-            Models auto-save to localStorage. Load state on page refresh, reset to defaults anytime.
-          </p>
-          <pre class="code-block language-javascript">const settings = M.create(schema, data, {
-  persist: 'app-settings' // Auto-save key
-});
-settings.reset(true); // Clear storage too</pre>
-        </div>
-
-        <!-- 17. Comprehensive Tests -->
-        <div class="carousel-slide">
-          <span class="slide-number">17</span>
-          <h3 class="slide-title">100+ Unit Tests</h3>
-          <p class="slide-description">
-            Comprehensive test suite covering all modules: DOM, utils, dates, models, storage, tables,
-            elements, and more.
-          </p>
-          <pre class="code-block language-bash"># Run tests in browser
-open tests/test.html
-# DOM, Utils, Dates, Models, Storage...</pre>
-        </div>
-
-        <!-- 18. CSS Grid System -->
-        <div class="carousel-slide">
-          <span class="slide-number">18</span>
-          <h3 class="slide-title">CSS Grid System</h3>
-          <p class="slide-description">
-            Bootstrap-style 12-column grid plus modern CSS Grid utilities. Mobile-first, responsive
-            breakpoints.
-          </p>
-          <pre class="code-block language-html">&lt;div class="row"&gt;
-  &lt;div class="col-6"&gt;Half&lt;/div&gt;
-  &lt;div class="col-6"&gt;Half&lt;/div&gt;
-&lt;/div&gt;</pre>
-        </div>
-
-        <!-- 19. BYOS - Bring Your Own Styles -->
-        <div class="carousel-slide">
-          <span class="slide-number">19</span>
-          <h3 class="slide-title">CSS-Free Usage</h3>
-          <p class="slide-description">
-            Use Domma's JS with your own CSS framework. Disable theming entirely for Bootstrap, Tailwind, or
-            custom styles.
-          </p>
-          <pre class="code-block language-javascript">$.setup({ noStyles: true });
-// All JS features work without Domma CSS
-$('.tailwind-class').fadeIn().on('click', fn);</pre>
-        </div>
-
-        <!-- 20. Blueprint-Centric Integration -->
-        <div class="carousel-slide">
-          <span class="slide-number">20</span>
-          <h3 class="slide-title">Blueprint-Centric Architecture</h3>
-          <p class="slide-description">
-            Define your schema once and use it everywhere: forms, models, tables, and CRUD operations.
-          </p>
-          <pre class="code-block language-javascript">const schema = { name: M.types.string, email: M.types.email };
-F.create(schema); // Auto-generate form
-M.create(schema); // Reactive model
-F.crud('#app', schema, { api: '/api/users' }); // Complete CRUD</pre>
-        </div>
-      </div>
+      <div class="carousel-track"></div>
     </div>
   </div>
 
@@ -1006,8 +759,39 @@ F.crud('#app', schema, { api: '/api/users' }); // Complete CRUD</pre>
       }
     };
 
-    // Render features before animations
+    // Load and render carousel slides from JSON config
+    const renderCarouselSlides = async () => {
+      try {
+        const response = await fetch('layouts/config/carousel-slides.json');
+        const config = await response.json();
+        const track = $('.carousel-track');
+
+        config.slides.forEach(slide => {
+          const slideHtml = `
+            <div class="carousel-slide">
+              <span class="slide-number">${slide.number}</span>
+              <h3 class="slide-title">${slide.title}</h3>
+              <p class="slide-description">${slide.description}</p>
+              <pre class="code-block language-${slide.language}">${slide.code}</pre>
+            </div>
+          `;
+
+          track.append(slideHtml);
+        });
+
+        // Scan for syntax highlighting after rendering
+        if (typeof Domma !== 'undefined' && Domma.syntax) {
+          Domma.syntax.scan();
+        }
+
+      } catch (error) {
+        console.error('Failed to load carousel slides:', error);
+      }
+    };
+
+    // Render features and carousel before animations
     await renderFeatures();
+    await renderCarouselSlides();
 
     // Declarative setup for carousel
     $.setup({
@@ -1053,11 +837,6 @@ F.crud('#app', schema, { api: '/api/users' }); // Complete CRUD</pre>
     animateElements('.splash-carousel', 150);            // Carousel (single element)
     animateElements('.cta-group', 200);                  // CTA buttons
     animateElements('.miniapps-grid .col', 120);        // MiniApps cards
-
-    // Scan and highlight code blocks
-    if (typeof Domma !== 'undefined' && Domma.syntax) {
-      Domma.syntax.scan();
-    }
   });
 </script>
 

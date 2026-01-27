@@ -1,0 +1,144 @@
+{
+  "slides": [
+    {
+      "number": 1,
+      "title": "Zero Dependencies",
+      "description": "No external libraries required. Everything is self-contained in a single <span data-build-size>~250KB</span> bundle.",
+      "code": "<script src=\"domma.min.js\"></script>\n// That's it. You're ready to go!",
+      "language": "html"
+    },
+    {
+      "number": 2,
+      "title": "jQuery-Style DOM API",
+      "description": "Familiar $() syntax with 90+ chainable methods for traversal, manipulation, events, and effects.",
+      "code": "$('.card').addClass('active')\n  .fadeIn(300)\n  .on('click', handler);",
+      "language": "javascript"
+    },
+    {
+      "number": 3,
+      "title": "Template Engine",
+      "description": "Mustache-style templates with loops, conditionals, partials, and auto-escaping built in.",
+      "code": "const tmpl = _.template('Hello {{name}}!');\ntmpl({ name: 'World' }); // \"Hello World!\"\n_.render('{{#each items}}{{.}}{{/each}}', data);",
+      "language": "javascript"
+    },
+    {
+      "number": 4,
+      "title": "Lodash-Compatible Utils",
+      "description": "120+ utility functions for arrays, objects, strings, and functions &mdash; all via the _ alias.",
+      "code": "const grouped = _.groupBy(users, 'role');\nconst unique = _.uniqBy(items, 'id');\nconst result = _.flow([fn1, fn2])(data);",
+      "language": "javascript"
+    },
+    {
+      "number": 5,
+      "title": "Moment-Style Dates",
+      "description": "Chainable date manipulation with formatting, parsing, comparison, and relative time.",
+      "code": "D().add(7, 'days').format('MMM D, YYYY');\nD('2025-01-01').fromNow();\nD().startOf('month').isBefore(D());",
+      "language": "javascript"
+    },
+    {
+      "number": 6,
+      "title": "Reactive Models",
+      "description": "Pub/sub events, schema validation, and two-way DOM binding for reactive data.",
+      "code": "const user = M.create({ name: M.types.string });\nM.bind(user, 'name', '#input', { twoWay: true });\nuser.onChange('name', val => console.log(val));",
+      "language": "javascript"
+    },
+    {
+      "number": 7,
+      "title": "UI Components",
+      "description": "Ready-to-use modals, tabs, accordions, carousels, tooltips, and toasts.",
+      "code": "const modal = Domma.elements.modal('#dialog');\nmodal.open();\nDomma.elements.toast.success('Saved!');",
+      "language": "javascript"
+    },
+    {
+      "number": 8,
+      "title": "DataTable-Like Tables",
+      "description": "Sorting, filtering, pagination, row selection, and CSV/JSON export built in.",
+      "code": "const table = Domma.tables.create('#grid', {\n  data, columns, pagination: true\n});\ntable.search('query').toCSV();",
+      "language": "javascript"
+    },
+    {
+      "number": 9,
+      "title": "Mutable Configuration",
+      "description": "Setup once, update anytime. Inspect and reset configuration at runtime.",
+      "code": "$.setup({ '#modal': { component: 'modal' } });\n$.update('#modal', { options: { backdrop: false } });\n$.config('#modal'); $.reset('#modal');",
+      "language": "javascript"
+    },
+    {
+      "number": 10,
+      "title": "100+ SVG Icons",
+      "description": "Built-in icon library with render, inject, and scan modes. Customisable size and colour.",
+      "code": "Domma.icons.render('search', { size: 24 });\nDomma.icons.inject('#icon-container', 'check');\n<i data-icon=\"heart\"></i> // Auto-scanned",
+      "language": "javascript"
+    },
+    {
+      "number": 11,
+      "title": "Theme System",
+      "description": "Light/dark modes with 8 colour variants. Auto-detects system preference and persists choices.",
+      "code": "Domma.theme.init({ autoDetect: true });\nDomma.theme.set('dark');\nDomma.theme.setVariant('ocean');",
+      "language": "javascript"
+    },
+    {
+      "number": 12,
+      "title": "Visual Effects",
+      "description": "CSS-powered glow, fireworks, and shadow effects. Pure CSS implementation for performance.",
+      "code": "<h1 class=\"glow-primary\">Glowing Title</h1>\n<button class=\"firework-on-hover\">Celebrate!</button>\n<div class=\"shadow-xl elevation-3\">Elevated</div>",
+      "language": "html"
+    },
+    {
+      "number": 13,
+      "title": "Forms Module",
+      "description": "Schema-driven form generation with validation, wizards, and complete CRUD operations.",
+      "code": "const form = Domma.forms.create(schema, data, {\n  onSubmit: (data) => console.log('Submitted:', data)\n});\nform.renderTo('#form-container');",
+      "language": "javascript"
+    },
+    {
+      "number": 14,
+      "title": "HTTP Client",
+      "description": "Fetch-based HTTP client with promise API. GET, POST, PUT, DELETE with automatic JSON handling.",
+      "code": "const users = await Domma.http.get('/api/users');\nawait Domma.http.post('/api/users', { name: 'Alice' });\nawait Domma.http.delete('/api/users/1');",
+      "language": "javascript"
+    },
+    {
+      "number": 15,
+      "title": "Storage Wrapper",
+      "description": "localStorage wrapper with auto JSON serialisation, namespaced keys, and graceful fallbacks.",
+      "code": "S.set('user', { name: 'Alice', role: 'admin' });\nconst user = S.get('user'); // Auto-parsed\nS.keys(); S.has('user'); S.clear();",
+      "language": "javascript"
+    },
+    {
+      "number": 16,
+      "title": "Model Persistence",
+      "description": "Models auto-save to localStorage. Load state on page refresh, reset to defaults anytime.",
+      "code": "const settings = M.create(schema, data, {\n  persist: 'app-settings' // Auto-save key\n});\nsettings.reset(true); // Clear storage too",
+      "language": "javascript"
+    },
+    {
+      "number": 17,
+      "title": "100+ Unit Tests",
+      "description": "Comprehensive test suite covering all modules: DOM, utils, dates, models, storage, tables, elements, and more.",
+      "code": "# Run tests in browser\nopen tests/test.html\n# DOM, Utils, Dates, Models, Storage...",
+      "language": "bash"
+    },
+    {
+      "number": 18,
+      "title": "CSS Grid System",
+      "description": "Bootstrap-style 12-column grid plus modern CSS Grid utilities. Mobile-first, responsive breakpoints.",
+      "code": "<div class=\"row\">\n  <div class=\"col-6\">Half</div>\n  <div class=\"col-6\">Half</div>\n</div>",
+      "language": "html"
+    },
+    {
+      "number": 19,
+      "title": "CSS-Free Usage",
+      "description": "Use Domma's JS with your own CSS framework. Disable theming entirely for Bootstrap, Tailwind, or custom styles.",
+      "code": "$.setup({ noStyles: true });\n// All JS features work without Domma CSS\n$('.tailwind-class').fadeIn().on('click', fn);",
+      "language": "javascript"
+    },
+    {
+      "number": 20,
+      "title": "Blueprint-Centric Architecture",
+      "description": "Define your schema once and use it everywhere: forms, models, tables, and CRUD operations.",
+      "code": "const schema = { name: M.types.string, email: M.types.email };\nF.create(schema); // Auto-generate form\nM.create(schema); // Reactive model\nF.crud('#app', schema, { api: '/api/users' }); // Complete CRUD",
+      "language": "javascript"
+    }
+  ]
+}
