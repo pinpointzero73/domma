@@ -1,0 +1,135 @@
+{
+  "groups": [
+    {
+      "id": "core",
+      "label": "Core",
+      "items": [
+        {
+          "label": "DOM",
+          "url": "showcase/dom/index.html",
+          "icon": "$"
+        },
+        {
+          "label": "Utils",
+          "url": "showcase/utils/index.html",
+          "icon": "_"
+        },
+        {
+          "label": "Config",
+          "url": "showcase/config/index.html",
+          "icon": "settings",
+          "iconSize": 42
+        },
+        {
+          "label": "Storage",
+          "url": "showcase/storage/index.html",
+          "icon": "save",
+          "iconSize": 42
+        },
+        {
+          "label": "HTTP",
+          "url": "showcase/http/index.html",
+          "icon": "globe",
+          "iconSize": 42
+        },
+        {
+          "label": "Integrations",
+          "url": "showcase/integrations/index.html",
+          "icon": "box",
+          "iconSize": 42
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "label": "Data",
+      "items": [
+        {
+          "label": "Dates",
+          "url": "showcase/dates/index.html",
+          "icon": "calendar",
+          "iconSize": 42
+        },
+        {
+          "label": "Models",
+          "url": "showcase/models/index.html",
+          "icon": "database",
+          "iconSize": 42
+        },
+        {
+          "label": "Forms",
+          "url": "showcase/forms/index.html",
+          "icon": "document-add",
+          "iconSize": 42
+        },
+        {
+          "label": "Tables",
+          "url": "showcase/tables/index.html",
+          "icon": "grid",
+          "iconSize": 42
+        }
+      ]
+    },
+    {
+      "id": "ui",
+      "label": "UI",
+      "items": [
+        {
+          "label": "Elements",
+          "url": "showcase/elements/index.html",
+          "icon": "layout",
+          "iconSize": 42
+        },
+        {
+          "label": "Icons",
+          "url": "showcase/icons/index.html",
+          "icon": "image",
+          "iconSize": 42
+        },
+        {
+          "label": "Themes",
+          "url": "showcase/themes/index.html",
+          "icon": "sun",
+          "iconSize": 42
+        },
+        {
+          "label": "Effects",
+          "url": "showcase/effects/index.html",
+          "icon": "zap",
+          "iconSize": 42,
+          "iconClass": "glow-primary"
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "label": "Tools",
+      "items": [
+        {
+          "label": "Theme Roller",
+          "url": "showcase/theme-roller/index.html",
+          "icon": "palette",
+          "iconSize": 42
+        },
+        {
+          "label": "Page Roller",
+          "url": "showcase/page-roller/index.html",
+          "icon": "box",
+          "iconSize": 42
+        },
+        {
+          "label": "Editor",
+          "url": "showcase/elements/editor/index.html",
+          "icon": "edit",
+          "iconSize": 42
+        },
+        {
+          "label": "Print PDF",
+          "url": "showcase/print-to-pdf/index.html",
+          "icon": "download",
+          "iconSize": 42
+        }
+      ]
+    }
+  ]
+}

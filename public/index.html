@@ -440,103 +440,8 @@
     </div>
   </div>
 
-  <div class="features">
-    <!-- Core Foundation -->
-    <div class="feature-group">
-      <div class="feature-group-label">Core</div>
-      <div class="feature-group-items">
-        <a href="showcase/dom/index.html" class="feature" data-tooltip="jQuery-compatible DOM manipulation with 90+ methods">
-          <div class="feature-icon">$</div>
-          <div class="feature-label">DOM</div>
-        </a>
-        <a href="showcase/utils/index.html" class="feature" data-tooltip="120+ Lodash utilities for arrays, objects, and functions">
-          <div class="feature-icon">_</div>
-          <div class="feature-label">Utils</div>
-        </a>
-        <a href="showcase/config/index.html" class="feature" data-tooltip="Declarative JSON configuration engine for components">
-          <div class="feature-icon" data-icon="settings" data-icon-size="42"></div>
-          <div class="feature-label">Config</div>
-        </a>
-        <a href="showcase/storage/index.html" class="feature" data-tooltip="localStorage wrapper with auto JSON serialization">
-          <div class="feature-icon" data-icon="save" data-icon-size="42"></div>
-          <div class="feature-label">Storage</div>
-        </a>
-        <a href="showcase/http/index.html" class="feature" data-tooltip="Promise-based HTTP client with auto JSON handling">
-          <div class="feature-icon" data-icon="globe" data-icon-size="42"></div>
-          <div class="feature-label">HTTP</div>
-        </a>
-      </div>
-    </div>
-
-    <!-- Data Management -->
-    <div class="feature-group">
-      <div class="feature-group-label">Data</div>
-      <div class="feature-group-items">
-        <a href="showcase/dates/index.html" class="feature" data-tooltip="Moment.js-style date manipulation and formatting">
-          <div class="feature-icon" data-icon="calendar" data-icon-size="42"></div>
-          <div class="feature-label">Dates</div>
-        </a>
-        <a href="showcase/models/index.html" class="feature" data-tooltip="Reactive data models with validation and pub/sub">
-          <div class="feature-icon" data-icon="database" data-icon-size="42"></div>
-          <div class="feature-label">Models</div>
-        </a>
-        <a href="showcase/forms/index.html" class="feature" data-tooltip="Schema-driven form generation with validation">
-          <div class="feature-icon" data-icon="document-add" data-icon-size="42"></div>
-          <div class="feature-label">Forms</div>
-        </a>
-        <a href="showcase/tables/index.html" class="feature" data-tooltip="DataTable-like functionality with sorting and filtering">
-          <div class="feature-icon" data-icon="grid" data-icon-size="42"></div>
-          <div class="feature-label">Tables</div>
-        </a>
-      </div>
-    </div>
-
-    <!-- UI & Styling -->
-    <div class="feature-group">
-      <div class="feature-group-label">UI</div>
-      <div class="feature-group-items">
-        <a href="showcase/elements/index.html" class="feature" data-tooltip="25+ UI components: modals, tabs, carousels, and more">
-          <div class="feature-icon" data-icon="layout" data-icon-size="42"></div>
-          <div class="feature-label">Elements</div>
-        </a>
-        <a href="showcase/icons/index.html" class="feature" data-tooltip="200+ SVG icons in 15 categories with auto-injection">
-          <div class="feature-icon" data-icon="image" data-icon-size="42"></div>
-          <div class="feature-label">Icons</div>
-        </a>
-        <a href="showcase/themes/index.html" class="feature" data-tooltip="10+ pre-built themes with light/dark variants">
-          <div class="feature-icon" data-icon="sun" data-icon-size="42"></div>
-          <div class="feature-label">Themes</div>
-        </a>
-        <a href="showcase/effects/index.html" class="feature" data-tooltip="Visual effects: glow, shadows, fireworks, and animations">
-          <div class="feature-icon glow-primary" data-icon="zap" data-icon-size="42"></div>
-          <div class="feature-label">Effects</div>
-        </a>
-      </div>
-    </div>
-
-    <!-- Tools -->
-    <div class="feature-group">
-      <div class="feature-group-label">Tools</div>
-      <div class="feature-group-items">
-        <a href="showcase/theme-roller/index.html" class="feature" data-tooltip="Visual theme customization with live preview and export">
-          <div class="feature-icon" data-icon="palette" data-icon-size="42"></div>
-          <div class="feature-label">Theme Roller</div>
-        </a>
-        <a href="showcase/page-roller/index.html" class="feature" data-tooltip="Drag-and-drop page builder with component library">
-          <div class="feature-icon" data-icon="box" data-icon-size="42"></div>
-          <div class="feature-label">Page Roller</div>
-        </a>
-        <a href="showcase/elements/editor/index.html" class="feature" data-tooltip="Rich text content editor with export options">
-          <div class="feature-icon" data-icon="edit" data-icon-size="42"></div>
-          <div class="feature-label">Editor</div>
-        </a>
-        <a href="showcase/print-to-pdf/index.html" class="feature" data-tooltip="Print and PDF export functionality for pages">
-          <div class="feature-icon" data-icon="download" data-icon-size="42"></div>
-          <div class="feature-label">Print PDF</div>
-        </a>
-      </div>
-    </div>
-  </div>
+  <!-- Feature cards (rendered dynamically from layouts/config/features.json) -->
+  <div class="features" id="splash-features"></div>
 
   <div class="splash-carousel">
     <div id="features-carousel" class="carousel">
@@ -774,6 +679,19 @@ open tests/test.html
           <pre class="code-block language-javascript">$.setup({ noStyles: true });
 // All JS features work without Domma CSS
 $('.tailwind-class').fadeIn().on('click', fn);</pre>
+        </div>
+
+        <!-- 20. Blueprint-Centric Integration -->
+        <div class="carousel-slide">
+          <span class="slide-number">20</span>
+          <h3 class="slide-title">Blueprint-Centric Architecture</h3>
+          <p class="slide-description">
+            Define your schema once and use it everywhere: forms, models, tables, and CRUD operations.
+          </p>
+          <pre class="code-block language-javascript">const schema = { name: M.types.string, email: M.types.email };
+F.create(schema); // Auto-generate form
+M.create(schema); // Reactive model
+F.crud('#app', schema, { api: '/api/users' }); // Complete CRUD</pre>
         </div>
       </div>
     </div>
@@ -1030,8 +948,68 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
 <script type="module" src="layouts/js/layout.js"></script>
 
 <script>
-  $(() => {
-    // Declarative setup for components
+  $(async () => {
+    // Initialize theme engine with silver-light theme persistence
+    if (typeof Domma !== 'undefined' && Domma.theme) {
+      Domma.theme.init({
+        theme: 'silver-light',
+        persist: true,
+        autoDetect: false
+      });
+    }
+
+    // Load and render feature cards from JSON config
+    const renderFeatures = async () => {
+      try {
+        const response = await fetch('layouts/config/features.json');
+        const config = await response.json();
+        const container = $('#splash-features');
+
+        config.groups.forEach(group => {
+          // Create group container
+          const groupHtml = `
+            <div class="feature-group">
+              <div class="feature-group-label">${group.label}</div>
+              <div class="feature-group-items">
+                ${group.items.map(item => {
+                  // Determine icon rendering based on type
+                  let iconHtml;
+                  if (item.icon === '$' || item.icon === '_') {
+                    // Text icons ($ and _)
+                    iconHtml = `<div class="feature-icon">${item.icon}</div>`;
+                  } else {
+                    // SVG icons (data-icon)
+                    const iconClass = item.iconClass ? ` ${item.iconClass}` : '';
+                    const iconSize = item.iconSize || 42;
+                    iconHtml = `<div class="feature-icon${iconClass}" data-icon="${item.icon}" data-icon-size="${iconSize}"></div>`;
+                  }
+
+                  return `
+                    <a href="${item.url}" class="feature">
+                      ${iconHtml}
+                      <div class="feature-label">${item.label}</div>
+                    </a>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+
+          container.append(groupHtml);
+        });
+
+        // Scan for SVG icons after rendering
+        Domma.icons.scan();
+
+      } catch (error) {
+        console.error('Failed to load feature cards:', error);
+      }
+    };
+
+    // Render features before animations
+    await renderFeatures();
+
+    // Declarative setup for carousel
     $.setup({
       '#features-carousel': {
         component: 'carousel',
@@ -1044,25 +1022,8 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
           showArrows: true,
           showIndicators: true
         }
-      },
-      '[data-tooltip]': {
-        component: 'tooltip',
-        options: {
-          position: 'top',
-          trigger: 'hover',
-          delay: 200
-        }
       }
     });
-
-    // Initialize theme engine with silver-light theme persistence
-    if (typeof Domma !== 'undefined' && Domma.theme) {
-      Domma.theme.init({
-        theme: 'silver-light',
-        persist: true,
-        autoDetect: false
-      });
-    }
 
     // Stagger animations for splash page elements
     const animateElements = (selector, delay = 100, initialTransform = 'translateY(20px)') => {
@@ -1092,9 +1053,6 @@ $('.tailwind-class').fadeIn().on('click', fn);</pre>
     animateElements('.splash-carousel', 150);            // Carousel (single element)
     animateElements('.cta-group', 200);                  // CTA buttons
     animateElements('.miniapps-grid .col', 120);        // MiniApps cards
-
-    // Scan for data-icon attributes
-    Domma.icons.scan();
 
     // Scan and highlight code blocks
     if (typeof Domma !== 'undefined' && Domma.syntax) {
