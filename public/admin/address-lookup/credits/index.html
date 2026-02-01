@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Credits - Address Lookup Admin - Domma</title>
+  <meta name="description" content="Manage Address Lookup Service Credits">
+
+  <!-- Domma Core Styles -->
+  <link rel="stylesheet" href="../../../dist/domma.css">
+  <link rel="stylesheet" href="../../../dist/grid.css">
+  <link rel="stylesheet" href="../../../dist/elements.css">
+  <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+
+  <!-- Admin Custom Styles -->
+  <link rel="stylesheet" href="../../index.css">
+</head>
+<body class="dm-cloaked" data-theme="default" data-layout="public">
+
+<!-- Layout system will inject navbar here -->
+
+<!-- Admin Layout Wrapper -->
+<div class="admin-wrapper">
+  <!-- Sidebar -->
+  <aside id="admin-sidebar" class="admin-sidebar"></aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <!-- Page Header -->
+    <div class="admin-header">
+      <h1>Credit Management</h1>
+      <p>View and manage credit transactions</p>
+    </div>
+
+    <!-- Page Content -->
+    <div class="admin-content">
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-4 gap-4 mb-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title text-sm text-gray-600 mb-2">Total Purchased</h3>
+        <p class="text-3xl font-bold" id="stat-total-purchased">-</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title text-sm text-gray-600 mb-2">Total Consumed</h3>
+        <p class="text-3xl font-bold" id="stat-total-consumed">-</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title text-sm text-gray-600 mb-2">Total Remaining</h3>
+        <p class="text-3xl font-bold" id="stat-total-remaining">-</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title text-sm text-gray-600 mb-2">Transactions</h3>
+        <p class="text-3xl font-bold" id="stat-total-transactions">-</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="grid grid-cols-4 gap-4">
+        <div>
+          <label class="form-label">Search User</label>
+          <input type="text" id="search-input" class="form-input" placeholder="Search by email...">
+        </div>
+        <div>
+          <label class="form-label">Transaction Type</label>
+          <select id="type-filter" class="form-input">
+            <option value="">All Types</option>
+            <option value="purchase">Purchase</option>
+            <option value="lookup">Lookup (Deduction)</option>
+            <option value="refund">Refund</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Date Range</label>
+          <select id="date-filter" class="form-input">
+            <option value="all">All Time</option>
+            <option value="today">Today</option>
+            <option value="week">Last 7 Days</option>
+            <option value="month">Last 30 Days</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Sort By</label>
+          <select id="sort-filter" class="form-input">
+            <option value="recent">Most Recent</option>
+            <option value="amount">Largest Amount</option>
+            <option value="user">User (A-Z)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transactions Table -->
+  <div class="card mb-6">
+    <div class="card-header">
+      <h2 class="card-title">Transactions (<span id="transaction-count">0</span>)</h2>
+    </div>
+    <div class="card-body">
+      <div id="loading-indicator" style="text-align: center; padding: 2rem;">
+        <p>Loading transactions...</p>
+      </div>
+      <table id="transactions-table" class="table" style="display: none;"></table>
+      <div id="no-transactions" style="display: none; text-align: center; padding: 2rem;">
+        <p class="text-gray-500">No transactions found</p>
+      </div>
+    </div>
+  </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Refund Modal -->
+<div id="refund-modal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Refund Credits</h3>
+      <button class="modal-close" data-close-modal>&times;</button>
+    </div>
+    <div class="modal-body">
+      <p><strong>User:</strong> <span id="refund-user-email"></span></p>
+      <p><strong>Original Transaction:</strong> <span id="refund-original-description"></span></p>
+      <div class="form-group mt-4">
+        <label class="form-label">Credits to Refund</label>
+        <input type="number" id="refund-credits-amount" class="form-input" min="1">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Refund Reason</label>
+        <input type="text" id="refund-reason" class="form-input" placeholder="e.g., Failed lookup">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button class="btn btn-primary" id="confirm-refund">Process Refund</button>
+    </div>
+  </div>
+</div>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<!-- Domma Framework -->
+<script src="../../../dist/domma.min.js"></script>
+
+<!-- Layout System (injects navbar) -->
+<script type="module" src="../../../layouts/js/layout.js"></script>
+
+<!-- Admin Page Logic -->
+<script type="module" src="index.js"></script>
+</body>
+</html>

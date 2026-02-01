@@ -1,0 +1,27 @@
+      .app-features-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          font-size: 0.9rem;
+          color: #495057;
+      }
+      .app-features-list li {
+          padding: 0.3rem 0 0.3rem 1.5rem;
+          position: relative;
+      }
+      .app-features-list li::before {
+          content: "✓";
+          position: absolute;
+          left: 0;
+          color: #10b981;
+          font-weight: bold;
+      }
+
+      .card-body {
+          display: flex;
+          flex-direction: column;
+      }
+
+      .mt-auto {
+          margin-top: auto;
+      }

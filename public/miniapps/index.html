@@ -22,35 +22,8 @@
 
   <script src="../dist/domma.min.js" defer></script>
 
-  <style>
-      .app-features-list {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-          font-size: 0.9rem;
-          color: #495057;
-      }
-      .app-features-list li {
-          padding: 0.3rem 0 0.3rem 1.5rem;
-          position: relative;
-      }
-      .app-features-list li::before {
-          content: "✓";
-          position: absolute;
-          left: 0;
-          color: #10b981;
-          font-weight: bold;
-      }
-
-      .card-body {
-          display: flex;
-          flex-direction: column;
-      }
-
-      .mt-auto {
-          margin-top: auto;
-      }
-  </style>
+  <!-- App Custom Styles -->
+  <link rel="stylesheet" href="./custom.css">
 </head>
 <body class="dm-cloaked" data-layout="public" data-theme="default">
 
@@ -118,6 +91,35 @@
               </div>
               <div class="app-actions">
                 <a href="./garage/index.html" class="btn btn-success w-100">Launch App</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Address Lookup Card -->
+      <div class="col-4 d-flex">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="text-center">
+              <span data-icon="map-pin" data-icon-size="48" class="text-success"></span>
+              <h3 class="card-title mt-2">Address Lookup</h3>
+              <span class="badge badge-success mb-3">Available Now</span>
+            </div>
+            <p class="card-text small">UK Postcode lookup service with free and premium tiers, API key management, and credit system.</p>
+            <ul class="app-features-list small">
+              <li>Free & Premium postcode lookups</li>
+              <li>API key management & rate limiting</li>
+              <li>Credit system with smart caching</li>
+            </ul>
+            <div class="mt-auto pt-3">
+              <div class="app-tech-stack mb-3">
+                <span class="badge badge-primary-soft me-1">Domma.auth</span>
+                <span class="badge badge-primary-soft me-1">Domma.http</span>
+                <span class="badge badge-primary-soft me-1">Backend API</span>
+              </div>
+              <div class="app-actions">
+                <a href="./address/index.html" class="btn btn-success w-100">Launch App</a>
               </div>
             </div>
           </div>

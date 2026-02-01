@@ -43,6 +43,7 @@
     "build:kickstart": "npm run build:js && npm run build:info && node scripts/build-kickstart-zip.js",
     "build:miniapps": "node scripts/build-miniapp.js && node scripts/copy-miniapps.js",
     "build:miniapp:garage": "node scripts/build-miniapp.js garage",
+    "build:miniapp:address": "node scripts/build-miniapp.js address",
     "generate:bundles": "node scripts/generate-bundles.js",
     "release": "bash scripts/release.sh",
     "release:patch": "npm version patch && npm run release",

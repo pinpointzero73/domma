@@ -1,0 +1,39 @@
+        .faq-section {
+            padding: 4rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-category {
+            margin-bottom: 3rem;
+        }
+
+        .faq-category h2 {
+            font-size: 1.5rem;
+            color: var(--dm-primary);
+            margin: 0 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--dm-primary-light);
+        }
+
+        .faq-category .accordion-content pre {
+            background: var(--dm-gray-100);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 0.5rem 0;
+        }
+
+        .faq-category .accordion-content code {
+            font-family: var(--dm-font-mono);
+            font-size: 0.9rem;
+        }
+
+        .faq-category .accordion-content ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .faq-category .accordion-content li {
+            margin-bottom: 0.25rem;
+        }

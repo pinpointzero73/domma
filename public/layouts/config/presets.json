@@ -182,5 +182,33 @@
       "variantSelector": false
     },
     "features": []
+  },
+  "admin": {
+    "navbar": {
+      "type": "flat",
+      "brand": {
+        "text": "Domma Admin",
+        "url": "/admin/index.html",
+        "showVersion": false
+      },
+      "items": [
+        { "text": "Dashboard", "url": "/admin/index.html", "page": "admin" },
+        { "text": "Back to Site", "url": "/index.html", "page": "home" }
+      ],
+      "variant": "dark",
+      "actions": [
+        { "type": "auth", "loginUrl": "/login/index.html" },
+        { "type": "theme-selector", "position": "inline" }
+      ]
+    },
+    "footer": null,
+    "sidebar": {
+      "enabled": false
+    },
+    "theme": {
+      "variantSelector": true,
+      "position": "fixed-right"
+    },
+    "features": []
   }
 }

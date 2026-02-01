@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Credits Management - Admin - Domma</title>
+  <meta name="description" content="Manage user credits and gift credits">
+
+  <!-- Domma Core Styles -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+
+  <!-- Admin Custom Styles -->
+  <link rel="stylesheet" href="../index.css">
+</head>
+<body class="dm-cloaked" data-theme="default" data-layout="public">
+
+<!-- Layout system will inject navbar here -->
+
+<!-- Admin Layout Wrapper -->
+<div class="admin-wrapper">
+  <!-- Sidebar -->
+  <aside id="admin-sidebar" class="admin-sidebar"></aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <!-- Page Header -->
+    <div class="admin-header">
+      <h1>Credits Management</h1>
+      <p>Gift credits to users and manage credit balances</p>
+    </div>
+
+    <!-- Page Content -->
+    <div class="admin-content">
+
+      <!-- Gift Credits Form -->
+      <div class="card mb-6" data-collapsible="true">
+        <div class="card-header">
+          <h2 class="card-title">Gift Credits</h2>
+        </div>
+        <div class="card-body">
+          <form id="gift-credits-form">
+            <div class="grid grid-cols-12 gap-4">
+              <!-- User Search -->
+              <div class="col-span-12">
+                <label for="user-search" class="form-label">Search User</label>
+                <input type="text" id="user-search" class="form-input"
+                       placeholder="Search by email or name..."
+                       autocomplete="off">
+                <div id="user-search-results" class="mt-2" style="display: none;"></div>
+              </div>
+
+              <!-- Selected User Info -->
+              <div class="col-span-12" id="selected-user-info" style="display: none;">
+                <div class="alert alert-info">
+                  <strong>Selected User:</strong>
+                  <span id="selected-user-email"></span> -
+                  <span id="selected-user-name"></span>
+                  <br>
+                  <strong>Current Balance:</strong>
+                  <span id="selected-user-balance" class="badge badge-primary">0 credits</span>
+                </div>
+                <input type="hidden" id="selected-user-id">
+              </div>
+
+              <!-- Credit Amount -->
+              <div class="col-span-6">
+                <label for="credit-amount" class="form-label">Credit Amount *</label>
+                <input type="number" id="credit-amount" class="form-input"
+                       placeholder="Enter amount (positive to gift, negative to deduct)"
+                       required>
+                <small class="text-gray-500">Positive to gift, negative to deduct</small>
+              </div>
+
+              <!-- Preview Balance -->
+              <div class="col-span-6">
+                <label class="form-label">New Balance Preview</label>
+                <div class="p-3 bg-gray-100 rounded">
+                  <span id="balance-preview" class="text-2xl font-bold text-gray-600">-</span>
+                  <span class="text-sm text-gray-500">credits</span>
+                </div>
+              </div>
+
+              <!-- Reason -->
+              <div class="col-span-12">
+                <label for="credit-reason" class="form-label">Reason *</label>
+                <textarea id="credit-reason" class="form-input" rows="3"
+                          placeholder="Enter reason for this credit adjustment (minimum 10 characters)"
+                          required minlength="10"></textarea>
+                <small class="text-gray-500">Minimum 10 characters</small>
+              </div>
+
+              <!-- Submit -->
+              <div class="col-span-12">
+                <button type="submit" class="btn btn-primary" id="gift-credits-btn" disabled>
+                  <span data-icon="gift" data-icon-size="16"></span>
+                  Gift Credits
+                </button>
+                <button type="button" class="btn btn-secondary" id="reset-form-btn">
+                  Reset Form
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Transaction History -->
+      <div class="card" data-collapsible="true">
+        <div class="card-header">
+          <h2 class="card-title">Recent Credit Transactions</h2>
+        </div>
+        <div class="card-body">
+          <!-- Filters -->
+          <div class="grid grid-cols-12 gap-4 mb-4">
+            <div class="col-span-4">
+              <select id="transaction-type-filter" class="form-input">
+                <option value="">All Transaction Types</option>
+                <option value="purchase">Purchase</option>
+                <option value="lookup">Lookup</option>
+                <option value="refund">Refund</option>
+                <option value="adjustment">Adjustment (Gifted)</option>
+              </select>
+            </div>
+            <div class="col-span-4">
+              <input type="text" id="transaction-user-filter" class="form-input"
+                     placeholder="Filter by user email...">
+            </div>
+            <div class="col-span-4">
+              <button id="refresh-transactions" class="btn btn-primary btn-block">
+                <span data-icon="refresh" data-icon-size="16"></span>
+                Refresh
+              </button>
+            </div>
+          </div>
+
+          <!-- Transactions Table -->
+          <table id="transactions-table" class="table"></table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Domma Framework -->
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<script src="../../dist/domma.min.js"></script>
+
+<!-- Layout System (injects navbar) -->
+<script type="module" src="../../layouts/js/layout.js"></script>
+
+<!-- Admin Page Logic -->
+<script type="module" src="index.js"></script>
+</body>
+</html>

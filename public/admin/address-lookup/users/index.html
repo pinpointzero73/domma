@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users - Address Lookup Admin - Domma</title>
+  <meta name="description" content="Manage Address Lookup Service Users">
+
+  <!-- Domma Core Styles -->
+  <link rel="stylesheet" href="../../../dist/domma.css">
+  <link rel="stylesheet" href="../../../dist/grid.css">
+  <link rel="stylesheet" href="../../../dist/elements.css">
+  <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+
+  <!-- Admin Custom Styles -->
+  <link rel="stylesheet" href="../../index.css">
+</head>
+<body class="dm-cloaked" data-theme="default" data-layout="public">
+
+<!-- Layout system will inject navbar here -->
+
+<!-- Admin Layout Wrapper -->
+<div class="admin-wrapper">
+  <!-- Sidebar -->
+  <aside id="admin-sidebar" class="admin-sidebar"></aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <!-- Page Header -->
+    <div class="admin-header">
+      <h1>Address Lookup Users</h1>
+      <p>Manage users and grant credits</p>
+    </div>
+
+    <!-- Page Content -->
+    <div class="admin-content">
+
+  <!-- Filters -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <label class="form-label">Search</label>
+          <input type="text" id="search-input" class="form-input" placeholder="Search by email...">
+        </div>
+        <div>
+          <label class="form-label">Role</label>
+          <select id="role-filter" class="form-input">
+            <option value="">All Roles</option>
+            <option value="admin">Admin</option>
+            <option value="subscriber">Subscriber</option>
+            <option value="guest">Guest</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Sort By</label>
+          <select id="sort-filter" class="form-input">
+            <option value="lookups">Most Lookups</option>
+            <option value="credits">Most Credits</option>
+            <option value="recent">Most Recent</option>
+            <option value="email">Email (A-Z)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="card mb-6">
+    <div class="card-header">
+      <h2 class="card-title">Users (<span id="user-count">0</span>)</h2>
+    </div>
+    <div class="card-body">
+      <div id="loading-indicator" style="text-align: center; padding: 2rem;">
+        <p>Loading users...</p>
+      </div>
+      <table id="users-table" class="table" style="display: none;"></table>
+      <div id="no-users" style="display: none; text-align: center; padding: 2rem;">
+        <p class="text-gray-500">No users found</p>
+      </div>
+    </div>
+  </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Grant Credits Modal -->
+<div id="grant-credits-modal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Grant Credits</h3>
+      <button class="modal-close" data-close-modal>&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>Grant credits to: <strong id="grant-user-email"></strong></p>
+      <div class="form-group">
+        <label class="form-label">Credits Amount</label>
+        <input type="number" id="grant-credits-amount" class="form-input" min="1" value="100">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Reason (optional)</label>
+        <input type="text" id="grant-credits-reason" class="form-input" placeholder="e.g., Promotional bonus">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button class="btn btn-primary" id="confirm-grant-credits">Grant Credits</button>
+    </div>
+  </div>
+</div>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<!-- Domma Framework -->
+<script src="../../../dist/domma.min.js"></script>
+
+<!-- Layout System (injects navbar) -->
+<script type="module" src="../../../layouts/js/layout.js"></script>
+
+<!-- Admin Page Logic -->
+<script type="module" src="index.js"></script>
+</body>
+</html>

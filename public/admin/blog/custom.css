@@ -1,0 +1,16 @@
+    /* Status badge colours */
+    .badge-draft { background-color: #fbbf24; color: #78350f; }
+    .badge-published { background-color: #34d399; color: #064e3b; }
+    .badge-archived { background-color: #9ca3af; color: #1f2937; }
+
+    /* Table action buttons */
+    .btn-table-action {
+      padding: 0.25rem 0.75rem;
+      font-size: 0.875rem;
+      margin-right: 0.25rem;
+    }
+
+    /* Quick actions column */
+    .actions-cell {
+      white-space: nowrap;
+    }

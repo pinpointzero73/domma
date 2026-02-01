@@ -1,0 +1,254 @@
+        /* Page layout */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body > *:not(footer) {
+            flex-shrink: 0;
+        }
+
+        body > footer {
+            margin-top: auto;
+        }
+
+        /* Todo container */
+        .todo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Input area */
+        .todo-input-container {
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            border-radius: 12px;
+            box-shadow: var(--dm-shadow-sm);
+        }
+
+        .todo-input {
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--dm-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            transition: border-color 0.2s ease;
+        }
+
+        .todo-input:focus {
+            outline: none;
+            border-color: var(--dm-primary);
+            box-shadow: 0 0 0 3px var(--dm-focus-ring);
+        }
+
+        .todo-input::placeholder {
+            color: var(--dm-gray-400);
+        }
+
+        @media (max-width: 768px) {
+            .todo-input-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Todo list */
+        .todo-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .todo-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: start;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+            background: var(--dm-card-bg);
+            border: 1px solid var(--dm-border);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .todo-item:hover {
+            box-shadow: var(--dm-shadow-md);
+            border-color: var(--dm-primary-light);
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .todo-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .todo-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .todo-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+
+        /* Checkbox */
+        .todo-checkbox {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: var(--dm-primary);
+        }
+
+        /* Todo text */
+        .todo-text {
+            font-size: 1rem;
+            color: var(--dm-text);
+            word-break: break-word;
+        }
+
+        /* Badges */
+        .todo-badges {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        /* Dropdowns */
+        .todo-select, .create-select {
+            padding: 0.5rem 0.875rem;
+            border: 1px solid var(--dm-border);
+            border-radius: 6px;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .todo-select:hover, .create-select:hover {
+            border-color: var(--dm-primary);
+            background: var(--dm-hover-bg);
+        }
+
+        .todo-select:focus, .create-select:focus {
+            outline: none;
+            border-color: var(--dm-primary);
+            box-shadow: 0 0 0 3px var(--dm-focus-ring);
+        }
+
+        /* Action buttons */
+        .todo-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .todo-actions .btn {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        /* Empty state */
+        .todo-empty {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--dm-gray-500);
+        }
+
+        .todo-empty h3 {
+            margin: 1rem 0 0.5rem;
+            color: var(--dm-gray-600);
+        }
+
+        .todo-empty p {
+            margin: 0;
+        }
+
+        /* Code display */
+        .code-display {
+            background: var(--dm-gray-900);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .code-display pre {
+            margin: 0;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .code-display code {
+            color: var(--dm-gray-100);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Badge colors */
+        .badge {
+            padding: 0.25rem 0.625rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .badge-not-started {
+            background: var(--dm-gray-200);
+            color: var(--dm-gray-700);
+        }
+
+        .badge-in-progress {
+            background: var(--dm-info-light);
+            color: var(--dm-info-dark);
+        }
+
+        .badge-completed {
+            background: var(--dm-success-light);
+            color: var(--dm-success-dark);
+        }
+
+        .badge-highest {
+            background: var(--dm-danger);
+            color: var(--dm-white);
+        }
+
+        .badge-high {
+            background: var(--dm-warning); /* Mapped from #fd7e14 */
+            color: var(--dm-white);
+        }
+
+        .badge-medium {
+            background: var(--dm-warning); /* Mapped from #ffc107 */
+            color: var(--dm-black);
+        }
+
+        .badge-low {
+            background: var(--dm-info); /* Mapped from #20c997 */
+            color: var(--dm-white);
+        }
+
+        .badge-lowest {
+            background: var(--dm-gray-400);
+            color: var(--dm-white);
+        }

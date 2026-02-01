@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Address Lookup API Tester</title>
+  <link rel="stylesheet" href="/dist/domma.css">
+  <link rel="stylesheet" href="/dist/elements.css">
+  <style>
+    body {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .test-section {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      border: 1px solid var(--dm-slate-300);
+      border-radius: 8px;
+    }
+    .result {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--dm-slate-50);
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.875rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .result.error {
+      background: #fee;
+      color: #c00;
+    }
+    .result.success {
+      background: #efe;
+      color: #060;
+    }
+  </style>
+</head>
+<body>
+  <h1>Address Lookup API Tester</h1>
+  <p>Test the address lookup API with different authentication methods</p>
+
+  <!-- Test 1: JWT Auth -->
+  <div class="test-section">
+    <h2>Test 1: JWT Authentication</h2>
+    <p>First, register and login to get a JWT token:</p>
+
+    <div style="margin-bottom: 1rem;">
+      <label>Email:</label><br>
+      <input type="email" id="jwt-email" value="jwttest@example.com" style="width: 300px; padding: 0.5rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label>Password:</label><br>
+      <input type="password" id="jwt-password" value="JwtPassword123!" style="width: 300px; padding: 0.5rem;">
+    </div>
+
+    <button onclick="registerJWT()" class="btn btn-secondary">1. Register</button>
+    <button onclick="loginJWT()" class="btn btn-primary">2. Login</button>
+    <button onclick="lookupJWT()" class="btn btn-success">3. Lookup (JWT)</button>
+
+    <div id="jwt-result" class="result"></div>
+  </div>
+
+  <!-- Test 2: API Key Auth -->
+  <div class="test-section">
+    <h2>Test 2: API Key Authentication</h2>
+    <p>After logging in above, create an API key and test it:</p>
+
+    <div style="margin-bottom: 1rem;">
+      <label>API Key Name:</label><br>
+      <input type="text" id="apikey-name" value="Test API Key" style="width: 300px; padding: 0.5rem;">
+    </div>
+
+    <button onclick="createApiKey()" class="btn btn-secondary">1. Create API Key</button>
+    <button onclick="lookupApiKey()" class="btn btn-success">2. Lookup (API Key)</button>
+
+    <div id="apikey-result" class="result"></div>
+  </div>
+
+  <!-- Test 3: Direct cURL -->
+  <div class="test-section">
+    <h2>Test 3: Direct cURL Commands</h2>
+    <p>Copy and paste these commands into your terminal:</p>
+
+    <h3>JWT Authentication:</h3>
+    <pre style="background: var(--dm-slate-800); color: white; padding: 1rem; border-radius: 4px; overflow-x: auto;">
+# 1. Register
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test User","email":"curltest@example.com","password":"CurlPassword123!"}'
+
+# 2. Login (save the token)
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"curltest@example.com","password":"CurlPassword123!"}'
+
+# 3. Lookup with JWT (replace YOUR_TOKEN)
+curl -X POST http://localhost:3000/api/address/lookup \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{"postcode":"SW1A 1AA","tier":"free"}'
+    </pre>
+
+    <h3>API Key Authentication:</h3>
+    <pre style="background: var(--dm-slate-800); color: white; padding: 1rem; border-radius: 4px; overflow-x: auto;">
+# 1. Create API key (use JWT token from login)
+curl -X POST http://localhost:3000/api/address/api-keys \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{"name":"My Test Key","permissions":["freeLookup","premiumLookup"]}'
+
+# 2. Lookup with API Key (replace YOUR_API_KEY)
+curl -X POST http://localhost:3000/api/address/v1/lookup \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -d '{"postcode":"SW1A 1AA","tier":"free"}'
+    </pre>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:3000/api';
+    let jwtToken = null;
+    let apiKey = null;
+
+    // JWT Registration
+    async function registerJWT() {
+      const email = document.getElementById('jwt-email').value;
+      const password = document.getElementById('jwt-password').value;
+
+      try {
+        const response = await fetch(`${API_URL}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: 'JWT Test User',
+            email,
+            password
+          })
+        });
+
+        const data = await response.json();
+
+        document.getElementById('jwt-result').className = response.ok ? 'result success' : 'result error';
+        document.getElementById('jwt-result').textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        document.getElementById('jwt-result').className = 'result error';
+        document.getElementById('jwt-result').textContent = error.message;
+      }
+    }
+
+    // JWT Login
+    async function loginJWT() {
+      const email = document.getElementById('jwt-email').value;
+      const password = document.getElementById('jwt-password').value;
+
+      try {
+        const response = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.token) {
+          jwtToken = data.token;
+          document.getElementById('jwt-result').className = 'result success';
+          document.getElementById('jwt-result').textContent = 'Login successful!\n\n' + JSON.stringify(data, null, 2);
+        } else {
+          document.getElementById('jwt-result').className = 'result error';
+          document.getElementById('jwt-result').textContent = JSON.stringify(data, null, 2);
+        }
+      } catch (error) {
+        document.getElementById('jwt-result').className = 'result error';
+        document.getElementById('jwt-result').textContent = error.message;
+      }
+    }
+
+    // JWT Lookup
+    async function lookupJWT() {
+      if (!jwtToken) {
+        alert('Please login first to get a JWT token');
+        return;
+      }
+
+      try {
+        console.log('[JWT Lookup] Sending request with token:', jwtToken.substring(0, 20) + '...');
+
+        const requestBody = { postcode: 'SW1A 1AA', tier: 'free' };
+        console.log('[JWT Lookup] Request body:', requestBody);
+        console.log('[JWT Lookup] Postcode type:', typeof requestBody.postcode);
+
+        const response = await fetch(`${API_URL}/address/lookup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwtToken}`
+          },
+          body: JSON.stringify(requestBody)
+        });
+
+        const data = await response.json();
+
+        console.log('[JWT Lookup] Response:', data);
+
+        document.getElementById('jwt-result').className = response.ok ? 'result success' : 'result error';
+        document.getElementById('jwt-result').textContent =
+          `Status: ${response.status} ${response.statusText}\n\n` +
+          JSON.stringify(data, null, 2);
+      } catch (error) {
+        console.error('[JWT Lookup] Error:', error);
+        document.getElementById('jwt-result').className = 'result error';
+        document.getElementById('jwt-result').textContent = error.message;
+      }
+    }
+
+    // Create API Key
+    async function createApiKey() {
+      if (!jwtToken) {
+        alert('Please login first to create an API key');
+        return;
+      }
+
+      const name = document.getElementById('apikey-name').value;
+
+      try {
+        const response = await fetch(`${API_URL}/address/api-keys`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwtToken}`
+          },
+          body: JSON.stringify({
+            name,
+            permissions: ['freeLookup', 'premiumLookup']
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.key) {
+          apiKey = data.key;
+          document.getElementById('apikey-result').className = 'result success';
+          document.getElementById('apikey-result').textContent =
+            'API Key created successfully!\n\n' +
+            'Key: ' + data.key + '\n\n' +
+            JSON.stringify(data, null, 2);
+        } else {
+          document.getElementById('apikey-result').className = 'result error';
+          document.getElementById('apikey-result').textContent = JSON.stringify(data, null, 2);
+        }
+      } catch (error) {
+        document.getElementById('apikey-result').className = 'result error';
+        document.getElementById('apikey-result').textContent = error.message;
+      }
+    }
+
+    // API Key Lookup
+    async function lookupApiKey() {
+      if (!apiKey) {
+        alert('Please create an API key first');
+        return;
+      }
+
+      try {
+        console.log('[API Key Lookup] Sending request with API key:', apiKey.substring(0, 20) + '...');
+
+        const requestBody = { postcode: 'SW1A 1AA', tier: 'free' };
+        console.log('[API Key Lookup] Request body:', requestBody);
+        console.log('[API Key Lookup] Postcode type:', typeof requestBody.postcode);
+
+        const response = await fetch(`${API_URL}/address/v1/lookup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-Key': apiKey
+          },
+          body: JSON.stringify(requestBody)
+        });
+
+        const data = await response.json();
+
+        console.log('[API Key Lookup] Response:', data);
+
+        document.getElementById('apikey-result').className = response.ok ? 'result success' : 'result error';
+        document.getElementById('apikey-result').textContent =
+          `Status: ${response.status} ${response.statusText}\n\n` +
+          JSON.stringify(data, null, 2);
+      } catch (error) {
+        console.error('[API Key Lookup] Error:', error);
+        document.getElementById('apikey-result').className = 'result error';
+        document.getElementById('apikey-result').textContent = error.message;
+      }
+    }
+  </script>
+</body>
+</html>

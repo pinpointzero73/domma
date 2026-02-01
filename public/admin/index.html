@@ -15,7 +15,9 @@
   <!-- Admin Custom Styles -->
   <link rel="stylesheet" href="index.css">
 </head>
-<body class="dm-cloaked" data-theme="default">
+<body class="dm-cloaked" data-theme="default" data-layout="public">
+
+<!-- Layout system will inject navbar here -->
 
 <!-- Admin Layout Wrapper -->
 <div class="admin-wrapper">
@@ -141,6 +143,10 @@
 
 <!-- Domma Framework -->
 <script src="../dist/domma.min.js"></script>
+
+<!-- Layout System (injects navbar) -->
+<script type="module" src="../layouts/js/layout.js"></script>
+
 <!-- Chart.js for visualisations -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <!-- Admin Page Logic -->

@@ -1,0 +1,23 @@
+        .content-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        #progression-container {
+            margin: 3rem 0;
+        }
+
+        .loading-message {
+            text-align: center;
+            padding: 3rem;
+            color: var(--dm-gray-600);
+            font-size: 1.1rem;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 3rem;
+            color: var(--dm-danger);
+            font-size: 1.1rem;
+        }

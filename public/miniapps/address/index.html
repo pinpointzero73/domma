@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Address Lookup - Domma MiniApp</title>
+  <meta name="description" content="UK Postcode lookup service with free and premium tiers">
+
+  <!-- Domma Core Styles -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+
+  <!-- App Custom Styles -->
+  <link rel="stylesheet" href="./custom.css">
+</head>
+<body class="dm-cloaked" data-theme="light">
+  <!-- Auth Section (shown when logged out) -->
+  <div id="authSection" class="auth-wrapper">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title text-center mb-4">
+                <span data-icon="map-pin"></span> Address Lookup
+              </h2>
+              <p class="text-center text-muted mb-4">
+                UK Postcode lookup service with free and premium tiers
+              </p>
+              <div id="authContainer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Section (shown when logged in) -->
+  <div id="appSection" class="app-wrapper" style="display: none;">
+
+    <!-- Custom Navbar -->
+    <header id="app-navbar" class="app-navbar">
+      <div class="navbar-brand">
+        <span data-icon="map-pin"></span>
+        <span>Address Lookup</span>
+      </div>
+      <div class="navbar-user">
+        <span id="userName">User</span>
+        <span id="userBadge" class="badge badge-primary">Guest</span>
+      </div>
+      <div class="navbar-actions">
+        <span class="credits-badge">
+          <span data-icon="zap"></span>
+          <span id="creditBalance">0</span> Credits
+        </span>
+        <button id="logoutBtn" class="btn btn-outline-light btn-sm">
+          <span data-icon="log-out"></span> Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside id="app-sidebar" class="app-sidebar"></aside>
+
+    <!-- Main Content -->
+    <main class="app-main">
+      <div class="app-content">
+
+        <!-- Section: Lookup -->
+        <section id="lookupSection" class="app-section active">
+
+          <!-- Card 1: Lookup Form -->
+          <div class="card shadow-md" style="max-width: 900px; margin: 0 auto 3rem auto;">
+            <div class="card-body">
+              <h2 class="card-title text-muted">Postcode Lookup</h2>
+              <p class="text-muted mb-4">Enter a UK postcode to find location details</p>
+              <div id="lookupFormContainer"></div>
+            </div>
+          </div>
+
+          <!-- Card 2: Results (hidden until lookup) -->
+          <div id="resultsCard" class="card shadow-md" style="max-width: 900px; margin: 0 auto; display: none;">
+            <div class="card-body">
+              <!-- Status badge injected here -->
+              <div id="lookupStatus"></div>
+
+              <!-- Postcode title -->
+              <div id="postcodeTitle" class="mb-4" style="background: #1e293b; padding: 1.5rem 2rem; border-radius: 0.5rem; display: flex; align-items: center;"></div>
+
+              <!-- Tabs for Grid/JSON/Cache views -->
+              <div id="resultsTabs" class="tabs tabs-pills mb-4">
+                <ul class="tab-list">
+                  <li class="tab-item active">
+                    <span data-icon="layout"></span> Grid View
+                  </li>
+                  <li class="tab-item">
+                    <span data-icon="code"></span> JSON
+                  </li>
+                  <li class="tab-item" id="cacheTab">
+                    <span data-icon="database"></span> <span id="cacheTabLabel">Cache Details</span>
+                  </li>
+                </ul>
+                <div class="tab-content">
+                  <!-- Grid View Panel -->
+                  <div class="tab-panel active" id="gridViewPanel">
+                    <div id="gridViewContent"></div>
+                  </div>
+                  <!-- JSON View Panel -->
+                  <div class="tab-panel" id="jsonViewPanel">
+                    <div id="jsonViewContent"></div>
+                  </div>
+                  <!-- Cache Details Panel -->
+                  <div class="tab-panel" id="cacheDetailsPanel">
+                    <div id="cacheDetailsContent"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Addresses section (Premium only) -->
+              <div id="addressesSection" style="display: none;"></div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- Section: Dashboard -->
+        <section id="dashboardSection" class="app-section">
+          <h2 class="mb-4">Dashboard</h2>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid" id="statsGrid">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Usage Chart Placeholder -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <h3 class="card-title">Usage Over Time</h3>
+              <div id="usageChart">
+                <!-- Daily breakdown will be rendered here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Lookups -->
+          <div class="card">
+            <div class="card-body">
+              <div id="recentLookups">
+                <!-- Recent lookups will be rendered here -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section: API Keys -->
+        <section id="apiKeysSection" class="app-section">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">API Keys</h2>
+            <button id="createApiKeyBtn" class="btn btn-primary">
+              <span data-icon="plus"></span> Create API Key
+            </button>
+          </div>
+
+          <div id="apiKeysList">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <!-- Section: Saved Addresses -->
+        <section id="savedSection" class="app-section">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">Saved Addresses</h2>
+            <button id="saveAddressBtn" class="btn btn-primary" style="display: none;">
+              <span data-icon="bookmark"></span> Save Current Address
+            </button>
+          </div>
+
+          <div id="savedAddressesList">
+            <!-- Populated by JS -->
+          </div>
+
+          <div id="noSavedAddresses" style="display: none;">
+            <div class="card">
+              <div class="card-body text-center py-5">
+                <span data-icon="bookmark" style="width: 64px; height: 64px; opacity: 0.2;"></span>
+                <h3 class="mt-3">No Saved Addresses</h3>
+                <p class="text-muted">
+                  Perform a lookup and save your frequently used addresses for quick access.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section: Feedback -->
+        <section id="feedbackSection" class="app-section">
+          <h2 class="mb-4">Feedback</h2>
+          <div style="max-width: 600px; margin: 0 auto;">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="card-title">Send us your feedback</h3>
+                <p class="text-muted mb-4">
+                  We'd love to hear from you! Report bugs, request features, or share your thoughts.
+                </p>
+
+                <!-- Domma.forms will render here -->
+                <div id="feedbackFormContainer"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section: Contact -->
+        <section id="contactSection" class="app-section">
+          <h2 class="mb-4">Contact Us</h2>
+          <div class="row justify-content-center">
+            <div class="col-12 col-md-8">
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">Get in Touch</h3>
+                  <p class="text-muted mb-4">
+                    Need help or have questions? Here's how to reach us.
+                  </p>
+
+                  <div class="mb-4">
+                    <h4 class="h5 mb-2">
+                      <span data-icon="mail"></span> Support Email
+                    </h4>
+                    <p class="mb-0">
+                      <a href="mailto:support@domma.dev" class="text-primary">support@domma.dev</a>
+                    </p>
+                  </div>
+
+                  <div class="mb-4">
+                    <h4 class="h5 mb-2">
+                      <span data-icon="book"></span> Documentation
+                    </h4>
+                    <p class="mb-0">
+                      <a href="/docs" class="text-primary">View full API documentation</a>
+                    </p>
+                  </div>
+
+                  <div class="mb-4">
+                    <h4 class="h5 mb-2">
+                      <span data-icon="help-circle"></span> FAQ
+                    </h4>
+                    <p class="mb-0">
+                      <a href="/faq" class="text-primary">Frequently Asked Questions</a>
+                    </p>
+                  </div>
+
+                  <div class="alert alert-info mt-4">
+                    <span data-icon="info"></span>
+                    <strong>Response Time:</strong> We typically respond within 24 hours during business days.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- REMOVED: Credits Tab - will be moved to separate purchase flow -->
+
+      </div>
+
+      <!-- Footer -->
+      <footer class="app-footer">
+        <span>Built with love using <strong>Domma</strong></span>
+        <div class="footer-links">
+          <a href="#" id="footerFeedback">Feedback</a>
+          <a href="#" id="footerContact">Contact</a>
+        </div>
+      </footer>
+    </main>
+
+  </div>
+
+  <!-- DOMPurify for XSS protection -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+  <!-- Scripts -->
+  <script type="module" src="../../dist/domma.min.js"></script>
+  <script type="module" src="./dist/app.min.js"></script>
+</body>
+</html>

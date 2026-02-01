@@ -15,26 +15,12 @@
   <!-- Admin Custom Styles -->
   <link rel="stylesheet" href="../index.css">
 
-  <style>
-    /* Status badge colours */
-    .badge-draft { background-color: #fbbf24; color: #78350f; }
-    .badge-published { background-color: #34d399; color: #064e3b; }
-    .badge-archived { background-color: #9ca3af; color: #1f2937; }
-
-    /* Table action buttons */
-    .btn-table-action {
-      padding: 0.25rem 0.75rem;
-      font-size: 0.875rem;
-      margin-right: 0.25rem;
-    }
-
-    /* Quick actions column */
-    .actions-cell {
-      white-space: nowrap;
-    }
-  </style>
+  <!-- App Custom Styles -->
+  <link rel="stylesheet" href="./custom.css">
 </head>
-<body class="dm-cloaked" data-theme="default">
+<body class="dm-cloaked" data-theme="default" data-layout="public">
+
+<!-- Layout system will inject navbar here -->
 
 <!-- Admin Layout Wrapper -->
 <div class="admin-wrapper">
@@ -139,6 +125,9 @@
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
 
 <script src="../../dist/domma.min.js"></script>
+
+<!-- Layout System (injects navbar) -->
+<script type="module" src="../../layouts/js/layout.js"></script>
 <!-- Admin Page Logic -->
 <script type="module" src="index.js"></script>
 </body>

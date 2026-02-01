@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics - Address Lookup Admin - Domma</title>
+  <meta name="description" content="Address Lookup Service Analytics">
+
+  <!-- Domma Core Styles -->
+  <link rel="stylesheet" href="../../../dist/domma.css">
+  <link rel="stylesheet" href="../../../dist/grid.css">
+  <link rel="stylesheet" href="../../../dist/elements.css">
+  <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+
+  <!-- Admin Custom Styles -->
+  <link rel="stylesheet" href="../../index.css">
+</head>
+<body class="dm-cloaked" data-theme="default" data-layout="public">
+
+<!-- Layout system will inject navbar here -->
+
+<!-- Admin Layout Wrapper -->
+<div class="admin-wrapper">
+  <!-- Sidebar -->
+  <aside id="admin-sidebar" class="admin-sidebar"></aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <!-- Page Header -->
+    <div class="admin-header">
+      <h1>Analytics & Insights</h1>
+      <p>Comprehensive service analytics</p>
+    </div>
+
+    <!-- Page Content -->
+    <div class="admin-content">
+
+  <!-- Time Period Selector -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <label class="form-label">Time Period</label>
+      <select id="time-period" class="form-input" style="max-width: 300px;">
+        <option value="7">Last 7 Days</option>
+        <option value="30" selected>Last 30 Days</option>
+        <option value="90">Last 90 Days</option>
+        <option value="365">Last Year</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Charts Row 1 -->
+  <div class="grid grid-cols-2 mb-6 gap-6">
+    <!-- Lookups Over Time Chart -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Lookups Over Time</h2>
+      </div>
+      <div class="card-body">
+        <canvas id="lookups-chart"></canvas>
+      </div>
+    </div>
+
+    <!-- Free vs Premium Pie Chart -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Free vs Premium Ratio</h2>
+      </div>
+      <div class="card-body">
+        <canvas id="tier-chart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row 2 -->
+  <div class="grid grid-cols-2 mb-6 gap-6">
+    <!-- Cache Performance Chart -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Cache Performance</h2>
+      </div>
+      <div class="card-body">
+        <canvas id="cache-chart"></canvas>
+      </div>
+    </div>
+
+    <!-- Provider Usage Chart -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Provider Usage</h2>
+      </div>
+      <div class="card-body">
+        <canvas id="provider-chart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popular Postcodes Table -->
+  <div class="card mb-6">
+    <div class="card-header">
+      <h2 class="card-title">Top 20 Postcodes</h2>
+    </div>
+    <div class="card-body">
+      <div id="loading-postcodes" style="text-align: center; padding: 2rem;">
+        <p>Loading data...</p>
+      </div>
+      <table id="popular-postcodes-table" class="table" style="display: none;"></table>
+    </div>
+  </div>
+
+  <!-- Error Tracking Table -->
+  <div class="card mb-6">
+    <div class="card-header">
+      <h2 class="card-title">Recent Errors</h2>
+    </div>
+    <div class="card-body">
+      <div id="loading-errors" style="text-align: center; padding: 2rem;">
+        <p>Loading data...</p>
+      </div>
+      <table id="errors-table" class="table" style="display: none;"></table>
+      <div id="no-errors" style="display: none; text-align: center; padding: 2rem;">
+        <p class="text-success">No errors recorded</p>
+      </div>
+    </div>
+  </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<!-- Domma Framework -->
+<script src="../../../dist/domma.min.js"></script>
+
+<!-- Layout System (injects navbar) -->
+<script type="module" src="../../../layouts/js/layout.js"></script>
+
+<!-- Chart.js for visualisations -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<!-- Admin Page Logic -->
+<script type="module" src="index.js"></script>
+</body>
+</html>

@@ -714,7 +714,7 @@
     // Load and render feature cards from JSON config
     const renderFeatures = async () => {
       try {
-        const response = await fetch('layouts/config/features.json');
+        const response = await fetch('data/features.json');
         const config = await response.json();
         const container = $('#splash-features');
 
@@ -762,7 +762,7 @@
     // Load and render carousel slides from JSON config
     const renderCarouselSlides = async () => {
       try {
-        const response = await fetch('layouts/config/carousel-slides.json');
+        const response = await fetch('data/carousel-slides.json');
         const config = await response.json();
         const track = $('.carousel-track');
 

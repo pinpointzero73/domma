@@ -1,0 +1,472 @@
+/**
+ * Address Lookup MiniApp - Custom Styles
+ * Domma Framework
+ */
+
+:root {
+  --dm-primary: #3b82f6;
+  --dm-success: #10b981;
+  --dm-warning: #f59e0b;
+  --dm-danger: #ef4444;
+}
+
+body {
+  background: #f8fafc;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===================================
+ * Auth Section Styles
+ * =================================== */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+}
+
+/* ===================================
+ * App Wrapper - Full Viewport
+ * =================================== */
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ===================================
+ * Navbar - Fixed Top (Dark Theme)
+ * =================================== */
+.app-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: var(--dm-slate-900);
+  border-bottom: 1px solid var(--dm-slate-700);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  z-index: 1000;
+  gap: 1rem;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: white;
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--dm-slate-300);
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.credits-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--dm-slate-800);
+  color: var(--dm-blue-400);
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1px solid var(--dm-slate-600);
+}
+
+/* ===================================
+ * Main Content - With Sidebar Space
+ * =================================== */
+.app-main {
+  flex: 1;
+  margin-left: 250px;
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease;
+}
+
+.app-content {
+  flex: 1;
+  padding: 2rem;
+}
+
+/* ===================================
+ * Footer - At Bottom of Main
+ * =================================== */
+.app-footer {
+  margin-top: auto;
+  padding: 1.5rem 2rem;
+  background: var(--dm-slate-900);
+  border-top: 1px solid var(--dm-slate-700);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--dm-slate-400);
+  font-size: 0.875rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer-links a {
+  color: var(--dm-slate-400);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--dm-blue-400);
+  text-decoration: underline;
+}
+
+/* ===================================
+ * Sections - Only Active is Visible
+ * =================================== */
+.app-section {
+  display: none;
+}
+
+.app-section.active {
+  display: block;
+}
+
+/* ===================================
+ * Save Mode Radio Buttons
+ * =================================== */
+.lookup-inline-options {
+  padding: 1rem;
+  background: var(--dm-slate-50);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.save-mode-options label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+  color: var(--dm-gray-700);
+}
+
+.save-mode-label {
+  min-width: 160px;
+  padding: 1rem;
+}
+
+.save-mode-label-primary {
+  font-weight: 700;
+  font-size: 1.125rem;
+  margin-bottom: 0.25rem;
+}
+
+.save-mode-label-secondary {
+  font-size: 0.875rem;
+  color: var(--dm-gray-700);
+  font-weight: 500;
+}
+
+/* ===================================
+ * Credit Badge
+ * =================================== */
+.credit-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 9999px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.credit-badge .credit-icon {
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===================================
+ * Lookup Section Improvements
+ * =================================== */
+#lookupSection .card {
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#lookupSection .card-body {
+  padding: 2rem;
+}
+
+#lookupSection .card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--dm-slate-900);
+}
+
+/* ===================================
+ * Address List
+ * =================================== */
+.address-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.address-item {
+  padding: 1rem;
+  border: 1px solid var(--dm-slate-200);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.address-item:hover {
+  border-color: var(--dm-primary);
+  background: var(--dm-slate-50);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ===================================
+ * API Key Display
+ * =================================== */
+.api-key-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--dm-slate-100);
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.api-key-prefix {
+  color: var(--dm-slate-600);
+}
+
+.api-key-copy-btn {
+  margin-left: auto;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+/* ===================================
+ * Stats Grid
+ * =================================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--dm-slate-600);
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--dm-slate-900);
+}
+
+/* ===================================
+ * Credit Packs
+ * =================================== */
+.credit-packs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.credit-pack {
+  padding: 1.5rem;
+  border: 2px solid var(--dm-slate-200);
+  border-radius: 8px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.credit-pack:hover {
+  border-color: var(--dm-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.credit-pack.popular {
+  border-color: var(--dm-primary);
+  background: rgba(59, 130, 246, 0.05);
+  position: relative;
+}
+
+.credit-pack.popular::before {
+  content: 'POPULAR';
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  padding: 0.25rem 0.5rem;
+  background: var(--dm-primary);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 4px;
+}
+
+.pack-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.pack-credits {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dm-primary);
+  margin-bottom: 0.5rem;
+}
+
+.pack-price {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.pack-description {
+  font-size: 0.875rem;
+  color: var(--dm-slate-600);
+  margin-bottom: 1rem;
+}
+
+.pack-per-lookup {
+  font-size: 0.75rem;
+  color: var(--dm-slate-500);
+}
+
+/* ===================================
+ * Saved Address Card
+ * =================================== */
+.saved-address-card {
+  padding: 1rem;
+  border: 1px solid var(--dm-slate-200);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.saved-address-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.saved-address-name {
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.saved-address-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: var(--dm-slate-200);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  margin-right: 0.25rem;
+}
+
+.permanent-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: var(--dm-primary);
+  color: white;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ===================================
+ * Contact Section
+ * =================================== */
+.contact-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.contact-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.contact-method {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--dm-gray-700);
+  font-size: 0.9rem;
+}
+
+.contact-method [data-icon] {
+  color: var(--dm-primary);
+}
+
+.contact-form .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ===================================
+ * Responsive - Sidebar Collapses
+ * =================================== */
+@media (max-width: 768px) {
+  .app-main {
+    margin-left: 60px;
+  }
+
+  .navbar-user {
+    display: none;
+  }
+}

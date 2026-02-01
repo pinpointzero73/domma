@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Keys - Address Lookup Admin - Domma</title>
+  <meta name="description" content="Manage Address Lookup Service API Keys">
+
+  <!-- Domma Core Styles -->
+  <link rel="stylesheet" href="../../../dist/domma.css">
+  <link rel="stylesheet" href="../../../dist/grid.css">
+  <link rel="stylesheet" href="../../../dist/elements.css">
+  <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+
+  <!-- Admin Custom Styles -->
+  <link rel="stylesheet" href="../../index.css">
+</head>
+<body class="dm-cloaked" data-theme="default" data-layout="public">
+
+<!-- Layout system will inject navbar here -->
+
+<!-- Admin Layout Wrapper -->
+<div class="admin-wrapper">
+  <!-- Sidebar -->
+  <aside id="admin-sidebar" class="admin-sidebar"></aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <!-- Page Header -->
+    <div class="admin-header">
+      <h1>API Keys Management</h1>
+      <p>View and manage all API keys</p>
+    </div>
+
+    <!-- Page Content -->
+    <div class="admin-content">
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-4 gap-4 mb-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title text-sm text-gray-600 mb-2">Total Keys</h3>
+        <p class="text-3xl font-bold" id="stat-total-keys">-</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title text-sm text-gray-600 mb-2">Active Keys</h3>
+        <p class="text-3xl font-bold" id="stat-active-keys">-</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title text-sm text-gray-600 mb-2">Revoked Keys</h3>
+        <p class="text-3xl font-bold" id="stat-revoked-keys">-</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title text-sm text-gray-600 mb-2">Total Requests</h3>
+        <p class="text-3xl font-bold" id="stat-total-requests">-</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <label class="form-label">Search</label>
+          <input type="text" id="search-input" class="form-input" placeholder="Search by user email or key...">
+        </div>
+        <div>
+          <label class="form-label">Status</label>
+          <select id="status-filter" class="form-input">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Sort By</label>
+          <select id="sort-filter" class="form-input">
+            <option value="recent">Most Recent</option>
+            <option value="usage">Most Used</option>
+            <option value="user">User (A-Z)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Keys Table -->
+  <div class="card mb-6">
+    <div class="card-header">
+      <h2 class="card-title">API Keys (<span id="key-count">0</span>)</h2>
+    </div>
+    <div class="card-body">
+      <div id="loading-indicator" style="text-align: center; padding: 2rem;">
+        <p>Loading API keys...</p>
+      </div>
+      <table id="keys-table" class="table" style="display: none;"></table>
+      <div id="no-keys" style="display: none; text-align: center; padding: 2rem;">
+        <p class="text-gray-500">No API keys found</p>
+      </div>
+    </div>
+  </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Revoke Key Modal -->
+<div id="revoke-key-modal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Revoke API Key</h3>
+      <button class="modal-close" data-close-modal>&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to revoke this API key?</p>
+      <p><strong>Key:</strong> <span id="revoke-key-prefix"></span></p>
+      <p><strong>User:</strong> <span id="revoke-key-user"></span></p>
+      <p class="text-gray-500 mt-2">This action cannot be undone. The user will need to create a new key.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button class="btn btn-danger" id="confirm-revoke-key">Revoke Key</button>
+    </div>
+  </div>
+</div>
+
+<!-- Adjust Rate Limit Modal -->
+<div id="rate-limit-modal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Adjust Rate Limits</h3>
+      <button class="modal-close" data-close-modal>&times;</button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Key:</strong> <span id="rate-limit-key-prefix"></span></p>
+      <p><strong>User:</strong> <span id="rate-limit-key-user"></span></p>
+      <div class="form-group mt-4">
+        <label class="form-label">Requests Per Minute</label>
+        <input type="number" id="rate-limit-per-minute" class="form-input" min="1" max="1000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Requests Per Day</label>
+        <input type="number" id="rate-limit-per-day" class="form-input" min="1" max="100000">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button class="btn btn-primary" id="confirm-rate-limit">Update Limits</button>
+    </div>
+  </div>
+</div>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<!-- Domma Framework -->
+<script src="../../../dist/domma.min.js"></script>
+
+<!-- Layout System (injects navbar) -->
+<script type="module" src="../../../layouts/js/layout.js"></script>
+
+<!-- Admin Page Logic -->
+<script type="module" src="index.js"></script>
+</body>
+</html>
