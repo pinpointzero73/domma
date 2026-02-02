@@ -33,6 +33,13 @@ export const feedbackBlueprint = {
   title: 'Feedback',
   fields: [
     {
+      name: 'rating',
+      type: 'custom',
+      label: 'How would you rate your experience?',
+      required: false,
+      customHTML: '<dm-star-rating value="0" max="5" id="feedbackRating"></dm-star-rating>'
+    },
+    {
       name: 'subject',
       type: 'select',
       label: 'Subject',

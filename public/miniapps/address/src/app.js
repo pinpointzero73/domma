@@ -304,19 +304,24 @@ class AddressApp {
       onSubmit: async (data) => {
         console.log('[Feedback] Form data received:', data);
 
+        // Get rating from star-rating component
+        const ratingElement = document.getElementById('feedbackRating');
+        const rating = ratingElement ? parseInt(ratingElement.getAttribute('value') || '0', 10) : 0;
+
         // Map array indices to field names
-        // data[0] = subject (first field), data[1] = message (second field)
+        // data[0] = rating (custom field), data[1] = subject, data[2] = message
         const formData = {
-          subject: data[0] || data.subject,
-          message: data[1] || data.message
+          rating: rating,
+          subject: data[1] || data.subject,
+          message: data[2] || data.message
         };
 
         console.log('[Feedback] Mapped data:', formData);
 
         await this.submitFeedback({
           type: formData.subject,
-          message: formData.message
-          // rating omitted - will be added when star rating component is implemented
+          message: formData.message,
+          rating: formData.rating
         });
         return true;  // Return true to reset form
       },
@@ -1012,12 +1017,14 @@ class AddressApp {
 
   renderSavedAddresses(addresses) {
     if (!addresses || addresses.length === 0) {
-      $('#savedAddressesList').html('<p class="text-muted">No saved addresses</p>');
+      $('#savedAddressesList').empty();
       $('#noSavedAddresses').show();
+      $('#savedAddressesFilter').hide();
       return;
     }
 
     $('#noSavedAddresses').hide();
+    $('#savedAddressesFilter').show();
 
     // Prepare data for DataTable
     const tableData = addresses.map(addr => ({
@@ -1032,8 +1039,14 @@ class AddressApp {
       createdAt: addr.createdAt
     }));
 
-    // Clear and create table container
-    $('#savedAddressesList').html('<div id="savedAddressesTable"></div>');
+    // Clear and create table container inside a card
+    $('#savedAddressesList').html(`
+      <div class="card">
+        <div class="card-body">
+          <div id="savedAddressesTable"></div>
+        </div>
+      </div>
+    `);
 
     // Destroy existing table if present
     if (this.savedAddressesTable) {
@@ -1108,6 +1121,24 @@ class AddressApp {
       responsive: true,
       striped: true
     });
+
+    // Set up search-filter component event listener
+    const searchFilter = document.querySelector('#savedAddressesFilter dm-search-filter');
+    if (searchFilter) {
+      searchFilter.addEventListener('search', (e) => {
+        const query = e.detail.query || '';
+        if (this.savedAddressesTable) {
+          this.savedAddressesTable.search(query);
+        }
+      });
+
+      searchFilter.addEventListener('filter', (e) => {
+        const tags = e.detail.tags || [];
+        // Tag filtering would require custom implementation
+        // For now, we'll just use text search
+        console.log('[SavedAddresses] Tag filter:', tags);
+      });
+    }
 
     // Scan icons after table render
     if (Domma.icons) {
@@ -1628,9 +1659,17 @@ class AddressApp {
           title: 'Actions',
           sortable: false,
           render: (value) => `
-            <button class="btn btn-sm btn-danger delete-api-key-btn" data-key-id="${value}" title="Delete API Key">
-              <span data-icon="trash" data-icon-size="16"></span>
-            </button>
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-outline-primary view-stats-btn" data-key-id="${value}" title="View Statistics">
+                <span data-icon="bar-chart" data-icon-size="14"></span>
+              </button>
+              <button class="btn btn-outline-warning regenerate-key-btn" data-key-id="${value}" title="Regenerate Key">
+                <span data-icon="refresh-cw" data-icon-size="14"></span>
+              </button>
+              <button class="btn btn-outline-danger delete-api-key-btn" data-key-id="${value}" title="Delete API Key">
+                <span data-icon="trash" data-icon-size="14"></span>
+              </button>
+            </div>
           `
         }
       ],
@@ -1644,10 +1683,10 @@ class AddressApp {
     });
 
     // Bind delete button events using event delegation
-    $('#apiKeysTable').off('click', '.delete-api-key-btn').on('click', '.delete-api-key-btn', (e) => {
+    $('#apiKeysTable').off('click', '.delete-api-key-btn').on('click', '.delete-api-key-btn', function(e) {
       e.preventDefault();
-      const keyId = $(e.currentTarget).data('key-id');
-      this.deleteApiKey(keyId);
+      const keyId = this.getAttribute('data-key-id');
+      self.deleteApiKey(keyId);
     });
 
     // Bind copy button events using event delegation
@@ -1662,6 +1701,21 @@ class AddressApp {
         console.error('Copy failed:', error);
         Domma.elements.toast('Failed to copy', { type: 'error' });
       }
+    });
+
+    // Bind view stats button events using event delegation
+    const self = this;
+    $('#apiKeysTable').off('click', '.view-stats-btn').on('click', '.view-stats-btn', function(e) {
+      e.preventDefault();
+      const keyId = this.getAttribute('data-key-id');
+      self.showApiKeyStats(keyId);
+    });
+
+    // Bind regenerate button events using event delegation
+    $('#apiKeysTable').off('click', '.regenerate-key-btn').on('click', '.regenerate-key-btn', function(e) {
+      e.preventDefault();
+      const keyId = this.getAttribute('data-key-id');
+      self.regenerateApiKey(keyId);
     });
 
     // Scan icons after table render - do it multiple times to ensure they render
@@ -1914,22 +1968,37 @@ class AddressApp {
         </div>
       `;
 
-      // Create modal using Domma.elements
+      // Create and show modal using Domma.elements
       const modal = Domma.elements.modal({
         title: 'API Key Statistics',
-        content: statsHtml,
+        content: '', // Empty content - will be injected after modal opens
         footer: `
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         `,
-        size: 'medium'
+        size: 'medium',
+        onOpen: () => {
+          // Inject immediately when modal starts opening
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              const modalComponent = document.querySelector('domma-modal');
+              const shadowRoot = modalComponent?.shadowRoot;
+              const modalBody = shadowRoot?.querySelector('.modal-body');
+
+              if (modalBody) {
+                modalBody.innerHTML = statsHtml;
+
+                // Scan icons in modal after content is injected
+                if (Domma.icons) {
+                  Domma.icons.scan(modalBody);
+                }
+              }
+            });
+          });
+        }
       });
 
-      modal.show();
-
-      // Scan icons in modal
-      if (Domma.icons) {
-        Domma.icons.scan();
-      }
+      // Open the modal
+      modal.open();
 
     } catch (error) {
       console.error('Load API key stats error:', error);
@@ -1993,43 +2062,64 @@ class AddressApp {
 
       const modal = Domma.elements.modal({
         title: 'API Key Regenerated',
-        content: newKeyHtml,
+        content: '', // Empty content - will be injected after modal opens
         footer: `
           <button type="button" class="btn btn-primary" data-dismiss="modal">I've Saved It</button>
         `,
         size: 'medium',
         backdrop: 'static',  // Prevent closing by clicking outside
-        keyboard: false      // Prevent closing with ESC key
-      });
+        keyboard: false,     // Prevent closing with ESC key
+        onOpen: () => {
+          // Inject immediately when modal starts opening
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              const modalComponent = document.querySelector('domma-modal');
+              const shadowRoot = modalComponent?.shadowRoot;
+              const modalBody = shadowRoot?.querySelector('.modal-body');
 
-      modal.show();
+              if (modalBody) {
+                modalBody.innerHTML = newKeyHtml;
 
-      // Scan icons in modal
-      if (Domma.icons) {
-        Domma.icons.scan();
-      }
+                // Scan icons in modal after content is injected
+                if (Domma.icons) {
+                  Domma.icons.scan(modalBody);
+                }
 
-      // Bind copy button
-      $('#copyNewKeyBtn').on('click', async () => {
-        const keyValue = document.getElementById('newApiKeyValue').value;
-        try {
-          await _.copyToClipboard(keyValue);
-          Domma.elements.toast('API key copied to clipboard!', { type: 'success' });
-          $('#copyNewKeyBtn').html('<span data-icon="check"></span> Copied!');
-          setTimeout(() => {
-            $('#copyNewKeyBtn').html('<span data-icon="copy"></span> Copy');
-            if (Domma.icons) Domma.icons.scan();
-          }, 2000);
-        } catch (error) {
-          Domma.elements.toast('Failed to copy', { type: 'error' });
+                // Bind copy button - need to search within shadow DOM
+                const copyBtn = shadowRoot.querySelector('#copyNewKeyBtn');
+                if (copyBtn) {
+                  copyBtn.addEventListener('click', async () => {
+                    const keyInput = shadowRoot.querySelector('#newApiKeyValue');
+                    const keyValue = keyInput?.value;
+                    if (keyValue) {
+                      try {
+                        await _.copyToClipboard(keyValue);
+                        Domma.elements.toast('API key copied to clipboard!', { type: 'success' });
+                        copyBtn.innerHTML = '<span data-icon="check"></span> Copied!';
+                        if (Domma.icons) Domma.icons.scan(copyBtn);
+                        setTimeout(() => {
+                          copyBtn.innerHTML = '<span data-icon="copy"></span> Copy';
+                          if (Domma.icons) Domma.icons.scan(copyBtn);
+                        }, 2000);
+                      } catch (error) {
+                        Domma.elements.toast('Failed to copy', { type: 'error' });
+                      }
+                    }
+                  });
+                }
+              }
+            });
+          });
+        },
+        onClosed: async () => {
+          // Reload API keys list after modal closes
+          await this.loadApiKeys();
+          this.updateSidebarBadges();
         }
       });
 
-      // Reload API keys list after modal closes
-      modal.on('hide', async () => {
-        await this.loadApiKeys();
-        this.updateSidebarBadges();
-      });
+      // Open the modal
+      modal.open();
 
       Domma.elements.toast('API key regenerated successfully', { type: 'success' });
 
