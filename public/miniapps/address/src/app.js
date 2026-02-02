@@ -649,6 +649,32 @@ class AddressApp {
   // POSTCODE LOOKUP
   // ============================================================================
 
+  async checkIfPostcodeSaved(postcode) {
+    try {
+      const response = await fetch(`${this.config.apiUrl}/address/saved`, {
+        headers: Domma.auth.getHeaders()
+      });
+
+      if (!response.ok) {
+        return null;
+      }
+
+      const data = await response.json();
+      const saved = data.addresses?.find(addr =>
+        addr.postcode.replace(/\s/g, '').toUpperCase() === postcode.replace(/\s/g, '').toUpperCase()
+      );
+
+      return saved ? {
+        saveMode: saved.isPermanent ? 'permanent' : (saved.saveMode || 'normal'),
+        name: saved.name,
+        id: saved._id
+      } : null;
+    } catch (error) {
+      console.error('Check saved postcode error:', error);
+      return null;
+    }
+  }
+
   async performLookupWithData(data) {
     try {
       // Reset results card before new lookup
@@ -679,8 +705,11 @@ class AddressApp {
         throw new Error(responseData.message || 'Lookup failed');
       }
 
+      // Check if this postcode is saved
+      const savedAddressInfo = await this.checkIfPostcodeSaved(data.postcode);
+
       this.currentLookupResult = responseData;
-      this.renderLookupResults(responseData);
+      this.renderLookupResults(responseData, savedAddressInfo);
 
       // Show "Save Current" button only if there are addresses (premium tier)
       if (responseData.data && responseData.data.addresses && responseData.data.addresses.length > 0) {
@@ -705,7 +734,7 @@ class AddressApp {
     }
   }
 
-  renderLookupResults(result) {
+  renderLookupResults(result, savedAddressInfo = null) {
     if (!result.success) {
       $('#postcodeTitle').html(`
         <div class="alert alert-danger">
@@ -773,8 +802,16 @@ class AddressApp {
       ? '<span class="badge badge-primary ml-2"><span data-icon="map-pin"></span> Full Addresses</span>'
       : '<span class="badge badge-secondary ml-2"><span data-icon="map"></span> Postcode Data</span>';
 
+    // Show saved address indicator if this postcode is saved
+    let savedBadge = '';
+    if (savedAddressInfo) {
+      const badgeColor = savedAddressInfo.saveMode === 'permanent' ? 'success' : (savedAddressInfo.saveMode === 'delayed' ? 'warning' : 'info');
+      const badgeText = savedAddressInfo.saveMode === 'permanent' ? 'PERMANENT' : (savedAddressInfo.saveMode === 'delayed' ? 'DELAYED' : 'SAVED');
+      savedBadge = `<span class="badge badge-${badgeColor} ml-2"><span data-icon="bookmark"></span> ${badgeText} ADDRESS</span>`;
+    }
+
     $('#postcodeTitle').html(`
-      <span style="font-size: 3rem; font-weight: 900; color: white; text-shadow: 3px 3px 6px rgba(0,0,0,0.5); letter-spacing: 0.1em; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased;">${_.escape(data.postcode)}</span>${creditBadge}${dataTypeBadge}
+      <span style="font-size: 3rem; font-weight: 900; color: white; text-shadow: 3px 3px 6px rgba(0,0,0,0.5); letter-spacing: 0.1em; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased;">${_.escape(data.postcode)}</span>${creditBadge}${dataTypeBadge}${savedBadge}
     `);
 
     // Get preferences for this postcode
@@ -796,7 +833,7 @@ class AddressApp {
               <div class="save-mode-label-secondary">24h cache</div>
             </label>
 
-            <input type="radio" class="btn-check" name="saveMode-${currentPostcode}" id="mode-delayed-${currentPostcode}" value="saved" ${saveMode === 'saved' ? 'checked' : ''} autocomplete="off">
+            <input type="radio" class="btn-check" name="saveMode-${currentPostcode}" id="mode-delayed-${currentPostcode}" value="delayed" ${saveMode === 'delayed' ? 'checked' : ''} autocomplete="off">
             <label class="btn btn-outline-secondary save-mode-label" for="mode-delayed-${currentPostcode}">
               <div class="save-mode-label-primary">Delayed</div>
               <div class="save-mode-label-secondary">7 day + refresh</div>
@@ -817,14 +854,19 @@ class AddressApp {
     $('#postcodeTitle').after(inlineOptionsHtml);
 
     // Bind save mode radio handler
-    $('input[name^="saveMode-"]').on('change', (e) => {
+    $('input[name^="saveMode-"]').on('change', async (e) => {
       const postcode = $(e.target).closest('.btn-group').data('postcode');
       const newMode = e.target.value;
       preferences.setForPostcode(postcode, 'saveMode', newMode);
 
       // Show feedback toast
-      const modeLabels = { normal: 'Normal (24h)', saved: 'Delayed (7 day)', permanent: 'Permanent' };
+      const modeLabels = { normal: 'Normal (24h)', delayed: 'Delayed (7 day)', permanent: 'Permanent' };
       Domma.elements.toast(`Save mode set to: ${modeLabels[newMode]}`, { type: 'info', duration: 2000 });
+
+      // Auto-save if delayed or permanent
+      if ((newMode === 'delayed' || newMode === 'permanent') && this.currentLookupResult) {
+        await this.autoSaveAddress(newMode);
+      }
     });
 
     // Build ALL fields for Grid View
@@ -986,6 +1028,7 @@ class AddressApp {
       tags: addr.tags || [],
       notes: addr.notes || '',
       isPermanent: addr.isPermanent,
+      saveMode: addr.isPermanent ? 'permanent' : (addr.saveMode || 'normal'),
       createdAt: addr.createdAt
     }));
 
@@ -1003,45 +1046,50 @@ class AddressApp {
       columns: [
         {
           key: 'name',
-          label: 'Name',
-          render: (value, row) => `
-            <div>
-              <strong>${_.escape(value)}</strong>
-              ${row.isPermanent ? '<span class="badge badge-success ml-2">PERMANENT</span>' : ''}
-            </div>
-          `
+          title: 'Name',
+          render: (value, row) => {
+            let badge = '';
+            if (row.saveMode === 'permanent') {
+              badge = '<span class="badge badge-success ml-2">PERMANENT</span>';
+            } else if (row.saveMode === 'delayed') {
+              badge = '<span class="badge badge-warning ml-2">DELAYED</span>';
+            }
+            return `
+              <div>
+                <strong>${_.escape(value)}</strong>
+                ${badge}
+              </div>
+            `;
+          }
         },
         {
           key: 'address',
-          label: 'Address',
+          title: 'Address',
           render: (value) => `<span class="text-muted small">${_.escape(value)}</span>`
         },
         {
           key: 'postcode',
-          label: 'Postcode',
+          title: 'Postcode',
           render: (value) => `<code style="font-size: 0.875rem;">${_.escape(value)}</code>`
         },
         {
           key: 'tags',
-          label: 'Tags',
+          title: 'Tags',
           render: (value) => value.length > 0
             ? value.map(tag => `<span class="badge badge-secondary">${_.escape(tag)}</span>`).join(' ')
             : '<span class="text-muted">—</span>'
         },
         {
           key: 'createdAt',
-          label: 'Saved',
+          title: 'Saved',
           render: (value) => `<span class="text-muted small">${D(value).fromNow()}</span>`
         },
         {
           key: '_id',
-          label: 'Actions',
+          title: 'Actions',
           sortable: false,
           render: (value, row) => `
             <div class="btn-group btn-group-sm">
-              <button class="btn btn-outline-primary" onclick="addressApp.quickRelookup('${_.escape(row.postcode)}')" title="Re-lookup">
-                <span data-icon="refresh" data-icon-size="14"></span>
-              </button>
               <button class="btn btn-outline-primary" onclick="addressApp.editSavedAddress('${value}')" title="Edit">
                 <span data-icon="edit" data-icon-size="14"></span>
               </button>
@@ -1065,17 +1113,6 @@ class AddressApp {
     if (Domma.icons) {
       setTimeout(() => Domma.icons.scan(), 100);
     }
-  }
-
-  quickRelookup(postcode) {
-    // Navigate to lookup section and prefill postcode
-    this.showSection('lookup');
-    setTimeout(() => {
-      $('input[name="postcode"]').val(postcode);
-      if (Domma.icons) {
-        Domma.icons.scan();
-      }
-    }, 100);
   }
 
   filterSavedAddresses(query, tags) {
@@ -1199,6 +1236,91 @@ class AddressApp {
     } catch (error) {
       console.error('Save address error:', error);
       throw error;
+    }
+  }
+
+  async autoSaveAddress(saveMode) {
+    if (!this.currentLookupResult) {
+      console.warn('No current lookup result to save');
+      return;
+    }
+
+    const postcode = this.currentLookupResult.data.postcode;
+    const postcodeData = this.currentLookupResult.data;
+
+    // Check if already saved
+    const existing = this.savedAddresses?.find(addr =>
+      addr.postcode.replace(/\s/g, '').toUpperCase() === postcode.replace(/\s/g, '').toUpperCase()
+    );
+
+    if (existing) {
+      // Update existing address saveMode
+      try {
+        const response = await fetch(`${this.config.apiUrl}/address/saved/${existing._id}`, {
+          method: 'PATCH',
+          headers: {
+            ...Domma.auth.getHeaders(),
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            isPermanent: saveMode === 'permanent',
+            saveMode: saveMode
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update address');
+        }
+
+        Domma.elements.toast(`Address updated to ${saveMode}`, { type: 'success' });
+        await this.loadSavedAddresses();
+        this.updateSidebarBadges();
+      } catch (error) {
+        console.error('Update address error:', error);
+        Domma.elements.toast('Failed to update address', { type: 'error' });
+      }
+      return;
+    }
+
+    // Create new saved address
+    try {
+      const saveData = {
+        name: `${postcodeData?.admin_district || postcodeData?.region || 'Location'} (${postcode})`,
+        postcode: postcode,
+        selectedAddress: {
+          line1: postcodeData?.admin_district || postcodeData?.region || postcode,
+          town: postcodeData?.admin_ward || postcodeData?.parish || postcodeData?.admin_district || postcodeData?.region || 'Unknown',
+          postcode: postcode,
+          country: postcodeData?.country || 'England',
+          formatted: `${postcodeData?.admin_district || postcodeData?.region || postcode}, ${postcode}`
+        },
+        isPermanent: saveMode === 'permanent',
+        saveMode: saveMode,
+        notes: `Auto-saved as ${saveMode}`,
+        tags: [saveMode, 'auto']
+      };
+
+      const response = await fetch(`${this.config.apiUrl}/address/saved`, {
+        method: 'POST',
+        headers: {
+          ...Domma.auth.getHeaders(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(saveData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to save address');
+      }
+
+      Domma.elements.toast(`Address saved as ${saveMode}!`, { type: 'success' });
+      await this.loadSavedAddresses();
+      this.updateSidebarBadges();
+
+    } catch (error) {
+      console.error('Auto-save address error:', error);
+      Domma.elements.toast(`Failed to save: ${error.message}`, { type: 'error' });
     }
   }
 
@@ -1344,18 +1466,34 @@ class AddressApp {
 
   renderApiKeys(keys) {
     if (!keys || keys.length === 0) {
-      $('#apiKeysList').html(`
+      const cardHtml = `
         <div class="card">
+          <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem;">
+            <h3 style="margin: 0; font-size: 1.25rem;">Your API Keys</h3>
+          </div>
           <div class="card-body text-center py-5">
             <span data-icon="key" style="width: 64px; height: 64px; opacity: 0.2;"></span>
             <h3 class="mt-3">No API Keys</h3>
             <p class="text-muted">Create an API key to access the Address Lookup API programmatically.</p>
-            <button class="btn btn-primary" onclick="addressApp.showCreateApiKeyModal()">
-              <span data-icon="plus"></span> Create API Key
-            </button>
           </div>
         </div>
-      `);
+      `;
+
+      $('#apiKeysList').html(cardHtml);
+
+      // Add create button after HTML is in DOM
+      const iconSpan = $('<span>').attr('data-icon', 'plus-circle').attr('data-icon-size', '16');
+      const textSpan = $('<span>').text('Create API Key');
+      const createBtn = $('<button>')
+        .addClass('btn btn-primary')
+        .css({ display: 'flex', alignItems: 'center', gap: '0.5rem' })
+        .append(iconSpan)
+        .append(textSpan);
+
+      $('#apiKeysList .card-header').append(createBtn);
+
+      // Bind event after appending to DOM
+      $('#apiKeysList .card-header button').on('click', () => this.showCreateApiKeyModal());
 
       if (Domma.icons) {
         Domma.icons.scan();
@@ -1363,93 +1501,176 @@ class AddressApp {
       return;
     }
 
-    const html = keys.map(key => `
-      <div class="card mb-3">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div style="flex: 1;">
-              <div class="d-flex align-items-center gap-2 mb-2">
-                <h4 class="mb-0">${_.escape(key.name)}</h4>
-                <span class="badge badge-${key.isActive ? 'success' : 'secondary'}">
-                  ${key.isActive ? 'Active' : 'Disabled'}
-                </span>
-              </div>
-              <div class="api-key-display" style="display: flex; align-items: center; gap: 0.5rem;">
-                <code style="background: #f5f5f5; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">${_.escape(key.keyPrefix)}••••••••</code>
-                <button class="btn btn-sm btn-outline-primary copy-key-btn" data-key="${_.escape(key.keyPrefix)}" title="Copy key prefix">
-                  <span data-icon="copy" data-icon-size="14"></span>
-                </button>
-                <span class="text-muted" style="font-size: 0.8rem;">Hidden for security</span>
-              </div>
-            </div>
-            <div class="d-flex gap-2" style="flex-shrink: 0;">
-              <button class="btn btn-sm btn-outline-info" onclick="addressApp.showApiKeyStats('${key._id}')" title="View Statistics">
-                <span data-icon="bar-chart"></span> Stats
-              </button>
-              <button class="btn btn-sm btn-outline-secondary" onclick="addressApp.regenerateApiKey('${key._id}')" title="Regenerate Key">
-                <span data-icon="refresh-cw"></span>
-              </button>
-              <button class="btn btn-sm btn-outline-${key.isActive ? 'warning' : 'success'}" onclick="addressApp.toggleApiKey('${key._id}', ${!key.isActive})">
-                ${key.isActive ? 'Disable' : 'Enable'}
-              </button>
-              <button class="btn btn-sm btn-outline-danger" onclick="addressApp.deleteApiKey('${key._id}')">
-                <span data-icon="trash"></span>
-              </button>
-            </div>
-          </div>
+    // Prepare data for DataTable
+    const tableData = keys.map(key => ({
+      _id: key._id,
+      name: key.name,
+      isActive: key.isActive,
+      keyPrefix: key.keyPrefix,
+      permissions: key.permissions,
+      rateLimit: key.rateLimit,
+      createdAt: key.createdAt,
+      usage: key.usage
+    }));
 
-          <div class="row small">
-            <div class="col-md-3 mb-2">
-              <div class="text-muted mb-1">Permissions</div>
-              <div>
-                ${key.permissions.freeLookup ? '<span class="badge badge-success">Free</span>' : '<span class="badge badge-secondary">No Free</span>'}
-                ${key.permissions.premiumLookup ? '<span class="badge badge-primary">Premium</span>' : '<span class="badge badge-secondary">No Premium</span>'}
-              </div>
-            </div>
-            <div class="col-md-3 mb-2">
-              <div class="text-muted mb-1">Rate Limits</div>
-              <div><strong>${key.rateLimit.requestsPerMinute}</strong>/min · <strong>${key.rateLimit.requestsPerDay}</strong>/day</div>
-            </div>
-            <div class="col-md-3 mb-2">
-              <div class="text-muted mb-1">Created</div>
-              <div>${D(key.createdAt).format('D MMM YYYY')}</div>
-            </div>
-            ${key.usage && key.usage.totalRequests > 0 ? `
-              <div class="col-md-3 mb-2">
-                <div class="text-muted mb-1">Usage</div>
-                <div><strong>${key.usage.totalRequests}</strong> requests · Last ${D(key.usage.lastUsedAt).fromNow()}</div>
-              </div>
-            ` : `
-              <div class="col-md-3 mb-2">
-                <div class="text-muted mb-1">Usage</div>
-                <div class="text-muted">Never used</div>
-              </div>
-            `}
-          </div>
+    // Clear and create table container inside a card with header
+    const cardHtml = `
+      <div class="card">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem;">
+          <h3 style="margin: 0; font-size: 1.25rem;">Your API Keys</h3>
+        </div>
+        <div class="card-body">
+          <div id="apiKeysTable"></div>
         </div>
       </div>
-    `).join('');
+    `;
 
-    $('#apiKeysList').html(html);
+    $('#apiKeysList').html(cardHtml);
 
-    // Scan icons
+    // Add create button after HTML is in DOM
+    const iconSpan = $('<span>').attr('data-icon', 'plus-circle').attr('data-icon-size', '16');
+    const textSpan = $('<span>').text('Create API Key');
+    const createBtn = $('<button>')
+      .addClass('btn btn-primary')
+      .css({ display: 'flex', alignItems: 'center', gap: '0.5rem' })
+      .append(iconSpan)
+      .append(textSpan);
+
+    $('#apiKeysList .card-header').append(createBtn);
+
+    // Bind event after appending to DOM
+    $('#apiKeysList .card-header button').on('click', () => this.showCreateApiKeyModal());
+
+    // Scan icons in header
     if (Domma.icons) {
       Domma.icons.scan();
     }
 
-    // Bind copy button events
-    $('.copy-key-btn').on('click', async function(e) {
+    // Destroy existing table if present
+    if (this.apiKeysTable) {
+      this.apiKeysTable.destroy();
+    }
+
+    // Create DataTable
+    this.apiKeysTable = Domma.tables.create('#apiKeysTable', {
+      data: tableData,
+      columns: [
+        {
+          key: 'name',
+          title: 'Name',
+          render: (value, row) => `
+            <div>
+              <strong>${_.escape(value)}</strong>
+              <span class="badge badge-${row.isActive ? 'success' : 'secondary'} ml-2">
+                ${row.isActive ? 'Active' : 'Disabled'}
+              </span>
+            </div>
+          `
+        },
+        {
+          key: 'keyPrefix',
+          title: 'Key',
+          sortable: false,
+          render: (value) => `
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <code style="background: #f5f5f5; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">${_.escape(value)}••••••••</code>
+              <button class="btn btn-sm btn-outline-primary copy-key-btn" data-key="${_.escape(value)}" title="Copy">
+                <span data-icon="copy" data-icon-size="12"></span>
+              </button>
+            </div>
+          `
+        },
+        {
+          key: 'permissions',
+          title: 'Permissions',
+          sortable: false,
+          render: (value) => `
+            <div>
+              ${value.freeLookup ? '<span class="badge badge-success">Free</span>' : '<span class="badge badge-secondary">No Free</span>'}
+              ${value.premiumLookup ? '<span class="badge badge-primary ml-1">Premium</span>' : '<span class="badge badge-secondary ml-1">No Premium</span>'}
+            </div>
+          `
+        },
+        {
+          key: 'rateLimit',
+          title: 'Rate Limit',
+          sortable: false,
+          render: (value) => `
+            <div class="small">
+              <strong>${value.requestsPerMinute}</strong>/min<br>
+              <strong>${value.requestsPerDay}</strong>/day
+            </div>
+          `
+        },
+        {
+          key: 'usage',
+          title: 'Usage',
+          sortable: false,
+          render: (value) => {
+            if (value && value.totalRequests > 0) {
+              return `
+                <div class="small">
+                  <strong>${value.totalRequests}</strong> requests<br>
+                  <span class="text-muted">Last ${D(value.lastUsedAt).fromNow()}</span>
+                </div>
+              `;
+            }
+            return '<span class="text-muted small">Never used</span>';
+          }
+        },
+        {
+          key: 'createdAt',
+          title: 'Created',
+          render: (value) => `<span class="text-muted small">${D(value).format('D MMM YYYY')}</span>`
+        },
+        {
+          key: '_id',
+          title: 'Actions',
+          sortable: false,
+          render: (value) => `
+            <button class="btn btn-sm btn-danger delete-api-key-btn" data-key-id="${value}" title="Delete API Key">
+              <span data-icon="trash" data-icon-size="16"></span>
+            </button>
+          `
+        }
+      ],
+      pagination: {
+        enabled: true,
+        pageSize: 10
+      },
+      search: true,
+      responsive: true,
+      striped: true
+    });
+
+    // Bind delete button events using event delegation
+    $('#apiKeysTable').off('click', '.delete-api-key-btn').on('click', '.delete-api-key-btn', (e) => {
+      e.preventDefault();
+      const keyId = $(e.currentTarget).data('key-id');
+      this.deleteApiKey(keyId);
+    });
+
+    // Bind copy button events using event delegation
+    $('#apiKeysTable').off('click', '.copy-key-btn').on('click', '.copy-key-btn', async function(e) {
       e.preventDefault();
       const keyPrefix = $(this).data('key');
 
       try {
         await _.copyToClipboard(keyPrefix);
-        Domma.elements.toast('Key prefix copied to clipboard!', { type: 'success' });
+        Domma.elements.toast('Key prefix copied!', { type: 'success', duration: 2000 });
       } catch (error) {
         console.error('Copy failed:', error);
-        Domma.elements.toast('Failed to copy to clipboard', { type: 'error' });
+        Domma.elements.toast('Failed to copy', { type: 'error' });
       }
     });
+
+    // Scan icons after table render - do it multiple times to ensure they render
+    if (Domma.icons) {
+      Domma.icons.scan();
+      // setTimeout(() => Domma.icons.scan(), 100);
+      setTimeout(() => Domma.icons.scan(), 500);
+      // setTimeout(() => Domma.icons.scan(), 5000);
+    }
   }
 
   async showCreateApiKeyModal() {
@@ -1870,10 +2091,16 @@ class AddressApp {
       time: lookup.createdAt
     }));
 
-    // Clear container and add title
+    // Clear container and add card
     $('#recentLookups').html(`
-      <h3 class="h5 mb-3">Recent Lookups</h3>
-      <div id="recentLookupsTable"></div>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="h5 mb-0">Recent Lookups</h3>
+        </div>
+        <div class="card-body">
+          <div id="recentLookupsTable"></div>
+        </div>
+      </div>
     `);
 
     // Create DataTable
@@ -1886,12 +2113,12 @@ class AddressApp {
       columns: [
         {
           key: 'postcode',
-          label: 'Postcode',
+          title: 'Postcode',
           render: (value) => `<strong>${_.escape(value)}</strong>`
         },
         {
           key: 'type',
-          label: 'Type',
+          title: 'Type',
           render: (value) => {
             const badgeClass = value === 'full' ? 'primary' : 'secondary';
             return `<span class="badge badge-${badgeClass}">${_.escape(value)}</span>`;
@@ -1899,12 +2126,12 @@ class AddressApp {
         },
         {
           key: 'source',
-          label: 'Source',
+          title: 'Source',
           render: (value) => `<span class="text-muted">${_.escape(value)}</span>`
         },
         {
           key: 'time',
-          label: 'When',
+          title: 'When',
           render: (value) => D(value).fromNow()
         }
       ],
@@ -2028,36 +2255,63 @@ class AddressApp {
       }));
 
       const chartHtml = `
-        <div class="mb-4">
-          <h3 class="h5 mb-3">Usage Over Time</h3>
-          <dm-bar-chart id="usageBarChart" data='${JSON.stringify(chartData)}' show-values="true"></dm-bar-chart>
-        </div>
-
-        <div class="table-responsive">
-          <table class="table table-sm">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Lookups</th>
-                <th>Cache Hits</th>
-                <th>Credits Used</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${dailyBreakdown.slice(0, 14).map(day => `
-                <tr>
-                  <td>${D(day._id).format('D MMM YYYY')}</td>
-                  <td>${day.count}</td>
-                  <td>${day.cacheHits} (${day.count > 0 ? ((day.cacheHits / day.count) * 100).toFixed(0) : 0}%)</td>
-                  <td>${day.creditsCharged}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3 class="h5 mb-0">Usage Over Time</h3>
+          </div>
+          <div class="card-body">
+            <dm-bar-chart id="usageBarChart" data='${JSON.stringify(chartData)}' show-values="true"></dm-bar-chart>
+            <div id="usageBreakdownTable" class="mt-3"></div>
+          </div>
         </div>
       `;
 
       $('#usageChart').html(chartHtml);
+
+      // Create DataTable for usage breakdown
+      const usageTableData = dailyBreakdown.slice(0, 14).map(day => ({
+        date: day._id,
+        lookups: day.count,
+        cacheHits: day.cacheHits,
+        cacheHitRate: day.count > 0 ? ((day.cacheHits / day.count) * 100).toFixed(0) : 0,
+        creditsCharged: day.creditsCharged
+      }));
+
+      if (this.usageBreakdownTable) {
+        this.usageBreakdownTable.destroy();
+      }
+
+      this.usageBreakdownTable = Domma.tables.create('#usageBreakdownTable', {
+        data: usageTableData,
+        columns: [
+          {
+            key: 'date',
+            title: 'Date',
+            render: (value) => D(value).format('D MMM YYYY')
+          },
+          {
+            key: 'lookups',
+            title: 'Lookups',
+            render: (value) => `<strong>${value}</strong>`
+          },
+          {
+            key: 'cacheHits',
+            title: 'Cache Hits',
+            render: (value, row) => `${value} (${row.cacheHitRate}%)`
+          },
+          {
+            key: 'creditsCharged',
+            title: 'Credits Used'
+          }
+        ],
+        pagination: {
+          enabled: true,
+          pageSize: 7
+        },
+        search: false,
+        responsive: true,
+        striped: true
+      });
     }
   }
 

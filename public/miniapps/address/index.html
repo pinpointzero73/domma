@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Address Lookup - Domma MiniApp</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <meta name="description" content="UK Postcode lookup service with free and premium tiers">
 
   <!-- Domma Core Styles -->
@@ -89,6 +90,13 @@
               <!-- Postcode title -->
               <div id="postcodeTitle" class="mb-4" style="background: #1e293b; padding: 1.5rem 2rem; border-radius: 0.5rem; display: flex; align-items: center;"></div>
 
+              <!-- Save button -->
+              <div class="mb-4" style="text-align: right;">
+                <button id="saveAddressBtn" class="btn btn-primary" style="display: none;">
+                  <span data-icon="bookmark"></span> Save Current Address
+                </button>
+              </div>
+
               <!-- Tabs for Grid/JSON/Cache views -->
               <div id="resultsTabs" class="tabs tabs-pills mb-4">
                 <ul class="tab-list">
@@ -156,15 +164,8 @@
 
         <!-- Section: API Keys -->
         <section id="apiKeysSection" class="app-section">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="mb-0">API Keys</h2>
-            <button id="createApiKeyBtn" class="btn btn-primary">
-              <span data-icon="plus"></span> Create API Key
-            </button>
-          </div>
-
           <div id="apiKeysList">
-            <!-- Populated by JS -->
+            <!-- Populated by JS (includes card with header) -->
           </div>
         </section>
 
@@ -172,9 +173,6 @@
         <section id="savedSection" class="app-section">
           <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="mb-0">Saved Addresses</h2>
-            <button id="saveAddressBtn" class="btn btn-primary" style="display: none;">
-              <span data-icon="bookmark"></span> Save Current Address
-            </button>
           </div>
 
           <div id="savedAddressesList">
@@ -282,6 +280,6 @@
 
   <!-- Scripts -->
   <script type="module" src="../../dist/domma.min.js"></script>
-  <script type="module" src="./dist/app.min.js"></script>
+  <script type="module" src="./dist/app.min.js?v=8"></script>
 </body>
 </html>
