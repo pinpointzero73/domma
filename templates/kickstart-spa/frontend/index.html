@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{projectName}} - Single Page Application</title>
+  <meta name="description" content="{{projectName}} - A Domma-powered SPA">
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="dist/domma/domma.css">
+  <link rel="stylesheet" href="dist/domma/grid.css">
+  <link rel="stylesheet" href="dist/domma/elements.css">
+  <link rel="stylesheet" href="dist/domma/themes/domma-themes.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/custom.css">
+</head>
+<body class="dm-cloaked dm-theme-{{theme}}">
+  <!-- Navigation -->
+  <nav id="main-navbar"></nav>
+
+  <!-- SPA View Container -->
+  <main id="app" class="app-container"></main>
+
+  <!-- Footer -->
+  <footer class="page-footer"></footer>
+
+  <!-- DOMPurify for XSS protection -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
+
+  <!-- Domma Core -->
+  <script src="dist/domma/domma.min.js"></script>
+
+  <!-- Views (ES Modules) -->
+  <script src="js/views/index.js" type="module"></script>
+
+  <!-- App Initialisation -->
+  <script src="js/app.js" type="module"></script>
+</body>
+</html>

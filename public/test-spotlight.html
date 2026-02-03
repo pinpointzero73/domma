@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotlight Effect Test</title>
+  <link rel="stylesheet" href="dist/domma.css?v=20260203-7">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .test-hero {
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+      color: white;
+      margin-bottom: 2rem;
+    }
+
+    .test-content {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin: 0 0 1rem;
+    }
+
+    p {
+      font-size: 1.25rem;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-hero bg-ambient-rotate-spotlight">
+    <div class="test-content">
+      <h1>Spotlight Effect Test</h1>
+      <p>You should see a rotating white spotlight beam sweeping across this hero section.</p>
+      <p>The spotlight completes one full rotation every 25 seconds.</p>
+    </div>
+  </div>
+
+  <div style="padding: 2rem; max-width: 800px; margin: 0 auto;">
+    <h2>What to Look For:</h2>
+    <ul>
+      <li>A subtle white/light gradient beam rotating across the blue background</li>
+      <li>The beam should be semi-transparent (50% opacity)</li>
+      <li>Complete rotation takes 25 seconds</li>
+      <li>The text content should remain clearly readable on top</li>
+    </ul>
+
+    <h2>Troubleshooting:</h2>
+    <ul>
+      <li><strong>Hard refresh:</strong> Press Ctrl+Shift+R (or Cmd+Shift+R on Mac)</li>
+      <li><strong>Check DevTools:</strong> Open Inspect Element and look at the .test-hero::before pseudo-element</li>
+      <li><strong>Verify animation:</strong> The ::before should have transform rotating</li>
+      <li><strong>Check stacking:</strong> z-index should be: ::before = 0, content = 1</li>
+    </ul>
+  </div>
+</body>
+</html>

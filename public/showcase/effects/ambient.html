@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ambient Background Effects - Domma Showcase</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../css/domma-showcase.css">
+
+  <style>
+      .effect-demo {
+          height: 300px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 1.5rem;
+          font-weight: 600;
+          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+          margin-bottom: 1.5rem;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .effect-demo-small {
+          height: 200px;
+      }
+
+      .modifier-demo {
+          height: 200px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 1rem;
+          font-weight: 500;
+          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+  </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
+
+<div class="hero hero-center bg-ambient-rotate-spotlight">
+    <div class="hero-content">
+        <div class="hero-title">Ambient Background Effects</div>
+        <div class="hero-subtitle">Subtle CSS animations that add visual interest and depth to backgrounds without distracting from content</div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<main class="container py-8">
+
+  <!-- Introduction -->
+  <section class="card mb-6">
+    <div class="card-body">
+      <h2 class="card-title">About Ambient Effects</h2>
+      <p class="mb-3">
+        Ambient background effects use CSS animations and pseudo-elements to create subtle, continuous motion
+        in your backgrounds. All effects are GPU-accelerated for smooth 60fps performance and automatically
+        layer content on top using z-index positioning.
+      </p>
+      <div class="alert alert-info">
+        <strong>Performance Note:</strong> All ambient effects use <code>will-change: transform</code> and
+        only animate <code>transform</code> and <code>opacity</code> properties for optimal GPU acceleration.
+      </div>
+    </div>
+  </section>
+
+  <!-- Rotating Gradient Effects -->
+  <section class="card mb-6" data-section="rotating-gradients">
+    <div class="card-body">
+      <h2 class="card-title">Rotating Gradients</h2>
+      <p class="text-muted mb-4">
+        Gentle rotating radial and linear gradients that create a sense of subtle motion
+      </p>
+
+      <!-- Rotate Glow -->
+      <div class="mb-5">
+        <h3 class="h4 mb-3">Rotate Glow</h3>
+        <p class="text-muted mb-3">A single radial gradient rotating slowly</p>
+        <div class="effect-demo bg-ambient-rotate-glow">
+          <span>Rotating Glow Effect</span>
+        </div>
+        <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-ambient-rotate-glow">
+  &lt;h1>Your Content Here&lt;/h1>
+&lt;/div></code></pre>
+        </div>
+      </div>
+
+      <!-- Rotate Dual -->
+      <div class="mb-5">
+        <h3 class="h4 mb-3">Rotate Dual</h3>
+        <p class="text-muted mb-3">Two overlapping gradients rotating in opposite directions</p>
+        <div class="effect-demo bg-ambient-rotate-dual">
+          <span>Dual Rotation Effect</span>
+        </div>
+        <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-ambient-rotate-dual">
+  &lt;h1>Your Content Here&lt;/h1>
+&lt;/div></code></pre>
+        </div>
+      </div>
+
+      <!-- Rotate Spotlight -->
+      <div class="mb-5">
+        <h3 class="h4 mb-3">Rotate Spotlight</h3>
+        <p class="text-muted mb-3">Off-center rotating light beam effect</p>
+        <div class="effect-demo bg-ambient-rotate-spotlight">
+          <span>Spotlight Effect</span>
+        </div>
+        <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-ambient-rotate-spotlight">
+  &lt;h1>Your Content Here&lt;/h1>
+&lt;/div></code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating Shape Effects -->
+  <section class="card mb-6" data-section="floating-shapes">
+    <div class="card-body">
+      <h2 class="card-title">Floating Shapes</h2>
+      <p class="text-muted mb-4">
+        Soft gradient shapes that drift and morph across the background
+      </p>
+
+      <!-- Float Blobs -->
+      <div class="mb-5">
+        <h3 class="h4 mb-3">Float Blobs</h3>
+        <p class="text-muted mb-3">Morphing gradient circles that drift around</p>
+        <div class="effect-demo bg-ambient-float-blobs">
+          <span>Floating Blobs</span>
+        </div>
+        <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-ambient-float-blobs">
+  &lt;h1>Your Content Here&lt;/h1>
+&lt;/div></code></pre>
+        </div>
+      </div>
+
+      <!-- Float Orbs -->
+      <div class="mb-5">
+        <h3 class="h4 mb-3">Float Orbs</h3>
+        <p class="text-muted mb-3">Multiple floating semi-transparent orbs</p>
+        <div class="effect-demo bg-ambient-float-orbs">
+          <span>Floating Orbs</span>
+        </div>
+        <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-ambient-float-orbs">
+  &lt;h1>Your Content Here&lt;/h1>
+&lt;/div></code></pre>
+        </div>
+      </div>
+
+      <!-- Float Particles -->
+      <div class="mb-5">
+        <h3 class="h4 mb-3">Float Particles</h3>
+        <p class="text-muted mb-3">Tiny dots drifting upward like dust motes</p>
+        <div class="effect-demo bg-ambient-float-particles">
+          <span>Floating Particles</span>
+        </div>
+        <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-ambient-float-particles">
+  &lt;h1>Your Content Here&lt;/h1>
+&lt;/div></code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wave & Ripple Effects -->
+  <section class="card mb-6" data-section="wave-ripple">
+    <div class="card-body">
+      <h2 class="card-title">Wave & Ripple Effects</h2>
+      <p class="text-muted mb-4">
+        Flowing patterns and expanding ripples for dynamic backgrounds
+      </p>
+
+      <!-- Wave -->
+      <div class="mb-5">
+        <h3 class="h4 mb-3">Wave</h3>
+        <p class="text-muted mb-3">Subtle sine wave undulation across the background</p>
+        <div class="effect-demo bg-ambient-wave">
+          <span>Wave Effect</span>
+        </div>
+        <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-ambient-wave">
+  &lt;h1>Your Content Here&lt;/h1>
+&lt;/div></code></pre>
+        </div>
+      </div>
+
+      <!-- Ripple -->
+      <div class="mb-5">
+        <h3 class="h4 mb-3">Ripple</h3>
+        <p class="text-muted mb-3">Concentric rings expanding outward from center</p>
+        <div class="effect-demo bg-ambient-ripple">
+          <span>Ripple Effect</span>
+        </div>
+        <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-ambient-ripple">
+  &lt;h1>Your Content Here&lt;/h1>
+&lt;/div></code></pre>
+        </div>
+      </div>
+
+      <!-- Aurora -->
+      <div class="mb-5">
+        <h3 class="h4 mb-3">Aurora</h3>
+        <p class="text-muted mb-3">Northern lights style flowing colours</p>
+        <div class="effect-demo bg-ambient-aurora">
+          <span>Aurora Effect</span>
+        </div>
+        <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-ambient-aurora">
+  &lt;h1>Your Content Here&lt;/h1>
+&lt;/div></code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modifiers -->
+  <section class="card mb-6" data-section="modifiers">
+    <div class="card-body">
+      <h2 class="card-title">Modifiers</h2>
+      <p class="text-muted mb-4">
+        Adjust speed and intensity of ambient effects to suit your design
+      </p>
+
+      <!-- Speed Modifiers -->
+      <div class="mb-5">
+        <h3 class="h4 mb-3">Speed Modifiers</h3>
+        <p class="text-muted mb-3">Control animation speed with modifier classes</p>
+        <div class="row g-4 mb-4">
+          <div class="col-lg-4">
+            <div class="modifier-demo bg-ambient-rotate-glow bg-ambient-slow">
+              <span>Slow (45s)</span>
+            </div>
+            <code class="d-block text-center mt-2">.bg-ambient-slow</code>
+          </div>
+          <div class="col-lg-4">
+            <div class="modifier-demo bg-ambient-rotate-glow bg-ambient-normal">
+              <span>Normal (30s)</span>
+            </div>
+            <code class="d-block text-center mt-2">.bg-ambient-normal</code>
+          </div>
+          <div class="col-lg-4">
+            <div class="modifier-demo bg-ambient-rotate-glow bg-ambient-fast">
+              <span>Fast (15s)</span>
+            </div>
+            <code class="d-block text-center mt-2">.bg-ambient-fast</code>
+          </div>
+        </div>
+        <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-ambient-rotate-glow bg-ambient-slow">Slow&lt;/div>
+&lt;div class="bg-ambient-rotate-glow bg-ambient-normal">Normal&lt;/div>
+&lt;div class="bg-ambient-rotate-glow bg-ambient-fast">Fast&lt;/div></code></pre>
+        </div>
+      </div>
+
+      <!-- Intensity Modifiers -->
+      <div class="mb-5">
+        <h3 class="h4 mb-3">Intensity Modifiers</h3>
+        <p class="text-muted mb-3">Control effect opacity for subtle or intense effects</p>
+        <div class="row g-4 mb-4">
+          <div class="col-lg-6">
+            <div class="modifier-demo bg-ambient-rotate-dual bg-ambient-subtle">
+              <span>Subtle</span>
+            </div>
+            <code class="d-block text-center mt-2">.bg-ambient-subtle</code>
+          </div>
+          <div class="col-lg-6">
+            <div class="modifier-demo bg-ambient-rotate-dual bg-ambient-intense">
+              <span>Intense</span>
+            </div>
+            <code class="d-block text-center mt-2">.bg-ambient-intense</code>
+          </div>
+        </div>
+        <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-ambient-aurora bg-ambient-subtle">Subtle&lt;/div>
+&lt;div class="bg-ambient-aurora bg-ambient-intense">Intense&lt;/div></code></pre>
+        </div>
+      </div>
+
+      <!-- Combining Modifiers -->
+      <div class="mb-5">
+        <h3 class="h4 mb-3">Combining Modifiers</h3>
+        <p class="text-muted mb-3">Speed and intensity modifiers can be combined</p>
+        <div class="effect-demo-small bg-ambient-aurora bg-ambient-fast bg-ambient-intense">
+          <span>Fast + Intense Aurora</span>
+        </div>
+        <div class="code-example">
+<pre><code class="language-html">&lt;div class="bg-ambient-aurora bg-ambient-fast bg-ambient-intense">
+  &lt;h1>Your Content Here&lt;/h1>
+&lt;/div></code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Usage Guide -->
+  <section class="card mb-6" data-section="usage">
+    <div class="card-body">
+      <h2 class="card-title">Usage Guide</h2>
+      <div class="row">
+        <div class="col-lg-6 mb-4">
+          <h3 class="h5">How It Works</h3>
+          <ul class="mb-3">
+            <li>All effects use <code>::before</code> or <code>::after</code> pseudo-elements</li>
+            <li>Content automatically sits on top via <code>z-index: 1</code></li>
+            <li>Parent element must have <code>position: relative</code> (automatically applied)</li>
+            <li>Parent element gets <code>overflow: hidden</code> to contain effects</li>
+          </ul>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <h3 class="h5">Best Practices</h3>
+          <ul class="mb-3">
+            <li>Use subtle effects for content-heavy sections</li>
+            <li>Increase intensity for hero sections and CTAs</li>
+            <li>Combine with dark backgrounds for best visibility</li>
+            <li>Test on mobile devices for performance</li>
+          </ul>
+        </div>
+      </div>
+      <div class="alert alert-warning">
+        <strong>Accessibility:</strong> Ambient effects are purely decorative. Ensure sufficient
+        colour contrast between text and background regardless of the effect applied.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Domma JavaScript -->
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    // Scan for icons
+    if (typeof Domma !== 'undefined' && Domma.icons) {
+      Domma.icons.scan();
+    }
+  });
+</script>
+</body>
+</html>

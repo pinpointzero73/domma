@@ -1,0 +1,68 @@
+{
+  "projectName": "{{projectName}}",
+  "description": "Domma-based web application with full-stack capabilities",
+  "framework": "Domma",
+  "version": "1.0.0",
+
+  "paths": {
+    "frontend": "frontend/",
+    "backend": "backend/",
+    "blueprints": "blueprints/",
+    "types": "frontend/types/"
+  },
+
+  "preferences": {
+    "useDommaAliases": true,
+    "preferBlueprintDrivenForms": true,
+    "useReactiveModels": true,
+    "cssLoadOrder": ["domma.css", "grid.css", "elements.css", "themes/domma-themes.css"]
+  },
+
+  "codeStyle": {
+    "quotes": "single",
+    "semi": true,
+    "indent": 4,
+    "trailingComma": "es5"
+  },
+
+  "domma": {
+    "version": "latest",
+    "cdn": "https://dommajs.org/dist/",
+    "aliases": {
+      "$": "Domma()",
+      "_": "Domma.utils",
+      "M": "Domma.models",
+      "B": "Blueprint (extend, pick, omit)",
+      "D": "Domma.dates()",
+      "S": "Domma.storage",
+      "A": "Domma.auth",
+      "F": "Domma.forms",
+      "H": "Domma.http",
+      "E": "Domma.elements",
+      "I": "Domma.icons",
+      "T": "Domma.tables"
+    }
+  },
+
+  "patterns": {
+    "blueprintLocation": "blueprints/",
+    "blueprintNaming": "camelCase with 'Blueprint' suffix (e.g., userBlueprint)",
+    "modelNaming": "camelCase (e.g., userModel)",
+    "formNaming": "Use F.render() or F.modal() with blueprints"
+  },
+
+  "documentation": {
+    "snippets": ".claude/snippets.md",
+    "blueprintGuide": "blueprints/README.md",
+    "officialDocs": "https://dommajs.org/docs/"
+  },
+
+  "reminders": [
+    "This is Domma, NOT jQuery",
+    "Always use aliases ($, _, M, B, etc.) instead of full names",
+    "CSS load order: domma.css → grid.css → elements.css → themes",
+    "Check .claude/snippets.md for code patterns",
+    "Check blueprints/ for reusable schemas",
+    "Use F.crud() for complete CRUD with minimal code"
+  ]
+}
