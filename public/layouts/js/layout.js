@@ -608,7 +608,7 @@ import {ConsentModule} from './modules/consent.js';
      */
     async function renderAuthActions(action, container, data) {
         const { levelsUp, user } = data;
-        const loginPath = action.loginUrl || (levelsUp > 0 ? '../'.repeat(levelsUp) + 'login/index.html' : 'login/index.html');
+        const loginPath = action.loginUrl || '/login/index.html';
 
         // Add Login/Logout link
         const loginLogoutHtml = user
@@ -718,7 +718,7 @@ import {ConsentModule} from './modules/consent.js';
                 }
 
                 // Prepare actions for the right side
-                const loginPath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'login/index.html' : 'login/index.html';
+                const loginPath = '/login/index.html';
 
                 Domma.elements.navbar('#main-navbar', {
                     brand: {text: config.brand?.text || 'Domma', url: config.brand?.url || '/'},

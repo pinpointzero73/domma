@@ -11,6 +11,7 @@ import {theme} from './theme.js';
 import {icons} from './icons.js';
 import {storage} from './storage.js';
 import {auth} from './auth.js';
+import {router} from './router.js';
 import sanitizeModule from './sanitize.js';
 
 // Register Web Components (Badge, Tooltip, Loader, BackToTop)
@@ -96,6 +97,7 @@ Domma.theme = theme;
 Domma.icons = icons;
 Domma.storage = storage;
 Domma.auth = auth;
+Domma.router = router;
 Domma.sanitize = sanitizeModule;
 
 // Expose DesktopNotification class for static method access
@@ -113,6 +115,7 @@ const H = http;
 const E = elements;
 const I = icons;
 const T = tables;
+const R = router;
 const B = {  // Blueprint composition methods
     extend: models.extend.bind(models),
     pick: models.pick.bind(models),
@@ -129,6 +132,7 @@ Domma.H = H;
 Domma.E = E;
 Domma.I = I;
 Domma.T = T;
+Domma.R = R;
 Domma.B = B;
 
 // Expose globally if needed
@@ -145,11 +149,12 @@ if (typeof window !== 'undefined') {
     window.E = E;
     window.I = I;
     window.T = T;
+    window.R = R;
     window.B = B;
 }
 
 export default Domma;
-export {Domma, $, _, M, D, S, A, F, H, E, I, T, B};
+export {Domma, $, _, M, D, S, A, F, H, E, I, T, R, B};
 
 // Reveal page after Domma is ready
 if (typeof document !== 'undefined') {

@@ -37,9 +37,9 @@
   <div class="command-block" style="max-width: 600px; margin: 2rem auto; text-align: left;">
     <div><span class="command-prompt">$</span> npm init -y</div>
     <div><span class="command-prompt">$</span> npm install domma-js</div>
-    <div><span class="command-prompt">$</span> npx domma init</div>
+    <div><span class="command-prompt">$</span> npx domma init <span style="opacity: 0.6;">--mpa | --spa</span></div>
     <p class="text-center mt-3" style="opacity: 0.8;">
-      Opens browser with 5 working pages!
+      Choose Multi-Page (MPA) or Single Page (SPA) mode!
     </p>
   </div>
 </section>
@@ -91,12 +91,25 @@
           <span class="command-prompt">$</span> npx domma init
         </div>
         <p class="text-secondary mt-3">
-          <strong>What happens:</strong> Creates 5 pages, navbar, footer, config - then opens in browser!
+          <strong>What happens:</strong> Interactive prompt lets you choose Multi-Page (MPA) or Single Page (SPA) mode!
         </p>
 
+        <div class="alert alert-info mb-4" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 1rem; border-radius: 0.5rem;">
+          <div class="d-flex align-items-start">
+            <span data-icon="info" style="color: var(--dm-info); min-width: 20px; margin-right: 0.75rem;"></span>
+            <div>
+              <strong>New in v0.11.0:</strong> Choose your architecture!
+              <div class="mt-2">
+                <code>npx domma init --mpa</code> - Multi-Page Application (traditional)<br>
+                <code>npx domma init --spa</code> - Single Page Application (client-side routing)
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="result-preview">
-          <h4 class="h6 mb-3">✓ You Get:</h4>
-          <div class="row g-3">
+          <h4 class="h6 mb-3">✓ Multi-Page Application (MPA):</h4>
+          <div class="row g-3 mb-4">
             <div class="col-12 col-md-6">
               <div class="file-list">
                 <div><span class="file-icon" data-icon="home"></span> index.html</div>
@@ -108,17 +121,101 @@
             </div>
             <div class="col-12 col-md-6">
               <ul class="list-unstyled mb-0">
-                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Navbar (JSON-configured)</li>
-                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Footer (JSON-configured)</li>
-                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> 16+ Themes ready</li>
-                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Icons, Grid, Components</li>
-                <li class="mb-0"><span data-icon="check" class="text-success me-2"></span> Mobile responsive</li>
+                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Traditional multi-page site</li>
+                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> 5 separate HTML pages</li>
+                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Works on any web server</li>
+                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> No JavaScript required</li>
+                <li class="mb-0"><span data-icon="check" class="text-success me-2"></span> SEO-friendly by default</li>
               </ul>
             </div>
+          </div>
+
+          <h4 class="h6 mb-3">✓ Single Page Application (SPA):</h4>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <div class="file-list">
+                <div><span class="file-icon" data-icon="home"></span> index.html (single entry)</div>
+                <div><span class="file-icon" data-icon="code"></span> js/views/home.js</div>
+                <div><span class="file-icon" data-icon="code"></span> js/views/about.js</div>
+                <div><span class="file-icon" data-icon="code"></span> js/views/contact.js</div>
+                <div><span class="file-icon" data-icon="code"></span> js/app.js (router)</div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <ul class="list-unstyled mb-0">
+                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Client-side routing (hash-based)</li>
+                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Instant view transitions</li>
+                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> No page reloads</li>
+                <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Built-in Router (R alias)</li>
+                <li class="mb-0"><span data-icon="check" class="text-success me-2"></span> Lifecycle hooks & middleware</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-4 p-3" style="background: rgba(139, 92, 246, 0.1); border-left: 3px solid var(--dm-primary); border-radius: 0.25rem;">
+            <strong>Both modes include:</strong> Navbar, Footer, 16+ Themes, Icons, Grid, Components, Mobile Responsive
           </div>
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- Which Mode Should I Choose? -->
+<section class="container py-8">
+  <h2 class="text-center mb-6">Which Mode Should I Choose?</h2>
+
+  <div class="row g-4">
+    <div class="col-12 col-md-6">
+      <div class="card h-100" style="border: 2px solid var(--dm-primary);">
+        <div class="card-body">
+          <h3 class="h5 mb-3">
+            <span data-icon="file-text" class="me-2"></span>
+            Choose MPA When:
+          </h3>
+          <ul class="list-unstyled">
+            <li class="mb-2"><span data-icon="check" class="text-primary me-2"></span> Building content-heavy sites (blogs, docs)</li>
+            <li class="mb-2"><span data-icon="check" class="text-primary me-2"></span> SEO is critical (search engines)</li>
+            <li class="mb-2"><span data-icon="check" class="text-primary me-2"></span> Need to work without JavaScript</li>
+            <li class="mb-2"><span data-icon="check" class="text-primary me-2"></span> Simple static hosting required</li>
+            <li class="mb-0"><span data-icon="check" class="text-primary me-2"></span> Each page is independent</li>
+          </ul>
+          <div class="mt-4 p-3" style="background: var(--dm-surface-light); border-radius: 0.25rem;">
+            <strong>Add more pages:</strong><br>
+            <code>npx domma add page services</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="card h-100" style="border: 2px solid var(--dm-success);">
+        <div class="card-body">
+          <h3 class="h5 mb-3">
+            <span data-icon="zap" class="me-2"></span>
+            Choose SPA When:
+          </h3>
+          <ul class="list-unstyled">
+            <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Building app-like experiences (dashboards, tools)</li>
+            <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Want instant page transitions</li>
+            <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Need client-side routing</li>
+            <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Share state between views</li>
+            <li class="mb-0"><span data-icon="check" class="text-success me-2"></span> Dynamic, interactive UI required</li>
+          </ul>
+          <div class="mt-4 p-3" style="background: var(--dm-surface-light); border-radius: 0.25rem;">
+            <strong>Add more views:</strong><br>
+            <code>npx domma add view settings</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-5">
+    <p class="text-secondary mb-0">
+      <span data-icon="info" class="me-2"></span>
+      <strong>Not sure?</strong> Start with MPA - it's simpler and works everywhere. You can always rebuild as SPA later.
+    </p>
   </div>
 </section>
 
@@ -127,7 +224,7 @@
   <div class="container text-center">
     <h2 class="mb-4">You're Done! 🎉</h2>
     <p class="lead mb-4">
-      Open <code>index.html</code> in your browser to see your new site.
+      Open <code>index.html</code> (MPA) or <code>frontend/index.html</code> (SPA) in your browser to see your new site.
     </p>
     <p class="text-secondary mb-6">
       Everything is ready to use - navbar, footer, theming, grid, components.<br>

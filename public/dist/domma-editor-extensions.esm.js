@@ -2,8 +2,8 @@
  * Domma Editor Extensions v0.11.0
  * Optional enhancements for Domma editor
  * (c) 2026 Darryl Waterhouse & DCBW-IT
- * Built: 2026-02-02T09:53:30.120Z
- * Commit: 7497027
+ * Built: 2026-02-03T23:13:58.391Z
+ * Commit: 02f4dcb
  *
  * Requires: domma.min.js
  */

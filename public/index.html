@@ -11,12 +11,12 @@
   <link
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700&display=swap"
       rel="stylesheet">
-  <link rel="stylesheet" href="dist/domma.css">
-  <link rel="stylesheet" href="dist/grid.css">
-  <link rel="stylesheet" href="dist/elements.css">
-  <link rel="stylesheet" href="dist/syntax.css">
-  <link rel="stylesheet" href="dist/themes/domma-themes.css">
-  <link rel="stylesheet" href="dist/festive-snow.css">
+  <link rel="stylesheet" href="dist/domma.css?v=20260203-8">
+  <link rel="stylesheet" href="dist/grid.css?v=20260203-8">
+  <link rel="stylesheet" href="dist/elements.css?v=20260203-8">
+  <link rel="stylesheet" href="dist/syntax.css?v=20260203-8">
+  <link rel="stylesheet" href="dist/themes/domma-themes.css?v=20260203-8">
+  <link rel="stylesheet" href="dist/festive-snow.css?v=20260203-8">
   <style>
       .splash-hero {
           display: flex;
@@ -27,7 +27,7 @@
           padding: 3rem 1rem 2rem 1rem; /* Reduced horizontal padding on mobile */
           background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
           color: var(--dm-white);
-          overflow-x: hidden; /* Prevent horizontal scroll */
+          overflow: hidden; /* Required for ambient effects */
       }
 
       .splash-hero-grid {
@@ -401,7 +401,7 @@
 
 <nav id="main-navbar"></nav>
 
-<section class="splash-hero">
+<section class="splash-hero bg-ambient-rotate-dual">
   <div class="splash-hero-grid">
     <!-- Left column: Logo, heading, and backronym -->
     <div>
@@ -631,58 +631,52 @@
     <p class="lead">Production-ready applications built with Domma</p>
   </div>
 
-  <div class="row g-4 mb-4">
+  <div class="grid grid-cols-3 gap-4 mb-4 miniapps-grid">
     <!-- My Garage Preview -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card h-100 card-hover" data-tooltip="Manage your vehicle fleet with DVLA API integration">
-        <div class="card-body">
-          <div class="text-center mb-3">
-            <div data-icon="car" data-icon-size="48" style="color: var(--dm-primary);"></div>
-          </div>
-          <h4 class="card-title">My Garage</h4>
-          <p class="card-text">Vehicle management with DVLA integration. Look up any UK vehicle by registration
-            number.</p>
-          <span class="badge badge-success">Available Now</span>
+    <div class="card h-100 card-hover" data-tooltip="Manage your vehicle fleet with DVLA API integration">
+      <div class="card-body">
+        <div class="text-center mb-3">
+          <div data-icon="car" data-icon-size="48" style="color: var(--dm-primary);"></div>
         </div>
-        <div class="card-footer">
-          <a href="miniapps/garage/index.html" class="btn btn-success w-100">Launch App</a>
-        </div>
+        <h4 class="card-title">My Garage</h4>
+        <p class="card-text">Vehicle management with DVLA integration. Look up any UK vehicle by registration
+          number.</p>
+        <span class="badge badge-success">Available Now</span>
+      </div>
+      <div class="card-footer">
+        <a href="miniapps/garage/index.html" class="btn btn-success w-100">Launch App</a>
       </div>
     </div>
 
     <!-- Document Editor Preview -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card h-100 card-hover" data-tooltip="Rich text editor with version history and export features">
-        <div class="card-body">
-          <div class="text-center mb-3">
-            <div data-icon="document" data-icon-size="48" style="color: var(--dm-primary);"></div>
-          </div>
-          <h4 class="card-title">Domma Docs</h4>
-          <p class="card-text">Powerful document editor with rich text formatting and export to PDF, HTML, and
-            Markdown.</p>
-          <span class="badge badge-success">Available Now</span>
+    <div class="card h-100 card-hover" data-tooltip="Rich text editor with version history and export features">
+      <div class="card-body">
+        <div class="text-center mb-3">
+          <div data-icon="document" data-icon-size="48" style="color: var(--dm-primary);"></div>
         </div>
-        <div class="card-footer">
-          <a href="miniapps/docs/index.html" class="btn btn-success w-100">Launch App</a>
-        </div>
+        <h4 class="card-title">Domma Docs</h4>
+        <p class="card-text">Powerful document editor with rich text formatting and export to PDF, HTML, and
+          Markdown.</p>
+        <span class="badge badge-success">Available Now</span>
+      </div>
+      <div class="card-footer">
+        <a href="miniapps/docs/index.html" class="btn btn-success w-100">Launch App</a>
       </div>
     </div>
 
     <!-- Invoicing Preview -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card h-100 card-hover" data-tooltip="Professional invoicing with client management - launching soon">
-        <div class="card-body">
-          <div class="text-center mb-3">
-            <div data-icon="document-add" data-icon-size="48" style="color: var(--dm-primary);"></div>
-          </div>
-          <h4 class="card-title">Invoicing System</h4>
-          <p class="card-text">Complete invoicing solution for freelancers and small businesses with client
-            management.</p>
-          <span class="badge badge-primary">Coming Soon</span>
+    <div class="card h-100 card-hover" data-tooltip="Professional invoicing with client management - launching soon">
+      <div class="card-body">
+        <div class="text-center mb-3">
+          <div data-icon="document-add" data-icon-size="48" style="color: var(--dm-primary);"></div>
         </div>
-        <div class="card-footer">
-          <a href="miniapps/index.html" class="btn btn-primary w-100">Explore MiniApps</a>
-        </div>
+        <h4 class="card-title">Invoicing System</h4>
+        <p class="card-text">Complete invoicing solution for freelancers and small businesses with client
+          management.</p>
+        <span class="badge badge-primary">Coming Soon</span>
+      </div>
+      <div class="card-footer">
+        <a href="miniapps/index.html" class="btn btn-primary w-100">Explore MiniApps</a>
       </div>
     </div>
   </div>

@@ -13,8 +13,7 @@
   <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
 
   <!-- App Styles -->
-  <!-- App Custom Styles -->
-  <link rel="stylesheet" href="./custom.css">
+  <link rel="stylesheet" href="./custom.css?v=6">
 
   <!-- Layout System -->
   <script type="module" src="../../layouts/js/layout.js"></script>
@@ -26,7 +25,7 @@
   <script src="../../dist/domma.min.js" defer></script>
 
   <!-- App Logic -->
-  <script src="./dist/app.min.js" defer></script>
+  <script src="./dist/app.min.js?v=8" defer></script>
 </head>
 <body class="dm-cloaked" data-layout="public" data-theme="default">
 
@@ -56,7 +55,7 @@
                   type="text"
                   class="search-input"
                   id="regInput"
-                  placeholder="e.g. AB12CDE"
+                  placeholder="AB12CDE"
                   pattern="[A-Za-z0-9]{2,8}"
                   maxlength="8"
                   required
@@ -109,17 +108,17 @@
 
         <!-- Search Box -->
         <div class="garage-search-wrapper">
-          <div class="input-group-icon has-addon-left">
-            <span class="input-group-addon input-group-addon-left" data-icon="search" data-icon-size="18"></span>
+          <div class="garage-search-input-wrapper">
+            <span class="garage-search-icon" data-icon="search" data-icon-size="18"></span>
             <input type="text"
                    id="garageSearch"
-                   class="form-input"
+                   class="garage-search-input"
                    placeholder="Search by registration, make, colour, year...">
           </div>
           <div id="garageSearchCount" class="garage-search-count"></div>
         </div>
 
-        <div id="garageList" class="history-list">
+        <div id="garageList" class="garage-list">
           <div class="empty-state">
             <div class="empty-state-icon">🚗</div>
             <h3>No saved vehicles</h3>

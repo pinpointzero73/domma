@@ -142,6 +142,165 @@ settings.clearStorage();   // Remove from localStorage
 settings.reset(true);      // Reset and clear storage
 ```
 
+### router.js - Hash-based SPA routing
+
+Accessed via `Domma.router` or `R`:
+
+- **Initialization**: `init(options)` - Set up router with container, routes, views
+- **Navigation**: `navigate(path, options)`, `back()`, `forward()`, `reload()`
+- **Registration**: `route(config)`, `view(name, viewDef)`
+- **Middleware**: `use(middleware)`, `clearMiddleware()`
+- **State**: `current()`, `getContainer()`
+
+**Router Configuration:**
+
+```javascript
+import {views} from './views/index.js';
+
+R.init({
+  container: '#app',           // View container selector
+  routes: [                    // Route definitions
+    { path: '/', view: 'home', title: 'Home', onEnter, onLeave },
+    { path: '/about', view: 'about', title: 'About' },
+    { path: '/user/:id', view: 'user', title: 'User Profile' }
+  ],
+  views: views,                // View registry object
+  default: '/',                // Default route
+  notFound: '404',             // 404 view name
+  transitions: {               // Transition config
+    enter: 'fadeIn',
+    leave: 'fadeOut',
+    duration: 200
+  }
+});
+```
+
+**View Structure:**
+
+```javascript
+export const homeView = {
+  template: `<div class="home">...</div>`,  // String or function returning string
+
+  // Called before rendering (async supported)
+  async onEnter(params) {
+    // Fetch data, validate auth, etc.
+    const data = await H.get('/api/home');
+    return data;  // Can return data to pass to template
+  },
+
+  // Called after view is mounted
+  onMount($container) {
+    // Initialize components
+    E.tooltip($container.find('[data-tooltip]'));
+
+    // Bind events
+    $container.find('#my-button').on('click', () => {
+      E.toast('Clicked!', {type: 'success'});
+    });
+  },
+
+  // Called when leaving view (cleanup)
+  onLeave() {
+    // Remove event listeners, timers, etc.
+    $('#my-button').off('click');
+  }
+};
+```
+
+**Route Parameters:**
+
+```javascript
+// Route: /user/:id
+// URL: #/user/123
+
+// In view:
+onEnter(params) {
+  console.log(params.id);  // '123'
+}
+```
+
+**Middleware (Route Guards):**
+
+```javascript
+// Authentication guard
+R.use((to, from, next) => {
+  if (to.path !== '/login' && !isAuthenticated()) {
+    next('/login');  // Redirect to login
+  } else {
+    next();  // Allow navigation
+  }
+});
+
+// Logging middleware
+R.use((to, from, next) => {
+  console.log(`Navigating from ${from?.path} to ${to.path}`);
+  next();
+});
+```
+
+**Pub/Sub Events:**
+
+```javascript
+// Router publishes events via M.publish()
+M.subscribe('router:ready', ({router}) => {
+  console.log('Router initialized');
+});
+
+M.subscribe('router:beforeChange', ({from, to}) => {
+  console.log(`Leaving ${from?.path}, going to ${to.path}`);
+});
+
+M.subscribe('router:afterChange', ({from, to}) => {
+  console.log(`Now on ${to.path}`);
+  // Update active navbar item, etc.
+});
+
+M.subscribe('router:error', ({error, route}) => {
+  console.error(`Router error on ${route}:`, error);
+});
+```
+
+**Programmatic Navigation:**
+
+```javascript
+// Navigate to route
+R.navigate('/about');
+
+// Navigate with replace (no history entry)
+R.navigate('/about', {replace: true});
+
+// History navigation
+R.back();
+R.forward();
+
+// Reload current route
+R.reload();
+
+// Get current route info
+const current = R.current();
+console.log(current.path, current.params, current.query);
+```
+
+**Dynamic Routes:**
+
+```javascript
+// Register route at runtime
+R.route({
+  path: '/settings',
+  view: 'settings',
+  title: 'Settings',
+  onEnter: async (params) => {
+    // Pre-load data
+  }
+});
+
+// Register view at runtime
+R.view('settings', {
+  template: '<div>Settings</div>',
+  onMount($container) { }
+});
+```
+
 ### elements.js - UI components
 
 Accessed via `Domma.elements`:

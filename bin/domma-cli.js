@@ -62,6 +62,8 @@ switch (command) {
  */
 async function handleInit() {
   const quickMode = args.includes('--quick');
+  const spaFlag = args.includes('--spa');
+  const mpaFlag = args.includes('--mpa');
 
   // ASCII Art Banner
   console.log(`
@@ -78,6 +80,31 @@ async function handleInit() {
   let projectName = 'my-app';
   let theme = 'charcoal-dark';
   let includeThemeSelector = false;
+  let projectMode = 'mpa'; // Default to multi-page
+
+  // Determine project mode
+  if (spaFlag) {
+    projectMode = 'spa';
+  } else if (mpaFlag) {
+    projectMode = 'mpa';
+  } else if (!quickMode) {
+    // Prompt user to choose mode
+    const rl = readline.createInterface({input, output});
+
+    console.log(`\n  Choose project type:`);
+    console.log(`    ❯ Multi-Page Application (MPA) - Traditional multi-page website (default)`);
+    console.log(`      Single Page Application (SPA) - Client-side routing with view switching`);
+
+    const modeAnswer = await rl.question(`\n  Enter choice (mpa/spa): `);
+    const modeInput = modeAnswer.trim().toLowerCase();
+
+    if (modeInput === 'spa' || modeInput === 's') {
+      projectMode = 'spa';
+    }
+
+    rl.close();
+    console.log('');
+  }
 
   if (!quickMode) {
     const rl = readline.createInterface({input, output});
@@ -113,8 +140,9 @@ async function handleInit() {
     console.log('');
   }
 
-  // Find templates directory
-  const templatesDir = join(__dirname, '..', 'templates', 'kickstart');
+  // Find templates directory based on mode
+  const templateName = projectMode === 'spa' ? 'kickstart-spa' : 'kickstart';
+  const templatesDir = join(__dirname, '..', 'templates', templateName);
   const distDir = join(__dirname, '..', 'public', 'dist');
 
   if (!existsSync(templatesDir)) {
@@ -171,12 +199,21 @@ async function handleInit() {
     console.log(`  ✓ Copied themes/`);
   }
 
-  console.log(`\n  ✓ Done! Your project "${projectName}" is ready.\n`);
+  console.log(`\n  ✓ Done! Your ${projectMode.toUpperCase()} project "${projectName}" is ready.\n`);
   console.log(`  Next steps:`);
-  console.log(`    1. Open frontend/pages/index.html in your browser`);
-  console.log(`    2. Edit domma.config.json to customise`);
-  console.log(`    3. Add new pages: npx domma-js add page <name>`);
-  console.log(`    4. Read the docs: https://github.com/dcbw-it/domma\n`);
+
+  if (projectMode === 'spa') {
+    console.log(`    1. Open frontend/index.html in your browser`);
+    console.log(`    2. Edit domma.config.json to customise routes and navbar`);
+    console.log(`    3. Add new views: npx domma-js add view <name>`);
+    console.log(`    4. Edit views in frontend/js/views/`);
+  } else {
+    console.log(`    1. Open frontend/pages/index.html in your browser`);
+    console.log(`    2. Edit domma.config.json to customise`);
+    console.log(`    3. Add new pages: npx domma-js add page <name>`);
+  }
+
+  console.log(`    ${projectMode === 'spa' ? '5' : '4'}. Read the docs: https://github.com/dcbw-it/domma\n`);
 }
 
 /**
@@ -189,9 +226,14 @@ async function handleAdd() {
     case 'page':
       await handleAddPage();
       break;
+    case 'view':
+      await handleAddView();
+      break;
     default:
       console.error(`Unknown add command: ${subCommand}`);
-      console.log('Usage: npx domma-js add page <name>');
+      console.log('Usage:');
+      console.log('  npx domma-js add page <path>  # For Multi-Page Applications');
+      console.log('  npx domma-js add view <name>  # For Single Page Applications');
       process.exit(1);
   }
 }
@@ -242,6 +284,157 @@ async function handleAddPage() {
 
   // Create page
   createPage(pageDir, pageName);
+}
+
+/**
+ * Handle adding a new view (SPA only)
+ */
+async function handleAddView() {
+  const quickMode = args.includes('--quick');
+  let viewName = args[2];
+
+  // Check if we're in a Domma project
+  const configPath = join(process.cwd(), 'domma.config.json');
+  if (!existsSync(configPath)) {
+    console.error('\n  ✗ Error: Not in a Domma project directory');
+    console.error('  Run this command from your project root (where domma.config.json is located)\n');
+    process.exit(1);
+  }
+
+  // Check if it's an SPA project
+  let config;
+  try {
+    config = JSON.parse(readFileSync(configPath, 'utf-8'));
+  } catch (e) {
+    console.error('\n  ✗ Error: Could not read domma.config.json');
+    process.exit(1);
+  }
+
+  if (!config.spa || !config.spa.enabled) {
+    console.error('\n  ✗ Error: This command is only for Single Page Applications');
+    console.error('  For Multi-Page Applications, use: npx domma-js add page <path>\n');
+    process.exit(1);
+  }
+
+  if (!viewName && quickMode) {
+    console.error('View name required with --quick flag');
+    console.log('Usage: npx domma-js add view <name> --quick');
+    console.log('Example: npx domma-js add view settings --quick');
+    process.exit(1);
+  }
+
+  if (!quickMode) {
+    const rl = readline.createInterface({input, output});
+
+    if (!viewName) {
+      const nameAnswer = await rl.question('  View name (e.g., settings, profile, dashboard): ');
+      viewName = nameAnswer.trim();
+    }
+
+    if (!viewName) {
+      console.error('  ✗ View name is required');
+      rl.close();
+      process.exit(1);
+    }
+
+    rl.close();
+  }
+
+  // Sanitize view name
+  viewName = viewName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+
+  // Check if view already exists
+  const viewPath = join(process.cwd(), 'frontend', 'js', 'views', `${viewName}.js`);
+  if (existsSync(viewPath)) {
+    console.error(`\n  ✗ View "${viewName}" already exists`);
+    process.exit(1);
+  }
+
+  // Read view template
+  const viewTemplateDir = join(__dirname, '..', 'templates', 'view-template');
+  const viewTemplatePath = join(viewTemplateDir, 'view.js');
+
+  if (!existsSync(viewTemplatePath)) {
+    console.error(`\n  ✗ Error: View template not found at ${viewTemplatePath}`);
+    process.exit(1);
+  }
+
+  let viewTemplate = readFileSync(viewTemplatePath, 'utf-8');
+
+  // Create title case name
+  const titleCase = viewName.split('-').map(w =>
+    w.charAt(0).toUpperCase() + w.slice(1)
+  ).join(' ');
+
+  // Variable substitution
+  const vars = {
+    '{{viewName}}': viewName,
+    '{{viewTitle}}': titleCase
+  };
+
+  for (const [key, value] of Object.entries(vars)) {
+    viewTemplate = viewTemplate.replaceAll(key, value);
+  }
+
+  // Write view file
+  writeFileSync(viewPath, viewTemplate, 'utf-8');
+  console.log(`\n  ✓ Created view: frontend/js/views/${viewName}.js`);
+
+  // Update views/index.js
+  const viewsIndexPath = join(process.cwd(), 'frontend', 'js', 'views', 'index.js');
+  if (existsSync(viewsIndexPath)) {
+    let viewsIndex = readFileSync(viewsIndexPath, 'utf-8');
+
+    // Add import
+    const importStatement = `import {${viewName}View} from './${viewName}.js';\n`;
+    viewsIndex = viewsIndex.replace(/(import\s+\{[^}]+\}\s+from\s+['"][^'"]+['"];\n)+/, `$&${importStatement}`);
+
+    // Add to exports
+    const exportPattern = /export const views = \{([^}]*)\};/s;
+    const match = viewsIndex.match(exportPattern);
+    if (match) {
+      const currentExports = match[1].trim();
+      const newExport = currentExports.endsWith(',')
+        ? `\n    ${viewName}: ${viewName}View`
+        : `,\n    ${viewName}: ${viewName}View`;
+      viewsIndex = viewsIndex.replace(exportPattern, `export const views = {${currentExports}${newExport}\n};`);
+    }
+
+    writeFileSync(viewsIndexPath, viewsIndex, 'utf-8');
+    console.log(`  ✓ Updated views/index.js`);
+  }
+
+  // Update domma.config.json - add route
+  const routePath = `/${viewName}`;
+  const newRoute = {
+    path: routePath,
+    view: viewName,
+    title: `${config.project?.name || 'App'} - ${titleCase}`
+  };
+
+  if (!config.routes) {
+    config.routes = [];
+  }
+
+  config.routes.push(newRoute);
+  console.log(`  ✓ Added route: ${routePath}`);
+
+  // Update navbar items
+  if (config.navbar && config.navbar.items) {
+    const newNavItem = {
+      text: titleCase,
+      url: `#${routePath}`
+    };
+    config.navbar.items.push(newNavItem);
+    console.log(`  ✓ Added navbar item: ${titleCase}`);
+  }
+
+  // Write updated config
+  writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
+  console.log(`  ✓ Updated domma.config.json\n`);
+
+  console.log(`  View "${titleCase}" is ready!`);
+  console.log(`  Navigate to it at: #${routePath}\n`);
 }
 
 /**
@@ -466,26 +659,35 @@ function showHelp() {
 Domma CLI v${VERSION} - Project scaffolding and management
 
 Commands:
-  npx domma-js              Initialize a new Domma project
+  npx domma-js              Initialize a new Domma project (interactive)
   npx domma-js init         Initialize a new Domma project
-  npx domma-js add page <path>  Add a new page at specified path
-  npx domma-js setup-ai     Add AI assistance files to existing project
+    --spa                   Create Single Page Application
+    --mpa                   Create Multi-Page Application (default)
     --quick                 Skip interactive prompts
+
+  npx domma-js add page <path>  Add a new page (MPA only)
+  npx domma-js add view <name>  Add a new view (SPA only)
+  npx domma-js setup-ai         Add AI assistance files to existing project
 
 Options:
   --help, -h               Show this help message
   --version, -v            Show version number
 
 Examples:
-  npx domma-js                     # Interactive project setup
-  npx domma-js --quick             # Quick project setup with defaults
+  # Initialize projects:
+  npx domma-js                     # Interactive setup (choose MPA or SPA)
+  npx domma-js --spa               # Create SPA with prompts
+  npx domma-js --mpa --quick       # Create MPA with defaults
   npx domma-js setup-ai            # Add AI assistance to existing project
 
-  # Add pages at different paths:
+  # Add pages (MPA only):
   npx domma-js add page admin                      # Root level (admin/)
   npx domma-js add page pages/dashboard            # One level deep (pages/dashboard/)
   npx domma-js add page frontend/pages/profile     # Two levels deep (frontend/pages/profile/)
-  npx domma-js add page src/views/settings --quick # Quick mode (non-interactive)
+
+  # Add views (SPA only):
+  npx domma-js add view settings   # Creates settings view with route
+  npx domma-js add view profile    # Creates profile view with route
 
 Note: Paths are automatically calculated based on folder depth
 `);

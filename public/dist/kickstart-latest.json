@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026_01_27_08_20",
-  "buildDate": "2026-01-27T08:20:12.793Z",
+  "timestamp": "2026_02_03_22_07",
+  "buildDate": "2026-02-03T22:07:48.711Z",
   "files": {
-    "minimal": "kickstart-minimal_2026_01_27_08_20.tar.gz",
-    "essentials": "kickstart-essentials_2026_01_27_08_20.tar.gz",
-    "full": "kickstart-full_2026_01_27_08_20.tar.gz",
-    "dataFocused": "kickstart-data-focused_2026_01_27_08_20.tar.gz",
-    "alias": "kickstart_2026_01_27_08_20.tar.gz"
+    "minimal": "kickstart-minimal_2026_02_03_22_07.tar.gz",
+    "essentials": "kickstart-essentials_2026_02_03_22_07.tar.gz",
+    "full": "kickstart-full_2026_02_03_22_07.tar.gz",
+    "dataFocused": "kickstart-data-focused_2026_02_03_22_07.tar.gz",
+    "alias": "kickstart_2026_02_03_22_07.tar.gz"
   }
 }

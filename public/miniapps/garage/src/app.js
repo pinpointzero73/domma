@@ -135,11 +135,21 @@ const GarageApp = {
     }
 
     // Event delegation for save/remove vehicle buttons
-    $(document).on('click', '.save-vehicle-btn, .remove-vehicle-btn', function (e) {
+    $(document).on('click', '.save-vehicle-btn, .remove-vehicle-btn, .garage-remove-btn', function (e) {
       e.preventDefault();
-      const $btn = $(this);
+      e.stopPropagation(); // Prevent bubbling to parent garage-vehicle-item
+
+      // Get the button element (in case user clicked on icon or other child)
+      let $btn = $(this);
+      if (!$btn.is('button')) {
+        $btn = $(this).closest('button');
+      }
+
       const vehicleId = $btn.attr('data-vehicle-id'); // MongoDB ObjectId is a string, not an integer
       const currentlySaved = $btn.attr('data-is-saved') === 'true';
+
+      console.log('Button clicked:', {vehicleId, currentlySaved, willSave: !currentlySaved});
+
       // Toggle the save state
       GarageApp.toggleSaveVehicle(vehicleId, !currentlySaved);
     });
@@ -454,7 +464,7 @@ const GarageApp = {
       return;
     }
 
-    // Render saved vehicles with details
+    // Render saved vehicles with clean design
     const html = vehicles.map(vehicle => {
       const v = vehicle.data;
       const taxStatus = v.taxStatus === 'Taxed' ? 'success' :
@@ -462,64 +472,69 @@ const GarageApp = {
       const motStatus = v.motStatus === 'Valid' ? 'success' : 'danger';
 
       return `
-                    <div class="vehicle-card" style="background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
-                            <div style="flex: 1;">
-                                <div style="font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-bottom: 0.25rem;">${vehicle.vrn}</div>
-                                <div style="font-size: 1.125rem; color: #4b5563; font-weight: 600;">${v.make}</div>
-                            </div>
-                            <button class="btn-sm remove-vehicle-btn" style="background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; white-space: nowrap;"
-                                    data-vehicle-id="${vehicle.id}" data-is-saved="true">
-                                <span data-icon="trash" data-icon-size="16"></span> Remove
-                            </button>
-                        </div>
+        <div class="garage-vehicle-item" data-id="${vehicle.id}">
+          <div class="garage-vehicle-header">
+            <div class="garage-vehicle-title">
+              <div class="garage-vehicle-reg">${vehicle.vrn}</div>
+              <div class="garage-vehicle-make">${v.make || 'Unknown Make'}</div>
+            </div>
+            <button class="garage-remove-btn remove-vehicle-btn" data-vehicle-id="${vehicle.id}" data-is-saved="true">
+              <span data-icon="trash" data-icon-size="14"></span>
+              Remove
+            </button>
+          </div>
 
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
-                            <div style="background: #f9fafb; padding: 0.75rem; border-radius: 6px;">
-                                <div style="font-size: 0.75rem; color: #6b7280; font-weight: 600; margin-bottom: 0.25rem;">COLOUR</div>
-                                <div style="font-size: 0.875rem; color: #1f2937; font-weight: 600;">${v.colour || 'N/A'}</div>
-                            </div>
-                            <div style="background: #f9fafb; padding: 0.75rem; border-radius: 6px;">
-                                <div style="font-size: 0.75rem; color: #6b7280; font-weight: 600; margin-bottom: 0.25rem;">YEAR</div>
-                                <div style="font-size: 0.875rem; color: #1f2937; font-weight: 600;">${v.yearOfManufacture || 'N/A'}</div>
-                            </div>
-                            <div style="background: #f9fafb; padding: 0.75rem; border-radius: 6px;">
-                                <div style="font-size: 0.75rem; color: #6b7280; font-weight: 600; margin-bottom: 0.25rem;">FUEL</div>
-                                <div style="font-size: 0.875rem; color: #1f2937; font-weight: 600;">${v.fuelType || 'N/A'}</div>
-                            </div>
-                            <div style="background: #f9fafb; padding: 0.75rem; border-radius: 6px;">
-                                <div style="font-size: 0.75rem; color: #6b7280; font-weight: 600; margin-bottom: 0.25rem;">ENGINE</div>
-                                <div style="font-size: 0.875rem; color: #1f2937; font-weight: 600;">${v.engineCapacity ? v.engineCapacity + 'cc' : 'N/A'}</div>
-                            </div>
-                        </div>
+          <div class="garage-vehicle-details">
+            <div class="garage-detail-item">
+              <div class="garage-detail-label">Colour</div>
+              <div class="garage-detail-value">${v.colour || 'N/A'}</div>
+            </div>
+            <div class="garage-detail-item">
+              <div class="garage-detail-label">Year</div>
+              <div class="garage-detail-value">${v.yearOfManufacture || 'N/A'}</div>
+            </div>
+            <div class="garage-detail-item">
+              <div class="garage-detail-label">Fuel</div>
+              <div class="garage-detail-value">${v.fuelType || 'N/A'}</div>
+            </div>
+            <div class="garage-detail-item">
+              <div class="garage-detail-label">Engine</div>
+              <div class="garage-detail-value">${v.engineCapacity ? v.engineCapacity + 'cc' : 'N/A'}</div>
+            </div>
+          </div>
 
-                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                            <span class="status-badge ${taxStatus}" style="padding: 0.375rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">
-                                <span data-icon="${taxStatus === 'success' ? 'check' : 'alert-circle'}" data-icon-size="14"></span>
-                                Tax: ${v.taxStatus || 'Unknown'}
-                                ${v.taxDueDate ? `<br><span style="font-size: 0.7rem; opacity: 0.8;">Due: ${this.formatDate(v.taxDueDate)}</span>` : ''}
-                            </span>
-                            <span class="status-badge ${motStatus}" style="padding: 0.375rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">
-                                <span data-icon="${motStatus === 'success' ? 'check' : 'alert-circle'}" data-icon-size="14"></span>
-                                MOT: ${v.motStatus || 'Unknown'}
-                                ${v.motExpiryDate ? `<br><span style="font-size: 0.7rem; opacity: 0.8;">Expires: ${this.formatDate(v.motExpiryDate)}</span>` : ''}
-                            </span>
-                            ${v.co2Emissions ? `<span class="status-badge" style="background: #e0e7ff; color: #3730a3; padding: 0.375rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">CO2: ${v.co2Emissions}g/km</span>` : ''}
-                        </div>
-                    </div>
-                `;
+          <div class="garage-vehicle-badges">
+            <span class="garage-badge ${taxStatus}">
+              <span data-icon="${taxStatus === 'success' ? 'check' : 'alert-circle'}" data-icon-size="12"></span>
+              Tax: ${v.taxStatus || 'Unknown'}
+              ${v.taxDueDate ? `<span class="garage-badge-detail">Due: ${this.formatDate(v.taxDueDate)}</span>` : ''}
+            </span>
+            <span class="garage-badge ${motStatus}">
+              <span data-icon="${motStatus === 'success' ? 'check' : 'alert-circle'}" data-icon-size="12"></span>
+              MOT: ${v.motStatus || 'Unknown'}
+              ${v.motExpiryDate ? `<span class="garage-badge-detail">Expires: ${this.formatDate(v.motExpiryDate)}</span>` : ''}
+            </span>
+            ${v.co2Emissions ? `<span class="garage-badge info">CO2: ${v.co2Emissions}g/km</span>` : ''}
+          </div>
+        </div>
+      `;
     }).join('');
 
-    $garageList.html(html);
+    $garageList.html(html, { safe: false });
 
     // Rescan icons after DOM update
     if (Domma.icons) {
       Domma.icons.scan();
     }
 
-    // Attach click handlers to vehicle items
+    // Attach click handlers to vehicle items (but not buttons)
     $('.garage-vehicle-item').each(function () {
-      $(this).on('click', function () {
+      $(this).on('click', function (e) {
+        // Don't trigger if clicking on a button or its children
+        if ($(e.target).closest('.garage-remove-btn, .remove-vehicle-btn, .save-vehicle-btn').length > 0) {
+          return;
+        }
+
         const id = $(this).attr('data-id');
         const vehicle = vehicles.find(v => v.id == id);
         if (vehicle) {
@@ -593,14 +608,12 @@ const GarageApp = {
 
     // Save/Remove button
     const saveButton = vehicle.is_saved
-      ? `<button class="btn remove-vehicle-btn" style="background: #ef4444; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;"
-                       data-vehicle-id="${vehicle.id}" data-is-saved="true">
-                 <span data-icon="trash" data-icon-size="18"></span> Remove from Garage
-               </button>`
-      : `<button class="btn save-vehicle-btn" style="background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;"
-                       data-vehicle-id="${vehicle.id}" data-is-saved="false">
-                 <span data-icon="bookmark" data-icon-size="18"></span> Save to Garage
-               </button>`;
+      ? `<button class="remove-vehicle-btn" data-vehicle-id="${vehicle.id}" data-is-saved="true">
+           <span data-icon="trash" data-icon-size="18"></span> Remove from Garage
+         </button>`
+      : `<button class="save-vehicle-btn" data-vehicle-id="${vehicle.id}" data-is-saved="false">
+           <span data-icon="bookmark" data-icon-size="18"></span> Save to Garage
+         </button>`;
 
     $resultsTab.html(`
             <div class="vehicle-card">
@@ -662,7 +675,7 @@ const GarageApp = {
                     </div>
                 </div>
             </div>
-        `);
+        `, { safe: false });
 
     // Rescan icons after DOM update
     if (Domma.icons) {

@@ -362,15 +362,247 @@
           border: 1px solid #bfdbfe;
       }
 
-      /* Garage Search - uses Domma input-group component */
+      /* Garage Search - Clean modern design */
       .garage-search-wrapper {
           margin-bottom: 1.5rem;
+      }
+
+      .garage-search-input-wrapper {
+          position: relative;
+          width: 100%;
+      }
+
+      .garage-search-icon {
+          position: absolute;
+          left: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #9ca3af;
+          pointer-events: none;
+      }
+
+      .garage-search-input {
+          width: 100%;
+          padding: 0.75rem 1rem 0.75rem 3rem;
+          border: 2px solid #e5e7eb;
+          border-radius: 8px;
+          font-size: 0.875rem;
+          transition: all 0.2s;
+          background: #f9fafb;
+      }
+
+      .garage-search-input:focus {
+          outline: none;
+          border-color: var(--dm-primary);
+          background: white;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
       }
 
       .garage-search-count {
           margin-top: 0.5rem;
           font-size: 0.75rem;
           color: #6b7280;
+          font-weight: 500;
+      }
+
+      /* Garage List */
+      .garage-list {
+          display: grid;
+          gap: 1rem;
+      }
+
+      .garage-vehicle-item {
+          background: #f9fafb;
+          padding: 1.5rem;
+          border-radius: 8px;
+          border: 2px solid transparent;
+          transition: all 0.2s;
+          cursor: pointer;
+      }
+
+      .garage-vehicle-item:hover {
+          background: white;
+          border-color: var(--dm-primary);
+          transform: translateX(4px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .garage-vehicle-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: start;
+          margin-bottom: 1rem;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid #e5e7eb;
+      }
+
+      .garage-vehicle-title {
+          flex: 1;
+      }
+
+      .garage-vehicle-reg {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #1f2937;
+          margin-bottom: 0.25rem;
+      }
+
+      .garage-vehicle-make {
+          font-size: 1rem;
+          color: #6b7280;
+          font-weight: 500;
+      }
+
+      .garage-remove-btn {
+          background: #fee2e2;
+          color: #991b1b;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 6px;
+          font-size: 0.875rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+          display: flex;
+          align-items: center;
+          gap: 0.375rem;
+          white-space: nowrap;
+          position: relative;
+          z-index: 10;
+      }
+
+      .garage-remove-btn:hover {
+          background: #fecaca;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+      }
+
+      .garage-vehicle-details {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+          gap: 0.75rem;
+          margin-bottom: 1rem;
+      }
+
+      .garage-detail-item {
+          background: white;
+          padding: 0.75rem;
+          border-radius: 6px;
+          border: 1px solid #e5e7eb;
+      }
+
+      .garage-detail-label {
+          font-size: 0.625rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          color: #9ca3af;
+          font-weight: 700;
+          margin-bottom: 0.25rem;
+      }
+
+      .garage-detail-value {
+          font-size: 0.875rem;
+          color: #1f2937;
+          font-weight: 600;
+      }
+
+      .garage-vehicle-badges {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+      }
+
+      .garage-badge {
+          padding: 0.375rem 0.75rem;
+          border-radius: 6px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.375rem;
+          line-height: 1.2;
+      }
+
+      .garage-badge.success {
+          background: #d1fae5;
+          color: #065f46;
+      }
+
+      .garage-badge.warning {
+          background: #fef3c7;
+          color: #92400e;
+      }
+
+      .garage-badge.danger {
+          background: #fee2e2;
+          color: #991b1b;
+      }
+
+      .garage-badge.info {
+          background: #dbeafe;
+          color: #1e40af;
+      }
+
+      .garage-badge-detail {
+          display: block;
+          font-size: 0.625rem;
+          opacity: 0.8;
+          margin-top: 0.125rem;
+      }
+
+      @media (max-width: 768px) {
+          .garage-vehicle-header {
+              flex-direction: column;
+              gap: 0.75rem;
+          }
+
+          .garage-remove-btn {
+              width: 100%;
+              justify-content: center;
+          }
+
+          .garage-vehicle-details {
+              grid-template-columns: repeat(2, 1fr);
+          }
+      }
+
+      /* Results Tab - Save/Remove Buttons */
+      .save-vehicle-btn,
+      .remove-vehicle-btn {
+          border: none;
+          padding: 0.75rem 1.5rem;
+          border-radius: 8px;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          position: relative;
+          z-index: 10;
+      }
+
+      .save-vehicle-btn {
+          background: #10b981;
+          color: white;
+      }
+
+      .save-vehicle-btn:hover {
+          background: #059669;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+      }
+
+      .remove-vehicle-btn {
+          background: #ef4444;
+          color: white;
+      }
+
+      .remove-vehicle-btn:hover {
+          background: #dc2626;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
       }
 
       /* Authentication Styles */
