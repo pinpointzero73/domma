@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Router - Domma Showcase</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../showcase/css/domma-showcase.css">
+  <style>
+    .router-demo-container {
+      border: 2px solid var(--color-border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      background: var(--color-bg-secondary);
+      margin-top: 1rem;
+    }
+
+    .router-demo-nav {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .router-demo-nav a {
+      padding: 0.5rem 1rem;
+      background: var(--color-primary);
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .router-demo-nav a:hover {
+      background: var(--color-primary-dark);
+    }
+
+    .router-demo-nav a.active {
+      background: var(--color-success);
+    }
+
+    #router-app {
+      min-height: 200px;
+      padding: 1.5rem;
+      background: var(--color-bg);
+      border-radius: 4px;
+      border: 1px solid var(--color-border);
+    }
+
+    .lifecycle-log {
+      max-height: 200px;
+      overflow-y: auto;
+      background: var(--color-bg-code);
+      padding: 0.75rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.875rem;
+      margin-top: 1rem;
+    }
+
+    .lifecycle-log-entry {
+      padding: 0.25rem 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .lifecycle-log-entry:last-child {
+      border-bottom: none;
+    }
+
+    .route-table code {
+      background: var(--color-bg-code);
+      padding: 0.125rem 0.375rem;
+      border-radius: 3px;
+      font-size: 0.875em;
+    }
+  </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="subpage">
+
+<div class="hero hero-center bg-ambient-rotate-spotlight">
+    <div class="hero-content">
+        <div class="hero-title">Router</div>
+        <div class="hero-subtitle">Hash-based SPA routing with middleware support, view lifecycle hooks, and navigation events.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+  <!-- Overview -->
+  <section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Overview</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        <code>Domma.router</code> provides hash-based client-side routing for single-page applications (SPAs).
+        Build dynamic, multi-page experiences without full page reloads.
+      </p>
+      <div class="alert alert-info mb-4">
+        <strong>Alias:</strong> Use <code>R</code> as a shorthand for <code>Domma.router</code>
+      </div>
+      <h3 class="text-lg font-semibold mb-2">Key Features</h3>
+      <ul class="mb-4">
+        <li><strong>Hash-based routing</strong> - Works without server configuration (#/path)</li>
+        <li><strong>Dynamic route parameters</strong> - Extract params from URLs (/user/:id)</li>
+        <li><strong>View lifecycle hooks</strong> - onEnter, onMount, onLeave for component control</li>
+        <li><strong>Middleware & guards</strong> - Authentication, logging, and access control</li>
+        <li><strong>Smooth transitions</strong> - Fade animations between views</li>
+        <li><strong>Pub/Sub events</strong> - Integration with Domma's event system</li>
+        <li><strong>Template rendering</strong> - Works with Domma's template engine</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- API Reference -->
+  <section class="card mb-6" data-section="API Reference">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">API Reference</h2>
+    </div>
+    <div class="card-body">
+      <table class="table route-table">
+        <thead>
+        <tr>
+          <th>Method</th>
+          <th>Signature</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>init()</code></td>
+          <td><code>R.init(options)</code></td>
+          <td>Initialise router with container, routes, and views</td>
+        </tr>
+        <tr>
+          <td><code>navigate()</code></td>
+          <td><code>R.navigate(path, options)</code></td>
+          <td>Navigate to a route programmatically</td>
+        </tr>
+        <tr>
+          <td><code>back()</code></td>
+          <td><code>R.back()</code></td>
+          <td>Go back in browser history</td>
+        </tr>
+        <tr>
+          <td><code>forward()</code></td>
+          <td><code>R.forward()</code></td>
+          <td>Go forward in browser history</td>
+        </tr>
+        <tr>
+          <td><code>current()</code></td>
+          <td><code>R.current()</code></td>
+          <td>Get current route information</td>
+        </tr>
+        <tr>
+          <td><code>route()</code></td>
+          <td><code>R.route(config)</code></td>
+          <td>Add a single route definition</td>
+        </tr>
+        <tr>
+          <td><code>view()</code></td>
+          <td><code>R.view(name, viewDef)</code></td>
+          <td>Register a view (template or function)</td>
+        </tr>
+        <tr>
+          <td><code>use()</code></td>
+          <td><code>R.use(middleware)</code></td>
+          <td>Add middleware function for route guards</td>
+        </tr>
+        <tr>
+          <td><code>destroy()</code></td>
+          <td><code>R.destroy()</code></td>
+          <td>Clean up router and remove listeners</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <h3 class="text-lg font-semibold mt-6 mb-3">Config Options</h3>
+      <pre class="code-block language-javascript">{
+    container: '#app',           // View container selector
+    routes: [                    // Route definitions
+        { path: '/', view: 'home', title: 'Home' },
+        { path: '/about', view: 'about', title: 'About' },
+        { path: '/user/:id', view: 'user', title: 'User Profile' }
+    ],
+    views: {                     // View registry
+        home: homeView,
+        about: aboutView,
+        user: userView
+    },
+    default: '/',                // Default route
+    notFound: '404',             // 404 view name
+    transitions: {               // Transition config
+        enter: 'fadeIn',
+        leave: 'fadeOut',
+        duration: 200
+    }
+}</pre>
+    </div>
+  </section>
+
+  <!-- Basic Setup -->
+  <section class="card mb-6" data-section="Basic Setup">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Basic Setup</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">Initialise the router with views and routes:</p>
+
+      <h4 class="category-title-style mb-3">1. Define Views</h4>
+      <pre class="code-block language-javascript">// Simple string template
+const homeView = {
+    template: `
+        &lt;div class="page-home"&gt;
+            &lt;h1&gt;Welcome Home&lt;/h1&gt;
+            &lt;p&gt;This is the home page.&lt;/p&gt;
+        &lt;/div&gt;
+    `
+};
+
+// View with lifecycle hooks
+const aboutView = {
+    template: `
+        &lt;div class="page-about"&gt;
+            &lt;h1&gt;About Us&lt;/h1&gt;
+            &lt;p&gt;Learn more about our company.&lt;/p&gt;
+        &lt;/div&gt;
+    `,
+
+    // Called after view is mounted in DOM
+    onMount($container) {
+        console.log('About view mounted');
+        // Initialise components, bind events, etc.
+    }
+};
+
+// View registry
+const views = {
+    home: homeView,
+    about: aboutView
+};</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">2. Initialise Router</h4>
+      <pre class="code-block language-javascript">R.init({
+    container: '#app',
+    routes: [
+        { path: '/', view: 'home', title: 'Home' },
+        { path: '/about', view: 'about', title: 'About' }
+    ],
+    views: views,
+    transitions: { duration: 300 }
+});
+
+// Router is now active and listening for hash changes</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">3. Navigation Links</h4>
+      <pre class="code-block language-html">&lt;nav&gt;
+    &lt;a href="#/"&gt;Home&lt;/a&gt;
+    &lt;a href="#/about"&gt;About&lt;/a&gt;
+&lt;/nav&gt;
+
+&lt;div id="app"&gt;
+    &lt;!-- Views render here --&gt;
+&lt;/div&gt;</pre>
+    </div>
+  </section>
+
+  <!-- Route Parameters -->
+  <section class="card mb-6" data-section="Route Parameters">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Route Parameters</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">Extract dynamic segments from URLs:</p>
+
+      <h4 class="category-title-style mb-3">Define Dynamic Routes</h4>
+      <pre class="code-block language-javascript">// Route with :id parameter
+R.route({
+    path: '/user/:id',
+    view: 'user',
+    title: 'User Profile'
+});
+
+// Route with multiple parameters
+R.route({
+    path: '/post/:category/:slug',
+    view: 'post',
+    title: 'Blog Post'
+});</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">Access Parameters in Views</h4>
+      <pre class="code-block language-javascript">const userView = {
+    // Function template - receives params
+    template: async (params) => {
+        // params.id contains the :id from URL
+        const userId = params.id;
+
+        // Fetch user data
+        const user = await H.get(`/api/users/${userId}`);
+
+        return `
+            &lt;div class="page-user"&gt;
+                &lt;h1&gt;${user.name}&lt;/h1&gt;
+                &lt;p&gt;Email: ${user.email}&lt;/p&gt;
+                &lt;p&gt;User ID: ${params.id}&lt;/p&gt;
+            &lt;/div&gt;
+        `;
+    },
+
+    onMount($container) {
+        console.log('User view mounted');
+    }
+};
+
+// Navigate: R.navigate('/user/123')
+// params = { id: '123' }</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">Multiple Parameters</h4>
+      <pre class="code-block language-javascript">const postView = {
+    template: (params) => {
+        // params = { category: 'tech', slug: 'my-post' }
+        return `
+            &lt;div class="page-post"&gt;
+                &lt;h1&gt;Category: ${params.category}&lt;/h1&gt;
+                &lt;h2&gt;Slug: ${params.slug}&lt;/h2&gt;
+            &lt;/div&gt;
+        `;
+    }
+};
+
+// URL: #/post/tech/my-post
+// params = { category: 'tech', slug: 'my-post' }</pre>
+    </div>
+  </section>
+
+  <!-- View Lifecycle -->
+  <section class="card mb-6" data-section="View Lifecycle">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">View Lifecycle Hooks</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">Control view behavior with lifecycle hooks:</p>
+
+      <h4 class="category-title-style mb-3">onEnter - Before Rendering</h4>
+      <pre class="code-block language-javascript">const profileView = {
+    template: `&lt;div id="profile"&gt;&lt;/div&gt;`,
+
+    // Called before view renders
+    async onEnter(params) {
+        console.log('Entering profile view', params);
+
+        // Fetch data, validate auth, etc.
+        const user = await H.get(`/api/users/${params.id}`);
+
+        // Can return false to cancel navigation
+        if (!user) {
+            E.toast('User not found', { type: 'error' });
+            return false;  // Cancel navigation
+        }
+
+        // Store data for template
+        this.userData = user;
+    }
+};</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">onMount - After Rendering</h4>
+      <pre class="code-block language-javascript">const dashboardView = {
+    template: `
+        &lt;div class="dashboard"&gt;
+            &lt;button id="refresh-btn"&gt;Refresh&lt;/button&gt;
+            &lt;div id="data-container"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    `,
+
+    // Called after view is in DOM
+    onMount($container) {
+        console.log('Dashboard mounted');
+
+        // Initialise components
+        E.tooltip($container.find('[data-tooltip]'));
+
+        // Bind event handlers
+        $container.find('#refresh-btn').on('click', () => {
+            this.refreshData();
+        });
+
+        // Start intervals/timers
+        this.interval = setInterval(() => {
+            this.updateStats();
+        }, 5000);
+    }
+};</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">onLeave - Before Leaving</h4>
+      <pre class="code-block language-javascript">const editorView = {
+    template: `&lt;textarea id="editor"&gt;&lt;/textarea&gt;`,
+
+    // Called before leaving view
+    onLeave() {
+        console.log('Leaving editor');
+
+        // Clean up intervals/timers
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+
+        // Unbind events
+        $('#editor').off('input');
+
+        // Warn about unsaved changes
+        if (this.hasUnsavedChanges) {
+            const leave = confirm('You have unsaved changes. Leave anyway?');
+            return leave;  // false = cancel navigation
+        }
+    }
+};</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">Complete Lifecycle Example</h4>
+      <pre class="code-block language-javascript">const fullLifecycleView = {
+    template: `&lt;div class="view"&gt;Content&lt;/div&gt;`,
+
+    async onEnter(params) {
+        // 1. Before render - fetch data, check auth
+        console.log('1. onEnter', params);
+        this.data = await H.get('/api/data');
+    },
+
+    onMount($container) {
+        // 2. After mount - init components, bind events
+        console.log('2. onMount', $container);
+        $container.find('button').on('click', this.handleClick);
+    },
+
+    onLeave() {
+        // 3. Before leave - cleanup, confirm navigation
+        console.log('3. onLeave');
+        $container.find('button').off('click');
+        return true;  // Allow navigation
+    }
+};</pre>
+    </div>
+  </section>
+
+  <!-- Middleware -->
+  <section class="card mb-6" data-section="Middleware & Guards">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Middleware & Route Guards</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">Use middleware to protect routes, log navigation, or modify behavior:</p>
+
+      <h4 class="category-title-style mb-3">Authentication Guard</h4>
+      <pre class="code-block language-javascript">// Add auth middleware
+R.use((to, from, next) => {
+    console.log(`Navigating from ${from?.path} to ${to.path}`);
+
+    // Check if route requires authentication
+    if (to.meta?.requiresAuth) {
+        const isAuthenticated = S.get('auth_token');
+
+        if (!isAuthenticated) {
+            E.toast('Please login first', { type: 'warning' });
+            R.navigate('/login');  // Redirect to login
+            return;  // Don't call next() = block navigation
+        }
+    }
+
+    next();  // Allow navigation
+});
+
+// Protected route
+R.route({
+    path: '/dashboard',
+    view: 'dashboard',
+    title: 'Dashboard',
+    meta: { requiresAuth: true }  // Requires login
+});</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">Logging Middleware</h4>
+      <pre class="code-block language-javascript">// Log all navigation
+R.use((to, from, next) => {
+    console.log('Router:', {
+        from: from?.path,
+        to: to.path,
+        params: to.params,
+        timestamp: new Date().toISOString()
+    });
+
+    next();  // Continue
+});</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">Multiple Middleware</h4>
+      <pre class="code-block language-javascript">// Middleware runs in order
+
+// 1. Logging
+R.use((to, from, next) => {
+    console.log(`Route: ${to.path}`);
+    next();
+});
+
+// 2. Authentication
+R.use((to, from, next) => {
+    if (to.meta?.requiresAuth && !isLoggedIn()) {
+        R.navigate('/login');
+        return;
+    }
+    next();
+});
+
+// 3. Analytics
+R.use((to, from, next) => {
+    trackPageView(to.path);
+    next();
+});</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">Role-Based Access Control</h4>
+      <pre class="code-block language-javascript">R.use((to, from, next) => {
+    const userRole = S.get('user_role');
+    const requiredRole = to.meta?.role;
+
+    if (requiredRole && userRole !== requiredRole) {
+        E.toast('Access denied', { type: 'error' });
+        R.navigate('/');
+        return;
+    }
+
+    next();
+});
+
+// Admin-only route
+R.route({
+    path: '/admin',
+    view: 'admin',
+    title: 'Admin Panel',
+    meta: { requiresAuth: true, role: 'admin' }
+});</pre>
+    </div>
+  </section>
+
+  <!-- Programmatic Navigation -->
+  <section class="card mb-6" data-section="Programmatic Navigation">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Programmatic Navigation</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">Navigate using JavaScript instead of links:</p>
+
+      <h4 class="category-title-style mb-3">Navigate to Route</h4>
+      <pre class="code-block language-javascript">// Basic navigation
+R.navigate('/about');
+
+// Navigate with parameters
+R.navigate('/user/123');
+
+// Navigate with replace (no history entry)
+R.navigate('/home', { replace: true });</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">History Navigation</h4>
+      <pre class="code-block language-javascript">// Go back
+R.back();
+
+// Go forward
+R.forward();
+
+// Get current route
+const current = R.current();
+console.log(current.path);    // '/user/123'
+console.log(current.params);  // { id: '123' }</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">After Action Navigation</h4>
+      <pre class="code-block language-javascript">// Navigate after form submission
+$('#contact-form').on('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = {
+        name: $('#name').val(),
+        email: $('#email').val()
+    };
+
+    try {
+        await H.post('/api/contact', formData);
+        E.toast('Message sent!', { type: 'success' });
+        R.navigate('/thank-you');
+    } catch (err) {
+        E.toast('Error: ' + err.message, { type: 'error' });
+    }
+});
+
+// Navigate after login
+async function login(email, password) {
+    const response = await H.post('/api/login', { email, password });
+    S.set('auth_token', response.token);
+    E.toast('Welcome back!', { type: 'success' });
+    R.navigate('/dashboard');
+}</pre>
+    </div>
+  </section>
+
+  <!-- Pub/Sub Events -->
+  <section class="card mb-6" data-section="Pub/Sub Events">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Pub/Sub Navigation Events</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">Router publishes events via the Models pub/sub system:</p>
+
+      <h4 class="category-title-style mb-3">Available Events</h4>
+      <pre class="code-block language-javascript">// Router initialization
+M.subscribe('router:ready', ({ router }) => {
+    console.log('Router initialised', router);
+});
+
+// Before navigation
+M.subscribe('router:beforeChange', ({ from, to }) => {
+    console.log(`Leaving ${from?.path}, going to ${to.path}`);
+
+    // Update navbar active state
+    $('.nav-link').removeClass('active');
+    $(`.nav-link[href="#${to.path}"]`).addClass('active');
+});
+
+// After navigation
+M.subscribe('router:afterChange', ({ from, to }) => {
+    console.log(`Now on ${to.path}`);
+
+    // Track pageview
+    analytics.track('pageview', { path: to.path });
+
+    // Scroll to top
+    window.scrollTo(0, 0);
+});</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">Sync Navbar with Router</h4>
+      <pre class="code-block language-javascript">// Highlight active nav item
+M.subscribe('router:afterChange', ({ to }) => {
+    // Remove all active classes
+    $('.nav-item').removeClass('active');
+
+    // Add to current route
+    $(`.nav-item[href="#${to.path}"]`).addClass('active');
+});
+
+// Handle nested routes
+M.subscribe('router:afterChange', ({ to }) => {
+    const section = to.path.split('/')[1];
+    $(`.nav-item[data-section="${section}"]`).addClass('active');
+});</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">Integration with Components</h4>
+      <pre class="code-block language-javascript">// Notify components of route changes
+M.subscribe('router:afterChange', ({ to }) => {
+    // Trigger breadcrumb update
+    M.publish('breadcrumbs:update', { path: to.path });
+
+    // Update sidebar
+    M.publish('sidebar:select', { section: to.params.section });
+
+    // Refresh data tables
+    if (to.path.includes('/dashboard')) {
+        M.publish('table:refresh');
+    }
+});</pre>
+    </div>
+  </section>
+
+  <!-- Interactive Demo -->
+  <section class="card mb-6" data-section="Live Demo">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Interactive Demo</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">A live mini-SPA demonstrating router features:</p>
+
+      <div class="router-demo-container">
+        <div class="router-demo-nav">
+          <a href="#demo/" class="demo-nav-link">Home</a>
+          <a href="#demo/about" class="demo-nav-link">About</a>
+          <a href="#demo/user/123" class="demo-nav-link">User 123</a>
+          <a href="#demo/user/456" class="demo-nav-link">User 456</a>
+          <button class="btn btn-sm btn-outline" id="demo-back">← Back</button>
+          <button class="btn btn-sm btn-outline" id="demo-forward">Forward →</button>
+        </div>
+
+        <div id="router-app">
+          <!-- Views render here -->
+        </div>
+
+        <div class="lifecycle-log" id="lifecycle-log">
+          <div class="text-muted mb-2"><strong>Lifecycle Log:</strong></div>
+        </div>
+      </div>
+
+      <h4 class="category-title-style mb-3 mt-4">Demo Source Code</h4>
+      <pre class="code-block language-javascript">// Define views with lifecycle logging
+const demoViews = {
+    home: {
+        template: `
+            &lt;h2&gt;🏠 Home Page&lt;/h2&gt;
+            &lt;p&gt;Welcome to the router demo!&lt;/p&gt;
+        `,
+        onMount($el) {
+            addLog('home: onMount called');
+        }
+    },
+
+    about: {
+        template: `
+            &lt;h2&gt;ℹ️ About Page&lt;/h2&gt;
+            &lt;p&gt;This demo shows router lifecycle hooks.&lt;/p&gt;
+        `,
+        onMount($el) {
+            addLog('about: onMount called');
+        }
+    },
+
+    user: {
+        template: (params) => `
+            &lt;h2&gt;👤 User Profile&lt;/h2&gt;
+            &lt;p&gt;Viewing user ID: &lt;strong&gt;${params.id}&lt;/strong&gt;&lt;/p&gt;
+        `,
+        onEnter(params) {
+            addLog(`user: onEnter with id=${params.id}`);
+        },
+        onMount($el) {
+            addLog('user: onMount called');
+        }
+    }
+};
+
+// Initialise demo router
+R.init({
+    container: '#router-app',
+    routes: [
+        { path: '/demo/', view: 'home', title: 'Demo Home' },
+        { path: '/demo/about', view: 'about', title: 'Demo About' },
+        { path: '/demo/user/:id', view: 'user', title: 'Demo User' }
+    ],
+    views: demoViews
+});</pre>
+    </div>
+  </section>
+
+  <!-- Best Practices -->
+  <section class="card" data-section="Best Practices">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Best Practices</h2>
+    </div>
+    <div class="card-body">
+      <h4 class="category-title-style mb-3">View Organization</h4>
+      <ul class="mb-4">
+        <li><strong>Separate concerns</strong> - Keep views in separate files/modules</li>
+        <li><strong>Use lifecycle hooks</strong> - Clean up in onLeave to prevent memory leaks</li>
+        <li><strong>Template functions</strong> - Use functions for dynamic content, strings for static</li>
+        <li><strong>Async loading</strong> - Fetch data in onEnter, not in templates</li>
+      </ul>
+
+      <h4 class="category-title-style mb-3 mt-4">Route Design</h4>
+      <ul class="mb-4">
+        <li><strong>RESTful patterns</strong> - Use resource-based URLs (/users, /posts/:id)</li>
+        <li><strong>Descriptive paths</strong> - Make URLs readable and meaningful</li>
+        <li><strong>Consistent structure</strong> - Follow a predictable pattern</li>
+        <li><strong>Meta data</strong> - Use route.meta for permissions, analytics tags, etc.</li>
+      </ul>
+
+      <h4 class="category-title-style mb-3 mt-4">Performance</h4>
+      <ul class="mb-4">
+        <li><strong>Lazy load views</strong> - Load view code only when needed</li>
+        <li><strong>Cleanup timers</strong> - Clear intervals/timeouts in onLeave</li>
+        <li><strong>Unbind events</strong> - Remove event listeners to prevent memory leaks</li>
+        <li><strong>Cache data</strong> - Store fetched data to avoid redundant requests</li>
+      </ul>
+
+      <h4 class="category-title-style mb-3 mt-4">Security</h4>
+      <ul class="mb-4">
+        <li><strong>Validate params</strong> - Always validate/sanitise route parameters</li>
+        <li><strong>Auth middleware</strong> - Protect routes with authentication checks</li>
+        <li><strong>XSS protection</strong> - Sanitise user-generated content in templates</li>
+        <li><strong>HTTPS required</strong> - Use secure connections in production</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  // Scan icons
+  Domma.icons.scan();
+
+  // Lifecycle logging utility
+  function addLog(message) {
+    const log = $('#lifecycle-log');
+    if (log.length === 0) return; // Element doesn't exist yet
+
+    const entry = $('<div class="lifecycle-log-entry">').text(`[${new Date().toLocaleTimeString()}] ${message}`);
+    log.append(entry);
+
+    // Scroll to bottom
+    if (log[0]) {
+      log[0].scrollTop = log[0].scrollHeight;
+    }
+  }
+
+  // Demo views with lifecycle hooks
+  const demoViews = {
+    home: {
+      template: `
+        <div style="text-align: center;">
+          <h2>🏠 Home Page</h2>
+          <p>Welcome to the router demo!</p>
+          <p class="text-muted">Click the navigation links above to explore different routes.</p>
+        </div>
+      `,
+      onMount($el) {
+        addLog('✅ home: onMount called');
+      },
+      onLeave() {
+        addLog('👋 home: onLeave called');
+      }
+    },
+
+    about: {
+      template: `
+        <div style="text-align: center;">
+          <h2>ℹ️ About Page</h2>
+          <p>This demo shows router lifecycle hooks and navigation.</p>
+          <p class="text-muted">Watch the lifecycle log below as you navigate!</p>
+        </div>
+      `,
+      onMount($el) {
+        addLog('✅ about: onMount called');
+      },
+      onLeave() {
+        addLog('👋 about: onLeave called');
+      }
+    },
+
+    user: {
+      template: (params) => `
+        <div style="text-align: center;">
+          <h2>👤 User Profile</h2>
+          <p>Viewing user ID: <strong style="color: var(--color-primary);">${params.id}</strong></p>
+          <p class="text-muted">Notice how the ID changes in the URL and template!</p>
+        </div>
+      `,
+      onEnter(params) {
+        addLog(`🔍 user: onEnter with id=${params.id}`);
+      },
+      onMount($el) {
+        addLog('✅ user: onMount called');
+      },
+      onLeave() {
+        addLog('👋 user: onLeave called');
+      }
+    },
+
+    '404': {
+      template: (params) => `
+        <div style="text-align: center; padding: 2rem;">
+          <h2 style="font-size: 3rem;">404</h2>
+          <p>Page not found: <code>${params.path}</code></p>
+          <a href="#demo/" class="btn btn-primary mt-3">Go Home</a>
+        </div>
+      `
+    }
+  };
+
+  // Initialise demo router
+  R.init({
+    container: '#router-app',
+    routes: [
+      { path: '/demo/', view: 'home', title: 'Demo - Home' },
+      { path: '/demo/about', view: 'about', title: 'Demo - About' },
+      { path: '/demo/user/:id', view: 'user', title: 'Demo - User Profile' }
+    ],
+    views: demoViews,
+    default: '/demo/',
+    notFound: '404',
+    transitions: { duration: 250 }
+  });
+
+  // Log router events
+  M.subscribe('router:ready', () => {
+    addLog('🚀 Router initialised');
+  });
+
+  M.subscribe('router:beforeChange', ({ from, to }) => {
+    const fromPath = from?.path || 'none';
+    addLog(`🧭 Navigating: ${fromPath} → ${to.path}`);
+  });
+
+  M.subscribe('router:afterChange', ({ to }) => {
+    addLog(`📍 Navigation complete: ${to.path}`);
+
+    // Update active nav links
+    $('.demo-nav-link').removeClass('active');
+    $(`.demo-nav-link[href="#${to.path}"]`).addClass('active');
+  });
+
+  // History navigation buttons
+  $('#demo-back').on('click', () => {
+    addLog('⬅️ Back button clicked');
+    R.back();
+  });
+
+  $('#demo-forward').on('click', () => {
+    addLog('➡️ Forward button clicked');
+    R.forward();
+  });
+
+  // Initial log
+  addLog('📄 Page loaded - router ready');
+</script>
+</body>
+</html>
