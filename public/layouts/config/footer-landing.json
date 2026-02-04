@@ -3,8 +3,9 @@
   "layout": "columns",
   "variant": "dark",
   "position": "static",
+  "className": "bg-ambient-rotate-glow",
   "brand": {
-    "text": "Domma",
+    "text": "DommaJS",
     "url": "index.html",
     "description": "Dynamic Object Manipulation & Modeling API - A lightweight, zero-dependency JavaScript framework"
   },
