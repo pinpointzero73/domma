@@ -1,8 +1,8 @@
 /*!
- * Domma Complete CSS Bundle v0.11.0
+ * Domma Complete CSS Bundle v0.12.0
  * Dynamic Object Manipulation & Modeling API
  * (c) 2026 Darryl Waterhouse & DCBW-IT
- * Built: 2026-02-03T22:07:32.427Z
+ * Built: 2026-02-04T09:28:09.851Z
  */
 
 /* ============================================
@@ -11,11 +11,11 @@
    ============================================ */
 
 /*!
- * Domma Core CSS v0.11.0
+ * Domma Core CSS v0.12.0
  * Dynamic Object Manipulation & Modeling API
  * (c) 2026 Darryl Waterhouse & DCBW-IT
- * Built: 2026-02-03T22:07:31.877Z
- * Commit: 02f4dcb
+ * Built: 2026-02-04T09:28:09.494Z
+ * Commit: 0e3b45b
  */
 
 /**
@@ -3802,21 +3802,29 @@ code, pre {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
-    animation: dm-ambient-rotate-dual-1 40s linear infinite;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
+    animation: dm-ambient-rotate-dual-1 30s linear infinite;
     will-change: transform;
+    z-index: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    transform-origin: center center;
 }
 
 .bg-ambient-rotate-dual::after {
     content: '';
     position: absolute;
     top: -50%;
-    right: -50%;
+    left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle at 70% 70%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
-    animation: dm-ambient-rotate-dual-2 35s linear infinite;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+    animation: dm-ambient-rotate-dual-2 25s linear infinite;
     will-change: transform;
+    z-index: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    transform-origin: center center;
 }
 
 .bg-ambient-rotate-spotlight {
@@ -3828,12 +3836,16 @@ code, pre {
     content: '';
     position: absolute;
     top: -50%;
-    left: -25%;
-    width: 150%;
+    left: -50%;
+    width: 200%;
     height: 200%;
-    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
     animation: dm-ambient-rotate-spotlight 25s linear infinite;
     will-change: transform;
+    z-index: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    transform-origin: center center;
 }
 
 /* Utility Classes - Floating Shapes */
@@ -4455,11 +4467,11 @@ body.dm-cloaked.dm-ready {
    ============================================ */
 
 /*!
- * Domma Grid CSS v0.11.0
+ * Domma Grid CSS v0.12.0
  * Dynamic Object Manipulation & Modeling API
  * (c) 2026 Darryl Waterhouse & DCBW-IT
- * Built: 2026-02-03T22:07:31.889Z
- * Commit: 02f4dcb
+ * Built: 2026-02-04T09:28:09.502Z
+ * Commit: 0e3b45b
  */
 
 /**
@@ -5056,11 +5068,11 @@ body.dm-cloaked.dm-ready {
    ============================================ */
 
 /*!
- * Domma Elements CSS v0.11.0
+ * Domma Elements CSS v0.12.0
  * Dynamic Object Manipulation & Modeling API
  * (c) 2026 Darryl Waterhouse & DCBW-IT
- * Built: 2026-02-03T22:07:31.901Z
- * Commit: 02f4dcb
+ * Built: 2026-02-04T09:28:09.512Z
+ * Commit: 0e3b45b
  */
 
 /**
@@ -11605,11 +11617,11 @@ code {
    ============================================ */
 
 /*!
- * Domma Themes v0.11.0
+ * Domma Themes v0.12.0
  * Dynamic Object Manipulation & Modeling API
  * (c) 2026 Darryl Waterhouse & DCBW-IT
- * Built: 2026-02-03T22:07:31.841Z
- * Commit: 02f4dcb
+ * Built: 2026-02-04T09:28:09.466Z
+ * Commit: 0e3b45b
  */
 
 /**
