@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Domma - Dynamic Object Manipulation & Modeling API</title>
+  <title>DommaJS - Dynamic Object Manipulation & Modeling API</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="alternate icon" href="assets/logo/domma-icon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +25,7 @@
           justify-content: center;
           text-align: center;
           padding: 3rem 1rem 2rem 1rem; /* Reduced horizontal padding on mobile */
-          background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
+          /* Background now controlled by bg-dark class for dark-charcoal theme */
           color: var(--dm-white);
           overflow: hidden; /* Required for ambient effects */
       }
@@ -149,7 +149,7 @@
       }
 
       .feature:hover {
-          animation: pulse 1.5s ease-in-out infinite;
+          animation: heartbeat 1.5s ease-in-out infinite;
           color: white;
       }
 
@@ -158,14 +158,12 @@
           color: white;
       }
 
-      @keyframes pulse {
+      @keyframes heartbeat {
           0%, 100% {
               transform: scale(1);
-              box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3);
           }
           50% {
               transform: scale(1.05);
-              box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
           }
       }
 
@@ -397,11 +395,11 @@
 
   </style>
 </head>
-<body class="dm-theme-silver-light dm-cloaked" data-layout="splash">
+<body class="dm-theme-charcoal-dark dm-cloaked" data-layout="splash">
 
 <nav id="main-navbar"></nav>
 
-<section class="splash-hero bg-ambient-rotate-dual">
+<section class="splash-hero bg-dark bg-ambient-rotate-glow">
   <div class="splash-hero-grid">
     <!-- Left column: Logo, heading, and backronym -->
     <div>
@@ -417,7 +415,7 @@
                 stroke-linejoin="round"/>
           <circle cx="24" cy="24" r="3" fill="currentColor"/>
         </svg>
-        <h1 class="logo" style="margin: 0;">Domma</h1>
+        <h1 class="logo" style="margin: 0;">DommaJS</h1>
       </div>
       <p class="backronym" style="text-align: left; margin: 0;">
         <strong>D</strong>ynamic <strong>O</strong>bject <strong>M</strong>anipulation & <strong>M</strong>odeling
@@ -444,11 +442,14 @@
   <div class="features" id="splash-features"></div>
 
   <!-- Carousel slides (rendered dynamically from layouts/config/carousel-slides.json) -->
+  <!-- COMMENTED OUT: Carousel for reconsideration -->
+  <!--
   <div class="splash-carousel">
     <div id="features-carousel" class="carousel">
       <div class="carousel-track"></div>
     </div>
   </div>
+  -->
 
 <!--  <div class="module-cards">-->
 <!--    <a href="showcase/config/index.html" class="card module-card card-hover">-->
@@ -753,6 +754,8 @@
       }
     };
 
+    // COMMENTED OUT: Carousel for reconsideration
+    /*
     // Load and render carousel slides from JSON config
     const renderCarouselSlides = async () => {
       try {
@@ -782,11 +785,15 @@
         console.error('Failed to load carousel slides:', error);
       }
     };
+    */
 
-    // Render features and carousel before animations
+    // Render features before animations
     await renderFeatures();
-    await renderCarouselSlides();
+    // COMMENTED OUT: Carousel for reconsideration
+    // await renderCarouselSlides();
 
+    // COMMENTED OUT: Carousel setup
+    /*
     // Declarative setup for carousel
     $.setup({
       '#features-carousel': {
@@ -802,6 +809,7 @@
         }
       }
     });
+    */
 
     // Stagger animations for splash page elements
     const animateElements = (selector, delay = 100, initialTransform = 'translateY(20px)') => {
@@ -828,7 +836,8 @@
     // Apply stagger animations to page sections
     animateElements('.feature', 100);                    // 12 features
     animateElements('.module-card', 80);                 // 13 module cards
-    animateElements('.splash-carousel', 150);            // Carousel (single element)
+    // COMMENTED OUT: Carousel animation
+    // animateElements('.splash-carousel', 150);            // Carousel (single element)
     animateElements('.cta-group', 200);                  // CTA buttons
     animateElements('.miniapps-grid .col', 120);        // MiniApps cards
   });
