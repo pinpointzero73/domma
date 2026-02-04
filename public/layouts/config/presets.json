@@ -3,7 +3,7 @@
     "navbar": {
       "type": "dropdowns",
       "brand": {
-        "text": "Domma",
+        "text": "DommaJS",
         "url": "index.html",
         "showVersion": true
       },
