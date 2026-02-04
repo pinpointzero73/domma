@@ -1,6 +1,18 @@
 {
   "releases": [
     {
+      "year": "v0.12.0",
+      "title": "SPA Router & Ambient Effects",
+      "description": "Hash-based SPA routing with middleware support, view lifecycle hooks, and navigation events. Added CSS-only ambient background effects (rotating glows, floating blobs, waves) for stunning visual presentations without JavaScript.",
+      "date": "2026-02-04"
+    },
+    {
+      "year": "v0.11.1",
+      "title": "Address MiniApp",
+      "description": "New production MiniApp for UK address lookup with postcode search. Features ONS local data integration, premium getAddress.io provider support, bar charts for analytics, and star ratings for saved addresses.",
+      "date": "2026-02-02"
+    },
+    {
       "year": "v0.11.0",
       "title": "Schema Builder - Visual Blueprint Designer",
       "description": "Build Domma Blueprints visually with drag-and-drop. Features 21 field types, live form preview with validation testing, 12-column grid layout support, and multi-format export to JavaScript, JSON, or TypeScript.",
@@ -37,5 +49,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.10.2"
+  "latestVersion": "v0.12.0"
 }
