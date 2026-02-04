@@ -33,6 +33,12 @@
           "iconSize": 42
         },
         {
+          "label": "Router",
+          "url": "showcase/router/index.html",
+          "icon": "map",
+          "iconSize": 42
+        },
+        {
           "label": "Integrations",
           "url": "showcase/integrations/index.html",
           "icon": "box",
