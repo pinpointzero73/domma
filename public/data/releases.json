@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.12.1",
+      "title": "DommaJS Brand Refresh & Bug Fixes",
+      "description": "Rebranded to DommaJS across splash page, navbar, and footer. Improved feature card animations with smooth breathing effect. Fixed critical backToTop bug that could destroy page body element when selector parameter was used.",
+      "date": "2026-02-04"
+    },
+    {
       "year": "v0.12.0",
       "title": "SPA Router & Ambient Effects",
       "description": "Hash-based SPA routing with middleware support, view lifecycle hooks, and navigation events. Added CSS-only ambient background effects (rotating glows, floating blobs, waves) for stunning visual presentations without JavaScript.",
@@ -49,5 +55,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.12.0"
+  "latestVersion": "v0.12.1"
 }
