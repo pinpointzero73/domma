@@ -1,7 +1,7 @@
 # Domma Development Makefile
 # Makes local development builds easier with proper environment settings
 
-.PHONY: help build build-dev build-prod dev garage garage-prod docs miniapps kickstart clean
+.PHONY: help build build-dev build-prod dev garage garage-prod docs miniapps kickstart clean kill-ports
 
 # Default target
 help:
@@ -28,6 +28,8 @@ help:
 	@echo ""
 	@echo "Utilities:"
 	@echo "  make clean          - Clean dist and build artifacts"
+	@echo "  make kill-ports     - Kill processes on ports 3000, 3001, 3010"
+	@echo "                        (or specify: make kill-ports PORTS=\"8080 9000\")"
 	@echo "  make watch-garage   - Watch garage app for changes (requires nodemon)"
 	@echo ""
 
@@ -113,6 +115,16 @@ kickstart:
 	@echo "   - Fresh JavaScript with current timestamps"
 	@echo "   - Each bundle includes info.json metadata"
 	@echo "   - Ready for distribution"
+
+# Kill processes on development ports
+# Usage: make kill-ports PORTS="3000 3001 3010"
+kill-ports:
+	@PORTS_TO_KILL="$(if $(PORTS),$(PORTS),3000 3001 3010)"; \
+	echo "🔪 Killing processes on ports: $$PORTS_TO_KILL"; \
+	for port in $$PORTS_TO_KILL; do \
+		lsof -ti:$$port | xargs -r kill -9 2>/dev/null || true; \
+	done; \
+	echo "✅ Ports cleared"
 
 # Making Live
 enliven:
