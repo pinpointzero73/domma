@@ -1,4 +1,4 @@
-import sanitizeModule from './sanitize.js';
+import sanitiseModule from './sanitize.js';
 
 class DommaCollection {
     constructor(selector, context) {
@@ -367,19 +367,19 @@ class DommaCollection {
     /**
      * Get or set inner HTML with automatic XSS protection.
      *
-     * SECURITY: Content is sanitized by default to prevent XSS attacks.
+     * SECURITY: Content is sanitised by default to prevent XSS attacks.
      * Use {safe: false} option only for TRUSTED server content.
      *
      * @param {string} [content] - HTML content to set
-     * @param {Object} [options] - Sanitization options
-     * @param {boolean} [options.safe=true] - Sanitize content (true = safe, false = raw)
+     * @param {Object} [options] - Sanitisation options
+     * @param {boolean} [options.safe=true] - Sanitise content (true = safe, false = raw)
      * @param {string} [options.preset='default'] - Preset: 'default', 'strict', 'basic'
      * @param {Array} [options.allowedTags] - Custom allowed HTML tags
      * @param {Array} [options.allowedAttrs] - Custom allowed attributes
      * @returns {string|DommaCollection}
      *
      * @example
-     * // Safe by default (sanitized)
+     * // Safe by default (sanitised)
      * $('#content').html(userInput);
      *
      * // Unsafe - for TRUSTED content only
@@ -393,9 +393,9 @@ class DommaCollection {
             const firstEl = this.elements[0];
             return firstEl ? firstEl.innerHTML : '';
         }
-        const shouldSanitize = options.safe !== false;
-        if (shouldSanitize) {
-            content = sanitizeModule.sanitize(content, options);
+        const shouldSanitise = options.safe !== false;
+        if (shouldSanitise) {
+            content = sanitiseModule.sanitise(content, options);
         }
         return this.each((i, el) => {
             el.innerHTML = content;

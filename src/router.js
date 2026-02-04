@@ -20,10 +20,10 @@ export const router = {
     _middleware: [],
     _transitioning: false,
     _transitions: {},
-    _initialized: false,
+    _initialised: false,
 
     /**
-     * Initialize the router
+     * Initialise the router
      * @param {Object} options - Configuration options
      * @param {string} options.container - Selector for view container element
      * @param {Array} options.routes - Route definitions
@@ -48,8 +48,8 @@ export const router = {
      * });
      */
     init(options = {}) {
-        if (this._initialized) {
-            console.warn('[Domma Router] Already initialized');
+        if (this._initialised) {
+            console.warn('[Domma Router] Already initialised');
             return this;
         }
 
@@ -76,7 +76,7 @@ export const router = {
         // Handle initial route
         this._handleRouteChange();
 
-        this._initialized = true;
+        this._initialised = true;
 
         // Publish router ready event
         if (typeof window !== 'undefined' && window.M) {
@@ -98,8 +98,8 @@ export const router = {
      * R.navigate('/user/123', { replace: true });
      */
     navigate(path, options = {}) {
-        if (!this._initialized) {
-            console.error('[Domma Router] Router not initialized. Call R.init() first.');
+        if (!this._initialised) {
+            console.error('[Domma Router] Router not initialised. Call R.init() first.');
             return;
         }
 
@@ -216,7 +216,7 @@ export const router = {
         this._views = {};
         this._middleware = [];
         this._currentRoute = null;
-        this._initialized = false;
+        this._initialised = false;
     },
 
     // Internal: Handle route changes
@@ -373,7 +373,7 @@ export const router = {
                 html = this._renderTemplate(template, params);
             }
 
-            // Set HTML (bypass sanitization for trusted templates)
+            // Set HTML (bypass sanitisation for trusted templates)
             $container.html(html, {safe: false});
 
             // Scan for icons

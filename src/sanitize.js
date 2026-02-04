@@ -1,9 +1,9 @@
 /**
- * HTML Sanitization Module
+ * HTML Sanitisation Module
  * Provides XSS protection for DOM manipulation
  *
  * SECURITY: This module is critical for preventing XSS attacks
- * - Uses DOMPurify when available for robust sanitization
+ * - Uses DOMPurify when available for robust sanitisation
  * - Falls back to HTML escaping when DOMPurify is not present
  * - Provides configurable allowlists for different use cases
  */
@@ -90,7 +90,7 @@ const BASIC_CONFIG = {
 };
 
 /**
- * Sanitization presets
+ * Sanitisation presets
  */
 const PRESETS = {
     default: DEFAULT_CONFIG,
@@ -99,17 +99,17 @@ const PRESETS = {
 };
 
 /**
- * Main sanitization function
+ * Main sanitisation function
  *
- * @param {string} html - HTML string to sanitize
- * @param {Object} options - Sanitization options
+ * @param {string} html - HTML string to sanitise
+ * @param {Object} options - Sanitisation options
  * @param {string} options.preset - Preset name ('default', 'strict', 'basic')
  * @param {Array} options.allowedTags - Custom allowed tags (overrides preset)
  * @param {Array} options.allowedAttrs - Custom allowed attributes (overrides preset)
  * @param {boolean} options.allowDataAttrs - Allow data-* attributes
- * @returns {string} - Sanitized HTML
+ * @returns {string} - Sanitised HTML
  */
-export function sanitize(html, options = {}) {
+export function sanitise(html, options = {}) {
     if (html == null || html === '') {
         return '';
     }
@@ -134,7 +134,7 @@ export function sanitize(html, options = {}) {
         try {
             return window.DOMPurify.sanitize(html, config);
         } catch (error) {
-            console.error('DOMPurify sanitization failed:', error);
+            console.error('DOMPurify sanitisation failed:', error);
             // Fall back to escape
             return escapeHtml(html);
         }
@@ -146,25 +146,25 @@ export function sanitize(html, options = {}) {
 }
 
 /**
- * Sanitize for basic text with minimal formatting
+ * Sanitise for basic text with minimal formatting
  * Only allows: b, i, em, strong, br
  *
- * @param {string} html - HTML string to sanitize
- * @returns {string} - Sanitized HTML
+ * @param {string} html - HTML string to sanitise
+ * @returns {string} - Sanitised HTML
  */
-export function sanitizeBasic(html) {
-    return sanitize(html, { preset: 'basic' });
+export function sanitiseBasic(html) {
+    return sanitise(html, { preset: 'basic' });
 }
 
 /**
- * Sanitize for user-generated content (strict)
+ * Sanitise for user-generated content (strict)
  * Only allows: b, i, em, strong, p, br, a, ul, ol, li
  *
- * @param {string} html - HTML string to sanitize
- * @returns {string} - Sanitized HTML
+ * @param {string} html - HTML string to sanitise
+ * @returns {string} - Sanitised HTML
  */
-export function sanitizeUserContent(html) {
-    return sanitize(html, { preset: 'strict' });
+export function sanitiseUserContent(html) {
+    return sanitise(html, { preset: 'strict' });
 }
 
 /**
@@ -199,11 +199,11 @@ if (typeof window !== 'undefined' && !isDOMPurifyAvailable()) {
     );
 }
 
-// Export default sanitize function
+// Export default sanitise function
 export default {
-    sanitize,
-    sanitizeBasic,
-    sanitizeUserContent,
+    sanitise,
+    sanitiseBasic,
+    sanitiseUserContent,
     escape,
     hasDOMPurify
 };

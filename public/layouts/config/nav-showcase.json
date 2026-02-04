@@ -64,6 +64,12 @@
           "section": "http"
         },
         {
+          "text": "Router",
+          "url": "showcase/router/index.html",
+          "section": "router",
+          "badge": "New"
+        },
+        {
           "text": "Integrations",
           "url": "showcase/integrations/index.html",
           "section": "integrations",

@@ -224,6 +224,7 @@ When adding a new showcase:
 - **Make it interactive**: Let users play with the feature
 - **Show code**: Display the code being demonstrated
 - **Provide variations**: Show different configuration options
+- **British English**: Use British spellings in all new code, comments, and documentation (-ise not -ize, -yse not -yze, -our not -or)
 
 ## File Paths
 
