@@ -292,15 +292,11 @@ export function createLoaderWrapper(selector, options = {}) {
 /**
  * BackToTop Wrapper
  * Maintains exact API: Domma.elements.backToTop(selector, options)
+ * Note: selector parameter is ignored - backToTop always appends to body
  */
 export function createBackToTopWrapper(selector, options = {}) {
-    // BackToTop can work without a selector (auto-creates button)
-    let element = null;
-    if (selector) {
-        element = typeof selector === 'string'
-            ? document.querySelector(selector)
-            : selector;
-    }
+    // BackToTop always appends to body (selector parameter ignored for backwards compatibility)
+    // This prevents catastrophic bugs when selector is 'body' or other critical elements
 
     // Create Web Component
     const webComponent = document.createElement('domma-back-to-top');
@@ -324,12 +320,8 @@ export function createBackToTopWrapper(selector, options = {}) {
         }
     }
 
-    // If selector provided, replace it; otherwise append to body
-    if (element) {
-        element.replaceWith(webComponent);
-    } else {
-        document.body.appendChild(webComponent);
-    }
+    // Always append to body - backToTop is a fixed-position element
+    document.body.appendChild(webComponent);
 
     // Store reference for retrieval
     webComponent._dommaComponent = webComponent;
