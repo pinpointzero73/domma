@@ -203,6 +203,46 @@ async function handleInit() {
     console.log(`  ✓ Copied themes/`);
   }
 
+  // Create or update package.json with scripts
+  const packageJsonPath = join(process.cwd(), 'package.json');
+  let packageJson;
+
+  if (existsSync(packageJsonPath)) {
+    // Update existing package.json
+    packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
+    console.log(`\n  Updating package.json with serve scripts...`);
+  } else {
+    // Create new package.json
+    packageJson = {
+      name: projectName,
+      version: '1.0.0',
+      description: `${projectName} - Powered by Domma`,
+      main: 'index.js',
+      type: 'module'
+    };
+    console.log(`\n  Creating package.json...`);
+  }
+
+  // Add/update scripts
+  if (!packageJson.scripts) {
+    packageJson.scripts = {};
+  }
+
+  packageJson.scripts.start = 'domma serve';
+  packageJson.scripts.serve = 'domma serve';
+  packageJson.scripts['serve:3096'] = 'domma serve --port 3096';
+
+  // Ensure domma-js is in dependencies
+  if (!packageJson.dependencies) {
+    packageJson.dependencies = {};
+  }
+  if (!packageJson.dependencies['domma-js']) {
+    packageJson.dependencies['domma-js'] = `^${VERSION}`;
+  }
+
+  writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2), 'utf-8');
+  console.log(`  ✓ Added npm scripts: start, serve`);
+
   console.log(`\n  ✓ Done! Your ${projectMode.toUpperCase()} project "${projectName}" is ready.\n`);
 
   // Prompt to start development server
@@ -217,12 +257,12 @@ async function handleInit() {
     console.log(`\n  Next steps:`);
 
     if (projectMode === 'spa') {
-      console.log(`    1. Start server: npx domma serve`);
+      console.log(`    1. Start server: npm start  (or: npm run serve)`);
       console.log(`    2. Edit domma.config.json to customise routes and navbar`);
       console.log(`    3. Add new views: npx domma add view <name>`);
       console.log(`    4. Edit views in frontend/js/views/`);
     } else {
-      console.log(`    1. Start server: npx domma serve`);
+      console.log(`    1. Start server: npm start  (or: npm run serve)`);
       console.log(`    2. Edit domma.config.json to customise`);
       console.log(`    3. Add new pages: npx domma add page <name>`);
     }
@@ -572,7 +612,12 @@ function copyTemplatesRecursive(srcDir, destDir, vars) {
  * Handle serve command
  */
 async function handleServe() {
-  const configPath = join(process.cwd(), 'domma.config.json');
+  // Check for domma.config.json at root (MPA) or in frontend/ (SPA)
+  let configPath = join(process.cwd(), 'domma.config.json');
+
+  if (!existsSync(configPath)) {
+    configPath = join(process.cwd(), 'frontend', 'domma.config.json');
+  }
 
   if (!existsSync(configPath)) {
     console.error('\n  ✗ Not in a Domma project directory');
@@ -622,7 +667,7 @@ async function handleServe() {
   const config = JSON.parse(readFileSync(configPath, 'utf-8'));
   const isSpa = config.spa?.enabled === true;
   const portIndex = args.indexOf('--port');
-  const port = portIndex !== -1 ? parseInt(args[portIndex + 1]) : 3000;
+  const port = portIndex !== -1 ? parseInt(args[portIndex + 1]) : 3096;
   const servePath = isSpa ? 'frontend' : 'frontend/pages';
 
   console.log(`
@@ -758,7 +803,7 @@ Commands:
   npx domma-js add view <name>  Add a new view (SPA only)
   npx domma-js setup-ai         Add AI assistance files to existing project
   npx domma-js serve            Start development server with live reload
-    --port <number>             Custom port (default: 3000)
+    --port <number>             Custom port (default: 3096)
 
 Options:
   --help, -h               Show this help message
@@ -781,9 +826,13 @@ Examples:
   npx domma-js add view profile    # Creates profile view with route
 
   # Development server:
-  npx domma-js serve               # Start server (auto-detects MPA/SPA)
-  npx domma-js serve --port 8080   # Start on custom port
+  npm start                        # Start server (uses scripts from package.json)
+  npm run serve                    # Same as npm start
+  npm run serve:3096               # Start on port 3096 (explicit)
+  npx domma-js serve               # Direct CLI usage
+  npx domma-js serve --port 3096   # Custom port
 
-Note: Paths are automatically calculated based on folder depth
+Note: After 'npx domma init', use 'npm start' to run the server.
+      Paths are automatically calculated based on folder depth.
 `);
 }

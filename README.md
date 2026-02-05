@@ -33,8 +33,14 @@ Get a complete project structure with development server in seconds:
 ```bash
 npm init -y
 npm install domma-js
-npx domma init      # Creates project structure
-npx domma serve     # Starts development server with live reload
+npx domma init      # Creates project structure (prompts to start server)
+```
+
+**Or manually start the server:**
+```bash
+npm start           # Starts on port 3000
+npm run serve       # Same as npm start
+npm run serve:8080  # Custom port
 ```
 
 This creates:
@@ -43,6 +49,7 @@ This creates:
 - ✅ JSON configuration (`domma.config.json`)
 - ✅ Navbar and footer (configured via JSON)
 - ✅ Theme system with 16+ themes
+- ✅ npm scripts (`start`, `serve`) in package.json
 - ✅ Development server with live reload
 - ✅ All features ready to use
 
@@ -50,12 +57,36 @@ This creates:
 
 Start the built-in development server with live reload:
 
+**Using npm scripts (recommended):**
 ```bash
-npx domma serve              # Start server (auto-detects MPA/SPA)
-npx domma serve --port 8080  # Custom port
+npm start              # Start on port 3096
+npm run serve          # Same as npm start
+npm run serve:3096     # Explicit port 3096
 ```
 
-The server auto-detects your project type and serves from the correct directory with live reload enabled.
+**Using CLI directly:**
+```bash
+npx domma serve              # Start server (auto-detects MPA/SPA)
+npx domma serve --port 3096  # Custom port
+```
+
+The server auto-detects your project type (MPA/SPA) and serves from the correct directory with live reload enabled.
+
+**Full Development Workflow:**
+```bash
+# 1. Create project
+npm install domma-js
+npx domma init
+
+# 2. Start developing (auto-starts server or run manually)
+npm start                    # Opens http://localhost:3096
+
+# 3. Make changes → browser auto-reloads
+
+# 4. Stop server: Ctrl+C
+
+# 5. Restart anytime: npm start
+```
 
 ### Via npm (Manual Setup)
 
