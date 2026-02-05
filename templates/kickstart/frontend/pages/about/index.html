@@ -19,11 +19,14 @@
 <nav id="main-navbar"></nav>
 
 <!-- Page Header -->
-<section class="container py-6">
-  <h1 class="display-2 mb-3">About {{projectName}}</h1>
-  <p class="lead text-secondary">
-    Learn more about our mission, values, and the team behind the project.
-  </p>
+<section class="hero hero-center bg-dark bg-ambient-rotate-glow" style="min-height: 40vh; padding: 3rem 2rem;">
+  <div class="hero-content">
+    <span data-icon="users" data-icon-size="72" class="mb-3" style="color: var(--dm-white-t85);"></span>
+    <h1 class="display-2 mb-3" style="color: var(--dm-white);">About {{projectName}}</h1>
+    <p class="lead" style="color: var(--dm-white-t85); max-width: 600px;">
+      Learn more about our mission, values, and the team behind the project.
+    </p>
+  </div>
 </section>
 
 <!-- About Content -->
@@ -32,12 +35,12 @@
     <div class="lg:col-span-2">
       <h2 class="h3 mb-4">Our Story</h2>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+        {{projectName}} was built with a vision to create modern, accessible web applications using the powerful
+        Domma framework. We believe in simplicity, performance, and putting developers first.
       </p>
       <p>
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
-        sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        Our journey started with a simple idea: make web development faster, easier, and more enjoyable while
+        delivering exceptional user experiences. Today, we continue to push the boundaries of what's possible.
       </p>
 
       <h2 class="h3 mt-6 mb-4">Our Mission</h2>
@@ -89,79 +92,75 @@
 <section class="container py-6">
   <h2 class="text-center mb-6">Meet the Team</h2>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  <div class="grid grid-cols-4 gap-4">
     <!-- Team Member 1 -->
-    <div class="card text-center hover shadow-md">
-        <div class="card-body">
-          <div class="mb-3"
-               style="width: 80px; height: 80px; margin: 0 auto; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
-          <h3 class="h5 mb-1">Jane Doe</h3>
-          <p class="text-secondary mb-3">Lead Developer</p>
-          <div class="d-flex justify-content-center gap-2">
-            <a href="#" class="btn btn-sm btn-outline-primary">
-              <span data-icon="github"></span>
-            </a>
-            <a href="#" class="btn btn-sm btn-outline-primary">
-              <span data-icon="twitter"></span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-    <!-- Team Member 2 -->
-    <div class="card text-center hover shadow-md">
-        <div class="card-body">
-          <div class="mb-3"
-               style="width: 80px; height: 80px; margin: 0 auto; border-radius: 50%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
-          <h3 class="h5 mb-1">John Smith</h3>
-          <p class="text-secondary mb-3">UX Designer</p>
-          <div class="d-flex justify-content-center gap-2">
-            <a href="#" class="btn btn-sm btn-outline-primary">
-              <span data-icon="github"></span>
-            </a>
-            <a href="#" class="btn btn-sm btn-outline-primary">
-              <span data-icon="twitter"></span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-    <!-- Team Member 3 -->
-    <div class="card text-center hover shadow-md">
-        <div class="card-body">
-          <div class="mb-3"
-               style="width: 80px; height: 80px; margin: 0 auto; border-radius: 50%; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
-          <h3 class="h5 mb-1">Sarah Johnson</h3>
-          <p class="text-secondary mb-3">Product Manager</p>
-          <div class="d-flex justify-content-center gap-2">
-            <a href="#" class="btn btn-sm btn-outline-primary">
-              <span data-icon="github"></span>
-            </a>
-            <a href="#" class="btn btn-sm btn-outline-primary">
-              <span data-icon="twitter"></span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-    <!-- Team Member 4 -->
-    <div class="card text-center hover shadow-md">
-        <div class="card-body">
-          <div class="mb-3"
-               style="width: 80px; height: 80px; margin: 0 auto; border-radius: 50%; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
-          <h3 class="h5 mb-1">Mike Chen</h3>
-          <p class="text-secondary mb-3">DevOps Engineer</p>
-          <div class="d-flex justify-content-center gap-2">
-            <a href="#" class="btn btn-sm btn-outline-primary">
-              <span data-icon="github"></span>
-            </a>
-            <a href="#" class="btn btn-sm btn-outline-primary">
-              <span data-icon="twitter"></span>
-            </a>
-          </div>
+    <div class="card text-center card-hover shadow-lg">
+      <div class="card-body p-4">
+        <span data-icon="user" data-icon-size="64" class="text-primary mb-3"></span>
+        <h3 class="h5 mb-1">Jane Doe</h3>
+        <p class="text-secondary mb-3">Lead Developer</p>
+        <div class="d-flex justify-content-center gap-2">
+          <a href="#" class="btn btn-sm btn-outline-primary">
+            <span data-icon="github" data-icon-size="16"></span>
+          </a>
+          <a href="#" class="btn btn-sm btn-outline-primary">
+            <span data-icon="twitter" data-icon-size="16"></span>
+          </a>
         </div>
       </div>
     </div>
+
+    <!-- Team Member 2 -->
+    <div class="card text-center card-hover shadow-lg">
+      <div class="card-body p-4">
+        <span data-icon="user" data-icon-size="64" class="text-danger mb-3"></span>
+        <h3 class="h5 mb-1">John Smith</h3>
+        <p class="text-secondary mb-3">UX Designer</p>
+        <div class="d-flex justify-content-center gap-2">
+          <a href="#" class="btn btn-sm btn-outline-primary">
+            <span data-icon="github" data-icon-size="16"></span>
+          </a>
+          <a href="#" class="btn btn-sm btn-outline-primary">
+            <span data-icon="twitter" data-icon-size="16"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Member 3 -->
+    <div class="card text-center card-hover shadow-lg">
+      <div class="card-body p-4">
+        <span data-icon="user" data-icon-size="64" class="text-info mb-3"></span>
+        <h3 class="h5 mb-1">Sarah Johnson</h3>
+        <p class="text-secondary mb-3">Product Manager</p>
+        <div class="d-flex justify-content-center gap-2">
+          <a href="#" class="btn btn-sm btn-outline-primary">
+            <span data-icon="github" data-icon-size="16"></span>
+          </a>
+          <a href="#" class="btn btn-sm btn-outline-primary">
+            <span data-icon="twitter" data-icon-size="16"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Member 4 -->
+    <div class="card text-center card-hover shadow-lg">
+      <div class="card-body p-4">
+        <span data-icon="user" data-icon-size="64" class="text-warning mb-3"></span>
+        <h3 class="h5 mb-1">Mike Chen</h3>
+        <p class="text-secondary mb-3">DevOps Engineer</p>
+        <div class="d-flex justify-content-center gap-2">
+          <a href="#" class="btn btn-sm btn-outline-primary">
+            <span data-icon="github" data-icon-size="16"></span>
+          </a>
+          <a href="#" class="btn btn-sm btn-outline-primary">
+            <span data-icon="twitter" data-icon-size="16"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
 </section>
 
@@ -170,47 +169,47 @@
   <div class="container">
     <h2 class="text-center mb-6">Our Journey</h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="card h-100 shadow-md">
-          <div class="card-body">
-            <div class="badge badge-primary mb-3">2024 Q1</div>
-            <h3 class="h5 mb-2">Project Launch</h3>
-            <p class="text-secondary mb-0">
-              Initial release with core features and documentation.
-            </p>
-          </div>
-        </div>
-
-      <div class="card h-100 shadow-md">
-          <div class="card-body">
-            <div class="badge badge-primary mb-3">2024 Q2</div>
-            <h3 class="h5 mb-2">Community Growth</h3>
-            <p class="text-secondary mb-0">
-              Reached 1,000 users and 50+ contributors.
-            </p>
-          </div>
-        </div>
-
-      <div class="card h-100 shadow-md">
-          <div class="card-body">
-            <div class="badge badge-primary mb-3">2024 Q3</div>
-            <h3 class="h5 mb-2">Major Update</h3>
-            <p class="text-secondary mb-0">
-              Version 2.0 with enhanced performance and new features.
-            </p>
-          </div>
-        </div>
-
-      <div class="card h-100 shadow-md">
-          <div class="card-body">
-            <div class="badge badge-success mb-3">2024 Q4</div>
-            <h3 class="h5 mb-2">Looking Ahead</h3>
-            <p class="text-secondary mb-0">
-              Expanding features and building partnerships.
-            </p>
-          </div>
+    <div class="grid grid-cols-4 gap-4">
+      <div class="card card-hover shadow-lg">
+        <div class="card-body p-4">
+          <span class="badge badge-primary mb-3">{{year}} Q1</span>
+          <h3 class="h5 mb-2">Project Launch</h3>
+          <p class="text-secondary mb-0">
+            Initial release with core features and documentation.
+          </p>
         </div>
       </div>
+
+      <div class="card card-hover shadow-lg">
+        <div class="card-body p-4">
+          <span class="badge badge-info mb-3">{{year}} Q2</span>
+          <h3 class="h5 mb-2">Community Growth</h3>
+          <p class="text-secondary mb-0">
+            Reached 1,000 users and 50+ contributors.
+          </p>
+        </div>
+      </div>
+
+      <div class="card card-hover shadow-lg">
+        <div class="card-body p-4">
+          <span class="badge badge-warning mb-3">{{year}} Q3</span>
+          <h3 class="h5 mb-2">Major Update</h3>
+          <p class="text-secondary mb-0">
+            Version 2.0 with enhanced performance and new features.
+          </p>
+        </div>
+      </div>
+
+      <div class="card card-hover shadow-lg">
+        <div class="card-body p-4">
+          <span class="badge badge-success mb-3">{{year}} Q4</span>
+          <h3 class="h5 mb-2">Looking Ahead</h3>
+          <p class="text-secondary mb-0">
+            Expanding features and building partnerships.
+          </p>
+        </div>
+      </div>
+    </div>
     </div>
   </div>
 </section>

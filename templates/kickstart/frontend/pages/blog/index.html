@@ -19,11 +19,14 @@
 <nav id="main-navbar"></nav>
 
 <!-- Page Header -->
-<section class="container py-6">
-  <h1 class="display-2 mb-3">Blog</h1>
-  <p class="lead text-secondary">
-    Latest updates, tutorials, and insights from our team.
-  </p>
+<section class="hero hero-center bg-dark bg-ambient-rotate-glow" style="min-height: 40vh; padding: 3rem 2rem;">
+  <div class="hero-content">
+    <span data-icon="document" data-icon-size="72" class="mb-3" style="color: var(--dm-white-t85);"></span>
+    <h1 class="display-2 mb-3" style="color: var(--dm-white);">Blog</h1>
+    <p class="lead" style="color: var(--dm-white-t85); max-width: 600px;">
+      Latest updates, tutorials, and insights from our team.
+    </p>
+  </div>
 </section>
 
 <!-- Filters -->
@@ -41,9 +44,9 @@
 
 <!-- Blog Posts -->
 <section class="container py-4">
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div class="grid grid-cols-3 gap-5">
     <!-- Blog Post 1 -->
-    <article class="card h-100 hover shadow-md">
+    <article class="card card-hover shadow-lg">
         <div class="card-body">
           <div class="d-flex gap-2 mb-3">
             <span class="badge badge-primary">Tutorial</span>
@@ -63,7 +66,7 @@
       </article>
 
     <!-- Blog Post 2 -->
-    <article class="card h-100 hover shadow-md">
+    <article class="card card-hover shadow-lg">
         <div class="card-body">
           <div class="d-flex gap-2 mb-3">
             <span class="badge badge-success">Update</span>
@@ -83,7 +86,7 @@
       </article>
 
     <!-- Blog Post 3 -->
-    <article class="card h-100 hover shadow-md">
+    <article class="card card-hover shadow-lg">
         <div class="card-body">
           <div class="d-flex gap-2 mb-3">
             <span class="badge badge-warning">News</span>

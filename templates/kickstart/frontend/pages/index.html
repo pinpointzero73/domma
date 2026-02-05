@@ -19,19 +19,19 @@
 <nav id="main-navbar"></nav>
 
 <!-- Hero Section -->
-<section class="hero hero-gradient-primary text-center py-8 bg-ambient-rotate-spotlight">
-  <div class="container">
-    <h1 class="display-1 mb-4">Welcome to {{projectName}}</h1>
-    <p class="lead mb-6">
+<section class="hero hero-center bg-dark bg-ambient-rotate-glow" style="min-height: 50vh; padding: 4rem 2rem;">
+  <div class="hero-content">
+    <h1 class="display-1 mb-4" style="color: var(--dm-white);">Welcome to {{projectName}}</h1>
+    <p class="lead mb-6" style="color: var(--dm-white-t85); max-width: 700px;">
       A modern web project powered by Domma - the lightweight JavaScript framework
-      with zero dependencies.
+      with zero dependencies and powerful features.
     </p>
     <div class="d-flex justify-content-center gap-3">
       <a href="docs/" class="btn btn-lg btn-primary">
-        <span data-icon="book"></span> Get Started
+        <span data-icon="book" data-icon-size="20"></span> Get Started
       </a>
-      <a href="https://github.com/dcbw-it/domma" class="btn btn-lg btn-outline-primary" target="_blank">
-        <span data-icon="github"></span> View on GitHub
+      <a href="https://dommajs.org" class="btn btn-lg btn-outline-light" target="_blank">
+        <span data-icon="external-link" data-icon-size="20"></span> View Docs
       </a>
     </div>
   </div>
@@ -41,90 +41,78 @@
 <section class="container py-8">
   <h2 class="text-center mb-6">Key Features</h2>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div class="grid grid-cols-3 gap-5">
     <!-- Feature 1 -->
-    <div class="card hover shadow-md h-100">
-        <div class="card-body text-center">
-          <div class="mb-4" style="font-size: 3rem; color: var(--dm-primary);">
-            <span data-icon="zap"></span>
-          </div>
-          <h3 class="h4 mb-3">Lightning Fast</h3>
-          <p class="text-secondary">
-            Zero dependencies and optimized for performance.
-            Get up and running in minutes.
-          </p>
-        </div>
+    <div class="card card-hover shadow-lg">
+      <div class="card-body text-center p-5">
+        <span data-icon="zap" data-icon-size="48" class="text-warning mb-3"></span>
+        <h3 class="h5 mb-3">Lightning Fast</h3>
+        <p class="text-secondary mb-0">
+          Zero dependencies and optimised for performance.
+          Get up and running in minutes.
+        </p>
       </div>
+    </div>
 
     <!-- Feature 2 -->
-    <div class="card hover shadow-md h-100">
-        <div class="card-body text-center">
-          <div class="mb-4" style="font-size: 3rem; color: var(--dm-primary);">
-            <span data-icon="layers"></span>
-          </div>
-          <h3 class="h4 mb-3">Feature Complete</h3>
-          <p class="text-secondary">
-            DOM manipulation, utilities, reactive models, UI components,
-            and more in one package.
-          </p>
-        </div>
+    <div class="card card-hover shadow-lg">
+      <div class="card-body text-center p-5">
+        <span data-icon="layers" data-icon-size="48" class="text-primary mb-3"></span>
+        <h3 class="h5 mb-3">Feature Complete</h3>
+        <p class="text-secondary mb-0">
+          DOM manipulation, utilities, reactive models, UI components,
+          and more in one package.
+        </p>
       </div>
+    </div>
 
     <!-- Feature 3 -->
-    <div class="card hover shadow-md h-100">
-        <div class="card-body text-center">
-          <div class="mb-4" style="font-size: 3rem; color: var(--dm-primary);">
-            <span data-icon="palette"></span>
-          </div>
-          <h3 class="h4 mb-3">Beautiful Themes</h3>
-          <p class="text-secondary">
-            16+ built-in themes with light/dark variants.
-            Fully customizable with CSS variables.
-          </p>
-        </div>
+    <div class="card card-hover shadow-lg">
+      <div class="card-body text-center p-5">
+        <span data-icon="palette" data-icon-size="48" class="text-info mb-3"></span>
+        <h3 class="h5 mb-3">Beautiful Themes</h3>
+        <p class="text-secondary mb-0">
+          16+ built-in themes with light/dark variants.
+          Fully customisable with CSS variables.
+        </p>
       </div>
+    </div>
 
     <!-- Feature 4 -->
-    <div class="card hover shadow-md h-100">
-        <div class="card-body text-center">
-          <div class="mb-4" style="font-size: 3rem; color: var(--dm-primary);">
-            <span data-icon="code"></span>
-          </div>
-          <h3 class="h4 mb-3">Developer Friendly</h3>
-          <p class="text-secondary">
-            jQuery-like syntax, Lodash utilities, and comprehensive
-            TypeScript definitions.
-          </p>
-        </div>
+    <div class="card card-hover shadow-lg">
+      <div class="card-body text-center p-5">
+        <span data-icon="code" data-icon-size="48" class="text-success mb-3"></span>
+        <h3 class="h5 mb-3">Developer Friendly</h3>
+        <p class="text-secondary mb-0">
+          jQuery-like syntax, Lodash utilities, and comprehensive
+          TypeScript definitions.
+        </p>
       </div>
+    </div>
 
     <!-- Feature 5 -->
-    <div class="card hover shadow-md h-100">
-        <div class="card-body text-center">
-          <div class="mb-4" style="font-size: 3rem; color: var(--dm-primary);">
-            <span data-icon="smartphone"></span>
-          </div>
-          <h3 class="h4 mb-3">Fully Responsive</h3>
-          <p class="text-secondary">
-            Bootstrap-compatible grid system with CSS Grid utilities.
-            Mobile-first design.
-          </p>
-        </div>
+    <div class="card card-hover shadow-lg">
+      <div class="card-body text-center p-5">
+        <span data-icon="smartphone" data-icon-size="48" class="text-danger mb-3"></span>
+        <h3 class="h5 mb-3">Fully Responsive</h3>
+        <p class="text-secondary mb-0">
+          Bootstrap-compatible grid system with CSS Grid utilities.
+          Mobile-first design.
+        </p>
       </div>
+    </div>
 
     <!-- Feature 6 -->
-    <div class="card hover shadow-md h-100">
-        <div class="card-body text-center">
-          <div class="mb-4" style="font-size: 3rem; color: var(--dm-primary);">
-            <span data-icon="settings"></span>
-          </div>
-          <h3 class="h4 mb-3">JSON Configured</h3>
-          <p class="text-secondary">
-            Single config file drives navbar, footer, theme, and features.
-            No complex setup needed.
-          </p>
-        </div>
+    <div class="card card-hover shadow-lg">
+      <div class="card-body text-center p-5">
+        <span data-icon="settings" data-icon-size="48" class="text-secondary mb-3"></span>
+        <h3 class="h5 mb-3">JSON Configured</h3>
+        <p class="text-secondary mb-0">
+          Single config file drives navbar, footer, theme, and features.
+          No complex setup needed.
+        </p>
       </div>
+    </div>
   </div>
 </section>
 
@@ -137,10 +125,12 @@
     </p>
     <div class="d-flex justify-content-center gap-3">
       <a href="docs/" class="btn btn-lg btn-primary">
+        <span data-icon="book" data-icon-size="20"></span>
         Read the Docs
       </a>
-      <a href="https://github.com/dcbw-it/domma" class="btn btn-lg btn-outline-primary" target="_blank">
-        View on GitHub
+      <a href="https://dommajs.org" class="btn btn-lg btn-outline-primary" target="_blank">
+        <span data-icon="external-link" data-icon-size="20"></span>
+        Explore DommaJS
       </a>
     </div>
   </div>
