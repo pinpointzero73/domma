@@ -1,53 +1,90 @@
 /**
  * Domma Kickstart Application
- * Simple initialization for navbar, footer, theme, and features
+ * Configuration-driven initialization using JSON configs
  */
 
 $(() => {
   console.log('[App] Initializing...');
 
-  // Simple navbar initialization
-  const initNavbar = () => {
-    Domma.elements.navbar('#main-navbar', {
-      brand: {
-        text: '{{projectName}}',
-        url: './'
-      },
-      items: [
-        { text: 'Home', url: './', active: true },
-        { text: 'About', url: 'about/' },
-        { text: 'Contact', url: 'contact/' },
-        { text: 'Blog', url: 'blog/' },
-        { text: 'Docs', url: 'docs/' }
-      ],
-      variant: 'dark',
-      position: 'sticky',
-      collapsible: true
-    });
-    console.log('[App] Navbar initialized');
+  // Calculate path prefix based on current page location
+  const currentPath = window.location.pathname;
+  const currentDir = currentPath.substring(0, currentPath.lastIndexOf('/'));
+  const depth = (currentDir.match(/\//g) || []).length;
+  const prefix = '../'.repeat(depth);
+
+  console.log('[App] Path:', currentPath, 'Depth:', depth, 'Prefix:', prefix);
+
+  // Helper to adjust URLs in config based on page depth
+  const adjustUrls = (config) => {
+    const adjusted = _.cloneDeep(config);
+
+    if (adjusted.brand?.url) {
+      adjusted.brand.url = prefix + adjusted.brand.url;
+    }
+
+    if (adjusted.items) {
+      adjusted.items = adjusted.items.map(item => ({
+        ...item,
+        url: prefix + item.url
+      }));
+    }
+
+    if (adjusted.links) {
+      adjusted.links = adjusted.links.map(link => ({
+        ...link,
+        url: prefix + link.url
+      }));
+    }
+
+    return adjusted;
   };
 
-  // Simple footer initialization
-  const initFooter = () => {
-    const $footer = $('.page-footer');
-    if ($footer.length) {
-      const footerHTML = `
-        <div class="container py-4">
-          <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-            <p class="mb-0 text-secondary">© {{year}} {{projectName}}. All rights reserved.</p>
-            <nav class="d-flex gap-3">
-              <a href="privacy/" class="text-secondary">Privacy Policy</a>
-              <a href="cookies/" class="text-secondary">Cookie Policy</a>
-              <a href="terms/" class="text-secondary">Terms of Service</a>
-              <a href="contact/" class="text-secondary">Contact Us</a>
-            </nav>
+  // Load navbar config and initialize
+  fetch(prefix + 'config/navbar.json')
+    .then(response => {
+      if (!response.ok) throw new Error(`Failed to load navbar.json: ${response.status}`);
+      return response.json();
+    })
+    .then(config => {
+      const navConfig = adjustUrls(config);
+      console.log('[App] Navbar config:', navConfig);
+      Domma.elements.navbar('#main-navbar', navConfig);
+      console.log('[App] Navbar initialized');
+    })
+    .catch(error => {
+      console.error('[App] Navbar error:', error);
+    });
+
+  // Load footer config and initialize
+  fetch(prefix + 'config/footer.json')
+    .then(response => {
+      if (!response.ok) throw new Error(`Failed to load footer.json: ${response.status}`);
+      return response.json();
+    })
+    .then(config => {
+      const footerConfig = adjustUrls(config);
+      const $footer = $('.page-footer');
+
+      if ($footer.length) {
+        const footerHTML = `
+          <div class="container py-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <p class="mb-0 text-secondary">${footerConfig.copyright}</p>
+              <nav class="d-flex gap-3">
+                ${footerConfig.links.map(link =>
+                  `<a href="${link.url}" class="text-secondary">${link.text}</a>`
+                ).join('')}
+              </nav>
+            </div>
           </div>
-        </div>
-      `;
-      $footer.html(footerHTML);
-      console.log('[App] Footer initialized');
-    }
-  };
+        `;
+        $footer.html(footerHTML);
+        console.log('[App] Footer initialized');
+      }
+    })
+    .catch(error => {
+      console.error('[App] Footer error:', error);
+    });
 
   // Initialize theme
   if (Domma.theme) {
@@ -56,12 +93,8 @@ $(() => {
       persist: true,
       autoDetect: false
     });
-    console.log('[App] Theme initialized: {{theme}}');
+    console.log('[App] Theme initialized');
   }
-
-  // Initialize components
-  initNavbar();
-  initFooter();
 
   // Scan for icons
   if (Domma.icons) {

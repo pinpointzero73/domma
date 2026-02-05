@@ -1,0 +1,21 @@
+{
+  "copyright": "© {{year}} {{projectName}}. All rights reserved.",
+  "links": [
+    {
+      "text": "Privacy Policy",
+      "url": "pages/privacy/index.html"
+    },
+    {
+      "text": "Cookie Policy",
+      "url": "pages/cookies/index.html"
+    },
+    {
+      "text": "Terms of Service",
+      "url": "pages/terms/index.html"
+    },
+    {
+      "text": "Contact Us",
+      "url": "pages/contact/index.html"
+    }
+  ]
+}

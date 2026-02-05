@@ -1,0 +1,36 @@
+{
+  "brand": {
+    "text": "{{projectName}}",
+    "url": "pages/index.html"
+  },
+  "items": [
+    {
+      "text": "Home",
+      "url": "pages/index.html",
+      "page": "home"
+    },
+    {
+      "text": "About",
+      "url": "pages/about/index.html",
+      "page": "about"
+    },
+    {
+      "text": "Blog",
+      "url": "pages/blog/index.html",
+      "page": "blog"
+    },
+    {
+      "text": "Docs",
+      "url": "pages/docs/index.html",
+      "page": "docs"
+    },
+    {
+      "text": "Contact",
+      "url": "pages/contact/index.html",
+      "page": "contact"
+    }
+  ],
+  "variant": "dark",
+  "position": "sticky",
+  "collapsible": true
+}
