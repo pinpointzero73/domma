@@ -1,6 +1,30 @@
 {
   "releases": [
     {
+      "year": "v0.13.3",
+      "title": "Polished SPA Templates & Dev Server",
+      "description": "Redesigned SPA template views with professional layouts matching the QuickStart demo. Added built-in development server (npx domma serve) with live reload and automatic project detection. Fixed template CSS paths.",
+      "date": "2026-02-05"
+    },
+    {
+      "year": "v0.13.2",
+      "title": "SPA Template Path Fixes",
+      "description": "Fixed broken CSS and JavaScript paths in SPA template that caused white screen errors after npx domma init.",
+      "date": "2026-02-05"
+    },
+    {
+      "year": "v0.13.1",
+      "title": "Development Server with npm Scripts",
+      "description": "Added npm scripts (npm start, npm run serve) to generated projects for easier development workflow. Server auto-prompts after npx domma init.",
+      "date": "2026-02-05"
+    },
+    {
+      "year": "v0.13.0",
+      "title": "Built-in Development Server",
+      "description": "Introduced npx domma serve command with optional live-server integration, automatic MPA/SPA detection, and custom port support (default: 3096).",
+      "date": "2026-02-05"
+    },
+    {
       "year": "v0.12.1",
       "title": "DommaJS Brand Refresh & Bug Fixes",
       "description": "Rebranded to DommaJS across splash page, navbar, and footer. Improved feature card animations with smooth breathing effect. Fixed critical backToTop bug that could destroy page body element when selector parameter was used.",
@@ -55,5 +79,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.12.1"
+  "latestVersion": "v0.13.3"
 }
