@@ -3,6 +3,7 @@
 import {existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync, cpSync} from 'fs';
 import {dirname, join, relative} from 'path';
 import {fileURLToPath} from 'url';
+import {spawnSync} from 'child_process';
 import * as readline from 'readline/promises';
 import {stdin as input, stdout as output} from 'process';
 
@@ -35,6 +36,9 @@ switch (command) {
     break;
   case 'setup-ai':
     handleSetupAI();
+    break;
+  case 'serve':
+    handleServe();
     break;
   case 'version':
   case '--version':
@@ -200,20 +204,31 @@ async function handleInit() {
   }
 
   console.log(`\n  ✓ Done! Your ${projectMode.toUpperCase()} project "${projectName}" is ready.\n`);
-  console.log(`  Next steps:`);
 
-  if (projectMode === 'spa') {
-    console.log(`    1. Open frontend/index.html in your browser`);
-    console.log(`    2. Edit domma.config.json to customise routes and navbar`);
-    console.log(`    3. Add new views: npx domma-js add view <name>`);
-    console.log(`    4. Edit views in frontend/js/views/`);
+  // Prompt to start development server
+  const rl2 = readline.createInterface({input, output});
+  const startServer = await rl2.question(`  Start development server now? (Y/n): `);
+  rl2.close();
+
+  if (startServer.toLowerCase() !== 'n' && startServer.toLowerCase() !== 'no') {
+    console.log('');
+    await handleServe();
   } else {
-    console.log(`    1. Open frontend/pages/index.html in your browser`);
-    console.log(`    2. Edit domma.config.json to customise`);
-    console.log(`    3. Add new pages: npx domma-js add page <name>`);
-  }
+    console.log(`\n  Next steps:`);
 
-  console.log(`    ${projectMode === 'spa' ? '5' : '4'}. Read the docs: https://github.com/dcbw-it/domma\n`);
+    if (projectMode === 'spa') {
+      console.log(`    1. Start server: npx domma serve`);
+      console.log(`    2. Edit domma.config.json to customise routes and navbar`);
+      console.log(`    3. Add new views: npx domma add view <name>`);
+      console.log(`    4. Edit views in frontend/js/views/`);
+    } else {
+      console.log(`    1. Start server: npx domma serve`);
+      console.log(`    2. Edit domma.config.json to customise`);
+      console.log(`    3. Add new pages: npx domma add page <name>`);
+    }
+
+    console.log(`    ${projectMode === 'spa' ? '5' : '4'}. Read the docs: https://github.com/dcbw-it/domma\n`);
+  }
 }
 
 /**
@@ -554,6 +569,80 @@ function copyTemplatesRecursive(srcDir, destDir, vars) {
 }
 
 /**
+ * Handle serve command
+ */
+async function handleServe() {
+  const configPath = join(process.cwd(), 'domma.config.json');
+
+  if (!existsSync(configPath)) {
+    console.error('\n  ✗ Not in a Domma project directory');
+    console.error('  Run "npx domma init" first to create a project.\n');
+    process.exit(1);
+  }
+
+  // Check if live-server is available
+  let liveServer;
+  try {
+    liveServer = await import('live-server');
+  } catch (e) {
+    console.log('\n  live-server is not installed.');
+    const rl = readline.createInterface({input, output});
+    const answer = await rl.question('  Install it now? (Y/n): ');
+    rl.close();
+
+    if (answer.toLowerCase() === 'n') {
+      console.log('\n  To install manually: npm install live-server');
+      console.log('  Then run: npx domma serve\n');
+      process.exit(0);
+    }
+
+    console.log('\n  Installing live-server...');
+    // Use spawnSync with explicit arguments array (safe)
+    const result = spawnSync('npm', ['install', 'live-server'], {
+      stdio: 'inherit',
+      shell: true  // Needed for Windows compatibility
+    });
+
+    if (result.status !== 0) {
+      console.error('  ✗ Failed to install live-server');
+      console.error('  Try: npm install live-server\n');
+      process.exit(1);
+    }
+
+    // Try importing again after installation
+    try {
+      liveServer = await import('live-server');
+    } catch (importError) {
+      console.error('  ✗ Failed to load live-server after installation');
+      console.error('  Please try again or install manually\n');
+      process.exit(1);
+    }
+  }
+
+  const config = JSON.parse(readFileSync(configPath, 'utf-8'));
+  const isSpa = config.spa?.enabled === true;
+  const portIndex = args.indexOf('--port');
+  const port = portIndex !== -1 ? parseInt(args[portIndex + 1]) : 3000;
+  const servePath = isSpa ? 'frontend' : 'frontend/pages';
+
+  console.log(`
+╔═══════════════════════════════════════╗
+║      Domma Development Server         ║
+╚═══════════════════════════════════════╝
+`);
+  console.log(`  Project type: ${isSpa ? 'SPA' : 'MPA'}`);
+  console.log(`  Serving: ${servePath}/`);
+  console.log(`  URL: http://localhost:${port}\n`);
+
+  liveServer.default.start({
+    port,
+    root: servePath,
+    open: true,
+    logLevel: 1
+  });
+}
+
+/**
  * Show version information
  */
 function showVersion() {
@@ -668,6 +757,8 @@ Commands:
   npx domma-js add page <path>  Add a new page (MPA only)
   npx domma-js add view <name>  Add a new view (SPA only)
   npx domma-js setup-ai         Add AI assistance files to existing project
+  npx domma-js serve            Start development server with live reload
+    --port <number>             Custom port (default: 3000)
 
 Options:
   --help, -h               Show this help message
@@ -688,6 +779,10 @@ Examples:
   # Add views (SPA only):
   npx domma-js add view settings   # Creates settings view with route
   npx domma-js add view profile    # Creates profile view with route
+
+  # Development server:
+  npx domma-js serve               # Start server (auto-detects MPA/SPA)
+  npx domma-js serve --port 8080   # Start on custom port
 
 Note: Paths are automatically calculated based on folder depth
 `);

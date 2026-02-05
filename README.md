@@ -28,12 +28,13 @@ modern UI components in one cohesive package.
 
 ### Quick Start with CLI (Recommended)
 
-Get a complete project structure with 5 sample pages in seconds:
+Get a complete project structure with development server in seconds:
 
 ```bash
 npm init -y
 npm install domma-js
-npx domma init
+npx domma init      # Creates project structure
+npx domma serve     # Starts development server with live reload
 ```
 
 This creates:
@@ -42,7 +43,19 @@ This creates:
 - ✅ JSON configuration (`domma.config.json`)
 - ✅ Navbar and footer (configured via JSON)
 - ✅ Theme system with 16+ themes
+- ✅ Development server with live reload
 - ✅ All features ready to use
+
+### Development Server
+
+Start the built-in development server with live reload:
+
+```bash
+npx domma serve              # Start server (auto-detects MPA/SPA)
+npx domma serve --port 8080  # Custom port
+```
+
+The server auto-detects your project type and serves from the correct directory with live reload enabled.
 
 ### Via npm (Manual Setup)
 
