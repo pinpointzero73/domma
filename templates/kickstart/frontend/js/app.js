@@ -1,167 +1,93 @@
 /**
  * Domma Kickstart Application
- *
- * This file initialises your Domma project based on domma.config.json.
- * Customise the config file to change navbar, footer, theme, and features.
+ * Simple initialization for navbar, footer, theme, and features
  */
 
 $(() => {
-  // Determine config path based on page location
-  // Root pages (pages/index.html) need ../../domma.config.json (up to project root)
-  // Sub-pages (pages/about/index.html) need ../../../domma.config.json
-  const pathname = window.location.pathname;
-  const isSubPage = pathname.match(/\/pages\/[^/]+\//) !== null;
-  const configPath = isSubPage ? '../../../domma.config.json' : '../../domma.config.json';
+  console.log('[App] Initializing...');
 
-  // Load configuration
-  Domma.http.get(configPath).then(config => {
-    // Initialise theme
-    if (config.theme) {
-      Domma.theme.init({
-        theme: config.theme.default || 'charcoal-dark',
-        persist: config.theme.persist !== false,
-        autoDetect: config.theme.autoDetect === true
-      });
+  // Simple navbar initialization
+  const initNavbar = () => {
+    Domma.elements.navbar('#main-navbar', {
+      brand: {
+        text: '{{projectName}}',
+        url: './'
+      },
+      items: [
+        { text: 'Home', url: './', active: true },
+        { text: 'About', url: 'about/' },
+        { text: 'Contact', url: 'contact/' },
+        { text: 'Blog', url: 'blog/' },
+        { text: 'Docs', url: 'docs/' }
+      ],
+      variant: 'dark',
+      position: 'sticky',
+      collapsible: true
+    });
+    console.log('[App] Navbar initialized');
+  };
 
-      // Add theme selector if enabled
-      if (config.theme.selector) {
-        addThemeSelector();
-      }
+  // Simple footer initialization
+  const initFooter = () => {
+    const $footer = $('.page-footer');
+    if ($footer.length) {
+      const footerHTML = `
+        <div class="container py-4">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <p class="mb-0 text-secondary">© {{year}} {{projectName}}. All rights reserved.</p>
+            <nav class="d-flex gap-3">
+              <a href="privacy/" class="text-secondary">Privacy Policy</a>
+              <a href="cookies/" class="text-secondary">Cookie Policy</a>
+              <a href="terms/" class="text-secondary">Terms of Service</a>
+              <a href="contact/" class="text-secondary">Contact Us</a>
+            </nav>
+          </div>
+        </div>
+      `;
+      $footer.html(footerHTML);
+      console.log('[App] Footer initialized');
     }
+  };
 
-    // Initialise navbar
-    if (config.navbar) {
-      Domma.elements.navbar('#main-navbar', {
-        brand: config.navbar.brand,
-        items: config.navbar.items,
-        variant: config.navbar.variant || 'dark',
-        position: config.navbar.position || 'sticky',
-        collapsible: config.navbar.collapsible !== false
-      });
+  // Initialize theme
+  if (Domma.theme) {
+    Domma.theme.init({
+      theme: '{{theme}}',
+      persist: true,
+      autoDetect: false
+    });
+    console.log('[App] Theme initialized: {{theme}}');
+  }
+
+  // Initialize components
+  initNavbar();
+  initFooter();
+
+  // Scan for icons
+  if (Domma.icons) {
+    Domma.icons.scan();
+    console.log('[App] Icons scanned');
+  }
+
+  // Back to top button
+  if (Domma.elements.backToTop) {
+    Domma.elements.backToTop({
+      scrollThreshold: 300,
+      position: 'bottom-right'
+    });
+    console.log('[App] Back to top initialized');
+  }
+
+  // Smooth scroll
+  $('a[href^="#"]').on('click', function (e) {
+    e.preventDefault();
+    const targetId = $(this).attr('href');
+    const $target = $(targetId);
+
+    if ($target.length) {
+      $target[0].scrollIntoView({behavior: 'smooth'});
     }
-
-    // Initialise footer
-    if (config.footer) {
-      const $footer = $('.page-footer');
-      if ($footer.length) {
-        const $footerContent = $('<div class="footer-content"></div>');
-
-        const $copyright = $('<p></p>').text(config.footer.copyright);
-        $footerContent.append($copyright);
-
-        const $nav = $('<nav class="footer-nav"></nav>');
-        _.each(config.footer.links, link => {
-          const $link = $('<a></a>')
-            .attr('href', link.url)
-            .text(link.text);
-          $nav.append($link);
-        });
-        $footerContent.append($nav);
-
-        $footer.append($footerContent);
-      }
-    }
-
-    // Initialise features
-    if (config.features) {
-      // Icon scanning
-      if (config.features.icons) {
-        Domma.icons.scan();
-      }
-
-      // Back to top button
-      if (config.features.backToTop) {
-        Domma.elements.backToTop({
-          scrollThreshold: 300,
-          position: 'bottom-right'
-        });
-      }
-
-      // Smooth scroll
-      if (config.features.smoothScroll) {
-        $('a[href^="#"]').on('click', function (e) {
-          e.preventDefault();
-          const targetId = $(this).attr('href');
-          const $target = $(targetId);
-
-          if ($target.length) {
-            $target[0].scrollIntoView({behavior: 'smooth'});
-          }
-        });
-      }
-
-      // Code copy buttons
-      if (config.features.codeCopy) {
-        $('pre code').each((codeBlock) => {
-          const $code = $(codeBlock);
-          const $pre = $code.parent();
-
-          const $button = $('<button class="btn btn-sm code-copy-btn">Copy</button>');
-
-          $button.on('click', () => {
-            _.copyToClipboard($code.text());
-            $button.text('Copied!');
-            setTimeout(() => $button.text('Copy'), 2000);
-          });
-
-          $pre.css('position', 'relative');
-          $pre.prepend($button);
-        });
-      }
-    }
-
-    console.log(`✓ Domma initialised with theme: ${config.theme.default}`);
-  }).catch(err => {
-    console.warn('Could not load domma.config.json:', err.message);
   });
+
+  console.log('[App] Initialization complete');
 });
-
-/**
- * Add floating theme selector
- */
-function addThemeSelector() {
-  const themes = Domma.theme.listThemes();
-  const currentTheme = Domma.theme.get();
-
-  const $selector = $('<div class="theme-selector"></div>');
-  const $select = $('<select id="theme-select" class="form-select"></select>');
-
-  _.each(themes, theme => {
-    const $option = $('<option></option>')
-      .attr('value', theme)
-      .text(theme);
-
-    if (theme === currentTheme) {
-      $option.attr('selected', 'selected');
-    }
-
-    $select.append($option);
-  });
-
-  $selector.append($select);
-
-  // Add styles
-  const $style = $(`<style>
-        .theme-selector {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            z-index: 1000;
-            background: var(--dm-surface);
-            padding: var(--dm-space-3);
-            border-radius: var(--dm-radius-md);
-            box-shadow: var(--dm-shadow-lg);
-        }
-        .theme-selector select {
-            min-width: 150px;
-        }
-    </style>`);
-
-  $('head').append($style);
-  $('body').append($selector);
-
-  // Handle theme changes
-  $select.on('change', (e) => {
-    Domma.theme.set($(e.target).val());
-  });
-}
