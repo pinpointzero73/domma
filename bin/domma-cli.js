@@ -668,7 +668,6 @@ async function handleServe() {
   const isSpa = config.spa?.enabled === true;
   const portIndex = args.indexOf('--port');
   const port = portIndex !== -1 ? parseInt(args[portIndex + 1]) : 3096;
-  const servePath = isSpa ? 'frontend' : 'frontend/pages';
 
   console.log(`
 ╔═══════════════════════════════════════╗
@@ -676,12 +675,13 @@ async function handleServe() {
 ╚═══════════════════════════════════════╝
 `);
   console.log(`  Project type: ${isSpa ? 'SPA' : 'MPA'}`);
-  console.log(`  Serving: ${servePath}/`);
-  console.log(`  URL: http://localhost:${port}\n`);
+  console.log(`  Serving: frontend/`);
+  console.log(`  URL: http://localhost:${port}${isSpa ? '' : '/pages/'}\n`);
 
   liveServer.default.start({
     port,
-    root: servePath,
+    root: 'frontend',
+    file: isSpa ? 'index.html' : 'pages/index.html',
     open: true,
     logLevel: 1
   });
