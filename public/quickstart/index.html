@@ -28,12 +28,59 @@
 <!-- Navigation -->
 <nav id="main-nav"></nav>
 
-<div class="hero hero-center bg-ambient-rotate-spotlight">
-    <div class="hero-content">
-        <div class="hero-title">Up and Running in 30 Seconds</div>
-        <div class="hero-subtitle">Zero configuration. No decisions. Just three commands.</div>
-    </div>
-</div>
+<section class="hero hero-lg hero-center hero-fluid bg-dark bg-ambient-rotate-glow" style="min-height: 50vh; padding: 3rem 2rem;">
+        <div class="hero-content" style="max-width: 900px; margin: 0 auto;">
+            <!-- Animated SVG Logo -->
+            <div class="hero-logo" style="display: flex; justify-content: center; margin-bottom: 2rem;">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"
+                     style="width: 120px; height: 120px; color: var(--dm-white-t85);">
+                    <path d="M12 8 L12 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M12 8 L24 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M12 40 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M24 8 L36 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M36 16 L36 32" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M36 32 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="24" cy="24" r="3" fill="currentColor"/>
+                </svg>
+            </div>
+
+            <!-- Gradient Text Heading -->
+            <h1 class="display-1 mb-4" style="font-size: 3.5rem; font-weight: 800; letter-spacing: -0.05em; background: linear-gradient(135deg, var(--dm-white-t90) 0%, var(--dm-white-t70) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                Get Started with Domma
+            </h1>
+
+            <p class="lead mb-5" style="font-size: 1.25rem; opacity: 0.9; max-width: 700px; margin: 0 auto 3rem;">
+                Choose your architecture: Multi-Page for content sites, or Single-Page for app-like experiences. Up and running in 30 seconds.
+            </p>
+
+            <!-- Feature Pills -->
+            <div class="d-flex gap-2 flex-wrap justify-content-center mb-4">
+                <span class="badge badge-lg" style="background: var(--dm-white-t10); border: 1px solid var(--dm-white-t20); padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+                    <span data-icon="zap" data-icon-size="16" style="color: var(--dm-warning);"></span> 30 Second Setup
+                </span>
+                <span class="badge badge-lg" style="background: var(--dm-white-t10); border: 1px solid var(--dm-white-t20); padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+                    <span data-icon="layers" data-icon-size="16" style="color: var(--dm-info);"></span> Zero Dependencies
+                </span>
+                <span class="badge badge-lg" style="background: var(--dm-white-t10); border: 1px solid var(--dm-white-t20); padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+                    <span data-icon="palette" data-icon-size="16" style="color: var(--dm-success);"></span> 16+ Themes
+                </span>
+            </div>
+
+            <!-- Two CTA Buttons -->
+            <div class="d-flex gap-3 justify-content-center flex-wrap mb-0">
+                <a href="mpa/" class="cta">
+                    <span data-icon="file-text" data-icon-size="20"></span>
+                    QuickStart: MPA
+                    <span class="cta-arrow">&rarr;</span>
+                </a>
+                <a href="spa/" class="cta cta-secondary">
+                    <span data-icon="zap" data-icon-size="20"></span>
+                    QuickStart: SPA
+                    <span class="cta-arrow">&rarr;</span>
+                </a>
+            </div>
+        </div>
+</section>
 
 <section class="container">
   <div class="command-block" style="max-width: 600px; margin: 2rem auto; text-align: left;">
@@ -164,60 +211,93 @@
 </section>
 
 <!-- Which Mode Should I Choose? -->
-<section class="container py-8">
-  <h2 class="text-center mb-6">Which Mode Should I Choose?</h2>
+<section class="container py-6">
+  <h2 class="text-center display-3 mb-3">Choose Your Architecture</h2>
+  <p class="text-center text-secondary mb-5 lead">Both modes include Navbar, Footer, 16+ Themes, Icons, Grid, Components, and Mobile Responsive design</p>
 
-  <div class="row g-4">
-    <div class="col-12 col-md-6">
-      <div class="card h-100" style="border: 2px solid var(--dm-primary);">
-        <div class="card-body">
-          <h3 class="h5 mb-3">
-            <span data-icon="file-text" class="me-2"></span>
-            Choose MPA When:
-          </h3>
-          <ul class="list-unstyled">
-            <li class="mb-2"><span data-icon="check" class="text-primary me-2"></span> Building content-heavy sites (blogs, docs)</li>
-            <li class="mb-2"><span data-icon="check" class="text-primary me-2"></span> SEO is critical (search engines)</li>
-            <li class="mb-2"><span data-icon="check" class="text-primary me-2"></span> Need to work without JavaScript</li>
-            <li class="mb-2"><span data-icon="check" class="text-primary me-2"></span> Simple static hosting required</li>
-            <li class="mb-0"><span data-icon="check" class="text-primary me-2"></span> Each page is independent</li>
+  <div class="row g-5 justify-content-center">
+    <!-- MPA Card -->
+    <div class="col-12 col-lg-6">
+      <div class="card h-100 card-hover" style="border: 2px solid var(--dm-primary); transition: all 0.3s ease;">
+        <div class="card-body p-5">
+          <!-- Icon -->
+          <div class="text-center mb-4">
+            <span data-icon="file-text" data-icon-size="64" style="color: var(--dm-primary);"></span>
+          </div>
+
+          <!-- Title -->
+          <h3 class="text-center h3 mb-3">Multi-Page Application</h3>
+          <p class="text-center text-secondary mb-4">Traditional site with separate HTML pages</p>
+
+          <!-- Command -->
+          <div class="command-block text-center" style="font-size: 1rem;">
+            <span class="command-prompt">$</span> npx domma init --mpa
+          </div>
+
+          <!-- Benefits -->
+          <h4 class="h6 mt-4 mb-3">Perfect For:</h4>
+          <ul class="list-unstyled mb-4">
+            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> Content-heavy sites (blogs, docs, marketing)</li>
+            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> SEO is critical</li>
+            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> Works without JavaScript</li>
+            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> Simple static hosting</li>
+            <li class="mb-0"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> Independent pages</li>
           </ul>
-          <div class="mt-4 p-3" style="background: var(--dm-surface-light); border-radius: 0.25rem;">
-            <strong>Add more pages:</strong><br>
-            <code>npx domma add page services</code>
+
+          <!-- CTA -->
+          <div class="text-center mt-4">
+            <a href="mpa/" class="btn btn-lg btn-primary w-100">
+              <span data-icon="arrow-right" data-icon-size="20"></span>
+              Get Started with MPA
+            </a>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col-12 col-md-6">
-      <div class="card h-100" style="border: 2px solid var(--dm-success);">
-        <div class="card-body">
-          <h3 class="h5 mb-3">
-            <span data-icon="zap" class="me-2"></span>
-            Choose SPA When:
-          </h3>
-          <ul class="list-unstyled">
-            <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Building app-like experiences (dashboards, tools)</li>
-            <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Want instant page transitions</li>
-            <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Need client-side routing</li>
-            <li class="mb-2"><span data-icon="check" class="text-success me-2"></span> Share state between views</li>
-            <li class="mb-0"><span data-icon="check" class="text-success me-2"></span> Dynamic, interactive UI required</li>
+    <!-- SPA Card -->
+    <div class="col-12 col-lg-6">
+      <div class="card h-100 card-hover" style="border: 2px solid var(--dm-success); transition: all 0.3s ease;">
+        <div class="card-body p-5">
+          <!-- Icon -->
+          <div class="text-center mb-4">
+            <span data-icon="zap" data-icon-size="64" style="color: var(--dm-success);"></span>
+          </div>
+
+          <!-- Title -->
+          <h3 class="text-center h3 mb-3">Single Page Application</h3>
+          <p class="text-center text-secondary mb-4">App-like experience with client-side routing</p>
+
+          <!-- Command -->
+          <div class="command-block text-center" style="font-size: 1rem;">
+            <span class="command-prompt">$</span> npx domma init --spa
+          </div>
+
+          <!-- Benefits -->
+          <h4 class="h6 mt-4 mb-3">Perfect For:</h4>
+          <ul class="list-unstyled mb-4">
+            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-success); margin-right: 0.5rem;"></span> App-like experiences (dashboards, tools)</li>
+            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-success); margin-right: 0.5rem;"></span> Instant page transitions</li>
+            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-success); margin-right: 0.5rem;"></span> Client-side routing</li>
+            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-success); margin-right: 0.5rem;"></span> Shared state between views</li>
+            <li class="mb-0"><span data-icon="check" data-icon-size="18" style="color: var(--dm-success); margin-right: 0.5rem;"></span> Dynamic, interactive UI</li>
           </ul>
-          <div class="mt-4 p-3" style="background: var(--dm-surface-light); border-radius: 0.25rem;">
-            <strong>Add more views:</strong><br>
-            <code>npx domma add view settings</code>
+
+          <!-- CTA -->
+          <div class="text-center mt-4">
+            <a href="spa/" class="btn btn-lg btn-success w-100">
+              <span data-icon="arrow-right" data-icon-size="20"></span>
+              Get Started with SPA
+            </a>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="text-center mt-5">
-    <p class="text-secondary mb-0">
-      <span data-icon="info" class="me-2"></span>
-      <strong>Not sure?</strong> Start with MPA - it's simpler and works everywhere. You can always rebuild as SPA later.
-    </p>
+  <div class="text-center mt-6 p-4" style="background: var(--dm-surface-raised); border-radius: var(--dm-radius-lg); border: 1px solid var(--dm-border);">
+    <span data-icon="info" data-icon-size="24" style="color: var(--dm-info); margin-right: 0.5rem;"></span>
+    <strong>Not sure which to choose?</strong> Start with MPA - it's simpler and works everywhere. You can always rebuild as SPA later.
   </div>
 </section>
 
@@ -309,90 +389,7 @@
 </section>
 
 <!-- Footer -->
-<footer class="bg-gray-900 text-gray-100 py-6 mt-8">
-  <div class="container">
-    <div class="grid grid-cols-6 gap-8 align-items-center">
-      <!-- Branding -->
-      <div>
-        <a href="/" class="d-flex align-items-center text-decoration-none mb-2">
-          <span data-icon="box" style="width: 32px; height: 32px; color: var(--dm-primary);"></span>
-          <div class="ms-2">
-            <div class="text-white font-weight-bold">Domma.js</div>
-            <div class="text-muted text-xs">v0.7.0-alpha</div>
-          </div>
-        </a>
-        <div class="text-xs text-gray-500 mt-2">Built: <span id="build-date"></span></div>
-        <div class="text-xs text-gray-500">~260KB min</div>
-      </div>
-
-      <!-- Resources -->
-      <div>
-        <div class="d-flex flex-wrap gap-2">
-          <a href="../showcase/" class="btn btn-sm btn-outline-secondary">
-            <span data-icon="grid" style="width: 14px; height: 14px;"></span> Showcase
-          </a>
-          <a href="http://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md"
-             class="btn btn-sm btn-outline-secondary" target="_blank">
-            <span data-icon="book" style="width: 14px; height: 14px;"></span> Docs
-          </a>
-          <a href="http://github.com/dcbw-it/domma/blob/main/docs/API.md" class="btn btn-sm btn-outline-secondary"
-             target="_blank">
-            <span data-icon="code" style="width: 14px; height: 14px;"></span> API
-          </a>
-        </div>
-      </div>
-
-      <!-- Community -->
-      <div>
-        <div class="d-flex flex-wrap gap-2">
-          <a href="http://github.com/dcbw-it/domma" class="btn btn-sm btn-outline-primary" target="_blank">
-            <span data-icon="github" style="width: 14px; height: 14px;"></span> GitHub
-          </a>
-          <a href="http://www.npmjs.com/package/domma-js" class="btn btn-sm btn-outline-danger" target="_blank">
-            <span data-icon="package" style="width: 14px; height: 14px;"></span> npm
-          </a>
-        </div>
-      </div>
-
-      <!-- DCBW IT -->
-      <div>
-        <div class="d-flex flex-wrap gap-2">
-          <a href="http://www.dcbw-it.co.uk/" class="btn btn-sm btn-outline-info" target="_blank">
-            <span data-icon="globe" style="width: 14px; height: 14px;"></span> DCBW IT
-          </a>
-          <a href="http://www.dcbw-it.co.uk/services" class="btn btn-sm btn-outline-info" target="_blank">
-            <span data-icon="briefcase" style="width: 14px; height: 14px;"></span> Services
-          </a>
-        </div>
-      </div>
-
-      <!-- Features -->
-      <div class="text-center">
-        <div class="d-flex flex-wrap gap-2 justify-content-center">
-          <span class="badge bg-success">Zero deps</span>
-          <span class="badge bg-primary">ES Modules</span>
-          <span class="badge bg-info">MIT License</span>
-        </div>
-      </div>
-
-      <!-- Copyright & Social -->
-      <div class="text-end">
-        <div class="text-xs text-gray-500 mb-2">© 2024 DCBW IT</div>
-        <div class="d-flex gap-3 justify-content-end">
-          <a href="http://github.com/dcbw-it/domma" class="text-gray-500 hover:text-primary" target="_blank">
-            <span data-icon="github" style="width: 20px; height: 20px;"></span>
-          </a>
-          <a href="http://www.npmjs.com/package/domma-js" class="text-gray-500 hover:text-primary" target="_blank">
-            <span data-icon="package" style="width: 20px; height: 20px;"></span>
-          </a>
-          <a href="http://twitter.com/dcbw_it" class="text-gray-500 hover:text-primary" target="_blank">
-            <span data-icon="twitter" style="width: 20px; height: 20px;"></span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>
+<footer class="page-footer"></footer>
 
 <!-- Domma JavaScript -->
 <!-- DOMPurify for XSS protection -->
@@ -429,9 +426,22 @@
   // Add back-to-top button
   Domma.elements.backToTop();
 
-    // Set build date
-    const buildDate = D().format('D MMMM YYYY');
-    $('#build-date').text(buildDate);
+  // Initialize footer
+  Domma.elements.footer('.page-footer', {
+    layout: 'simple',
+    variant: 'dark',
+    brand: { text: 'Domma QuickStart', url: '/quickstart/' },
+    links: [
+      { text: 'Showcase', url: '../showcase/' },
+      { text: 'Documentation', url: 'https://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md', external: true },
+      { text: 'API Reference', url: 'https://github.com/dcbw-it/domma/blob/main/docs/API.md', external: true }
+    ],
+    social: [
+      { icon: 'github', url: 'https://github.com/dcbw-it/domma', label: 'GitHub' },
+      { icon: 'package', url: 'https://www.npmjs.com/package/domma-js', label: 'npm' }
+    ],
+    copyright: '© 2026 Darryl Waterhouse & DCBW-IT. All rights reserved.'
+  });
 
     // Use Domma Config to setup code copy
     $.setup({
@@ -439,6 +449,7 @@
         init: (el) => {
           // Wrap code block
           if (el.parentElement?.classList.contains('code-block-wrapper')) return;
+          if (!el.parentNode) return; // Safety check
 
           const wrapper = document.createElement('div');
           wrapper.className = 'code-block-wrapper';

@@ -2297,8 +2297,8 @@ code {
     position: relative;
     padding: var(--dm-space-12) var(--dm-space-6);
     background-color: var(--dm-gray-100);
-    border: 1px solid var(--dm-border);
-    border-radius: var(--dm-radius-lg);
+    border: none;
+    border-radius: 0;
     margin-bottom: var(--dm-space-6);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     text-align: center;

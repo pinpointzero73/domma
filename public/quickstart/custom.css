@@ -137,3 +137,87 @@
           max-width: 600px;
           margin: 0 auto;
       }
+
+      /* ===== HERO LOGO ANIMATION ===== */
+      .hero-logo svg {
+          color: var(--dm-white-t85);
+          animation: glow 3s ease-in-out infinite alternate;
+          filter: drop-shadow(0 0 20px var(--dm-white-t30));
+      }
+
+      @keyframes glow {
+          from {
+              filter: drop-shadow(0 0 20px var(--dm-white-t30));
+          }
+          to {
+              filter: drop-shadow(0 0 40px var(--dm-white-t50));
+          }
+      }
+
+      /* ===== CTA BUTTONS ===== */
+      .cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.75rem;
+          background: var(--dm-white-t95);
+          color: var(--dm-primary-dark);
+          font-size: 1.1rem;
+          font-weight: 600;
+          padding: 0.875rem 2rem;
+          border-radius: 50px;
+          text-decoration: none;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 20px var(--dm-black-t20);
+      }
+
+      .cta:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 30px var(--dm-black-t30);
+          color: var(--dm-primary-dark);
+          text-decoration: none;
+      }
+
+      .cta-secondary {
+          background: var(--dm-white-t15);
+          color: var(--dm-white);
+          border: 2px solid var(--dm-white-t40);
+      }
+
+      .cta-secondary:hover {
+          color: var(--dm-white);
+      }
+
+      .cta-arrow {
+          transition: transform 0.3s ease;
+      }
+
+      .cta:hover .cta-arrow {
+          transform: translateX(4px);
+      }
+
+      /* ===== ENHANCED STEP CARDS ===== */
+      .step-number {
+          width: 3rem;
+          height: 3rem;
+          font-size: 1.5rem;
+          background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
+          box-shadow: 0 4px 15px var(--dm-primary-t30);
+      }
+
+      /* ===== DEMO CONTAINER ===== */
+      .demo-container {
+          border: 2px solid var(--dm-border);
+          border-radius: var(--dm-radius-lg);
+          overflow: hidden;
+          background: var(--dm-surface);
+          box-shadow: var(--dm-shadow-xl);
+          margin: 2rem 0;
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 768px) {
+          .cta {
+              width: 100%;
+              justify-content: center;
+          }
+      }

@@ -10,12 +10,6 @@
           "section": "download"
         },
         {
-          "text": "QuickStart",
-          "url": "quickstart/index.html",
-          "section": "quickstart",
-          "badge": "New"
-        },
-        {
           "text": "Feedback",
           "url": "feedback/index.html",
           "section": "feedback",
@@ -32,6 +26,31 @@
           "url": "https://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md",
           "section": "docs",
           "external": true
+        }
+      ]
+    },
+    {
+      "text": "QuickStart",
+      "items": [
+        {
+          "text": "Overview",
+          "url": "quickstart/index.html",
+          "section": "quickstart"
+        },
+        {
+          "divider": true
+        },
+        {
+          "text": "MPA",
+          "url": "quickstart/mpa/index.html",
+          "section": "quickstart-mpa",
+          "badge": "New"
+        },
+        {
+          "text": "SPA",
+          "url": "quickstart/spa/index.html",
+          "section": "quickstart-spa",
+          "badge": "New"
         }
       ]
     },

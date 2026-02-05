@@ -7,10 +7,12 @@
   <meta name="description" content="{{projectName}} - A Domma-powered SPA">
 
   <!-- Domma CSS -->
-  <link rel="stylesheet" href="dist/domma/domma.css">
-  <link rel="stylesheet" href="dist/domma/grid.css">
-  <link rel="stylesheet" href="dist/domma/elements.css">
-  <link rel="stylesheet" href="dist/domma/themes/domma-themes.css">
+  <!-- Note: These paths work when testing in repo. When you run "npx domma init", -->
+  <!-- the CLI will copy Domma files to your project and update paths to: dist/domma/*.css -->
+  <link rel="stylesheet" href="../../../public/dist/domma.css">
+  <link rel="stylesheet" href="../../../public/dist/grid.css">
+  <link rel="stylesheet" href="../../../public/dist/elements.css">
+  <link rel="stylesheet" href="../../../public/dist/themes/domma-themes.css">
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/custom.css">
@@ -29,7 +31,9 @@
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
 
   <!-- Domma Core -->
-  <script src="dist/domma/domma.min.js"></script>
+  <!-- Note: This path works when testing in repo. When you run "npx domma init", -->
+  <!-- the CLI will copy Domma files and update path to: dist/domma/domma.min.js -->
+  <script src="../../../public/dist/domma.min.js"></script>
 
   <!-- Views (ES Modules) -->
   <script src="js/views/index.js" type="module"></script>
