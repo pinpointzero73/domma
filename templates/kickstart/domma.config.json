@@ -13,35 +13,35 @@
   "navbar": {
     "brand": {
       "text": "{{projectName}}",
-      "logo": "frontend/assets/logo/placeholder.svg",
-      "url": "/frontend/pages/"
+      "logo": "assets/logo/placeholder.svg",
+      "url": "pages/"
     },
     "items": [
       {
         "text": "Home",
-        "url": "/frontend/pages/",
+        "url": "pages/",
         "active": true
       },
       {
         "text": "About",
-        "url": "/frontend/pages/about/"
+        "url": "pages/about/"
       },
       {
         "text": "Contact",
-        "url": "/frontend/pages/contact/"
+        "url": "pages/contact/"
       },
       {
         "text": "Blog",
-        "url": "/frontend/pages/blog/"
+        "url": "pages/blog/"
       },
       {
         "text": "Docs",
-        "url": "/frontend/pages/docs/"
+        "url": "pages/docs/"
       },
       {
         "text": "QuickStart",
-        "url": "https://github.com/dcbw-it/domma#quick-start-with-cli-recommended",
-        "badge": "New"
+        "url": "https://dommajs.org/docs/getting-started",
+        "badge": "Docs"
       }
     ],
     "variant": "dark",
@@ -53,19 +53,19 @@
     "links": [
       {
         "text": "Privacy Policy",
-        "url": "/frontend/pages/privacy/"
+        "url": "pages/privacy/"
       },
       {
         "text": "Cookie Policy",
-        "url": "/frontend/pages/cookies/"
+        "url": "pages/cookies/"
       },
       {
         "text": "Terms of Service",
-        "url": "/frontend/pages/terms/"
+        "url": "pages/terms/"
       },
       {
         "text": "Contact Us",
-        "url": "/frontend/pages/contact/"
+        "url": "pages/contact/"
       }
     ]
   },
