@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPA QuickStart - Domma Single Page Application Guide</title>
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="alternate icon" href="../../assets/logo/domma-icon.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/syntax.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../custom.css">
+  <style>
+    .spa-nav-link {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      margin: 0 0.25rem;
+      background: var(--dm-surface);
+      border-radius: var(--dm-radius-md);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: var(--dm-text);
+    }
+    .spa-nav-link:hover {
+      background: var(--dm-primary-t10);
+      color: var(--dm-primary);
+    }
+    .spa-nav-link.active {
+      background: var(--dm-primary);
+      color: white;
+    }
+    #spa-app {
+      min-height: 300px;
+    }
+  </style>
+</head>
+<body class="dm-theme-charcoal-dark" data-layout="public">
+
+<!-- Navigation -->
+<nav id="main-nav"></nav>
+
+<!-- Hero Section -->
+<section class="hero hero-lg hero-center hero-fluid bg-dark bg-ambient-rotate-glow" style="min-height: 50vh; padding: 3rem 2rem;">
+    <div class="hero-content" style="max-width: 900px; margin: 0 auto;">
+      <!-- Animated SVG Logo -->
+      <div class="hero-logo" style="display: flex; justify-content: center; margin-bottom: 2rem;">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"
+             style="width: 120px; height: 120px; color: var(--dm-white-t85);">
+          <path d="M12 8 L12 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <path d="M12 8 L24 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <path d="M12 40 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <path d="M24 8 L36 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M36 16 L36 32" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <path d="M36 32 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="24" cy="24" r="3" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <!-- Badge -->
+      <div style="margin-bottom: 1.5rem;">
+        <span class="badge badge-lg" style="background: var(--dm-success-t20); border: 1px solid var(--dm-success-t40); padding: 0.5rem 1.5rem; font-size: 0.9rem;">
+          ⚡ Single Page Application
+        </span>
+      </div>
+
+      <!-- Gradient Text Heading -->
+      <h1 class="display-1 mb-4" style="font-size: 3.5rem; font-weight: 800; letter-spacing: -0.05em; background: linear-gradient(135deg, var(--dm-white-t90) 0%, var(--dm-white-t70) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        SPA QuickStart
+      </h1>
+
+      <p class="lead mb-5" style="font-size: 1.25rem; opacity: 0.9; max-width: 700px; margin: 0 auto 3rem;">
+        Build an app-like experience with client-side routing and instant transitions. Perfect for dashboards, tools, and interactive web apps.
+      </p>
+
+      <!-- Feature Pills -->
+      <div class="d-flex gap-2 flex-wrap justify-content-center mb-4">
+        <span class="badge badge-lg" style="background: var(--dm-white-t10); border: 1px solid var(--dm-white-t20); padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+          <span data-icon="zap" data-icon-size="16" style="color: var(--dm-warning);"></span> Instant Transitions
+        </span>
+        <span class="badge badge-lg" style="background: var(--dm-white-t10); border: 1px solid var(--dm-white-t20); padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+          <span data-icon="layers" data-icon-size="16" style="color: var(--dm-success);"></span> Client Routing
+        </span>
+        <span class="badge badge-lg" style="background: var(--dm-white-t10); border: 1px solid var(--dm-white-t20); padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+          <span data-icon="database" data-icon-size="16" style="color: var(--dm-info);"></span> Shared State
+        </span>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="d-flex gap-3 justify-content-center flex-wrap mb-0">
+        <a href="#setup" class="cta">
+          <span data-icon="download" data-icon-size="20"></span>
+          Setup Guide
+          <span class="cta-arrow">&darr;</span>
+        </a>
+        <a href="#example" class="cta cta-secondary">
+          <span data-icon="eye" data-icon-size="20"></span>
+          Live Example
+          <span class="cta-arrow">&darr;</span>
+        </a>
+      </div>
+    </div>
+</section>
+
+<!-- Setup Steps -->
+<section id="setup" class="container py-8">
+  <h2 class="text-center mb-6">Setup Your SPA in 3 Steps</h2>
+
+  <!-- Step 1 -->
+  <div class="step-card">
+    <div class="d-flex align-items-start">
+      <span class="step-number">1</span>
+      <div class="flex-grow-1">
+        <h3 class="h4 mb-3">Create & Initialize Project</h3>
+        <div class="command-block">
+          <span class="command-prompt">$</span> mkdir my-spa-app && cd my-spa-app<br>
+          <span class="command-prompt">$</span> npm init -y
+        </div>
+        <p class="text-secondary mt-3">
+          Creates a new project folder and initializes package.json
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step-card">
+    <div class="d-flex align-items-start">
+      <span class="step-number">2</span>
+      <div class="flex-grow-1">
+        <h3 class="h4 mb-3">Install Domma</h3>
+        <div class="command-block">
+          <span class="command-prompt">$</span> npm install domma-js
+        </div>
+        <p class="text-secondary mt-3">
+          Downloads Domma from npm (~260KB minified)
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step-card">
+    <div class="d-flex align-items-start">
+      <span class="step-number">3</span>
+      <div class="flex-grow-1">
+        <h3 class="h4 mb-3">Generate SPA Structure</h3>
+        <div class="command-block">
+          <span class="command-prompt">$</span> npx domma init --spa
+        </div>
+        <p class="text-secondary mt-3 mb-4">
+          Creates a single page application with client-side routing
+        </p>
+
+        <!-- File Structure -->
+        <div class="result-preview">
+          <h4 class="h6 mb-3">✓ Generated File Structure:</h4>
+          <div class="file-list">
+            <div><span class="file-icon" data-icon="home"></span> frontend/index.html (single entry)</div>
+            <div><span class="file-icon" data-icon="code"></span> frontend/js/app.js (router init)</div>
+            <div><span class="file-icon" data-icon="folder"></span> frontend/js/views/</div>
+            <div style="padding-left: 2rem;"><span class="file-icon" data-icon="code"></span> home.js</div>
+            <div style="padding-left: 2rem;"><span class="file-icon" data-icon="code"></span> about.js</div>
+            <div style="padding-left: 2rem;"><span class="file-icon" data-icon="code"></span> contact.js</div>
+            <div style="padding-left: 2rem;"><span class="file-icon" data-icon="code"></span> 404.js</div>
+            <div><span class="file-icon" data-icon="folder"></span> frontend/css/custom.css</div>
+            <div><span class="file-icon" data-icon="settings"></span> frontend/domma.config.json</div>
+          </div>
+        </div>
+
+        <!-- Run Command -->
+        <div class="alert alert-success mt-4" style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 1rem; border-radius: 0.5rem;">
+          <strong>✓ Ready!</strong> Open <code>frontend/index.html</code> in your browser or run:
+          <div class="command-block mt-2" style="margin: 0;">
+            <span class="command-prompt">$</span> npx live-server frontend
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Live Router Demo -->
+<section id="example" class="bg-surface py-8">
+  <div class="container">
+    <h2 class="text-center mb-3">Live SPA Router Demo</h2>
+    <p class="text-center text-secondary mb-6">
+      Click the navigation links below to switch between views <strong>without page reload</strong>. This is how your SPA will work!
+    </p>
+
+    <!-- Router Demo Container -->
+    <div class="demo-container">
+      <!-- Demo Navigation -->
+      <div class="p-4 text-center" style="background: var(--dm-gray-900); border-bottom: 1px solid var(--dm-border);">
+        <a class="spa-nav-link active" data-view="home">
+          <span data-icon="home" data-icon-size="18"></span> Home
+        </a>
+        <a class="spa-nav-link" data-view="about">
+          <span data-icon="info" data-icon-size="18"></span> About
+        </a>
+        <a class="spa-nav-link" data-view="contact">
+          <span data-icon="mail" data-icon-size="18"></span> Contact
+        </a>
+      </div>
+
+      <!-- View Container -->
+      <div id="spa-app"></div>
+    </div>
+
+    <div class="alert alert-info mt-4" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 1rem; border-radius: 0.5rem;">
+      <span data-icon="info" style="color: var(--dm-info); margin-right: 0.5rem;"></span>
+      <strong>Notice:</strong> The content changes instantly without reloading the page. That's the power of client-side routing!
+    </div>
+  </div>
+</section>
+
+<!-- Code Examples -->
+<section class="container py-8">
+  <h2 class="text-center mb-6">Code Structure</h2>
+
+  <div class="row g-4">
+    <!-- domma.config.json -->
+    <div class="col-12">
+      <h3 class="h5 mb-3">frontend/domma.config.json</h3>
+      <pre class="code-block language-json">{
+  "project": {
+    "name": "My SPA App",
+    "version": "1.0.0"
+  },
+  "spa": {
+    "enabled": true,
+    "container": "#app",
+    "defaultRoute": "/",
+    "notFoundView": "404"
+  },
+  "routes": [
+    { "path": "/", "view": "home" },
+    { "path": "/about", "view": "about" },
+    { "path": "/contact", "view": "contact" }
+  ],
+  "navbar": {
+    "brand": { "text": "My App", "url": "#/" },
+    "items": [
+      { "text": "Home", "url": "#/" },
+      { "text": "About", "url": "#/about" },
+      { "text": "Contact", "url": "#/contact" }
+    ]
+  }
+}</pre>
+    </div>
+
+    <!-- View Definition -->
+    <div class="col-12">
+      <h3 class="h5 mb-3">frontend/js/views/home.js</h3>
+      <pre class="code-block language-javascript">export const homeView = {
+  template: `
+    &lt;div class="hero hero-gradient-primary hero-center" style="padding: 3rem 2rem;"&gt;
+      &lt;div class="hero-content"&gt;
+        &lt;h1&gt;Welcome to My SPA&lt;/h1&gt;
+        &lt;p class="lead"&gt;Built with Domma's powerful router&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class="container py-6"&gt;
+      &lt;h2&gt;This is the Home View&lt;/h2&gt;
+      &lt;p&gt;Click the navigation links to switch views without page reload!&lt;/p&gt;
+    &lt;/div&gt;
+  `,
+
+  onMount($container) {
+    // Scan for icons when view mounts
+    Domma.icons.scan($container[0]);
+    console.log('Home view mounted');
+  },
+
+  onLeave() {
+    console.log('Home view unmounted');
+  }
+};</pre>
+    </div>
+
+    <!-- Router Initialization -->
+    <div class="col-12">
+      <h3 class="h5 mb-3">frontend/js/app.js</h3>
+      <pre class="code-block language-javascript">import { views } from './views/index.js';
+
+$(() => {
+  // Load config
+  Domma.http.get('domma.config.json').then(config => {
+    // Initialize router
+    R.init({
+      container: config.spa.container || '#app',
+      routes: config.routes || [],
+      views: views,
+      default: config.spa.defaultRoute || '/',
+      notFound: config.spa.notFoundView || '404'
+    });
+
+    // Subscribe to route changes
+    M.subscribe('router:afterChange', ({ to, from }) => {
+      console.log(`Route changed: ${from?.path} → ${to.path}`);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    console.log('Router initialized');
+  });
+});</pre>
+    </div>
+  </div>
+</section>
+
+<!-- Next Steps -->
+<section class="bg-surface py-8">
+  <div class="container text-center">
+    <h2 class="mb-4">You're Ready to Build! 🎉</h2>
+    <p class="lead mb-6">
+      Your SPA is set up and ready. Start editing views in <code>frontend/js/views/</code> folder.
+    </p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a href="../" class="btn btn-lg btn-outline-success">
+        <span data-icon="arrow-left"></span> Back to QuickStart
+      </a>
+      <a href="../../showcase/" class="btn btn-lg btn-success">
+        <span data-icon="grid"></span> Explore Showcase
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="page-footer"></footer>
+
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+
+<script>
+$(() => {
+  // Initialize theme
+  Domma.theme.init({ theme: 'charcoal-dark', persist: true });
+
+  // Initialize main navbar
+  Domma.elements.navbar('#main-nav', {
+    brand: { text: 'Domma QuickStart', url: '/quickstart/' },
+    items: [
+      { text: 'Home', url: '/quickstart/' },
+      { text: 'MPA', url: '/quickstart/mpa/' },
+      { text: 'SPA', url: '/quickstart/spa/', active: true },
+      { text: 'Showcase', url: '../../showcase/' }
+    ],
+    variant: 'dark',
+    position: 'sticky'
+  });
+
+  // Initialize page footer
+  Domma.elements.footer('.page-footer', {
+    layout: 'simple',
+    variant: 'dark',
+    brand: { text: 'Domma QuickStart', url: '/quickstart/' },
+    links: [
+      { text: 'Showcase', url: '../../showcase/' },
+      { text: 'Documentation', url: 'https://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md', external: true }
+    ],
+    social: [
+      { icon: 'github', url: 'https://github.com/dcbw-it/domma', label: 'GitHub' }
+    ],
+    copyright: '© 2026 Darryl Waterhouse & DCBW-IT. All rights reserved.'
+  });
+
+  // SPA Router Demo
+  const spaViews = {
+    home: {
+      template: `
+        <div class="hero hero-center bg-dark bg-ambient-rotate-glow" style="min-height: 40vh; padding: 3rem 2rem;">
+          <div class="hero-content">
+            <div class="mb-4">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 72px; height: 72px; color: var(--dm-white-t85);">
+                <path d="M12 8 L12 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                <path d="M12 8 L24 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                <path d="M12 40 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                <path d="M24 8 L36 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M36 16 L36 32" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                <path d="M36 32 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="24" cy="24" r="3" fill="currentColor"/>
+              </svg>
+            </div>
+            <h1 class="hero-title" style="color: var(--dm-white);">Home View</h1>
+            <p class="hero-subtitle" style="color: var(--dm-white-t85);">Welcome to your SPA. This view loaded instantly without a page reload!</p>
+          </div>
+        </div>
+
+        <div class="container py-8">
+          <div class="grid grid-cols-4 gap-5">
+            <div class="card card-hover shadow-lg">
+              <div class="card-body text-center p-5">
+                <span data-icon="zap" data-icon-size="48" class="text-warning mb-3"></span>
+                <h3 class="h5">Instant Navigation</h3>
+                <p class="text-secondary mb-0">Zero page reloads, instant transitions</p>
+              </div>
+            </div>
+            <div class="card card-hover shadow-lg">
+              <div class="card-body text-center p-5">
+                <span data-icon="database" data-icon-size="48" class="text-success mb-3"></span>
+                <h3 class="h5">Shared State</h3>
+                <p class="text-secondary mb-0">Data persists across views</p>
+              </div>
+            </div>
+            <div class="card card-hover shadow-lg">
+              <div class="card-body text-center p-5">
+                <span data-icon="settings" data-icon-size="48" class="text-info mb-3"></span>
+                <h3 class="h5">Lifecycle Hooks</h3>
+                <p class="text-secondary mb-0">Full control with onMount/onLeave</p>
+              </div>
+            </div>
+            <div class="card card-hover shadow-lg">
+              <div class="card-body text-center p-5">
+                <span data-icon="code" data-icon-size="48" class="text-primary mb-3"></span>
+                <h3 class="h5">Simple API</h3>
+                <p class="text-secondary mb-0">Define views with templates</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `,
+      onMount($el) { Domma.icons.scan($el[0]); }
+    },
+    about: {
+      template: `
+        <div class="hero hero-center bg-dark bg-ambient-rotate-glow" style="min-height: 40vh; padding: 3rem 2rem;">
+          <div class="hero-content">
+            <span data-icon="info" data-icon-size="72" class="mb-3" style="color: var(--dm-white-t85);"></span>
+            <h1 class="hero-title" style="color: var(--dm-white);">About View</h1>
+            <p class="hero-subtitle" style="color: var(--dm-white-t85);">Route parameters and lifecycle hooks</p>
+          </div>
+        </div>
+
+        <div class="container py-8">
+          <div class="grid grid-cols-3 gap-5 mb-6">
+            <div class="card card-hover shadow-lg">
+              <div class="card-body text-center p-5">
+                <span data-icon="arrow-right" data-icon-size="48" class="text-primary mb-3"></span>
+                <h3 class="h5">onEnter()</h3>
+                <p class="text-secondary mb-0">Pre-render hook with async support</p>
+              </div>
+            </div>
+            <div class="card card-hover shadow-lg">
+              <div class="card-body text-center p-5">
+                <span data-icon="check-circle" data-icon-size="48" class="text-success mb-3"></span>
+                <h3 class="h5">onMount()</h3>
+                <p class="text-secondary mb-0">Post-render, initialize components</p>
+              </div>
+            </div>
+            <div class="card card-hover shadow-lg">
+              <div class="card-body text-center p-5">
+                <span data-icon="x-circle" data-icon-size="48" class="text-danger mb-3"></span>
+                <h3 class="h5">onLeave()</h3>
+                <p class="text-secondary mb-0">Cleanup before unmounting</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-5">
+            <div class="card card-hover shadow-lg">
+              <div class="card-body text-center p-5">
+                <span data-icon="settings" data-icon-size="48" class="text-info mb-3"></span>
+                <h3 class="h5">Route Params</h3>
+                <p class="text-secondary mb-0"><code>/user/:id</code> → params.id</p>
+              </div>
+            </div>
+            <div class="card card-hover shadow-lg">
+              <div class="card-body text-center p-5">
+                <span data-icon="layers" data-icon-size="48" class="text-warning mb-3"></span>
+                <h3 class="h5">Middleware</h3>
+                <p class="text-secondary mb-0">Auth guards, logging, validation</p>
+              </div>
+            </div>
+            <div class="card card-hover shadow-lg">
+              <div class="card-body text-center p-5">
+                <span data-icon="zap" data-icon-size="48" class="text-success mb-3"></span>
+                <h3 class="h5">Pub/Sub Events</h3>
+                <p class="text-secondary mb-0">router:beforeChange, afterChange</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `,
+      onMount($el) { Domma.icons.scan($el[0]); }
+    },
+    contact: {
+      template: `
+        <div class="hero hero-center bg-dark bg-ambient-rotate-glow" style="min-height: 40vh; padding: 3rem 2rem;">
+          <div class="hero-content">
+            <span data-icon="mail" data-icon-size="72" class="mb-3" style="color: var(--dm-white-t85);"></span>
+            <h1 class="hero-title" style="color: var(--dm-white);">Contact View</h1>
+            <p class="hero-subtitle" style="color: var(--dm-white-t85);">Blueprint-driven forms with validation</p>
+          </div>
+        </div>
+
+        <div class="container py-8">
+          <div class="row g-5 mb-6">
+            <div class="col-lg-8 mx-auto">
+              <div class="card shadow-lg">
+                <div class="card-body p-4">
+                  <h3 class="h5 mb-4">Send us a Message</h3>
+                  <div id="contact-form"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-5">
+            <div class="card card-hover shadow-lg">
+              <div class="card-body text-center p-5">
+                <span data-icon="database" data-icon-size="48" class="text-primary mb-3"></span>
+                <h3 class="h5">Blueprint Forms</h3>
+                <p class="text-secondary mb-0">Auto-generated from schema</p>
+              </div>
+            </div>
+            <div class="card card-hover shadow-lg">
+              <div class="card-body text-center p-5">
+                <span data-icon="check" data-icon-size="48" class="text-success mb-3"></span>
+                <h3 class="h5">Built-in Validation</h3>
+                <p class="text-secondary mb-0">Required, patterns, custom rules</p>
+              </div>
+            </div>
+            <div class="card card-hover shadow-lg">
+              <div class="card-body text-center p-5">
+                <span data-icon="zap" data-icon-size="48" class="text-warning mb-3"></span>
+                <h3 class="h5">Model Binding</h3>
+                <p class="text-secondary mb-0">Reactive two-way data binding</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `,
+      onMount($el) {
+        Domma.icons.scan($el[0]);
+
+        // Define Blueprint for contact form
+        const contactBlueprint = {
+          name: {
+            type: M.types.string,
+            label: 'Name',
+            required: true,
+            minLength: 2,
+            placeholder: 'John Doe'
+          },
+          email: {
+            type: M.types.string,
+            label: 'Email',
+            required: true,
+            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            placeholder: 'john@example.com'
+          },
+          subject: {
+            type: M.types.string,
+            label: 'Subject',
+            placeholder: "What's this about?"
+          },
+          message: {
+            type: M.types.string,
+            label: 'Message',
+            inputType: 'textarea',
+            required: true,
+            minLength: 10,
+            placeholder: 'Your message here...'
+          }
+        };
+
+        // Create form using Domma Forms
+        const form = Domma.forms.create('#contact-form', {
+          blueprint: contactBlueprint,
+          layout: 'grid',
+          submitText: 'Send Message',
+          submitIcon: 'send',
+          onSubmit: (data) => {
+            console.log('Form data:', data);
+            Domma.elements.toast.success('Message sent! (Demo only)', {
+              position: 'top-center',
+              duration: 3000
+            });
+            form.reset();
+          }
+        });
+      }
+    }
+  };
+
+  let currentView = 'home';
+
+  function renderView(viewName) {
+    const view = spaViews[viewName];
+    const $app = $('#spa-app');
+
+    $app.fadeOut(200, function() {
+      $app.html(view.template).fadeIn(200);
+      if (view.onMount) view.onMount($app);
+
+      // Update nav active states
+      $('.spa-nav-link').removeClass('active');
+      $(`.spa-nav-link[data-view="${viewName}"]`).addClass('active');
+
+      currentView = viewName;
+    });
+  }
+
+  // Initial render
+  renderView('home');
+
+  // Handle nav clicks
+  $('.spa-nav-link').on('click', function(e) {
+    e.preventDefault();
+    const viewName = $(this).data('view');
+    renderView(viewName);
+  });
+
+  // Scan icons
+  Domma.icons.scan();
+
+  // Add back-to-top
+  Domma.elements.backToTop();
+
+  // Code copy functionality
+  $.setup({
+    '.code-block': {
+      init: (el) => {
+        if (el.parentElement?.classList.contains('code-block-wrapper')) return;
+        if (!el.parentNode) return; // Safety check
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-block-wrapper';
+        el.parentNode.insertBefore(wrapper, el);
+        wrapper.appendChild(el);
+
+        const btn = document.createElement('button');
+        btn.className = 'code-block-copy';
+        btn.setAttribute('data-icon', 'copy');
+        wrapper.appendChild(btn);
+
+        Domma.icons.inject(btn.querySelector('[data-icon]'));
+
+        $(btn).on('click', async function() {
+          await _.copyToClipboard(el.textContent);
+          btn.classList.add('copied');
+          btn.setAttribute('data-icon', 'check');
+          Domma.icons.inject(btn.querySelector('[data-icon]'));
+
+          Domma.elements.toast.success('Code copied!', {
+            position: 'bottom-center',
+            duration: 2000
+          });
+
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.setAttribute('data-icon', 'copy');
+            Domma.icons.inject(btn.querySelector('[data-icon]'));
+          }, 2000);
+        });
+      }
+    }
+  });
+
+  console.log('✓ SPA QuickStart loaded');
+});
+</script>
+</body>
+</html>

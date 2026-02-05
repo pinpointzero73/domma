@@ -1,0 +1,49 @@
+# Netlify Configuration for Domma Showcase
+# Automatically builds and deploys the showcase site
+
+[build]
+  # Build command - runs production build
+  command = "npm run build"
+
+  # Publish directory - serves the public folder
+  publish = "public"
+
+  # Node version
+  [build.environment]
+    NODE_VERSION = "20"
+
+# Redirect rules
+[[redirects]]
+  # SPA fallback for showcase routes
+  from = "/showcase/*"
+  to = "/showcase/:splat"
+  status = 200
+
+[[redirects]]
+  # Ensure clean URLs work
+  from = "/*"
+  to = "/:splat"
+  status = 200
+
+# Headers for security and caching
+[[headers]]
+  for = "/dist/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

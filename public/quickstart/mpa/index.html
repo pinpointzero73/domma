@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MPA QuickStart - Domma Multi-Page Application Guide</title>
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="alternate icon" href="../../assets/logo/domma-icon.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/syntax.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../custom.css">
+</head>
+<body class="dm-theme-charcoal-dark" data-layout="public">
+
+<!-- Navigation -->
+<nav id="main-nav"></nav>
+
+<!-- Hero Section -->
+<section class="hero hero-lg hero-center hero-fluid bg-dark bg-ambient-rotate-glow" style="min-height: 50vh; padding: 3rem 2rem;">
+    <div class="hero-content" style="max-width: 900px; margin: 0 auto;">
+      <!-- Animated SVG Logo -->
+      <div class="hero-logo" style="display: flex; justify-content: center; margin-bottom: 2rem;">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"
+             style="width: 120px; height: 120px; color: var(--dm-white-t85);">
+          <path d="M12 8 L12 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <path d="M12 8 L24 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <path d="M12 40 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <path d="M24 8 L36 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M36 16 L36 32" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <path d="M36 32 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="24" cy="24" r="3" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <!-- Badge -->
+      <div style="margin-bottom: 1.5rem;">
+        <span class="badge badge-lg" style="background: var(--dm-primary-t20); border: 1px solid var(--dm-primary-t40); padding: 0.5rem 1.5rem; font-size: 0.9rem;">
+          📄 Multi-Page Application
+        </span>
+      </div>
+
+      <!-- Gradient Text Heading -->
+      <h1 class="display-1 mb-4" style="font-size: 3.5rem; font-weight: 800; letter-spacing: -0.05em; background: linear-gradient(135deg, var(--dm-white-t90) 0%, var(--dm-white-t70) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        MPA QuickStart
+      </h1>
+
+      <p class="lead mb-5" style="font-size: 1.25rem; opacity: 0.9; max-width: 700px; margin: 0 auto 3rem;">
+        Build a traditional multi-page site with separate HTML files for each page. Perfect for content sites, blogs, and documentation.
+      </p>
+
+      <!-- Feature Pills -->
+      <div class="d-flex gap-2 flex-wrap justify-content-center mb-4">
+        <span class="badge badge-lg" style="background: var(--dm-white-t10); border: 1px solid var(--dm-white-t20); padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+          <span data-icon="globe" data-icon-size="16" style="color: var(--dm-primary);"></span> SEO Friendly
+        </span>
+        <span class="badge badge-lg" style="background: var(--dm-white-t10); border: 1px solid var(--dm-white-t20); padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+          <span data-icon="code" data-icon-size="16" style="color: var(--dm-success);"></span> No JS Required
+        </span>
+        <span class="badge badge-lg" style="background: var(--dm-white-t10); border: 1px solid var(--dm-white-t20); padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+          <span data-icon="server" data-icon-size="16" style="color: var(--dm-info);"></span> Static Hosting
+        </span>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="d-flex gap-3 justify-content-center flex-wrap mb-0">
+        <a href="#setup" class="cta">
+          <span data-icon="download" data-icon-size="20"></span>
+          Setup Guide
+          <span class="cta-arrow">&darr;</span>
+        </a>
+        <a href="#example" class="cta cta-secondary">
+          <span data-icon="eye" data-icon-size="20"></span>
+          Live Example
+          <span class="cta-arrow">&darr;</span>
+        </a>
+      </div>
+    </div>
+</section>
+
+<!-- Setup Steps -->
+<section id="setup" class="container py-8">
+  <h2 class="text-center mb-6">Setup Your MPA in 3 Steps</h2>
+
+  <!-- Step 1 -->
+  <div class="step-card">
+    <div class="d-flex align-items-start">
+      <span class="step-number">1</span>
+      <div class="flex-grow-1">
+        <h3 class="h4 mb-3">Create & Initialize Project</h3>
+        <div class="command-block">
+          <span class="command-prompt">$</span> mkdir my-mpa-site && cd my-mpa-site<br>
+          <span class="command-prompt">$</span> npm init -y
+        </div>
+        <p class="text-secondary mt-3">
+          Creates a new project folder and initializes package.json
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step-card">
+    <div class="d-flex align-items-start">
+      <span class="step-number">2</span>
+      <div class="flex-grow-1">
+        <h3 class="h4 mb-3">Install Domma</h3>
+        <div class="command-block">
+          <span class="command-prompt">$</span> npm install domma-js
+        </div>
+        <p class="text-secondary mt-3">
+          Downloads Domma from npm (~260KB minified)
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step-card">
+    <div class="d-flex align-items-start">
+      <span class="step-number">3</span>
+      <div class="flex-grow-1">
+        <h3 class="h4 mb-3">Generate MPA Structure</h3>
+        <div class="command-block">
+          <span class="command-prompt">$</span> npx domma init --mpa
+        </div>
+        <p class="text-secondary mt-3 mb-4">
+          Creates a complete multi-page site structure with separate HTML files
+        </p>
+
+        <!-- File Structure -->
+        <div class="result-preview">
+          <h4 class="h6 mb-3">✓ Generated File Structure:</h4>
+          <div class="file-list">
+            <div><span class="file-icon" data-icon="home"></span> pages/index.html (Home)</div>
+            <div><span class="file-icon" data-icon="user"></span> pages/about/index.html</div>
+            <div><span class="file-icon" data-icon="mail"></span> pages/contact/index.html</div>
+            <div><span class="file-icon" data-icon="book"></span> pages/blog/index.html</div>
+            <div><span class="file-icon" data-icon="file-text"></span> pages/docs/index.html</div>
+            <div><span class="file-icon" data-icon="folder"></span> css/custom.css</div>
+            <div><span class="file-icon" data-icon="code"></span> js/app.js</div>
+            <div><span class="file-icon" data-icon="settings"></span> domma.config.json</div>
+          </div>
+        </div>
+
+        <!-- Run Command -->
+        <div class="alert alert-success mt-4" style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 1rem; border-radius: 0.5rem;">
+          <strong>✓ Ready!</strong> Open <code>pages/index.html</code> in your browser or run:
+          <div class="command-block mt-2" style="margin: 0;">
+            <span class="command-prompt">$</span> npx live-server pages
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Live Example -->
+<section id="example" class="bg-surface py-8">
+  <div class="container">
+    <h2 class="text-center mb-3">Live MPA Example</h2>
+    <p class="text-center text-secondary mb-6">
+      This is a working example of what your MPA will look like. Each section represents a separate HTML page.
+    </p>
+
+    <!-- Embedded Example Container -->
+    <div class="demo-container">
+      <!-- Example Navbar -->
+      <div id="example-navbar"></div>
+
+      <!-- Example Hero -->
+      <div class="hero hero-gradient-blue hero-center" style="padding: 3rem 2rem;">
+        <div class="hero-content">
+          <h1 class="h2">Welcome to My Site</h1>
+          <p class="lead mb-4">A beautiful multi-page site built with Domma</p>
+          <button class="btn btn-lg btn-light">Get Started</button>
+        </div>
+      </div>
+
+      <!-- Example Content -->
+      <div class="container py-6">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="card shadow-lg h-100">
+              <div class="card-body text-center">
+                <div class="mb-3">
+                  <span data-icon="zap" data-icon-size="48" style="color: var(--dm-warning);"></span>
+                </div>
+                <h3 class="h5">Lightning Fast</h3>
+                <p class="text-secondary">Optimized for speed and performance</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card shadow-lg h-100">
+              <div class="card-body text-center">
+                <div class="mb-3">
+                  <span data-icon="shield" data-icon-size="48" style="color: var(--dm-success);"></span>
+                </div>
+                <h3 class="h5">Secure</h3>
+                <p class="text-secondary">Built with security best practices</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card shadow-lg h-100">
+              <div class="card-body text-center">
+                <div class="mb-3">
+                  <span data-icon="layers" data-icon-size="48" style="color: var(--dm-info);"></span>
+                </div>
+                <h3 class="h5">Zero Dependencies</h3>
+                <p class="text-secondary">No external dependencies required</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Example Footer -->
+      <div id="example-footer"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Code Examples -->
+<section class="container py-8">
+  <h2 class="text-center mb-6">Code Structure</h2>
+
+  <div class="row g-4">
+    <!-- domma.config.json -->
+    <div class="col-12">
+      <h3 class="h5 mb-3">domma.config.json</h3>
+      <pre class="code-block language-json">{
+  "project": {
+    "name": "My MPA Site",
+    "version": "1.0.0"
+  },
+  "theme": {
+    "default": "charcoal-dark",
+    "persist": true
+  },
+  "navbar": {
+    "brand": { "text": "My Site", "url": "/" },
+    "items": [
+      { "text": "Home", "url": "index.html" },
+      { "text": "About", "url": "about/index.html" },
+      { "text": "Contact", "url": "contact/index.html" }
+    ]
+  }
+}</pre>
+    </div>
+
+    <!-- pages/index.html -->
+    <div class="col-12">
+      <h3 class="h5 mb-3">pages/index.html</h3>
+      <pre class="code-block language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;link rel="stylesheet" href="../node_modules/domma-js/public/dist/domma.css"&gt;
+  &lt;link rel="stylesheet" href="../node_modules/domma-js/public/dist/elements.css"&gt;
+  &lt;link rel="stylesheet" href="../css/custom.css"&gt;
+&lt;/head&gt;
+&lt;body class="dm-theme-charcoal-dark"&gt;
+  &lt;nav id="navbar"&gt;&lt;/nav&gt;
+
+  &lt;main class="container py-6"&gt;
+    &lt;h1&gt;Welcome to My Site&lt;/h1&gt;
+    &lt;p&gt;This is a multi-page application.&lt;/p&gt;
+  &lt;/main&gt;
+
+  &lt;footer class="page-footer"&gt;&lt;/footer&gt;
+
+  &lt;script src="../node_modules/domma-js/public/dist/domma.min.js"&gt;&lt;/script&gt;
+  &lt;script src="../js/app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- Next Steps -->
+<section class="bg-surface py-8">
+  <div class="container text-center">
+    <h2 class="mb-4">You're Ready to Build! 🎉</h2>
+    <p class="lead mb-6">
+      Your MPA is set up and ready. Start editing pages in the <code>pages/</code> folder.
+    </p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a href="../" class="btn btn-lg btn-outline-primary">
+        <span data-icon="arrow-left"></span> Back to QuickStart
+      </a>
+      <a href="../../showcase/" class="btn btn-lg btn-primary">
+        <span data-icon="grid"></span> Explore Showcase
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="page-footer"></footer>
+
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+
+<script>
+$(() => {
+  // Initialize theme
+  Domma.theme.init({ theme: 'charcoal-dark', persist: true });
+
+  // Initialize main navbar
+  Domma.elements.navbar('#main-nav', {
+    brand: { text: 'Domma QuickStart', url: '/quickstart/' },
+    items: [
+      { text: 'Home', url: '/quickstart/' },
+      { text: 'MPA', url: '/quickstart/mpa/', active: true },
+      { text: 'SPA', url: '/quickstart/spa/' },
+      { text: 'Showcase', url: '../../showcase/' }
+    ],
+    variant: 'dark',
+    position: 'sticky'
+  });
+
+  // Initialize example navbar
+  Domma.elements.navbar('#example-navbar', {
+    brand: { text: 'My Site', url: '#' },
+    items: [
+      { text: 'Home', url: '#', active: true },
+      { text: 'About', url: '#' },
+      { text: 'Blog', url: '#' },
+      { text: 'Contact', url: '#' }
+    ],
+    variant: 'dark',
+    position: 'static'
+  });
+
+  // Initialize example footer
+  Domma.elements.footer('#example-footer', {
+    layout: 'minimal',
+    variant: 'light',
+    copyright: '© 2026 My Site. All rights reserved.'
+  });
+
+  // Initialize page footer
+  Domma.elements.footer('.page-footer', {
+    layout: 'simple',
+    variant: 'dark',
+    brand: { text: 'Domma QuickStart', url: '/quickstart/' },
+    links: [
+      { text: 'Showcase', url: '../../showcase/' },
+      { text: 'Documentation', url: 'https://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md', external: true }
+    ],
+    social: [
+      { icon: 'github', url: 'https://github.com/dcbw-it/domma', label: 'GitHub' }
+    ],
+    copyright: '© 2026 Darryl Waterhouse & DCBW-IT. All rights reserved.'
+  });
+
+  // Scan icons
+  Domma.icons.scan();
+
+  // Add back-to-top
+  Domma.elements.backToTop();
+
+  // Code copy functionality
+  $.setup({
+    '.code-block': {
+      init: (el) => {
+        if (el.parentElement?.classList.contains('code-block-wrapper')) return;
+        if (!el.parentNode) return; // Safety check
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-block-wrapper';
+        el.parentNode.insertBefore(wrapper, el);
+        wrapper.appendChild(el);
+
+        const btn = document.createElement('button');
+        btn.className = 'code-block-copy';
+        btn.setAttribute('data-icon', 'copy');
+        wrapper.appendChild(btn);
+
+        Domma.icons.inject(btn.querySelector('[data-icon]'));
+
+        $(btn).on('click', async function() {
+          await _.copyToClipboard(el.textContent);
+          btn.classList.add('copied');
+          btn.setAttribute('data-icon', 'check');
+          Domma.icons.inject(btn.querySelector('[data-icon]'));
+
+          Domma.elements.toast.success('Code copied!', {
+            position: 'bottom-center',
+            duration: 2000
+          });
+
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.setAttribute('data-icon', 'copy');
+            Domma.icons.inject(btn.querySelector('[data-icon]'));
+          }, 2000);
+        });
+      }
+    }
+  });
+
+  console.log('✓ MPA QuickStart loaded');
+});
+</script>
+</body>
+</html>
