@@ -3,33 +3,31 @@
  */
 export const notFoundView = {
     template: `
-        <section class="container py-8 text-center">
-            <div class="row">
-                <div class="col-lg-6 mx-auto">
-                    <div class="mb-4">
-                        <span data-icon="alert-circle" data-icon-size="96" style="color: var(--dm-danger);"></span>
-                    </div>
-                    <h1 class="display-1 mb-2">404</h1>
-                    <h2 class="h3 mb-4">Page Not Found</h2>
-                    <p class="lead text-secondary mb-5">
-                        The page you're looking for doesn't exist or has been moved.
-                    </p>
-                    <div class="d-flex gap-3 justify-content-center">
-                        <a href="#/" class="btn btn-lg btn-primary">
-                            <span data-icon="home" data-icon-size="20"></span>
-                            Go Home
-                        </a>
-                        <button class="btn btn-lg btn-outline-secondary" onclick="history.back()">
-                            <span data-icon="arrow-left" data-icon-size="20"></span>
-                            Go Back
-                        </button>
-                    </div>
-                </div>
+        <div class="hero hero-center bg-dark bg-ambient-rotate-glow" style="min-height: 60vh; padding: 3rem 2rem;">
+          <div class="hero-content">
+            <span data-icon="alert-circle" data-icon-size="96" class="mb-3" style="color: var(--dm-danger);"></span>
+            <h1 class="display-1 mb-3" style="color: var(--dm-white); font-size: 6rem;">404</h1>
+            <h2 class="h3 mb-4" style="color: var(--dm-white-t90);">Page Not Found</h2>
+            <p class="lead mb-5" style="color: var(--dm-white-t75); max-width: 600px;">
+              The page you're looking for doesn't exist or has been moved.
+            </p>
+            <div class="d-flex gap-3 justify-content-center">
+              <a href="#/" class="btn btn-lg btn-primary">
+                <span data-icon="home" data-icon-size="20"></span>
+                Go Home
+              </a>
+              <button class="btn btn-lg btn-outline-light" onclick="history.back()">
+                <span data-icon="arrow-left" data-icon-size="20"></span>
+                Go Back
+              </button>
             </div>
-        </section>
+          </div>
+        </div>
     `,
 
     onMount($container) {
+        // Scan for icons
+        Domma.icons.scan($container[0]);
         console.log('404 view mounted');
     }
 };
