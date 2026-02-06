@@ -1,0 +1,240 @@
+/**
+ * Domma Celebrations Demo Page
+ * Testing interface for celebrations system
+ */
+
+import { CelebrationsEffect } from '../../../layouts/js/modules/celebrations/index.js';
+
+// Global state
+let celebrationsEffect = null;
+let currentTheme = 'auto';
+let currentIntensity = 'medium';
+let isEnabled = false;
+
+/**
+ * Get theme display name
+ */
+function getThemeDisplayName(theme) {
+  const themes = CelebrationsEffect.getThemes();
+  return themes[theme] ? `${themes[theme].emoji} ${themes[theme].displayName}` : theme;
+}
+
+/**
+ * Update info panel
+ */
+function updateInfoPanel() {
+  // Current date
+  const now = new Date();
+  $('#current-date').text(now.toLocaleDateString('en-GB', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }));
+
+  // Active theme
+  let activeTheme = currentTheme;
+  if (currentTheme === 'auto') {
+    activeTheme = CelebrationsEffect.getCurrentTheme();
+  }
+
+  $('#active-theme').text(activeTheme ? getThemeDisplayName(activeTheme) : 'None');
+
+  // Status
+  $('#status').text(isEnabled ? 'Running' : 'Disabled')
+    .removeClass('text-success text-danger')
+    .addClass(isEnabled ? 'text-success' : 'text-danger');
+
+  // Particle count
+  if (celebrationsEffect && celebrationsEffect.particles) {
+    $('#particle-count').text(celebrationsEffect.particles.length + celebrationsEffect.specialParticles.length);
+  } else {
+    $('#particle-count').text('0');
+  }
+}
+
+/**
+ * Initialize celebrations effect
+ */
+async function initCelebrations() {
+  if (celebrationsEffect) {
+    celebrationsEffect.destroy();
+  }
+
+  celebrationsEffect = new CelebrationsEffect({
+    theme: currentTheme,
+    intensity: currentIntensity,
+    enabled: false // We'll start manually
+  });
+
+  await celebrationsEffect.init();
+
+  if (isEnabled) {
+    celebrationsEffect.start();
+  }
+
+  updateInfoPanel();
+}
+
+/**
+ * Toggle enable/disable
+ */
+function toggleEffect() {
+  if (!celebrationsEffect) {
+    console.error('[Demo] Celebrations effect not initialized');
+    return;
+  }
+
+  isEnabled = !isEnabled;
+
+  const $btn = $('#toggle-btn');
+
+  if (isEnabled) {
+    $btn.removeClass('btn-success').addClass('btn-danger');
+    $btn.empty()
+      .append($('<span>').attr('data-icon', 'pause').attr('data-icon-size', '16'))
+      .append(' Disable');
+    celebrationsEffect.start();
+  } else {
+    $btn.removeClass('btn-danger').addClass('btn-success');
+    $btn.empty()
+      .append($('<span>').attr('data-icon', 'play').attr('data-icon-size', '16'))
+      .append(' Enable');
+    celebrationsEffect.pause();
+
+    // Clear the canvas when disabling
+    if (celebrationsEffect.canvasManager) {
+      celebrationsEffect.canvasManager.clear();
+    }
+  }
+
+  Domma.icons.scan(); // Re-scan for new icons
+  updateInfoPanel();
+}
+
+/**
+ * Change intensity
+ */
+function setIntensity(intensity) {
+  currentIntensity = intensity;
+
+  // Update button states
+  $('.intensity-btn').removeClass('btn-primary active').addClass('btn-secondary');
+  $(`.intensity-btn[data-intensity="${intensity}"]`).removeClass('btn-secondary').addClass('btn-primary active');
+
+  // Update intensity
+  if (celebrationsEffect) {
+    celebrationsEffect.setIntensity(intensity);
+  }
+
+  updateInfoPanel();
+}
+
+/**
+ * Change theme
+ */
+async function setTheme(theme) {
+  currentTheme = theme;
+
+  // Update select
+  $('#theme-select').val(theme);
+
+  // Update theme
+  if (celebrationsEffect) {
+    await celebrationsEffect.setTheme(theme);
+  } else {
+    await initCelebrations();
+  }
+
+  updateInfoPanel();
+}
+
+/**
+ * Initialize demo page
+ */
+$(() => {
+  console.log('[Celebrations Demo] Initializing...');
+
+  // Scan icons
+  Domma.icons.scan();
+
+  // Initialize breathing effect on stat cards
+  Domma.effects.breathe('.stat-card', {
+    amplitude: 6,
+    duration: 3000,
+    stagger: 200,
+    pauseOnHover: true
+  });
+
+  // Initialize tooltips on celebration cards
+  $('.celebration-card').each(function() {
+    const $card = $(this);
+    const tooltipContent = $card.attr('data-tooltip');
+
+    if (tooltipContent) {
+      Domma.elements.tooltip(this, {
+        content: tooltipContent,
+        position: 'top',
+        trigger: 'hover',
+        delay: 200
+      });
+    }
+  });
+
+  // Initialize collapsible usage card
+  Domma.elements.card('#usage-card', {
+    collapsible: true,
+    collapsed: true
+  });
+
+  // Initialize effect
+  initCelebrations();
+
+  // Update info panel every second
+  setInterval(updateInfoPanel, 1000);
+
+  // Event listeners
+  $('#toggle-btn').on('click', toggleEffect);
+
+  $('.intensity-btn').on('click', function() {
+    const intensity = $(this).data('intensity');
+    setIntensity(intensity);
+  });
+
+  $('#theme-select').on('change', function() {
+    const theme = $(this).val();
+    setTheme(theme);
+  });
+
+  $('#theme-variant-select').on('change', function() {
+    const variant = $(this).val();
+    if (Domma.theme) {
+      Domma.theme.setVariant(variant);
+    }
+  });
+
+  // Celebration card click handlers
+  $('.celebration-card').on('click', async function() {
+    const card = $(this);
+    const themeName = card.attr('data-theme');
+
+    console.log(`[Demo] Switching to theme: ${themeName}`);
+    await setTheme(themeName);
+
+    // Enable if not already enabled
+    if (!isEnabled) {
+      toggleEffect();
+    }
+  });
+
+  // Set initial theme based on auto-detect
+  const detectedTheme = CelebrationsEffect.getCurrentTheme();
+  if (detectedTheme) {
+    console.log(`[Celebrations Demo] Auto-detected theme: ${detectedTheme}`);
+  } else {
+    console.log('[Celebrations Demo] No active celebration detected');
+  }
+
+  updateInfoPanel();
+  console.log('[Celebrations Demo] Ready!');
+});

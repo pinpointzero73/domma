@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domma Celebrations - Demo & Testing</title>
+
+  <!-- Domma CSS -->
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/demo.css">
+</head>
+<body class="dm-theme-charcoal-dark dm-cloaked" data-layout="celebrations-demo">
+
+<!-- Compact Controls Bar -->
+<div class="controls-bar">
+  <div class="container">
+    <div class="controls-inner">
+      <div class="control-item">
+        <label>Theme:</label>
+        <select id="theme-select" class="form-select form-select-sm">
+          <option value="auto">Auto-detect</option>
+          <option value="christmas">🎄 Christmas</option>
+          <option value="halloween">🎃 Halloween</option>
+          <option value="valentines">💕 Valentine's</option>
+          <option value="guy-fawkes">🎆 Guy Fawkes</option>
+          <option value="st-patricks">☘️ St Patrick's</option>
+          <option value="st-andrews">🏴󠁧󠁢󠁳󠁣󠁴󠁿 St Andrew's</option>
+          <option value="st-davids">🏴󠁧󠁢󠁷󠁬󠁳󠁿 St David's</option>
+          <option value="st-georges">🏴󠁧󠁢󠁥󠁮󠁧󠁿 St George's</option>
+        </select>
+      </div>
+
+      <div class="control-item">
+        <label>Theme Variant:</label>
+        <select id="theme-variant-select" class="form-select form-select-sm">
+          <option value="light">Light</option>
+          <option value="dark" selected>Dark</option>
+        </select>
+      </div>
+
+      <div class="control-item">
+        <label>Intensity:</label>
+        <div class="btn-group btn-group-sm">
+          <button class="btn btn-secondary intensity-btn" data-intensity="light">Light</button>
+          <button class="btn btn-primary intensity-btn active" data-intensity="medium">Medium</button>
+          <button class="btn btn-secondary intensity-btn" data-intensity="heavy">Heavy</button>
+        </div>
+      </div>
+
+      <div class="control-item">
+        <button id="toggle-btn" class="btn btn-success btn-sm">
+          <span data-icon="play" data-icon-size="16"></span> Enable
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Info Stats -->
+<div class="info-stats">
+  <div class="container">
+    <div class="grid grid-cols-4 gap-4 stats-grid">
+      <div class="stat-card">
+        <span data-icon="calendar" data-icon-size="24" class="stat-icon"></span>
+        <div class="stat-content">
+          <div class="stat-label">Date</div>
+          <div id="current-date" class="stat-value">--</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <span data-icon="sparkles" data-icon-size="24" class="stat-icon"></span>
+        <div class="stat-content">
+          <div class="stat-label">Theme</div>
+          <div id="active-theme" class="stat-value">None</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <span data-icon="activity" data-icon-size="24" class="stat-icon"></span>
+        <div class="stat-content">
+          <div class="stat-label">Status</div>
+          <div id="status" class="stat-value">Disabled</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <span data-icon="box" data-icon-size="24" class="stat-icon"></span>
+        <div class="stat-content">
+          <div class="stat-label">Particles</div>
+          <div id="particle-count" class="stat-value">0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<section class="container content-section">
+  <div class="text-center hero-header">
+    <h1 class="display-3">Domma Celebrations</h1>
+    <p class="lead">Year-round visual effects for 8 celebration themes</p>
+  </div>
+
+  <!-- Main Celebrations -->
+  <div class="celebration-group">
+    <h2 class="group-title">Main Celebrations</h2>
+    <div class="grid grid-cols-4 gap-6 celebration-grid">
+      <div class="celebration-card" data-theme="christmas"
+           data-tooltip="Snowflakes | Santa's sleigh & reindeer | Christmas trees | Wreaths | Toy trains | Robins | Elves"
+           data-tooltip-position="top">
+        <div class="celebration-emoji">🎄</div>
+        <h3>Christmas</h3>
+        <p class="celebration-dates">Dec 1 - Jan 1</p>
+        <span class="badge badge-info">32 Days</span>
+      </div>
+
+      <div class="celebration-card" data-theme="halloween"
+           data-tooltip="Floating pumpkins | Small spiders | Flying witches | Bats | Gravestones | Jack-o-lanterns | Dangling spiders"
+           data-tooltip-position="top">
+        <div class="celebration-emoji">🎃</div>
+        <h3>Halloween</h3>
+        <p class="celebration-dates">Oct 26-31</p>
+        <span class="badge badge-warning">6 Days</span>
+      </div>
+
+      <div class="celebration-card" data-theme="valentines"
+           data-tooltip="Floating hearts | Rose petals | Flying cupid with bow | Heart garlands | Sparkles"
+           data-tooltip-position="top">
+        <div class="celebration-emoji">💕</div>
+        <h3>Valentine's Day</h3>
+        <p class="celebration-dates">Feb 9-14</p>
+        <span class="badge badge-danger">6 Days</span>
+      </div>
+
+      <div class="celebration-card" data-theme="guy-fawkes"
+           data-tooltip="Rising sparks that explode | Firework rockets | Animated bonfires | Catherine wheels | Roman candles"
+           data-tooltip-position="top">
+        <div class="celebration-emoji">🎆</div>
+        <h3>Guy Fawkes</h3>
+        <p class="celebration-dates">Nov 1-5</p>
+        <span class="badge badge-primary">5 Days</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Patron Saints Days -->
+  <div class="celebration-group">
+    <h2 class="group-title">Patron Saints Days</h2>
+    <div class="grid grid-cols-4 gap-6 celebration-grid">
+      <div class="celebration-card" data-theme="st-patricks"
+           data-tooltip="Shamrocks | Gold coins | Leprechauns | Flying banshees | Pots of gold | Rainbows"
+           data-tooltip-position="top">
+        <div class="celebration-emoji">☘️</div>
+        <h3>St Patrick's</h3>
+        <p class="celebration-dates">Mar 12-17 • Ireland</p>
+        <span class="badge badge-success">6 Days</span>
+      </div>
+
+      <div class="celebration-card" data-theme="st-andrews"
+           data-tooltip="Thistles | Snowflakes | Bagpiper silhouette | Flying saltire flags | Tartan patterns"
+           data-tooltip-position="top">
+        <div class="celebration-emoji">🏴󠁧󠁢󠁳󠁣󠁴󠁿</div>
+        <h3>St Andrew's</h3>
+        <p class="celebration-dates">Nov 25-30 • Scotland</p>
+        <span class="badge badge-info">6 Days</span>
+      </div>
+
+      <div class="celebration-card" data-theme="st-davids"
+           data-tooltip="Daffodils | Leeks | Flying dragons | Daffodil fields | Welsh flag colors"
+           data-tooltip-position="top">
+        <div class="celebration-emoji">🌻</div>
+        <h3>St David's</h3>
+        <p class="celebration-dates">Feb 24-Mar 1 • Wales</p>
+        <span class="badge badge-warning">6 Days</span>
+      </div>
+
+      <div class="celebration-card" data-theme="st-georges"
+           data-tooltip="Rose petals (red & white) | Knights in armor | Dragons | Red cross flags"
+           data-tooltip-position="top">
+        <div class="celebration-emoji">🌹</div>
+        <h3>St George's</h3>
+        <p class="celebration-dates">Apr 18-23 • England</p>
+        <span class="badge badge-danger">6 Days</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Usage Instructions -->
+  <div class="card mt-6" id="usage-card">
+    <div class="card-header">
+      <h2>How to Use Domma Celebrations</h2>
+    </div>
+    <div class="card-body">
+      <h3>Quick Start</h3>
+      <p>The Celebrations system automatically detects the current date and activates the appropriate theme during celebration periods. Simply include the layout system in your page:</p>
+
+      <pre><code class="language-html">&lt;!-- Include Domma --&gt;
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Include Layout System (handles celebrations automatically) --&gt;
+&lt;script type="module" src="layouts/js/layout.js"&gt;&lt;/script&gt;</code></pre>
+
+      <h3 class="mt-4">Manual Control</h3>
+      <p>For testing or manual control, you can enable celebrations with specific settings:</p>
+
+      <pre><code class="language-javascript">// Import the celebrations module
+import CelebrationsEffect from './layouts/js/modules/celebrations/index.js';
+
+// Create instance with options
+const celebrations = new CelebrationsEffect({
+  theme: 'christmas',     // or 'auto' for date detection
+  intensity: 'medium',    // 'light', 'medium', or 'heavy'
+  enabled: true,
+  container: document.body
+});
+
+// Start the effect
+celebrations.start();
+
+// Change theme dynamically
+await celebrations.setTheme('halloween');
+
+// Change intensity
+celebrations.setIntensity('heavy');
+
+// Pause/resume
+celebrations.pause();
+celebrations.start();
+
+// Cleanup
+celebrations.destroy();</code></pre>
+
+      <h3 class="mt-4">Available Themes</h3>
+      <ul>
+        <li><strong>christmas</strong> - Snowflakes, Santa's sleigh, reindeer, trees, wreaths, robins, toy trains, elves (Dec 1 - Jan 1)</li>
+        <li><strong>halloween</strong> - Pumpkins, bats, ghosts, witches, gravestones, spiders (Oct 26-31)</li>
+        <li><strong>valentines</strong> - Hearts, rose petals, cupid, love letters (Feb 9-14)</li>
+        <li><strong>guy-fawkes</strong> - Fireworks, bonfires, rockets, catherine wheels, roman candles (Nov 1-5)</li>
+        <li><strong>st-patricks</strong> - Shamrocks, gold coins, leprechauns, pots of gold, rainbows (Mar 12-17)</li>
+        <li><strong>st-andrews</strong> - Thistles, Scottish flag, bagpiper, heather (Nov 25-30)</li>
+        <li><strong>st-davids</strong> - Daffodils, leeks, Welsh dragon, flags (Feb 24 - Mar 1)</li>
+        <li><strong>st-georges</strong> - Rose petals, knights, dragons, English flag (Apr 18-23)</li>
+      </ul>
+
+      <h3 class="mt-4">Intensity Levels</h3>
+      <ul>
+        <li><strong>light</strong> - Fewer particles, subtle effects, better performance</li>
+        <li><strong>medium</strong> - Balanced particle count, recommended default</li>
+        <li><strong>heavy</strong> - Maximum particles and decorations, spectacular display</li>
+      </ul>
+
+      <h3 class="mt-4">Automatic Detection</h3>
+      <p>When theme is set to <code>'auto'</code>, the system automatically:</p>
+      <ul>
+        <li>Detects the current date</li>
+        <li>Checks if any celebration is active</li>
+        <li>Activates the appropriate theme</li>
+        <li>Returns <code>null</code> if no celebration is currently active</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Domma JavaScript -->
+<script src="../../dist/domma.min.js"></script>
+
+<!-- Layout System -->
+<script type="module" src="../../layouts/js/layout.js"></script>
+
+<!-- Celebrations Demo -->
+<script type="module" src="js/demo.js"></script>
+
+</body>
+</html>

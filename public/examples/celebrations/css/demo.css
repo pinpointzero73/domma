@@ -1,0 +1,287 @@
+/**
+ * Domma Celebrations Demo - Clean, Minimal Design
+ */
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background-attachment: fixed;
+}
+
+body.dm-theme-charcoal-dark {
+  --dm-surface: rgba(26, 26, 46, 0.95);
+  --dm-surface-raised: rgba(30, 30, 50, 0.98);
+  --dm-border: rgba(255, 255, 255, 0.1);
+  --dm-text-primary: #e0e0e0;
+  --dm-text-secondary: #a0a0a0;
+}
+
+/* Compact Controls Bar */
+.controls-bar {
+  background: rgba(18, 18, 35, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 0;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.controls-inner {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.control-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.control-item label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.control-item select {
+  min-width: 160px;
+}
+
+.control-item .btn-group {
+  box-shadow: none;
+}
+
+/* Info Stats */
+.info-stats {
+  background: rgba(30, 30, 50, 0.5);
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-8px);
+}
+
+.stat-icon {
+  color: var(--dm-primary);
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Main Content */
+.content-section {
+  padding: 3rem 0 4rem;
+}
+
+.hero-header {
+  margin-bottom: 4rem;
+}
+
+.hero-header h1 {
+  background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.hero-header .lead {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.25rem;
+}
+
+/* Celebration Groups */
+.celebration-group {
+  margin-bottom: 3rem;
+}
+
+.celebration-group:last-child {
+  margin-bottom: 0;
+}
+
+.group-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.95);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Celebration Cards */
+.celebration-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+}
+
+.celebration-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(13, 110, 253, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.celebration-card:hover {
+  transform: scale(1.05) translateY(-8px);
+  border-color: var(--dm-primary);
+  box-shadow: 0 20px 60px rgba(13, 110, 253, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.celebration-card:hover::before {
+  opacity: 1;
+}
+
+.celebration-emoji {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  line-height: 1;
+  transition: transform 0.4s ease;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+.celebration-card:hover .celebration-emoji {
+  transform: scale(1.15) rotate(5deg);
+}
+
+.celebration-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 0.5rem;
+}
+
+.celebration-dates {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 1rem;
+}
+
+.celebration-card .badge {
+  font-size: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .stats-grid,
+  .celebration-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .controls-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .control-item {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .control-item select,
+  .control-item .btn-group,
+  .control-item button {
+    flex: 1;
+  }
+
+  .stats-grid,
+  .celebration-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .celebration-emoji {
+    font-size: 3.5rem;
+  }
+
+  .hero-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-header .lead {
+    font-size: 1.1rem;
+  }
+}
+
+/* Celebration Tooltips */
+.celebration-tooltip {
+  background: rgba(13, 110, 253, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  padding: 0.75rem 1rem !important;
+  max-width: 300px !important;
+  line-height: 1.5 !important;
+  text-align: left !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+.celebration-tooltip::before {
+  border-top-color: rgba(13, 110, 253, 0.95) !important;
+}
+
+@media print {
+  .controls-bar,
+  .info-stats {
+    display: none;
+  }
+
+  body {
+    background: white;
+  }
+}

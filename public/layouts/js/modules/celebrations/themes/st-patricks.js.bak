@@ -1,0 +1,950 @@
+/**
+ * St Patrick's Day Theme for Domma Celebrations
+ * (March 17th, Irish Celebration)
+ *
+ * Features:
+ * - Falling shamrocks (3-leaf clovers)
+ * - Golden coins floating
+ * - Rainbow with pot of gold
+ * - Leprechaun characters
+ * - Irish harps and Celtic knots
+ * - Green color scheme with gold accents
+ */
+
+export default {
+  name: 'st-patricks',
+  displayName: 'St Patrick\'s Day',
+  emoji: '☘️',
+
+  // Intensity configurations
+  intensityConfig: {
+    light: {
+      count: 40,
+      speedRange: [0.4, 1.2],
+      sizeRange: [2, 4],
+      pots: 1,
+      leprechaunChance: 0.0003
+    },
+    medium: {
+      count: 80,
+      speedRange: [0.5, 1.5],
+      sizeRange: [2, 5],
+      pots: 2,
+      leprechaunChance: 0.0005
+    },
+    heavy: {
+      count: 120,
+      speedRange: [0.6, 1.8],
+      sizeRange: [3, 6],
+      pots: 3,
+      leprechaunChance: 0.0008
+    }
+  },
+
+  particles: ['shamrock', 'gold-coin', 'sparkle'],
+  decorations: ['pot-of-gold', 'rainbow', 'leprechaun', 'harp', 'static-leprechaun', 'moon'],
+  colors: {
+    primary: '#228B22',    // Irish green
+    secondary: '#90EE90',  // Light green
+    white: '#FFFFFF',      // White (Irish flag)
+    accent: '#FFD700',     // Gold
+    rainbow: ['#ff0000', '#ffa500', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#8b00ff']
+  },
+
+  /**
+   * Create shamrock particle (green, white, gold - Irish colors)
+   */
+  createShamrock(canvasWidth, canvasHeight, config) {
+    const colorChoice = Math.random();
+    let color, strokeColor;
+    if (colorChoice < 0.5) {
+      color = '#228B22';      // 50% green
+      strokeColor = '#006400'; // Dark green
+    } else if (colorChoice < 0.75) {
+      color = '#FFFFFF';      // 25% white
+      strokeColor = '#d0d0d0'; // Light grey
+    } else {
+      color = '#FFD700';      // 25% gold
+      strokeColor = '#DAA520'; // Dark gold
+    }
+
+    return {
+      type: 'shamrock',
+      x: Math.random() * canvasWidth,
+      y: -20,
+      size: config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]),
+      speed: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]),
+      opacity: 0.7 + Math.random() * 0.3,
+      windOffset: Math.random() * Math.PI * 2,
+      windSpeed: 0.015 + Math.random() * 0.025,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: (Math.random() - 0.5) * 0.02,
+      color: color,
+      strokeColor: strokeColor,
+      active: true
+    };
+  },
+
+  /**
+   * Create gold coin particle
+   */
+  createGoldCoin(canvasWidth, canvasHeight, config) {
+    return {
+      type: 'gold-coin',
+      x: Math.random() * canvasWidth,
+      y: -20,
+      size: 2 + Math.random() * 3,
+      speed: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.8,
+      opacity: 0.9 + Math.random() * 0.1,
+      rotation: 0,
+      rotationSpeed: 0.05 + Math.random() * 0.1,
+      spinPhase: Math.random() * Math.PI * 2,
+      glintPhase: Math.random() * Math.PI * 2,
+      windOffset: Math.random() * Math.PI * 2,
+      windSpeed: 0.01 + Math.random() * 0.02,
+      active: true
+    };
+  },
+
+  /**
+   * Create pot of gold decoration
+   */
+  createPotOfGold(canvasWidth, canvasHeight, options = {}) {
+    return {
+      type: 'pot-of-gold',
+      x: options.x !== undefined ? options.x : Math.random() * canvasWidth * 0.6 + canvasWidth * 0.2,
+      y: options.y !== undefined ? options.y : canvasHeight - 40,
+      size: 20 + Math.random() * 10,
+      opacity: 1,
+      glintPhase: Math.random() * Math.PI * 2,
+      coins: [],
+      active: true,
+      static: true
+    };
+  },
+
+  /**
+   * Create rainbow decoration
+   */
+  createRainbow(canvasWidth, canvasHeight, potX, potY) {
+    return {
+      type: 'rainbow',
+      startX: 0,
+      startY: canvasHeight * 0.3,
+      endX: potX,
+      endY: potY,
+      width: canvasWidth,
+      height: canvasHeight,
+      opacity: 0.7,
+      active: true,
+      static: true
+    };
+  },
+
+  /**
+   * Create falling particle (shamrocks and gold coins)
+   */
+  createFallingParticle(canvasWidth, canvasHeight, config) {
+    const choice = Math.random();
+
+    // 80% shamrocks, 20% gold coins
+    if (choice < 0.8) {
+      return this.createShamrock(canvasWidth, canvasHeight, config);
+    } else {
+      return this.createGoldCoin(canvasWidth, canvasHeight, config);
+    }
+  },
+
+  /**
+   * Create initial static decorations (pots of gold with rainbows)
+   */
+  createInitialDecorations(canvasWidth, canvasHeight, config) {
+    const decorations = [];
+
+    // Green moon (top right corner)
+    decorations.push({
+      type: 'moon',
+      x: canvasWidth - 120,
+      y: 100,
+      size: 60 + Math.random() * 20,
+      opacity: 0.85,
+      glowPhase: Math.random() * Math.PI * 2,
+      active: true,
+      static: true
+    });
+
+    // Create pots of gold
+    const potCount = config.pots || 2;
+    for (let i = 0; i < potCount; i++) {
+      const potX = (canvasWidth / (potCount + 1)) * (i + 1);
+      const potY = canvasHeight - 40;
+
+      // Add pot of gold
+      decorations.push(this.createPotOfGold(canvasWidth, canvasHeight, {
+        x: potX,
+        y: potY
+      }));
+
+      // Add rainbow ending at pot
+      decorations.push(this.createRainbow(canvasWidth, canvasHeight, potX, potY));
+    }
+
+    // Add 1-2 static leprechauns
+    const leprechaunCount = 1 + Math.floor(Math.random() * 2);
+    for (let i = 0; i < leprechaunCount; i++) {
+      const x = 60 + Math.random() * (canvasWidth - 120);
+      decorations.push({
+        type: 'static-leprechaun',
+        x: x,
+        y: canvasHeight - 35,
+        size: 12 + Math.random() * 4,
+        opacity: 1,
+        time: Math.random() * 1000,
+        wavePhase: Math.random() * Math.PI * 2,
+        active: true,
+        static: true
+      });
+    }
+
+    return decorations;
+  },
+
+  /**
+   * Spawn special St Patrick's particles
+   */
+  spawnSpecialParticle(specialParticles, canvasWidth, canvasHeight, config) {
+    const choice = Math.random();
+
+    // Leprechaun (very rare, max 1)
+    if (choice < config.leprechaunChance) {
+      if (specialParticles.some(p => p.type === 'leprechaun')) {
+        return null;
+      }
+      const fromLeft = Math.random() < 0.5;
+      return {
+        type: 'leprechaun',
+        x: fromLeft ? -50 : canvasWidth + 50,
+        y: canvasHeight - 35,
+        baseY: canvasHeight - 35,
+        vx: fromLeft ? 1.2 + Math.random() * 0.8 : -(1.2 + Math.random() * 0.8),
+        size: 12 + Math.random() * 6,
+        opacity: 1,
+        time: 0,
+        legPhase: Math.random() * Math.PI * 2,
+        active: true,
+        static: false
+      };
+    }
+
+    // Banshee (flying ghostly figure, rare, max 1)
+    if (choice < config.leprechaunChance + 0.0003) {
+      if (specialParticles.some(p => p.type === 'banshee')) {
+        return null;
+      }
+      const fromLeft = Math.random() < 0.5;
+      return {
+        type: 'banshee',
+        x: fromLeft ? -100 : canvasWidth + 100,
+        y: Math.random() * (canvasHeight * 0.4) + 50,
+        baseY: Math.random() * (canvasHeight * 0.4) + 50,
+        vx: fromLeft ? 2 + Math.random() * 1 : -(2 + Math.random() * 1),
+        size: 18 + Math.random() * 10,
+        opacity: 0.6 + Math.random() * 0.2,
+        waveAmplitude: 25 + Math.random() * 20,
+        waveFrequency: 0.0015 + Math.random() * 0.002,
+        waveOffset: Math.random() * Math.PI * 2,
+        time: 0,
+        wailPhase: Math.random() * Math.PI * 2,
+        active: true,
+        static: false
+      };
+    }
+
+    // Pot of gold + rainbow (rare)
+    if (choice < 0.001) {
+      const potCount = specialParticles.filter(p => p.type === 'pot-of-gold').length;
+      if (potCount < config.pots) {
+        const pot = this.createPotOfGold(canvasWidth, canvasHeight);
+        const rainbow = this.createRainbow(canvasWidth, canvasHeight, pot.x, pot.y);
+        specialParticles.push(rainbow);
+        return pot;
+      }
+    }
+
+    return null;
+  },
+
+  /**
+   * Draw shamrock (3-leaf clover) - Irish colors
+   */
+  drawShamrock(ctx, particle) {
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size;
+
+    ctx.save();
+    ctx.globalAlpha = particle.opacity;
+    ctx.translate(x, y);
+    ctx.rotate(particle.rotation);
+
+    ctx.fillStyle = particle.color || '#228B22';
+    ctx.strokeStyle = particle.strokeColor || '#006400';
+    ctx.lineWidth = size * 0.1;
+
+    // Three heart-shaped leaves
+    for (let i = 0; i < 3; i++) {
+      const angle = (i / 3) * Math.PI * 2 - Math.PI / 2;
+      ctx.save();
+      ctx.rotate(angle);
+      ctx.translate(0, -size * 0.7);
+
+      // Heart-shaped leaf
+      ctx.beginPath();
+      ctx.moveTo(0, size * 0.3);
+      ctx.bezierCurveTo(-size * 0.5, -size * 0.2, -size * 0.3, -size * 0.6, 0, -size * 0.35);
+      ctx.bezierCurveTo(size * 0.3, -size * 0.6, size * 0.5, -size * 0.2, 0, size * 0.3);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    // Stem
+    ctx.strokeStyle = '#8B4513';
+    ctx.lineWidth = size * 0.15;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, size * 1.2);
+    ctx.stroke();
+
+    ctx.restore();
+  },
+
+  /**
+   * Draw spinning gold coin
+   */
+  drawGoldCoin(ctx, particle, time) {
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size;
+
+    // 3D spin effect
+    const spinWidth = Math.abs(Math.cos(particle.rotation)) * size;
+
+    ctx.save();
+    ctx.globalAlpha = particle.opacity;
+    ctx.translate(x, y);
+
+    // Coin body
+    ctx.fillStyle = '#FFD700';
+    ctx.strokeStyle = '#DAA520';
+    ctx.lineWidth = size * 0.15;
+
+    ctx.beginPath();
+    ctx.ellipse(0, 0, spinWidth, size, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Glint
+    if (spinWidth > size * 0.3) {
+      const glintIntensity = (Math.sin(time * 0.005 + particle.glintPhase) + 1) * 0.5;
+      ctx.fillStyle = `rgba(255, 255, 255, ${glintIntensity * 0.6})`;
+      ctx.beginPath();
+      ctx.ellipse(-spinWidth * 0.3, -size * 0.3, spinWidth * 0.3, size * 0.3, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+  },
+
+  /**
+   * Draw pot of gold
+   */
+  drawPotOfGold(ctx, particle, time) {
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size;
+
+    ctx.save();
+    ctx.translate(x, y);
+
+    // Pot (black cauldron)
+    ctx.fillStyle = '#1a1a1a';
+    ctx.strokeStyle = '#0a0a0a';
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+    ctx.arc(0, 0, size * 0.7, 0, Math.PI);
+    ctx.lineTo(-size * 0.7, size * 0.4);
+    ctx.quadraticCurveTo(0, size * 0.6, size * 0.7, size * 0.4);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Handle
+    ctx.strokeStyle = '#2a2a2a';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(0, -size * 0.2, size * 0.5, Math.PI, 0);
+    ctx.stroke();
+
+    // Gold coins overflowing
+    const coinPositions = [
+      {x: -size * 0.4, y: -size * 0.2, s: 0.8},
+      {x: size * 0.3, y: -size * 0.3, s: 0.9},
+      {x: -size * 0.1, y: -size * 0.5, s: 1.0},
+      {x: size * 0.5, y: -size * 0.1, s: 0.7},
+      {x: -size * 0.5, y: 0, s: 0.75},
+      {x: size * 0.1, y: -size * 0.6, s: 0.85},
+      {x: 0, y: -size * 0.3, s: 0.95}
+    ];
+
+    ctx.fillStyle = '#FFD700';
+    ctx.strokeStyle = '#DAA520';
+    ctx.lineWidth = 1;
+
+    coinPositions.forEach((coin, i) => {
+      const glintPhase = time * 0.002 + i * 0.5;
+      const glint = (Math.sin(glintPhase) + 1) * 0.5;
+
+      ctx.save();
+      ctx.translate(coin.x, coin.y);
+
+      // Coin
+      ctx.beginPath();
+      ctx.arc(0, 0, size * 0.2 * coin.s, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Glint
+      ctx.fillStyle = `rgba(255, 255, 255, ${glint * 0.6})`;
+      ctx.beginPath();
+      ctx.arc(-size * 0.08 * coin.s, -size * 0.08 * coin.s, size * 0.08 * coin.s, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    });
+
+    // Glow
+    ctx.globalAlpha = 0.3;
+    const glowGradient = ctx.createRadialGradient(0, -size * 0.2, 0, 0, -size * 0.2, size * 1.5);
+    glowGradient.addColorStop(0, '#FFD700');
+    glowGradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
+    ctx.fillStyle = glowGradient;
+    ctx.fillRect(-size * 1.5, -size * 1.5, size * 3, size * 1.5);
+
+    ctx.restore();
+  },
+
+  /**
+   * Draw rainbow
+   */
+  drawRainbow(ctx, particle) {
+    const startX = particle.startX;
+    const startY = particle.startY;
+    const endX = particle.endX;
+    const endY = particle.endY;
+    const width = particle.width;
+
+    ctx.save();
+    ctx.globalAlpha = particle.opacity;
+
+    const arcWidth = Math.abs(endX - startX);
+    const centerX = (startX + endX) / 2;
+    const height = Math.abs(startY - endY);
+
+    // Draw 7 rainbow bands
+    const colors = this.colors.rainbow;
+    const bandWidth = 15;
+
+    colors.forEach((color, i) => {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = bandWidth;
+      ctx.beginPath();
+
+      const radius = height + i * bandWidth;
+      ctx.arc(centerX, endY, radius, Math.PI, 0);
+      ctx.stroke();
+    });
+
+    ctx.restore();
+  },
+
+  /**
+   * Draw leprechaun
+   */
+  drawLeprechaun(ctx, particle, time) {
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size;
+    const dir = particle.vx > 0 ? 1 : -1;
+
+    ctx.save();
+    ctx.translate(x, y);
+    if (dir === -1) {
+      ctx.scale(-1, 1);
+    }
+
+    const legPhase = Math.sin(time * 0.02 + particle.legPhase) * (Math.PI / 6);
+
+    // Legs
+    ctx.strokeStyle = '#228B22';
+    ctx.lineWidth = size * 0.15;
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.2, size * 0.5);
+    ctx.lineTo(-size * 0.3, size * 1.2 + Math.sin(legPhase) * size * 0.1);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(size * 0.2, size * 0.5);
+    ctx.lineTo(size * 0.3, size * 1.2 + Math.sin(legPhase + Math.PI) * size * 0.1);
+    ctx.stroke();
+
+    // Shoes (buckles)
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(-size * 0.4, size * 1.15, size * 0.3, size * 0.2);
+    ctx.fillRect(size * 0.1, size * 1.15, size * 0.3, size * 0.2);
+
+    ctx.fillStyle = '#FFD700';
+    ctx.fillRect(-size * 0.35, size * 1.2, size * 0.2, size * 0.1);
+    ctx.fillRect(size * 0.15, size * 1.2, size * 0.2, size * 0.1);
+
+    // Body (green coat)
+    ctx.fillStyle = '#228B22';
+    ctx.fillRect(-size * 0.5, 0, size, size * 0.6);
+
+    // Belt
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(-size * 0.5, size * 0.35, size, size * 0.1);
+    ctx.fillStyle = '#FFD700';
+    ctx.fillRect(-size * 0.15, size * 0.35, size * 0.3, size * 0.1);
+
+    // Head
+    ctx.fillStyle = '#FFD7BA';
+    ctx.beginPath();
+    ctx.arc(0, -size * 0.3, size * 0.4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Beard
+    ctx.fillStyle = '#ff6600';
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.3, -size * 0.1);
+    ctx.quadraticCurveTo(-size * 0.4, size * 0.2, 0, size * 0.3);
+    ctx.quadraticCurveTo(size * 0.4, size * 0.2, size * 0.3, -size * 0.1);
+    ctx.closePath();
+    ctx.fill();
+
+    // Hat (green top hat)
+    ctx.fillStyle = '#228B22';
+    ctx.fillRect(-size * 0.5, -size * 0.8, size, size * 0.1);
+    ctx.fillRect(-size * 0.35, -size * 1.4, size * 0.7, size * 0.6);
+
+    // Hat buckle
+    ctx.fillStyle = '#FFD700';
+    ctx.fillRect(-size * 0.15, -size * 0.85, size * 0.3, size * 0.15);
+
+    // Eyes
+    ctx.fillStyle = '#000000';
+    ctx.beginPath();
+    ctx.arc(-size * 0.12, -size * 0.35, size * 0.06, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(size * 0.12, -size * 0.35, size * 0.06, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  },
+
+  /**
+   * Draw banshee (flying ghostly figure)
+   */
+  drawBanshee(ctx, particle, time) {
+    const x = particle.x;
+    const y = particle.y + Math.sin(time * particle.waveFrequency + particle.waveOffset) * particle.waveAmplitude;
+    const size = particle.size;
+    const dir = particle.vx > 0 ? 1 : -1;
+
+    ctx.save();
+    ctx.globalAlpha = particle.opacity;
+    ctx.translate(x, y);
+    if (dir === -1) {
+      ctx.scale(-1, 1);
+    }
+
+    // Intense ghostly aura (larger, more ethereal)
+    const aura = ctx.createRadialGradient(0, -size * 0.5, 0, 0, -size * 0.5, size * 3);
+    aura.addColorStop(0, 'rgba(180, 255, 180, 0.4)');
+    aura.addColorStop(0.3, 'rgba(150, 255, 150, 0.2)');
+    aura.addColorStop(0.6, 'rgba(120, 255, 120, 0.1)');
+    aura.addColorStop(1, 'rgba(100, 255, 100, 0)');
+    ctx.fillStyle = aura;
+    ctx.fillRect(-size * 3, -size * 3, size * 6, size * 6);
+
+    // Flowing tattered shroud (multiple layers for depth)
+    const shroudWave = Math.sin(time * 0.008 + particle.wailPhase) * size * 0.25;
+
+    // Back layer (darker, more transparent)
+    ctx.fillStyle = 'rgba(200, 240, 200, 0.3)';
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.8, -size * 1.2);
+    ctx.bezierCurveTo(
+      -size * 1.2 + shroudWave * 2, -size * 0.4,
+      -size * 1.0 + shroudWave * 1.5, size * 0.6,
+      -size * 0.6 + shroudWave, size * 1.8
+    );
+    ctx.bezierCurveTo(
+      -size * 0.3, size * 1.5,
+      size * 0.3, size * 1.5,
+      size * 0.6 - shroudWave, size * 1.8
+    );
+    ctx.bezierCurveTo(
+      size * 1.0 - shroudWave * 1.5, size * 0.6,
+      size * 1.2 - shroudWave * 2, -size * 0.4,
+      size * 0.8, -size * 1.2
+    );
+    ctx.closePath();
+    ctx.fill();
+
+    // Main shroud (brighter, more solid)
+    ctx.fillStyle = 'rgba(230, 255, 230, 0.85)';
+    ctx.strokeStyle = 'rgba(180, 255, 180, 0.6)';
+    ctx.lineWidth = size * 0.04;
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.5, -size * 1.0);
+    for (let i = 0; i <= 12; i++) {
+      const t = i / 12;
+      const waveOffset = Math.sin(time * 0.012 + t * Math.PI * 3 + particle.wailPhase) * size * 0.3;
+      const posX = (t - 0.5) * size * 1.8 + waveOffset;
+      const posY = -size * 1.0 + t * size * 2.2;
+
+      if (i === 0) {
+        ctx.moveTo(posX, posY);
+      } else {
+        ctx.lineTo(posX, posY);
+      }
+    }
+    ctx.lineTo(-size * 0.5, -size * 1.0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Tattered edges (vertical streaks)
+    ctx.strokeStyle = 'rgba(180, 255, 180, 0.4)';
+    ctx.lineWidth = size * 0.02;
+    for (let i = 0; i < 8; i++) {
+      const xPos = -size * 0.7 + i * (size * 1.4 / 7);
+      const streakWave = Math.sin(time * 0.015 + i * 0.8) * size * 0.2;
+      ctx.beginPath();
+      ctx.moveTo(xPos, size * 0.4);
+      ctx.lineTo(xPos + streakWave, size * 1.2 + (i % 2) * size * 0.4);
+      ctx.stroke();
+    }
+
+    // Gaunt head and elongated face
+    const headTilt = Math.sin(time * 0.006) * 0.15;
+    ctx.save();
+    ctx.rotate(headTilt);
+
+    // Head (very pale, almost translucent)
+    ctx.fillStyle = 'rgba(240, 255, 240, 0.9)';
+    ctx.strokeStyle = 'rgba(180, 230, 180, 0.5)';
+    ctx.lineWidth = size * 0.03;
+    ctx.beginPath();
+    ctx.ellipse(0, -size * 0.8, size * 0.35, size * 0.55, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Hollow, sunken eye sockets (dark green shadows)
+    ctx.fillStyle = 'rgba(50, 100, 50, 0.6)';
+    ctx.beginPath();
+    ctx.ellipse(-size * 0.15, -size * 0.85, size * 0.12, size * 0.08, 0, 0, Math.PI * 2);
+    ctx.ellipse(size * 0.15, -size * 0.85, size * 0.12, size * 0.08, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Intensely glowing eyes (pulsing bright green)
+    const eyePulse = 0.6 + Math.sin(time * 0.008 + particle.wailPhase) * 0.4;
+    ctx.fillStyle = `rgba(100, 255, 150, ${eyePulse})`;
+    ctx.shadowColor = '#64ff96';
+    ctx.shadowBlur = size * 0.6;
+    ctx.beginPath();
+    ctx.arc(-size * 0.15, -size * 0.85, size * 0.08, 0, Math.PI * 2);
+    ctx.arc(size * 0.15, -size * 0.85, size * 0.08, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Gaping mouth (wailing/screaming - O shape)
+    const mouthOpen = 0.2 + Math.sin(time * 0.01 + particle.wailPhase) * 0.1;
+    ctx.fillStyle = 'rgba(80, 150, 80, 0.7)';
+    ctx.strokeStyle = 'rgba(50, 100, 50, 0.8)';
+    ctx.lineWidth = size * 0.02;
+    ctx.beginPath();
+    ctx.ellipse(0, -size * 0.6, size * 0.15, size * (0.2 + mouthOpen), 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.restore();
+
+    // Wild, flowing hair (very long, chaotic strands)
+    ctx.strokeStyle = 'rgba(220, 255, 220, 0.7)';
+    for (let i = 0; i < 12; i++) {
+      const hairX = -size * 0.35 + (i / 11) * size * 0.7;
+      const hairWave1 = Math.sin(time * 0.01 + i * 0.6 + particle.wailPhase) * size * 0.5;
+      const hairWave2 = Math.cos(time * 0.008 + i * 0.4) * size * 0.3;
+
+      ctx.lineWidth = size * (0.04 + (i % 3) * 0.02);
+      ctx.beginPath();
+      ctx.moveTo(hairX, -size * 1.1);
+      ctx.bezierCurveTo(
+        hairX + hairWave1 * 0.3, -size * 0.5,
+        hairX + hairWave1 * 0.6 + hairWave2 * 0.5, size * 0.2,
+        hairX + hairWave1 + hairWave2, size * 1.0 + (i % 2) * size * 0.5
+      );
+      ctx.stroke();
+    }
+
+    // Spectral hands reaching forward
+    const handReach = Math.sin(time * 0.01 + particle.wailPhase) * size * 0.3;
+
+    // Left hand
+    ctx.fillStyle = 'rgba(230, 255, 230, 0.8)';
+    ctx.strokeStyle = 'rgba(180, 230, 180, 0.6)';
+    ctx.lineWidth = size * 0.02;
+    ctx.save();
+    ctx.translate(-size * 0.6, -size * 0.2);
+    ctx.rotate(-0.3 + handReach * 0.002);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, size * 0.15, size * 0.25, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    // Fingers (skeletal)
+    for (let f = 0; f < 4; f++) {
+      const fingerX = -size * 0.08 + f * size * 0.055;
+      ctx.beginPath();
+      ctx.moveTo(fingerX, size * 0.15);
+      ctx.lineTo(fingerX, size * 0.35);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Right hand
+    ctx.save();
+    ctx.translate(size * 0.6, -size * 0.2);
+    ctx.rotate(0.3 - handReach * 0.002);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, size * 0.15, size * 0.25, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    // Fingers
+    for (let f = 0; f < 4; f++) {
+      const fingerX = -size * 0.08 + f * size * 0.055;
+      ctx.beginPath();
+      ctx.moveTo(fingerX, size * 0.15);
+      ctx.lineTo(fingerX, size * 0.35);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Ethereal wisps trailing behind
+    ctx.strokeStyle = 'rgba(180, 255, 180, 0.3)';
+    ctx.lineWidth = size * 0.02;
+    for (let i = 0; i < 6; i++) {
+      const angle = (i / 6) * Math.PI * 2;
+      const wispWave = Math.sin(time * 0.01 + i * 0.8) * size * 0.6;
+      const wispLength = size * (1.5 + (i % 2) * 0.5);
+      ctx.beginPath();
+      ctx.moveTo(0, size * 0.4);
+      ctx.bezierCurveTo(
+        Math.cos(angle) * size * 0.8 + wispWave * 0.5, size * 1.0,
+        Math.cos(angle) * size * 1.5 + wispWave, size * 1.8,
+        Math.cos(angle) * wispLength + wispWave * 1.5, size * 2.5
+      );
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  },
+
+  /**
+   * Draw green moon
+   */
+  drawMoon(ctx, particle, time) {
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size;
+
+    ctx.save();
+    ctx.globalAlpha = particle.opacity;
+    ctx.translate(x, y);
+
+    // Moon body (Irish green tint)
+    const moonGradient = ctx.createRadialGradient(-size * 0.2, -size * 0.2, 0, 0, 0, size);
+    moonGradient.addColorStop(0, '#90EE90');    // Light green center
+    moonGradient.addColorStop(0.5, '#7FD87F');  // Medium green
+    moonGradient.addColorStop(1, '#5CB85C');    // Darker green edge
+    ctx.fillStyle = moonGradient;
+    ctx.beginPath();
+    ctx.arc(0, 0, size, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Craters (darker green)
+    ctx.fillStyle = 'rgba(60, 130, 60, 0.3)';
+    ctx.beginPath();
+    ctx.arc(-size * 0.3, -size * 0.2, size * 0.15, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(size * 0.25, size * 0.1, size * 0.2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(size * 0.1, -size * 0.4, size * 0.12, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Shamrock silhouette on moon surface
+    ctx.save();
+    ctx.translate(size * 0.2, size * 0.35);
+    ctx.scale(0.15, 0.15);
+    ctx.fillStyle = 'rgba(34, 139, 34, 0.4)';
+    // Three leaves
+    for (let i = 0; i < 3; i++) {
+      const angle = (i / 3) * Math.PI * 2 - Math.PI / 2;
+      ctx.save();
+      ctx.rotate(angle);
+      ctx.translate(0, -size * 0.7);
+      ctx.beginPath();
+      ctx.moveTo(0, size * 0.3);
+      ctx.bezierCurveTo(-size * 0.5, -size * 0.2, -size * 0.3, -size * 0.6, 0, -size * 0.35);
+      ctx.bezierCurveTo(size * 0.3, -size * 0.6, size * 0.5, -size * 0.2, 0, size * 0.3);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.restore();
+
+    // Green glow (pulsing)
+    const glowIntensity = 0.3 + Math.sin(time * 0.002 + particle.glowPhase) * 0.15;
+    ctx.globalAlpha = glowIntensity;
+    const glowGradient = ctx.createRadialGradient(0, 0, size * 0.8, 0, 0, size * 1.8);
+    glowGradient.addColorStop(0, 'rgba(144, 238, 144, 0.8)');
+    glowGradient.addColorStop(0.5, 'rgba(144, 238, 144, 0.4)');
+    glowGradient.addColorStop(1, 'rgba(144, 238, 144, 0)');
+    ctx.fillStyle = glowGradient;
+    ctx.beginPath();
+    ctx.arc(0, 0, size * 1.8, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  },
+
+  /**
+   * Draw static leprechaun (standing still)
+   */
+  drawStaticLeprechaun(ctx, particle, time) {
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size;
+
+    ctx.save();
+    ctx.translate(x, y);
+
+    // Slight waving animation
+    const wave = Math.sin(time * 0.003 + particle.wavePhase) * 0.05;
+
+    // Legs (no walking animation, just standing)
+    ctx.strokeStyle = '#228B22';
+    ctx.lineWidth = size * 0.15;
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.2, size * 0.5);
+    ctx.lineTo(-size * 0.25, size * 1.2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(size * 0.2, size * 0.5);
+    ctx.lineTo(size * 0.25, size * 1.2);
+    ctx.stroke();
+
+    // Shoes (buckles)
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(-size * 0.35, size * 1.15, size * 0.25, size * 0.15);
+    ctx.fillRect(size * 0.1, size * 1.15, size * 0.25, size * 0.15);
+
+    ctx.fillStyle = '#FFD700';
+    ctx.fillRect(-size * 0.32, size * 1.18, size * 0.15, size * 0.08);
+    ctx.fillRect(size * 0.13, size * 1.18, size * 0.15, size * 0.08);
+
+    // Body (green coat)
+    ctx.fillStyle = '#228B22';
+    ctx.fillRect(-size * 0.5, 0, size, size * 0.6);
+
+    // Belt
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(-size * 0.5, size * 0.35, size, size * 0.1);
+    ctx.fillStyle = '#FFD700';
+    ctx.fillRect(-size * 0.15, size * 0.35, size * 0.3, size * 0.1);
+
+    // Left arm (waving slightly)
+    ctx.save();
+    ctx.translate(-size * 0.5, size * 0.2);
+    ctx.rotate(-0.3 + wave);
+    ctx.fillStyle = '#228B22';
+    ctx.fillRect(0, 0, size * 0.15, size * 0.4);
+    // Hand
+    ctx.fillStyle = '#FFD7BA';
+    ctx.beginPath();
+    ctx.arc(size * 0.075, size * 0.4, size * 0.12, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Right arm
+    ctx.save();
+    ctx.translate(size * 0.5, size * 0.2);
+    ctx.rotate(0.3 - wave * 0.5);
+    ctx.fillStyle = '#228B22';
+    ctx.fillRect(-size * 0.15, 0, size * 0.15, size * 0.4);
+    // Hand
+    ctx.fillStyle = '#FFD7BA';
+    ctx.beginPath();
+    ctx.arc(-size * 0.075, size * 0.4, size * 0.12, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Head
+    ctx.fillStyle = '#FFD7BA';
+    ctx.beginPath();
+    ctx.arc(0, -size * 0.3, size * 0.4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Beard (orange/red)
+    ctx.fillStyle = '#ff6600';
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.3, -size * 0.1);
+    ctx.quadraticCurveTo(-size * 0.4, size * 0.2, 0, size * 0.3);
+    ctx.quadraticCurveTo(size * 0.4, size * 0.2, size * 0.3, -size * 0.1);
+    ctx.closePath();
+    ctx.fill();
+
+    // Hat (green top hat)
+    ctx.fillStyle = '#228B22';
+    ctx.fillRect(-size * 0.5, -size * 0.8, size, size * 0.1);
+    ctx.fillRect(-size * 0.35, -size * 1.4, size * 0.7, size * 0.6);
+
+    // Hat buckle
+    ctx.fillStyle = '#FFD700';
+    ctx.fillRect(-size * 0.15, -size * 0.85, size * 0.3, size * 0.15);
+
+    // Eyes
+    ctx.fillStyle = '#000000';
+    ctx.beginPath();
+    ctx.arc(-size * 0.12, -size * 0.35, size * 0.06, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(size * 0.12, -size * 0.35, size * 0.06, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Smile
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = size * 0.04;
+    ctx.beginPath();
+    ctx.arc(0, -size * 0.2, size * 0.15, 0, Math.PI);
+    ctx.stroke();
+
+    ctx.restore();
+  }
+};
