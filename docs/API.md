@@ -915,6 +915,238 @@ Box shadow and elevation utilities for depth and visual hierarchy:
 
 ---
 
+## JavaScript Effects (`Domma.effects`)
+
+The `Domma.effects` module provides programmatic visual effects and animations for UI elements. All effects support accessibility features like `prefers-reduced-motion` and return control objects for pause/resume/destroy operations.
+
+### `effects.breathe(selector, options)`
+
+Creates a sinusoidal vertical floating animation. Elements gently float up and down in a smooth, continuous motion.
+
+**Parameters:**
+- `selector`: CSS selector string, HTMLElement, NodeList, or Array
+- `options` (optional): Configuration object
+
+**Options:**
+- `amplitude` (number): Vertical movement distance in pixels. Default: `6`
+- `duration` (number): Complete animation cycle time in milliseconds. Default: `3000`
+- `easing` (string): CSS easing function. Default: `'ease-in-out'`
+- `delay` (number): Initial delay before animation starts (ms). Default: `0`
+- `stagger` (number): Delay between multiple elements (ms). Default: `0`
+- `iterations` (number | 'infinite'): Number of animation cycles. Default: `'infinite'`
+- `pauseOnHover` (boolean): Pause animation when hovering. Default: `false`
+- `autoStart` (boolean): Start animation immediately. Default: `true`
+- `respectMotionPreference` (boolean): Honor prefers-reduced-motion. Default: `true`
+- `onStart` (function): Callback when animation starts. Default: `null`
+- `onComplete` (function): Callback when animation completes (finite iterations only). Default: `null`
+
+**Returns:** Control object with methods:
+- `pause()`: Pause the animation
+- `resume()`: Resume a paused animation
+- `stop()`: Stop the animation completely
+- `restart()`: Restart from the beginning
+- `destroy()`: Stop and clean up all resources
+- `isRunning()`: Check if animation is running
+- `isPaused()`: Check if animation is paused
+
+**Examples:**
+
+```javascript
+// Basic usage - stat cards with gentle float
+Domma.effects.breathe('.stat-card');
+
+// With configuration
+const breathe = Domma.effects.breathe('.feature-card', {
+  amplitude: 8,       // 8px vertical movement
+  duration: 2500,     // 2.5 second cycle
+  stagger: 150,       // 150ms delay between cards
+  pauseOnHover: true  // Pause when hovering
+});
+
+// Control the animation
+breathe.pause();
+breathe.resume();
+breathe.stop();
+breathe.destroy();
+
+// Finite iterations with callback
+Domma.effects.breathe('.notification', {
+  amplitude: 12,
+  iterations: 3,
+  onComplete: () => {
+    console.log('Animation finished!');
+  }
+});
+
+// Individual amplitude for each element
+$('.card').each(function() {
+  const amplitude = parseInt($(this).data('amplitude')) || 6;
+  Domma.effects.breathe(this, { amplitude, duration: 3000 });
+});
+```
+
+**Use Cases:**
+- Dashboard stat cards
+- Feature highlights
+- Pricing tiers
+- Call-to-action elements
+- Hero section components
+
+---
+
+### `effects.pulse(selector, options)`
+
+Creates a grow-and-shrink scale animation. Elements smoothly scale up and down to create a breathing or pulsing effect.
+
+**Parameters:**
+- `selector`: CSS selector string, HTMLElement, NodeList, or Array
+- `options` (optional): Configuration object
+
+**Options:**
+- `scale` (number): Scale factor (e.g., 1.05 = 5% larger). Default: `1.05`
+- `duration` (number): Complete animation cycle time in milliseconds. Default: `2000`
+- `easing` (string): CSS easing function. Default: `'ease-in-out'`
+- `delay` (number): Initial delay before animation starts (ms). Default: `0`
+- `stagger` (number): Delay between multiple elements (ms). Default: `0`
+- `iterations` (number | 'infinite'): Number of animation cycles. Default: `'infinite'`
+- `pauseOnHover` (boolean): Pause animation when hovering. Default: `false`
+- `autoStart` (boolean): Start animation immediately. Default: `true`
+- `respectMotionPreference` (boolean): Honor prefers-reduced-motion. Default: `true`
+- `onStart` (function): Callback when animation starts. Default: `null`
+- `onComplete` (function): Callback when animation completes (finite iterations only). Default: `null`
+
+**Returns:** Control object (same methods as `breathe()`)
+
+**Examples:**
+
+```javascript
+// Basic usage - pulsing badges
+Domma.effects.pulse('.badge-notification');
+
+// With configuration
+const pulse = Domma.effects.pulse('.status-indicator', {
+  scale: 1.2,         // 20% larger at peak
+  duration: 1500,     // 1.5 second cycle
+  stagger: 100        // 100ms delay between indicators
+});
+
+// Notification dot with pause on hover
+Domma.effects.pulse('.notification-dot', {
+  scale: 1.3,
+  duration: 1200,
+  pauseOnHover: true
+});
+
+// Subtle button emphasis
+Domma.effects.pulse('.btn-primary', {
+  scale: 1.03,        // Very subtle 3% growth
+  duration: 2500
+});
+
+// Different scale for each element
+$('.badge').each(function() {
+  const scale = parseFloat($(this).data('scale')) || 1.05;
+  Domma.effects.pulse(this, { scale, duration: 2000 });
+});
+
+// Control methods
+pulse.pause();
+pulse.resume();
+pulse.stop();
+pulse.destroy();
+```
+
+**Use Cases:**
+- Notification indicators
+- Badge counters
+- Loading states
+- Interactive buttons
+- Status icons
+
+---
+
+### Accessibility
+
+Both `breathe()` and `pulse()` respect user motion preferences by default. If a user has enabled "Reduce motion" in their system settings (`prefers-reduced-motion: reduce`), effects will be automatically disabled.
+
+```javascript
+// Respects system preference (default)
+Domma.effects.breathe('.element', {
+  respectMotionPreference: true  // Default
+});
+
+// Override to force animation
+Domma.effects.breathe('.element', {
+  respectMotionPreference: false
+});
+```
+
+**Best Practice:** Always respect user preferences unless there's a compelling reason not to. Animations can cause discomfort or motion sickness for some users.
+
+---
+
+### Real-World Examples
+
+**Dashboard with Stat Cards:**
+```javascript
+// Stat cards with staggered breathing
+Domma.effects.breathe('.stat-card', {
+  amplitude: 6,
+  duration: 3000,
+  stagger: 200,
+  pauseOnHover: true
+});
+```
+
+**Notification System:**
+```javascript
+// Badge counter with pulse
+Domma.effects.pulse('.badge-notification', {
+  scale: 1.15,
+  duration: 1500
+});
+
+// Notification dot indicator
+Domma.effects.pulse('.notification-dot', {
+  scale: 1.3,
+  duration: 1200
+});
+```
+
+**Feature Cards with Entrance:**
+```javascript
+// Staggered entrance animation
+Domma.effects.breathe('.feature-card', {
+  amplitude: 8,
+  stagger: 150,
+  iterations: 3,
+  onComplete: () => {
+    // Optionally transition to infinite subtle animation
+    Domma.effects.breathe('.feature-card', {
+      amplitude: 4,
+      duration: 4000
+    });
+  }
+});
+```
+
+**Combined Effects:**
+```javascript
+// Breathing cards
+Domma.effects.breathe('.pricing-tier', {
+  amplitude: 6,
+  stagger: 100
+});
+
+// Pulsing "Popular" badge
+Domma.effects.pulse('.badge-popular', {
+  scale: 1.1,
+  duration: 2000
+});
+```
+
+---
+
 ## Elements (`Domma.elements`)
 
 UI component library providing 25+ interactive elements including modals, tabs, carousels, tooltips, and more.

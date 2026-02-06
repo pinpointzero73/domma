@@ -22,8 +22,14 @@
       "variantSelector": true,
       "position": "fixed-right"
     },
-    "snow": {
+    "celebrations": {
       "toggle": true
+    },
+    "twinklingStars": {
+      "enabled": true,
+      "count": 150,
+      "minSize": 1,
+      "maxSize": 3
     },
     "features": [
       "back-to-top",
@@ -57,7 +63,7 @@
           "variantSelector": true,
           "position": "fixed-right"
         },
-        "snow": {
+        "celebrations": {
           "toggle": true
         },
         "features": [
@@ -93,7 +99,7 @@
           "variantSelector": true,
           "position": "fixed-right"
         },
-        "snow": {
+        "celebrations": {
           "toggle": true
         },
         "features": [
@@ -130,7 +136,7 @@
           "variantSelector": true,
           "position": "fixed-right"
         },
-        "snow": {
+        "celebrations": {
           "toggle": true
         },
         "features": [
@@ -165,7 +171,7 @@
       "variantSelector": true,
       "position": "fixed-right"
     },
-    "snow": {
+    "celebrations": {
       "toggle": true
     },
     "features": [
@@ -210,5 +216,36 @@
       "position": "fixed-right"
     },
     "features": []
+  },
+  "celebrations-demo": {
+    "navbar": {
+      "type": "dropdowns",
+      "brand": {
+        "text": "Domma",
+        "url": "../../index.html",
+        "showVersion": true
+      },
+      "items": "nav-showcase",
+      "variant": null,
+      "actions": [
+        { "type": "auth", "loginUrl": "../../login/index.html" },
+        { "type": "theme-selector", "position": "inline" }
+      ]
+    },
+    "footer": "footer-landing",
+    "sidebar": {
+      "enabled": false
+    },
+    "theme": {
+      "variantSelector": false,
+      "position": "fixed-right"
+    },
+    "celebrations": {
+      "toggle": false
+    },
+    "features": [
+      "back-to-top",
+      "icon-scan"
+    ]
   }
 }

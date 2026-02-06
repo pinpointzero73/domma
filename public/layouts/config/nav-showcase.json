@@ -325,6 +325,21 @@
           "divider": true
         },
         {
+          "text": "JavaScript",
+          "url": "showcase/effects/javascript.html",
+          "section": "effects-javascript",
+          "badge": "New"
+        },
+        {
+          "text": "Celebrations",
+          "url": "examples/celebrations/index.html",
+          "section": "celebrations",
+          "badge": "New"
+        },
+        {
+          "divider": true
+        },
+        {
           "text": "Animations",
           "url": "showcase/effects/animations.html",
           "section": "effects-animations"

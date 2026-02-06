@@ -88,9 +88,14 @@ import {ConsentModule} from './modules/consent.js';
             await renderThemeControls(presetConfig.theme);
         }
 
-        // Render snow controls
-        if (presetConfig.snow) {
-            await renderSnowControls(presetConfig.snow);
+        // Render celebrations controls
+        if (presetConfig.celebrations) {
+            await renderCelebrationsControls(presetConfig.celebrations);
+        }
+
+        // Initialize twinkling stars
+        if (presetConfig.twinklingStars && presetConfig.twinklingStars.enabled) {
+            await initTwinklingStars(presetConfig.twinklingStars);
         }
 
         // Render footer
@@ -138,8 +143,8 @@ import {ConsentModule} from './modules/consent.js';
     function injectStyles() {
         const styles = `
       <style id="layout-styles">
-        /* Snow toggle disc */
-        .snow-toggle-container {
+        /* Celebrations toggle disc */
+        .celebrations-toggle-container {
           position: fixed;
           top: calc(50vh - 175px);
           right: calc(-5px);
@@ -148,7 +153,7 @@ import {ConsentModule} from './modules/consent.js';
           flex-direction: column;
           gap: 0.5rem;
         }
-        .snow-toggle {
+        .celebrations-toggle {
           width: 40px;
           height: 40px;
           border-radius: 9999px;
@@ -161,19 +166,19 @@ import {ConsentModule} from './modules/consent.js';
           transition: background 0.2s ease, transform 0.2s ease;
           box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .snow-toggle:hover {
+        .celebrations-toggle:hover {
           background: var(--dm-hover-bg, rgba(0,0,0,0.04));
           transform: scale(1.05);
         }
-        .snow-toggle svg {
+        .celebrations-toggle svg {
           color: var(--dm-text, #212529);
           width: 20px;
           height: 20px;
         }
-        .snow-toggle.active svg {
+        .celebrations-toggle.active svg {
           color: var(--dm-primary, #0d6efd);
         }
-        .snow-toggle::after {
+        .celebrations-toggle::after {
           content: attr(data-tooltip);
           position: absolute;
           right: 50px;
@@ -189,10 +194,10 @@ import {ConsentModule} from './modules/consent.js';
           pointer-events: none;
           transition: opacity 0.15s ease;
         }
-        .snow-toggle:hover::after {
+        .celebrations-toggle:hover::after {
           opacity: 1;
         }
-        .snow-slider {
+        .celebrations-slider {
           display: flex;
           flex-direction: column;
           gap: 0.25rem;
@@ -201,12 +206,12 @@ import {ConsentModule} from './modules/consent.js';
           transform: translateY(-10px);
           transition: all 0.2s ease;
         }
-        .snow-toggle-container:hover .snow-slider {
+        .celebrations-toggle-container:hover .celebrations-slider {
           opacity: 1;
           visibility: visible;
           transform: translateY(0);
         }
-        .snow-intensity-btn {
+        .celebrations-intensity-btn {
           padding: 0.35rem 0.6rem;
           background: var(--dm-surface, #fff);
           border: 1px solid var(--dm-border, #dee2e6);
@@ -217,10 +222,10 @@ import {ConsentModule} from './modules/consent.js';
           white-space: nowrap;
           box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .snow-intensity-btn:hover {
+        .celebrations-intensity-btn:hover {
           background: var(--dm-hover-bg, rgba(0,0,0,0.04));
         }
-        .snow-intensity-btn.active {
+        .celebrations-intensity-btn.active {
           background: var(--dm-primary, #0d6efd);
           color: var(--dm-white, #fff);
           border-color: var(--dm-primary, #0d6efd);
@@ -1106,85 +1111,93 @@ import {ConsentModule} from './modules/consent.js';
     /**
      * Check if current date is in festive season (Dec 1 - Jan 3)
      */
-    function isFestiveSeason() {
-        const now = new Date();
-        const month = now.getMonth(); // 0-11
-        const day = now.getDate();
-
-        // December (month 11) or January 1-3 (month 0, days 1-3)
-        return (month === 11) || (month === 0 && day <= 3);
-
-        // TEMP: Override for testing - remove this line after Dec/Jan
-        // return true;
+    /**
+     * Check if any celebration is currently active
+     * (Delegated to CelebrationsEffect module)
+     */
+    async function isCelebrationSeason() {
+        try {
+            const { CelebrationsEffect } = await import('./modules/celebrations/index.js');
+            return CelebrationsEffect.isCelebrationSeason();
+        } catch (error) {
+            console.error('[Domma Layout] Failed to check celebration season:', error);
+            return false;
+        }
     }
 
     /**
-     * Render snow toggle disc
+     * Render celebrations toggle disc
      */
-    async function renderSnowControls(config) {
+    async function renderCelebrationsControls(config) {
         try {
-            if (!config.toggle || !isFestiveSeason()) {
-                return; // Only show during festive season
+            const isSeason = await isCelebrationSeason();
+            if (!config.toggle || !isSeason) {
+                return; // Only show during celebration season
             }
 
-            // Get Christmas tree icon from Domma icon system
-            const treeIcon = typeof Domma !== 'undefined' && Domma.icons
-              ? Domma.icons.html('tree', {size: 20})
-              : '<svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2l2 4h-1l2 4h-1.5l2.5 5h-2l3 6H7l3-6H8l2.5-5H9l2-4h-1l2-4z"/></svg>';
+            // Get sparkles icon from Domma icon system
+            const sparklesIcon = typeof Domma !== 'undefined' && Domma.icons
+              ? Domma.icons.html('sparkles', {size: 20})
+              : '<svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 1l2.5 6.5L21 10l-6.5 2.5L12 19l-2.5-6.5L3 10l6.5-2.5L12 1z"/></svg>';
 
-            // Create snow toggle HTML
+            // Create celebrations toggle HTML
             const toggleHtml = `
-                <div class="snow-toggle-container">
-                    <button class="snow-toggle" id="snow-toggle" data-tooltip="Snow effect">
-                        ${treeIcon}
+                <div class="celebrations-toggle-container">
+                    <button class="celebrations-toggle" id="celebrations-toggle" data-tooltip="Celebration effects">
+                        ${sparklesIcon}
                     </button>
-                    <div class="snow-slider" id="snow-slider">
-                        <button class="snow-intensity-btn" data-intensity="light">Light</button>
-                        <button class="snow-intensity-btn" data-intensity="medium">Medium</button>
-                        <button class="snow-intensity-btn" data-intensity="heavy">Heavy</button>
+                    <div class="celebrations-slider" id="celebrations-slider">
+                        <button class="celebrations-intensity-btn" data-intensity="light">Light</button>
+                        <button class="celebrations-intensity-btn" data-intensity="medium">Medium</button>
+                        <button class="celebrations-intensity-btn" data-intensity="heavy">Heavy</button>
                     </div>
                 </div>
             `;
 
             document.body.insertAdjacentHTML('afterbegin', toggleHtml);
 
-            const {SnowEffect} = await import('./modules/snow.js');
-            initSnowToggle(SnowEffect);
+            const { CelebrationsEffect } = await import('./modules/celebrations/index.js');
+            initCelebrationsToggle(CelebrationsEffect);
 
-            console.log('[Domma Layout] Snow toggle rendered');
+            console.log('[Domma Layout] Celebrations toggle rendered');
         } catch (error) {
-            console.error('[Domma Layout] Snow toggle render failed:', error);
+            console.error('[Domma Layout] Celebrations toggle render failed:', error);
         }
     }
 
     /**
-     * Initialize snow toggle
+     * Initialize celebrations toggle
      */
-    function initSnowToggle(SnowEffect) {
-        const toggleBtn = document.getElementById('snow-toggle');
-        const slider = document.getElementById('snow-slider');
+    function initCelebrationsToggle(CelebrationsEffect) {
+        const toggleBtn = document.getElementById('celebrations-toggle');
+        const slider = document.getElementById('celebrations-slider');
 
         if (!toggleBtn || !slider) return;
 
         const storage = typeof Domma !== 'undefined' && Domma.storage ? Domma.storage : null;
-        let snowEffect = null;
+        let celebrationsEffect = null;
 
         // Load saved state
-        const savedEnabled = storage ? storage.get('snow-enabled', false) : false;
-        const savedIntensity = storage ? storage.get('snow-intensity', 'medium') : 'medium';
+        const savedEnabled = storage ? storage.get('celebrations-enabled', false) : false;
+        const savedIntensity = storage ? storage.get('celebrations-intensity', 'medium') : 'medium';
 
         // Initialize if enabled
         if (savedEnabled) {
-            snowEffect = new SnowEffect({intensity: savedIntensity, enabled: true});
-            snowEffect.init();
-            snowEffect.start();
-            toggleBtn.classList.add('active');
+            celebrationsEffect = new CelebrationsEffect({
+                theme: 'auto',
+                intensity: savedIntensity,
+                enabled: true
+            });
+            celebrationsEffect.init().then(() => {
+                celebrationsEffect.start();
+                toggleBtn.classList.add('active');
+            });
         }
 
         // Update slider active state
         function updateSliderState() {
-            const current = storage ? storage.get('snow-intensity', 'medium') : 'medium';
-            slider.querySelectorAll('.snow-intensity-btn').forEach(btn => {
+            const current = storage ? storage.get('celebrations-intensity', 'medium') : 'medium';
+            slider.querySelectorAll('.celebrations-intensity-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.intensity === current);
             });
         }
@@ -1194,32 +1207,38 @@ import {ConsentModule} from './modules/consent.js';
             const isActive = toggleBtn.classList.contains('active');
 
             if (isActive) {
-                // Disable snow
-                if (snowEffect) {
-                    snowEffect.stop();
-                    snowEffect = null;
+                // Disable celebrations
+                if (celebrationsEffect) {
+                    celebrationsEffect.pause();
+                    celebrationsEffect.destroy();
+                    celebrationsEffect = null;
                 }
                 toggleBtn.classList.remove('active');
-                if (storage) storage.set('snow-enabled', false);
+                if (storage) storage.set('celebrations-enabled', false);
             } else {
-                // Enable snow
-                const intensity = storage ? storage.get('snow-intensity', 'medium') : 'medium';
-                snowEffect = new SnowEffect({intensity, enabled: true});
-                snowEffect.init();
-                snowEffect.start();
-                toggleBtn.classList.add('active');
-                if (storage) storage.set('snow-enabled', true);
+                // Enable celebrations
+                const intensity = storage ? storage.get('celebrations-intensity', 'medium') : 'medium';
+                celebrationsEffect = new CelebrationsEffect({
+                    theme: 'auto',
+                    intensity,
+                    enabled: false
+                });
+                celebrationsEffect.init().then(() => {
+                    celebrationsEffect.start();
+                    toggleBtn.classList.add('active');
+                    if (storage) storage.set('celebrations-enabled', true);
+                });
             }
         });
 
         // Intensity handlers
-        slider.querySelectorAll('.snow-intensity-btn').forEach(btn => {
+        slider.querySelectorAll('.celebrations-intensity-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const intensity = btn.dataset.intensity;
-                if (storage) storage.set('snow-intensity', intensity);
+                if (storage) storage.set('celebrations-intensity', intensity);
 
-                if (snowEffect) {
-                    snowEffect.setIntensity(intensity);
+                if (celebrationsEffect) {
+                    celebrationsEffect.setIntensity(intensity);
                 }
 
                 updateSliderState();
@@ -1227,6 +1246,31 @@ import {ConsentModule} from './modules/consent.js';
         });
 
         updateSliderState();
+    }
+
+    /**
+     * Initialize twinkling stars effect
+     */
+    async function initTwinklingStars(config) {
+        try {
+            const { TwinklingStars } = await import('./modules/twinkling-stars.js');
+
+            const stars = new TwinklingStars({
+                count: config.count || 150,
+                minSize: config.minSize || 1,
+                maxSize: config.maxSize || 3,
+                twinkleSpeed: config.twinkleSpeed || 0.003,
+                color: config.color || 'rgba(255, 240, 200, 1)',
+                zIndex: config.zIndex || 1
+            });
+
+            stars.init();
+            stars.start();
+
+            console.log('[Domma Layout] Twinkling stars initialized');
+        } catch (error) {
+            console.error('[Domma Layout] Failed to initialize twinkling stars:', error);
+        }
     }
 
     /**

@@ -12,6 +12,7 @@ import {icons} from './icons.js';
 import {storage} from './storage.js';
 import {auth} from './auth.js';
 import {router} from './router.js';
+import effects from './effects.js';
 import sanitizeModule from './sanitize.js';
 
 // Register Web Components (Badge, Tooltip, Loader, BackToTop)
@@ -90,6 +91,7 @@ Domma.ready = (callback) => configEngine.ready(callback);
 
 Domma.models = models;
 Domma.elements = elements;
+Domma.effects = effects;
 Domma.dates = dates;
 Domma.tables = tables;
 Domma.forms = forms;
