@@ -376,41 +376,42 @@ $('#change-layout').on('click', () => {
     <script src="../../../dist/domma-syntax.min.js"></script>
     <script type="module" src="../../../layouts/js/layout.js"></script>
     <script>
-        // Sample data sets
+        // Domma Release Timeline
         const basicTimelineData = [
-            { year: '2020', title: 'Project Start', description: 'Initial planning and development began with core team formation' },
-            { year: '2021', title: 'Beta Release', description: 'First public beta with essential features and user testing' },
-            { year: '2022', title: 'Version 1.0', description: 'Stable release with full feature set and documentation' },
-            { year: '2023', title: 'Major Update', description: 'Added new components and improved performance significantly' },
-            { year: '2024', title: 'Current', description: 'Ongoing development with Timeline component addition' }
+            { year: '2023', title: 'Domma v0.1.0', description: 'Initial alpha release with DOM manipulation ($) and utilities (_)' },
+            { year: 'Q1 2024', title: 'v0.3.0 Alpha', description: 'Added Dates (D), Storage (S), and HTTP (H) modules' },
+            { year: 'Q2 2024', title: 'v0.5.0 Beta', description: 'Models (M) with reactive data binding and Forms module launched' },
+            { year: 'Q3 2024', title: 'v0.8.0', description: 'Elements module with 22+ UI components and Tables module' },
+            { year: 'Q4 2024', title: 'v0.12.0', description: 'Layout system, Blueprint schemas, and celebration effects' },
+            { year: 'Jan 2026', title: 'v0.14.1', description: 'Enhanced celebrations with patron saint flower petal animations' }
         ];
 
         const companyHistory = [
-            { year: '2018', title: 'Company Founded', description: 'Started with a vision to simplify web development' },
-            { year: '2019', title: 'First Product', description: 'Launched initial framework prototype' },
-            { year: '2020', title: 'Team Expansion', description: 'Grew to 10 developers and designers' },
-            { year: '2021', title: 'Major Funding', description: 'Secured Series A funding for growth' },
-            { year: '2022', title: 'Market Leadership', description: 'Became leading framework in the space' },
-            { year: '2023', title: 'Global Reach', description: 'Expanded to serve international markets' }
+            { year: '2023', title: 'Framework Concept', description: 'Domma envisioned as jQuery + Lodash + Moment unified toolkit' },
+            { year: 'Q1 2024', title: 'Core Modules', description: 'DOM ($), Utils (_), Dates (D) modules implemented' },
+            { year: 'Q2 2024', title: 'Reactive Models', description: 'Models (M) with pub/sub and two-way binding launched' },
+            { year: 'Q3 2024', title: 'UI Components', description: 'Elements module with modal, tabs, carousel, and 20+ components' },
+            { year: 'Q4 2024', title: 'Advanced Features', description: 'Forms, Tables, Blueprints, and celebration animations added' },
+            { year: 'Jan 2026', title: 'Production Ready', description: 'Comprehensive testing suite and v1.0 roadmap established' }
         ];
 
         const projectMilestones = [
-            { year: 'Q1', title: 'Research', description: 'Market analysis and user research' },
-            { year: 'Q2', title: 'Design', description: 'UI/UX design and prototyping' },
-            { year: 'Q3', title: 'Development', description: 'Core development and testing' },
-            { year: 'Q4', title: 'Launch', description: 'Public release and marketing' }
+            { year: 'v0.8.0', title: 'Elements Module', description: 'Modal, tabs, tooltip, carousel, and 18 more components' },
+            { year: 'v0.10.0', title: 'Forms & Tables', description: 'FormBuilder, validation, and DataTable functionality' },
+            { year: 'v0.12.0', title: 'Blueprints', description: 'Unified schema system for models, forms, and CRUD' },
+            { year: 'v0.14.1', title: 'Celebrations', description: '8 celebration themes with advanced canvas animations' }
         ];
 
         const shortData = [
-            { year: '2022', title: 'Planning', description: 'Initial project planning phase' },
-            { year: '2023', title: 'Development', description: 'Core development and testing' },
-            { year: '2024', title: 'Release', description: 'Public release and adoption' }
+            { year: '2023', title: 'Alpha', description: 'Initial Domma framework concept and core modules' },
+            { year: '2024', title: 'Beta', description: 'UI components, forms, and reactive models' },
+            { year: '2026', title: 'v1.0', description: 'Production-ready stable release' }
         ];
 
         const interactiveData = [
-            { year: '2020', title: 'Foundation', description: 'Project foundation and team building' },
-            { year: '2022', title: 'Growth', description: 'Rapid expansion and feature development' },
-            { year: '2024', title: 'Innovation', description: 'Latest features and improvements' }
+            { year: '2023', title: 'Core Modules', description: 'DOM ($), Utils (_), Dates (D) foundation' },
+            { year: '2024', title: 'UI Components', description: 'Elements module with 22+ components' },
+            { year: '2026', title: 'Advanced Features', description: 'Celebrations, Blueprints, and Router enhancements' }
         ];
 
         // Initialize all timelines

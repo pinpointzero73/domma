@@ -397,81 +397,81 @@ const roadmap = Domma.elements.progression('#roadmap', {
 <script src="../../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../../layouts/js/layout.js"></script>
 <script>
-    // Timeline mode demo
+    // Timeline mode demo - Domma Release History
     Domma.elements.progression('#timeline-demo', {
         mode: 'timeline',
         items: [
-            { year: '2020', title: 'Founded', description: 'Company established with mission to innovate' },
-            { year: '2021', title: 'Series A', description: 'Raised $5M funding from top investors' },
-            { year: '2022', title: 'Product Launch', description: 'Released v1.0 to enthusiastic response' },
-            { year: '2023', title: 'Expansion', description: 'Opened 3 new offices across continents' },
-            { year: '2024', title: 'IPO', description: 'Went public on NASDAQ with strong debut' }
+            { year: '2023', title: 'Domma v0.1.0', description: 'Initial alpha release with core DOM manipulation and utilities' },
+            { year: 'Q2 2024', title: 'v0.5.0', description: 'Added Models, Forms, and Tables modules with reactive data binding' },
+            { year: 'Q3 2024', title: 'v0.8.0', description: 'Elements module launched with 22+ UI components' },
+            { year: 'Q4 2024', title: 'v0.12.0', description: 'Layout system, celebrations effects, and Blueprint schema' },
+            { year: 'Jan 2026', title: 'v0.14.1', description: 'Enhanced celebrations with patron saint animations and CSS architecture improvements' }
         ],
         layout: 'vertical',
         theme: 'default',
         animation: true
     });
 
-    // Roadmap mode demo
+    // Roadmap mode demo - Domma 2026 Development Roadmap
     Domma.elements.progression('#roadmap-demo', {
         mode: 'roadmap',
         items: [
             {
-                id: 'research',
-                title: 'Market Research',
-                description: 'Comprehensive market analysis and user research',
+                id: 'celebrations-complete',
+                title: 'Celebration Effects Complete',
+                description: '8 celebration themes with flower petal animations for UK patron saints',
                 status: 'completed',
                 date: 'Q1 2026',
-                tags: ['research', 'planning']
+                tags: ['animations', 'ui'],
+                priority: 'medium'
             },
             {
-                id: 'design',
-                title: 'UI/UX Design',
-                description: 'Design system and user interface mockups',
-                status: 'completed',
-                date: 'Q1 2026',
-                priority: 'high',
-                assignee: 'Design Team'
-            },
-            {
-                id: 'backend',
-                title: 'Backend Development',
-                description: 'API development and database architecture',
+                id: 'router-module',
+                title: 'Router Module Enhancement',
+                description: 'Advanced SPA routing with lazy loading and code splitting',
                 status: 'in-progress',
                 date: 'Q2 2026',
-                progress: 65,
-                priority: 'critical',
-                tags: ['backend', 'api'],
-                assignee: 'Engineering Team'
+                progress: 45,
+                priority: 'high',
+                tags: ['routing', 'spa'],
+                assignee: 'Core Team'
             },
             {
-                id: 'frontend',
-                title: 'Frontend Development',
-                description: 'React components and responsive layouts',
+                id: 'form-validation',
+                title: 'Form Validation v2',
+                description: 'Enhanced async validation with custom rules and multi-step forms',
                 status: 'in-progress',
                 date: 'Q2 2026',
-                progress: 40,
+                progress: 30,
                 priority: 'high',
-                tags: ['frontend', 'ui'],
-                assignee: 'Frontend Team'
+                tags: ['forms', 'validation']
             },
             {
-                id: 'testing',
-                title: 'QA & Testing',
-                description: 'Automated testing and quality assurance',
+                id: 'charts-module',
+                title: 'Charts Module',
+                description: 'Data visualization with charts, graphs, and dashboards',
                 status: 'planned',
                 date: 'Q3 2026',
                 priority: 'medium',
+                tags: ['visualization', 'charts']
+            },
+            {
+                id: 'testing-suite',
+                title: 'Testing Suite Expansion',
+                description: 'Comprehensive Vitest and Cypress coverage for all modules',
+                status: 'planned',
+                date: 'Q3 2026',
+                priority: 'critical',
                 tags: ['testing', 'qa']
             },
             {
-                id: 'launch',
-                title: 'Product Launch',
-                description: 'Marketing campaign and public release',
+                id: 'v1-release',
+                title: 'Domma v1.0 Stable',
+                description: 'Production-ready release with complete documentation and CDN',
                 status: 'planned',
                 date: 'Q4 2026',
                 priority: 'critical',
-                tags: ['launch', 'marketing']
+                tags: ['release', 'milestone']
             }
         ],
         showProgress: true,

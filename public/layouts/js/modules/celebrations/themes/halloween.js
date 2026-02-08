@@ -4,6 +4,7 @@
  * Features:
  * - Flying bats with wing animation
  * - Floating ghosts with wavy motion
+ *
  * - Pumpkins (both floating and static jack-o-lanterns)
  * - Gravestones scattered on ground
  * - Haunted castle with towers and turrets
@@ -114,7 +115,7 @@ export default {
 
     if (depth < 0.33) {
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 1.8;
-      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.5;
+      speed = config.speedRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.5;
       opacity = 0.7 + Math.random() * 0.2;
     } else if (depth < 0.66) {
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 1.2;
@@ -276,7 +277,11 @@ export default {
       opacity: 0.9,
       glowPhase: 0,
       active: true,
-      static: true
+      static: true,
+      batmanVisible: false,
+      batmanTimer: Math.random() * 120 * 1000, // Random initial delay
+      batmanInterval: 120 * 1000, // Appear every 2 minutes
+      batmanDisplayTime: 3 * 1000 // Display for 3 seconds
     });
 
     // Create gravestones
@@ -321,6 +326,7 @@ export default {
         size: 3 + Math.random() * 3,
         opacity: 0.8,
         swingPhase: Math.random() * Math.PI * 2,
+        swingAmplitude: 20 + Math.random() * 30,
         swingSpeed: 0.02 + Math.random() * 0.02,
         active: true,
         static: true
@@ -458,7 +464,7 @@ export default {
         smoke: [],
         time: 0,
         active: true,
-        static: false
+        static: true
       };
     }
 
@@ -820,7 +826,7 @@ export default {
       // Jagged mouth
       ctx.beginPath();
       ctx.moveTo(-size * 0.6, size * 0.4);
-      for (let i = 0; i <= 6; i++) {
+      for (let i = -4; i <= 4; i++) {
         const xPos = -size * 0.6 + (i / 6) * size * 1.2;
         const yPos = size * 0.4 + (i % 2 === 0 ? 0 : size * 0.2);
         ctx.lineTo(xPos, yPos);
@@ -1010,7 +1016,7 @@ export default {
     ctx.shadowColor = '#00ff00';
     ctx.shadowBlur = 15;
     ctx.beginPath();
-    ctx.ellipse(0, 0, size * 0.7, size * 0.3, 0, 0, Math.PI);
+    ctx.ellipse(0, 0, size * 0.7, size * 0.3, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
 
@@ -1386,6 +1392,47 @@ export default {
     ctx.beginPath();
     ctx.arc(-size * 0.2, size * 0.5, size * 0.12, 0, Math.PI * 2);
     ctx.fill();
+
+    // Draw Batman logo if visible
+    if (particle.batmanVisible) {
+      const batSize = size * 0.7; // Adjust size of the bat signal
+      ctx.fillStyle = '#000000'; // Black bat signal
+      ctx.globalAlpha = particle.opacity; // Use moon's opacity
+
+      ctx.beginPath();
+      // Bat body
+      ctx.ellipse(0, 0, batSize * 0.8, batSize * 0.3, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Left wing
+      ctx.moveTo(-batSize * 0.8, 0);
+      ctx.quadraticCurveTo(-batSize * 1.2, -batSize * 0.8, -batSize * 2.0, -batSize * 0.5);
+      ctx.quadraticCurveTo(-batSize * 1.5, batSize * 0.2, -batSize * 0.8, batSize * 0.3);
+      ctx.lineTo(-batSize * 0.8, 0);
+      ctx.fill();
+
+      // Right wing
+      ctx.moveTo(batSize * 0.8, 0);
+      ctx.quadraticCurveTo(batSize * 1.2, -batSize * 0.8, batSize * 2.0, -batSize * 0.5);
+      ctx.quadraticCurveTo(batSize * 1.5, batSize * 0.2, batSize * 0.8, batSize * 0.3);
+      ctx.lineTo(batSize * 0.8, 0);
+      ctx.fill();
+
+      // Ears (small triangles on top of the head)
+      ctx.beginPath();
+      ctx.moveTo(-batSize * 0.3, -batSize * 0.3);
+      ctx.lineTo(-batSize * 0.4, -batSize * 0.6);
+      ctx.lineTo(-batSize * 0.5, -batSize * 0.3);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(batSize * 0.3, -batSize * 0.3);
+      ctx.lineTo(batSize * 0.4, -batSize * 0.6);
+      ctx.lineTo(batSize * 0.5, -batSize * 0.3);
+      ctx.closePath();
+      ctx.fill();
+    }
 
     ctx.restore();
   },
