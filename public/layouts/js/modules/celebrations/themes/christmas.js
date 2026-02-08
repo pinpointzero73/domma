@@ -15,6 +15,8 @@
  * - Mobile-responsive particle reduction
  */
 
+import { createParticle } from './../core/particles.js';
+
 export default {
   name: 'christmas',
   displayName: 'Christmas',
@@ -55,6 +57,22 @@ export default {
     secondary: '#228B22',  // Forest green
     accent: '#c00',        // Christmas red
     gold: '#FFD700'        // Gold star/trim
+  },
+
+  /**
+   * Create a snowflake particle
+   */
+  createSnowflakeParticle(canvasWidth, canvasHeight, config) {
+    const particle = createParticle(config, canvasWidth, canvasHeight);
+    particle.type = 'snowflake';
+    return particle;
+  },
+
+  /**
+   * Create falling particle (snowflakes)
+   */
+  createFallingParticle(canvasWidth, canvasHeight, config) {
+    return this.createSnowflakeParticle(canvasWidth, canvasHeight, config);
   },
 
   /**
@@ -186,6 +204,7 @@ export default {
         targetX: fromLeft ? canvasWidth + 100 : -100, // Store target X
         canvasWidth: canvasWidth, // Store canvas width for arc calculation
         vx: fromLeft ? 3 + Math.random() * 2 : -(3 + Math.random() * 2),
+        vy: 0,
         arcHeight: 150 + Math.random() * 100, // Height of the arc
         time: 0,
         size: 15 + Math.random() * 10,
@@ -226,6 +245,7 @@ export default {
         y: canvasHeight - 50,
         baseY: canvasHeight - 50,
         vx: fromLeft ? 4 + Math.random() * 2 : -(4 + Math.random() * 2),
+        vy: 0,
         size: 20 + Math.random() * 10,
         opacity: 1,
         time: 0,

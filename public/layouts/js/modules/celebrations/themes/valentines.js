@@ -133,7 +133,8 @@ export default {
       maxLife: 20 + Math.random() * 30,
       color: Math.random() < 0.5 ? '#ffd700' : '#ffffff',
       twinklePhase: Math.random() * Math.PI * 2,
-      active: true
+      active: true,
+      static: true
     };
   },
 

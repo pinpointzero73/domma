@@ -44,7 +44,7 @@ export default {
     }
   },
 
-  particles: ['daffodil', 'leek', 'spring-sparkle'],
+  particles: ['daffodil-petal', 'daffodil', 'spring-sparkle'],
   decorations: ['daffodil-field', 'welsh-dragon', 'flag', 'harp', 'leek-bundle', 'twinkling-star'],
   colors: {
     primary: '#FFDD00',    // Daffodil yellow
@@ -54,16 +54,40 @@ export default {
   },
 
   /**
-   * Create daffodil particle
+   * Create daffodil petal particle (simple yellow petal)
+   */
+  createDaffodilPetal(canvasWidth, canvasHeight, config) {
+    const yellowShades = ['#FFDD00', '#FFE135', '#FFED4E', '#FFF68F'];
+    return {
+      type: 'daffodil-petal',
+      x: -30,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]),  // Horizontal drift
+      size: (config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0])) * 1.5,  // Larger petals
+      speed: (Math.random() - 0.5) * 0.2,  // Gentle vertical bobbing
+      opacity: 0.75 + Math.random() * 0.25,
+      windOffset: Math.random() * Math.PI * 2,
+      windSpeed: 0.015 + Math.random() * 0.02,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: (Math.random() - 0.5) * 0.03,
+      color: yellowShades[Math.floor(Math.random() * yellowShades.length)],
+      flutter: Math.random() * Math.PI * 2,
+      flutterSpeed: 0.02 + Math.random() * 0.02,
+      active: true
+    };
+  },
+
+  /**
+   * Create daffodil particle (full flower - rare)
    */
   createDaffodil(canvasWidth, canvasHeight, config) {
     return {
       type: 'daffodil',
-      x: Math.random() * canvasWidth,
-      y: -30,
-      vx: (Math.random() - 0.5) * 0.6,  // Side-to-side drift
+      x: -30,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]),  // Horizontal drift
       size: config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]),
-      speed: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]),
+      speed: 0.1,  // Minimal vertical movement
       opacity: 0.8 + Math.random() * 0.2,
       windOffset: Math.random() * Math.PI * 2,
       windSpeed: 0.015 + Math.random() * 0.02,
@@ -79,11 +103,11 @@ export default {
   createLeek(canvasWidth, canvasHeight, config) {
     return {
       type: 'leek',
-      x: Math.random() * canvasWidth,
-      y: -30,
-      vx: (Math.random() - 0.5) * 0.6,  // Side-to-side drift
+      x: -30,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: (config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0])) * 0.8,  // Horizontal drift (was vertical speed)
       size: config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 1.2,
-      speed: (config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0])) * 0.8,
+      speed: 0.15,  // Minimal vertical movement (was downward falling)
       opacity: 0.7 + Math.random() * 0.3,
       rotation: Math.random() * Math.PI * 2,
       rotationSpeed: (Math.random() - 0.5) * 0.03,
@@ -100,11 +124,11 @@ export default {
     const colors = ['#FFD700', '#FFFFFF', '#90EE90', '#98FB98']; // Gold, white, light green
     return {
       type: 'spring-sparkle',
-      x: Math.random() * canvasWidth,
-      y: -20,
-      vx: (Math.random() - 0.5) * 0.5,
+      x: -20,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: (config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0])) * 0.8,  // Horizontal drift (was vertical speed)
       size: config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.6,
-      speed: (config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0])) * 0.8,
+      vy: (Math.random() - 0.5) * 0.2,  // Minimal random vertical movement
       opacity: 0.6 + Math.random() * 0.4,
       rotation: Math.random() * Math.PI * 2,
       rotationSpeed: (Math.random() - 0.5) * 0.04,
@@ -112,23 +136,27 @@ export default {
       twinklePhase: Math.random() * Math.PI * 2,
       windOffset: Math.random() * Math.PI * 2,
       windSpeed: 0.015 + Math.random() * 0.02,
-      active: true
+      active: true,
+      static: false
     };
   },
 
   /**
-   * Create falling particle (randomly picks type)
+   * Create drifting particle (randomly picks type)
+   * Note: St. David's Day particles drift horizontally (left-to-right), not vertically
    */
   createFallingParticle(canvasWidth, canvasHeight, config) {
     const choice = Math.random();
 
-    // 50% daffodils, 35% leeks, 15% sparkles
-    if (choice < 0.5) {
+    // 60% daffodil petals, 20% full daffodils, 15% sparkles, 5% leeks
+    if (choice < 0.6) {
+      return this.createDaffodilPetal(canvasWidth, canvasHeight, config);
+    } else if (choice < 0.8) {
       return this.createDaffodil(canvasWidth, canvasHeight, config);
-    } else if (choice < 0.85) {
-      return this.createLeek(canvasWidth, canvasHeight, config);
-    } else {
+    } else if (choice < 0.95) {
       return this.createSpringSparkle(canvasWidth, canvasHeight, config);
+    } else {
+      return this.createLeek(canvasWidth, canvasHeight, config);
     }
   },
 
@@ -186,7 +214,7 @@ export default {
       opacity: 1,
       time: 0,
       wingPhase: Math.random() * Math.PI * 2,
-      breathePhase: Math.random() * Math.PI * 2,
+      breatheFirePhase: Math.random() * Math.PI * 2,
       active: true,
       static: true
     });
@@ -296,7 +324,45 @@ export default {
   },
 
   /**
-   * Draw daffodil
+   * Draw daffodil petal (simple elliptical petal shape)
+   */
+  drawDaffodilPetal(ctx, particle, time) {
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size;
+
+    // Flutter effect (petal curling as it drifts)
+    const flutter = Math.sin(time * particle.flutterSpeed + particle.flutter) * 0.3;
+
+    ctx.save();
+    ctx.globalAlpha = particle.opacity;
+    ctx.translate(x, y);
+    ctx.rotate(particle.rotation + flutter);
+
+    // Create petal shape (elongated ellipse)
+    ctx.fillStyle = particle.color;
+    ctx.strokeStyle = '#FFB700'; // Golden edge
+    ctx.lineWidth = size * 0.08;
+
+    ctx.beginPath();
+    // Petal is wider at one end (teardrop shape)
+    ctx.ellipse(0, 0, size * 0.6, size * 1.2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Add subtle detail line (petal vein)
+    ctx.strokeStyle = 'rgba(255, 200, 0, 0.4)';
+    ctx.lineWidth = size * 0.06;
+    ctx.beginPath();
+    ctx.moveTo(0, -size * 1.1);
+    ctx.lineTo(0, size * 1.1);
+    ctx.stroke();
+
+    ctx.restore();
+  },
+
+  /**
+   * Draw daffodil (full flower)
    */
   drawDaffodil(ctx, particle) {
     const x = particle.x;
@@ -407,7 +473,7 @@ export default {
       const rootX = (i - 2) * size * 0.15;
       ctx.beginPath();
       ctx.moveTo(rootX, size * 1.5);
-      ctx.lineTo(rootX + (Math.random() - 0.5) * size * 0.3, size * 1.8);
+      ctx.lineTo(rootX + Math.sin(i * 1.7) * size * 0.15, size * 1.8);
       ctx.stroke();
     }
 
@@ -417,11 +483,11 @@ export default {
   /**
    * Draw spring sparkle
    */
-  drawSpringSparkle(ctx, particle) {
+  drawSpringSparkle(ctx, particle, time) {
     const x = particle.x;
     const y = particle.y;
     const size = particle.size;
-    const twinkle = 0.6 + Math.sin(particle.twinklePhase) * 0.4;
+    const twinkle = 0.6 + Math.sin(time * 0.004 + particle.twinklePhase) * 0.4;
 
     ctx.save();
     ctx.globalAlpha = particle.opacity * twinkle;
@@ -1138,7 +1204,9 @@ export default {
       ctx.fill();
     }
 
-    ctx.restore();
+    ctx.restore();   // closes dragon save (line 856)
+
+    ctx.restore();   // closes flag save (line 804) — THIS WAS MISSING
   },
 
   /**

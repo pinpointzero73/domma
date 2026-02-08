@@ -44,7 +44,7 @@ export default {
     }
   },
 
-  particles: ['shamrock', 'gold-coin', 'sparkle'],
+  particles: ['clover-petal', 'shamrock', 'gold-coin', 'sparkle'],
   decorations: ['pot-of-gold', 'rainbow', 'leprechaun', 'harp', 'static-leprechaun', 'moon', 'twinkling-star'],
   colors: {
     primary: '#228B22',    // Irish green
@@ -55,7 +55,31 @@ export default {
   },
 
   /**
-   * Create shamrock particle (green, white, gold - Irish colors)
+   * Create clover petal particle (simple green heart-shaped petal)
+   */
+  createCloverPetal(canvasWidth, canvasHeight, config) {
+    const greenShades = ['#228B22', '#32CD32', '#90EE90', '#3CB371', '#2E8B57'];
+    return {
+      type: 'clover-petal',
+      x: -30,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]),  // Horizontal drift
+      size: (config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0])) * 1.5,  // Larger petals
+      speed: (Math.random() - 0.5) * 0.2,  // Gentle vertical bobbing
+      opacity: 0.75 + Math.random() * 0.25,
+      windOffset: Math.random() * Math.PI * 2,
+      windSpeed: 0.015 + Math.random() * 0.025,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: (Math.random() - 0.5) * 0.03,
+      color: greenShades[Math.floor(Math.random() * greenShades.length)],
+      flutter: Math.random() * Math.PI * 2,
+      flutterSpeed: 0.02 + Math.random() * 0.02,
+      active: true
+    };
+  },
+
+  /**
+   * Create shamrock particle (full 3-leaf clover - rare)
    */
   createShamrock(canvasWidth, canvasHeight, config) {
     const colorChoice = Math.random();
@@ -73,10 +97,11 @@ export default {
 
     return {
       type: 'shamrock',
-      x: Math.random() * canvasWidth,
-      y: -20,
+      x: -30,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]),  // Horizontal drift
       size: config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]),
-      speed: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]),
+      speed: (Math.random() - 0.5) * 0.15,  // Gentle vertical bobbing
       opacity: 0.7 + Math.random() * 0.3,
       windOffset: Math.random() * Math.PI * 2,
       windSpeed: 0.015 + Math.random() * 0.025,
@@ -94,10 +119,11 @@ export default {
   createGoldCoin(canvasWidth, canvasHeight, config) {
     return {
       type: 'gold-coin',
-      x: Math.random() * canvasWidth,
-      y: -20,
+      x: -30,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: (config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0])) * 0.8,  // Horizontal drift
       size: 2 + Math.random() * 3,
-      speed: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.8,
+      speed: (Math.random() - 0.5) * 0.1,  // Gentle vertical bobbing
       opacity: 0.9 + Math.random() * 0.1,
       rotation: 0,
       rotationSpeed: 0.05 + Math.random() * 0.1,
@@ -145,16 +171,45 @@ export default {
   },
 
   /**
-   * Create falling particle (shamrocks and gold coins)
+   * Create sparkle particle (Irish sparkles)
+   */
+  createSparkle(canvasWidth, canvasHeight, config) {
+    const colors = ['#FFD700', '#FFFFFF', '#228B22']; // Gold, white, green
+    return {
+      type: 'sparkle',
+      x: -20,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: (config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0])) * 0.8,  // Horizontal drift
+      size: config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.6,
+      vy: (Math.random() - 0.5) * 0.2,  // Minimal random vertical movement
+      opacity: 0.6 + Math.random() * 0.4,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: (Math.random() - 0.5) * 0.04,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      twinklePhase: Math.random() * Math.PI * 2,
+      windOffset: Math.random() * Math.PI * 2,
+      windSpeed: 0.015 + Math.random() * 0.02,
+      active: true,
+      static: false
+    };
+  },
+
+  /**
+   * Create drifting particle (randomly picks type)
+   * Note: St. Patrick's Day particles drift horizontally (left-to-right), not vertically
    */
   createFallingParticle(canvasWidth, canvasHeight, config) {
     const choice = Math.random();
 
-    // 80% shamrocks, 20% gold coins
-    if (choice < 0.8) {
+    // 60% clover petals, 20% full shamrocks, 15% gold coins, 5% sparkles
+    if (choice < 0.6) {
+      return this.createCloverPetal(canvasWidth, canvasHeight, config);
+    } else if (choice < 0.8) {
       return this.createShamrock(canvasWidth, canvasHeight, config);
-    } else {
+    } else if (choice < 0.95) {
       return this.createGoldCoin(canvasWidth, canvasHeight, config);
+    } else {
+      return this.createSparkle(canvasWidth, canvasHeight, config);
     }
   },
 
@@ -298,6 +353,93 @@ export default {
     }
 
     return null;
+  },
+
+  /**
+   * Draw clover petal (simple green heart-shaped petal)
+   */
+  drawCloverPetal(ctx, particle, time) {
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size;
+
+    // Flutter effect (petal curling as it drifts)
+    const flutter = Math.sin(time * particle.flutterSpeed + particle.flutter) * 0.3;
+
+    ctx.save();
+    ctx.globalAlpha = particle.opacity;
+    ctx.translate(x, y);
+    ctx.rotate(particle.rotation + flutter);
+
+    // Clover petal is heart-shaped
+    ctx.fillStyle = particle.color;
+    ctx.strokeStyle = '#006400'; // Dark green edge
+    ctx.lineWidth = size * 0.08;
+
+    ctx.beginPath();
+    // Top curves (two rounded lobes forming a heart)
+    ctx.moveTo(0, -size * 0.3);
+    ctx.bezierCurveTo(
+      -size * 0.6, -size * 0.7,
+      -size * 0.8, -size * 0.3,
+      -size * 0.5, size * 0.2
+    );
+    // Bottom point
+    ctx.lineTo(0, size * 0.8);
+    ctx.lineTo(size * 0.5, size * 0.2);
+    // Right curve
+    ctx.bezierCurveTo(
+      size * 0.8, -size * 0.3,
+      size * 0.6, -size * 0.7,
+      0, -size * 0.3
+    );
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Central vein
+    ctx.strokeStyle = 'rgba(0, 100, 0, 0.4)';
+    ctx.lineWidth = size * 0.06;
+    ctx.beginPath();
+    ctx.moveTo(0, -size * 0.2);
+    ctx.lineTo(0, size * 0.7);
+    ctx.stroke();
+
+    ctx.restore();
+  },
+
+  /**
+   * Draw sparkle (Irish celebration sparkle)
+   */
+  drawSparkle(ctx, particle, time) {
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size;
+    const twinkle = 0.6 + Math.sin(time * 0.004 + particle.twinklePhase) * 0.4;
+
+    ctx.save();
+    ctx.globalAlpha = particle.opacity * twinkle;
+    ctx.translate(x, y);
+    ctx.rotate(particle.rotation);
+
+    // Draw 4-pointed sparkle
+    ctx.fillStyle = particle.color;
+    ctx.shadowColor = particle.color;
+    ctx.shadowBlur = size * 2;
+
+    ctx.beginPath();
+    ctx.moveTo(0, -size);
+    ctx.lineTo(size * 0.3, -size * 0.3);
+    ctx.lineTo(size, 0);
+    ctx.lineTo(size * 0.3, size * 0.3);
+    ctx.lineTo(0, size);
+    ctx.lineTo(-size * 0.3, size * 0.3);
+    ctx.lineTo(-size, 0);
+    ctx.lineTo(-size * 0.3, -size * 0.3);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
   },
 
   /**

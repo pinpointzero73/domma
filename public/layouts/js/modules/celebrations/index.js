@@ -237,16 +237,20 @@ export class CelebrationsEffect {
     this.particles = [];
     this.specialParticles = [];
 
+    // Determine initial particle count (some themes may want to start with fewer particles)
+    const initialRatio = config.initialParticleRatio !== undefined ? config.initialParticleRatio : 1.0;
+    const initialCount = Math.floor(config.count * initialRatio);
+
     // Create falling particles (theme-specific method or generic)
     if (this.themeModule.createFallingParticle) {
-      for (let i = 0; i < config.count; i++) {
+      for (let i = 0; i < initialCount; i++) {
         const particle = this.themeModule.createFallingParticle(width, height, config);
         particle.y = Math.random() * height; // Spread across screen initially
         this.particles.push(particle);
       }
     } else {
       // Fallback to generic particles
-      for (let i = 0; i < config.count; i++) {
+      for (let i = 0; i < initialCount; i++) {
         const particle = createParticle(config, width, height);
         particle.y = Math.random() * height;
         this.particles.push(particle);
@@ -260,7 +264,7 @@ export class CelebrationsEffect {
       console.log(`[Celebrations] Created ${decorations.length} decorations`);
     }
 
-    console.log(`[Celebrations] Created ${config.count} particles (${this.options.intensity})`);
+    console.log(`[Celebrations] Created ${initialCount}/${config.count} particles (${this.options.intensity}, ${Math.round(initialRatio * 100)}% initial)`);
   }
 
   /**
@@ -402,6 +406,18 @@ export class CelebrationsEffect {
     this.physicsEngine.updateWind(currentTime);
     const windForce = this.physicsEngine.getWindForce();
 
+    // Gradually add particles until reaching target count (for themes with initialParticleRatio < 1)
+    if (this.particles.length < config.count && Math.random() < 0.05) {
+      if (this.themeModule.createFallingParticle) {
+        const newParticle = this.themeModule.createFallingParticle(width, height, config);
+        // For new particles added during animation, start them off-screen
+        if (newParticle.y === undefined || newParticle.y < 0) {
+          newParticle.y = -20;
+        }
+        this.particles.push(newParticle);
+      }
+    }
+
     // Update and render particles
     this.particles.forEach((particle, index) => {
       // Update physics
@@ -422,7 +438,7 @@ export class CelebrationsEffect {
       // Render particle (theme-specific)
       // For now, render as generic snowflake-like particle
       // Theme modules should provide custom rendering
-      if (this.themeModule.drawSnowflake && particle.type === undefined) {
+      if (this.themeModule.drawSnowflake && particle.type === 'snowflake') {
         this.themeModule.drawSnowflake(ctx, particle);
       } else if (this.themeModule['draw' + this.capitalizeFirst(particle.type)]) {
         const drawMethod = 'draw' + this.capitalizeFirst(particle.type);

@@ -323,7 +323,7 @@ export default {
         swingPhase: Math.random() * Math.PI * 2,
         swingSpeed: 0.02 + Math.random() * 0.02,
         active: true,
-        static: false
+        static: true
       });
     }
 
@@ -337,7 +337,7 @@ export default {
         size: 30 + Math.random() * 10,
         opacity: 0.9,
         swayPhase: Math.random() * Math.PI * 2,
-        swaySpeed: 0.01 + Math.random() * 0.01,
+        swaySpeed: 0.015 + Math.random() * 0.015,
         glowPhase: Math.random() * Math.PI * 2,
         glowSpeed: 0.02,
         active: true,
@@ -407,14 +407,15 @@ export default {
       };
     }
 
-    // Floating pumpkin (5% chance)
-    if (choice < 0.21) {
+    // Floating pumpkin (2% chance)
+    if (choice < 0.18) {
       return {
         type: 'floating-pumpkin',
         x: Math.random() * canvasWidth,
         y: -50,
         size: 8 + Math.random() * 6,
-        speed: 0.3 + Math.random() * 0.5,
+        vx: (Math.random() - 0.5) * 0.5, // Initial horizontal velocity
+        vy: 0.3 + Math.random() * 0.5, // Initial vertical velocity
         opacity: 0.9,
         rotation: Math.random() * Math.PI * 2,
         rotationSpeed: (Math.random() - 0.5) * 0.01,
@@ -1166,13 +1167,13 @@ export default {
       ctx.scale(-1, 1);
     }
 
-    // Broomstick (horizontal, pointing forward)
+    // Broomstick (horizontal, pointing backward relative to direction of travel)
     ctx.strokeStyle = '#8B4513';
     ctx.lineWidth = size * 0.12;
     ctx.lineCap = 'round';
     ctx.beginPath();
-    ctx.moveTo(-size * 0.8, size * 0.6);
-    ctx.lineTo(size * 1.8, size * 0.6);
+    ctx.moveTo(size * 0.2, size * 0.6);  // Start point near witch's body
+    ctx.lineTo(-size * 1.5, size * 0.6); // End point extending backward
     ctx.stroke();
 
     // Bristles (at back of broom)
@@ -1181,9 +1182,9 @@ export default {
     for (let i = 0; i < 8; i++) {
       const angle = (Math.PI / 3) * ((i / 7) - 0.5);
       ctx.beginPath();
-      ctx.moveTo(size * 1.8, size * 0.6);
+      ctx.moveTo(-size * 1.5, size * 0.6); // Bristles start at the back of the broom
       ctx.lineTo(
-        size * 1.8 + Math.cos(angle) * size * 0.4,
+        -size * 1.5 + Math.cos(angle) * size * 0.4,
         size * 0.6 + Math.sin(angle) * size * 0.4
       );
       ctx.stroke();
@@ -1396,11 +1397,12 @@ export default {
     const x = particle.x;
     const y = particle.y;
     const size = particle.size;
-    const sway = Math.sin(time * particle.swaySpeed + particle.swayPhase) * size * 0.08;
+    const sway = Math.sin(time * particle.swaySpeed + particle.swayPhase) * size * 0.12; // Increased amplitude
+    const bounce = Math.abs(Math.sin(time * particle.swaySpeed * 2 + particle.swayPhase)) * size * 0.03; // Subtle vertical bounce
 
     ctx.save();
     ctx.globalAlpha = particle.opacity;
-    ctx.translate(x + sway, y);
+    ctx.translate(x + sway, y - bounce);
 
     // Wooden pole/stake (weathered wood)
     const poleGradient = ctx.createLinearGradient(-size * 0.05, 0, size * 0.05, 0);

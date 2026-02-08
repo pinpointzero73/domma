@@ -25,6 +25,7 @@ export default {
   intensityConfig: {
     light: {
       count: 60,
+      initialParticleRatio: 0.25,  // Start with 25% of particles (15), build up to full count
       speedRange: [0.5, 1.5],
       sizeRange: [2, 4],
       bonfires: 1,
@@ -34,6 +35,7 @@ export default {
     },
     medium: {
       count: 120,
+      initialParticleRatio: 0.25,  // Start with 25% of particles (30), build up to full count
       speedRange: [0.5, 2.0],
       sizeRange: [2, 5],
       bonfires: 2,
@@ -43,6 +45,7 @@ export default {
     },
     heavy: {
       count: 200,
+      initialParticleRatio: 0.25,  // Start with 25% of particles (50), build up to full count
       speedRange: [0.5, 2.5],
       sizeRange: [3, 6],
       bonfires: 3,
@@ -110,7 +113,7 @@ export default {
       time: 0,
       cracklePhase: 0,
       active: true,
-      static: false
+      static: true
     };
   },
 
@@ -147,7 +150,7 @@ export default {
       time: 0,
       duration: 5000 + Math.random() * 3000,
       active: true,
-      static: false
+      static: true
     };
   },
 
@@ -168,7 +171,7 @@ export default {
       maxShots: 5 + Math.floor(Math.random() * 5),
       time: 0,
       active: true,
-      static: false
+      static: true
     };
   },
 

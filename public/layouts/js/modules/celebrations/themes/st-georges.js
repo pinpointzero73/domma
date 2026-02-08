@@ -45,7 +45,7 @@ export default {
     }
   },
 
-  particles: ['tudor-rose', 'oak-leaf', 'crown', 'sparkle'],
+  particles: ['rose-petal', 'tudor-rose', 'oak-leaf', 'sparkle'],
   decorations: ['english-rose', 'st-georges-cross', 'knight', 'dragon', 'shield', 'castle','twinkling-star'],
   colors: {
     primary: '#C8102E',    // English red
@@ -56,17 +56,48 @@ export default {
   },
 
   /**
-   * Create Tudor Rose particle (red and white layered rose)
+   * Create rose petal particle (simple red/white petal)
+   */
+  createRosePetal(canvasWidth, canvasHeight, config) {
+    // 70% red petals, 30% white petals (English colors)
+    const isRed = Math.random() < 0.7;
+    const petalColors = isRed
+      ? ['#C8102E', '#DC143C', '#B91C1C', '#991B1B']  // Red shades
+      : ['#FFFFFF', '#FFF5F5', '#FECACA', '#FEE2E2']; // White to pink shades
+
+    return {
+      type: 'rose-petal',
+      x: -30,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]),  // Horizontal drift
+      size: (config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0])) * 1.5,  // Larger petals
+      speed: (Math.random() - 0.5) * 0.2,  // Gentle vertical bobbing
+      opacity: 0.75 + Math.random() * 0.25,
+      windOffset: Math.random() * Math.PI * 2,
+      windSpeed: 0.015 + Math.random() * 0.02,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: (Math.random() - 0.5) * 0.03,
+      color: petalColors[Math.floor(Math.random() * petalColors.length)],
+      flutter: Math.random() * Math.PI * 2,
+      flutterSpeed: 0.02 + Math.random() * 0.02,
+      active: true
+    };
+  },
+
+  /**
+   * Create Tudor Rose particle (red and white layered rose - full flower)
    */
   createTudorRose(canvasWidth, canvasHeight, config) {
     return {
       type: 'tudor-rose',
-      x: Math.random() * canvasWidth,
-      y: -20,
-      vx: (Math.random() - 0.5) * 0.3, // Side-to-side drift
+      x: -30,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]),  // Horizontal drift
       size: config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]),
-      speed: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]),
+      speed: (Math.random() - 0.5) * 0.15,  // Gentle vertical bobbing
       opacity: 0.8 + Math.random() * 0.2,
+      windOffset: Math.random() * Math.PI * 2,
+      windSpeed: 0.015 + Math.random() * 0.02,
       rotation: Math.random() * Math.PI * 2,
       rotationSpeed: (Math.random() - 0.5) * 0.02,
       petalCount: 5, // Tudor rose has 5 petals
@@ -90,12 +121,14 @@ export default {
 
     return {
       type: 'oak-leaf',
-      x: Math.random() * canvasWidth,
-      y: -20,
-      vx: (Math.random() - 0.5) * 0.4, // Side-to-side drift
+      x: -30,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: (config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0])) * 0.8,  // Horizontal drift
       size: config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]),
-      speed: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.8,
+      speed: (Math.random() - 0.5) * 0.2,  // Gentle vertical bobbing
       opacity: 0.75 + Math.random() * 0.25,
+      windOffset: Math.random() * Math.PI * 2,
+      windSpeed: 0.02 + Math.random() * 0.03,
       rotation: Math.random() * Math.PI * 2,
       rotationSpeed: (Math.random() - 0.5) * 0.04,
       color: color,
@@ -106,23 +139,46 @@ export default {
   },
 
   /**
-   * Create Royal Crown particle (English monarchy symbol)
+   * Create sparkle particle (English celebration sparkles)
    */
-  createCrown(canvasWidth, canvasHeight, config) {
+  createSparkle(canvasWidth, canvasHeight, config) {
+    const colors = ['#FFD700', '#FFFFFF', '#C8102E']; // Gold, white, red
     return {
-      type: 'crown',
-      x: Math.random() * canvasWidth,
-      y: -20,
-      vx: (Math.random() - 0.5) * 0.25, // Slow side-to-side drift
-      size: config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]),
-      speed: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.6,
-      opacity: 0.85 + Math.random() * 0.15,
-      rotation: Math.random() * 0.3 - 0.15, // Slight tilt only
-      rotationSpeed: (Math.random() - 0.5) * 0.01,
-      glint: Math.random() * Math.PI * 2,
-      glintSpeed: 0.02,
-      active: true
+      type: 'sparkle',
+      x: -20,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: (config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0])) * 0.8,  // Horizontal drift
+      size: config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.6,
+      vy: (Math.random() - 0.5) * 0.2,  // Minimal random vertical movement
+      opacity: 0.6 + Math.random() * 0.4,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: (Math.random() - 0.5) * 0.04,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      twinklePhase: Math.random() * Math.PI * 2,
+      windOffset: Math.random() * Math.PI * 2,
+      windSpeed: 0.015 + Math.random() * 0.02,
+      active: true,
+      static: false
     };
+  },
+
+  /**
+   * Create drifting particle (randomly picks type)
+   * Note: St. George's Day particles drift horizontally (left-to-right), not vertically
+   */
+  createFallingParticle(canvasWidth, canvasHeight, config) {
+    const choice = Math.random();
+
+    // 60% rose petals, 20% full Tudor roses, 15% sparkles, 5% oak leaves
+    if (choice < 0.6) {
+      return this.createRosePetal(canvasWidth, canvasHeight, config);
+    } else if (choice < 0.8) {
+      return this.createTudorRose(canvasWidth, canvasHeight, config);
+    } else if (choice < 0.95) {
+      return this.createSparkle(canvasWidth, canvasHeight, config);
+    } else {
+      return this.createOakLeaf(canvasWidth, canvasHeight, config);
+    }
   },
 
   /**
@@ -356,46 +412,56 @@ export default {
   },
 
   /**
-   * Draw rose petal
+   * Draw rose petal (simple red/white petal)
    */
-  drawRosePetal(ctx, particle) {
+  drawRosePetal(ctx, particle, time) {
     const x = particle.x;
     const y = particle.y;
     const size = particle.size;
-    const sway = Math.sin(particle.sway) * size * 0.3;
+
+    // Flutter effect (petal curling as it drifts)
+    const flutter = Math.sin(time * particle.flutterSpeed + particle.flutter) * 0.3;
 
     ctx.save();
     ctx.globalAlpha = particle.opacity;
-    ctx.translate(x + sway, y);
-    ctx.rotate(particle.rotation);
+    ctx.translate(x, y);
+    ctx.rotate(particle.rotation + flutter);
 
-    // Petal shape (teardrop/oval)
+    // Determine if this is a white or red petal based on color
+    const isWhite = particle.color.includes('FFF') || particle.color.includes('fff');
+
+    // Petal shape (heart-like rose petal)
     ctx.fillStyle = particle.color;
-    ctx.strokeStyle = particle.color === '#FFFFFF' ? '#FFE6E6' : '#8B0000';
-    ctx.lineWidth = size * 0.1;
+    ctx.strokeStyle = isWhite ? '#FFE6E6' : '#8B0000';
+    ctx.lineWidth = size * 0.08;
 
     ctx.beginPath();
-    ctx.moveTo(0, -size * 0.5);
+    // Top curves (two rounded lobes)
+    ctx.moveTo(0, -size * 0.4);
     ctx.bezierCurveTo(
-      size * 0.5, -size * 0.3,
-      size * 0.5, size * 0.3,
-      0, size * 0.5
+      size * 0.6, -size * 0.8,
+      size * 0.8, -size * 0.2,
+      size * 0.4, size * 0.2
     );
+    // Bottom point
+    ctx.lineTo(0, size * 1.0);
+    ctx.lineTo(-size * 0.4, size * 0.2);
+    // Left curve
     ctx.bezierCurveTo(
-      -size * 0.5, size * 0.3,
-      -size * 0.5, -size * 0.3,
-      0, -size * 0.5
+      -size * 0.8, -size * 0.2,
+      -size * 0.6, -size * 0.8,
+      0, -size * 0.4
     );
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
     // Central vein
-    ctx.strokeStyle = particle.color === '#FFFFFF' ? '#FFB6C1' : '#600000';
-    ctx.lineWidth = size * 0.05;
+    ctx.strokeStyle = isWhite ? 'rgba(255, 182, 193, 0.5)' : 'rgba(139, 0, 0, 0.4)';
+    ctx.lineWidth = size * 0.06;
     ctx.beginPath();
-    ctx.moveTo(0, -size * 0.4);
-    ctx.lineTo(0, size * 0.4);
+    ctx.moveTo(0, -size * 0.3);
+    ctx.lineTo(0, size * 0.9);
     ctx.stroke();
 
     ctx.restore();
@@ -1486,6 +1552,40 @@ export default {
       ctx.lineTo(-size * 0.4, yPos - size * 0.15);
       ctx.stroke();
     }
+
+    ctx.restore();
+  },
+
+  /**
+   * Draw sparkle (English celebration sparkle)
+   */
+  drawSparkle(ctx, particle, time) {
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size;
+    const twinkle = 0.6 + Math.sin(time * 0.004 + particle.twinklePhase) * 0.4;
+
+    ctx.save();
+    ctx.globalAlpha = particle.opacity * twinkle;
+    ctx.translate(x, y);
+    ctx.rotate(particle.rotation);
+
+    // Draw 4-pointed sparkle
+    ctx.fillStyle = particle.color;
+    ctx.shadowColor = particle.color;
+    ctx.shadowBlur = size * 2;
+
+    ctx.beginPath();
+    ctx.moveTo(0, -size);
+    ctx.lineTo(size * 0.3, -size * 0.3);
+    ctx.lineTo(size, 0);
+    ctx.lineTo(size * 0.3, size * 0.3);
+    ctx.lineTo(0, size);
+    ctx.lineTo(-size * 0.3, size * 0.3);
+    ctx.lineTo(-size, 0);
+    ctx.lineTo(-size * 0.3, -size * 0.3);
+    ctx.closePath();
+    ctx.fill();
 
     ctx.restore();
   },

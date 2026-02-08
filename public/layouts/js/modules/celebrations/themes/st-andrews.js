@@ -44,7 +44,7 @@ export default {
     }
   },
 
-  particles: ['heather', 'thistle', 'saltire-sparkle'],
+  particles: ['heather-petal', 'heather', 'saltire-sparkle'],
   decorations: ['thistle-plant', 'bagpiper', 'saltire-flag', 'tartan-pattern', 'highland-scene', 'twinkling-star'],
   colors: {
     primary: '#0065BD',    // Scottish blue (Saltire)
@@ -54,7 +54,32 @@ export default {
   },
 
   /**
-   * Create thistle particle (white and blue - Scottish Saltire colors)
+   * Create heather petal particle (simple purple petal)
+   */
+  createHeatherPetal(canvasWidth, canvasHeight, config) {
+    // Purple/pink heather shades
+    const purpleShades = ['#9370DB', '#BA55D3', '#DA70D6', '#DDA0DD', '#8B008B'];
+    return {
+      type: 'heather-petal',
+      x: -30,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]),  // Horizontal drift
+      size: (config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0])) * 1.5,  // Larger petals
+      speed: (Math.random() - 0.5) * 0.2,  // Gentle vertical bobbing
+      opacity: 0.75 + Math.random() * 0.25,
+      windOffset: Math.random() * Math.PI * 2,
+      windSpeed: 0.015 + Math.random() * 0.02,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: (Math.random() - 0.5) * 0.03,
+      color: purpleShades[Math.floor(Math.random() * purpleShades.length)],
+      flutter: Math.random() * Math.PI * 2,
+      flutterSpeed: 0.02 + Math.random() * 0.02,
+      active: true
+    };
+  },
+
+  /**
+   * Create thistle particle (white and blue - Scottish Saltire colors - full flower)
    */
   createThistle(canvasWidth, canvasHeight, config) {
     const isWhite = Math.random() < 0.5; // 50% white, 50% blue
@@ -65,11 +90,11 @@ export default {
 
     return {
       type: 'thistle',
-      x: Math.random() * canvasWidth,
-      y: -20,
-      vx: (Math.random() - 0.5) * 0.6,  // Side-to-side drift
+      x: -30,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.7,  // Horizontal drift
       size: config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]),
-      speed: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.7,
+      speed: (Math.random() - 0.5) * 0.15,  // Gentle vertical bobbing
       opacity: 0.7 + Math.random() * 0.3,
       windOffset: Math.random() * Math.PI * 2,
       windSpeed: 0.015 + Math.random() * 0.02,
@@ -82,7 +107,7 @@ export default {
   },
 
   /**
-   * Create heather particle (Scottish Highland heather - purple flowers)
+   * Create heather particle (Scottish Highland heather - purple flowers - full sprig)
    */
   createHeather(canvasWidth, canvasHeight, config) {
     // Heather color variations (purple/pink shades)
@@ -98,12 +123,14 @@ export default {
 
     return {
       type: 'heather',
-      x: Math.random() * canvasWidth,
-      y: -20,
-      vx: (Math.random() - 0.5) * 0.5, // Side-to-side drift
+      x: -30,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: (config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0])) * 0.6,  // Horizontal drift
       size: config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]),
-      speed: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.6,
+      speed: (Math.random() - 0.5) * 0.15,  // Gentle vertical bobbing
       opacity: 0.75 + Math.random() * 0.25,
+      windOffset: Math.random() * Math.PI * 2,
+      windSpeed: 0.02 + Math.random() * 0.02,
       rotation: Math.random() * Math.PI * 2,
       rotationSpeed: (Math.random() - 0.5) * 0.03,
       color: color,
@@ -118,17 +145,43 @@ export default {
    * Create saltire sparkle particle
    */
   createSaltireSparkle(canvasWidth, canvasHeight, config) {
+    const colors = ['#0065BD', '#FFFFFF']; // Scottish blue and white
     return {
       type: 'saltire-sparkle',
-      x: Math.random() * canvasWidth,
-      y: Math.random() * canvasHeight,
-      size: 1 + Math.random() * 2,
-      opacity: 1,
-      life: 30 + Math.random() * 40,
-      maxLife: 30 + Math.random() * 40,
+      x: -20,  // Start from left edge
+      y: Math.random() * canvasHeight,  // Random height
+      vx: (config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0])) * 0.8,  // Horizontal drift
+      size: config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.6,
+      vy: (Math.random() - 0.5) * 0.2,  // Minimal random vertical movement
+      opacity: 0.6 + Math.random() * 0.4,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: (Math.random() - 0.5) * 0.04,
+      color: colors[Math.floor(Math.random() * colors.length)],
       twinklePhase: Math.random() * Math.PI * 2,
-      active: true
+      windOffset: Math.random() * Math.PI * 2,
+      windSpeed: 0.015 + Math.random() * 0.02,
+      active: true,
+      static: false
     };
+  },
+
+  /**
+   * Create drifting particle (randomly picks type)
+   * Note: St. Andrew's Day particles drift horizontally (left-to-right), not vertically
+   */
+  createFallingParticle(canvasWidth, canvasHeight, config) {
+    const choice = Math.random();
+
+    // 60% heather petals, 20% full heather, 15% sparkles, 5% thistles
+    if (choice < 0.6) {
+      return this.createHeatherPetal(canvasWidth, canvasHeight, config);
+    } else if (choice < 0.8) {
+      return this.createHeather(canvasWidth, canvasHeight, config);
+    } else if (choice < 0.95) {
+      return this.createSaltireSparkle(canvasWidth, canvasHeight, config);
+    } else {
+      return this.createThistle(canvasWidth, canvasHeight, config);
+    }
   },
 
   /**
@@ -288,6 +341,59 @@ export default {
     }
 
     return null;
+  },
+
+  /**
+   * Draw heather petal (simple purple bell-shaped petal)
+   */
+  drawHeatherPetal(ctx, particle, time) {
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size;
+
+    // Flutter effect (petal curling as it drifts)
+    const flutter = Math.sin(time * particle.flutterSpeed + particle.flutter) * 0.3;
+
+    ctx.save();
+    ctx.globalAlpha = particle.opacity;
+    ctx.translate(x, y);
+    ctx.rotate(particle.rotation + flutter);
+
+    // Heather bell petal shape (small bell)
+    ctx.fillStyle = particle.color;
+    ctx.strokeStyle = '#6A0DAD'; // Purple edge
+    ctx.lineWidth = size * 0.08;
+
+    ctx.beginPath();
+    // Bell shape with slight flare at bottom
+    ctx.moveTo(0, -size * 0.6);
+    ctx.bezierCurveTo(
+      size * 0.4, -size * 0.5,
+      size * 0.5, size * 0.2,
+      size * 0.3, size * 0.8
+    );
+    ctx.lineTo(-size * 0.3, size * 0.8);
+    ctx.bezierCurveTo(
+      -size * 0.5, size * 0.2,
+      -size * 0.4, -size * 0.5,
+      0, -size * 0.6
+    );
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Add bell texture lines
+    ctx.strokeStyle = 'rgba(106, 13, 173, 0.3)';
+    ctx.lineWidth = size * 0.04;
+    for (let i = 0; i < 4; i++) {
+      const yPos = -size * 0.5 + i * size * 0.35;
+      ctx.beginPath();
+      ctx.moveTo(-size * 0.25, yPos);
+      ctx.lineTo(size * 0.25, yPos);
+      ctx.stroke();
+    }
+
+    ctx.restore();
   },
 
   /**
@@ -486,10 +592,11 @@ export default {
 
       // Create deeply lobed, spiny leaf edge
       const lobes = 5;
+      const depth = size * 0.15;  // Moved outside loop so it's accessible below
+
       for (let j = 0; j <= lobes; j++) {
         const t = j / lobes;
         const leafWidth = size * 0.25 * Math.sin(t * Math.PI);
-        const depth = size * 0.15;
 
         if (j < lobes) {
           // Deep cut between lobes
@@ -761,29 +868,30 @@ export default {
     const x = particle.x;
     const y = particle.y;
     const size = particle.size;
-    const lifeRatio = particle.life / particle.maxLife;
-    const twinkle = (Math.sin(time * 0.01 + particle.twinklePhase) + 1) * 0.5;
+    const twinkle = 0.6 + Math.sin(time * 0.004 + particle.twinklePhase) * 0.4;
 
     ctx.save();
-    ctx.globalAlpha = particle.opacity * lifeRatio * twinkle;
+    ctx.globalAlpha = particle.opacity * twinkle;
+    ctx.translate(x, y);
+    ctx.rotate(particle.rotation);
 
-    // X-shaped sparkle (saltire)
-    ctx.strokeStyle = '#FFFFFF';
-    ctx.lineWidth = size * 0.5;
-    ctx.shadowColor = '#FFFFFF';
+    // Draw 4-pointed sparkle (Scottish blue or white)
+    ctx.fillStyle = particle.color;
+    ctx.shadowColor = particle.color;
     ctx.shadowBlur = size * 2;
 
     ctx.beginPath();
-    ctx.moveTo(x - size * 2, y - size * 2);
-    ctx.lineTo(x + size * 2, y + size * 2);
-    ctx.stroke();
+    ctx.moveTo(0, -size);
+    ctx.lineTo(size * 0.3, -size * 0.3);
+    ctx.lineTo(size, 0);
+    ctx.lineTo(size * 0.3, size * 0.3);
+    ctx.lineTo(0, size);
+    ctx.lineTo(-size * 0.3, size * 0.3);
+    ctx.lineTo(-size, 0);
+    ctx.lineTo(-size * 0.3, -size * 0.3);
+    ctx.closePath();
+    ctx.fill();
 
-    ctx.beginPath();
-    ctx.moveTo(x - size * 2, y + size * 2);
-    ctx.lineTo(x + size * 2, y - size * 2);
-    ctx.stroke();
-
-    ctx.shadowBlur = 0;
     ctx.restore();
   },
 
