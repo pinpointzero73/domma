@@ -65,6 +65,74 @@ export default {
     firework: ['#ff0000', '#ffff00', '#00ff00', '#0000ff', '#ff00ff', '#00ffff', '#ffffff']
   },
 
+  // Lightning effect properties
+  lightningChance: 0.0005, // 0.05% chance per frame to strike
+  lightningDuration: 200, // Lightning flash lasts 200ms
+  lightningTimer: 0,
+  lightningActive: false,
+  lightningColor: '#fefefe', // Bright white/blue flash
+
+  /**
+   * Draw a procedurally generated lightning bolt
+   * @param {CanvasRenderingContext2D} ctx
+   * @param {number} x1 - Start X
+   * @param {number} y1 - Start Y
+   * @param {number} x2 - End X
+   * @param {number} y2 - End Y
+   * @param {number} segments - Number of segments for the bolt (controls detail)
+   * @param {number} displacement - Max displacement for forks
+   * @param {number} roughness - How jagged the line is
+   * @param {number} branchChance - Probability of branching
+   * @param {number} lineWidth - Base line width
+   * @param {string} color - Color of the lightning
+   */
+  drawLightning(ctx, x1, y1, x2, y2, segments, displacement, roughness, branchChance, lineWidth, color) {
+    if (segments < 1) {
+      return;
+    }
+
+    const midpointX = (x1 + x2) / 2;
+    const midpointY = (y1 + y2) / 2;
+
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+    const perpendicularAngle = angle + Math.PI / 2;
+
+    const offset = (Math.random() - 0.5) * displacement;
+    const newMidpointX = midpointX + Math.cos(perpendicularAngle) * offset;
+    const newMidpointY = midpointY + Math.sin(perpendicularAngle) * offset;
+
+    const newSegments = segments - 1;
+    const newDisplacement = displacement * roughness;
+    const newLineWidth = lineWidth * 0.8;
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    // Draw main segment
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(newMidpointX, newMidpointY);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    // Recursive call for sub-segments
+    if (newSegments > 0) {
+      this.drawLightning(ctx, x1, y1, newMidpointX, newMidpointY, newSegments, newDisplacement, roughness, branchChance, newLineWidth, color);
+      this.drawLightning(ctx, newMidpointX, newMidpointY, x2, y2, newSegments, newDisplacement, roughness, branchChance, newLineWidth, color);
+
+      // Create a fork
+      if (Math.random() < branchChance && newSegments > 1) {
+        const forkLength = Math.random() * displacement * 0.5;
+        const forkAngle = (Math.random() - 0.5) * Math.PI / 3; // Max 60 degree deviation
+        const forkX = newMidpointX + Math.cos(angle + forkAngle) * forkLength;
+        const forkY = newMidpointY + Math.sin(angle + forkAngle) * forkLength;
+        this.drawLightning(ctx, newMidpointX, newMidpointY, forkX, forkY, newSegments - 1, newDisplacement * 0.5, roughness, branchChance * 0.5, newLineWidth * 0.6, color);
+      }
+    }
+  },
+
   /**
    * Create rising ember particle that will explode
    */
@@ -146,7 +214,9 @@ export default {
       opacity: 1,
       rotation: 0,
       rotationSpeed: 0.05 + Math.random() * 0.1,
-      sparks: [],
+      sparks: [], // Keep this for internal spark management
+      sparkTimer: 0, // New: timer for emitting sparks
+      sparkInterval: 50, // New: emit sparks every 50ms
       time: 0,
       duration: 5000 + Math.random() * 3000,
       active: true,
@@ -407,6 +477,20 @@ export default {
    * Update special particles (fireworks, sparks, etc.)
    */
   updateSpecialParticles(specialParticles, deltaTime) {
+    // Update lightning effect
+    if (this.lightningActive) {
+      this.lightningTimer += deltaTime;
+      if (this.lightningTimer >= this.lightningDuration) {
+        this.lightningActive = false;
+        this.lightningTimer = 0;
+      }
+    } else {
+      if (Math.random() < this.lightningChance) {
+        this.lightningActive = true;
+        this.lightningTimer = 0;
+      }
+    }
+
     for (const particle of specialParticles) {
       // Increment time for animated particles
       if (particle.time !== undefined) {
@@ -433,6 +517,49 @@ export default {
         if (particle.opacity <= 0) {
           particle.active = false;
         }
+      }
+
+      // Update Catherine Wheel
+      if (particle.type === 'catherine-wheel') {
+        particle.rotation += particle.rotationSpeed * (deltaTime / 16); // Normalize rotation speed
+        particle.time += deltaTime;
+
+        // Deactivate after duration
+        if (particle.time > particle.duration) {
+          particle.active = false;
+        }
+
+        // Emit new sparks
+        particle.sparkTimer += deltaTime;
+        if (particle.sparkTimer >= particle.sparkInterval) {
+          particle.sparkTimer = 0;
+          // Emit multiple sparks per interval
+          const numSparks = 2 + Math.floor(Math.random() * 3); // 2-4 sparks
+          for (let i = 0; i < numSparks; i++) {
+            const angle = Math.random() * Math.PI * 2; // Random direction
+            const speed = 1 + Math.random() * 3;
+            particle.sparks.push({
+              x: 0, // Relative to wheel center
+              y: 0, // Relative to wheel center
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed,
+              size: 1 + Math.random() * 1.5,
+              opacity: 1,
+              life: 1.0,
+              fadeRate: 0.05 + Math.random() * 0.03,
+              color: this.colors.firework[Math.floor(Math.random() * this.colors.firework.length)]
+            });
+          }
+        }
+
+        // Update existing sparks
+        particle.sparks = particle.sparks.filter(spark => {
+          spark.x += spark.vx;
+          spark.y += spark.vy;
+          spark.life -= spark.fadeRate;
+          spark.opacity = Math.max(0, spark.life);
+          return spark.life > 0;
+        });
       }
     }
   },
@@ -709,7 +836,7 @@ export default {
   },
 
   /**
-   * Draw Catherine wheel (spinning firework)
+   * Draw Catherine wheel (spinning firework) - IMPROVED
    */
   drawCatherineWheel(ctx, particle, time) {
     const x = particle.x;
@@ -720,36 +847,78 @@ export default {
     ctx.translate(x, y);
     ctx.rotate(particle.rotation);
 
-    // Hub (nailed to post)
-    ctx.fillStyle = '#654321';
+    // Center pin/mount
+    ctx.fillStyle = '#654321'; // Dark wood/metal color
     ctx.beginPath();
-    ctx.arc(0, 0, size * 0.3, 0, Math.PI * 2);
+    ctx.arc(0, 0, size * 0.1, 0, Math.PI * 2);
     ctx.fill();
 
-    // Sparks shooting out from spokes
-    const spokeCount = 6;
-    for (let i = 0; i < spokeCount; i++) {
-      const angle = (i / spokeCount) * Math.PI * 2;
-      const sparkColors = ['#ffff00', '#ffa500', '#ff4500', '#ffffff'];
+    // Wheel structure (concentric circles, more defined)
+    ctx.strokeStyle = '#8B4513'; // Brownish for the cardboard/wood wheel
+    ctx.lineWidth = size * 0.15;
+    ctx.beginPath();
+    ctx.arc(0, 0, size * 0.6, 0, Math.PI * 2);
+    ctx.stroke();
 
-      // Spoke trail
-      for (let j = 0; j < 10; j++) {
-        const dist = size * (0.5 + j * 0.2);
-        const sparkX = Math.cos(angle) * dist;
-        const sparkY = Math.sin(angle) * dist;
-        const sparkSize = size * (0.15 - j * 0.01);
-        const sparkColor = sparkColors[j % sparkColors.length];
+    ctx.strokeStyle = '#cc6600'; // Inner ring for color
+    ctx.lineWidth = size * 0.1;
+    ctx.beginPath();
+    ctx.arc(0, 0, size * 0.4, 0, Math.PI * 2);
+    ctx.stroke();
 
-        ctx.fillStyle = sparkColor;
-        ctx.shadowColor = sparkColor;
-        ctx.shadowBlur = 10;
-        ctx.globalAlpha = 1 - (j / 10) * 0.7;
+    // Outer firework tubes/spokes
+    const tubeCount = 8;
+    for (let i = 0; i < tubeCount; i++) {
+      const angle = (i / tubeCount) * Math.PI * 2;
+      const tubeX = Math.cos(angle) * size * 0.7;
+      const tubeY = Math.sin(angle) * size * 0.7;
 
-        ctx.beginPath();
-        ctx.arc(sparkX, sparkY, sparkSize, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      ctx.fillStyle = '#444444'; // Dark grey for tubes
+      ctx.strokeStyle = '#222222';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(tubeX, tubeY, size * 0.15, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
     }
+
+    // Draw emitted sparks
+    particle.sparks.forEach(spark => {
+      ctx.save();
+      ctx.translate(spark.x, spark.y);
+
+      // Spark glow
+      const glowGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, spark.size * 5);
+      glowGradient.addColorStop(0, spark.color);
+      glowGradient.addColorStop(0.5, `${spark.color}80`);
+      glowGradient.addColorStop(1, 'rgba(255, 69, 0, 0)'); // Fade to transparent orange/red
+      ctx.fillStyle = glowGradient;
+      ctx.globalAlpha = spark.opacity * 0.6;
+      ctx.fillRect(-spark.size * 5, -spark.size * 5, spark.size * 10, spark.size * 10);
+
+      // Spark core
+      ctx.globalAlpha = spark.opacity;
+      ctx.fillStyle = spark.color;
+      ctx.shadowColor = spark.color;
+      ctx.shadowBlur = spark.size * 3;
+      ctx.beginPath();
+      ctx.arc(0, 0, spark.size, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    });
+
+    // Pulsing inner glow from the active wheel
+    const innerGlowIntensity = 0.6 + Math.sin(time * 0.01) * 0.4;
+    ctx.globalAlpha = innerGlowIntensity * particle.opacity;
+    const innerGlow = ctx.createRadialGradient(0, 0, 0, 0, 0, size);
+    innerGlow.addColorStop(0, 'rgba(255, 200, 0, 0.7)');
+    innerGlow.addColorStop(0.5, 'rgba(255, 100, 0, 0.4)');
+    innerGlow.addColorStop(1, 'rgba(255, 0, 0, 0)');
+    ctx.fillStyle = innerGlow;
+    ctx.beginPath();
+    ctx.arc(0, 0, size, 0, Math.PI * 2);
+    ctx.fill();
 
     ctx.shadowBlur = 0;
     ctx.restore();
@@ -1270,5 +1439,39 @@ export default {
 
     ctx.shadowBlur = 0;
     ctx.restore();
+  },
+
+  /**
+   * Draw global theme effects (e.g., lightning)
+   */
+  drawGlobalEffects(ctx, currentTime, canvasWidth, canvasHeight) {
+    if (this.lightningActive) {
+      ctx.save();
+      ctx.globalAlpha = 0.8 + Math.sin(this.lightningTimer * 0.01) * 0.2; // Pulsing effect during flash
+      ctx.shadowColor = this.lightningColor;
+      ctx.shadowBlur = 20;
+
+      // Draw main lightning bolt from top-center to random bottom position
+      const startX = canvasWidth * (0.4 + Math.random() * 0.2); // Top middle
+      const startY = 0;
+      const endX = canvasWidth * Math.random();
+      const endY = canvasHeight;
+
+      this.drawLightning(
+        ctx,
+        startX,
+        startY,
+        endX,
+        endY,
+        5 + Math.floor(Math.random() * 3), // 5-7 segments
+        50 + Math.random() * 50, // 50-100 displacement
+        0.7, // Roughness
+        0.3, // Branch chance
+        3 + Math.random() * 2, // Line width
+        this.lightningColor
+      );
+
+      ctx.restore();
+    }
   }
 };

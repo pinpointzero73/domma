@@ -507,6 +507,11 @@ export class CelebrationsEffect {
       }
     }
 
+    // Call theme-specific global drawing (e.g., lightning)
+    if (this.themeModule.drawGlobalEffects) {
+      this.themeModule.drawGlobalEffects(ctx, currentTime, width, height);
+    }
+
     // Continue animation
     this.animationFrame = requestAnimationFrame(() => this.animate());
   }

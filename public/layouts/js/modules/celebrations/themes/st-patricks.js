@@ -158,6 +158,8 @@ export default {
   createRainbow(canvasWidth, canvasHeight, potX, potY) {
     return {
       type: 'rainbow',
+      x: 0, // Added x coordinate for validation
+      y: canvasHeight * 0.3, // Added y coordinate for validation
       startX: 0,
       startY: canvasHeight * 0.3,
       endX: potX,
@@ -165,6 +167,8 @@ export default {
       width: canvasWidth,
       height: canvasHeight,
       opacity: 0.7,
+      vx: 0,
+      vy: 0,
       active: true,
       static: true
     };
@@ -308,6 +312,7 @@ export default {
         y: canvasHeight - 35,
         baseY: canvasHeight - 35,
         vx: fromLeft ? 1.2 + Math.random() * 0.8 : -(1.2 + Math.random() * 0.8),
+        vy: 0,
         size: 12 + Math.random() * 6,
         opacity: 1,
         time: 0,
@@ -620,7 +625,7 @@ export default {
 
     const arcWidth = Math.abs(endX - startX);
     const centerX = (startX + endX) / 2;
-    const height = Math.abs(startY - endY);
+    const arcHeight = Math.abs(startY - endY); // Renamed to arcHeight
 
     // Draw 7 rainbow bands
     const colors = this.colors.rainbow;
@@ -631,7 +636,7 @@ export default {
       ctx.lineWidth = bandWidth;
       ctx.beginPath();
 
-      const radius = height + i * bandWidth;
+      const radius = arcHeight + i * bandWidth;
       ctx.arc(centerX, endY, radius, Math.PI, 0);
       ctx.stroke();
     });

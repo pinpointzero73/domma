@@ -63,6 +63,13 @@ export default {
     purple: '#6a0dad'      // Spooky purple
   },
 
+  // Lightning effect properties
+  lightningChance: 0.0005, // 0.05% chance per frame to strike
+  lightningDuration: 200, // Lightning flash lasts 200ms
+  lightningTimer: 0,
+  lightningActive: false,
+  lightningColor: '#fefefe', // Bright white/blue flash
+
   /**
    * Create bat particle
    */
@@ -115,7 +122,7 @@ export default {
 
     if (depth < 0.33) {
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 1.8;
-      speed = config.speedRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.5;
+      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.5;
       opacity = 0.7 + Math.random() * 0.2;
     } else if (depth < 0.66) {
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 1.2;
@@ -376,6 +383,67 @@ export default {
       active: true,
       static: true
     };
+  },
+
+  /**
+   * Draw a procedurally generated lightning bolt
+   * @param {CanvasRenderingContext2D} ctx
+   * @param {number} x1 - Start X
+   * @param {number} y1 - Start Y
+   * @param {number} x2 - End X
+   * @param {number} y2 - End Y
+   * @param {number} segments - Number of segments for the bolt (controls detail)
+   * @param {number} displacement - Max displacement for forks
+   * @param {number} roughness - How jagged the line is
+   * @param {number} branchChance - Probability of branching
+   * @param {number} lineWidth - Base line width
+   * @param {string} color - Color of the lightning
+   */
+  drawLightning(ctx, x1, y1, x2, y2, segments, displacement, roughness, branchChance, lineWidth, color) {
+    if (segments < 1) {
+      return;
+    }
+
+    const midpointX = (x1 + x2) / 2;
+    const midpointY = (y1 + y2) / 2;
+
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+    const perpendicularAngle = angle + Math.PI / 2;
+
+    const offset = (Math.random() - 0.5) * displacement;
+    const newMidpointX = midpointX + Math.cos(perpendicularAngle) * offset;
+    const newMidpointY = midpointY + Math.sin(perpendicularAngle) * offset;
+
+    const newSegments = segments - 1;
+    const newDisplacement = displacement * roughness;
+    const newLineWidth = lineWidth * 0.8;
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    // Draw main segment
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(newMidpointX, newMidpointY);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    // Recursive call for sub-segments
+    if (newSegments > 0) {
+      this.drawLightning(ctx, x1, y1, newMidpointX, newMidpointY, newSegments, newDisplacement, roughness, branchChance, newLineWidth, color);
+      this.drawLightning(ctx, newMidpointX, newMidpointY, x2, y2, newSegments, newDisplacement, roughness, branchChance, newLineWidth, color);
+
+      // Create a fork
+      if (Math.random() < branchChance && newSegments > 1) {
+        const forkLength = Math.random() * displacement * 0.5;
+        const forkAngle = (Math.random() - 0.5) * Math.PI / 3; // Max 60 degree deviation
+        const forkX = newMidpointX + Math.cos(angle + forkAngle) * forkLength;
+        const forkY = newMidpointY + Math.sin(angle + forkAngle) * forkLength;
+        this.drawLightning(ctx, newMidpointX, newMidpointY, forkX, forkY, newSegments - 1, newDisplacement * 0.5, roughness, branchChance * 0.5, newLineWidth * 0.6, color);
+      }
+    }
   },
 
   /**
@@ -1712,5 +1780,39 @@ export default {
     ctx.fill();
 
     ctx.restore();
+  },
+
+  /**
+   * Draw global theme effects (e.g., lightning)
+   */
+  drawGlobalEffects(ctx, currentTime, canvasWidth, canvasHeight) {
+    if (this.lightningActive) {
+      ctx.save();
+      ctx.globalAlpha = 0.8 + Math.sin(this.lightningTimer * 0.01) * 0.2; // Pulsing effect during flash
+      ctx.shadowColor = this.lightningColor;
+      ctx.shadowBlur = 20;
+
+      // Draw main lightning bolt from top-center to random bottom position
+      const startX = canvasWidth * (0.4 + Math.random() * 0.2); // Top middle
+      const startY = 0;
+      const endX = canvasWidth * Math.random();
+      const endY = canvasHeight;
+
+      this.drawLightning(
+        ctx,
+        startX,
+        startY,
+        endX,
+        endY,
+        5 + Math.floor(Math.random() * 3), // 5-7 segments
+        50 + Math.random() * 50, // 50-100 displacement
+        0.7, // Roughness
+        0.3, // Branch chance
+        3 + Math.random() * 2, // Line width
+        this.lightningColor
+      );
+
+      ctx.restore();
+    }
   }
 };
