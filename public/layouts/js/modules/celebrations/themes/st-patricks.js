@@ -156,13 +156,18 @@ export default {
    * Create rainbow decoration
    */
   createRainbow(canvasWidth, canvasHeight, potX, potY) {
+    const rainbowStartX = 20; // Fixed start near left edge
+    const rainbowEndX = potX; // End at pot position
+    const centerX = (rainbowStartX + potX) / 2;
+    const rainbowHeight = canvasHeight * 0.2;
+    const centerY = potY - (rainbowHeight / 2);
+
     return {
       type: 'rainbow',
-      x: 0, // Added x coordinate for validation
-      y: canvasHeight * 0.3, // Added y coordinate for validation
-      startX: 0,
-      startY: canvasHeight * 0.3,
-      endX: potX,
+      x: centerX,
+      y: centerY,
+      startX: rainbowStartX,
+      endX: rainbowEndX,
       endY: potY,
       width: canvasWidth,
       height: canvasHeight,
@@ -235,21 +240,19 @@ export default {
       static: true
     });
 
-    // Create pots of gold
-    const potCount = config.pots || 2;
-    for (let i = 0; i < potCount; i++) {
-      const potX = (canvasWidth / (potCount + 1)) * (i + 1);
-      const potY = canvasHeight - 40;
+    // Create small corner rainbow with single pot of gold
+    const rainbowStartX = 20;
+    const rainbowEndX = 220; // Small 200px rainbow
+    const potY = canvasHeight - 40;
 
-      // Add pot of gold
-      decorations.push(this.createPotOfGold(canvasWidth, canvasHeight, {
-        x: potX,
+    // Add single pot of gold at the right end of the rainbow
+    decorations.push(this.createPotOfGold(canvasWidth, canvasHeight, {
+        x: rainbowEndX,
         y: potY
-      }));
+    }));
 
-      // Add rainbow ending at pot
-      decorations.push(this.createRainbow(canvasWidth, canvasHeight, potX, potY));
-    }
+    // Add small corner rainbow
+    decorations.push(this.createRainbow(canvasWidth, canvasHeight, rainbowEndX, potY));
 
     // Add 1-2 static leprechauns
     const leprechaunCount = 1 + Math.floor(Math.random() * 2);
@@ -306,12 +309,19 @@ export default {
         return null;
       }
       const fromLeft = Math.random() < 0.5;
-      return {
+
+      // Calculate vx for 3-second crossing
+      // Core physics: position updates by vx * normalizedDelta (≈1 per frame at 60fps)
+      // Per second: vx * 60 pixels
+      // For 3 seconds: vx = (canvasWidth + 100) / (3 * 60) = (canvasWidth + 100) / 180
+      const baseSpeed = (canvasWidth + 100) / 180;
+
+      const newLeprechaun = {
         type: 'leprechaun',
         x: fromLeft ? -50 : canvasWidth + 50,
         y: canvasHeight - 35,
         baseY: canvasHeight - 35,
-        vx: fromLeft ? 1.2 + Math.random() * 0.8 : -(1.2 + Math.random() * 0.8),
+        vx: fromLeft ? baseSpeed : -baseSpeed,
         vy: 0,
         size: 12 + Math.random() * 6,
         opacity: 1,
@@ -320,6 +330,7 @@ export default {
         active: true,
         static: false
       };
+      return newLeprechaun;
     }
 
     // Banshee (flying ghostly figure, rare, max 1)
@@ -358,6 +369,40 @@ export default {
     }
 
     return null;
+  },
+
+  /**
+   * Update special particles (leprechauns, banshees)
+   */
+  updateSpecialParticles(specialParticles, deltaTime, canvasWidth, canvasHeight) {
+    specialParticles.forEach(particle => {
+      if (!particle.active) return;
+
+      if (particle.type === 'leprechaun' || particle.type === 'banshee') {
+        // Only update time for animation - position is handled by core updateMovingParticle()
+        particle.time += deltaTime;
+
+        // Remove if off-screen
+        if (particle.type === 'leprechaun') {
+          if ((particle.vx > 0 && particle.x > canvasWidth + particle.size * 2) ||
+            (particle.vx < 0 && particle.x < -particle.size * 2)) {
+            particle.active = false;
+          }
+        } else if (particle.type === 'banshee') {
+          if ((particle.vx > 0 && particle.x > canvasWidth + particle.size * 4) ||
+            (particle.vx < 0 && particle.x < -particle.size * 4)) {
+            particle.active = false;
+          }
+        }
+      }
+
+      // For static-leprechaun, only update internal time for idle animation
+      if (particle.type === 'static-leprechaun') {
+        particle.time += deltaTime;
+      }
+    });
+
+    return specialParticles.filter(p => p.active);
   },
 
   /**
@@ -610,38 +655,73 @@ export default {
     ctx.restore();
   },
 
+  // Helper function to draw a small gold pot (similar to pot-of-gold but simpler)
+  drawSmallGoldPot(ctx, x, y, size) {
+    ctx.save();
+    ctx.translate(x, y);
+
+    // Pot (black cauldron)
+    ctx.fillStyle = '#1a1a1a';
+    ctx.strokeStyle = '#0a0a0a';
+    ctx.lineWidth = 1;
+
+    ctx.beginPath();
+    // Arc for the top of the pot
+    ctx.arc(0, -size * 0.4, size * 0.7, 0, Math.PI, true);
+    // Sides of the pot
+    ctx.lineTo(size * 0.7, size * 0.4);
+    ctx.quadraticCurveTo(0, size * 0.6, -size * 0.7, size * 0.4);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Gold coins overflowing (simple blob)
+    ctx.fillStyle = '#FFD700';
+    ctx.beginPath();
+    ctx.arc(0, -size * 0.7, size * 0.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  },
+
+
   /**
    * Draw rainbow
    */
   drawRainbow(ctx, particle) {
     const startX = particle.startX;
-    const startY = particle.startY;
     const endX = particle.endX;
     const endY = particle.endY;
-    const width = particle.width;
+    const canvasHeight = particle.height;
 
     ctx.save();
-    ctx.globalAlpha = particle.opacity;
+    ctx.globalAlpha = 0.5;
 
-    const arcWidth = Math.abs(endX - startX);
+    const rainbowWidth = Math.abs(endX - startX);
     const centerX = (startX + endX) / 2;
-    const arcHeight = Math.abs(startY - endY); // Renamed to arcHeight
+    const rainbowHeight = canvasHeight * 0.2;
 
-    // Draw 7 rainbow bands
+    // Calculate radius and center Y for a circular arc
+    const radius = (rainbowWidth * rainbowWidth + 4 * rainbowHeight * rainbowHeight) / (8 * rainbowHeight);
+    const arcCenterY = endY + rainbowHeight - radius;
+
+    // Draw 7 rainbow bands from outer to inner
     const colors = this.colors.rainbow;
-    const bandWidth = 15;
+    const bandWidth = 5; // Smaller bands for the compact rainbow
 
-    colors.forEach((color, i) => {
-      ctx.strokeStyle = color;
+    for (let i = colors.length - 1; i >= 0; i--) {
+      ctx.strokeStyle = colors[i];
       ctx.lineWidth = bandWidth;
       ctx.beginPath();
-
-      const radius = arcHeight + i * bandWidth;
-      ctx.arc(centerX, endY, radius, Math.PI, 0);
+      ctx.arc(centerX, arcCenterY, radius + (colors.length - 1 - i) * bandWidth, Math.PI, 0);
       ctx.stroke();
-    });
+    }
 
     ctx.restore();
+
+    // Draw single small gold pot at the right end
+    const potSize = 20;
+    this.drawSmallGoldPot(ctx, endX, endY, potSize);
   },
 
   /**
@@ -659,28 +739,36 @@ export default {
       ctx.scale(-1, 1);
     }
 
-    const legPhase = Math.sin(time * 0.02 + particle.legPhase) * (Math.PI / 6);
+    // Walking animation phases
+    const walkCycle = (particle.time * 0.05) % (Math.PI * 2); // Speed of walk based on particle's own time
+    const legSwing = Math.sin(walkCycle + particle.legPhase) * (Math.PI / 6); // Max swing angle
+    const armSwing = Math.sin(walkCycle + Math.PI + particle.legPhase) * (Math.PI / 8); // Arms swing opposite to legs
 
     // Legs
-    ctx.strokeStyle = '#228B22';
+    ctx.strokeStyle = '#228B22'; // Green pants
     ctx.lineWidth = size * 0.15;
-    ctx.beginPath();
-    ctx.moveTo(-size * 0.2, size * 0.5);
-    ctx.lineTo(-size * 0.3, size * 1.2 + Math.sin(legPhase) * size * 0.1);
-    ctx.stroke();
+
+    // Right leg (front leg in current step)
     ctx.beginPath();
     ctx.moveTo(size * 0.2, size * 0.5);
-    ctx.lineTo(size * 0.3, size * 1.2 + Math.sin(legPhase + Math.PI) * size * 0.1);
+    ctx.lineTo(size * 0.2 + Math.sin(legSwing) * size * 0.3, size * 1.2 + Math.cos(legSwing) * size * 0.1);
     ctx.stroke();
 
-    // Shoes (buckles)
-    ctx.fillStyle = '#000000';
-    ctx.fillRect(-size * 0.4, size * 1.15, size * 0.3, size * 0.2);
-    ctx.fillRect(size * 0.1, size * 1.15, size * 0.3, size * 0.2);
+    // Left leg (back leg in current step)
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.2, size * 0.5);
+    ctx.lineTo(-size * 0.2 + Math.sin(legSwing + Math.PI) * size * 0.3, size * 1.2 + Math.cos(legSwing + Math.PI) * size * 0.1);
+    ctx.stroke();
 
-    ctx.fillStyle = '#FFD700';
-    ctx.fillRect(-size * 0.35, size * 1.2, size * 0.2, size * 0.1);
-    ctx.fillRect(size * 0.15, size * 1.2, size * 0.2, size * 0.1);
+    // Shoes (buckles) - now animated with legs
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(size * 0.2 + Math.sin(legSwing) * size * 0.3 - size * 0.15, size * 1.15 + Math.cos(legSwing) * size * 0.1, size * 0.3, size * 0.2);
+    ctx.fillRect(-size * 0.2 + Math.sin(legSwing + Math.PI) * size * 0.3 - size * 0.15, size * 1.15 + Math.cos(legSwing + Math.PI) * size * 0.1, size * 0.3, size * 0.2);
+
+    ctx.fillStyle = '#FFD700'; // Gold buckle
+    ctx.fillRect(size * 0.2 + Math.sin(legSwing) * size * 0.3 - size * 0.1, size * 1.2 + Math.cos(legSwing) * size * 0.1, size * 0.2, size * 0.1);
+    ctx.fillRect(-size * 0.2 + Math.sin(legSwing + Math.PI) * size * 0.3 - size * 0.1, size * 1.2 + Math.cos(legSwing + Math.PI) * size * 0.1, size * 0.2, size * 0.1);
+
 
     // Body (green coat)
     ctx.fillStyle = '#228B22';
@@ -691,6 +779,31 @@ export default {
     ctx.fillRect(-size * 0.5, size * 0.35, size, size * 0.1);
     ctx.fillStyle = '#FFD700';
     ctx.fillRect(-size * 0.15, size * 0.35, size * 0.3, size * 0.1);
+
+    // Arms (swinging)
+    ctx.fillStyle = '#228B22'; // Green coat
+    // Right arm
+    ctx.save();
+    ctx.translate(size * 0.4, size * 0.2);
+    ctx.rotate(armSwing);
+    ctx.fillRect(0, 0, size * 0.15, size * 0.4);
+    ctx.fillStyle = '#FFD7BA'; // Hand color
+    ctx.beginPath();
+    ctx.arc(size * 0.075, size * 0.4, size * 0.12, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Left arm
+    ctx.save();
+    ctx.translate(-size * 0.4 - size * 0.15, size * 0.2); // Adjust for width
+    ctx.rotate(armSwing + Math.PI); // Opposite swing
+    ctx.fillRect(0, 0, size * 0.15, size * 0.4);
+    ctx.fillStyle = '#FFD7BA'; // Hand color
+    ctx.beginPath();
+    ctx.arc(size * 0.075, size * 0.4, size * 0.12, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
 
     // Head
     ctx.fillStyle = '#FFD7BA';
@@ -1018,10 +1131,14 @@ export default {
     ctx.save();
     ctx.translate(x, y);
 
-    // Slight waving animation
-    const wave = Math.sin(time * 0.003 + particle.wavePhase) * 0.05;
+    // Subtle idle animations
+    const idleBob = Math.sin(particle.time * 0.005 + particle.wavePhase) * size * 0.05; // Gentle up-down
+    const idleSway = Math.sin(particle.time * 0.003 + particle.wavePhase * 0.5) * 0.05; // Gentle left-right sway
 
-    // Legs (no walking animation, just standing)
+    ctx.translate(0, idleBob);
+    ctx.rotate(idleSway);
+
+    // Legs (still, but part of the overall bob/sway)
     ctx.strokeStyle = '#228B22';
     ctx.lineWidth = size * 0.15;
     ctx.beginPath();
@@ -1052,10 +1169,10 @@ export default {
     ctx.fillStyle = '#FFD700';
     ctx.fillRect(-size * 0.15, size * 0.35, size * 0.3, size * 0.1);
 
-    // Left arm (waving slightly)
+    // Left arm (waving slightly - more natural)
     ctx.save();
     ctx.translate(-size * 0.5, size * 0.2);
-    ctx.rotate(-0.3 + wave);
+    ctx.rotate(-0.3 + Math.sin(particle.time * 0.007 + particle.wavePhase * 1.2) * 0.1); // Waving
     ctx.fillStyle = '#228B22';
     ctx.fillRect(0, 0, size * 0.15, size * 0.4);
     // Hand
@@ -1065,10 +1182,10 @@ export default {
     ctx.fill();
     ctx.restore();
 
-    // Right arm
+    // Right arm (subtle movement)
     ctx.save();
     ctx.translate(size * 0.5, size * 0.2);
-    ctx.rotate(0.3 - wave * 0.5);
+    ctx.rotate(0.3 - Math.sin(particle.time * 0.006 + particle.wavePhase * 0.8) * 0.05); // More subtle
     ctx.fillStyle = '#228B22';
     ctx.fillRect(-size * 0.15, 0, size * 0.15, size * 0.4);
     // Hand
@@ -1078,11 +1195,14 @@ export default {
     ctx.fill();
     ctx.restore();
 
-    // Head
-    ctx.fillStyle = '#FFD7BA';
+    // Head (subtle nod)
+    ctx.save();
+    ctx.translate(0, -size * 0.3);
+    ctx.rotate(Math.sin(particle.time * 0.004 + particle.wavePhase * 1.5) * 0.02);
     ctx.beginPath();
-    ctx.arc(0, -size * 0.3, size * 0.4, 0, Math.PI * 2);
+    ctx.arc(0, 0, size * 0.4, 0, Math.PI * 2);
     ctx.fill();
+    ctx.restore();
 
     // Beard (orange/red)
     ctx.fillStyle = '#ff6600';
@@ -1153,7 +1273,7 @@ export default {
       if (i === 0) {
         ctx.moveTo(outerX, outerY);
       } else {
-        ctx.lineTo(outerX, outerY);
+        ctx.lineTo(outerX, innerY);
       }
       ctx.lineTo(innerX, innerY);
     }

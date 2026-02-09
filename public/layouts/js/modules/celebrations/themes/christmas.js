@@ -30,7 +30,8 @@ export default {
       sizeRange: [1, 3],
       trees: 3,
       wreaths: 2,
-      northStars: 1
+      northStars: 1,
+      snowmen: 2
     },
     medium: {
       count: 150,
@@ -38,7 +39,8 @@ export default {
       sizeRange: [1, 4],
       trees: 6,
       wreaths: 3,
-      northStars: 1
+      northStars: 1,
+      snowmen: 3
     },
     heavy: {
       count: 300,
@@ -46,12 +48,13 @@ export default {
       sizeRange: [1, 5],
       trees: 10,
       wreaths: 4,
-      northStars: 1
+      northStars: 1,
+      snowmen: 4
     }
   },
 
   particles: ['snowflake'],
-  decorations: ['tree', 'wreath', 'sleigh', 'robin', 'train', 'elf', 'firework', 'north-star'],
+  decorations: ['tree', 'wreath', 'sleigh', 'robin', 'train', 'elf', 'firework', 'north-star', 'snowman'],
   colors: {
     primary: '#ffffff',    // Snow white
     secondary: '#228B22',  // Forest green
@@ -147,6 +150,25 @@ export default {
   },
 
   /**
+   * Create snowman decoration
+   */
+  createSnowman(canvasWidth, canvasHeight, options = {}) {
+    return {
+      type: 'snowman',
+      x: options.x !== undefined ? options.x : Math.random() * canvasWidth,
+      y: options.y !== undefined ? options.y : canvasHeight - 50,
+      vx: 0,
+      vy: 0,
+      size: 15 + Math.random() * 10,
+      opacity: 1.0,
+      time: Math.random() * 1000,
+      wavePhase: Math.random() * Math.PI * 2,
+      active: true,
+      static: true
+    };
+  },
+
+  /**
    * Create initial static decorations (trees, wreaths, and North Stars)
    */
   createInitialDecorations(canvasWidth, canvasHeight, config) {
@@ -178,6 +200,15 @@ export default {
       }));
     }
 
+    // Create snowmen
+    const snowmanCount = config.snowmen || 3;
+    for (let i = 0; i < snowmanCount; i++) {
+      decorations.push(this.createSnowman(canvasWidth, canvasHeight, {
+        x: (canvasWidth / (snowmanCount + 1)) * (i + 1),
+        y: canvasHeight - 50 - Math.random() * 10
+      }));
+    }
+
     return decorations;
   },
 
@@ -194,7 +225,7 @@ export default {
       }
       const fromLeft = Math.random() < 0.5;
       const startX = fromLeft ? -100 : canvasWidth + 100;
-      const baseY = 100 + Math.random() * (canvasHeight * 0.3); // Start lower for arc
+      const baseY = 100 + Math.random() * (canvasHeight * 0.3);
       return {
         type: 'sleigh',
         x: startX,
@@ -213,10 +244,7 @@ export default {
         active: true,
         static: false
       };
-    }
-
-    // Elf (0.08% chance) - Sequential range after sleigh
-    if (choice >= 0.0005 && choice < 0.0013) {
+    } else if (choice < 0.0013) { // Elf (0.08% chance) - Sequential range after sleigh
       const fromLeft = Math.random() < 0.5;
       return {
         type: 'elf',
@@ -234,19 +262,29 @@ export default {
         active: true,
         static: false
       };
-    }
-
-    // Christmas train (0.1% chance) - Sequential range after elf
-    if (choice >= 0.0013 && choice < 0.0023) {
+    } else if (choice < 0.005) { // Christmas train (0.37% chance - much more frequent)
+      if (specialParticles.some(p => p.type === 'train')) {
+        return null;
+      }
       const fromLeft = Math.random() < 0.5;
+      const startX = fromLeft ? -500 : canvasWidth + 500;
+      const trainSize = 21 + Math.random() * 9; // 21-30 (40% reduction from 35-50)
+
+      // Calculate Y position so wheels sit near the bottom
+      // size = trainSize * 1.8
+      // baseUnit = size / 20
+      // wheelRadius = baseUnit * 8 = (trainSize * 1.8 / 20) * 8 = trainSize * 0.72
+      const wheelRadius = trainSize * 0.72;
+      const trainY = canvasHeight - wheelRadius - 10; // Position wheels 10px from bottom
+
       return {
         type: 'train',
-        x: fromLeft ? -500 : canvasWidth + 500,
-        y: canvasHeight - 50,
-        baseY: canvasHeight - 50,
+        x: startX,
+        y: trainY,
+        baseY: trainY,
         vx: fromLeft ? 4 + Math.random() * 2 : -(4 + Math.random() * 2),
         vy: 0,
-        size: 20 + Math.random() * 10,
+        size: trainSize,
         opacity: 1,
         time: 0,
         smoke: [],
@@ -254,10 +292,7 @@ export default {
         static: false,
         carriages: 2 + Math.floor(Math.random() * 2)
       };
-    }
-
-    // Fireworks (0.15% chance) - Sequential range after train
-    if (choice >= 0.0023 && choice < 0.0038) {
+    } else if (choice < 0.008) { // Fireworks (0.3% chance) - Sequential range after train
       return {
         type: 'firework',
         x: Math.random() * canvasWidth,
@@ -272,10 +307,7 @@ export default {
         exploded: false,
         explosionTime: 30 + Math.random() * 30
       };
-    }
-
-    // Robin (0.25% chance, max 1) - Sequential range after fireworks
-    if (choice >= 0.0038 && choice < 0.0063) {
+    } else if (choice < 0.012) { // Robin (0.4% chance, max 1) - Sequential range after fireworks
       if (specialParticles.some(p => p.type === 'robin')) {
         return null;
       }
@@ -283,8 +315,9 @@ export default {
       const startY = Math.random() * (canvasHeight * 0.2);
       const startX = fromLeft ? -50 : canvasWidth + 50;
       const robinSize = 10 + Math.random() * 5;
-      const targetX = Math.random() * (canvasWidth * 0.6) + (canvasHeight * 0.2);
-      const targetY = canvasHeight * 0.5 + Math.random() * (canvasHeight * 0.4);
+      // Ensure targetY is within reasonable visible bounds
+      const targetY = Math.max(robinSize * 3, Math.min(canvasHeight * 0.6 - robinSize * 2, canvasHeight * 0.2 + Math.random() * (canvasHeight * 0.4)));
+      const targetX = Math.random() * (canvasWidth * 0.6) + (canvasWidth * 0.2); // Also ensure targetX is not too far off
 
       return {
         type: 'robin',
@@ -310,6 +343,153 @@ export default {
     }
 
     return null;
+  },
+
+  /**
+   * Update special particles (sleigh, robin, train, firework)
+   */
+  updateSpecialParticles(specialParticles, deltaTime, canvasWidth = 1024, canvasHeight = 768) { // Added default canvas dimensions
+    specialParticles.forEach(particle => {
+      // Increment time for animated particles
+      if (particle.time !== undefined) {
+        particle.time += deltaTime;
+      }
+
+      switch (particle.type) {
+        case 'sleigh':
+          // Sleigh movement (arc motion is handled in drawSleigh based on particle.x)
+          // Just need to ensure it deactivates when off-screen
+          if ((particle.vx > 0 && particle.x > particle.targetX) || (particle.vx < 0 && particle.x < particle.targetX)) {
+            particle.active = false;
+          }
+          break;
+
+        case 'robin':
+          // Robin flight pattern: fly in -> sit -> flit off
+          switch (particle.state) {
+            case 'flying_in':
+              const dx = particle.targetX - particle.x;
+              const dy = particle.targetY - particle.y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+
+              if (distance < 20) {
+                particle.state = 'sitting';
+                particle.vx = 0;
+                particle.vy = 0;
+                particle.sitStartTime = particle.time;
+              } else {
+                // Calculate desired velocity components based on direction to target
+                const targetDirectionX = dx / distance;
+                const targetDirectionY = dy / distance;
+
+                // Max speed for flying in
+                const maxFlightSpeed = 3;
+
+                // Base horizontal speed towards target
+                particle.vx = targetDirectionX * maxFlightSpeed;
+
+                // Add undulating wave motion (bird-like bobbing flight)
+                const waveAmplitude = 30; // Vertical wave height
+                const waveFrequency = 0.008; // Wave frequency
+                const waveMotion = Math.sin(particle.time * waveFrequency + particle.waveOffset) * waveAmplitude;
+
+                // Calculate vertical velocity: base direction + wave derivative
+                const waveDerivative = Math.cos(particle.time * waveFrequency + particle.waveOffset) * waveAmplitude * waveFrequency;
+                particle.vy = targetDirectionY * maxFlightSpeed * 0.3 + waveDerivative;
+              }
+              break;
+
+            case 'sitting':
+              particle.vx = 0;
+              particle.vy = 0;
+              if (particle.time - particle.sitStartTime > particle.sitTime) {
+                particle.state = 'flying_away';
+                // Set base horizontal velocity (away from center)
+                const baseVx = particle.x < canvasWidth / 2 ? -4 : 4;
+                particle.vx = baseVx;
+                particle.flyAwayStartTime = particle.time;
+              }
+              break;
+
+            case 'flying_away':
+              // Maintain horizontal velocity
+              const flyDirection = particle.vx > 0 ? 1 : -1;
+              particle.vx = flyDirection * 4;
+
+              // Add undulating wave motion for natural bird flight
+              const waveAmplitude = 25;
+              const waveFrequency = 0.01;
+              const flyTime = particle.time - particle.flyAwayStartTime;
+
+              // Upward bias + wave motion
+              const waveMotion = Math.sin(flyTime * waveFrequency + particle.waveOffset) * waveAmplitude;
+              const waveDerivative = Math.cos(flyTime * waveFrequency + particle.waveOffset) * waveAmplitude * waveFrequency;
+              particle.vy = -1.5 + waveDerivative; // Gentle upward + wave
+
+              if (particle.x < -50 || particle.x > canvasWidth + 50 || particle.y < -50) {
+                particle.active = false;
+              }
+              break;
+          }
+          break;
+
+        case 'train':
+          // Train deactivates when off-screen
+          if ((particle.vx > 0 && particle.x > canvasWidth + 500) || (particle.vx < 0 && particle.x < -500)) {
+            particle.active = false;
+          }
+
+          // Emit smoke puffs - every 150ms
+          if (!particle.lastSmokeTime) {
+            particle.lastSmokeTime = 0;
+          }
+
+          if (particle.time - particle.lastSmokeTime > 150) {
+            particle.lastSmokeTime = particle.time;
+
+            // Calculate smoke position from chimney
+            const smokeX = particle.x + (particle.vx > 0 ? -particle.size * 0.8 : particle.size * 0.8);
+            const smokeY = particle.y - particle.size * 1.5;
+
+            particle.smoke.push({
+              x: smokeX,
+              y: smokeY,
+              vx: (Math.random() - 0.5) * 0.5,
+              vy: -1 - Math.random() * 0.5,
+              size: particle.size * (0.3 + Math.random() * 0.4),
+              opacity: 1,
+              life: 1.0,
+              fadeRate: 0.02 + Math.random() * 0.01
+            });
+          }
+
+          // Update smoke puffs
+          particle.smoke = particle.smoke.filter(smoke => {
+            smoke.x += smoke.vx;
+            smoke.y += smoke.vy;
+            smoke.vy *= 0.99; // Slow vertical lift
+            smoke.size *= 1.01; // Expand
+            smoke.opacity -= smoke.fadeRate;
+            return smoke.opacity > 0;
+          });
+          break;
+
+        case 'firework':
+          // Check firework explosion
+          if (!particle.exploded) {
+            // Explode when reached target height OR after flight time
+            const reachedTarget = particle.y <= particle.targetY;
+            const timeExpired = particle.time >= particle.explosionTime;
+
+            if (reachedTarget || timeExpired) {
+              particle.exploded = true;
+              this.explodeFirework(particle, specialParticles);
+              particle.active = false; // Remove the firework itself
+            }
+          }
+          break;
+      }
+    });
   },
 
   /**
@@ -562,9 +742,9 @@ export default {
         ctx.globalAlpha = glowOpacity;
         ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(lightX, lightY, size * 0.15, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = 1;
+      ctx.arc(lightX, lightY, size * 0.15, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
       }
     }
 
@@ -683,7 +863,7 @@ export default {
     const size = particle.size * 1.5;
     const dir = particle.vx > 0 ? 1 : -1;
     // Half-sine wave for galloping/running motion (0 to 1 range)
-    const runCycle = Math.abs(Math.sin(particle.time * 0.015));
+    const runCycle = Math.abs(Math.sin(particle.time * 0.007));
 
     // Safety check for NaN values
     if (!isFinite(x) || !isFinite(y) || !isFinite(size)) {
@@ -742,14 +922,14 @@ export default {
       ctx.strokeStyle = '#7b563a';
 
       // Front leg extends forward during gallop
-      const frontLegExtension = runCycle * size * 0.3;
+      const frontLegExtension = runCycle * size * 0.45;
       ctx.beginPath();
       ctx.moveTo(reindeerX + dir * size * 0.3, legY);
       ctx.lineTo(reindeerX + dir * (size * 0.3 + frontLegExtension), legY + size * 0.3);
       ctx.stroke();
 
       // Back leg extends backward during gallop (opposite phase)
-      const backLegExtension = (1 - runCycle) * size * 0.3;
+      const backLegExtension = (1 - runCycle) * size * 0.45;
       ctx.beginPath();
       ctx.moveTo(reindeerX - dir * size * 0.3, legY);
       ctx.lineTo(reindeerX - dir * (size * 0.3 + backLegExtension), legY + size * 0.3);
@@ -850,7 +1030,7 @@ export default {
 
     // Rope tie
     ctx.strokeStyle = '#654321';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.arc(sackX, y - size * 0.4, size * 0.2, 0, Math.PI, true);
     ctx.stroke();
@@ -912,7 +1092,7 @@ export default {
     ctx.save();
     ctx.translate(x, y);
 
-    const legAngle = Math.sin(particle.time * 0.02) * (Math.PI / 6);
+    const legAngle = Math.sin(particle.time * 0.05) * (Math.PI / 3);
 
     // Legs
     ctx.fillStyle = '#004d00';
@@ -977,6 +1157,17 @@ export default {
     const size = particle.size * 1.8;
     const dir = particle.vx > 0 ? 1 : -1;
     const time = particle.time;
+
+    // Draw smoke puffs FIRST (before translation) - they use absolute coordinates
+    particle.smoke.forEach(smoke => {
+      ctx.save();
+      ctx.globalAlpha = smoke.opacity;
+      ctx.fillStyle = '#E8E8E8'; // Light gray smoke
+      ctx.beginPath();
+      ctx.arc(smoke.x, smoke.y, smoke.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
 
     ctx.save();
     ctx.translate(x, y);
@@ -1173,137 +1364,6 @@ export default {
       ctx.stroke();
     });
 
-    // Smoke puffs
-    particle.smoke.forEach(smoke => {
-      ctx.fillStyle = `rgba(220, 220, 220, ${smoke.opacity})`;
-      ctx.beginPath();
-      ctx.arc(smoke.x, smoke.y, smoke.size, 0, Math.PI * 2);
-      ctx.fill();
-    });
-
-    ctx.restore();
-  },
-
-  /**
-   * Draw robin bird with Santa hat
-   */
-  drawRobin(ctx, particle) {
-    const x = particle.x;
-    const y = particle.y;
-    const size = particle.size;
-    const dir = particle.vx > 0 ? 1 : -1;
-    const time = particle.time;
-
-    ctx.save();
-    ctx.translate(x, y);
-    if (dir === -1) {
-      ctx.scale(-1, 1);
-    }
-
-    const isFlying = particle.state === 'flying_in' || particle.state === 'flying_away';
-
-    // Wing animation
-    let wingAngle = 0;
-    if (isFlying) {
-      const flapCycle = time * 0.025;
-      wingAngle = Math.sin(flapCycle) * (Math.PI / 3);
-      wingAngle += Math.sin(flapCycle * 2) * (Math.PI / 10);
-    }
-
-    // Legs (only when sitting)
-    if (!isFlying) {
-      ctx.strokeStyle = '#5D4037';
-      ctx.lineWidth = size * 0.1;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(-size * 0.2, size * 0.5);
-      ctx.moveTo(0, 0);
-      ctx.lineTo(size * 0.2, size * 0.5);
-      ctx.stroke();
-    }
-
-    // Body
-    ctx.fillStyle = '#8D6E63';
-    ctx.beginPath();
-    ctx.ellipse(0, -size * 0.5, size, size * 0.6, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Red breast
-    ctx.fillStyle = '#D32F2F';
-    ctx.beginPath();
-    ctx.arc(size * 0.3, -size * 0.4, size * 0.4, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Head
-    ctx.fillStyle = '#A1887F';
-    ctx.beginPath();
-    ctx.arc(size * 0.5, -size, size * 0.5, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Beak
-    ctx.fillStyle = '#FFC107';
-    ctx.beginPath();
-    ctx.moveTo(size, -size * 1.1);
-    ctx.lineTo(size * 1.3, -size);
-    ctx.lineTo(size, -size * 0.9);
-    ctx.closePath();
-    ctx.fill();
-
-    // Eye
-    ctx.fillStyle = '#000';
-    ctx.beginPath();
-    ctx.arc(size * 0.7, -size * 1.1, size * 0.08, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Santa hat
-    const hatX = size * 0.4;
-    const hatY = -size * 1.4;
-    ctx.fillStyle = '#c00';
-    ctx.beginPath();
-    ctx.moveTo(hatX, hatY);
-    ctx.lineTo(hatX + size * 0.6, hatY);
-    ctx.lineTo(hatX + size * 0.3, hatY - size * 0.5);
-    ctx.closePath();
-    ctx.fill();
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(hatX - size * 0.05, hatY, size * 0.7, size * 0.15);
-    ctx.beginPath();
-    ctx.arc(hatX + size * 0.3, hatY - size * 0.5, size * 0.1, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Wings (when flying)
-    if (isFlying) {
-      ctx.fillStyle = '#8D6E63';
-      ctx.strokeStyle = '#5D4037';
-      ctx.lineWidth = size * 0.05;
-
-      // Back wing
-      ctx.save();
-      ctx.translate(-size * 0.2, -size * 0.5);
-      ctx.rotate(wingAngle * 0.9);
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.quadraticCurveTo(-size * 0.6, -size * 0.7, -size, 0);
-      ctx.quadraticCurveTo(-size * 0.6, size * 0.4, 0, 0);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-      ctx.restore();
-
-      // Front wing
-      ctx.save();
-      ctx.translate(size * 0.2, -size * 0.5);
-      ctx.rotate(-wingAngle);
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.quadraticCurveTo(size * 0.6, -size * 0.7, size, 0);
-      ctx.quadraticCurveTo(size * 0.6, size * 0.4, 0, 0);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-      ctx.restore();
-    }
-
     ctx.restore();
   },
 
@@ -1339,5 +1399,374 @@ export default {
         color: colors[Math.floor(Math.random() * colors.length)]
       });
     }
+  },
+
+  /**
+   * Draw robin (British red-breasted robin with Santa hat)
+   */
+  drawRobin(ctx, particle, time) {
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size;
+    const dir = particle.vx >= 0 ? 1 : -1;
+
+    // Determine animation state
+    const isFlying = particle.state === 'flying_in' || particle.state === 'flying_away';
+    const isSitting = particle.state === 'sitting';
+
+    // Initialize transition tracking if needed
+    if (particle.wingIntensity === undefined) {
+      particle.wingIntensity = isFlying ? 1 : 0;
+    }
+
+    // Smooth exponential transition between flying and sitting
+    const targetIntensity = isFlying ? 1 : 0;
+    const transitionSpeed = 0.02; // Smooth transition
+    particle.wingIntensity += (targetIntensity - particle.wingIntensity) * transitionSpeed;
+
+    // Wing flapping with sinusoidal easing for smooth, natural motion
+    let wingAngle = 0;
+    if (particle.wingIntensity > 0.01) {
+      // Natural wing flap frequency (about 2-3 flaps per second)
+      const flapFrequency = 0.012; // Frequency in radians per millisecond
+
+      // Get base sine wave (-1 to 1)
+      const rawSine = Math.sin(time * flapFrequency + particle.waveOffset);
+
+      // Apply ease-in-out using sine for smooth acceleration/deceleration
+      // This creates the characteristic "flap" motion: slow at extremes, fast in middle
+      const easedSine = Math.sin(rawSine * Math.PI / 2);
+
+      // Amplitude: wings move from folded (down) to extended (up)
+      const flapAmplitude = Math.PI / 6; // 30° range
+
+      // Apply intensity for smooth transitions
+      wingAngle = easedSine * flapAmplitude * particle.wingIntensity;
+    }
+
+    ctx.save();
+    ctx.translate(x, y);
+    if (dir === -1) {
+      ctx.scale(-1, 1);
+    }
+
+    // Body (red breast)
+    ctx.fillStyle = '#A52A2A'; // Brown back
+    ctx.beginPath();
+    ctx.ellipse(0, 0, size * 0.6, size * 0.8, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Red breast
+    ctx.fillStyle = '#DC143C'; // Crimson red
+    ctx.beginPath();
+    ctx.ellipse(size * 0.15, size * 0.1, size * 0.45, size * 0.6, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Tail (behind wings) - very subtle
+    ctx.fillStyle = '#654321';
+    ctx.strokeStyle = '#4a2c2a';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.5, 0);
+    ctx.quadraticCurveTo(-size * 0.7, -size * 0.08, -size * 0.85, 0);
+    ctx.quadraticCurveTo(-size * 0.7, size * 0.08, -size * 0.5, 0);
+    ctx.fill();
+    ctx.stroke();
+
+    // Left wing (back wing)
+    ctx.fillStyle = '#8B4513';
+    ctx.strokeStyle = '#654321';
+    ctx.lineWidth = 1;
+    ctx.save();
+    ctx.translate(-size * 0.3, -size * 0.1);
+    ctx.rotate(wingAngle);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, size * 0.45, size * 0.25, -Math.PI / 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+
+    // Right wing (front wing)
+    ctx.fillStyle = '#A0692F';
+    ctx.strokeStyle = '#654321';
+    ctx.lineWidth = 1;
+    ctx.save();
+    ctx.translate(-size * 0.3, size * 0.1);
+    ctx.rotate(-wingAngle);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, size * 0.45, size * 0.25, Math.PI / 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+
+    // Head - simple, minimal animation
+    ctx.fillStyle = '#A52A2A';
+    ctx.beginPath();
+    ctx.arc(size * 0.5, -size * 0.2, size * 0.35, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Beak
+    ctx.fillStyle = '#FFD700';
+    ctx.strokeStyle = '#DAA520';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(size * 0.75, -size * 0.2);
+    ctx.lineTo(size * 0.95, -size * 0.15);
+    ctx.lineTo(size * 0.75, -size * 0.1);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Eye
+    ctx.fillStyle = '#000000';
+    ctx.beginPath();
+    ctx.arc(size * 0.6, -size * 0.25, size * 0.08, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Eye highlight
+    ctx.fillStyle = '#FFFFFF';
+    ctx.beginPath();
+    ctx.arc(size * 0.62, -size * 0.27, size * 0.03, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Legs (when sitting) - simple and clean
+    if (isSitting) {
+      ctx.strokeStyle = '#8B4513';
+      ctx.lineWidth = size * 0.08;
+      ctx.lineCap = 'round';
+
+      // Right leg
+      ctx.beginPath();
+      ctx.moveTo(size * 0.1, size * 0.7);
+      ctx.lineTo(size * 0.1, size * 1.0);
+      ctx.stroke();
+
+      // Left leg
+      ctx.beginPath();
+      ctx.moveTo(-size * 0.1, size * 0.7);
+      ctx.lineTo(-size * 0.1, size * 1.0);
+      ctx.stroke();
+
+      // Simple feet
+      ctx.lineWidth = size * 0.06;
+      ctx.beginPath();
+      ctx.moveTo(size * 0.1, size * 1.0);
+      ctx.lineTo(size * 0.25, size * 1.0);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-size * 0.1, size * 1.0);
+      ctx.lineTo(-size * 0.25, size * 1.0);
+      ctx.stroke();
+    }
+
+    // Santa hat
+    const hatX = size * 0.5;
+    const hatY = -size * 0.55;
+
+    // Hat body
+    ctx.fillStyle = '#c00';
+    ctx.beginPath();
+    ctx.moveTo(hatX - size * 0.3, hatY);
+    ctx.lineTo(hatX + size * 0.25, hatY);
+    ctx.lineTo(hatX + size * 0.1, hatY - size * 0.5);
+    ctx.closePath();
+    ctx.fill();
+
+    // Hat brim
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(hatX - size * 0.32, hatY, size * 0.58, size * 0.1);
+
+    // Hat pompom
+    ctx.beginPath();
+    ctx.arc(hatX + size * 0.1, hatY - size * 0.5, size * 0.1, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  },
+
+  /**
+   * Draw snowman with top hat, scarf, and coal features
+   */
+  drawSnowman(ctx, particle, time) {
+    const x = particle.x;
+    const y = particle.y;
+    const size = particle.size;
+
+    // Subtle idle animation (gentle sway)
+    const sway = Math.sin(time * 0.002 + particle.wavePhase) * 0.03;
+
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(sway);
+
+    // Shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.beginPath();
+    ctx.ellipse(0, size * 2.0, size * 1.2, size * 0.3, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Bottom snowball (largest)
+    ctx.fillStyle = '#FFFFFF';
+    ctx.strokeStyle = '#E0E0E0';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(0, size * 1.3, size * 1.0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Middle snowball
+    ctx.beginPath();
+    ctx.arc(0, size * 0.3, size * 0.7, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Head snowball (smallest)
+    ctx.beginPath();
+    ctx.arc(0, -size * 0.6, size * 0.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Coal buttons
+    ctx.fillStyle = '#000000';
+    ctx.beginPath();
+    ctx.arc(0, size * 0.5, size * 0.08, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(0, size * 0.1, size * 0.08, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(0, -size * 0.2, size * 0.08, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Stick arms
+    ctx.strokeStyle = '#654321';
+    ctx.lineWidth = size * 0.1;
+
+    // Left arm
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.6, size * 0.3);
+    ctx.lineTo(-size * 1.2, size * 0.0);
+    ctx.lineTo(-size * 1.5, -size * 0.1);
+    ctx.stroke();
+    // Fingers
+    ctx.lineWidth = size * 0.05;
+    ctx.beginPath();
+    ctx.moveTo(-size * 1.5, -size * 0.1);
+    ctx.lineTo(-size * 1.7, -size * 0.3);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(-size * 1.5, -size * 0.1);
+    ctx.lineTo(-size * 1.8, -size * 0.05);
+    ctx.stroke();
+
+    // Right arm
+    ctx.lineWidth = size * 0.1;
+    ctx.beginPath();
+    ctx.moveTo(size * 0.6, size * 0.3);
+    ctx.lineTo(size * 1.2, size * 0.0);
+    ctx.lineTo(size * 1.5, -size * 0.1);
+    ctx.stroke();
+    // Fingers
+    ctx.lineWidth = size * 0.05;
+    ctx.beginPath();
+    ctx.moveTo(size * 1.5, -size * 0.1);
+    ctx.lineTo(size * 1.7, -size * 0.3);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(size * 1.5, -size * 0.1);
+    ctx.lineTo(size * 1.8, -size * 0.05);
+    ctx.stroke();
+
+    // Carrot nose
+    ctx.fillStyle = '#FF6347'; // Tomato orange
+    ctx.beginPath();
+    ctx.moveTo(size * 0.15, -size * 0.6);
+    ctx.lineTo(size * 0.6, -size * 0.65);
+    ctx.lineTo(size * 0.15, -size * 0.55);
+    ctx.closePath();
+    ctx.fill();
+
+    // Eyes
+    ctx.fillStyle = '#000000';
+    ctx.beginPath();
+    ctx.arc(-size * 0.15, -size * 0.7, size * 0.08, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(size * 0.15, -size * 0.7, size * 0.08, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Smile (coal pieces)
+    const smilePoints = [
+      { x: -size * 0.2, y: -size * 0.4 },
+      { x: -size * 0.1, y: -size * 0.35 },
+      { x: 0, y: -size * 0.33 },
+      { x: size * 0.1, y: -size * 0.35 },
+      { x: size * 0.2, y: -size * 0.4 }
+    ];
+    smilePoints.forEach(point => {
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, size * 0.05, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // Scarf
+    ctx.fillStyle = '#c00';
+    ctx.strokeStyle = '#8B0000';
+    ctx.lineWidth = 1;
+
+    // Scarf around neck
+    ctx.beginPath();
+    ctx.ellipse(0, -size * 0.15, size * 0.55, size * 0.15, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Scarf hanging end
+    ctx.fillRect(size * 0.3, -size * 0.1, size * 0.2, size * 0.8);
+    ctx.strokeRect(size * 0.3, -size * 0.1, size * 0.2, size * 0.8);
+
+    // Fringe at end of scarf
+    ctx.strokeStyle = '#8B0000';
+    ctx.lineWidth = size * 0.03;
+    for (let i = 0; i < 4; i++) {
+      ctx.beginPath();
+      ctx.moveTo(size * 0.33 + i * size * 0.13, size * 0.7);
+      ctx.lineTo(size * 0.33 + i * size * 0.13, size * 0.85);
+      ctx.stroke();
+    }
+
+    // Top hat
+    ctx.fillStyle = '#000000';
+    ctx.strokeStyle = '#333333';
+    ctx.lineWidth = 2;
+
+    // Hat brim
+    ctx.beginPath();
+    ctx.ellipse(0, -size * 1.1, size * 0.7, size * 0.15, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Hat top
+    ctx.fillRect(-size * 0.45, -size * 1.8, size * 0.9, size * 0.7);
+    ctx.strokeRect(-size * 0.45, -size * 1.8, size * 0.9, size * 0.7);
+
+    // Hat band (red)
+    ctx.fillStyle = '#c00';
+    ctx.fillRect(-size * 0.45, -size * 1.3, size * 0.9, size * 0.15);
+
+    // Holly on hat
+    ctx.fillStyle = '#228B22';
+    ctx.beginPath();
+    ctx.arc(-size * 0.15, -size * 1.22, size * 0.08, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(size * 0.15, -size * 1.22, size * 0.08, 0, Math.PI * 2);
+    ctx.fill();
+    // Berries
+    ctx.fillStyle = '#FF0000';
+    ctx.beginPath();
+    ctx.arc(0, -size * 1.25, size * 0.06, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
   }
 };

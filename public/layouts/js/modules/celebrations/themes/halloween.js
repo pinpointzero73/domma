@@ -83,11 +83,11 @@ export default {
       opacity = 0.9 + Math.random() * 0.1;
     } else if (depth < 0.66) {
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]);
-      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]);
+      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.sizeRange[0]);
       opacity = 0.6 + Math.random() * 0.2;
     } else {
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.7;
-      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.7;
+      speed = config.speedRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.7;
       opacity = 0.4 + Math.random() * 0.2;
     }
 
@@ -122,15 +122,15 @@ export default {
 
     if (depth < 0.33) {
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 1.8;
-      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.5;
+      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.sizeRange[0]) * 0.5;
       opacity = 0.7 + Math.random() * 0.2;
     } else if (depth < 0.66) {
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 1.2;
-      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.5;
+      speed = config.speedRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.5;
       opacity = 0.5 + Math.random() * 0.15;
     } else {
       size = config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]);
-      speed = config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.5;
+      speed = config.speedRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]) * 0.5;
       opacity = 0.3 + Math.random() * 0.15;
     }
 
@@ -161,7 +161,7 @@ export default {
       y: Math.random() * canvasHeight,
       size: config.sizeRange[0] + Math.random() * (config.sizeRange[1] - config.sizeRange[0]),
       vx: (Math.random() - 0.5) * 0.2, // Gentle horizontal drift
-      speed: (config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0])) * 0.2, // Slight downward/floating speed
+      speed: (config.speedRange[0] + Math.random() * (config.speedRange[1] - config.sizeRange[0])) * 0.2, // Slight downward/floating speed
       opacity: 0.8 + Math.random() * 0.2,
       rotation: Math.random() * Math.PI * 2,
       rotationSpeed: (Math.random() - 0.5) * 0.008,
@@ -247,7 +247,7 @@ export default {
         x: Math.random() * canvasWidth,
         y: -20,
         size: 1 + Math.random() * 2,
-        speed: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.speedRange[0]) * 0.5,
+        speed: config.speedRange[0] + Math.random() * (config.speedRange[1] - config.sizeRange[0]) * 0.5,
         opacity: 0.6 + Math.random() * 0.3,
         rotation: Math.random() * Math.PI * 2,
         rotationSpeed: (Math.random() - 0.5) * 0.02,
@@ -284,11 +284,8 @@ export default {
       opacity: 0.9,
       glowPhase: 0,
       active: true,
-      static: true,
-      batmanVisible: false,
-      batmanTimer: Math.random() * 120 * 1000, // Random initial delay
-      batmanInterval: 120 * 1000, // Appear every 2 minutes
-      batmanDisplayTime: 3 * 1000 // Display for 3 seconds
+      static: true
+      // Removed Batman properties
     });
 
     // Create gravestones
@@ -540,6 +537,96 @@ export default {
   },
 
   /**
+   * Update special Halloween particles (moon, witch, floating pumpkin)
+   */
+  updateSpecialParticles(specialParticles, deltaTime, canvasWidth, canvasHeight) {
+    // Update lightning effect
+    if (this.lightningActive) {
+      this.lightningTimer += deltaTime;
+      if (this.lightningTimer >= this.lightningDuration) {
+        this.lightningActive = false;
+        this.lightningTimer = 0;
+      }
+    } else {
+      if (Math.random() < this.lightningChance) {
+        this.lightningActive = true;
+        this.lightningTimer = 0;
+      }
+    }
+
+    specialParticles.forEach(particle => {
+      // Increment time for animated particles (if they have a time property)
+      if (particle.time !== undefined) {
+        particle.time += deltaTime;
+      }
+
+      switch (particle.type) {
+        case 'moon':
+          // Batman logo logic removed
+          break;
+
+        case 'witch':
+          // Witch flies across the screen then deactivates
+          if ((particle.vx > 0 && particle.x > canvasWidth + 100) || (particle.vx < 0 && particle.x < -100)) {
+            particle.active = false;
+          }
+          break;
+
+        case 'floating-pumpkin':
+          // Floating pumpkins also eventually go off-screen
+          if (particle.y > canvasHeight + 50) {
+            particle.active = false;
+          }
+          break;
+
+        case 'cauldron':
+          // Manage bubbles
+          if (particle.time % 100 < 20) { // Spawn new bubbles periodically
+            particle.bubbles.push({
+              x: (Math.random() - 0.5) * particle.size * 0.5,
+              y: particle.size * 0.3 + Math.random() * particle.size * 0.2, // From potion surface
+              size: particle.size * (0.05 + Math.random() * 0.1),
+              vy: -0.5 - Math.random() * 0.5,
+              opacity: 1,
+              life: 1.0,
+              fadeRate: 0.01 + Math.random() * 0.005
+            });
+          }
+          particle.bubbles = particle.bubbles.filter(bubble => {
+            bubble.y += bubble.vy;
+            bubble.vy *= 0.98; // Slow down ascent
+            bubble.opacity -= bubble.fadeRate;
+            return bubble.opacity > 0 && bubble.y > -particle.size; // Remove if too high or faded
+          });
+
+          // Manage smoke/steam
+          if (particle.time % 200 < 30) { // Emit smoke periodically
+            particle.smoke.push({
+              x: (Math.random() - 0.5) * particle.size * 0.3,
+              y: -particle.size * 0.5 + Math.random() * particle.size * 0.1,
+              size: particle.size * (0.2 + Math.random() * 0.3),
+              vx: (Math.random() - 0.5) * 0.1,
+              vy: -0.2 - Math.random() * 0.2,
+              opacity: 0.5,
+              life: 1.0,
+              fadeRate: 0.005 + Math.random() * 0.003
+            });
+          }
+          particle.smoke = particle.smoke.filter(smoke => {
+            smoke.x += smoke.vx;
+            smoke.y += smoke.vy;
+            smoke.size *= 1.02; // Expand
+            smoke.opacity -= smoke.fadeRate;
+            return smoke.opacity > 0;
+          });
+          break;
+
+        // Add other special particle update logic here if needed
+      }
+    });
+  },
+
+  /**
    * Draw bat with wing animation
    */
   drawBat(ctx, particle) {
@@ -738,7 +825,7 @@ export default {
 
     // Stem
     ctx.fillStyle = '#8B4513';
-    ctx.fillRect(-size * 0.15, -size * 1.1, size * 0.3, size * 0.15);
+    ctx.fillRect(-size * 0.2, -size * 1.1, size * 0.4, size * 0.2);
 
     // Inner glow (pulsing)
     const glowIntensity = (Math.sin(time * 0.002 + particle.glowPhase) + 1) * 0.5;
@@ -811,7 +898,7 @@ export default {
   },
 
   /**
-   * Draw jack-o-lantern with glowing face
+   * Draw sinister jack-o-lantern with spikey mouth and yellow glow
    */
   drawJackOLantern(ctx, particle, time) {
     const x = particle.x;
@@ -842,78 +929,50 @@ export default {
     ctx.fillStyle = '#8B4513';
     ctx.fillRect(-size * 0.2, -size * 1.1, size * 0.4, size * 0.2);
 
-    // Inner glow
-    const glowIntensity = 0.5 + (Math.sin(time * 0.003 + particle.glowPhase) + 1) * 0.25;
+    // Inner glow (pulsing) - now just an internal light source
+    const flicker = 0.8 + Math.sin(time * 0.02 + particle.glowPhase) * 0.2; // Flicker effect
+    const glowIntensity = 0.5 + flicker * 0.5;
     const glowGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 1.5);
-    glowGradient.addColorStop(0, `rgba(255, 200, 0, ${glowIntensity})`);
-    glowGradient.addColorStop(1, 'rgba(255, 200, 0, 0)');
+    glowGradient.addColorStop(0, `rgba(255, 255, 100, ${glowIntensity})`); // Bright yellow center
+    glowGradient.addColorStop(0.5, `rgba(255, 200, 0, ${glowIntensity * 0.7})`); // Orange-yellow transition
+    glowGradient.addColorStop(1, 'rgba(255, 150, 0, 0)'); // Fades to transparent orange
     ctx.fillStyle = glowGradient;
     ctx.fillRect(-size * 1.5, -size * 1.5, size * 3, size * 3);
 
-    // Face (carved out - black with glow)
+    // Face (carved out - black with enhanced glow)
     ctx.fillStyle = '#000000';
-    ctx.shadowColor = '#ffaa00';
-    ctx.shadowBlur = 10;
+    ctx.shadowColor = `rgba(255, 180, 0, ${flicker})`; // Shadow color matches glow
+    ctx.shadowBlur = size * 0.5; // Increased blur for more glow
 
-    if (particle.face === 'happy') {
-      // Triangle eyes
-      ctx.beginPath();
-      ctx.moveTo(-size * 0.5, -size * 0.3);
-      ctx.lineTo(-size * 0.3, 0);
-      ctx.lineTo(-size * 0.7, 0);
-      ctx.closePath();
-      ctx.fill();
+    // Sinister Triangular Eyes
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.6, -size * 0.4);
+    ctx.lineTo(-size * 0.2, -size * 0.3);
+    ctx.lineTo(-size * 0.5, -size * 0.1);
+    ctx.closePath();
+    ctx.fill();
 
-      ctx.beginPath();
-      ctx.moveTo(size * 0.5, -size * 0.3);
-      ctx.lineTo(size * 0.7, 0);
-      ctx.lineTo(size * 0.3, 0);
-      ctx.closePath();
-      ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(size * 0.6, -size * 0.4);
+    ctx.lineTo(size * 0.2, -size * 0.3);
+    ctx.lineTo(size * 0.5, -size * 0.1);
+    ctx.closePath();
+    ctx.fill();
 
-      // Smiling mouth
-      ctx.beginPath();
-      ctx.arc(0, size * 0.3, size * 0.6, 0, Math.PI);
-      ctx.fill();
-    } else if (particle.face === 'scary') {
-      // Angry eyes
-      ctx.beginPath();
-      ctx.moveTo(-size * 0.7, -size * 0.2);
-      ctx.lineTo(-size * 0.3, 0);
-      ctx.lineTo(-size * 0.5, 0);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(size * 0.7, -size * 0.2);
-      ctx.lineTo(size * 0.5, 0);
-      ctx.lineTo(size * 0.3, 0);
-      ctx.closePath();
-      ctx.fill();
-
-      // Jagged mouth
-      ctx.beginPath();
-      ctx.moveTo(-size * 0.6, size * 0.4);
-      for (let i = -4; i <= 4; i++) {
-        const xPos = -size * 0.6 + (i / 6) * size * 1.2;
-        const yPos = size * 0.4 + (i % 2 === 0 ? 0 : size * 0.2);
-        ctx.lineTo(xPos, yPos);
-      }
-      ctx.fill();
-    } else {
-      // Wicked eyes (circles)
-      ctx.beginPath();
-      ctx.arc(-size * 0.4, -size * 0.2, size * 0.2, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(size * 0.4, -size * 0.2, size * 0.2, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Evil grin
-      ctx.beginPath();
-      ctx.arc(0, size * 0.5, size * 0.5, 0, Math.PI, true);
-      ctx.fill();
-    }
+    // Spikey Mouth
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.7, size * 0.2);
+    ctx.lineTo(-size * 0.5, size * 0.4);
+    ctx.lineTo(-size * 0.3, size * 0.25);
+    ctx.lineTo(0, size * 0.45);
+    ctx.lineTo(size * 0.3, size * 0.25);
+    ctx.lineTo(size * 0.5, size * 0.4);
+    ctx.lineTo(size * 0.7, size * 0.2);
+    ctx.lineTo(size * 0.5, size * 0.1);
+    ctx.lineTo(0, size * 0.25);
+    ctx.lineTo(-size * 0.5, size * 0.1);
+    ctx.closePath();
+    ctx.fill();
 
     ctx.shadowBlur = 0;
     ctx.restore();
@@ -1389,28 +1448,28 @@ export default {
 
     // Eyes (triangles)
     ctx.beginPath();
-    ctx.moveTo(-size * 0.4, -size * 0.3);
-    ctx.lineTo(-size * 0.2, -size * 0.1);
-    ctx.lineTo(-size * 0.6, -size * 0.1);
-    ctx.closePath();
-    ctx.fill();
+      ctx.moveTo(-size * 0.4, -size * 0.3);
+      ctx.lineTo(-size * 0.2, -size * 0.1);
+      ctx.lineTo(-size * 0.6, -size * 0.1);
+      ctx.closePath();
+      ctx.fill();
 
     ctx.beginPath();
-    ctx.moveTo(size * 0.4, -size * 0.3);
-    ctx.lineTo(size * 0.6, -size * 0.1);
-    ctx.lineTo(size * 0.2, -size * 0.1);
-    ctx.closePath();
-    ctx.fill();
+      ctx.moveTo(size * 0.4, -size * 0.3);
+      ctx.lineTo(size * 0.6, -size * 0.1);
+      ctx.lineTo(size * 0.2, -size * 0.1);
+      ctx.closePath();
+      ctx.fill();
 
     // Mouth (zigzag)
     ctx.beginPath();
-    ctx.moveTo(-size * 0.5, size * 0.2);
-    for (let i = -4; i <= 4; i++) {
-      ctx.lineTo(i * size * 0.12, size * 0.2 + (i % 2 === 0 ? size * 0.15 : 0));
-    }
-    ctx.lineTo(size * 0.5, size * 0.2);
-    ctx.closePath();
-    ctx.fill();
+      ctx.moveTo(-size * 0.5, size * 0.2);
+      for (let i = -4; i <= 4; i++) {
+        ctx.lineTo(i * size * 0.12, size * 0.2 + (i % 2 === 0 ? size * 0.15 : 0));
+      }
+      ctx.lineTo(size * 0.5, size * 0.2);
+      ctx.closePath();
+      ctx.fill();
 
     ctx.restore();
   },
@@ -1461,47 +1520,7 @@ export default {
     ctx.arc(-size * 0.2, size * 0.5, size * 0.12, 0, Math.PI * 2);
     ctx.fill();
 
-    // Draw Batman logo if visible
-    if (particle.batmanVisible) {
-      const batSize = size * 0.7; // Adjust size of the bat signal
-      ctx.fillStyle = '#000000'; // Black bat signal
-      ctx.globalAlpha = particle.opacity; // Use moon's opacity
-
-      ctx.beginPath();
-      // Bat body
-      ctx.ellipse(0, 0, batSize * 0.8, batSize * 0.3, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Left wing
-      ctx.moveTo(-batSize * 0.8, 0);
-      ctx.quadraticCurveTo(-batSize * 1.2, -batSize * 0.8, -batSize * 2.0, -batSize * 0.5);
-      ctx.quadraticCurveTo(-batSize * 1.5, batSize * 0.2, -batSize * 0.8, batSize * 0.3);
-      ctx.lineTo(-batSize * 0.8, 0);
-      ctx.fill();
-
-      // Right wing
-      ctx.moveTo(batSize * 0.8, 0);
-      ctx.quadraticCurveTo(batSize * 1.2, -batSize * 0.8, batSize * 2.0, -batSize * 0.5);
-      ctx.quadraticCurveTo(batSize * 1.5, batSize * 0.2, batSize * 0.8, batSize * 0.3);
-      ctx.lineTo(batSize * 0.8, 0);
-      ctx.fill();
-
-      // Ears (small triangles on top of the head)
-      ctx.beginPath();
-      ctx.moveTo(-batSize * 0.3, -batSize * 0.3);
-      ctx.lineTo(-batSize * 0.4, -batSize * 0.6);
-      ctx.lineTo(-batSize * 0.5, -batSize * 0.3);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(batSize * 0.3, -batSize * 0.3);
-      ctx.lineTo(batSize * 0.4, -batSize * 0.6);
-      ctx.lineTo(batSize * 0.5, -batSize * 0.3);
-      ctx.closePath();
-      ctx.fill();
-    }
-
+    // No Batman logo drawing
     ctx.restore();
   },
 
@@ -1756,7 +1775,7 @@ export default {
     // Draw 4-pointed star
     ctx.beginPath();
     for (let i = 0; i < 4; i++) {
-      const angle = (i * Math.PI) / 2;
+      const angle = (i / 4) * Math.PI - Math.PI / 2;
       const outerX = Math.cos(angle) * size;
       const outerY = Math.sin(angle) * size;
       const innerAngle = angle + Math.PI / 4;

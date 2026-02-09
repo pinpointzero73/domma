@@ -457,7 +457,7 @@ export class CelebrationsEffect {
 
     // Theme-specific special particle updates (firework explosions, etc.)
     if (this.themeModule.updateSpecialParticles) {
-      this.themeModule.updateSpecialParticles(this.specialParticles, deltaTime);
+      this.themeModule.updateSpecialParticles(this.specialParticles, deltaTime, width, height);
     }
 
     // Update and render special particles (decorations)
@@ -470,8 +470,9 @@ export class CelebrationsEffect {
       if (!particle.static) {
         updateMovingParticle(particle, deltaTime, currentTime);
 
-        // Remove if off-screen
-        if (particle.x < -200 || particle.x > width + 200) {
+        // Remove if off-screen (wider tolerance for large particles like trains)
+        const offscreenMargin = particle.type === 'train' ? 600 : 200;
+        if (particle.x < -offscreenMargin || particle.x > width + offscreenMargin) {
           particle.active = false;
           return false;
         }
