@@ -1,3 +1,16 @@
+### v0.13.4 - Enhanced Celebrations & Particle Fixes (2026-02-08)
+
+✨ **Features & Enhancements**
+
+*   **Global Celebrations System:**
+    *   **Resolved 'Invalid particle values' errors:** Fixed initialization issues across Halloween, Guy Fawkes, Christmas, St. Patrick's, St. George's, St. David's, and St. Andrew's themes by ensuring proper `vx`, `vy`, `static`, `x`, and `y` initializations for all particles.
+    *   **Christmas Snow Rendering:** Corrected Christmas snow rendering to appear as distinct snowflakes instead of amorphous blobs.
+    *   **Witch's Broomstick Orientation:** Fixed the witch's broomstick orientation in the Halloween theme.
+    *   **Halloween Batman Logo:** Implemented a dynamic Batman logo appearing periodically on the moon in the Halloween theme.
+    *   **Halloween Fork-Lighting:** Introduced a procedural fork-lighting effect for the Halloween theme.
+    *   **Guy Fawkes Fork-Lighting:** Extended the procedural fork-lighting effect to the Guy Fawkes theme.
+    *   **Guy Fawkes Catherine Wheel:** Visually overhauled the Catherine Wheel in the Guy Fawkes theme for a more realistic and dynamic effect, including detailed structure, dynamic spark emission, and pulsing glows.
+
 ### ✨ Features
 
 *   **New Timeline Component**: Introducing a versatile, data-driven timeline component with multiple layouts (vertical, horizontal, centered), animations, and theming options.

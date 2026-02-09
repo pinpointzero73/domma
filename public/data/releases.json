@@ -1,6 +1,24 @@
 {
   "releases": [
     {
+      "year": "v0.14.1",
+      "title": "Patron Saint Celebrations & Animation Polish",
+      "description": "Transformed UK patron saint celebrations with horizontal-drifting flower petals: St. David's Day yellow daffodil petals, St. George's Day red/white rose petals, St. Andrew's Day purple heather petals, and St. Patrick's Day green clover petals. Fixed critical St. David's Day animation freeze caused by canvas state corruption (missing ctx.restore()). Replaced harsh X-shaped Saltire sparkles with elegant 4-pointed stars. Reduced Guy Fawkes Night initial particle spam with gradual spawning (25% start, builds to 100% over 20 seconds). All patron saint celebrations now feature realistic flutter animations and gentle vertical bobbing.",
+      "date": "2026-02-09"
+    },
+    {
+      "year": "v0.14.0",
+      "title": "CSS Architecture & Progression Component",
+      "description": "Major CSS restructure with proper build process: separated domma.css (base + utilities), grid.css (layout systems), and elements.css (22 UI components). Introduced unified Progression component with dual modes (timeline/roadmap) for event visualisation. Added status tracking with 5 states (planned, in-progress, completed, delayed, cancelled), interactive tooltips, and responsive layouts. Enhanced celebrations showcase with accurate release timelines. Improved CSS build workflow with src/css source files and npm run build:css automation.",
+      "date": "2026-02-08"
+    },
+    {
+      "year": "v0.13.4",
+      "title": "Enhanced Celebrations & Particle Fixes",
+      "description": "Resolved 'Invalid particle values' errors across Halloween, Guy Fawkes, Christmas, St. Patrick's, St. George's, St. David's, and St. Andrew's themes by ensuring proper vx, vy, static, x, y initialisations. Fixed Christmas snow rendering and witch's broomstick orientation. Implemented dynamic Batman logo display on the moon and procedural fork-lighting for the Halloween theme. Introduced fork-lighting and visually overhauled the Catherine Wheel for the Guy Fawkes theme for a more realistic and dynamic effect.",
+      "date": "2026-02-08"
+    },
+    {
       "year": "v0.13.3",
       "title": "Polished SPA Templates & Dev Server",
       "description": "Redesigned SPA template views with professional layouts matching the QuickStart demo. Added built-in development server (npx domma serve) with live reload and automatic project detection. Fixed template CSS paths.",
@@ -79,5 +97,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.13.3"
+  "latestVersion": "v0.14.1"
 }
