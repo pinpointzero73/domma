@@ -434,6 +434,11 @@ export default {
           break;
 
         case 'train':
+          // Initialize smoke array if needed
+          if (!particle.smoke) {
+            particle.smoke = [];
+          }
+
           // Train deactivates when off-screen
           if ((particle.vx > 0 && particle.x > canvasWidth + 500) || (particle.vx < 0 && particle.x < -500)) {
             particle.active = false;
@@ -447,20 +452,39 @@ export default {
           if (particle.time - particle.lastSmokeTime > 150) {
             particle.lastSmokeTime = particle.time;
 
-            // Calculate smoke position from chimney
-            const smokeX = particle.x + (particle.vx > 0 ? -particle.size * 0.8 : particle.size * 0.8);
-            const smokeY = particle.y - particle.size * 1.5;
+            // Calculate smoke position from chimney - must match drawing code exactly
+            const size = particle.size * 1.8;
+            const baseUnit = size / 20;
+            const dir = particle.vx > 0 ? 1 : -1;
 
-            particle.smoke.push({
+            // From drawing code:
+            const wheelRadius = baseUnit * 8;
+            const chassisHeight = baseUnit * 7;
+            const boilerRadius = baseUnit * 10;
+            const engineChassisBottomY = -wheelRadius - baseUnit; // -9 * baseUnit
+            const boilerTopY = engineChassisBottomY - chassisHeight - boilerRadius * 2; // -36 * baseUnit
+            const chimneyTopY = boilerTopY - baseUnit * 8; // -44 * baseUnit
+
+            const engineLength = baseUnit * 70;
+            const cabWidth = baseUnit * 25;
+            const boilerWidth = engineLength - cabWidth; // 45 * baseUnit
+            const chimneyX = boilerWidth * 0.7; // 31.5 * baseUnit
+
+            // Convert from local drawing coords to world coords
+            const smokeX = particle.x + (chimneyX * dir);
+            const smokeY = particle.y + chimneyTopY; // chimneyTopY is negative, so this goes UP
+
+            const smokeParticle = {
               x: smokeX,
               y: smokeY,
-              vx: (Math.random() - 0.5) * 0.5,
-              vy: -1 - Math.random() * 0.5,
-              size: particle.size * (0.3 + Math.random() * 0.4),
-              opacity: 1,
-              life: 1.0,
-              fadeRate: 0.02 + Math.random() * 0.01
-            });
+              vx: (Math.random() - 0.5) * 0.8,
+              vy: -0.8 - Math.random() * 0.4,
+              size: 8 + Math.random() * 6,
+              opacity: 0.7 + Math.random() * 0.2,
+              fadeRate: 0.012 + Math.random() * 0.008
+            };
+
+            particle.smoke.push(smokeParticle);
           }
 
           // Update smoke puffs
@@ -468,7 +492,7 @@ export default {
             smoke.x += smoke.vx;
             smoke.y += smoke.vy;
             smoke.vy *= 0.99; // Slow vertical lift
-            smoke.size *= 1.01; // Expand
+            smoke.size *= 1.02; // Expand as it rises
             smoke.opacity -= smoke.fadeRate;
             return smoke.opacity > 0;
           });
@@ -1159,15 +1183,24 @@ export default {
     const time = particle.time;
 
     // Draw smoke puffs FIRST (before translation) - they use absolute coordinates
-    particle.smoke.forEach(smoke => {
-      ctx.save();
-      ctx.globalAlpha = smoke.opacity;
-      ctx.fillStyle = '#E8E8E8'; // Light gray smoke
-      ctx.beginPath();
-      ctx.arc(smoke.x, smoke.y, smoke.size, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    });
+    if (particle.smoke && particle.smoke.length > 0) {
+      particle.smoke.forEach(smoke => {
+        ctx.save();
+        ctx.globalAlpha = smoke.opacity;
+
+        // Light gray smoke with subtle gradient
+        const gradient = ctx.createRadialGradient(smoke.x, smoke.y, 0, smoke.x, smoke.y, smoke.size);
+        gradient.addColorStop(0, '#CCCCCC');
+        gradient.addColorStop(0.5, '#AAAAAA');
+        gradient.addColorStop(1, '#888888');
+        ctx.fillStyle = gradient;
+
+        ctx.beginPath();
+        ctx.arc(smoke.x, smoke.y, smoke.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+    }
 
     ctx.save();
     ctx.translate(x, y);
