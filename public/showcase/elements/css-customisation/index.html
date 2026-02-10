@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Customisation Cheat-Sheet - Domma Elements</title>
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-rotate-spotlight">
+    <div class="hero-content">
+        <div class="hero-title">CSS Customisation Cheat-Sheet</div>
+        <div class="hero-subtitle">Override Domma's CSS variables to match your existing project's design system — no need to rewrite component styles</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <!-- SECTION 1: Overview -->
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">CSS Customisation Overview</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Domma can be dropped into existing projects without disrupting your design system. This cheat-sheet shows you exactly which CSS variables and classes to override to make Domma elements match your brand colours, typography, spacing, and more.
+            </p>
+
+            <h4 class="category-title">Three-Tier CSS Variable Architecture</h4>
+            <p class="mb-4">
+                Domma uses a cascading variable system that gives you flexibility at multiple levels:
+            </p>
+            <ol class="mb-4">
+                <li><strong>Palette tier</strong> — Raw colour values (e.g., <code>--dm-blue-600</code>, <code>--dm-slate-300</code>)</li>
+                <li><strong>Semantic tier</strong> — Contextual tokens (e.g., <code>--dm-primary</code>, <code>--dm-border</code>, <code>--dm-text</code>)</li>
+                <li><strong>Component tier</strong> — Element-specific (e.g., <code>--dm-card-bg</code>, <code>--dm-navbar-text</code>)</li>
+            </ol>
+
+            <h4 class="category-title">Override Strategy</h4>
+            <p class="mb-4">
+                <strong>Override at the highest tier for maximum impact.</strong> Changing <code>--dm-primary</code> affects buttons, badges, links, focus states, and 15+ components. Changing <code>--dm-blue-600</code> (the default value of <code>--dm-primary</code>) affects <em>everything</em> that references blue.
+            </p>
+
+            <h4 class="category-title">Minimal CSS Inclusion for Existing Projects</h4>
+            <p class="mb-2">If you already have a design system, you only need to load Domma's component CSS:</p>
+            <pre class="code-block language-html">&lt;!-- Load only what you need --&gt;
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;  &lt;!-- UI components --&gt;
+
+&lt;!-- Optional: grid system if you don't have one --&gt;
+&lt;link rel="stylesheet" href="dist/grid.css"&gt;
+
+&lt;!-- Override Domma variables to match your system --&gt;
+&lt;style&gt;
+:root {
+    --dm-primary: #your-brand-colour;
+    --dm-font-sans: 'Your Font', sans-serif;
+    /* ...more overrides */
+}
+&lt;/style&gt;</pre>
+        </div>
+    </section>
+
+    <!-- SECTION 2: Quick Start - 10 Variables That Change Everything -->
+    <section class="card mb-6" data-section="Quick Start">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Quick Start — 10 Variables That Change Everything</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                These 10 high-impact variables adapt the entire Domma framework to your brand in under 30 seconds.
+            </p>
+
+            <table class="option-table mb-6">
+                <tr>
+                    <th>Intent</th>
+                    <th>Variable</th>
+                    <th>Default</th>
+                    <th>Affects</th>
+                </tr>
+                <tr>
+                    <td>Brand colour</td>
+                    <td><code>--dm-primary</code></td>
+                    <td><code>var(--dm-blue-600)</code></td>
+                    <td>Buttons, links, badges, focus states, progress bars</td>
+                </tr>
+                <tr>
+                    <td>Brand hover</td>
+                    <td><code>--dm-primary-hover</code></td>
+                    <td><code>var(--dm-blue-700)</code></td>
+                    <td>Button hover, link hover, active states</td>
+                </tr>
+                <tr>
+                    <td>Secondary colour</td>
+                    <td><code>--dm-secondary</code></td>
+                    <td><code>var(--dm-slate-600)</code></td>
+                    <td>Secondary buttons, muted elements</td>
+                </tr>
+                <tr>
+                    <td>Page background</td>
+                    <td><code>--dm-background</code></td>
+                    <td><code>var(--dm-slate-100)</code></td>
+                    <td>Body background, page wrapper</td>
+                </tr>
+                <tr>
+                    <td>Card/panel surface</td>
+                    <td><code>--dm-surface</code></td>
+                    <td><code>var(--dm-white)</code></td>
+                    <td>Cards, modals, dropdowns, panels</td>
+                </tr>
+                <tr>
+                    <td>Text colour</td>
+                    <td><code>--dm-text</code></td>
+                    <td><code>var(--dm-slate-800)</code></td>
+                    <td>Body text, headings, labels</td>
+                </tr>
+                <tr>
+                    <td>Border colour</td>
+                    <td><code>--dm-border</code></td>
+                    <td><code>var(--dm-slate-300)</code></td>
+                    <td>Inputs, cards, tables, dividers</td>
+                </tr>
+                <tr>
+                    <td>Border radius</td>
+                    <td><code>--dm-radius-md</code></td>
+                    <td><code>0.375rem</code></td>
+                    <td>Buttons, inputs, cards, badges</td>
+                </tr>
+                <tr>
+                    <td>Font family</td>
+                    <td><code>--dm-font-sans</code></td>
+                    <td><code>Roboto, ...</code></td>
+                    <td>All text elements</td>
+                </tr>
+                <tr>
+                    <td>Base shadow</td>
+                    <td><code>--dm-shadow</code></td>
+                    <td><code>0 1px 3px ...</code></td>
+                    <td>Cards, dropdowns, modals</td>
+                </tr>
+            </table>
+
+            <h4 class="category-title">Copy-Paste Override Template</h4>
+            <pre class="code-block language-css">:root {
+    /* Brand colours */
+    --dm-primary: #0066cc;               /* Your brand blue */
+    --dm-primary-hover: #0052a3;         /* Darker for hover */
+    --dm-secondary: #6c757d;             /* Secondary/muted colour */
+
+    /* Backgrounds */
+    --dm-background: #f5f5f5;            /* Page background */
+    --dm-surface: #ffffff;               /* Card/panel background */
+
+    /* Text */
+    --dm-text: #2c3e50;                  /* Body text */
+    --dm-text-secondary: #7f8c8d;        /* Muted text */
+
+    /* Borders & shapes */
+    --dm-border: #dee2e6;                /* Border colour */
+    --dm-radius-md: 0.5rem;              /* Corner radius */
+
+    /* Typography */
+    --dm-font-sans: 'Inter', sans-serif; /* Your font stack */
+}</pre>
+
+            <h4 class="category-title">Before / After Demo</h4>
+            <p class="mb-2">See the impact of custom variables in real-time:</p>
+            <div class="demo-area">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Default theme -->
+                    <div>
+                        <p class="font-semibold mb-2">Default Domma Theme</p>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h4 class="card-title">Sample Card</h4>
+                                <p class="card-text mb-3">This uses default Domma variables.</p>
+                                <button class="btn btn-primary btn-sm">Primary Button</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Custom branded theme -->
+                    <div class="custom-brand">
+                        <p class="font-semibold mb-2">Custom Brand Theme</p>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h4 class="card-title">Sample Card</h4>
+                                <p class="card-text mb-3">This uses custom overrides.</p>
+                                <button class="btn btn-primary btn-sm">Primary Button</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: Global Variable Reference -->
+    <section class="card mb-6" data-section="Global Variables">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Global Variable Reference</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Complete list of semantic CSS variables organised by category. These control appearance across <em>all</em> components.</p>
+
+            <h4 class="category-title">Semantic Colours</h4>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Default</th><th>Usage</th></tr>
+                <tr><td><code>--dm-primary</code></td><td><code>var(--dm-blue-600)</code></td><td>Primary brand colour</td></tr>
+                <tr><td><code>--dm-primary-hover</code></td><td><code>var(--dm-blue-700)</code></td><td>Primary hover state</td></tr>
+                <tr><td><code>--dm-primary-active</code></td><td><code>var(--dm-blue-800)</code></td><td>Primary active/pressed state</td></tr>
+                <tr><td><code>--dm-primary-light</code></td><td><code>var(--dm-blue-200)</code></td><td>Primary tint (backgrounds)</td></tr>
+                <tr><td><code>--dm-primary-dark</code></td><td><code>var(--dm-blue-800)</code></td><td>Primary shade</td></tr>
+                <tr><td><code>--dm-secondary</code></td><td><code>var(--dm-slate-600)</code></td><td>Secondary colour</td></tr>
+                <tr><td><code>--dm-secondary-hover</code></td><td><code>var(--dm-slate-700)</code></td><td>Secondary hover</td></tr>
+                <tr><td><code>--dm-success</code></td><td><code>var(--dm-green-600)</code></td><td>Success state</td></tr>
+                <tr><td><code>--dm-success-hover</code></td><td><code>var(--dm-green-700)</code></td><td>Success hover</td></tr>
+                <tr><td><code>--dm-success-light</code></td><td><code>var(--dm-green-100)</code></td><td>Success background tint</td></tr>
+                <tr><td><code>--dm-danger</code></td><td><code>var(--dm-red-600)</code></td><td>Error/danger state</td></tr>
+                <tr><td><code>--dm-danger-hover</code></td><td><code>var(--dm-red-700)</code></td><td>Danger hover</td></tr>
+                <tr><td><code>--dm-danger-light</code></td><td><code>var(--dm-red-100)</code></td><td>Danger background tint</td></tr>
+                <tr><td><code>--dm-warning</code></td><td><code>var(--dm-amber-500)</code></td><td>Warning state</td></tr>
+                <tr><td><code>--dm-warning-hover</code></td><td><code>var(--dm-amber-600)</code></td><td>Warning hover</td></tr>
+                <tr><td><code>--dm-warning-light</code></td><td><code>var(--dm-amber-100)</code></td><td>Warning background tint</td></tr>
+                <tr><td><code>--dm-info</code></td><td><code>var(--dm-sky-500)</code></td><td>Info state</td></tr>
+                <tr><td><code>--dm-info-hover</code></td><td><code>var(--dm-sky-600)</code></td><td>Info hover</td></tr>
+                <tr><td><code>--dm-info-light</code></td><td><code>var(--dm-sky-100)</code></td><td>Info background tint</td></tr>
+            </table>
+
+            <h4 class="category-title">Backgrounds & Surfaces</h4>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Default</th><th>Usage</th></tr>
+                <tr><td><code>--dm-background</code></td><td><code>var(--dm-slate-100)</code></td><td>Page background</td></tr>
+                <tr><td><code>--dm-background-alt</code></td><td><code>var(--dm-slate-200)</code></td><td>Alternate background (stripes)</td></tr>
+                <tr><td><code>--dm-surface</code></td><td><code>var(--dm-white)</code></td><td>Card/modal/dropdown background</td></tr>
+                <tr><td><code>--dm-surface-raised</code></td><td><code>var(--dm-slate-50)</code></td><td>Elevated surfaces</td></tr>
+                <tr><td><code>--dm-surface-overlay</code></td><td><code>var(--dm-white)</code></td><td>Overlay panels (modal backdrop)</td></tr>
+            </table>
+
+            <h4 class="category-title">Text Colours</h4>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Default</th><th>Usage</th></tr>
+                <tr><td><code>--dm-text</code></td><td><code>var(--dm-slate-800)</code></td><td>Primary body text</td></tr>
+                <tr><td><code>--dm-text-secondary</code></td><td><code>var(--dm-slate-600)</code></td><td>Secondary text (subtitles)</td></tr>
+                <tr><td><code>--dm-text-muted</code></td><td><code>var(--dm-slate-500)</code></td><td>Muted/placeholder text</td></tr>
+                <tr><td><code>--dm-text-disabled</code></td><td><code>var(--dm-slate-400)</code></td><td>Disabled text</td></tr>
+                <tr><td><code>--dm-text-inverse</code></td><td><code>var(--dm-white)</code></td><td>Text on dark backgrounds</td></tr>
+            </table>
+
+            <h4 class="category-title">Borders & Focus States</h4>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Default</th><th>Usage</th></tr>
+                <tr><td><code>--dm-border</code></td><td><code>var(--dm-slate-300)</code></td><td>Default border colour</td></tr>
+                <tr><td><code>--dm-border-light</code></td><td><code>var(--dm-slate-200)</code></td><td>Subtle borders</td></tr>
+                <tr><td><code>--dm-border-dark</code></td><td><code>var(--dm-slate-400)</code></td><td>Prominent borders</td></tr>
+                <tr><td><code>--dm-border-focus</code></td><td><code>var(--dm-blue-500)</code></td><td>Focus border colour</td></tr>
+                <tr><td><code>--dm-focus-ring</code></td><td><code>rgba(59, 130, 246, 0.25)</code></td><td>Focus outline (box-shadow)</td></tr>
+            </table>
+
+            <h4 class="category-title">Spacing</h4>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Value</th><th>Usage</th></tr>
+                <tr><td><code>--dm-space-0</code></td><td><code>0</code></td><td>No spacing</td></tr>
+                <tr><td><code>--dm-space-1</code></td><td><code>0.25rem</code></td><td>4px</td></tr>
+                <tr><td><code>--dm-space-2</code></td><td><code>0.5rem</code></td><td>8px</td></tr>
+                <tr><td><code>--dm-space-3</code></td><td><code>0.75rem</code></td><td>12px</td></tr>
+                <tr><td><code>--dm-space-4</code></td><td><code>1rem</code></td><td>16px (default button padding)</td></tr>
+                <tr><td><code>--dm-space-5</code></td><td><code>1.25rem</code></td><td>20px</td></tr>
+                <tr><td><code>--dm-space-6</code></td><td><code>1.5rem</code></td><td>24px</td></tr>
+                <tr><td><code>--dm-space-8</code></td><td><code>2rem</code></td><td>32px</td></tr>
+                <tr><td><code>--dm-space-10</code></td><td><code>2.5rem</code></td><td>40px</td></tr>
+                <tr><td><code>--dm-space-12</code></td><td><code>3rem</code></td><td>48px</td></tr>
+                <tr><td><code>--dm-space-16</code></td><td><code>4rem</code></td><td>64px</td></tr>
+            </table>
+
+            <h4 class="category-title">Typography</h4>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Value</th></tr>
+                <tr><td><code>--dm-font-sans</code></td><td><code>Roboto, ui-sans-serif, system-ui, ...</code></td></tr>
+                <tr><td><code>--dm-font-mono</code></td><td><code>ui-monospace, SFMono-Regular, ...</code></td></tr>
+                <tr><td><code>--dm-font-size-xs</code></td><td><code>0.75rem</code> (12px)</td></tr>
+                <tr><td><code>--dm-font-size-sm</code></td><td><code>0.875rem</code> (14px)</td></tr>
+                <tr><td><code>--dm-font-size-base</code></td><td><code>1rem</code> (16px)</td></tr>
+                <tr><td><code>--dm-font-size-lg</code></td><td><code>1.125rem</code> (18px)</td></tr>
+                <tr><td><code>--dm-font-size-xl</code></td><td><code>1.25rem</code> (20px)</td></tr>
+                <tr><td><code>--dm-font-size-2xl</code></td><td><code>1.5rem</code> (24px)</td></tr>
+                <tr><td><code>--dm-font-size-3xl</code></td><td><code>1.875rem</code> (30px)</td></tr>
+                <tr><td><code>--dm-font-size-4xl</code></td><td><code>2.25rem</code> (36px)</td></tr>
+                <tr><td><code>--dm-font-size-5xl</code></td><td><code>3rem</code> (48px)</td></tr>
+            </table>
+
+            <h4 class="category-title">Border Radius</h4>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Value</th><th>Usage</th></tr>
+                <tr><td><code>--dm-radius-none</code></td><td><code>0</code></td><td>Sharp corners</td></tr>
+                <tr><td><code>--dm-radius-sm</code></td><td><code>0.125rem</code></td><td>Subtle rounding</td></tr>
+                <tr><td><code>--dm-radius</code></td><td><code>0.25rem</code></td><td>Base radius</td></tr>
+                <tr><td><code>--dm-radius-md</code></td><td><code>0.375rem</code></td><td>Default (buttons, inputs)</td></tr>
+                <tr><td><code>--dm-radius-lg</code></td><td><code>0.5rem</code></td><td>Cards, modals</td></tr>
+                <tr><td><code>--dm-radius-xl</code></td><td><code>0.75rem</code></td><td>Large panels</td></tr>
+                <tr><td><code>--dm-radius-2xl</code></td><td><code>1rem</code></td><td>Very rounded</td></tr>
+                <tr><td><code>--dm-radius-full</code></td><td><code>9999px</code></td><td>Pill shape (badges, chips)</td></tr>
+            </table>
+
+            <h4 class="category-title">Shadows</h4>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Usage</th></tr>
+                <tr><td><code>--dm-shadow-sm</code></td><td>Subtle lift (hover states)</td></tr>
+                <tr><td><code>--dm-shadow</code></td><td>Base shadow (cards)</td></tr>
+                <tr><td><code>--dm-shadow-md</code></td><td>Medium elevation (dropdowns)</td></tr>
+                <tr><td><code>--dm-shadow-lg</code></td><td>High elevation (modals)</td></tr>
+                <tr><td><code>--dm-shadow-xl</code></td><td>Very high elevation</td></tr>
+                <tr><td><code>--dm-shadow-2xl</code></td><td>Dramatic depth</td></tr>
+            </table>
+
+            <h4 class="category-title">Transitions</h4>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Value</th><th>Usage</th></tr>
+                <tr><td><code>--dm-transition-fast</code></td><td><code>150ms ease</code></td><td>Quick interactions (hover)</td></tr>
+                <tr><td><code>--dm-transition-normal</code></td><td><code>250ms ease</code></td><td>Standard animations</td></tr>
+                <tr><td><code>--dm-transition-slow</code></td><td><code>350ms ease</code></td><td>Deliberate transitions</td></tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- SECTION 4: Per-Component Override Reference -->
+    <section class="card mb-6" data-section="Component Overrides">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Per-Component Override Reference</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Component-specific variables for fine-tuned control. Override these when global changes aren't enough.
+            </p>
+
+            <h4 class="category-title">Button</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.btn</code>, <code>.btn-primary</code>, <code>.btn-outline-*</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-primary</code>, <code>--dm-primary-hover</code>, <code>--dm-radius-md</code>, <code>--dm-space-2</code>, <code>--dm-space-4</code>, <code>--dm-focus-ring</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Change brand → <code>--dm-primary: #your-colour;</code> | Rounder → <code>--dm-radius-md: var(--dm-radius-full);</code></p>
+
+            <h4 class="category-title">Card</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.card</code>, <code>.card-header</code>, <code>.card-body</code>, <code>.card-footer</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-card-bg</code>, <code>--dm-card-border</code>, <code>--dm-card-shadow</code>, <code>--dm-radius-lg</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Dark cards → <code>--dm-card-bg: var(--dm-slate-800);</code> | Flat design → <code>--dm-card-shadow: none; --dm-radius-lg: 0;</code></p>
+
+            <h4 class="category-title">Modal</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.modal</code>, <code>.modal-header</code>, <code>.modal-body</code>, <code>.modal-footer</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-surface</code>, <code>--dm-radius-lg</code>, <code>--dm-shadow-xl</code>, <code>--dm-transition-normal</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Smooth modals → <code>--dm-transition-normal: 400ms cubic-bezier(0.4, 0, 0.2, 1);</code></p>
+
+            <h4 class="category-title">Tabs</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.tabs</code>, <code>.tab-item</code>, <code>.tab-content</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-tab-border</code>, <code>--dm-tab-hover-bg</code>, <code>--dm-tab-active-border</code>, <code>--dm-tab-active-text</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Custom active colour → <code>--dm-tab-active-border: #your-colour; --dm-tab-active-text: #your-colour;</code></p>
+
+            <h4 class="category-title">Accordion</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.accordion</code>, <code>.accordion-item</code>, <code>.accordion-header</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-accordion-border</code>, <code>--dm-accordion-header-hover</code>, <code>--dm-radius-lg</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Borderless → <code>--dm-accordion-border: transparent;</code></p>
+
+            <h4 class="category-title">Tooltip</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.tooltip</code>, <code>.tooltip-arrow</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-slate-900</code> (background), <code>--dm-radius-md</code>, <code>--dm-font-size-sm</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Light tooltip → Override with inline style on tooltip element or create custom CSS class</p>
+
+            <h4 class="category-title">Table</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.table</code>, <code>.table-striped</code>, <code>.table-hover</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-table-border</code>, <code>--dm-table-hover-bg</code>, <code>--dm-table-stripe-bg</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Zebra stripes → <code>--dm-table-stripe-bg: var(--dm-slate-50);</code></p>
+
+            <h4 class="category-title">Forms (Inputs, Select, Textarea)</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.form-input</code>, <code>.form-select</code>, <code>.form-textarea</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-input-bg</code>, <code>--dm-input-border</code>, <code>--dm-input-text</code>, <code>--dm-input-focus-border</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Outline focus → <code>--dm-input-focus-border: #your-brand-colour;</code></p>
+
+            <h4 class="category-title">Badge</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.badge</code>, <code>.badge-primary</code>, <code>.badge-success</code>, etc.</p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-primary</code> (+ status colours), <code>--dm-radius-full</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Square badges → <code>--dm-radius-full: var(--dm-radius-sm);</code></p>
+
+            <h4 class="category-title">Alert</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.alert</code>, <code>.alert-success</code>, <code>.alert-danger</code>, etc.</p>
+            <p class="mb-2"><strong>Variables:</strong> Status colour variants (<code>--dm-*-light</code>, <code>--dm-*-dark</code>)</p>
+            <p class="mb-4"><strong>Common override:</strong> Subtle alerts → Lighten <code>--dm-success-light</code>, <code>--dm-danger-light</code>, etc.</p>
+
+            <h4 class="category-title">Navbar</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.navbar</code>, <code>.navbar-item</code>, <code>.navbar-brand</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-navbar-bg</code>, <code>--dm-navbar-text</code>, <code>--dm-navbar-border</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Dark navbar → <code>--dm-navbar-bg: var(--dm-slate-900); --dm-navbar-text: var(--dm-white);</code></p>
+
+            <h4 class="category-title">Sidebar</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.sidebar</code>, <code>.sidebar-item</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-sidebar-bg</code>, <code>--dm-sidebar-border</code>, <code>--dm-sidebar-item-hover</code>, <code>--dm-sidebar-item-active</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Match navbar → Use same background/text variables as navbar</p>
+
+            <h4 class="category-title">Dropdown</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.dropdown</code>, <code>.dropdown-item</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-dropdown-bg</code>, <code>--dm-dropdown-border</code>, <code>--dm-dropdown-item-hover</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Hover highlight → <code>--dm-dropdown-item-hover: var(--dm-primary-light);</code></p>
+
+            <h4 class="category-title">Autocomplete</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.autocomplete</code>, <code>.autocomplete-item</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-autocomplete-bg</code>, <code>--dm-autocomplete-border</code>, <code>--dm-autocomplete-highlight</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Match highlight → <code>--dm-autocomplete-highlight: #your-yellow;</code></p>
+
+            <h4 class="category-title">Pillbox</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.pillbox</code>, <code>.pill</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-pillbox-bg</code>, <code>--dm-pillbox-border</code>, <code>--dm-pill-bg</code>, <code>--dm-pill-color</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Brand-coloured pills → <code>--dm-pill-bg: var(--dm-primary-light); --dm-pill-color: var(--dm-primary);</code></p>
+
+            <h4 class="category-title">Toast</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.toast</code>, <code>.toast-success</code>, <code>.toast-error</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-slate-800</code> (background), status colours, <code>--dm-radius-md</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Position or styling requires JavaScript options (not CSS variables)</p>
+
+            <h4 class="category-title">Loader</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.loader</code>, <code>.loader-spinner</code>, <code>.loader-dots</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-primary</code> (spinner colour)</p>
+            <p class="mb-4"><strong>Common override:</strong> White spinner → Override via JavaScript <code>color</code> option or target <code>.loader-spinner</code> CSS</p>
+
+            <h4 class="category-title">Hero</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.hero</code>, <code>.hero-primary</code>, <code>.hero-dark</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-primary</code>, gradient definitions</p>
+            <p class="mb-4"><strong>Common override:</strong> Custom gradient → Define new <code>.hero-custom</code> class with <code>background</code> property</p>
+
+            <h4 class="category-title">Carousel</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.carousel</code>, <code>.carousel-item</code>, <code>.carousel-controls</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-radius-lg</code>, <code>--dm-primary</code>, <code>--dm-shadow-md</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Control colour → Target <code>.carousel-controls button</code> with <code>background</code> or <code>color</code></p>
+
+            <h4 class="category-title">Dialog</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.dialog</code> (same as modal)</p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-surface</code>, <code>--dm-radius-lg</code>, <code>--dm-border</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Same as Modal</p>
+
+            <h4 class="category-title">Breadcrumbs</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.breadcrumbs</code>, <code>.breadcrumb-item</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-primary</code>, <code>--dm-text-muted</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Active crumb → Target <code>.breadcrumb-item.active</code> with <code>color</code></p>
+
+            <h4 class="category-title">Timer</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.timer</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-success</code>, <code>--dm-warning</code>, <code>--dm-secondary</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Time colour thresholds → Pass <code>color</code> via JavaScript options</p>
+
+            <h4 class="category-title">Footer</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.footer</code>, <code>.footer-simple</code>, <code>.footer-columns</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-surface</code>, <code>--dm-border</code>, <code>--dm-text-muted</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Dark footer → <code>--dm-surface: var(--dm-slate-900); --dm-text-muted: var(--dm-slate-400);</code></p>
+
+            <h4 class="category-title">Back-to-Top</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.back-to-top</code></p>
+            <p class="mb-2"><strong>Variables:</strong> <code>--dm-primary</code>, <code>--dm-primary-hover</code>, <code>--dm-radius-full</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Icon size or position → Target <code>.back-to-top</code> with <code>width</code>/<code>height</code> or <code>bottom</code>/<code>right</code></p>
+
+            <h4 class="category-title">Progression (Timeline/Roadmap)</h4>
+            <p class="mb-2"><strong>Classes:</strong> <code>.progression</code>, <code>.progression-item</code></p>
+            <p class="mb-2"><strong>Variables:</strong> Status colours (<code>--dm-success</code>, <code>--dm-warning</code>, <code>--dm-info</code>, <code>--dm-danger</code>), <code>--dm-primary</code>, <code>--dm-surface</code></p>
+            <p class="mb-4"><strong>Common override:</strong> Status indicators → Override status colour variables</p>
+        </div>
+    </section>
+
+    <!-- SECTION 5: Integration Recipes -->
+    <section class="card mb-6" data-section="Integration Recipes">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Integration Recipes</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Practical examples for integrating Domma into existing projects with popular frameworks and design systems.</p>
+
+            <h4 class="category-title">Recipe 1: Bootstrap Project</h4>
+            <p class="mb-2">Map Bootstrap's CSS variables to Domma's for consistent branding:</p>
+            <pre class="code-block language-css">:root {
+    /* Map Bootstrap primary to Domma primary */
+    --dm-primary: var(--bs-primary, #0d6efd);
+    --dm-primary-hover: var(--bs-primary-dark, #0a58ca);
+
+    /* Map Bootstrap surfaces */
+    --dm-surface: var(--bs-body-bg, #fff);
+    --dm-background: var(--bs-light, #f8f9fa);
+
+    /* Map Bootstrap text */
+    --dm-text: var(--bs-body-color, #212529);
+    --dm-text-secondary: var(--bs-secondary, #6c757d);
+
+    /* Map Bootstrap borders */
+    --dm-border: var(--bs-border-color, #dee2e6);
+    --dm-radius-md: var(--bs-border-radius, 0.375rem);
+
+    /* Map Bootstrap status colours */
+    --dm-success: var(--bs-success, #198754);
+    --dm-danger: var(--bs-danger, #dc3545);
+    --dm-warning: var(--bs-warning, #ffc107);
+    --dm-info: var(--bs-info, #0dcaf0);
+}</pre>
+
+            <h4 class="category-title">Recipe 2: Tailwind Project</h4>
+            <p class="mb-2">Map Tailwind colour tokens to Domma variables:</p>
+            <pre class="code-block language-css">:root {
+    /* Map Tailwind primary (e.g., indigo) */
+    --dm-primary: rgb(99 102 241);          /* indigo-500 */
+    --dm-primary-hover: rgb(79 70 229);     /* indigo-600 */
+    --dm-primary-active: rgb(67 56 202);    /* indigo-700 */
+
+    /* Map Tailwind surfaces */
+    --dm-background: rgb(249 250 251);      /* gray-50 */
+    --dm-surface: rgb(255 255 255);         /* white */
+
+    /* Map Tailwind text */
+    --dm-text: rgb(17 24 39);               /* gray-900 */
+    --dm-text-secondary: rgb(107 114 128);  /* gray-500 */
+    --dm-text-muted: rgb(156 163 175);      /* gray-400 */
+
+    /* Map Tailwind borders */
+    --dm-border: rgb(229 231 235);          /* gray-200 */
+
+    /* Match Tailwind radius */
+    --dm-radius-md: 0.375rem;               /* rounded */
+    --dm-radius-lg: 0.5rem;                 /* rounded-lg */
+}</pre>
+
+            <h4 class="category-title">Recipe 3: Dark Theme Integration</h4>
+            <p class="mb-2">Override variables for a dark-themed site:</p>
+            <pre class="code-block language-css">/* Dark theme overrides */
+:root {
+    /* Dark backgrounds */
+    --dm-background: #0f172a;               /* slate-900 */
+    --dm-surface: #1e293b;                  /* slate-800 */
+    --dm-surface-raised: #334155;           /* slate-700 */
+
+    /* Dark text */
+    --dm-text: #f1f5f9;                     /* slate-100 */
+    --dm-text-secondary: #cbd5e1;           /* slate-300 */
+    --dm-text-muted: #94a3b8;               /* slate-400 */
+
+    /* Dark borders */
+    --dm-border: #334155;                   /* slate-700 */
+    --dm-border-light: #1e293b;             /* slate-800 */
+
+    /* Adjust status colours for dark bg */
+    --dm-primary-light: #1e3a8a;            /* blue-900 */
+    --dm-success-light: #14532d;            /* green-900 */
+    --dm-danger-light: #7f1d1d;             /* red-900 */
+
+    /* Component-specific for dark */
+    --dm-card-bg: var(--dm-surface);
+    --dm-navbar-bg: var(--dm-slate-900);
+    --dm-navbar-text: var(--dm-text);
+}</pre>
+        </div>
+    </section>
+
+    <!-- SECTION 6: Scoping Overrides -->
+    <section class="card mb-6" data-section="Scoping">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Scoping Overrides</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Override variables for specific sections of your page by scoping them to a container element. This lets you have different colour schemes in sidebars, admin panels, or feature sections.
+            </p>
+
+            <h4 class="category-title">Scoped Example</h4>
+            <pre class="code-block language-css">/* Entire page uses default Domma theme */
+:root {
+    --dm-primary: #2563eb;  /* Blue */
+}
+
+/* Sidebar uses green accent */
+.my-sidebar {
+    --dm-primary: #198754;  /* Green */
+    --dm-primary-hover: #157347;
+}
+
+/* Admin panel uses red accent */
+.admin-section {
+    --dm-primary: #dc2626;  /* Red */
+    --dm-primary-hover: #b91c1c;
+}</pre>
+
+            <h4 class="category-title">Result</h4>
+            <p class="mb-2">Elements inside <code>.my-sidebar</code> will have green buttons, badges, and links. Elements inside <code>.admin-section</code> will be red. Everything else stays blue.</p>
+        </div>
+    </section>
+
+    <!-- SECTION 7: Custom Themes -->
+    <section class="card mb-6" data-section="Custom Themes">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Custom Themes</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Domma ships with 10+ built-in themes (charcoal, ocean, forest, sunset, etc.), but you can also create custom themes by defining your own CSS classes.
+            </p>
+
+            <h4 class="category-title">Difference Between Approaches</h4>
+            <ul class="mb-4">
+                <li><strong>Overriding <code>:root</code></strong> — Changes apply globally and immediately</li>
+                <li><strong>Using <code>.dm-theme-*</code> classes</strong> — Apply pre-built Domma themes by adding class to <code>&lt;body&gt;</code></li>
+                <li><strong>Creating a custom theme file</strong> — Bundle your overrides into a reusable theme that can be toggled</li>
+            </ul>
+
+            <h4 class="category-title">Minimal Custom Theme Template</h4>
+            <pre class="code-block language-css">/* custom-theme.css */
+.dm-theme-corporate {
+    /* Brand */
+    --dm-primary: #003d7a;              /* Corporate blue */
+    --dm-primary-hover: #002f5f;
+    --dm-secondary: #6c757d;
+
+    /* Backgrounds */
+    --dm-background: #f8f9fa;
+    --dm-surface: #ffffff;
+
+    /* Text */
+    --dm-text: #2c3e50;
+    --dm-text-secondary: #546e7a;
+
+    /* Shapes */
+    --dm-radius-md: 0.25rem;            /* Sharp corners for corporate look */
+    --dm-radius-lg: 0.5rem;
+
+    /* Typography */
+    --dm-font-sans: 'Helvetica Neue', Arial, sans-serif;
+}</pre>
+
+            <h4 class="category-title">Usage</h4>
+            <pre class="code-block language-html">&lt;link rel="stylesheet" href="custom-theme.css"&gt;
+&lt;body class="dm-theme-corporate"&gt;
+    &lt;!-- Your content --&gt;
+&lt;/body&gt;</pre>
+
+            <p class="mb-0 mt-4">For advanced theme creation with light/dark variants and automatic switching, see the <a href="../theme-roller/index.html">Theme Roller</a> tool.</p>
+        </div>
+    </section>
+
+    <!-- SECTION 8: Related -->
+    <section class="card mb-6" data-section="Related">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Related Resources</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Explore these resources for more on theming and customisation:</p>
+
+            <div class="grid grid-cols-1 grid-auto-fit-250 gap-4">
+                <a href="../../themes/index.html" class="card card-hover no-underline text-inherit">
+                    <div class="card-body">
+                        <h4 class="card-title">Themes Showcase</h4>
+                        <p class="card-text">View all 10+ built-in themes with live previews.</p>
+                    </div>
+                </a>
+
+                <a href="../theme-roller/index.html" class="card card-hover no-underline text-inherit">
+                    <div class="card-body">
+                        <h4 class="card-title">Theme Roller</h4>
+                        <p class="card-text">Visual theme customisation tool with live preview and export.</p>
+                    </div>
+                </a>
+
+                <a href="../index.html" class="card card-hover no-underline text-inherit">
+                    <div class="card-body">
+                        <h4 class="card-title">All Elements</h4>
+                        <p class="card-text">Browse all 28 UI components with interactive examples.</p>
+                    </div>
+                </a>
+
+                <a href="../../grid/index.html" class="card card-hover no-underline text-inherit">
+                    <div class="card-body">
+                        <h4 class="card-title">Grid System</h4>
+                        <p class="card-text">Learn about Domma's CSS Grid and Flexbox utilities.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+    $(() => {
+        // Custom brand demo scoping
+        const customBrandCSS = `
+            .custom-brand {
+                --dm-primary: #16a34a;
+                --dm-primary-hover: #15803d;
+                --dm-surface: #f0fdf4;
+                --dm-text: #14532d;
+                --dm-radius-md: 0.5rem;
+                --dm-card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+        `;
+        $('<style>').text(customBrandCSS).appendTo('head');
+    });
+</script>
+</body>
+</html>
