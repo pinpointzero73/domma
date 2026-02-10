@@ -590,6 +590,32 @@ editor.save();
         </div>
     </section>
 
+    <!-- CSS Customisation Section -->
+    <section class="card mb-6" data-section="CSS Customisation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">CSS Customisation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Override these CSS variables to customise Editor appearance and match your design system.</p>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Default</th><th>Controls</th></tr>
+                <tr><td><code>--dm-surface</code></td><td><code>var(--dm-white)</code></td><td>Editor background</td></tr>
+                <tr><td><code>--dm-border</code></td><td><code>var(--dm-slate-300)</code></td><td>Editor border</td></tr>
+                <tr><td><code>--dm-radius-md</code></td><td><code>0.375rem</code></td><td>Editor corner radius</td></tr>
+                <tr><td><code>--dm-primary</code></td><td><code>var(--dm-blue-600)</code></td><td>Toolbar button active colour</td></tr>
+            </table>
+            <h4 class="category-title">Example Override</h4>
+            <pre class="code-block language-css">:root {
+    /* Dark editor theme */
+    --dm-surface: #1e293b;
+    --dm-text: #f1f5f9;
+}</pre>
+            <p class="mt-4">
+                <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
+            </p>
+        </div>
+    </section>
+
 </main>
 
 <!-- DOMPurify for XSS protection -->

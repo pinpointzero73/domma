@@ -305,6 +305,32 @@ carousel.play();</pre>
         </div>
     </section>
 
+    <!-- CSS Customisation Section -->
+    <section class="card mb-6" data-section="CSS Customisation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">CSS Customisation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Override these CSS variables to customise Carousel appearance and match your design system.</p>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Default</th><th>Controls</th></tr>
+                <tr><td><code>--dm-radius-lg</code></td><td><code>0.5rem</code></td><td>Carousel corner radius</td></tr>
+                <tr><td><code>--dm-primary</code></td><td><code>var(--dm-blue-600)</code></td><td>Control/indicator colour</td></tr>
+                <tr><td><code>--dm-shadow-md</code></td><td><code>0 4px 6px...</code></td><td>Carousel shadow</td></tr>
+                <tr><td><code>--dm-surface</code></td><td><code>var(--dm-white)</code></td><td>Carousel background</td></tr>
+            </table>
+            <h4 class="category-title">Example Override</h4>
+            <pre class="code-block language-css">/* Custom control colour - target via CSS */
+.carousel-controls button {
+    background: rgba(0,0,0,0.5);
+    color: white;
+}</pre>
+            <p class="mt-4">
+                <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
+            </p>
+        </div>
+    </section>
+
     <section class="card mb-6" data-section="Related">
     <div class="card-header"><h2 class="text-xl font-semibold m-0">Related Elements</h2></div>
     <div class="card-body">

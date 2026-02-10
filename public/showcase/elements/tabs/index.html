@@ -708,6 +708,36 @@ document.getElementById('next-tab').addEventListener('click', () => {
         </div>
     </section>
 
+    <!-- SECTION 7.5: CSS Customisation -->
+    <section class="card mb-6" data-section="CSS Customisation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">CSS Customisation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Override these CSS variables to customise Tabs appearance and match your design system.</p>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Default</th><th>Controls</th></tr>
+                <tr><td><code>--dm-tab-border</code></td><td><code>var(--dm-border)</code></td><td>Tab border colour</td></tr>
+                <tr><td><code>--dm-tab-hover-bg</code></td><td><code>var(--dm-hover-bg)</code></td><td>Tab hover background</td></tr>
+                <tr><td><code>--dm-tab-active-border</code></td><td><code>var(--dm-primary)</code></td><td>Active tab bottom border colour</td></tr>
+                <tr><td><code>--dm-tab-active-text</code></td><td><code>var(--dm-primary)</code></td><td>Active tab text colour</td></tr>
+                <tr><td><code>--dm-primary</code></td><td><code>var(--dm-blue-600)</code></td><td>Primary brand colour</td></tr>
+            </table>
+            <h4 class="category-title">Example Override</h4>
+            <pre class="code-block language-css">:root {
+    /* Custom active tab colour */
+    --dm-tab-active-border: #16a34a;  /* Green */
+    --dm-tab-active-text: #16a34a;
+
+    /* Subtle hover */
+    --dm-tab-hover-bg: rgba(0,0,0,0.02);
+}</pre>
+            <p class="mt-4">
+                <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
+            </p>
+        </div>
+    </section>
+
     <!-- SECTION 8: Related Elements -->
   <section class="card mb-6" data-section="Related Elements">
         <div class="card-header">

@@ -595,6 +595,32 @@ slideover.destroy();</pre>
     </div>
   </section>
 
+  <!-- CSS Customisation Section -->
+  <section class="card mb-6" data-section="CSS Customisation">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">CSS Customisation</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">Override these CSS variables to customise Slideover appearance and match your design system.</p>
+      <table class="option-table mb-6">
+        <tr><th>Variable</th><th>Default</th><th>Controls</th></tr>
+        <tr><td><code>--dm-surface</code></td><td><code>var(--dm-white)</code></td><td>Slideover background</td></tr>
+        <tr><td><code>--dm-shadow-xl</code></td><td><code>0 20px 25px...</code></td><td>Slideover shadow</td></tr>
+        <tr><td><code>--dm-transition-normal</code></td><td><code>250ms ease</code></td><td>Slide animation speed</td></tr>
+        <tr><td><code>--dm-text</code></td><td><code>var(--dm-slate-800)</code></td><td>Content text colour</td></tr>
+      </table>
+      <h4 class="category-title">Example Override</h4>
+      <pre class="code-block language-css">:root {
+    /* Dark slideover */
+    --dm-surface: #1e293b;
+    --dm-text: #f1f5f9;
+}</pre>
+      <p class="mt-4">
+        <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
+      </p>
+    </div>
+  </section>
+
 </main>
 
 <!-- DOMPurify for XSS protection -->

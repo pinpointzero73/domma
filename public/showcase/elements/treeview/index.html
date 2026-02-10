@@ -544,6 +544,31 @@ tree.scrollToNode(nodeId);  // Scroll into view</pre>
     </div>
   </section>
 
+  <!-- CSS Customisation Section -->
+  <section class="card mb-6" data-section="CSS Customisation">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">CSS Customisation</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">Override these CSS variables to customise TreeView appearance and match your design system.</p>
+      <table class="option-table mb-6">
+        <tr><th>Variable</th><th>Default</th><th>Controls</th></tr>
+        <tr><td><code>--dm-primary</code></td><td><code>var(--dm-blue-600)</code></td><td>Selected node colour</td></tr>
+        <tr><td><code>--dm-hover-bg</code></td><td><code>var(--dm-slate-100)</code></td><td>Node hover background</td></tr>
+        <tr><td><code>--dm-border</code></td><td><code>var(--dm-slate-300)</code></td><td>Tree border colour</td></tr>
+        <tr><td><code>--dm-text</code></td><td><code>var(--dm-slate-800)</code></td><td>Node text colour</td></tr>
+      </table>
+      <h4 class="category-title">Example Override</h4>
+      <pre class="code-block language-css">:root {
+    /* Highlight selected nodes */
+    --dm-primary: #059669;
+}</pre>
+      <p class="mt-4">
+        <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
+      </p>
+    </div>
+  </section>
+
 </main>
 
 <!-- DOMPurify for XSS protection -->

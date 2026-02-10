@@ -873,6 +873,32 @@ M.bind(formModel, 'tags', '#tags-json', {
         </div>
     </section>
 
+    <!-- CSS Customisation Section -->
+    <section class="card mb-6" data-section="CSS Customisation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">CSS Customisation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Override these CSS variables to customise Pillbox appearance and match your design system.</p>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Default</th><th>Controls</th></tr>
+                <tr><td><code>--dm-pillbox-bg</code></td><td><code>var(--dm-surface)</code></td><td>Pillbox background</td></tr>
+                <tr><td><code>--dm-pillbox-border</code></td><td><code>var(--dm-border)</code></td><td>Pillbox border</td></tr>
+                <tr><td><code>--dm-pill-bg</code></td><td><code>var(--dm-gray-200)</code></td><td>Individual pill background</td></tr>
+                <tr><td><code>--dm-pill-color</code></td><td><code>var(--dm-text)</code></td><td>Pill text colour</td></tr>
+            </table>
+            <h4 class="category-title">Example Override</h4>
+            <pre class="code-block language-css">:root {
+    /* Brand-coloured pills */
+    --dm-pill-bg: var(--dm-primary-light);
+    --dm-pill-color: var(--dm-primary);
+}</pre>
+            <p class="mt-4">
+                <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
+            </p>
+        </div>
+    </section>
+
     <section class="card mb-6" data-section="Related Elements">
         <div class="card-header">
             <h2 class="text-xl font-semibold m-0">Related Elements</h2>

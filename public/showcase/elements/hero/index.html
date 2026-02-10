@@ -926,6 +926,31 @@ $.setup({
         </div>
     </section>
 
+    <!-- CSS Customisation Section -->
+    <section class="card mb-6" data-section="CSS Customisation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">CSS Customisation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Override these CSS variables to customise Hero appearance and match your design system.</p>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Default</th><th>Controls</th></tr>
+                <tr><td><code>--dm-primary</code></td><td><code>var(--dm-blue-600)</code></td><td>Primary hero background/gradient</td></tr>
+                <tr><td><code>--dm-text-inverse</code></td><td><code>var(--dm-white)</code></td><td>Text on dark hero</td></tr>
+                <tr><td><code>--dm-font-size-4xl</code></td><td><code>2.25rem</code></td><td>Hero title size</td></tr>
+                <tr><td><code>--dm-font-size-xl</code></td><td><code>1.25rem</code></td><td>Hero subtitle size</td></tr>
+            </table>
+            <h4 class="category-title">Example Override</h4>
+            <pre class="code-block language-css">/* Custom gradient - create new class */
+.hero-custom {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}</pre>
+            <p class="mt-4">
+                <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
+            </p>
+        </div>
+    </section>
+
     <section class="card mb-6" data-section="Related">
     <div class="card-header">
         <h2 class="text-xl font-semibold m-0">Related Elements</h2>

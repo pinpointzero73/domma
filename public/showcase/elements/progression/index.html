@@ -368,6 +368,32 @@ const roadmap = Domma.elements.progression('#roadmap', {
         </div>
     </section>
 
+    <!-- CSS Customisation Section -->
+    <section class="card mb-6" data-section="CSS Customisation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">CSS Customisation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Override these CSS variables to customise Progression appearance and match your design system.</p>
+            <table class="option-table mb-6">
+                <tr><th>Variable</th><th>Default</th><th>Controls</th></tr>
+                <tr><td><code>--dm-success</code></td><td><code>var(--dm-green-600)</code></td><td>Completed status colour</td></tr>
+                <tr><td><code>--dm-info</code></td><td><code>var(--dm-sky-500)</code></td><td>In-progress status colour</td></tr>
+                <tr><td><code>--dm-warning</code></td><td><code>var(--dm-amber-500)</code></td><td>Blocked status colour</td></tr>
+                <tr><td><code>--dm-primary</code></td><td><code>var(--dm-blue-600)</code></td><td>Planned status colour</td></tr>
+            </table>
+            <h4 class="category-title">Example Override</h4>
+            <pre class="code-block language-css">:root {
+    /* Custom status colours */
+    --dm-success: #10b981;
+    --dm-info: #3b82f6;
+}</pre>
+            <p class="mt-4">
+                <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
+            </p>
+        </div>
+    </section>
+
     <section class="card mb-6" data-section="Related">
         <div class="card-header"><h2 class="text-xl font-semibold m-0">Related Elements</h2></div>
         <div class="card-body">
