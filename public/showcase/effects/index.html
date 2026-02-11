@@ -244,7 +244,7 @@
   // Initialize
   document.addEventListener('DOMContentLoaded', () => {
     // Add subtle firework to the fireworks card on hover
-    const fireworkCard = document.querySelector('a[href="fireworks.html"]');
+    const fireworkCard = $('a[href="fireworks.html"]')[0];
     if (fireworkCard) {
       fireworkCard.addEventListener('mouseenter', () => {
         const icon = fireworkCard.querySelector('.card-body > div');

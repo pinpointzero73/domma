@@ -70,24 +70,29 @@ const dropdown = Domma.elements.dropdown('#my-button', {
         <h3 class="category-title-style">Step 1: Add Trigger Button</h3>
         <p class="mb-4 text-gray-600">Create a button that will trigger the dropdown:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;button id="my-dropdown" class="btn btn-primary"&gt;Actions&lt;/button&gt;</code></pre>
+            <pre><code>
+&lt;button id="my-dropdown" class="btn btn-primary"&gt;Actions&lt;/button&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title-style">Step 2: Include Domma</h3>
         <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;!-- CSS --&gt;
+            <pre><code>
+&lt;!-- CSS --&gt;
 &lt;link rel="stylesheet" href="dist/domma.css"&gt;
 &lt;link rel="stylesheet" href="dist/elements.css"&gt;
 
 &lt;!-- JavaScript --&gt;
-&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title-style">Step 3: Initialize the Dropdown</h3>
         <p class="mb-4 text-gray-600">Call <code>Domma.elements.dropdown()</code> with menu items:</p>
         <div class="code-block language-javascript mb-6">
-            <pre><code>Domma.elements.dropdown('#my-dropdown', {
+            <pre><code>
+Domma.elements.dropdown('#my-dropdown', {
     items: [
         { text: 'Edit', value: 'edit' },
         { text: 'Duplicate', value: 'duplicate' },
@@ -99,7 +104,8 @@ const dropdown = Domma.elements.dropdown('#my-button', {
     onSelect: (item) => {
         console.log('Selected:', item.value);
     }
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <div class="alert alert-info">
@@ -447,10 +453,12 @@ $.setup({
             <tr><td><code>--dm-shadow-md</code></td><td><code>0 4px 6px...</code></td><td>Dropdown shadow</td></tr>
         </table>
         <h4 class="category-title">Example Override</h4>
-        <pre class="code-block language-css">:root {
+        <pre class="code-block language-css">
+:root {
     /* Highlight hover with primary */
     --dm-dropdown-item-hover: var(--dm-primary-light);
-}</pre>
+}
+</pre>
         <p class="mt-4">
             <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
         </p>
@@ -513,7 +521,7 @@ $.setup({
         onOpen: () => console.log('User menu opened'),
         onClose: () => console.log('User menu closed'),
         onSelect: (item) => {
-            const resultDiv = document.getElementById('tutorial-result');
+            const resultDiv = $('#tutorial-result')[0];
             resultDiv.innerHTML = `<p class="text-primary text-sm">✓ Action selected: <strong>${item.value}</strong></p>`;
         }
     });
@@ -585,9 +593,9 @@ $.setup({
         ]
     });
 
-    document.getElementById('prog-open').addEventListener('click', () => programmaticDropdown.open());
-    document.getElementById('prog-close').addEventListener('click', () => programmaticDropdown.close());
-    document.getElementById('prog-toggle').addEventListener('click', () => programmaticDropdown.toggle());
+    $('#prog-open').on('click', () => programmaticDropdown.open());
+    $('#prog-close').on('click', () => programmaticDropdown.close());
+    $('#prog-toggle').on('click', () => programmaticDropdown.toggle());
 </script>
 
 </body>

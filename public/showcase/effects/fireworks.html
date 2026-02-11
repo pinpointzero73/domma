@@ -425,7 +425,7 @@ container.addEventListener('click', (e) => {
 <script>
   // Proper fireworks implementation with individual particles
   function launchFirework(containerId, theme = 'celebration', position = 50, particleCount = 200) {
-    const container = document.getElementById(containerId);
+    const container = $('#' + containerId)[0];
     if (!container) return;
 
     // DON'T clear container - allow multiple fireworks
@@ -616,7 +616,7 @@ container.addEventListener('click', (e) => {
 
   // Launch multiple fireworks function
   function launchMultipleFireworks(containerId = 'firework-demo-3', theme = 'mixed', count = 5) {
-    const container = document.getElementById(containerId);
+    const container = $('#' + containerId)[0];
     if (!container) return;
 
     // Clear any existing fireworks for a fresh display
@@ -662,7 +662,7 @@ container.addEventListener('click', (e) => {
   }
 
   // Add CSS for rocket launch animation
-  if (!document.getElementById('firework-styles')) {
+  if (!$('#firework-styles')[0]) {
     const style = document.createElement('style');
     style.id = 'firework-styles';
     style.textContent = `
@@ -683,7 +683,7 @@ container.addEventListener('click', (e) => {
   // Restart animations on button click for demo
   document.addEventListener('DOMContentLoaded', () => {
     // Add click to restart for demo boxes
-    document.querySelectorAll('.demo-box').forEach(box => {
+    $('.demo-box').forEach(box => {
       box.style.cursor = 'pointer';
       box.addEventListener('click', () => {
         const fireworks = box.querySelectorAll('.firework');
@@ -708,7 +708,7 @@ container.addEventListener('click', (e) => {
     });
 
     // Celebrate button example
-    const celebrateBtn = document.getElementById('celebrate-btn');
+    const celebrateBtn = $('#celebrate-btn')[0];
     if (celebrateBtn) {
       celebrateBtn.addEventListener('click', () => {
         // Launch multiple celebration fireworks
@@ -727,7 +727,7 @@ container.addEventListener('click', (e) => {
     }
 
     // Add hover trigger
-    const hoverBtn = document.getElementById('hover-btn');
+    const hoverBtn = $('#hover-btn')[0];
     if (hoverBtn) {
       hoverBtn.addEventListener('mouseenter', () => {
         launchFirework('hover-demo', 'celebration', 50);
@@ -735,7 +735,7 @@ container.addEventListener('click', (e) => {
     }
 
     // Add click to launch
-    const clickDemo = document.getElementById('click-demo');
+    const clickDemo = $('#click-demo')[0];
     if (clickDemo && clickDemo.parentElement) {
       clickDemo.parentElement.addEventListener('click', (e) => {
         if (e.target.tagName !== 'BUTTON') {

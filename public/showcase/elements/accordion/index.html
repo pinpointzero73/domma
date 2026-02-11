@@ -51,7 +51,8 @@ const accordion = Domma.elements.accordion('#accordion', {
         <h3 class="category-title-style">Step 1: Add HTML Structure</h3>
         <p class="mb-4 text-gray-600">Create the accordion HTML with <code>.accordion</code> container and <code>.accordion-item</code> elements:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;div id="my-accordion" class="accordion">
+            <pre><code>
+&lt;div id="my-accordion" class="accordion">
     &lt;div class="accordion-item">
         &lt;div class="accordion-header">
             &lt;span>Section 1&lt;/span>
@@ -70,27 +71,32 @@ const accordion = Domma.elements.accordion('#accordion', {
             &lt;div class="accordion-content">More content&lt;/div>
         &lt;/div>
     &lt;/div>
-&lt;/div></code></pre>
+&lt;/div>
+</code></pre>
         </div>
 
         <h3 class="category-title-style">Step 2: Include Domma</h3>
         <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;!-- CSS -->
+            <pre><code>
+&lt;!-- CSS -->
 &lt;link rel="stylesheet" href="dist/domma.css">
 &lt;link rel="stylesheet" href="dist/elements.css">
 
 &lt;!-- JavaScript -->
-&lt;script src="dist/domma.min.js">&lt;/script></code></pre>
+&lt;script src="dist/domma.min.js">&lt;/script>
+</code></pre>
         </div>
 
         <h3 class="category-title-style">Step 3: Initialize the Accordion</h3>
         <p class="mb-4 text-gray-600">Call <code>Domma.elements.accordion()</code> to activate the accordion:</p>
         <div class="code-block language-javascript mb-6">
-            <pre><code>Domma.elements.accordion('#my-accordion', {
+            <pre><code>
+Domma.elements.accordion('#my-accordion', {
     multiExpand: false,  // Only one panel open at a time
     activeIndex: 0       // First panel open by default
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <div class="alert alert-info">
@@ -279,7 +285,8 @@ const accordion = Domma.elements.accordion('#accordion', {
             </p>
 
             <h4 class="category-title-style">Single Accordion Setup</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#my-accordion': {
         component: 'accordion',
         options: {
@@ -288,10 +295,12 @@ const accordion = Domma.elements.accordion('#accordion', {
             animation: 'slide'
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title-style">Multiple Accordions at Once</h4>
-            <pre class="code-block language-javascript">// Configure all FAQ accordions site-wide
+            <pre class="code-block language-javascript">
+// Configure all FAQ accordions site-wide
 $.setup({
     '.faq-accordion': {
         component: 'accordion',
@@ -312,10 +321,12 @@ $.setup({
             multiExpand: true  // Allow multiple sections open
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title-style">With Initial State & Events</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#product-details': {
         component: 'accordion',
         options: {
@@ -335,7 +346,8 @@ $.setup({
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title-style">Benefits of Declarative Config</h4>
             <ul class="list-disc list-inside mb-4">
@@ -350,7 +362,8 @@ $.setup({
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">Programmatic (Traditional)</p>
-                    <pre class="code-block language-javascript">// Scattered throughout code
+                    <pre class="code-block language-javascript">
+// Scattered throughout code
 const acc1 = Domma.elements.accordion(
     '#accordion-1',
     {multiExpand: false}
@@ -359,11 +372,13 @@ const acc1 = Domma.elements.accordion(
 const acc2 = Domma.elements.accordion(
     '#accordion-2',
     {multiExpand: true}
-);</pre>
+);
+</pre>
                 </div>
                 <div>
                     <p class="font-semibold mb-2">Declarative (Recommended)</p>
-                    <pre class="code-block language-javascript">// Clean, centralized config
+                    <pre class="code-block language-javascript">
+// Clean, centralized config
 $.setup({
     '#accordion-1': {
         component: 'accordion',
@@ -373,7 +388,8 @@ $.setup({
         component: 'accordion',
         options: {multiExpand: true}
     }
-});</pre>
+});
+</pre>
                 </div>
             </div>
         </div>
@@ -394,11 +410,13 @@ $.setup({
                 <tr><td><code>--dm-primary</code></td><td><code>var(--dm-blue-600)</code></td><td>Active item indicator colour</td></tr>
             </table>
             <h4 class="category-title">Example Override</h4>
-            <pre class="code-block language-css">:root {
+            <pre class="code-block language-css">
+:root {
     /* Borderless accordion */
     --dm-accordion-border: transparent;
     --dm-accordion-header-hover: rgba(0,0,0,0.02);
-}</pre>
+}
+</pre>
             <p class="mt-4">
                 <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
             </p>

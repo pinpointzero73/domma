@@ -29,7 +29,8 @@
         <div class="card-body">
             <p class="mb-4">Transform a table element into an interactive data grid.</p>
 
-            <pre class="code-block language-javascript">// Create a table instance
+            <pre class="code-block language-javascript">
+// Create a table instance
 const table = Domma.tables.create('#my-table', {
     data: [
         { id: 1, name: 'Alice', email: 'alice@example.com', role: 'Admin' },
@@ -53,7 +54,8 @@ const table = Domma.tables.create('#my-table', {
 });
 
 // HTML
-<table id="my-table" class="table"></table></pre>
+<table id="my-table" class="table"></table>
+</pre>
 
             <h4 class="tables-category-title">Column Options</h4>
             <table class="tables-option-table mb-4">
@@ -97,7 +99,8 @@ const table = Domma.tables.create('#my-table', {
             <h4 class="tables-category-title">Custom Render Examples</h4>
             <p class="mb-4">Use the <code>render</code> function to transform cell values — perfect for date formatting,
                 badges, or custom HTML.</p>
-            <pre class="code-block language-javascript mb-4">// Format dates using Domma's date module
+            <pre class="code-block language-javascript mb-4">
+// Format dates using Domma's date module
 {
     key: 'joined',
     title: 'Joined',
@@ -117,7 +120,8 @@ const table = Domma.tables.create('#my-table', {
     key: 'actions',
     title: '',
     render: (val, row) => `<button data-id="${row.id}">Edit ${row.name}</button>`
-}</pre>
+}
+</pre>
 
             <p class="text-sm text-muted mb-4"><strong>Tip:</strong> Use <code>width: '100px'</code> or <code>width:
                 '20%'</code> to set column widths.</p>
@@ -219,7 +223,8 @@ const table = Domma.tables.create('#my-table', {
         <div class="card-body">
             <p class="mb-4">Sort data by one or multiple columns.</p>
 
-            <pre class="code-block language-javascript">// Single column sort
+            <pre class="code-block language-javascript">
+// Single column sort
 table.sort('name', 'asc');
 table.sort('age', 'desc');
 
@@ -239,7 +244,8 @@ const sortState = table.getSortState();
 // Listen for sort events
 table.on('sort', (column, direction) => {
     console.log(`Sorted by ${column} ${direction}`);
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <p class="text-sm text-muted mb-3">Click column headers in the demo table above to sort. Click again to
@@ -262,7 +268,8 @@ table.on('sort', (column, direction) => {
         <div class="card-body">
             <p class="mb-4">Filter data with text search or column-specific filters.</p>
 
-            <pre class="code-block language-javascript">// Global text search
+            <pre class="code-block language-javascript">
+// Global text search
 table.search('alice');
 
 // Column filter
@@ -286,7 +293,8 @@ table.clearFilters();
 // Listen for filter events
 table.on('filter', (filters) => {
     console.log('Active filters:', filters);
-});</pre>
+});
+</pre>
         </div>
     </section>
 
@@ -298,7 +306,8 @@ table.on('filter', (filters) => {
         <div class="card-body">
             <p class="mb-4">Navigate through large datasets with pagination controls.</p>
 
-            <pre class="code-block language-javascript">// Create table with pagination
+            <pre class="code-block language-javascript">
+// Create table with pagination
 const table = Domma.tables.create('#table', {
     data: largeDataset,
     pagination: true,
@@ -329,7 +338,8 @@ const info = table.pageInfo();
 // Listen for page events
 table.on('page', (page, pageSize) => {
     console.log(`Page ${page + 1}`);
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <div class="flex gap-2 items-center">
@@ -357,7 +367,8 @@ table.on('page', (page, pageSize) => {
         <div class="card-body">
             <p class="mb-4">Select single or multiple rows for bulk operations.</p>
 
-            <pre class="code-block language-javascript">// Enable selection
+            <pre class="code-block language-javascript">
+// Enable selection
 const table = Domma.tables.create('#table', {
     data: data,
     selectable: true,
@@ -386,7 +397,8 @@ const selectedIndices = table.getSelectedIndices();
 // Listen for selection events
 table.on('select', (selectedRows, selectedIndices) => {
     console.log(`${selectedRows.length} rows selected`);
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <p class="text-sm text-muted mb-3">Use checkboxes in the demo table to select rows. Selected rows are
@@ -404,7 +416,8 @@ table.on('select', (selectedRows, selectedIndices) => {
         <div class="card-body">
             <p class="mb-4">Add, update, and remove data dynamically.</p>
 
-            <pre class="code-block language-javascript">// Set all data
+            <pre class="code-block language-javascript">
+// Set all data
 table.setData(newDataArray);
 
 // Get all data (filtered/sorted state)
@@ -429,7 +442,8 @@ table.removeRows([0, 1, 2]);
 table.clear();
 
 // Refresh table (re-render)
-table.refresh();</pre>
+table.refresh();
+</pre>
 
             <div class="demo-area">
                 <div class="flex gap-2">
@@ -449,7 +463,8 @@ table.refresh();</pre>
         <div class="card-body">
             <p class="mb-4">Enable a built-in export toolbar with Copy/Download toggle and format buttons.</p>
 
-            <pre class="code-block language-javascript">// Enable export panel
+            <pre class="code-block language-javascript">
+// Enable export panel
 const table = Domma.tables.create('#my-table', {
     data: myData,
     columns: [...],
@@ -464,7 +479,8 @@ const table = Domma.tables.create('#my-table', {
 // [ Copy (•)──Download ]  |  📋 Text  📄 CSV  📊 Excel  { } JSON
 //
 // Toggle LEFT  = Copy mode (copies to clipboard)
-// Toggle RIGHT = Download mode (downloads file)</pre>
+// Toggle RIGHT = Download mode (downloads file)
+</pre>
 
             <h4 class="tables-category-title">Export Panel Options</h4>
             <table class="tables-option-table mb-4">
@@ -505,7 +521,8 @@ const table = Domma.tables.create('#my-table', {
             <p class="mb-4">Enable a dropdown to show/hide columns dynamically. Users can toggle column visibility
                 without reloading the table.</p>
 
-            <pre class="code-block language-javascript">// Enable column toggle dropdown
+            <pre class="code-block language-javascript">
+// Enable column toggle dropdown
 const table = Domma.tables.create('#my-table', {
     data: myData,
     columns: [
@@ -525,7 +542,8 @@ table.toggleColumn('name');     // Toggle visibility
 // Get column info
 table.getVisibleColumns();      // Array of visible column configs
 table.getHiddenColumns();       // Array of hidden column configs
-table.getColumns();             // All columns</pre>
+table.getColumns();             // All columns
+</pre>
 
             <h4 class="tables-category-title">Column Visibility Options</h4>
             <table class="tables-option-table mb-4">
@@ -570,7 +588,8 @@ table.getColumns();             // All columns</pre>
         <div class="card-body">
             <p class="mb-4">Customise row stripe and hover colours using named variants or custom hex/RGB values.</p>
 
-            <pre class="code-block language-javascript">// Named variants (uses CSS variables)
+            <pre class="code-block language-javascript">
+// Named variants (uses CSS variables)
 const table1 = Domma.tables.create('#table', {
     data: data,
     striped: true,
@@ -599,7 +618,8 @@ const table3 = Domma.tables.create('#table', {
 
 // Named variants: 'none', 'lighter', 'light', 'medium', 'dark',
 //                 'primary-tint', 'success-tint', 'warning-tint',
-//                 'danger-tint', 'info-tint'</pre>
+//                 'danger-tint', 'info-tint'
+</pre>
 
             <h3 class="text-lg font-semibold mt-6 mb-3">Stripe Colour Options</h3>
             <table class="tables-option-table">
@@ -661,7 +681,8 @@ const table3 = Domma.tables.create('#table', {
         <div class="card-body">
             <p class="mb-4">Programmatically export data in various formats.</p>
 
-            <pre class="code-block language-javascript">// Copy to clipboard
+            <pre class="code-block language-javascript">
+// Copy to clipboard
 table.copyToClipboard();        // Tab-separated (paste into Excel)
 table.copyToClipboard('csv');   // CSV format
 table.copyToClipboard('json');  // JSON format
@@ -679,7 +700,8 @@ table.download('json', 'users.json');
 // Export callback
 table.on('export', (info) => {
     console.log(`Exported ${info.rowCount} rows as ${info.format}`);
-});</pre>
+});
+</pre>
 
             <div class="demo-area">
                 <p class="text-sm text-muted mb-3">Try the export buttons in the Interactive Demo above, or use
@@ -702,7 +724,8 @@ table.on('export', (info) => {
         <div class="card-body">
             <p class="mb-4">Listen to table events for custom behavior.</p>
 
-            <pre class="code-block language-javascript">// Available events
+            <pre class="code-block language-javascript">
+// Available events
 table.on('sort', (column, direction) => { });
 table.on('filter', (activeFilters) => { });
 table.on('search', (query) => { });
@@ -718,7 +741,8 @@ table.off('sort', handler);
 // One-time listener
 table.once('render', () => {
     console.log('Table rendered for the first time');
-});</pre>
+});
+</pre>
         </div>
     </section>
 
@@ -734,7 +758,8 @@ table.once('render', () => {
             </p>
 
             <h4 class="tables-category-title">Centralized Table Config</h4>
-            <pre class="code-block language-javascript">// Define all table configurations in one place
+            <pre class="code-block language-javascript">
+// Define all table configurations in one place
 const tableConfigs = {
     users: {
         selector: '#users-table',
@@ -787,10 +812,12 @@ Object.values(tableConfigs).forEach(config => {
             table.on(event, handler);
         });
     }
-});</pre>
+});
+</pre>
 
             <h4 class="tables-category-title">Using $.setup() for Table Containers</h4>
-            <pre class="code-block language-javascript">// Enhance table containers with config engine
+            <pre class="code-block language-javascript">
+// Enhance table containers with config engine
 $.setup({
     '.table-container': {
         initial: {
@@ -827,10 +854,12 @@ $.setup({
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="tables-category-title">Dynamic Table Factory</h4>
-            <pre class="code-block language-javascript">// Create a reusable table factory with config
+            <pre class="code-block language-javascript">
+// Create a reusable table factory with config
 class TableFactory {
     static presets = {
         users: {
@@ -874,10 +903,12 @@ class TableFactory {
 const usersTable = TableFactory.create('#users', 'users', userData);
 const productsTable = TableFactory.create('#products', 'products', productData, {
     pageSize: 100  // Override preset
-});</pre>
+});
+</pre>
 
             <h4 class="tables-category-title">State-Driven Table Management</h4>
-            <pre class="code-block language-javascript">// Use Domma models for reactive table state
+            <pre class="code-block language-javascript">
+// Use Domma models for reactive table state
 const tableState = M.create({
     data: { type: 'array', default: [] },
     sortColumn: { type: 'string', default: '' },
@@ -914,7 +945,8 @@ tableState.onChange('data', (newData) => {
 
 tableState.onChange('selectedRows', (rows) => {
     $('#selection-count').text(`${rows.length} selected`);
-});</pre>
+});
+</pre>
 
             <h4 class="tables-category-title">Benefits of Configuration-Driven Tables</h4>
             <ul class="mb-4">
@@ -929,7 +961,8 @@ tableState.onChange('selectedRows', (rows) => {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">Imperative (Scattered)</p>
-                    <pre class="code-block code-block-sm language-javascript">// Table 1
+                    <pre class="code-block code-block-sm language-javascript">
+// Table 1
 const table1 = Domma.tables.create('#t1', {
     data: data1,
     columns: [/*...*/],
@@ -947,11 +980,13 @@ const table2 = Domma.tables.create('#t2', {
     pageSize: 50
 });
 
-// Configurations spread out</pre>
+// Configurations spread out
+</pre>
                 </div>
                 <div>
                     <p class="font-semibold mb-2">Configuration-Driven (Centralized)</p>
-                    <pre class="code-block code-block-sm language-javascript">// One config object
+                    <pre class="code-block code-block-sm language-javascript">
+// One config object
 const config = {
     table1: {
         selector: '#t1',
@@ -971,7 +1006,8 @@ const config = {
 };
 
 // Single init
-initTables(config);</pre>
+initTables(config);
+</pre>
                 </div>
             </div>
         </div>

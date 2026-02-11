@@ -71,7 +71,8 @@
         <div class="card-body">
             <p class="mb-4">Initialise multiple components at once with a single configuration object.</p>
 
-            <pre class="code-block language-javascript mb-4">// Initialise components declaratively
+            <pre class="code-block language-javascript mb-4">
+// Initialise components declaratively
 $.setup({
     // Selector: configuration
     '#my-modal': {
@@ -88,7 +89,8 @@ $.setup({
         component: 'tabs',
         options: { animation: true, activeIndex: 0 }
     }
-});</pre>
+});
+</pre>
 
           <h4 class="category-title-config">Supported Components (16 total)</h4>
           <div class="grid grid-cols-4 gap-3 mb-4">
@@ -123,7 +125,8 @@ $.setup({
         <div class="card-body">
             <p class="mb-4">Bind event handlers directly in configuration using inline functions or action objects.</p>
 
-            <pre class="code-block language-javascript mb-4">$.setup({
+            <pre class="code-block language-javascript mb-4">
+$.setup({
     // Inline function handler
     '#submit-btn': {
         events: {
@@ -152,7 +155,8 @@ $.setup({
             ]
         }
     }
-});</pre>
+});
+</pre>
 
             <div class="try-section-config">
                 <h5 class="font-semibold mb-3">Try it</h5>
@@ -173,7 +177,8 @@ $.setup({
             <p class="mb-4">The config engine automatically handles DOMContentLoaded, with support for global and per-selector initialisation callbacks.</p>
 
             <h4 class="category-title-config">Automatic DOMContentLoaded Detection</h4>
-            <pre class="code-block language-javascript mb-4">// Config automatically waits for DOM if needed
+            <pre class="code-block language-javascript mb-4">
+// Config automatically waits for DOM if needed
 $.setup({
     '#my-element': {
         component: 'card',
@@ -181,11 +186,13 @@ $.setup({
     }
 });
 // ✅ If DOM is loading: queued for DOMContentLoaded
-// ✅ If DOM is ready: executes immediately</pre>
+// ✅ If DOM is ready: executes immediately
+</pre>
 
             <h4 class="category-title-config">Global $init Callback</h4>
             <p class="mb-2">Use <code>$init</code> for code that should run once when all configs are processed:</p>
-            <pre class="code-block language-javascript mb-4">$.setup({
+            <pre class="code-block language-javascript mb-4">
+$.setup({
     $init() {
         // Runs once after all selectors are configured
         console.log('Config engine initialised!');
@@ -202,11 +209,13 @@ $.setup({
         component: 'tabs',
         options: { activeIndex: 0 }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title-config">Per-Selector init Callbacks</h4>
             <p class="mb-2">Each selector can have its own initialisation callback that receives the DommaCollection:</p>
-            <pre class="code-block language-javascript mb-4">$.setup({
+            <pre class="code-block language-javascript mb-4">
+$.setup({
     '#user-card': {
         init($el) {
             // Runs when this selector is configured
@@ -235,11 +244,13 @@ $.setup({
             text: 'Checking...'
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title-config">Standalone ready() Helper</h4>
             <p class="mb-2">For manual DOMReady callbacks outside of config:</p>
-            <pre class="code-block language-javascript mb-4">// Standard method
+            <pre class="code-block language-javascript mb-4">
+// Standard method
 Domma.ready(() => {
     console.log('DOM is ready!');
     // Your initialisation code
@@ -251,7 +262,8 @@ $.ready(() => {
 });
 
 // Executes immediately if DOM is already ready
-// Otherwise waits for DOMContentLoaded</pre>
+// Otherwise waits for DOMContentLoaded
+</pre>
 
             <div class="try-section-config">
                 <h5 class="font-semibold mb-3">Try it</h5>
@@ -277,7 +289,8 @@ $.ready(() => {
         <div class="card-body">
             <p class="mb-4">Set initial properties like CSS, text, HTML, classes, and attributes.</p>
 
-            <pre class="code-block language-javascript mb-4">$.setup({
+            <pre class="code-block language-javascript mb-4">
+$.setup({
     '#welcome-message': {
         initial: {
             text: 'Welcome to Domma!',
@@ -299,7 +312,8 @@ $.ready(() => {
             attr: { 'aria-disabled': 'true' }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title-config">Available Properties</h4>
             <table class="api-table-config">
@@ -356,7 +370,8 @@ $.ready(() => {
             <p class="mb-4">Modify configuration after initialisation with <code>$.update()</code>. Changes are
                 deep-merged.</p>
 
-            <pre class="code-block language-javascript mb-4">// Initial setup
+            <pre class="code-block language-javascript mb-4">
+// Initial setup
 $.setup({
     '#my-modal': {
         component: 'modal',
@@ -382,7 +397,8 @@ $.update('#status', {
         text: 'Updated status',
         addClass: 'pulse'
     }
-});</pre>
+});
+</pre>
 
             <div class="try-section-config">
                 <h5 class="font-semibold mb-3">Try it</h5>
@@ -408,7 +424,8 @@ $.update('#status', {
         <div class="card-body">
             <p class="mb-4">Retrieve current configuration for debugging or dynamic adjustments.</p>
 
-            <pre class="code-block language-javascript mb-4">// Get config for specific selector
+            <pre class="code-block language-javascript mb-4">
+// Get config for specific selector
 const modalConfig = $.config('#my-modal');
 console.log(modalConfig);
 // { component: 'modal', options: { backdrop: true, keyboard: true } }
@@ -416,7 +433,8 @@ console.log(modalConfig);
 // Get all configurations
 const allConfigs = $.config();
 console.log(allConfigs);
-// { '#my-modal': {...}, '.card': {...}, ... }</pre>
+// { '#my-modal': {...}, '.card': {...}, ... }
+</pre>
 
             <div class="try-section-config">
                 <h5 class="font-semibold mb-3">Current Page Configurations</h5>
@@ -434,7 +452,8 @@ console.log(allConfigs);
         <div class="card-body">
             <p class="mb-4">Reset configuration, destroy components, and unbind events with <code>$.reset()</code>.</p>
 
-            <pre class="code-block language-javascript mb-4">// Reset specific selector
+            <pre class="code-block language-javascript mb-4">
+// Reset specific selector
 $.reset('#my-modal');
 // - Destroys the modal component
 // - Unbinds all event handlers
@@ -442,7 +461,8 @@ $.reset('#my-modal');
 
 // Reset ALL configurations
 $.reset();
-// Resets every selector that was configured</pre>
+// Resets every selector that was configured
+</pre>
 
             <div class="alert alert-warning">
                 <strong>Memory Management:</strong> Always call <code>$.reset()</code> when removing configured elements
@@ -459,7 +479,8 @@ $.reset();
         <div class="card-body">
             <p class="mb-4">A complete form with validation, dynamic UI, and component integration.</p>
 
-            <pre class="code-block language-javascript mb-4">$.setup({
+            <pre class="code-block language-javascript mb-4">
+$.setup({
     // Form validation and submission
     '#contact-form': {
         events: {
@@ -500,7 +521,8 @@ $.reset();
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <div class="live-demo-config">
                 <h5 class="font-semibold mb-3">Live Demo</h5>

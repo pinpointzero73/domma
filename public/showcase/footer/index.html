@@ -95,30 +95,35 @@
         <h3 class="text-xl font-semibold mb-3">Step 1: Add HTML Container</h3>
         <p class="mb-4 text-gray-600">Add a <code>&lt;footer&gt;</code> element to your page, typically at the bottom:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;body>
+            <pre><code>
+&lt;body>
     &lt;main class="content">
         &lt;!-- Your page content -->
     &lt;/main>
 
     &lt;footer id="site-footer">&lt;/footer>
-&lt;/body></code></pre>
+&lt;/body>
+</code></pre>
         </div>
 
         <h3 class="text-xl font-semibold mb-3">Step 2: Include Domma</h3>
         <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;!-- CSS -->
+            <pre><code>
+&lt;!-- CSS -->
 &lt;link rel="stylesheet" href="dist/domma.css">
 &lt;link rel="stylesheet" href="dist/elements.css">
 
 &lt;!-- JavaScript -->
-&lt;script src="dist/domma.min.js">&lt;/script></code></pre>
+&lt;script src="dist/domma.min.js">&lt;/script>
+</code></pre>
         </div>
 
         <h3 class="text-xl font-semibold mb-3">Step 3: Initialize the Footer</h3>
         <p class="mb-4 text-gray-600">Call <code>Domma.elements.footer()</code> with your content:</p>
         <div class="code-block language-javascript mb-6">
-            <pre><code>Domma.elements.footer('#site-footer', {
+            <pre><code>
+Domma.elements.footer('#site-footer', {
     layout: 'simple',
     brand: { text: 'My Site' },
     links: [
@@ -126,7 +131,8 @@
         { text: 'Contact', url: '/contact' }
     ],
     copyright: '© 2026 My Site'
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <div class="alert alert-info">
@@ -151,7 +157,8 @@
 
         <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
         <div class="code-block language-javascript">
-        <pre><code>Domma.elements.footer('#footer', {
+        <pre><code>
+Domma.elements.footer('#footer', {
     layout: 'simple',
     variant: 'light',
     brand: {
@@ -170,7 +177,8 @@
         { icon: 'twitter', url: 'https://twitter.com', label: 'Twitter' }
     ],
     copyright: '© 2026 Domma. All rights reserved.'
-});</code></pre>
+});
+</code></pre>
         </div>
     </section>
 
@@ -191,7 +199,8 @@
 
         <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
         <div class="code-block language-javascript">
-        <pre><code>Domma.elements.footer('#footer', {
+        <pre><code>
+Domma.elements.footer('#footer', {
     layout: 'columns',
     variant: 'dark',
     brand: {
@@ -229,7 +238,8 @@
         { icon: 'twitter', url: '#', label: 'Twitter' }
     ],
     copyright: '© 2026 Domma. All rights reserved.'
-});</code></pre>
+});
+</code></pre>
         </div>
     </section>
 
@@ -250,7 +260,8 @@
 
         <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
         <div class="code-block language-javascript">
-        <pre><code>Domma.elements.footer('#footer', {
+        <pre><code>
+Domma.elements.footer('#footer', {
     layout: 'minimal',
     variant: 'light',
     copyright: '© 2026 Domma',
@@ -259,7 +270,8 @@
         { icon: 'twitter', url: '#', label: 'Twitter' },
         { icon: 'linkedin', url: '#', label: 'LinkedIn' }
     ]
-});</code></pre>
+});
+</code></pre>
         </div>
     </section>
 
@@ -280,11 +292,13 @@
 
         <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
         <div class="code-block language-javascript">
-        <pre><code>Domma.elements.footer('#footer', {
+        <pre><code>
+Domma.elements.footer('#footer', {
     variant: 'dark',  // 'light', 'dark', or 'transparent'
     layout: 'simple',
     // ... other options
-});</code></pre>
+});
+</code></pre>
         </div>
     </section>
 
@@ -397,7 +411,8 @@
         <p class="mb-6 text-gray-600">Use <code>$.setup()</code> for declarative initialization</p>
 
         <div class="code-block language-javascript">
-        <pre><code>$.setup({
+        <pre><code>
+$.setup({
     '#site-footer': {
         component: 'footer',
         options: {
@@ -408,7 +423,8 @@
             copyright: '© 2026 My App'
         }
     }
-});</code></pre>
+});
+</code></pre>
         </div>
     </section>
 

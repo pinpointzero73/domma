@@ -71,7 +71,8 @@
                 <span class="utils-method-item">zipObject()</span>
             </div>
 
-            <pre class="code-block language-javascript">// Chunk array into groups
+            <pre class="code-block language-javascript">
+// Chunk array into groups
 _.chunk([1, 2, 3, 4, 5], 2)  // [[1, 2], [3, 4], [5]]
 
 // Remove falsy values
@@ -94,7 +95,8 @@ _.intersection([1, 2], [2, 3])  // [2]
 
 // Array to object
 _.zipObject(['a', 'b'], [1, 2])  // {a: 1, b: 2}
-_.fromPairs([['a', 1], ['b', 2]])  // {a: 1, b: 2}</pre>
+_.fromPairs([['a', 1], ['b', 2]])  // {a: 1, b: 2}
+</pre>
 
             <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
@@ -145,7 +147,8 @@ _.fromPairs([['a', 1], ['b', 2]])  // {a: 1, b: 2}</pre>
                 <span class="utils-method-item">sortBy()</span>
             </div>
 
-            <pre class="code-block language-javascript">const users = [
+            <pre class="code-block language-javascript">
+const users = [
     { name: 'Alice', age: 25, dept: 'Engineering' },
     { name: 'Bob', age: 30, dept: 'Sales' },
     { name: 'Carol', age: 25, dept: 'Engineering' }
@@ -173,7 +176,8 @@ _.partition(users, u => u.age > 25)
 
 // Count by property
 _.countBy(users, 'dept')
-// { Engineering: 2, Sales: 1 }</pre>
+// { Engineering: 2, Sales: 1 }
+</pre>
 
             <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
@@ -228,7 +232,8 @@ _.countBy(users, 'dept')
                 <span class="utils-method-item">values()</span>
             </div>
 
-            <pre class="code-block language-javascript">const obj = {
+            <pre class="code-block language-javascript">
+const obj = {
     user: { name: 'Alice', address: { city: 'NYC' } },
     settings: { theme: 'dark' }
 };
@@ -258,7 +263,8 @@ _.mapKeys({a: 1, b: 2}, (v, k) => k.toUpperCase())  // {A: 1, B: 2}
 _.mapValues({a: 1, b: 2}, v => v * 2)  // {a: 2, b: 4}
 
 // Invert object
-_.invert({a: 1, b: 2})  // {1: 'a', 2: 'b'}</pre>
+_.invert({a: 1, b: 2})  // {1: 'a', 2: 'b'}
+</pre>
 
             <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
@@ -305,7 +311,8 @@ _.invert({a: 1, b: 2})  // {1: 'a', 2: 'b'}</pre>
                 <span class="utils-method-item">wrap()</span>
             </div>
 
-            <pre class="code-block language-javascript">// Debounce - wait for pause in calls
+            <pre class="code-block language-javascript">
+// Debounce - wait for pause in calls
 const search = _.debounce((query) => {
     console.log('Searching:', query);
 }, 300);
@@ -336,7 +343,8 @@ init();  // (nothing)
 const add = _.curry((a, b, c) => a + b + c);
 add(1)(2)(3);  // 6
 add(1, 2)(3);  // 6
-add(1)(2, 3);  // 6</pre>
+add(1)(2, 3);  // 6
+</pre>
 
             <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It - Debounce</h4>
@@ -387,7 +395,8 @@ add(1)(2, 3);  // 6</pre>
                 <span class="utils-method-item">words()</span>
             </div>
 
-            <pre class="code-block language-javascript">// Case conversion
+            <pre class="code-block language-javascript">
+// Case conversion
 _.camelCase('hello world')    // 'helloWorld'
 _.kebabCase('helloWorld')     // 'hello-world'
 _.snakeCase('Hello World')    // 'hello_world'
@@ -414,7 +423,8 @@ tpl({ name: 'Alice' })        // 'Hello, Alice!'
 _.escape('<div>')            // '&lt;div&gt;'
 
 // Words
-_.words('fred, barney, & pebbles')  // ['fred', 'barney', 'pebbles']</pre>
+_.words('fred, barney, & pebbles')  // ['fred', 'barney', 'pebbles']
+</pre>
 
             <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
@@ -446,7 +456,8 @@ _.words('fred, barney, & pebbles')  // ['fred', 'barney', 'pebbles']</pre>
             </div>
 
             <h4 class="utils-category-title">Basic Usage</h4>
-            <pre class="code-block language-javascript">// Compile and reuse
+            <pre class="code-block language-javascript">
+// Compile and reuse
 const tmpl = _.template('Hello {{name}}!');
 tmpl({ name: 'World' });  // 'Hello World!'
 
@@ -460,10 +471,12 @@ _.render('<p>{{content}}</p>', { content: '<scr' + 'ipt>' });
 
 // Use triple braces for raw output
 _.render('{{{html}}}', { html: '<strong>Bold</strong>' });
-// '<strong>Bold</strong>'</pre>
+// '<strong>Bold</strong>'
+</pre>
 
             <h4 class="utils-category-title">Conditionals</h4>
-            <pre class="code-block language-javascript">// {{#if}}...{{/if}}
+            <pre class="code-block language-javascript">
+// {{#if}}...{{/if}}
 _.render('{{#if active}}Online{{/if}}', { active: true });
 // 'Online'
 
@@ -473,10 +486,12 @@ _.render('{{#if premium}}Pro{{else}}Free{{/if}}', { premium: false });
 
 // {{#unless}}...{{/unless}}
 _.render('{{#unless verified}}Please verify{{/unless}}', { verified: false });
-// 'Please verify'</pre>
+// 'Please verify'
+</pre>
 
             <h4 class="utils-category-title">Loops</h4>
-            <pre class="code-block language-javascript">// {{#each}}...{{/each}}
+            <pre class="code-block language-javascript">
+// {{#each}}...{{/each}}
 _.render('{{#each items}}<li>{{name}}</li>{{/each}}', {
     items: [{ name: 'Apple' }, { name: 'Banana' }]
 });
@@ -488,10 +503,12 @@ _.render('{{#each tags}}#{{.}} {{/each}}', { tags: ['js', 'css', 'html'] });
 
 // Access loop metadata
 _.render('{{#each items}}{{@index}}: {{name}}{{/each}}', { items: [...] });
-// '0: Apple1: Banana'</pre>
+// '0: Apple1: Banana'
+</pre>
 
             <h4 class="utils-category-title">Context & Partials</h4>
-            <pre class="code-block language-javascript">// {{#with}}...{{/with}} - shift context
+            <pre class="code-block language-javascript">
+// {{#with}}...{{/with}} - shift context
 _.render('{{#with user}}{{firstName}} {{lastName}}{{/with}}', {
     user: { firstName: 'John', lastName: 'Doe' }
 });
@@ -500,7 +517,8 @@ _.render('{{#with user}}{{firstName}} {{lastName}}{{/with}}', {
 // {{> partial}} - include named partials
 const opts = { partials: { header: '<h1>{{title}}</h1>' } };
 _.render('{{> header}}', { title: 'Welcome' }, opts);
-// '<h1>Welcome</h1>'</pre>
+// '<h1>Welcome</h1>'
+</pre>
 
             <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
@@ -566,7 +584,8 @@ _.render('{{> header}}', { title: 'Welcome' }, opts);
                 <span class="utils-method-item">toString()</span>
             </div>
 
-            <pre class="code-block language-javascript">// Type checking
+            <pre class="code-block language-javascript">
+// Type checking
 _.isArray([1, 2])        // true
 _.isObject({})           // true
 _.isPlainObject({})      // true
@@ -599,7 +618,8 @@ _.toSafeInteger(3.7)     // 3
 _.toArray('abc')         // ['a', 'b', 'c']
 _.toString([1, 2, 3])    // '1,2,3'
 _.castArray(1)           // [1]
-_.castArray([1])         // [1]</pre>
+_.castArray([1])         // [1]
+</pre>
 
             <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
@@ -645,7 +665,8 @@ _.castArray([1])         // [1]</pre>
                 <span class="utils-method-item">random()</span>
             </div>
 
-            <pre class="code-block language-javascript">// Basic maths
+            <pre class="code-block language-javascript">
+// Basic maths
 _.add(6, 4)              // 10
 _.subtract(6, 4)         // 2
 _.multiply(6, 4)         // 24
@@ -673,7 +694,8 @@ _.meanBy(items, 'n')     // 2
 _.clamp(10, 0, 5)        // 5 (clamp to range)
 _.inRange(3, 2, 4)       // true
 _.random(0, 100)         // Random number 0-100
-_.random(1.5, 5.5, true) // Random float</pre>
+_.random(1.5, 5.5, true) // Random float
+</pre>
 
             <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
@@ -700,7 +722,8 @@ _.random(1.5, 5.5, true) // Random float</pre>
             </p>
 
             <h4 class="font-semibold mb-3">Data Transformation Pipeline</h4>
-            <pre class="code-block language-javascript">// Transform API data for display using utility pipeline
+            <pre class="code-block language-javascript">
+// Transform API data for display using utility pipeline
 const transformUserData = _.flow([
     // 1. Filter active users only
     (users) => _.filter(users, { status: 'active' }),
@@ -739,10 +762,12 @@ $.setup({
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="font-semibold mb-3 mt-4">Form Validation & Data Processing</h4>
-            <pre class="code-block language-javascript">// Centralized form validation with utils
+            <pre class="code-block language-javascript">
+// Centralized form validation with utils
 const validators = {
     email: (value) => /^[^S@]+@[^S@]+\.[^S@]+$/.test(value),
     required: (value) => !_.isEmpty(_.trim(value)),
@@ -821,10 +846,12 @@ $.setup({
             }, 300)
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="font-semibold mb-3 mt-4">Smart Search with Debounce & Filtering</h4>
-            <pre class="code-block language-javascript">// Search implementation with utils
+            <pre class="code-block language-javascript">
+// Search implementation with utils
 $.setup({
     '#product-search': {
         initial: {
@@ -901,10 +928,12 @@ function renderProducts($container, products) {
     `).join('');
 
     $container.find('#results').html(html || '<p>No products found</p>');
-}</pre>
+}
+</pre>
 
             <h4 class="font-semibold mb-3 mt-4">Data Aggregation Dashboard</h4>
-            <pre class="code-block language-javascript">// Analytics dashboard with util aggregations
+            <pre class="code-block language-javascript">
+// Analytics dashboard with util aggregations
 $.setup({
     '#analytics-dashboard': {
         events: {
@@ -960,7 +989,8 @@ $.setup({
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="font-semibold mb-3 mt-4">Benefits of Utils + Config Pattern</h4>
             <ul class="mb-4">
@@ -975,7 +1005,8 @@ $.setup({
             <div class="grid grid-cols-1 grid-cols-md-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">Imperative (Verbose)</p>
-                    <pre class="code-block code-block-sm language-javascript">// Filter, sort, group manually
+                    <pre class="code-block code-block-sm language-javascript">
+// Filter, sort, group manually
 const active = [];
 for (const user of users) {
     if (user.status === 'active') {
@@ -996,11 +1027,13 @@ for (const user of active) {
 }
 
 // Hard to read, error-prone
-// Mutable operations</pre>
+// Mutable operations
+</pre>
                 </div>
                 <div>
                     <p class="font-semibold mb-2">Functional with Utils (Clean)</p>
-                    <pre class="code-block code-block-sm language-javascript">// Pipeline with utils
+                    <pre class="code-block code-block-sm language-javascript">
+// Pipeline with utils
 const byDept = _.flow([
     users => _.filter(users, {
         status: 'active'
@@ -1012,7 +1045,8 @@ const byDept = _.flow([
 // Clear transformation steps
 // Immutable operations
 // Chainable and composable
-// Easy to test each step</pre>
+// Easy to test each step
+</pre>
                 </div>
             </div>
         </div>
@@ -1059,7 +1093,8 @@ const byDept = _.flow([
                 <span class="utils-method-item">uniqueId()</span>
             </div>
 
-            <pre class="code-block language-javascript">// Generate ranges
+            <pre class="code-block language-javascript">
+// Generate ranges
 _.range(5)               // [0, 1, 2, 3, 4]
 _.range(1, 5)            // [1, 2, 3, 4]
 _.range(0, 10, 2)        // [0, 2, 4, 6, 8]
@@ -1089,7 +1124,8 @@ getName({ name: 'Alice' })  // 'Alice'
 _.identity('hello')      // 'hello'
 
 // Noop
-_.noop()                 // undefined (do nothing)</pre>
+_.noop()                 // undefined (do nothing)
+</pre>
 
             <div class="utils-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>

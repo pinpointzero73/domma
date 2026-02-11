@@ -102,7 +102,8 @@
       <div class="example-section">
         <h3 class="example-title">Storing and Accessing Nested Data</h3>
 
-        <pre class="code-block language-javascript mb-4">// Create model with nested object values
+        <pre class="code-block language-javascript mb-4">
+// Create model with nested object values
 const userModel = M.create({
     profile: { type: 'object', default: {} },
     address: { type: 'object', default: {} }
@@ -128,7 +129,8 @@ console.log('City:', city);  // 'New York'
 // Update nested property
 const address = userModel.get('address');
 _.set(address, 'city', 'Boston');
-userModel.set('address', address);  // Trigger change events</pre>
+userModel.set('address', address);  // Trigger change events
+</pre>
 
         <div class="grid grid-cols-2 gap-4">
           <div>
@@ -155,7 +157,8 @@ userModel.set('address', address);  // Trigger change events</pre>
       <div class="example-section">
         <h3 class="example-title">Helper Function for Nested Binding</h3>
 
-        <pre class="code-block language-javascript mb-4">// Helper function for binding nested properties
+        <pre class="code-block language-javascript mb-4">
+// Helper function for binding nested properties
 function bindNested(model, field, path, selector, options = {}) {
     M.bind(model, field, selector, {
         ...options,
@@ -176,7 +179,8 @@ const formModel = M.create({
 // Bind form inputs with dot notation paths
 bindNested(formModel, 'userData', 'user.name', '#user-name', { twoWay: true });
 bindNested(formModel, 'userData', 'user.email', '#user-email', { twoWay: true });
-bindNested(formModel, 'userData', 'address.city', '#address-city', { twoWay: true });</pre>
+bindNested(formModel, 'userData', 'address.city', '#address-city', { twoWay: true });
+</pre>
 
         <div class="grid grid-cols-2 gap-4">
           <div>
@@ -302,15 +306,16 @@ bindNested(formModel, 'userData', 'address.city', '#address-city', { twoWay: tru
       <h2 class="text-xl font-semibold">Example 4: Form Auto-Serialization</h2>
     </div>
     <div class="card-body">
-            <pre class="code-block language-javascript mb-4">// Utility to serialize form with dot notation support
+            <pre class="code-block language-javascript mb-4">
+// Utility to serialize form with dot notation support
 function serializeFormWithDotNotation(formSelector) {
     const data = {};
-    
+
     $(formSelector).find('input, select, textarea').each(function() {
         const element = $(this);
         const name = element.attr('name');
         if (!name) return;
-        
+
         let value;
         if (element.attr('type') === 'checkbox') {
             value = element.prop('checked');
@@ -323,17 +328,18 @@ function serializeFormWithDotNotation(formSelector) {
         } else {
             value = element.val();
         }
-        
+
         // Use _.set to handle dot notation
         _.set(data, name, value);
     });
-    
+
     return data;
 }
 
 // Usage
 const formData = serializeFormWithDotNotation('#my-form');
-// Returns nested object: { user: { name: '...', email: '...' }, address: { ... } }</pre>
+// Returns nested object: { user: { name: '...', email: '...' }, address: { ... } }
+</pre>
 
       <div class="helper-box">
         <strong>Pro Tip:</strong> You can use HTML5 data attributes or name attributes with dot notation to
@@ -381,7 +387,7 @@ const formData = serializeFormWithDotNotation('#my-form');
   function bindNested(model, field, path, selector, options = {}) {
     // Ensure we have a DOM element, not a jQuery object
     const element = typeof selector === 'string' ?
-      document.querySelector(selector) :
+      $(selector)[0] :
       (selector.jquery ? selector[0] : selector);
 
     return M.bind(model, field, element, {
@@ -593,7 +599,7 @@ const formData = serializeFormWithDotNotation('#my-form');
         if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
           setFormValues(value, path);
         } else {
-          const input = document.querySelector(`[name="${path}"]`);
+          const input = $(`[name="${path}"]`)[0];
           if (input) {
             if (input.type === 'checkbox') {
               input.checked = value;

@@ -103,7 +103,8 @@
       </ul>
 
       <h4 class="category-title">Basic Usage</h4>
-      <pre class="code-block language-javascript">// Factory method (recommended)
+      <pre class="code-block language-javascript">
+// Factory method (recommended)
 const slideover = Domma.elements.slideover({
     title: 'My Slideover',
     content: '&lt;p&gt;Slideover content goes here.&lt;/p&gt;',
@@ -124,10 +125,12 @@ slideover.isOpen();
 slideover.setTitle('New Title');
 slideover.setContent('&lt;p&gt;Updated content&lt;/p&gt;');
 slideover.setSize('xl');
-slideover.setPosition('left');</pre>
+slideover.setPosition('left');
+</pre>
 
       <h4 class="category-title">HTML Structure (Existing Element)</h4>
-      <pre class="code-block language-html">&lt;div id="my-slideover"&gt;
+      <pre class="code-block language-html">
+&lt;div id="my-slideover"&gt;
     &lt;div class="dm-slideover-header"&gt;
         &lt;h5 class="dm-slideover-title"&gt;Slideover Title&lt;/h5&gt;
         &lt;button class="dm-slideover-close" data-dismiss="slideover"&gt;&times;&lt;/button&gt;
@@ -144,7 +147,8 @@ const slideover = Domma.elements.slideover('#my-slideover', {
 });
 
 slideover.open();
-&lt;/script&gt;</pre>
+&lt;/script&gt;
+</pre>
     </div>
   </section>
 
@@ -174,7 +178,8 @@ slideover.open();
         </button>
       </div>
 
-      <pre class="code-block language-javascript">// Right (default)
+      <pre class="code-block language-javascript">
+// Right (default)
 const slideoverRight = Domma.elements.slideover({
     title: 'Right Slideover',
     content: '&lt;p&gt;Slides in from the right side.&lt;/p&gt;',
@@ -200,7 +205,8 @@ const slideoverBottom = Domma.elements.slideover({
     title: 'Bottom Slideover',
     content: '&lt;p&gt;Slides up from the bottom.&lt;/p&gt;',
     position: 'bottom'
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -223,7 +229,8 @@ const slideoverBottom = Domma.elements.slideover({
         <button class="btn btn-secondary" onclick="demoSizeCustom()">Custom (400px)</button>
       </div>
 
-      <pre class="code-block language-javascript">// Predefined sizes
+      <pre class="code-block language-javascript">
+// Predefined sizes
 const small = Domma.elements.slideover({
     title: 'Small Slideover',
     content: '&lt;p&gt;25% width&lt;/p&gt;',
@@ -247,7 +254,8 @@ const custom = Domma.elements.slideover({
     title: 'Custom Slideover',
     content: '&lt;p&gt;400px width&lt;/p&gt;',
     size: '400px'  // Can use px, rem, em, %
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -265,7 +273,8 @@ const custom = Domma.elements.slideover({
         <button class="btn btn-outline" onclick="demoBackdropNoClose()">Backdrop, No Close</button>
       </div>
 
-      <pre class="code-block language-javascript">// No backdrop
+      <pre class="code-block language-javascript">
+// No backdrop
 const noBackdrop = Domma.elements.slideover({
     title: 'No Backdrop',
     content: '&lt;p&gt;No overlay behind the slideover.&lt;/p&gt;',
@@ -278,14 +287,16 @@ const backdropNoClose = Domma.elements.slideover({
     content: '&lt;p&gt;Must use X button to close.&lt;/p&gt;',
     backdrop: true,
     backdropClose: false
-});</pre>
+});
+</pre>
 
       <h4 class="category-title mt-5">Non-Closable Slideover</h4>
       <p class="mb-3">Remove the X button and require programmatic closing.</p>
 
       <button class="btn btn-warning mb-3" onclick="demoNonClosable()">Non-Closable Slideover</button>
 
-      <pre class="code-block language-javascript">const nonClosable = Domma.elements.slideover({
+      <pre class="code-block language-javascript">
+const nonClosable = Domma.elements.slideover({
     title: 'Non-Closable',
     content: `
         &lt;p&gt;This slideover has no X button.&lt;/p&gt;
@@ -296,7 +307,8 @@ const backdropNoClose = Domma.elements.slideover({
     closable: false,
     backdropClose: false,
     keyboard: false  // Disable Escape key too
-});</pre>
+});
+</pre>
 
       <h4 class="category-title mt-5">Event Callbacks</h4>
       <p class="mb-3">Hook into slideover lifecycle events.</p>
@@ -305,7 +317,8 @@ const backdropNoClose = Domma.elements.slideover({
       <div id="callback-log" class="p-3 bg-gray-100 rounded mb-3"
            style="min-height: 80px; font-family: monospace; font-size: 0.875rem;"></div>
 
-      <pre class="code-block language-javascript">const slideover = Domma.elements.slideover({
+      <pre class="code-block language-javascript">
+const slideover = Domma.elements.slideover({
     title: 'Callbacks Demo',
     content: '&lt;p&gt;Watch the log for callback messages.&lt;/p&gt;',
     onOpen: (instance) => {
@@ -317,7 +330,8 @@ const backdropNoClose = Domma.elements.slideover({
     onClosed: (instance) => {
         console.log('Slideover fully closed!', instance);
     }
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -333,7 +347,8 @@ const backdropNoClose = Domma.elements.slideover({
 
       <button class="btn btn-primary mb-3" onclick="demoFormContent()">Contact Form</button>
 
-      <pre class="code-block language-javascript">const formSlideover = Domma.elements.slideover({
+      <pre class="code-block language-javascript">
+const formSlideover = Domma.elements.slideover({
     title: 'Contact Form',
     content: `
         &lt;form id="contact-form"&gt;
@@ -361,7 +376,8 @@ const backdropNoClose = Domma.elements.slideover({
             formSlideover.close();
         });
     }
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -377,7 +393,8 @@ const backdropNoClose = Domma.elements.slideover({
 
       <button class="btn btn-primary mb-3" onclick="demoProgrammatic()">Open Control Panel</button>
 
-      <pre class="code-block language-javascript">let slideover = Domma.elements.slideover({
+      <pre class="code-block language-javascript">
+let slideover = Domma.elements.slideover({
     title: 'Control Panel',
     content: `
         &lt;p&gt;Use the buttons to modify this slideover:&lt;/p&gt;
@@ -409,7 +426,8 @@ slideover.setSize('md');
 slideover.setPosition('left');
 
 // Clean up
-slideover.destroy();</pre>
+slideover.destroy();
+</pre>
     </div>
   </section>
 
@@ -420,10 +438,14 @@ slideover.destroy();</pre>
     </div>
     <div class="card-body">
       <h4 class="category-title">Factory Method</h4>
-      <pre class="code-block language-javascript">Domma.elements.slideover(options)</pre>
+      <pre class="code-block language-javascript">
+Domma.elements.slideover(options)
+</pre>
 
       <h4 class="category-title mt-4">Constructor</h4>
-      <pre class="code-block language-javascript">Domma.elements.slideover(selector, options)</pre>
+      <pre class="code-block language-javascript">
+Domma.elements.slideover(selector, options)
+</pre>
 
       <h4 class="category-title mt-4">Options</h4>
       <table class="table">
@@ -610,11 +632,13 @@ slideover.destroy();</pre>
         <tr><td><code>--dm-text</code></td><td><code>var(--dm-slate-800)</code></td><td>Content text colour</td></tr>
       </table>
       <h4 class="category-title">Example Override</h4>
-      <pre class="code-block language-css">:root {
+      <pre class="code-block language-css">
+:root {
     /* Dark slideover */
     --dm-surface: #1e293b;
     --dm-text: #f1f5f9;
-}</pre>
+}
+</pre>
       <p class="mt-4">
         <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
       </p>
@@ -858,7 +882,7 @@ slideover.destroy();</pre>
       onOpen: () => {
         // Update status every 500ms
         const interval = setInterval(() => {
-          const statusEl = document.getElementById('is-open-status');
+          const statusEl = $('#is-open-status')[0];
           if (statusEl && currentSlideover) {
             statusEl.textContent = currentSlideover.isOpen() ? 'true ✅' : 'false ❌';
           } else {

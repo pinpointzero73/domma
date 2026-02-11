@@ -134,7 +134,8 @@
         <div class="card-body">
             <p class="mb-4">Creates a gentle up-and-down floating motion using sinusoidal easing.</p>
 
-            <pre class="code-block language-javascript">// Basic usage
+            <pre class="code-block language-javascript">
+// Basic usage
 Domma.effects.breathe('.stat-card');
 
 // With configuration
@@ -151,7 +152,8 @@ breathe.pause();
 breathe.resume();
 breathe.stop();
 breathe.restart();
-breathe.destroy();</pre>
+breathe.destroy();
+</pre>
 
             <h4 class="font-semibold mt-4 mb-2">Demo: Basic Breathe</h4>
             <div class="demo-box" id="breathe-demo-1">
@@ -204,7 +206,8 @@ breathe.destroy();</pre>
         <div class="card-body">
             <p class="mb-4">Creates a grow-and-shrink breathing effect using scale transforms.</p>
 
-            <pre class="code-block language-javascript">// Basic usage
+            <pre class="code-block language-javascript">
+// Basic usage
 Domma.effects.pulse('.badge');
 
 // With configuration
@@ -219,7 +222,8 @@ const pulse = Domma.effects.pulse('.element', {
 pulse.pause();
 pulse.resume();
 pulse.stop();
-pulse.destroy();</pre>
+pulse.destroy();
+</pre>
 
             <h4 class="font-semibold mt-4 mb-2">Demo: Basic Pulse</h4>
             <div class="demo-box" id="pulse-demo-1">
@@ -399,7 +403,8 @@ pulse.destroy();</pre>
             <h4 class="font-semibold mb-2">prefers-reduced-motion</h4>
             <p class="mb-4">If a user has enabled "Reduce motion" in their system settings, effects will be automatically disabled. You can override this with <code>respectMotionPreference: false</code>.</p>
 
-            <pre class="code-block language-javascript">// Respects system preference (default)
+            <pre class="code-block language-javascript">
+// Respects system preference (default)
 Domma.effects.breathe('.element', {
   respectMotionPreference: true
 });
@@ -407,7 +412,8 @@ Domma.effects.breathe('.element', {
 // Forces animation even if user prefers reduced motion
 Domma.effects.breathe('.element', {
   respectMotionPreference: false
-});</pre>
+});
+</pre>
 
             <div class="alert alert-info">
                 <strong>Note:</strong> Always respect user preferences unless there's a compelling reason not to. Animations can cause discomfort or motion sickness for some users.
@@ -440,7 +446,8 @@ Domma.effects.breathe('.element', {
             </ul>
 
             <h4 class="font-semibold mb-2">Combined Effects</h4>
-            <pre class="code-block language-javascript">// Stat card with subtle breathe
+            <pre class="code-block language-javascript">
+// Stat card with subtle breathe
 Domma.effects.breathe('.stat-card', {
   amplitude: 6,
   duration: 3000,
@@ -462,7 +469,8 @@ Domma.effects.breathe('.feature-card', {
   onComplete: () => {
     console.log('All cards animated!');
   }
-});</pre>
+});
+</pre>
         </div>
     </section>
 

@@ -85,14 +85,16 @@
       <p class="mb-3">The <code>config</code> parameter accepts any valid <a
           href="https://developer.mozilla.org/en-US/docs/Web/API/fetch#options" target="_blank"
           class="text-primary">fetch options</a>:</p>
-      <pre class="code-block language-javascript">{
+      <pre class="code-block language-javascript">
+{
     headers: {
         'Authorization': 'Bearer token123',
         'X-Custom-Header': 'value'
     },
     mode: 'cors',
     credentials: 'include'
-}</pre>
+}
+</pre>
     </div>
   </section>
 
@@ -109,7 +111,8 @@
 
       <div class="http-demo-grid">
         <div>
-                    <pre class="code-block language-javascript mb-4">// Fetch a single post
+                    <pre class="code-block language-javascript mb-4">
+// Fetch a single post
 const post = await Domma.http.get(
     'https://jsonplaceholder.typicode.com/posts/1'
 );
@@ -118,7 +121,8 @@ console.log(post.title);
 // Fetch multiple posts
 const posts = await Domma.http.get(
     'https://jsonplaceholder.typicode.com/posts?_limit=3'
-);</pre>
+);
+</pre>
           <button class="btn btn-primary" id="demo-get">
             <span data-icon="download" data-icon-size="16"></span>
             Fetch Posts
@@ -153,14 +157,16 @@ const posts = await Domma.http.get(
             <label class="form-label">Body</label>
             <textarea class="form-textarea" id="post-body" rows="2">This is the post content.</textarea>
           </div>
-          <pre class="code-block language-javascript mb-4">const newPost = await Domma.http.post(
+          <pre class="code-block language-javascript mb-4">
+const newPost = await Domma.http.post(
     'https://jsonplaceholder.typicode.com/posts',
     {
         title: 'My New Post',
         body: 'This is the post content.',
         userId: 1
     }
-);</pre>
+);
+</pre>
           <button class="btn btn-primary" id="demo-post">
             <span data-icon="plus" data-icon-size="16"></span>
             Create Post
@@ -187,7 +193,8 @@ const posts = await Domma.http.get(
 
       <div class="http-demo-grid">
         <div>
-                    <pre class="code-block language-javascript mb-4">const updated = await Domma.http.put(
+                    <pre class="code-block language-javascript mb-4">
+const updated = await Domma.http.put(
     'https://jsonplaceholder.typicode.com/posts/1',
     {
         id: 1,
@@ -195,7 +202,8 @@ const posts = await Domma.http.get(
         body: 'Updated content here.',
         userId: 1
     }
-);</pre>
+);
+</pre>
           <button class="btn btn-warning" id="demo-put">
             <span data-icon="edit" data-icon-size="16"></span>
             Update Post
@@ -232,14 +240,16 @@ const posts = await Domma.http.get(
             <label class="form-label">Update Title Only</label>
             <input type="text" class="form-input" id="patch-title" value="Patched Title">
           </div>
-                    <pre class="code-block language-javascript mb-4">// Only update the title field
+                    <pre class="code-block language-javascript mb-4">
+// Only update the title field
 const patched = await Domma.http.patch(
     'https://jsonplaceholder.typicode.com/posts/1',
     {
         title: 'Patched Title'
         // Other fields (body, userId) remain unchanged
     }
-);</pre>
+);
+</pre>
           <button class="btn btn-info" id="demo-patch">
             <span data-icon="edit" data-icon-size="16"></span>
             Patch Post
@@ -266,10 +276,12 @@ const patched = await Domma.http.patch(
 
       <div class="http-demo-grid">
         <div>
-                    <pre class="code-block language-javascript mb-4">await Domma.http.delete(
+                    <pre class="code-block language-javascript mb-4">
+await Domma.http.delete(
     'https://jsonplaceholder.typicode.com/posts/1'
 );
-// Returns empty object {} on success</pre>
+// Returns empty object {} on success
+</pre>
           <button class="btn btn-danger" id="demo-delete">
             <span data-icon="trash" data-icon-size="16"></span>
             Delete Post
@@ -293,14 +305,16 @@ const patched = await Domma.http.patch(
 
       <div class="http-demo-grid">
         <div>
-                    <pre class="code-block language-javascript mb-4">try {
+                    <pre class="code-block language-javascript mb-4">
+try {
     const data = await Domma.http.get(
         'https://jsonplaceholder.typicode.com/posts/999'
     );
 } catch (error) {
     console.error('Request failed:', error.message);
     // "HTTP Error: 404"
-}</pre>
+}
+</pre>
           <button class="btn btn-outline" id="demo-error">
             <span data-icon="alert-triangle" data-icon-size="16"></span>
             Trigger 404 Error
@@ -322,7 +336,8 @@ const patched = await Domma.http.patch(
     <div class="card-body">
       <p class="mb-4">Add custom headers to your requests:</p>
 
-      <pre class="code-block language-javascript">// Add authorization header
+      <pre class="code-block language-javascript">
+// Add authorization header
 const data = await Domma.http.get('/api/protected', {
     headers: {
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIs...',
@@ -335,7 +350,8 @@ const xml = await Domma.http.post('/api/xml', xmlData, {
     headers: {
         'Content-Type': 'application/xml'
     }
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -351,7 +367,8 @@ const xml = await Domma.http.post('/api/xml', xmlData, {
       </p>
 
       <h4 class="category-title-style mb-3">API Service Class</h4>
-      <pre class="code-block language-javascript">// Create a service class for your API
+      <pre class="code-block language-javascript">
+// Create a service class for your API
 class UserService {
     constructor(baseURL = '/api') {
         this.baseURL = baseURL;
@@ -385,10 +402,12 @@ class UserService {
 // Usage
 const userService = new UserService();
 const users = await userService.getAll();
-const user = await userService.getById(123);</pre>
+const user = await userService.getById(123);
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">Centralized API Configuration</h4>
-      <pre class="code-block language-javascript">// Define all API endpoints in config
+      <pre class="code-block language-javascript">
+// Define all API endpoints in config
 const apiConfig = {
     baseURL: 'https://api.example.com',
     endpoints: {
@@ -452,10 +471,12 @@ const user = await api.request('GET', apiConfig.endpoints.users.get, null, { id:
 const newUser = await api.request('POST', apiConfig.endpoints.users.create, {
     name: 'Alice',
     email: 'alice@example.com'
-});</pre>
+});
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">Using $.setup() for API Interactions</h4>
-      <pre class="code-block language-javascript">// Declaratively handle API-driven UI interactions
+      <pre class="code-block language-javascript">
+// Declaratively handle API-driven UI interactions
 $.setup({
     '#user-list': {
         events: {
@@ -509,10 +530,12 @@ $.setup({
             }, 300)
         }
     }
-});</pre>
+});
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">Request/Response Interceptor Pattern</h4>
-      <pre class="code-block language-javascript">// Wrap Domma.http with interceptors
+      <pre class="code-block language-javascript">
+// Wrap Domma.http with interceptors
 class HTTPClient {
     constructor() {
         this.requestInterceptors = [];
@@ -593,7 +616,8 @@ client.addErrorInterceptor(async (error) => {
         window.location = '/login';
     }
     return error;
-});</pre>
+});
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">Benefits of Service Layer Pattern</h4>
       <ul class="mb-4">
@@ -609,7 +633,8 @@ client.addErrorInterceptor(async (error) => {
       <div class="grid grid-cols-1 grid-cols-md-2 gap-4">
         <div>
           <p class="font-semibold mb-2">Scattered (Hard to Maintain)</p>
-          <pre class="code-block code-block-sm language-javascript">// Component 1
+          <pre class="code-block code-block-sm language-javascript">
+// Component 1
 const users = await Domma.http.get(
     'https://api.example.com/users'
 );
@@ -627,11 +652,13 @@ await Domma.http.post(
 
 // URL repeated 3 times
 // Hard to change base URL
-// No consistent error handling</pre>
+// No consistent error handling
+</pre>
         </div>
         <div>
           <p class="font-semibold mb-2">Service Layer (Centralized)</p>
-          <pre class="code-block code-block-sm language-javascript">// services/user.js
+          <pre class="code-block code-block-sm language-javascript">
+// services/user.js
 class UserService {
     baseURL = 'https://api.example.com';
 
@@ -652,7 +679,8 @@ class UserService {
 const userService = new UserService();
 const users = await userService.getAll();
 const user = await userService.getById(id);
-await userService.create(userData);</pre>
+await userService.create(userData);
+</pre>
         </div>
       </div>
     </div>
@@ -667,7 +695,8 @@ await userService.create(userData);</pre>
       <div class="grid grid-cols-1 grid-cols-md-2 gap-4">
         <div>
           <h4 class="font-semibold mb-2">Basic Usage</h4>
-          <pre class="code-block language-javascript">// GET
+          <pre class="code-block language-javascript">
+// GET
 const users = await Domma.http.get('/api/users');
 
 // POST
@@ -680,11 +709,13 @@ const user = await Domma.http.post('/api/users', {
 await Domma.http.put('/api/users/1', { name: 'Jane' });
 
 // DELETE
-await Domma.http.delete('/api/users/1');</pre>
+await Domma.http.delete('/api/users/1');
+</pre>
         </div>
         <div>
           <h4 class="font-semibold mb-2">With async/await</h4>
-          <pre class="code-block language-javascript">async function fetchData() {
+          <pre class="code-block language-javascript">
+async function fetchData() {
     try {
         const data = await Domma.http.get('/api/data');
         console.log(data);
@@ -696,7 +727,8 @@ await Domma.http.delete('/api/users/1');</pre>
 // Or with .then()
 Domma.http.get('/api/data')
     .then(data => console.log(data))
-    .catch(err => console.error(err));</pre>
+    .catch(err => console.error(err));
+</pre>
         </div>
       </div>
     </div>

@@ -38,7 +38,8 @@
                 <span class="models-method-item">emit()</span>
             </div>
 
-            <pre class="code-block language-javascript">// Subscribe to an event
+            <pre class="code-block language-javascript">
+// Subscribe to an event
 M.subscribe('user:login', (data) => {
     console.log('User logged in:', data.username);
 });
@@ -62,7 +63,8 @@ M.once('app:ready', () => {
 // Namespace events
 M.on('cart:add', handler);
 M.on('cart:remove', handler);
-M.on('cart:clear', handler);</pre>
+M.on('cart:clear', handler);
+</pre>
 
             <div class="models-try-section">
                 <h4 class="font-semibold mb-3">Try It - Event Console</h4>
@@ -101,7 +103,8 @@ M.on('cart:clear', handler);</pre>
         <div class="card-body">
             <p class="mb-4">Create reactive data models with blueprint validation and change detection.</p>
 
-            <pre class="code-block language-javascript">// Create a model with blueprint
+            <pre class="code-block language-javascript">
+// Create a model with blueprint
 const user = M.create({
     name: { type: 'string', required: true },
     email: {
@@ -147,7 +150,8 @@ user.onChange('email', (newVal, oldVal) => {
 // Validate
 const result = user.validate();
 // { valid: true, errors: {} }
-// or { valid: false, errors: { email: 'Invalid email' } }</pre>
+// or { valid: false, errors: { email: 'Invalid email' } }
+</pre>
 
             <div class="models-try-section">
                 <h4 class="font-semibold mb-3">Try It - User Model</h4>
@@ -216,7 +220,8 @@ const result = user.validate();
         <div class="card-body">
             <p class="mb-4">Built-in type validators for common data types.</p>
 
-            <pre class="code-block language-javascript">// Available types
+            <pre class="code-block language-javascript">
+// Available types
 M.types.string    // String values
 M.types.number    // Numeric values
 M.types.boolean   // true/false
@@ -262,7 +267,8 @@ const blueprint = {
 
     // Nested object
     address: { type: 'object' }
-};</pre>
+};
+</pre>
         </div>
     </section>
 
@@ -281,7 +287,8 @@ const blueprint = {
             utilities.
           </div>
 
-            <pre class="code-block language-javascript">const user = M.create({
+            <pre class="code-block language-javascript">
+const user = M.create({
     name: { type: 'string' },
     email: { type: 'string' }
 }, { name: 'Alice' });
@@ -306,7 +313,8 @@ M.bind(user, 'name', '#display3');
 user.set('name', 'Bob');  // All three elements update
 
 // Unbind
-M.unbind(user, 'name', '#name-display');</pre>
+M.unbind(user, 'name', '#name-display');
+</pre>
 
             <div class="models-try-section">
                 <h4 class="font-semibold mb-3">Try It - Live Binding</h4>
@@ -342,7 +350,8 @@ M.unbind(user, 'name', '#name-display');</pre>
         <div class="card-body">
             <p class="mb-4">A complete example using pub/sub and reactive models together.</p>
 
-            <pre class="code-block language-javascript">// Cart model
+            <pre class="code-block language-javascript">
+// Cart model
 const cart = M.create({
     items: { type: 'array', default: [] },
     total: { type: 'number', default: 0 }
@@ -379,7 +388,8 @@ $('.add-to-cart').on('click', function() {
         price: $(this).data('price')
     };
     M.emit('cart:add', product);
-});</pre>
+});
+</pre>
 
             <div class="models-try-section">
                 <h4 class="font-semibold mb-3">Try It - Mini Cart</h4>
@@ -439,7 +449,8 @@ $('.add-to-cart').on('click', function() {
         <div class="card-body">
             <p class="mb-4">A complete CRUD example with model-based form validation and clipboard export.</p>
 
-            <pre class="code-block language-javascript">// Users collection model
+            <pre class="code-block language-javascript">
+// Users collection model
 const usersModel = M.create({
     users: { type: 'array', default: [] }
 });
@@ -464,7 +475,8 @@ if (formModel.validate().valid) {
 }
 
 // Export to clipboard
-navigator.clipboard.writeText(JSON.stringify(usersModel.get('users'), null, 2));</pre>
+navigator.clipboard.writeText(JSON.stringify(usersModel.get('users'), null, 2));
+</pre>
 
             <div class="models-try-section">
                 <h4 class="font-semibold mb-3">Try It - User Manager</h4>

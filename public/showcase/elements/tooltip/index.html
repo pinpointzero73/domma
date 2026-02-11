@@ -63,26 +63,31 @@ const tooltip = Domma.elements.tooltip('#my-button', {
         <h3 class="category-title-style">Step 1: Add HTML Element</h3>
         <p class="mb-4 text-gray-600">Create any HTML element that will trigger the tooltip:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;button id="my-button" class="btn btn-primary"&gt;Hover Me&lt;/button&gt;
+            <pre><code>
+&lt;button id="my-button" class="btn btn-primary"&gt;Hover Me&lt;/button&gt;
 &lt;span id="help-icon"&gt;?&lt;/span&gt;
-&lt;a id="info-link" href="#"&gt;Learn more&lt;/a&gt;</code></pre>
+&lt;a id="info-link" href="#"&gt;Learn more&lt;/a&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title-style">Step 2: Include Domma</h3>
         <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;!-- CSS --&gt;
+            <pre><code>
+&lt;!-- CSS --&gt;
 &lt;link rel="stylesheet" href="dist/domma.css"&gt;
 &lt;link rel="stylesheet" href="dist/elements.css"&gt;
 
 &lt;!-- JavaScript --&gt;
-&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title-style">Step 3: Initialize the Tooltip</h3>
         <p class="mb-4 text-gray-600">Call <code>Domma.elements.tooltip()</code> to attach a tooltip:</p>
         <div class="code-block language-javascript mb-6">
-            <pre><code>// Hover tooltip
+            <pre><code>
+// Hover tooltip
 Domma.elements.tooltip('#my-button', {
     content: 'Helpful information appears here',
     position: 'top',       // 'top', 'bottom', 'left', 'right'
@@ -95,7 +100,8 @@ Domma.elements.tooltip('#help-icon', {
     content: '&lt;strong&gt;Tip:&lt;/strong&gt; Click to continue',
     trigger: 'click',
     position: 'bottom'
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <div class="alert alert-info">
@@ -131,13 +137,15 @@ Domma.elements.tooltip('#help-icon', {
             </domma-tooltip>
         </div>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;domma-tooltip content="Top tooltip" position="top"&gt;
+            <pre><code>
+&lt;domma-tooltip content="Top tooltip" position="top"&gt;
     &lt;button class="btn btn-primary"&gt;Top&lt;/button&gt;
 &lt;/domma-tooltip&gt;
 
 &lt;domma-tooltip content="Bottom tooltip" position="bottom"&gt;
     &lt;button class="btn btn-primary"&gt;Bottom&lt;/button&gt;
-&lt;/domma-tooltip&gt;</code></pre>
+&lt;/domma-tooltip&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title-style">Trigger Types</h3>
@@ -153,7 +161,8 @@ Domma.elements.tooltip('#help-icon', {
             </domma-tooltip>
         </div>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;domma-tooltip content="Hover trigger" trigger="hover"&gt;
+            <pre><code>
+&lt;domma-tooltip content="Hover trigger" trigger="hover"&gt;
     &lt;button&gt;Hover&lt;/button&gt;
 &lt;/domma-tooltip&gt;
 
@@ -163,7 +172,8 @@ Domma.elements.tooltip('#help-icon', {
 
 &lt;domma-tooltip content="Focus trigger" trigger="focus"&gt;
     &lt;input type="text" placeholder="Focus me"&gt;
-&lt;/domma-tooltip&gt;</code></pre>
+&lt;/domma-tooltip&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title-style">Delay Configuration</h3>
@@ -180,13 +190,15 @@ Domma.elements.tooltip('#help-icon', {
             </domma-tooltip>
         </div>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;domma-tooltip content="Instant" delay="0"&gt;
+            <pre><code>
+&lt;domma-tooltip content="Instant" delay="0"&gt;
     &lt;button&gt;No Delay&lt;/button&gt;
 &lt;/domma-tooltip&gt;
 
 &lt;domma-tooltip content="Delayed" delay="500" hide-delay="300"&gt;
     &lt;button&gt;With Delays&lt;/button&gt;
-&lt;/domma-tooltip&gt;</code></pre>
+&lt;/domma-tooltip&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title-style">Programmatic API</h3>
@@ -200,7 +212,8 @@ Domma.elements.tooltip('#help-icon', {
             <button class="btn btn-sm btn-secondary" onclick="changeTooltipPosition()">Change Position</button>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>const tooltip = document.querySelector('domma-tooltip');
+            <pre><code>
+const tooltip = $('domma-tooltip')[0];
 
 // Update content
 tooltip.setContent('New tooltip text!');
@@ -216,7 +229,8 @@ tooltip.toggle();
 // Check visibility
 if (tooltip.isVisible()) {
     console.log('Tooltip is showing');
-}</code></pre>
+}
+</code></pre>
         </div>
 
         <h3 class="category-title-style">Wrapper API (Backwards Compatible)</h3>
@@ -227,7 +241,8 @@ if (tooltip.isVisible()) {
             <button id="wrapper-tooltip-btn" class="btn btn-success">Wrapper Tooltip</button>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>// Traditional approach - still works!
+            <pre><code>
+// Traditional approach - still works!
 const tooltip = Domma.elements.tooltip('#my-element', {
     content: 'Helpful information here',
     position: 'top',
@@ -239,7 +254,8 @@ const tooltip = Domma.elements.tooltip('#my-element', {
 tooltip.show();
 tooltip.hide();
 tooltip.setContent('Updated text');
-tooltip.destroy();</code></pre>
+tooltip.destroy();
+</code></pre>
         </div>
 
         <div class="alert alert-info">
@@ -488,11 +504,13 @@ $.setup({
             <tr><td><code>--dm-text-inverse</code></td><td><code>var(--dm-white)</code></td><td>Tooltip text colour</td></tr>
         </table>
         <h4 class="category-title">Example Override</h4>
-        <pre class="code-block language-css">/* Light tooltip - override inline or create custom class */
+        <pre class="code-block language-css">
+/* Light tooltip - override inline or create custom class */
 .tooltip-light {
     background: #f9fafb;
     color: #1f2937;
-}</pre>
+}
+</pre>
         <p class="mt-4">
             <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
         </p>
@@ -544,20 +562,20 @@ $.setup({
     let contentIndex = 0;
 
     window.updateTooltipContent = function() {
-        const tooltip = document.getElementById('programmable-tooltip');
+        const tooltip = $('#programmable-tooltip')[0];
         contentIndex = (contentIndex + 1) % tooltipContents.length;
         tooltip.setContent(tooltipContents[contentIndex]);
     };
 
     window.changeTooltipPosition = function() {
-        const tooltip = document.getElementById('programmable-tooltip');
+        const tooltip = $('#programmable-tooltip')[0];
         currentPosIndex = (currentPosIndex + 1) % positions.length;
         tooltip.setPosition(positions[currentPosIndex]);
     };
 
     // Web Components - Wrapper API demo
     $(() => {
-        if (document.getElementById('wrapper-tooltip-btn')) {
+        if ($('#wrapper-tooltip-btn').length) {
             Domma.elements.tooltip('#wrapper-tooltip-btn', {
                 content: 'This uses the wrapper API!',
                 position: 'top',

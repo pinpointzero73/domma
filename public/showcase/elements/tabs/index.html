@@ -55,7 +55,8 @@
             </ul>
 
           <h4 class="category-title-style">Basic Usage</h4>
-            <pre class="code-block language-javascript">// HTML structure
+            <pre class="code-block language-javascript">
+// HTML structure
 &lt;div id="my-tabs" class="tabs"&gt;
     &lt;ul class="tab-list"&gt;
         &lt;li class="tab-item active"&gt;Tab 1&lt;/li&gt;
@@ -79,7 +80,8 @@ const tabs = Domma.elements.tabs('#my-tabs', {
 tabs.show(1);     // Show second tab
 tabs.next();      // Go to next tab
 tabs.prev();      // Go to previous tab
-tabs.getActive(); // Returns active index</pre>
+tabs.getActive(); // Returns active index
+</pre>
         </div>
     </section>
 
@@ -94,7 +96,8 @@ tabs.getActive(); // Returns active index</pre>
             </p>
 
           <h4 class="category-title-style">Simple Tabs</h4>
-            <pre class="code-block language-javascript">// HTML
+            <pre class="code-block language-javascript">
+// HTML
 &lt;div id="quick-tabs" class="tabs"&gt;
     &lt;ul class="tab-list"&gt;
         &lt;li class="tab-item active"&gt;Home&lt;/li&gt;
@@ -118,7 +121,8 @@ tabs.getActive(); // Returns active index</pre>
 &lt;/div&gt;
 
 // JavaScript
-Domma.elements.tabs('#quick-tabs');</pre>
+Domma.elements.tabs('#quick-tabs');
+</pre>
 
             <div class="demo-area">
                 <div id="quick-tabs" class="tabs">
@@ -158,17 +162,20 @@ Domma.elements.tabs('#quick-tabs');</pre>
 
           <h4 class="category-title-style">Step 1: Create Tab Headers</h4>
             <p class="mb-2">Start with the tab list structure:</p>
-            <pre class="code-block language-javascript">&lt;div id="product-tabs" class="tabs"&gt;
+            <pre class="code-block language-javascript">
+&lt;div id="product-tabs" class="tabs"&gt;
     &lt;ul class="tab-list"&gt;
         &lt;li class="tab-item active"&gt;Overview&lt;/li&gt;
         &lt;li class="tab-item"&gt;Features&lt;/li&gt;
         &lt;li class="tab-item"&gt;Reviews&lt;/li&gt;
     &lt;/ul&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;
+</pre>
 
           <h4 class="category-title-style mt-4">Step 2: Add Tab Panels</h4>
             <p class="mb-2">Add corresponding content panels (same order as tabs):</p>
-            <pre class="code-block language-javascript">&lt;div id="product-tabs" class="tabs"&gt;
+            <pre class="code-block language-javascript">
+&lt;div id="product-tabs" class="tabs"&gt;
     &lt;ul class="tab-list"&gt;...&lt;/ul&gt;
     &lt;div class="tab-content"&gt;
         &lt;div class="tab-panel active"&gt;
@@ -187,38 +194,45 @@ Domma.elements.tabs('#quick-tabs');</pre>
             &lt;p&gt;⭐⭐⭐⭐⭐ (4.8/5)&lt;/p&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;
+</pre>
 
           <h4 class="category-title-style mt-4">Step 3: Initialise with Animation</h4>
             <p class="mb-2">Add smooth transitions between tabs:</p>
-            <pre class="code-block language-javascript">const productTabs = Domma.elements.tabs('#product-tabs', {
+            <pre class="code-block language-javascript">
+const productTabs = Domma.elements.tabs('#product-tabs', {
     activeIndex: 0,    // Start with first tab
     animation: true    // Enable smooth transitions
-});</pre>
+});
+</pre>
 
           <h4 class="category-title-style mt-4">Step 4: Add Change Callback</h4>
             <p class="mb-2">Track which tab users view:</p>
-            <pre class="code-block language-javascript">const productTabs = Domma.elements.tabs('#product-tabs', {
+            <pre class="code-block language-javascript">
+const productTabs = Domma.elements.tabs('#product-tabs', {
     activeIndex: 0,
     animation: true,
     onChange: (index, panel) => {
         const tabs = ['Overview', 'Features', 'Reviews'];
         console.log(`User viewing: ${tabs[index]}`);
     }
-});</pre>
+});
+</pre>
 
           <h4 class="category-title-style mt-4">Step 5: Add Next/Previous Buttons</h4>
             <p class="mb-2">Navigate programmatically with buttons:</p>
-            <pre class="code-block language-javascript">&lt;button id="prev-tab"&gt;← Previous&lt;/button&gt;
+            <pre class="code-block language-javascript">
+&lt;button id="prev-tab"&gt;← Previous&lt;/button&gt;
 &lt;button id="next-tab"&gt;Next →&lt;/button&gt;
 
-document.getElementById('prev-tab').addEventListener('click', () => {
+$('#prev-tab').on('click', () => {
     productTabs.prev();
 });
 
-document.getElementById('next-tab').addEventListener('click', () => {
+$('#next-tab').on('click', () => {
     productTabs.next();
-});</pre>
+});
+</pre>
 
           <h4 class="category-title-style mt-4">Step 6: Complete Working Demo</h4>
             <div class="demo-area">
@@ -646,7 +660,8 @@ document.getElementById('next-tab').addEventListener('click', () => {
             </p>
 
           <h4 class="category-title-style">Basic Setup</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#product-tabs': {
         component: 'tabs',
         options: {
@@ -654,10 +669,12 @@ document.getElementById('next-tab').addEventListener('click', () => {
             animation: true
         }
     }
-});</pre>
+});
+</pre>
 
           <h4 class="category-title-style mt-4">With Change Tracking</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#analytics-tabs': {
         component: 'tabs',
         options: {
@@ -670,10 +687,12 @@ document.getElementById('next-tab').addEventListener('click', () => {
             }
         }
     }
-});</pre>
+});
+</pre>
 
           <h4 class="category-title-style mt-4">Multiple Tab Sets</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '.product-tabs': {
         component: 'tabs',
         options: {
@@ -688,7 +707,8 @@ document.getElementById('next-tab').addEventListener('click', () => {
             animation: false // No animation
         }
     }
-});</pre>
+});
+</pre>
 
           <h4 class="category-title-style mt-4">Demo</h4>
           <div class="demo-area tabs-demo-area">
@@ -724,14 +744,16 @@ document.getElementById('next-tab').addEventListener('click', () => {
                 <tr><td><code>--dm-primary</code></td><td><code>var(--dm-blue-600)</code></td><td>Primary brand colour</td></tr>
             </table>
             <h4 class="category-title">Example Override</h4>
-            <pre class="code-block language-css">:root {
+            <pre class="code-block language-css">
+:root {
     /* Custom active tab colour */
     --dm-tab-active-border: #16a34a;  /* Green */
     --dm-tab-active-text: #16a34a;
 
     /* Subtle hover */
     --dm-tab-hover-bg: rgba(0,0,0,0.02);
-}</pre>
+}
+</pre>
             <p class="mt-4">
                 <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
             </p>

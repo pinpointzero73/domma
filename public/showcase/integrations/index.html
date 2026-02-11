@@ -190,7 +190,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <h4 class="mb-3">Single Blueprint Definition</h4>
-                    <pre class="code-block language-javascript">const userBlueprint = {
+                    <pre class="code-block language-javascript">
+const userBlueprint = {
     name: {
         type: 'string',
         required: true,
@@ -208,11 +209,13 @@
         max: 125,
         label: 'Age'
     }
-};</pre>
+};
+</pre>
                 </div>
                 <div>
                     <h4 class="mb-3">Use Everywhere</h4>
-                    <pre class="code-block language-javascript">// Auto-generate a form
+                    <pre class="code-block language-javascript">
+// Auto-generate a form
 const form = F.create(userBlueprint);
 
 // Create a reactive model
@@ -221,7 +224,8 @@ const model = M.create(userBlueprint);
 // Full CRUD with one line
 F.crud('#app', userBlueprint, {
     api: '/api/users'
-});</pre>
+});
+</pre>
                 </div>
             </div>
 
@@ -261,15 +265,18 @@ F.crud('#app', userBlueprint, {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                     <h4 class="mb-3">Publisher</h4>
-                    <pre class="code-block language-javascript">// Component A publishes event
+                    <pre class="code-block language-javascript">
+// Component A publishes event
 M.publish('cart:updated', {
     items: cartItems,
     total: calculateTotal()
-});</pre>
+});
+</pre>
                 </div>
                 <div>
                     <h4 class="mb-3">Subscribers</h4>
-                    <pre class="code-block language-javascript">// Component B listens
+                    <pre class="code-block language-javascript">
+// Component B listens
 M.subscribe('cart:updated', (data) => {
     updateBadge(data.items.length);
 });
@@ -277,7 +284,8 @@ M.subscribe('cart:updated', (data) => {
 // Component C also listens
 M.subscribe('cart:updated', (data) => {
     showNotification(`Cart updated`);
-});</pre>
+});
+</pre>
                 </div>
             </div>
 
@@ -301,10 +309,12 @@ M.subscribe('cart:updated', (data) => {
         <div class="card-body">
             <p class="mb-4">The <code>F.crud()</code> method combines Forms, Models, Tables, and Validation into a complete CRUD interface with just one function call.</p>
 
-            <pre class="code-block language-javascript">F.crud('#users', userBlueprint, {
+            <pre class="code-block language-javascript">
+F.crud('#users', userBlueprint, {
     api: '/api/users',           // REST API endpoint
     features: ['add', 'edit', 'delete', 'search']
-});</pre>
+});
+</pre>
 
             <p class="mt-3 mb-3">This single line creates:</p>
             <ul class="mb-4">
@@ -330,7 +340,8 @@ M.subscribe('cart:updated', (data) => {
         <div class="card-body">
             <p class="mb-4">Domma uses a modular CSS architecture with 4 files loaded in order:</p>
 
-            <pre class="code-block language-html">&lt;!-- 1. Base styles + utilities --&gt;
+            <pre class="code-block language-html">
+&lt;!-- 1. Base styles + utilities --&gt;
 &lt;link rel="stylesheet" href="dist/domma.css"&gt;
 
 &lt;!-- 2. Grid system (Bootstrap + CSS Grid) --&gt;
@@ -340,7 +351,8 @@ M.subscribe('cart:updated', (data) => {
 &lt;link rel="stylesheet" href="dist/elements.css"&gt;
 
 &lt;!-- 4. Theme system (10+ themes) --&gt;
-&lt;link rel="stylesheet" href="dist/themes/domma-themes.css"&gt;</pre>
+&lt;link rel="stylesheet" href="dist/themes/domma-themes.css"&gt;
+</pre>
 
             <h4 class="mt-4 mb-3">Theme Integration</h4>
             <p class="mb-3">All Domma components are theme-aware. Change the theme and everything updates together:</p>
@@ -382,7 +394,8 @@ M.subscribe('cart:updated', (data) => {
 
             <h4 class="mt-4 mb-3">Grid System</h4>
             <p class="mb-3">Use Bootstrap-style grid or CSS Grid utilities:</p>
-            <pre class="code-block language-html">&lt;!-- Bootstrap-style --&gt;
+            <pre class="code-block language-html">
+&lt;!-- Bootstrap-style --&gt;
 &lt;div class="row"&gt;
     &lt;div class="col-md-6"&gt;Column 1&lt;/div&gt;
     &lt;div class="col-md-6"&gt;Column 2&lt;/div&gt;
@@ -392,7 +405,8 @@ M.subscribe('cart:updated', (data) => {
 &lt;div class="grid grid-cols-2 gap-4"&gt;
     &lt;div&gt;Column 1&lt;/div&gt;
     &lt;div&gt;Column 2&lt;/div&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;
+</pre>
         </div>
     </section>
 
@@ -443,7 +457,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 content: `
                     <h4 class="mb-3">Two-Way Binding</h4>
                     <p>Forms can be automatically bound to Models for reactive updates:</p>
-                    <pre class="code-block language-javascript">const userModel = M.create(userBlueprint, {
+                    <pre class="code-block language-javascript">
+const userModel = M.create(userBlueprint, {
     name: 'John Doe',
     email: 'john@example.com'
 });
@@ -454,7 +469,8 @@ const form = F.create(userBlueprint, {}, {
 });
 
 // Changes in form update model automatically
-// Changes in model update form automatically</pre>
+// Changes in model update form automatically
+</pre>
                 `
             },
             {
@@ -463,7 +479,8 @@ const form = F.create(userBlueprint, {}, {
                 content: `
                     <h4 class="mb-3">Reactive DOM Binding</h4>
                     <p>Bind model properties directly to DOM elements:</p>
-                    <pre class="code-block language-javascript">const userModel = M.create(userBlueprint);
+                    <pre class="code-block language-javascript">
+const userModel = M.create(userBlueprint);
 
 // Bind model fields to DOM elements
 M.bind(userModel, 'name', '#display-name', {
@@ -473,7 +490,8 @@ M.bind(userModel, 'name', '#display-name', {
 M.bind(userModel, 'email', '#display-email');
 
 // When model changes, DOM updates automatically
-userModel.set('name', 'Jane Smith');</pre>
+userModel.set('name', 'Jane Smith');
+</pre>
                 `
             },
             {
@@ -482,7 +500,8 @@ userModel.set('name', 'Jane Smith');</pre>
                 content: `
                     <h4 class="mb-3">API Synchronization</h4>
                     <p>Sync models with REST APIs manually or use CRUD helper:</p>
-                    <pre class="code-block language-javascript">// Manual sync
+                    <pre class="code-block language-javascript">
+// Manual sync
 const user = M.create(userBlueprint);
 
 // Load from API
@@ -497,7 +516,8 @@ const result = await H.put('/api/users/1',
 // Or use CRUD helper for automatic sync
 F.crud('#users', userBlueprint, {
     api: '/api/users'  // Handles all CRUD
-});</pre>
+});
+</pre>
                 `
             },
             {
@@ -506,7 +526,8 @@ F.crud('#users', userBlueprint, {
                 content: `
                     <h4 class="mb-3">localStorage Persistence</h4>
                     <p>Models can automatically persist to localStorage:</p>
-                    <pre class="code-block language-javascript">// Auto-persist model
+                    <pre class="code-block language-javascript">
+// Auto-persist model
 const settings = M.create(settingsBlueprint, {}, {
     persist: 'user-settings',  // localStorage key
     autoSave: true            // Save on every change
@@ -519,7 +540,8 @@ settings.load();
 // Check if persisted
 if (settings.isPersisted()) {
     console.log('Settings saved');
-}</pre>
+}
+</pre>
                 `
             }
         ]
@@ -681,7 +703,8 @@ if (settings.isPersisted()) {
                 <p class="text-muted mb-3">This model reflects the latest form submission</p>
                 <pre style="background: #282c34; color: #abb2bf; padding: 1rem; border-radius: 4px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 13px;">${JSON.stringify(demoModel.toJSON(), null, 2)}</pre>
                 <p class="mt-3"><strong>Try it:</strong> Open browser console and type:</p>
-                <pre class="code-block language-javascript">// Change model property
+                <pre class="code-block language-javascript">
+// Change model property
 window.demoModel.set('name', 'Jane Smith');
 
 // Get a value
@@ -691,7 +714,8 @@ window.demoModel.get('name');
 window.demoModel.validate();
 
 // Get all data as JSON
-window.demoModel.toJSON();</pre>
+window.demoModel.toJSON();
+</pre>
             `;
 
             blueprintContent.html(DOMPurify.sanitize(html, {safe: false}));

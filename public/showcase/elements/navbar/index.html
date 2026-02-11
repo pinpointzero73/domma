@@ -1060,13 +1060,15 @@ navbar.setActive(1);
             <tr><td><code>--dm-hover-bg</code></td><td><code>var(--dm-slate-100)</code></td><td>Link hover background</td></tr>
         </table>
         <h4 class="category-title">Example Override</h4>
-        <pre class="code-block language-css">:root {
+        <pre class="code-block language-css">
+:root {
     /* Dark navbar */
     --dm-navbar-bg: #0f172a;
     --dm-navbar-text: #f1f5f9;
     --dm-navbar-border: #1e293b;
     --dm-hover-bg: rgba(255,255,255,0.1);
-}</pre>
+}
+</pre>
         <p class="mt-4">
             <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
         </p>
@@ -1169,7 +1171,7 @@ navbar.setActive(1);
         ],
         onItemClick: (item, index, event) => {
             event.preventDefault();
-            const log = document.getElementById('tutorial-log');
+            const log = $('#tutorial-log')[0];
             const timestamp = new Date().toLocaleTimeString();
             log.textContent = `[${timestamp}] Clicked: ${item.text} → ${item.url}`;
         }

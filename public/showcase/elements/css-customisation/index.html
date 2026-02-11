@@ -48,7 +48,8 @@
 
             <h4 class="category-title">Minimal CSS Inclusion for Existing Projects</h4>
             <p class="mb-2">If you already have a design system, you only need to load Domma's component CSS:</p>
-            <pre class="code-block language-html">&lt;!-- Load only what you need --&gt;
+            <pre class="code-block language-html">
+&lt;!-- Load only what you need --&gt;
 &lt;link rel="stylesheet" href="dist/elements.css"&gt;  &lt;!-- UI components --&gt;
 
 &lt;!-- Optional: grid system if you don't have one --&gt;
@@ -61,7 +62,8 @@
     --dm-font-sans: 'Your Font', sans-serif;
     /* ...more overrides */
 }
-&lt;/style&gt;</pre>
+&lt;/style&gt;
+</pre>
         </div>
     </section>
 
@@ -145,7 +147,8 @@
             </table>
 
             <h4 class="category-title">Copy-Paste Override Template</h4>
-            <pre class="code-block language-css">:root {
+            <pre class="code-block language-css">
+:root {
     /* Brand colours */
     --dm-primary: #0066cc;               /* Your brand blue */
     --dm-primary-hover: #0052a3;         /* Darker for hover */
@@ -165,7 +168,8 @@
 
     /* Typography */
     --dm-font-sans: 'Inter', sans-serif; /* Your font stack */
-}</pre>
+}
+</pre>
 
             <h4 class="category-title">Before / After Demo</h4>
             <p class="mb-2">See the impact of custom variables in real-time:</p>
@@ -474,7 +478,8 @@
 
             <h4 class="category-title">Recipe 1: Bootstrap Project</h4>
             <p class="mb-2">Map Bootstrap's CSS variables to Domma's for consistent branding:</p>
-            <pre class="code-block language-css">:root {
+            <pre class="code-block language-css">
+:root {
     /* Map Bootstrap primary to Domma primary */
     --dm-primary: var(--bs-primary, #0d6efd);
     --dm-primary-hover: var(--bs-primary-dark, #0a58ca);
@@ -496,11 +501,13 @@
     --dm-danger: var(--bs-danger, #dc3545);
     --dm-warning: var(--bs-warning, #ffc107);
     --dm-info: var(--bs-info, #0dcaf0);
-}</pre>
+}
+</pre>
 
             <h4 class="category-title">Recipe 2: Tailwind Project</h4>
             <p class="mb-2">Map Tailwind colour tokens to Domma variables:</p>
-            <pre class="code-block language-css">:root {
+            <pre class="code-block language-css">
+:root {
     /* Map Tailwind primary (e.g., indigo) */
     --dm-primary: rgb(99 102 241);          /* indigo-500 */
     --dm-primary-hover: rgb(79 70 229);     /* indigo-600 */
@@ -521,11 +528,13 @@
     /* Match Tailwind radius */
     --dm-radius-md: 0.375rem;               /* rounded */
     --dm-radius-lg: 0.5rem;                 /* rounded-lg */
-}</pre>
+}
+</pre>
 
             <h4 class="category-title">Recipe 3: Dark Theme Integration</h4>
             <p class="mb-2">Override variables for a dark-themed site:</p>
-            <pre class="code-block language-css">/* Dark theme overrides */
+            <pre class="code-block language-css">
+/* Dark theme overrides */
 :root {
     /* Dark backgrounds */
     --dm-background: #0f172a;               /* slate-900 */
@@ -550,7 +559,8 @@
     --dm-card-bg: var(--dm-surface);
     --dm-navbar-bg: var(--dm-slate-900);
     --dm-navbar-text: var(--dm-text);
-}</pre>
+}
+</pre>
         </div>
     </section>
 
@@ -565,7 +575,8 @@
             </p>
 
             <h4 class="category-title">Scoped Example</h4>
-            <pre class="code-block language-css">/* Entire page uses default Domma theme */
+            <pre class="code-block language-css">
+/* Entire page uses default Domma theme */
 :root {
     --dm-primary: #2563eb;  /* Blue */
 }
@@ -580,7 +591,8 @@
 .admin-section {
     --dm-primary: #dc2626;  /* Red */
     --dm-primary-hover: #b91c1c;
-}</pre>
+}
+</pre>
 
             <h4 class="category-title">Result</h4>
             <p class="mb-2">Elements inside <code>.my-sidebar</code> will have green buttons, badges, and links. Elements inside <code>.admin-section</code> will be red. Everything else stays blue.</p>
@@ -605,7 +617,8 @@
             </ul>
 
             <h4 class="category-title">Minimal Custom Theme Template</h4>
-            <pre class="code-block language-css">/* custom-theme.css */
+            <pre class="code-block language-css">
+/* custom-theme.css */
 .dm-theme-corporate {
     /* Brand */
     --dm-primary: #003d7a;              /* Corporate blue */
@@ -626,13 +639,16 @@
 
     /* Typography */
     --dm-font-sans: 'Helvetica Neue', Arial, sans-serif;
-}</pre>
+}
+</pre>
 
             <h4 class="category-title">Usage</h4>
-            <pre class="code-block language-html">&lt;link rel="stylesheet" href="custom-theme.css"&gt;
+            <pre class="code-block language-html">
+&lt;link rel="stylesheet" href="custom-theme.css"&gt;
 &lt;body class="dm-theme-corporate"&gt;
     &lt;!-- Your content --&gt;
-&lt;/body&gt;</pre>
+&lt;/body&gt;
+</pre>
 
             <p class="mb-0 mt-4">For advanced theme creation with light/dark variants and automatic switching, see the <a href="../theme-roller/index.html">Theme Roller</a> tool.</p>
         </div>

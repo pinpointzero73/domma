@@ -60,27 +60,33 @@ const backToTop = Domma.elements.backToTop('#back-to-top', {
         <h3 class="category-title-style">Step 1: Add Button Element</h3>
         <p class="mb-4 text-gray-600">Create a button element with a class and unique ID:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;button id="back-to-top" class="back-to-top-btn"&gt;↑&lt;/button&gt;</code></pre>
+            <pre><code>
+&lt;button id="back-to-top" class="back-to-top-btn"&gt;↑&lt;/button&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title-style">Step 2: Include Domma</h3>
         <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;!-- CSS --&gt;
+            <pre><code>
+&lt;!-- CSS --&gt;
 &lt;link rel="stylesheet" href="dist/domma.css"&gt;
 &lt;link rel="stylesheet" href="dist/elements.css"&gt;
 
 &lt;!-- JavaScript --&gt;
-&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title-style">Step 3: Initialize the Button</h3>
         <p class="mb-4 text-gray-600">Call <code>Domma.elements.backToTop()</code> to activate the button:</p>
         <div class="code-block language-javascript mb-6">
-            <pre><code>Domma.elements.backToTop('#back-to-top', {
+            <pre><code>
+Domma.elements.backToTop('#back-to-top', {
     showAfter: 300,   // Show after scrolling 300px
     duration: 500     // Scroll animation duration in ms
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <div class="alert alert-info">
@@ -137,7 +143,8 @@ Domma.elements.backToTop('#back-to-top', {
         <p class="mb-4">Use the native <code>&lt;domma-back-to-top&gt;</code> Web Component directly in HTML with attributes for configuration:</p>
 
         <div class="code-block language-html mb-4">
-            <pre><code>&lt;!-- Basic Web Component --&gt;
+            <pre><code>
+&lt;!-- Basic Web Component --&gt;
 &lt;domma-back-to-top&gt;&lt;/domma-back-to-top&gt;
 
 &lt;!-- Configured Web Component --&gt;
@@ -152,7 +159,8 @@ Domma.elements.backToTop('#back-to-top', {
 &lt;domma-back-to-top
     target="#scrollable-content"
     show-after="300"
-&gt;&lt;/domma-back-to-top&gt;</code></pre>
+&gt;&lt;/domma-back-to-top&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title">Live Web Component Demo</h3>
@@ -238,8 +246,9 @@ Domma.elements.backToTop('#back-to-top', {
         <h3 class="category-title">JavaScript API</h3>
         <p class="mb-4">Access the Web Component instance and call methods programmatically:</p>
         <div class="code-block language-javascript mb-4">
-            <pre><code>// Get the Web Component element
-const btn = document.querySelector('domma-back-to-top');
+            <pre><code>
+// Get the Web Component element
+const btn = $('domma-back-to-top')[0];
 
 // Call methods
 btn.scroll();              // Scroll to top
@@ -261,7 +270,8 @@ btn.addEventListener('show', (e) => {
 
 btn.addEventListener('hide', (e) => {
     console.log('Button hidden');
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <h3 class="category-title">Reactive Attributes Demo</h3>
@@ -288,23 +298,25 @@ btn.addEventListener('hide', (e) => {
 
         <h3 class="category-title">Event Handling</h3>
         <div class="code-block language-javascript mb-4">
-            <pre><code>&lt;domma-back-to-top id="my-btn"&gt;&lt;/domma-back-to-top&gt;
+            <pre><code>
+&lt;domma-back-to-top id="my-btn"&gt;&lt;/domma-back-to-top&gt;
 
 &lt;script&gt;
-const btn = document.getElementById('my-btn');
+const btn = $('#my-btn')[0];
 
 // Listen for show event
 btn.addEventListener('show', (e) => {
     console.log('Button became visible');
-    document.getElementById('status').textContent = 'Visible';
+    $('#status')[0].textContent = 'Visible';
 });
 
 // Listen for hide event
 btn.addEventListener('hide', (e) => {
     console.log('Button became hidden');
-    document.getElementById('status').textContent = 'Hidden';
+    $('#status')[0].textContent = 'Hidden';
 });
-&lt;/script&gt;</code></pre>
+&lt;/script&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title">Benefits of Web Components</h3>
@@ -323,7 +335,8 @@ btn.addEventListener('hide', (e) => {
 
         <h4 class="text-lg font-semibold mt-4 mb-2">React</h4>
         <div class="code-block language-javascript mb-4">
-            <pre><code>import { useRef, useEffect } from 'react';
+            <pre><code>
+import { useRef, useEffect } from 'react';
 
 function MyComponent() {
     const btnRef = useRef(null);
@@ -338,12 +351,14 @@ function MyComponent() {
     }, []);
 
     return &lt;domma-back-to-top ref={btnRef} show-after="300" /&gt;;
-}</code></pre>
+}
+</code></pre>
         </div>
 
         <h4 class="text-lg font-semibold mt-4 mb-2">Vue</h4>
         <div class="code-block language-javascript mb-4">
-            <pre><code>&lt;template&gt;
+            <pre><code>
+&lt;template&gt;
     &lt;domma-back-to-top
         ref="backToTop"
         :show-after="300"
@@ -363,12 +378,14 @@ export default {
         this.$refs.backToTop.scroll();
     }
 };
-&lt;/script&gt;</code></pre>
+&lt;/script&gt;
+</code></pre>
         </div>
 
         <h4 class="text-lg font-semibold mt-4 mb-2">Angular</h4>
         <div class="code-block language-javascript mb-4">
-            <pre><code>import { Component, ViewChild, ElementRef } from '@angular/core';
+            <pre><code>
+import { Component, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
     selector: 'app-my-component',
@@ -390,13 +407,15 @@ export class MyComponent {
     scrollToTop() {
         this.backToTop.nativeElement.scroll();
     }
-}</code></pre>
+}
+</code></pre>
         </div>
 
         <h3 class="category-title">CSS Part Customization</h3>
         <p class="mb-4">Customize Web Component styles using CSS <code>::part()</code> selectors:</p>
         <div class="code-block language-css mb-4">
-            <pre><code>/* Target the button inside Shadow DOM */
+            <pre><code>
+/* Target the button inside Shadow DOM */
 domma-back-to-top::part(button) {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: none;
@@ -408,7 +427,8 @@ domma-back-to-top::part(button) {
 domma-back-to-top::part(button):hover {
     transform: translateY(-2px) scale(1.15);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-}</code></pre>
+}
+</code></pre>
         </div>
     </div>
 </section>
@@ -462,11 +482,11 @@ const backToTop = Domma.elements.backToTop('#back-to-top', {
     target: '#scrollable-container',
     onShow: () =&gt; {
         console.log('Button shown');
-        document.getElementById('status').textContent = 'Visible';
+        $('#status')[0].textContent = 'Visible';
     },
     onHide: () =&gt; {
         console.log('Button hidden');
-        document.getElementById('status').textContent = 'Hidden';
+        $('#status')[0].textContent = 'Hidden';
     }
 });
 </code></pre>
@@ -716,10 +736,12 @@ $.setup({
             <tr><td><code>--dm-shadow-md</code></td><td><code>0 4px 6px...</code></td><td>Button shadow</td></tr>
         </table>
         <h4 class="category-title">Example Override</h4>
-        <pre class="code-block language-css">:root {
+        <pre class="code-block language-css">
+:root {
     /* Square button */
     --dm-radius-full: 0.5rem;
-}</pre>
+}
+</pre>
         <p class="mt-4">
             <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
         </p>
@@ -770,10 +792,10 @@ $.setup({
         duration: 600,
         target: '#tutorial-container',
         onShow: () => {
-            document.getElementById('button-status').textContent = 'Visible';
+            $('#button-status')[0].textContent = 'Visible';
         },
         onHide: () => {
-            document.getElementById('button-status').textContent = 'Hidden';
+            $('#button-status')[0].textContent = 'Hidden';
         }
     });
 
@@ -803,36 +825,36 @@ $.setup({
         target: '#programmatic-demo'
     });
 
-    document.getElementById('prog-show').addEventListener('click', () => programmaticBtn.show());
-    document.getElementById('prog-hide').addEventListener('click', () => programmaticBtn.hide());
-    document.getElementById('prog-toggle').addEventListener('click', () => programmaticBtn.toggle());
-    document.getElementById('prog-scroll').addEventListener('click', () => programmaticBtn.scroll(400));
+    $('#prog-show').on('click', () => programmaticBtn.show());
+    $('#prog-hide').on('click', () => programmaticBtn.hide());
+    $('#prog-toggle').on('click', () => programmaticBtn.toggle());
+    $('#prog-scroll').on('click', () => programmaticBtn.scroll(400));
 
     // Web Component Demos
     // Main Web Component demo - get the element and set its target
-    const wcDemoBtn = document.getElementById('wc-demo-btn');
+    const wcDemoBtn = $('#wc-demo-btn')[0];
     if (wcDemoBtn) {
         wcDemoBtn.setAttribute('target', '#wc-demo-container');
     }
 
     // Reactive attributes demo
-    const reactiveBtn = document.getElementById('reactive-btn');
+    const reactiveBtn = $('#reactive-btn')[0];
     if (reactiveBtn) {
         reactiveBtn.setAttribute('target', '#reactive-demo');
 
         let currentPosition = 'bottom-right';
-        document.getElementById('wc-change-position').addEventListener('click', () => {
+        $('#wc-change-position').on('click', () => {
             currentPosition = currentPosition === 'bottom-right' ? 'bottom-left' : 'bottom-right';
             reactiveBtn.setPosition(currentPosition);
         });
 
         let currentOffset = 16;
-        document.getElementById('wc-change-offset').addEventListener('click', () => {
+        $('#wc-change-offset').on('click', () => {
             currentOffset = currentOffset === 16 ? 32 : 16;
             reactiveBtn.setOffset(currentOffset);
         });
 
-        document.getElementById('wc-manual-show').addEventListener('click', () => {
+        $('#wc-manual-show').on('click', () => {
             reactiveBtn.show();
         });
     }

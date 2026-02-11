@@ -28,7 +28,8 @@
         </div>
         <div class="card-body">
             <p class="mb-4">Select elements using CSS selectors, DOM elements, or HTML strings.</p>
-            <pre class="code-block language-javascript">// CSS selector
+            <pre class="code-block language-javascript">
+// CSS selector
 $('.class')
 $('#id')
 $('div.container > p')
@@ -41,7 +42,8 @@ $(element)
 $('<div class="new">Content</div>')
 
 // Collection from NodeList
-$(document.querySelectorAll('p'))</pre>
+$($('p'))
+</pre>
 
           <h4 class="font-semibold mt-4 mb-2">Try It</h4>
             <div class="flex gap-2 mb-4">
@@ -69,15 +71,17 @@ $(document.querySelectorAll('p'))</pre>
         <div class="card-body">
             <p class="mb-4">Limit your search to a specific element for better performance and clarity.</p>
 
-            <pre class="code-block language-javascript">// Search within specific container
-const container = document.getElementById('container');
+            <pre class="code-block language-javascript">
+// Search within specific container
+const container = $('#container')[0];
 $('li', container).addClass('highlight');
 
 // Equivalent to chaining
 $('#container').find('li').addClass('highlight');
 
 // Performance benefit: searches smaller subset
-$('.item', containerEl).css('color', 'blue');</pre>
+$('.item', containerEl).css('color', 'blue');
+</pre>
 
           <h4 class="font-semibold mt-4 mb-2">Try It</h4>
           <div class="mb-4">
@@ -148,7 +152,8 @@ $('.item', containerEl).css('color', 'blue');</pre>
             <code class="badge badge-light">offsetParent()</code>
             </div>
 
-            <pre class="code-block language-javascript">// Find descendants
+            <pre class="code-block language-javascript">
+// Find descendants
 $('#container').find('.item')
 
 // Navigate up
@@ -166,7 +171,8 @@ $('.items').filter('.active')
 $('.items').not('.disabled')
 $('.items').eq(2)  // Third element
 $('.items').first()
-$('.items').last()</pre>
+$('.items').last()
+</pre>
 
           <h4 class="font-semibold mt-4 mb-2">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
@@ -209,7 +215,8 @@ $('.items').last()</pre>
             <code class="badge badge-light">removeData()</code>
             </div>
 
-            <pre class="code-block language-javascript">// Get/set HTML content
+            <pre class="code-block language-javascript">
+// Get/set HTML content
 $('#box').html()              // Get
 $('#box').html('<b>New</b>')  // Set
 
@@ -228,7 +235,8 @@ $('img').attr({ src: 'img.jpg', alt: 'Image' })
 
 // Data attributes
 $('#el').data('id')          // data-id
-$('#el').data('id', '123')</pre>
+$('#el').data('id', '123')
+</pre>
 
           <h4 class="font-semibold mt-4 mb-2">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
@@ -265,7 +273,8 @@ $('#el').data('id', '123')</pre>
             <code class="badge badge-light">toggle()</code>
             </div>
 
-            <pre class="code-block language-javascript">// Get/set CSS
+            <pre class="code-block language-javascript">
+// Get/set CSS
 $('#box').css('color')
 $('#box').css('color', 'red')
 $('#box').css({ color: 'red', fontSize: '16px' })
@@ -279,7 +288,8 @@ $('#box').hasClass('active')  // Returns boolean
 // Visibility
 $('#box').show()
 $('#box').hide()
-$('#box').toggle()</pre>
+$('#box').toggle()
+</pre>
 
           <h4 class="font-semibold mt-4 mb-2">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
@@ -325,7 +335,8 @@ $('#box').toggle()</pre>
             <code class="badge badge-light">replaceAll()</code>
             </div>
 
-            <pre class="code-block language-javascript">// Inserting content
+            <pre class="code-block language-javascript">
+// Inserting content
 $('#list').append('<li>New item</li>')
 $('#list').prepend('<li>First item</li>')
 $('#item').after('<li>After</li>')
@@ -343,7 +354,8 @@ $('#item').remove()
 $('#list').empty()
 
 // Cloning
-$('#item').clone()</pre>
+$('#item').clone()
+</pre>
 
           <h4 class="font-semibold mt-4 mb-2">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
@@ -395,7 +407,8 @@ $('#item').clone()</pre>
             <code class="badge badge-light">load()</code>
             </div>
 
-            <pre class="code-block language-javascript">// Basic event binding
+            <pre class="code-block language-javascript">
+// Basic event binding
 $('#btn').on('click', function(e) {
     console.log('Clicked!', this);
 });
@@ -419,7 +432,8 @@ $('#input').focus(handler);
 $('#form').submit(handler);
 
 // Hover (mouseenter + mouseleave)
-$('#box').hover(enterFn, leaveFn);</pre>
+$('#box').hover(enterFn, leaveFn);
+</pre>
 
           <h4 class="font-semibold mt-4 mb-2">Try It</h4>
           <div class="p-4 border rounded bg-gray-50">
@@ -454,7 +468,8 @@ $('#box').hover(enterFn, leaveFn);</pre>
             <code class="badge badge-light">delay()</code>
             </div>
 
-            <pre class="code-block language-javascript">// Fade effects
+            <pre class="code-block language-javascript">
+// Fade effects
 $('#box').fadeIn(400)
 $('#box').fadeOut(400)
 $('#box').fadeToggle()
@@ -475,7 +490,8 @@ $('#box').animate({
 $('#box')
     .fadeOut(200)
     .delay(500)
-    .fadeIn(200)</pre>
+    .fadeIn(200)
+</pre>
 
           <h4 class="font-semibold mt-4 mb-2">Try It</h4>
             <div class="flex gap-2 flex-wrap mb-4">
@@ -510,7 +526,8 @@ $('#box')
             <code class="badge badge-light">scrollLeft()</code>
             </div>
 
-            <pre class="code-block language-javascript">// Dimensions
+            <pre class="code-block language-javascript">
+// Dimensions
 $('#box').width()              // Content width
 $('#box').width(200)           // Set width
 $('#box').height()
@@ -525,7 +542,8 @@ $('#box').position()           // { top, left } relative to offset parent
 // Scroll
 $(window).scrollTop()
 $(window).scrollTop(0)         // Scroll to top
-$('#box').scrollLeft()</pre>
+$('#box').scrollLeft()
+</pre>
 
           <h4 class="font-semibold mt-4 mb-2">Try It</h4>
             <button class="btn btn-primary mb-4" id="dim-btn">Get Dimensions</button>
@@ -556,7 +574,8 @@ $('#box').scrollLeft()</pre>
             <code class="badge badge-light">length</code>
             </div>
 
-            <pre class="code-block language-javascript">// Iterate
+            <pre class="code-block language-javascript">
+// Iterate
 $('.items').each(function(index, element) {
     console.log(index, $(this).text());
 });
@@ -575,7 +594,8 @@ $('.items')[0]        // Same as get(0)
 $('.items').index($('.active'))  // Position of element
 
 // Length
-$('.items').length    // Number of elements</pre>
+$('.items').length    // Number of elements
+</pre>
         </div>
     </section>
 
@@ -762,7 +782,7 @@ $('.items').length    // Number of elements</pre>
         $('.context-item').removeClass('badge-primary').addClass('badge-secondary');
 
         // Select only within container 1 using context parameter
-        const container1 = document.getElementById('context-demo-1');
+        const container1 = $('#context-demo-1')[0];
         $('.context-item', container1)
             .removeClass('badge-secondary')
             .addClass('badge-primary');
@@ -777,7 +797,7 @@ $('.items').length    // Number of elements</pre>
         $('.context-item').removeClass('badge-primary').addClass('badge-secondary');
 
         // Select only within container 2 using context parameter
-        const container2 = document.getElementById('context-demo-2');
+        const container2 = $('#context-demo-2')[0];
         $('.context-item', container2)
             .removeClass('badge-secondary')
             .addClass('badge-primary');

@@ -44,7 +44,8 @@
                 <span class="models-method-item">isAvailable()</span>
             </div>
 
-            <pre class="code-block language-javascript">// Set values (auto-stringify)
+            <pre class="code-block language-javascript">
+// Set values (auto-stringify)
 S.set('user', { name: 'Alice', role: 'admin' });
 S.set('preferences', ['dark', 'compact']);
 S.set('count', 42);
@@ -58,7 +59,8 @@ S.get('missing', []);    // Default value if not found
 S.has('user');           // true
 S.keys();                // ['user', 'preferences', 'count']
 S.remove('count');
-S.clear();               // Clear only Domma keys</pre>
+S.clear();               // Clear only Domma keys
+</pre>
 
             <div class="models-try-section">
                 <h4 class="font-semibold mb-3">Try It</h4>
@@ -98,7 +100,8 @@ S.clear();               // Clear only Domma keys</pre>
             <p class="mb-4">Models can automatically persist to localStorage. Data is saved on every change and restored
                 when the model is created.</p>
 
-            <pre class="code-block language-javascript">// Create a persistent model
+            <pre class="code-block language-javascript">
+// Create a persistent model
 const settings = M.create({
     theme: { type: 'string', default: 'light' },
     fontSize: { type: 'number', default: 14 },
@@ -115,7 +118,8 @@ settings.set('fontSize', 16);
 settings.save();           // Force save
 settings.load();           // Force reload from storage
 settings.clearStorage();   // Remove from localStorage
-settings.reset(true);      // Reset and clear storage</pre>
+settings.reset(true);      // Reset and clear storage
+</pre>
 
             <div class="models-try-section">
                 <h4 class="font-semibold mb-3">Try It - Persistent Settings</h4>

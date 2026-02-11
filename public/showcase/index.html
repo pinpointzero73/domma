@@ -279,10 +279,13 @@
 
         <div class="quick-start bg-gray-900 text-gray-100 p-6 rounded-lg mt-8">
             <p class="mb-4"><strong>1. Include Domma</strong></p>
-            <pre class="code-block language-javascript mb-6">&lt;script src="dist/domma.min.js"&gt;</script></pre>
+            <pre class="code-block language-javascript mb-6">
+&lt;script src="dist/domma.min.js"&gt;</script>
+</pre>
 
             <p class="mb-4"><strong>2. Use the short aliases</strong></p>
-            <pre class="code-block language-javascript mb-6">// DOM manipulation (jQuery-style)
+            <pre class="code-block language-javascript mb-6">
+// DOM manipulation (jQuery-style)
 $('.btn').on('click', () => alert('Clicked!'));
 
 // Utilities (Lodash-style)
@@ -297,10 +300,12 @@ M.bind(user, 'name', '#name-input', { twoWay: true });
 
 // Storage (localStorage)
 S.set('prefs', { theme: 'dark' });
-S.get('prefs');  // { theme: 'dark' }</pre>
+S.get('prefs');  // { theme: 'dark' }
+</pre>
 
             <p class="mb-4"><strong>3. Or use the config engine for declarative setup</strong></p>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '.card': {
         component: 'card',
         options: { hover: true }
@@ -310,7 +315,8 @@ S.get('prefs');  // { theme: 'dark' }</pre>
             click: (e, $el) => $el.text('Submitted!')
         }
     }
-});</pre>
+});
+</pre>
         </div>
     </section>
 

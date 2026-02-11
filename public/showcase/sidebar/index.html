@@ -100,34 +100,40 @@
         <h3 class="text-xl font-semibold mb-3">Step 1: Add HTML Container</h3>
         <p class="mb-4 text-gray-600">Add an <code>&lt;aside&gt;</code> element to your page where you want the sidebar to appear:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;aside id="my-sidebar">&lt;/aside>
+            <pre><code>
+&lt;aside id="my-sidebar">&lt;/aside>
 
 &lt;main class="content">
     &lt;!-- Your page content -->
-&lt;/main></code></pre>
+&lt;/main>
+</code></pre>
         </div>
 
         <h3 class="text-xl font-semibold mb-3">Step 2: Include Domma</h3>
         <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;!-- CSS -->
+            <pre><code>
+&lt;!-- CSS -->
 &lt;link rel="stylesheet" href="dist/domma.css">
 &lt;link rel="stylesheet" href="dist/elements.css">
 
 &lt;!-- JavaScript -->
-&lt;script src="dist/domma.min.js">&lt;/script></code></pre>
+&lt;script src="dist/domma.min.js">&lt;/script>
+</code></pre>
         </div>
 
         <h3 class="text-xl font-semibold mb-3">Step 3: Initialize the Sidebar</h3>
         <p class="mb-4 text-gray-600">Call <code>Domma.elements.sidebar()</code> with your navigation items:</p>
         <div class="code-block language-javascript mb-6">
-            <pre><code>Domma.elements.sidebar('#my-sidebar', {
+            <pre><code>
+Domma.elements.sidebar('#my-sidebar', {
     items: [
         { text: 'Home', url: '/', icon: 'home' },
         { text: 'About', url: '/about', icon: 'info' },
         { text: 'Contact', url: '/contact', icon: 'mail' }
     ]
-});</code></pre>
+});
+</code></pre>
         </div>
 
         <div class="alert alert-info">
@@ -151,7 +157,8 @@
 
         <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
         <div class="code-block language-javascript">
-            <pre><code>const sidebar = Domma.elements.sidebar('#sidebar-basic', {
+            <pre><code>
+const sidebar = Domma.elements.sidebar('#sidebar-basic', {
     position: 'left',
     fixed: true,
     width: '250px',
@@ -167,7 +174,8 @@
     ],
     variant: 'dark',
     activeSection: 'dashboard'
-});</code></pre>
+});
+</code></pre>
         </div>
     </section>
 
@@ -188,7 +196,8 @@
 
         <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
         <div class="code-block language-javascript">
-            <pre><code>const sidebar = Domma.elements.sidebar('#sidebar-nested', {
+            <pre><code>
+const sidebar = Domma.elements.sidebar('#sidebar-nested', {
     items: [
         { text: 'Dashboard', url: '#', icon: 'layout' },
         {
@@ -210,7 +219,8 @@
         { heading: 'SYSTEM' },
         { text: 'Settings', url: '#settings', icon: 'settings' }
     ]
-});</code></pre>
+});
+</code></pre>
         </div>
     </section>
 
@@ -229,13 +239,15 @@
 
         <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
         <div class="code-block language-javascript">
-            <pre><code>Domma.elements.sidebar('#sidebar-badges', {
+            <pre><code>
+Domma.elements.sidebar('#sidebar-badges', {
     items: [
         { text: 'Inbox', url: '#inbox', icon: 'mail', badge: '12' },
         { text: 'Notifications', url: '#notifications', icon: 'bell', badge: '3' },
         { text: 'Messages', url: '#messages', icon: 'message-square', badge: '99+' }
     ]
-});</code></pre>
+});
+</code></pre>
         </div>
     </section>
 
@@ -254,10 +266,12 @@
 
         <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
         <div class="code-block language-javascript">
-            <pre><code>Domma.elements.sidebar('#sidebar-light', {
+            <pre><code>
+Domma.elements.sidebar('#sidebar-light', {
     variant: 'light',  // or 'dark'
     items: [/* ... */]
-});</code></pre>
+});
+</code></pre>
         </div>
     </section>
 
@@ -277,11 +291,13 @@
 
         <h3 class="text-xl font-semibold mb-3">JavaScript</h3>
         <div class="code-block language-javascript">
-            <pre><code>Domma.elements.sidebar('#sidebar-persist', {
+            <pre><code>
+Domma.elements.sidebar('#sidebar-persist', {
     persistExpanded: true,
     persistKey: 'my-app-sidebar',  // Unique key for this sidebar
     items: [/* ... */]
-});</code></pre>
+});
+</code></pre>
         </div>
     </section>
 
@@ -456,7 +472,8 @@
         <p class="mb-6 text-gray-600">Use <code>$.setup()</code> for declarative initialization</p>
 
         <div class="code-block language-javascript">
-            <pre><code>$.setup({
+            <pre><code>
+$.setup({
     '#my-sidebar': {
         component: 'sidebar',
         options: {
@@ -468,7 +485,8 @@
             activeSection: 'home'
         }
     }
-});</code></pre>
+});
+</code></pre>
         </div>
     </section>
 

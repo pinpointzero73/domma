@@ -298,7 +298,7 @@ Domma.elements.autocomplete('#tag-input', {
 });
 
 function renderTags() {
-    document.getElementById('tag-container').innerHTML =
+    $('#tag-container')[0].innerHTML =
         selectedTags.map(tag =>
             `&lt;span class="badge"&gt;${tag}&lt;/span&gt;`
         ).join('');
@@ -800,10 +800,12 @@ M.bind(model, 'query', '#search-mirror', { twoWay: true });
                 <tr><td><code>--dm-hover-bg</code></td><td><code>var(--dm-slate-100)</code></td><td>Item hover background</td></tr>
             </table>
             <h4 class="category-title">Example Override</h4>
-            <pre class="code-block language-css">:root {
+            <pre class="code-block language-css">
+:root {
     /* Yellow match highlighting */
     --dm-autocomplete-highlight: #fef3c7;
-}</pre>
+}
+</pre>
             <p class="mt-4">
                 <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
             </p>
@@ -893,7 +895,7 @@ M.bind(model, 'query', '#search-mirror', { twoWay: true });
         minChars: 1,
         highlightMatches: true,
         onSelect: (country) => {
-            document.getElementById('tutorial-result').innerHTML = `
+            $('#tutorial-result')[0].innerHTML = `
                 <p class="text-sm"><strong>Selected:</strong> ${country.label}</p>
                 <p class="text-sm"><strong>Country Code:</strong> ${country.value}</p>
             `;
@@ -958,7 +960,7 @@ M.bind(model, 'query', '#search-mirror', { twoWay: true });
     });
 
     function renderTags() {
-        document.getElementById('selected-tags').innerHTML =
+        $('#selected-tags')[0].innerHTML =
             selectedTags.map(tag =>
                 `<span class="badge">${tag} <button onclick="removeTag('${tag}')" class="ml-1 bg-none border-none cursor-pointer">&times;</button></span>`
             ).join('');

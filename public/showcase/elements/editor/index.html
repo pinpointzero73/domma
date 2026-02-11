@@ -94,26 +94,31 @@ Domma.elements.editor('#editor', {
             <h3 class="category-title-style">Step 1: Add Container Element</h3>
             <p class="mb-4 text-gray-600">Create a container div for the editor:</p>
             <div class="code-block language-html mb-6">
-                <pre><code>&lt;div id="my-editor"&gt;&lt;/div&gt;</code></pre>
+                <pre><code>
+&lt;div id="my-editor"&gt;&lt;/div&gt;
+</code></pre>
             </div>
 
             <h3 class="category-title-style">Step 2: Include Domma and Tools Bundle</h3>
             <p class="mb-4 text-gray-600">Add Domma CSS/JS and the tools bundle (includes editor):</p>
             <div class="code-block language-html mb-6">
-                <pre><code>&lt;!-- CSS --&gt;
+                <pre><code>
+&lt;!-- CSS --&gt;
 &lt;link rel="stylesheet" href="dist/domma.css"&gt;
 &lt;link rel="stylesheet" href="dist/elements.css"&gt;
 &lt;link rel="stylesheet" href="dist/domma-tools.css"&gt;
 
 &lt;!-- JavaScript --&gt;
 &lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;
-&lt;script src="dist/domma-tools.min.js"&gt;&lt;/script&gt;</code></pre>
+&lt;script src="dist/domma-tools.min.js"&gt;&lt;/script&gt;
+</code></pre>
             </div>
 
             <h3 class="category-title-style">Step 3: Initialize the Editor</h3>
             <p class="mb-4 text-gray-600">Call <code>Domma.elements.editor()</code> to create the editor:</p>
             <div class="code-block language-javascript mb-6">
-                <pre><code>// Simple text editor
+                <pre><code>
+// Simple text editor
 Domma.elements.editor('#my-editor', {
     mode: 'text',           // 'text', 'rich', or 'code'
     placeholder: 'Start typing...',
@@ -129,7 +134,8 @@ Domma.elements.editor('#my-editor', {
         ['link', 'image'],
         ['heading', 'quote']
     ]
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <div class="alert alert-info">
@@ -605,11 +611,13 @@ editor.save();
                 <tr><td><code>--dm-primary</code></td><td><code>var(--dm-blue-600)</code></td><td>Toolbar button active colour</td></tr>
             </table>
             <h4 class="category-title">Example Override</h4>
-            <pre class="code-block language-css">:root {
+            <pre class="code-block language-css">
+:root {
     /* Dark editor theme */
     --dm-surface: #1e293b;
     --dm-text: #f1f5f9;
-}</pre>
+}
+</pre>
             <p class="mt-4">
                 <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
             </p>
@@ -671,7 +679,7 @@ editor.save();
         switchableEditor.setMode(mode);
 
         // Update button states
-        document.querySelectorAll('.mode-switcher button').forEach(btn => {
+        $('.mode-switcher button').forEach(btn => {
             btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
         });
     };
@@ -711,7 +719,7 @@ editor.save();
         placeholder: 'Type something... it will save automatically every 2 seconds',
         minHeight: 150,
         onSave: (content) => {
-            document.getElementById('last-saved').textContent = new Date().toLocaleTimeString();
+            $('#last-saved')[0].textContent = new Date().toLocaleTimeString();
         }
     });
 
@@ -722,7 +730,7 @@ editor.save();
     window.clearStorage = function () {
         localStorage.removeItem('domma:editor:domma-autosave-demo');
         autosaveEditor.clear();
-        document.getElementById('last-saved').textContent = 'Never';
+        $('#last-saved')[0].textContent = 'Never';
         alert('Storage cleared!');
     };
 </script>

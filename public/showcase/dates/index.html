@@ -28,7 +28,8 @@
         <div class="card-body">
             <p class="mb-4">Create DommaDate instances from various inputs.</p>
 
-            <pre class="code-block language-javascript">// Current date/time
+            <pre class="code-block language-javascript">
+// Current date/time
 D()
 D(new Date())
 
@@ -47,7 +48,8 @@ D(new Date(2025, 11, 25))
 Domma.dates.parse('2025-12-25')
 
 // Get current timestamp
-Domma.dates.now()  // Returns timestamp number</pre>
+Domma.dates.now()  // Returns timestamp number
+</pre>
 
           <div class="try-section-style">
                 <h4 class="font-semibold mb-3">Try It</h4>
@@ -96,7 +98,8 @@ Domma.dates.now()  // Returns timestamp number</pre>
                 <div class="format-token">a <span>pm</span></div>
             </div>
 
-            <pre class="code-block language-javascript">D().format('YYYY-MM-DD')           // '2025-12-03'
+            <pre class="code-block language-javascript">
+D().format('YYYY-MM-DD')           // '2025-12-03'
 D().format('MMMM D, YYYY')          // 'December 3, 2025'
 D().format('dddd, MMMM Do YYYY')    // 'Wednesday, December 3rd 2025'
 D().format('h:mm A')                // '2:30 PM'
@@ -107,7 +110,8 @@ D().format('MMM D, YYYY h:mm A')    // 'Dec 3, 2025 2:30 PM'
 D().toISOString()                   // '2025-12-03T14:30:45.000Z'
 
 // Unix timestamp
-D().unix()                          // 1733236245</pre>
+D().unix()                          // 1733236245
+</pre>
 
           <div class="try-section-style">
                 <h4 class="font-semibold mb-3">Try It</h4>
@@ -142,7 +146,8 @@ D().unix()                          // 1733236245</pre>
               <span class="method-item-style">clone()</span>
             </div>
 
-            <pre class="code-block language-javascript">// Add time
+            <pre class="code-block language-javascript">
+// Add time
 D().add(7, 'days').format('MMM D')
 D().add(1, 'month').format('MMM D')
 D().add(2, 'hours').format('h:mm A')
@@ -173,7 +178,8 @@ D()
 
 // Clone to avoid mutation
 const date = D('2025-06-15');
-const nextMonth = date.clone().add(1, 'month');</pre>
+const nextMonth = date.clone().add(1, 'month');
+</pre>
 
           <div class="try-section-style">
                 <h4 class="font-semibold mb-3">Try It</h4>
@@ -213,7 +219,8 @@ const nextMonth = date.clone().add(1, 'month');</pre>
               <span class="method-item-style">quarter()</span>
             </div>
 
-            <pre class="code-block language-javascript">const d = D('2025-12-25T14:30:45');
+            <pre class="code-block language-javascript">
+const d = D('2025-12-25T14:30:45');
 
 // Getters (no argument)
 d.year()        // 2025
@@ -238,7 +245,8 @@ d.toDate()      // Returns Date instance
 
 // Get as object
 d.toObject()
-// { year: 2025, month: 11, date: 25, ... }</pre>
+// { year: 2025, month: 11, date: 25, ... }
+</pre>
 
           <div class="try-section-style">
                 <h4 class="font-semibold mb-3">Current Date Components</h4>
@@ -264,7 +272,8 @@ d.toObject()
               <span class="method-item-style">to()</span>
             </div>
 
-            <pre class="code-block language-javascript">// Time from now
+            <pre class="code-block language-javascript">
+// Time from now
 D().subtract(5, 'minutes').fromNow()  // 'a few minutes ago'
 D().subtract(2, 'hours').fromNow()    // '2 hours ago'
 D().subtract(3, 'days').fromNow()     // '3 days ago'
@@ -278,7 +287,8 @@ future.from(past)                      // 'in 12 months'
 
 // Time to now/another date
 D().add(2, 'weeks').toNow()            // 'in 2 weeks'
-past.to(future)                        // 'in 12 months'</pre>
+past.to(future)                        // 'in 12 months'
+</pre>
 
           <div class="try-section-style">
                 <h4 class="font-semibold mb-3">Try It</h4>
@@ -314,7 +324,8 @@ past.to(future)                        // 'in 12 months'</pre>
               <span class="method-item-style">diff()</span>
             </div>
 
-            <pre class="code-block language-javascript">const jan = D('2025-01-15');
+            <pre class="code-block language-javascript">
+const jan = D('2025-01-15');
 const dec = D('2025-12-25');
 
 // Comparison
@@ -337,7 +348,8 @@ dec.diff(jan, 'months')              // 11
 dec.diff(jan, 'weeks')               // 49
 
 // Float difference
-dec.diff(jan, 'months', true)        // 11.33...</pre>
+dec.diff(jan, 'months', true)        // 11.33...
+</pre>
 
           <div class="try-section-style">
                 <h4 class="font-semibold mb-3">Try It - Date Difference</h4>
@@ -374,7 +386,8 @@ dec.diff(jan, 'months', true)        // 11.33...</pre>
               <span class="method-item-style">dates.max()</span>
             </div>
 
-            <pre class="code-block language-javascript">// Instance validation
+            <pre class="code-block language-javascript">
+// Instance validation
 D('2025-12-25').isValid()            // true
 D('invalid').isValid()               // false
 
@@ -394,7 +407,8 @@ D('2025-12-01').daysInMonth()        // 31
 // Min/Max of dates
 const dates = [D('2025-03-15'), D('2025-01-01'), D('2025-06-20')];
 Domma.dates.min(dates).format('MMM D')  // 'Jan 1'
-Domma.dates.max(dates).format('MMM D')  // 'Jun 20'</pre>
+Domma.dates.max(dates).format('MMM D')  // 'Jun 20'
+</pre>
 
           <div class="try-section-style">
                 <h4 class="font-semibold mb-3">Try It</h4>

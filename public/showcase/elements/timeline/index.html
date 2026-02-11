@@ -52,24 +52,29 @@
                     <h3 class="category-title-style">Step 1: Add Container Element</h3>
                     <p class="mb-4 text-gray-600">Create a container div for the timeline:</p>
                     <div class="code-block language-html mb-6">
-                        <pre><code>&lt;div id="my-timeline"&gt;&lt;/div&gt;</code></pre>
+                        <pre><code>
+&lt;div id="my-timeline"&gt;&lt;/div&gt;
+</code></pre>
                     </div>
 
                     <h3 class="category-title-style">Step 2: Include Domma</h3>
                     <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
                     <div class="code-block language-html mb-6">
-                        <pre><code>&lt;!-- CSS --&gt;
+                        <pre><code>
+&lt;!-- CSS --&gt;
 &lt;link rel="stylesheet" href="dist/domma.css"&gt;
 &lt;link rel="stylesheet" href="dist/elements.css"&gt;
 
 &lt;!-- JavaScript --&gt;
-&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;
+</code></pre>
                     </div>
 
                     <h3 class="category-title-style">Step 3: Initialize the Timeline</h3>
                     <p class="mb-4 text-gray-600">Call <code>Domma.elements.timeline()</code> with your timeline data:</p>
                     <div class="code-block language-javascript mb-6">
-                        <pre><code>// Prepare your timeline data
+                        <pre><code>
+// Prepare your timeline data
 const events = [
     {
         year: '2020',
@@ -94,7 +99,8 @@ Domma.elements.timeline('#my-timeline', {
     layout: 'vertical',      // 'vertical' or 'centered'
     animation: true,         // Animate items on scroll
     animationDelay: 100      // Delay between items (ms)
-});</code></pre>
+});
+</code></pre>
                     </div>
 
                     <div class="alert alert-info">
@@ -380,10 +386,12 @@ $('#change-layout').on('click', () => {
                         <tr><td><code>--dm-border</code></td><td><code>var(--dm-slate-300)</code></td><td>Event card border</td></tr>
                     </table>
                     <h4 class="category-title">Example Override</h4>
-                    <pre class="code-block language-css">:root {
+                    <pre class="code-block language-css">
+:root {
     /* Custom timeline accent */
     --dm-primary: #8b5cf6;
-}</pre>
+}
+</pre>
                     <p class="mt-4">
                         <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
                     </p>

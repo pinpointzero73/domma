@@ -77,7 +77,8 @@
       </ul>
 
       <h4 class="category-title">Basic Usage</h4>
-      <pre class="code-block language-javascript">// Simple hierarchical data
+      <pre class="code-block language-javascript">
+// Simple hierarchical data
 const folders = [
     { id: 1, name: 'Documents', parent_id: null },
     { id: 2, name: 'Work', parent_id: 1 },
@@ -99,7 +100,8 @@ const tree = Domma.elements.treeView('#tree', {
 tree.expandAll();      // Expand all nodes
 tree.collapseAll();    // Collapse all nodes
 tree.select(nodeId);   // Select a node
-tree.refresh();        // Re-render tree</pre>
+tree.refresh();        // Re-render tree
+</pre>
     </div>
   </section>
 
@@ -112,24 +114,29 @@ tree.refresh();        // Re-render tree</pre>
       <h3 class="category-title-style">Step 1: Add Container Element</h3>
       <p class="mb-4 text-gray-600">Create a container div for the tree:</p>
       <div class="code-block language-html mb-6">
-        <pre><code>&lt;div id="my-tree"&gt;&lt;/div&gt;</code></pre>
+        <pre><code>
+&lt;div id="my-tree"&gt;&lt;/div&gt;
+</code></pre>
       </div>
 
       <h3 class="category-title-style">Step 2: Include Domma</h3>
       <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
       <div class="code-block language-html mb-6">
-        <pre><code>&lt;!-- CSS --&gt;
+        <pre><code>
+&lt;!-- CSS --&gt;
 &lt;link rel="stylesheet" href="dist/domma.css"&gt;
 &lt;link rel="stylesheet" href="dist/elements.css"&gt;
 
 &lt;!-- JavaScript --&gt;
-&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;
+</code></pre>
       </div>
 
       <h3 class="category-title-style">Step 3: Initialize the TreeView</h3>
       <p class="mb-4 text-gray-600">Call <code>Domma.elements.treeView()</code> with hierarchical data:</p>
       <div class="code-block language-javascript mb-6">
-        <pre><code>// Prepare hierarchical data (flat structure with parent_id)
+        <pre><code>
+// Prepare hierarchical data (flat structure with parent_id)
 const folders = [
     { id: 1, name: 'Documents', parent_id: null },
     { id: 2, name: 'Work', parent_id: 1 },
@@ -154,7 +161,8 @@ const tree = Domma.elements.treeView('#my-tree', {
 // Programmatic control
 tree.expandAll();    // Expand all nodes
 tree.collapseAll();  // Collapse all nodes
-tree.select(nodeId); // Select a node</code></pre>
+tree.select(nodeId); // Select a node
+</code></pre>
       </div>
 
       <div class="alert alert-info">
@@ -178,14 +186,16 @@ tree.select(nodeId); // Select a node</code></pre>
         <div id="tree1"></div>
       </div>
 
-      <pre class="code-block language-javascript">const tree = Domma.elements.treeView('#tree1', {
+      <pre class="code-block language-javascript">
+const tree = Domma.elements.treeView('#tree1', {
     data: [
         { id: 1, name: 'Root', parent_id: null },
         { id: 2, name: 'Child 1', parent_id: 1 },
         { id: 3, name: 'Child 2', parent_id: 1 },
         { id: 4, name: 'Grandchild', parent_id: 2 }
     ]
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -203,14 +213,16 @@ tree.select(nodeId); // Select a node</code></pre>
         <div id="tree2"></div>
       </div>
 
-      <pre class="code-block language-javascript">Domma.elements.treeView('#tree2', {
+      <pre class="code-block language-javascript">
+Domma.elements.treeView('#tree2', {
     data: [
         { id: 1, name: 'Documents', parent_id: null, icon: 'folder' },
         { id: 2, name: 'Images', parent_id: null, icon: 'folder' },
         { id: 3, name: 'Report.pdf', parent_id: 1, icon: 'file-text' },
         { id: 4, name: 'Photo.jpg', parent_id: 2, icon: 'image' }
     ]
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -228,7 +240,8 @@ tree.select(nodeId); // Select a node</code></pre>
         <div id="tree3"></div>
       </div>
 
-      <pre class="code-block language-javascript">Domma.elements.treeView('#tree3', {
+      <pre class="code-block language-javascript">
+Domma.elements.treeView('#tree3', {
     data: [
         { id: 1, name: 'Projects', parent_id: null, count: 12 },
         { id: 2, name: 'Work', parent_id: 1, count: 5 },
@@ -236,7 +249,8 @@ tree.select(nodeId); // Select a node</code></pre>
         { id: 4, name: 'Archive', parent_id: null, count: 25 }
     ],
     getBadge: (node) => node.count || null
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -254,7 +268,8 @@ tree.select(nodeId); // Select a node</code></pre>
         <div id="tree4"></div>
       </div>
 
-      <pre class="code-block language-javascript">Domma.elements.treeView('#tree4', {
+      <pre class="code-block language-javascript">
+Domma.elements.treeView('#tree4', {
     data: [
         { id: 1, name: 'Folder 1', parent_id: null },
         { id: 2, name: 'Folder 2', parent_id: null },
@@ -268,7 +283,8 @@ tree.select(nodeId); // Select a node</code></pre>
     onAction: (action, nodeId, node) => {
         Domma.elements.toast(`${action}: ${node.name}`, { type: 'info' });
     }
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -287,7 +303,8 @@ tree.select(nodeId); // Select a node</code></pre>
         <div id="tree5"></div>
       </div>
 
-      <pre class="code-block language-javascript">Domma.elements.treeView('#tree5', {
+      <pre class="code-block language-javascript">
+Domma.elements.treeView('#tree5', {
     data: [
         { id: 1, name: 'index.js', parent_id: null, icon: 'file-text', size: '2.4 KB' },
         { id: 2, name: 'package.json', parent_id: null, icon: 'package', size: '1.2 KB' },
@@ -302,7 +319,8 @@ tree.select(nodeId); // Select a node</code></pre>
             ${node.size ? `&lt;span style="color: var(--dm-slate-500); font-size: 0.75rem;"&gt;${node.size}&lt;/span&gt;` : ''}
         `;
     }
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -328,7 +346,8 @@ tree.select(nodeId); // Select a node</code></pre>
         </div>
       </div>
 
-      <pre class="code-block language-javascript">Domma.elements.treeView('#tree6', {
+      <pre class="code-block language-javascript">
+Domma.elements.treeView('#tree6', {
     data: [
         { id: 1, name: 'Node 1', parent_id: null },
         { id: 2, name: 'Node 2', parent_id: null },
@@ -343,7 +362,8 @@ tree.select(nodeId); // Select a node</code></pre>
     onCollapse: (nodeId, node) => {
         console.log('Collapsed:', node.name);
     }
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -369,7 +389,8 @@ tree.select(nodeId); // Select a node</code></pre>
         <div id="tree7"></div>
       </div>
 
-      <pre class="code-block language-javascript">const tree = Domma.elements.treeView('#tree', { data });
+      <pre class="code-block language-javascript">
+const tree = Domma.elements.treeView('#tree', { data });
 
 // Expansion
 tree.expandAll();           // Expand all nodes
@@ -402,7 +423,8 @@ tree.getFlatData();         // Get flat array
 // Utilities
 tree.find(predicate);       // Find first matching node
 tree.filter(predicate);     // Find all matching nodes
-tree.scrollToNode(nodeId);  // Scroll into view</pre>
+tree.scrollToNode(nodeId);  // Scroll into view
+</pre>
     </div>
   </section>
 
@@ -559,10 +581,12 @@ tree.scrollToNode(nodeId);  // Scroll into view</pre>
         <tr><td><code>--dm-text</code></td><td><code>var(--dm-slate-800)</code></td><td>Node text colour</td></tr>
       </table>
       <h4 class="category-title">Example Override</h4>
-      <pre class="code-block language-css">:root {
+      <pre class="code-block language-css">
+:root {
     /* Highlight selected nodes */
     --dm-primary: #059669;
-}</pre>
+}
+</pre>
       <p class="mt-4">
         <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
       </p>
@@ -650,7 +674,7 @@ tree.scrollToNode(nodeId);  // Scroll into view</pre>
   });
 
   // Tree 6: Events
-  const eventLog = document.getElementById('eventLog');
+  const eventLog = $('#eventLog')[0];
 
   function logEvent(message) {
     const time = new Date().toLocaleTimeString();

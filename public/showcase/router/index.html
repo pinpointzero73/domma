@@ -179,7 +179,8 @@
       </table>
 
       <h3 class="text-lg font-semibold mt-6 mb-3">Config Options</h3>
-      <pre class="code-block language-javascript">{
+      <pre class="code-block language-javascript">
+{
     container: '#app',           // View container selector
     routes: [                    // Route definitions
         { path: '/', view: 'home', title: 'Home' },
@@ -198,7 +199,8 @@
         leave: 'fadeOut',
         duration: 200
     }
-}</pre>
+}
+</pre>
     </div>
   </section>
 
@@ -211,7 +213,8 @@
       <p class="mb-4">Initialise the router with views and routes:</p>
 
       <h4 class="category-title-style mb-3">1. Define Views</h4>
-      <pre class="code-block language-javascript">// Simple string template
+      <pre class="code-block language-javascript">
+// Simple string template
 const homeView = {
     template: `
         &lt;div class="page-home"&gt;
@@ -241,10 +244,12 @@ const aboutView = {
 const views = {
     home: homeView,
     about: aboutView
-};</pre>
+};
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">2. Initialise Router</h4>
-      <pre class="code-block language-javascript">R.init({
+      <pre class="code-block language-javascript">
+R.init({
     container: '#app',
     routes: [
         { path: '/', view: 'home', title: 'Home' },
@@ -254,17 +259,20 @@ const views = {
     transitions: { duration: 300 }
 });
 
-// Router is now active and listening for hash changes</pre>
+// Router is now active and listening for hash changes
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">3. Navigation Links</h4>
-      <pre class="code-block language-html">&lt;nav&gt;
+      <pre class="code-block language-html">
+&lt;nav&gt;
     &lt;a href="#/"&gt;Home&lt;/a&gt;
     &lt;a href="#/about"&gt;About&lt;/a&gt;
 &lt;/nav&gt;
 
 &lt;div id="app"&gt;
     &lt;!-- Views render here --&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;
+</pre>
     </div>
   </section>
 
@@ -277,7 +285,8 @@ const views = {
       <p class="mb-4">Extract dynamic segments from URLs:</p>
 
       <h4 class="category-title-style mb-3">Define Dynamic Routes</h4>
-      <pre class="code-block language-javascript">// Route with :id parameter
+      <pre class="code-block language-javascript">
+// Route with :id parameter
 R.route({
     path: '/user/:id',
     view: 'user',
@@ -289,10 +298,12 @@ R.route({
     path: '/post/:category/:slug',
     view: 'post',
     title: 'Blog Post'
-});</pre>
+});
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">Access Parameters in Views</h4>
-      <pre class="code-block language-javascript">const userView = {
+      <pre class="code-block language-javascript">
+const userView = {
     // Function template - receives params
     template: async (params) => {
         // params.id contains the :id from URL
@@ -316,10 +327,12 @@ R.route({
 };
 
 // Navigate: R.navigate('/user/123')
-// params = { id: '123' }</pre>
+// params = { id: '123' }
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">Multiple Parameters</h4>
-      <pre class="code-block language-javascript">const postView = {
+      <pre class="code-block language-javascript">
+const postView = {
     template: (params) => {
         // params = { category: 'tech', slug: 'my-post' }
         return `
@@ -332,7 +345,8 @@ R.route({
 };
 
 // URL: #/post/tech/my-post
-// params = { category: 'tech', slug: 'my-post' }</pre>
+// params = { category: 'tech', slug: 'my-post' }
+</pre>
     </div>
   </section>
 
@@ -345,7 +359,8 @@ R.route({
       <p class="mb-4">Control view behavior with lifecycle hooks:</p>
 
       <h4 class="category-title-style mb-3">onEnter - Before Rendering</h4>
-      <pre class="code-block language-javascript">const profileView = {
+      <pre class="code-block language-javascript">
+const profileView = {
     template: `&lt;div id="profile"&gt;&lt;/div&gt;`,
 
     // Called before view renders
@@ -364,10 +379,12 @@ R.route({
         // Store data for template
         this.userData = user;
     }
-};</pre>
+};
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">onMount - After Rendering</h4>
-      <pre class="code-block language-javascript">const dashboardView = {
+      <pre class="code-block language-javascript">
+const dashboardView = {
     template: `
         &lt;div class="dashboard"&gt;
             &lt;button id="refresh-btn"&gt;Refresh&lt;/button&gt;
@@ -392,10 +409,12 @@ R.route({
             this.updateStats();
         }, 5000);
     }
-};</pre>
+};
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">onLeave - Before Leaving</h4>
-      <pre class="code-block language-javascript">const editorView = {
+      <pre class="code-block language-javascript">
+const editorView = {
     template: `&lt;textarea id="editor"&gt;&lt;/textarea&gt;`,
 
     // Called before leaving view
@@ -416,10 +435,12 @@ R.route({
             return leave;  // false = cancel navigation
         }
     }
-};</pre>
+};
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">Complete Lifecycle Example</h4>
-      <pre class="code-block language-javascript">const fullLifecycleView = {
+      <pre class="code-block language-javascript">
+const fullLifecycleView = {
     template: `&lt;div class="view"&gt;Content&lt;/div&gt;`,
 
     async onEnter(params) {
@@ -440,7 +461,8 @@ R.route({
         $container.find('button').off('click');
         return true;  // Allow navigation
     }
-};</pre>
+};
+</pre>
     </div>
   </section>
 
@@ -453,7 +475,8 @@ R.route({
       <p class="mb-4">Use middleware to protect routes, log navigation, or modify behavior:</p>
 
       <h4 class="category-title-style mb-3">Authentication Guard</h4>
-      <pre class="code-block language-javascript">// Add auth middleware
+      <pre class="code-block language-javascript">
+// Add auth middleware
 R.use((to, from, next) => {
     console.log(`Navigating from ${from?.path} to ${to.path}`);
 
@@ -477,10 +500,12 @@ R.route({
     view: 'dashboard',
     title: 'Dashboard',
     meta: { requiresAuth: true }  // Requires login
-});</pre>
+});
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">Logging Middleware</h4>
-      <pre class="code-block language-javascript">// Log all navigation
+      <pre class="code-block language-javascript">
+// Log all navigation
 R.use((to, from, next) => {
     console.log('Router:', {
         from: from?.path,
@@ -490,10 +515,12 @@ R.use((to, from, next) => {
     });
 
     next();  // Continue
-});</pre>
+});
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">Multiple Middleware</h4>
-      <pre class="code-block language-javascript">// Middleware runs in order
+      <pre class="code-block language-javascript">
+// Middleware runs in order
 
 // 1. Logging
 R.use((to, from, next) => {
@@ -514,10 +541,12 @@ R.use((to, from, next) => {
 R.use((to, from, next) => {
     trackPageView(to.path);
     next();
-});</pre>
+});
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">Role-Based Access Control</h4>
-      <pre class="code-block language-javascript">R.use((to, from, next) => {
+      <pre class="code-block language-javascript">
+R.use((to, from, next) => {
     const userRole = S.get('user_role');
     const requiredRole = to.meta?.role;
 
@@ -536,7 +565,8 @@ R.route({
     view: 'admin',
     title: 'Admin Panel',
     meta: { requiresAuth: true, role: 'admin' }
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -549,17 +579,20 @@ R.route({
       <p class="mb-4">Navigate using JavaScript instead of links:</p>
 
       <h4 class="category-title-style mb-3">Navigate to Route</h4>
-      <pre class="code-block language-javascript">// Basic navigation
+      <pre class="code-block language-javascript">
+// Basic navigation
 R.navigate('/about');
 
 // Navigate with parameters
 R.navigate('/user/123');
 
 // Navigate with replace (no history entry)
-R.navigate('/home', { replace: true });</pre>
+R.navigate('/home', { replace: true });
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">History Navigation</h4>
-      <pre class="code-block language-javascript">// Go back
+      <pre class="code-block language-javascript">
+// Go back
 R.back();
 
 // Go forward
@@ -568,10 +601,12 @@ R.forward();
 // Get current route
 const current = R.current();
 console.log(current.path);    // '/user/123'
-console.log(current.params);  // { id: '123' }</pre>
+console.log(current.params);  // { id: '123' }
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">After Action Navigation</h4>
-      <pre class="code-block language-javascript">// Navigate after form submission
+      <pre class="code-block language-javascript">
+// Navigate after form submission
 $('#contact-form').on('submit', async (e) => {
     e.preventDefault();
 
@@ -595,7 +630,8 @@ async function login(email, password) {
     S.set('auth_token', response.token);
     E.toast('Welcome back!', { type: 'success' });
     R.navigate('/dashboard');
-}</pre>
+}
+</pre>
     </div>
   </section>
 
@@ -608,7 +644,8 @@ async function login(email, password) {
       <p class="mb-4">Router publishes events via the Models pub/sub system:</p>
 
       <h4 class="category-title-style mb-3">Available Events</h4>
-      <pre class="code-block language-javascript">// Router initialization
+      <pre class="code-block language-javascript">
+// Router initialization
 M.subscribe('router:ready', ({ router }) => {
     console.log('Router initialised', router);
 });
@@ -631,10 +668,12 @@ M.subscribe('router:afterChange', ({ from, to }) => {
 
     // Scroll to top
     window.scrollTo(0, 0);
-});</pre>
+});
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">Sync Navbar with Router</h4>
-      <pre class="code-block language-javascript">// Highlight active nav item
+      <pre class="code-block language-javascript">
+// Highlight active nav item
 M.subscribe('router:afterChange', ({ to }) => {
     // Remove all active classes
     $('.nav-item').removeClass('active');
@@ -647,10 +686,12 @@ M.subscribe('router:afterChange', ({ to }) => {
 M.subscribe('router:afterChange', ({ to }) => {
     const section = to.path.split('/')[1];
     $(`.nav-item[data-section="${section}"]`).addClass('active');
-});</pre>
+});
+</pre>
 
       <h4 class="category-title-style mb-3 mt-4">Integration with Components</h4>
-      <pre class="code-block language-javascript">// Notify components of route changes
+      <pre class="code-block language-javascript">
+// Notify components of route changes
 M.subscribe('router:afterChange', ({ to }) => {
     // Trigger breadcrumb update
     M.publish('breadcrumbs:update', { path: to.path });
@@ -662,7 +703,8 @@ M.subscribe('router:afterChange', ({ to }) => {
     if (to.path.includes('/dashboard')) {
         M.publish('table:refresh');
     }
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -694,7 +736,8 @@ M.subscribe('router:afterChange', ({ to }) => {
       </div>
 
       <h4 class="category-title-style mb-3 mt-4">Demo Source Code</h4>
-      <pre class="code-block language-javascript">// Define views with lifecycle logging
+      <pre class="code-block language-javascript">
+// Define views with lifecycle logging
 const demoViews = {
     home: {
         template: `
@@ -739,7 +782,8 @@ R.init({
         { path: '/demo/user/:id', view: 'user', title: 'Demo User' }
     ],
     views: demoViews
-});</pre>
+});
+</pre>
     </div>
   </section>
 

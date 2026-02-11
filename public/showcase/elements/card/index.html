@@ -53,7 +53,8 @@
             </ul>
 
             <h4 class="category-title">Basic Usage</h4>
-            <pre class="code-block language-javascript">// Option 1: Enhance existing HTML
+            <pre class="code-block language-javascript">
+// Option 1: Enhance existing HTML
 &lt;div id="my-card" class="card"&gt;
     &lt;div class="card-header"&gt;Card Header&lt;/div&gt;
     &lt;div class="card-body"&gt;
@@ -74,7 +75,8 @@ const generatedCard = Domma.elements.card('#container', {
     icon: 'info',
     content: '&lt;p&gt;Card content goes here.&lt;/p&gt;',
     collapsible: true
-});</pre>
+});
+</pre>
         </div>
     </section>
 
@@ -90,12 +92,14 @@ const generatedCard = Domma.elements.card('#container', {
             </p>
 
             <h4 class="category-title">CSS-Only Card (No JavaScript)</h4>
-            <pre class="code-block language-javascript">&lt;div class="card"&gt;
+            <pre class="code-block language-javascript">
+&lt;div class="card"&gt;
     &lt;div class="card-body"&gt;
         &lt;h3 class="card-title"&gt;Simple Card&lt;/h3&gt;
         &lt;p class="card-text"&gt;This card requires no JavaScript.&lt;/p&gt;
     &lt;/div&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;
+</pre>
 
             <div class="demo-area mb-4">
               <div class="card" class="card-max-w-400">
@@ -107,7 +111,8 @@ const generatedCard = Domma.elements.card('#container', {
             </div>
 
             <h4 class="category-title">Card with Hover Effect (JavaScript)</h4>
-            <pre class="code-block language-javascript">// HTML
+            <pre class="code-block language-javascript">
+// HTML
 &lt;div id="hover-card" class="card"&gt;
     &lt;div class="card-body"&gt;
         &lt;h3 class="card-title"&gt;Hover Me&lt;/h3&gt;
@@ -116,7 +121,8 @@ const generatedCard = Domma.elements.card('#container', {
 &lt;/div&gt;
 
 // JavaScript
-Domma.elements.card('#hover-card', { hover: true });</pre>
+Domma.elements.card('#hover-card', { hover: true });
+</pre>
 
             <div class="demo-area">
               <div id="quick-hover-card" class="card" class="card-max-w-400">
@@ -141,16 +147,19 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
 
             <h4 class="category-title">Step 1: HTML Structure</h4>
             <p class="mb-2">Start with the basic card structure using semantic class names:</p>
-            <pre class="code-block language-javascript">&lt;div id="product-card" class="card"&gt;
+            <pre class="code-block language-javascript">
+&lt;div id="product-card" class="card"&gt;
     &lt;div class="card-body"&gt;
         &lt;h3 class="card-title"&gt;Product Name&lt;/h3&gt;
         &lt;p class="card-text"&gt;Brief description of the product.&lt;/p&gt;
     &lt;/div&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;
+</pre>
 
             <h4 class="category-title mt-4">Step 2: Add Header and Footer</h4>
             <p class="mb-2">Expand the structure with a header (for images or badges) and footer (for actions):</p>
-            <pre class="code-block language-javascript">&lt;div id="product-card" class="card"&gt;
+            <pre class="code-block language-javascript">
+&lt;div id="product-card" class="card"&gt;
     &lt;div class="card-header"&gt;
         &lt;span class="badge badge-primary"&gt;New&lt;/span&gt;
     &lt;/div&gt;
@@ -162,24 +171,29 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
     &lt;div class="card-footer"&gt;
         &lt;button class="btn btn-primary"&gt;Add to Cart&lt;/button&gt;
     &lt;/div&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;
+</pre>
 
             <h4 class="category-title mt-4">Step 3: Enable Hover Effect</h4>
             <p class="mb-2">Add the hover effect to make the card interactive:</p>
-            <pre class="code-block language-javascript">const productCard = Domma.elements.card('#product-card', {
+            <pre class="code-block language-javascript">
+const productCard = Domma.elements.card('#product-card', {
     hover: true  // Enables lift animation on hover
-});</pre>
+});
+</pre>
 
             <h4 class="category-title mt-4">Step 4: Make It Clickable</h4>
             <p class="mb-2">Turn the entire card into a clickable link:</p>
-            <pre class="code-block language-javascript">const productCard = Domma.elements.card('#product-card', {
+            <pre class="code-block language-javascript">
+const productCard = Domma.elements.card('#product-card', {
     hover: true,
     clickable: true,
     onClick: (event) =&gt; {
         console.log('Card clicked!');
         window.location.href = '/product/premium-headphones';
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title mt-4">Step 5: Complete Working Demo</h4>
             <p class="mb-2">Here's the finished interactive product card:</p>
@@ -377,11 +391,13 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
 
             <h4 class="category-title">Example 1: Generated Card with Title and Content</h4>
             <p class="mb-2">Create a card entirely from JavaScript options:</p>
-            <pre class="code-block language-javascript">Domma.elements.card('#generated-card', {
+            <pre class="code-block language-javascript">
+Domma.elements.card('#generated-card', {
     title: 'Generated Card',
     content: '&lt;p&gt;This card was created entirely from JavaScript options.&lt;/p&gt;',
     collapsible: true
-});</pre>
+});
+</pre>
 
             <div class="demo-area mb-4">
               <div id="generated-card" class="card-max-w-500"></div>
@@ -389,12 +405,14 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
 
             <h4 class="category-title">Example 2: Card with Icon</h4>
             <p class="mb-2">Add an icon to the card title:</p>
-            <pre class="code-block language-javascript">Domma.elements.card('#icon-card', {
+            <pre class="code-block language-javascript">
+Domma.elements.card('#icon-card', {
     title: 'Settings',
     icon: 'settings',
     content: '&lt;p&gt;Configure your application settings here.&lt;/p&gt;',
     collapsible: true
-});</pre>
+});
+</pre>
 
             <div class="demo-area mb-4">
               <div id="icon-card" class="card-max-w-500"></div>
@@ -402,13 +420,15 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
 
             <h4 class="category-title">Example 3: Colored Card Variant</h4>
             <p class="mb-2">Apply a color variant to the card:</p>
-            <pre class="code-block language-javascript">Domma.elements.card('#colored-card', {
+            <pre class="code-block language-javascript">
+Domma.elements.card('#colored-card', {
     title: 'Important Notice',
     icon: 'alert',
     color: 'primary',
     content: '&lt;p&gt;This card uses the primary color variant.&lt;/p&gt;',
     collapsible: true
-});</pre>
+});
+</pre>
 
             <div class="demo-area mb-4">
               <div id="colored-card" class="card-max-w-500"></div>
@@ -416,13 +436,15 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
 
             <h4 class="category-title">Example 4: Initially Collapsed Card</h4>
             <p class="mb-2">Create a card that starts collapsed:</p>
-            <pre class="code-block language-javascript">Domma.elements.card('#collapsed-card', {
+            <pre class="code-block language-javascript">
+Domma.elements.card('#collapsed-card', {
     title: 'Click to Expand',
     icon: 'info',
     collapsed: true,
     collapsible: true,
     content: '&lt;p&gt;This card was initially collapsed.&lt;/p&gt;'
-});</pre>
+});
+</pre>
 
             <div class="demo-area mb-4">
               <div id="collapsed-card" class="card-max-w-500"></div>
@@ -430,7 +452,8 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
 
             <h4 class="category-title">Example 5: Programmatic Control</h4>
             <p class="mb-2">Control card state with JavaScript methods:</p>
-            <pre class="code-block language-javascript">const card = Domma.elements.card('#controlled-card', {
+            <pre class="code-block language-javascript">
+const card = Domma.elements.card('#controlled-card', {
     title: 'Controlled Card',
     icon: 'box',
     collapsible: true,
@@ -440,7 +463,8 @@ Domma.elements.card('#hover-card', { hover: true });</pre>
 // Control methods
 $('#expand-btn').on('click', () =&gt; card.expand());
 $('#collapse-btn').on('click', () =&gt; card.collapse());
-$('#toggle-btn').on('click', () =&gt; card.toggle());</pre>
+$('#toggle-btn').on('click', () =&gt; card.toggle());
+</pre>
 
             <div class="demo-area mb-4">
               <div id="controlled-card" class="card-max-w-500"></div>
@@ -453,7 +477,8 @@ $('#toggle-btn').on('click', () =&gt; card.toggle());</pre>
 
             <h4 class="category-title">Example 6: Dynamic Content Updates</h4>
             <p class="mb-2">Update card content dynamically using setContent():</p>
-            <pre class="code-block language-javascript">const card = Domma.elements.card('#dynamic-card', {
+            <pre class="code-block language-javascript">
+const card = Domma.elements.card('#dynamic-card', {
     title: 'Dynamic Content',
     icon: 'refresh',
     collapsible: true,
@@ -464,7 +489,8 @@ $('#update-btn').on('click', () =&gt; {
     const timestamp = new Date().toLocaleTimeString();
     card.setContent(`&lt;p&gt;Content updated at ${timestamp}&lt;/p&gt;`);
     card.updateHeight(); // Adjust height after content change
-});</pre>
+});
+</pre>
 
             <div class="demo-area mb-4">
               <div id="dynamic-card" class="card-max-w-500"></div>
@@ -473,7 +499,8 @@ $('#update-btn').on('click', () =&gt; {
 
             <h4 class="category-title">Example 7: Loading Data into Generated Cards</h4>
             <p class="mb-2">Perfect for dashboard widgets that load data asynchronously:</p>
-            <pre class="code-block language-javascript">// Create card with loading state
+            <pre class="code-block language-javascript">
+// Create card with loading state
 const statsCard = Domma.elements.card('#stats-card', {
     title: 'User Statistics',
     icon: 'database',
@@ -493,7 +520,8 @@ setTimeout(() =&gt; {
     `;
     statsCard.setContent(content);
     statsCard.updateHeight();
-}, 1500);</pre>
+}, 1500);
+</pre>
 
             <div class="demo-area mb-4">
               <div id="stats-card" class="card-max-w-500"></div>
@@ -503,12 +531,14 @@ setTimeout(() =&gt; {
             <p class="mb-4">
                 The enhancement is fully backwards compatible. Existing HTML-based card usage continues to work:
             </p>
-            <pre class="code-block language-javascript">// Still works - enhances existing HTML
+            <pre class="code-block language-javascript">
+// Still works - enhances existing HTML
 &lt;div id="existing-card" class="card"&gt;
     &lt;div class="card-body"&gt;Existing HTML&lt;/div&gt;
 &lt;/div&gt;
 
-Domma.elements.card('#existing-card', { hover: true });</pre>
+Domma.elements.card('#existing-card', { hover: true });
+</pre>
 
             <p class="mb-0">
                 The Card component automatically detects whether to generate HTML (when <code>title</code> or
@@ -586,8 +616,7 @@ Domma.elements.card('#existing-card', { hover: true });</pre>
                 <tr>
                     <td>Theme colours not applying</td>
                     <td>Ensure <code>domma-themes.css</code> is loaded and a theme class (e.g.,
-                      <code>.dm-theme-charcoal-dark</code>) is on <code>
-                        <body>
+                      <code>.dm-theme-charcoal-dark</code>) is on <code>                        <body>
                       </code>.
                     </td>
                 </tr>
@@ -843,7 +872,8 @@ Domma.elements.card('#existing-card', { hover: true });</pre>
             </p>
 
             <h4 class="category-title">Dynamic Content Loading</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#product-grid': {
         events: {
             ready: async (e, $container) =&gt; {
@@ -878,10 +908,12 @@ Domma.elements.card('#existing-card', { hover: true });</pre>
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Filterable Card Grid</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#blog-grid': {
         initial: {
             data: { posts: [], filteredPosts: [], activeCategory: 'all' }
@@ -932,10 +964,12 @@ function renderCards($container, posts) {
     `).join('');
 
     $container.find('.cards-container').html(html);
-}</pre>
+}
+</pre>
 
             <h4 class="category-title">Sortable Cards</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '#team-grid': {
         initial: {
             data: { members: [] }
@@ -975,10 +1009,12 @@ function renderTeam($container, members) {
     `).join('');
 
     $container.find('.team-container').html(html);
-}</pre>
+}
+</pre>
 
             <h4 class="category-title">Interactive Card Actions</h4>
-            <pre class="code-block language-javascript">$.setup({
+            <pre class="code-block language-javascript">
+$.setup({
     '.product-card': {
         component: 'card',
         options: { hover: true, clickable: true },
@@ -1016,7 +1052,8 @@ function renderTeam($container, members) {
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Benefits of Hybrid Approach</h4>
             <ul class="mb-4">
@@ -1030,7 +1067,8 @@ function renderTeam($container, members) {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">CSS-Only (Static)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;">&lt;div class="card"&gt;
+                    <pre class="code-block language-javascript" style="font-size: 0.85em;">
+&lt;div class="card"&gt;
     &lt;img src="image.jpg"
          class="card-img-top"
          alt="Product"&gt;
@@ -1047,11 +1085,13 @@ function renderTeam($container, members) {
     &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;!-- No dynamic content --&gt;</pre>
+&lt;!-- No dynamic content --&gt;
+</pre>
                 </div>
                 <div>
                     <p class="font-semibold mb-2">CSS+JS Hybrid (Dynamic)</p>
-                    <pre class="code-block language-javascript" style="font-size: 0.85em;">&lt;div id="products"&gt;
+                    <pre class="code-block language-javascript" style="font-size: 0.85em;">
+&lt;div id="products"&gt;
     &lt;!-- Cards loaded via JS --&gt;
 &lt;/div&gt;
 
@@ -1075,7 +1115,7 @@ $.setup({
     }
 });
 &lt;/script&gt;
-                    </pre>
+</pre>
                 </div>
             </div>
         </div>
@@ -1098,7 +1138,8 @@ $.setup({
                 <tr><td><code>--dm-primary</code></td><td><code>var(--dm-blue-600)</code></td><td>Primary colour for <code>.card-primary</code></td></tr>
             </table>
             <h4 class="category-title">Example Override</h4>
-            <pre class="code-block language-css">:root {
+            <pre class="code-block language-css">
+:root {
     /* Dark card theme */
     --dm-card-bg: #1e293b;
     --dm-card-border: #334155;
@@ -1107,7 +1148,8 @@ $.setup({
     /* Or flat design */
     --dm-card-shadow: none;
     --dm-radius-lg: 0;
-}</pre>
+}
+</pre>
             <p class="mt-4">
                 <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
             </p>
@@ -1185,7 +1227,7 @@ $.setup({
             hover: true,
             clickable: true,
             onClick: (e) => {
-                const result = document.getElementById('click-result');
+                const result = $('#click-result')[0];
                 result.classList.remove('hidden');
                 result.textContent = `Card clicked at ${new Date().toLocaleTimeString()}`;
             }

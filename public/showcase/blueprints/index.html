@@ -135,7 +135,8 @@
         <div class="card-body">
             <p class="mb-4">A blueprint is a JavaScript object defining field types, validation, and UI configuration.</p>
 
-            <pre class="code-block language-javascript">const userBlueprint = {
+            <pre class="code-block language-javascript">
+const userBlueprint = {
     name: {
         type: 'string',           // Field type
         required: true,           // Validation
@@ -163,7 +164,8 @@
         default: true,
         label: 'Active User'
     }
-};</pre>
+};
+</pre>
 
             <div class="mt-4">
                 <h4 class="font-semibold mb-2">Field Properties</h4>
@@ -267,13 +269,15 @@
                         <h4 class="text-md font-semibold">Form-Level Options</h4>
                     </div>
                     <div class="card-body">
-                        <pre class="code-block language-javascript">F.render('#form', blueprint, {}, {
+                        <pre class="code-block language-javascript">
+F.render('#form', blueprint, {}, {
     layout: 'grid',      // or 'stacked', 'inline'
     columns: 2,          // 2 or 3 columns (grid only)
     labelPosition: 'top', // or 'left', 'floating'
     showLabels: true,
     showHelperText: true
-});</pre>
+});
+</pre>
                     </div>
                 </div>
 
@@ -282,7 +286,8 @@
                         <h4 class="text-md font-semibold">Field-Level Options</h4>
                     </div>
                     <div class="card-body">
-                        <pre class="code-block language-javascript">fieldName: {
+                        <pre class="code-block language-javascript">
+fieldName: {
     type: 'string',
     required: true,
     label: 'Field Label',
@@ -294,7 +299,8 @@
         tooltip: 'Info',      // Hover tooltip (NEW!)
         disabled: false       // Disable field
     }
-}</pre>
+}
+</pre>
                     </div>
                 </div>
             </div>
@@ -302,7 +308,8 @@
             <h4 class="font-semibold mb-2">Grid Layout Example</h4>
             <p class="mb-3">Use <code>layout: 'grid'</code> with <code>columns: 2</code> and <code>formConfig.span</code> to control field width:</p>
 
-            <pre class="code-block language-javascript">const addressBlueprint = {
+            <pre class="code-block language-javascript">
+const addressBlueprint = {
     street: {
         type: 'string',
         required: true,
@@ -333,7 +340,8 @@
 F.render('#form', addressBlueprint, {}, {
     layout: 'grid',
     columns: 2
-});</pre>
+});
+</pre>
 
             <div class="alert alert-info mt-4">
                 <span data-icon="info" data-size="20"></span>
@@ -353,7 +361,8 @@ F.render('#form', addressBlueprint, {}, {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <h4 class="font-semibold mb-2">Blueprint Definition</h4>
-                    <pre class="code-block language-javascript">const contactBlueprint = {
+                    <pre class="code-block language-javascript">
+const contactBlueprint = {
     name: {
         type: 'string',
         required: true,
@@ -385,7 +394,8 @@ F.render(
             console.log(data);
         }
     }
-);</pre>
+);
+</pre>
                 </div>
                 <div>
                     <h4 class="font-semibold mb-2">Generated Form</h4>
@@ -408,7 +418,8 @@ F.render(
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <h4 class="font-semibold mb-2">Code</h4>
-                    <pre class="code-block language-javascript">const user = M.create(userBlueprint, {
+                    <pre class="code-block language-javascript">
+const user = M.create(userBlueprint, {
     name: 'Alice',
     email: 'alice@example.com',
     age: 30
@@ -426,7 +437,8 @@ const errors = user.validate();
 // Listen for changes
 user.onChange((event) => {
     console.log(event);
-});</pre>
+});
+</pre>
 
                     <div class="mt-3">
                         <h5 class="font-semibold mb-2">Try It</h5>
@@ -477,7 +489,8 @@ user.onChange((event) => {
                 <h4 class="font-semibold mb-2">B.extend() - Merge Blueprints</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <pre class="code-block language-javascript">const base = {
+                        <pre class="code-block language-javascript">
+const base = {
     name: { type: 'string' },
     email: { type: 'email' }
 };
@@ -488,7 +501,8 @@ const extended = {
 };
 
 const result = B.extend(base, extended);
-// { name: {...}, email: {required: true}, age: {...} }</pre>
+// { name: {...}, email: {required: true}, age: {...} }
+</pre>
                     </div>
                     <div>
                         <button class="btn btn-primary mb-2" id="extend-demo">Run Example</button>
@@ -504,7 +518,8 @@ const result = B.extend(base, extended);
                 <h4 class="font-semibold mb-2">B.pick() - Extract Fields</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <pre class="code-block language-javascript">const full = {
+                        <pre class="code-block language-javascript">
+const full = {
     name: { type: 'string' },
     email: { type: 'email' },
     age: { type: 'number' },
@@ -512,7 +527,8 @@ const result = B.extend(base, extended);
 };
 
 const subset = B.pick(full, ['name', 'email']);
-// { name: {...}, email: {...} }</pre>
+// { name: {...}, email: {...} }
+</pre>
                     </div>
                     <div>
                         <button class="btn btn-primary mb-2" id="pick-demo">Run Example</button>
@@ -528,7 +544,8 @@ const subset = B.pick(full, ['name', 'email']);
                 <h4 class="font-semibold mb-2">B.omit() - Remove Fields</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <pre class="code-block language-javascript">const admin = {
+                        <pre class="code-block language-javascript">
+const admin = {
     name: { type: 'string' },
     email: { type: 'email' },
     role: { type: 'string' },
@@ -536,7 +553,8 @@ const subset = B.pick(full, ['name', 'email']);
 };
 
 const public = B.omit(admin, ['permissions']);
-// { name: {...}, email: {...}, role: {...} }</pre>
+// { name: {...}, email: {...}, role: {...} }
+</pre>
                     </div>
                     <div>
                         <button class="btn btn-primary mb-2" id="omit-demo">Run Example</button>

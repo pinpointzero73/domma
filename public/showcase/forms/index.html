@@ -435,7 +435,8 @@
           <p class="mb-4">Generate forms automatically from blueprint definitions with built-in validation and type
             mapping.</p>
 
-          <pre class="code-block language-javascript">// Define a blueprint
+          <pre class="code-block language-javascript">
+// Define a blueprint
 const userBlueprint = {
     name: {
         type: 'string',
@@ -477,7 +478,8 @@ const form = Domma.forms.create(userBlueprint, initialData, {
 });
 
 // Render to DOM
-form.renderTo('#form-container');</pre>
+form.renderTo('#form-container');
+</pre>
 
           <div class="forms-demo">
             <h4>Try It - Basic Form</h4>
@@ -507,7 +509,8 @@ form.renderTo('#form-container');</pre>
           <p class="mb-4">Support for different layout styles: stacked, grid, and inline layouts with customizable
             sections.</p>
 
-          <pre class="code-block language-javascript">// Grid layout with sections
+          <pre class="code-block language-javascript">
+// Grid layout with sections
 const profileForm = Domma.forms.create(blueprint, data, {
     layout: 'grid',
     columns: 2,
@@ -521,7 +524,8 @@ const profileForm = Domma.forms.create(blueprint, data, {
             fields: ['role', 'newsletter', 'notifications']
         }
     ]
-});</pre>
+});
+</pre>
 
           <div class="forms-demo">
             <h4>Try It - Layout Styles</h4>
@@ -556,7 +560,8 @@ const profileForm = Domma.forms.create(blueprint, data, {
         <div class="card-body">
           <p class="mb-4">Create professional modal forms with automatic event handling and error management.</p>
 
-          <pre class="code-block language-javascript">// Modal form
+          <pre class="code-block language-javascript">
+// Modal form
 const modal = Domma.forms.modal(userBlueprint, userData, {
     title: 'Edit User Profile',
     size: 'medium',
@@ -570,7 +575,8 @@ const modal = Domma.forms.modal(userBlueprint, userData, {
     }
 });
 
-modal.open();</pre>
+modal.open();
+</pre>
 
           <div class="forms-demo">
             <h4>Try It - Modal Forms</h4>
@@ -597,7 +603,8 @@ modal.open();</pre>
         <div class="card-body">
           <p class="mb-4">Create multi-step workflows with progress tracking and step validation.</p>
 
-          <pre class="code-block language-javascript">// Multi-step wizard
+          <pre class="code-block language-javascript">
+// Multi-step wizard
 const wizard = Domma.forms.wizard([
     {
         title: 'Account Details',
@@ -630,7 +637,8 @@ const wizard = Domma.forms.wizard([
     }
 });
 
-wizard.open();</pre>
+wizard.open();
+</pre>
 
           <div class="forms-demo">
             <h4>Try It - Registration Wizard</h4>
@@ -654,7 +662,8 @@ wizard.open();</pre>
         <div class="card-body">
           <p class="mb-4">Zero-configuration CRUD interfaces with automatic table generation and form modals.</p>
 
-          <pre class="code-block language-javascript">// Complete CRUD setup
+          <pre class="code-block language-javascript">
+// Complete CRUD setup
 const userCrud = Domma.forms.crud({
     blueprint: userBlueprint,
     endpoint: '/api/users',
@@ -667,7 +676,8 @@ const userCrud = Domma.forms.crud({
 });
 
 // Initialize CRUD interface
-await userCrud.init();</pre>
+await userCrud.init();
+</pre>
 
           <div class="forms-demo">
             <h4>Try It - CRUD Operations (Mock Data)</h4>
@@ -699,7 +709,8 @@ await userCrud.init();</pre>
         <div class="card-body">
           <p class="mb-4">Built-in and custom validators with real-time feedback and comprehensive error handling.</p>
 
-          <pre class="code-block language-javascript">// Blueprint with various validation rules
+          <pre class="code-block language-javascript">
+// Blueprint with various validation rules
 const validationBlueprint = {
     username: {
         type: 'string',
@@ -737,7 +748,8 @@ const validationBlueprint = {
             return true;
         }
     }
-};</pre>
+};
+</pre>
 
           <div class="forms-demo">
             <h4>Try It - Form Validation</h4>
@@ -766,7 +778,8 @@ const validationBlueprint = {
           <p class="mb-4">Seamless integration with Domma's reactive model system for two-way data binding and
             persistence.</p>
 
-          <pre class="code-block language-javascript">// Create model with persistence
+          <pre class="code-block language-javascript">
+// Create model with persistence
 const userModel = M.create(userBlueprint, initialData, {
     persist: 'user-profile'  // Auto-save to localStorage
 });
@@ -782,7 +795,8 @@ const form = Domma.forms.create(userBlueprint, userModel.get(), {
 // Listen for model changes
 userModel.onChange((changes) => {
     console.log('Model updated:', changes);
-});</pre>
+});
+</pre>
 
           <div class="forms-demo">
             <h4>Try It - Model Integration</h4>
@@ -1210,13 +1224,15 @@ userModel.onChange((changes) => {
                     <button class="copy-btn mb-2" onclick="copyCodeExample(this)">
                       <span data-icon="copy"></span> Copy
                     </button>
-                    <pre class="code-block language-javascript">const form = Domma.forms.create({
+                    <pre class="code-block language-javascript">
+const form = Domma.forms.create({
   name: { type: 'string', required: true },
   email: { type: 'email', required: true }
 }, {}, {
   onSubmit: (data) => console.log(data)
 });
-form.renderTo('#container');</pre>
+form.renderTo('#container');
+</pre>
                   </div>
 
                   <!-- Modal Form Example -->
@@ -1228,11 +1244,13 @@ form.renderTo('#container');</pre>
                     <button class="copy-btn mb-2" onclick="copyCodeExample(this)">
                       <span data-icon="copy"></span> Copy
                     </button>
-                    <pre class="code-block language-javascript">const modal = Domma.forms.modal(blueprint, data, {
+                    <pre class="code-block language-javascript">
+const modal = Domma.forms.modal(blueprint, data, {
   title: 'Edit User',
   onSave: async (data) => await api.save(data)
 });
-modal.open();</pre>
+modal.open();
+</pre>
                   </div>
 
                   <!-- Wizard Example -->
@@ -1244,11 +1262,13 @@ modal.open();</pre>
                     <button class="copy-btn mb-2" onclick="copyCodeExample(this)">
                       <span data-icon="copy"></span> Copy
                     </button>
-                    <pre class="code-block language-javascript">const wizard = Domma.forms.wizard(steps, data, {
+                    <pre class="code-block language-javascript">
+const wizard = Domma.forms.wizard(steps, data, {
   title: 'Setup Wizard',
   onComplete: async (data) => await api.setup(data)
 });
-wizard.open();</pre>
+wizard.open();
+</pre>
                   </div>
 
                   <!-- CRUD Example -->
@@ -1260,12 +1280,14 @@ wizard.open();</pre>
                     <button class="copy-btn mb-2" onclick="copyCodeExample(this)">
                       <span data-icon="copy"></span> Copy
                     </button>
-                    <pre class="code-block language-javascript">const crud = Domma.forms.crud({
+                    <pre class="code-block language-javascript">
+const crud = Domma.forms.crud({
   blueprint: userBlueprint,
   endpoint: '/api/users',
   tableSelector: '#users-table'
 });
-await crud.init();</pre>
+await crud.init();
+</pre>
                   </div>
                 </div>
               </div>

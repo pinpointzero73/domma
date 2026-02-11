@@ -171,7 +171,7 @@ const productBreadcrumbs = Domma.elements.breadcrumbs('#product-breadcrumbs', {
         <p class="text-muted mb-2">Update breadcrumbs when user clicks a category:</p>
         <div class="code-block language-javascript mb-4">
             <pre><code>
-document.querySelectorAll('[data-category]').forEach(btn =&gt; {
+$('[data-category]').forEach(btn =&gt; {
     btn.addEventListener('click', (e) =&gt; {
         const category = e.target.dataset.category;
         const categoryName = e.target.textContent;
@@ -229,10 +229,10 @@ function showSubcategories(category) {
         `&lt;button class="btn btn-sm btn-secondary" data-subcategory="${sub}"&gt;${sub}&lt;/button&gt;`
     ).join('');
 
-    document.getElementById('subcategory-list').innerHTML = html;
+    $('#subcategory-list')[0].innerHTML = html;
 
     // Add event listeners
-    document.querySelectorAll('[data-subcategory]').forEach(btn =&gt; {
+    $('[data-subcategory]').forEach(btn =&gt; {
         btn.addEventListener('click', (e) =&gt; {
             productBreadcrumbs.addItem({
                 text: e.target.textContent,
@@ -537,7 +537,7 @@ const docsBreadcrumbs = Domma.elements.breadcrumbs('#docs-breadcrumbs', {
 });
 
 function updateDocsContent(section) {
-    document.getElementById('docs-content').innerHTML =
+    $('#docs-content')[0].innerHTML =
         `&lt;h5&gt;Current Section: ${section}&lt;/h5&gt;
          &lt;p class="text-sm"&gt;Documentation for ${section}...&lt;/p&gt;`;
 }
@@ -988,10 +988,12 @@ breadcrumbs.addItem({ text: 'New Level', active: true });
             <tr><td><code>--dm-font-size-sm</code></td><td><code>0.875rem</code></td><td>Breadcrumb text size</td></tr>
         </table>
         <h4 class="category-title">Example Override</h4>
-        <pre class="code-block language-css">:root {
+        <pre class="code-block language-css">
+:root {
     /* Larger breadcrumbs */
     --dm-font-size-sm: 1rem;
-}</pre>
+}
+</pre>
         <p class="mt-4">
             <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
         </p>

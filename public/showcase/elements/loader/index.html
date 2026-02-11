@@ -109,14 +109,16 @@ loader.toggle();
             </div>
         </div>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;!-- Container with loader --&gt;
+            <pre><code>
+&lt;!-- Container with loader --&gt;
 &lt;div style="position: relative; width: 100px; height: 100px;"&gt;
     &lt;domma-loader type="spinner" size="medium" color="primary"&gt;&lt;/domma-loader&gt;
 &lt;/div&gt;
 
 &lt;domma-loader type="dots" size="medium" color="success"&gt;&lt;/domma-loader&gt;
 &lt;domma-loader type="pulse" size="medium" color="info"&gt;&lt;/domma-loader&gt;
-&lt;domma-loader type="bars" size="medium" color="warning"&gt;&lt;/domma-loader&gt;</code></pre>
+&lt;domma-loader type="bars" size="medium" color="warning"&gt;&lt;/domma-loader&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title">Size Variants</h3>
@@ -133,12 +135,14 @@ loader.toggle();
             </div>
         </div>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;domma-loader type="spinner" size="small" color="primary"&gt;&lt;/domma-loader&gt;
+            <pre><code>
+&lt;domma-loader type="spinner" size="small" color="primary"&gt;&lt;/domma-loader&gt;
 &lt;domma-loader type="spinner" size="medium" color="primary"&gt;&lt;/domma-loader&gt;
 &lt;domma-loader type="spinner" size="large" color="primary"&gt;&lt;/domma-loader&gt;
 
 &lt;!-- Custom size in pixels --&gt;
-&lt;domma-loader type="spinner" size="80" color="primary"&gt;&lt;/domma-loader&gt;</code></pre>
+&lt;domma-loader type="spinner" size="80" color="primary"&gt;&lt;/domma-loader&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title">With Loading Text</h3>
@@ -151,8 +155,10 @@ loader.toggle();
             </div>
         </div>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;domma-loader type="spinner" size="medium" color="primary" text="Loading..."&gt;&lt;/domma-loader&gt;
-&lt;domma-loader type="dots" size="medium" color="success" text="Please wait"&gt;&lt;/domma-loader&gt;</code></pre>
+            <pre><code>
+&lt;domma-loader type="spinner" size="medium" color="primary" text="Loading..."&gt;&lt;/domma-loader&gt;
+&lt;domma-loader type="dots" size="medium" color="success" text="Please wait"&gt;&lt;/domma-loader&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title">Overlay Mode</h3>
@@ -164,10 +170,12 @@ loader.toggle();
             </div>
         </div>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;div style="position: relative; width: 300px; height: 200px;"&gt;
+            <pre><code>
+&lt;div style="position: relative; width: 300px; height: 200px;"&gt;
     &lt;p&gt;Content behind overlay&lt;/p&gt;
     &lt;domma-loader type="spinner" size="large" color="white" text="Loading..." overlay&gt;&lt;/domma-loader&gt;
-&lt;/div&gt;</code></pre>
+&lt;/div&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title">Programmatic API</h3>
@@ -184,7 +192,8 @@ loader.toggle();
             </div>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>const loader = document.querySelector('domma-loader');
+            <pre><code>
+const loader = $('domma-loader')[0];
 
 // Show/hide control
 loader.show();
@@ -200,7 +209,8 @@ if (loader.isVisible()) {
 loader.setText('Processing...');
 loader.setType('dots');
 loader.setSize('large');
-loader.setColor('success');</code></pre>
+loader.setColor('success');
+</code></pre>
         </div>
 
         <h3 class="category-title">Wrapper API (Backwards Compatible)</h3>
@@ -211,7 +221,8 @@ loader.setColor('success');</code></pre>
             <div id="wrapper-loader-demo" style="width: 200px; height: 150px; position: relative; border: 1px solid var(--dm-border); border-radius: 8px;"></div>
         </div>
         <div class="code-block language-javascript mb-6">
-            <pre><code>// Traditional approach - still works!
+            <pre><code>
+// Traditional approach - still works!
 const loader = Domma.elements.loader('#my-container', {
     type: 'dots',
     size: 'large',
@@ -224,7 +235,8 @@ const loader = Domma.elements.loader('#my-container', {
 loader.show();
 loader.hide();
 loader.setText('Updated text');
-loader.destroy();</code></pre>
+loader.destroy();
+</code></pre>
         </div>
 
         <div class="alert alert-info">
@@ -332,7 +344,7 @@ const dataLoader = Domma.elements.loader('#data-container', {
             <pre><code>
 async function loadData() {
     // Hide placeholder
-    document.getElementById('placeholder-text').classList.add('hidden');
+    $('#placeholder-text')[0].classList.add('hidden');
 
     // Show loader
     dataLoader.show();
@@ -355,7 +367,7 @@ async function loadData() {
         <div class="code-block language-javascript mb-4">
             <pre><code>
 async function loadData() {
-    document.getElementById('placeholder-text').classList.add('hidden');
+    $('#placeholder-text')[0].classList.add('hidden');
     dataLoader.show();
 
     try {
@@ -366,7 +378,7 @@ async function loadData() {
         dataLoader.hide();
 
         // Display results
-        const resultEl = document.getElementById('data-result');
+        const resultEl = $('#data-result')[0];
         resultEl.innerHTML = `&lt;h4&gt;Data Loaded!&lt;/h4&gt;&lt;pre&gt;${JSON.stringify(data, null, 2)}&lt;/pre&gt;`;
         resultEl.classList.remove('hidden');
     } catch (error) {
@@ -614,7 +626,7 @@ setTimeout(() =&gt; fs.destroy(), 2000);
         </div>
         <div class="code-block language-javascript mb-6">
             <pre><code>
-const submitBtn = document.getElementById('submit-btn');
+const submitBtn = $('#submit-btn')[0];
 let btnLoader = null;
 
 submitBtn.addEventListener('click', async () =&gt; {
@@ -652,7 +664,7 @@ submitBtn.addEventListener('click', async () =&gt; {
         </div>
         <div class="code-block language-javascript">
             <pre><code>
-const galleryContainer = document.getElementById('gallery-container');
+const galleryContainer = $('#gallery-container')[0];
 const galleryLoader = Domma.elements.loader(galleryContainer, {
     type: 'pulse',
     size: 'large',
@@ -1176,9 +1188,11 @@ $.setup({
             <tr><td><code>--dm-text</code></td><td><code>var(--dm-slate-800)</code></td><td>Loading text colour</td></tr>
         </table>
         <h4 class="category-title">Example Override</h4>
-        <pre class="code-block language-css">/* White spinner for dark backgrounds */
+        <pre class="code-block language-css">
+/* White spinner for dark backgrounds */
 /* Override via JavaScript color option:
-elements.loader('#container', { color: '#ffffff' }) */</pre>
+elements.loader('#container', { color: '#ffffff' }) */
+</pre>
         <p class="mt-4">
             <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
         </p>
@@ -1349,7 +1363,7 @@ elements.loader('#container', { color: '#ffffff' }) */</pre>
 
     // Example 7: Button Loading State
     let btnLoader = null;
-    const submitBtn = document.getElementById('submit-btn');
+    const submitBtn = $('#submit-btn')[0];
 
     $('#submit-btn').on('click', async function () {
         const originalText = this.textContent;
@@ -1436,22 +1450,22 @@ elements.loader('#container', { color: '#ffffff' }) */</pre>
     let currentTypeIndex = 0;
 
     window.showProgrammableLoader = function() {
-        const loader = document.getElementById('programmable-loader');
+        const loader = $('#programmable-loader')[0];
         loader.show();
     };
 
     window.hideProgrammableLoader = function() {
-        const loader = document.getElementById('programmable-loader');
+        const loader = $('#programmable-loader')[0];
         loader.hide();
     };
 
     window.toggleProgrammableLoader = function() {
-        const loader = document.getElementById('programmable-loader');
+        const loader = $('#programmable-loader')[0];
         loader.toggle();
     };
 
     window.changeLoaderType = function() {
-        const loader = document.getElementById('programmable-loader');
+        const loader = $('#programmable-loader')[0];
         currentTypeIndex = (currentTypeIndex + 1) % loaderTypes.length;
         const newType = loaderTypes[currentTypeIndex];
         loader.setType(newType);
@@ -1465,7 +1479,7 @@ elements.loader('#container', { color: '#ffffff' }) */</pre>
 
     // Web Components - Wrapper API demo
     window.addEventListener('DOMContentLoaded', () => {
-        if (document.getElementById('wrapper-loader-demo')) {
+        if ($('#wrapper-loader-demo').length) {
             createLoaderWrapper('#wrapper-loader-demo', {
                 type: 'dots',
                 size: 'large',

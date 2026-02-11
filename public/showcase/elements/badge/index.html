@@ -59,15 +59,18 @@
       <h3 class="category-title-style">Step 1: Include Domma CSS</h3>
       <p class="mb-4 text-gray-600">Add Domma CSS to your page:</p>
       <div class="code-block language-html mb-6">
-        <pre><code>&lt;!-- CSS --&gt;
+        <pre><code>
+&lt;!-- CSS --&gt;
 &lt;link rel="stylesheet" href="dist/domma.css"&gt;
-&lt;link rel="stylesheet" href="dist/elements.css"&gt;</code></pre>
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;
+</code></pre>
       </div>
 
       <h3 class="category-title-style">Step 2: Add Badge HTML</h3>
       <p class="mb-4 text-gray-600">Use <code>&lt;span&gt;</code> elements with badge classes:</p>
       <div class="code-block language-html mb-6">
-        <pre><code>&lt;span class="badge"&gt;Default&lt;/span&gt;
+        <pre><code>
+&lt;span class="badge"&gt;Default&lt;/span&gt;
 &lt;span class="badge badge-primary"&gt;Primary&lt;/span&gt;
 &lt;span class="badge badge-success"&gt;Success&lt;/span&gt;
 &lt;span class="badge badge-danger"&gt;Urgent&lt;/span&gt;
@@ -76,7 +79,8 @@
 &lt;span class="badge badge-sm badge-primary"&gt;Small&lt;/span&gt;
 
 &lt;!-- Pill style for tags --&gt;
-&lt;span class="badge badge-pill badge-info"&gt;Tag&lt;/span&gt;</code></pre>
+&lt;span class="badge badge-pill badge-info"&gt;Tag&lt;/span&gt;
+</code></pre>
       </div>
 
       <div class="alert alert-info">
@@ -106,9 +110,11 @@
         <domma-badge variant="info">Info</domma-badge>
       </div>
       <div class="code-block language-html mb-6">
-        <pre><code>&lt;domma-badge variant="primary"&gt;Primary&lt;/domma-badge&gt;
+        <pre><code>
+&lt;domma-badge variant="primary"&gt;Primary&lt;/domma-badge&gt;
 &lt;domma-badge variant="success"&gt;Success&lt;/domma-badge&gt;
-&lt;domma-badge variant="danger"&gt;Danger&lt;/domma-badge&gt;</code></pre>
+&lt;domma-badge variant="danger"&gt;Danger&lt;/domma-badge&gt;
+</code></pre>
       </div>
 
       <h3 class="category-title-style">Size Variants</h3>
@@ -118,9 +124,11 @@
         <domma-badge variant="primary" size="large">Large</domma-badge>
       </div>
       <div class="code-block language-html mb-6">
-        <pre><code>&lt;domma-badge variant="primary" size="small"&gt;Small&lt;/domma-badge&gt;
+        <pre><code>
+&lt;domma-badge variant="primary" size="small"&gt;Small&lt;/domma-badge&gt;
 &lt;domma-badge variant="primary" size="medium"&gt;Medium&lt;/domma-badge&gt;
-&lt;domma-badge variant="primary" size="large"&gt;Large&lt;/domma-badge&gt;</code></pre>
+&lt;domma-badge variant="primary" size="large"&gt;Large&lt;/domma-badge&gt;
+</code></pre>
       </div>
 
       <h3 class="category-title-style">Pill & Outline Styles</h3>
@@ -130,9 +138,11 @@
         <domma-badge variant="danger" pill outline>Pill Outline</domma-badge>
       </div>
       <div class="code-block language-html mb-6">
-        <pre><code>&lt;domma-badge variant="primary" pill&gt;Pill Badge&lt;/domma-badge&gt;
+        <pre><code>
+&lt;domma-badge variant="primary" pill&gt;Pill Badge&lt;/domma-badge&gt;
 &lt;domma-badge variant="success" outline&gt;Outline&lt;/domma-badge&gt;
-&lt;domma-badge variant="danger" pill outline&gt;Pill Outline&lt;/domma-badge&gt;</code></pre>
+&lt;domma-badge variant="danger" pill outline&gt;Pill Outline&lt;/domma-badge&gt;
+</code></pre>
       </div>
 
       <h3 class="category-title-style">Removable Badges</h3>
@@ -144,15 +154,17 @@
         <domma-badge variant="warning" removable pill>TypeScript</domma-badge>
       </div>
       <div class="code-block language-html mb-6">
-        <pre><code>&lt;domma-badge variant="primary" removable&gt;JavaScript&lt;/domma-badge&gt;
+        <pre><code>
+&lt;domma-badge variant="primary" removable&gt;JavaScript&lt;/domma-badge&gt;
 &lt;domma-badge variant="success" removable&gt;CSS&lt;/domma-badge&gt;
 
 &lt;script&gt;
 // Listen for remove event
-document.querySelector('domma-badge').addEventListener('remove', (e) => {
+$('domma-badge').on('remove', (e) => {
     console.log('Badge removed!');
 });
-&lt;/script&gt;</code></pre>
+&lt;/script&gt;
+</code></pre>
       </div>
 
       <h3 class="category-title-style">Programmatic API</h3>
@@ -162,7 +174,8 @@ document.querySelector('domma-badge').addEventListener('remove', (e) => {
         <button class="btn btn-sm btn-primary" onclick="changeVariant()">Change Variant</button>
       </div>
       <div class="code-block language-javascript mb-6">
-        <pre><code>const badge = document.querySelector('domma-badge');
+        <pre><code>
+const badge = $('domma-badge')[0];
 
 // Update variant
 badge.setVariant('success');
@@ -174,7 +187,8 @@ badge.setText('Updated!');
 badge.setSize('large');
 
 // Chain methods
-badge.setVariant('danger').setText('Error!').setSize('small');</code></pre>
+badge.setVariant('danger').setText('Error!').setSize('small');
+</code></pre>
       </div>
 
       <h3 class="category-title-style">Wrapper API (Backwards Compatible)</h3>
@@ -185,7 +199,8 @@ badge.setVariant('danger').setText('Error!').setSize('small');</code></pre>
         <span id="wrapper-badge-1">Wrapper Badge</span>
       </div>
       <div class="code-block language-javascript mb-6">
-        <pre><code>// Traditional approach - still works!
+        <pre><code>
+// Traditional approach - still works!
 const badge = Domma.elements.badge('#my-badge', {
     variant: 'success',
     size: 'large',
@@ -196,7 +211,8 @@ const badge = Domma.elements.badge('#my-badge', {
 // Same API as before
 badge.setVariant('danger');
 badge.setText('Updated!');
-badge.destroy();</code></pre>
+badge.destroy();
+</code></pre>
       </div>
 
       <div class="alert alert-info">
@@ -283,10 +299,10 @@ badge.destroy();</code></pre>
 &lt;/div&gt;
 
 &lt;script&gt;
-const badge = document.querySelector('.badge');
+const badge = $('.badge')[0];
 let count = 3;
 
-document.getElementById('clear-btn').addEventListener('click', () => {
+$('#clear-btn').on('click', () => {
     count = 0;
     badge.textContent = count;
     if (count === 0) {
@@ -533,10 +549,12 @@ function updateBadge(count) {
         <tr><td><code>--dm-radius-full</code></td><td><code>9999px</code></td><td>Badge shape (pill)</td></tr>
       </table>
       <h4 class="category-title">Example Override</h4>
-      <pre class="code-block language-css">:root {
+      <pre class="code-block language-css">
+:root {
     /* Square badges */
     --dm-radius-full: 0.25rem;
-}</pre>
+}
+</pre>
       <p class="mt-4">
         <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
       </p>
@@ -581,8 +599,8 @@ function updateBadge(count) {
 
   $(() => {
     // Tutorial
-    document.getElementById('clear-notifications').addEventListener('click', () => {
-      const badge = document.getElementById('notification-count');
+    $('#clear-notifications').on('click', () => {
+      const badge = $('#notification-count')[0];
       badge.textContent = '0';
       badge.style.display = 'none';
     });
@@ -592,7 +610,7 @@ function updateBadge(count) {
     let currentIndex = 0;
 
     window.changeVariant = function() {
-      const badge = document.getElementById('programmable-badge');
+      const badge = $('#programmable-badge')[0];
       currentIndex = (currentIndex + 1) % variants.length;
       const newVariant = variants[currentIndex];
       badge.setVariant(newVariant);
@@ -600,7 +618,7 @@ function updateBadge(count) {
     };
 
     // Web Components - Wrapper API demo
-    if (document.getElementById('wrapper-badge-1')) {
+    if ($('#wrapper-badge-1').length) {
       createBadgeWrapper('#wrapper-badge-1', {
         variant: 'info',
         size: 'large',

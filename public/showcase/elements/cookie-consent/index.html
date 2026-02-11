@@ -55,7 +55,8 @@
       </ul>
 
       <h4 class="category-title">Basic Usage</h4>
-      <pre class="code-block language-javascript">// Initialize cookie consent
+      <pre class="code-block language-javascript">
+// Initialize cookie consent
 const consent = Domma.elements.cookieConsent({
     message: 'We use cookies to improve your experience.',
     privacyPolicyUrl: '/privacy',
@@ -65,7 +66,8 @@ const consent = Domma.elements.cookieConsent({
 });
 
 // Show the consent bar
-consent.show();</pre>
+consent.show();
+</pre>
     </div>
   </section>
 
@@ -78,18 +80,21 @@ consent.show();</pre>
       <h3 class="category-title-style">Step 1: Include Domma</h3>
       <p class="mb-4 text-gray-600">Add Domma CSS and JavaScript to your page:</p>
       <div class="code-block language-html mb-6">
-        <pre><code>&lt;!-- CSS --&gt;
+        <pre><code>
+&lt;!-- CSS --&gt;
 &lt;link rel="stylesheet" href="dist/domma.css"&gt;
 &lt;link rel="stylesheet" href="dist/elements.css"&gt;
 
 &lt;!-- JavaScript --&gt;
-&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
+&lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;
+</code></pre>
       </div>
 
       <h3 class="category-title-style">Step 2: Initialize Cookie Consent</h3>
       <p class="mb-4 text-gray-600">Call <code>Domma.elements.cookieConsent()</code> to create and show the consent banner:</p>
       <div class="code-block language-javascript mb-6">
-        <pre><code>const consent = Domma.elements.cookieConsent({
+        <pre><code>
+const consent = Domma.elements.cookieConsent({
     message: 'We use cookies to improve your experience.',
     privacyPolicyUrl: '/privacy-policy',
     autoShow: true,   // Automatically show on page load
@@ -101,7 +106,8 @@ consent.show();</pre>
         // User rejected cookies
         console.log('Cookies rejected');
     }
-});</code></pre>
+});
+</code></pre>
       </div>
 
       <div class="alert alert-info">
@@ -131,7 +137,8 @@ consent.show();</pre>
         Preferences: <span id="basic-prefs">{}</span>
       </div>
 
-      <pre class="code-block language-javascript">// Basic cookie consent
+      <pre class="code-block language-javascript">
+// Basic cookie consent
 const consent = Domma.elements.cookieConsent({
     message: 'We use cookies to improve your experience.',
     privacyPolicyUrl: '/privacy',
@@ -142,7 +149,8 @@ const consent = Domma.elements.cookieConsent({
     }
 });
 
-consent.show();</pre>
+consent.show();
+</pre>
     </div>
   </section>
 
@@ -167,7 +175,8 @@ consent.show();</pre>
         Preferences: <span id="custom-prefs">{}</span>
       </div>
 
-      <pre class="code-block language-javascript">// Custom categories
+      <pre class="code-block language-javascript">
+// Custom categories
 const consent = Domma.elements.cookieConsent({
     categories: {
         necessary: {
@@ -195,7 +204,8 @@ const consent = Domma.elements.cookieConsent({
             // Enable marketing cookies
         }
     }
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -218,14 +228,16 @@ const consent = Domma.elements.cookieConsent({
         <button class="btn btn-outline" onclick="showPosition('center-modal', 'modal')">Center Modal</button>
       </div>
 
-      <pre class="code-block language-javascript">// Position variants
+      <pre class="code-block language-javascript">
+// Position variants
 Domma.elements.cookieConsent({
     position: 'bottom-right',  // or 'top', 'bottom-left', 'center-modal'
     layout: 'box',             // or 'bar', 'modal'
     theme: 'dark',             // or 'light', 'auto'
     animation: true,
     backdrop: true             // For modal layout
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -244,7 +256,8 @@ Domma.elements.cookieConsent({
         <button class="btn btn-primary" onclick="showConfigExample()">Show Config Example</button>
       </div>
 
-      <pre class="code-block language-javascript">// Using Config Engine
+      <pre class="code-block language-javascript">
+// Using Config Engine
 $.setup({
     'body': {
         component: 'cookieConsent',
@@ -265,7 +278,8 @@ $.setup({
             }
         }
     }
-});</pre>
+});
+</pre>
     </div>
   </section>
 
@@ -295,7 +309,8 @@ $.setup({
         API output will appear here...
       </div>
 
-      <pre class="code-block language-javascript">// API Methods
+      <pre class="code-block language-javascript">
+// API Methods
 const consent = Domma.elements.cookieConsent(options);
 
 consent.show();              // Show consent UI
@@ -307,7 +322,8 @@ consent.getState();          // Get current state
 consent.getPreferences();    // Get cookie preferences
 consent.isAccepted('analytics'); // Check specific category
 consent.reset();             // Clear saved preferences
-consent.destroy();           // Remove component</pre>
+consent.destroy();           // Remove component
+</pre>
     </div>
   </section>
 
@@ -326,14 +342,16 @@ consent.destroy();           // Remove component</pre>
         <p>Click here to <a href="#" data-cookie-consent-open class="text-primary">manage cookie preferences</a></p>
       </div>
 
-      <pre class="code-block language-javascript">// Reopen trigger
+      <pre class="code-block language-javascript">
+// Reopen trigger
 Domma.elements.cookieConsent({
     reopenSelector: '[data-cookie-consent-open]',
     // ... other options
 });
 
 // In HTML:
-&lt;a href="#" data-cookie-consent-open&gt;Cookie Settings&lt;/a&gt;</pre>
+&lt;a href="#" data-cookie-consent-open&gt;Cookie Settings&lt;/a&gt;
+</pre>
     </div>
   </section>
 
@@ -352,11 +370,13 @@ Domma.elements.cookieConsent({
         <tr><td><code>--dm-shadow-lg</code></td><td><code>0 10px 15px...</code></td><td>Banner shadow</td></tr>
       </table>
       <h4 class="category-title">Example Override</h4>
-      <pre class="code-block language-css">:root {
+      <pre class="code-block language-css">
+:root {
     /* Dark cookie banner */
     --dm-surface: #1e293b;
     --dm-text: #f1f5f9;
-}</pre>
+}
+</pre>
       <p class="mt-4">
         <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
       </p>

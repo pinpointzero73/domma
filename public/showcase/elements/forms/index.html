@@ -60,15 +60,18 @@
         <h3 class="category-title-style">Step 1: Include Domma CSS</h3>
         <p class="mb-4 text-gray-600">Add Domma CSS to your page:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;!-- CSS --&gt;
+            <pre><code>
+&lt;!-- CSS --&gt;
 &lt;link rel="stylesheet" href="dist/domma.css"&gt;
-&lt;link rel="stylesheet" href="dist/elements.css"&gt;</code></pre>
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title-style">Step 2: Add Form HTML</h3>
         <p class="mb-4 text-gray-600">Use form classes with standard HTML elements:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;form&gt;
+            <pre><code>
+&lt;form&gt;
     &lt;!-- Text input --&gt;
     &lt;div class="form-group"&gt;
         &lt;label&gt;Email&lt;/label&gt;
@@ -91,7 +94,8 @@
 
     &lt;!-- Submit button --&gt;
     &lt;button type="submit" class="btn btn-primary"&gt;Sign In&lt;/button&gt;
-&lt;/form&gt;</code></pre>
+&lt;/form&gt;
+</code></pre>
         </div>
 
         <div class="alert alert-info">
@@ -190,16 +194,16 @@
 
         <div class="code-block language-javascript mt-4">
             <pre><code>
-document.getElementById('form').addEventListener('submit', (e) => {
+$('#form').on('submit', (e) => {
     e.preventDefault();
 
     // Clear previous validation
-    document.querySelectorAll('.form-group').forEach(group => {
+    $('.form-group').forEach(group => {
         group.classList.remove('has-error', 'has-success');
     });
 
     // Validate name
-    const name = document.getElementById('name');
+    const name = $('#name')[0];
     if (name.value.length < 2) {
         name.closest('.form-group').classList.add('has-error');
         return;
@@ -207,7 +211,7 @@ document.getElementById('form').addEventListener('submit', (e) => {
     name.closest('.form-group').classList.add('has-success');
 
     // Validate email
-    const email = document.getElementById('email');
+    const email = $('#email')[0];
     if (!email.value.includes('@')) {
         email.closest('.form-group').classList.add('has-error');
         return;
@@ -517,7 +521,8 @@ document.getElementById('form').addEventListener('submit', (e) => {
         </p>
 
       <h4 class="category-title-style">Form Validation with $.setup()</h4>
-        <pre class="code-block language-javascript">$.setup({
+        <pre class="code-block language-javascript">
+$.setup({
     '#registration-form': {
         initial: {
             data: { touched: {}, errors: {} }
@@ -594,10 +599,12 @@ document.getElementById('form').addEventListener('submit', (e) => {
             }, 300)
         }
     }
-});</pre>
+});
+</pre>
 
       <h4 class="category-title-style">Auto-Save Draft</h4>
-        <pre class="code-block language-javascript">$.setup({
+        <pre class="code-block language-javascript">
+$.setup({
     '#article-form': {
         initial: {
             data: { saveTimer: null, lastSaved: null }
@@ -620,10 +627,12 @@ document.getElementById('form').addEventListener('submit', (e) => {
             }, 2000)
         }
     }
-});</pre>
+});
+</pre>
 
       <h4 class="category-title-style">Dynamic Form Fields</h4>
-        <pre class="code-block language-javascript">$.setup({
+        <pre class="code-block language-javascript">
+$.setup({
     '#contact-form': {
         events: {
             'click #add-phone': (e, $form) => {
@@ -648,10 +657,12 @@ document.getElementById('form').addEventListener('submit', (e) => {
             }
         }
     }
-});</pre>
+});
+</pre>
 
       <h4 class="category-title-style">Multi-Step Form</h4>
-        <pre class="code-block language-javascript">$.setup({
+        <pre class="code-block language-javascript">
+$.setup({
     '#wizard-form': {
         initial: {
             data: { currentStep: 1, totalSteps: 3, formData: {} }
@@ -692,7 +703,8 @@ document.getElementById('form').addEventListener('submit', (e) => {
             }
         }
     }
-});</pre>
+});
+</pre>
 
       <h4 class="category-title-style">Benefits of Hybrid Approach</h4>
         <ul class="mb-4">
@@ -706,7 +718,8 @@ document.getElementById('form').addEventListener('submit', (e) => {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <p class="font-semibold mb-2">CSS-Only (Default)</p>
-                <pre class="code-block language-javascript" style="font-size: 0.85em;">&lt;form action="/submit" method="POST"&gt;
+                <pre class="code-block language-javascript" style="font-size: 0.85em;">
+&lt;form action="/submit" method="POST"&gt;
     &lt;div class="form-group"&gt;
         &lt;label&gt;Email&lt;/label&gt;
         &lt;input type="email"
@@ -721,11 +734,13 @@ document.getElementById('form').addEventListener('submit', (e) => {
     &lt;/button&gt;
 &lt;/form&gt;
 
-&lt;!-- Works with native validation --&gt;</pre>
+&lt;!-- Works with native validation --&gt;
+</pre>
             </div>
             <div>
                 <p class="font-semibold mb-2">CSS+JS Hybrid (Enhanced)</p>
-                <pre class="code-block language-javascript" style="font-size: 0.85em;">&lt;form id="enhanced-form"&gt;
+                <pre class="code-block language-javascript" style="font-size: 0.85em;">
+&lt;form id="enhanced-form"&gt;
     &lt;div class="form-group"&gt;
         &lt;label&gt;Email&lt;/label&gt;
         &lt;input type="email"
@@ -749,7 +764,8 @@ $.setup({
         }
     }
 });
-&lt;/script&gt;</pre>
+&lt;/script&gt;
+</pre>
             </div>
         </div>
     </div>
@@ -771,14 +787,16 @@ $.setup({
             <tr><td><code>--dm-focus-ring</code></td><td><code>rgba(59, 130, 246, 0.25)</code></td><td>Focus ring (box-shadow)</td></tr>
         </table>
         <h4 class="category-title">Example Override</h4>
-        <pre class="code-block language-css">:root {
+        <pre class="code-block language-css">
+:root {
     /* Custom focus colour */
     --dm-input-focus-border: #16a34a;  /* Green focus */
     --dm-focus-ring: rgba(22, 163, 74, 0.25);
 
     /* Subtle borders */
     --dm-input-border: #e5e7eb;
-}</pre>
+}
+</pre>
         <p class="mt-4">
             <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
         </p>

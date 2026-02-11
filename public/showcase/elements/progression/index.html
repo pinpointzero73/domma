@@ -46,7 +46,8 @@
 
             <h3 class="category-title-style">Basic Usage</h3>
             <div class="code-block language-javascript">
-                <pre><code>// Timeline mode
+                <pre><code>
+// Timeline mode
 const timeline = Domma.elements.progression('#timeline', {
     mode: 'timeline',
     items: [
@@ -67,7 +68,8 @@ const roadmap = Domma.elements.progression('#roadmap', {
         }
     ],
     showProgress: true
-});</code></pre>
+});
+</code></pre>
             </div>
         </div>
     </section>
@@ -83,7 +85,8 @@ const roadmap = Domma.elements.progression('#roadmap', {
             </div>
 
             <div class="code-block language-javascript">
-                <pre><code>Domma.elements.progression('#timeline-demo', {
+                <pre><code>
+Domma.elements.progression('#timeline-demo', {
     mode: 'timeline',
     items: [
         { year: '2020', title: 'Founded', description: 'Company established' },
@@ -94,7 +97,8 @@ const roadmap = Domma.elements.progression('#roadmap', {
     ],
     layout: 'vertical',
     theme: 'default'
-});</code></pre>
+});
+</code></pre>
             </div>
         </div>
     </section>
@@ -110,7 +114,8 @@ const roadmap = Domma.elements.progression('#roadmap', {
             </div>
 
             <div class="code-block language-javascript">
-                <pre><code>Domma.elements.progression('#roadmap-demo', {
+                <pre><code>
+Domma.elements.progression('#roadmap-demo', {
     mode: 'roadmap',
     items: [
         {
@@ -167,7 +172,8 @@ const roadmap = Domma.elements.progression('#roadmap', {
     ],
     showProgress: true,
     progressPosition: 'top'
-});</code></pre>
+});
+</code></pre>
             </div>
         </div>
     </section>
@@ -183,11 +189,13 @@ const roadmap = Domma.elements.progression('#roadmap', {
             </div>
 
             <div class="code-block language-javascript">
-                <pre><code>Domma.elements.progression('#layout-centered', {
+                <pre><code>
+Domma.elements.progression('#layout-centered', {
     mode: 'timeline',
     layout: 'centered',
     items: [...]
-});</code></pre>
+});
+</code></pre>
             </div>
         </div>
     </section>
@@ -203,14 +211,16 @@ const roadmap = Domma.elements.progression('#roadmap', {
             </div>
 
             <div class="code-block language-javascript">
-                <pre><code>Domma.elements.progression('#interactive-roadmap', {
+                <pre><code>
+Domma.elements.progression('#interactive-roadmap', {
     mode: 'roadmap',
     allowStatusChange: true,
     onStatusChange: (item, oldStatus, newStatus) => {
         console.log(`${item.title}: ${oldStatus} → ${newStatus}`);
     },
     items: [...]
-});</code></pre>
+});
+</code></pre>
             </div>
         </div>
     </section>
@@ -348,17 +358,21 @@ const roadmap = Domma.elements.progression('#roadmap', {
 
             <h3 class="category-title-style">Old (Still Works)</h3>
             <div class="code-block language-javascript mb-4">
-                <pre><code>Domma.elements.timeline('#my-timeline', {
+                <pre><code>
+Domma.elements.timeline('#my-timeline', {
     items: [{ year: '2024', title: 'Event', description: '...' }]
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <h3 class="category-title-style">New (Recommended)</h3>
             <div class="code-block language-javascript">
-                <pre><code>Domma.elements.progression('#my-timeline', {
+                <pre><code>
+Domma.elements.progression('#my-timeline', {
     mode: 'timeline',
     items: [{ year: '2024', title: 'Event', description: '...' }]
-});</code></pre>
+});
+</code></pre>
             </div>
 
             <div class="alert alert-info mt-4">
@@ -383,11 +397,13 @@ const roadmap = Domma.elements.progression('#roadmap', {
                 <tr><td><code>--dm-primary</code></td><td><code>var(--dm-blue-600)</code></td><td>Planned status colour</td></tr>
             </table>
             <h4 class="category-title">Example Override</h4>
-            <pre class="code-block language-css">:root {
+            <pre class="code-block language-css">
+:root {
     /* Custom status colours */
     --dm-success: #10b981;
     --dm-info: #3b82f6;
-}</pre>
+}
+</pre>
             <p class="mt-4">
                 <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
             </p>

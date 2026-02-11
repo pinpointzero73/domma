@@ -121,7 +121,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Interactive container elements with hover effects and click handling</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '.demo-card': {
     component: 'card',
     options: {
@@ -130,7 +131,8 @@
       onClick: () => console.log('Card clicked!')
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <div class="grid grid-cols-3 gap-4">
@@ -165,7 +167,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Dialog overlays with backdrop, keyboard support, and animations</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '#demo-modal': {
     component: 'modal',
     options: {
@@ -175,7 +178,8 @@
       animation: 'fade'
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <button id="open-modal-btn" class="btn btn-primary">Open Modal</button>
@@ -206,7 +210,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Tabbed content panels with animation support</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '#demo-tabs': {
     component: 'tabs',
     options: {
@@ -214,7 +219,8 @@
       animation: 'fade'
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <div id="demo-tabs" class="tabs">
@@ -250,7 +256,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Collapsible content sections with single or multi-expand modes</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '#demo-accordion': {
     component: 'accordion',
     options: {
@@ -258,7 +265,8 @@
       animation: 'slide'
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <div id="demo-accordion" class="accordion">
@@ -309,7 +317,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Contextual popups on hover or click with multiple positioning options</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '[data-tooltip]': {
     component: 'tooltip',
     options: {
@@ -318,7 +327,8 @@
       delay: 200
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <div class="flex gap-4">
@@ -346,7 +356,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Image/content slider with autoplay, indicators, and navigation arrows</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '#demo-carousel': {
     component: 'carousel',
     options: {
@@ -357,7 +368,8 @@
       showIndicators: true
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <div id="demo-carousel" class="carousel" style="max-width: 600px; margin: 0 auto;">
@@ -388,7 +400,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Dropdown menus with positioning and selection handling</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '#demo-dropdown': {
     component: 'dropdown',
     options: {
@@ -402,7 +415,8 @@
       closeOnSelect: true
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo" style="text-align: center;">
         <button class="btn btn-primary" id="demo-dropdown">Actions</button>
@@ -418,7 +432,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Status indicators and labels with variant styles</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '.demo-badge': {
     component: 'badge',
     options: {
@@ -426,7 +441,8 @@
       rounded: true
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <div class="flex gap-2 flex-wrap">
@@ -449,7 +465,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Scroll-to-top button that appears after scrolling down</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '#back-to-top': {
     component: 'backToTop',
     options: {
@@ -458,7 +475,8 @@
       position: 'bottom-right'
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <p class="text-muted"><strong>Note:</strong> Scroll down the page to see the back-to-top button appear in the
@@ -479,7 +497,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Radio/checkbox style button groups with single or multi-select</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '#demo-btngroup': {
     component: 'buttonGroup',
     options: {
@@ -487,7 +506,8 @@
       activeClass: 'active'
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <div class="btn-group" id="demo-btngroup">
@@ -509,7 +529,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Loading indicators with multiple animation types</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '#demo-loader-container': {
     component: 'loader',
     options: {
@@ -519,7 +540,8 @@
       text: 'Loading...'
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <button id="show-loader-btn" class="btn btn-primary">Show Loader</button>
@@ -539,7 +561,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Navigation trail showing current page location</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '#demo-breadcrumbs': {
     component: 'breadcrumbs',
     options: {
@@ -551,7 +574,8 @@
       separator: '/'
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <div class="breadcrumb-container">
@@ -569,7 +593,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Responsive navigation bar with brand, menu items, and actions</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '#demo-navbar': {
     component: 'navbar',
     options: {
@@ -582,7 +607,8 @@
       variant: 'light'
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <nav id="demo-navbar" class="navbar"></nav>
@@ -598,7 +624,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Desktop browser notifications (requires permission)</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '#request-notification-btn': {
     events: {
       click: async () => {
@@ -614,7 +641,8 @@
       }
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <button id="request-notification-btn" class="btn btn-primary">Request Permission & Show Notification</button>
@@ -631,7 +659,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Countdown timer with optional visual display and controls</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '#demo-timer': {
     component: 'timer',
     options: {
@@ -641,7 +670,8 @@
       autoStart: false
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <div id="demo-timer"></div>
@@ -657,7 +687,8 @@
     <div class="card-body">
       <p><strong>Purpose:</strong> Scheduled time-based alerts with localStorage persistence</p>
 
-      <pre class="code-block language-javascript mb-4">$.setup({
+      <pre class="code-block language-javascript mb-4">
+$.setup({
   '#demo-alarm': {
     component: 'alarm',
     options: {
@@ -672,15 +703,18 @@
       storageKey: 'demo-alarms'
     }
   }
-});</pre>
+});
+</pre>
 
       <div class="component-demo">
         <div class="alert alert-info">
           <strong>Alarm Configuration:</strong> Alarms are configured via options and persist in localStorage.
           When an alarm triggers, a desktop notification and optional sound are displayed.
         </div>
-        <pre class="code-block">Current Time: <span id="current-time">--:--</span>
-Next Alarm: Morning Meeting at 09:00 (weekdays)</pre>
+        <pre class="code-block">
+Current Time: <span id="current-time">--:--</span>
+Next Alarm: Morning Meeting at 09:00 (weekdays)
+</pre>
       </div>
     </div>
   </section>
@@ -703,22 +737,26 @@ Next Alarm: Morning Meeting at 09:00 (weekdays)</pre>
         <div>
           <h4 class="text-danger">autocomplete</h4>
           <p class="text-sm text-muted mb-2"><strong>Why:</strong> Complex data binding and async data sources</p>
-          <pre class="code-block language-javascript text-xs">// Use direct init
+          <pre class="code-block language-javascript text-xs">
+// Use direct init
 const ac = Domma.elements.autocomplete('#search', {
   data: ['Apple', 'Banana', 'Cherry'],
   onSelect: (val) => console.log(val)
-});</pre>
+});
+</pre>
         </div>
 
         <!-- Pillbox -->
         <div>
           <h4 class="text-danger">pillbox</h4>
           <p class="text-sm text-muted mb-2"><strong>Why:</strong> Advanced multi-select state management</p>
-          <pre class="code-block language-javascript text-xs">// Use direct init
+          <pre class="code-block language-javascript text-xs">
+// Use direct init
 const pb = Domma.elements.pillbox('#tags', {
   data: ['React', 'Vue', 'Angular'],
   creatable: true
-});</pre>
+});
+</pre>
         </div>
 
         <!-- Toast -->
@@ -726,40 +764,48 @@ const pb = Domma.elements.pillbox('#tags', {
           <h4 class="text-danger">toast</h4>
           <p class="text-sm text-muted mb-2"><strong>Why:</strong> Ephemeral notifications (no persistent DOM element)
           </p>
-          <pre class="code-block language-javascript text-xs">// Use static method
+          <pre class="code-block language-javascript text-xs">
+// Use static method
 Domma.elements.toast('Success!', {
   type: 'success',
   duration: 3000
-});</pre>
+});
+</pre>
         </div>
 
         <!-- Dialog -->
         <div>
           <h4 class="text-danger">dialog (alert, confirm, prompt)</h4>
           <p class="text-sm text-muted mb-2"><strong>Why:</strong> Promise-based programmatic APIs</p>
-          <pre class="code-block language-javascript text-xs">// Use static methods
+          <pre class="code-block language-javascript text-xs">
+// Use static methods
 const ok = await Domma.elements.confirm('Delete?');
-const name = await Domma.elements.prompt('Name:');</pre>
+const name = await Domma.elements.prompt('Name:');
+</pre>
         </div>
 
         <!-- TreeView -->
         <div>
           <h4 class="text-danger">treeView</h4>
           <p class="text-sm text-muted mb-2"><strong>Why:</strong> Hierarchical data requires direct data binding</p>
-          <pre class="code-block language-javascript text-xs">// Use direct init
+          <pre class="code-block language-javascript text-xs">
+// Use direct init
 const tree = Domma.elements.treeView('#tree', {
   items: [{label: 'Parent', children: [...]}]
-});</pre>
+});
+</pre>
         </div>
 
         <!-- hero -->
         <div>
           <h4 class="text-danger">hero</h4>
           <p class="text-sm text-muted mb-2"><strong>Why:</strong> CSS-only component (no JavaScript)</p>
-          <pre class="code-block language-html text-xs"><!-- Use HTML + CSS classes -->
+          <pre class="code-block language-html text-xs">
+<!-- Use HTML + CSS classes -->
 <div class="hero hero-primary">
   <h1>Hero Section</h1>
-</div></pre>
+</div>
+</pre>
         </div>
 
         <!-- Developer Tools -->
@@ -767,9 +813,11 @@ const tree = Domma.elements.treeView('#tree', {
           <h4 class="text-danger">themeRoller / pageRoller / editor</h4>
           <p class="text-sm text-muted mb-2"><strong>Why:</strong> Developer tools (in tools bundle, not main bundle)
           </p>
-          <pre class="code-block language-javascript text-xs">// Load domma-tools.min.js first
+          <pre class="code-block language-javascript text-xs">
+// Load domma-tools.min.js first
 const roller = Domma.elements.themeRoller('#container');
-const editor = Domma.elements.editor('#editor');</pre>
+const editor = Domma.elements.editor('#editor');
+</pre>
         </div>
       </div>
     </div>

@@ -68,15 +68,18 @@
         <h3 class="category-title-style">Step 1: Include Domma CSS</h3>
         <p class="mb-4 text-gray-600">Add Domma CSS to your page:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;!-- CSS --&gt;
+            <pre><code>
+&lt;!-- CSS --&gt;
 &lt;link rel="stylesheet" href="dist/domma.css"&gt;
-&lt;link rel="stylesheet" href="dist/elements.css"&gt;</code></pre>
+&lt;link rel="stylesheet" href="dist/elements.css"&gt;
+</code></pre>
         </div>
 
         <h3 class="category-title-style">Step 2: Add hero HTML</h3>
         <p class="mb-4 text-gray-600">Use hero classes for hero sections:</p>
         <div class="code-block language-html mb-6">
-            <pre><code>&lt;div class="hero"&gt;
+            <pre><code>
+&lt;div class="hero"&gt;
     &lt;div class="hero-content"&gt;
         &lt;h1 class="hero-title"&gt;Welcome to Domma&lt;/h1&gt;
         &lt;p class="hero-subtitle"&gt;
@@ -96,7 +99,8 @@
         &lt;h1 class="hero-title"&gt;Gradient Hero&lt;/h1&gt;
         &lt;p class="hero-subtitle"&gt;Eye-catching gradient background&lt;/p&gt;
     &lt;/div&gt;
-&lt;/div&gt;</code></pre>
+&lt;/div&gt;
+</code></pre>
         </div>
 
         <div class="alert alert-info">
@@ -750,7 +754,8 @@
             </p>
 
             <h4 class="category-title">Dynamic Content Updates</h4>
-            <pre class="code-block language-javascript">// Rotate through multiple messages
+            <pre class="code-block language-javascript">
+// Rotate through multiple messages
 $.setup({
     '#hero-hero': {
         initial: {
@@ -780,10 +785,12 @@ $.setup({
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Scroll-Based Animations</h4>
-            <pre class="code-block language-javascript">// Animate hero on scroll into view
+            <pre class="code-block language-javascript">
+// Animate hero on scroll into view
 $.setup({
     '.hero': {
         initial: {
@@ -806,10 +813,12 @@ $.setup({
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Interactive CTA Tracking</h4>
-            <pre class="code-block language-javascript">// Track user interactions with analytics
+            <pre class="code-block language-javascript">
+// Track user interactions with analytics
 $.setup({
     '#marketing-hero': {
         events: {
@@ -835,10 +844,12 @@ $.setup({
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Personalised Content</h4>
-            <pre class="code-block language-javascript">// Customise hero based on user data
+            <pre class="code-block language-javascript">
+// Customise hero based on user data
 const user = { name: 'Alice', plan: 'Pro' };
 
 $.setup({
@@ -857,7 +868,8 @@ $.setup({
             }
         }
     }
-});</pre>
+});
+</pre>
 
             <h4 class="category-title">Benefits of Hybrid Approach</h4>
             <ul class="mb-4">
@@ -873,7 +885,8 @@ $.setup({
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <p class="font-semibold mb-2">CSS-Only (Default)</p>
-                    <pre class="code-block language-javascript text-sm"><div class="hero hero-primary">
+                    <pre class="code-block language-javascript text-sm">
+<div class="hero hero-primary">
     <div class="hero-content">
         <h1 class="hero-title">
             Static Title
@@ -889,11 +902,13 @@ $.setup({
     </div>
 </div>
 
-<!-- No JavaScript needed --></pre>
+<!-- No JavaScript needed -->
+</pre>
                 </div>
                 <div>
                     <p class="font-semibold mb-2">CSS+JS Hybrid (Enhanced)</p>
-                    <pre class="code-block language-javascript text-sm"><div id="hero"
+                    <pre class="code-block language-javascript text-sm">
+<div id="hero"
      class="hero hero-primary">
     <div class="hero-content">
         <h1 class="hero-title">
@@ -920,7 +935,8 @@ $.setup({
         }
     }
 });
-&lt;/script&gt;</pre>
+&lt;/script&gt;
+</pre>
                 </div>
             </div>
         </div>
@@ -941,10 +957,12 @@ $.setup({
                 <tr><td><code>--dm-font-size-xl</code></td><td><code>1.25rem</code></td><td>Hero subtitle size</td></tr>
             </table>
             <h4 class="category-title">Example Override</h4>
-            <pre class="code-block language-css">/* Custom gradient - create new class */
+            <pre class="code-block language-css">
+/* Custom gradient - create new class */
 .hero-custom {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}</pre>
+}
+</pre>
             <p class="mt-4">
                 <a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a>
             </p>
