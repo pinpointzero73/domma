@@ -206,6 +206,7 @@ export class DommaTooltip extends DommaElement {
         this._hideTimeout = setTimeout(() => {
             if (this._tooltip) {
                 this._tooltip.classList.remove('show');
+                this._tooltip.style.opacity = '0';
 
                 setTimeout(() => {
                     if (this._tooltip) {
@@ -243,11 +244,18 @@ export class DommaTooltip extends DommaElement {
         const { content, position, html } = this._options;
 
         this._tooltip = document.createElement('div');
-        this._tooltip.className = 'tooltip';
+        this._tooltip.className = 'domma-tooltip';
         this._tooltip.setAttribute('data-position', position);
 
+        // Apply inline styles since tooltip is rendered outside Shadow DOM
+        this._applyTooltipStyles();
+
         if (html) {
-            this._tooltip.innerHTML = content;
+            // Sanitize HTML content if DOMPurify is available
+            const sanitizedContent = (typeof DOMPurify !== 'undefined')
+                ? DOMPurify.sanitize(content)
+                : content;
+            this._tooltip.innerHTML = sanitizedContent;
         } else {
             this._tooltip.textContent = content;
         }
@@ -258,14 +266,96 @@ export class DommaTooltip extends DommaElement {
         this._tooltip.offsetHeight;
         this._tooltip.classList.add('show');
 
+        // Set opacity inline (since we're using inline styles, CSS classes won't override)
+        this._tooltip.style.opacity = '1';
+
         this._isVisible = true;
+    }
+
+    _applyTooltipStyles() {
+        // Base styles for the tooltip
+        Object.assign(this._tooltip.style, {
+            position: 'fixed',
+            zIndex: '1000',
+            padding: '0.5rem 0.75rem',
+            background: 'var(--dm-text, #212529)',
+            color: 'var(--dm-surface, #fff)',
+            borderRadius: '4px',
+            fontSize: '0.875rem',
+            lineHeight: '1.4',
+            maxWidth: '250px',
+            pointerEvents: 'none',
+            transition: 'opacity 0.15s ease',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+        });
+
+        // Set initial opacity via style (will be overridden by .show class)
+        this._tooltip.style.opacity = '0';
+
+        // Add arrow using ::before (via inline style won't work, so inject a style tag)
+        this._injectGlobalTooltipStyles();
+    }
+
+    _injectGlobalTooltipStyles() {
+        // Only inject once per page
+        if (document.getElementById('domma-tooltip-styles')) return;
+
+        const style = document.createElement('style');
+        style.id = 'domma-tooltip-styles';
+        style.textContent = `
+            .domma-tooltip.show {
+                opacity: 1 !important;
+            }
+
+            /* Arrow */
+            .domma-tooltip::before {
+                content: '';
+                position: absolute;
+                width: 0;
+                height: 0;
+                border: 5px solid transparent;
+            }
+
+            .domma-tooltip[data-position="top"]::before {
+                bottom: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-top-color: var(--dm-text, #212529);
+            }
+
+            .domma-tooltip[data-position="bottom"]::before {
+                top: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-bottom-color: var(--dm-text, #212529);
+            }
+
+            .domma-tooltip[data-position="left"]::before {
+                right: -10px;
+                top: 50%;
+                transform: translateY(-50%);
+                border-left-color: var(--dm-text, #212529);
+            }
+
+            .domma-tooltip[data-position="right"]::before {
+                left: -10px;
+                top: 50%;
+                transform: translateY(-50%);
+                border-right-color: var(--dm-text, #212529);
+            }
+        `;
+        document.head.appendChild(style);
     }
 
     _updateTooltipContent() {
         const { content, html } = this._options;
 
         if (html) {
-            this._tooltip.innerHTML = content;
+            // Sanitize HTML content if DOMPurify is available
+            const sanitizedContent = (typeof DOMPurify !== 'undefined')
+                ? DOMPurify.sanitize(content)
+                : content;
+            this._tooltip.innerHTML = sanitizedContent;
         } else {
             this._tooltip.textContent = content;
         }
@@ -304,11 +394,7 @@ export class DommaTooltip extends DommaElement {
                 left = rect.left + (rect.width - tooltipRect.width) / 2;
         }
 
-        // Add scroll offset
-        top += window.scrollY;
-        left += window.scrollX;
-
-        // Keep tooltip within viewport
+        // Keep tooltip within viewport (fixed positioning uses viewport coordinates)
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
 
@@ -317,8 +403,8 @@ export class DommaTooltip extends DommaElement {
             left = viewportWidth - tooltipRect.width - 8;
         }
         if (top < 0) top = 8;
-        if (top + tooltipRect.height > viewportHeight + window.scrollY) {
-            top = viewportHeight + window.scrollY - tooltipRect.height - 8;
+        if (top + tooltipRect.height > viewportHeight) {
+            top = viewportHeight - tooltipRect.height - 8;
         }
 
         this._tooltip.style.top = top + 'px';

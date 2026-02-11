@@ -530,7 +530,7 @@ $.setup({
 <script src="../../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../../layouts/js/layout.js"></script>
 <script type="module">
-    import { createTooltipWrapper } from '../../../src/web-components/wrappers/legacy-wrappers.js';
+    // Note: createTooltipWrapper is already available in domma.min.js via Domma.elements.tooltip()
 
     // Web Components - Programmatic API demo
     const positions = ['top', 'bottom', 'left', 'right'];
@@ -558,7 +558,7 @@ $.setup({
     // Web Components - Wrapper API demo
     $(() => {
         if (document.getElementById('wrapper-tooltip-btn')) {
-            createTooltipWrapper('#wrapper-tooltip-btn', {
+            Domma.elements.tooltip('#wrapper-tooltip-btn', {
                 content: 'This uses the wrapper API!',
                 position: 'top',
                 trigger: 'hover'
