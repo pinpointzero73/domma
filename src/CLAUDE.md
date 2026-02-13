@@ -521,6 +521,56 @@ S.keys();                                          // List all Domma keys
 S.clear();                                         // Clear only Domma keys
 ```
 
+### effects.js - Visual effects and animations
+
+Accessed via `Domma.effects`:
+
+- **breathe**: `effects.breathe(selector, { amplitude, duration, easing, delay, stagger, iterations, pauseOnHover })` - Sinusoidal floating animation
+- **pulse**: `effects.pulse(selector, { scale, duration, easing, delay, stagger, iterations, pauseOnHover })` - Pulsing scale animation
+- **typewriter**: `effects.typewriter(selector, { speed, deleteSpeed, cursor, cursorChar, cursorBlink, loop, loopDelay, pauseOnHover, actions })` - Character-by-character text animation with action queue
+
+**Typewriter Actions:**
+- `{ render: 'text', effect: 'none|fade|bounce|glow' }` - Type text with optional entrance effect
+- `{ wait: '2s' }` - Pause for duration (supports '2s', '500ms', or number)
+- `{ undoRender: true }` - Delete all characters from last render
+- `{ undoRender: N }` - Delete last N characters
+- `{ undoRender: 'all' }` - Delete all characters
+
+**Control Object** (returned by all effects):
+- `pause()` - Pause the effect
+- `resume()` - Resume the effect
+- `stop()` - Stop the effect
+- `restart()` - Restart from beginning
+- `destroy()` - Clean up and remove effect
+- `isRunning()` - Check if effect is active
+- `isPaused()` - Check if effect is paused
+
+```javascript
+// Breathing animation
+Domma.effects.breathe('.stat-card', {
+  amplitude: 8,
+  duration: 2000,
+  pauseOnHover: true
+});
+
+// Typewriter with sequence
+const tw = Domma.effects.typewriter('.hero-title', {
+  speed: 50,
+  actions: [
+    { render: 'Hello', effect: 'bounce' },
+    { wait: '2s' },
+    { undoRender: true },
+    { render: 'Welcome to Domma', effect: 'fade' }
+  ],
+  loop: true
+});
+
+// Control the animation
+tw.pause();
+tw.resume();
+tw.destroy();
+```
+
 ## Aliases
 
 | Full Path        | Alias | Global     | Description                      |
@@ -553,6 +603,7 @@ src/
 ├── config.js        # JSON configuration engine
 ├── http.js          # HTTP client
 ├── storage.js       # localStorage wrapper
+├── effects.js       # Visual effects (breathe, pulse, typewriter)
 ├── theme.js         # Theme management
 ├── icons.js         # SVG icon system
 ├── theme-roller.js  # Theme customisation tool (tools bundle)

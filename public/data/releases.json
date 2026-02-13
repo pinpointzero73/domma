@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.14.5",
+      "title": "Typewriter Effect with Action Queue",
+      "description": "Introduced Domma.effects.typewriter() with character-by-character text rendering, blinking cursor (caret, block, underline styles), and powerful action queue system. Features include render/wait/undoRender actions, per-character entrance effects (fade, bounce, glow), partial text deletion, configurable looping, and full pause/resume/restart controls. Optimized with GPU acceleration and hardware-accelerated animations for buttery-smooth 60fps rendering. Perfect for hero banners, animated intros, and dynamic text displays.",
+      "date": "2026-02-13"
+    },
+    {
       "year": "v0.14.1",
       "title": "Patron Saint Celebrations & Animation Polish",
       "description": "Transformed UK patron saint celebrations with horizontal-drifting flower petals: St. David's Day yellow daffodil petals, St. George's Day red/white rose petals, St. Andrew's Day purple heather petals, and St. Patrick's Day green clover petals. Fixed critical St. David's Day animation freeze caused by canvas state corruption (missing ctx.restore()). Replaced harsh X-shaped Saltire sparkles with elegant 4-pointed stars. Reduced Guy Fawkes Night initial particle spam with gradual spawning (25% start, builds to 100% over 20 seconds). All patron saint celebrations now feature realistic flutter animations and gentle vertical bobbing.",
@@ -97,5 +103,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.14.1"
+  "latestVersion": "v0.14.5"
 }

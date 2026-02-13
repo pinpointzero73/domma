@@ -403,6 +403,16 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - Methods: `render()`, `inject()`, `scan()` (auto-scan `data-icon` attributes)
 - Customizable size and color
 
+#### Effects (`Domma.effects`)
+
+- **breathe()** - Sinusoidal floating animation with configurable amplitude and duration
+- **pulse()** - Pulsing scale animation for attention-grabbing elements
+- **typewriter()** - Character-by-character text animation with action queue system
+  - Actions: `render` (type text), `wait` (pause), `undoRender` (delete text)
+  - Effects: `none`, `fade`, `bounce`, `glow` (per-character entrance animations)
+  - Features: Blinking cursor, looping, partial undo, pause on hover
+  - Control methods: `pause()`, `resume()`, `stop()`, `restart()`, `destroy()`
+
 ### CSS Features
 
 #### Base Utilities (domma.css)

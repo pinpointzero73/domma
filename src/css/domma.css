@@ -3235,6 +3235,127 @@ code, pre {
     }
 }
 
+/* Typewriter Effect Keyframes */
+
+@keyframes dm-cursor-blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes dm-tw-fade {
+    from {
+        opacity: 0;
+        transform: translateZ(0);
+    }
+    to {
+        opacity: 1;
+        transform: translateZ(0);
+    }
+}
+
+@keyframes dm-tw-bounce {
+    0% {
+        opacity: 0;
+        transform: translateY(-8px) translateZ(0);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(2px) translateZ(0);
+    }
+    80% {
+        transform: translateY(-1px) translateZ(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) translateZ(0);
+    }
+}
+
+@keyframes dm-tw-glow {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateZ(0);
+        filter: brightness(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1) translateZ(0);
+        filter: brightness(1.5);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateZ(0);
+        filter: brightness(1);
+    }
+}
+
+/* Typewriter Classes */
+
+.dm-tw-cursor {
+    display: inline;
+    white-space: pre;
+    font-weight: 600;
+    margin-left: 2px;
+    vertical-align: 0.08em;
+    animation: dm-cursor-blink 1s ease-in-out infinite;
+}
+
+.dm-tw-cursor.dm-tw-cursor-no-blink {
+    animation: none;
+    opacity: 1;
+}
+
+/* Cursor Types */
+.dm-tw-cursor-caret {
+    /* Default - thin vertical line */
+}
+
+.dm-tw-cursor-block {
+    padding: 0;
+    background: currentColor;
+    color: var(--dm-body-bg, #fff);
+    opacity: 0.8;
+    font-size: 0.7em;
+    line-height: 0.9;
+}
+
+.dm-tw-cursor-block.dm-tw-cursor-no-blink {
+    opacity: 0.6;
+}
+
+.dm-tw-cursor-underline {
+    border-bottom: 2px solid currentColor;
+    padding: 0;
+    min-width: 0.5em;
+}
+
+.dm-tw-char {
+    display: inline;
+    white-space: pre;
+    font-weight: 600;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translateZ(0);
+}
+
+.dm-tw-char-fade {
+    animation: dm-tw-fade 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.dm-tw-char-bounce {
+    animation: dm-tw-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.dm-tw-char-glow {
+    animation: dm-tw-glow 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
 /* Animation Classes */
 
 .animate-fade-in {

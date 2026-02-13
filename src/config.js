@@ -2,6 +2,7 @@ import {dom} from './dom.js';
 import {elements} from './elements.js';
 import {forms} from './forms.js';
 import {utils} from './utils.js';
+import effects from './effects.js';
 
 export const configEngine = {
     // Storage for mutable configuration
@@ -197,7 +198,11 @@ export const configEngine = {
             alarm: elements.alarm,
             autocomplete: elements.autocomplete,
             pillbox: elements.pillbox,
-            form: forms.create
+            form: forms.create,
+            // Effects
+            breathe: effects.breathe,
+            pulse: effects.pulse,
+            typewriter: effects.typewriter
         };
 
         const factory = componentMap[componentType];
