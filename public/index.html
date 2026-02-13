@@ -424,9 +424,7 @@
 
     <!-- Right column: Tagline and CTA -->
     <div>
-      <p class="tagline" style="text-align: left; margin: 0 0 1.5rem 0; font-size: 1.1rem; line-height: 1.6;">
-        A lightweight, zero-dependency JavaScript framework combining jQuery-style DOM manipulation,
-        Lodash utilities, and modern UI components.
+      <p class="tagline" id="splash-typewriter" style="text-align: left; margin: 0 0 1.5rem 0; font-size: 1.1rem; line-height: 1.6; min-height: 3.2em;">
       </p>
       <div style="text-align: right;">
         <a href="showcase/index.html" class="cta">
@@ -705,6 +703,9 @@
       });
     }
 
+    // Splash tagline typewriter - controlled by MotionControl (defined below)
+    // Initial setup will be handled by MotionControl.updateTypewriter() after DOM ready
+
     // Load and render feature cards from JSON config
     const renderFeatures = async () => {
       try {
@@ -788,6 +789,10 @@
 
     // Render features before animations
     await renderFeatures();
+
+    // Initialize feature card hover events (after features are rendered)
+    MotionControl.initFeatureHovers();
+
     // COMMENTED OUT: Carousel for reconsideration
     // await renderCarouselSlides();
 
@@ -839,6 +844,229 @@
     // animateElements('.splash-carousel', 150);            // Carousel (single element)
     animateElements('.cta-group', 200);                  // CTA buttons
     animateElements('.miniapps-grid .col', 120);        // MiniApps cards
+  });
+</script>
+
+<!-- Motion Control Footer -->
+<footer id="motion-control-footer" style="position: fixed; bottom: 1rem; right: 1rem; padding: 0.75rem 1rem; background: var(--dm-white); border: 1px solid var(--dm-gray-300); border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); z-index: 1000; font-size: 0.875rem; transition: opacity 0.3s ease;">
+  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; user-select: none; margin: 0;">
+    <input type="checkbox" id="motion-toggle" checked style="cursor: pointer; width: 16px; height: 16px;">
+    <span style="color: var(--dm-gray-700); font-weight: 500;">Enable animations</span>
+  </label>
+</footer>
+
+<script>
+  // Motion preference management
+  const MotionControl = {
+    storageKey: 'domma:motionEnabled',
+    typewriterInstance: null,
+    isHovering: false,
+    hoverTimeout: null,
+
+    // Feature-specific taglines
+    featureTaglines: {
+      'DOM': '90+ jQuery-compatible methods for powerful DOM manipulation.',
+      'Utils': '120+ Lodash-compatible utilities for arrays, objects, and functions.',
+      'Config': 'Declarative configuration engine for automatic component initialization.',
+      'Storage': 'localStorage wrapper with auto JSON serialization and namespacing.',
+      'HTTP': 'Promise-based HTTP client with interceptors and auto retry.',
+      'Router': 'Hash-based SPA routing with views, middleware, and transitions.',
+      'Integrations': 'Seamless integrations with popular libraries and frameworks.',
+      'Dates': 'Moment-style date manipulation with formatting and calculations.',
+      'Models': 'Reactive data models with validation, pub/sub, and DOM binding.',
+      'Forms': 'Blueprint-driven form generation with validation and wizards.',
+      'Tables': 'DataTable functionality with sorting, filtering, and export.',
+      'Elements': '22 production-ready UI components with themes and accessibility.',
+      'Icons': '200+ SVG icons in 15 categories with automatic rendering.',
+      'Themes': '10+ built-in themes with light/dark variants and custom support.',
+      'Effects': 'Visual effects including breathe, pulse, and typewriter animations.',
+      'Theme Roller': 'Interactive theme customization tool with live preview.',
+      'Page Roller': 'Visual page builder with component library and layouts.',
+      'Editor': 'Rich text content editor with export to multiple formats.',
+      'Print PDF': 'Print and PDF export functionality for any page content.',
+    },
+
+    // Default actions
+    defaultActions: [
+      { render: 'A lightweight, zero-dependency JavaScript framework.', effect: 'fade' },
+      { wait: '3s' },
+      { undoRender: true },
+      { render: 'jQuery-style DOM. Lodash utilities. Modern UI components.', effect: 'fade' },
+      { wait: '3s' },
+      { undoRender: true },
+      { render: '22 UI components. 120+ utilities. Zero dependencies.', effect: 'fade' },
+      { wait: '3s' },
+      { undoRender: true },
+      { render: 'Build reactive applications with a single, powerful framework.', effect: 'fade' },
+      { wait: '3s' },
+      { undoRender: true },
+      { render: 'From DOM queries to data tables — everything you need.', effect: 'fade' },
+      { wait: '3s' },
+      { undoRender: true },
+    ],
+
+    // Get current preference (default: true)
+    isEnabled() {
+      const stored = S.get(this.storageKey);
+      return stored === null ? true : stored;
+    },
+
+    // Set preference
+    setEnabled(enabled) {
+      S.set(this.storageKey, enabled);
+    },
+
+    // Initialize toggle state
+    initToggle() {
+      const toggle = $('#motion-toggle');
+      toggle.prop('checked', this.isEnabled());
+
+      toggle.on('change', (e) => {
+        const enabled = e.target.checked;
+        this.setEnabled(enabled);
+        this.updateTypewriter(enabled);
+      });
+    },
+
+    // Show feature-specific content
+    showFeatureContent(featureName) {
+      if (!this.isEnabled()) return; // Don't animate if disabled
+
+      this.isHovering = true;
+      const tagline = this.featureTaglines[featureName];
+
+      if (!tagline) return;
+
+      // Clear any pending hover timeout
+      if (this.hoverTimeout) {
+        clearTimeout(this.hoverTimeout);
+        this.hoverTimeout = null;
+      }
+
+      // Properly stop current typewriter
+      if (this.typewriterInstance) {
+        if (this.typewriterInstance.stop) {
+          this.typewriterInstance.stop();
+        }
+        if (this.typewriterInstance.destroy) {
+          this.typewriterInstance.destroy();
+        }
+        this.typewriterInstance = null;
+      }
+
+      // Wait a frame for cleanup to complete before starting new animation
+      requestAnimationFrame(() => {
+        if (!this.isHovering) return; // User already moved away
+
+        const $target = $('#splash-typewriter');
+        $target.empty();
+
+        this.typewriterInstance = Domma.effects.typewriter('#splash-typewriter', {
+          speed: 25, // Faster for hover
+          deleteSpeed: 15,
+          cursor: true,
+          cursorChar: '|',
+          cursorBlink: true,
+          loop: false, // Don't loop on hover
+          respectMotionPreference: false,
+          actions: [
+            { render: tagline, effect: 'fade' },
+          ],
+        });
+      });
+    },
+
+    // Restore default content
+    restoreDefault() {
+      this.isHovering = false;
+
+      // Add a small delay to prevent flickering when moving between features
+      if (this.hoverTimeout) {
+        clearTimeout(this.hoverTimeout);
+      }
+
+      this.hoverTimeout = setTimeout(() => {
+        if (!this.isHovering && this.isEnabled()) { // Only restore if still not hovering and animations enabled
+          // Properly stop current instance
+          if (this.typewriterInstance) {
+            if (this.typewriterInstance.stop) {
+              this.typewriterInstance.stop();
+            }
+            if (this.typewriterInstance.destroy) {
+              this.typewriterInstance.destroy();
+            }
+            this.typewriterInstance = null;
+          }
+
+          // Wait a frame before restarting default animation
+          requestAnimationFrame(() => {
+            if (!this.isHovering) { // Double-check still not hovering
+              this.updateTypewriter(true);
+            }
+          });
+        }
+      }, 200);
+    },
+
+    // Initialize feature card hover events
+    initFeatureHovers() {
+      $('.feature').each((index, element) => {
+        const $feature = $(element);
+        const featureName = $feature.find('.feature-label').text().trim();
+
+        $feature.on('mouseenter', () => {
+          this.showFeatureContent(featureName);
+        });
+
+        $feature.on('mouseleave', () => {
+          this.restoreDefault();
+        });
+      });
+    },
+
+    // Update typewriter based on preference
+    updateTypewriter(enabled) {
+      const $target = $('#splash-typewriter');
+
+      // Properly stop and clean up existing instance
+      if (this.typewriterInstance) {
+        if (this.typewriterInstance.stop) {
+          this.typewriterInstance.stop();
+        }
+        if (this.typewriterInstance.destroy) {
+          this.typewriterInstance.destroy();
+        }
+        this.typewriterInstance = null;
+      }
+
+      if (enabled) {
+        // Enable animations - wait a frame for cleanup
+        requestAnimationFrame(() => {
+          $target.empty();
+          this.typewriterInstance = Domma.effects.typewriter('#splash-typewriter', {
+            speed: 40,
+            deleteSpeed: 20,
+            cursor: true,
+            cursorChar: '|',
+            cursorBlink: true,
+            loop: true,
+            loopDelay: 500,
+            respectMotionPreference: false, // Override system preference
+            actions: this.defaultActions,
+          });
+        });
+      } else {
+        // Disable animations - show static text
+        $target.text('A lightweight, zero-dependency JavaScript framework combining jQuery-style DOM manipulation, Lodash utilities, and modern UI components.');
+      }
+    }
+  };
+
+  // Initialize motion control when DOM is ready
+  $(async () => {
+    MotionControl.initToggle();
+    // Start typewriter based on saved preference
+    MotionControl.updateTypewriter(MotionControl.isEnabled());
   });
 </script>
 
