@@ -1261,13 +1261,13 @@ export const forms = {
             const editIcon = window.Domma.icons.html('edit', {
               size: 16,
               class: 'inline-icon',
-              colour: '#a5d8ff',
+              colour: 'var(--dm-info-light, #a5d8ff)',
               attrs: {style: 'margin-right: 4px;'}
             });
             const trashIcon = window.Domma.icons.html('trash', {
               size: 16,
               class: 'inline-icon',
-              colour: '#ffacac',
+              colour: 'var(--dm-danger-light, #ffacac)',
               attrs: {style: 'margin-right: 4px;'}
             });
             return `

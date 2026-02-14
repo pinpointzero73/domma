@@ -1329,7 +1329,7 @@ class TableInstance {
         // Selection checkbox column
         if (opts.selectable && opts.selectionMode === 'multiple') {
             const th = document.createElement('th');
-            th.style.cssText = 'padding: 12px; border: 1px solid #ddd; background: #f8f9fa; width: 40px;';
+            th.style.cssText = 'padding: 12px; border: 1px solid var(--dm-border, #ddd); background: var(--dm-table-header-bg, var(--dm-background-alt, #f8f9fa)); width: 40px;';
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.checked = this._selected.size > 0 && this._selected.size === pageData.length;
@@ -1346,7 +1346,7 @@ class TableInstance {
 
         for (const col of visibleColumns) {
             const th = document.createElement('th');
-            th.style.cssText = 'padding: 12px; border: 1px solid #ddd; background: #f8f9fa; text-align: left;';
+            th.style.cssText = 'padding: 12px; border: 1px solid var(--dm-border, #ddd); background: var(--dm-table-header-bg, var(--dm-background-alt, #f8f9fa)); text-align: left;';
             if (col.width) th.style.width = typeof col.width === 'number' ? col.width + 'px' : col.width;
 
             const sort = this._sorts.find(s => s.column === col.key);
@@ -1398,13 +1398,13 @@ class TableInstance {
 
             if (this._selected.has(row[key])) {
                 tr.classList.add(classes.selected);
-                tr.style.background = '#e3f2fd';
+                tr.style.background = 'var(--dm-primary-light, #e3f2fd)';
             }
 
             // Selection checkbox
             if (opts.selectable && opts.selectionMode === 'multiple') {
                 const td = document.createElement('td');
-                td.style.cssText = 'padding: 12px; border: 1px solid #ddd;';
+                td.style.cssText = 'padding: 12px; border: 1px solid var(--dm-border, #ddd);';
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.checked = this._selected.has(row[key]);
@@ -1426,7 +1426,7 @@ class TableInstance {
             for (const col of visibleColumns) {
                 const td = document.createElement('td');
                 td.className = classes.cell;
-                td.style.cssText = 'padding: 12px; border: 1px solid #ddd;';
+                td.style.cssText = 'padding: 12px; border: 1px solid var(--dm-border, #ddd);';
 
                 const isEditing = this._editingCell &&
                     this._editingCell.rowIndex === rowIndex &&
@@ -1436,7 +1436,7 @@ class TableInstance {
                     const input = document.createElement('input');
                     input.type = 'text';
                     input.value = row[col.key] || '';
-                    input.style.cssText = 'width: 100%; padding: 4px; border: 1px solid #007bff;';
+                    input.style.cssText = 'width: 100%; padding: 4px; border: 1px solid var(--dm-primary, #007bff);';
 
                     this._addEventHandler(input, 'blur', () => {
                         this.updateRow(row[key], {[col.key]: input.value});
@@ -1521,7 +1521,7 @@ class TableInstance {
                     btn.textContent = content;
                 }
                 btn.disabled = disabled;
-                btn.style.cssText = 'padding: 6px 12px; margin: 0 2px; border: 1px solid #ddd; background: #fff; cursor: pointer; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center;';
+                btn.style.cssText = 'padding: 6px 12px; margin: 0 2px; border: 1px solid var(--dm-border, #ddd); background: var(--dm-surface, #fff); cursor: pointer; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center;';
                 if (disabled) btn.style.opacity = '0.5';
                 this._addEventHandler(btn, 'click', onClick);
                 return btn;
@@ -1539,9 +1539,9 @@ class TableInstance {
             for (let i = startPage; i <= endPage; i++) {
                 const btn = createBtn(i, () => this.page(i), false);
                 if (i === this._currentPage) {
-                    btn.style.background = '#007bff';
+                    btn.style.background = 'var(--dm-primary, #007bff)';
                     btn.style.color = '#fff';
-                    btn.style.borderColor = '#007bff';
+                    btn.style.borderColor = 'var(--dm-primary, #007bff)';
                 }
                 buttonsWrapper.appendChild(btn);
             }

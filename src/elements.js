@@ -613,7 +613,7 @@ const ModalFactory = {
         dialog.setAttribute('role', 'dialog');
         dialog.setAttribute('aria-modal', 'true');
         dialog.style.cssText = `
-            background: white;
+            background: var(--dm-surface, #fff);
             border-radius: 8px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             max-width: 90%;
@@ -629,10 +629,10 @@ const ModalFactory = {
 
         if (opts.title) {
             const safeTitle = sanitizeModule.sanitize(String(opts.title), {preset: 'basic'});
-            html += `<div class="dm-dialog-header${opts.headerClass ? ' ' + opts.headerClass : ''}" style="position: relative; padding: 1.5rem 1.5rem 1rem; border-bottom: 1px solid #e5e7eb;">`;
+            html += `<div class="dm-dialog-header${opts.headerClass ? ' ' + opts.headerClass : ''}" style="position: relative; padding: 1.5rem 1.5rem 1rem; border-bottom: 1px solid var(--dm-border, #e5e7eb);">`;
             html += `<h3 class="dm-dialog-title" style="margin: 0; font-size: 1.25rem; font-weight: 600;">${safeTitle}</h3>`;
             if (opts.backdrop && opts.backdropClose) {
-                html += '<button type="button" class="dm-dialog-close" aria-label="Close" style="position: absolute; right: 1rem; top: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6b7280; line-height: 1; padding: 0; width: 2rem; height: 2rem;">&times;</button>';
+                html += '<button type="button" class="dm-dialog-close" aria-label="Close" style="position: absolute; right: 1rem; top: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--dm-text-secondary, #6b7280); line-height: 1; padding: 0; width: 2rem; height: 2rem;">&times;</button>';
             }
             html += '</div>';
         }
@@ -644,7 +644,7 @@ const ModalFactory = {
         html += '</div>';
 
         if (opts.buttons && opts.buttons.length > 0) {
-            html += `<div class="dm-dialog-footer${opts.footerClass ? ' ' + opts.footerClass : ''}" style="display: flex; justify-content: flex-end; gap: 0.5rem; padding: 1rem 1.5rem; border-top: 1px solid #e5e7eb; background: #f9fafb;">`;
+            html += `<div class="dm-dialog-footer${opts.footerClass ? ' ' + opts.footerClass : ''}" style="display: flex; justify-content: flex-end; gap: 0.5rem; padding: 1rem 1.5rem; border-top: 1px solid var(--dm-border, #e5e7eb); background: var(--dm-surface-raised, #f9fafb);">`;
             opts.buttons.forEach(btn => {
                 const variant = btn.variant || 'secondary';
                 const safeId = sanitizeModule.sanitize(String(btn.id), {preset: 'basic'});
@@ -1248,14 +1248,14 @@ class Badge extends Component {
     };
 
     static variants = {
-        primary: {bg: '#4f46e5', color: '#fff'},
-        secondary: {bg: '#6b7280', color: '#fff'},
-        success: {bg: '#10b981', color: '#fff'},
-        danger: {bg: '#ef4444', color: '#fff'},
-        warning: {bg: '#f59e0b', color: '#000'},
-        info: {bg: '#3b82f6', color: '#fff'},
-        light: {bg: '#f3f4f6', color: '#111'},
-        dark: {bg: '#1f2937', color: '#fff'}
+        primary: {bg: 'var(--dm-primary, #4f46e5)', color: '#fff'},
+        secondary: {bg: 'var(--dm-secondary, #6b7280)', color: '#fff'},
+        success: {bg: 'var(--dm-success, #10b981)', color: '#fff'},
+        danger: {bg: 'var(--dm-danger, #ef4444)', color: '#fff'},
+        warning: {bg: 'var(--dm-warning, #f59e0b)', color: '#000'},
+        info: {bg: 'var(--dm-info, #3b82f6)', color: '#fff'},
+        light: {bg: 'var(--dm-background-alt, #f3f4f6)', color: 'var(--dm-text, #111)'},
+        dark: {bg: 'var(--dm-surface-overlay, #1f2937)', color: 'var(--dm-white, #fff)'}
     };
 
     static sizes = {
@@ -1746,11 +1746,11 @@ class Toast {
 
 class ToastInstance {
     static typeStyles = {
-        default: {bg: '#1f2937', color: '#fff', accent: '#6b7280'},
-        success: {bg: '#065f46', color: '#fff', accent: '#10b981'},
-        error: {bg: '#991b1b', color: '#fff', accent: '#ef4444'},
-        warning: {bg: '#92400e', color: '#fff', accent: '#f59e0b'},
-        info: {bg: '#1e40af', color: '#fff', accent: '#3b82f6'}
+        default: {bg: 'var(--dm-surface-overlay, #1f2937)', color: 'var(--dm-white, #fff)', accent: 'var(--dm-secondary, #6b7280)'},
+        success: {bg: 'var(--dm-success-dark, #065f46)', color: '#fff', accent: 'var(--dm-success, #10b981)'},
+        error: {bg: 'var(--dm-danger-dark, #991b1b)', color: '#fff', accent: 'var(--dm-danger, #ef4444)'},
+        warning: {bg: 'var(--dm-warning-dark, #92400e)', color: '#fff', accent: 'var(--dm-warning, #f59e0b)'},
+        info: {bg: 'var(--dm-info-dark, #1e40af)', color: '#fff', accent: 'var(--dm-info, #3b82f6)'}
     };
 
     constructor(message, options, container) {
@@ -7498,7 +7498,7 @@ class Slideover extends Component {
         el.style.position = 'fixed';
         el.style.top = '0';
         el.style.height = '100vh';
-        el.style.backgroundColor = 'white';
+        el.style.backgroundColor = 'var(--dm-surface, #fff)';
         el.style.boxShadow = this._getBoxShadow();
         el.style.zIndex = '9999';
         el.style.display = 'none';

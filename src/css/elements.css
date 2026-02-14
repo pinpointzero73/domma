@@ -293,7 +293,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.95);
-    background-color: var(--dm-white);
+    background-color: var(--dm-surface, var(--dm-white));
     border-radius: var(--dm-radius-lg);
     box-shadow: var(--dm-shadow-xl);
     z-index: 50;
@@ -483,7 +483,7 @@
     justify-content: space-between;
     padding: var(--dm-space-4) var(--dm-space-6);
     cursor: pointer;
-    background-color: var(--dm-white);
+    background-color: var(--dm-surface, var(--dm-white));
     font-weight: 500;
     transition: background-color var(--dm-transition-fast);
 }
@@ -1655,7 +1655,7 @@ code {
 
 .navbar-link:hover {
     color: var(--dm-text);
-    background-color: var(--dm-gray-800);
+    background-color: var(--dm-hover-bg, var(--dm-gray-800));
     border-radius: 0;
 }
 
@@ -1667,7 +1667,7 @@ code {
 
 .nav-version {
     display: none;
-    color: #eee;
+    color: var(--dm-text-secondary, #eee);
 }
 
 /* Light navbar variant */
@@ -1971,7 +1971,7 @@ code {
 .navbar-dropdown-divider {
     height: 1px;
     margin: 0.5rem 0;
-    background: var(--dm-border-color, rgba(0, 0, 0, 0.1));
+    background: var(--dm-border, rgba(0, 0, 0, 0.1));
     list-style: none;
 }
 
@@ -2296,11 +2296,12 @@ code {
 .hero {
     position: relative;
     padding: var(--dm-space-12) var(--dm-space-6);
-    background-color: var(--dm-gray-100);
+    background-color: var(--dm-background-alt, var(--dm-gray-100));
+    color: var(--dm-text, inherit);
     border: none;
     border-radius: 0;
     margin-bottom: var(--dm-space-6);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--dm-shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.05));
     text-align: center;
 }
 
@@ -2311,7 +2312,7 @@ code {
 }
 
 .hero-dark {
-    background-color: var(--dm-gray-900);
+    background-color: var(--dm-surface-overlay, var(--dm-gray-900));
     color: var(--dm-white);
 }
 
@@ -2593,7 +2594,7 @@ code {
     gap: var(--dm-space-2);
     padding: var(--dm-space-1) var(--dm-space-3);
     background: var(--dm-primary);
-    color: white;
+    color: var(--dm-white);
     font-size: var(--dm-font-size-sm);
     font-weight: 500;
     border-radius: var(--dm-radius-full);
@@ -2602,8 +2603,8 @@ code {
 }
 
 .hero-badge-secondary {
-    background: var(--dm-gray-200);
-    color: var(--dm-gray-900);
+    background: var(--dm-secondary-light, var(--dm-gray-200));
+    color: var(--dm-text, var(--dm-gray-900));
 }
 
 .hero-badge-outline {
@@ -2614,22 +2615,22 @@ code {
 
 .hero-badge-success {
     background: var(--dm-success);
-    color: white;
+    color: var(--dm-white);
 }
 
 .hero-badge-warning {
     background: var(--dm-warning);
-    color: var(--dm-gray-900);
+    color: var(--dm-text, var(--dm-gray-900));
 }
 
 .hero-badge-danger {
     background: var(--dm-danger);
-    color: white;
+    color: var(--dm-white);
 }
 
 .hero-badge-info {
     background: var(--dm-info);
-    color: white;
+    color: var(--dm-white);
 }
 
 /* Badge icon/emoji support */
@@ -2703,43 +2704,43 @@ code {
 /* 5. Additional Gradient Variants - Modern gradient backgrounds */
 
 .hero-gradient-purple {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--dm-purple, #667eea) 0%, var(--dm-purple-dark, #764ba2) 100%);
+    color: var(--dm-white);
 }
 
 .hero-gradient-blue {
-    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--dm-info, #3b82f6) 0%, var(--dm-info-dark, #1e40af) 100%);
+    color: var(--dm-white);
 }
 
 .hero-gradient-green {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--dm-success, #10b981) 0%, var(--dm-success-dark, #059669) 100%);
+    color: var(--dm-white);
 }
 
 .hero-gradient-sunset {
-    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--dm-warning, #f59e0b) 0%, var(--dm-danger, #ef4444) 100%);
+    color: var(--dm-white);
 }
 
 .hero-gradient-ocean {
-    background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--dm-sky, #0ea5e9) 0%, var(--dm-cyan, #06b6d4) 100%);
+    color: var(--dm-white);
 }
 
 .hero-gradient-rose {
-    background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--dm-pink, #ec4899) 0%, var(--dm-rose, #f43f5e) 100%);
+    color: var(--dm-white);
 }
 
 .hero-gradient-forest {
-    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--dm-green, #16a34a) 0%, var(--dm-green-dark, #15803d) 100%);
+    color: var(--dm-white);
 }
 
 .hero-gradient-night {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--dm-slate-800, #1e293b) 0%, var(--dm-slate-900, #0f172a) 100%);
+    color: var(--dm-white);
 }
 
    CAROUSEL
@@ -3434,8 +3435,8 @@ code {
 }
 
 .sidebar-dark .sidebar-link.active {
-    color: #eaeaea;
-    background: rgba(102, 178, 255, 0.15);
+    color: var(--dm-text-light, #eaeaea);
+    background: var(--dm-primary-light, rgba(102, 178, 255, 0.15));
     border-left-color: var(--dm-primary-light, #66b2ff);
 }
 
@@ -4920,11 +4921,11 @@ code {
     right: 0;
     bottom: 0;
     z-index: 1000;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: var(--dm-loader-overlay-bg, rgba(255, 255, 255, 0.9));
 }
 
 [data-theme="dark"] .dm-loader.dm-loader-overlay {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: var(--dm-loader-overlay-bg, rgba(0, 0, 0, 0.8));
 }
 
 /* Spinner type */
@@ -5283,7 +5284,7 @@ code {
     width: 16px;
     left: 2px;
     top: 2px;
-    background: white;
+    background: var(--dm-white, #fff);
     border-radius: 50%;
     transition: left 0.2s;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
@@ -5442,7 +5443,7 @@ code {
     width: 16px;
     left: 3px;
     bottom: 3px;
-    background: white;
+    background: var(--dm-white, #fff);
     border-radius: 50%;
     transition: transform 0.3s;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);

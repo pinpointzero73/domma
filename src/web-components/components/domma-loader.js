@@ -23,14 +23,14 @@ export class DommaLoader extends DommaElement {
     };
 
     static colors = {
-        primary: '#6495ED',
-        secondary: '#6c757d',
-        success: '#28a745',
-        danger: '#dc3545',
-        warning: '#ffc107',
-        info: '#17a2b8',
+        primary: 'var(--dm-primary, #6495ED)',
+        secondary: 'var(--dm-secondary, #6c757d)',
+        success: 'var(--dm-success, #28a745)',
+        danger: 'var(--dm-danger, #dc3545)',
+        warning: 'var(--dm-warning, #ffc107)',
+        info: 'var(--dm-info, #17a2b8)',
         white: '#ffffff',
-        dark: '#343a40'
+        dark: 'var(--dm-surface-overlay, #343a40)'
     };
 
     static get observedAttributes() {

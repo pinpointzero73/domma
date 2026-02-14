@@ -20,14 +20,14 @@ export class DommaBadge extends DommaElement {
     }
 
     static variants = {
-        primary: { bg: '#4f46e5', color: '#fff' },
-        secondary: { bg: '#6b7280', color: '#fff' },
-        success: { bg: '#10b981', color: '#fff' },
-        danger: { bg: '#ef4444', color: '#fff' },
-        warning: { bg: '#f59e0b', color: '#000' },
-        info: { bg: '#3b82f6', color: '#fff' },
-        light: { bg: '#f3f4f6', color: '#111' },
-        dark: { bg: '#1f2937', color: '#fff' }
+        primary: { bg: 'var(--dm-primary, #4f46e5)', color: '#fff' },
+        secondary: { bg: 'var(--dm-secondary, #6b7280)', color: '#fff' },
+        success: { bg: 'var(--dm-success, #10b981)', color: '#fff' },
+        danger: { bg: 'var(--dm-danger, #ef4444)', color: '#fff' },
+        warning: { bg: 'var(--dm-warning, #f59e0b)', color: '#000' },
+        info: { bg: 'var(--dm-info, #3b82f6)', color: '#fff' },
+        light: { bg: 'var(--dm-background-alt, #f3f4f6)', color: 'var(--dm-text, #111)' },
+        dark: { bg: 'var(--dm-surface-overlay, #1f2937)', color: 'var(--dm-white, #fff)' }
     };
 
     static sizes = {

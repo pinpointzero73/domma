@@ -234,8 +234,8 @@ Domma.elements.autocomplete('#user-search', {
         return `
             &lt;div style="display: flex; flex-direction: column;"&gt;
                 &lt;strong&gt;${user.name}&lt;/strong&gt;
-                &lt;span style="font-size: 0.875rem; color: #666;"&gt;${user.email}&lt;/span&gt;
-                &lt;span style="font-size: 0.75rem; color: #999;"&gt;Role: ${user.role}&lt;/span&gt;
+                &lt;span style="font-size: 0.875rem; color: var(--dm-text-secondary, #666);"&gt;${user.email}&lt;/span&gt;
+                &lt;span style="font-size: 0.75rem; color: var(--dm-text-muted, #999);"&gt;Role: ${user.role}&lt;/span&gt;
             &lt;/div&gt;
         `;
     },

@@ -146,8 +146,8 @@ import {ConsentModule} from './modules/consent.js';
         /* Celebrations toggle disc */
         .celebrations-toggle-container {
           position: fixed;
-          top: calc(50vh - 175px);
-          right: calc(-5px);
+          bottom: 91px;
+          right: 16px;
           z-index: 1000;
           display: flex;
           flex-direction: column;

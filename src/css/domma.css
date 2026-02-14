@@ -2317,7 +2317,7 @@ code, pre {
 .form-input.success:focus,
 .form-select.success:focus,
 .form-textarea.success:focus {
-    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+    box-shadow: 0 0 0 3px var(--dm-focus-ring-success, rgba(22, 163, 74, 0.2));
 }
 
 .form-input.warning,
@@ -2329,7 +2329,7 @@ code, pre {
 .form-input.warning:focus,
 .form-select.warning:focus,
 .form-textarea.warning:focus {
-    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    box-shadow: 0 0 0 3px var(--dm-focus-ring-warning, rgba(245, 158, 11, 0.2));
 }
 
 .form-success {
@@ -2354,7 +2354,7 @@ code, pre {
 .has-success .form-input:focus,
 .has-success .form-select:focus,
 .has-success .form-textarea:focus {
-    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+    box-shadow: 0 0 0 3px var(--dm-focus-ring-success, rgba(22, 163, 74, 0.2));
 }
 
 .has-error .form-input,
@@ -2366,7 +2366,7 @@ code, pre {
 .has-error .form-input:focus,
 .has-error .form-select:focus,
 .has-error .form-textarea:focus {
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    box-shadow: 0 0 0 3px var(--dm-focus-ring-danger, rgba(239, 68, 68, 0.2));
 }
 
 .has-warning .form-input,
@@ -2378,7 +2378,7 @@ code, pre {
 .has-warning .form-input:focus,
 .has-warning .form-select:focus,
 .has-warning .form-textarea:focus {
-    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    box-shadow: 0 0 0 3px var(--dm-focus-ring-warning, rgba(245, 158, 11, 0.2));
 }
 
 /* Input Sizes */
@@ -3317,7 +3317,7 @@ code, pre {
 .dm-tw-cursor-block {
     padding: 0;
     background: currentColor;
-    color: var(--dm-body-bg, #fff);
+    color: var(--dm-background, #fff);
     opacity: 0.8;
     font-size: 0.7em;
     line-height: 0.9;

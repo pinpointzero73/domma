@@ -302,7 +302,7 @@ EditorExtensions.register('table', {
     for (let r = 0; r < rows; r++) {
       html += '<tr>';
       for (let c = 0; c < cols; c++) {
-        html += '<td style="border:1px solid #ddd;padding:8px;min-width:100px;">&nbsp;</td>';
+        html += '<td style="border:1px solid var(--dm-border, #ddd);padding:8px;min-width:100px;">&nbsp;</td>';
       }
       html += '</tr>';
     }
@@ -327,7 +327,7 @@ EditorExtensions.register('divider', {
     btn.innerHTML = '<span data-icon="minus" data-icon-size="16"></span>';
 
     btn.addEventListener('click', () => {
-      document.execCommand('insertHTML', false, '<hr style="margin: 1rem 0; border: none; border-top: 1px solid #ddd;">');
+      document.execCommand('insertHTML', false, '<hr style="margin: 1rem 0; border: none; border-top: 1px solid var(--dm-border, #ddd);">');
       editor._editorEl.focus();
     });
 
@@ -426,7 +426,7 @@ EditorExtensions.register('contextMenu', {
       {
         label: 'Insert Divider',
         action: () => {
-          document.execCommand('insertHTML', false, '<hr style="margin: 1rem 0; border: none; border-top: 1px solid #ddd;">');
+          document.execCommand('insertHTML', false, '<hr style="margin: 1rem 0; border: none; border-top: 1px solid var(--dm-border, #ddd);">');
         },
         icon: 'minus'
       }
