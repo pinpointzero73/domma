@@ -864,9 +864,924 @@ export function typewriter(selector, options = {}) {
   };
 }
 
+/**
+ * Resolve selector to an array of elements
+ * Shared helper for all effects
+ *
+ * @param {string|Element|NodeList|Array} selector
+ * @param {string} effectName - Name for error/warning messages
+ * @returns {Array<Element>|null}
+ */
+function resolveElements(selector, effectName) {
+  let elements;
+  if (typeof selector === 'string') {
+    elements = Array.from(document.querySelectorAll(selector));
+  } else if (selector instanceof Element) {
+    elements = [selector];
+  } else if (selector instanceof NodeList || Array.isArray(selector)) {
+    elements = Array.from(selector);
+  } else {
+    console.error(`[Domma.effects.${effectName}] Invalid selector`);
+    return null;
+  }
+
+  if (elements.length === 0) {
+    console.warn(`[Domma.effects.${effectName}] No elements found`);
+    return null;
+  }
+
+  return elements;
+}
+
+/**
+ * Create a no-op control object for when effects are disabled
+ * @returns {Object}
+ */
+function noopControl() {
+  return {
+    pause: () => {},
+    resume: () => {},
+    stop: () => {},
+    restart: () => {},
+    destroy: () => {},
+    isRunning: () => false,
+    isPaused: () => false
+  };
+}
+
+/**
+ * Check if reduced motion is preferred
+ * @returns {boolean}
+ */
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/**
+ * Scroll-triggered entrance animations using IntersectionObserver
+ * Elements animate into view when they enter the viewport.
+ *
+ * @param {string|Element|NodeList} selector - Element(s) to animate
+ * @param {Object} options - Configuration options
+ * @param {string} options.animation - Animation type: 'fade', 'slide-up', 'slide-down', 'slide-left', 'slide-right', 'zoom', 'flip' (default: 'fade')
+ * @param {number} options.duration - Animation duration in ms (default: 600)
+ * @param {string} options.easing - CSS easing function (default: 'ease-out')
+ * @param {number} options.delay - Delay before animation in ms (default: 0)
+ * @param {number} options.stagger - Delay between multiple elements in ms (default: 0)
+ * @param {number} options.threshold - IntersectionObserver threshold 0-1 (default: 0.1)
+ * @param {string} options.rootMargin - Observer root margin (default: '0px')
+ * @param {boolean} options.once - Only animate once (default: true)
+ * @param {boolean} options.respectMotionPreference - Honour prefers-reduced-motion (default: true)
+ * @param {Function} options.onReveal - Callback per element when revealed
+ * @returns {Object} Control object with destroy() method
+ *
+ * @example
+ * // Simple fade-in on scroll
+ * Domma.effects.reveal('.card');
+ *
+ * @example
+ * // Slide up with stagger
+ * Domma.effects.reveal('.feature', {
+ *   animation: 'slide-up',
+ *   duration: 800,
+ *   stagger: 100
+ * });
+ */
+export function reveal(selector, options = {}) {
+  const defaults = {
+    animation: 'fade',
+    duration: 600,
+    easing: 'ease-out',
+    delay: 0,
+    stagger: 0,
+    threshold: 0.1,
+    rootMargin: '0px',
+    once: true,
+    respectMotionPreference: true,
+    onReveal: null
+  };
+
+  const opts = { ...defaults, ...options };
+
+  const elements = resolveElements(selector, 'reveal');
+  if (!elements) return null;
+
+  // Respect motion preferences
+  if (opts.respectMotionPreference && prefersReducedMotion()) {
+    // Show elements immediately without animation
+    elements.forEach(el => {
+      el.classList.add('dm-reveal-visible');
+    });
+    return noopControl();
+  }
+
+  // Apply initial hidden state and animation class
+  elements.forEach((el, index) => {
+    el.classList.add('dm-reveal', `dm-reveal-${opts.animation}`);
+    el.style.transitionDuration = `${opts.duration}ms`;
+    el.style.transitionTimingFunction = opts.easing;
+    const totalDelay = opts.delay + (index * opts.stagger);
+    if (totalDelay > 0) {
+      el.style.transitionDelay = `${totalDelay}ms`;
+    }
+  });
+
+  // Create observer
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('dm-reveal-visible');
+        if (opts.onReveal) opts.onReveal(entry.target);
+        if (opts.once) {
+          observer.unobserve(entry.target);
+        }
+      } else if (!opts.once) {
+        entry.target.classList.remove('dm-reveal-visible');
+      }
+    });
+  }, {
+    threshold: opts.threshold,
+    rootMargin: opts.rootMargin
+  });
+
+  elements.forEach(el => observer.observe(el));
+
+  return {
+    pause() {},
+    resume() {},
+    stop() {
+      observer.disconnect();
+    },
+    restart() {
+      elements.forEach(el => {
+        el.classList.remove('dm-reveal-visible');
+        observer.observe(el);
+      });
+    },
+    destroy() {
+      observer.disconnect();
+      elements.forEach(el => {
+        el.classList.remove('dm-reveal', 'dm-reveal-visible',
+          `dm-reveal-${opts.animation}`);
+        el.style.transitionDuration = '';
+        el.style.transitionTimingFunction = '';
+        el.style.transitionDelay = '';
+      });
+    },
+    isRunning() { return true; },
+    isPaused() { return false; }
+  };
+}
+
+/**
+ * Text cipher/decode animation
+ * Characters cycle through random glyphs before settling on the correct character.
+ *
+ * @param {string|Element|NodeList} selector - Element(s) to animate
+ * @param {Object} options - Configuration options
+ * @param {number} options.speed - Ms per character resolve (default: 50)
+ * @param {number} options.scrambleSpeed - Ms between scramble frame updates (default: 30)
+ * @param {string} options.characters - Character pool for scramble (default: alphanumeric + symbols)
+ * @param {string} options.revealOrder - 'left-to-right', 'right-to-left', 'random', 'center-out' (default: 'left-to-right')
+ * @param {number} options.scrambleDuration - How long each char scrambles before resolving in ms (default: 800)
+ * @param {number} options.stagger - Delay between multiple elements in ms (default: 0)
+ * @param {boolean|number} options.loop - false, true (infinite), or number of loops (default: false)
+ * @param {number} options.loopDelay - Ms between loops (default: 2000)
+ * @param {boolean} options.respectMotionPreference - Honour prefers-reduced-motion (default: true)
+ * @param {Function} options.onComplete - Callback when animation completes
+ * @param {Function} options.onCharacter - Callback per character resolved (char, index)
+ * @returns {Object} Control object with pause(), resume(), stop(), restart(), destroy() methods
+ *
+ * @example
+ * Domma.effects.scramble('.hero-title');
+ *
+ * @example
+ * Domma.effects.scramble('.heading', {
+ *   scrambleDuration: 1200,
+ *   revealOrder: 'random',
+ *   loop: true,
+ *   loopDelay: 3000
+ * });
+ */
+export function scramble(selector, options = {}) {
+  const defaults = {
+    speed: 50,
+    scrambleSpeed: 30,
+    characters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*',
+    revealOrder: 'left-to-right',
+    scrambleDuration: 800,
+    stagger: 0,
+    loop: false,
+    loopDelay: 2000,
+    respectMotionPreference: true,
+    onComplete: null,
+    onCharacter: null
+  };
+
+  const opts = { ...defaults, ...options };
+
+  const elements = resolveElements(selector, 'scramble');
+  if (!elements) return null;
+
+  if (opts.respectMotionPreference && prefersReducedMotion()) {
+    return noopControl();
+  }
+
+  // State per element
+  const states = elements.map((el, elIndex) => {
+    const originalText = el.textContent;
+    return {
+      element: el,
+      originalText,
+      rafId: null,
+      timeoutId: null,
+      paused: false,
+      loopCount: 0
+    };
+  });
+
+  function getRevealOrder(length, order) {
+    const indices = Array.from({ length }, (_, i) => i);
+    switch (order) {
+      case 'right-to-left':
+        return indices.reverse();
+      case 'random':
+        // Fisher-Yates shuffle
+        for (let i = indices.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [indices[i], indices[j]] = [indices[j], indices[i]];
+        }
+        return indices;
+      case 'center-out': {
+        const center = Math.floor(length / 2);
+        const result = [center];
+        for (let offset = 1; offset <= center; offset++) {
+          if (center - offset >= 0) result.push(center - offset);
+          if (center + offset < length) result.push(center + offset);
+        }
+        return result;
+      }
+      default: // left-to-right
+        return indices;
+    }
+  }
+
+  function randomChar() {
+    return opts.characters[Math.floor(Math.random() * opts.characters.length)];
+  }
+
+  function animateElement(state) {
+    if (state.paused) return;
+
+    const text = state.originalText;
+    const len = text.length;
+
+    if (len === 0) {
+      if (opts.onComplete) opts.onComplete();
+      return;
+    }
+
+    const order = getRevealOrder(len, opts.revealOrder);
+    const resolved = new Array(len).fill(false);
+    const display = text.split('').map(ch => ch === ' ' ? ' ' : randomChar());
+    const startTime = performance.now();
+
+    // Calculate resolve time per character based on order
+    const resolveDelay = opts.speed;
+
+    function frame(currentTime) {
+      if (state.paused) return;
+
+      const elapsed = currentTime - startTime;
+
+      // Resolve characters based on timing
+      order.forEach((charIndex, orderPos) => {
+        if (resolved[charIndex]) return;
+
+        const charResolveTime = opts.scrambleDuration + (orderPos * resolveDelay);
+        if (elapsed >= charResolveTime) {
+          resolved[charIndex] = true;
+          display[charIndex] = text[charIndex];
+          if (opts.onCharacter) opts.onCharacter(text[charIndex], charIndex);
+        }
+      });
+
+      // Scramble unresolved characters
+      for (let i = 0; i < len; i++) {
+        if (!resolved[i] && text[i] !== ' ') {
+          display[i] = randomChar();
+        }
+      }
+
+      // Build output with spans
+      state.element.innerHTML = display.map((ch, i) =>
+        `<span class="dm-scramble-char${resolved[i] ? ' dm-scramble-resolved' : ''}">${ch}</span>`
+      ).join('');
+
+      // Check if all resolved
+      if (resolved.every(Boolean)) {
+        if (opts.onComplete) opts.onComplete();
+        handleLoop(state);
+        return;
+      }
+
+      state.rafId = requestAnimationFrame(frame);
+    }
+
+    state.rafId = requestAnimationFrame(frame);
+  }
+
+  function handleLoop(state) {
+    if (opts.loop === false) return;
+
+    if (typeof opts.loop === 'number' && state.loopCount >= opts.loop - 1) return;
+
+    state.loopCount++;
+    state.timeoutId = setTimeout(() => {
+      if (!state.paused) animateElement(state);
+    }, opts.loopDelay);
+  }
+
+  // Start all elements with stagger
+  states.forEach((state, index) => {
+    const delay = index * opts.stagger;
+    if (delay > 0) {
+      state.timeoutId = setTimeout(() => animateElement(state), delay);
+    } else {
+      animateElement(state);
+    }
+  });
+
+  return {
+    pause() {
+      states.forEach(s => {
+        s.paused = true;
+        if (s.rafId) cancelAnimationFrame(s.rafId);
+        if (s.timeoutId) clearTimeout(s.timeoutId);
+      });
+    },
+    resume() {
+      states.forEach(s => {
+        s.paused = false;
+        animateElement(s);
+      });
+    },
+    stop() {
+      states.forEach(s => {
+        s.paused = true;
+        if (s.rafId) cancelAnimationFrame(s.rafId);
+        if (s.timeoutId) clearTimeout(s.timeoutId);
+        s.element.textContent = s.originalText;
+      });
+    },
+    restart() {
+      states.forEach(s => {
+        if (s.rafId) cancelAnimationFrame(s.rafId);
+        if (s.timeoutId) clearTimeout(s.timeoutId);
+        s.paused = false;
+        s.loopCount = 0;
+        animateElement(s);
+      });
+    },
+    destroy() {
+      states.forEach(s => {
+        if (s.rafId) cancelAnimationFrame(s.rafId);
+        if (s.timeoutId) clearTimeout(s.timeoutId);
+        s.element.textContent = s.originalText;
+      });
+    },
+    isRunning() {
+      return states.length > 0 && !states[0].paused;
+    },
+    isPaused() {
+      return states.length > 0 && states[0].paused;
+    }
+  };
+}
+
+/**
+ * Animated number counting effect
+ * Smoothly counts from one number to another with easing.
+ *
+ * @param {string|Element|NodeList} selector - Element(s) to animate
+ * @param {Object} options - Configuration options
+ * @param {number} options.from - Start value (default: 0)
+ * @param {number} options.to - End value (required, or reads from element textContent)
+ * @param {number} options.duration - Total count duration in ms (default: 2000)
+ * @param {string} options.easing - 'linear', 'ease-out', 'ease-in-out' (default: 'ease-out')
+ * @param {number} options.decimals - Decimal places (default: 0)
+ * @param {string} options.separator - Thousands separator (default: ',')
+ * @param {string} options.prefix - Text before number (default: '')
+ * @param {string} options.suffix - Text after number (default: '')
+ * @param {number} options.stagger - Delay between multiple elements in ms (default: 0)
+ * @param {string} options.trigger - 'immediate' or 'scroll' (default: 'immediate')
+ * @param {number} options.threshold - Observer threshold when trigger is scroll (default: 0.5)
+ * @param {boolean} options.respectMotionPreference - Honour prefers-reduced-motion (default: true)
+ * @param {Function} options.onUpdate - Callback on each frame (currentValue)
+ * @param {Function} options.onComplete - Callback when counting completes
+ * @returns {Object} Control object with pause(), resume(), stop(), restart(), destroy() methods
+ *
+ * @example
+ * // Count from 0 to value in element
+ * Domma.effects.counter('.stat-number');
+ *
+ * @example
+ * // Count with formatting
+ * Domma.effects.counter('.revenue', {
+ *   from: 0,
+ *   to: 1250000,
+ *   duration: 3000,
+ *   separator: ',',
+ *   prefix: '$',
+ *   decimals: 2
+ * });
+ */
+export function counter(selector, options = {}) {
+  const defaults = {
+    from: 0,
+    to: null,
+    duration: 2000,
+    easing: 'ease-out',
+    decimals: 0,
+    separator: ',',
+    prefix: '',
+    suffix: '',
+    stagger: 0,
+    trigger: 'immediate',
+    threshold: 0.5,
+    respectMotionPreference: true,
+    onUpdate: null,
+    onComplete: null
+  };
+
+  const opts = { ...defaults, ...options };
+
+  const elements = resolveElements(selector, 'counter');
+  if (!elements) return null;
+
+  // If reduced motion, show final value immediately
+  if (opts.respectMotionPreference && prefersReducedMotion()) {
+    elements.forEach(el => {
+      const to = opts.to !== null ? opts.to : parseFloat(el.textContent.replace(/[^0-9.\-]/g, '')) || 0;
+      el.textContent = opts.prefix + formatNumber(to, opts.decimals, opts.separator) + opts.suffix;
+    });
+    return noopControl();
+  }
+
+  // Easing functions
+  function easingFn(t) {
+    switch (opts.easing) {
+      case 'linear': return t;
+      case 'ease-in-out': return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      case 'ease-out':
+      default: return 1 - Math.pow(1 - t, 3);
+    }
+  }
+
+  function formatNumber(num, decimals, separator) {
+    const fixed = num.toFixed(decimals);
+    if (!separator) return fixed;
+    const parts = fixed.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+    return parts.join('.');
+  }
+
+  const states = elements.map((el, index) => {
+    const to = opts.to !== null ? opts.to : parseFloat(el.textContent.replace(/[^0-9.\-]/g, '')) || 0;
+    return {
+      element: el,
+      from: opts.from,
+      to: to,
+      rafId: null,
+      timeoutId: null,
+      startTime: null,
+      paused: false,
+      complete: false
+    };
+  });
+
+  function animateCounter(state) {
+    if (state.paused) return;
+
+    state.startTime = performance.now();
+    state.complete = false;
+
+    function frame(currentTime) {
+      if (state.paused) return;
+
+      const elapsed = currentTime - state.startTime;
+      const progress = Math.min(elapsed / opts.duration, 1);
+      const easedProgress = easingFn(progress);
+      const currentValue = state.from + (state.to - state.from) * easedProgress;
+
+      state.element.textContent = opts.prefix + formatNumber(currentValue, opts.decimals, opts.separator) + opts.suffix;
+
+      if (opts.onUpdate) opts.onUpdate(currentValue);
+
+      if (progress < 1) {
+        state.rafId = requestAnimationFrame(frame);
+      } else {
+        state.complete = true;
+        // Ensure final value is exact
+        state.element.textContent = opts.prefix + formatNumber(state.to, opts.decimals, opts.separator) + opts.suffix;
+        if (opts.onComplete) opts.onComplete();
+      }
+    }
+
+    state.rafId = requestAnimationFrame(frame);
+  }
+
+  // Scroll-triggered observer
+  let observer = null;
+
+  function startElement(state, delay) {
+    if (delay > 0) {
+      state.timeoutId = setTimeout(() => animateCounter(state), delay);
+    } else {
+      animateCounter(state);
+    }
+  }
+
+  if (opts.trigger === 'scroll') {
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const state = states.find(s => s.element === entry.target);
+          if (state && !state.complete) {
+            const index = states.indexOf(state);
+            startElement(state, index * opts.stagger);
+          }
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: opts.threshold });
+
+    elements.forEach(el => observer.observe(el));
+  } else {
+    // Immediate start
+    states.forEach((state, index) => {
+      startElement(state, index * opts.stagger);
+    });
+  }
+
+  return {
+    pause() {
+      states.forEach(s => {
+        s.paused = true;
+        if (s.rafId) cancelAnimationFrame(s.rafId);
+        if (s.timeoutId) clearTimeout(s.timeoutId);
+      });
+    },
+    resume() {
+      states.forEach(s => {
+        if (s.paused && !s.complete) {
+          s.paused = false;
+          animateCounter(s);
+        }
+      });
+    },
+    stop() {
+      states.forEach(s => {
+        s.paused = true;
+        if (s.rafId) cancelAnimationFrame(s.rafId);
+        if (s.timeoutId) clearTimeout(s.timeoutId);
+      });
+      if (observer) observer.disconnect();
+    },
+    restart() {
+      states.forEach((s, index) => {
+        if (s.rafId) cancelAnimationFrame(s.rafId);
+        if (s.timeoutId) clearTimeout(s.timeoutId);
+        s.paused = false;
+        s.complete = false;
+        startElement(s, index * opts.stagger);
+      });
+    },
+    destroy() {
+      states.forEach(s => {
+        if (s.rafId) cancelAnimationFrame(s.rafId);
+        if (s.timeoutId) clearTimeout(s.timeoutId);
+      });
+      if (observer) observer.disconnect();
+    },
+    isRunning() {
+      return states.length > 0 && !states[0].paused && !states[0].complete;
+    },
+    isPaused() {
+      return states.length > 0 && states[0].paused;
+    }
+  };
+}
+
+/**
+ * Material Design click ripple effect
+ * Adds a circular wave effect emanating from click/touch point.
+ *
+ * @param {string|Element|NodeList} selector - Element(s) to add ripple to
+ * @param {Object} options - Configuration options
+ * @param {string} options.colour - Ripple colour (default: 'rgba(255, 255, 255, 0.35)')
+ * @param {number} options.duration - Ripple animation duration in ms (default: 600)
+ * @param {number} options.opacity - Starting opacity (default: 0.35)
+ * @param {boolean} options.unbounded - Allow ripple to overflow element (default: false)
+ * @param {boolean} options.centered - Always ripple from centre (default: false)
+ * @param {string} options.trigger - 'click', 'mousedown', 'pointerdown' (default: 'pointerdown')
+ * @param {boolean} options.respectMotionPreference - Honour prefers-reduced-motion (default: true)
+ * @returns {Object} Control object with destroy() method
+ *
+ * @example
+ * // Add ripple to buttons
+ * Domma.effects.ripple('.btn');
+ *
+ * @example
+ * // Custom colour ripple
+ * Domma.effects.ripple('.card', {
+ *   colour: 'rgba(59, 130, 246, 0.3)',
+ *   duration: 800
+ * });
+ */
+export function ripple(selector, options = {}) {
+  const defaults = {
+    colour: 'rgba(255, 255, 255, 0.35)',
+    duration: 600,
+    opacity: 0.35,
+    unbounded: false,
+    centered: false,
+    trigger: 'pointerdown',
+    respectMotionPreference: true
+  };
+
+  const opts = { ...defaults, ...options };
+
+  const elements = resolveElements(selector, 'ripple');
+  if (!elements) return null;
+
+  if (opts.respectMotionPreference && prefersReducedMotion()) {
+    return noopControl();
+  }
+
+  // Inject shared keyframes once
+  const styleId = 'domma-ripple-keyframes';
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.textContent = `
+      @keyframes dm-ripple-expand {
+        0% {
+          transform: scale(0);
+          opacity: var(--dm-ripple-opacity, 0.35);
+        }
+        100% {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  const handlers = new Map();
+
+  elements.forEach(el => {
+    // Set up container
+    el.classList.add('dm-ripple-container');
+    const originalPosition = getComputedStyle(el).position;
+    if (originalPosition === 'static') {
+      el.style.position = 'relative';
+    }
+    if (!opts.unbounded) {
+      el.style.overflow = 'hidden';
+    }
+
+    const handler = (e) => {
+      const rect = el.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height) * 2;
+
+      let x, y;
+      if (opts.centered) {
+        x = rect.width / 2;
+        y = rect.height / 2;
+      } else {
+        x = (e.clientX || e.touches?.[0]?.clientX || rect.width / 2) - rect.left;
+        y = (e.clientY || e.touches?.[0]?.clientY || rect.height / 2) - rect.top;
+      }
+
+      const rippleEl = document.createElement('span');
+      rippleEl.className = 'dm-ripple';
+      rippleEl.style.cssText = `
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        width: ${size}px;
+        height: ${size}px;
+        left: ${x - size / 2}px;
+        top: ${y - size / 2}px;
+        background: ${opts.colour};
+        --dm-ripple-opacity: ${opts.opacity};
+        animation: dm-ripple-expand ${opts.duration}ms ease-out forwards;
+      `;
+
+      el.appendChild(rippleEl);
+
+      // Remove after animation
+      setTimeout(() => {
+        rippleEl.remove();
+      }, opts.duration);
+    };
+
+    el.addEventListener(opts.trigger, handler);
+    handlers.set(el, handler);
+  });
+
+  return {
+    pause() {},
+    resume() {},
+    stop() {},
+    restart() {},
+    destroy() {
+      elements.forEach(el => {
+        if (handlers.has(el)) {
+          el.removeEventListener(opts.trigger, handlers.get(el));
+          handlers.delete(el);
+        }
+        el.classList.remove('dm-ripple-container');
+        // Remove active ripple elements
+        el.querySelectorAll('.dm-ripple').forEach(r => r.remove());
+      });
+    },
+    isRunning() { return true; },
+    isPaused() { return false; }
+  };
+}
+
+/**
+ * Attention/error shake animation
+ * Quick shake animation for invalid inputs or attention-grabbing.
+ *
+ * @param {string|Element|NodeList} selector - Element(s) to shake
+ * @param {Object} options - Configuration options
+ * @param {number} options.intensity - Shake distance in px (default: 6)
+ * @param {number} options.duration - Total shake duration in ms (default: 500)
+ * @param {string} options.direction - 'horizontal', 'vertical', 'both' (default: 'horizontal')
+ * @param {string} options.easing - CSS easing function (default: 'ease-in-out')
+ * @param {number} options.iterations - Number of shake cycles (default: 1)
+ * @param {number} options.stagger - Delay between elements in ms (default: 0)
+ * @param {boolean} options.respectMotionPreference - Honour prefers-reduced-motion (default: true)
+ * @param {Function} options.onComplete - Callback when shake completes
+ * @returns {Object} Control object with stop(), restart(), destroy() methods
+ *
+ * @example
+ * // Shake an invalid input
+ * Domma.effects.shake('#email-input');
+ *
+ * @example
+ * // Vertical shake with multiple iterations
+ * Domma.effects.shake('.alert', {
+ *   direction: 'vertical',
+ *   intensity: 4,
+ *   iterations: 2,
+ *   onComplete: () => console.log('Shake done')
+ * });
+ */
+export function shake(selector, options = {}) {
+  const defaults = {
+    intensity: 6,
+    duration: 500,
+    direction: 'horizontal',
+    easing: 'ease-in-out',
+    iterations: 1,
+    stagger: 0,
+    respectMotionPreference: true,
+    onComplete: null
+  };
+
+  const opts = { ...defaults, ...options };
+
+  const elements = resolveElements(selector, 'shake');
+  if (!elements) return null;
+
+  if (opts.respectMotionPreference && prefersReducedMotion()) {
+    if (opts.onComplete) opts.onComplete();
+    return noopControl();
+  }
+
+  const animId = `domma-shake-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const d = opts.intensity;
+
+  let keyframeBody;
+  switch (opts.direction) {
+    case 'vertical':
+      keyframeBody = `
+        0%, 100% { transform: translateY(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateY(-${d}px); }
+        20%, 40%, 60%, 80% { transform: translateY(${d}px); }
+      `;
+      break;
+    case 'both':
+      keyframeBody = `
+        0%, 100% { transform: translate(0, 0); }
+        10% { transform: translate(-${d}px, -${d}px); }
+        20% { transform: translate(${d}px, ${d}px); }
+        30% { transform: translate(-${d}px, ${d}px); }
+        40% { transform: translate(${d}px, -${d}px); }
+        50% { transform: translate(-${d}px, 0); }
+        60% { transform: translate(${d}px, 0); }
+        70% { transform: translate(0, -${d}px); }
+        80% { transform: translate(0, ${d}px); }
+        90% { transform: translate(-${d}px, -${d}px); }
+      `;
+      break;
+    default: // horizontal
+      keyframeBody = `
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-${d}px); }
+        20%, 40%, 60%, 80% { transform: translateX(${d}px); }
+      `;
+  }
+
+  const styleElement = document.createElement('style');
+  styleElement.setAttribute('data-domma-effect', animId);
+  styleElement.textContent = `@keyframes ${animId} { ${keyframeBody} }`;
+  document.head.appendChild(styleElement);
+
+  const animEndHandlers = new Map();
+
+  elements.forEach((el, index) => {
+    const staggerDelay = index * opts.stagger;
+
+    const startShake = () => {
+      el.style.animation = `${animId} ${opts.duration}ms ${opts.easing} ${opts.iterations}`;
+
+      const onEnd = () => {
+        el.style.animation = '';
+        el.removeEventListener('animationend', onEnd);
+        animEndHandlers.delete(el);
+        if (opts.onComplete && index === elements.length - 1) {
+          opts.onComplete();
+        }
+      };
+
+      el.addEventListener('animationend', onEnd);
+      animEndHandlers.set(el, onEnd);
+    };
+
+    if (staggerDelay > 0) {
+      setTimeout(startShake, staggerDelay);
+    } else {
+      startShake();
+    }
+  });
+
+  return {
+    pause() {
+      elements.forEach(el => el.style.animationPlayState = 'paused');
+    },
+    resume() {
+      elements.forEach(el => el.style.animationPlayState = 'running');
+    },
+    stop() {
+      elements.forEach(el => {
+        el.style.animation = '';
+        if (animEndHandlers.has(el)) {
+          el.removeEventListener('animationend', animEndHandlers.get(el));
+          animEndHandlers.delete(el);
+        }
+      });
+    },
+    restart() {
+      elements.forEach((el, index) => {
+        el.style.animation = 'none';
+        el.offsetHeight; // Trigger reflow
+        el.style.animation = `${animId} ${opts.duration}ms ${opts.easing} ${opts.iterations}`;
+      });
+    },
+    destroy() {
+      elements.forEach(el => {
+        el.style.animation = '';
+        if (animEndHandlers.has(el)) {
+          el.removeEventListener('animationend', animEndHandlers.get(el));
+          animEndHandlers.delete(el);
+        }
+      });
+      styleElement.remove();
+    },
+    isRunning() {
+      return elements.length > 0 && elements[0].style.animation !== '' &&
+             elements[0].style.animationPlayState !== 'paused';
+    },
+    isPaused() {
+      return elements.length > 0 && elements[0].style.animationPlayState === 'paused';
+    }
+  };
+}
+
 // Export as default for module usage
 export default {
   breathe,
   pulse,
-  typewriter
+  typewriter,
+  reveal,
+  scramble,
+  counter,
+  ripple,
+  shake
 };

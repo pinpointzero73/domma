@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter Effect - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .demo-box {
+            padding: 2rem;
+            margin: 1rem 0;
+            background: rgba(13, 110, 253, 0.1);
+            border: 2px solid rgba(13, 110, 253, 0.3);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-card {
+            padding: 1.5rem;
+            background: var(--dm-card-bg, #fff);
+            border: 1px solid var(--dm-border-color, #dee2e6);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            color: var(--dm-primary);
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--dm-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .effect-controls {
+            display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap; margin: 1rem 0;
+        }
+        .nav-link {
+            padding: 0.5rem 1rem; margin: 0.25rem; border-radius: 4px;
+            background: rgba(13, 110, 253, 0.1); text-decoration: none;
+            color: var(--dm-primary); display: inline-block; transition: all 0.2s ease;
+        }
+        .nav-link:hover { background: rgba(13, 110, 253, 0.2); transform: translateY(-2px); }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="effects">
+<div class="hero hero-center bg-ambient-rotate-spotlight">
+    <div class="hero-content">
+        <div class="hero-title">Counter Effect</div>
+        <div class="hero-subtitle">Animated number counting with easing, formatting, and scroll-triggered activation. Perfect for stats and dashboards.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <!-- See Also -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+        <h3 class="text-lg font-semibold mb-2">
+            <span data-icon="arrow-left" data-icon-size="20"></span>
+            See Also
+        </h3>
+        <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="reveal.html" class="nav-link">Reveal</a>
+        <a href="scramble.html" class="nav-link">Scramble</a>
+        <a href="ripple.html" class="nav-link">Ripple</a>
+        <a href="shake.html" class="nav-link">Shake</a>
+    </div>
+
+    <!-- Overview -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Domma.effects.counter()</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The <code>counter()</code> effect smoothly counts from one number to another using requestAnimationFrame with configurable easing. Supports thousands separators, prefixes, suffixes, decimals, and scroll-triggered activation.</p>
+
+            <pre class="code-block language-javascript">
+// Count from 0 to the number in the element
+Domma.effects.counter('.stat-number');
+
+// With full formatting
+Domma.effects.counter('.revenue', {
+  from: 0,
+  to: 1250000,
+  duration: 3000,
+  separator: ',',
+  prefix: '$',
+  decimals: 2,
+  easing: 'ease-out'
+});
+
+// Scroll-triggered
+Domma.effects.counter('.stat', {
+  trigger: 'scroll',
+  threshold: 0.5
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 1: Basic Stats -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Dashboard Stats</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Click to animate stat counters with staggered timing.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+                <div class="stat-card">
+                    <div class="stat-number counter-demo-1">12500</div>
+                    <div class="stat-label">Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number counter-demo-1">847</div>
+                    <div class="stat-label">Projects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number counter-demo-1">99</div>
+                    <div class="stat-label">Uptime %</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number counter-demo-1">3200000</div>
+                    <div class="stat-label">API Calls</div>
+                </div>
+            </div>
+            <div class="effect-controls">
+                <button class="btn btn-primary" id="counter-start-1">Start Count</button>
+                <button class="btn btn-danger" id="counter-restart-1">Restart</button>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.counter('.stat-number', {
+  duration: 2000,
+  stagger: 200,
+  separator: ','
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 2: Prefix & Suffix -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Prefix &amp; Suffix</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Add currency symbols, percentage signs, and other formatting.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div class="stat-card">
+                    <div class="stat-number" id="counter-revenue" style="font-size: 2.5rem;">0</div>
+                    <div class="stat-label">Revenue</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="counter-percent" style="font-size: 2.5rem;">0</div>
+                    <div class="stat-label">Satisfaction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="counter-temp" style="font-size: 2.5rem;">0</div>
+                    <div class="stat-label">Temperature</div>
+                </div>
+            </div>
+            <button class="btn btn-primary mt-3" id="counter-start-2">Start</button>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.counter('#revenue', {
+  to: 84750, prefix: '$', separator: ','
+});
+
+Domma.effects.counter('#percent', {
+  to: 98.7, suffix: '%', decimals: 1
+});
+
+Domma.effects.counter('#temp', {
+  to: 23.5, suffix: '°C', decimals: 1
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 3: Easing Comparison -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Easing Comparison</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Compare different easing functions counting to 1,000.</p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="stat-card">
+                    <div class="stat-number" id="counter-linear" style="font-size: 2.5rem;">0</div>
+                    <div class="stat-label">Linear</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="counter-easeout" style="font-size: 2.5rem;">0</div>
+                    <div class="stat-label">Ease Out</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="counter-easeinout" style="font-size: 2.5rem;">0</div>
+                    <div class="stat-label">Ease In-Out</div>
+                </div>
+            </div>
+            <button class="btn btn-primary mt-3" id="counter-start-3">Start All</button>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.counter('#linear', { to: 1000, easing: 'linear', duration: 3000 });
+Domma.effects.counter('#easeout', { to: 1000, easing: 'ease-out', duration: 3000 });
+Domma.effects.counter('#easeinout', { to: 1000, easing: 'ease-in-out', duration: 3000 });
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 4: Scroll Triggered -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Scroll Triggered</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">These counters start when they scroll into view. Scroll down if they haven't started yet.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+                <div class="stat-card">
+                    <div class="stat-number counter-scroll">5280</div>
+                    <div class="stat-label">Downloads</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number counter-scroll">142</div>
+                    <div class="stat-label">Contributors</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number counter-scroll">28</div>
+                    <div class="stat-label">Countries</div>
+                </div>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.counter('.counter-scroll', {
+  trigger: 'scroll',
+  threshold: 0.5,
+  stagger: 150,
+  separator: ','
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 5: Decimals -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Decimal Precision</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Count with decimal places for financial or scientific data.</p>
+            <div class="stat-card" style="max-width: 300px; margin: 0 auto;">
+                <div class="stat-number" id="counter-decimal" style="font-size: 2.5rem;">0</div>
+                <div class="stat-label">Portfolio Value</div>
+            </div>
+            <button class="btn btn-primary mt-3" id="counter-start-decimal">Start</button>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.counter('#counter-decimal', {
+  to: 42867.53,
+  prefix: '$',
+  decimals: 2,
+  separator: ',',
+  duration: 2500
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Options Reference -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Options Reference</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>from</code></td><td>number</td><td>0</td><td>Start value</td></tr>
+                        <tr><td><code>to</code></td><td>number</td><td>null</td><td>End value (reads from element if null)</td></tr>
+                        <tr><td><code>duration</code></td><td>number</td><td>2000</td><td>Total count duration in ms</td></tr>
+                        <tr><td><code>easing</code></td><td>string</td><td>'ease-out'</td><td>'linear', 'ease-out', 'ease-in-out'</td></tr>
+                        <tr><td><code>decimals</code></td><td>number</td><td>0</td><td>Decimal places</td></tr>
+                        <tr><td><code>separator</code></td><td>string</td><td>','</td><td>Thousands separator</td></tr>
+                        <tr><td><code>prefix</code></td><td>string</td><td>''</td><td>Text before number</td></tr>
+                        <tr><td><code>suffix</code></td><td>string</td><td>''</td><td>Text after number</td></tr>
+                        <tr><td><code>stagger</code></td><td>number</td><td>0</td><td>Delay between elements (ms)</td></tr>
+                        <tr><td><code>trigger</code></td><td>string</td><td>'immediate'</td><td>'immediate' or 'scroll'</td></tr>
+                        <tr><td><code>threshold</code></td><td>number</td><td>0.5</td><td>Observer threshold when trigger is scroll</td></tr>
+                        <tr><td><code>respectMotionPreference</code></td><td>boolean</td><td>true</td><td>Honour prefers-reduced-motion</td></tr>
+                        <tr><td><code>onUpdate</code></td><td>function</td><td>null</td><td>Callback on each frame (currentValue)</td></tr>
+                        <tr><td><code>onComplete</code></td><td>function</td><td>null</td><td>Callback when counting completes</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Store original values for restart
+    const originals1 = [];
+    document.querySelectorAll('.counter-demo-1').forEach(el => {
+      originals1.push(el.textContent);
+    });
+
+    let ctrl1;
+
+    // Demo 1: Dashboard Stats
+    $('#counter-start-1').on('click', () => {
+      if (ctrl1) ctrl1.destroy();
+      originals1.forEach((val, i) => {
+        document.querySelectorAll('.counter-demo-1')[i].textContent = val;
+      });
+      ctrl1 = Domma.effects.counter('.counter-demo-1', {
+        duration: 2000,
+        stagger: 200,
+        separator: ','
+      });
+    });
+
+    $('#counter-restart-1').on('click', () => {
+      if (ctrl1) ctrl1.restart();
+    });
+
+    // Demo 2: Prefix & Suffix
+    $('#counter-start-2').on('click', () => {
+      Domma.effects.counter('#counter-revenue', {
+        to: 84750, prefix: '$', separator: ',', duration: 2000
+      });
+      Domma.effects.counter('#counter-percent', {
+        to: 98.7, suffix: '%', decimals: 1, duration: 2000
+      });
+      Domma.effects.counter('#counter-temp', {
+        to: 23.5, suffix: '°C', decimals: 1, duration: 2000
+      });
+    });
+
+    // Demo 3: Easing Comparison
+    $('#counter-start-3').on('click', () => {
+      document.getElementById('counter-linear').textContent = '0';
+      document.getElementById('counter-easeout').textContent = '0';
+      document.getElementById('counter-easeinout').textContent = '0';
+      Domma.effects.counter('#counter-linear', { to: 1000, easing: 'linear', duration: 3000, separator: ',' });
+      Domma.effects.counter('#counter-easeout', { to: 1000, easing: 'ease-out', duration: 3000, separator: ',' });
+      Domma.effects.counter('#counter-easeinout', { to: 1000, easing: 'ease-in-out', duration: 3000, separator: ',' });
+    });
+
+    // Demo 4: Scroll triggered
+    Domma.effects.counter('.counter-scroll', {
+      trigger: 'scroll',
+      threshold: 0.5,
+      stagger: 150,
+      separator: ','
+    });
+
+    // Demo 5: Decimal
+    $('#counter-start-decimal').on('click', () => {
+      document.getElementById('counter-decimal').textContent = '0';
+      Domma.effects.counter('#counter-decimal', {
+        to: 42867.53,
+        prefix: '$',
+        decimals: 2,
+        separator: ',',
+        duration: 2500
+      });
+    });
+
+    Domma.icons.scan();
+  });
+</script>
+</body>
+</html>

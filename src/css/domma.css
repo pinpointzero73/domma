@@ -3356,6 +3356,121 @@ code, pre {
     animation: dm-tw-glow 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
+/* =================================================================
+   Reveal Effect - Scroll-triggered entrance animations
+   ================================================================= */
+
+.dm-reveal {
+    opacity: 0;
+    transition-property: opacity, transform;
+    will-change: opacity, transform;
+}
+
+.dm-reveal.dm-reveal-visible {
+    opacity: 1;
+    transform: none !important;
+}
+
+.dm-reveal-fade {
+    /* opacity-only, no transform needed */
+}
+
+.dm-reveal-slide-up {
+    transform: translateY(30px);
+}
+
+.dm-reveal-slide-down {
+    transform: translateY(-30px);
+}
+
+.dm-reveal-slide-left {
+    transform: translateX(30px);
+}
+
+.dm-reveal-slide-right {
+    transform: translateX(-30px);
+}
+
+.dm-reveal-zoom {
+    transform: scale(0.85);
+}
+
+.dm-reveal-flip {
+    transform: perspective(600px) rotateX(15deg);
+}
+
+/* =================================================================
+   Scramble Effect - Text cipher/decode
+   ================================================================= */
+
+.dm-scramble-char {
+    display: inline;
+    white-space: pre;
+}
+
+.dm-scramble-resolved {
+    /* Resolved characters can be styled differently if desired */
+}
+
+/* =================================================================
+   Ripple Effect - Material Design click ripple
+   ================================================================= */
+
+.dm-ripple-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.dm-ripple {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    will-change: transform, opacity;
+}
+
+/* =================================================================
+   Shake Effect - Attention/error animation (keyframes injected by JS)
+   ================================================================= */
+
+/* Static shake keyframes for CSS-only usage */
+@keyframes dm-shake-h {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
+    20%, 40%, 60%, 80% { transform: translateX(6px); }
+}
+
+@keyframes dm-shake-v {
+    0%, 100% { transform: translateY(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateY(-6px); }
+    20%, 40%, 60%, 80% { transform: translateY(6px); }
+}
+
+.dm-shake-h {
+    animation: dm-shake-h 0.5s ease-in-out;
+}
+
+.dm-shake-v {
+    animation: dm-shake-v 0.5s ease-in-out;
+}
+
+/* Reduced motion: disable all effects */
+@media (prefers-reduced-motion: reduce) {
+    .dm-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .dm-ripple {
+        animation: none !important;
+    }
+
+    .dm-shake-h,
+    .dm-shake-v {
+        animation: none !important;
+    }
+}
+
 /* Animation Classes */
 
 .animate-fade-in {

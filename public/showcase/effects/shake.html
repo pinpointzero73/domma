@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shake Effect - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .demo-box {
+            padding: 2rem;
+            margin: 1rem 0;
+            background: rgba(13, 110, 253, 0.1);
+            border: 2px solid rgba(13, 110, 253, 0.3);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .shake-target {
+            padding: 1.5rem 2rem;
+            display: inline-block;
+            margin: 0.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .shake-input {
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border: 2px solid var(--dm-border-color, #dee2e6);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            transition: border-color 0.2s;
+        }
+        .shake-input.invalid {
+            border-color: var(--dm-danger, #dc3545);
+        }
+        .effect-controls {
+            display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap; margin: 1rem 0;
+        }
+        .nav-link {
+            padding: 0.5rem 1rem; margin: 0.25rem; border-radius: 4px;
+            background: rgba(13, 110, 253, 0.1); text-decoration: none;
+            color: var(--dm-primary); display: inline-block; transition: all 0.2s ease;
+        }
+        .nav-link:hover { background: rgba(13, 110, 253, 0.2); transform: translateY(-2px); }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="effects">
+<div class="hero hero-center bg-ambient-rotate-spotlight">
+    <div class="hero-content">
+        <div class="hero-title">Shake Effect</div>
+        <div class="hero-subtitle">Quick attention/error shake animation. Perfect for form validation feedback and drawing attention to important elements.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <!-- See Also -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+        <h3 class="text-lg font-semibold mb-2">
+            <span data-icon="arrow-left" data-icon-size="20"></span>
+            See Also
+        </h3>
+        <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="reveal.html" class="nav-link">Reveal</a>
+        <a href="scramble.html" class="nav-link">Scramble</a>
+        <a href="counter.html" class="nav-link">Counter</a>
+        <a href="ripple.html" class="nav-link">Ripple</a>
+    </div>
+
+    <!-- Overview -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Domma.effects.shake()</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The <code>shake()</code> effect applies a quick shake animation to draw attention or signal an error. Supports horizontal, vertical, and both directions with configurable intensity and iterations.</p>
+
+            <pre class="code-block language-javascript">
+// Shake an invalid input
+Domma.effects.shake('#email-input');
+
+// Vertical shake with callback
+Domma.effects.shake('.alert', {
+  direction: 'vertical',
+  intensity: 4,
+  iterations: 2,
+  onComplete: () => console.log('Shake done')
+});
+
+// Intense shake
+Domma.effects.shake('.error-box', {
+  intensity: 12,
+  duration: 800,
+  direction: 'both'
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 1: Directions -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Shake Directions</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Three shake directions: horizontal, vertical, and both axes simultaneously.</p>
+            <div class="demo-box">
+                <div class="shake-target bg-primary text-white" id="shake-h">Horizontal</div>
+                <div class="shake-target bg-success text-white" id="shake-v">Vertical</div>
+                <div class="shake-target bg-danger text-white" id="shake-both">Both</div>
+            </div>
+            <div class="effect-controls">
+                <button class="btn btn-primary" id="shake-start-h">Shake Horizontal</button>
+                <button class="btn btn-success" id="shake-start-v">Shake Vertical</button>
+                <button class="btn btn-danger" id="shake-start-both">Shake Both</button>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.shake('#el', { direction: 'horizontal' }); // Default
+Domma.effects.shake('#el', { direction: 'vertical' });
+Domma.effects.shake('#el', { direction: 'both' });
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 2: Intensity -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Intensity Levels</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Different shake intensities from subtle to extreme.</p>
+            <div class="demo-box">
+                <div class="shake-target" id="shake-subtle" style="background: #e3f2fd; color: #1565c0;">Subtle (2px)</div>
+                <div class="shake-target" id="shake-normal" style="background: #fff3e0; color: #e65100;">Normal (6px)</div>
+                <div class="shake-target" id="shake-intense" style="background: #fce4ec; color: #c62828;">Intense (12px)</div>
+            </div>
+            <div class="effect-controls">
+                <button class="btn btn-primary" id="shake-start-subtle">Subtle</button>
+                <button class="btn btn-warning" id="shake-start-normal">Normal</button>
+                <button class="btn btn-danger" id="shake-start-intense">Intense</button>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.shake('#el', { intensity: 2 });   // Subtle
+Domma.effects.shake('#el', { intensity: 6 });   // Normal (default)
+Domma.effects.shake('#el', { intensity: 12 });  // Intense
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 3: Form Validation -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Form Validation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Shake invalid form inputs to draw attention. Try submitting with an empty or invalid email.</p>
+            <div style="max-width: 400px; margin: 0 auto;">
+                <label class="d-block mb-2 font-semibold">Email Address</label>
+                <input type="email" class="shake-input mb-2" id="shake-email" placeholder="Enter your email">
+                <div class="text-danger mb-3" id="shake-error" style="display: none; font-size: 0.9rem;">Please enter a valid email address.</div>
+                <button class="btn btn-primary" id="shake-validate">Submit</button>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+$('#submit').on('click', () => {
+  const email = $('#email').val();
+  const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  if (!isValid) {
+    $('#email').addClass('invalid');
+    Domma.effects.shake('#email', {
+      intensity: 4,
+      duration: 400,
+      onComplete: () => {
+        // Remove invalid state after delay
+        setTimeout(() => $('#email').removeClass('invalid'), 2000);
+      }
+    });
+  }
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 4: Multiple Iterations -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Multiple Iterations</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Repeat the shake cycle multiple times for persistent emphasis.</p>
+            <div class="demo-box">
+                <div class="shake-target bg-warning text-dark" id="shake-iter">Shake Me!</div>
+            </div>
+            <div class="effect-controls">
+                <button class="btn btn-primary" id="shake-1x">1x</button>
+                <button class="btn btn-primary" id="shake-2x">2x</button>
+                <button class="btn btn-primary" id="shake-3x">3x</button>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.shake('#el', { iterations: 1 }); // Default
+Domma.effects.shake('#el', { iterations: 2 });
+Domma.effects.shake('#el', { iterations: 3 });
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 5: Stagger -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Staggered Shake</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Shake multiple elements with a cascading delay.</p>
+            <div class="demo-box">
+                <div class="shake-target shake-stagger" style="background: #e8eaf6; color: #283593;">Item 1</div>
+                <div class="shake-target shake-stagger" style="background: #e8eaf6; color: #283593;">Item 2</div>
+                <div class="shake-target shake-stagger" style="background: #e8eaf6; color: #283593;">Item 3</div>
+                <div class="shake-target shake-stagger" style="background: #e8eaf6; color: #283593;">Item 4</div>
+            </div>
+            <button class="btn btn-primary mt-3" id="shake-start-stagger">Shake All (Staggered)</button>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.shake('.item', {
+  stagger: 100,
+  intensity: 5,
+  direction: 'horizontal'
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Options Reference -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Options Reference</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>intensity</code></td><td>number</td><td>6</td><td>Shake distance in pixels</td></tr>
+                        <tr><td><code>duration</code></td><td>number</td><td>500</td><td>Total shake duration in ms</td></tr>
+                        <tr><td><code>direction</code></td><td>string</td><td>'horizontal'</td><td>'horizontal', 'vertical', 'both'</td></tr>
+                        <tr><td><code>easing</code></td><td>string</td><td>'ease-in-out'</td><td>CSS easing function</td></tr>
+                        <tr><td><code>iterations</code></td><td>number</td><td>1</td><td>Number of shake cycles</td></tr>
+                        <tr><td><code>stagger</code></td><td>number</td><td>0</td><td>Delay between elements (ms)</td></tr>
+                        <tr><td><code>respectMotionPreference</code></td><td>boolean</td><td>true</td><td>Honour prefers-reduced-motion</td></tr>
+                        <tr><td><code>onComplete</code></td><td>function</td><td>null</td><td>Callback when shake completes</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Demo 1: Directions
+    $('#shake-start-h').on('click', () => {
+      Domma.effects.shake('#shake-h', { direction: 'horizontal' });
+    });
+    $('#shake-start-v').on('click', () => {
+      Domma.effects.shake('#shake-v', { direction: 'vertical' });
+    });
+    $('#shake-start-both').on('click', () => {
+      Domma.effects.shake('#shake-both', { direction: 'both' });
+    });
+
+    // Demo 2: Intensity
+    $('#shake-start-subtle').on('click', () => {
+      Domma.effects.shake('#shake-subtle', { intensity: 2 });
+    });
+    $('#shake-start-normal').on('click', () => {
+      Domma.effects.shake('#shake-normal', { intensity: 6 });
+    });
+    $('#shake-start-intense').on('click', () => {
+      Domma.effects.shake('#shake-intense', { intensity: 12 });
+    });
+
+    // Demo 3: Form Validation
+    $('#shake-validate').on('click', () => {
+      const email = $('#shake-email').val();
+      const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+      if (!isValid) {
+        $('#shake-email').addClass('invalid');
+        $('#shake-error').show();
+        Domma.effects.shake('#shake-email', {
+          intensity: 4,
+          duration: 400,
+          onComplete: () => {
+            setTimeout(() => {
+              $('#shake-email').removeClass('invalid');
+              $('#shake-error').hide();
+            }, 2000);
+          }
+        });
+      } else {
+        $('#shake-email').removeClass('invalid');
+        $('#shake-error').hide();
+        Domma.elements.toast('Valid email!', { type: 'success' });
+      }
+    });
+
+    // Demo 4: Iterations
+    $('#shake-1x').on('click', () => { Domma.effects.shake('#shake-iter', { iterations: 1 }); });
+    $('#shake-2x').on('click', () => { Domma.effects.shake('#shake-iter', { iterations: 2 }); });
+    $('#shake-3x').on('click', () => { Domma.effects.shake('#shake-iter', { iterations: 3 }); });
+
+    // Demo 5: Stagger
+    $('#shake-start-stagger').on('click', () => {
+      Domma.effects.shake('.shake-stagger', {
+        stagger: 100,
+        intensity: 5,
+        direction: 'horizontal'
+      });
+    });
+
+    Domma.icons.scan();
+  });
+</script>
+</body>
+</html>

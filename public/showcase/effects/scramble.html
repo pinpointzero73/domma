@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scramble Effect - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .demo-box {
+            padding: 2rem;
+            margin: 1rem 0;
+            background: rgba(13, 110, 253, 0.1);
+            border: 2px solid rgba(13, 110, 253, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.05em;
+            min-height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .effect-controls {
+            display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap; margin: 1rem 0;
+        }
+        .nav-link {
+            padding: 0.5rem 1rem; margin: 0.25rem; border-radius: 4px;
+            background: rgba(13, 110, 253, 0.1); text-decoration: none;
+            color: var(--dm-primary); display: inline-block; transition: all 0.2s ease;
+        }
+        .nav-link:hover { background: rgba(13, 110, 253, 0.2); transform: translateY(-2px); }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="effects">
+<div class="hero hero-center bg-ambient-rotate-spotlight">
+    <div class="hero-content">
+        <div class="hero-title">Scramble Effect</div>
+        <div class="hero-subtitle">Text cipher/decode animation. Characters cycle through random glyphs before settling on the correct character.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <!-- See Also -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+        <h3 class="text-lg font-semibold mb-2">
+            <span data-icon="arrow-left" data-icon-size="20"></span>
+            See Also
+        </h3>
+        <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="reveal.html" class="nav-link">Reveal</a>
+        <a href="counter.html" class="nav-link">Counter</a>
+        <a href="ripple.html" class="nav-link">Ripple</a>
+        <a href="shake.html" class="nav-link">Shake</a>
+    </div>
+
+    <!-- Overview -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Domma.effects.scramble()</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The <code>scramble()</code> effect wraps text characters and rapidly cycles through random glyphs before resolving each character to its final value. Supports multiple reveal orders and looping.</p>
+
+            <pre class="code-block language-javascript">
+// Basic usage
+Domma.effects.scramble('.hero-title');
+
+// With options
+const ctrl = Domma.effects.scramble('.heading', {
+  scrambleDuration: 1200,
+  revealOrder: 'random',
+  loop: true,
+  loopDelay: 3000,
+  onComplete: () => console.log('Decoded!')
+});
+
+// Control
+ctrl.pause();
+ctrl.resume();
+ctrl.restart();
+ctrl.destroy();
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 1: Basic -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Basic Scramble</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Click to decode the text left-to-right.</p>
+            <div class="demo-box" id="scramble-demo-1">Welcome to Domma</div>
+            <div class="effect-controls">
+                <button class="btn btn-primary" id="scramble-start-1">Start</button>
+                <button class="btn btn-secondary" id="scramble-pause-1">Pause</button>
+                <button class="btn btn-secondary" id="scramble-resume-1">Resume</button>
+                <button class="btn btn-danger" id="scramble-stop-1">Stop</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo 2: Reveal Orders -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Reveal Orders</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Different orders for character resolution.</p>
+
+            <h4 class="font-semibold mt-4 mb-2">Left to Right</h4>
+            <div class="demo-box" id="scramble-ltr">Domma Effects</div>
+            <button class="btn btn-primary mb-4" id="scramble-start-ltr">Start Left-to-Right</button>
+
+            <h4 class="font-semibold mt-4 mb-2">Right to Left</h4>
+            <div class="demo-box" id="scramble-rtl">Domma Effects</div>
+            <button class="btn btn-primary mb-4" id="scramble-start-rtl">Start Right-to-Left</button>
+
+            <h4 class="font-semibold mt-4 mb-2">Random</h4>
+            <div class="demo-box" id="scramble-random">Domma Effects</div>
+            <button class="btn btn-primary mb-4" id="scramble-start-random">Start Random</button>
+
+            <h4 class="font-semibold mt-4 mb-2">Centre Out</h4>
+            <div class="demo-box" id="scramble-center">Domma Effects</div>
+            <button class="btn btn-primary" id="scramble-start-center">Start Centre-Out</button>
+
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.scramble('#el', { revealOrder: 'left-to-right' });
+Domma.effects.scramble('#el', { revealOrder: 'right-to-left' });
+Domma.effects.scramble('#el', { revealOrder: 'random' });
+Domma.effects.scramble('#el', { revealOrder: 'center-out' });
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 3: Loop -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Looping Scramble</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Infinite loop with configurable delay between cycles.</p>
+            <div class="demo-box" id="scramble-loop">Build Amazing Apps</div>
+            <div class="effect-controls">
+                <button class="btn btn-primary" id="scramble-start-loop">Start Loop</button>
+                <button class="btn btn-danger" id="scramble-stop-loop">Stop Loop</button>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.scramble('.headline', {
+  loop: true,
+  loopDelay: 2000,
+  scrambleDuration: 1000,
+  revealOrder: 'random'
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 4: Custom Characters -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Custom Character Pool</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Use custom characters for the scramble animation.</p>
+            <div class="demo-box" id="scramble-custom">01100100</div>
+            <button class="btn btn-primary" id="scramble-start-custom">Start Binary Scramble</button>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.scramble('#binary', {
+  characters: '01',
+  scrambleDuration: 1500,
+  speed: 80
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 5: Speed Variations -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Speed Variations</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Adjust scramble duration and resolve speed.</p>
+            <div class="demo-box" id="scramble-fast" style="font-size: 1.5rem;">Quick Decode</div>
+            <button class="btn btn-primary mb-3" id="scramble-start-fast">Fast (300ms)</button>
+
+            <div class="demo-box" id="scramble-slow" style="font-size: 1.5rem;">Slow Reveal</div>
+            <button class="btn btn-primary" id="scramble-start-slow">Slow (2000ms)</button>
+        </div>
+    </section>
+
+    <!-- Options Reference -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Options Reference</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>speed</code></td><td>number</td><td>50</td><td>Ms per character resolve</td></tr>
+                        <tr><td><code>scrambleSpeed</code></td><td>number</td><td>30</td><td>Ms between scramble frame updates</td></tr>
+                        <tr><td><code>characters</code></td><td>string</td><td>A-Z, a-z, 0-9, symbols</td><td>Character pool for scramble glyphs</td></tr>
+                        <tr><td><code>revealOrder</code></td><td>string</td><td>'left-to-right'</td><td>'left-to-right', 'right-to-left', 'random', 'center-out'</td></tr>
+                        <tr><td><code>scrambleDuration</code></td><td>number</td><td>800</td><td>How long each char scrambles before resolving (ms)</td></tr>
+                        <tr><td><code>stagger</code></td><td>number</td><td>0</td><td>Delay between multiple elements (ms)</td></tr>
+                        <tr><td><code>loop</code></td><td>boolean|number</td><td>false</td><td>false, true (infinite), or number of loops</td></tr>
+                        <tr><td><code>loopDelay</code></td><td>number</td><td>2000</td><td>Ms between loops</td></tr>
+                        <tr><td><code>respectMotionPreference</code></td><td>boolean</td><td>true</td><td>Honour prefers-reduced-motion</td></tr>
+                        <tr><td><code>onComplete</code></td><td>function</td><td>null</td><td>Callback when animation completes</td></tr>
+                        <tr><td><code>onCharacter</code></td><td>function</td><td>null</td><td>Callback per character resolved (char, index)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    let ctrl1;
+
+    // Demo 1: Basic
+    $('#scramble-start-1').on('click', () => {
+      if (ctrl1) ctrl1.destroy();
+      document.getElementById('scramble-demo-1').textContent = 'Welcome to Domma';
+      ctrl1 = Domma.effects.scramble('#scramble-demo-1');
+    });
+    $('#scramble-pause-1').on('click', () => { if (ctrl1) ctrl1.pause(); });
+    $('#scramble-resume-1').on('click', () => { if (ctrl1) ctrl1.resume(); });
+    $('#scramble-stop-1').on('click', () => { if (ctrl1) ctrl1.stop(); });
+
+    // Demo 2: Reveal Orders
+    let ctrlLtr, ctrlRtl, ctrlRandom, ctrlCenter;
+
+    $('#scramble-start-ltr').on('click', () => {
+      if (ctrlLtr) ctrlLtr.destroy();
+      document.getElementById('scramble-ltr').textContent = 'Domma Effects';
+      ctrlLtr = Domma.effects.scramble('#scramble-ltr', { revealOrder: 'left-to-right' });
+    });
+    $('#scramble-start-rtl').on('click', () => {
+      if (ctrlRtl) ctrlRtl.destroy();
+      document.getElementById('scramble-rtl').textContent = 'Domma Effects';
+      ctrlRtl = Domma.effects.scramble('#scramble-rtl', { revealOrder: 'right-to-left' });
+    });
+    $('#scramble-start-random').on('click', () => {
+      if (ctrlRandom) ctrlRandom.destroy();
+      document.getElementById('scramble-random').textContent = 'Domma Effects';
+      ctrlRandom = Domma.effects.scramble('#scramble-random', { revealOrder: 'random' });
+    });
+    $('#scramble-start-center').on('click', () => {
+      if (ctrlCenter) ctrlCenter.destroy();
+      document.getElementById('scramble-center').textContent = 'Domma Effects';
+      ctrlCenter = Domma.effects.scramble('#scramble-center', { revealOrder: 'center-out' });
+    });
+
+    // Demo 3: Loop
+    let ctrlLoop;
+    $('#scramble-start-loop').on('click', () => {
+      if (ctrlLoop) ctrlLoop.destroy();
+      document.getElementById('scramble-loop').textContent = 'Build Amazing Apps';
+      ctrlLoop = Domma.effects.scramble('#scramble-loop', {
+        loop: true,
+        loopDelay: 2000,
+        scrambleDuration: 1000,
+        revealOrder: 'random'
+      });
+    });
+    $('#scramble-stop-loop').on('click', () => { if (ctrlLoop) ctrlLoop.stop(); });
+
+    // Demo 4: Custom characters
+    let ctrlCustom;
+    $('#scramble-start-custom').on('click', () => {
+      if (ctrlCustom) ctrlCustom.destroy();
+      document.getElementById('scramble-custom').textContent = '01100100';
+      ctrlCustom = Domma.effects.scramble('#scramble-custom', {
+        characters: '01',
+        scrambleDuration: 1500,
+        speed: 80
+      });
+    });
+
+    // Demo 5: Speed variations
+    let ctrlFast, ctrlSlow;
+    $('#scramble-start-fast').on('click', () => {
+      if (ctrlFast) ctrlFast.destroy();
+      document.getElementById('scramble-fast').textContent = 'Quick Decode';
+      ctrlFast = Domma.effects.scramble('#scramble-fast', { scrambleDuration: 300, speed: 20 });
+    });
+    $('#scramble-start-slow').on('click', () => {
+      if (ctrlSlow) ctrlSlow.destroy();
+      document.getElementById('scramble-slow').textContent = 'Slow Reveal';
+      ctrlSlow = Domma.effects.scramble('#scramble-slow', { scrambleDuration: 2000, speed: 100 });
+    });
+
+    Domma.icons.scan();
+  });
+</script>
+</body>
+</html>

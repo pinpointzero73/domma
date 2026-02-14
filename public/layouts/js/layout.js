@@ -108,7 +108,7 @@ import {ConsentModule} from './modules/consent.js';
 
         // Initialize sidebar
         if (presetConfig.sidebar) {
-            SidebarModule.init(presetConfig.sidebar);
+            await SidebarModule.init(presetConfig.sidebar, configBase);
         }
 
         // Initialize features

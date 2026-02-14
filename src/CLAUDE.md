@@ -528,6 +528,11 @@ Accessed via `Domma.effects`:
 - **breathe**: `effects.breathe(selector, { amplitude, duration, easing, delay, stagger, iterations, pauseOnHover })` - Sinusoidal floating animation
 - **pulse**: `effects.pulse(selector, { scale, duration, easing, delay, stagger, iterations, pauseOnHover })` - Pulsing scale animation
 - **typewriter**: `effects.typewriter(selector, { speed, deleteSpeed, cursor, cursorChar, cursorBlink, loop, loopDelay, pauseOnHover, actions })` - Character-by-character text animation with action queue
+- **reveal**: `effects.reveal(selector, { animation, duration, easing, delay, stagger, threshold, rootMargin, once, onReveal })` - Scroll-triggered entrance animations (fade, slide-up/down/left/right, zoom, flip)
+- **scramble**: `effects.scramble(selector, { speed, scrambleSpeed, characters, revealOrder, scrambleDuration, loop, loopDelay, onComplete, onCharacter })` - Text cipher/decode animation
+- **counter**: `effects.counter(selector, { from, to, duration, easing, decimals, separator, prefix, suffix, trigger, threshold, onUpdate, onComplete })` - Animated number counting with formatting
+- **ripple**: `effects.ripple(selector, { colour, duration, opacity, unbounded, centered, trigger })` - Material Design click ripple effect
+- **shake**: `effects.shake(selector, { intensity, duration, direction, easing, iterations, stagger, onComplete })` - Attention/error shake animation
 
 **Typewriter Actions:**
 - `{ render: 'text', effect: 'none|fade|bounce|glow' }` - Type text with optional entrance effect
@@ -603,7 +608,7 @@ src/
 ├── config.js        # JSON configuration engine
 ├── http.js          # HTTP client
 ├── storage.js       # localStorage wrapper
-├── effects.js       # Visual effects (breathe, pulse, typewriter)
+├── effects.js       # Visual effects (breathe, pulse, typewriter, reveal, scramble, counter, ripple, shake)
 ├── theme.js         # Theme management
 ├── icons.js         # SVG icon system
 ├── theme-roller.js  # Theme customisation tool (tools bundle)

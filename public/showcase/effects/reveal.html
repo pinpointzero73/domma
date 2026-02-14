@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reveal Effect - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .demo-box {
+            padding: 2rem;
+            margin: 1rem 0;
+            background: rgba(13, 110, 253, 0.1);
+            border: 2px solid rgba(13, 110, 253, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+        .reveal-card {
+            padding: 2rem;
+            background: var(--dm-card-bg, #fff);
+            border: 1px solid var(--dm-border-color, #dee2e6);
+            border-radius: 8px;
+            text-align: center;
+            margin: 0.5rem;
+        }
+        .reveal-card h4 { margin-bottom: 0.5rem; }
+        .reveal-card p { color: var(--dm-text-muted); margin: 0; }
+        .spacer { height: 50vh; display: flex; align-items: center; justify-content: center; color: var(--dm-text-muted); font-size: 1.25rem; }
+        .effect-controls {
+            display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap; margin: 1rem 0;
+        }
+        .nav-link {
+            padding: 0.5rem 1rem; margin: 0.25rem; border-radius: 4px;
+            background: rgba(13, 110, 253, 0.1); text-decoration: none;
+            color: var(--dm-primary); display: inline-block; transition: all 0.2s ease;
+        }
+        .nav-link:hover { background: rgba(13, 110, 253, 0.2); transform: translateY(-2px); }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="effects">
+<div class="hero hero-center bg-ambient-rotate-spotlight">
+    <div class="hero-content">
+        <div class="hero-title">Reveal Effect</div>
+        <div class="hero-subtitle">Scroll-triggered entrance animations using IntersectionObserver. Elements animate into view as they enter the viewport.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <!-- See Also -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+        <h3 class="text-lg font-semibold mb-2">
+            <span data-icon="arrow-left" data-icon-size="20"></span>
+            See Also
+        </h3>
+        <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="scramble.html" class="nav-link">Scramble</a>
+        <a href="counter.html" class="nav-link">Counter</a>
+        <a href="ripple.html" class="nav-link">Ripple</a>
+        <a href="shake.html" class="nav-link">Shake</a>
+    </div>
+
+    <!-- Overview -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Domma.effects.reveal()</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The <code>reveal()</code> effect uses <code>IntersectionObserver</code> to trigger CSS transitions when elements scroll into view. Supports fade, slide, zoom, and flip animations with stagger support for groups of elements.</p>
+
+            <pre class="code-block language-javascript">
+// Simple fade-in on scroll
+Domma.effects.reveal('.card');
+
+// Slide up with stagger
+const ctrl = Domma.effects.reveal('.feature', {
+  animation: 'slide-up',
+  duration: 800,
+  stagger: 100,
+  threshold: 0.2,
+  onReveal: (el) => console.log('Revealed:', el)
+});
+
+// Clean up
+ctrl.destroy();
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Scroll Down -->
+    <div class="spacer">
+        <span data-icon="chevron-down" data-icon-size="24"></span>&nbsp; Scroll down to see the reveal animations
+    </div>
+
+    <!-- Demo 1: Fade -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Fade (Default)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Elements fade in smoothly as they enter the viewport.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div class="reveal-card reveal-fade-demo">
+                    <div style="font-size: 2rem;" data-icon="zap"></div>
+                    <h4>Fast</h4>
+                    <p>Lightning performance</p>
+                </div>
+                <div class="reveal-card reveal-fade-demo">
+                    <div style="font-size: 2rem;" data-icon="shield"></div>
+                    <h4>Secure</h4>
+                    <p>Built-in protection</p>
+                </div>
+                <div class="reveal-card reveal-fade-demo">
+                    <div style="font-size: 2rem;" data-icon="code"></div>
+                    <h4>Clean</h4>
+                    <p>Readable API</p>
+                </div>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.reveal('.reveal-fade-demo', {
+  animation: 'fade',
+  duration: 600,
+  stagger: 150
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 2: Slide Up -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Slide Up</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Elements slide upward from below as they enter.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div class="reveal-card reveal-slideup-demo">
+                    <h4>Feature One</h4>
+                    <p>Slide-up entrance</p>
+                </div>
+                <div class="reveal-card reveal-slideup-demo">
+                    <h4>Feature Two</h4>
+                    <p>Staggered timing</p>
+                </div>
+                <div class="reveal-card reveal-slideup-demo">
+                    <h4>Feature Three</h4>
+                    <p>Smooth easing</p>
+                </div>
+                <div class="reveal-card reveal-slideup-demo">
+                    <h4>Feature Four</h4>
+                    <p>GPU-accelerated</p>
+                </div>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.reveal('.reveal-slideup-demo', {
+  animation: 'slide-up',
+  duration: 800,
+  stagger: 120,
+  easing: 'ease-out'
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 3: Slide Left/Right -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Slide Left &amp; Right</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Elements slide in from the sides.</p>
+            <div class="row">
+                <div class="col-6">
+                    <div class="reveal-card reveal-slideleft-demo">
+                        <h4>From the Right</h4>
+                        <p>Slides left into view</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="reveal-card reveal-slideright-demo">
+                        <h4>From the Left</h4>
+                        <p>Slides right into view</p>
+                    </div>
+                </div>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+// Slide in from right
+Domma.effects.reveal('.slide-left', { animation: 'slide-left' });
+
+// Slide in from left
+Domma.effects.reveal('.slide-right', { animation: 'slide-right' });
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 4: Zoom -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Zoom</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Elements scale up from a smaller size.</p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="reveal-card reveal-zoom-demo">
+                    <div style="font-size: 3rem;">🚀</div>
+                    <h4>Launch</h4>
+                </div>
+                <div class="reveal-card reveal-zoom-demo">
+                    <div style="font-size: 3rem;">⚡</div>
+                    <h4>Speed</h4>
+                </div>
+                <div class="reveal-card reveal-zoom-demo">
+                    <div style="font-size: 3rem;">🎯</div>
+                    <h4>Precision</h4>
+                </div>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.reveal('.reveal-zoom-demo', {
+  animation: 'zoom',
+  duration: 700,
+  stagger: 200
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 5: Flip -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Flip</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Elements flip in with a 3D perspective transform.</p>
+            <div class="reveal-card reveal-flip-demo" style="max-width: 400px; margin: 0 auto;">
+                <h4>3D Flip Entrance</h4>
+                <p>Uses perspective transform for depth</p>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.reveal('.flip-card', {
+  animation: 'flip',
+  duration: 900
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 6: Re-animate (once: false) -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Re-animate on Re-entry</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">With <code>once: false</code>, elements re-animate every time they enter the viewport. Scroll up and down to see them repeat.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div class="reveal-card reveal-repeat-demo">
+                    <h4>Repeatable</h4>
+                    <p>Animates on every scroll</p>
+                </div>
+                <div class="reveal-card reveal-repeat-demo">
+                    <h4>Repeatable</h4>
+                    <p>Scroll up and back down</p>
+                </div>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.reveal('.repeatable', {
+  animation: 'slide-up',
+  once: false  // Re-animate on re-entry
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Options Reference -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Options Reference</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>animation</code></td><td>string</td><td>'fade'</td><td>Animation type: 'fade', 'slide-up', 'slide-down', 'slide-left', 'slide-right', 'zoom', 'flip'</td></tr>
+                        <tr><td><code>duration</code></td><td>number</td><td>600</td><td>Animation duration in ms</td></tr>
+                        <tr><td><code>easing</code></td><td>string</td><td>'ease-out'</td><td>CSS easing function</td></tr>
+                        <tr><td><code>delay</code></td><td>number</td><td>0</td><td>Delay before animation in ms</td></tr>
+                        <tr><td><code>stagger</code></td><td>number</td><td>0</td><td>Delay between multiple elements in ms</td></tr>
+                        <tr><td><code>threshold</code></td><td>number</td><td>0.1</td><td>IntersectionObserver threshold (0-1)</td></tr>
+                        <tr><td><code>rootMargin</code></td><td>string</td><td>'0px'</td><td>Observer root margin</td></tr>
+                        <tr><td><code>once</code></td><td>boolean</td><td>true</td><td>Only animate once, or re-animate on re-entry</td></tr>
+                        <tr><td><code>respectMotionPreference</code></td><td>boolean</td><td>true</td><td>Honour prefers-reduced-motion</td></tr>
+                        <tr><td><code>onReveal</code></td><td>function</td><td>null</td><td>Callback per element when revealed</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Fade demo
+    Domma.effects.reveal('.reveal-fade-demo', {
+      animation: 'fade',
+      duration: 600,
+      stagger: 150
+    });
+
+    // Slide up demo
+    Domma.effects.reveal('.reveal-slideup-demo', {
+      animation: 'slide-up',
+      duration: 800,
+      stagger: 120
+    });
+
+    // Slide left demo
+    Domma.effects.reveal('.reveal-slideleft-demo', {
+      animation: 'slide-left',
+      duration: 700
+    });
+
+    // Slide right demo
+    Domma.effects.reveal('.reveal-slideright-demo', {
+      animation: 'slide-right',
+      duration: 700
+    });
+
+    // Zoom demo
+    Domma.effects.reveal('.reveal-zoom-demo', {
+      animation: 'zoom',
+      duration: 700,
+      stagger: 200
+    });
+
+    // Flip demo
+    Domma.effects.reveal('.reveal-flip-demo', {
+      animation: 'flip',
+      duration: 900
+    });
+
+    // Repeat demo
+    Domma.effects.reveal('.reveal-repeat-demo', {
+      animation: 'slide-up',
+      duration: 600,
+      stagger: 100,
+      once: false
+    });
+
+    Domma.icons.scan();
+  });
+</script>
+</body>
+</html>

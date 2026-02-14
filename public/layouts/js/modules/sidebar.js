@@ -1,6 +1,7 @@
 /**
  * Sidebar Module
  * Auto-generates navigation sidebar from page sections using Domma.elements.sidebar()
+ * Supports prependNav config to prepend grouped navigation links before auto-generated items
  */
 export const SidebarModule = {
     sidebarInstance: null,
@@ -8,21 +9,61 @@ export const SidebarModule = {
     /**
      * Initialize sidebar
      * @param {Object} config - Sidebar configuration
+     * @param {string} configBase - Base path to config directory
      */
-    init(config) {
+    async init(config, configBase) {
         if (!config || !config.enabled) return;
 
         try {
-            // Generate sidebar content
-            const items = this.generateItems(config);
+            // Load prepended navigation items if configured
+            let prependItems = [];
+            if (config.prependNav && configBase) {
+                prependItems = await this.loadPrependNav(config.prependNav, configBase);
+            }
 
-            if (!items || items.length === 0) {
+            // Generate sidebar content from page sections
+            const pageItems = this.generateItems(config);
+
+            // Build the sidebar items array
+            const sidebarItems = [];
+
+            // Add prepended nav groups first
+            if (prependItems.length > 0) {
+                sidebarItems.push(...prependItems);
+
+                // Add page sections as a group if there are any
+                if (pageItems.length > 0) {
+                    sidebarItems.push({
+                        text: 'On This Page',
+                        items: pageItems.map(item => ({
+                            text: item.title,
+                            url: `#${item.id}`,
+                            section: item.id
+                        }))
+                    });
+                }
+            }
+
+            if (sidebarItems.length === 0 && pageItems.length === 0) {
                 console.log('[Domma Layout] No sidebar items found');
                 return;
             }
 
             // Create container element
             this.createContainer();
+
+            // Build items for Domma.elements.sidebar()
+            let finalItems;
+            if (sidebarItems.length > 0) {
+                finalItems = sidebarItems;
+            } else {
+                // No prepended nav, use flat page items
+                finalItems = pageItems.map(item => ({
+                    text: item.title,
+                    url: `#${item.id}`,
+                    section: item.id
+                }));
+            }
 
             // Initialize Domma.elements.sidebar() with push mode and scroll-spy
             this.sidebarInstance = window.Domma.elements.sidebar('#page-sidebar', {
@@ -34,11 +75,7 @@ export const SidebarModule = {
                 width: '220px',
                 collapsedWidth: '60px',
                 header: { title: 'Contents' },
-                items: items.map(item => ({
-                    text: item.title,
-                    url: `#${item.id}`,
-                    section: item.id
-                })),
+                items: finalItems,
                 variant: 'dark',
                 scrollSpy: true,
                 scrollSpyOffset: '-100px 0px -50% 0px',
@@ -49,18 +86,64 @@ export const SidebarModule = {
                 persistCollapseKey: 'layout-sidebar',
                 collapseAt: 576,
                 onItemClick: (item, path, event) => {
-                    event.preventDefault();
-                    const target = document.getElementById(item.section);
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        history.pushState(null, null, `#${item.section}`);
+                    // Only handle anchor links (page section links)
+                    if (item.url && item.url.startsWith('#')) {
+                        event.preventDefault();
+                        const target = document.getElementById(item.section);
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            history.pushState(null, null, `#${item.section}`);
+                        }
                     }
+                    // External page links navigate normally (default behaviour)
                 }
             });
 
-            console.log('[Domma Layout] Sidebar rendered with', items.length, 'items');
+            const totalItems = prependItems.length > 0
+                ? prependItems.reduce((sum, g) => sum + (g.items ? g.items.length : 1), 0) + pageItems.length
+                : pageItems.length;
+            console.log('[Domma Layout] Sidebar rendered with', totalItems, 'items');
         } catch (error) {
             console.error('[Domma Layout] Sidebar initialization failed:', error);
+        }
+    },
+
+    /**
+     * Load prepended navigation from a config file
+     * @param {string} navName - Config file name (without .json extension)
+     * @param {string} configBase - Base path to config directory
+     * @returns {Array} Array of sidebar group items
+     */
+    async loadPrependNav(navName, configBase) {
+        try {
+            const response = await fetch(configBase + navName + '.json');
+            if (!response.ok) return [];
+
+            const navConfig = await response.json();
+
+            if (navConfig.type === 'grouped' && Array.isArray(navConfig.groups)) {
+                return navConfig.groups.map(group => {
+                    const children = (group.items || []).map(item => {
+                        const sidebarItem = {
+                            text: item.text,
+                            url: item.url
+                        };
+                        if (item.slug) sidebarItem.section = item.slug;
+                        if (item.badge) sidebarItem.badge = item.badge;
+                        return sidebarItem;
+                    });
+
+                    return {
+                        text: group.title,
+                        items: children
+                    };
+                });
+            }
+
+            return [];
+        } catch (error) {
+            console.warn('[Domma Layout] Failed to load prependNav config:', navName, error);
+            return [];
         }
     },
 

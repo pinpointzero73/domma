@@ -1,0 +1,95 @@
+{
+  "type": "grouped",
+  "groups": [
+    {
+      "title": "CSS Effects",
+      "items": [
+        {
+          "text": "Animations",
+          "url": "animations.html",
+          "slug": "effects-animations"
+        },
+        {
+          "text": "Filters",
+          "url": "filters.html",
+          "slug": "effects-filters"
+        },
+        {
+          "text": "Fireworks",
+          "url": "fireworks.html",
+          "slug": "effects-fireworks"
+        },
+        {
+          "text": "Glow",
+          "url": "glow.html",
+          "slug": "effects-glow"
+        },
+        {
+          "text": "Gradients",
+          "url": "gradients.html",
+          "slug": "effects-gradients"
+        },
+        {
+          "text": "Shadows",
+          "url": "shadows.html",
+          "slug": "effects-shadows"
+        }
+      ]
+    },
+    {
+      "title": "JavaScript Effects",
+      "items": [
+        {
+          "text": "Overview",
+          "url": "javascript.html",
+          "slug": "effects-javascript"
+        },
+        {
+          "text": "Reveal",
+          "url": "reveal.html",
+          "slug": "effects-reveal",
+          "badge": "New"
+        },
+        {
+          "text": "Scramble",
+          "url": "scramble.html",
+          "slug": "effects-scramble",
+          "badge": "New"
+        },
+        {
+          "text": "Counter",
+          "url": "counter.html",
+          "slug": "effects-counter",
+          "badge": "New"
+        },
+        {
+          "text": "Ripple",
+          "url": "ripple.html",
+          "slug": "effects-ripple",
+          "badge": "New"
+        },
+        {
+          "text": "Shake",
+          "url": "shake.html",
+          "slug": "effects-shake",
+          "badge": "New"
+        }
+      ]
+    },
+    {
+      "title": "Examples",
+      "items": [
+        {
+          "text": "Celebrations",
+          "url": "../../examples/celebrations/index.html",
+          "slug": "celebrations"
+        },
+        {
+          "text": "Ambient",
+          "url": "ambient.html",
+          "slug": "effects-ambient"
+        }
+      ]
+    }
+  ]
+}

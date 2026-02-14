@@ -45,6 +45,21 @@ All effects are pure CSS implementations using:
 - Hardware-accelerated properties (`transform`, `opacity`)
 - Theme-aware color integration
 
+### 4. JavaScript Effects (`Domma.effects`)
+
+Programmatic animation effects accessed via `Domma.effects`:
+
+- **breathe()** - Sinusoidal floating animation
+- **pulse()** - Grow-and-shrink scale animation
+- **typewriter()** - Character-by-character text animation with action queue
+- **reveal()** - Scroll-triggered entrance animations (fade, slide, zoom, flip) using IntersectionObserver
+- **scramble()** - Text cipher/decode animation with multiple reveal orders
+- **counter()** - Animated number counting with easing, formatting, and scroll trigger
+- **ripple()** - Material Design click ripple effect
+- **shake()** - Attention/error shake animation
+
+All JS effects support `respectMotionPreference` and return control objects with `pause()`, `resume()`, `stop()`, `restart()`, `destroy()`.
+
 ## File Structure
 
 ```
@@ -53,6 +68,12 @@ public/showcase/effects/
 ├── glow.html           # Glow effects showcase
 ├── fireworks.html      # Fireworks animations showcase
 ├── shadows.html        # Shadow utilities showcase
+├── javascript.html     # JS effects overview (breathe, pulse, typewriter)
+├── reveal.html         # Reveal effect showcase
+├── scramble.html       # Scramble effect showcase
+├── counter.html        # Counter effect showcase
+├── ripple.html         # Ripple effect showcase
+├── shake.html          # Shake effect showcase
 └── CLAUDE.md           # This file
 ```
 

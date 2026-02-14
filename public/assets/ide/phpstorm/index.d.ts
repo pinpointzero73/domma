@@ -18,6 +18,7 @@ export * from './storage';
 export * from './http';
 export * from './theme';
 export * from './icons';
+export * from './effects';
 
 // Import types for the main Domma object
 import {dom, DommaCollection} from './dom';
@@ -31,6 +32,7 @@ import {Storage, storage} from './storage';
 import {Http, http} from './http';
 import {Theme, theme} from './theme';
 import {Icons, icons} from './icons';
+import {Effects, effects} from './effects';
 
 // ============================================
 // Main Domma Interface
@@ -80,6 +82,9 @@ export interface DommaStatic {
 
     /** Icon library */
     icons: Icons;
+
+    /** Visual effects and animations */
+    effects: Effects;
 
     // ============================================
     // ConfigEngine Methods ($.setup, $.config, etc.)

@@ -333,8 +333,7 @@
         {
           "text": "Celebrations",
           "url": "examples/celebrations/index.html",
-          "section": "celebrations",
-          "badge": "New"
+          "section": "celebrations"
         },
         {
           "divider": true

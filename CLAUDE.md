@@ -411,7 +411,21 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Actions: `render` (type text), `wait` (pause), `undoRender` (delete text)
   - Effects: `none`, `fade`, `bounce`, `glow` (per-character entrance animations)
   - Features: Blinking cursor, looping, partial undo, pause on hover
-  - Control methods: `pause()`, `resume()`, `stop()`, `restart()`, `destroy()`
+- **reveal()** - Scroll-triggered entrance animations using IntersectionObserver
+  - Animations: `fade`, `slide-up`, `slide-down`, `slide-left`, `slide-right`, `zoom`, `flip`
+  - Features: Stagger, threshold, once/repeat, onReveal callback
+- **scramble()** - Text cipher/decode animation
+  - Reveal orders: `left-to-right`, `right-to-left`, `random`, `center-out`
+  - Features: Custom character pools, looping, per-character callbacks
+- **counter()** - Animated number counting with easing
+  - Easing: `linear`, `ease-out`, `ease-in-out`
+  - Features: Prefix/suffix, thousands separator, decimals, scroll trigger
+- **ripple()** - Material Design click ripple effect
+  - Features: Custom colour, centred mode, unbounded overflow, configurable trigger
+- **shake()** - Attention/error shake animation
+  - Directions: `horizontal`, `vertical`, `both`
+  - Features: Configurable intensity, iterations, stagger, onComplete callback
+- All effects support `respectMotionPreference` and return control objects with `pause()`, `resume()`, `stop()`, `restart()`, `destroy()`
 
 ### CSS Features
 

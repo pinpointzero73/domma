@@ -1147,6 +1147,273 @@ Domma.effects.pulse('.badge-popular', {
 
 ---
 
+### `effects.reveal(selector, options)`
+
+Scroll-triggered entrance animations using IntersectionObserver. Elements animate into view when they enter the viewport.
+
+**Parameters:**
+- `selector`: CSS selector string, HTMLElement, NodeList, or Array
+- `options` (optional): Configuration object
+
+**Options:**
+- `animation` (string): Animation type - `'fade'`, `'slide-up'`, `'slide-down'`, `'slide-left'`, `'slide-right'`, `'zoom'`, `'flip'`. Default: `'fade'`
+- `duration` (number): Animation duration in ms. Default: `600`
+- `easing` (string): CSS easing function. Default: `'ease-out'`
+- `delay` (number): Delay before animation in ms. Default: `0`
+- `stagger` (number): Delay between multiple elements in ms. Default: `0`
+- `threshold` (number): IntersectionObserver threshold 0-1. Default: `0.1`
+- `rootMargin` (string): Observer root margin. Default: `'0px'`
+- `once` (boolean): Only animate once, or re-animate on re-entry. Default: `true`
+- `respectMotionPreference` (boolean): Honour prefers-reduced-motion. Default: `true`
+- `onReveal` (function): Callback per element when revealed. Default: `null`
+
+**Returns:** Control object with `destroy()`, `restart()`, `stop()` methods
+
+**Examples:**
+
+```javascript
+// Simple fade-in on scroll
+Domma.effects.reveal('.card');
+
+// Slide up with stagger
+Domma.effects.reveal('.feature', {
+  animation: 'slide-up',
+  duration: 800,
+  stagger: 100,
+  threshold: 0.2
+});
+
+// Re-animate on re-entry
+Domma.effects.reveal('.section', {
+  animation: 'zoom',
+  once: false
+});
+
+// Callback on reveal
+Domma.effects.reveal('.stat', {
+  animation: 'slide-up',
+  onReveal: (el) => {
+    // Start counter animation when stat enters view
+    Domma.effects.counter(el.querySelector('.number'));
+  }
+});
+```
+
+**Use Cases:**
+- Landing page feature sections
+- Portfolio/gallery items
+- Blog post cards
+- Dashboard widgets on first load
+
+---
+
+### `effects.scramble(selector, options)`
+
+Text cipher/decode animation. Characters cycle through random glyphs before settling on the correct character.
+
+**Parameters:**
+- `selector`: CSS selector string, HTMLElement, NodeList, or Array
+- `options` (optional): Configuration object
+
+**Options:**
+- `speed` (number): Ms per character resolve. Default: `50`
+- `scrambleSpeed` (number): Ms between scramble frame updates. Default: `30`
+- `characters` (string): Character pool for scramble glyphs. Default: `'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*'`
+- `revealOrder` (string): `'left-to-right'`, `'right-to-left'`, `'random'`, `'center-out'`. Default: `'left-to-right'`
+- `scrambleDuration` (number): How long each character scrambles before resolving in ms. Default: `800`
+- `stagger` (number): Delay between multiple elements in ms. Default: `0`
+- `loop` (boolean|number): `false`, `true` (infinite), or number of loops. Default: `false`
+- `loopDelay` (number): Ms between loops. Default: `2000`
+- `respectMotionPreference` (boolean): Honour prefers-reduced-motion. Default: `true`
+- `onComplete` (function): Callback when animation completes. Default: `null`
+- `onCharacter` (function): Callback per character resolved (char, index). Default: `null`
+
+**Returns:** Control object with `pause()`, `resume()`, `stop()`, `restart()`, `destroy()` methods
+
+**Examples:**
+
+```javascript
+// Basic scramble decode
+Domma.effects.scramble('.hero-title');
+
+// Random reveal order with looping
+Domma.effects.scramble('.tagline', {
+  revealOrder: 'random',
+  loop: true,
+  loopDelay: 3000
+});
+
+// Binary-style decode
+Domma.effects.scramble('.code-display', {
+  characters: '01',
+  scrambleDuration: 1500
+});
+```
+
+**Use Cases:**
+- Hero section headlines
+- Terminal/hacker-style interfaces
+- Secret/cipher reveals
+- Loading state text
+
+---
+
+### `effects.counter(selector, options)`
+
+Animated number counting effect. Smoothly counts from one number to another with easing, formatting, and optional scroll trigger.
+
+**Parameters:**
+- `selector`: CSS selector string, HTMLElement, NodeList, or Array
+- `options` (optional): Configuration object
+
+**Options:**
+- `from` (number): Start value. Default: `0`
+- `to` (number): End value (reads from element textContent if null). Default: `null`
+- `duration` (number): Total count duration in ms. Default: `2000`
+- `easing` (string): `'linear'`, `'ease-out'`, `'ease-in-out'`. Default: `'ease-out'`
+- `decimals` (number): Decimal places. Default: `0`
+- `separator` (string): Thousands separator. Default: `','`
+- `prefix` (string): Text before number. Default: `''`
+- `suffix` (string): Text after number. Default: `''`
+- `stagger` (number): Delay between multiple elements in ms. Default: `0`
+- `trigger` (string): `'immediate'` or `'scroll'`. Default: `'immediate'`
+- `threshold` (number): Observer threshold when trigger is scroll. Default: `0.5`
+- `respectMotionPreference` (boolean): Honour prefers-reduced-motion. Default: `true`
+- `onUpdate` (function): Callback on each frame (currentValue). Default: `null`
+- `onComplete` (function): Callback when counting completes. Default: `null`
+
+**Returns:** Control object with `pause()`, `resume()`, `stop()`, `restart()`, `destroy()` methods
+
+**Examples:**
+
+```javascript
+// Count from 0 to the number in the element
+Domma.effects.counter('.stat-number');
+
+// Formatted currency counter
+Domma.effects.counter('.revenue', {
+  to: 1250000,
+  prefix: '$',
+  separator: ',',
+  duration: 3000
+});
+
+// Scroll-triggered stat counters
+Domma.effects.counter('.stat', {
+  trigger: 'scroll',
+  stagger: 200
+});
+
+// Percentage with decimal
+Domma.effects.counter('.uptime', {
+  to: 99.97,
+  suffix: '%',
+  decimals: 2
+});
+```
+
+**Use Cases:**
+- Dashboard stat cards
+- Landing page metrics
+- Revenue/growth displays
+- Progress percentages
+
+---
+
+### `effects.ripple(selector, options)`
+
+Material Design click ripple effect. Adds a circular wave emanating from the click/touch point.
+
+**Parameters:**
+- `selector`: CSS selector string, HTMLElement, NodeList, or Array
+- `options` (optional): Configuration object
+
+**Options:**
+- `colour` (string): Ripple colour. Default: `'rgba(255, 255, 255, 0.35)'`
+- `duration` (number): Ripple animation duration in ms. Default: `600`
+- `opacity` (number): Starting opacity. Default: `0.35`
+- `unbounded` (boolean): Allow ripple to overflow element. Default: `false`
+- `centered` (boolean): Always ripple from centre. Default: `false`
+- `trigger` (string): `'click'`, `'mousedown'`, `'pointerdown'`. Default: `'pointerdown'`
+- `respectMotionPreference` (boolean): Honour prefers-reduced-motion. Default: `true`
+
+**Returns:** Control object with `destroy()` method
+
+**Examples:**
+
+```javascript
+// Add ripple to all buttons
+Domma.effects.ripple('.btn');
+
+// Custom colour ripple on cards
+Domma.effects.ripple('.card', {
+  colour: 'rgba(59, 130, 246, 0.3)',
+  duration: 800
+});
+
+// Centred ripple (ignores click position)
+Domma.effects.ripple('.icon-btn', {
+  centered: true
+});
+```
+
+**Use Cases:**
+- Button click feedback
+- Interactive list items
+- Card click feedback
+- Navigation items
+
+---
+
+### `effects.shake(selector, options)`
+
+Attention/error shake animation. Quick shake to signal errors or draw attention.
+
+**Parameters:**
+- `selector`: CSS selector string, HTMLElement, NodeList, or Array
+- `options` (optional): Configuration object
+
+**Options:**
+- `intensity` (number): Shake distance in px. Default: `6`
+- `duration` (number): Total shake duration in ms. Default: `500`
+- `direction` (string): `'horizontal'`, `'vertical'`, `'both'`. Default: `'horizontal'`
+- `easing` (string): CSS easing function. Default: `'ease-in-out'`
+- `iterations` (number): Number of shake cycles. Default: `1`
+- `stagger` (number): Delay between elements in ms. Default: `0`
+- `respectMotionPreference` (boolean): Honour prefers-reduced-motion. Default: `true`
+- `onComplete` (function): Callback when shake completes. Default: `null`
+
+**Returns:** Control object with `pause()`, `resume()`, `stop()`, `restart()`, `destroy()` methods
+
+**Examples:**
+
+```javascript
+// Shake an invalid input
+Domma.effects.shake('#email-input');
+
+// Vertical shake with callback
+Domma.effects.shake('.alert', {
+  direction: 'vertical',
+  intensity: 4,
+  iterations: 2,
+  onComplete: () => console.log('Shake done')
+});
+
+// Staggered error shake on form fields
+Domma.effects.shake('.invalid-field', {
+  stagger: 50,
+  intensity: 4
+});
+```
+
+**Use Cases:**
+- Form validation feedback
+- Wrong password/PIN indication
+- Attention-drawing alerts
+- Error state notification
+
+---
+
 ## Elements (`Domma.elements`)
 
 UI component library providing 25+ interactive elements including modals, tabs, carousels, tooltips, and more.

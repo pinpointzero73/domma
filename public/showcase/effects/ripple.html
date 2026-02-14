@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ripple Effect - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .demo-box {
+            padding: 2rem;
+            margin: 1rem 0;
+            background: rgba(13, 110, 253, 0.1);
+            border: 2px solid rgba(13, 110, 253, 0.3);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .ripple-target {
+            padding: 1.5rem 2.5rem;
+            display: inline-block;
+            margin: 0.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            user-select: none;
+        }
+        .ripple-btn-primary { background: var(--dm-primary); color: white; }
+        .ripple-btn-success { background: var(--dm-success); color: white; }
+        .ripple-btn-danger { background: var(--dm-danger); color: white; }
+        .ripple-btn-dark { background: #1a1a2e; color: white; }
+        .ripple-card {
+            padding: 2rem;
+            background: var(--dm-card-bg, #fff);
+            border: 1px solid var(--dm-border-color, #dee2e6);
+            border-radius: 12px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .effect-controls {
+            display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap; margin: 1rem 0;
+        }
+        .nav-link {
+            padding: 0.5rem 1rem; margin: 0.25rem; border-radius: 4px;
+            background: rgba(13, 110, 253, 0.1); text-decoration: none;
+            color: var(--dm-primary); display: inline-block; transition: all 0.2s ease;
+        }
+        .nav-link:hover { background: rgba(13, 110, 253, 0.2); transform: translateY(-2px); }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="effects">
+<div class="hero hero-center bg-ambient-rotate-spotlight">
+    <div class="hero-content">
+        <div class="hero-title">Ripple Effect</div>
+        <div class="hero-subtitle">Material Design click ripple. Adds a circular wave effect emanating from the click/touch point for tactile UI feedback.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <!-- See Also -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+        <h3 class="text-lg font-semibold mb-2">
+            <span data-icon="arrow-left" data-icon-size="20"></span>
+            See Also
+        </h3>
+        <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="reveal.html" class="nav-link">Reveal</a>
+        <a href="scramble.html" class="nav-link">Scramble</a>
+        <a href="counter.html" class="nav-link">Counter</a>
+        <a href="shake.html" class="nav-link">Shake</a>
+    </div>
+
+    <!-- Overview -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Domma.effects.ripple()</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The <code>ripple()</code> effect creates a Material Design-style circular wave expanding from the click/touch point. The ripple element is absolutely positioned, scales from 0 to 4x, and fades out. Perfect for buttons, cards, and interactive elements.</p>
+
+            <pre class="code-block language-javascript">
+// Add ripple to all buttons
+Domma.effects.ripple('.btn');
+
+// Custom colour and duration
+Domma.effects.ripple('.card', {
+  colour: 'rgba(59, 130, 246, 0.3)',
+  duration: 800,
+  centered: false
+});
+
+// Clean up
+ctrl.destroy();
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 1: Basic Buttons -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Button Ripples</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Click on these buttons to see the ripple effect. The ripple emanates from the click point.</p>
+            <div class="demo-box">
+                <span class="ripple-target ripple-btn-primary ripple-demo-1">Primary</span>
+                <span class="ripple-target ripple-btn-success ripple-demo-1">Success</span>
+                <span class="ripple-target ripple-btn-danger ripple-demo-1">Danger</span>
+                <span class="ripple-target ripple-btn-dark ripple-demo-1">Dark</span>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.ripple('.btn', {
+  colour: 'rgba(255, 255, 255, 0.35)',
+  duration: 600
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 2: Custom Colours -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Custom Ripple Colours</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Different ripple colours for different contexts.</p>
+            <div class="demo-box">
+                <span class="ripple-target ripple-colour-blue" style="background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9;">Blue Ripple</span>
+                <span class="ripple-target ripple-colour-green" style="background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7;">Green Ripple</span>
+                <span class="ripple-target ripple-colour-red" style="background: #ffebee; color: #c62828; border: 1px solid #ef9a9a;">Red Ripple</span>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.ripple('.blue', { colour: 'rgba(21, 101, 192, 0.3)' });
+Domma.effects.ripple('.green', { colour: 'rgba(46, 125, 50, 0.3)' });
+Domma.effects.ripple('.red', { colour: 'rgba(198, 40, 40, 0.3)' });
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 3: Centred Ripple -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Centred Ripple</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">With <code>centered: true</code>, the ripple always starts from the centre of the element regardless of click position.</p>
+            <div class="demo-box">
+                <span class="ripple-target ripple-btn-primary ripple-centered" style="width: 200px;">Click Anywhere</span>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.ripple('.element', {
+  centered: true
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 4: Card Ripples -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Card Ripples</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Ripple effect on cards for interactive list items or dashboards.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <div class="ripple-card ripple-card-demo">
+                    <div style="font-size: 2rem;" data-icon="folder"></div>
+                    <h4 class="mt-2">Documents</h4>
+                    <p class="text-muted">24 files</p>
+                </div>
+                <div class="ripple-card ripple-card-demo">
+                    <div style="font-size: 2rem;" data-icon="image"></div>
+                    <h4 class="mt-2">Photos</h4>
+                    <p class="text-muted">148 files</p>
+                </div>
+                <div class="ripple-card ripple-card-demo">
+                    <div style="font-size: 2rem;" data-icon="music"></div>
+                    <h4 class="mt-2">Music</h4>
+                    <p class="text-muted">52 files</p>
+                </div>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.ripple('.file-card', {
+  colour: 'rgba(13, 110, 253, 0.15)',
+  duration: 800
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 5: Duration Comparison -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Duration Comparison</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Compare different ripple durations.</p>
+            <div class="demo-box">
+                <span class="ripple-target ripple-btn-primary ripple-fast">Fast (300ms)</span>
+                <span class="ripple-target ripple-btn-primary ripple-normal">Normal (600ms)</span>
+                <span class="ripple-target ripple-btn-primary ripple-slow">Slow (1200ms)</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Options Reference -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Options Reference</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>colour</code></td><td>string</td><td>'rgba(255, 255, 255, 0.35)'</td><td>Ripple colour (CSS colour value)</td></tr>
+                        <tr><td><code>duration</code></td><td>number</td><td>600</td><td>Ripple animation duration in ms</td></tr>
+                        <tr><td><code>opacity</code></td><td>number</td><td>0.35</td><td>Starting opacity</td></tr>
+                        <tr><td><code>unbounded</code></td><td>boolean</td><td>false</td><td>Allow ripple to overflow element</td></tr>
+                        <tr><td><code>centered</code></td><td>boolean</td><td>false</td><td>Always ripple from centre</td></tr>
+                        <tr><td><code>trigger</code></td><td>string</td><td>'pointerdown'</td><td>'click', 'mousedown', 'pointerdown'</td></tr>
+                        <tr><td><code>respectMotionPreference</code></td><td>boolean</td><td>true</td><td>Honour prefers-reduced-motion</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Demo 1: Basic buttons
+    Domma.effects.ripple('.ripple-demo-1', {
+      colour: 'rgba(255, 255, 255, 0.35)',
+      duration: 600
+    });
+
+    // Demo 2: Custom colours
+    Domma.effects.ripple('.ripple-colour-blue', { colour: 'rgba(21, 101, 192, 0.3)' });
+    Domma.effects.ripple('.ripple-colour-green', { colour: 'rgba(46, 125, 50, 0.3)' });
+    Domma.effects.ripple('.ripple-colour-red', { colour: 'rgba(198, 40, 40, 0.3)' });
+
+    // Demo 3: Centred
+    Domma.effects.ripple('.ripple-centered', {
+      centered: true,
+      colour: 'rgba(255, 255, 255, 0.4)'
+    });
+
+    // Demo 4: Card ripples
+    Domma.effects.ripple('.ripple-card-demo', {
+      colour: 'rgba(13, 110, 253, 0.15)',
+      duration: 800
+    });
+
+    // Demo 5: Duration comparison
+    Domma.effects.ripple('.ripple-fast', { duration: 300, colour: 'rgba(255, 255, 255, 0.4)' });
+    Domma.effects.ripple('.ripple-normal', { duration: 600, colour: 'rgba(255, 255, 255, 0.4)' });
+    Domma.effects.ripple('.ripple-slow', { duration: 1200, colour: 'rgba(255, 255, 255, 0.4)' });
+
+    Domma.icons.scan();
+  });
+</script>
+</body>
+</html>
