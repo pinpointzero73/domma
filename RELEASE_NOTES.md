@@ -1,3 +1,17 @@
+### v0.15.0 - Effects Motion Preference Fix (2026-02-14)
+
+🐛 **Bug Fixes**
+
+*   **Effects Motion Preference Override:** Fixed critical issue where `reveal()` and `ripple()` effects were being disabled by CSS media queries even when JavaScript explicitly set `respectMotionPreference: false`. Effects now properly respect the JavaScript override setting.
+    *   Added `data-force-animation` attribute to elements when motion preference should be ignored
+    *   Updated CSS `@media (prefers-reduced-motion: reduce)` queries to exclude elements with `data-force-animation` using `:not()` selector
+    *   Fixed ripple effect to apply attribute to dynamically created ripple elements
+    *   Ensures showcase demo pages work correctly regardless of user's system motion preferences
+
+*   **Showcase Effects Pages:** Cleaned up effects showcase pages by removing references to obsolete `overrideMotionPreference` variable
+    *   Updated breathe.html, shake.html, and counter.html to use `respectMotionPreference: false` consistently
+    *   Fixed 14 remaining references across 3 showcase files
+
 ### v0.13.4 - Enhanced Celebrations & Particle Fixes (2026-02-08)
 
 ✨ **Features & Enhancements**

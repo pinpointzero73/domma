@@ -2,93 +2,40 @@
   "type": "grouped",
   "groups": [
     {
+      "title": "Overview",
+      "items": [
+        { "text": "Effects Overview", "url": "index.html", "slug": "effects-overview" }
+      ]
+    },
+    {
       "title": "CSS Effects",
       "items": [
-        {
-          "text": "Animations",
-          "url": "animations.html",
-          "slug": "effects-animations"
-        },
-        {
-          "text": "Filters",
-          "url": "filters.html",
-          "slug": "effects-filters"
-        },
-        {
-          "text": "Fireworks",
-          "url": "fireworks.html",
-          "slug": "effects-fireworks"
-        },
-        {
-          "text": "Glow",
-          "url": "glow.html",
-          "slug": "effects-glow"
-        },
-        {
-          "text": "Gradients",
-          "url": "gradients.html",
-          "slug": "effects-gradients"
-        },
-        {
-          "text": "Shadows",
-          "url": "shadows.html",
-          "slug": "effects-shadows"
-        }
+        { "text": "Animations", "url": "animations.html", "slug": "effects-animations" },
+        { "text": "Filters", "url": "filters.html", "slug": "effects-filters" },
+        { "text": "Fireworks", "url": "fireworks.html", "slug": "effects-fireworks" },
+        { "text": "Glow", "url": "glow.html", "slug": "effects-glow" },
+        { "text": "Gradients", "url": "gradients.html", "slug": "effects-gradients" },
+        { "text": "Shadows", "url": "shadows.html", "slug": "effects-shadows" }
       ]
     },
     {
       "title": "JavaScript Effects",
       "items": [
-        {
-          "text": "Overview",
-          "url": "javascript.html",
-          "slug": "effects-javascript"
-        },
-        {
-          "text": "Reveal",
-          "url": "reveal.html",
-          "slug": "effects-reveal",
-          "badge": "New"
-        },
-        {
-          "text": "Scramble",
-          "url": "scramble.html",
-          "slug": "effects-scramble",
-          "badge": "New"
-        },
-        {
-          "text": "Counter",
-          "url": "counter.html",
-          "slug": "effects-counter",
-          "badge": "New"
-        },
-        {
-          "text": "Ripple",
-          "url": "ripple.html",
-          "slug": "effects-ripple",
-          "badge": "New"
-        },
-        {
-          "text": "Shake",
-          "url": "shake.html",
-          "slug": "effects-shake",
-          "badge": "New"
-        }
+        { "text": "Overview", "url": "javascript.html", "slug": "effects-javascript" },
+        { "text": "Breathe", "url": "breathe.html", "slug": "effects-breathe" },
+        { "text": "Counter", "url": "counter.html", "slug": "effects-counter" },
+        { "text": "Pulse", "url": "pulse.html", "slug": "effects-pulse" },
+        { "text": "Reveal", "url": "reveal.html", "slug": "effects-reveal" },
+        { "text": "Ripple", "url": "ripple.html", "slug": "effects-ripple" },
+        { "text": "Scramble", "url": "scramble.html", "slug": "effects-scramble" },
+        { "text": "Shake", "url": "shake.html", "slug": "effects-shake" },
+        { "text": "Typewriter", "url": "typewriter.html", "slug": "effects-typewriter" }
       ]
     },
     {
       "title": "Examples",
       "items": [
-        {
-          "text": "Celebrations",
-          "url": "../../examples/celebrations/index.html",
-          "slug": "celebrations"
-        },
-        {
-          "text": "Ambient",
-          "url": "ambient.html",
-          "slug": "effects-ambient"
-        }
+        { "text": "Celebrations", "url": "../../examples/celebrations/index.html", "slug": "celebrations" }
       ]
     }
   ]

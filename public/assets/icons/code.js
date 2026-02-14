@@ -14,6 +14,24 @@ export default {
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
     },
+    'git-branch': {
+        viewBox: '0 0 24 24',
+        path: 'M6 3v12M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM18 9c-3 0-6 3-6 6v3',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'terminal': {
+        viewBox: '0 0 24 24',
+        path: 'M4 17l6-6-6-6M12 19h8',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
 
     // Text Formatting
     'bold': {

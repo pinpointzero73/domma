@@ -67,10 +67,24 @@
             See Also
         </h3>
         <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="breathe.html" class="nav-link">Breathe</a>
+        <a href="pulse.html" class="nav-link">Pulse</a>
+        <a href="typewriter.html" class="nav-link">Typewriter</a>
         <a href="reveal.html" class="nav-link">Reveal</a>
         <a href="scramble.html" class="nav-link">Scramble</a>
         <a href="ripple.html" class="nav-link">Ripple</a>
         <a href="shake.html" class="nav-link">Shake</a>
+    </div>
+
+    <!-- Motion Preference Notice -->
+    <div id="motion-notice" class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded" style="display:none;">
+        <div class="flex items-start gap-3">
+            <span style="font-size: 20px; flex-shrink: 0;">ℹ️</span>
+            <div>
+                <h4 class="font-semibold mb-1">Motion Preference Detected</h4>
+                <p>Your system has <code>prefers-reduced-motion</code> enabled. This demo page overrides that setting to demonstrate effects. In production, use <code>respectMotionPreference: true</code> (the default) to honour user preferences.</p>
+            </div>
+        </div>
     </div>
 
     <!-- Overview -->
@@ -307,6 +321,11 @@ Domma.effects.counter('#counter-decimal', {
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // Show notice if user has reduced motion enabled
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      $('#motion-notice').show();
+    }
+
     // Store original values for restart
     const originals1 = [];
     document.querySelectorAll('.counter-demo-1').forEach(el => {
@@ -324,7 +343,8 @@ Domma.effects.counter('#counter-decimal', {
       ctrl1 = Domma.effects.counter('.counter-demo-1', {
         duration: 2000,
         stagger: 200,
-        separator: ','
+        separator: ',',
+        respectMotionPreference: false
       });
     });
 
@@ -335,13 +355,16 @@ Domma.effects.counter('#counter-decimal', {
     // Demo 2: Prefix & Suffix
     $('#counter-start-2').on('click', () => {
       Domma.effects.counter('#counter-revenue', {
-        to: 84750, prefix: '$', separator: ',', duration: 2000
+        to: 84750, prefix: '$', separator: ',', duration: 2000,
+        respectMotionPreference: false
       });
       Domma.effects.counter('#counter-percent', {
-        to: 98.7, suffix: '%', decimals: 1, duration: 2000
+        to: 98.7, suffix: '%', decimals: 1, duration: 2000,
+        respectMotionPreference: false
       });
       Domma.effects.counter('#counter-temp', {
-        to: 23.5, suffix: '°C', decimals: 1, duration: 2000
+        to: 23.5, suffix: '°C', decimals: 1, duration: 2000,
+        respectMotionPreference: false
       });
     });
 
@@ -350,9 +373,18 @@ Domma.effects.counter('#counter-decimal', {
       document.getElementById('counter-linear').textContent = '0';
       document.getElementById('counter-easeout').textContent = '0';
       document.getElementById('counter-easeinout').textContent = '0';
-      Domma.effects.counter('#counter-linear', { to: 1000, easing: 'linear', duration: 3000, separator: ',' });
-      Domma.effects.counter('#counter-easeout', { to: 1000, easing: 'ease-out', duration: 3000, separator: ',' });
-      Domma.effects.counter('#counter-easeinout', { to: 1000, easing: 'ease-in-out', duration: 3000, separator: ',' });
+      Domma.effects.counter('#counter-linear', {
+        to: 1000, easing: 'linear', duration: 3000, separator: ',',
+        respectMotionPreference: false
+      });
+      Domma.effects.counter('#counter-easeout', {
+        to: 1000, easing: 'ease-out', duration: 3000, separator: ',',
+        respectMotionPreference: false
+      });
+      Domma.effects.counter('#counter-easeinout', {
+        to: 1000, easing: 'ease-in-out', duration: 3000, separator: ',',
+        respectMotionPreference: false
+      });
     });
 
     // Demo 4: Scroll triggered
@@ -360,7 +392,8 @@ Domma.effects.counter('#counter-decimal', {
       trigger: 'scroll',
       threshold: 0.5,
       stagger: 150,
-      separator: ','
+      separator: ',',
+      respectMotionPreference: false
     });
 
     // Demo 5: Decimal
@@ -371,7 +404,8 @@ Domma.effects.counter('#counter-decimal', {
         prefix: '$',
         decimals: 2,
         separator: ',',
-        duration: 2500
+        duration: 2500,
+        respectMotionPreference: false
       });
     });
 

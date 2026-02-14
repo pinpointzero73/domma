@@ -1,0 +1,50 @@
+{
+  "version": "0.15.0",
+  "releaseDate": "2026-02-14",
+  "codename": "Motion Override",
+  "changes": {
+    "bugFixes": [
+      {
+        "title": "Effects Motion Preference Override",
+        "description": "Fixed critical issue where reveal() and ripple() effects were being disabled by CSS media queries even when JavaScript explicitly set respectMotionPreference: false",
+        "impact": "high",
+        "files": [
+          "src/effects.js",
+          "src/css/domma.css"
+        ],
+        "details": [
+          "Added data-force-animation attribute to elements when motion preference should be ignored",
+          "Updated CSS @media (prefers-reduced-motion: reduce) queries to exclude elements with data-force-animation",
+          "Fixed ripple effect to apply attribute to dynamically created ripple elements",
+          "Ensures showcase demo pages work correctly regardless of user's system motion preferences"
+        ]
+      },
+      {
+        "title": "Showcase Effects Pages Cleanup",
+        "description": "Cleaned up effects showcase pages by removing references to obsolete overrideMotionPreference variable",
+        "impact": "medium",
+        "files": [
+          "public/showcase/effects/breathe.html",
+          "public/showcase/effects/shake.html",
+          "public/showcase/effects/counter.html"
+        ],
+        "details": [
+          "Updated all showcase pages to use respectMotionPreference: false consistently",
+          "Fixed 14 remaining references across 3 showcase files"
+        ]
+      }
+    ],
+    "features": [],
+    "enhancements": [],
+    "breaking": []
+  },
+  "buildInfo": {
+    "commit": "c91b2e2",
+    "buildDate": "2026-02-14T11:00:00Z"
+  },
+  "stats": {
+    "totalFiles": 2,
+    "linesAdded": 15,
+    "linesRemoved": 5
+  }
+}

@@ -325,20 +325,6 @@
           "divider": true
         },
         {
-          "text": "JavaScript",
-          "url": "showcase/effects/javascript.html",
-          "section": "effects-javascript",
-          "badge": "New"
-        },
-        {
-          "text": "Celebrations",
-          "url": "examples/celebrations/index.html",
-          "section": "celebrations"
-        },
-        {
-          "divider": true
-        },
-        {
           "text": "Animations",
           "url": "showcase/effects/animations.html",
           "section": "effects-animations"
@@ -367,6 +353,63 @@
           "text": "Shadows",
           "url": "showcase/effects/shadows.html",
           "section": "effects-shadows"
+        },
+        {
+          "divider": true
+        },
+        {
+          "text": "JavaScript",
+          "url": "showcase/effects/javascript.html",
+          "section": "effects-javascript",
+          "badge": "New"
+        },
+        {
+          "text": "Breathe",
+          "url": "showcase/effects/breathe.html",
+          "section": "effects-breathe"
+        },
+        {
+          "text": "Counter",
+          "url": "showcase/effects/counter.html",
+          "section": "effects-counter"
+        },
+        {
+          "text": "Pulse",
+          "url": "showcase/effects/pulse.html",
+          "section": "effects-pulse"
+        },
+        {
+          "text": "Reveal",
+          "url": "showcase/effects/reveal.html",
+          "section": "effects-reveal"
+        },
+        {
+          "text": "Ripple",
+          "url": "showcase/effects/ripple.html",
+          "section": "effects-ripple"
+        },
+        {
+          "text": "Scramble",
+          "url": "showcase/effects/scramble.html",
+          "section": "effects-scramble"
+        },
+        {
+          "text": "Shake",
+          "url": "showcase/effects/shake.html",
+          "section": "effects-shake"
+        },
+        {
+          "text": "Typewriter",
+          "url": "showcase/effects/typewriter.html",
+          "section": "effects-typewriter"
+        },
+        {
+          "divider": true
+        },
+        {
+          "text": "Celebrations",
+          "url": "examples/celebrations/index.html",
+          "section": "celebrations"
         }
       ]
     },

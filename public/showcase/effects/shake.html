@@ -67,10 +67,24 @@
             See Also
         </h3>
         <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="breathe.html" class="nav-link">Breathe</a>
+        <a href="pulse.html" class="nav-link">Pulse</a>
+        <a href="typewriter.html" class="nav-link">Typewriter</a>
         <a href="reveal.html" class="nav-link">Reveal</a>
         <a href="scramble.html" class="nav-link">Scramble</a>
         <a href="counter.html" class="nav-link">Counter</a>
         <a href="ripple.html" class="nav-link">Ripple</a>
+    </div>
+
+    <!-- Motion Preference Notice -->
+    <div id="motion-notice" class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded" style="display:none;">
+        <div class="flex items-start gap-3">
+            <span style="font-size: 20px; flex-shrink: 0;">ℹ️</span>
+            <div>
+                <h4 class="font-semibold mb-1">Motion Preference Detected</h4>
+                <p>Your system has <code>prefers-reduced-motion</code> enabled. This demo page overrides that setting to demonstrate effects. In production, use <code>respectMotionPreference: true</code> (the default) to honour user preferences.</p>
+            </div>
+        </div>
     </div>
 
     <!-- Overview -->
@@ -267,26 +281,49 @@ Domma.effects.shake('.item', {
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // Show notice if user has reduced motion enabled
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      $('#motion-notice').show();
+    }
+
     // Demo 1: Directions
     $('#shake-start-h').on('click', () => {
-      Domma.effects.shake('#shake-h', { direction: 'horizontal' });
+      Domma.effects.shake('#shake-h', {
+        direction: 'horizontal',
+        respectMotionPreference: false
+      });
     });
     $('#shake-start-v').on('click', () => {
-      Domma.effects.shake('#shake-v', { direction: 'vertical' });
+      Domma.effects.shake('#shake-v', {
+        direction: 'vertical',
+        respectMotionPreference: false
+      });
     });
     $('#shake-start-both').on('click', () => {
-      Domma.effects.shake('#shake-both', { direction: 'both' });
+      Domma.effects.shake('#shake-both', {
+        direction: 'both',
+        respectMotionPreference: false
+      });
     });
 
     // Demo 2: Intensity
     $('#shake-start-subtle').on('click', () => {
-      Domma.effects.shake('#shake-subtle', { intensity: 2 });
+      Domma.effects.shake('#shake-subtle', {
+        intensity: 2,
+        respectMotionPreference: false
+      });
     });
     $('#shake-start-normal').on('click', () => {
-      Domma.effects.shake('#shake-normal', { intensity: 6 });
+      Domma.effects.shake('#shake-normal', {
+        intensity: 6,
+        respectMotionPreference: false
+      });
     });
     $('#shake-start-intense').on('click', () => {
-      Domma.effects.shake('#shake-intense', { intensity: 12 });
+      Domma.effects.shake('#shake-intense', {
+        intensity: 12,
+        respectMotionPreference: false
+      });
     });
 
     // Demo 3: Form Validation
@@ -300,6 +337,7 @@ Domma.effects.shake('.item', {
         Domma.effects.shake('#shake-email', {
           intensity: 4,
           duration: 400,
+          respectMotionPreference: false,
           onComplete: () => {
             setTimeout(() => {
               $('#shake-email').removeClass('invalid');
@@ -315,16 +353,32 @@ Domma.effects.shake('.item', {
     });
 
     // Demo 4: Iterations
-    $('#shake-1x').on('click', () => { Domma.effects.shake('#shake-iter', { iterations: 1 }); });
-    $('#shake-2x').on('click', () => { Domma.effects.shake('#shake-iter', { iterations: 2 }); });
-    $('#shake-3x').on('click', () => { Domma.effects.shake('#shake-iter', { iterations: 3 }); });
+    $('#shake-1x').on('click', () => {
+      Domma.effects.shake('#shake-iter', {
+        iterations: 1,
+        respectMotionPreference: false
+      });
+    });
+    $('#shake-2x').on('click', () => {
+      Domma.effects.shake('#shake-iter', {
+        iterations: 2,
+        respectMotionPreference: false
+      });
+    });
+    $('#shake-3x').on('click', () => {
+      Domma.effects.shake('#shake-iter', {
+        iterations: 3,
+        respectMotionPreference: false
+      });
+    });
 
     // Demo 5: Stagger
     $('#shake-start-stagger').on('click', () => {
       Domma.effects.shake('.shake-stagger', {
         stagger: 100,
         intensity: 5,
-        direction: 'horizontal'
+        direction: 'horizontal',
+        respectMotionPreference: false
       });
     });
 

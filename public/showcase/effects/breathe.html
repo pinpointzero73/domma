@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breathe Effect - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .demo-box {
+            padding: 2rem;
+            margin: 1rem 0;
+            background: rgba(13, 110, 253, 0.1);
+            border: 2px solid rgba(13, 110, 253, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 500;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .demo-item {
+            display: inline-block;
+            padding: 1rem 1.5rem;
+            margin: 0.5rem;
+            background: var(--dm-primary);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .effect-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .effect-controls label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 4px;
+            background: rgba(13, 110, 253, 0.1);
+            text-decoration: none;
+            color: var(--dm-primary);
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(13, 110, 253, 0.2);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body data-layout="showcase" data-layout-variant="effects">
+<div class="hero hero-center bg-ambient-rotate-spotlight">
+    <div class="hero-content">
+        <div class="hero-title">Breathe Effect</div>
+        <div class="hero-subtitle">Sinusoidal floating animation that adds a gentle up-and-down motion to elements.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <!-- See Also -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+        <h3 class="text-lg font-semibold mb-2">
+            <span data-icon="arrow-left" data-icon-size="20"></span>
+            See Also
+        </h3>
+        <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="pulse.html" class="nav-link">Pulse</a>
+        <a href="typewriter.html" class="nav-link">Typewriter</a>
+        <a href="reveal.html" class="nav-link">Reveal</a>
+        <a href="scramble.html" class="nav-link">Scramble</a>
+        <a href="counter.html" class="nav-link">Counter</a>
+        <a href="ripple.html" class="nav-link">Ripple</a>
+        <a href="shake.html" class="nav-link">Shake</a>
+    </div>
+
+    <!-- Motion Preference Notice -->
+    <div id="motion-notice" class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded" style="display:none;">
+        <div class="flex items-start gap-3">
+            <span style="font-size: 20px; flex-shrink: 0;">ℹ️</span>
+            <div>
+                <h4 class="font-semibold mb-1">Motion Preference Detected</h4>
+                <p>Your system has <code>prefers-reduced-motion</code> enabled. This demo page overrides that setting to demonstrate effects. In production, use <code>respectMotionPreference: true</code> (the default) to honour user preferences.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overview -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Domma.effects.breathe()</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Creates a gentle up-and-down floating motion using sinusoidal easing. Perfect for stat cards, feature highlights, pricing tiers, and call-to-action elements.</p>
+
+            <pre class="code-block language-javascript">
+// Basic usage
+Domma.effects.breathe('.stat-card');
+
+// With configuration
+const breathe = Domma.effects.breathe('.element', {
+  amplitude: 6,       // Vertical distance in pixels
+  duration: 3000,     // Animation cycle time in ms
+  stagger: 200,       // Delay between multiple elements
+  pauseOnHover: true, // Pause when hovering
+  iterations: 'infinite'
+});
+
+// Control methods
+breathe.pause();
+breathe.resume();
+breathe.stop();
+breathe.restart();
+breathe.destroy();
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Basic Breathe -->
+    <section class="card mb-6" data-section="basic">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Basic Breathe</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Simple floating animation with control methods.</p>
+            <div class="demo-box" id="breathe-demo-1">
+                <div class="demo-item">Card 1</div>
+                <div class="demo-item">Card 2</div>
+                <div class="demo-item">Card 3</div>
+            </div>
+            <div class="effect-controls">
+                <button class="btn btn-primary" id="breathe-start-1">Start</button>
+                <button class="btn btn-secondary" id="breathe-pause-1">Pause</button>
+                <button class="btn btn-secondary" id="breathe-resume-1">Resume</button>
+                <button class="btn btn-danger" id="breathe-stop-1">Stop</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo: Stagger Effect -->
+    <section class="card mb-6" data-section="stagger">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Stagger Effect</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Cascading animations with 150ms delay between elements.</p>
+            <div class="demo-box" id="breathe-demo-2">
+                <div class="demo-item">Item 1</div>
+                <div class="demo-item">Item 2</div>
+                <div class="demo-item">Item 3</div>
+                <div class="demo-item">Item 4</div>
+            </div>
+            <button class="btn btn-primary" id="breathe-start-2">Start Stagger</button>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.breathe('#breathe-demo-2 .demo-item', {
+  amplitude: 8,
+  duration: 2500,
+  stagger: 150
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Amplitude Variations -->
+    <section class="card mb-6" data-section="amplitude">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Amplitude Variations</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Different vertical movement distances.</p>
+            <div class="demo-box" id="breathe-demo-3">
+                <div class="demo-item" data-amplitude="4">Small (4px)</div>
+                <div class="demo-item" data-amplitude="8">Medium (8px)</div>
+                <div class="demo-item" data-amplitude="16">Large (16px)</div>
+            </div>
+            <button class="btn btn-primary" id="breathe-start-3">Start Variations</button>
+            <pre class="code-block language-javascript mt-4">
+// Apply different amplitudes to each item
+$('#breathe-demo-3 .demo-item').each(function() {
+  const amplitude = parseInt($(this).attr('data-amplitude')) || 6;
+  Domma.effects.breathe(this, {
+    amplitude: amplitude,
+    duration: 3000
+  });
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Pause on Hover -->
+    <section class="card mb-6" data-section="pause-on-hover">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Pause on Hover</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Animation pauses when you hover over elements.</p>
+            <div class="demo-box" id="breathe-demo-4">
+                <div class="demo-item">Hover Me 1</div>
+                <div class="demo-item">Hover Me 2</div>
+                <div class="demo-item">Hover Me 3</div>
+            </div>
+            <button class="btn btn-primary" id="breathe-start-4">Start with Pause on Hover</button>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.breathe('#breathe-demo-4 .demo-item', {
+  amplitude: 10,
+  duration: 2000,
+  pauseOnHover: true
+});
+</pre>
+        </div>
+    </section>
+
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Show notice if user has reduced motion enabled
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      $('#motion-notice').show();
+    }
+
+    // Store control objects
+    let breathe1, breathe2, breathe3, breathe4;
+
+    // breathe() Demo 1 - Basic
+    $('#breathe-start-1').on('click', () => {
+      if (breathe1) breathe1.destroy();
+      breathe1 = Domma.effects.breathe('#breathe-demo-1 .demo-item', {
+        amplitude: 6,
+        duration: 3000,
+        respectMotionPreference: false
+      });
+    });
+
+    $('#breathe-pause-1').on('click', () => {
+      if (breathe1) breathe1.pause();
+    });
+
+    $('#breathe-resume-1').on('click', () => {
+      if (breathe1) breathe1.resume();
+    });
+
+    $('#breathe-stop-1').on('click', () => {
+      if (breathe1) {
+        breathe1.stop();
+        breathe1 = null;
+      }
+    });
+
+    // breathe() Demo 2 - Stagger
+    $('#breathe-start-2').on('click', () => {
+      if (breathe2) breathe2.destroy();
+      breathe2 = Domma.effects.breathe('#breathe-demo-2 .demo-item', {
+        amplitude: 8,
+        duration: 2500,
+        stagger: 150,
+        respectMotionPreference: false
+      });
+    });
+
+    // breathe() Demo 3 - Amplitude Variations
+    $('#breathe-start-3').on('click', () => {
+      if (breathe3) breathe3.destroy();
+
+      // Apply different amplitudes to each item
+      $('#breathe-demo-3 .demo-item').each(function() {
+        const amplitude = parseInt($(this).attr('data-amplitude')) || 6;
+        Domma.effects.breathe(this, {
+          amplitude: amplitude,
+          duration: 3000,
+          respectMotionPreference: false
+        });
+      });
+    });
+
+    // breathe() Demo 4 - Pause on Hover
+    $('#breathe-start-4').on('click', () => {
+      if (breathe4) breathe4.destroy();
+      breathe4 = Domma.effects.breathe('#breathe-demo-4 .demo-item', {
+        amplitude: 10,
+        duration: 2000,
+        pauseOnHover: true,
+        respectMotionPreference: false
+      });
+    });
+
+    // Scan icons
+    Domma.icons.scan();
+  });
+</script>
+</body>
+</html>

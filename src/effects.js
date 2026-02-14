@@ -984,6 +984,10 @@ export function reveal(selector, options = {}) {
     if (totalDelay > 0) {
       el.style.transitionDelay = `${totalDelay}ms`;
     }
+    // Add attribute to force animation even with prefers-reduced-motion
+    if (!opts.respectMotionPreference) {
+      el.setAttribute('data-force-animation', 'true');
+    }
   });
 
   // Create observer
@@ -1551,6 +1555,10 @@ export function ripple(selector, options = {}) {
     if (!opts.unbounded) {
       el.style.overflow = 'hidden';
     }
+    // Add attribute to force animation even with prefers-reduced-motion
+    if (!opts.respectMotionPreference) {
+      el.setAttribute('data-force-animation', 'true');
+    }
 
     const handler = (e) => {
       const rect = el.getBoundingClientRect();
@@ -1567,6 +1575,9 @@ export function ripple(selector, options = {}) {
 
       const rippleEl = document.createElement('span');
       rippleEl.className = 'dm-ripple';
+      if (!opts.respectMotionPreference) {
+        rippleEl.setAttribute('data-force-animation', 'true');
+      }
       rippleEl.style.cssText = `
         position: absolute;
         border-radius: 50%;

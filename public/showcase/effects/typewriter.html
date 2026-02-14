@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typewriter Effect - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .demo-box {
+            padding: 2rem;
+            margin: 1rem 0;
+            background: rgba(13, 110, 253, 0.1);
+            border: 2px solid rgba(13, 110, 253, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 500;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .effect-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 4px;
+            background: rgba(13, 110, 253, 0.1);
+            text-decoration: none;
+            color: var(--dm-primary);
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(13, 110, 253, 0.2);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body data-layout="showcase" data-layout-variant="effects">
+<div class="hero hero-center bg-ambient-rotate-spotlight">
+    <div class="hero-content">
+        <div class="hero-title">Typewriter Effect</div>
+        <div class="hero-subtitle">Character-by-character text animation with action queues and entrance effects.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <!-- See Also -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+        <h3 class="text-lg font-semibold mb-2">
+            <span data-icon="arrow-left" data-icon-size="20"></span>
+            See Also
+        </h3>
+        <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="breathe.html" class="nav-link">Breathe</a>
+        <a href="pulse.html" class="nav-link">Pulse</a>
+        <a href="reveal.html" class="nav-link">Reveal</a>
+        <a href="scramble.html" class="nav-link">Scramble</a>
+        <a href="counter.html" class="nav-link">Counter</a>
+        <a href="ripple.html" class="nav-link">Ripple</a>
+        <a href="shake.html" class="nav-link">Shake</a>
+    </div>
+
+    <!-- Motion Preference Notice -->
+    <div id="motion-notice" class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded" style="display:none;">
+        <div class="flex items-start gap-3">
+            <span style="font-size: 20px; flex-shrink: 0;">ℹ️</span>
+            <div>
+                <h4 class="font-semibold mb-1">Motion Preference Detected</h4>
+                <p>Your system has <code>prefers-reduced-motion</code> enabled. This demo page overrides that setting to demonstrate effects. In production, use <code>respectMotionPreference: true</code> (the default) to honour user preferences.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overview -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Domma.effects.typewriter()</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Creates a character-by-character typing effect with support for action queues, character entrance effects, and text deletion. Perfect for hero sections, terminal interfaces, and storytelling.</p>
+
+            <pre class="code-block language-javascript">
+// Basic usage
+Domma.effects.typewriter('.hero-title', {
+  actions: [
+    { render: 'Hello, World!' }
+  ]
+});
+
+// Complex sequence with effects
+const tw = Domma.effects.typewriter('.element', {
+  speed: 50,              // ms per character (typing)
+  deleteSpeed: 30,        // ms per character (deletion)
+  cursor: true,           // show blinking cursor
+  cursorChar: '|',        // cursor character
+  loop: true,             // loop infinitely
+  actions: [
+    { render: 'Hello', effect: 'bounce' },
+    { wait: '2s' },
+    { undoRender: true },  // delete all from last render
+    { render: 'Welcome to Domma', effect: 'fade' },
+    { wait: '3s' },
+    { undoRender: 5 },     // delete last 5 characters
+    { render: 'ma!', effect: 'glow' }
+  ]
+});
+
+// Control methods
+tw.pause();
+tw.resume();
+tw.stop();
+tw.restart();
+tw.destroy();
+</pre>
+
+            <h4 class="font-semibold mt-4 mb-2">Action Types</h4>
+            <ul class="list-disc ml-6 mb-4">
+                <li><code>{ render: 'text', effect: 'none|fade|bounce|glow' }</code> - Type text with optional entrance effect</li>
+                <li><code>{ wait: '2s' }</code> - Pause for duration (supports '2s', '500ms', or number)</li>
+                <li><code>{ undoRender: true }</code> - Delete all characters from last render</li>
+                <li><code>{ undoRender: N }</code> - Delete last N characters</li>
+                <li><code>{ undoRender: 'all' }</code> - Delete all characters</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Demo: Basic Typewriter -->
+    <section class="card mb-6" data-section="basic">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Basic Typewriter</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Simple typing animation with control methods.</p>
+            <div class="demo-box" id="typewriter-demo-1" style="font-size: 1.5rem; min-height: 3rem;"></div>
+            <div class="effect-controls">
+                <button class="btn btn-primary" id="typewriter-start-1">Start</button>
+                <button class="btn btn-secondary" id="typewriter-pause-1">Pause</button>
+                <button class="btn btn-secondary" id="typewriter-resume-1">Resume</button>
+                <button class="btn btn-danger" id="typewriter-stop-1">Stop</button>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.typewriter('#typewriter-demo-1', {
+  speed: 50,
+  deleteSpeed: 30,
+  actions: [
+    { render: 'Hello, World!' },
+    { wait: '2s' },
+    { undoRender: 'all' },
+    { wait: '500ms' },
+    { render: 'Welcome to DommaJS', effect: 'fade' }
+  ]
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Character Effects -->
+    <section class="card mb-6" data-section="character-effects">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Character Effects</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Compare different character entrance effects.</p>
+            <div class="demo-box" id="typewriter-demo-2" style="font-size: 1.5rem; min-height: 3rem;"></div>
+            <div class="effect-controls">
+                <button class="btn btn-primary" id="typewriter-effect-none">None</button>
+                <button class="btn btn-primary" id="typewriter-effect-fade">Fade</button>
+                <button class="btn btn-primary" id="typewriter-effect-bounce">Bounce</button>
+                <button class="btn btn-primary" id="typewriter-effect-glow">Glow</button>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+// Demonstrate each effect type
+Domma.effects.typewriter('#demo', {
+  speed: 40,
+  actions: [
+    { render: `Effect: ${effect}`, effect: effect }
+  ]
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Action Sequence -->
+    <section class="card mb-6" data-section="action-sequence">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Action Sequence</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Complex sequence with render, wait, and undo actions.</p>
+            <div class="demo-box" id="typewriter-demo-3" style="font-size: 1.5rem; min-height: 3rem;"></div>
+            <button class="btn btn-primary" id="typewriter-start-3">Start Sequence</button>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.typewriter('#typewriter-demo-3', {
+  speed: 50,
+  deleteSpeed: 30,
+  actions: [
+    { render: 'Hello', effect: 'bounce' },
+    { wait: '1.5s' },
+    { undoRender: true },
+    { render: 'Welcome to Domma', effect: 'fade' },
+    { wait: '2s' }
+  ]
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Partial Undo -->
+    <section class="card mb-6" data-section="partial-undo">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Partial Undo</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Demonstrate selective character deletion.</p>
+            <div class="demo-box" id="typewriter-demo-4" style="font-size: 1.5rem; min-height: 3rem;"></div>
+            <button class="btn btn-primary" id="typewriter-start-4">Start Partial Undo</button>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.typewriter('#typewriter-demo-4', {
+  speed: 50,
+  deleteSpeed: 30,
+  actions: [
+    { render: 'Domma Framework', effect: 'fade' },
+    { wait: '1s' },
+    { undoRender: 9 },  // Delete "Framework"
+    { wait: '500ms' },
+    { render: 'Effects!', effect: 'glow' },
+    { wait: '2s' }
+  ]
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Hero Banner Loop -->
+    <section class="card mb-6" data-section="hero-banner-loop">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Hero Banner Loop</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Infinite looping typewriter for hero sections.</p>
+            <div class="demo-box" id="typewriter-demo-5" style="font-size: 2rem; font-weight: bold; min-height: 4rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;"></div>
+            <div class="effect-controls">
+                <button class="btn btn-light" id="typewriter-start-5">Start Loop</button>
+                <button class="btn btn-light" id="typewriter-stop-5">Stop Loop</button>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.typewriter('#typewriter-demo-5', {
+  speed: 60,
+  deleteSpeed: 40,
+  loop: true,
+  loopDelay: 2000,
+  actions: [
+    { render: 'Build Faster', effect: 'bounce' },
+    { wait: '2s' },
+    { undoRender: 'all' },
+    { wait: '500ms' },
+    { render: 'Code Smarter', effect: 'fade' },
+    { wait: '2s' },
+    { undoRender: 'all' },
+    { wait: '500ms' }
+  ]
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Cursor Types -->
+    <section class="card mb-6" data-section="cursor-types">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Cursor Types</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Different cursor styles with smooth fade animation.</p>
+            <div class="demo-box" id="typewriter-demo-6" style="font-size: 1.5rem; min-height: 3rem;"></div>
+            <div class="effect-controls">
+                <button class="btn btn-primary" id="typewriter-cursor-caret">Caret |</button>
+                <button class="btn btn-primary" id="typewriter-cursor-block">Block █</button>
+                <button class="btn btn-primary" id="typewriter-cursor-underline">Underline _</button>
+                <button class="btn btn-secondary" id="typewriter-cursor-noblink">No Blink</button>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+// Different cursor styles
+Domma.effects.typewriter('#demo', {
+  speed: 50,
+  cursorType: 'caret',  // or 'block', 'underline'
+  cursorChar: '|',       // or '█', '_'
+  cursorBlink: true,     // or false
+  actions: [
+    { render: 'Cursor type: caret' }
+  ]
+});
+</pre>
+        </div>
+    </section>
+
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Show notice if user has reduced motion enabled
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      $('#motion-notice').show();
+    }
+
+    // Store control objects
+    let typewriter1, typewriter2, typewriter3, typewriter4, typewriter5, typewriter6;
+
+    // typewriter() Demo 1 - Basic
+    $('#typewriter-start-1').on('click', () => {
+      if (typewriter1) typewriter1.destroy();
+      $('#typewriter-demo-1').html('');
+      typewriter1 = Domma.effects.typewriter('#typewriter-demo-1', {
+        speed: 50,
+        deleteSpeed: 30,
+        respectMotionPreference: false,
+        actions: [
+          { render: 'Hello, World!' },
+          { wait: '2s' },
+          { undoRender: 'all' },
+          { wait: '500ms' },
+          { render: 'Welcome to DommaJS', effect: 'fade' }
+        ]
+      });
+    });
+
+    $('#typewriter-pause-1').on('click', () => {
+      if (typewriter1) typewriter1.pause();
+    });
+
+    $('#typewriter-resume-1').on('click', () => {
+      if (typewriter1) typewriter1.resume();
+    });
+
+    $('#typewriter-stop-1').on('click', () => {
+      if (typewriter1) {
+        typewriter1.stop();
+        typewriter1 = null;
+      }
+    });
+
+    // typewriter() Demo 2 - Character Effects
+    function startTypewriterEffect(effect) {
+      if (typewriter2) typewriter2.destroy();
+      $('#typewriter-demo-2').html('');
+      typewriter2 = Domma.effects.typewriter('#typewriter-demo-2', {
+        speed: 40,
+        respectMotionPreference: false,
+        actions: [
+          { render: `Effect: ${effect}`, effect: effect }
+        ]
+      });
+    }
+
+    $('#typewriter-effect-none').on('click', () => startTypewriterEffect('none'));
+    $('#typewriter-effect-fade').on('click', () => startTypewriterEffect('fade'));
+    $('#typewriter-effect-bounce').on('click', () => startTypewriterEffect('bounce'));
+    $('#typewriter-effect-glow').on('click', () => startTypewriterEffect('glow'));
+
+    // typewriter() Demo 3 - Action Sequence
+    $('#typewriter-start-3').on('click', () => {
+      if (typewriter3) typewriter3.destroy();
+      $('#typewriter-demo-3').html('');
+      typewriter3 = Domma.effects.typewriter('#typewriter-demo-3', {
+        speed: 50,
+        deleteSpeed: 30,
+        respectMotionPreference: false,
+        actions: [
+          { render: 'Hello', effect: 'bounce' },
+          { wait: '1.5s' },
+          { undoRender: true },
+          { render: 'Welcome to Domma', effect: 'fade' },
+          { wait: '2s' }
+        ]
+      });
+    });
+
+    // typewriter() Demo 4 - Partial Undo
+    $('#typewriter-start-4').on('click', () => {
+      if (typewriter4) typewriter4.destroy();
+      $('#typewriter-demo-4').html('');
+      typewriter4 = Domma.effects.typewriter('#typewriter-demo-4', {
+        speed: 50,
+        deleteSpeed: 30,
+        respectMotionPreference: false,
+        actions: [
+          { render: 'Domma Framework', effect: 'fade' },
+          { wait: '1s' },
+          { undoRender: 9 },  // Delete "Framework"
+          { wait: '500ms' },
+          { render: 'Effects!', effect: 'glow' },
+          { wait: '2s' }
+        ]
+      });
+    });
+
+    // typewriter() Demo 5 - Hero Banner Loop
+    $('#typewriter-start-5').on('click', () => {
+      if (typewriter5) typewriter5.destroy();
+      $('#typewriter-demo-5').html('');
+      typewriter5 = Domma.effects.typewriter('#typewriter-demo-5', {
+        speed: 60,
+        deleteSpeed: 40,
+        loop: true,
+        loopDelay: 2000,
+        respectMotionPreference: false,
+        actions: [
+          { render: 'Build Faster', effect: 'bounce' },
+          { wait: '2s' },
+          { undoRender: 'all' },
+          { wait: '500ms' },
+          { render: 'Code Smarter', effect: 'fade' },
+          { wait: '2s' },
+          { undoRender: 'all' },
+          { wait: '500ms' },
+          { render: 'Ship Better', effect: 'glow' },
+          { wait: '2s' },
+          { undoRender: 'all' },
+          { wait: '500ms' }
+        ]
+      });
+    });
+
+    $('#typewriter-stop-5').on('click', () => {
+      if (typewriter5) {
+        typewriter5.stop();
+        typewriter5 = null;
+      }
+    });
+
+    // typewriter() Demo 6 - Cursor Types
+    function startCursorDemo(cursorType, cursorChar, cursorBlink = true) {
+      if (typewriter6) typewriter6.destroy();
+      $('#typewriter-demo-6').html('');
+      typewriter6 = Domma.effects.typewriter('#typewriter-demo-6', {
+        speed: 50,
+        cursorType: cursorType,
+        cursorChar: cursorChar,
+        cursorBlink: cursorBlink,
+        respectMotionPreference: false,
+        actions: [
+          { render: 'Cursor type: ' + cursorType }
+        ]
+      });
+    }
+
+    $('#typewriter-cursor-caret').on('click', () => startCursorDemo('caret', '|'));
+    $('#typewriter-cursor-block').on('click', () => startCursorDemo('block', '█'));
+    $('#typewriter-cursor-underline').on('click', () => startCursorDemo('underline', '_'));
+    $('#typewriter-cursor-noblink').on('click', () => startCursorDemo('caret', '|', false));
+
+    // Scan icons
+    Domma.icons.scan();
+  });
+</script>
+</body>
+</html>

@@ -52,7 +52,7 @@
         .nav-link:hover { background: rgba(13, 110, 253, 0.2); transform: translateY(-2px); }
     </style>
 </head>
-<body class="dm-cloaked" data-layout="showcase" data-layout-variant="effects">
+<body data-layout="showcase" data-layout-variant="effects">
 <div class="hero hero-center bg-ambient-rotate-spotlight">
     <div class="hero-content">
         <div class="hero-title">Ripple Effect</div>
@@ -69,10 +69,24 @@
             See Also
         </h3>
         <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="breathe.html" class="nav-link">Breathe</a>
+        <a href="pulse.html" class="nav-link">Pulse</a>
+        <a href="typewriter.html" class="nav-link">Typewriter</a>
         <a href="reveal.html" class="nav-link">Reveal</a>
         <a href="scramble.html" class="nav-link">Scramble</a>
         <a href="counter.html" class="nav-link">Counter</a>
         <a href="shake.html" class="nav-link">Shake</a>
+    </div>
+
+    <!-- Motion Preference Notice -->
+    <div id="motion-notice" class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded" style="display:none;">
+        <div class="flex items-start gap-3">
+            <span style="font-size: 20px; flex-shrink: 0;">ℹ️</span>
+            <div>
+                <h4 class="font-semibold mb-1">Motion Preference Detected</h4>
+                <p>Your system has <code>prefers-reduced-motion</code> enabled. This demo page overrides that setting to demonstrate effects. In production, use <code>respectMotionPreference: true</code> (the default) to honour user preferences.</p>
+            </div>
+        </div>
     </div>
 
     <!-- Overview -->
@@ -240,33 +254,62 @@ Domma.effects.ripple('.file-card', {
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // Show notice if user has reduced motion enabled
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      $('#motion-notice').show();
+    }
+
     // Demo 1: Basic buttons
     Domma.effects.ripple('.ripple-demo-1', {
       colour: 'rgba(255, 255, 255, 0.35)',
-      duration: 600
+      duration: 600,
+      respectMotionPreference: false
     });
 
     // Demo 2: Custom colours
-    Domma.effects.ripple('.ripple-colour-blue', { colour: 'rgba(21, 101, 192, 0.3)' });
-    Domma.effects.ripple('.ripple-colour-green', { colour: 'rgba(46, 125, 50, 0.3)' });
-    Domma.effects.ripple('.ripple-colour-red', { colour: 'rgba(198, 40, 40, 0.3)' });
+    Domma.effects.ripple('.ripple-colour-blue', {
+      colour: 'rgba(21, 101, 192, 0.3)',
+      respectMotionPreference: false
+    });
+    Domma.effects.ripple('.ripple-colour-green', {
+      colour: 'rgba(46, 125, 50, 0.3)',
+      respectMotionPreference: false
+    });
+    Domma.effects.ripple('.ripple-colour-red', {
+      colour: 'rgba(198, 40, 40, 0.3)',
+      respectMotionPreference: false
+    });
 
     // Demo 3: Centred
     Domma.effects.ripple('.ripple-centered', {
       centered: true,
-      colour: 'rgba(255, 255, 255, 0.4)'
+      colour: 'rgba(255, 255, 255, 0.4)',
+      respectMotionPreference: false
     });
 
     // Demo 4: Card ripples
     Domma.effects.ripple('.ripple-card-demo', {
       colour: 'rgba(13, 110, 253, 0.15)',
-      duration: 800
+      duration: 800,
+      respectMotionPreference: false
     });
 
     // Demo 5: Duration comparison
-    Domma.effects.ripple('.ripple-fast', { duration: 300, colour: 'rgba(255, 255, 255, 0.4)' });
-    Domma.effects.ripple('.ripple-normal', { duration: 600, colour: 'rgba(255, 255, 255, 0.4)' });
-    Domma.effects.ripple('.ripple-slow', { duration: 1200, colour: 'rgba(255, 255, 255, 0.4)' });
+    Domma.effects.ripple('.ripple-fast', {
+      duration: 300,
+      colour: 'rgba(255, 255, 255, 0.4)',
+      respectMotionPreference: false
+    });
+    Domma.effects.ripple('.ripple-normal', {
+      duration: 600,
+      colour: 'rgba(255, 255, 255, 0.4)',
+      respectMotionPreference: false
+    });
+    Domma.effects.ripple('.ripple-slow', {
+      duration: 1200,
+      colour: 'rgba(255, 255, 255, 0.4)',
+      respectMotionPreference: false
+    });
 
     Domma.icons.scan();
   });

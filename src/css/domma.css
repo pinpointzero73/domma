@@ -3453,20 +3453,20 @@ code, pre {
     animation: dm-shake-v 0.5s ease-in-out;
 }
 
-/* Reduced motion: disable all effects */
+/* Reduced motion: disable all effects (unless forced via data-force-animation) */
 @media (prefers-reduced-motion: reduce) {
-    .dm-reveal {
+    .dm-reveal:not([data-force-animation]) {
         opacity: 1;
         transform: none;
         transition: none;
     }
 
-    .dm-ripple {
+    .dm-ripple:not([data-force-animation]) {
         animation: none !important;
     }
 
-    .dm-shake-h,
-    .dm-shake-v {
+    .dm-shake-h:not([data-force-animation]),
+    .dm-shake-v:not([data-force-animation]) {
         animation: none !important;
     }
 }

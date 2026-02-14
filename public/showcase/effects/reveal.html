@@ -44,7 +44,7 @@
         .nav-link:hover { background: rgba(13, 110, 253, 0.2); transform: translateY(-2px); }
     </style>
 </head>
-<body class="dm-cloaked" data-layout="showcase" data-layout-variant="effects">
+<body data-layout="showcase" data-layout-variant="effects">
 <div class="hero hero-center bg-ambient-rotate-spotlight">
     <div class="hero-content">
         <div class="hero-title">Reveal Effect</div>
@@ -61,10 +61,24 @@
             See Also
         </h3>
         <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="breathe.html" class="nav-link">Breathe</a>
+        <a href="pulse.html" class="nav-link">Pulse</a>
+        <a href="typewriter.html" class="nav-link">Typewriter</a>
         <a href="scramble.html" class="nav-link">Scramble</a>
         <a href="counter.html" class="nav-link">Counter</a>
         <a href="ripple.html" class="nav-link">Ripple</a>
         <a href="shake.html" class="nav-link">Shake</a>
+    </div>
+
+    <!-- Motion Preference Notice -->
+    <div id="motion-notice" class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded" style="display:none;">
+        <div class="flex items-start gap-3">
+            <span style="font-size: 20px; flex-shrink: 0;">ℹ️</span>
+            <div>
+                <h4 class="font-semibold mb-1">Motion Preference Detected</h4>
+                <p>Your system has <code>prefers-reduced-motion</code> enabled. This demo page overrides that setting to demonstrate effects. In production, use <code>respectMotionPreference: true</code> (the default) to honour user preferences.</p>
+            </div>
+        </div>
     </div>
 
     <!-- Overview -->
@@ -317,43 +331,54 @@ Domma.effects.reveal('.repeatable', {
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // Show notice if user has reduced motion enabled
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      $('#motion-notice').show();
+    }
+
     // Fade demo
     Domma.effects.reveal('.reveal-fade-demo', {
       animation: 'fade',
       duration: 600,
-      stagger: 150
+      stagger: 150,
+      respectMotionPreference: false
     });
 
     // Slide up demo
     Domma.effects.reveal('.reveal-slideup-demo', {
       animation: 'slide-up',
       duration: 800,
-      stagger: 120
+      stagger: 120,
+      respectMotionPreference: false
     });
 
     // Slide left demo
     Domma.effects.reveal('.reveal-slideleft-demo', {
       animation: 'slide-left',
-      duration: 700
+      duration: 700,
+      respectMotionPreference: false
     });
 
     // Slide right demo
     Domma.effects.reveal('.reveal-slideright-demo', {
       animation: 'slide-right',
-      duration: 700
+      duration: 700,
+      respectMotionPreference: false
     });
 
     // Zoom demo
     Domma.effects.reveal('.reveal-zoom-demo', {
       animation: 'zoom',
       duration: 700,
-      stagger: 200
+      stagger: 200,
+      respectMotionPreference: false
     });
 
     // Flip demo
     Domma.effects.reveal('.reveal-flip-demo', {
       animation: 'flip',
-      duration: 900
+      duration: 900,
+      respectMotionPreference: false
     });
 
     // Repeat demo
@@ -361,7 +386,8 @@ Domma.effects.reveal('.repeatable', {
       animation: 'slide-up',
       duration: 600,
       stagger: 100,
-      once: false
+      once: false,
+      respectMotionPreference: false
     });
 
     Domma.icons.scan();

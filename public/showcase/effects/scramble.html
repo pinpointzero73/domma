@@ -55,10 +55,24 @@
             See Also
         </h3>
         <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="breathe.html" class="nav-link">Breathe</a>
+        <a href="pulse.html" class="nav-link">Pulse</a>
+        <a href="typewriter.html" class="nav-link">Typewriter</a>
         <a href="reveal.html" class="nav-link">Reveal</a>
         <a href="counter.html" class="nav-link">Counter</a>
         <a href="ripple.html" class="nav-link">Ripple</a>
         <a href="shake.html" class="nav-link">Shake</a>
+    </div>
+
+    <!-- Motion Preference Notice -->
+    <div id="motion-notice" class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded" style="display:none;">
+        <div class="flex items-start gap-3">
+            <span style="font-size: 20px; flex-shrink: 0;">ℹ️</span>
+            <div>
+                <h4 class="font-semibold mb-1">Motion Preference Detected</h4>
+                <p>Your system has <code>prefers-reduced-motion</code> enabled. This demo page overrides that setting to demonstrate effects. In production, use <code>respectMotionPreference: true</code> (the default) to honour user preferences.</p>
+            </div>
+        </div>
     </div>
 
     <!-- Overview -->
@@ -234,13 +248,20 @@ Domma.effects.scramble('#binary', {
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // Show notice if user has reduced motion enabled
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      $('#motion-notice').show();
+    }
+
     let ctrl1;
 
     // Demo 1: Basic
     $('#scramble-start-1').on('click', () => {
       if (ctrl1) ctrl1.destroy();
       document.getElementById('scramble-demo-1').textContent = 'Welcome to Domma';
-      ctrl1 = Domma.effects.scramble('#scramble-demo-1');
+      ctrl1 = Domma.effects.scramble('#scramble-demo-1', {
+        respectMotionPreference: false
+      });
     });
     $('#scramble-pause-1').on('click', () => { if (ctrl1) ctrl1.pause(); });
     $('#scramble-resume-1').on('click', () => { if (ctrl1) ctrl1.resume(); });
@@ -252,22 +273,34 @@ Domma.effects.scramble('#binary', {
     $('#scramble-start-ltr').on('click', () => {
       if (ctrlLtr) ctrlLtr.destroy();
       document.getElementById('scramble-ltr').textContent = 'Domma Effects';
-      ctrlLtr = Domma.effects.scramble('#scramble-ltr', { revealOrder: 'left-to-right' });
+      ctrlLtr = Domma.effects.scramble('#scramble-ltr', {
+        revealOrder: 'left-to-right',
+        respectMotionPreference: false
+      });
     });
     $('#scramble-start-rtl').on('click', () => {
       if (ctrlRtl) ctrlRtl.destroy();
       document.getElementById('scramble-rtl').textContent = 'Domma Effects';
-      ctrlRtl = Domma.effects.scramble('#scramble-rtl', { revealOrder: 'right-to-left' });
+      ctrlRtl = Domma.effects.scramble('#scramble-rtl', {
+        revealOrder: 'right-to-left',
+        respectMotionPreference: false
+      });
     });
     $('#scramble-start-random').on('click', () => {
       if (ctrlRandom) ctrlRandom.destroy();
       document.getElementById('scramble-random').textContent = 'Domma Effects';
-      ctrlRandom = Domma.effects.scramble('#scramble-random', { revealOrder: 'random' });
+      ctrlRandom = Domma.effects.scramble('#scramble-random', {
+        revealOrder: 'random',
+        respectMotionPreference: false
+      });
     });
     $('#scramble-start-center').on('click', () => {
       if (ctrlCenter) ctrlCenter.destroy();
       document.getElementById('scramble-center').textContent = 'Domma Effects';
-      ctrlCenter = Domma.effects.scramble('#scramble-center', { revealOrder: 'center-out' });
+      ctrlCenter = Domma.effects.scramble('#scramble-center', {
+        revealOrder: 'center-out',
+        respectMotionPreference: false
+      });
     });
 
     // Demo 3: Loop
@@ -279,7 +312,8 @@ Domma.effects.scramble('#binary', {
         loop: true,
         loopDelay: 2000,
         scrambleDuration: 1000,
-        revealOrder: 'random'
+        revealOrder: 'random',
+        respectMotionPreference: false
       });
     });
     $('#scramble-stop-loop').on('click', () => { if (ctrlLoop) ctrlLoop.stop(); });
@@ -292,7 +326,8 @@ Domma.effects.scramble('#binary', {
       ctrlCustom = Domma.effects.scramble('#scramble-custom', {
         characters: '01',
         scrambleDuration: 1500,
-        speed: 80
+        speed: 80,
+        respectMotionPreference: false
       });
     });
 
@@ -301,12 +336,20 @@ Domma.effects.scramble('#binary', {
     $('#scramble-start-fast').on('click', () => {
       if (ctrlFast) ctrlFast.destroy();
       document.getElementById('scramble-fast').textContent = 'Quick Decode';
-      ctrlFast = Domma.effects.scramble('#scramble-fast', { scrambleDuration: 300, speed: 20 });
+      ctrlFast = Domma.effects.scramble('#scramble-fast', {
+        scrambleDuration: 300,
+        speed: 20,
+        respectMotionPreference: false
+      });
     });
     $('#scramble-start-slow').on('click', () => {
       if (ctrlSlow) ctrlSlow.destroy();
       document.getElementById('scramble-slow').textContent = 'Slow Reveal';
-      ctrlSlow = Domma.effects.scramble('#scramble-slow', { scrambleDuration: 2000, speed: 100 });
+      ctrlSlow = Domma.effects.scramble('#scramble-slow', {
+        scrambleDuration: 2000,
+        speed: 100,
+        respectMotionPreference: false
+      });
     });
 
     Domma.icons.scan();
