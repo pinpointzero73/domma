@@ -44,7 +44,7 @@ R.init({
 Views can be strings, functions, or objects with lifecycle hooks:
 
 ```javascript
-// Simple string template
+// Simple string template (for small views)
 const homeView = {
     template: `<h1>Home</h1><p>Welcome!</p>`
 };
@@ -79,6 +79,67 @@ const dashboardView = {
     }
 };
 ```
+
+### Template Files
+
+**Recommended:** Use external template files instead of inline strings for maintainability.
+
+```javascript
+// ✅ Recommended - external template file
+const homeView = {
+    templateUrl: 'js/views/templates/home.html',
+
+    onMount($container) {
+        I.scan($container[0]);
+    }
+};
+
+// ✅ With partials for reusable sections
+const dashboardView = {
+    templateUrl: 'js/views/templates/dashboard.html',
+
+    partials: {
+        'header': 'js/views/templates/partials/header.html',
+        'sidebar': 'js/views/templates/partials/sidebar.html'
+    },
+
+    onMount($container) {
+        I.scan($container[0]);
+    }
+};
+
+// ❌ Avoid - large inline template strings
+const homeView = {
+    template: `
+        <div>
+            <!-- 50+ lines of HTML -->
+        </div>
+    `
+};
+```
+
+**Template Features:**
+
+- **Mustache syntax**: Variables `{{name}}`, conditionals `{{#if}}`, loops `{{#each}}`
+- **Partials**: Reusable sections with `{{> partialName}}`
+- **Caching**: Templates fetched once and cached per session
+- **Parallel loading**: Partials loaded concurrently with main template
+
+**File organization:**
+
+```
+js/views/
+├── home.js                    # View logic
+├── about.js
+└── templates/
+    ├── home.html              # Template markup
+    ├── about.html
+    └── partials/
+        ├── header.html         # Reusable sections
+        └── footer.html
+```
+
+**Path resolution:** Paths are relative to the HTML page serving the SPA.
 
 ## Router API
 

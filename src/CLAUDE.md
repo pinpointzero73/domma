@@ -178,8 +178,15 @@ R.init({
 **View Structure:**
 
 ```javascript
+// ✅ RECOMMENDED: External template file
 export const homeView = {
-  template: `<div class="home">...</div>`,  // String or function returning string
+  templateUrl: 'js/views/templates/home.html',  // Path to template file
+
+  // Optional: Reusable template sections
+  partials: {
+    'header': 'js/views/templates/partials/header.html',
+    'footer': 'js/views/templates/partials/footer.html'
+  },
 
   // Called before rendering (async supported)
   async onEnter(params) {
@@ -190,6 +197,9 @@ export const homeView = {
 
   // Called after view is mounted
   onMount($container) {
+    // Scan for icons
+    I.scan($container[0]);
+
     // Initialize components
     E.tooltip($container.find('[data-tooltip]'));
 
@@ -205,7 +215,19 @@ export const homeView = {
     $('#my-button').off('click');
   }
 };
+
+// Alternative: Inline template (use only for simple views <5 lines)
+export const simpleView = {
+  template: `<div class="simple">Simple content</div>`,
+  onMount($container) { I.scan($container[0]); }
+};
 ```
+
+**Template Loading:**
+- Router fetches and caches templates automatically
+- Templates support Mustache-style syntax: `{{variable}}`, `{{#if}}`, `{{#each}}`
+- Partials are loaded in parallel for performance
+- All templates cached per-session (cleared on hard refresh)
 
 **Route Parameters:**
 

@@ -4,6 +4,7 @@ Quick-reference code patterns for common tasks. Copy, paste, and adapt to your n
 
 ## Table of Contents
 
+- [View Templates](#view-templates)
 - [Page Initialization](#page-initialization)
 - [Blueprint Definition](#blueprint-definition)
 - [Form Generation](#form-generation)
@@ -16,6 +17,104 @@ Quick-reference code patterns for common tasks. Copy, paste, and adapt to your n
 - [Toast Notifications](#toast-notifications)
 - [Dialog Confirmations](#dialog-confirmations)
 - [Utility Functions](#utility-functions)
+
+---
+
+## View Templates
+
+```javascript
+// ✅ RECOMMENDED: External template file pattern
+// js/views/dashboard.js
+export const dashboardView = {
+    templateUrl: 'js/views/templates/dashboard.html',
+
+    // Optional: Reusable partials
+    partials: {
+        'stats-card': 'js/views/templates/partials/stats-card.html',
+        'user-list': 'js/views/templates/partials/user-list.html'
+    },
+
+    async onEnter(params) {
+        // Called before rendering - fetch data, validate auth
+        const data = await H.get('/api/dashboard');
+        return data;  // Available as {{variable}} in template
+    },
+
+    onMount($container) {
+        // Called after view is rendered
+        I.scan($container[0]);  // Scan for icons
+
+        // Initialize components
+        E.tabs('#dashboard-tabs');
+        E.tooltip('[data-tooltip]');
+
+        // Bind events
+        $container.find('.refresh-btn').on('click', async () => {
+            const newData = await H.get('/api/dashboard');
+            // Update view with new data
+        });
+    },
+
+    onLeave() {
+        // Cleanup when leaving view
+        $('.refresh-btn').off('click');
+    }
+};
+```
+
+```html
+<!-- js/views/templates/dashboard.html -->
+<div class="container py-6">
+    <h1>Dashboard</h1>
+    <p>Welcome back, {{userName}}!</p>
+
+    <!-- Use partials for reusable sections -->
+    {{> stats-card}}
+    {{> user-list}}
+
+    <!-- Mustache syntax supported -->
+    {{#if hasNotifications}}
+        <div class="alert">You have {{notificationCount}} notifications</div>
+    {{/if}}
+
+    {{#each items}}
+        <div class="item">{{this.name}}</div>
+    {{/each}}
+</div>
+```
+
+```html
+<!-- js/views/templates/partials/stats-card.html -->
+<div class="card">
+    <div class="card-body">
+        <h3>Statistics</h3>
+        <p>Total: {{totalItems}}</p>
+    </div>
+</div>
+```
+
+```javascript
+// ❌ AVOID: Large inline templates
+export const badView = {
+    template: `
+        <div>...50 lines of HTML...</div>
+    `,  // Hard to maintain, clutters JavaScript file
+    onMount($container) { }
+};
+
+// ✅ OK: Simple inline templates (<5 lines)
+export const simpleView = {
+    template: `<div class="simple">Simple content</div>`,
+    onMount($container) { I.scan($container[0]); }
+};
+```
+
+**Why use `templateUrl`?**
+- Separates concerns: HTML in `.html` files, logic in `.js` files
+- Easier to edit and maintain
+- Better syntax highlighting in editors
+- Templates are cached automatically
+- Supports Mustache templating and partials
 
 ---
 

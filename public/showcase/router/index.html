@@ -276,6 +276,258 @@ R.init({
     </div>
   </section>
 
+  <!-- Template Files -->
+  <section class="card mb-6" data-section="Template Files">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold">Template Files</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Keep your HTML markup separate from JavaScript logic using external template files.
+        The <code>templateUrl</code> and <code>partials</code> properties allow you to load
+        templates from separate <code>.html</code> files, improving maintainability and code organisation.
+      </p>
+
+      <div class="alert alert-info mb-4">
+        <strong>Why templateUrl?</strong> Large HTML strings in JavaScript files are hard to maintain,
+        lack syntax highlighting, and mix concerns. External template files solve these problems while
+        keeping your views clean and focused on logic.
+      </div>
+
+      <h4 class="category-title-style mb-3">The Problem: Inline Template Strings</h4>
+      <pre class="code-block language-javascript">
+// ❌ Hard to maintain - 50+ lines of HTML in a string
+const homeView = {
+    template: `
+        &lt;div class="home-page"&gt;
+            &lt;header class="hero"&gt;
+                &lt;h1&gt;Welcome to Our Site&lt;/h1&gt;
+                &lt;p&gt;Discover amazing content...&lt;/p&gt;
+            &lt;/header&gt;
+            &lt;section class="features"&gt;
+                &lt;div class="feature-card"&gt;...&lt;/div&gt;
+                &lt;div class="feature-card"&gt;...&lt;/div&gt;
+                &lt;div class="feature-card"&gt;...&lt;/div&gt;
+            &lt;/section&gt;
+            &lt;section class="stats"&gt;...&lt;/section&gt;
+            &lt;section class="testimonials"&gt;...&lt;/section&gt;
+            &lt;footer&gt;...&lt;/footer&gt;
+        &lt;/div&gt;
+    ` // 50+ more lines...
+};
+</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">The Solution: External Template Files</h4>
+      <pre class="code-block language-javascript">
+// ✅ Clean and maintainable
+const homeView = {
+    templateUrl: 'js/views/templates/home.html',
+
+    onMount($container) {
+        console.log('Home view mounted');
+        I.scan($container[0]);
+    }
+};
+</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">Template Variables</h4>
+      <p class="mb-3">
+        Templates support Mustache-style syntax for dynamic content. The router uses Domma's
+        template engine (<code>_.render()</code>) to render variables, conditionals, and loops.
+      </p>
+
+      <pre class="code-block language-html">
+&lt;!-- js/views/templates/user.html --&gt;
+&lt;div class="user-profile"&gt;
+    &lt;h1&gt;{{name}}&lt;/h1&gt;
+    &lt;p&gt;Email: {{email}}&lt;/p&gt;
+
+    {{#if premium}}
+        &lt;span class="badge badge-gold"&gt;Premium Member&lt;/span&gt;
+    {{/if}}
+
+    &lt;h3&gt;Recent Posts&lt;/h3&gt;
+    &lt;ul&gt;
+        {{#each posts}}
+            &lt;li&gt;{{this.title}} - {{this.date}}&lt;/li&gt;
+        {{/each}}
+    &lt;/ul&gt;
+&lt;/div&gt;
+</pre>
+
+      <pre class="code-block language-javascript">
+// View with template data
+const userView = {
+    templateUrl: 'js/views/templates/user.html',
+
+    async onEnter(params) {
+        // Fetch user data
+        const user = await H.get(`/api/users/${params.id}`);
+
+        // Store data for template rendering
+        this.templateData = {
+            name: user.name,
+            email: user.email,
+            premium: user.tier === 'premium',
+            posts: user.recentPosts
+        };
+    }
+};
+</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">Partials - Reusable Template Sections</h4>
+      <p class="mb-3">
+        Use partials to share common sections across multiple views. Partials are loaded in
+        parallel with the main template for optimal performance.
+      </p>
+
+      <pre class="code-block language-javascript">
+// View with partials
+const dashboardView = {
+    templateUrl: 'js/views/templates/dashboard.html',
+
+    partials: {
+        'header': 'js/views/templates/partials/header.html',
+        'sidebar': 'js/views/templates/partials/sidebar.html',
+        'stats-card': 'js/views/templates/partials/stats-card.html'
+    },
+
+    onMount($container) {
+        I.scan($container[0]);
+    }
+};
+</pre>
+
+      <pre class="code-block language-html">
+&lt;!-- js/views/templates/dashboard.html --&gt;
+&lt;div class="dashboard"&gt;
+    {{&gt; header}}
+
+    &lt;div class="dashboard-layout"&gt;
+        {{&gt; sidebar}}
+
+        &lt;main class="dashboard-content"&gt;
+            &lt;h2&gt;Statistics&lt;/h2&gt;
+            &lt;div class="stats-grid"&gt;
+                {{&gt; stats-card}}
+                {{&gt; stats-card}}
+                {{&gt; stats-card}}
+            &lt;/div&gt;
+        &lt;/main&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+      <pre class="code-block language-html">
+&lt;!-- js/views/templates/partials/header.html --&gt;
+&lt;header class="app-header"&gt;
+    &lt;h1&gt;{{appName}}&lt;/h1&gt;
+    &lt;nav&gt;
+        &lt;a href="#/"&gt;Home&lt;/a&gt;
+        &lt;a href="#/dashboard"&gt;Dashboard&lt;/a&gt;
+    &lt;/nav&gt;
+&lt;/header&gt;
+</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">Template Caching</h4>
+      <p class="mb-3">
+        Templates are fetched once and cached for the session. Subsequent navigations to
+        the same view use the cached template, improving performance. The cache is cleared
+        on hard refresh.
+      </p>
+
+      <pre class="code-block language-javascript">
+// First navigation: Fetches template from server
+R.navigate('/home');  // HTTP request for home.html
+
+// Second navigation: Uses cached template
+R.navigate('/about'); // No request
+R.navigate('/home');  // No request - uses cache
+</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">Recommended File Organisation</h4>
+      <p class="mb-3">
+        Store templates alongside your view logic for easy maintenance:
+      </p>
+
+      <pre class="code-block language-plaintext">
+js/views/
+├── home.js                    # View logic
+├── about.js
+├── contact.js
+└── templates/
+    ├── home.html              # Template markup
+    ├── about.html
+    ├── contact.html
+    └── partials/
+        ├── header.html         # Reusable sections
+        ├── footer.html
+        └── stats-card.html
+</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">Path Resolution</h4>
+      <p class="mb-3">
+        All template paths are relative to the HTML page serving your SPA (not the JavaScript file).
+        If your SPA is at <code>/index.html</code>, template paths resolve from the site root.
+      </p>
+
+      <pre class="code-block language-javascript">
+// If your SPA is at: https://example.com/index.html
+const view = {
+    // Loads from: https://example.com/js/views/templates/home.html
+    templateUrl: 'js/views/templates/home.html'
+};
+
+// If your SPA is at: https://example.com/app/index.html
+const view = {
+    // Loads from: https://example.com/app/js/views/templates/home.html
+    templateUrl: 'js/views/templates/home.html'
+};
+</pre>
+
+      <h4 class="category-title-style mb-3 mt-4">Complete Example</h4>
+      <pre class="code-block language-javascript">
+// js/views/contact.js
+export const contactView = {
+    templateUrl: 'js/views/templates/contact.html',
+
+    partials: {
+        'form-header': 'js/views/templates/partials/form-header.html'
+    },
+
+    onMount($container) {
+        // Scan for icons
+        I.scan($container[0]);
+
+        // Bind form submit
+        $container.find('#contact-form').on('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                name: $('#name').val(),
+                email: $('#email').val(),
+                message: $('#message').val()
+            };
+
+            try {
+                await H.post('/api/contact', formData);
+                E.toast('Message sent!', { type: 'success' });
+                R.navigate('/thank-you');
+            } catch (err) {
+                E.toast('Error: ' + err.message, { type: 'error' });
+            }
+        });
+    },
+
+    onLeave() {
+        // Clean up event listeners
+        $('#contact-form').off('submit');
+    }
+};
+</pre>
+    </div>
+  </section>
+
   <!-- Route Parameters -->
   <section class="card mb-6" data-section="Route Parameters">
     <div class="card-header">
@@ -796,6 +1048,9 @@ R.init({
       <h4 class="category-title-style mb-3">View Organization</h4>
       <ul class="mb-4">
         <li><strong>Separate concerns</strong> - Keep views in separate files/modules</li>
+        <li><strong>Use templateUrl</strong> - Use <code>templateUrl</code> for views with more than a few lines of HTML</li>
+        <li><strong>Store templates</strong> - Keep templates in <code>js/views/templates/</code> directories</li>
+        <li><strong>Use partials</strong> - Extract reusable sections into partials for sharing across views</li>
         <li><strong>Use lifecycle hooks</strong> - Clean up in onLeave to prevent memory leaks</li>
         <li><strong>Template functions</strong> - Use functions for dynamic content, strings for static</li>
         <li><strong>Async loading</strong> - Fetch data in onEnter, not in templates</li>

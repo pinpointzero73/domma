@@ -48,7 +48,10 @@
     "blueprintLocation": "blueprints/",
     "blueprintNaming": "camelCase with 'Blueprint' suffix (e.g., userBlueprint)",
     "modelNaming": "camelCase (e.g., userModel)",
-    "formNaming": "Use F.render() or F.modal() with blueprints"
+    "formNaming": "Use F.render() or F.modal() with blueprints",
+    "templateUrl": "Use templateUrl for views, not inline template strings",
+    "templateDir": "js/views/templates/",
+    "partialsDir": "js/views/templates/partials/"
   },
 
   "documentation": {
@@ -60,6 +63,7 @@
   "reminders": [
     "This is Domma, NOT jQuery",
     "Always use aliases ($, _, M, B, etc.) instead of full names",
+    "Use templateUrl: 'path.html' for view templates, not inline strings",
     "CSS load order: domma.css → grid.css → elements.css → themes",
     "Check .claude/snippets.md for code patterns",
     "Check blueprints/ for reusable schemas",

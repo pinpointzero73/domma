@@ -11,6 +11,38 @@ For detailed, context-specific guidance, consult the distributed CLAUDE.md files
 A lightweight, zero-dependency JavaScript framework combining jQuery-style DOM manipulation, Lodash utilities, and
 modern UI components.
 
+## ⚠️ STOP - Convention Enforcement
+
+**Before writing code, check this table to use Domma's built-in features instead of reinventing them:**
+
+| When you need...                  | Use Domma's...                | NOT...                          |
+|-----------------------------------|-------------------------------|---------------------------------|
+| DOM selection/manipulation        | `$('#el').addClass('active')` | `document.querySelector()`      |
+| Store data locally                | `S.set('key', data)`          | `localStorage.setItem()`        |
+| Make HTTP requests                | `H.get('/api/users')`         | `fetch('/api/users')`           |
+| Utility functions (map, filter)   | `_.map(array, fn)`            | Manual `array.map()`            |
+| Date manipulation                 | `D().add(1, 'day')`           | Manual date arithmetic          |
+| Reactive data models              | `M.create(blueprint)`         | Manual state management         |
+| Form generation                   | `F.create(selector, blueprint)` | Manual `<form>` HTML          |
+| UI components (modals, tabs)      | `E.modal(selector, options)`  | Manual HTML/CSS/JS              |
+| Toast notifications               | `E.toast('Message', {type})`  | Manual notification divs        |
+| Icons                             | `<span data-icon="name">`     | Manual SVG/icon fonts           |
+| DataTables                        | `T.create(selector, {data})`  | Manual table generation         |
+| Confirm dialogs                   | `await E.confirm('Sure?')`    | `window.confirm()`              |
+| Templates                         | `templateUrl: 'path.html'`    | Large template strings in JS    |
+
+**Template File Convention:**
+- ✅ **DO**: Use `templateUrl: 'path/to/template.html'` for view templates
+- ✅ **DO**: Store templates in `/templates/` directories near view files
+- ✅ **DO**: Use `partials: { name: 'path.html' }` for reusable template sections
+- ❌ **DON'T**: Put large HTML template strings in JavaScript const variables
+- ❌ **DON'T**: Use inline `template:` strings longer than ~5 lines
+
+**When Unsure:**
+- If you're about to write vanilla JavaScript for something common (HTTP, storage, DOM, forms, dates), **ASK** if Domma provides it
+- If you're about to paste a large HTML string into a JavaScript file, **ASK** about using `templateUrl`
+- Check the [Domma Features Reference](#domma-features-reference) below before implementing manually
+
 ## Commands
 
 **Build:**

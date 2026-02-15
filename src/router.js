@@ -21,6 +21,7 @@ export const router = {
     _transitioning: false,
     _transitions: {},
     _initialised: false,
+    _templateCache: {},
 
     /**
      * Initialise the router
@@ -358,19 +359,54 @@ export const router = {
         this._transitioning = false;
     },
 
+    // Internal: Load template from URL with caching
+    async _loadTemplate(url) {
+        if (this._templateCache[url]) {
+            return this._templateCache[url];
+        }
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Failed to load template: ${url} (${response.status})`);
+            }
+            const text = await response.text();
+            this._templateCache[url] = text;
+            return text;
+        } catch (error) {
+            console.error(`[Domma Router] Template load error:`, error);
+            throw error;
+        }
+    },
+
     // Internal: Render content (template string or function)
     async _renderContent(view, params, $container) {
         let html;
 
         // Check if view is an object with template property
         if (typeof view === 'object' && !Array.isArray(view)) {
-            const template = view.template;
+            let template = view.template;
+
+            // Load template from URL if templateUrl specified
+            if (!template && view.templateUrl) {
+                template = await this._loadTemplate(view.templateUrl);
+            }
+
+            // Load partials from URLs if specified
+            let partials = {};
+            if (view.partials) {
+                const entries = Object.entries(view.partials);
+                const loaded = await Promise.all(
+                    entries.map(([name, url]) => this._loadTemplate(url).then(t => [name, t]))
+                );
+                partials = Object.fromEntries(loaded);
+            }
 
             // Render template
             if (typeof template === 'function') {
                 html = await template(params);
             } else if (typeof template === 'string') {
-                html = this._renderTemplate(template, params);
+                html = this._renderTemplate(template, params, partials);
             }
 
             // Set HTML (bypass sanitisation for trusted templates)
@@ -405,9 +441,9 @@ export const router = {
     },
 
     // Internal: Render template using Domma template engine
-    _renderTemplate(template, params) {
-        if (typeof window !== 'undefined' && window._) {
-            return window._.render(template, params);
+    _renderTemplate(template, params, partials = {}) {
+        if (typeof window !== 'undefined' && window._ && typeof window._.render === 'function') {
+            return window._.render(template, params || {}, { partials });
         }
         // Fallback: simple replacement
         return template.replace(/\{\{(\w+)\}\}/g, (match, key) => params[key] || '');
@@ -418,11 +454,27 @@ export const router = {
         let html;
 
         if (typeof view === 'object' && !Array.isArray(view)) {
-            const template = view.template;
+            let template = view.template;
+
+            // Load template from URL if templateUrl specified
+            if (!template && view.templateUrl) {
+                template = await this._loadTemplate(view.templateUrl);
+            }
+
+            // Load partials from URLs if specified
+            let partials = {};
+            if (view.partials) {
+                const entries = Object.entries(view.partials);
+                const loaded = await Promise.all(
+                    entries.map(([name, url]) => this._loadTemplate(url).then(t => [name, t]))
+                );
+                partials = Object.fromEntries(loaded);
+            }
+
             if (typeof template === 'function') {
                 html = await template(params);
             } else if (typeof template === 'string') {
-                html = this._renderTemplate(template, params);
+                html = this._renderTemplate(template, params, partials);
             }
             // Safe: html is from application-controlled templates, not user input
             this._container.innerHTML = html;

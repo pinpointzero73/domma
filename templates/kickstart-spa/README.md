@@ -40,19 +40,44 @@ The entire app is configured via `frontend/domma.config.json`:
 
 ### 2. View-Based Routing
 
-Each route maps to a view module in `js/views/`:
+Each route maps to a view module in `js/views/` with a companion template file:
 
 ```javascript
-// Example: js/views/home.js
-export default {
-  render() {
-    return `<h1>Welcome!</h1>`;
+// ✅ RECOMMENDED: js/views/home.js
+export const homeView = {
+  templateUrl: 'js/views/templates/home.html',  // External template file
+
+  async onEnter(params) {
+    // Called before rendering - fetch data, validate auth, etc.
+    const data = await H.get('/api/home');
+    return data;
   },
-  mounted() {
-    console.log('Home view mounted');
+
+  onMount($container) {
+    // Called after rendering - initialize components, bind events
+    I.scan($container[0]);  // Scan for icons
+    E.tooltip($container.find('[data-tooltip]'));
+  },
+
+  onLeave() {
+    // Cleanup when leaving view
   }
 };
 ```
+
+```html
+<!-- js/views/templates/home.html -->
+<div class="container">
+  <h1>Welcome to {{projectName}}</h1>
+  <p>This template was loaded from an external file!</p>
+</div>
+```
+
+**Why use `templateUrl`?**
+- Keeps HTML separate from JavaScript (easier to maintain)
+- Templates support Mustache syntax (`{{variable}}`, `{{#if}}`, `{{#each}}`)
+- Router caches templates automatically for performance
+- Use inline `template:` only for very simple views (<5 lines)
 
 Views are automatically loaded and mounted by the router.
 
@@ -125,22 +150,42 @@ The template includes working defaults:
 
 ### Adding a New Route
 
-1. **Create view module:**
+1. **Create template file:**
+   ```html
+   <!-- js/views/templates/pricing.html -->
+   <div class="container py-6">
+     <h1>Pricing</h1>
+     <p>Simple and transparent pricing for everyone.</p>
+     <div class="grid grid-cols-3 gap-4">
+       <!-- Pricing cards here -->
+     </div>
+   </div>
+   ```
+
+2. **Create view module:**
    ```javascript
    // js/views/pricing.js
-   export default {
-     render() {
-       return `<h1>Pricing</h1><p>Simple and transparent</p>`;
+   export const pricingView = {
+     templateUrl: 'js/views/templates/pricing.html',
+
+     async onEnter(params) {
+       // Fetch pricing data if needed
+       const plans = await H.get('/api/pricing');
+       return plans;
+     },
+
+     onMount($container) {
+       I.scan($container[0]);  // Scan for icons
      }
    };
    ```
 
-2. **Export from views/index.js:**
+3. **Export from views/index.js:**
    ```javascript
-   export {default as pricing} from './pricing.js';
+   export {pricingView as pricing} from './pricing.js';
    ```
 
-3. **Add to domma.config.json:**
+4. **Add to domma.config.json:**
    ```json
    {
      "path": "/pricing",
@@ -149,7 +194,7 @@ The template includes working defaults:
    }
    ```
 
-4. **Add to navbar (optional):**
+5. **Add to navbar (optional):**
    ```json
    {
      "text": "Pricing",
