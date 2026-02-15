@@ -1,107 +1,119 @@
 {
   "releases": [
     {
+      "year": "v0.16.0",
+      "title": "Template Evolution - External Template Loading",
+      "description": "<p><strong>Major enhancement to the SPA Router:</strong> Views can now load HTML templates from external files using <code>templateUrl</code> and <code>partials</code>, dramatically improving code organisation and maintainability.</p><p><strong>Key Features:</strong></p><ul><li><strong>External Templates</strong> — Reference <code>.html</code> files instead of embedding large HTML strings in JavaScript</li><li><strong>Template Caching</strong> — Templates fetched once and cached per session for optimal performance</li><li><strong>Parallel Partials</strong> — Reusable template sections loaded concurrently</li><li><strong>Mustache Syntax</strong> — Full support for <code>{{variable}}</code>, <code>{{#if}}</code>, <code>{{#each}}</code>, and <code>{{> partial}}</code></li><li><strong>Organised Structure</strong> — Recommended <code>js/views/templates/</code> directory pattern</li></ul><p><strong>Impact:</strong> Views with 400+ lines of inline HTML reduced to ~50 lines of clean JavaScript. HTML files get proper syntax highlighting and editor support, while logic stays separate from presentation.</p><p><strong>Enhanced Kickstart Template:</strong> New Domma projects now include built-in convention enforcement (<code>CLAUDE.md</code>, memory files) for AI-assisted development with Claude Code, Cursor, and similar tools.</p><p><strong>Documentation:</strong> Comprehensive <em>Template Files</em> tutorial added to Router Showcase with 6 detailed sections covering all aspects of external template usage. Router now discoverable from the showcase hub.</p>",
+      "date": "2026-02-15"
+    },
+    {
+      "year": "v0.15.0",
+      "title": "Motion Override & Effects Polish",
+      "description": "<p><strong>Critical Fix:</strong> Resolved issue where <code>reveal()</code> and <code>ripple()</code> effects were disabled by CSS media queries even when JavaScript explicitly set <code>respectMotionPreference: false</code>.</p><p><strong>Solution:</strong> Added <code>data-force-animation</code> attribute system to override CSS <code>@media (prefers-reduced-motion: reduce)</code> queries. Showcase demo pages now display animations correctly regardless of system motion preferences.</p><p><strong>Code Cleanup:</strong> Updated effects showcase pages to use consistent <code>respectMotionPreference: false</code> configuration, removing obsolete variable references across 3 showcase files.</p>",
+      "date": "2026-02-14"
+    },
+    {
       "year": "v0.14.5",
       "title": "Typewriter Effect with Action Queue",
-      "description": "Introduced Domma.effects.typewriter() with character-by-character text rendering, blinking cursor (caret, block, underline styles), and powerful action queue system. Features include render/wait/undoRender actions, per-character entrance effects (fade, bounce, glow), partial text deletion, configurable looping, and full pause/resume/restart controls. Optimized with GPU acceleration and hardware-accelerated animations for buttery-smooth 60fps rendering. Perfect for hero banners, animated intros, and dynamic text displays.",
+      "description": "<p>Introduced <code>Domma.effects.typewriter()</code> with character-by-character text rendering, blinking cursor, and powerful action queue system.</p><p><strong>Features:</strong></p><ul><li>Cursor styles: caret, block, underline</li><li>Action queue: <code>render</code>, <code>wait</code>, <code>undoRender</code> actions</li><li>Per-character entrance effects: fade, bounce, glow</li><li>Partial text deletion and configurable looping</li><li>Full control: pause/resume/restart</li></ul><p><strong>Performance:</strong> GPU acceleration and hardware-accelerated animations for buttery-smooth 60fps rendering. Perfect for hero banners, animated intros, and dynamic text displays.</p>",
       "date": "2026-02-13"
     },
     {
       "year": "v0.14.1",
       "title": "Patron Saint Celebrations & Animation Polish",
-      "description": "Transformed UK patron saint celebrations with horizontal-drifting flower petals: St. David's Day yellow daffodil petals, St. George's Day red/white rose petals, St. Andrew's Day purple heather petals, and St. Patrick's Day green clover petals. Fixed critical St. David's Day animation freeze caused by canvas state corruption (missing ctx.restore()). Replaced harsh X-shaped Saltire sparkles with elegant 4-pointed stars. Reduced Guy Fawkes Night initial particle spam with gradual spawning (25% start, builds to 100% over 20 seconds). All patron saint celebrations now feature realistic flutter animations and gentle vertical bobbing.",
+      "description": "<p>Transformed UK patron saint celebrations with horizontal-drifting flower petals:</p><ul><li><strong>St. David's Day</strong> — Yellow daffodil petals</li><li><strong>St. George's Day</strong> — Red/white rose petals</li><li><strong>St. Andrew's Day</strong> — Purple heather petals</li><li><strong>St. Patrick's Day</strong> — Green clover petals</li></ul><p><strong>Bug Fixes:</strong></p><ul><li>Fixed critical St. David's Day animation freeze caused by canvas state corruption (missing <code>ctx.restore()</code>)</li><li>Replaced harsh X-shaped Saltire sparkles with elegant 4-pointed stars</li><li>Reduced Guy Fawkes Night initial particle spam with gradual spawning (25% start, builds to 100% over 20 seconds)</li></ul><p>All patron saint celebrations now feature realistic flutter animations and gentle vertical bobbing.</p>",
       "date": "2026-02-09"
     },
     {
       "year": "v0.14.0",
       "title": "CSS Architecture & Progression Component",
-      "description": "Major CSS restructure with proper build process: separated domma.css (base + utilities), grid.css (layout systems), and elements.css (22 UI components). Introduced unified Progression component with dual modes (timeline/roadmap) for event visualisation. Added status tracking with 5 states (planned, in-progress, completed, delayed, cancelled), interactive tooltips, and responsive layouts. Enhanced celebrations showcase with accurate release timelines. Improved CSS build workflow with src/css source files and npm run build:css automation.",
+      "description": "<p><strong>Major CSS Restructure:</strong> Proper build process with separation of concerns:</p><ul><li><code>domma.css</code> — Base styles + utilities</li><li><code>grid.css</code> — Layout systems</li><li><code>elements.css</code> — 22 UI components</li></ul><p><strong>New Progression Component:</strong> Unified component with dual modes for event visualisation:</p><ul><li><strong>Timeline mode</strong> — Chronological events</li><li><strong>Roadmap mode</strong> — Status-driven milestones</li><li>5 status states: planned, in-progress, completed, delayed, cancelled</li><li>Interactive tooltips and responsive layouts</li></ul><p>Enhanced celebrations showcase with accurate release timelines. Improved CSS build workflow with <code>src/css</code> source files and <code>npm run build:css</code> automation.</p>",
       "date": "2026-02-08"
     },
     {
       "year": "v0.13.4",
       "title": "Enhanced Celebrations & Particle Fixes",
-      "description": "Resolved 'Invalid particle values' errors across Halloween, Guy Fawkes, Christmas, St. Patrick's, St. George's, St. David's, and St. Andrew's themes by ensuring proper vx, vy, static, x, y initialisations. Fixed Christmas snow rendering and witch's broomstick orientation. Implemented dynamic Batman logo display on the moon and procedural fork-lighting for the Halloween theme. Introduced fork-lighting and visually overhauled the Catherine Wheel for the Guy Fawkes theme for a more realistic and dynamic effect.",
+      "description": "<p><strong>Bug Fixes:</strong> Resolved 'Invalid particle values' errors across all celebration themes (Halloween, Guy Fawkes, Christmas, St. Patrick's, St. George's, St. David's, St. Andrew's) by ensuring proper <code>vx</code>, <code>vy</code>, <code>static</code>, <code>x</code>, <code>y</code> initialisations.</p><p><strong>Visual Enhancements:</strong></p><ul><li>Fixed Christmas snow rendering and witch's broomstick orientation</li><li>Implemented dynamic Batman logo display on the moon</li><li>Added procedural fork-lighting for Halloween theme</li><li>Visually overhauled Catherine Wheel for Guy Fawkes theme with fork-lighting for more realistic and dynamic effects</li></ul>",
       "date": "2026-02-08"
     },
     {
       "year": "v0.13.3",
       "title": "Polished SPA Templates & Dev Server",
-      "description": "Redesigned SPA template views with professional layouts matching the QuickStart demo. Added built-in development server (npx domma serve) with live reload and automatic project detection. Fixed template CSS paths.",
+      "description": "<p>Redesigned SPA template views with professional layouts matching the QuickStart demo.</p><p><strong>New Development Server:</strong> Added built-in <code>npx domma serve</code> command with:</p><ul><li>Live reload functionality</li><li>Automatic MPA/SPA project detection</li><li>Fixed template CSS paths</li></ul>",
       "date": "2026-02-05"
     },
     {
       "year": "v0.13.2",
       "title": "SPA Template Path Fixes",
-      "description": "Fixed broken CSS and JavaScript paths in SPA template that caused white screen errors after npx domma init.",
+      "description": "<p><strong>Critical Fix:</strong> Fixed broken CSS and JavaScript paths in SPA template that caused white screen errors after <code>npx domma init</code>.</p>",
       "date": "2026-02-05"
     },
     {
       "year": "v0.13.1",
       "title": "Development Server with npm Scripts",
-      "description": "Added npm scripts (npm start, npm run serve) to generated projects for easier development workflow. Server auto-prompts after npx domma init.",
+      "description": "<p>Added npm scripts to generated projects for easier development workflow:</p><ul><li><code>npm start</code></li><li><code>npm run serve</code></li></ul><p>Server auto-prompts after <code>npx domma init</code>.</p>",
       "date": "2026-02-05"
     },
     {
       "year": "v0.13.0",
       "title": "Built-in Development Server",
-      "description": "Introduced npx domma serve command with optional live-server integration, automatic MPA/SPA detection, and custom port support (default: 3096).",
+      "description": "<p>Introduced <code>npx domma serve</code> command with:</p><ul><li>Optional live-server integration</li><li>Automatic MPA/SPA detection</li><li>Custom port support (default: 3096)</li></ul>",
       "date": "2026-02-05"
     },
     {
       "year": "v0.12.1",
       "title": "DommaJS Brand Refresh & Bug Fixes",
-      "description": "Rebranded to DommaJS across splash page, navbar, and footer. Improved feature card animations with smooth breathing effect. Fixed critical backToTop bug that could destroy page body element when selector parameter was used.",
+      "description": "<p><strong>Branding:</strong> Rebranded to <strong>DommaJS</strong> across splash page, navbar, and footer.</p><p><strong>Enhancements:</strong> Improved feature card animations with smooth breathing effect.</p><p><strong>Critical Fix:</strong> Fixed <code>backToTop()</code> bug that could destroy page body element when selector parameter was used.</p>",
       "date": "2026-02-04"
     },
     {
       "year": "v0.12.0",
       "title": "SPA Router & Ambient Effects",
-      "description": "Hash-based SPA routing with middleware support, view lifecycle hooks, and navigation events. Added CSS-only ambient background effects (rotating glows, floating blobs, waves) for stunning visual presentations without JavaScript.",
+      "description": "<p><strong>SPA Router:</strong> Hash-based routing system with:</p><ul><li>Middleware support for route guards</li><li>View lifecycle hooks (<code>onEnter</code>, <code>onMount</code>, <code>onLeave</code>)</li><li>Navigation events</li></ul><p><strong>Ambient Effects:</strong> CSS-only ambient background effects (rotating glows, floating blobs, waves) for stunning visual presentations without JavaScript.</p>",
       "date": "2026-02-04"
     },
     {
       "year": "v0.11.1",
       "title": "Address MiniApp",
-      "description": "New production MiniApp for UK address lookup with postcode search. Features ONS local data integration, premium getAddress.io provider support, bar charts for analytics, and star ratings for saved addresses.",
+      "description": "<p>New production MiniApp for UK address lookup with postcode search.</p><p><strong>Features:</strong></p><ul><li>ONS local data integration</li><li>Premium getAddress.io provider support</li><li>Bar charts for analytics</li><li>Star ratings for saved addresses</li></ul>",
       "date": "2026-02-02"
     },
     {
       "year": "v0.11.0",
       "title": "Schema Builder - Visual Blueprint Designer",
-      "description": "Build Domma Blueprints visually with drag-and-drop. Features 21 field types, live form preview with validation testing, 12-column grid layout support, and multi-format export to JavaScript, JSON, or TypeScript.",
+      "description": "<p>Build Domma Blueprints visually with drag-and-drop interface.</p><p><strong>Features:</strong></p><ul><li>21 field types</li><li>Live form preview with validation testing</li><li>12-column grid layout support</li><li>Multi-format export: JavaScript, JSON, TypeScript</li></ul>",
       "date": "2026-01-26"
     },
     {
       "year": "v0.10.1",
       "title": "Easier Project Setup",
-      "description": "New CLI tools and setup documentation make getting started faster. Run the post-install script to configure your environment automatically.",
+      "description": "<p>New CLI tools and setup documentation make getting started faster.</p><p>Run the post-install script to configure your environment automatically.</p>",
       "date": "2026-01-23"
     },
     {
       "year": "v0.10.0",
       "title": "Blueprints - Define Once, Use Everywhere",
-      "description": "Major release introducing Blueprints for unified data schemas. Define your data structure once and use it with Models, Forms, and CRUD operations automatically.",
+      "description": "<p><strong>Major Release:</strong> Introducing Blueprints for unified data schemas.</p><p>Define your data structure once and use it with:</p><ul><li>Models (reactive data)</li><li>Forms (auto-generation)</li><li>CRUD operations (automatic API integration)</li></ul>",
       "date": "2026-01-23"
     },
     {
       "year": "Jan 22-23",
       "title": "Build System Updates",
-      "description": "Updated distribution bundles with improved build process and version consistency across all bundle variants.",
+      "description": "<p>Updated distribution bundles with improved build process and version consistency across all bundle variants.</p>",
       "date": "2026-01-22"
     },
     {
       "year": "Jan 21",
       "title": "CDN Distribution Ready",
-      "description": "Framework now available via CDN for easier integration. Simply include the script tag and start using Domma in your projects.",
+      "description": "<p>Framework now available via CDN for easier integration.</p><p>Simply include the script tag and start using Domma in your projects.</p>",
       "date": "2026-01-21"
     },
     {
       "year": "v0.9.x",
       "title": "Foundation Release",
-      "description": "Core framework with DOM manipulation, utilities, reactive models, UI components, and theming system.",
+      "description": "<p>Core framework with:</p><ul><li>DOM manipulation (jQuery-compatible API)</li><li>Utilities (Lodash-compatible)</li><li>Reactive models</li><li>UI components</li><li>Theming system</li></ul>",
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.14.5"
+  "latestVersion": "v0.16.0"
 }

@@ -8164,6 +8164,7 @@ class Progression extends Component {
         theme: 'default',           // 'default' | 'minimal' | 'corporate' | 'modern'
         clickable: false,
         onItemClick: null,
+        allowHtml: false,           // Allow HTML in descriptions (sanitized with DOMPurify)
 
         // Timeline-specific options
         yearWidth: '80px',
@@ -8268,7 +8269,7 @@ class Progression extends Component {
             <div class="dm-progression-marker dm-timeline-year">${this._escapeHtml(item.year || item.date || '')}</div>
             <div class="dm-progression-content dm-timeline-content">
                 <h4 class="dm-progression-title dm-timeline-title">${this._escapeHtml(item.title || '')}</h4>
-                <p class="dm-progression-description dm-timeline-description">${this._escapeHtml(item.description || '')}</p>
+                <p class="dm-progression-description dm-timeline-description">${this._renderContent(item.description || '')}</p>
             </div>
         `;
 
@@ -8313,7 +8314,7 @@ class Progression extends Component {
 
         // Description
         if (item.description) {
-            contentHtml += `<p class="dm-progression-description">${this._escapeHtml(item.description)}</p>`;
+            contentHtml += `<p class="dm-progression-description">${this._renderContent(item.description)}</p>`;
         }
 
         // Progress bar for in-progress items
@@ -8414,6 +8415,24 @@ class Progression extends Component {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    _sanitizeHtml(html) {
+        // Use DOMPurify if available, otherwise escape HTML
+        if (typeof DOMPurify !== 'undefined') {
+            return DOMPurify.sanitize(html, {
+                ALLOWED_TAGS: ['p', 'strong', 'em', 'u', 'br', 'ul', 'ol', 'li', 'code', 'pre', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'span', 'div'],
+                ALLOWED_ATTR: ['href', 'target', 'class', 'id']
+            });
+        } else {
+            console.warn('DOMPurify not available, falling back to HTML escaping');
+            return this._escapeHtml(html);
+        }
+    }
+
+    _renderContent(content) {
+        // Return sanitized HTML if allowHtml is true, otherwise escape
+        return this.options.allowHtml ? this._sanitizeHtml(content) : this._escapeHtml(content);
     }
 
     _findItemIndex(indexOrId) {

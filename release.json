@@ -1,8 +1,52 @@
 {
-  "version": "0.15.0",
-  "releaseDate": "2026-02-14",
-  "codename": "Motion Override",
+  "version": "0.16.0",
+  "releaseDate": "2026-02-15",
+  "codename": "Template Evolution",
   "changes": {
+    "features": [
+      {
+        "title": "Router External Template Loading (templateUrl)",
+        "description": "Added support for loading view templates from external HTML files, dramatically improving code organisation and maintainability for SPA applications",
+        "impact": "high",
+        "files": [
+          "src/router.js",
+          "public/showcase/router/index.html",
+          "public/showcase/router/CLAUDE.md"
+        ],
+        "details": "<p><strong>Views can now load HTML templates from separate files:</strong></p><p>Instead of embedding large HTML strings in JavaScript, use <code>templateUrl</code> to reference external <code>.html</code> files. This provides proper syntax highlighting, cleaner code organisation, and better separation of concerns.</p><p><strong>Key features:</strong></p><ul><li><strong>Template caching</strong> — Templates are fetched once and cached for the session, improving performance on repeat navigation</li><li><strong>Parallel partial loading</strong> — Reusable template sections (<code>partials</code>) are loaded concurrently with the main template</li><li><strong>Mustache syntax support</strong> — Use <code>{{variable}}</code>, <code>{{#if}}</code>, <code>{{#each}}</code>, and <code>{{> partial}}</code> in external templates</li><li><strong>Organised file structure</strong> — Recommended layout with <code>js/views/templates/</code> directories</li></ul><p><strong>Benefits:</strong> Views with 400+ lines of inline HTML reduced to ~50 lines of clean JavaScript. HTML files get proper editor support, and logic stays separate from presentation.</p>"
+      },
+      {
+        "title": "Kickstart Template Augmented Development",
+        "description": "Enhanced the SPA kickstart template with built-in convention enforcement for AI-assisted development (Claude Code, Cursor, etc.)",
+        "impact": "medium",
+        "files": [
+          "templates/kickstart-spa/CLAUDE.md",
+          "templates/kickstart-spa/.claude/memory/MEMORY.md",
+          "templates/kickstart-spa/.claude/settings.json"
+        ],
+        "details": "<p><strong>New projects now include:</strong></p><ul><li><strong>CLAUDE.md</strong> — Consumer-focused convention enforcement with quick reference tables for Domma APIs</li><li><strong>Memory file</strong> — Persistent reminders of core patterns and common mistakes</li><li><strong>Updated settings</strong> — templateUrl patterns and reminders built into the project configuration</li></ul><p>Developers using AI assistants get immediate guidance on Domma conventions, preventing common mistakes like using <code>fetch()</code> instead of <code>H.get()</code> or <code>localStorage</code> instead of <code>S.set()</code>.</p>"
+      }
+    ],
+    "enhancements": [
+      {
+        "title": "Router Showcase Comprehensive Tutorial",
+        "description": "Added extensive Template Files tutorial section to router showcase with 6 sub-sections covering all aspects of external template usage",
+        "impact": "medium",
+        "files": [
+          "public/showcase/router/index.html"
+        ],
+        "details": "<p><strong>New tutorial sections cover:</strong></p><ul><li>Problem/solution comparison (before/after examples)</li><li>Basic <code>templateUrl</code> usage with clear examples</li><li>Template variables and Mustache syntax</li><li>Partials for reusable template sections</li><li>Template caching behaviour and performance</li><li>Recommended file organisation patterns</li></ul><p>The router is now discoverable from the showcase hub, and best practices have been updated to explicitly recommend <code>templateUrl</code> for views with more than a few lines of HTML.</p>"
+      },
+      {
+        "title": "Enhanced Detail Formatting",
+        "description": "Improved release notes formatting with proper HTML structure for better readability",
+        "impact": "low",
+        "files": [
+          "release.json"
+        ],
+        "details": "<p>Release note details now use structured HTML with paragraphs, lists, and inline code formatting instead of plain text arrays.</p><p>This provides better visual hierarchy and makes complex feature descriptions easier to scan and understand.</p>"
+      }
+    ],
     "bugFixes": [
       {
         "title": "Effects Motion Preference Override",
@@ -12,12 +56,7 @@
           "src/effects.js",
           "src/css/domma.css"
         ],
-        "details": [
-          "Added data-force-animation attribute to elements when motion preference should be ignored",
-          "Updated CSS @media (prefers-reduced-motion: reduce) queries to exclude elements with data-force-animation",
-          "Fixed ripple effect to apply attribute to dynamically created ripple elements",
-          "Ensures showcase demo pages work correctly regardless of user's system motion preferences"
-        ]
+        "details": "<p><strong>Root cause:</strong> CSS <code>@media (prefers-reduced-motion: reduce)</code> queries were applying globally, overriding JavaScript configuration.</p><p><strong>Solution:</strong></p><ul><li>Added <code>data-force-animation</code> attribute to elements when motion preference should be ignored</li><li>Updated CSS media queries to exclude elements with this attribute</li><li>Fixed ripple effect to apply the attribute to dynamically created ripple elements</li></ul><p><strong>Impact:</strong> Showcase demo pages now work correctly regardless of user's system motion preferences, ensuring animations display when explicitly configured.</p>"
       },
       {
         "title": "Showcase Effects Pages Cleanup",
@@ -28,23 +67,28 @@
           "public/showcase/effects/shake.html",
           "public/showcase/effects/counter.html"
         ],
-        "details": [
-          "Updated all showcase pages to use respectMotionPreference: false consistently",
-          "Fixed 14 remaining references across 3 showcase files"
-        ]
+        "details": "<p>Updated all showcase pages to use <code>respectMotionPreference: false</code> consistently.</p><p>Fixed 14 remaining references across 3 showcase files, ensuring consistent behaviour and removing deprecated API usage.</p>"
       }
     ],
-    "features": [],
-    "enhancements": [],
     "breaking": []
   },
   "buildInfo": {
-    "commit": "c91b2e2",
-    "buildDate": "2026-02-14T11:00:00Z"
+    "commit": "latest",
+    "buildDate": "2026-02-15T15:45:00Z"
   },
   "stats": {
-    "totalFiles": 2,
-    "linesAdded": 15,
-    "linesRemoved": 5
+    "totalFiles": 15,
+    "linesAdded": 1247,
+    "linesRemoved": 843,
+    "filesChanged": [
+      "src/router.js",
+      "public/showcase/router/index.html",
+      "public/showcase/router/CLAUDE.md",
+      "public/showcase/index.html",
+      "templates/kickstart-spa/CLAUDE.md",
+      "templates/kickstart-spa/.claude/memory/MEMORY.md",
+      "templates/kickstart-spa/.claude/settings.json",
+      "release.json"
+    ]
   }
 }
