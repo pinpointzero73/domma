@@ -1,0 +1,24 @@
+# robots.txt for dommajs.org
+# Controls how search engines crawl and index the site
+
+# Allow all well-behaved crawlers by default
+User-agent: *
+
+# Block admin and authentication pages
+Disallow: /admin/
+Disallow: /login/
+
+# Block build artifacts and internal resources
+Disallow: /dist/
+Disallow: /assets/
+Disallow: /layouts/
+
+# Block any test or development files
+Disallow: /test/
+Disallow: /*.test.html
+
+# Allow everything else (default)
+Allow: /
+
+# Sitemap location
+Sitemap: https://dommajs.org/sitemap.xml

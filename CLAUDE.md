@@ -277,6 +277,7 @@ public/
 - Do not run a server as I am running one
 - Audit your own work and reiterate where possible
 - **British English**: Use British spellings in all new code, comments, and documentation (-ise not -ize, -yse not -yze, -our not -or). Existing code may use American spellings for backwards compatibility.
+- When adding a new public page, add its entry to `public/sitemap.xml`
 
 ## Domma Features Reference
 
