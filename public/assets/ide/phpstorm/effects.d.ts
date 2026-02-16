@@ -47,14 +47,15 @@ export interface PulseOptions {
     respectMotionPreference?: boolean;
 }
 
-export interface TypewriterAction {
+export interface ScribeAction {
     render?: string;
     effect?: 'none' | 'fade' | 'bounce' | 'glow';
     wait?: string | number;
     undoRender?: boolean | number | 'all';
 }
 
-export interface TypewriterOptions {
+export interface ScribeOptions {
+    mode?: 'typewriter' | 'word' | 'sentence';
     speed?: number;
     deleteSpeed?: number;
     cursor?: boolean;
@@ -66,10 +67,10 @@ export interface TypewriterOptions {
     pauseOnHover?: boolean;
     autoStart?: boolean;
     respectMotionPreference?: boolean;
-    actions?: TypewriterAction[];
+    actions?: ScribeAction[];
     onStart?: () => void;
     onComplete?: () => void;
-    onCharacter?: (char: string, index: number) => void;
+    onCharacter?: (unit: string, index: number) => void;
     onRender?: (text: string) => void;
     onUndoRender?: (deletedText: string) => void;
     onLoop?: (loopCount: number) => void;
@@ -145,8 +146,8 @@ export interface Effects {
     breathe(selector: Selector, options?: BreatheOptions): EffectControl | null;
     /** Pulsing scale animation */
     pulse(selector: Selector, options?: PulseOptions): EffectControl | null;
-    /** Character-by-character text animation with action queue */
-    typewriter(selector: Selector, options?: TypewriterOptions): EffectControl | null;
+    /** Text animation with configurable granularity (characters, words, or sentences) and action queue */
+    scribe(selector: Selector, options?: ScribeOptions): EffectControl | null;
     /** Scroll-triggered entrance animations using IntersectionObserver */
     reveal(selector: Selector, options?: RevealOptions): EffectControl | null;
     /** Text cipher/decode animation */

@@ -399,9 +399,9 @@
           "section": "effects-shake"
         },
         {
-          "text": "Typewriter",
-          "url": "showcase/effects/typewriter.html",
-          "section": "effects-typewriter"
+          "text": "Scribe",
+          "url": "showcase/effects/scribe.html",
+          "section": "effects-scribe"
         },
         {
           "divider": true

@@ -28,8 +28,8 @@
         { "text": "Reveal", "url": "reveal.html", "slug": "effects-reveal" },
         { "text": "Ripple", "url": "ripple.html", "slug": "effects-ripple" },
         { "text": "Scramble", "url": "scramble.html", "slug": "effects-scramble" },
-        { "text": "Shake", "url": "shake.html", "slug": "effects-shake" },
-        { "text": "Typewriter", "url": "typewriter.html", "slug": "effects-typewriter" }
+        { "text": "Scribe", "url": "scribe.html", "slug": "effects-scribe" },
+        { "text": "Shake", "url": "shake.html", "slug": "effects-shake" }
       ]
     },
     {

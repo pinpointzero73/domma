@@ -424,7 +424,7 @@
 
     <!-- Right column: Tagline and CTA -->
     <div>
-      <p class="tagline" id="splash-typewriter" style="text-align: left; margin: 0 0 1.5rem 0; font-size: 1.1rem; line-height: 1.6; min-height: 3.2em;">
+      <p class="tagline" id="splash-scribe" style="text-align: left; margin: 0 0 1.5rem 0; font-size: 1.1rem; line-height: 1.6; min-height: 3.2em;">
       </p>
       <div style="text-align: right;">
         <a href="showcase/index.html" class="cta">
@@ -859,7 +859,7 @@
   // Motion preference management
   const MotionControl = {
     storageKey: 'domma:motionEnabled',
-    typewriterInstance: null,
+    scribeInstance: null,
     isHovering: false,
     hoverTimeout: null,
 
@@ -944,24 +944,24 @@
       }
 
       // Properly stop current typewriter
-      if (this.typewriterInstance) {
-        if (this.typewriterInstance.stop) {
-          this.typewriterInstance.stop();
+      if (this.scribeInstance) {
+        if (this.scribeInstance.stop) {
+          this.scribeInstance.stop();
         }
-        if (this.typewriterInstance.destroy) {
-          this.typewriterInstance.destroy();
+        if (this.scribeInstance.destroy) {
+          this.scribeInstance.destroy();
         }
-        this.typewriterInstance = null;
+        this.scribeInstance = null;
       }
 
       // Wait a frame for cleanup to complete before starting new animation
       requestAnimationFrame(() => {
         if (!this.isHovering) return; // User already moved away
 
-        const $target = $('#splash-typewriter');
+        const $target = $('#splash-scribe');
         $target.empty();
 
-        this.typewriterInstance = Domma.effects.typewriter('#splash-typewriter', {
+        this.scribeInstance = Domma.effects.scribe('#splash-scribe', {
           speed: 25, // Faster for hover
           deleteSpeed: 15,
           cursor: true,
@@ -988,14 +988,14 @@
       this.hoverTimeout = setTimeout(() => {
         if (!this.isHovering && this.isEnabled()) { // Only restore if still not hovering and animations enabled
           // Properly stop current instance
-          if (this.typewriterInstance) {
-            if (this.typewriterInstance.stop) {
-              this.typewriterInstance.stop();
+          if (this.scribeInstance) {
+            if (this.scribeInstance.stop) {
+              this.scribeInstance.stop();
             }
-            if (this.typewriterInstance.destroy) {
-              this.typewriterInstance.destroy();
+            if (this.scribeInstance.destroy) {
+              this.scribeInstance.destroy();
             }
-            this.typewriterInstance = null;
+            this.scribeInstance = null;
           }
 
           // Wait a frame before restarting default animation
@@ -1026,24 +1026,24 @@
 
     // Update typewriter based on preference
     updateTypewriter(enabled) {
-      const $target = $('#splash-typewriter');
+      const $target = $('#splash-scribe');
 
       // Properly stop and clean up existing instance
-      if (this.typewriterInstance) {
-        if (this.typewriterInstance.stop) {
-          this.typewriterInstance.stop();
+      if (this.scribeInstance) {
+        if (this.scribeInstance.stop) {
+          this.scribeInstance.stop();
         }
-        if (this.typewriterInstance.destroy) {
-          this.typewriterInstance.destroy();
+        if (this.scribeInstance.destroy) {
+          this.scribeInstance.destroy();
         }
-        this.typewriterInstance = null;
+        this.scribeInstance = null;
       }
 
       if (enabled) {
         // Enable animations - wait a frame for cleanup
         requestAnimationFrame(() => {
           $target.empty();
-          this.typewriterInstance = Domma.effects.typewriter('#splash-typewriter', {
+          this.scribeInstance = Domma.effects.scribe('#splash-scribe', {
             speed: 40,
             deleteSpeed: 20,
             cursor: true,

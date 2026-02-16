@@ -51,7 +51,7 @@ Programmatic animation effects accessed via `Domma.effects`:
 
 - **breathe()** - Sinusoidal floating animation
 - **pulse()** - Grow-and-shrink scale animation
-- **typewriter()** - Character-by-character text animation with action queue
+- **scribe()** - Text animation with configurable granularity (characters, words, or sentences) and action queue
 - **reveal()** - Scroll-triggered entrance animations (fade, slide, zoom, flip) using IntersectionObserver
 - **scramble()** - Text cipher/decode animation with multiple reveal orders
 - **counter()** - Animated number counting with easing, formatting, and scroll trigger

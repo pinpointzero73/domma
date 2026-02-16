@@ -391,13 +391,14 @@ export function pulse(selector, options = {}) {
 }
 
 /**
- * Apply a typewriter effect to elements
- * Types text character-by-character with optional entrance effects
+ * Apply a scribe effect to elements
+ * Types text with configurable granularity (characters, words, or sentences) and optional entrance effects
  *
  * @param {string|Element|NodeList} selector - Element(s) to animate
  * @param {Object} options - Configuration options
- * @param {number} options.speed - Milliseconds per character when typing (default: 50)
- * @param {number} options.deleteSpeed - Milliseconds per character when deleting (default: 30)
+ * @param {string} options.mode - Rendering granularity: 'typewriter' (char-by-char), 'word', or 'sentence' (default: 'typewriter')
+ * @param {number} options.speed - Milliseconds per unit when typing (default: 50)
+ * @param {number} options.deleteSpeed - Milliseconds per unit when deleting (default: 30)
  * @param {boolean} options.cursor - Show blinking cursor (default: true)
  * @param {string} options.cursorChar - Cursor character (default: '|')
  * @param {boolean} options.cursorBlink - Animate cursor blink (default: true)
@@ -409,23 +410,34 @@ export function pulse(selector, options = {}) {
  * @param {Array<Object>} options.actions - Action queue to execute
  * @param {Function} options.onStart - Callback when animation starts
  * @param {Function} options.onComplete - Callback when animation completes
- * @param {Function} options.onCharacter - Callback for each character typed (char, index)
+ * @param {Function} options.onCharacter - Callback for each unit rendered (unit, index) - unit can be char/word/sentence depending on mode
  * @param {Function} options.onRender - Callback when render action completes (text)
  * @param {Function} options.onUndoRender - Callback when undoRender action completes (deletedText)
  * @param {Function} options.onLoop - Callback on each loop iteration (loopCount)
  * @returns {Object} Control object with pause(), resume(), stop(), restart(), destroy() methods
  *
  * @example
- * // Simple usage
- * Domma.effects.typewriter('.hero-title', {
+ * // Simple usage (character mode)
+ * Domma.effects.scribe('.hero-title', {
+ *   mode: 'typewriter',
  *   actions: [
  *     { render: 'Hello, World!', effect: 'bounce' }
  *   ]
  * });
  *
  * @example
+ * // Word-by-word rendering
+ * Domma.effects.scribe('.demo', {
+ *   mode: 'word',
+ *   actions: [
+ *     { render: 'Welcome to Domma', effect: 'fade' }
+ *   ]
+ * });
+ *
+ * @example
  * // Complex sequence with undo
- * const tw = Domma.effects.typewriter('.demo', {
+ * const scribe = Domma.effects.scribe('.demo', {
+ *   mode: 'typewriter',
  *   speed: 50,
  *   actions: [
  *     { render: 'Hello', effect: 'fade' },
@@ -437,9 +449,10 @@ export function pulse(selector, options = {}) {
  *   loop: true
  * });
  */
-export function typewriter(selector, options = {}) {
+export function scribe(selector, options = {}) {
   // Default options
   const defaults = {
+    mode: 'typewriter', // 'typewriter' (char-by-char), 'word', or 'sentence'
     speed: 50,
     deleteSpeed: 30,
     cursor: true,
@@ -471,19 +484,19 @@ export function typewriter(selector, options = {}) {
   } else if (selector instanceof NodeList || Array.isArray(selector)) {
     elements = Array.from(selector);
   } else {
-    console.error('[Domma.effects.typewriter] Invalid selector');
+    console.error('[Domma.effects.scribe] Invalid selector');
     return null;
   }
 
   if (elements.length === 0) {
-    console.warn('[Domma.effects.typewriter] No elements found');
+    console.warn('[Domma.effects.scribe] No elements found');
     return null;
   }
 
   // Respect motion preferences - return no-op control object
   if (opts.respectMotionPreference &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    console.log('[Domma.effects.typewriter] Disabled due to prefers-reduced-motion');
+    console.log('[Domma.effects.scribe] Disabled due to prefers-reduced-motion');
     return {
       pause: () => {},
       resume: () => {},
@@ -512,7 +525,7 @@ export function typewriter(selector, options = {}) {
   // State for each element
   const elementStates = elements.map(el => ({
     element: el,
-    charSpans: [],
+    unitSpans: [],
     cursorSpan: null,
     currentAction: 0,
     charTimerId: null,
@@ -531,20 +544,20 @@ export function typewriter(selector, options = {}) {
       state.cursorSpan = document.createElement('span');
 
       // Base cursor classes
-      let cursorClasses = ['dm-tw-cursor'];
+      let cursorClasses = ['dm-scribe-cursor'];
 
       // Add cursor type class
       if (opts.cursorType === 'block') {
-        cursorClasses.push('dm-tw-cursor-block');
+        cursorClasses.push('dm-scribe-cursor-block');
       } else if (opts.cursorType === 'underline') {
-        cursorClasses.push('dm-tw-cursor-underline');
+        cursorClasses.push('dm-scribe-cursor-underline');
       } else {
-        cursorClasses.push('dm-tw-cursor-caret');
+        cursorClasses.push('dm-scribe-cursor-caret');
       }
 
       // Add no-blink class if needed
       if (!opts.cursorBlink) {
-        cursorClasses.push('dm-tw-cursor-no-blink');
+        cursorClasses.push('dm-scribe-cursor-no-blink');
       }
 
       state.cursorSpan.className = cursorClasses.join(' ');
@@ -565,8 +578,8 @@ export function typewriter(selector, options = {}) {
         if (opts.onLoop) opts.onLoop(state.loopCount);
 
         // Clear element content (keep cursor)
-        state.charSpans.forEach(span => span.remove());
-        state.charSpans = [];
+        state.unitSpans.forEach(span => span.remove());
+        state.unitSpans = [];
         state.lastRenderStart = 0;
         state.currentAction = 0;
 
@@ -595,19 +608,49 @@ export function typewriter(selector, options = {}) {
     processActions(state);
   }
 
+  // Split text into units based on mode
+  function splitTextByMode(text, mode) {
+    if (mode === 'word') {
+      // Split on word boundaries, keeping whitespace attached to preceding word
+      return text.match(/(\S+\s*)/g) || [];
+    } else if (mode === 'sentence') {
+      // Split on sentence endings, keeping punctuation and whitespace
+      const sentences = text.match(/([^.!?]*[.!?]+\s*)/g) || [];
+      // If text doesn't end with sentence punctuation, add remainder as final sentence
+      const lastSentence = sentences.join('');
+      if (lastSentence.length < text.length) {
+        sentences.push(text.substring(lastSentence.length));
+      }
+      return sentences;
+    } else {
+      // Typewriter mode - split into individual characters
+      return text.split('');
+    }
+  }
+
+  // Get CSS class name based on mode
+  function getUnitClassName(mode) {
+    if (mode === 'word') return 'dm-scribe-word';
+    if (mode === 'sentence') return 'dm-scribe-sentence';
+    return 'dm-scribe-char';
+  }
+
   // Handle render action
   function handleRender(state, action) {
     return new Promise(resolve => {
       const text = String(action.render);
       const effect = action.effect || 'none';
-      state.lastRenderStart = state.charSpans.length;
-      let charIndex = 0;
+      const units = splitTextByMode(text, opts.mode);
+      const unitClassName = getUnitClassName(opts.mode);
+
+      state.lastRenderStart = state.unitSpans.length;
+      let unitIndex = 0;
       let lastFrameTime = performance.now();
 
-      function typeChar(currentTime) {
+      function typeUnit(currentTime) {
         if (state.paused) return;
 
-        if (charIndex >= text.length) {
+        if (unitIndex >= units.length) {
           if (opts.onRender) opts.onRender(text);
           resolve();
           return;
@@ -616,24 +659,24 @@ export function typewriter(selector, options = {}) {
         // Throttle to desired speed using RAF for smoother timing
         const elapsed = currentTime - lastFrameTime;
         if (elapsed < opts.speed) {
-          state.charTimerId = requestAnimationFrame(typeChar);
+          state.charTimerId = requestAnimationFrame(typeUnit);
           return;
         }
 
         lastFrameTime = currentTime;
 
-        const char = text[charIndex];
+        const unit = units[unitIndex];
         const span = document.createElement('span');
-        span.className = 'dm-tw-char';
-        span.textContent = char;
+        span.className = unitClassName;
+        span.textContent = unit;
 
         // Apply entrance effect
         if (effect === 'fade') {
-          span.classList.add('dm-tw-char-fade');
+          span.classList.add('dm-scribe-fade');
         } else if (effect === 'bounce') {
-          span.classList.add('dm-tw-char-bounce');
+          span.classList.add('dm-scribe-bounce');
         } else if (effect === 'glow') {
-          span.classList.add('dm-tw-char-glow');
+          span.classList.add('dm-scribe-glow');
         }
 
         // Use DocumentFragment for smoother insertion
@@ -647,17 +690,17 @@ export function typewriter(selector, options = {}) {
           state.element.appendChild(fragment);
         }
 
-        state.charSpans.push(span);
+        state.unitSpans.push(span);
 
         if (opts.onCharacter) {
-          opts.onCharacter(char, state.charSpans.length - 1);
+          opts.onCharacter(unit, state.unitSpans.length - 1);
         }
 
-        charIndex++;
-        state.charTimerId = requestAnimationFrame(typeChar);
+        unitIndex++;
+        state.charTimerId = requestAnimationFrame(typeUnit);
       }
 
-      state.charTimerId = requestAnimationFrame(typeChar);
+      state.charTimerId = requestAnimationFrame(typeUnit);
     });
   }
 
@@ -674,34 +717,34 @@ export function typewriter(selector, options = {}) {
   // Handle undoRender action
   function handleUndoRender(state, action) {
     return new Promise(resolve => {
-      let charsToDelete = 0;
+      let unitsToDelete = 0;
       const undoValue = action.undoRender;
 
       if (undoValue === true) {
         // Delete all from last render
-        charsToDelete = state.charSpans.length - state.lastRenderStart;
+        unitsToDelete = state.unitSpans.length - state.lastRenderStart;
       } else if (undoValue === 'all') {
         // Delete everything
-        charsToDelete = state.charSpans.length;
+        unitsToDelete = state.unitSpans.length;
       } else if (typeof undoValue === 'number') {
         // Delete specific count
-        charsToDelete = Math.min(undoValue, state.charSpans.length);
+        unitsToDelete = Math.min(undoValue, state.unitSpans.length);
       }
 
-      if (charsToDelete === 0) {
+      if (unitsToDelete === 0) {
         resolve();
         return;
       }
 
-      const deletedChars = [];
+      const deletedUnits = [];
       let deleted = 0;
       let lastFrameTime = performance.now();
 
-      function deleteChar(currentTime) {
+      function deleteUnit(currentTime) {
         if (state.paused) return;
 
-        if (deleted >= charsToDelete) {
-          const deletedText = deletedChars.reverse().join('');
+        if (deleted >= unitsToDelete) {
+          const deletedText = deletedUnits.reverse().join('');
           if (opts.onUndoRender) opts.onUndoRender(deletedText);
           resolve();
           return;
@@ -710,23 +753,23 @@ export function typewriter(selector, options = {}) {
         // Throttle to desired delete speed using RAF
         const elapsed = currentTime - lastFrameTime;
         if (elapsed < opts.deleteSpeed) {
-          state.charTimerId = requestAnimationFrame(deleteChar);
+          state.charTimerId = requestAnimationFrame(deleteUnit);
           return;
         }
 
         lastFrameTime = currentTime;
 
-        if (state.charSpans.length > 0) {
-          const span = state.charSpans.pop();
-          deletedChars.push(span.textContent);
+        if (state.unitSpans.length > 0) {
+          const span = state.unitSpans.pop();
+          deletedUnits.push(span.textContent);
           span.remove();
         }
 
         deleted++;
-        state.charTimerId = requestAnimationFrame(deleteChar);
+        state.charTimerId = requestAnimationFrame(deleteUnit);
       }
 
-      state.charTimerId = requestAnimationFrame(deleteChar);
+      state.charTimerId = requestAnimationFrame(deleteUnit);
     });
   }
 
@@ -762,7 +805,7 @@ export function typewriter(selector, options = {}) {
   // Return control object
   return {
     /**
-     * Pause the typewriter animation
+     * Pause the scribe animation
      */
     pause() {
       elementStates.forEach(state => {
@@ -773,7 +816,7 @@ export function typewriter(selector, options = {}) {
     },
 
     /**
-     * Resume the typewriter animation
+     * Resume the scribe animation
      */
     resume() {
       elementStates.forEach(state => {
@@ -783,7 +826,7 @@ export function typewriter(selector, options = {}) {
     },
 
     /**
-     * Stop the typewriter animation
+     * Stop the scribe animation
      */
     stop() {
       elementStates.forEach(state => {
@@ -795,7 +838,7 @@ export function typewriter(selector, options = {}) {
     },
 
     /**
-     * Restart the typewriter animation from the beginning
+     * Restart the scribe animation from the beginning
      */
     restart() {
       elementStates.forEach(state => {
@@ -804,8 +847,8 @@ export function typewriter(selector, options = {}) {
         if (state.waitTimerId) clearTimeout(state.waitTimerId);
 
         // Clear content
-        state.charSpans.forEach(span => span.remove());
-        state.charSpans = [];
+        state.unitSpans.forEach(span => span.remove());
+        state.unitSpans = [];
         state.currentAction = 0;
         state.loopCount = 0;
         state.lastRenderStart = 0;
@@ -817,7 +860,7 @@ export function typewriter(selector, options = {}) {
     },
 
     /**
-     * Destroy the typewriter animation and clean up
+     * Destroy the scribe animation and clean up
      */
     destroy() {
       elementStates.forEach(state => {
@@ -825,8 +868,8 @@ export function typewriter(selector, options = {}) {
         if (state.charTimerId) cancelAnimationFrame(state.charTimerId);
         if (state.waitTimerId) clearTimeout(state.waitTimerId);
 
-        // Remove all character spans
-        state.charSpans.forEach(span => span.remove());
+        // Remove all unit spans
+        state.unitSpans.forEach(span => span.remove());
 
         // Remove cursor
         if (state.cursorSpan) {
@@ -1789,7 +1832,7 @@ export function shake(selector, options = {}) {
 export default {
   breathe,
   pulse,
-  typewriter,
+  scribe,
   reveal,
   scramble,
   counter,

@@ -440,10 +440,11 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 
 - **breathe()** - Sinusoidal floating animation with configurable amplitude and duration
 - **pulse()** - Pulsing scale animation for attention-grabbing elements
-- **typewriter()** - Character-by-character text animation with action queue system
+- **scribe()** - Text animation with configurable granularity (characters, words, or sentences)
+  - Modes: `typewriter` (char-by-char), `word` (word-by-word), `sentence` (sentence-by-sentence)
   - Actions: `render` (type text), `wait` (pause), `undoRender` (delete text)
-  - Effects: `none`, `fade`, `bounce`, `glow` (per-character entrance animations)
-  - Features: Blinking cursor, looping, partial undo, pause on hover
+  - Effects: `none`, `fade`, `bounce`, `glow` (per-unit entrance animations)
+  - Features: Blinking cursor, looping, partial undo, pause on hover, mode-aware deletion
 - **reveal()** - Scroll-triggered entrance animations using IntersectionObserver
   - Animations: `fade`, `slide-up`, `slide-down`, `slide-left`, `slide-right`, `zoom`, `flip`
   - Features: Stagger, threshold, once/repeat, onReveal callback

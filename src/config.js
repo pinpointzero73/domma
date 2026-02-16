@@ -202,7 +202,7 @@ export const configEngine = {
             // Effects
             breathe: effects.breathe,
             pulse: effects.pulse,
-            typewriter: effects.typewriter
+            scribe: effects.scribe
         };
 
         const factory = componentMap[componentType];

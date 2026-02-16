@@ -549,19 +549,24 @@ Accessed via `Domma.effects`:
 
 - **breathe**: `effects.breathe(selector, { amplitude, duration, easing, delay, stagger, iterations, pauseOnHover })` - Sinusoidal floating animation
 - **pulse**: `effects.pulse(selector, { scale, duration, easing, delay, stagger, iterations, pauseOnHover })` - Pulsing scale animation
-- **typewriter**: `effects.typewriter(selector, { speed, deleteSpeed, cursor, cursorChar, cursorBlink, loop, loopDelay, pauseOnHover, actions })` - Character-by-character text animation with action queue
+- **scribe**: `effects.scribe(selector, { mode, speed, deleteSpeed, cursor, cursorChar, cursorBlink, loop, loopDelay, pauseOnHover, actions })` - Text animation with configurable granularity
 - **reveal**: `effects.reveal(selector, { animation, duration, easing, delay, stagger, threshold, rootMargin, once, onReveal })` - Scroll-triggered entrance animations (fade, slide-up/down/left/right, zoom, flip)
 - **scramble**: `effects.scramble(selector, { speed, scrambleSpeed, characters, revealOrder, scrambleDuration, loop, loopDelay, onComplete, onCharacter })` - Text cipher/decode animation
 - **counter**: `effects.counter(selector, { from, to, duration, easing, decimals, separator, prefix, suffix, trigger, threshold, onUpdate, onComplete })` - Animated number counting with formatting
 - **ripple**: `effects.ripple(selector, { colour, duration, opacity, unbounded, centered, trigger })` - Material Design click ripple effect
 - **shake**: `effects.shake(selector, { intensity, duration, direction, easing, iterations, stagger, onComplete })` - Attention/error shake animation
 
-**Typewriter Actions:**
+**Scribe Modes:**
+- `mode: 'typewriter'` - Character-by-character rendering (default)
+- `mode: 'word'` - Word-by-word rendering
+- `mode: 'sentence'` - Sentence-by-sentence rendering
+
+**Scribe Actions:**
 - `{ render: 'text', effect: 'none|fade|bounce|glow' }` - Type text with optional entrance effect
 - `{ wait: '2s' }` - Pause for duration (supports '2s', '500ms', or number)
-- `{ undoRender: true }` - Delete all characters from last render
-- `{ undoRender: N }` - Delete last N characters
-- `{ undoRender: 'all' }` - Delete all characters
+- `{ undoRender: true }` - Delete all units from last render
+- `{ undoRender: N }` - Delete last N units (chars/words/sentences based on mode)
+- `{ undoRender: 'all' }` - Delete all units
 
 **Control Object** (returned by all effects):
 - `pause()` - Pause the effect
@@ -580,8 +585,9 @@ Domma.effects.breathe('.stat-card', {
   pauseOnHover: true
 });
 
-// Typewriter with sequence
-const tw = Domma.effects.typewriter('.hero-title', {
+// Scribe with sequence
+const scribe = Domma.effects.scribe('.hero-title', {
+  mode: 'typewriter',  // or 'word', 'sentence'
   speed: 50,
   actions: [
     { render: 'Hello', effect: 'bounce' },
@@ -593,9 +599,9 @@ const tw = Domma.effects.typewriter('.hero-title', {
 });
 
 // Control the animation
-tw.pause();
-tw.resume();
-tw.destroy();
+scribe.pause();
+scribe.resume();
+scribe.destroy();
 ```
 
 ## Aliases
@@ -630,7 +636,7 @@ src/
 ├── config.js        # JSON configuration engine
 ├── http.js          # HTTP client
 ├── storage.js       # localStorage wrapper
-├── effects.js       # Visual effects (breathe, pulse, typewriter, reveal, scramble, counter, ripple, shake)
+├── effects.js       # Visual effects (breathe, pulse, scribe, reveal, scramble, counter, ripple, shake)
 ├── theme.js         # Theme management
 ├── icons.js         # SVG icon system
 ├── theme-roller.js  # Theme customisation tool (tools bundle)

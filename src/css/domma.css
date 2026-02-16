@@ -3235,9 +3235,9 @@ code, pre {
     }
 }
 
-/* Typewriter Effect Keyframes */
+/* Scribe Effect Keyframes */
 
-@keyframes dm-cursor-blink {
+@keyframes dm-scribe-cursor-blink {
     0%, 100% {
         opacity: 1;
     }
@@ -3246,7 +3246,7 @@ code, pre {
     }
 }
 
-@keyframes dm-tw-fade {
+@keyframes dm-scribe-fade {
     from {
         opacity: 0;
         transform: translateZ(0);
@@ -3257,7 +3257,7 @@ code, pre {
     }
 }
 
-@keyframes dm-tw-bounce {
+@keyframes dm-scribe-bounce {
     0% {
         opacity: 0;
         transform: translateY(-8px) translateZ(0);
@@ -3275,7 +3275,7 @@ code, pre {
     }
 }
 
-@keyframes dm-tw-glow {
+@keyframes dm-scribe-glow {
     0% {
         opacity: 0;
         transform: scale(0.8) translateZ(0);
@@ -3293,28 +3293,28 @@ code, pre {
     }
 }
 
-/* Typewriter Classes */
+/* Scribe Classes */
 
-.dm-tw-cursor {
+.dm-scribe-cursor {
     display: inline;
     white-space: pre;
     font-weight: 600;
     margin-left: 2px;
     vertical-align: 0.08em;
-    animation: dm-cursor-blink 1s ease-in-out infinite;
+    animation: dm-scribe-cursor-blink 1s ease-in-out infinite;
 }
 
-.dm-tw-cursor.dm-tw-cursor-no-blink {
+.dm-scribe-cursor.dm-scribe-cursor-no-blink {
     animation: none;
     opacity: 1;
 }
 
 /* Cursor Types */
-.dm-tw-cursor-caret {
+.dm-scribe-cursor-caret {
     /* Default - thin vertical line */
 }
 
-.dm-tw-cursor-block {
+.dm-scribe-cursor-block {
     padding: 0;
     background: currentColor;
     color: var(--dm-background, #fff);
@@ -3323,17 +3323,20 @@ code, pre {
     line-height: 0.9;
 }
 
-.dm-tw-cursor-block.dm-tw-cursor-no-blink {
+.dm-scribe-cursor-block.dm-scribe-cursor-no-blink {
     opacity: 0.6;
 }
 
-.dm-tw-cursor-underline {
+.dm-scribe-cursor-underline {
     border-bottom: 2px solid currentColor;
     padding: 0;
     min-width: 0.5em;
 }
 
-.dm-tw-char {
+/* Unit base styling (shared across modes) */
+.dm-scribe-char,
+.dm-scribe-word,
+.dm-scribe-sentence {
     display: inline;
     white-space: pre;
     font-weight: 600;
@@ -3344,16 +3347,17 @@ code, pre {
     transform: translateZ(0);
 }
 
-.dm-tw-char-fade {
-    animation: dm-tw-fade 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+/* Effect classes (shared across modes) */
+.dm-scribe-fade {
+    animation: dm-scribe-fade 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-.dm-tw-char-bounce {
-    animation: dm-tw-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+.dm-scribe-bounce {
+    animation: dm-scribe-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-.dm-tw-char-glow {
-    animation: dm-tw-glow 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+.dm-scribe-glow {
+    animation: dm-scribe-glow 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 /* =================================================================
