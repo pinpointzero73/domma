@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scribe Effect - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .demo-box {
+            padding: 2rem;
+            margin: 1rem 0;
+            background: var(--dm-primary-t10, rgba(13, 110, 253, 0.1));
+            border: 2px solid rgba(13, 110, 253, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 500;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .effect-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 4px;
+            background: var(--dm-primary-t10, rgba(13, 110, 253, 0.1));
+            text-decoration: none;
+            color: var(--dm-primary);
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--dm-primary-t20, rgba(13, 110, 253, 0.2));
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body data-layout="showcase" data-layout-variant="effects">
+<div class="hero hero-center bg-ambient-rotate-spotlight">
+    <div class="hero-content">
+        <div class="hero-title">Scribe Effect</div>
+        <div class="hero-subtitle">Text rendering with configurable granularity (characters, words, or sentences) text animation with action queues and entrance effects.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <!-- See Also -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+        <h3 class="text-lg font-semibold mb-2">
+            <span data-icon="arrow-left" data-icon-size="20"></span>
+            See Also
+        </h3>
+        <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="breathe.html" class="nav-link">Breathe</a>
+        <a href="pulse.html" class="nav-link">Pulse</a>
+        <a href="reveal.html" class="nav-link">Reveal</a>
+        <a href="scramble.html" class="nav-link">Scramble</a>
+        <a href="counter.html" class="nav-link">Counter</a>
+        <a href="ripple.html" class="nav-link">Ripple</a>
+        <a href="shake.html" class="nav-link">Shake</a>
+    </div>
+
+    <!-- Motion Preference Notice -->
+    <div id="motion-notice" class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded" style="display:none;">
+        <div class="flex items-start gap-3">
+            <span style="font-size: 20px; flex-shrink: 0;">ℹ️</span>
+            <div>
+                <h4 class="font-semibold mb-1">Motion Preference Detected</h4>
+                <p>Your system has <code>prefers-reduced-motion</code> enabled. This demo page overrides that setting to demonstrate effects. In production, use <code>respectMotionPreference: true</code> (the default) to honour user preferences.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overview -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Domma.effects.scribe()</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Creates a character-by-character typing effect with support for action queues, character entrance effects, and text deletion. Perfect for hero sections, terminal interfaces, and storytelling.</p>
+
+            <pre class="code-block language-javascript">
+// Basic usage
+Domma.effects.scribe('.hero-title', {
+  actions: [
+    { render: 'Hello, World!' }
+  ]
+});
+
+// Complex sequence with effects
+const tw = Domma.effects.scribe('.element', {
+  speed: 50,              // ms per character (typing)
+  deleteSpeed: 30,        // ms per character (deletion)
+  cursor: true,           // show blinking cursor
+  cursorChar: '|',        // cursor character
+  loop: true,             // loop infinitely
+  actions: [
+    { render: 'Hello', effect: 'bounce' },
+    { wait: '2s' },
+    { undoRender: true },  // delete all from last render
+    { render: 'Welcome to Domma', effect: 'fade' },
+    { wait: '3s' },
+    { undoRender: 5 },     // delete last 5 characters
+    { render: 'ma!', effect: 'glow' }
+  ]
+});
+
+// Control methods
+tw.pause();
+tw.resume();
+tw.stop();
+tw.restart();
+tw.destroy();
+</pre>
+
+            <h4 class="font-semibold mt-4 mb-2">Action Types</h4>
+            <ul class="list-disc ml-6 mb-4">
+                <li><code>{ render: 'text', effect: 'none|fade|bounce|glow' }</code> - Type text with optional entrance effect</li>
+                <li><code>{ wait: '2s' }</code> - Pause for duration (supports '2s', '500ms', or number)</li>
+                <li><code>{ undoRender: true }</code> - Delete all characters from last render</li>
+                <li><code>{ undoRender: N }</code> - Delete last N characters</li>
+                <li><code>{ undoRender: 'all' }</code> - Delete all characters</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Demo: Basic Scribe -->
+    <section class="card mb-6" data-section="basic">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Basic Scribe</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Simple typing animation with control methods.</p>
+            <div class="demo-box" id="scribe-demo-1" style="font-size: 1.5rem; min-height: 3rem;"></div>
+            <div class="effect-controls">
+                <button class="btn btn-primary" id="scribe-start-1">Start</button>
+                <button class="btn btn-secondary" id="scribe-pause-1">Pause</button>
+                <button class="btn btn-secondary" id="scribe-resume-1">Resume</button>
+                <button class="btn btn-danger" id="scribe-stop-1">Stop</button>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.scribe('#scribe-demo-1', {
+  speed: 50,
+  deleteSpeed: 30,
+  actions: [
+    { render: 'Hello, World!' },
+    { wait: '2s' },
+    { undoRender: 'all' },
+    { wait: '500ms' },
+    { render: 'Welcome to DommaJS', effect: 'fade' }
+  ]
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Character Effects -->
+    <section class="card mb-6" data-section="character-effects">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Character Effects</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Compare different character entrance effects.</p>
+            <div class="demo-box" id="scribe-demo-2" style="font-size: 1.5rem; min-height: 3rem;"></div>
+            <div class="effect-controls">
+                <button class="btn btn-primary" id="scribe-effect-none">None</button>
+                <button class="btn btn-primary" id="scribe-effect-fade">Fade</button>
+                <button class="btn btn-primary" id="scribe-effect-bounce">Bounce</button>
+                <button class="btn btn-primary" id="scribe-effect-glow">Glow</button>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+// Demonstrate each effect type
+Domma.effects.scribe('#demo', {
+  speed: 40,
+  actions: [
+    { render: `Effect: ${effect}`, effect: effect }
+  ]
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Action Sequence -->
+    <section class="card mb-6" data-section="action-sequence">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Action Sequence</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Complex sequence with render, wait, and undo actions.</p>
+            <div class="demo-box" id="scribe-demo-3" style="font-size: 1.5rem; min-height: 3rem;"></div>
+            <button class="btn btn-primary" id="scribe-start-3">Start Sequence</button>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.scribe('#scribe-demo-3', {
+  speed: 50,
+  deleteSpeed: 30,
+  actions: [
+    { render: 'Hello', effect: 'bounce' },
+    { wait: '1.5s' },
+    { undoRender: true },
+    { render: 'Welcome to Domma', effect: 'fade' },
+    { wait: '2s' }
+  ]
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Rendering Modes -->
+    <section class="card mb-6" data-section="rendering-modes">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Rendering Modes</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Control rendering granularity with <code>mode</code>: character-by-character, word-by-word, or sentence-by-sentence.</p>
+
+            <h4 class="font-semibold mb-2 mt-4">Character Mode (default)</h4>
+            <div class="demo-box" id="scribe-mode-char" style="font-size: 1.3rem; min-height: 3rem;"></div>
+            <button class="btn btn-primary btn-sm mb-3" id="scribe-start-mode-char">Start Character Mode</button>
+            <pre class="code-block language-javascript">
+Domma.effects.scribe('#demo', {
+  mode: 'typewriter',  // Character-by-character
+  actions: [{ render: 'Hello World!' }]
+});
+</pre>
+
+            <h4 class="font-semibold mb-2 mt-4">Word Mode</h4>
+            <div class="demo-box" id="scribe-mode-word" style="font-size: 1.3rem; min-height: 3rem;"></div>
+            <button class="btn btn-primary btn-sm mb-3" id="scribe-start-mode-word">Start Word Mode</button>
+            <pre class="code-block language-javascript">
+Domma.effects.scribe('#demo', {
+  mode: 'word',  // Word-by-word
+  speed: 100,    // Per word, not per character
+  actions: [{ render: 'Welcome to the Domma framework!', effect: 'bounce' }]
+});
+</pre>
+
+            <h4 class="font-semibold mb-2 mt-4">Sentence Mode</h4>
+            <div class="demo-box" id="scribe-mode-sentence" style="font-size: 1.3rem; min-height: 4rem;"></div>
+            <button class="btn btn-primary btn-sm mb-3" id="scribe-start-mode-sentence">Start Sentence Mode</button>
+            <pre class="code-block language-javascript">
+Domma.effects.scribe('#demo', {
+  mode: 'sentence',  // Sentence-by-sentence
+  speed: 200,        // Per sentence
+  actions: [{ render: 'First sentence. Second sentence! Third sentence?', effect: 'fade' }]
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Partial Undo -->
+    <section class="card mb-6" data-section="partial-undo">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Partial Undo</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Demonstrate selective unit deletion. In word mode, <code>undoRender</code> deletes words. In sentence mode, it deletes sentences.</p>
+            <div class="demo-box" id="scribe-demo-4" style="font-size: 1.5rem; min-height: 3rem;"></div>
+            <button class="btn btn-primary" id="scribe-start-4">Start Partial Undo</button>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.scribe('#scribe-demo-4', {
+  speed: 50,
+  deleteSpeed: 30,
+  actions: [
+    { render: 'Domma Framework', effect: 'fade' },
+    { wait: '1s' },
+    { undoRender: 9 },  // Delete "Framework"
+    { wait: '500ms' },
+    { render: 'Effects!', effect: 'glow' },
+    { wait: '2s' }
+  ]
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Hero Banner Loop -->
+    <section class="card mb-6" data-section="hero-banner-loop">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Hero Banner Loop</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Infinite looping scribe for hero sections.</p>
+            <div class="demo-box" id="scribe-demo-5" style="font-size: 2rem; font-weight: bold; min-height: 4rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;"></div>
+            <div class="effect-controls">
+                <button class="btn btn-light" id="scribe-start-5">Start Loop</button>
+                <button class="btn btn-light" id="scribe-stop-5">Stop Loop</button>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.scribe('#scribe-demo-5', {
+  speed: 60,
+  deleteSpeed: 40,
+  loop: true,
+  loopDelay: 2000,
+  actions: [
+    { render: 'Build Faster', effect: 'bounce' },
+    { wait: '2s' },
+    { undoRender: 'all' },
+    { wait: '500ms' },
+    { render: 'Code Smarter', effect: 'fade' },
+    { wait: '2s' },
+    { undoRender: 'all' },
+    { wait: '500ms' }
+  ]
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo: Cursor Types -->
+    <section class="card mb-6" data-section="cursor-types">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Cursor Types</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Different cursor styles with smooth fade animation.</p>
+            <div class="demo-box" id="scribe-demo-6" style="font-size: 1.5rem; min-height: 3rem;"></div>
+            <div class="effect-controls">
+                <button class="btn btn-primary" id="scribe-cursor-caret">Caret |</button>
+                <button class="btn btn-primary" id="scribe-cursor-block">Block █</button>
+                <button class="btn btn-primary" id="scribe-cursor-underline">Underline _</button>
+                <button class="btn btn-secondary" id="scribe-cursor-noblink">No Blink</button>
+            </div>
+            <pre class="code-block language-javascript mt-4">
+// Different cursor styles
+Domma.effects.scribe('#demo', {
+  speed: 50,
+  cursorType: 'caret',  // or 'block', 'underline'
+  cursorChar: '|',       // or '█', '_'
+  cursorBlink: true,     // or false
+  actions: [
+    { render: 'Cursor type: caret' }
+  ]
+});
+</pre>
+        </div>
+    </section>
+
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Show notice if user has reduced motion enabled
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      $('#motion-notice').show();
+    }
+
+    // Store control objects
+    let scribe1, scribe2, scribe3, scribe4, scribe5, scribe6;
+    let scribeModeChar, scribeModeWord, scribeModeSentence;
+
+    // Mode Demos - Character Mode
+    $('#scribe-start-mode-char').on('click', () => {
+      if (scribeModeChar) scribeModeChar.destroy();
+      $('#scribe-mode-char').html('');
+      scribeModeChar = Domma.effects.scribe('#scribe-mode-char', {
+        mode: 'typewriter',
+        speed: 50,
+        respectMotionPreference: false,
+        actions: [{ render: 'Hello World!', effect: 'fade' }]
+      });
+    });
+
+    // Mode Demos - Word Mode
+    $('#scribe-start-mode-word').on('click', () => {
+      if (scribeModeWord) scribeModeWord.destroy();
+      $('#scribe-mode-word').html('');
+      scribeModeWord = Domma.effects.scribe('#scribe-mode-word', {
+        mode: 'word',
+        speed: 100,
+        respectMotionPreference: false,
+        actions: [{ render: 'Welcome to the Domma framework!', effect: 'bounce' }]
+      });
+    });
+
+    // Mode Demos - Sentence Mode
+    $('#scribe-start-mode-sentence').on('click', () => {
+      if (scribeModeSentence) scribeModeSentence.destroy();
+      $('#scribe-mode-sentence').html('');
+      scribeModeSentence = Domma.effects.scribe('#scribe-mode-sentence', {
+        mode: 'sentence',
+        speed: 200,
+        respectMotionPreference: false,
+        actions: [{ render: 'First sentence. Second sentence! Third sentence?', effect: 'fade' }]
+      });
+    });
+
+    // scribe() Demo 1 - Basic
+    $('#scribe-start-1').on('click', () => {
+      if (scribe1) scribe1.destroy();
+      $('#scribe-demo-1').html('');
+      scribe1 = Domma.effects.scribe('#scribe-demo-1', {
+        speed: 50,
+        deleteSpeed: 30,
+        respectMotionPreference: false,
+        actions: [
+          { render: 'Hello, World!' },
+          { wait: '2s' },
+          { undoRender: 'all' },
+          { wait: '500ms' },
+          { render: 'Welcome to DommaJS', effect: 'fade' }
+        ]
+      });
+    });
+
+    $('#scribe-pause-1').on('click', () => {
+      if (scribe1) scribe1.pause();
+    });
+
+    $('#scribe-resume-1').on('click', () => {
+      if (scribe1) scribe1.resume();
+    });
+
+    $('#scribe-stop-1').on('click', () => {
+      if (scribe1) {
+        scribe1.stop();
+        scribe1 = null;
+      }
+    });
+
+    // scribe() Demo 2 - Character Effects
+    function startScribeEffect(effect) {
+      if (scribe2) scribe2.destroy();
+      $('#scribe-demo-2').html('');
+      scribe2 = Domma.effects.scribe('#scribe-demo-2', {
+        speed: 40,
+        respectMotionPreference: false,
+        actions: [
+          { render: `Effect: ${effect}`, effect: effect }
+        ]
+      });
+    }
+
+    $('#scribe-effect-none').on('click', () => startScribeEffect('none'));
+    $('#scribe-effect-fade').on('click', () => startScribeEffect('fade'));
+    $('#scribe-effect-bounce').on('click', () => startScribeEffect('bounce'));
+    $('#scribe-effect-glow').on('click', () => startScribeEffect('glow'));
+
+    // scribe() Demo 3 - Action Sequence
+    $('#scribe-start-3').on('click', () => {
+      if (scribe3) scribe3.destroy();
+      $('#scribe-demo-3').html('');
+      scribe3 = Domma.effects.scribe('#scribe-demo-3', {
+        speed: 50,
+        deleteSpeed: 30,
+        respectMotionPreference: false,
+        actions: [
+          { render: 'Hello', effect: 'bounce' },
+          { wait: '1.5s' },
+          { undoRender: true },
+          { render: 'Welcome to Domma', effect: 'fade' },
+          { wait: '2s' }
+        ]
+      });
+    });
+
+    // scribe() Demo 4 - Partial Undo
+    $('#scribe-start-4').on('click', () => {
+      if (scribe4) scribe4.destroy();
+      $('#scribe-demo-4').html('');
+      scribe4 = Domma.effects.scribe('#scribe-demo-4', {
+        speed: 50,
+        deleteSpeed: 30,
+        respectMotionPreference: false,
+        actions: [
+          { render: 'Domma Framework', effect: 'fade' },
+          { wait: '1s' },
+          { undoRender: 9 },  // Delete "Framework"
+          { wait: '500ms' },
+          { render: 'Effects!', effect: 'glow' },
+          { wait: '2s' }
+        ]
+      });
+    });
+
+    // scribe() Demo 5 - Hero Banner Loop
+    $('#scribe-start-5').on('click', () => {
+      if (scribe5) scribe5.destroy();
+      $('#scribe-demo-5').html('');
+      scribe5 = Domma.effects.scribe('#scribe-demo-5', {
+        speed: 60,
+        deleteSpeed: 40,
+        loop: true,
+        loopDelay: 2000,
+        respectMotionPreference: false,
+        actions: [
+          { render: 'Build Faster', effect: 'bounce' },
+          { wait: '2s' },
+          { undoRender: 'all' },
+          { wait: '500ms' },
+          { render: 'Code Smarter', effect: 'fade' },
+          { wait: '2s' },
+          { undoRender: 'all' },
+          { wait: '500ms' },
+          { render: 'Ship Better', effect: 'glow' },
+          { wait: '2s' },
+          { undoRender: 'all' },
+          { wait: '500ms' }
+        ]
+      });
+    });
+
+    $('#scribe-stop-5').on('click', () => {
+      if (scribe5) {
+        scribe5.stop();
+        scribe5 = null;
+      }
+    });
+
+    // scribe() Demo 6 - Cursor Types
+    function startCursorDemo(cursorType, cursorChar, cursorBlink = true) {
+      if (scribe6) scribe6.destroy();
+      $('#scribe-demo-6').html('');
+      scribe6 = Domma.effects.scribe('#scribe-demo-6', {
+        speed: 50,
+        cursorType: cursorType,
+        cursorChar: cursorChar,
+        cursorBlink: cursorBlink,
+        respectMotionPreference: false,
+        actions: [
+          { render: 'Cursor type: ' + cursorType }
+        ]
+      });
+    }
+
+    $('#scribe-cursor-caret').on('click', () => startCursorDemo('caret', '|'));
+    $('#scribe-cursor-block').on('click', () => startCursorDemo('block', '█'));
+    $('#scribe-cursor-underline').on('click', () => startCursorDemo('underline', '_'));
+    $('#scribe-cursor-noblink').on('click', () => startCursorDemo('caret', '|', false));
+
+    // Scan icons
+    Domma.icons.scan();
+  });
+</script>
+</body>
+</html>
