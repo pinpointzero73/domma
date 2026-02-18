@@ -23,10 +23,10 @@
           align-items: center;
           justify-content: center;
           text-align: center;
-          padding: 3rem 1rem 2rem 1rem; /* Reduced horizontal padding on mobile */
-          /* Background now controlled by bg-dark class for dark-charcoal theme */
-          color: var(--dm-white);
-          overflow: hidden; /* Required for ambient effects */
+          padding: 3rem 1rem 2rem 1rem;
+          background-color: var(--dm-background);
+          color: var(--dm-text);
+          overflow: hidden;
       }
 
       .splash-hero-grid {
@@ -53,7 +53,7 @@
       }
 
       .hero-logo {
-          color: var(--dm-white-t85);
+          color: var(--dm-text);
           animation: glow 3s ease-in-out infinite alternate;
           flex-shrink: 0;
       }
@@ -62,12 +62,8 @@
           font-size: 5rem;
           font-weight: 800;
           letter-spacing: -0.05em;
-          background: linear-gradient(135deg, var(--dm-white-t90) 0%, var(--dm-white-t70) 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          color: var(--dm-text);
           margin: 0 0 0.5rem;
-          animation: glow 3s ease-in-out infinite alternate;
       }
 
       @keyframes glow {
@@ -85,10 +81,12 @@
           margin: 0 0 1rem;
           font-weight: 300;
           letter-spacing: 0.05em;
+          color: var(--dm-text-secondary);
       }
 
       .backronym strong {
           font-weight: 600;
+          color: var(--dm-text);
       }
 
       .tagline {
@@ -97,6 +95,7 @@
           max-width: 600px;
           line-height: 1.6;
           margin: 0 0 2.5rem;
+          color: var(--dm-text-secondary);
       }
 
       .features {
@@ -119,11 +118,11 @@
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.1em;
-          color: rgba(255, 255, 255, 0.6);
+          color: var(--dm-text-muted);
           padding: 0.25rem 0.75rem;
-          background: rgba(255, 255, 255, 0.05);
+          background: var(--dm-surface-raised);
           border-radius: 20px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          border: 1px solid var(--dm-border);
       }
 
       .feature-group-items {
@@ -134,13 +133,13 @@
       }
 
       .feature {
-          background: var(--dm-white-t10);
-          border: 1px solid var(--dm-white-t20);
+          background: var(--dm-surface-raised);
+          border: 1px solid var(--dm-border);
           border-radius: 12px;
           padding: 1.25rem 1.5rem;
           min-width: 120px;
           text-decoration: none;
-          color: inherit;
+          color: var(--dm-text);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -149,12 +148,7 @@
 
       .feature:hover {
           animation: heartbeat 1.5s ease-in-out infinite;
-          color: white;
-      }
-
-      .feature:hover .feature-icon,
-      .feature:hover .feature-label {
-          color: white;
+          background: var(--dm-hover-bg);
       }
 
       @keyframes heartbeat {
@@ -174,6 +168,7 @@
           align-items: center;
           justify-content: center;
           min-height: 42px;
+          color: var(--dm-primary);
       }
 
       .feature-icon svg {
@@ -184,6 +179,7 @@
       .feature-label {
           font-size: 0.875rem;
           opacity: 0.9;
+          color: var(--dm-text-secondary);
       }
 
       .splash-carousel {
@@ -278,15 +274,15 @@
           display: inline-flex;
           align-items: center;
           gap: 0.75rem;
-          background: var(--dm-white-t95);
-          color: var(--dm-primary-dark);
+          background: var(--dm-primary);
+          color: var(--dm-text-inverse);
           text-decoration: none;
           font-size: 1.1rem;
           font-weight: 600;
           padding: 0.875rem 2rem;
           border-radius: 50px;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 20px var(--dm-black-t20);
+          box-shadow: var(--dm-shadow-lg);
       }
 
       .cta:hover {
@@ -694,10 +690,9 @@
 
 <script>
   $(async () => {
-    // Initialize theme engine with silver-light theme persistence
+    // Initialize theme engine with persistence (will load stored theme or use default)
     if (typeof Domma !== 'undefined' && Domma.theme) {
       Domma.theme.init({
-        theme: 'silver-light',
         persist: true,
         autoDetect: false
       });

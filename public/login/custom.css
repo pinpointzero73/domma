@@ -13,7 +13,7 @@
       }
 
       .login-card {
-          background: white;
+          background: var(--dm-surface, white);
           border-radius: 16px;
           padding: 3rem;
           box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -32,12 +32,12 @@
       .login-header h1 {
           margin: 0 0 0.5rem;
           font-size: 1.75rem;
-          color: #1f2937;
+          color: var(--dm-text, #1f2937);
       }
 
       .login-header p {
           margin: 0;
-          color: #6b7280;
+          color: var(--dm-text-secondary, #6b7280);
       }
 
       #authTabs {
@@ -66,7 +66,7 @@
 
       .auth-tab-pill.active {
           background: var(--dm-primary);
-          color: white;
+          color: #ffffff;
           border-color: var(--dm-primary);
           box-shadow: 0 4px 12px var(--dm-primary-t30);
       }
@@ -75,7 +75,7 @@
           text-align: center;
           margin-top: 2rem;
           padding-top: 2rem;
-          border-top: 1px solid #e5e7eb;
+          border-top: 1px solid var(--dm-border, #e5e7eb);
       }
 
       .login-footer a {
