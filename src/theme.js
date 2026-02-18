@@ -138,7 +138,9 @@ class ThemeEngine {
      * @returns {boolean}
      */
     isDark() {
-        return this.getMode() === 'dark';
+        const mode = this.getMode();
+        // Special case: grayve is a dark theme without '-dark' suffix
+        return mode === 'dark' || this._theme === 'grayve';
     }
 
     /**
@@ -329,6 +331,8 @@ class ThemeEngine {
             // Remove all theme classes
             const classes = this._target.className.split(' ').filter(c => !c.startsWith(CLASS_PREFIX));
             this._target.className = classes.join(' ').trim();
+            // Remove data-mode attribute
+            this._target.removeAttribute('data-mode');
         }
         return this;
     }
@@ -358,6 +362,10 @@ class ThemeEngine {
         classes.push(`${CLASS_PREFIX}${this._theme}`);
 
         target.className = classes.join(' ').trim();
+
+        // Set data-mode attribute for consistent dark mode detection
+        const mode = this.isDark() ? 'dark' : 'light';
+        target.setAttribute('data-mode', mode);
 
         // Update meta theme-color
         if (updateMeta) {

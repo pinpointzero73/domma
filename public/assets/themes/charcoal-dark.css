@@ -34,10 +34,10 @@
     /* ================================================
        PRIMARY COLOURS - Charcoal Gray
        ================================================ */
-    --dm-primary: #36454f;
+    --dm-primary: #8a9bab;
     --dm-primary-hover: #4a5d69;
     --dm-primary-active: #5e7583;
-    --dm-primary-light: #e8ebed;
+    --dm-primary-light: rgba(138, 155, 171, 0.15);
     --dm-primary-dark: #1c2428;
 
     /* Focus ring with charcoal colour */
@@ -50,7 +50,7 @@
     --dm-secondary: #5f6f7a;
     --dm-secondary-hover: #738290;
     --dm-secondary-active: #8795a0;
-    --dm-secondary-light: #f0f2f3;
+    --dm-secondary-light: rgba(95, 111, 122, 0.15);
     --dm-secondary-dark: #3d4a52;
 
     /* ================================================
@@ -59,13 +59,13 @@
     --dm-success: #4caf50;
     --dm-success-hover: #61b965;
     --dm-success-active: #76c37a;
-    --dm-success-light: #e8f5e9;
+    --dm-success-light: rgba(76, 175, 80, 0.15);
     --dm-success-dark: #388e3c;
 
     --dm-info: #2196f3;
     --dm-info-hover: #42a5f5;
     --dm-info-active: #64b5f6;
-    --dm-info-light: #e3f2fd;
+    --dm-info-light: rgba(33, 150, 243, 0.15);
     --dm-info-dark: #1976d2;
 
     /* ================================================
@@ -80,15 +80,15 @@
        SELECTION
        ================================================ */
     --dm-selected-bg: rgba(54, 69, 79, 0.12);
-    --dm-tab-active-border: #36454f;
-    --dm-tab-active-text: #1c2428;
-    --dm-progress-bar: #36454f;
+    --dm-tab-active-border: #8a9bab;
+    --dm-tab-active-text: #b0bec5;
+    --dm-progress-bar: #8a9bab;
 
     /* Danger - Standard red */
     --dm-danger: #dc3545;
     --dm-danger-hover: #bb2d3b;
     --dm-danger-active: #b02a37;
-    --dm-danger-light: #f8d7da;
+    --dm-danger-light: rgba(220, 53, 69, 0.15);
     --dm-danger-dark: #842029;
 
     /* ================================================

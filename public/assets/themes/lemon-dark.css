@@ -37,7 +37,7 @@
     --dm-primary: #c9b458;
     --dm-primary-hover: #d4c06a;
     --dm-primary-active: #dfcc7c;
-    --dm-primary-light: #faf8f0;
+    --dm-primary-light: rgba(201, 180, 88, 0.15);
     --dm-primary-dark: #a89740;
 
     /* Focus ring with subtle lemon colour */
@@ -50,7 +50,7 @@
     --dm-secondary: #9a9583;
     --dm-secondary-hover: #a8a392;
     --dm-secondary-active: #b6b1a1;
-    --dm-secondary-light: #f5f4f1;
+    --dm-secondary-light: rgba(154, 149, 131, 0.15);
     --dm-secondary-dark: #7a766a;
 
     /* ================================================
@@ -59,21 +59,21 @@
     --dm-success: #7da453;
     --dm-success-hover: #8fb365;
     --dm-success-active: #a1c277;
-    --dm-success-light: #f2f7ed;
+    --dm-success-light: rgba(125, 164, 83, 0.15);
     --dm-success-dark: #658840;
 
     --dm-info: #6a9fb5;
     --dm-info-hover: #7dadc1;
     --dm-info-active: #90bbcd;
-    --dm-info-light: #f0f6f8;
+    --dm-info-light: rgba(106, 159, 181, 0.15);
     --dm-info-dark: #527d91;
 
     --dm-warning: #d4a843;
     --dm-warning-hover: #dbb658;
     --dm-warning-active: #e2c46d;
-    --dm-warning-light: #faf6ec;
+    --dm-warning-light: rgba(212, 168, 67, 0.15);
     --dm-warning-dark: #b08a30;
-    --dm-warning-text: #8a6b20;
+    --dm-warning-text: #d4c070;
 
     /* ================================================
        ACCENT COLOURS
@@ -88,14 +88,14 @@
        ================================================ */
     --dm-selected-bg: rgba(201, 180, 88, 0.15);
     --dm-tab-active-border: #c9b458;
-    --dm-tab-active-text: #8a7530;
+    --dm-tab-active-text: #d4b858;
     --dm-progress-bar: #c9b458;
 
     /* Danger - Standard red */
     --dm-danger: #dc3545;
     --dm-danger-hover: #bb2d3b;
     --dm-danger-active: #b02a37;
-    --dm-danger-light: #f8d7da;
+    --dm-danger-light: rgba(220, 53, 69, 0.15);
     --dm-danger-dark: #842029;
 
     /* ================================================

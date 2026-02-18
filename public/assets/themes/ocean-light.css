@@ -8,74 +8,74 @@
     color-scheme: light;
 
     /* ================================================
-       FOUNDATIONAL COLORS - Dark Mode Base
+       FOUNDATIONAL COLORS - Light Mode Base
        ================================================ */
 
-    /* Backgrounds - Dark slate/charcoal backgrounds */
-    --dm-background: #0f172a; /* slate-900 */
-    --dm-background-alt: #1e293b; /* slate-800 */
-    --dm-surface: #1e293b; /* slate-800 */
-    --dm-surface-raised: #334155; /* slate-700 */
-    --dm-surface-overlay: #334155; /* slate-700 */
+    /* Backgrounds - Light/white backgrounds */
+    --dm-background: #ffffff;
+    --dm-background-alt: #f8f9fa;
+    --dm-surface: #ffffff;
+    --dm-surface-raised: #f1f3f5;
+    --dm-surface-overlay: #f8f9fa;
 
-    /* Text - Light colors for readability on dark */
-    --dm-text: #e2e8f0; /* slate-200 */
-    --dm-text-secondary: #94a3b8; /* slate-400 */
-    --dm-text-muted: #64748b; /* slate-500 */
-    --dm-text-disabled: #475569; /* slate-600 */
-    --dm-text-inverse: #0f172a; /* slate-900 */
+    /* Text - Dark colors for readability on light */
+    --dm-text: #212529;
+    --dm-text-secondary: #495057;
+    --dm-text-muted: #6c757d;
+    --dm-text-disabled: #adb5bd;
+    --dm-text-inverse: #ffffff;
 
-    /* Borders - Subtle on dark backgrounds */
-    --dm-border: #334155; /* slate-700 */
-    --dm-border-light: #1e293b; /* slate-800 */
-    --dm-border-dark: #475569; /* slate-600 */
+    /* Borders - Subtle on light backgrounds */
+    --dm-border: #dee2e6;
+    --dm-border-light: #e9ecef;
+    --dm-border-dark: #ced4da;
 
     /* ================================================
-       OCEAN ACCENT COLORS - Bright for dark mode
+       OCEAN ACCENT COLORS - Dark/rich for light mode
        ================================================ */
 
-    /* Primary - Bright cyan/blue for visibility */
-    --dm-primary: #48cae4;
-    --dm-primary-hover: #5cd2e8;
-    --dm-primary-active: #70daec;
-    --dm-primary-light: rgba(72, 202, 228, 0.15);
-    --dm-primary-dark: #00b4d8;
+    /* Primary - Rich ocean blue for contrast */
+    --dm-primary: #0077b6;
+    --dm-primary-hover: #0096c7;
+    --dm-primary-active: #00b4d8;
+    --dm-primary-light: #caf0f8;
+    --dm-primary-dark: #023e8a;
 
-    /* Secondary - Light slate blue */
-    --dm-secondary: #90e0ef;
-    --dm-secondary-hover: #a6e7f2;
-    --dm-secondary-active: #bceef5;
-    --dm-secondary-light: rgba(144, 224, 239, 0.15);
-    --dm-secondary-dark: #48cae4;
+    /* Secondary - Slate blue */
+    --dm-secondary: #457b9d;
+    --dm-secondary-hover: #5a8fad;
+    --dm-secondary-active: #6ea3bd;
+    --dm-secondary-light: #e8f4f8;
+    --dm-secondary-dark: #1d3557;
 
-    /* Success - Bright teal/green */
-    --dm-success: #52e3b8;
-    --dm-success-hover: #66e7c1;
-    --dm-success-active: #7aebca;
-    --dm-success-light: rgba(82, 227, 184, 0.15);
-    --dm-success-dark: #06d6a0;
+    /* Success - Ocean-tinted teal */
+    --dm-success: #06d6a0;
+    --dm-success-hover: #1fe0ac;
+    --dm-success-active: #39eab7;
+    --dm-success-light: #d4f5ed;
+    --dm-success-dark: #05a87d;
 
-    /* Danger - Bright red (standard dark mode) */
-    --dm-danger: #ef4444; /* red-500 */
-    --dm-danger-hover: #f87171; /* red-400 */
-    --dm-danger-active: #fca5a5; /* red-300 */
-    --dm-danger-light: rgba(248, 113, 113, 0.15);
-    --dm-danger-dark: #dc2626; /* red-600 */
+    /* Danger - Standard red */
+    --dm-danger: #dc3545;
+    --dm-danger-hover: #bb2d3b;
+    --dm-danger-active: #b02a37;
+    --dm-danger-light: #f8d7da;
+    --dm-danger-dark: #842029;
 
-    /* Warning - Bright amber (standard dark mode) */
-    --dm-warning: #fbbf24; /* amber-400 */
-    --dm-warning-hover: #fcd34d; /* amber-300 */
-    --dm-warning-active: #fde68a; /* amber-200 */
-    --dm-warning-text: #78350f; /* amber-950 */
-    --dm-warning-light: rgba(251, 191, 36, 0.15);
-    --dm-warning-dark: #f59e0b; /* amber-500 */
+    /* Warning - Standard amber */
+    --dm-warning: #ffc107;
+    --dm-warning-hover: #ffca2c;
+    --dm-warning-active: #ffcd39;
+    --dm-warning-light: #fff3cd;
+    --dm-warning-dark: #664d03;
+    --dm-warning-text: #664d03;
 
-    /* Info - Bright ocean cyan */
-    --dm-info: #90e0ef;
-    --dm-info-hover: #a6e7f2;
-    --dm-info-active: #bceef5;
-    --dm-info-light: rgba(144, 224, 239, 0.15);
-    --dm-info-dark: #48cae4;
+    /* Info - Light cyan */
+    --dm-info: #48cae4;
+    --dm-info-hover: #5cd2e8;
+    --dm-info-active: #70daec;
+    --dm-info-light: #daf4f9;
+    --dm-info-dark: #00b4d8;
 
     /* ================================================
        INTERACTIVE STATES
@@ -94,7 +94,7 @@
     /* Cards */
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
-    --dm-card-shadow: var(--dm-shadow-sm);
+    --dm-card-shadow: var(--dm-shadow-md);
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);

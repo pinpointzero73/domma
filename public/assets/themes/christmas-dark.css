@@ -37,7 +37,7 @@
     --dm-primary: #c41e3a;
     --dm-primary-hover: #d42c48;
     --dm-primary-active: #e43a56;
-    --dm-primary-light: #fce4e8;
+    --dm-primary-light: rgba(196, 30, 58, 0.15);
     --dm-primary-dark: #9a1830;
 
     /* Focus ring with festive red */
@@ -47,10 +47,10 @@
     /* ================================================
        SECONDARY COLOURS - Christmas Green
        ================================================ */
-    --dm-secondary: #165b33;
+    --dm-secondary: #3cb371;
     --dm-secondary-hover: #1e7a45;
     --dm-secondary-active: #269957;
-    --dm-secondary-light: #e3f2e9;
+    --dm-secondary-light: rgba(60, 179, 113, 0.15);
     --dm-secondary-dark: #0f3d23;
 
     /* ================================================
@@ -59,26 +59,26 @@
     --dm-success: #228b22;
     --dm-success-hover: #2ea02e;
     --dm-success-active: #3ab53a;
-    --dm-success-light: #e6f4e6;
+    --dm-success-light: rgba(34, 139, 34, 0.15);
     --dm-success-dark: #1a6b1a;
 
     --dm-info: #a8d5e5;
     --dm-info-hover: #b8dde9;
     --dm-info-active: #c8e5ed;
-    --dm-info-light: #f0f9fc;
+    --dm-info-light: rgba(168, 213, 229, 0.15);
     --dm-info-dark: #6bb8d1;
 
     --dm-warning: #d4af37;
     --dm-warning-hover: #dabb4f;
     --dm-warning-active: #e0c767;
-    --dm-warning-light: #faf6e7;
+    --dm-warning-light: rgba(212, 175, 55, 0.15);
     --dm-warning-dark: #b8962d;
-    --dm-warning-text: #8b7021;
+    --dm-warning-text: #d4af37;
 
     --dm-danger: #bb2528;
     --dm-danger-hover: #cc3336;
     --dm-danger-active: #dd4144;
-    --dm-danger-light: #fce8e8;
+    --dm-danger-light: rgba(187, 37, 40, 0.15);
     --dm-danger-dark: #991e20;
 
     /* ================================================
@@ -101,7 +101,7 @@
     --dm-danger: #dc3545;
     --dm-danger-hover: #bb2d3b;
     --dm-danger-active: #b02a37;
-    --dm-danger-light: #f8d7da;
+    --dm-danger-light: rgba(220, 53, 69, 0.15);
     --dm-danger-dark: #842029;
 
     /* ================================================
