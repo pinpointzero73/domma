@@ -8,7 +8,6 @@ import {PathResolver} from './modules/path-resolver.js';
 import {TemplateLoader} from './modules/template-loader.js';
 import {FeaturesModule} from './modules/features.js';
 import {SidebarModule} from './modules/sidebar.js';
-import {ConsentModule} from './modules/consent.js';
 
 (async function () {
     // Wait for DOM
@@ -116,8 +115,8 @@ import {ConsentModule} from './modules/consent.js';
             FeaturesModule.init(presetConfig.features);
         }
 
-        // Initialize consent banner
-        ConsentModule.init();
+        // Note: Cookie consent is initialized earlier via initCookieConsent() at line 107
+        // ConsentModule.init() removed to prevent duplicate consent banners
 
         // Load analytics tracker (for page view tracking with IP address)
         const analyticsScript = document.createElement('script');
@@ -767,17 +766,9 @@ import {ConsentModule} from './modules/consent.js';
                     // Set href for admin users
                     if (isAdmin) {
                         userInfoEl.href = adminPath;
-                        userInfoEl.style.cssText = 'margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit; cursor: pointer; transition: background 0.2s ease;';
-
-                        // Add hover effect
-                        userInfoEl.addEventListener('mouseenter', () => {
-                            userInfoEl.style.background = 'rgba(255,255,255,0.2)';
-                        });
-                        userInfoEl.addEventListener('mouseleave', () => {
-                            userInfoEl.style.background = 'rgba(255,255,255,0.1)';
-                        });
+                        userInfoEl.style.cssText = 'margin-left: 1rem; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; cursor: pointer;';
                     } else {
-                        userInfoEl.style.cssText = 'margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem;';
+                        userInfoEl.style.cssText = 'margin-left: 1rem; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem;';
                     }
 
                     const nameSpan = document.createElement('span');

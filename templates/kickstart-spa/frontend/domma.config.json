@@ -43,7 +43,7 @@
         "url": "#/contact"
       }
     ],
-    "variant": "dark",
+    "variant": "light",
     "position": "sticky",
     "collapsible": true,
     "collapseAt": "md"

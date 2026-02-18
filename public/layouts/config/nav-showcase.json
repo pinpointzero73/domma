@@ -2,34 +2,6 @@
   "type": "dropdowns",
   "items": [
     {
-      "text": "Get Started",
-      "items": [
-        {
-          "text": "Download",
-          "url": "download/index.html",
-          "section": "download"
-        },
-        {
-          "text": "Feedback",
-          "url": "feedback/index.html",
-          "section": "feedback",
-          "badge": "New"
-        },
-        {
-          "text": "GitHub",
-          "url": "https://github.com/dcbw-it/domma",
-          "section": "github",
-          "external": true
-        },
-        {
-          "text": "Documentation",
-          "url": "https://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md",
-          "section": "docs",
-          "external": true
-        }
-      ]
-    },
-    {
       "text": "QuickStart",
       "items": [
         {
@@ -544,6 +516,12 @@
           "text": "Blog",
           "url": "blog/index.html",
           "section": "blog"
+        },
+        {
+          "text": "Feedback",
+          "url": "feedback/index.html",
+          "section": "feedback",
+          "badge": "New"
         },
         {
           "text": "FAQs",

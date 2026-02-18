@@ -857,6 +857,7 @@
     scribeInstance: null,
     isHovering: false,
     hoverTimeout: null,
+    pendingAnimationFrame: null,
 
     // Feature-specific taglines
     featureTaglines: {
@@ -938,6 +939,12 @@
         this.hoverTimeout = null;
       }
 
+      // Cancel any pending animation frame to prevent race conditions
+      if (this.pendingAnimationFrame) {
+        cancelAnimationFrame(this.pendingAnimationFrame);
+        this.pendingAnimationFrame = null;
+      }
+
       // Properly stop current typewriter
       if (this.scribeInstance) {
         if (this.scribeInstance.stop) {
@@ -950,7 +957,8 @@
       }
 
       // Wait a frame for cleanup to complete before starting new animation
-      requestAnimationFrame(() => {
+      this.pendingAnimationFrame = requestAnimationFrame(() => {
+        this.pendingAnimationFrame = null;
         if (!this.isHovering) return; // User already moved away
 
         const $target = $('#splash-scribe');
@@ -982,6 +990,12 @@
 
       this.hoverTimeout = setTimeout(() => {
         if (!this.isHovering && this.isEnabled()) { // Only restore if still not hovering and animations enabled
+          // Cancel any pending animation frame to prevent race conditions
+          if (this.pendingAnimationFrame) {
+            cancelAnimationFrame(this.pendingAnimationFrame);
+            this.pendingAnimationFrame = null;
+          }
+
           // Properly stop current instance
           if (this.scribeInstance) {
             if (this.scribeInstance.stop) {
@@ -994,7 +1008,8 @@
           }
 
           // Wait a frame before restarting default animation
-          requestAnimationFrame(() => {
+          this.pendingAnimationFrame = requestAnimationFrame(() => {
+            this.pendingAnimationFrame = null;
             if (!this.isHovering) { // Double-check still not hovering
               this.updateTypewriter(true);
             }
@@ -1023,6 +1038,12 @@
     updateTypewriter(enabled) {
       const $target = $('#splash-scribe');
 
+      // Cancel any pending animation frame to prevent race conditions
+      if (this.pendingAnimationFrame) {
+        cancelAnimationFrame(this.pendingAnimationFrame);
+        this.pendingAnimationFrame = null;
+      }
+
       // Properly stop and clean up existing instance
       if (this.scribeInstance) {
         if (this.scribeInstance.stop) {
@@ -1036,7 +1057,8 @@
 
       if (enabled) {
         // Enable animations - wait a frame for cleanup
-        requestAnimationFrame(() => {
+        this.pendingAnimationFrame = requestAnimationFrame(() => {
+          this.pendingAnimationFrame = null;
           $target.empty();
           this.scribeInstance = Domma.effects.scribe('#splash-scribe', {
             speed: 40,
