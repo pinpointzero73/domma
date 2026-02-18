@@ -1358,8 +1358,8 @@ textarea:not([class])::placeholder {
    ============================================ */
 
 .code-block {
-    background-color: var(--dm-background);
-    color: var(--dm-text-inverse);
+    background-color: #1e1e2e;
+    color: #d4d4d4;
     padding: var(--dm-space-4);
     border-radius: var(--dm-radius-md);
     overflow-x: auto;
@@ -3708,85 +3708,85 @@ code {
 }
 
 /* Light theme overrides */
-[class*="-light"].code-block {
-    background-color: var(--dm-hover-bg);
-    color: var(--dm-text);
+[data-mode="light"] .code-block {
+    background-color: #f5f5f5;
+    color: #1e1e2e;
     border-color: var(--dm-border);
 }
 
-[class*="-light"].code-block-copy {
+[data-mode="light"] .code-block-copy {
     background: var(--dm-background-alt);
     /*background: rgba(1, 1, 1, 0.125);*/
     border-color: var(--dm-border);
     color: var(--dm-text);
 }
 
-[class*="-light"].code-block-copy:hover {
+[data-mode="light"] .code-block-copy:hover {
     background: rgba(0, 0, 0, 0.1);
     color: var(--dm-text);
 }
 
-[class*="-light"].syntax-keyword {
+[data-mode="light"] .syntax-keyword {
     color: #0000ff;
 }
 
-[class*="-light"].syntax-string {
+[data-mode="light"] .syntax-string {
     color: #a31515;
 }
 
-[class*="-light"].syntax-comment {
+[data-mode="light"] .syntax-comment {
     color: #008000;
 }
 
-[class*="-light"].syntax-number {
+[data-mode="light"] .syntax-number {
     color: #098658;
 }
 
-[class*="-light"].syntax-function {
+[data-mode="light"] .syntax-function {
     color: #795e26;
 }
 
-[class*="-light"].syntax-class {
+[data-mode="light"] .syntax-class {
     color: #267f99;
 }
 
-[class*="-light"].syntax-tag {
+[data-mode="light"] .syntax-tag {
     color: #800000;
 }
 
-[class*="-light"].syntax-attr-name {
+[data-mode="light"] .syntax-attr-name {
     color: #e50000;
 }
 
-[class*="-light"].syntax-attr-value {
+[data-mode="light"] .syntax-attr-value {
     color: #0000ff;
 }
 
-[class*="-light"].syntax-selector {
+[data-mode="light"] .syntax-selector {
     color: #800000;
 }
 
-[class*="-light"].syntax-property {
+[data-mode="light"] .syntax-property {
     color: #e50000;
 }
 
-[class*="-light"].syntax-value {
+[data-mode="light"] .syntax-value {
     color: #0451a5;
 }
 
-[class*="-light"].syntax-operator {
+[data-mode="light"] .syntax-operator {
     color: #000000;
 }
 
-[class*="-light"].syntax-punctuation {
+[data-mode="light"] .syntax-punctuation {
     color: #000000;
 }
 
-[class*="-light"].syntax-boolean {
+[data-mode="light"] .syntax-boolean {
     color: #0000ff;
 }
 
-[class*="-light"].syntax-regex {
+[data-mode="light"] .syntax-regex {
     color: #811f3f;
 }
 
