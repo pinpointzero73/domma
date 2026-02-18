@@ -208,12 +208,19 @@
 
 .card-body {
     padding: var(--dm-space-6);
+    color: var(--dm-text);
 }
 
 .card-footer {
     padding: var(--dm-space-4) var(--dm-space-6);
     border-top: 1px solid var(--dm-card-border);
     background-color: var(--dm-surface-secondary);
+    color: var(--dm-text);
+}
+
+/* Darker footer background in dark mode for better contrast */
+[data-mode="dark"] .card-footer {
+    background-color: var(--dm-background-alt);
 }
 
 .card-title {
@@ -237,6 +244,16 @@
 }
 
 .card-primary .card-header {
+    background-color: var(--dm-primary);
+    color: var(--dm-white);
+    border-color: var(--dm-primary);
+}
+
+.card-primary .card-body {
+    color: var(--dm-white);
+}
+
+.card-primary .card-footer {
     background-color: var(--dm-primary);
     color: var(--dm-white);
     border-color: var(--dm-primary);
@@ -3813,6 +3830,11 @@ code {
 /* ============================================
    SIDEBAR - PUSH MODE
    ============================================ */
+
+/* Content area wrapper - parent container for pushed content */
+.dm-content-area {
+    transition: margin-left var(--dm-transition-normal, 0.3s) ease;
+}
 
 /* Content wrapper when sidebar pushes it (left position) */
 .sidebar-push-active {

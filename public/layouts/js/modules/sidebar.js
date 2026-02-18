@@ -70,7 +70,7 @@ export const SidebarModule = {
                 position: 'left',
                 fixed: true,
                 push: true,
-                contentSelector: '.container',
+                contentSelector: '.dm-content-area',
                 top: '64px',              // Navbar height offset
                 width: '220px',
                 collapsedWidth: '60px',
@@ -187,7 +187,7 @@ export const SidebarModule = {
     },
 
     /**
-     * Create container element for sidebar
+     * Create container element for sidebar and content wrapper
      */
     createContainer() {
         // Remove existing sidebar if present
@@ -196,17 +196,42 @@ export const SidebarModule = {
             existing.remove();
         }
 
-        // Create new container
-        const navbar = document.querySelector('nav');
-        const container = document.createElement('aside');
-        container.id = 'page-sidebar';
-
-        // Insert after navbar or at start of body
-        if (navbar && navbar.nextSibling) {
-            navbar.insertAdjacentElement('afterend', container);
-        } else {
-            document.body.insertAdjacentElement('afterbegin', container);
+        // Remove existing content wrapper if present
+        const existingWrapper = document.querySelector('.dm-content-area');
+        if (existingWrapper) {
+            // Unwrap: move children back to body, then remove wrapper
+            while (existingWrapper.firstChild) {
+                existingWrapper.parentNode.insertBefore(existingWrapper.firstChild, existingWrapper);
+            }
+            existingWrapper.remove();
         }
+
+        // Create sidebar element
+        const navbar = document.querySelector('nav');
+        const sidebar = document.createElement('aside');
+        sidebar.id = 'page-sidebar';
+
+        // Insert sidebar after navbar or at start of body
+        if (navbar && navbar.nextSibling) {
+            navbar.insertAdjacentElement('afterend', sidebar);
+        } else {
+            document.body.insertAdjacentElement('afterbegin', sidebar);
+        }
+
+        // Create content wrapper
+        const contentWrapper = document.createElement('div');
+        contentWrapper.className = 'dm-content-area';
+
+        // Move all remaining siblings after sidebar into the wrapper
+        let nextSibling = sidebar.nextSibling;
+        while (nextSibling) {
+            const current = nextSibling;
+            nextSibling = nextSibling.nextSibling;
+            contentWrapper.appendChild(current);
+        }
+
+        // Insert wrapper after sidebar
+        sidebar.insertAdjacentElement('afterend', contentWrapper);
     },
 
     /**
