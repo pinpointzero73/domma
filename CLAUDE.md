@@ -113,6 +113,7 @@ consult that folder's CLAUDE.md for detailed information.
 | `Domma.elements` | `E`   | `window.E` | UI components                    |
 | `Domma.icons`    | `I`   | `window.I` | SVG icon system                  |
 | `Domma.tables`   | `T`   | `window.T` | DataTable functionality          |
+| `Domma.router`   | `R`   | `window.R` | Client-side router               |
 
 ## CSS Architecture
 

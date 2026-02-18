@@ -41,19 +41,21 @@ This file enforces Domma framework conventions for augmented development (Claude
 
 ## Alias Quick Reference
 
-| Full Path        | Alias | Description                      |
-|------------------|-------|----------------------------------|
-| `Domma()`        | `$`   | DOM selection/manipulation       |
-| `Domma.utils`    | `_`   | Utility functions                |
-| `Domma.models`   | `M`   | Reactive models & pub/sub        |
-| Blueprint        | `B`   | Blueprint composition            |
-| `Domma.dates()`  | `D()` | Date manipulation                |
-| `Domma.storage`  | `S`   | localStorage wrapper             |
-| `Domma.forms`    | `F`   | Form builder                     |
-| `Domma.http`     | `H`   | HTTP client                      |
-| `Domma.elements` | `E`   | UI components                    |
-| `Domma.icons`    | `I`   | SVG icon system                  |
-| `Domma.tables`   | `T`   | DataTable functionality          |
+| Full Path        | Alias | Global     | Description                      |
+|------------------|-------|------------|----------------------------------|
+| `Domma()`        | `$`   | `window.$` | DOM selection/manipulation       |
+| `Domma.utils`    | `_`   | `window._` | Utility functions                |
+| `Domma.models`   | `M`   | `window.M` | Reactive models & pub/sub        |
+| Blueprint        | `B`   | `window.B` | Blueprint composition            |
+| `Domma.dates()`  | `D()` | `window.D` | Date manipulation                |
+| `Domma.storage`  | `S`   | `window.S` | localStorage wrapper             |
+| `Domma.auth`     | `A`   | `window.A` | Authentication module            |
+| `Domma.forms`    | `F`   | `window.F` | Form builder                     |
+| `Domma.http`     | `H`   | `window.H` | HTTP client                      |
+| `Domma.elements` | `E`   | `window.E` | UI components                    |
+| `Domma.icons`    | `I`   | `window.I` | SVG icon system                  |
+| `Domma.tables`   | `T`   | `window.T` | DataTable functionality          |
+| `Domma.router`   | `R`   | `window.R` | Client-side router               |
 
 ## CSS Load Order (CRITICAL)
 
@@ -167,6 +169,10 @@ backend/                 # Backend API (if needed)
 5. Forgetting `I.scan()` after dynamic icons
 6. Wrong CSS load order (elements before grid)
 7. Init Domma after module scripts (must be before)
+
+## British English
+
+Use British spellings in all new code, comments, and documentation (-ise not -ize, -our not -or, -yse not -yze).
 
 ## Additional Resources
 

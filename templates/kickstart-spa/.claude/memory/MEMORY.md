@@ -21,11 +21,17 @@ Quick reference for Domma conventions - enforces best practices across sessions.
 8. **Confirm**: `await E.confirm('Sure?')` - NOT `window.confirm()`
 9. **Icons**: `<span data-icon="name">` + `I.scan()` - NOT manual SVG
 10. **Tables**: `T.create(selector, {data})` - NOT manual `<table>` HTML
+11. **Modals**: `E.modal(selector, options)` — NOT custom modal code
+12. **Templates**: `templateUrl: 'path.html'` — NOT large inline strings
+13. **Tabs**: `E.tabs()`, `E.accordion()` — NOT custom switching code
+14. **Init**: Call `Domma.init()` and `I.scan()` after DOM ready
+15. **Events**: `.on()`, `.off()`, `.one()` — NOT `.addEventListener()`
 
 ## Aliases Quick Reference
 
 `$` = DOM | `_` = Utils | `M` = Models | `D` = Dates | `S` = Storage
 `H` = HTTP | `F` = Forms | `E` = Elements | `I` = Icons | `T` = Tables
+`A` = Auth | `R` = Router
 
 ## CSS Load Order (Critical)
 
