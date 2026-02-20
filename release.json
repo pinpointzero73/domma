@@ -1,208 +1,136 @@
 {
-  "version": "0.17.0",
-  "releaseDate": "2026-02-18",
-  "codename": "Theme Renaissance",
+  "version": "0.18.0",
+  "releaseDate": "2026-02-20",
+  "codename": "DommaComponents",
   "changes": {
     "features": [
       {
-        "title": "Theme Engine Auto-Persistence & Loading",
-        "description": "Theme selections now persist across sessions and automatically load on page refresh, providing seamless theme continuity",
-        "impact": "high",
+        "title": "Domma.component() — Web Components API",
+        "description": "New first-class Web Components system allowing developers to define reusable, encapsulated UI components with a clean declarative API",
+        "impact": "critical",
         "files": [
-          "public/index.html",
-          "src/theme.js"
+          "src/component-factory.js",
+          "src/template-compiler.js",
+          "src/plugins/",
+          "src/web-components/base/domma-element.js",
+          "src/index.js"
         ],
-        "details": "<p><strong>Fixed critical theme persistence issue:</strong></p><p>Previously, explicit theme parameters in <code>init()</code> calls were overriding stored themes, causing users to lose their theme selection on page reload.</p><p><strong>How it works now:</strong></p><ul><li><strong>Auto-save</strong> — Theme changes are automatically saved to localStorage when using <code>theme.set()</code></li><li><strong>Auto-load</strong> — On page load, the theme engine checks localStorage first before using defaults</li><li><strong>Proper initialization</strong> — <code>theme.init({ persist: true })</code> now correctly loads stored themes instead of forcing a default</li></ul><p><strong>Impact:</strong> Users' theme preferences are now respected across all pages and sessions, creating a consistent experience throughout the application.</p>"
+        "details": "<p><strong>Domma.component(name, definition)</strong> registers a native Web Component (Custom Element) with Shadow DOM encapsulation. The definition object mirrors the familiar Domma conventions:</p><ul><li><strong>data()</strong> — Returns the component's initial reactive state object</li><li><strong>computed</strong> — Object of functions that derive values from <code>this.data</code>, recalculated on every update</li><li><strong>methods</strong> — Event handler and utility functions, all bound to the component instance</li><li><strong>props</strong> — Type-validated, default-valued attributes observed from HTML (<code>M.types.*</code> type system)</li><li><strong>style</strong> — CSS string injected into the Shadow DOM; fully encapsulated, cannot leak or be overridden from outside</li><li><strong>templateUrl</strong> — Path to an external <code>.html</code> file for the component's markup; loaded and cached on first mount</li><li><strong>onBeforeMount()</strong> — Called before the template is inserted; use for data pre-fetching</li><li><strong>onMount($container)</strong> — Called after template is in the Shadow DOM; wire event listeners here</li><li><strong>onUpdated(changedData)</strong> — Called after any <code>this.set()</code> call; perform targeted DOM refreshes</li><li><strong>onUnmount()</strong> — Called before the element is removed; clean up timers and listeners</li></ul><p><strong>CSS variable passthrough:</strong> All <code>--dm-*</code> CSS variables flow from the host page into the Shadow DOM, so components theme-adapt automatically.</p>"
       },
       {
-        "title": "Router External Template Loading (templateUrl)",
-        "description": "Added support for loading view templates from external HTML files, dramatically improving code organisation and maintainability for SPA applications",
+        "title": "Template Compiler with Mustache Bindings",
+        "description": "New template compiler supporting {{variable}}, {{#if}}, {{#each}}, and {{#unless}} within component templates",
         "impact": "high",
         "files": [
-          "src/router.js",
-          "public/showcase/router/index.html",
-          "public/showcase/router/CLAUDE.md"
+          "src/template-compiler.js"
         ],
-        "details": "<p><strong>Views can now load HTML templates from separate files:</strong></p><p>Instead of embedding large HTML strings in JavaScript, use <code>templateUrl</code> to reference external <code>.html</code> files. This provides proper syntax highlighting, cleaner code organisation, and better separation of concerns.</p><p><strong>Key features:</strong></p><ul><li><strong>Template caching</strong> — Templates are fetched once and cached for the session, improving performance on repeat navigation</li><li><strong>Parallel partial loading</strong> — Reusable template sections (<code>partials</code>) are loaded concurrently with the main template</li><li><strong>Mustache syntax support</strong> — Use <code>{{variable}}</code>, <code>{{#if}}</code>, <code>{{#each}}</code>, and <code>{{> partial}}</code> in external templates</li><li><strong>Organised file structure</strong> — Recommended layout with <code>js/views/templates/</code> directories</li></ul><p><strong>Benefits:</strong> Views with 400+ lines of inline HTML reduced to ~50 lines of clean JavaScript. HTML files get proper editor support, and logic stays separate from presentation.</p>"
+        "details": "<p>The template compiler processes component HTML templates before insertion into the Shadow DOM:</p><ul><li><code>{{variable}}</code> — Interpolates data and computed values (HTML-escaped by default)</li><li><code>{{{variable}}}</code> — Unescaped HTML interpolation (use with caution)</li><li><code>{{#if condition}}...{{/if}}</code> — Conditional blocks</li><li><code>{{#unless condition}}...{{/unless}}</code> — Inverted conditional blocks</li><li><code>{{#each items}}...{{/each}}</code> — Iteration with <code>{{this}}</code> and <code>{{@index}}</code></li></ul><p><strong>Static template pattern:</strong> Components with user-editable inputs use zero-binding templates and drive all updates through targeted <code>onUpdated()</code> methods, preventing full re-renders from destroying focused elements.</p>"
       },
       {
-        "title": "Kickstart Template Augmented Development",
-        "description": "Enhanced the SPA kickstart template with built-in convention enforcement for AI-assisted development (Claude Code, Cursor, etc.)",
+        "title": "Four Example DommaComponents",
+        "description": "Calculator, To-Do List, Markdown Editor, and Notes App converted to self-contained <domma-*> Web Components",
+        "impact": "high",
+        "files": [
+          "public/examples/calculator/component.js",
+          "public/examples/calculator/template.html",
+          "public/examples/todo/component.js",
+          "public/examples/todo/template.html",
+          "public/examples/markdown/component.js",
+          "public/examples/markdown/template.html",
+          "public/examples/notes/component.js",
+          "public/examples/notes/template.html"
+        ],
+        "details": "<p>Each example app was converted from a standalone page script into a downloadable <code>&lt;domma-*&gt;</code> component:</p><ul><li><strong>&lt;domma-calculator&gt;</strong> — Basic and scientific modes, memory (M+/M−/MR/MC), angle toggle (DEG/RAD), full keyboard support, <code>initialMode</code> prop</li><li><strong>&lt;domma-todo&gt;</strong> — Add/edit/delete tasks, priority (Low/Medium/High/Critical), status (To-Do/In Progress/Done/Cancelled), search filter, localStorage persistence via <code>storageKey</code> prop</li><li><strong>&lt;domma-markdown-editor&gt;</strong> — Split-pane live preview, toolbar shortcuts, debounced auto-save, Ctrl+B/Ctrl+I/Ctrl+K keyboard shortcuts, word and character count, configurable <code>autoSaveDelay</code> prop</li><li><strong>&lt;domma-notes&gt;</strong> — Notes grid, overlay editor, rich-text toolbar, category tagging, full-text search, last-saved relative timestamp via <code>D().fromNow()</code></li></ul><p>All four components: use <code>S.get()</code>/<code>S.set()</code> for persistence, <code>E.toast()</code>/<code>E.confirm()</code>/<code>E.prompt()</code> for dialogs (light-DOM, works from Shadow DOM), <code>I.scan()</code> for icon rendering, and <code>_.render()</code> + <code>_.escape()</code> for safe HTML generation. Drop in with a single tag — no configuration required.</p>"
+      },
+      {
+        "title": "DommaComponents Showcase",
+        "description": "New dedicated showcase page covering the full component API with live demos, code examples, and a comprehensive tutorial",
         "impact": "medium",
         "files": [
-          "templates/kickstart-spa/CLAUDE.md",
-          "templates/kickstart-spa/.claude/memory/MEMORY.md",
-          "templates/kickstart-spa/.claude/settings.json"
+          "public/showcase/components/index.html"
         ],
-        "details": "<p><strong>New projects now include:</strong></p><ul><li><strong>CLAUDE.md</strong> — Consumer-focused convention enforcement with quick reference tables for Domma APIs</li><li><strong>Memory file</strong> — Persistent reminders of core patterns and common mistakes</li><li><strong>Updated settings</strong> — templateUrl patterns and reminders built into the project configuration</li></ul><p>Developers using AI assistants get immediate guidance on Domma conventions, preventing common mistakes like using <code>fetch()</code> instead of <code>H.get()</code> or <code>localStorage</code> instead of <code>S.set()</code>.</p>"
+        "details": "<p>The Components showcase at <code>/showcase/components/</code> covers:</p><ul><li>Live interactive demo of a custom <code>&lt;domma-card&gt;</code> component</li><li>Full API reference: data, computed, methods, props, style, templateUrl, lifecycle</li><li>Shadow DOM encapsulation explained with visual examples</li><li>CSS variable passthrough and theming patterns</li><li>Static template pattern for form-heavy components</li><li>Event delegation pattern for dynamic lists</li><li>Comparison with vanilla Custom Elements showing the DX improvement</li></ul>"
+      },
+      {
+        "title": "Splash Page — Examples Row",
+        "description": "Eight example tiles added to the landing page above MiniApps, with Scribe typewriter descriptions on hover",
+        "impact": "medium",
+        "files": [
+          "public/index.html"
+        ],
+        "details": "<p>The landing page now surfaces all eight example applications in a tile row above the MiniApps section:</p><ul><li>To-Do List, Calculator, Markdown Editor, Notes, Contacts, Gallery, Weather, Celebrations</li><li>Hovering a tile fires a second <code>Domma.effects.scribe()</code> instance in a dedicated description container beneath the row</li><li>The two scribe instances (splash tagline and example description) operate independently with no state conflicts</li><li>Both instances clean up correctly when animations are disabled via the motion toggle</li><li>Tiles animate in with the same stagger effect as the feature cards</li></ul><p>Also standardised the <code>View All Examples →</code> and <code>View All MiniApps →</code> buttons to identical <code>btn btn-outline btn-sm</code> styling, and increased vertical spacing between the two sections.</p>"
       }
     ],
     "enhancements": [
       {
-        "title": "Complete Theme System Overhaul",
-        "description": "Migrated entire component library from hardcoded palette variables to semantic theme variables, achieving full theme-readiness across all 16 themes",
-        "impact": "critical",
-        "files": [
-          "src/css/elements.css",
-          "src/theme.js",
-          "public/assets/themes/*.css"
-        ],
-        "details": "<p><strong>Massive architectural improvement to theming system:</strong></p><p><strong>Semantic Variable Migration:</strong></p><ul><li>Replaced ~298 instances of palette variables (<code>--dm-gray-*</code>, <code>--dm-slate-*</code>) with semantic variables</li><li>Components now use <code>--dm-text</code>, <code>--dm-surface</code>, <code>--dm-border</code>, <code>--dm-hover-bg</code>, etc.</li><li>Semantic variables automatically adapt to each theme's color scheme</li></ul><p><strong>Unified Dark Mode Detection:</strong></p><ul><li>Introduced <code>data-mode</code> attribute set by theme engine on body/html element</li><li>Replaced inconsistent selectors (<code>[data-theme=\"dark\"]</code>, <code>[class*=\"-dark\"]</code>) with unified <code>[data-mode=\"dark\"]</code></li><li>Fixed 78+ instances across elements.css for consistent dark mode styling</li></ul><p><strong>Theme File Corrections:</strong></p><ul><li>Fixed ocean-light/ocean-dark file content swap (files had inverted backgrounds)</li><li>Fixed forest-light/forest-dark file content swap</li><li>Improved contrast in 5 dark themes (charcoal, silver, lemon, christmas, sunset)</li><li>Converted opaque status colors to RGBA tints for better dark theme integration</li></ul><p><strong>Impact:</strong> All components now work perfectly across all 16 themes with proper contrast and readability. Text is no longer invisible in light or dark modes.</p>"
-      },
-      {
-        "title": "Enhanced Navbar & Footer Hover States",
-        "description": "Redesigned hover interactions for navigation and footer links with improved visibility and rounded corners",
+        "title": "Component Plugin System",
+        "description": "Extensible plugin architecture for registering component behaviours and mixins",
         "impact": "medium",
         "files": [
-          "src/css/elements.css"
+          "src/plugins/"
         ],
-        "details": "<p><strong>Light mode improvements:</strong></p><ul><li><strong>Dark hover backgrounds</strong> — Navbar and dropdown links now use <code>#1e293b</code> (dark slate) background on hover</li><li><strong>White text on hover</strong> — Ensures perfect readability with high contrast</li><li><strong>Rounded corners</strong> — Changed from <code>--dm-radius-sm</code> to <code>--dm-radius-md</code> for more polished appearance</li><li><strong>Footer links</strong> — Applied same dark hover treatment for consistency</li></ul><p><strong>Visual borders:</strong></p><ul><li>Added 1px dark bottom border to navbar in light mode (<code>rgba(0, 0, 0, 0.2)</code>)</li><li>Added 1px light top border to footer in dark mode (<code>rgba(255, 255, 255, 0.1)</code>)</li><li>Provides clear visual separation without being obtrusive</li></ul><p><strong>Impact:</strong> Navigation elements now have consistent, highly visible hover states across all themes with professional styling.</p>"
+        "details": "<p>A lightweight plugin system allows framework-level behaviours to be registered and shared across components without modifying the core factory. Plugins receive the component instance at mount time and can add methods, watchers, or lifecycle extensions.</p>"
       },
       {
-        "title": "Card Header Dark Mode Contrast",
-        "description": "Improved card header readability in dark themes by darkening background instead of lightening text",
-        "impact": "low",
-        "files": [
-          "src/css/elements.css"
-        ],
-        "details": "<p><strong>Better contrast approach:</strong></p><p>Instead of forcing white text on potentially light backgrounds, card headers now use darker backgrounds (<code>--dm-background-alt</code>) in dark mode.</p><p>This creates proper visual hierarchy while maintaining theme consistency. The <code>--dm-text</code> variable automatically provides appropriate text color for each mode.</p>"
-      },
-      {
-        "title": "Router Showcase Comprehensive Tutorial",
-        "description": "Added extensive Template Files tutorial section to router showcase with 6 sub-sections covering all aspects of external template usage",
+        "title": "DommaElement Base Class",
+        "description": "Shared HTMLElement base class providing common utilities to all Domma web components",
         "impact": "medium",
         "files": [
-          "public/showcase/router/index.html"
+          "src/web-components/base/domma-element.js"
         ],
-        "details": "<p><strong>New tutorial sections cover:</strong></p><ul><li>Problem/solution comparison (before/after examples)</li><li>Basic <code>templateUrl</code> usage with clear examples</li><li>Template variables and Mustache syntax</li><li>Partials for reusable template sections</li><li>Template caching behaviour and performance</li><li>Recommended file organisation patterns</li></ul><p>The router is now discoverable from the showcase hub, and best practices have been updated to explicitly recommend <code>templateUrl</code> for views with more than a few lines of HTML.</p>"
+        "details": "<p>All registered Domma components extend <code>DommaElement</code>, which provides:</p><ul><li>Shadow root initialisation with <code>mode: 'open'</code></li><li>Safe <code>this.set(key, value)</code> method that merges state and triggers <code>onUpdated()</code></li><li>Attribute observation wired to prop definitions</li><li>Automatic cleanup of event listeners on disconnect</li></ul>"
       },
       {
-        "title": "Enhanced Detail Formatting",
-        "description": "Improved release notes formatting with proper HTML structure for better readability",
+        "title": "Rollup Plugin for Component Bundling",
+        "description": "Rollup configuration updated to handle component files and external HTML templates",
         "impact": "low",
         "files": [
-          "release.json"
+          "rollup.config.js"
         ],
-        "details": "<p>Release note details now use structured HTML with paragraphs, lists, and inline code formatting instead of plain text arrays.</p><p>This provides better visual hierarchy and makes complex feature descriptions easier to scan and understand.</p>"
+        "details": "<p>The build pipeline now handles component <code>.js</code> files and can inline or reference companion <code>template.html</code> files during bundling, enabling production-ready component distribution.</p>"
       }
     ],
     "bugFixes": [
       {
-        "title": "Fixed Theme Persistence Override",
-        "description": "Removed explicit theme parameter from landing page initialization that was preventing stored theme from loading",
-        "impact": "high",
-        "files": [
-          "public/index.html"
-        ],
-        "details": "<p><strong>Problem:</strong> <code>theme.init({ theme: 'silver-light' })</code> was forcing a specific theme on every page load, ignoring localStorage.</p><p><strong>Solution:</strong> Changed to <code>theme.init({ persist: true })</code> which respects the theme storage priority: explicit param → stored theme → default theme.</p><p><strong>Result:</strong> Theme selections now persist correctly across page refreshes and navigation.</p>"
-      },
-      {
-        "title": "Fixed Ocean & Forest Theme File Content Swap",
-        "description": "Corrected inverted CSS custom property values in ocean and forest theme pairs",
+        "title": "Fixed E.prompt(), E.confirm(), E.alert() Silent Failures",
+        "description": "Corrected British/American spelling mismatch in the internal sanitization module that caused dialog methods and tooltip HTML rendering to silently fail",
         "impact": "critical",
         "files": [
-          "public/assets/themes/ocean-dark.css",
-          "public/assets/themes/ocean-light.css",
-          "public/assets/themes/forest-dark.css",
-          "public/assets/themes/forest-light.css"
+          "src/elements.js"
         ],
-        "details": "<p><strong>Issue:</strong> Dark theme files contained light backgrounds (<code>#ffffff</code>) and light theme files contained dark backgrounds (<code>#0f172a</code>).</p><p><strong>Fix:</strong> Swapped CSS custom property values between -light and -dark files while preserving class names and color-scheme declarations.</p><p><strong>Impact:</strong> Ocean and forest themes now display with correct light/dark mode colors.</p>"
-      },
-      {
-        "title": "Fixed Splash Hero Theme Readiness",
-        "description": "Converted splash hero from forced dark theme to fully theme-adaptive using semantic variables",
-        "impact": "medium",
-        "files": [
-          "public/index.html"
-        ],
-        "details": "<p>Replaced hardcoded colors with semantic variables:</p><ul><li><code>background: #1e293b</code> → <code>var(--dm-background)</code></li><li><code>color: #ffffff</code> → <code>var(--dm-text)</code></li><li>Feature cards, icons, CTAs all converted to semantic variables</li></ul><p>Splash hero now adapts perfectly to all 16 themes instead of being locked to dark mode.</p>"
-      },
-      {
-        "title": "Fixed Login Page Tab Visibility",
-        "description": "Corrected login/register tab button text color in dark themes",
-        "impact": "low",
-        "files": [
-          "public/login/custom.css"
-        ],
-        "details": "<p>Changed active tab from <code>var(--dm-text-inverse)</code> to explicit <code>#ffffff</code> to ensure white text on primary-colored background across all themes.</p>"
-      },
-      {
-        "title": "Fixed Navbar Branding Visibility",
-        "description": "Corrected misuse of --dm-text-inverse variable that caused invisible branding in light mode",
-        "impact": "medium",
-        "files": [
-          "src/css/elements.css"
-        ],
-        "details": "<p><strong>Issue:</strong> <code>--dm-text-inverse</code> was being used for navbar branding, but this variable is for colored button surfaces, not theme-adaptive text.</p><p><strong>Fix:</strong> Changed to <code>var(--dm-text)</code> which automatically provides dark text in light mode and light text in dark mode.</p>"
-      },
-      {
-        "title": "Improved Dark Theme Contrast Ratios",
-        "description": "Fixed illegible text in 5 dark themes by adjusting primary colors and status text values",
-        "impact": "high",
-        "files": [
-          "public/assets/themes/charcoal-dark.css",
-          "public/assets/themes/silver-dark.css",
-          "public/assets/themes/lemon-dark.css",
-          "public/assets/themes/christmas-dark.css",
-          "public/assets/themes/sunset-dark.css"
-        ],
-        "details": "<p><strong>Contrast fixes against <code>--dm-background: #0f172a</code>:</strong></p><ul><li><strong>charcoal-dark:</strong> <code>--dm-primary</code> from <code>#36454f</code> → <code>#8a9bab</code></li><li><strong>silver-dark:</strong> <code>--dm-tab-active-text</code> from <code>#4a5568</code> → <code>#a0aec0</code></li><li><strong>lemon-dark:</strong> <code>--dm-warning-text</code> from <code>#8a6b20</code> → <code>#d4c070</code></li><li><strong>christmas-dark:</strong> <code>--dm-secondary</code> from <code>#165b33</code> → <code>#3cb371</code></li></ul><p>Also converted all opaque pastel status backgrounds to RGBA tints for better dark theme integration.</p>"
-      },
-      {
-        "title": "Fixed Cookie Consent Component Theming",
-        "description": "Replaced hardcoded colors with semantic variables in cookie consent component",
-        "impact": "low",
-        "files": [
-          "src/css/elements.css"
-        ],
-        "details": "<p>Converted ~20 hardcoded color values to semantic variables:</p><ul><li><code>background: white</code> → <code>var(--dm-surface)</code></li><li><code>color: #333</code> → <code>var(--dm-text)</code></li><li><code>border: 1px solid #e5e5e5</code> → <code>var(--dm-border)</code></li></ul><p>Cookie consent now respects all theme variants.</p>"
-      },
-      {
-        "title": "Effects Motion Preference Override",
-        "description": "Fixed critical issue where reveal() and ripple() effects were being disabled by CSS media queries even when JavaScript explicitly set respectMotionPreference: false",
-        "impact": "high",
-        "files": [
-          "src/effects.js",
-          "src/css/domma.css"
-        ],
-        "details": "<p><strong>Root cause:</strong> CSS <code>@media (prefers-reduced-motion: reduce)</code> queries were applying globally, overriding JavaScript configuration.</p><p><strong>Solution:</strong></p><ul><li>Added <code>data-force-animation</code> attribute to elements when motion preference should be ignored</li><li>Updated CSS media queries to exclude elements with this attribute</li><li>Fixed ripple effect to apply the attribute to dynamically created ripple elements</li></ul><p><strong>Impact:</strong> Showcase demo pages now work correctly regardless of user's system motion preferences, ensuring animations display when explicitly configured.</p>"
-      },
-      {
-        "title": "Showcase Effects Pages Cleanup",
-        "description": "Cleaned up effects showcase pages by removing references to obsolete overrideMotionPreference variable",
-        "impact": "medium",
-        "files": [
-          "public/showcase/effects/breathe.html",
-          "public/showcase/effects/shake.html",
-          "public/showcase/effects/counter.html"
-        ],
-        "details": "<p>Updated all showcase pages to use <code>respectMotionPreference: false</code> consistently.</p><p>Fixed 14 remaining references across 3 showcase files, ensuring consistent behaviour and removing deprecated API usage.</p>"
+        "details": "<p><strong>Root cause:</strong> <code>sanitize.js</code> exports its function as <code>sanitise</code> (British spelling), but <code>elements.js</code> was calling <code>sanitizeModule.sanitize()</code> (American spelling). This resolved to <code>undefined</code>, throwing <code>TypeError: r.sanitize is not a function</code> silently inside promise chains.</p><p><strong>Affected:</strong> <code>E.prompt()</code>, <code>E.confirm()</code>, <code>E.alert()</code>, tooltips with HTML content, toast messages containing HTML, and the slideover component.</p><p><strong>Fix:</strong> Replaced all 12 occurrences of <code>sanitizeModule.sanitize</code> with <code>sanitizeModule.sanitise</code> in <code>elements.js</code>. Rebuilt bundles.</p><p><strong>Discovery:</strong> Found while testing the <code>&lt;domma-todo&gt;</code> edit function, which calls <code>E.prompt()</code> to pre-fill the task text for editing.</p>"
       }
     ],
     "breaking": []
   },
   "buildInfo": {
     "commit": "latest",
-    "buildDate": "2026-02-18T12:30:00Z"
+    "buildDate": "2026-02-20T12:00:00Z"
   },
   "stats": {
-    "totalFiles": 22,
-    "linesAdded": 487,
-    "linesRemoved": 312,
+    "totalFiles": 18,
+    "linesAdded": 1840,
+    "linesRemoved": 95,
     "filesChanged": [
-      "src/theme.js",
-      "src/css/elements.css",
+      "src/component-factory.js",
+      "src/template-compiler.js",
+      "src/plugins/",
+      "src/web-components/base/domma-element.js",
+      "src/web-components/components/domma-card.js",
+      "src/index.js",
+      "src/elements.js",
+      "rollup.config.js",
+      "public/examples/calculator/component.js",
+      "public/examples/calculator/template.html",
+      "public/examples/todo/component.js",
+      "public/examples/todo/template.html",
+      "public/examples/markdown/component.js",
+      "public/examples/markdown/template.html",
+      "public/examples/notes/component.js",
+      "public/examples/notes/template.html",
+      "public/showcase/components/index.html",
       "public/index.html",
-      "public/login/custom.css",
-      "public/assets/themes/ocean-dark.css",
-      "public/assets/themes/ocean-light.css",
-      "public/assets/themes/forest-dark.css",
-      "public/assets/themes/forest-light.css",
-      "public/assets/themes/charcoal-dark.css",
-      "public/assets/themes/silver-dark.css",
-      "public/assets/themes/lemon-dark.css",
-      "public/assets/themes/christmas-dark.css",
-      "public/assets/themes/sunset-dark.css",
+      "public/data/releases.json",
       "release.json"
     ]
   }

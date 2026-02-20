@@ -6311,16 +6311,16 @@ code {
 /* Dark theme support */
 [data-mode="dark"] .dm-progression-content {
     background: var(--dm-surface);
-    border-color: var(--dm-text);
-    color: var(--dm-text-inverse);
+    border-color: var(--dm-border);
+    color: var(--dm-text);
 }
 
 [data-mode="dark"] .dm-progression-title {
-    color: var(--dm-text-inverse);
+    color: var(--dm-text);
 }
 
 [data-mode="dark"] .dm-progression-description {
-    color: var(--dm-text-disabled);
+    color: var(--dm-text-secondary);
 }
 
 [data-mode="dark"] .dm-progression-minimal .dm-progression-content {
