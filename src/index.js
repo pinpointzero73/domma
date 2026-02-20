@@ -14,6 +14,7 @@ import {auth} from './auth.js';
 import {router} from './router.js';
 import effects from './effects.js';
 import sanitizeModule from './sanitize.js';
+import {components, createComponent} from './component-factory.js';
 
 // Register Web Components (Badge, Tooltip, Loader, BackToTop)
 import {registerComponents} from './web-components/index.js';
@@ -101,6 +102,16 @@ Domma.storage = storage;
 Domma.auth = auth;
 Domma.router = router;
 Domma.sanitize = sanitizeModule;
+Domma.components = components;
+
+/**
+ * Shorthand for Domma.components.define() — register a standalone component.
+ * Usage: Domma.component('tag-name', definition)
+ *
+ * @param {string} tagName
+ * @param {Object} definition
+ */
+Domma.component = (tagName, definition) => createComponent(tagName, definition);
 
 // Expose DesktopNotification class for static method access
 Domma.DesktopNotification = DesktopNotification;
@@ -156,7 +167,7 @@ if (typeof window !== 'undefined') {
 }
 
 export default Domma;
-export {Domma, $, _, M, D, S, A, F, H, E, I, T, R, B};
+export {Domma, $, _, M, D, S, A, F, H, E, I, T, R, B, components};
 
 // Reveal page after Domma is ready
 if (typeof document !== 'undefined') {

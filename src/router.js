@@ -383,6 +383,43 @@ export const router = {
     async _renderContent(view, params, $container) {
         let html;
 
+        // ── Component-based routes ──────────────────────────────────────────
+        // Route definition: { component: 'tag-name', props: (params) => ({…}) }
+        if (typeof view === 'object' && view.component && !Array.isArray(view)) {
+            const tagName     = view.component;
+            const containerEl = $container[0] || $container;
+
+            // Resolve props (accepts object literal or function)
+            const resolvedProps = typeof view.props === 'function'
+                ? view.props(params)
+                : (view.props || {});
+
+            // Build and configure the custom element
+            const el = document.createElement(tagName);
+            for (const [key, val] of Object.entries(resolvedProps)) {
+                const attr = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+                if (val === true || val === '') {
+                    el.setAttribute(attr, '');
+                } else if (val !== false && val !== null && val !== undefined) {
+                    el.setAttribute(
+                        attr,
+                        typeof val === 'object' ? JSON.stringify(val) : String(val)
+                    );
+                }
+            }
+
+            // Clear container safely, then append the component element
+            while (containerEl.firstChild) {
+                containerEl.removeChild(containerEl.firstChild);
+            }
+            containerEl.appendChild(el);
+
+            if (typeof view.onMount === 'function') {
+                view.onMount($container);
+            }
+            return;
+        }
+
         // Check if view is an object with template property
         if (typeof view === 'object' && !Array.isArray(view)) {
             let template = view.template;
@@ -451,6 +488,29 @@ export const router = {
 
     // Internal: Static render (no animations) - uses trusted application templates
     async _renderViewStatic(view, params) {
+        // ── Component-based routes (no animation path) ──────────────────────
+        if (typeof view === 'object' && view.component && !Array.isArray(view)) {
+            const tagName     = view.component;
+            const containerEl = this._container[0] || this._container;
+            const resolvedProps = typeof view.props === 'function'
+                ? view.props(params)
+                : (view.props || {});
+            const el = document.createElement(tagName);
+            for (const [key, val] of Object.entries(resolvedProps)) {
+                const attr = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+                if (val === true || val === '') {
+                    el.setAttribute(attr, '');
+                } else if (val !== false && val !== null && val !== undefined) {
+                    el.setAttribute(attr, typeof val === 'object' ? JSON.stringify(val) : String(val));
+                }
+            }
+            while (containerEl.firstChild) containerEl.removeChild(containerEl.firstChild);
+            containerEl.appendChild(el);
+            if (typeof view.onMount === 'function') view.onMount(this._container);
+            if (typeof window !== 'undefined' && window.I) window.I.scan(containerEl);
+            return;
+        }
+
         let html;
 
         if (typeof view === 'object' && !Array.isArray(view)) {

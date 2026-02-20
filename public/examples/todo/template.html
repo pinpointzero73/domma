@@ -1,0 +1,34 @@
+<div class="todo-wrapper">
+
+    <!-- Add task row -->
+    <div class="todo-input-container">
+        <input type="text" class="new-todo-input" placeholder="What needs to be done?" autocomplete="off">
+        <select class="new-status-select create-select">
+            <option value="not-started">Not Started</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+        </select>
+        <select class="new-priority-select create-select">
+            <option value="highest">Highest</option>
+            <option value="high">High</option>
+            <option value="medium" selected>Medium</option>
+            <option value="low">Low</option>
+            <option value="lowest">Lowest</option>
+        </select>
+        <button class="btn btn-primary add-todo-btn">
+            <span data-icon="plus" data-icon-size="16"></span>
+            Add Task
+        </button>
+    </div>
+
+    <!-- Empty state — shown/hidden by component -->
+    <div class="todo-empty" style="display: none;">
+        <span data-icon="check-circle" data-icon-size="64"></span>
+        <h3>No tasks yet</h3>
+        <p>Add a task above to get started</p>
+    </div>
+
+    <!-- List populated by _renderList() -->
+    <ul class="todo-list"></ul>
+
+</div>

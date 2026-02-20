@@ -94,12 +94,13 @@ export class DommaCard extends DommaElement {
                 justify-content: space-between;
                 padding: 0;
                 border-bottom: 1px solid var(--dm-border, #e5e7eb);
-                background: var(--dm-surface-subtle, #f9fafb);
+                background: var(--dm-background-alt, #f8fafc);
+                transition: background-color var(--dm-transition-fast, 150ms ease);
             }
 
             .card-header-content {
                 flex: 1;
-                background: var(--dm-surface-subtle, #f9fafb);
+                background: transparent;
             }
 
             .card-collapse-icon {
@@ -107,9 +108,17 @@ export class DommaCard extends DommaElement {
                 display: flex;
                 align-items: center;
                 transition: transform 200ms ease;
-                color: var(--dm-text-muted, #6b7280);
-                background: var(--dm-surface-subtle, #f9fafb);
+                color: var(--dm-text-secondary);
+                background: transparent;
                 padding: 1rem 1.5rem;
+            }
+
+            :host([collapsible]) .card-header-wrapper:hover .card-collapse-icon {
+                color: var(--dm-text);
+            }
+
+            :host([collapsible]) .card-header-wrapper:hover {
+                background: var(--dm-hover-bg);
             }
 
             :host([collapsed]) .card-collapse-icon {
@@ -129,7 +138,7 @@ export class DommaCard extends DommaElement {
                 margin: 0;
                 padding: 1rem 1.5rem;
                 border-bottom: 1px solid var(--dm-border, #e5e7eb);
-                background: var(--dm-surface-subtle, #f9fafb);
+                background: var(--dm-background-alt, #f8fafc);
             }
 
             ::slotted(.card-body) {
@@ -139,7 +148,7 @@ export class DommaCard extends DommaElement {
             ::slotted(.card-footer) {
                 padding: 1rem 1.5rem;
                 border-top: 1px solid var(--dm-border, #e5e7eb);
-                background: var(--dm-surface-subtle, #f9fafb);
+                background: var(--dm-background-alt, #f8fafc);
             }
         `;
         this.shadowRoot.appendChild(style);

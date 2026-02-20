@@ -61,6 +61,12 @@
           "badge": "New"
         },
         {
+          "text": "Components",
+          "url": "showcase/components/index.html",
+          "section": "components",
+          "badge": "New"
+        },
+        {
           "text": "Integrations",
           "url": "showcase/integrations/index.html",
           "section": "integrations",
@@ -134,6 +140,12 @@
         },
         {
           "divider": true
+        },
+        {
+          "text": "Components",
+          "url": "showcase/components/index.html",
+          "section": "components",
+          "badge": "New"
         },
         {
           "text": "Grid",

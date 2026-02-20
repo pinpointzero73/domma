@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Components - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        /* Card accent borders */
+        .card-accent-primary { border-left: 4px solid var(--dm-primary); }
+        .card-accent-success  { border-left: 3px solid var(--dm-success); }
+
+        /* Constrain tall code blocks inside examples */
+        .code-block-scroll {
+            max-height: 420px;
+            overflow-y: auto;
+        }
+
+        /* Code editor-style file tab — attaches to the top of a code block */
+        .code-file-tab {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #161622;
+            color: #64748b;
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.72rem;
+            letter-spacing: 0.02em;
+            padding: 0.35rem 1rem;
+            border-radius: var(--dm-radius-md) var(--dm-radius-md) 0 0;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-bottom: none;
+        }
+
+        .code-file-tab + .code-block {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        counter-demo,
+        user-card-demo,
+        todo-list-demo {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .lifecycle-log {
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.8rem;
+            max-height: 160px;
+            overflow-y: auto;
+            background: var(--dm-gray-900, #111);
+            color: #7dd3fc;
+            padding: 0.75rem;
+            border-radius: var(--dm-radius-md);
+            line-height: 1.6;
+        }
+
+        .lifecycle-log p { margin: 0; padding: 0.1rem 0; }
+        .lifecycle-log .log-mount   { color: #86efac; }
+        .lifecycle-log .log-update  { color: #fde68a; }
+        .lifecycle-log .log-unmount { color: #fca5a5; }
+        .lifecycle-log .log-time    { color: #94a3b8; margin-right: 0.5rem; }
+
+        .component-demo-wrapper {
+            border: 1px solid var(--dm-gray-200, #e5e7eb);
+            border-radius: var(--dm-radius-lg);
+            overflow: hidden;
+        }
+
+        .component-demo-header {
+            background: var(--dm-gray-100, #f9fafb);
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--dm-gray-200, #e5e7eb);
+            font-size: 0.8rem;
+            color: var(--dm-gray-500, #6b7280);
+            font-family: var(--dm-font-mono, monospace);
+        }
+
+        .demo-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--dm-gray-300, #d1d5db);
+        }
+        .demo-dot.red    { background: #f87171; }
+        .demo-dot.yellow { background: #fbbf24; }
+        .demo-dot.green  { background: #34d399; }
+
+        .component-demo-body {
+            padding: 2rem;
+            background: var(--dm-body-bg, #fff);
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
+
+<div class="hero hero-center bg-ambient-rotate-spotlight">
+    <div class="hero-content">
+        <div class="hero-title">Standalone Components</div>
+        <div class="hero-subtitle">Vue-style Custom Elements with reactive data, computed properties,
+            lifecycle hooks, and surgical DOM binding — built on Web Components with Shadow DOM.</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <!-- ── Concept overview ─────────────────────────────────────────────── -->
+    <div class="card card-accent-primary mb-6">
+        <div class="card-body">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div data-icon="code" class="text-primary" style="font-size: 2rem; flex-shrink: 0;"></div>
+                <h3 class="text-xl font-semibold mb-0">What are Domma Components?</h3>
+            </div>
+            <p class="text-muted mb-4">Domma Components unify the framework's primitives into a single
+                declarative definition: a reactive <strong>Model</strong> for state, a
+                <strong>Mustache template</strong> for markup, <strong>computed properties</strong>
+                for derived values, and <strong>lifecycle hooks</strong> for side effects.
+                Each component is a real Custom Element backed by Shadow DOM.</p>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="badge badge-primary mb-2">Shadow DOM</div>
+                    <p class="text-sm mb-0">True style encapsulation — component CSS never leaks out, theme variables still flow in.</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="badge badge-success mb-2">Surgical Updates</div>
+                    <p class="text-sm mb-0">Simple <code>{{field}}</code> bindings update only that text node. Block changes (<code>{{#if}}</code>) trigger targeted re-renders.</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="badge badge-warning mb-2">Zero Build Step</div>
+                    <p class="text-sm mb-0">JS object definition works at runtime. Optional <code>.domma</code> SFC format for build pipelines.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         EXAMPLE 1: Counter Demo
+         ══════════════════════════════════════════════════════════════════════ -->
+    <div class="card mb-6" id="card-counter" data-section="counter">
+        <div class="card-header">
+            <div class="card-header-content">
+                <span class="font-bold">Example 1 — Counter</span>
+                <span class="badge badge-secondary ms-3">reactive · computed · lifecycle</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <p class="text-muted mb-5">
+                Reactive <code>count</code> field, a <code>doubled</code> computed property, methods,
+                and lifecycle logging. The count display updates surgically (only that text node changes);
+                the colour badge re-renders when the condition flips.
+            </p>
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="component-demo-wrapper mb-4">
+                        <div class="component-demo-header">
+                            <span class="demo-dot red"></span>
+                            <span class="demo-dot yellow"></span>
+                            <span class="demo-dot green"></span>
+                            <span class="ms-2">&lt;counter-demo&gt;</span>
+                        </div>
+                        <div class="component-demo-body">
+                            <counter-demo></counter-demo>
+                        </div>
+                    </div>
+                    <h4 class="font-semibold mb-2">Lifecycle Log</h4>
+                    <div class="lifecycle-log" id="counter-log">
+                        <p class="text-muted">Waiting for events…</p>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="code-file-tab">counter-demo.js</div>
+                    <pre class="code-block code-block-scroll" style="font-size: 0.78rem; line-height: 1.5;"><code>Domma.component('counter-demo', {
+
+  // Inline template (use templateUrl for real projects)
+  template: `
+    &lt;div class="counter-wrap"&gt;
+      &lt;p class="count"&gt;Count: {{count}}&lt;/p&gt;
+      &lt;p class="doubled"&gt;Doubled: {{doubled}}&lt;/p&gt;
+      {{#if high}}
+        &lt;span class="badge-high"&gt;High!&lt;/span&gt;
+      {{/if}}
+      &lt;div class="actions"&gt;
+        &lt;button class="dm-inc"&gt;+&lt;/button&gt;
+        &lt;button class="dm-dec"&gt;−&lt;/button&gt;
+        &lt;button class="dm-rst"&gt;Reset&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  `,
+
+  data() { return { count: 0 }; },
+
+  computed: {
+    doubled() { return this.data.count * 2; },
+    high()    { return this.data.count >= 10; }
+  },
+
+  methods: {
+    increment() { this.set({ count: this.data.count + 1 }); },
+    decrement() { this.set({ count: this.data.count - 1 }); },
+    reset()     { this.set({ count: 0 }); }
+  },
+
+  onBeforeMount() { log('beforeMount'); },
+  onMount() {
+    log('mount');
+    // $() can't pierce Shadow DOM — wrap root.querySelector() in $()
+    $(this.root.querySelector('.dm-inc')).on('click', () =&gt; this.increment());
+    $(this.root.querySelector('.dm-dec')).on('click', () =&gt; this.decrement());
+    $(this.root.querySelector('.dm-rst')).on('click', () =&gt; this.reset());
+  },
+  onUpdated() { log('updated — count=' + this.data.count); },
+  onUnmount() { log('unmount'); },
+
+  style: `
+    .counter-wrap { text-align: center; padding: 1.5rem; }
+    .count   { font-size: 1.5rem; font-weight: 700; margin: 0 0 .25rem; }
+    .doubled { color: #6b7280; font-size: 0.9rem; margin: 0 0 .75rem; }
+    .badge-high { display: inline-block; background: #dc2626; color: #fff;
+                  padding: .2em .6em; border-radius: 9999px;
+                  font-size: .75rem; font-weight: 600; margin-bottom: .75rem; }
+    .actions { display: flex; gap: .5rem; justify-content: center; }
+    button { padding: .4rem 1rem; border: none; border-radius: 6px;
+             background: var(--dm-primary, #6495ED); color: #fff;
+             cursor: pointer; font-size: 1rem; }
+    button:last-child { background: #6b7280; }
+  `
+});</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         EXAMPLE 2: User Card with Props
+         ══════════════════════════════════════════════════════════════════════ -->
+    <div class="card mb-6" id="card-user-card" data-section="user-card">
+        <div class="card-header">
+            <div class="card-header-content">
+                <span class="font-bold">Example 2 — User Card with Props</span>
+                <span class="badge badge-secondary ms-3">props · async · conditional</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <p class="text-muted mb-5">
+                Demonstrates <strong>props</strong> (type coercion, defaults), simulated async data loading
+                with <code>{{#if loading}}</code> conditional rendering, and a computed
+                <code>initials</code> property.
+            </p>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="component-demo-wrapper mb-4">
+                        <div class="component-demo-header">
+                            <span class="demo-dot red"></span>
+                            <span class="demo-dot yellow"></span>
+                            <span class="demo-dot green"></span>
+                            <span class="ms-2">&lt;user-card-demo user-id="42"&gt;</span>
+                        </div>
+                        <div class="component-demo-body">
+                            <user-card-demo user-id="42" show-avatar></user-card-demo>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button class="btn btn-sm btn-primary" id="btn-user-42">User #42</button>
+                        <button class="btn btn-sm btn-secondary" id="btn-user-7">User #7</button>
+                        <button class="btn btn-sm btn-outline" id="btn-toggle-avatar">Toggle Avatar</button>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="code-file-tab">user-card-demo.js</div>
+                    <pre class="code-block code-block-scroll" style="font-size: 0.76rem; line-height: 1.5;"><code>Domma.component('user-card-demo', {
+
+  props: {
+    userId:     { type: M.types.number,  required: true },
+    showAvatar: { type: M.types.boolean, default: true  }
+  },
+
+  data() {
+    return { name: '', role: '', loading: true };
+  },
+
+  computed: {
+    initials() {
+      return this.data.name
+        .split(' ').map(n =&gt; n[0] || '').join('').toUpperCase();
+    }
+  },
+
+  methods: {
+    async fetchUser() {
+      this.set({ loading: true });
+
+      // Simulate API call (replace with: H.get('/api/users/' + this.props.userId))
+      await new Promise(r =&gt; setTimeout(r, 600));
+      const users = {
+        42: { name: 'Alice Nguyen', role: 'Senior Engineer' },
+        7:  { name: 'Bob Okafor',   role: 'Product Manager' }
+      };
+      const user = users[this.props.userId]
+        ?? { name: 'Unknown User', role: '—' };
+
+      this.set({ name: user.name, role: user.role, loading: false });
+    }
+  },
+
+  onMount() { this.fetchUser(); },
+
+  onPropsChanged(name) {
+    if (name === 'userId') this.fetchUser();
+  },
+
+  template: `
+    &lt;div class="card"&gt;
+      {{#if loading}}
+        &lt;div class="skeleton-wrap"&gt;
+          &lt;div class="skeleton avatar"&gt;&lt;/div&gt;
+          &lt;div class="skeleton-lines"&gt;
+            &lt;div class="skeleton line"&gt;&lt;/div&gt;
+            &lt;div class="skeleton line short"&gt;&lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      {{/if}}
+      {{#unless loading}}
+        &lt;div class="user-row"&gt;
+          {{#if showAvatar}}
+            &lt;div class="avatar"&gt;{{initials}}&lt;/div&gt;
+          {{/if}}
+          &lt;div&gt;
+            &lt;p class="name"&gt;{{name}}&lt;/p&gt;
+            &lt;p class="role"&gt;{{role}}&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      {{/unless}}
+    &lt;/div&gt;
+  `,
+
+  style: `/* … component-scoped CSS … */`
+});</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         EXAMPLE 3: Router Integration
+         ══════════════════════════════════════════════════════════════════════ -->
+    <div class="card mb-6" id="card-router" data-section="router">
+        <div class="card-header">
+            <div class="card-header-content">
+                <span class="font-bold">Example 3 — Router Integration</span>
+                <span class="badge badge-secondary ms-3">R.route · props from URL</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <p class="text-muted mb-4">
+                Use a component as a route view. Props are derived from URL parameters.
+            </p>
+            <pre class="code-block mb-4"><code>// Route definition — props come from URL params
+R.route({
+    path: '/users/:id',
+    component: 'user-card-demo',             // Custom element tag name
+    props: (params) => ({                    // Function receives route params
+        userId: parseInt(params.id, 10)
+    })
+});</code></pre>
+            <p class="text-sm text-muted mb-0">
+                When this route activates, the router creates <code>&lt;user-card-demo user-id="…"&gt;</code>
+                and mounts it in the route container — no extra glue code needed.
+            </p>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         EXAMPLE 4: .domma Single-File Format
+         ══════════════════════════════════════════════════════════════════════ -->
+    <div class="card mb-6" id="card-sfc" data-section="sfc">
+        <div class="card-header">
+            <div class="card-header-content">
+                <span class="font-bold">Example 4 — .domma Single-File Format</span>
+                <span class="badge badge-secondary ms-3">optional · build pipeline</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <p class="text-muted mb-4">
+                For build-pipeline projects, the optional Rollup plugin lets you co-locate
+                template, script, and styles in a single <code>.domma</code> file (similar to Vue's
+                <code>.vue</code> format). The filename becomes the tag name.
+            </p>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="code-file-tab">components/user-card.domma</div>
+                    <pre class="code-block" style="font-size: 0.78rem;"><code>&lt;template&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="avatar"&gt;{{initials}}&lt;/div&gt;
+    &lt;p class="name"&gt;{{name}}&lt;/p&gt;
+    &lt;p class="role"&gt;{{role}}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  props: {
+    userId: { type: M.types.number, required: true }
+  },
+  data() {
+    return { name: '', role: '', loading: true };
+  },
+  computed: {
+    initials() {
+      return this.data.name.split(' ').map(n =&gt; n[0]).join('');
+    }
+  },
+  methods: {
+    async fetchUser() {
+      const user = await H.get('/api/users/' + this.props.userId);
+      this.set({ name: user.name, role: user.role, loading: false });
+    }
+  },
+  onMount() { this.fetchUser(); }
+};
+&lt;/script&gt;
+
+&lt;style&gt;
+.card   { padding: var(--spacing-md); text-align: center; }
+.avatar { width: 3rem; height: 3rem; border-radius: 50%;
+          background: var(--dm-primary); color: #fff;
+          display: flex; align-items: center;
+          justify-content: center; margin: 0 auto .75rem; }
+.name   { font-weight: 700; margin: 0; }
+.role   { color: #6b7280; font-size: .875rem; margin: 0; }
+&lt;/style&gt;</code></pre>
+                </div>
+                <div class="col-md-6">
+                    <div class="code-file-tab">rollup.config.js</div>
+                    <pre class="code-block mb-4" style="font-size: 0.78rem;"><code>import { dommaPlugin } from './src/plugins/rollup-plugin-domma.js';
+
+export default {
+  input: 'src/main.js',
+  plugins: [
+    dommaPlugin(),   // Handles .domma files
+    // … other plugins
+  ]
+};</code></pre>
+                    <div class="card card-accent-success">
+                        <div class="card-body">
+                            <h5 class="font-semibold mb-2">How it works</h5>
+                            <ol class="ps-4 text-sm lh-lg mb-0">
+                                <li>Plugin detects <code>.domma</code> file extension</li>
+                                <li>Extracts <code>&lt;template&gt;</code>, <code>&lt;script&gt;</code>, <code>&lt;style&gt;</code> sections</li>
+                                <li>Derives tag name from filename (<code>user-card.domma → user-card</code>)</li>
+                                <li>Wraps <code>export default</code> definition into a <code>Domma.component()</code> call</li>
+                                <li>Standard Rollup bundling handles the rest</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         API REFERENCE
+         ══════════════════════════════════════════════════════════════════════ -->
+    <div class="card mb-6" id="card-api" data-section="api">
+        <div class="card-header">
+            <div class="card-header-content">
+                <span class="font-bold">API Reference</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="card h-full">
+                    <div class="card-body">
+                        <h4 class="font-semibold mb-3">Definition Options</h4>
+                        <table class="table table-sm">
+                            <thead><tr><th>Option</th><th>Type</th><th>Description</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>template</code></td><td>string</td><td>Inline Mustache template</td></tr>
+                                <tr><td><code>templateUrl</code></td><td>string</td><td>URL to external template file</td></tr>
+                                <tr><td><code>props</code></td><td>object</td><td>Declared HTML attributes with type/default</td></tr>
+                                <tr><td><code>data()</code></td><td>function</td><td>Returns initial reactive state</td></tr>
+                                <tr><td><code>computed</code></td><td>object</td><td>Derived values (re-evaluated each render)</td></tr>
+                                <tr><td><code>methods</code></td><td>object</td><td>Functions bound to the component context</td></tr>
+                                <tr><td><code>style</code></td><td>string</td><td>Scoped CSS injected into Shadow DOM</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card h-full">
+                    <div class="card-body">
+                        <h4 class="font-semibold mb-3">Lifecycle Hooks</h4>
+                        <table class="table table-sm">
+                            <thead><tr><th>Hook</th><th>When</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>onBeforeMount()</code></td><td>Before template is rendered</td></tr>
+                                <tr><td><code>onMount()</code></td><td>After template rendered + bindings established</td></tr>
+                                <tr><td><code>onUpdated()</code></td><td>After any reactive field triggers a DOM update</td></tr>
+                                <tr><td><code>onBeforeUnmount()</code></td><td>Before element is removed from DOM</td></tr>
+                                <tr><td><code>onUnmount()</code></td><td>After element removed and cleaned up</td></tr>
+                                <tr><td><code>onPropsChanged(name, old, new)</code></td><td>When an observed attribute changes</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-span-full">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="font-semibold mb-3">Context (<code>this</code>) inside methods &amp; hooks</h4>
+                            <div class="grid grid-cols-2 gap-3">
+                                <pre class="code-block" style="font-size: 0.8rem;"><code>this.data          // Reactive data snapshot (toJSON)
+this.props         // Resolved props object
+this.root          // shadowRoot reference
+this.el            // The host &lt;custom-element&gt; itself
+
+this.set({ field: value })  // Batch-update reactive data
+                             // (triggers bindings + onUpdated)</code></pre>
+                                <pre class="code-block" style="font-size: 0.8rem;"><code>// Methods are called via this.methodName()
+// Computed values appear as this.computedName
+
+// Accessing props in methods:
+const id = this.props.userId;
+
+// Updating state:
+this.set({ loading: false, name: 'Alice' });</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+    Domma.init?.();
+    I.scan();
+
+    // ── Collapsible example cards ────────────────────────────────────────────
+    ['card-counter', 'card-user-card', 'card-router', 'card-sfc', 'card-api'].forEach(id => {
+        E.card(`#${id}`, { collapsible: true });
+    });
+
+    // ── Lifecycle log helper ────────────────────────────────────────────────
+    function makeLogger(logEl) {
+        return function log(msg, type = 'update') {
+            const now = new Date();
+            const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+            const p = document.createElement('p');
+            p.innerHTML = `<span class="log-time">${time}</span><span class="log-${type}">${msg}</span>`;
+            // Remove placeholder text on first log
+            if (logEl.querySelector('.text-muted')) logEl.textContent = '';
+            logEl.appendChild(p);
+            logEl.scrollTop = logEl.scrollHeight;
+        };
+    }
+
+    const counterLog = makeLogger(document.getElementById('counter-log'));
+
+    // ── Example 1: Counter ──────────────────────────────────────────────────
+    Domma.component('counter-demo', {
+        template: `
+            <div class="counter-wrap">
+                <p class="count">Count: <span class="num">{{count}}</span></p>
+                <p class="doubled">Doubled: {{doubled}}</p>
+                {{#if high}}
+                <div class="badge-high">🔥 High! (≥10)</div>
+                {{/if}}
+                <div class="actions">
+                    <button class="btn-dec">−</button>
+                    <button class="btn-inc">+</button>
+                    <button class="btn-rst">Reset</button>
+                </div>
+            </div>
+        `,
+
+        data() { return { count: 0 }; },
+
+        computed: {
+            doubled() { return this.data.count * 2; },
+            high()    { return this.data.count >= 10; }
+        },
+
+        methods: {
+            increment() { this.set({ count: this.data.count + 1 }); },
+            decrement() { this.set({ count: this.data.count - 1 }); },
+            reset()     { this.set({ count: 0 }); }
+        },
+
+        onBeforeMount() { counterLog('onBeforeMount fired', 'mount'); },
+
+        onMount() {
+            counterLog('onMount — component ready', 'mount');
+            // $ can't pierce Shadow DOM — wrap root.querySelector() in $() to use Domma events
+            $(this.root.querySelector('.btn-inc')).on('click', () => this.increment());
+            $(this.root.querySelector('.btn-dec')).on('click', () => this.decrement());
+            $(this.root.querySelector('.btn-rst')).on('click', () => this.reset());
+        },
+
+        onUpdated() {
+            counterLog(`onUpdated — count=${this.data.count}, doubled=${this.data.count * 2}`, 'update');
+        },
+
+        onUnmount() { counterLog('onUnmount fired', 'unmount'); },
+
+        style: `
+            .counter-wrap {
+                text-align: center;
+                padding: 1.5rem 2rem;
+                font-family: system-ui, sans-serif;
+            }
+            .count {
+                font-size: 1.6rem;
+                font-weight: 700;
+                margin: 0 0 0.25rem;
+            }
+            .num { color: var(--dm-primary, #6495ED); }
+            .doubled {
+                color: #6b7280;
+                font-size: 0.9rem;
+                margin: 0 0 0.75rem;
+            }
+            .badge-high {
+                display: inline-block;
+                background: #dc2626;
+                color: #fff;
+                padding: .2em .75em;
+                border-radius: 9999px;
+                font-size: .8rem;
+                font-weight: 600;
+                margin-bottom: 0.75rem;
+            }
+            .actions {
+                display: flex;
+                gap: .5rem;
+                justify-content: center;
+            }
+            button {
+                padding: .5rem 1.25rem;
+                border: none;
+                border-radius: 8px;
+                background: var(--dm-primary, #6495ED);
+                color: #fff;
+                cursor: pointer;
+                font-size: 1.1rem;
+                font-weight: 600;
+                transition: opacity .15s;
+            }
+            button:hover { opacity: 0.85; }
+            .btn-dec { background: var(--dm-danger, #dc2626); }
+            .btn-rst { background: #6b7280; font-size: 0.85rem; }
+        `
+    });
+
+    // ── Example 2: User Card ────────────────────────────────────────────────
+    Domma.component('user-card-demo', {
+        props: {
+            userId:     { type: 'number',  required: true },
+            showAvatar: { type: 'boolean', default: true  }
+        },
+
+        data() {
+            return { name: '', role: '', department: '', loading: true };
+        },
+
+        computed: {
+            initials() {
+                if (!this.data.name) return '?';
+                return this.data.name.split(' ')
+                    .map(n => n[0] || '')
+                    .join('')
+                    .toUpperCase()
+                    .slice(0, 2);
+            }
+        },
+
+        methods: {
+            async fetchUser() {
+                this.set({ loading: true });
+
+                // Simulated API call — replace with H.get('/api/users/' + this.props.userId)
+                await new Promise(r => setTimeout(r, 700));
+
+                const db = {
+                    42: { name: 'Alice Nguyen',   role: 'Senior Engineer',    department: 'Platform' },
+                     7: { name: 'Bob Okafor',     role: 'Product Manager',    department: 'Product'  },
+                    99: { name: 'Carol Lindström', role: 'Design Lead',        department: 'UX'       }
+                };
+
+                const user = db[this.props.userId] ?? { name: 'Unknown User', role: '—', department: '—' };
+                this.set({ name: user.name, role: user.role, department: user.department, loading: false });
+            }
+        },
+
+        onMount() { this.fetchUser(); },
+
+        onPropsChanged(name) {
+            if (name === 'userId') this.fetchUser();
+        },
+
+        template: `
+            <div class="uc">
+                {{#if loading}}
+                <div class="skeleton-wrap">
+                    <div class="sk sk-avatar"></div>
+                    <div class="flex-fill">
+                        <div class="sk sk-line"></div>
+                        <div class="sk sk-line sk-short"></div>
+                    </div>
+                </div>
+                {{/if}}
+                {{#unless loading}}
+                <div class="user-row">
+                    {{#if showAvatar}}
+                    <div class="avatar">{{initials}}</div>
+                    {{/if}}
+                    <div class="user-info">
+                        <p class="name">{{name}}</p>
+                        <p class="role">{{role}}</p>
+                        <p class="dept">{{department}}</p>
+                    </div>
+                </div>
+                {{/unless}}
+            </div>
+        `,
+
+        style: `
+            .uc {
+                font-family: system-ui, sans-serif;
+                padding: 1.5rem;
+                min-width: 220px;
+            }
+            .user-row { display: flex; align-items: center; gap: 1rem; }
+            .avatar {
+                width: 3.5rem; height: 3.5rem;
+                border-radius: 50%;
+                background: var(--dm-primary, #6495ED);
+                color: #fff;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 1.2rem; font-weight: 700;
+                flex-shrink: 0;
+            }
+            .name  { font-weight: 700; font-size: 1.05rem; margin: 0 0 .2rem; }
+            .role  { color: #6b7280; font-size: .85rem; margin: 0 0 .15rem; }
+            .dept  { font-size: .75rem; color: #9ca3af; margin: 0;
+                     text-transform: uppercase; letter-spacing: .05em; }
+
+            /* Skeleton loader */
+            .skeleton-wrap { display: flex; align-items: center; gap: 1rem; }
+            .sk {
+                background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+                background-size: 200% 100%;
+                animation: shimmer 1.5s infinite;
+                border-radius: 4px;
+            }
+            .sk-avatar { width: 3.5rem; height: 3.5rem; border-radius: 50%; flex-shrink: 0; }
+            .sk-line   { height: 14px; margin-bottom: 8px; width: 120px; }
+            .sk-short  { width: 80px; margin-bottom: 0; }
+            @keyframes shimmer {
+                0%   { background-position: 200% 0; }
+                100% { background-position: -200% 0; }
+            }
+        `
+    });
+
+    // ── User Card controls ──────────────────────────────────────────────────
+    const userCardEl = document.querySelector('user-card-demo');
+    let avatarVisible = true;
+
+    $('#btn-user-42').on('click', () => {
+        userCardEl.setAttribute('user-id', '42');
+    });
+
+    $('#btn-user-7').on('click', () => {
+        userCardEl.setAttribute('user-id', '7');
+    });
+
+    $('#btn-toggle-avatar').on('click', () => {
+        avatarVisible = !avatarVisible;
+        if (avatarVisible) {
+            userCardEl.setAttribute('show-avatar', '');
+        } else {
+            userCardEl.removeAttribute('show-avatar');
+        }
+    });
+</script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+</body>
+</html>

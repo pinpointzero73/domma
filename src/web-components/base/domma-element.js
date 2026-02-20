@@ -26,6 +26,7 @@ export class DommaElement extends HTMLElement {
     connectedCallback() {
         if (!this._initialised) {
             this._options = this._mergeOptions();
+            this._onBeforeMount?.();
             this._injectStyles();
             this._render();
             this._bindEvents();
@@ -38,6 +39,7 @@ export class DommaElement extends HTMLElement {
      * Lifecycle: Called when element is removed from DOM
      */
     disconnectedCallback() {
+        this._onBeforeUnmount?.();
         this._cleanup();
         this._onDisconnect?.();
     }
@@ -51,6 +53,24 @@ export class DommaElement extends HTMLElement {
             this._onAttributeChange?.(name, oldValue, newValue);
         }
     }
+
+    /**
+     * Lifecycle hook called before the initial render (override in subclass).
+     * Fired once, before _render() and _bindEvents().
+     */
+    _onBeforeMount() {}
+
+    /**
+     * Lifecycle hook called after reactive data updates the DOM (override in subclass).
+     * Fired every time a model field change triggers a DOM update.
+     */
+    _onUpdated() {}
+
+    /**
+     * Lifecycle hook called before the element is removed from the DOM (override in subclass).
+     * Fired once, before _cleanup().
+     */
+    _onBeforeUnmount() {}
 
     /**
      * Merge attributes with defaults to create options object

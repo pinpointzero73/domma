@@ -1,0 +1,109 @@
+<div class="calculator-wrapper {{#if isScientific}}scientific-mode{{/if}}">
+
+    <!-- Mode Toggle -->
+    <div class="calculator-mode-toggle">
+        <button class="mode-btn" data-mode="basic">Basic</button>
+        <button class="mode-btn" data-mode="scientific">Scientific</button>
+    </div>
+
+    <div class="calculator-card">
+
+        {{#if isScientific}}
+        <!-- Angle Mode Toggle (scientific only) -->
+        <div class="angle-mode-toggle">
+            <button class="angle-btn" data-angle="deg">DEG</button>
+            <button class="angle-btn" data-angle="rad">RAD</button>
+        </div>
+        {{/if}}
+
+        <!-- Display -->
+        <div class="calculator-display">
+            {{#if hasMemory}}<div class="memory-indicator">M</div>{{/if}}
+            <div class="calculator-previous">{{previousOperation}}</div>
+            <div class="calculator-current">{{formattedDisplay}}</div>
+        </div>
+
+        {{#unless isScientific}}
+        <!-- Basic Mode Buttons -->
+        <div class="calculator-buttons">
+            <button class="calc-btn calc-btn-clear"    data-action="clear">C</button>
+            <button class="calc-btn calc-btn-clear"    data-action="all-clear">AC</button>
+            <button class="calc-btn calc-btn-operator" data-action="percent">%</button>
+            <button class="calc-btn calc-btn-operator" data-action="divide">÷</button>
+
+            <button class="calc-btn" data-number="7">7</button>
+            <button class="calc-btn" data-number="8">8</button>
+            <button class="calc-btn" data-number="9">9</button>
+            <button class="calc-btn calc-btn-operator" data-action="multiply">×</button>
+
+            <button class="calc-btn" data-number="4">4</button>
+            <button class="calc-btn" data-number="5">5</button>
+            <button class="calc-btn" data-number="6">6</button>
+            <button class="calc-btn calc-btn-operator" data-action="subtract">−</button>
+
+            <button class="calc-btn" data-number="1">1</button>
+            <button class="calc-btn" data-number="2">2</button>
+            <button class="calc-btn" data-number="3">3</button>
+            <button class="calc-btn calc-btn-operator" data-action="add">+</button>
+
+            <button class="calc-btn" data-number="0">0</button>
+            <button class="calc-btn" data-action="decimal">.</button>
+            <button class="calc-btn calc-btn-equals"   data-action="equals">=</button>
+        </div>
+        {{/unless}}
+
+        {{#if isScientific}}
+        <!-- Scientific Mode Buttons (8-column grid) -->
+        <div class="calculator-buttons-scientific">
+            <!-- Row 1: Memory & Clear -->
+            <button class="calc-btn calc-btn-function" data-action="angle-toggle">DEG</button>
+            <button class="calc-btn calc-btn-memory"   data-action="mc">MC</button>
+            <button class="calc-btn calc-btn-memory"   data-action="mr">MR</button>
+            <button class="calc-btn calc-btn-memory"   data-action="m-minus">M−</button>
+            <button class="calc-btn calc-btn-memory"   data-action="m-plus">M+</button>
+            <button class="calc-btn calc-btn-clear"    data-action="clear">C</button>
+            <button class="calc-btn calc-btn-clear"    data-action="all-clear">AC</button>
+            <button class="calc-btn calc-btn-operator" data-action="percent">%</button>
+
+            <!-- Row 2: Constants & Operators & Numbers -->
+            <button class="calc-btn calc-btn-constant" data-action="pi">π</button>
+            <button class="calc-btn calc-btn-constant" data-action="e">e</button>
+            <button class="calc-btn calc-btn-function" data-action="power">xʸ</button>
+            <button class="calc-btn calc-btn-function" data-action="reciprocal">1/x</button>
+            <button class="calc-btn calc-btn-operator" data-action="divide">÷</button>
+            <button class="calc-btn" data-number="7">7</button>
+            <button class="calc-btn" data-number="8">8</button>
+            <button class="calc-btn" data-number="9">9</button>
+
+            <!-- Row 3: Trig & Numbers -->
+            <button class="calc-btn calc-btn-function" data-action="sin">sin</button>
+            <button class="calc-btn calc-btn-function" data-action="cos">cos</button>
+            <button class="calc-btn calc-btn-function" data-action="tan">tan</button>
+            <button class="calc-btn calc-btn-function" data-action="sqrt">√</button>
+            <button class="calc-btn calc-btn-operator" data-action="multiply">×</button>
+            <button class="calc-btn" data-number="4">4</button>
+            <button class="calc-btn" data-number="5">5</button>
+            <button class="calc-btn" data-number="6">6</button>
+
+            <!-- Row 4: Inverse Trig & Numbers -->
+            <button class="calc-btn calc-btn-function" data-action="asin">asin</button>
+            <button class="calc-btn calc-btn-function" data-action="acos">acos</button>
+            <button class="calc-btn calc-btn-function" data-action="atan">atan</button>
+            <button class="calc-btn calc-btn-function" data-action="square">x²</button>
+            <button class="calc-btn calc-btn-operator" data-action="subtract">−</button>
+            <button class="calc-btn" data-number="1">1</button>
+            <button class="calc-btn" data-number="2">2</button>
+            <button class="calc-btn" data-number="3">3</button>
+
+            <!-- Row 5: Logs & Bottom Row -->
+            <button class="calc-btn calc-btn-function" data-action="ln">ln</button>
+            <button class="calc-btn calc-btn-function" data-action="log">log</button>
+            <button class="calc-btn calc-btn-operator" data-action="add">+</button>
+            <button class="calc-btn" data-number="0" style="grid-column: span 3;">0</button>
+            <button class="calc-btn" data-action="decimal">.</button>
+            <button class="calc-btn calc-btn-equals"   data-action="equals" style="grid-column: span 1;">=</button>
+        </div>
+        {{/if}}
+
+    </div>
+</div>

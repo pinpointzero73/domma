@@ -80,15 +80,15 @@
       <div class="card download-card-styles">
         <div class="card-body">
           <div class="download-icon-style" data-icon="zap" data-icon-size="48"></div>
-          <h3 class="text-xl font-semibold mb-2">Kickstart Starter</h3>
+          <h3 class="text-xl font-semibold mb-2">QuickStart Starter</h3>
           <p class="download-description-text">
             Complete starter kit with Domma, themes, CSS, and a ready-to-use template.<br/>
             Extract and start building immediately.
           </p>
-          <p class="download-size-text" id="kickstart-size">~260 KB</p>
-          <a href="../dist/kickstart.tar.gz" download class="btn btn-success btn-block mt-auto">
+          <p class="download-size-text" id="quickstart-size">~260 KB</p>
+          <a href="../dist/quickstart.tar.gz" download class="btn btn-success btn-block mt-auto">
             <span data-icon="download" data-icon-size="16"></span>
-            Download Kickstart
+            Download QuickStart
           </a>
         </div>
       </div>
@@ -162,61 +162,61 @@
 
   <!-- Kickstart Templates (UPDATED) -->
   <section class="mb-8">
-    <h2 class="text-2xl font-semibold mb-6 text-center">Kickstart Templates</h2>
+    <h2 class="text-2xl font-semibold mb-6 text-center">QuickStart Templates</h2>
     <p class="text-center text-muted mb-6">
       Ready-to-use project templates with preset-matched Domma bundles. Extract and start coding.
     </p>
     <div class="grid grid-cols-2 grid-cols-md-4 gap-4">
-      <!-- Kickstart Minimal -->
+      <!-- QuickStart Minimal -->
       <div class="card download-card-styles">
         <div class="card-body">
           <div class="download-icon-style" data-icon="zap" data-icon-size="32"></div>
           <h3 class="font-semibold mb-2">Minimal</h3>
           <p class="text-sm text-muted mb-2">~67KB</p>
           <p class="text-xs text-muted mb-3">Lightweight starter</p>
-          <a href="../dist/kickstart-minimal.tar.gz" download class="btn btn-sm btn-outline btn-block">
+          <a href="../dist/quickstart-minimal.tar.gz" download class="btn btn-sm btn-outline btn-block">
             <span data-icon="download" data-icon-size="14"></span>
             Download
           </a>
         </div>
       </div>
 
-      <!-- Kickstart Essentials -->
+      <!-- QuickStart Essentials -->
       <div class="card download-card-styles">
         <div class="card-body">
           <div class="download-icon-style" data-icon="zap" data-icon-size="32"></div>
           <h3 class="font-semibold mb-2">Essentials</h3>
           <p class="text-sm text-muted mb-2">~89KB</p>
           <p class="text-xs text-muted mb-3">Recommended starter</p>
-          <a href="../dist/kickstart-essentials.tar.gz" download class="btn btn-sm btn-success btn-block">
+          <a href="../dist/quickstart-essentials.tar.gz" download class="btn btn-sm btn-success btn-block">
             <span data-icon="download" data-icon-size="14"></span>
             Download
           </a>
         </div>
       </div>
 
-      <!-- Kickstart Full -->
+      <!-- QuickStart Full -->
       <div class="card download-card-styles">
         <div class="card-body">
           <div class="download-icon-style" data-icon="zap" data-icon-size="32"></div>
           <h3 class="font-semibold mb-2">Full</h3>
           <p class="text-sm text-muted mb-2">~102KB</p>
           <p class="text-xs text-muted mb-3">Complete starter</p>
-          <a href="../dist/kickstart-full.tar.gz" download class="btn btn-sm btn-outline btn-block">
+          <a href="../dist/quickstart-full.tar.gz" download class="btn btn-sm btn-outline btn-block">
             <span data-icon="download" data-icon-size="14"></span>
             Download
           </a>
         </div>
       </div>
 
-      <!-- Kickstart Data-Focused -->
+      <!-- QuickStart Data-Focused -->
       <div class="card download-card-styles">
         <div class="card-body">
           <div class="download-icon-style" data-icon="zap" data-icon-size="32"></div>
           <h3 class="font-semibold mb-2">Data-Focused</h3>
           <p class="text-sm text-muted mb-2">~76KB</p>
           <p class="text-xs text-muted mb-3">Data tools starter</p>
-          <a href="../dist/kickstart-data-focused.tar.gz" download class="btn btn-sm btn-outline btn-block">
+          <a href="../dist/quickstart-data-focused.tar.gz" download class="btn btn-sm btn-outline btn-block">
             <span data-icon="download" data-icon-size="14"></span>
             Download
           </a>
@@ -723,19 +723,19 @@
         console.warn('Could not load build info:', err);
       });
 
-    // Load kickstart metadata and update download links
-    fetch('../dist/kickstart-latest.json')
+    // Load quickstart metadata and update download links
+    fetch('../dist/quickstart-latest.json')
       .then(r => r.json())
       .then(metadata => {
         const {files, timestamp, buildDate} = metadata;
 
-        // Update all kickstart download links with timestamped filenames
+        // Update all quickstart download links with timestamped filenames
         const linkMap = {
-          'kickstart.tar.gz': files.alias,
-          'kickstart-minimal.tar.gz': files.minimal,
-          'kickstart-essentials.tar.gz': files.essentials,
-          'kickstart-full.tar.gz': files.full,
-          'kickstart-data-focused.tar.gz': files.dataFocused
+          'quickstart.tar.gz': files.alias,
+          'quickstart-minimal.tar.gz': files.minimal,
+          'quickstart-essentials.tar.gz': files.essentials,
+          'quickstart-full.tar.gz': files.full,
+          'quickstart-data-focused.tar.gz': files.dataFocused
         };
 
         // Update all download links
@@ -749,34 +749,34 @@
           });
         });
 
-        // Load and display kickstart size using the alias file
+        // Load and display quickstart size using the alias file
         fetch(`../dist/${files.alias}`)
           .then(r => r.blob())
           .then(blob => {
             const sizeKB = Math.round(blob.size / 1024);
-            const sizeEl = document.getElementById('kickstart-size');
+            const sizeEl = document.getElementById('quickstart-size');
             if (sizeEl) {
               sizeEl.textContent = `~${sizeKB} KB`;
             }
           })
           .catch(err => {
-            console.error('Could not load kickstart size:', err);
+            console.error('Could not load quickstart size:', err);
           });
       })
       .catch(err => {
-        console.error('Could not load kickstart metadata:', err);
-        // Fallback to old behavior if metadata not available
-        fetch('../dist/kickstart.tar.gz')
+        console.error('Could not load quickstart metadata:', err);
+        // Fallback to old behaviour if metadata not available
+        fetch('../dist/quickstart.tar.gz')
           .then(r => r.blob())
           .then(blob => {
             const sizeKB = Math.round(blob.size / 1024);
-            const sizeEl = document.getElementById('kickstart-size');
+            const sizeEl = document.getElementById('quickstart-size');
             if (sizeEl) {
               sizeEl.textContent = `~${sizeKB} KB`;
             }
           })
           .catch(err => {
-            console.error('Could not load kickstart.tar.gz size:', err);
+            console.error('Could not load quickstart.tar.gz size:', err);
           });
       });
   });

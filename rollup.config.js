@@ -3,6 +3,7 @@ import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
 import {execSync} from 'child_process';
 import {readFileSync} from 'fs';
+import {dommaPlugin} from './src/plugins/rollup-plugin-domma.js';
 
 // Read version from package.json
 const pkg = JSON.parse(readFileSync('./package.json', 'utf8'));
@@ -80,6 +81,7 @@ const obfuscatorOptions = {
 
 const commonPlugins = [
     resolve(),
+    dommaPlugin(),  // Transform .domma single-file components
     replace({
         preventAssignment: true,
         __BUILD_VERSION__: JSON.stringify(pkg.version),

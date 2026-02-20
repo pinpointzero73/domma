@@ -25,135 +25,31 @@
 </div>
 
 <div class="calculator-container">
-    <!-- Download card -->
+    <!-- Download / info hero -->
     <div class="hero hero-center bg-ambient-rotate-spotlight">
         <div class="hero-content">
             <div class="hero-title">Interactive Calculator Example</div>
-            <div class="hero-subtitle">A fully functional calculator demonstrating Domma's DOM querying, event
-                handling, and dynamic updates. Supports keyboard input and basic arithmetic operations.
+            <div class="hero-subtitle">
+                A fully functional calculator built as a <strong>DommaComponent</strong> — a reusable
+                <code>&lt;domma-calculator&gt;</code> Web Component with Shadow DOM, reactive data, and
+                keyboard support.
             </div>
             <div class="hero-actions">
-                <a href="index.html" download="calculator-example.html" class="btn btn-primary">
+                <a href="component.js" download="domma-calculator.js" class="btn btn-primary">
                     <span data-icon="download" data-icon-size="18"></span>
-                    Download HTML
+                    Download Component
                 </a>
-                <a href="index.js" download="calculator-example.js" class="btn btn-primary">
+                <a href="template.html" download="domma-calculator-template.html" class="btn btn-primary">
                     <span data-icon="download" data-icon-size="18"></span>
-                    Download JavaScript
+                    Download Template
                 </a>
             </div>
-            <p class="hero-note">Both files are required for the example to work</p>
+            <p class="hero-note">Both files are required. Drop in <code>&lt;domma-calculator&gt;&lt;/domma-calculator&gt;</code> anywhere.</p>
         </div>
     </div>
 
-    <!-- Calculator -->
-    <div class="calculator-wrapper">
-        <!-- Mode Toggle -->
-        <div class="calculator-mode-toggle">
-            <button class="mode-btn active" data-mode="basic">Basic</button>
-            <button class="mode-btn" data-mode="scientific">Scientific</button>
-        </div>
-
-        <div class="calculator-card">
-            <!-- Angle Mode Toggle (hidden by default) -->
-            <div class="angle-mode-toggle" id="angle-mode-toggle" style="display: none;">
-                <button class="angle-btn active" data-angle="deg">DEG</button>
-                <button class="angle-btn" data-angle="rad">RAD</button>
-            </div>
-
-            <div class="calculator-display">
-                <div id="previous-operation" class="calculator-previous"></div>
-                <div id="current-input" class="calculator-current">0</div>
-            </div>
-
-            <!-- Basic Mode Buttons -->
-            <div class="calculator-buttons" id="basic-buttons">
-                <!-- Row 1 -->
-                <button class="calc-btn calc-btn-clear" data-action="clear">C</button>
-                <button class="calc-btn calc-btn-clear" data-action="all-clear">AC</button>
-                <button class="calc-btn calc-btn-operator" data-action="percent">%</button>
-                <button class="calc-btn calc-btn-operator" data-action="divide">÷</button>
-
-                <!-- Row 2 -->
-                <button class="calc-btn" data-number="7">7</button>
-                <button class="calc-btn" data-number="8">8</button>
-                <button class="calc-btn" data-number="9">9</button>
-                <button class="calc-btn calc-btn-operator" data-action="multiply">×</button>
-
-                <!-- Row 3 -->
-                <button class="calc-btn" data-number="4">4</button>
-                <button class="calc-btn" data-number="5">5</button>
-                <button class="calc-btn" data-number="6">6</button>
-                <button class="calc-btn calc-btn-operator" data-action="subtract">−</button>
-
-                <!-- Row 4 -->
-                <button class="calc-btn" data-number="1">1</button>
-                <button class="calc-btn" data-number="2">2</button>
-                <button class="calc-btn" data-number="3">3</button>
-                <button class="calc-btn calc-btn-operator" data-action="add">+</button>
-
-                <!-- Row 5 -->
-                <button class="calc-btn" data-number="0">0</button>
-                <button class="calc-btn" data-action="decimal">.</button>
-                <button class="calc-btn calc-btn-equals" data-action="equals">=</button>
-            </div>
-
-            <!-- Scientific Mode Buttons -->
-            <div class="calculator-buttons-scientific" id="scientific-buttons" style="display: none;">
-                <!-- Row 1: Angle Mode & Memory & Clear -->
-                <button class="calc-btn calc-btn-function" data-action="angle-toggle">DEG</button>
-                <button class="calc-btn calc-btn-memory" data-action="mc">MC</button>
-                <button class="calc-btn calc-btn-memory" data-action="mr">MR</button>
-                <button class="calc-btn calc-btn-memory" data-action="m-minus">M−</button>
-                <button class="calc-btn calc-btn-memory" data-action="m-plus">M+</button>
-                <button class="calc-btn calc-btn-clear" data-action="clear">C</button>
-                <button class="calc-btn calc-btn-clear" data-action="all-clear">AC</button>
-                <button class="calc-btn calc-btn-operator" data-action="percent">%</button>
-
-                <!-- Row 2: Parentheses & Constants & Numbers -->
-                <button class="calc-btn calc-btn-function" data-action="paren-open">(</button>
-                <button class="calc-btn calc-btn-function" data-action="paren-close">)</button>
-                <button class="calc-btn calc-btn-constant" data-action="pi">π</button>
-                <button class="calc-btn calc-btn-constant" data-action="e">e</button>
-                <button class="calc-btn calc-btn-operator" data-action="divide">÷</button>
-                <button class="calc-btn" data-number="7">7</button>
-                <button class="calc-btn" data-number="8">8</button>
-                <button class="calc-btn" data-number="9">9</button>
-
-                <!-- Row 3: Trig & Numbers -->
-                <button class="calc-btn calc-btn-function" data-action="sin">sin</button>
-                <button class="calc-btn calc-btn-function" data-action="cos">cos</button>
-                <button class="calc-btn calc-btn-function" data-action="tan">tan</button>
-                <button class="calc-btn calc-btn-function" data-action="sqrt">√</button>
-                <button class="calc-btn calc-btn-operator" data-action="multiply">×</button>
-                <button class="calc-btn" data-number="4">4</button>
-                <button class="calc-btn" data-number="5">5</button>
-                <button class="calc-btn" data-number="6">6</button>
-
-                <!-- Row 4: Inverse Trig & Numbers -->
-                <button class="calc-btn calc-btn-function" data-action="asin">asin</button>
-                <button class="calc-btn calc-btn-function" data-action="acos">acos</button>
-                <button class="calc-btn calc-btn-function" data-action="atan">atan</button>
-                <button class="calc-btn calc-btn-function" data-action="square">x²</button>
-                <button class="calc-btn calc-btn-operator" data-action="subtract">−</button>
-                <button class="calc-btn" data-number="1">1</button>
-                <button class="calc-btn" data-number="2">2</button>
-                <button class="calc-btn" data-number="3">3</button>
-
-                <!-- Row 5: Logs & Power & Numbers -->
-                <button class="calc-btn calc-btn-function" data-action="ln">ln</button>
-                <button class="calc-btn calc-btn-function" data-action="log">log</button>
-                <button class="calc-btn calc-btn-function" data-action="power">xʸ</button>
-                <button class="calc-btn calc-btn-function" data-action="reciprocal">1/x</button>
-                <button class="calc-btn calc-btn-operator" data-action="add">+</button>
-                <button class="calc-btn" data-number="0" style="grid-column: span 2;">0</button>
-                <button class="calc-btn" data-action="decimal">.</button>
-
-                <!-- Row 6: Equals -->
-                <button class="calc-btn calc-btn-equals" data-action="equals" style="grid-column: span 8;">=</button>
-            </div>
-        </div>
-    </div>
+    <!-- The component — replaces all the manual markup -->
+    <domma-calculator></domma-calculator>
 </div>
 
 <!-- Load Domma framework -->
@@ -162,6 +58,6 @@
 
 <script src="../../dist/domma.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
-<script src="index.js"></script>
+<script src="component.js"></script>
 </body>
 </html>

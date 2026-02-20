@@ -1,0 +1,98 @@
+<div class="editor-wrapper">
+
+    <!-- Stats bar -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span data-icon="file-text" data-icon-size="16"></span>
+            <span>Words: <span class="stat-word-count stat-value">0</span></span>
+        </div>
+        <div class="stat-item">
+            <span data-icon="type" data-icon-size="16"></span>
+            <span>Characters: <span class="stat-char-count stat-value">0</span></span>
+        </div>
+        <div class="stat-item">
+            <span data-icon="clock" data-icon-size="16"></span>
+            <span>Last saved: <span class="stat-last-saved stat-value">Never</span></span>
+        </div>
+        <div class="stat-item" style="margin-left: auto;">
+            <button class="btn btn-sm btn-primary save-btn">
+                <span data-icon="save" data-icon-size="16"></span>
+                Save
+            </button>
+        </div>
+    </div>
+
+    <!-- Formatting toolbar -->
+    <div class="editor-toolbar">
+        <div class="toolbar-group">
+            <button class="toolbar-btn" data-action="bold"    title="Bold (Ctrl+B)">
+                <span data-icon="bold"   data-icon-size="18"></span>
+            </button>
+            <button class="toolbar-btn" data-action="italic"  title="Italic (Ctrl+I)">
+                <span data-icon="italic" data-icon-size="18"></span>
+            </button>
+        </div>
+        <div class="toolbar-group">
+            <button class="toolbar-btn" data-action="heading" title="Heading">
+                <span data-icon="type"           data-icon-size="18"></span>
+            </button>
+            <button class="toolbar-btn" data-action="quote"   title="Quote">
+                <span data-icon="message-square" data-icon-size="18"></span>
+            </button>
+        </div>
+        <div class="toolbar-group">
+            <button class="toolbar-btn" data-action="list"  title="Bullet List">
+                <span data-icon="list"  data-icon-size="18"></span>
+            </button>
+            <button class="toolbar-btn" data-action="link"  title="Link">
+                <span data-icon="link"  data-icon-size="18"></span>
+            </button>
+            <button class="toolbar-btn" data-action="image" title="Image">
+                <span data-icon="image" data-icon-size="18"></span>
+            </button>
+        </div>
+        <div class="toolbar-group">
+            <button class="toolbar-btn" data-action="code"  title="Code">
+                <span data-icon="code"  data-icon-size="18"></span>
+            </button>
+        </div>
+        <div class="toolbar-group">
+            <button class="toolbar-btn" data-action="clear" title="Clear All">
+                <span data-icon="trash" data-icon-size="18"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Split pane: editor | preview -->
+    <div class="split-pane">
+        <div class="pane">
+            <div class="pane-header">
+                <span>Markdown</span>
+                <span class="pane-hint">Type your markdown here…</span>
+            </div>
+            <div class="pane-content">
+                <textarea class="markdown-input" placeholder="# Hello Markdown!
+
+Start typing your markdown here...
+
+## Features
+- **Bold** and *italic* text
+- Lists and quotes
+- Links and images
+- Code blocks
+- And more!"></textarea>
+            </div>
+        </div>
+
+        <div class="pane">
+            <div class="pane-header">
+                <span>Preview</span>
+                <span class="pane-hint">Live preview</span>
+            </div>
+            <div class="pane-content preview-pane-content">
+                <p class="preview-placeholder">Start typing to see the preview…</p>
+            </div>
+        </div>
+    </div>
+
+</div>

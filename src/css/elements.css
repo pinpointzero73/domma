@@ -280,6 +280,16 @@
     align-items: center;
     justify-content: space-between;
     user-select: none;
+    transition: background-color var(--dm-transition-fast);
+}
+
+.card-collapsible .card-header:hover {
+    background-color: var(--dm-hover-bg);
+}
+
+.card-collapsible .card-header:focus-visible {
+    outline: 2px solid var(--dm-border-focus);
+    outline-offset: -2px;
 }
 
 .card-header-content {
@@ -290,6 +300,11 @@
     transition: transform var(--dm-transition-normal);
     flex-shrink: 0;
     margin-left: var(--dm-space-2);
+    color: var(--dm-text-secondary);
+}
+
+.card-collapsible .card-header:hover .card-collapse-icon {
+    color: var(--dm-text);
 }
 
 .card-collapsed .card-collapse-icon {

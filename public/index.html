@@ -182,6 +182,36 @@
           color: var(--dm-text-secondary);
       }
 
+      /* ── Examples row ───────────────────────────────────── */
+      .examples-row {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 1rem;
+      }
+
+      .examples-description {
+          min-height: 3.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.875rem 1.5rem;
+          background: var(--dm-surface-raised);
+          border: 1px solid var(--dm-border);
+          border-radius: 8px;
+          color: var(--dm-text-secondary);
+          font-size: 0.9375rem;
+          max-width: 640px;
+          margin: 1.5rem auto 0;
+          text-align: center;
+          transition: border-color 0.2s;
+      }
+
+      .examples-description:has(> :not(:empty)) {
+          border-color: var(--dm-primary);
+          color: var(--dm-text);
+      }
+
       .splash-carousel {
           width: 100%;
           max-width: 1200px;
@@ -618,8 +648,59 @@
   <br/>
 </section>
 
+<!-- Examples Section -->
+<section class="container my-5" id="examples-section">
+  <div class="text-center mb-4">
+    <h2>Domma Examples</h2>
+    <p class="lead">Real applications you can download and use today</p>
+  </div>
+
+  <div class="examples-row" id="examples-row">
+    <a href="examples/todo/index.html" class="feature example-tile" data-example="todo">
+      <div class="feature-icon" data-icon="check-circle" data-icon-size="42"></div>
+      <div class="feature-label">To-Do List</div>
+    </a>
+    <a href="examples/calculator/index.html" class="feature example-tile" data-example="calculator">
+      <div class="feature-icon" data-icon="gauge" data-icon-size="42"></div>
+      <div class="feature-label">Calculator</div>
+    </a>
+    <a href="examples/markdown/index.html" class="feature example-tile" data-example="markdown">
+      <div class="feature-icon" data-icon="file-code" data-icon-size="42"></div>
+      <div class="feature-label">Markdown Editor</div>
+    </a>
+    <a href="examples/notes/index.html" class="feature example-tile" data-example="notes">
+      <div class="feature-icon" data-icon="file-text" data-icon-size="42"></div>
+      <div class="feature-label">Notes</div>
+    </a>
+    <a href="examples/contacts/index.html" class="feature example-tile" data-example="contacts">
+      <div class="feature-icon" data-icon="users" data-icon-size="42"></div>
+      <div class="feature-label">Contacts</div>
+    </a>
+    <a href="examples/gallery/index.html" class="feature example-tile" data-example="gallery">
+      <div class="feature-icon" data-icon="images" data-icon-size="42"></div>
+      <div class="feature-label">Gallery</div>
+    </a>
+    <a href="examples/weather/index.html" class="feature example-tile" data-example="weather">
+      <div class="feature-icon" data-icon="cloud-sun" data-icon-size="42"></div>
+      <div class="feature-label">Weather</div>
+    </a>
+    <a href="examples/celebrations/index.html" class="feature example-tile" data-example="celebrations">
+      <div class="feature-icon" data-icon="gift" data-icon-size="42"></div>
+      <div class="feature-label">Celebrations</div>
+    </a>
+  </div>
+
+  <div class="examples-description" id="examples-description">
+    <span id="examples-scribe">Hover an example to see what it does…</span>
+  </div>
+
+  <div class="text-center mt-3">
+    <a href="examples/index.html" class="btn btn-outline btn-sm">View All Examples →</a>
+  </div>
+</section>
+
 <!-- MiniApps Section -->
-<section class="container my-5">
+<section class="container mt-5 pt-4 mb-5">
   <div class="text-center mb-4">
     <h2>Domma MiniApps</h2>
     <p class="lead">Production-ready applications built with Domma</p>
@@ -677,9 +758,11 @@
 
   <div class="text-center">
     <p class="text-muted">Real-world applications demonstrating Domma's full capabilities</p>
-    <a href="miniapps/index.html" class="btn btn-outline-primary btn-lg">View All MiniApps →</a>
+    <a href="miniapps/index.html" class="btn btn-outline btn-sm">View All MiniApps →</a>
   </div>
 </section>
+
+<br/>
 
 <!-- DOMPurify for XSS protection -->
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
@@ -787,6 +870,7 @@
 
     // Initialize feature card hover events (after features are rendered)
     MotionControl.initFeatureHovers();
+    MotionControl.initExamplesHovers();
 
     // COMMENTED OUT: Carousel for reconsideration
     // await renderCarouselSlides();
@@ -839,6 +923,7 @@
     // animateElements('.splash-carousel', 150);            // Carousel (single element)
     animateElements('.cta-group', 200);                  // CTA buttons
     animateElements('.miniapps-grid .col', 120);        // MiniApps cards
+    animateElements('.example-tile', 80);               // Example tiles
   });
 </script>
 
@@ -1020,7 +1105,7 @@
 
     // Initialize feature card hover events
     initFeatureHovers() {
-      $('.feature').each((index, element) => {
+      $('.feature:not(.example-tile)').each((index, element) => {
         const $feature = $(element);
         const featureName = $feature.find('.feature-label').text().trim();
 
@@ -1031,6 +1116,76 @@
         $feature.on('mouseleave', () => {
           this.restoreDefault();
         });
+      });
+    },
+
+    // Example descriptions (shown on hover)
+    exampleDescriptions: {
+      'todo': 'Full CRUD task manager with priorities, status tracking, and localStorage persistence.',
+      'calculator': 'Scientific calculator with basic and advanced operations, memory functions, and keyboard support.',
+      'markdown': 'Real-time markdown editor with live preview, syntax helpers, and auto-save to storage.',
+      'notes': 'Rich note manager with categories, full-text search, and persistent storage.',
+      'contacts': 'Contacts manager with avatar initials, groups, search, and export support.',
+      'gallery': 'Image gallery with lightbox viewer, category filters, and drag-and-drop upload.',
+      'weather': 'Weather dashboard with current conditions, hourly forecast, and geolocation support.',
+      'celebrations': 'Birthday and anniversary tracker with countdown timers and reminder alerts.',
+    },
+
+    exampleScribeInstance: null,
+    exampleIsHovering: false,
+    exampleHoverTimeout: null,
+    examplePendingFrame: null,
+
+    showExampleContent(exampleKey) {
+      if (!this.isEnabled()) return;
+      this.exampleIsHovering = true;
+      const description = this.exampleDescriptions[exampleKey];
+      if (!description) return;
+
+      if (this.exampleHoverTimeout) { clearTimeout(this.exampleHoverTimeout); this.exampleHoverTimeout = null; }
+      if (this.examplePendingFrame) { cancelAnimationFrame(this.examplePendingFrame); this.examplePendingFrame = null; }
+
+      if (this.exampleScribeInstance) {
+        if (this.exampleScribeInstance.stop) this.exampleScribeInstance.stop();
+        if (this.exampleScribeInstance.destroy) this.exampleScribeInstance.destroy();
+        this.exampleScribeInstance = null;
+      }
+
+      this.examplePendingFrame = requestAnimationFrame(() => {
+        this.examplePendingFrame = null;
+        if (!this.exampleIsHovering) return;
+        $('#examples-scribe').empty();
+        this.exampleScribeInstance = Domma.effects.scribe('#examples-scribe', {
+          speed: 18,
+          cursor: false,
+          loop: false,
+          respectMotionPreference: false,
+          actions: [{ render: description, effect: 'fade' }],
+        });
+      });
+    },
+
+    restoreExampleDefault() {
+      this.exampleIsHovering = false;
+      if (this.exampleHoverTimeout) clearTimeout(this.exampleHoverTimeout);
+      this.exampleHoverTimeout = setTimeout(() => {
+        if (this.exampleIsHovering) return;
+        if (this.examplePendingFrame) { cancelAnimationFrame(this.examplePendingFrame); this.examplePendingFrame = null; }
+        if (this.exampleScribeInstance) {
+          if (this.exampleScribeInstance.stop) this.exampleScribeInstance.stop();
+          if (this.exampleScribeInstance.destroy) this.exampleScribeInstance.destroy();
+          this.exampleScribeInstance = null;
+        }
+        $('#examples-scribe').text('Hover an example to see what it does…');
+      }, 200);
+    },
+
+    initExamplesHovers() {
+      $('.example-tile').each((index, element) => {
+        const $tile = $(element);
+        const exampleKey = $tile.data('example');
+        $tile.on('mouseenter', () => { this.showExampleContent(exampleKey); });
+        $tile.on('mouseleave', () => { this.restoreExampleDefault(); });
       });
     },
 
@@ -1055,6 +1210,14 @@
         this.scribeInstance = null;
       }
 
+      // Also clean up example scribe instance
+      if (this.examplePendingFrame) { cancelAnimationFrame(this.examplePendingFrame); this.examplePendingFrame = null; }
+      if (this.exampleScribeInstance) {
+        if (this.exampleScribeInstance.stop) this.exampleScribeInstance.stop();
+        if (this.exampleScribeInstance.destroy) this.exampleScribeInstance.destroy();
+        this.exampleScribeInstance = null;
+      }
+
       if (enabled) {
         // Enable animations - wait a frame for cleanup
         this.pendingAnimationFrame = requestAnimationFrame(() => {
@@ -1075,6 +1238,7 @@
       } else {
         // Disable animations - show static text
         $target.text('A lightweight, zero-dependency JavaScript framework combining jQuery-style DOM manipulation, Lodash utilities, and modern UI components.');
+        $('#examples-scribe').text('Hover an example to see what it does…');
       }
     }
   };

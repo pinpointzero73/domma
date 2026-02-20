@@ -65,6 +65,10 @@ export const SidebarModule = {
                 }));
             }
 
+            // Determine initial variant from the active theme
+            const theme = window.Domma.theme;
+            const getVariant = () => (theme && theme.isDark()) ? 'dark' : 'light';
+
             // Initialize Domma.elements.sidebar() with push mode and scroll-spy
             this.sidebarInstance = window.Domma.elements.sidebar('#page-sidebar', {
                 position: 'left',
@@ -76,7 +80,7 @@ export const SidebarModule = {
                 collapsedWidth: '60px',
                 header: { title: 'Contents' },
                 items: finalItems,
-                variant: 'dark',
+                variant: getVariant(),
                 scrollSpy: true,
                 scrollSpyOffset: '-100px 0px -50% 0px',
                 scrollSpyThreshold: 0.5,
@@ -98,6 +102,17 @@ export const SidebarModule = {
                     // External page links navigate normally (default behaviour)
                 }
             });
+
+            // Keep sidebar variant in sync with theme changes
+            if (theme && theme.onChange) {
+                theme.onChange(() => {
+                    const el = document.getElementById('page-sidebar');
+                    if (!el) return;
+                    const variant = getVariant();
+                    el.classList.remove('sidebar-dark', 'sidebar-light');
+                    el.classList.add(`sidebar-${variant}`);
+                });
+            }
 
             const totalItems = prependItems.length > 0
                 ? prependItems.reduce((sum, g) => sum + (g.items ? g.items.length : 1), 0) + pageItems.length

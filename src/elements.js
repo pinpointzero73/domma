@@ -628,7 +628,7 @@ const ModalFactory = {
         let html = '<div class="dm-dialog-content">';
 
         if (opts.title) {
-            const safeTitle = sanitizeModule.sanitize(String(opts.title), {preset: 'basic'});
+            const safeTitle = sanitizeModule.sanitise(String(opts.title), {preset: 'basic'});
             html += `<div class="dm-dialog-header${opts.headerClass ? ' ' + opts.headerClass : ''}" style="position: relative; padding: 1.5rem 1.5rem 1rem; border-bottom: 1px solid var(--dm-border, #e5e7eb);">`;
             html += `<h3 class="dm-dialog-title" style="margin: 0; font-size: 1.25rem; font-weight: 600;">${safeTitle}</h3>`;
             if (opts.backdrop && opts.backdropClose) {
@@ -639,7 +639,7 @@ const ModalFactory = {
 
         html += `<div class="dm-dialog-body${opts.bodyClass ? ' ' + opts.bodyClass : ''}${opts.scrollable ? ' dm-dialog-body-scrollable' : ''}" style="padding: 1.5rem;">`;
         // Content is sanitized by default (use {unsafe: true} to bypass)
-        const safeContent = opts.unsafe ? String(opts.content) : sanitizeModule.sanitize(String(opts.content));
+        const safeContent = opts.unsafe ? String(opts.content) : sanitizeModule.sanitise(String(opts.content));
         html += safeContent;
         html += '</div>';
 
@@ -647,8 +647,8 @@ const ModalFactory = {
             html += `<div class="dm-dialog-footer${opts.footerClass ? ' ' + opts.footerClass : ''}" style="display: flex; justify-content: flex-end; gap: 0.5rem; padding: 1rem 1.5rem; border-top: 1px solid var(--dm-border, #e5e7eb); background: var(--dm-surface-raised, #f9fafb);">`;
             opts.buttons.forEach(btn => {
                 const variant = btn.variant || 'secondary';
-                const safeId = sanitizeModule.sanitize(String(btn.id), {preset: 'basic'});
-                const safeText = sanitizeModule.sanitize(String(btn.text), {preset: 'basic'});
+                const safeId = sanitizeModule.sanitise(String(btn.id), {preset: 'basic'});
+                const safeText = sanitizeModule.sanitise(String(btn.text), {preset: 'basic'});
                 html += `<button type="button" class="btn btn-${variant}" data-button-id="${safeId}">${safeText}</button>`;
             });
             html += '</div>';
@@ -1154,7 +1154,7 @@ class Tooltip extends Component {
         this._tooltip.className = 'domma-tooltip';
 
         if (opts.html) {
-            this._tooltip.innerHTML = sanitizeModule.sanitize(String(opts.content));
+            this._tooltip.innerHTML = sanitizeModule.sanitise(String(opts.content));
         } else {
             this._tooltip.textContent = opts.content;
         }
@@ -1782,7 +1782,7 @@ class ToastInstance {
         if (opts.icon) {
             const iconWrapper = document.createElement('div');
             iconWrapper.className = 'domma-toast-icon';
-            iconWrapper.innerHTML = sanitizeModule.sanitize(String(opts.icon), {preset: 'basic'});
+            iconWrapper.innerHTML = sanitizeModule.sanitise(String(opts.icon), {preset: 'basic'});
             this._element.appendChild(iconWrapper);
         }
 
@@ -1801,7 +1801,7 @@ class ToastInstance {
         messageEl.className = 'domma-toast-message';
         if (opts.html) {
             // Sanitize HTML content before inserting
-            messageEl.innerHTML = sanitizeModule.sanitize(String(message));
+            messageEl.innerHTML = sanitizeModule.sanitise(String(message));
         } else {
             messageEl.textContent = message;
         }
@@ -4203,19 +4203,19 @@ const Dialog = {
             let html = '<div class="dm-dialog-content">';
 
             if (opts.title) {
-                const safeTitle = sanitizeModule.sanitize(String(opts.title), {preset: 'basic'});
+                const safeTitle = sanitizeModule.sanitise(String(opts.title), {preset: 'basic'});
                 html += `<div class="dm-dialog-header"><h3 class="dm-dialog-title">${safeTitle}</h3></div>`;
             }
 
             html += '<div class="dm-dialog-body">';
             if (opts.message) {
-                const safeMessage = sanitizeModule.sanitize(String(opts.message), {preset: 'basic'});
+                const safeMessage = sanitizeModule.sanitise(String(opts.message), {preset: 'basic'});
                 html += `<p class="dm-dialog-message">${safeMessage}</p>`;
             }
 
             if (type === 'prompt') {
-                const safePlaceholder = sanitizeModule.sanitize(String(opts.inputPlaceholder || ''), {preset: 'basic'});
-                const safeValue = sanitizeModule.sanitize(String(opts.inputValue || ''), {preset: 'basic'});
+                const safePlaceholder = sanitizeModule.sanitise(String(opts.inputPlaceholder || ''), {preset: 'basic'});
+                const safeValue = sanitizeModule.sanitise(String(opts.inputValue || ''), {preset: 'basic'});
                 html += `<input type="${opts.inputType}" class="dm-dialog-input form-input" placeholder="${safePlaceholder}" value="${safeValue}">`;
             }
 
@@ -7895,7 +7895,7 @@ class Slideover extends Component {
         const bodyEl = this.element.querySelector('.dm-slideover-body');
         if (bodyEl) {
             if (typeof content === 'string') {
-                bodyEl.innerHTML = sanitizeModule.sanitize(String(content));
+                bodyEl.innerHTML = sanitizeModule.sanitise(String(content));
             } else if (content instanceof Element) {
                 bodyEl.innerHTML = '';
                 bodyEl.appendChild(content);

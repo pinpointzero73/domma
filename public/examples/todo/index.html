@@ -33,52 +33,21 @@
                 models, and UI components. Add tasks, set priorities, track status, and persist data across sessions.
             </div>
             <div class="hero-actions">
-                <a href="index.html" download="todo-example.html" class="btn btn-primary">
+                <a href="component.js" download="domma-todo.js" class="btn btn-primary">
                     <span data-icon="download" data-icon-size="18"></span>
-                    Download HTML
+                    Download Component
                 </a>
-                <a href="index.js" download="todo-example.js" class="btn btn-primary">
+                <a href="template.html" download="domma-todo-template.html" class="btn btn-primary">
                     <span data-icon="download" data-icon-size="18"></span>
-                    Download JavaScript
+                    Download Template
                 </a>
             </div>
-            <p class="hero-note">Both files are required for the example to work</p>
+            <p class="hero-note">Both files are required. Drop in <code>&lt;domma-todo&gt;&lt;/domma-todo&gt;</code> anywhere.</p>
         </div>
     </div>
 
-    <!-- Todo app main section -->
-    <section class="todo-main">
-        <div class="todo-input-container">
-            <input type="text" id="todo-input" class="todo-input" placeholder="What needs to be done?"
-                   autocomplete="off">
-            <select id="status-input" class="create-select">
-                <option value="not-started">Not Started</option>
-                <option value="in-progress">In Progress</option>
-                <option value="completed">Completed</option>
-            </select>
-            <select id="priority-input" class="create-select">
-                <option value="highest">Highest</option>
-                <option value="high">High</option>
-                <option value="medium" selected>Medium</option>
-                <option value="low">Low</option>
-                <option value="lowest">Lowest</option>
-            </select>
-            <button id="add-todo-btn" class="btn btn-primary">
-                <span data-icon="plus" data-icon-size="16"></span>
-                Add Task
-            </button>
-        </div>
-
-        <ul id="todo-list" class="todo-list">
-            <!-- Tasks will be rendered here -->
-        </ul>
-
-        <div id="empty-state" class="todo-empty" style="display: none;">
-            <span data-icon="check-circle" data-icon-size="64"></span>
-            <h3>No tasks yet</h3>
-            <p>Add a task above to get started</p>
-        </div>
-    </section>
+    <!-- The component — replaces all the manual markup -->
+    <domma-todo></domma-todo>
 </div>
 
 <!-- Load Domma framework -->
@@ -86,10 +55,7 @@
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
 
 <script src="../../dist/domma.min.js"></script>
-<!-- Load syntax highlighter for code display -->
-<script src="../../dist/domma-syntax.min.js"></script>
-<!-- Load layout system -->
 <script type="module" src="../../layouts/js/layout.js"></script>
-<script src="index.js"></script>
+<script src="component.js"></script>
 </body>
 </html>

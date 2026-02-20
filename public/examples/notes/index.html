@@ -35,64 +35,21 @@
                 persist data across sessions.
             </div>
             <div class="hero-actions">
-                <a href="index.html" download="notes-example.html" class="btn btn-primary">
+                <a href="component.js" download="domma-notes.js" class="btn btn-primary">
                     <span data-icon="download" data-icon-size="18"></span>
-                    Download HTML
+                    Download Component
                 </a>
-                <a href="index.js" download="notes-example.js" class="btn btn-primary">
+                <a href="template.html" download="domma-notes-template.html" class="btn btn-primary">
                     <span data-icon="download" data-icon-size="18"></span>
-                    Download JavaScript
+                    Download Template
                 </a>
             </div>
-            <p class="hero-note">Both files are required for the example to work</p>
+            <p class="hero-note">Both files are required. Drop in <code>&lt;domma-notes&gt;&lt;/domma-notes&gt;</code> anywhere.</p>
         </div>
     </div>
 
-    <!-- Main app -->
-    <section class="notes-main">
-        <!-- Toolbar -->
-        <div class="flex gap-3 mb-4 flex-wrap">
-            <button class="btn btn-primary" id="new-note-btn">
-                <span data-icon="plus" data-icon-size="18"></span>
-                New Note
-            </button>
-          <input type="text" id="search-input" placeholder="Search notes..." class="flex-1 form-input">
-        </div>
-
-        <!-- Notes Grid -->
-        <div id="notes-grid" class="grid grid-cols-3 gap-4">
-            <!-- Notes will be rendered here -->
-        </div>
-
-        <!-- Empty state -->
-        <div id="empty-state" class="empty-state" style="display: none;">
-            <span data-icon="file-text" data-icon-size="64"></span>
-            <h3>No notes yet</h3>
-            <p>Click "New Note" to create your first note</p>
-        </div>
-    </section>
-</div>
-
-<!-- Editor Modal -->
-<div id="note-editor" class="note-editor-modal" style="display: none;">
-    <div class="note-editor-content">
-        <div class="editor-header">
-            <input type="text" id="note-title" placeholder="Note title">
-            <button class="btn btn-secondary btn-sm" id="close-editor">Close</button>
-        </div>
-        <div class="editor-toolbar">
-            <button data-format="bold" title="Bold"><b>B</b></button>
-            <button data-format="italic" title="Italic"><i>I</i></button>
-            <button data-format="underline" title="Underline"><u>U</u></button>
-            <button data-format="h1" title="Heading">H1</button>
-            <button data-format="ul" title="Bullet List">• List</button>
-        </div>
-        <textarea id="note-content" placeholder="Start writing..."></textarea>
-        <div class="editor-footer">
-            <input type="text" id="note-categories" placeholder="Add categories (comma-separated)">
-            <button class="btn btn-primary" id="save-note">Save Note</button>
-        </div>
-    </div>
+    <!-- The component — replaces all the manual markup -->
+    <domma-notes></domma-notes>
 </div>
 
 <!-- Scripts -->
@@ -100,8 +57,7 @@
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
 
 <script src="../../dist/domma.min.js"></script>
-<script src="../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
-<script src="index.js"></script>
+<script src="component.js"></script>
 </body>
 </html>

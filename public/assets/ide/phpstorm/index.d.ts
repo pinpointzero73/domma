@@ -19,6 +19,7 @@ export * from './http';
 export * from './theme';
 export * from './icons';
 export * from './effects';
+export * from './components';
 
 // Import types for the main Domma object
 import {dom, DommaCollection} from './dom';
@@ -33,6 +34,7 @@ import {Http, http} from './http';
 import {Theme, theme} from './theme';
 import {Icons, icons} from './icons';
 import {Effects, effects} from './effects';
+import {Components, ComponentDefinition, ComponentContext} from './components';
 
 // ============================================
 // Main Domma Interface
@@ -85,6 +87,30 @@ export interface DommaStatic {
 
     /** Visual effects and animations */
     effects: Effects;
+
+    /** Vue-style standalone Custom Elements */
+    components: Components;
+
+    /**
+     * Define and register a standalone component as a Custom Element.
+     *
+     * @param tagName - Tag name (must contain a hyphen, or auto-prefixed with `domma-`)
+     * @param definition - Component definition with template, data, computed, methods, lifecycle
+     *
+     * @example
+     * Domma.component('user-card', {
+     *   props: { userId: { type: M.types.number, required: true } },
+     *   data() { return { name: '', loading: true }; },
+     *   methods: {
+     *     async fetchUser() {
+     *       const user = await H.get('/api/users/' + this.props.userId);
+     *       this.set({ name: user.name, loading: false });
+     *     }
+     *   },
+     *   onMount() { this.fetchUser(); }
+     * });
+     */
+    component(tagName: string, definition: ComponentDefinition): void;
 
     // ============================================
     // ConfigEngine Methods ($.setup, $.config, etc.)
@@ -198,5 +224,7 @@ export {
     configEngine,
     DommaCollection,
     DommaDate,
-    Model
+    Model,
+    ComponentDefinition,
+    ComponentContext
 };

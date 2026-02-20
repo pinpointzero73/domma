@@ -1,0 +1,52 @@
+<div class="notes-wrapper">
+
+    <!-- Toolbar: new note + search -->
+    <div class="notes-toolbar">
+        <button class="btn btn-primary new-note-btn">
+            <span data-icon="plus" data-icon-size="18"></span>
+            New Note
+        </button>
+        <input type="text" class="search-input form-input" placeholder="Search notes…">
+    </div>
+
+    <!-- Notes grid — populated by _renderGrid() -->
+    <div class="notes-grid"></div>
+
+    <!-- Empty state — shown when no notes match -->
+    <div class="empty-state" style="display: none;">
+        <span data-icon="file-text" data-icon-size="64"></span>
+        <h3>No notes yet</h3>
+        <p>Click "New Note" to create your first note</p>
+    </div>
+
+    <!-- ── Editor overlay ─────────────────────────────────────────
+         Fixed-position modal within the Shadow DOM.
+         Shown/hidden directly via JS; never touched by _renderGrid().
+    ─────────────────────────────────────────────────────────────── -->
+    <div class="note-editor-overlay" style="display: none;" aria-modal="true" role="dialog">
+        <div class="note-editor-content">
+
+            <div class="editor-header">
+                <input type="text" class="note-title-input" placeholder="Note title">
+                <button class="btn btn-secondary btn-sm close-editor-btn">Close</button>
+            </div>
+
+            <div class="editor-toolbar">
+                <button class="fmt-btn" data-format="bold"      title="Bold"><b>B</b></button>
+                <button class="fmt-btn" data-format="italic"    title="Italic"><i>I</i></button>
+                <button class="fmt-btn" data-format="underline" title="Underline"><u>U</u></button>
+                <button class="fmt-btn" data-format="h1"        title="Heading">H1</button>
+                <button class="fmt-btn" data-format="ul"        title="Bullet List">• List</button>
+            </div>
+
+            <textarea class="note-content-input" placeholder="Start writing…"></textarea>
+
+            <div class="editor-footer">
+                <input type="text" class="note-categories-input" placeholder="Add categories (comma-separated)">
+                <button class="btn btn-primary save-note-btn">Save Note</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>

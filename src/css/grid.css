@@ -329,6 +329,30 @@
     gap: var(--dm-space-6, 2rem);
 }
 
+/* Bootstrap 5-style g-* aliases (row gutters — both axes) */
+.row.g-0 { gap: 0; }
+.row.g-1 { gap: var(--dm-space-1, 0.25rem); }
+.row.g-2 { gap: var(--dm-space-2, 0.5rem); }
+.row.g-3 { gap: var(--dm-space-3, 0.75rem); }
+.row.g-4 { gap: var(--dm-space-4, 1rem); }
+.row.g-5 { gap: var(--dm-space-5, 1.5rem); }
+.row.g-6 { gap: var(--dm-space-6, 2rem); }
+
+/* Bootstrap 5-style gx-* / gy-* (column-gap / row-gap only) */
+.row.gx-1 { column-gap: var(--dm-space-1, 0.25rem); }
+.row.gx-2 { column-gap: var(--dm-space-2, 0.5rem); }
+.row.gx-3 { column-gap: var(--dm-space-3, 0.75rem); }
+.row.gx-4 { column-gap: var(--dm-space-4, 1rem); }
+.row.gx-5 { column-gap: var(--dm-space-5, 1.5rem); }
+.row.gx-6 { column-gap: var(--dm-space-6, 2rem); }
+
+.row.gy-1 { row-gap: var(--dm-space-1, 0.25rem); }
+.row.gy-2 { row-gap: var(--dm-space-2, 0.5rem); }
+.row.gy-3 { row-gap: var(--dm-space-3, 0.75rem); }
+.row.gy-4 { row-gap: var(--dm-space-4, 1rem); }
+.row.gy-5 { row-gap: var(--dm-space-5, 1.5rem); }
+.row.gy-6 { row-gap: var(--dm-space-6, 2rem); }
+
 /* ============================================
    CSS GRID UTILITIES
    ============================================ */

@@ -43,6 +43,12 @@
           "url": "showcase/integrations/index.html",
           "icon": "box",
           "iconSize": 42
+        },
+        {
+          "label": "Components",
+          "url": "showcase/components/index.html",
+          "icon": "component",
+          "iconSize": 42
         }
       ]
     },
