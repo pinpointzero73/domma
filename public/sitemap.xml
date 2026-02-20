@@ -10,7 +10,7 @@
   - Legal pages: priority 0.3
 
   Update lastmod when pages receive significant content updates.
-  Current lastmod baseline: 2026-02-16
+  Current lastmod baseline: 2026-02-20
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
@@ -20,7 +20,7 @@
 
   <url>
     <loc>https://dommajs.org/</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -73,7 +73,7 @@
 
   <url>
     <loc>https://dommajs.org/changelog/</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -626,7 +626,28 @@
 
   <url>
     <loc>https://dommajs.org/examples/todo/</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://dommajs.org/examples/calculator/</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://dommajs.org/examples/markdown/</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://dommajs.org/examples/notes/</loc>
+    <lastmod>2026-02-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

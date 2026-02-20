@@ -34,7 +34,7 @@ import {Http, http} from './http';
 import {Theme, theme} from './theme';
 import {Icons, icons} from './icons';
 import {Effects, effects} from './effects';
-import {Components, ComponentDefinition, ComponentContext} from './components';
+import {Components, ComponentDefinition, ComponentContext, DommaElement} from './components';
 
 // ============================================
 // Main Domma Interface
@@ -226,5 +226,6 @@ export {
     DommaDate,
     Model,
     ComponentDefinition,
-    ComponentContext
+    ComponentContext,
+    DommaElement
 };
