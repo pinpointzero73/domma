@@ -10,6 +10,7 @@
       "items": "nav-showcase",
       "variant": null,
       "actions": [
+        { "type": "search" },
         { "type": "auth", "loginUrl": "login/index.html" },
         { "type": "theme-selector", "position": "inline" }
       ]
@@ -50,6 +51,7 @@
           "items": "nav-showcase",
           "variant": null,
           "actions": [
+            { "type": "search" },
             { "type": "auth", "loginUrl": "../login/index.html" },
             { "type": "theme-selector", "position": "inline" }
           ]
@@ -83,6 +85,7 @@
           "items": "nav-showcase",
           "variant": null,
           "actions": [
+            { "type": "search" },
             { "type": "auth", "loginUrl": "../../login/index.html" },
             { "type": "theme-selector", "position": "inline" }
           ]
@@ -120,6 +123,7 @@
           "items": "nav-showcase",
           "variant": null,
           "actions": [
+            { "type": "search" },
             { "type": "auth", "loginUrl": "../../login/index.html" },
             { "type": "theme-selector", "position": "inline" }
           ]
@@ -158,6 +162,7 @@
           "items": "nav-showcase",
           "variant": null,
           "actions": [
+            { "type": "search" },
             { "type": "auth", "loginUrl": "../../../login/index.html" },
             { "type": "theme-selector", "position": "inline" }
           ]
@@ -197,6 +202,7 @@
       "items": "nav-showcase",
       "variant": null,
       "actions": [
+        { "type": "search" },
         { "type": "auth", "loginUrl": "../login/index.html" },
         { "type": "theme-selector", "position": "inline" }
       ]
@@ -241,6 +247,7 @@
       ],
       "variant": "dark",
       "actions": [
+        { "type": "search" },
         { "type": "auth", "loginUrl": "/login/index.html" },
         { "type": "theme-selector", "position": "inline" }
       ]
@@ -266,6 +273,7 @@
       "items": "nav-showcase",
       "variant": null,
       "actions": [
+        { "type": "search" },
         { "type": "auth", "loginUrl": "../../login/index.html" },
         { "type": "theme-selector", "position": "inline" }
       ]

@@ -927,13 +927,74 @@
   });
 </script>
 
-<!-- Motion Control Footer -->
-<footer id="motion-control-footer" style="position: fixed; bottom: 1rem; right: 1rem; padding: 0.75rem 1rem; background: var(--dm-white); border: 1px solid var(--dm-gray-300); border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); z-index: 1000; font-size: 0.875rem; transition: opacity 0.3s ease;">
-  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; user-select: none; margin: 0;">
-    <input type="checkbox" id="motion-toggle" checked style="cursor: pointer; width: 16px; height: 16px;">
-    <span style="color: var(--dm-gray-700); font-weight: 500;">Enable animations</span>
-  </label>
-</footer>
+<!-- Motion control styles — slider injected into footer by MotionControl.initToggle() -->
+<style>
+  .motion-control-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0 0.75rem;
+  }
+  .motion-slider-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .motion-slider-label {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.78125rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--dm-text-muted, rgba(255,255,255,0.45));
+    transition: color 0.2s;
+  }
+  .motion-slider-wrapper:hover .motion-slider-label {
+    color: var(--dm-text, rgba(255,255,255,0.75));
+  }
+  .motion-switch-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+  .motion-switch-track {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 36px;
+    height: 20px;
+    background: var(--dm-gray-600, #4b5563);
+    border-radius: 9999px;
+    transition: background 0.22s ease;
+    flex-shrink: 0;
+  }
+  .motion-switch-input:checked + .motion-switch-track {
+    background: var(--dm-primary, #6366f1);
+  }
+  .motion-switch-thumb {
+    position: absolute;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 9999px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    transition: transform 0.22s ease;
+  }
+  .motion-switch-input:checked + .motion-switch-track .motion-switch-thumb {
+    transform: translateX(16px);
+  }
+  .motion-slider-wrapper:focus-within .motion-switch-track {
+    outline: 2px solid var(--dm-primary, #6366f1);
+    outline-offset: 2px;
+  }
+</style>
 
 <script>
   // Motion preference management
@@ -997,16 +1058,52 @@
       S.set(this.storageKey, enabled);
     },
 
-    // Initialize toggle state
+    // Inject the slider into the layout footer and bind events
     initToggle() {
-      const toggle = $('#motion-toggle');
-      toggle.prop('checked', this.isEnabled());
+      const self = this;
 
-      toggle.on('change', (e) => {
-        const enabled = e.target.checked;
-        this.setEnabled(enabled);
-        this.updateTypewriter(enabled);
-      });
+      function buildSliderHtml(checked) {
+        return `
+          <div class="motion-control-bar">
+            <label class="motion-slider-wrapper" for="motion-toggle">
+              <span class="motion-slider-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                Enable animations
+              </span>
+              <span class="motion-switch">
+                <input type="checkbox" id="motion-toggle" class="motion-switch-input" ${checked ? 'checked' : ''} aria-label="Enable animations">
+                <span class="motion-switch-track"><span class="motion-switch-thumb"></span></span>
+              </span>
+            </label>
+          </div>`;
+      }
+
+      function injectAndBind() {
+        const footerEl = document.getElementById('domma-footer-element');
+        if (!footerEl) return false;
+        const footerBottom = footerEl.querySelector('.footer-bottom');
+        if (!footerBottom) return false;
+        // Avoid double-injection
+        if (footerEl.querySelector('.motion-control-bar')) return true;
+
+        footerBottom.insertAdjacentHTML('afterend', buildSliderHtml(self.isEnabled()));
+
+        document.getElementById('motion-toggle').addEventListener('change', function () {
+          self.setEnabled(this.checked);
+          self.updateTypewriter(this.checked);
+        });
+        return true;
+      }
+
+      // Footer may not be rendered yet (layout.js is a deferred module)
+      if (!injectAndBind()) {
+        const observer = new MutationObserver(() => {
+          if (injectAndBind()) observer.disconnect();
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
     },
 
     // Show feature-specific content
@@ -1125,10 +1222,10 @@
       'calculator': 'Scientific calculator with basic and advanced operations, memory functions, and keyboard support.',
       'markdown': 'Real-time markdown editor with live preview, syntax helpers, and auto-save to storage.',
       'notes': 'Rich note manager with categories, full-text search, and persistent storage.',
-      'contacts': 'Contacts manager with avatar initials, groups, search, and export support.',
+      'contacts': 'Full-featured contact manager built as a &lt;domma-contacts&gt; web component with groups, favourites, DOB/age, and shadow-DOM encapsulation.',
       'gallery': 'Image gallery with lightbox viewer, category filters, and drag-and-drop upload.',
       'weather': 'Weather dashboard with current conditions, hourly forecast, and geolocation support.',
-      'celebrations': 'Birthday and anniversary tracker with countdown timers and reminder alerts.',
+      'celebrations': 'Celebration backdrops for Patron Saints days and events!',
     },
 
     exampleScribeInstance: null,

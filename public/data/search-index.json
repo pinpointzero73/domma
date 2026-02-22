@@ -1,0 +1,618 @@
+[
+  {
+    "title": "QuickStart Overview",
+    "description": "Get started with Domma quickly — MPA and SPA project templates",
+    "category": "QuickStart",
+    "url": "quickstart/index.html",
+    "keywords": ["start", "begin", "setup", "install", "getting started", "template"]
+  },
+  {
+    "title": "QuickStart MPA",
+    "description": "Multi-page application starter template with Domma",
+    "category": "QuickStart",
+    "url": "quickstart/mpa/index.html",
+    "keywords": ["multi-page", "mpa", "template", "starter", "traditional"]
+  },
+  {
+    "title": "QuickStart SPA",
+    "description": "Single-page application starter template with routing",
+    "category": "QuickStart",
+    "url": "quickstart/spa/index.html",
+    "keywords": ["single-page", "spa", "template", "router", "routing"]
+  },
+  {
+    "title": "Config",
+    "description": "Declarative configuration engine with auto-initialisation for 16 components",
+    "category": "Core",
+    "url": "showcase/config/index.html",
+    "keywords": ["setup", "initialise", "declarative", "json", "component init", "$.setup"]
+  },
+  {
+    "title": "DOM Manipulation",
+    "description": "jQuery-compatible API with 90+ chainable methods for DOM selection and manipulation",
+    "category": "Core",
+    "url": "showcase/dom/index.html",
+    "keywords": ["jquery", "selector", "dom", "elements", "traverse", "events", "find", "addClass"]
+  },
+  {
+    "title": "Utils",
+    "description": "120+ Lodash-compatible utility functions for arrays, objects, strings, and functions",
+    "category": "Core",
+    "url": "showcase/utils/index.html",
+    "keywords": ["lodash", "array", "object", "string", "filter", "map", "debounce", "throttle", "utility"]
+  },
+  {
+    "title": "Storage",
+    "description": "localStorage wrapper with auto JSON serialisation and namespaced keys",
+    "category": "Core",
+    "url": "showcase/storage/index.html",
+    "keywords": ["localstorage", "persist", "store", "cache", "S.set", "S.get"]
+  },
+  {
+    "title": "HTTP Client",
+    "description": "Fetch-based HTTP client with auto JSON handling and promise-based API",
+    "category": "Core",
+    "url": "showcase/http/index.html",
+    "keywords": ["fetch", "ajax", "request", "api", "get", "post", "put", "delete", "H.get"]
+  },
+  {
+    "title": "Router",
+    "description": "Client-side SPA router with hash and history modes, route guards, and lazy loading",
+    "category": "Core",
+    "url": "showcase/router/index.html",
+    "keywords": ["routing", "spa", "navigate", "history", "hash", "guards", "R"]
+  },
+  {
+    "title": "Components",
+    "description": "Web component integration and custom element patterns with Domma",
+    "category": "Core",
+    "url": "showcase/components/index.html",
+    "keywords": ["web components", "custom elements", "shadow dom", "component"]
+  },
+  {
+    "title": "Integrations",
+    "description": "Third-party library integrations — charts, maps, editors, and more",
+    "category": "Core",
+    "url": "showcase/integrations/index.html",
+    "keywords": ["third-party", "plugin", "chart", "map", "integration", "external"]
+  },
+  {
+    "title": "Blueprints",
+    "description": "Unified schema system — define data structure once, use for models, forms, and CRUD",
+    "category": "Data",
+    "url": "showcase/blueprints/index.html",
+    "keywords": ["schema", "validation", "types", "model", "form", "M.create", "blueprint", "M.extend"]
+  },
+  {
+    "title": "Dates",
+    "description": "Moment.js-style date manipulation — create, format, compare, and relative times",
+    "category": "Data",
+    "url": "showcase/dates/index.html",
+    "keywords": ["moment", "date", "time", "format", "D()", "fromNow", "add", "subtract"]
+  },
+  {
+    "title": "Models",
+    "description": "Reactive data models with validation, pub/sub, persistence, and two-way DOM binding",
+    "category": "Data",
+    "url": "showcase/models/index.html",
+    "keywords": ["reactive", "state", "observable", "pubsub", "M.create", "subscribe", "publish"]
+  },
+  {
+    "title": "Tables",
+    "description": "DataTable-like functionality with sorting, filtering, pagination, search, and CSV export",
+    "category": "Data",
+    "url": "showcase/tables/index.html",
+    "keywords": ["datatable", "grid", "sort", "filter", "paginate", "csv", "T.create"]
+  },
+  {
+    "title": "Alarm",
+    "description": "Scheduled alerts with persistence — set alarms that fire at specific times",
+    "category": "UI",
+    "url": "showcase/elements/alarm/index.html",
+    "keywords": ["alarm", "schedule", "timer", "alert", "notification", "reminder"]
+  },
+  {
+    "title": "Back to Top",
+    "description": "Scroll-to-top button with configurable threshold and smooth animation",
+    "category": "UI",
+    "url": "showcase/elements/back-to-top/index.html",
+    "keywords": ["scroll", "top", "button", "return", "backToTop"]
+  },
+  {
+    "title": "Cookie Consent",
+    "description": "GDPR-compliant cookie consent banner with configurable categories",
+    "category": "UI",
+    "url": "showcase/elements/cookie-consent/index.html",
+    "keywords": ["gdpr", "cookie", "privacy", "consent", "banner", "compliance"]
+  },
+  {
+    "title": "Desktop Notification",
+    "description": "Browser push notification wrapper with permission management",
+    "category": "UI",
+    "url": "showcase/elements/notification/index.html",
+    "keywords": ["push", "notification", "browser", "desktop", "alert", "system"]
+  },
+  {
+    "title": "Loader",
+    "description": "Loading indicators — spinner, dots, pulse, and bars variants",
+    "category": "UI",
+    "url": "showcase/elements/loader/index.html",
+    "keywords": ["loading", "spinner", "progress", "dots", "pulse", "bars", "wait"]
+  },
+  {
+    "title": "Timer",
+    "description": "Countdown timer with visual display and configurable intervals",
+    "category": "UI",
+    "url": "showcase/elements/timer/index.html",
+    "keywords": ["countdown", "clock", "timer", "interval", "stopwatch"]
+  },
+  {
+    "title": "Toast",
+    "description": "Non-blocking notification messages with success, error, warning, and info types",
+    "category": "UI",
+    "url": "showcase/elements/toast/index.html",
+    "keywords": ["notification", "message", "alert", "E.toast", "success", "error", "warning"]
+  },
+  {
+    "title": "Grid System",
+    "description": "12-column responsive Bootstrap-style grid plus CSS Grid utilities",
+    "category": "UI",
+    "url": "showcase/grid/index.html",
+    "keywords": ["layout", "columns", "responsive", "bootstrap", "flexbox", "grid", "breakpoint"]
+  },
+  {
+    "title": "Icons",
+    "description": "200+ SVG icons in 15 categories with size and colour customisation",
+    "category": "UI",
+    "url": "showcase/icons/index.html",
+    "keywords": ["svg", "icon", "data-icon", "I.scan", "symbol", "glyph"]
+  },
+  {
+    "title": "Themes",
+    "description": "10+ built-in themes with light and dark variants — Ocean, Forest, Sunset, Charcoal",
+    "category": "UI",
+    "url": "showcase/themes/index.html",
+    "keywords": ["theme", "dark mode", "light mode", "colour scheme", "skin", "palette"]
+  },
+  {
+    "title": "Forms",
+    "description": "Blueprint-driven form generation with validation, layouts, wizards, and CRUD helpers",
+    "category": "UI",
+    "url": "showcase/elements/forms/index.html",
+    "keywords": ["form", "input", "validation", "F.create", "wizard", "blueprint", "generate"]
+  },
+  {
+    "title": "Accordion",
+    "description": "Collapsible content sections with single or multi-expand modes",
+    "category": "Elements",
+    "url": "showcase/elements/accordion/index.html",
+    "keywords": ["collapse", "expand", "toggle", "panel", "faq", "E.accordion"]
+  },
+  {
+    "title": "Autocomplete",
+    "description": "Search input with dropdown suggestions, async data source, and keyboard navigation",
+    "category": "Elements",
+    "url": "showcase/elements/autocomplete/index.html",
+    "keywords": ["typeahead", "suggest", "search", "dropdown", "E.autocomplete", "combobox"]
+  },
+  {
+    "title": "Badge",
+    "description": "Small status indicators and count labels for buttons, nav items, and cards",
+    "category": "Elements",
+    "url": "showcase/elements/badge/index.html",
+    "keywords": ["label", "tag", "count", "indicator", "pill", "E.badge"]
+  },
+  {
+    "title": "Breadcrumbs",
+    "description": "Navigational path trail with customisable separators",
+    "category": "Elements",
+    "url": "showcase/elements/breadcrumbs/index.html",
+    "keywords": ["navigation", "path", "trail", "hierarchy", "E.breadcrumbs"]
+  },
+  {
+    "title": "Button Group",
+    "description": "Grouped radio and checkbox button controls for inline option selection",
+    "category": "Elements",
+    "url": "showcase/elements/button-group/index.html",
+    "keywords": ["radio", "checkbox", "toggle", "group", "E.buttonGroup"]
+  },
+  {
+    "title": "Card",
+    "description": "Content containers with collapsible mode, hover effects, and localStorage persistence",
+    "category": "Elements",
+    "url": "showcase/elements/card/index.html",
+    "keywords": ["panel", "container", "collapse", "content", "E.card"]
+  },
+  {
+    "title": "Carousel",
+    "description": "Image and content slideshow with autoplay, loop, and touch support",
+    "category": "Elements",
+    "url": "showcase/elements/carousel/index.html",
+    "keywords": ["slider", "slideshow", "gallery", "image", "autoplay", "E.carousel"]
+  },
+  {
+    "title": "Dialog",
+    "description": "Promise-based alert, confirm, and prompt dialogs replacing browser defaults",
+    "category": "Elements",
+    "url": "showcase/elements/dialog/index.html",
+    "keywords": ["alert", "confirm", "prompt", "popup", "E.confirm", "E.alert", "modal dialog"]
+  },
+  {
+    "title": "Dropdown",
+    "description": "Context menus and dropdown panels with smart positioning",
+    "category": "Elements",
+    "url": "showcase/elements/dropdown/index.html",
+    "keywords": ["menu", "context", "dropdown", "popover", "E.dropdown"]
+  },
+  {
+    "title": "Editor",
+    "description": "Rich text content editor with formatting tools and export options",
+    "category": "Elements",
+    "url": "showcase/elements/editor/index.html",
+    "keywords": ["rich text", "wysiwyg", "editor", "content", "format", "text editor"]
+  },
+  {
+    "title": "Footer",
+    "description": "Multi-column site footer with social links, brand, and three layout modes",
+    "category": "Elements",
+    "url": "showcase/footer/index.html",
+    "keywords": ["footer", "navigation", "social", "brand", "columns", "E.footer"]
+  },
+  {
+    "title": "Hero",
+    "description": "Full-width hero sections with multiple layout variants for landing pages",
+    "category": "Elements",
+    "url": "showcase/elements/hero/index.html",
+    "keywords": ["hero", "banner", "landing", "header", "jumbotron", "full-width"]
+  },
+  {
+    "title": "Modal",
+    "description": "Dialog overlays with backdrop, keyboard navigation, and animation options",
+    "category": "Elements",
+    "url": "showcase/elements/modal/index.html",
+    "keywords": ["dialog", "popup", "overlay", "E.modal", "lightbox", "window"]
+  },
+  {
+    "title": "Navbar",
+    "description": "Responsive navigation bar with brand, items, dropdowns, and mobile collapse",
+    "category": "Elements",
+    "url": "showcase/elements/navbar/index.html",
+    "keywords": ["navigation", "header", "menu", "brand", "mobile", "E.navbar", "responsive"]
+  },
+  {
+    "title": "Pillbox",
+    "description": "Multi-select tag input with custom validation and keyboard navigation",
+    "category": "Elements",
+    "url": "showcase/elements/pillbox/index.html",
+    "keywords": ["tags", "multi-select", "chips", "E.pillbox", "input", "token"]
+  },
+  {
+    "title": "Progression",
+    "description": "Unified timeline and roadmap component with status tracking and dual modes",
+    "category": "Elements",
+    "url": "showcase/elements/progression/index.html",
+    "keywords": ["timeline", "roadmap", "progress", "steps", "E.progression", "status"]
+  },
+  {
+    "title": "Sidebar",
+    "description": "Navigation sidebar with unlimited depth nesting, mobile drawer, and state persistence",
+    "category": "Elements",
+    "url": "showcase/sidebar/index.html",
+    "keywords": ["sidebar", "navigation", "drawer", "nested", "E.sidebar"]
+  },
+  {
+    "title": "Slideover",
+    "description": "Panel overlays that slide in from screen edges — left, right, top, bottom",
+    "category": "Elements",
+    "url": "showcase/elements/slideover/index.html",
+    "keywords": ["panel", "drawer", "slide", "overlay", "E.slideover"]
+  },
+  {
+    "title": "Tabs",
+    "description": "Tabbed content panels with configurable active tab and onChange callback",
+    "category": "Elements",
+    "url": "showcase/elements/tabs/index.html",
+    "keywords": ["tab", "panel", "content", "switch", "E.tabs"]
+  },
+  {
+    "title": "Tooltip",
+    "description": "Hover and click tooltips with configurable positioning and trigger events",
+    "category": "Elements",
+    "url": "showcase/elements/tooltip/index.html",
+    "keywords": ["hint", "popup", "title", "help", "E.tooltip", "hover"]
+  },
+  {
+    "title": "TreeView",
+    "description": "Hierarchical tree navigation with expand/collapse and custom node rendering",
+    "category": "Elements",
+    "url": "showcase/elements/treeview/index.html",
+    "keywords": ["tree", "hierarchy", "nested", "expand", "collapse", "E.treeview"]
+  },
+  {
+    "title": "Effects Overview",
+    "description": "JavaScript animation effects — breathe, pulse, scribe, reveal, scramble, counter, ripple, shake",
+    "category": "Effects",
+    "url": "showcase/effects/index.html",
+    "keywords": ["animation", "effect", "motion", "transition", "javascript"]
+  },
+  {
+    "title": "CSS Animations",
+    "description": "CSS-only animation classes for entrances, exits, and attention-seeking effects",
+    "category": "Effects",
+    "url": "showcase/effects/animations.html",
+    "keywords": ["css", "animation", "keyframe", "entrance", "exit", "class"]
+  },
+  {
+    "title": "CSS Filters",
+    "description": "CSS filter utilities — blur, brightness, contrast, grayscale, and more",
+    "category": "Effects",
+    "url": "showcase/effects/filters.html",
+    "keywords": ["filter", "blur", "brightness", "css", "image", "grayscale"]
+  },
+  {
+    "title": "Fireworks",
+    "description": "Click and hover firework particle animations with sparkle variants",
+    "category": "Effects",
+    "url": "showcase/effects/fireworks.html",
+    "keywords": ["firework", "particle", "sparkle", "click", "celebration", "animation"]
+  },
+  {
+    "title": "Glow Effects",
+    "description": "Luminous glow utility classes for buttons, cards, and any element",
+    "category": "Effects",
+    "url": "showcase/effects/glow.html",
+    "keywords": ["glow", "neon", "luminous", "light", "shadow", "css class"]
+  },
+  {
+    "title": "Gradients",
+    "description": "CSS gradient utilities and generator for backgrounds and text",
+    "category": "Effects",
+    "url": "showcase/effects/gradients.html",
+    "keywords": ["gradient", "background", "colour", "linear", "radial", "css"]
+  },
+  {
+    "title": "Shadows",
+    "description": "CSS shadow utilities — sm, md, lg, xl variants and elevation classes",
+    "category": "Effects",
+    "url": "showcase/effects/shadows.html",
+    "keywords": ["shadow", "elevation", "depth", "drop-shadow", "box-shadow"]
+  },
+  {
+    "title": "JavaScript Effects",
+    "description": "Overview of all JavaScript-powered animation effects in Domma",
+    "category": "Effects",
+    "url": "showcase/effects/javascript.html",
+    "keywords": ["animation", "effect", "javascript", "api", "overview"]
+  },
+  {
+    "title": "Breathe Effect",
+    "description": "Sinusoidal floating animation with configurable amplitude and duration",
+    "category": "Effects",
+    "url": "showcase/effects/breathe.html",
+    "keywords": ["breathe", "float", "sine", "oscillate", "breathe()", "animation"]
+  },
+  {
+    "title": "Counter Effect",
+    "description": "Animated number counting with easing, prefix/suffix, and scroll trigger",
+    "category": "Effects",
+    "url": "showcase/effects/counter.html",
+    "keywords": ["count", "number", "animate", "counter()", "increment", "scroll"]
+  },
+  {
+    "title": "Pulse Effect",
+    "description": "Pulsing scale animation for drawing attention to elements",
+    "category": "Effects",
+    "url": "showcase/effects/pulse.html",
+    "keywords": ["pulse", "scale", "beat", "attention", "pulse()", "animation"]
+  },
+  {
+    "title": "Reveal Effect",
+    "description": "Scroll-triggered entrance animations using IntersectionObserver — fade, slide, zoom",
+    "category": "Effects",
+    "url": "showcase/effects/reveal.html",
+    "keywords": ["scroll", "reveal", "entrance", "intersection", "reveal()", "fade", "slide-up"]
+  },
+  {
+    "title": "Ripple Effect",
+    "description": "Material Design click ripple effect with custom colour and unbounded modes",
+    "category": "Effects",
+    "url": "showcase/effects/ripple.html",
+    "keywords": ["ripple", "material", "click", "wave", "ripple()", "touch"]
+  },
+  {
+    "title": "Scramble Effect",
+    "description": "Text cipher/decode animation with configurable character pools and reveal orders",
+    "category": "Effects",
+    "url": "showcase/effects/scramble.html",
+    "keywords": ["scramble", "decode", "cipher", "text", "scramble()", "animation"]
+  },
+  {
+    "title": "Shake Effect",
+    "description": "Attention and error shake animation — horizontal, vertical, or both directions",
+    "category": "Effects",
+    "url": "showcase/effects/shake.html",
+    "keywords": ["shake", "error", "attention", "vibrate", "shake()", "animation"]
+  },
+  {
+    "title": "Scribe Effect",
+    "description": "Typewriter and word-by-word text animation with cursor, loops, and undo",
+    "category": "Effects",
+    "url": "showcase/effects/scribe.html",
+    "keywords": ["typewriter", "type", "text", "scribe()", "word", "cursor", "animation"]
+  },
+  {
+    "title": "Celebrations",
+    "description": "Seasonal celebration particle effects — Christmas, Halloween, Valentine's, and more",
+    "category": "Effects",
+    "url": "examples/celebrations/index.html",
+    "keywords": ["confetti", "snow", "celebration", "seasonal", "particle", "holiday"]
+  },
+  {
+    "title": "Theme Roller",
+    "description": "Visual theme customisation tool with live preview and CSS export",
+    "category": "Tools",
+    "url": "showcase/theme-roller/index.html",
+    "keywords": ["theme", "customise", "colors", "design", "css variables", "preview"]
+  },
+  {
+    "title": "Page Roller",
+    "description": "Drag-and-drop page builder tool with component library",
+    "category": "Tools",
+    "url": "showcase/page-roller/index.html",
+    "keywords": ["page builder", "drag", "drop", "layout", "visual", "wysiwyg"]
+  },
+  {
+    "title": "Schema Builder",
+    "description": "Visual blueprint and schema design tool for models and forms",
+    "category": "Tools",
+    "url": "showcase/schema-builder/index.html",
+    "keywords": ["schema", "blueprint", "design", "model", "form", "builder"]
+  },
+  {
+    "title": "Form Generation",
+    "description": "Showcase of blueprint-driven form generation with all input types and layouts",
+    "category": "Tools",
+    "url": "showcase/forms/index.html",
+    "keywords": ["form", "generate", "blueprint", "input", "wizard", "F.create"]
+  },
+  {
+    "title": "Print to PDF",
+    "description": "Print and PDF export functionality for any page or element",
+    "category": "Tools",
+    "url": "showcase/print-to-pdf/index.html",
+    "keywords": ["print", "pdf", "export", "download", "paper"]
+  },
+  {
+    "title": "API Reference",
+    "description": "Complete API reference documentation for all Domma modules",
+    "category": "Tools",
+    "url": "showcase/reference/index.html",
+    "keywords": ["api", "reference", "docs", "documentation", "method", "guide"]
+  },
+  {
+    "title": "Examples Overview",
+    "description": "Working example applications built with Domma",
+    "category": "Examples",
+    "url": "examples/index.html",
+    "keywords": ["example", "demo", "application", "sample", "tutorial"]
+  },
+  {
+    "title": "Todo List",
+    "description": "Full-featured todo list app with models, persistence, and filtering",
+    "category": "Examples",
+    "url": "examples/todo/index.html",
+    "keywords": ["todo", "task", "list", "app", "example"]
+  },
+  {
+    "title": "Weather App",
+    "description": "Weather application using HTTP module and API integration",
+    "category": "Examples",
+    "url": "examples/weather/index.html",
+    "keywords": ["weather", "api", "http", "app", "example", "forecast"]
+  },
+  {
+    "title": "Notes App",
+    "description": "Notes application with storage persistence and rich text editing",
+    "category": "Examples",
+    "url": "examples/notes/index.html",
+    "keywords": ["notes", "text", "editor", "storage", "app", "example"]
+  },
+  {
+    "title": "Calculator",
+    "description": "Calculator application demonstrating DOM manipulation and event handling",
+    "category": "Examples",
+    "url": "examples/calculator/index.html",
+    "keywords": ["calculator", "math", "dom", "events", "app", "example"]
+  },
+  {
+    "title": "Image Gallery",
+    "description": "Responsive image gallery with lightbox and filtering",
+    "category": "Examples",
+    "url": "examples/gallery/index.html",
+    "keywords": ["gallery", "image", "lightbox", "filter", "app", "example"]
+  },
+  {
+    "title": "Markdown Editor",
+    "description": "Live markdown editor with preview and localStorage persistence",
+    "category": "Examples",
+    "url": "examples/markdown/index.html",
+    "keywords": ["markdown", "editor", "preview", "text", "app", "example"]
+  },
+  {
+    "title": "Contacts",
+    "description": "Contact management app with tables, forms, and CRUD operations",
+    "category": "Examples",
+    "url": "examples/contacts/index.html",
+    "keywords": ["contacts", "crud", "table", "form", "app", "example"]
+  },
+  {
+    "title": "MiniApps Overview",
+    "description": "Full-featured mini applications built entirely with Domma",
+    "category": "MiniApps",
+    "url": "miniapps/index.html",
+    "keywords": ["miniapp", "application", "full", "demo", "complete"]
+  },
+  {
+    "title": "My Garage",
+    "description": "Vehicle management MiniApp with full CRUD, filtering, and stats",
+    "category": "MiniApps",
+    "url": "miniapps/garage/index.html",
+    "keywords": ["garage", "vehicle", "car", "management", "crud", "miniapp"]
+  },
+  {
+    "title": "Domma Docs",
+    "description": "Documentation viewer MiniApp built with Domma's router and components",
+    "category": "MiniApps",
+    "url": "miniapps/docs/index.html",
+    "keywords": ["docs", "documentation", "viewer", "miniapp", "spa"]
+  },
+  {
+    "title": "Invoicing System",
+    "description": "Invoice and billing management MiniApp with PDF export",
+    "category": "MiniApps",
+    "url": "miniapps/invoicing/index.html",
+    "keywords": ["invoice", "billing", "finance", "pdf", "miniapp", "crud"]
+  },
+  {
+    "title": "About Us",
+    "description": "About the Domma project and the team behind it",
+    "category": "Resources",
+    "url": "about/index.html",
+    "keywords": ["about", "team", "project", "history", "company"]
+  },
+  {
+    "title": "Blog",
+    "description": "Articles, tutorials, and updates about Domma development",
+    "category": "Resources",
+    "url": "blog/index.html",
+    "keywords": ["blog", "article", "tutorial", "news", "update"]
+  },
+  {
+    "title": "Feedback",
+    "description": "Send feedback, report bugs, or suggest new features for Domma",
+    "category": "Resources",
+    "url": "feedback/index.html",
+    "keywords": ["feedback", "bug", "feature", "suggest", "report", "contact"]
+  },
+  {
+    "title": "FAQs",
+    "description": "Frequently asked questions about Domma, licensing, and usage",
+    "category": "Resources",
+    "url": "faq/index.html",
+    "keywords": ["faq", "question", "help", "license", "usage", "support"]
+  },
+  {
+    "title": "Privacy Policy",
+    "description": "Domma's privacy policy and data handling practices",
+    "category": "Resources",
+    "url": "privacy-policy/index.html",
+    "keywords": ["privacy", "gdpr", "data", "policy", "legal", "cookies"]
+  },
+  {
+    "title": "Changelog",
+    "description": "Version history and release notes for all Domma releases",
+    "category": "Resources",
+    "url": "changelog/index.html",
+    "keywords": ["changelog", "release", "version", "history", "update", "what's new"]
+  }
+]

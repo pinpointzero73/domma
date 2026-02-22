@@ -1,0 +1,152 @@
+<div class="contacts-wrapper">
+
+    <!-- ── Toolbar ─────────────────────────────────────────────────────── -->
+    <div class="contacts-toolbar">
+        <input type="text" class="search-input" placeholder="Search contacts…" aria-label="Search contacts">
+        <select class="group-filter" aria-label="Filter by group">
+            <option value="">All groups</option>
+        </select>
+        <button class="fav-toggle-btn btn-tool" title="Show favourites only" aria-pressed="false">
+            <span data-icon="heart" data-icon-size="16"></span>
+            <span class="btn-tool-label">Favourites</span>
+        </button>
+        <div class="toolbar-spacer"></div>
+        <button class="add-group-btn btn-tool" title="Add a new group">
+            <span data-icon="tag" data-icon-size="16"></span>
+            <span class="btn-tool-label">Add Group</span>
+        </button>
+        <button class="add-contact-btn btn-primary-action">
+            <span data-icon="plus" data-icon-size="18"></span>
+            Add Contact
+        </button>
+    </div>
+
+    <!-- ── Stats bar ───────────────────────────────────────────────────── -->
+    <div class="contacts-stats"></div>
+
+    <!-- ── Groups management ───────────────────────────────────────────── -->
+    <div class="groups-panel"></div>
+
+    <!-- ── Card grid — populated by _renderGrid() ──────────────────────── -->
+    <div class="contacts-grid"></div>
+
+    <!-- ── Empty state ─────────────────────────────────────────────────── -->
+    <div class="empty-state" style="display:none;">
+        <span data-icon="users" data-icon-size="64"></span>
+        <h3>No contacts yet</h3>
+        <p>Click <strong>Add Contact</strong> to get started</p>
+    </div>
+
+    <!-- ── Editor overlay ──────────────────────────────────────────────
+         Fixed-position panel within Shadow DOM. Shown/hidden by JS;
+         _renderGrid() never touches it.
+    ─────────────────────────────────────────────────────────────────── -->
+    <div class="editor-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="editor-heading">
+        <div class="editor-panel">
+
+            <div class="editor-header">
+                <h2 class="editor-heading" id="editor-heading">Add Contact</h2>
+                <button class="close-editor-btn icon-btn" aria-label="Close editor">
+                    <span data-icon="x" data-icon-size="20"></span>
+                </button>
+            </div>
+
+            <div class="editor-body">
+                <div class="form-grid">
+
+                    <!-- Row 1: Name + Email -->
+                    <div class="form-field">
+                        <label class="field-label">Full Name <span class="required">*</span></label>
+                        <input type="text" class="f-name field-input" placeholder="Jane Smith" autocomplete="name">
+                    </div>
+                    <div class="form-field">
+                        <label class="field-label">Email <span class="required">*</span></label>
+                        <input type="email" class="f-email field-input" placeholder="jane@example.com" autocomplete="email">
+                    </div>
+
+                    <!-- Row 2: Title + Company -->
+                    <div class="form-field">
+                        <label class="field-label">
+                            <span data-icon="briefcase" data-icon-size="13"></span> Job Title
+                        </label>
+                        <input type="text" class="f-title field-input" placeholder="Software Engineer">
+                    </div>
+                    <div class="form-field">
+                        <label class="field-label">
+                            <span data-icon="building" data-icon-size="13"></span> Company
+                        </label>
+                        <input type="text" class="f-company field-input" placeholder="Acme Corp">
+                    </div>
+
+                    <!-- Row 3: Mobile + Phone -->
+                    <div class="form-field">
+                        <label class="field-label">
+                            <span data-icon="phone" data-icon-size="13"></span> Mobile
+                        </label>
+                        <input type="tel" class="f-mobile field-input" placeholder="+44 7911 123456" autocomplete="tel">
+                    </div>
+                    <div class="form-field">
+                        <label class="field-label">
+                            <span data-icon="phone" data-icon-size="13"></span> Work / Home Phone
+                        </label>
+                        <input type="tel" class="f-phone field-input" placeholder="+44 20 7946 0958">
+                    </div>
+
+                    <!-- Row 4: DOB + Website -->
+                    <div class="form-field">
+                        <label class="field-label">
+                            <span data-icon="cake" data-icon-size="13"></span> Date of Birth
+                        </label>
+                        <input type="date" class="f-dob field-input">
+                    </div>
+                    <div class="form-field">
+                        <label class="field-label">
+                            <span data-icon="link-2" data-icon-size="13"></span> Website
+                        </label>
+                        <input type="url" class="f-website field-input" placeholder="https://example.com">
+                    </div>
+
+                    <!-- Row 5: LinkedIn + Twitter -->
+                    <div class="form-field">
+                        <label class="field-label">
+                            <span data-icon="link-2" data-icon-size="13"></span> LinkedIn
+                        </label>
+                        <input type="url" class="f-linkedin field-input" placeholder="https://linkedin.com/in/…">
+                    </div>
+                    <div class="form-field">
+                        <label class="field-label">
+                            <span data-icon="at-sign" data-icon-size="13"></span> Twitter / X
+                        </label>
+                        <input type="text" class="f-twitter field-input" placeholder="@handle">
+                    </div>
+
+                    <!-- Row 6: Groups -->
+                    <div class="form-field form-field-full">
+                        <label class="field-label">
+                            <span data-icon="tag" data-icon-size="13"></span> Groups
+                            <span class="field-hint">(comma-separated)</span>
+                        </label>
+                        <input type="text" class="f-groups field-input" placeholder="Work, Family, Friends">
+                    </div>
+
+                    <!-- Row 7: Notes -->
+                    <div class="form-field form-field-full">
+                        <label class="field-label">Notes</label>
+                        <textarea class="f-notes field-input field-textarea" rows="3" placeholder="Additional notes about this contact…"></textarea>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="editor-footer">
+                <button class="btn-cancel close-editor-btn">Cancel</button>
+                <button class="btn-save save-contact-btn">
+                    <span data-icon="save" data-icon-size="16"></span>
+                    Save Contact
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</div>

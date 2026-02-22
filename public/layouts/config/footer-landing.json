@@ -24,9 +24,9 @@
       "title": "Resources",
       "links": [
         { "text": "QuickStart Guide", "url": "quickstart/index.html" },
-        { "text": "Documentation", "url": "https://github.com/dcbw-it/domma/blob/main/docs/GettingStarted.md", "external": true },
+        { "text": "Documentation", "url": "https://github.com/pinpointzero73/domma/blob/main/docs/GettingStarted.md", "external": true },
         { "text": "API Reference", "url": "showcase/reference/index.html" },
-        { "text": "GitHub", "url": "https://github.com/dcbw-it/domma", "external": true }
+        { "text": "GitHub", "url": "https://github.com/pinpointzero73/domma", "external": true }
       ]
     },
     {
@@ -48,9 +48,8 @@
     }
   ],
   "social": [
-    { "icon": "github", "url": "https://github.com/dcbw-it/domma", "label": "GitHub" },
-    { "icon": "twitter", "url": "#", "label": "Twitter" },
-    { "icon": "linkedin", "url": "#", "label": "LinkedIn" }
+    { "icon": "github", "url": "https://github.com/pinpointzero73/domma", "label": "GitHub" },
+    { "icon": "linkedin", "url": "https://www.linkedin.com/in/darryl-waterhouse/", "label": "LinkedIn" }
   ],
   "copyright": "© {{year}} Darryl Waterhouse & <a href=\"https://dcbw-it.com\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: inherit; text-decoration: underline;\">DCBW-IT</a>. All rights reserved."
 }

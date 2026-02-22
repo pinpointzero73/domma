@@ -8,6 +8,7 @@ import {PathResolver} from './modules/path-resolver.js';
 import {TemplateLoader} from './modules/template-loader.js';
 import {FeaturesModule} from './modules/features.js';
 import {SidebarModule} from './modules/sidebar.js';
+import {SiteSearch} from './modules/search.js';
 
 (async function () {
     // Wait for DOM
@@ -643,6 +644,31 @@ import {SidebarModule} from './modules/sidebar.js';
     }
 
     /**
+     * Render the search icon button that opens the site-wide search overlay
+     */
+    function renderSearchIcon(action, container) {
+        const btn = document.createElement('button');
+        btn.className = 'search-btn-trigger';
+        btn.setAttribute('aria-label', 'Search');
+        btn.setAttribute('title', 'Search (Ctrl+K)');
+
+        const icon = document.createElement('span');
+        icon.setAttribute('data-icon', 'search');
+        icon.setAttribute('aria-hidden', 'true');
+        btn.appendChild(icon);
+
+        btn.addEventListener('click', () => SiteSearch.open());
+        container.appendChild(btn);
+
+        // Scan the icon immediately
+        if (typeof Domma !== 'undefined' && Domma.icons && Domma.icons.scan) {
+            Domma.icons.scan(btn);
+        } else if (typeof I !== 'undefined' && I.scan) {
+            I.scan(btn);
+        }
+    }
+
+    /**
      * Render all navbar actions from config
      */
     async function renderNavbarActions(actionsConfig, container, data) {
@@ -650,6 +676,9 @@ import {SidebarModule} from './modules/sidebar.js';
 
         for (const action of actionsConfig) {
             switch (action.type) {
+                case 'search':
+                    renderSearchIcon(action, container);
+                    break;
                 case 'theme-selector':
                     renderThemeSelector(action, container);
                     break;
@@ -838,6 +867,9 @@ import {SidebarModule} from './modules/sidebar.js';
 
                     // Render all actions from config
                     await renderNavbarActions(actions, $navbarActions.get(0), { levelsUp, user });
+
+                    // Initialise site search (non-blocking — fetches index in background)
+                    SiteSearch.init(levelsUp).catch(() => {});
                 }
 
                 // Set up auth state listeners to reload page on auth changes

@@ -13,250 +13,154 @@
     <link rel="stylesheet" href="../../dist/grid.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-  <!-- App Custom Styles -->
-  <link rel="stylesheet" href="./custom.css">
+    <link rel="stylesheet" href="./custom.css">
 </head>
 <body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
 
 <div class="hero hero-center bg-ambient-rotate-spotlight">
     <div class="hero-content">
-        <div class="hero-title">Contact Management System</div>
-        <div class="hero-subtitle">A comprehensive example demonstrating Domma's full stack</div>
+        <div class="hero-title">Contact Management</div>
+        <div class="hero-subtitle">A full DommaComponent — Shadow DOM, CRUD, storage, and search</div>
     </div>
 </div>
 
 <div class="container">
-    <!-- hero with download links -->
+
+    <!-- Inner hero with download links -->
     <div class="hero hero-center bg-ambient-rotate-spotlight">
         <div class="hero-content">
             <div class="hero-title">Interactive Contact Manager</div>
             <div class="hero-subtitle">
-                A complete contact management system showcasing Models, Tables, Forms, Storage, and UI Components
-                working together seamlessly.
+                A complete contact management system built as a <code>&lt;domma-contacts&gt;</code> web
+                component. Drop it anywhere — storage, search, groups, favourites, and a rich editor
+                overlay are all encapsulated inside the Shadow DOM.
             </div>
             <div class="hero-actions">
-                <a href="index.html" download="contacts-example.html" class="btn btn-primary">
+                <a href="component.js" download="domma-contacts.js" class="btn btn-primary">
                     <span data-icon="download" data-icon-size="18"></span>
-                    Download HTML
+                    Download Component
                 </a>
-                <a href="index.js" download="contacts-example.js" class="btn btn-primary">
+                <a href="template.html" download="domma-contacts-template.html" class="btn btn-primary">
                     <span data-icon="download" data-icon-size="18"></span>
-                    Download JavaScript
+                    Download Template
                 </a>
             </div>
-            <p class="hero-note">Both files are required for the example to work</p>
+            <p class="hero-note">
+                Both files are required. Drop in
+                <code>&lt;domma-contacts&gt;&lt;/domma-contacts&gt;</code> anywhere.
+            </p>
         </div>
     </div>
 
-    <section class="py-8">
-        <!-- Stats Dashboard -->
-        <div class="stats-grid">
-            <div class="stats-card">
-                <div class="stats-number" id="total-contacts">0</div>
-                <div class="stats-label">Total Contacts</div>
+    <!-- The component — replaces all the previous manual markup -->
+    <domma-contacts></domma-contacts>
+
+    <!-- Features section -->
+    <div class="mt-8">
+        <h2 class="text-2xl font-semibold mb-4">Features Demonstrated</h2>
+        <div class="grid grid-cols-2 gap-6">
+
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="font-semibold mb-2">
+                        <span data-icon="component" data-icon-size="20"></span>
+                        DommaComponent / Shadow DOM
+                    </h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sm">
+                        <li>Registered via <code>Domma.component()</code></li>
+                        <li>Scoped CSS — zero leakage to host page</li>
+                        <li>Theme CSS variables flow in through the shadow boundary</li>
+                        <li>Portable: works with any Domma page</li>
+                    </ul>
+                </div>
             </div>
-            <div class="stats-card">
-                <div class="stats-number" id="total-groups">0</div>
-                <div class="stats-label">Groups</div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="font-semibold mb-2">
+                        <span data-icon="database" data-icon-size="20"></span>
+                        Storage &amp; Data
+                    </h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sm">
+                        <li><code>S.get() / S.set()</code> — auto JSON serialisation</li>
+                        <li>14-field contact model (name, DOB, social, groups…)</li>
+                        <li>Contacts and groups persist across page refreshes</li>
+                        <li><code>D().diff()</code> — live age from date of birth</li>
+                    </ul>
+                </div>
             </div>
-            <div class="stats-card">
-                <div class="stats-number" id="selected-count">0</div>
-                <div class="stats-label">Selected</div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="font-semibold mb-2">
+                        <span data-icon="search" data-icon-size="20"></span>
+                        Search &amp; Filtering
+                    </h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sm">
+                        <li><code>_.debounce()</code> — 250 ms debounced search</li>
+                        <li><code>_.filter()</code> — by query, group, and favourites</li>
+                        <li>Group dropdown auto-updates from managed groups</li>
+                        <li>Favourites toggle with star animation</li>
+                    </ul>
+                </div>
             </div>
-            <div class="stats-card">
-                <div class="stats-number" id="storage-size">0 KB</div>
-                <div class="stats-label">Storage Used</div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="font-semibold mb-2">
+                        <span data-icon="layout" data-icon-size="20"></span>
+                        UI Components
+                    </h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sm">
+                        <li><code>E.toast()</code> — success, warning notifications</li>
+                        <li><code>E.confirm()</code> — delete confirmations</li>
+                        <li><code>E.prompt()</code> — group name input</li>
+                        <li><code>I.scan(this.root)</code> — icons inside shadow root</li>
+                    </ul>
+                </div>
             </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="font-semibold mb-2">
+                        <span data-icon="users" data-icon-size="20"></span>
+                        Card Grid &amp; Avatars
+                    </h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sm">
+                        <li>Contact cards with colour-coded initial avatars</li>
+                        <li>Deterministic colour from contact ID hash</li>
+                        <li><code>_.render()</code> Mustache template per card</li>
+                        <li><code>_.escape()</code> + DOMPurify — two-layer XSS defence</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="font-semibold mb-2">
+                        <span data-icon="clock" data-icon-size="20"></span>
+                        Dates &amp; Groups
+                    </h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sm">
+                        <li><code>D().fromNow()</code> — relative created timestamps</li>
+                        <li><code>D().format()</code> — DOB display</li>
+                        <li>Groups CRUD: add / rename / delete via prompts</li>
+                        <li>Rename propagates to all contacts automatically</li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
+    </div>
 
-        <!-- Management Accordion -->
-        <div id="management-accordion" class="accordion mb-6">
-            <!-- Groups Management -->
-            <div class="accordion-item">
-                <div class="accordion-header">
-                    <span>Manage Groups (<span id="groups-count">0</span>)</span>
-                    <span class="accordion-icon">&#9660;</span>
-                </div>
-                <div class="accordion-body">
-                    <div class="accordion-content">
-                        <div class="form-group">
-                            <label for="group-name-input">Add New Group</label>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <input type="text" id="group-name-input" class="form-input"
-                                       placeholder="Enter group name">
-                                <button id="add-group-btn" class="btn btn-primary">
-                                    <span data-icon="tag" data-icon-size="18"></span>
-                                    Add Group
-                                </button>
-                            </div>
-                        </div>
-
-                        <div style="margin-top: 1.5rem;">
-                            <h4>Existing Groups</h4>
-                            <div id="groups-list" style="margin-top: 1rem;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Add/Edit Contact Form -->
-            <div class="accordion-item active">
-                <div class="accordion-header">
-                    <span id="form-title">Add Contact</span>
-                    <span class="accordion-icon">&#9660;</span>
-                </div>
-                <div class="accordion-body">
-                    <div class="accordion-content">
-                <form id="contact-form">
-                    <input type="hidden" id="contact-id">
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="form-group">
-                            <label for="contact-name">
-                                Full Name <span class="text-danger">*</span>
-                            </label>
-                            <input type="text"
-                                   id="contact-name"
-                                   class="form-input"
-                                   placeholder="John Doe"
-                                   data-tooltip="Enter first and last name"
-                                   required>
-                            <small class="form-text text-danger" id="name-error"></small>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="contact-email">
-                                Email <span class="text-danger">*</span>
-                            </label>
-                            <input type="email"
-                                   id="contact-email"
-                                   class="form-input"
-                                   placeholder="john@example.com"
-                                   data-tooltip="Valid email address required"
-                                   required>
-                            <small class="form-text text-danger" id="email-error"></small>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="contact-phone">Phone</label>
-                            <input type="tel"
-                                   id="contact-phone"
-                                   class="form-input"
-                                   placeholder="+44 783 544 9292"
-                                   data-tooltip="Optional phone number">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="contact-groups-btn">Groups</label>
-                            <button type="button" id="contact-groups-btn" class="btn btn-outline"
-                                    style="width: 100%; text-align: left;">
-                                <span id="contact-groups-display">Select groups...</span>
-                            </button>
-                            <input type="hidden" id="contact-groups" value="">
-                        </div>
-
-                        <div class="form-group col-span-full">
-                            <label for="contact-notes">Notes</label>
-                            <textarea id="contact-notes"
-                                      class="form-textarea"
-                                      rows="3"
-                                      placeholder="Additional notes about this contact..."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="mt-4" style="display: flex; gap: 1rem; justify-content: flex-end;">
-                        <button type="button" class="btn btn-secondary" id="cancel-btn">
-                            <span data-icon="x" data-icon-size="18"></span>
-                            Cancel
-                        </button>
-                        <button type="button" class="btn btn-primary" id="save-contact-btn">
-                            <span data-icon="save" data-icon-size="18"></span>
-                            <span id="save-btn-text">Save Contact</span>
-                        </button>
-                    </div>
-                </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Contacts Table -->
-        <div class="table-container">
-            <div id="contacts-table-container"></div>
-        </div>
-
-        <!-- Features Section -->
-        <div class="mt-8">
-            <h2 class="text-2xl font-semibold mb-4">Features Demonstrated</h2>
-            <div class="grid grid-cols-2 gap-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="font-semibold mb-2">
-                            <span data-icon="database" data-icon-size="20"></span>
-                            Data & Models
-                        </h4>
-                        <ul class="list-disc pl-5 space-y-1 text-sm">
-                            <li>Reactive models with validation</li>
-                            <li>Auto-persistence to localStorage</li>
-                            <li>Two-way data binding with forms</li>
-                            <li>Model change listeners</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="font-semibold mb-2">
-                            <span data-icon="layout" data-icon-size="20"></span>
-                            UI Components
-                        </h4>
-                        <ul class="list-disc pl-5 space-y-1 text-sm">
-                            <li>Domma Table with sorting & pagination</li>
-                            <li>Modal dialogs with forms</li>
-                            <li>Pillbox for multi-select groups</li>
-                            <li>Loaders, toasts, and tooltips</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="font-semibold mb-2">
-                            <span data-icon="check-square" data-icon-size="20"></span>
-                            Forms & Validation
-                        </h4>
-                        <ul class="list-disc pl-5 space-y-1 text-sm">
-                            <li>Real-time validation with feedback</li>
-                            <li>Form groups with error states</li>
-                            <li>Dynamic group creation via Pillbox</li>
-                            <li>Email and phone validation</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="font-semibold mb-2">
-                            <span data-icon="settings" data-icon-size="20"></span>
-                            Config Engine
-                        </h4>
-                        <ul class="list-disc pl-5 space-y-1 text-sm">
-                            <li>Declarative component setup</li>
-                            <li>Event binding with $.setup()</li>
-                            <li>Model integration via config</li>
-                            <li>Centralized configuration</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 </div>
 
-<!-- DOMPurify for XSS protection -->
+<!-- DOMPurify for XSS protection (required by component) -->
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
 
 <script src="../../dist/domma.min.js"></script>
-<script src="../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
-<script src="index.js"></script>
+<script src="component.js"></script>
 
 </body>
 </html>

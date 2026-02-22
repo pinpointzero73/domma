@@ -1782,7 +1782,7 @@ code {
 }
 
 .navbar-dark .navbar-link {
-    color: var(--dm-text-disabled);
+    color: var(--dm-gray-400, #adb5bd);
 }
 
 .navbar-dark .navbar-link:hover {
@@ -2079,7 +2079,7 @@ code {
 }
 
 .navbar-dark .navbar-dropdown-item {
-    color: var(--dm-text-disabled);
+    color: var(--dm-gray-400, #adb5bd);
 }
 
 .navbar-dark .navbar-dropdown-item:hover {

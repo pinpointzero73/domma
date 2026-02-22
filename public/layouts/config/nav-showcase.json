@@ -478,6 +478,11 @@
           "text": "Markdown Editor",
           "url": "examples/markdown/index.html",
           "section": "markdown"
+        },
+        {
+          "text": "Contacts",
+          "url": "examples/contacts/index.html",
+          "section": "contacts"
         }
       ]
     },
