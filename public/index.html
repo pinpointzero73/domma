@@ -922,8 +922,27 @@
     // COMMENTED OUT: Carousel animation
     // animateElements('.splash-carousel', 150);            // Carousel (single element)
     animateElements('.cta-group', 200);                  // CTA buttons
-    animateElements('.miniapps-grid .col', 120);        // MiniApps cards
-    animateElements('.example-tile', 80);               // Example tiles
+    // Scroll-reveal for MiniApps cards
+    if (MotionControl.isEnabled()) {
+      Domma.effects.reveal('.miniapps-grid .card', {
+        animation: 'slide-up',
+        duration: 500,
+        stagger: 100,
+        threshold: 0.15,
+        once: true,
+      });
+    }
+
+    // Scroll-reveal for example tiles — animates in as the section enters the viewport
+    if (MotionControl.isEnabled()) {
+      Domma.effects.reveal('.example-tile', {
+        animation: 'zoom',
+        duration: 450,
+        stagger: 60,
+        threshold: 0.15,
+        once: true,
+      });
+    }
   });
 </script>
 
