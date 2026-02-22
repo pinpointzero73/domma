@@ -309,6 +309,11 @@
           "divider": true
         },
         {
+          "text": "Ambient",
+          "url": "showcase/effects/ambient.html",
+          "section": "effects-ambient"
+        },
+        {
           "text": "Animations",
           "url": "showcase/effects/animations.html",
           "section": "effects-animations"

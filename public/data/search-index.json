@@ -329,6 +329,13 @@
     "keywords": ["tree", "hierarchy", "nested", "expand", "collapse", "E.treeview"]
   },
   {
+    "title": "Ambient Effects",
+    "description": "Subtle CSS background animations — aurora, rotating glows, floating blobs, orbs, waves, and ripples",
+    "category": "Effects",
+    "url": "showcase/effects/ambient.html",
+    "keywords": ["ambient", "aurora", "background", "glow", "rotating", "blob", "wave", "ripple", "css", "animation"]
+  },
+  {
     "title": "Effects Overview",
     "description": "JavaScript animation effects — breathe, pulse, scribe, reveal, scramble, counter, ripple, shake",
     "category": "Effects",
