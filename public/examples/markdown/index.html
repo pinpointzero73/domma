@@ -18,35 +18,27 @@
 </head>
 <body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
 
-<div class="hero hero-center bg-ambient-rotate-spotlight">
+<div class="hero hero-center bg-ambient-float-blobs">
     <div class="hero-content">
         <div class="hero-title">Markdown Editor</div>
-        <div class="hero-subtitle">Live preview with real-time rendering</div>
+        <div class="hero-subtitle">A real-time markdown editor with live preview, Storage persistence, and
+            syntax helpers using Domma's Utils, Storage, and DOM manipulation.
+        </div>
+        <div class="hero-actions">
+            <a href="component.js" download="domma-markdown-editor.js" class="btn btn-primary">
+                <span data-icon="download" data-icon-size="18"></span>
+                Download Component
+            </a>
+            <a href="template.html" download="domma-markdown-editor-template.html" class="btn btn-primary">
+                <span data-icon="download" data-icon-size="18"></span>
+                Download Template
+            </a>
+        </div>
+        <p class="hero-note">Both files are required. Drop in <code>&lt;domma-markdown-editor&gt;&lt;/domma-markdown-editor&gt;</code> anywhere.</p>
     </div>
 </div>
 
 <div class="container">
-    <!-- hero -->
-    <div class="hero hero-center bg-ambient-rotate-spotlight">
-        <div class="hero-content">
-            <div class="hero-title">Markdown Editor Example</div>
-            <div class="hero-subtitle">A real-time markdown editor with live preview, Storage persistence, and
-                syntax helpers using Domma's Utils, Storage, and DOM manipulation.
-            </div>
-            <div class="hero-actions">
-                <a href="component.js" download="domma-markdown-editor.js" class="btn btn-primary">
-                    <span data-icon="download" data-icon-size="18"></span>
-                    Download Component
-                </a>
-                <a href="template.html" download="domma-markdown-editor-template.html" class="btn btn-primary">
-                    <span data-icon="download" data-icon-size="18"></span>
-                    Download Template
-                </a>
-            </div>
-            <p class="hero-note">Both files are required. Drop in <code>&lt;domma-markdown-editor&gt;&lt;/domma-markdown-editor&gt;</code> anywhere.</p>
-        </div>
-    </div>
-
     <!-- The component — replaces all the manual markup -->
     <domma-markdown-editor></domma-markdown-editor>
 </div>

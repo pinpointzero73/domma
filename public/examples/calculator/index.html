@@ -17,37 +17,29 @@
 </head>
 <body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
 
-<div class="hero hero-center bg-ambient-rotate-spotlight">
+<div class="hero hero-center bg-ambient-float-blobs">
     <div class="hero-content">
         <div class="hero-title">Calculator</div>
-        <div class="hero-subtitle">A functional calculator demonstrating Domma's DOM manipulation and event handling</div>
+        <div class="hero-subtitle">
+            A fully functional calculator built as a <strong>DommaComponent</strong> — a reusable
+            <code>&lt;domma-calculator&gt;</code> Web Component with Shadow DOM, reactive data, and
+            keyboard support.
+        </div>
+        <div class="hero-actions">
+            <a href="component.js" download="domma-calculator.js" class="btn btn-primary">
+                <span data-icon="download" data-icon-size="18"></span>
+                Download Component
+            </a>
+            <a href="template.html" download="domma-calculator-template.html" class="btn btn-primary">
+                <span data-icon="download" data-icon-size="18"></span>
+                Download Template
+            </a>
+        </div>
+        <p class="hero-note">Both files are required. Drop in <code>&lt;domma-calculator&gt;&lt;/domma-calculator&gt;</code> anywhere.</p>
     </div>
 </div>
 
 <div class="calculator-container">
-    <!-- Download / info hero -->
-    <div class="hero hero-center bg-ambient-rotate-spotlight">
-        <div class="hero-content">
-            <div class="hero-title">Interactive Calculator Example</div>
-            <div class="hero-subtitle">
-                A fully functional calculator built as a <strong>DommaComponent</strong> — a reusable
-                <code>&lt;domma-calculator&gt;</code> Web Component with Shadow DOM, reactive data, and
-                keyboard support.
-            </div>
-            <div class="hero-actions">
-                <a href="component.js" download="domma-calculator.js" class="btn btn-primary">
-                    <span data-icon="download" data-icon-size="18"></span>
-                    Download Component
-                </a>
-                <a href="template.html" download="domma-calculator-template.html" class="btn btn-primary">
-                    <span data-icon="download" data-icon-size="18"></span>
-                    Download Template
-                </a>
-            </div>
-            <p class="hero-note">Both files are required. Drop in <code>&lt;domma-calculator&gt;&lt;/domma-calculator&gt;</code> anywhere.</p>
-        </div>
-    </div>
-
     <!-- The component — replaces all the manual markup -->
     <domma-calculator></domma-calculator>
 </div>

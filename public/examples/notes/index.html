@@ -18,36 +18,28 @@
 </head>
 <body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
 
-<div class="hero hero-center bg-ambient-rotate-spotlight">
+<div class="hero hero-center bg-ambient-float-blobs">
     <div class="hero-content">
         <div class="hero-title">Notes</div>
-        <div class="hero-subtitle">Rich note-taking with categories and search</div>
+        <div class="hero-subtitle">A feature-rich note manager demonstrating Domma's storage, DOM manipulation,
+            rich text handling, and UI components. Create notes, organise with categories, search content, and
+            persist data across sessions.
+        </div>
+        <div class="hero-actions">
+            <a href="component.js" download="domma-notes.js" class="btn btn-primary">
+                <span data-icon="download" data-icon-size="18"></span>
+                Download Component
+            </a>
+            <a href="template.html" download="domma-notes-template.html" class="btn btn-primary">
+                <span data-icon="download" data-icon-size="18"></span>
+                Download Template
+            </a>
+        </div>
+        <p class="hero-note">Both files are required. Drop in <code>&lt;domma-notes&gt;&lt;/domma-notes&gt;</code> anywhere.</p>
     </div>
 </div>
 
 <div class="container">
-    <!-- hero -->
-    <div class="hero hero-center bg-ambient-rotate-spotlight">
-        <div class="hero-content">
-            <div class="hero-title">Interactive Note Taking App</div>
-            <div class="hero-subtitle">A feature-rich note manager demonstrating Domma's storage, DOM manipulation,
-                rich text handling, and UI components. Create notes, organize with categories, search content, and
-                persist data across sessions.
-            </div>
-            <div class="hero-actions">
-                <a href="component.js" download="domma-notes.js" class="btn btn-primary">
-                    <span data-icon="download" data-icon-size="18"></span>
-                    Download Component
-                </a>
-                <a href="template.html" download="domma-notes-template.html" class="btn btn-primary">
-                    <span data-icon="download" data-icon-size="18"></span>
-                    Download Template
-                </a>
-            </div>
-            <p class="hero-note">Both files are required. Drop in <code>&lt;domma-notes&gt;&lt;/domma-notes&gt;</code> anywhere.</p>
-        </div>
-    </div>
-
     <!-- The component — replaces all the manual markup -->
     <domma-notes></domma-notes>
 </div>

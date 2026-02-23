@@ -17,35 +17,27 @@
 </head>
 <body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
 
-<div class="hero hero-center bg-ambient-rotate-spotlight">
+<div class="hero hero-center bg-ambient-float-blobs">
     <div class="hero-content">
         <div class="hero-title">To-Do List</div>
-        <div class="hero-subtitle">A feature-rich task manager showcasing Domma's capabilities</div>
+        <div class="hero-subtitle">A feature-rich task manager demonstrating Domma's DOM manipulation, storage,
+            models, and UI components. Add tasks, set priorities, track status, and persist data across sessions.
+        </div>
+        <div class="hero-actions">
+            <a href="component.js" download="domma-todo.js" class="btn btn-primary">
+                <span data-icon="download" data-icon-size="18"></span>
+                Download Component
+            </a>
+            <a href="template.html" download="domma-todo-template.html" class="btn btn-primary">
+                <span data-icon="download" data-icon-size="18"></span>
+                Download Template
+            </a>
+        </div>
+        <p class="hero-note">Both files are required. Drop in <code>&lt;domma-todo&gt;&lt;/domma-todo&gt;</code> anywhere.</p>
     </div>
 </div>
 
 <div class="todo-container">
-    <!-- hero with download links -->
-    <div class="hero hero-center bg-ambient-rotate-spotlight">
-        <div class="hero-content">
-            <div class="hero-title">Interactive To-Do List Example</div>
-            <div class="hero-subtitle">A feature-rich task manager demonstrating Domma's DOM manipulation, storage,
-                models, and UI components. Add tasks, set priorities, track status, and persist data across sessions.
-            </div>
-            <div class="hero-actions">
-                <a href="component.js" download="domma-todo.js" class="btn btn-primary">
-                    <span data-icon="download" data-icon-size="18"></span>
-                    Download Component
-                </a>
-                <a href="template.html" download="domma-todo-template.html" class="btn btn-primary">
-                    <span data-icon="download" data-icon-size="18"></span>
-                    Download Template
-                </a>
-            </div>
-            <p class="hero-note">Both files are required. Drop in <code>&lt;domma-todo&gt;&lt;/domma-todo&gt;</code> anywhere.</p>
-        </div>
-    </div>
-
     <!-- The component — replaces all the manual markup -->
     <domma-todo></domma-todo>
 </div>

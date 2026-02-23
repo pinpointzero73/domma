@@ -17,40 +17,32 @@
 </head>
 <body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
 
-<div class="hero hero-center bg-ambient-rotate-spotlight">
+<div class="hero hero-center bg-ambient-float-blobs">
     <div class="hero-content">
         <div class="hero-title">Contact Management</div>
-        <div class="hero-subtitle">A full DommaComponent — Shadow DOM, CRUD, storage, and search</div>
+        <div class="hero-subtitle">
+            A complete contact management system built as a <code>&lt;domma-contacts&gt;</code> web
+            component. Drop it anywhere — storage, search, groups, favourites, and a rich editor
+            overlay are all encapsulated inside the Shadow DOM.
+        </div>
+        <div class="hero-actions">
+            <a href="component.js" download="domma-contacts.js" class="btn btn-primary">
+                <span data-icon="download" data-icon-size="18"></span>
+                Download Component
+            </a>
+            <a href="template.html" download="domma-contacts-template.html" class="btn btn-primary">
+                <span data-icon="download" data-icon-size="18"></span>
+                Download Template
+            </a>
+        </div>
+        <p class="hero-note">
+            Both files are required. Drop in
+            <code>&lt;domma-contacts&gt;&lt;/domma-contacts&gt;</code> anywhere.
+        </p>
     </div>
 </div>
 
 <div class="container">
-
-    <!-- Inner hero with download links -->
-    <div class="hero hero-center bg-ambient-rotate-spotlight">
-        <div class="hero-content">
-            <div class="hero-title">Interactive Contact Manager</div>
-            <div class="hero-subtitle">
-                A complete contact management system built as a <code>&lt;domma-contacts&gt;</code> web
-                component. Drop it anywhere — storage, search, groups, favourites, and a rich editor
-                overlay are all encapsulated inside the Shadow DOM.
-            </div>
-            <div class="hero-actions">
-                <a href="component.js" download="domma-contacts.js" class="btn btn-primary">
-                    <span data-icon="download" data-icon-size="18"></span>
-                    Download Component
-                </a>
-                <a href="template.html" download="domma-contacts-template.html" class="btn btn-primary">
-                    <span data-icon="download" data-icon-size="18"></span>
-                    Download Template
-                </a>
-            </div>
-            <p class="hero-note">
-                Both files are required. Drop in
-                <code>&lt;domma-contacts&gt;&lt;/domma-contacts&gt;</code> anywhere.
-            </p>
-        </div>
-    </div>
 
     <!-- The component — replaces all the previous manual markup -->
     <domma-contacts></domma-contacts>
