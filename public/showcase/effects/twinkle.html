@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twinkle Effect - Domma Showcase</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .effect-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 4px;
+            background: var(--dm-primary-t10, rgba(13, 110, 253, 0.1));
+            text-decoration: none;
+            color: var(--dm-primary);
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--dm-primary-t20, rgba(13, 110, 253, 0.2));
+            transform: translateY(-2px);
+        }
+
+        .star-container {
+            position: relative;
+            min-height: 220px;
+            background: #0a0a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .star-container-label {
+            position: relative;
+            z-index: 10;
+            color: rgba(255, 240, 200, 0.85);
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-badge.running {
+            background: rgba(34, 197, 94, 0.15);
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-badge.stopped {
+            background: rgba(107, 114, 128, 0.15);
+            color: #6b7280;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+
+        .status-badge.paused {
+            background: rgba(234, 179, 8, 0.15);
+            color: #ca8a04;
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .status-dot.pulse-dot {
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.6); }
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .slider-row label {
+            min-width: 120px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .slider-row input[type="range"] {
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .slider-row span {
+            min-width: 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--dm-primary);
+        }
+
+        .options-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .options-table th,
+        .options-table td {
+            padding: 0.6rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--dm-border-color, rgba(0,0,0,0.1));
+        }
+
+        .options-table th {
+            font-weight: 600;
+            background: var(--dm-surface-alt, rgba(0,0,0,0.03));
+        }
+
+        .options-table code {
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="effects">
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Twinkle Effect</div>
+        <div class="hero-subtitle">Canvas-based twinkling stars animation. Works as a full-page ambient overlay or scoped to any container.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <!-- See Also -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+        <h3 class="text-lg font-semibold mb-2">
+            <span data-icon="arrow-left" data-icon-size="20"></span>
+            See Also
+        </h3>
+        <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="breathe.html" class="nav-link">Breathe</a>
+        <a href="pulse.html" class="nav-link">Pulse</a>
+        <a href="scribe.html" class="nav-link">Scribe</a>
+        <a href="reveal.html" class="nav-link">Reveal</a>
+        <a href="scramble.html" class="nav-link">Scramble</a>
+        <a href="counter.html" class="nav-link">Counter</a>
+        <a href="ripple.html" class="nav-link">Ripple</a>
+        <a href="shake.html" class="nav-link">Shake</a>
+    </div>
+
+    <!-- Motion Preference Notice -->
+    <div id="motion-notice" class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded" style="display:none;">
+        <div class="flex items-start gap-3">
+            <span style="font-size: 20px; flex-shrink: 0;">&#x2139;&#xFE0F;</span>
+            <div>
+                <h4 class="font-semibold mb-1">Motion Preference Detected</h4>
+                <p>Your system has <code>prefers-reduced-motion</code> enabled. This demo page overrides that setting to demonstrate effects. In production, use <code>respectMotionPreference: true</code> (the default) to honour user preferences.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overview -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Domma.effects.twinkle()</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Creates an ambient canvas-based starfield animation. Pass <code>null</code> (or omit the selector) for a
+                full-page fixed overlay, or provide a selector to scope stars inside a specific container.
+                Stars oscillate in brightness using a sinusoidal function and are drawn as 4-pointed shapes with a
+                centre glow.
+            </p>
+
+            <pre class="code-block language-javascript">
+// Full-page overlay
+const stars = Domma.effects.twinkle(null);
+
+// Container-scoped stars
+const stars = Domma.effects.twinkle('#hero-section', {
+  count: 80,
+  colour: 'rgba(200, 220, 255, 0.9)',
+  shape: 'circle'
+});
+
+// Control methods
+stars.pause();
+stars.resume();
+stars.stop();
+stars.restart();
+stars.destroy();
+</pre>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Options</h3>
+            <div class="table-responsive">
+                <table class="options-table">
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>count</code></td>
+                            <td><code>number</code></td>
+                            <td><code>100</code></td>
+                            <td>Number of stars to render</td>
+                        </tr>
+                        <tr>
+                            <td><code>minSize</code></td>
+                            <td><code>number</code></td>
+                            <td><code>1</code></td>
+                            <td>Minimum star radius in pixels</td>
+                        </tr>
+                        <tr>
+                            <td><code>maxSize</code></td>
+                            <td><code>number</code></td>
+                            <td><code>3</code></td>
+                            <td>Maximum star radius in pixels</td>
+                        </tr>
+                        <tr>
+                            <td><code>twinkleSpeed</code></td>
+                            <td><code>number</code></td>
+                            <td><code>0.003</code></td>
+                            <td>Base oscillation speed per frame (higher = faster twinkling)</td>
+                        </tr>
+                        <tr>
+                            <td><code>colour</code></td>
+                            <td><code>string</code></td>
+                            <td><code>'rgba(255, 240, 200, 1)'</code></td>
+                            <td>Star colour (any CSS colour value)</td>
+                        </tr>
+                        <tr>
+                            <td><code>zIndex</code></td>
+                            <td><code>number</code></td>
+                            <td><code>1</code></td>
+                            <td>Canvas stacking order</td>
+                        </tr>
+                        <tr>
+                            <td><code>shape</code></td>
+                            <td><code>'star' | 'circle'</code></td>
+                            <td><code>'star'</code></td>
+                            <td><code>'star'</code> draws a 4-pointed shape with glow; <code>'circle'</code> draws a soft dot</td>
+                        </tr>
+                        <tr>
+                            <td><code>respectMotionPreference</code></td>
+                            <td><code>boolean</code></td>
+                            <td><code>true</code></td>
+                            <td>Honour <code>prefers-reduced-motion</code> OS setting</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Control Methods</h3>
+            <pre class="code-block language-javascript">
+const stars = Domma.effects.twinkle('#section');
+
+stars.pause();      // Pause rendering (stars freeze in place)
+stars.resume();     // Resume from where it paused
+stars.stop();       // Stop and cancel animation frame
+stars.restart();    // Recreate stars and restart
+stars.destroy();    // Stop + remove canvas from DOM
+stars.isRunning();  // true when animating (not paused)
+stars.isPaused();   // true when paused mid-animation
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 1: Container-scoped -->
+    <section class="card mb-6" data-section="container">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Container-Scoped Stars</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Stars rendered inside a dark section element. The canvas is sized to the container and uses <code>position: absolute</code> so content above it remains interactive.</p>
+
+            <div class="star-container" id="star-container-1">
+                <div class="star-container-label">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">&#x2726;</div>
+                    <div>Stars are rendered in this container</div>
+                    <div style="font-size: 0.85rem; opacity: 0.7; margin-top: 0.3rem;">Click Start to initialise</div>
+                </div>
+            </div>
+
+            <div class="effect-controls mt-4">
+                <span id="status-1" class="status-badge stopped"><span class="status-dot"></span><span class="status-text">Stopped</span></span>
+                <button class="btn btn-primary" id="start-1">Start</button>
+                <button class="btn btn-secondary" id="pause-1">Pause</button>
+                <button class="btn btn-secondary" id="resume-1">Resume</button>
+                <button class="btn btn-secondary" id="restart-1">Restart</button>
+                <button class="btn btn-danger" id="destroy-1">Destroy</button>
+            </div>
+
+            <pre class="code-block language-javascript mt-4">
+const stars = Domma.effects.twinkle('#star-container', {
+  count: 80,
+  minSize: 1,
+  maxSize: 3,
+  colour: 'rgba(255, 240, 200, 0.9)',
+  respectMotionPreference: false
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 2: Full-page overlay -->
+    <section class="card mb-6" data-section="fullpage">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Full-Page Overlay</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Pass <code>null</code> as the selector to create a <code>position: fixed</code> canvas overlay that
+                covers the entire viewport. Stars sit behind page content via <code>pointer-events: none</code>.
+                This is the mode used on the Domma splash page.
+            </p>
+
+            <div class="effect-controls">
+                <span id="status-2" class="status-badge stopped"><span class="status-dot"></span><span class="status-text">Stopped</span></span>
+                <button class="btn btn-primary" id="start-2">Start Full-Page</button>
+                <button class="btn btn-secondary" id="pause-2">Pause</button>
+                <button class="btn btn-secondary" id="resume-2">Resume</button>
+                <button class="btn btn-danger" id="destroy-2">Destroy</button>
+            </div>
+
+            <pre class="code-block language-javascript mt-4">
+// null selector creates a full-page fixed canvas
+const stars = Domma.effects.twinkle(null, {
+  count: 120,
+  colour: 'rgba(255, 240, 200, 0.85)',
+  zIndex: 0   // behind all page content
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 3: Customisation sliders -->
+    <section class="card mb-6" data-section="customisation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Customisation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Adjust options and click Apply to see the changes.</p>
+
+            <div class="slider-row">
+                <label>Count</label>
+                <input type="range" id="opt-count" min="20" max="300" value="80">
+                <span id="val-count">80</span>
+            </div>
+            <div class="slider-row">
+                <label>Min Size</label>
+                <input type="range" id="opt-min-size" min="0.5" max="3" step="0.5" value="1">
+                <span id="val-min-size">1</span>
+            </div>
+            <div class="slider-row">
+                <label>Max Size</label>
+                <input type="range" id="opt-max-size" min="1" max="8" step="0.5" value="3">
+                <span id="val-max-size">3</span>
+            </div>
+            <div class="slider-row">
+                <label>Twinkle Speed</label>
+                <input type="range" id="opt-speed" min="0.001" max="0.02" step="0.001" value="0.003">
+                <span id="val-speed">0.003</span>
+            </div>
+
+            <div class="mt-4 mb-2">
+                <strong style="font-size: 0.9rem;">Colour preset:</strong>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                    <button class="btn btn-sm colour-btn active" data-colour="rgba(255, 240, 200, 1)">Warm White</button>
+                    <button class="btn btn-sm colour-btn" data-colour="rgba(180, 210, 255, 1)">Cool Blue</button>
+                    <button class="btn btn-sm colour-btn" data-colour="rgba(200, 255, 200, 1)">Soft Green</button>
+                    <button class="btn btn-sm colour-btn" data-colour="rgba(255, 180, 200, 1)">Rose</button>
+                    <button class="btn btn-sm colour-btn" data-colour="rgba(255, 200, 120, 1)">Amber</button>
+                </div>
+            </div>
+
+            <div class="star-container mt-4" id="star-container-3" style="min-height: 200px;">
+                <div class="star-container-label">
+                    <div style="font-size: 0.9rem; opacity: 0.8;">Adjust sliders above and click Apply</div>
+                </div>
+            </div>
+
+            <div class="effect-controls mt-3">
+                <button class="btn btn-primary" id="apply-3">Apply Options</button>
+                <button class="btn btn-danger" id="destroy-3">Destroy</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo 4: Shape variants -->
+    <section class="card mb-6" data-section="shapes">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Shape Variants</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The <code>shape</code> option controls how each star is drawn. <code>'star'</code> renders a 4-pointed shape with a centre glow. <code>'circle'</code> renders a soft filled dot.</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div>
+                    <p class="text-center mb-2"><strong>shape: 'star'</strong> (default)</p>
+                    <div class="star-container" id="shape-star" style="min-height: 160px;">
+                        <div class="star-container-label" style="font-size: 0.85rem; opacity: 0.7;">4-pointed stars with glow</div>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-center mb-2"><strong>shape: 'circle'</strong></p>
+                    <div class="star-container" id="shape-circle" style="min-height: 160px;">
+                        <div class="star-container-label" style="font-size: 0.85rem; opacity: 0.7;">Soft circular dots</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="effect-controls mt-3">
+                <button class="btn btn-primary" id="start-shapes">Start Both</button>
+                <button class="btn btn-danger" id="destroy-shapes">Destroy Both</button>
+            </div>
+
+            <pre class="code-block language-javascript mt-4">
+// 4-pointed star (default)
+Domma.effects.twinkle('#shape-star', { shape: 'star', count: 60 });
+
+// Circular dot
+Domma.effects.twinkle('#shape-circle', { shape: 'circle', count: 60 });
+</pre>
+        </div>
+    </section>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+    // Show notice if user has reduced motion enabled
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      $('#motion-notice').show();
+    }
+
+    // ── Status badge helper ───────────────────────────────────────────────
+
+    function setStatus(badgeEl, state) {
+      if (!badgeEl) return;
+      badgeEl.className = 'status-badge ' + state;
+      const dot = badgeEl.querySelector('.status-dot');
+      const text = badgeEl.querySelector('.status-text');
+      const labels = { running: 'Running', paused: 'Paused', stopped: 'Stopped' };
+      if (dot) {
+        dot.className = 'status-dot' + (state === 'running' ? ' pulse-dot' : '');
+      }
+      if (text) {
+        text.textContent = labels[state] || state;
+      }
+    }
+
+    // ── Demo 1: Container-scoped ──────────────────────────────────────────
+
+    let ctrl1 = null;
+    const badge1 = document.getElementById('status-1');
+
+    $('#start-1').on('click', () => {
+      if (ctrl1) ctrl1.destroy();
+      ctrl1 = Domma.effects.twinkle('#star-container-1', {
+        count: 80,
+        minSize: 1,
+        maxSize: 3,
+        colour: 'rgba(255, 240, 200, 0.9)',
+        respectMotionPreference: false
+      });
+      setStatus(badge1, 'running');
+    });
+
+    $('#pause-1').on('click', () => {
+      if (ctrl1) { ctrl1.pause(); setStatus(badge1, 'paused'); }
+    });
+
+    $('#resume-1').on('click', () => {
+      if (ctrl1) { ctrl1.resume(); setStatus(badge1, 'running'); }
+    });
+
+    $('#restart-1').on('click', () => {
+      if (ctrl1) { ctrl1.restart(); setStatus(badge1, 'running'); }
+    });
+
+    $('#destroy-1').on('click', () => {
+      if (ctrl1) { ctrl1.destroy(); ctrl1 = null; setStatus(badge1, 'stopped'); }
+    });
+
+    // ── Demo 2: Full-page overlay ─────────────────────────────────────────
+
+    let ctrl2 = null;
+    const badge2 = document.getElementById('status-2');
+
+    $('#start-2').on('click', () => {
+      if (ctrl2) ctrl2.destroy();
+      ctrl2 = Domma.effects.twinkle(null, {
+        count: 120,
+        colour: 'rgba(255, 240, 200, 0.85)',
+        zIndex: 0,
+        respectMotionPreference: false
+      });
+      setStatus(badge2, 'running');
+    });
+
+    $('#pause-2').on('click', () => {
+      if (ctrl2) { ctrl2.pause(); setStatus(badge2, 'paused'); }
+    });
+
+    $('#resume-2').on('click', () => {
+      if (ctrl2) { ctrl2.resume(); setStatus(badge2, 'running'); }
+    });
+
+    $('#destroy-2').on('click', () => {
+      if (ctrl2) { ctrl2.destroy(); ctrl2 = null; setStatus(badge2, 'stopped'); }
+    });
+
+    // ── Demo 3: Customisation ─────────────────────────────────────────────
+
+    let ctrl3 = null;
+    let selectedColour = 'rgba(255, 240, 200, 1)';
+
+    ['count', 'min-size', 'max-size', 'speed'].forEach(id => {
+      const el = document.getElementById('opt-' + id);
+      const val = document.getElementById('val-' + id);
+      if (el && val) {
+        el.addEventListener('input', () => { val.textContent = el.value; });
+      }
+    });
+
+    document.querySelectorAll('.colour-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedColour = btn.getAttribute('data-colour');
+        document.querySelectorAll('.colour-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    $('#apply-3').on('click', () => {
+      if (ctrl3) ctrl3.destroy();
+      ctrl3 = Domma.effects.twinkle('#star-container-3', {
+        count: parseInt(document.getElementById('opt-count').value, 10),
+        minSize: parseFloat(document.getElementById('opt-min-size').value),
+        maxSize: parseFloat(document.getElementById('opt-max-size').value),
+        twinkleSpeed: parseFloat(document.getElementById('opt-speed').value),
+        colour: selectedColour,
+        respectMotionPreference: false
+      });
+    });
+
+    $('#destroy-3').on('click', () => {
+      if (ctrl3) { ctrl3.destroy(); ctrl3 = null; }
+    });
+
+    // ── Demo 4: Shape variants ────────────────────────────────────────────
+
+    let ctrlStar = null;
+    let ctrlCircle = null;
+
+    $('#start-shapes').on('click', () => {
+      if (ctrlStar) ctrlStar.destroy();
+      if (ctrlCircle) ctrlCircle.destroy();
+      ctrlStar = Domma.effects.twinkle('#shape-star', {
+        count: 60,
+        shape: 'star',
+        respectMotionPreference: false
+      });
+      ctrlCircle = Domma.effects.twinkle('#shape-circle', {
+        count: 60,
+        shape: 'circle',
+        respectMotionPreference: false
+      });
+    });
+
+    $('#destroy-shapes').on('click', () => {
+      if (ctrlStar) { ctrlStar.destroy(); ctrlStar = null; }
+      if (ctrlCircle) { ctrlCircle.destroy(); ctrlCircle = null; }
+    });
+
+    // Scan icons
+    Domma.icons.scan();
+  });
+</script>
+</body>
+</html>
