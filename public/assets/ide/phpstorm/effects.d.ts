@@ -141,6 +141,17 @@ export interface ShakeOptions {
     onComplete?: () => void;
 }
 
+export interface TwinkleOptions {
+    count?: number;
+    minSize?: number;
+    maxSize?: number;
+    twinkleSpeed?: number;
+    colour?: string;
+    zIndex?: number;
+    shape?: 'star' | 'circle';
+    respectMotionPreference?: boolean;
+}
+
 export interface Effects {
     /** Sinusoidal floating animation */
     breathe(selector: Selector, options?: BreatheOptions): EffectControl | null;
@@ -158,6 +169,8 @@ export interface Effects {
     ripple(selector: Selector, options?: RippleOptions): EffectControl | null;
     /** Attention/error shake animation */
     shake(selector: Selector, options?: ShakeOptions): EffectControl | null;
+    /** Canvas-based twinkling stars animation */
+    twinkle(selector: Selector | null, options?: TwinkleOptions): EffectControl | null;
 }
 
 export const effects: Effects;

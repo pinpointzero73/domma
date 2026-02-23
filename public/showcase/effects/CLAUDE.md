@@ -57,6 +57,7 @@ Programmatic animation effects accessed via `Domma.effects`:
 - **counter()** - Animated number counting with easing, formatting, and scroll trigger
 - **ripple()** - Material Design click ripple effect
 - **shake()** - Attention/error shake animation
+- **twinkle()** - Canvas-based twinkling stars animation (full-page overlay or container-scoped)
 
 All JS effects support `respectMotionPreference` and return control objects with `pause()`, `resume()`, `stop()`, `restart()`, `destroy()`.
 
@@ -74,6 +75,7 @@ public/showcase/effects/
 ├── counter.html        # Counter effect showcase
 ├── ripple.html         # Ripple effect showcase
 ├── shake.html          # Shake effect showcase
+├── twinkle.html        # Twinkle (twinkling stars) effect showcase
 └── CLAUDE.md           # This file
 ```
 

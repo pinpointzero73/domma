@@ -3,7 +3,7 @@
   "layout": "columns",
   "variant": "dark",
   "position": "static",
-  "className": "bg-ambient-rotate-glow",
+  "className": "bg-ambient-float-blobs",
   "brand": {
     "text": "DommaJS",
     "url": "index.html",

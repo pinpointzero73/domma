@@ -1273,8 +1273,29 @@ import {SiteSearch} from './modules/search.js';
 
     /**
      * Initialize twinkling stars effect
+     * Prefers Domma.effects.twinkle() when available; falls back to the standalone module
      */
     async function initTwinklingStars(config) {
+        // Prefer the bundled Domma.effects.twinkle() if the full build is loaded
+        if (typeof Domma !== 'undefined' && Domma.effects && Domma.effects.twinkle) {
+            try {
+                Domma.effects.twinkle(null, {
+                    count: config.count || 150,
+                    minSize: config.minSize || 1,
+                    maxSize: config.maxSize || 3,
+                    twinkleSpeed: config.twinkleSpeed || 0.003,
+                    colour: config.color || 'rgba(255, 240, 200, 1)',
+                    zIndex: config.zIndex || 1,
+                    respectMotionPreference: false  // Layout manages its own lifecycle
+                });
+                console.log('[Domma Layout] Twinkling stars initialized (via Domma.effects)');
+                return;
+            } catch (error) {
+                console.warn('[Domma Layout] Domma.effects.twinkle failed, falling back to module:', error);
+            }
+        }
+
+        // Fallback: direct module import for standalone usage without the full Domma build
         try {
             const { TwinklingStars } = await import('./modules/twinkling-stars.js');
 
@@ -1290,7 +1311,7 @@ import {SiteSearch} from './modules/search.js';
             stars.init();
             stars.start();
 
-            console.log('[Domma Layout] Twinkling stars initialized');
+            console.log('[Domma Layout] Twinkling stars initialized (via standalone module)');
         } catch (error) {
             console.error('[Domma Layout] Failed to initialize twinkling stars:', error);
         }

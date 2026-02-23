@@ -1828,6 +1828,326 @@ export function shake(selector, options = {}) {
   };
 }
 
+/**
+ * Canvas-based twinkling stars animation
+ * Creates an ambient starfield effect, either as a full-page fixed overlay or scoped to a container element
+ *
+ * @param {string|Element|null} selector - CSS selector, Element, or null/'body' for full-page mode
+ * @param {Object} options - Configuration options
+ * @param {number} options.count - Number of stars (default: 100)
+ * @param {number} options.minSize - Minimum star size in pixels (default: 1)
+ * @param {number} options.maxSize - Maximum star size in pixels (default: 3)
+ * @param {number} options.twinkleSpeed - Base oscillation speed (default: 0.003)
+ * @param {string} options.colour - Star colour (default: 'rgba(255, 240, 200, 1)')
+ * @param {number} options.zIndex - Canvas z-index (default: 1)
+ * @param {'star'|'circle'} options.shape - Star shape; 'star' draws a 4-pointed star, 'circle' draws a dot (default: 'star')
+ * @param {boolean} options.respectMotionPreference - Honour prefers-reduced-motion (default: true)
+ * @returns {Object} Control object with pause(), resume(), stop(), restart(), destroy(), isRunning(), isPaused()
+ *
+ * @example
+ * // Full-page overlay (matches splash page behaviour)
+ * const stars = Domma.effects.twinkle(null);
+ *
+ * @example
+ * // Container-scoped stars
+ * const stars = Domma.effects.twinkle('#hero-section', {
+ *   count: 60,
+ *   colour: 'rgba(200, 230, 255, 0.9)',
+ *   shape: 'circle'
+ * });
+ *
+ * // Control methods
+ * stars.pause();
+ * stars.resume();
+ * stars.destroy();
+ */
+export function twinkle(selector, options = {}) {
+  const defaults = {
+    count: 100,
+    minSize: 1,
+    maxSize: 3,
+    twinkleSpeed: 0.003,
+    colour: 'rgba(255, 240, 200, 1)',
+    zIndex: 1,
+    shape: 'star',
+    respectMotionPreference: true
+  };
+
+  const opts = { ...defaults, ...options };
+
+  // Respect motion preferences
+  if (opts.respectMotionPreference &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    console.log('[Domma.effects.twinkle] Disabled due to prefers-reduced-motion');
+    return {
+      pause: () => {},
+      resume: () => {},
+      stop: () => {},
+      restart: () => {},
+      destroy: () => {},
+      isRunning: () => false,
+      isPaused: () => false
+    };
+  }
+
+  // Determine mode: full-page or container-scoped
+  const isFullPage = !selector || selector === 'body' || selector === document.body;
+
+  // Resolve container element(s)
+  let containers = [];
+  if (!isFullPage) {
+    if (typeof selector === 'string') {
+      containers = Array.from(document.querySelectorAll(selector));
+    } else if (selector instanceof Element) {
+      containers = [selector];
+    } else if (selector instanceof NodeList || Array.isArray(selector)) {
+      containers = Array.from(selector);
+    }
+
+    if (containers.length === 0) {
+      console.warn('[Domma.effects.twinkle] No elements found for selector:', selector);
+      return null;
+    }
+  }
+
+  // State
+  let running = false;
+  let paused = false;
+  let animationFrame = null;
+  const instanceId = `domma-twinkle-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+  // Per-canvas state: one canvas per container (or one for full-page)
+  const canvases = [];
+
+  // ── Star drawing helpers ──────────────────────────────────────────────────
+
+  function createStars(width, height) {
+    const stars = [];
+    for (let i = 0; i < opts.count; i++) {
+      stars.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: opts.minSize + Math.random() * (opts.maxSize - opts.minSize),
+        opacity: 0.3 + Math.random() * 0.7,
+        twinklePhase: Math.random() * Math.PI * 2,
+        twinkleSpeed: opts.twinkleSpeed + Math.random() * opts.twinkleSpeed
+      });
+    }
+    return stars;
+  }
+
+  function drawStar(ctx, star) {
+    star.twinklePhase += star.twinkleSpeed;
+    const twinkle = 0.3 + Math.sin(star.twinklePhase) * 0.7;
+
+    ctx.save();
+    ctx.globalAlpha = star.opacity * twinkle;
+    ctx.fillStyle = opts.colour;
+    ctx.shadowColor = opts.colour;
+
+    if (opts.shape === 'circle') {
+      ctx.shadowBlur = star.size * 2;
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.size * 0.6, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // 4-pointed star with centre glow
+      ctx.shadowBlur = star.size * 2;
+      ctx.beginPath();
+      for (let i = 0; i < 4; i++) {
+        const angle = (i * Math.PI) / 2;
+        const outerX = star.x + Math.cos(angle) * star.size;
+        const outerY = star.y + Math.sin(angle) * star.size;
+        const innerAngle = angle + Math.PI / 4;
+        const innerX = star.x + Math.cos(innerAngle) * (star.size * 0.3);
+        const innerY = star.y + Math.sin(innerAngle) * (star.size * 0.3);
+        if (i === 0) {
+          ctx.moveTo(outerX, outerY);
+        } else {
+          ctx.lineTo(outerX, outerY);
+        }
+        ctx.lineTo(innerX, innerY);
+      }
+      ctx.closePath();
+      ctx.fill();
+
+      // Centre glow dot
+      ctx.shadowBlur = star.size;
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.size * 0.25, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+  }
+
+  // ── Canvas setup ──────────────────────────────────────────────────────────
+
+  function createCanvas(container, isFixed) {
+    const canvas = document.createElement('canvas');
+    canvas.id = instanceId + (canvases.length > 0 ? `-${canvases.length}` : '');
+    canvas.setAttribute('data-domma-effect', 'twinkle');
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = opts.zIndex;
+
+    if (isFixed) {
+      canvas.style.position = 'fixed';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      document.body.appendChild(canvas);
+    } else {
+      const computedPosition = window.getComputedStyle(container).position;
+      if (computedPosition === 'static') {
+        container.style.position = 'relative';
+      }
+      canvas.style.position = 'absolute';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      canvas.width = container.offsetWidth || container.getBoundingClientRect().width;
+      canvas.height = container.offsetHeight || container.getBoundingClientRect().height;
+      container.appendChild(canvas);
+    }
+
+    const ctx = canvas.getContext('2d');
+    const stars = createStars(canvas.width, canvas.height);
+
+    return { canvas, ctx, stars, container };
+  }
+
+  function resizeCanvas(entry) {
+    if (entry.isFixed) {
+      entry.canvas.width = window.innerWidth;
+      entry.canvas.height = window.innerHeight;
+    } else {
+      const rect = entry.container.getBoundingClientRect();
+      entry.canvas.width = rect.width || entry.container.offsetWidth;
+      entry.canvas.height = rect.height || entry.container.offsetHeight;
+    }
+    // Recreate stars for the new dimensions
+    entry.stars = createStars(entry.canvas.width, entry.canvas.height);
+  }
+
+  // ── Initialise canvases ───────────────────────────────────────────────────
+
+  if (isFullPage) {
+    const entry = createCanvas(document.body, true);
+    entry.isFixed = true;
+    canvases.push(entry);
+  } else {
+    containers.forEach(container => {
+      const entry = createCanvas(container, false);
+      entry.isFixed = false;
+      canvases.push(entry);
+    });
+  }
+
+  // ── Resize handling ───────────────────────────────────────────────────────
+
+  let resizeObserver = null;
+
+  if (isFullPage) {
+    const onWindowResize = () => canvases.forEach(e => resizeCanvas(e));
+    window.addEventListener('resize', onWindowResize);
+    // Store for cleanup
+    canvases[0]._resizeHandler = onWindowResize;
+  } else {
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        canvases.forEach(e => resizeCanvas(e));
+      });
+      containers.forEach(c => resizeObserver.observe(c));
+    }
+  }
+
+  // ── Animation loop ────────────────────────────────────────────────────────
+
+  function animate() {
+    if (!running || paused) return;
+
+    canvases.forEach(({ canvas, ctx, stars }) => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(star => drawStar(ctx, star));
+    });
+
+    animationFrame = requestAnimationFrame(animate);
+  }
+
+  function startAnimation() {
+    if (running) return;
+    running = true;
+    paused = false;
+    animate();
+  }
+
+  // ── Start immediately ─────────────────────────────────────────────────────
+
+  startAnimation();
+  console.log(`[Domma.effects.twinkle] Initialised with ${opts.count} stars (${isFullPage ? 'full-page' : 'container'} mode)`);
+
+  // ── Control object ────────────────────────────────────────────────────────
+
+  return {
+    pause() {
+      if (!running || paused) return;
+      paused = true;
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+      }
+    },
+    resume() {
+      if (!running || !paused) return;
+      paused = false;
+      animate();
+    },
+    stop() {
+      running = false;
+      paused = false;
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+      }
+    },
+    restart() {
+      this.stop();
+      canvases.forEach(e => {
+        e.stars = createStars(e.canvas.width, e.canvas.height);
+      });
+      startAnimation();
+    },
+    destroy() {
+      this.stop();
+      // Remove resize listeners
+      if (isFullPage && canvases[0]?._resizeHandler) {
+        window.removeEventListener('resize', canvases[0]._resizeHandler);
+      }
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+        resizeObserver = null;
+      }
+      // Remove canvases from DOM
+      canvases.forEach(({ canvas }) => {
+        if (canvas && canvas.parentNode) {
+          canvas.parentNode.removeChild(canvas);
+        }
+      });
+      canvases.length = 0;
+    },
+    isRunning() {
+      return running && !paused;
+    },
+    isPaused() {
+      return running && paused;
+    }
+  };
+}
+
 // Export as default for module usage
 export default {
   breathe,
@@ -1837,5 +2157,6 @@ export default {
   scramble,
   counter,
   ripple,
-  shake
+  shake,
+  twinkle
 };

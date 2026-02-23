@@ -44,11 +44,27 @@
           background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
           text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
       }
+
+      .nav-link {
+          padding: 0.5rem 1rem;
+          margin: 0.25rem;
+          border-radius: 4px;
+          background: var(--dm-primary-t10, rgba(13, 110, 253, 0.1));
+          text-decoration: none;
+          color: var(--dm-primary);
+          display: inline-block;
+          transition: all 0.2s ease;
+      }
+
+      .nav-link:hover {
+          background: var(--dm-primary-t20, rgba(13, 110, 253, 0.2));
+          transform: translateY(-2px);
+      }
   </style>
 </head>
 <body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="effects">
 
-<div class="hero hero-center bg-ambient-aurora">
+<div class="hero hero-center bg-ambient-float-orbs">
     <div class="hero-content">
         <div class="hero-title">Ambient Background Effects</div>
         <div class="hero-subtitle">Subtle CSS animations that add visual interest and depth to backgrounds without distracting from content</div>
@@ -339,6 +355,20 @@
       </div>
     </div>
   </section>
+
+  <!-- See Also -->
+  <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+    <h3 class="text-lg font-semibold mb-2">
+      <span data-icon="arrow-left" data-icon-size="20"></span>
+      See Also
+    </h3>
+    <a href="index.html" class="nav-link">All Effects</a>
+    <a href="gradients.html" class="nav-link">Gradients</a>
+    <a href="animations.html" class="nav-link">Animations</a>
+    <a href="twinkle.html" class="nav-link">Twinkle</a>
+    <a href="breathe.html" class="nav-link">Breathe</a>
+    <a href="reveal.html" class="nav-link">Reveal</a>
+  </div>
 
 </main>
 

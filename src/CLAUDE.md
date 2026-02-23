@@ -555,6 +555,7 @@ Accessed via `Domma.effects`:
 - **counter**: `effects.counter(selector, { from, to, duration, easing, decimals, separator, prefix, suffix, trigger, threshold, onUpdate, onComplete })` - Animated number counting with formatting
 - **ripple**: `effects.ripple(selector, { colour, duration, opacity, unbounded, centered, trigger })` - Material Design click ripple effect
 - **shake**: `effects.shake(selector, { intensity, duration, direction, easing, iterations, stagger, onComplete })` - Attention/error shake animation
+- **twinkle**: `effects.twinkle(selector | null, { count, minSize, maxSize, twinkleSpeed, colour, zIndex, shape, respectMotionPreference })` - Canvas-based twinkling stars; pass `null` for full-page overlay or a selector for container-scoped mode
 
 **Scribe Modes:**
 - `mode: 'typewriter'` - Character-by-character rendering (default)

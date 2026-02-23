@@ -393,6 +393,11 @@
           "section": "effects-scribe"
         },
         {
+          "text": "Twinkle",
+          "url": "showcase/effects/twinkle.html",
+          "section": "effects-twinkle"
+        },
+        {
           "divider": true
         },
         {
@@ -516,13 +521,6 @@
           "text": "Invoicing System",
           "url": "miniapps/invoicing/index.html",
           "section": "invoicing"
-        },
-        {
-          "text": "Nexus Contact Manager",
-          "url": "#",
-          "section": "nexus",
-          "disabled": true,
-          "badge": "Coming Soon"
         }
       ]
     },
