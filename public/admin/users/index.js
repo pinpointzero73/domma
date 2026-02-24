@@ -22,9 +22,8 @@ $(() => {
     // 2. Initialise Collapsible Cards
     // ============================================
     function initCollapsibleCards() {
-        const cards = document.querySelectorAll('[data-collapsible="true"]');
-        cards.forEach(card => {
-            Domma.elements.card(card, { collapsible: true });
+        $('[data-collapsible="true"]').each(function () {
+            Domma.elements.card(this, { collapsible: true });
         });
     }
 
@@ -67,7 +66,6 @@ $(() => {
     // 4. Users Table
     // ============================================
     let usersTable = null;
-    let currentPage = 1;
     let searchQuery = '';
     let roleFilter = '';
 
@@ -110,9 +108,8 @@ $(() => {
     async function loadUsers() {
         try {
             const params = new URLSearchParams({
-                page: currentPage,
-                limit: 25,
-                sort: 'createdAt:desc'
+                sort: 'createdAt:desc',
+                limit: 1000
             });
 
             if (searchQuery) params.append('search', searchQuery);
@@ -180,6 +177,9 @@ $(() => {
                     regexSearch: true
                 });
 
+                // Scan icons in action buttons rendered inside the table
+                Domma.icons.scan();
+
                 // Handle action buttons
                 $('body').on('click', '.change-role-btn', function () {
                     const userId = $(this).attr('data-user-id');
@@ -197,6 +197,7 @@ $(() => {
                 });
             } else {
                 usersTable.setData(tableData);
+                Domma.icons.scan();
             }
         } catch (error) {
             console.error('[Admin] Failed to load users:', error);
@@ -344,28 +345,13 @@ $(() => {
             `Are you sure you want to delete this user?\n\nUser: ${user.email}\nName: ${user.name || 'N/A'}\nRole: ${_.capitalize(user.role)}\nContent: ${user.stats}\n\nThis action cannot be undone.`,
             {
                 title: 'Confirm User Deletion',
-                confirmText: 'Yes, Delete',
+                confirmText: 'Delete User',
                 cancelText: 'Cancel',
                 type: 'warning'
             }
         );
 
         if (!firstConfirm) return;
-
-        const typeConfirm = await Domma.elements.prompt(
-            `FINAL WARNING: This will permanently delete the user "${user.email}".\n\nType "DELETE" to confirm:`,
-            {
-                title: 'Final Deletion Confirmation',
-                inputPlaceholder: 'Type DELETE to confirm',
-                confirmText: 'Delete User',
-                cancelText: 'Cancel'
-            }
-        );
-
-        if (!typeConfirm || typeConfirm.toUpperCase() !== 'DELETE') {
-            Domma.elements.toast('User deletion cancelled', { type: 'info' });
-            return;
-        }
 
         try {
             const response = await Domma.http.delete(`${apiUrl}/admin/users/${userId}`, {
@@ -392,11 +378,66 @@ $(() => {
     }
 
     // ============================================
-    // 8. Search and Filter
+    // 8. Bulk Delete
+    // ============================================
+    async function showBulkDeleteConfirmation() {
+        const selected = usersTable ? usersTable.getSelected() : [];
+
+        if (!selected || selected.length === 0) {
+            Domma.elements.toast('Select at least one user first', { type: 'info' });
+            return;
+        }
+
+        const count = selected.length;
+        const confirmed = await Domma.elements.confirm(
+            `Permanently delete ${count} selected user${count > 1 ? 's' : ''}? This cannot be undone.`,
+            {
+                title: `Bulk Delete ${count} User${count > 1 ? 's' : ''}`,
+                confirmText: `Delete ${count} User${count > 1 ? 's' : ''}`,
+                cancelText: 'Cancel',
+                type: 'danger'
+            }
+        );
+
+        if (!confirmed) return;
+
+        let deleted = 0;
+        let failed = 0;
+
+        for (const user of selected) {
+            try {
+                const response = await Domma.http.delete(`${apiUrl}/admin/users/${user.id}`, {
+                    headers: AdminAuth.getAuthHeaders()
+                });
+                if (response.success) {
+                    deleted++;
+                } else {
+                    failed++;
+                }
+            } catch {
+                failed++;
+            }
+        }
+
+        const msg = deleted > 0
+            ? `Deleted ${deleted} user${deleted > 1 ? 's' : ''}${failed > 0 ? ` — ${failed} failed` : ''}`
+            : 'Failed to delete selected users';
+
+        Domma.elements.toast(msg, { type: failed > 0 && deleted === 0 ? 'error' : failed > 0 ? 'warning' : 'success' });
+
+        if (deleted > 0) {
+            loadUsers();
+            loadStats();
+        }
+    }
+
+    $('#bulk-delete-btn').on('click', showBulkDeleteConfirmation);
+
+    // ============================================
+    // 9. Search and Filter
     // ============================================
     const searchDebounced = _.debounce(() => {
         searchQuery = $('#user-search').val().trim();
-        currentPage = 1;
         loadUsers();
     }, 500);
 
@@ -404,7 +445,6 @@ $(() => {
 
     $('#role-filter').on('change', () => {
         roleFilter = $('#role-filter').val();
-        currentPage = 1;
         loadUsers();
     });
 
@@ -414,7 +454,7 @@ $(() => {
     });
 
     // ============================================
-    // 9. Initialise
+    // 10. Initialise
     // ============================================
     loadStats();
     loadUsers();

@@ -1384,6 +1384,14 @@ textarea:not([class])::placeholder {
     color: var(--dm-info-dark);
 }
 
+/* In dark themes, the "-dark" colour variants are designed for light backgrounds.
+   Use the base colour (readable on dark backgrounds) instead. */
+[data-mode="dark"] .alert-primary { color: var(--dm-primary); }
+[data-mode="dark"] .alert-success { color: var(--dm-success); }
+[data-mode="dark"] .alert-danger  { color: var(--dm-danger);  }
+[data-mode="dark"] .alert-warning { color: var(--dm-warning-text, var(--dm-warning)); }
+[data-mode="dark"] .alert-info    { color: var(--dm-info);    }
+
 
 /* ============================================
    CODE BLOCK

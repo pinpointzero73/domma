@@ -2546,6 +2546,43 @@ code, pre {
     z-index: 2;
 }
 
+/* Button Group Sizes */
+.btn-group-sm > .btn,
+.btn-group-sm > .btn-group > .btn {
+    padding: var(--dm-space-1) var(--dm-space-2);
+    font-size: var(--dm-font-size-xs);
+    line-height: 1.5;
+    border-radius: 0;
+}
+
+.btn-group-sm > .btn:first-child {
+    border-top-left-radius: var(--dm-radius-sm);
+    border-bottom-left-radius: var(--dm-radius-sm);
+}
+
+.btn-group-sm > .btn:last-child {
+    border-top-right-radius: var(--dm-radius-sm);
+    border-bottom-right-radius: var(--dm-radius-sm);
+}
+
+.btn-group-lg > .btn,
+.btn-group-lg > .btn-group > .btn {
+    padding: var(--dm-space-3) var(--dm-space-6);
+    font-size: var(--dm-font-size-lg);
+    line-height: 1.5;
+    border-radius: 0;
+}
+
+.btn-group-lg > .btn:first-child {
+    border-top-left-radius: var(--dm-radius-lg);
+    border-bottom-left-radius: var(--dm-radius-lg);
+}
+
+.btn-group-lg > .btn:last-child {
+    border-top-right-radius: var(--dm-radius-lg);
+    border-bottom-right-radius: var(--dm-radius-lg);
+}
+
 /* Range Slider */
 .form-range {
     appearance: none;

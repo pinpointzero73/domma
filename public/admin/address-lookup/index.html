@@ -27,9 +27,11 @@
   <!-- Main Content -->
   <main class="admin-main">
     <!-- Page Header -->
-    <div class="admin-header">
-      <h1>Address Lookup Service</h1>
-      <p>Overview & Statistics</p>
+    <div class="hero hero-sm bg-ambient-float-blobs">
+      <div class="hero-content">
+        <div class="hero-title">Address Lookup Service</div>
+        <div class="hero-subtitle">Overview &amp; Statistics</div>
+      </div>
     </div>
 
     <!-- Page Content -->
@@ -89,6 +91,82 @@
         <p class="text-3xl font-bold mb-2" id="stat-active-keys">-</p>
         <p class="text-xs text-gray-500">Across all users</p>
       </div>
+    </div>
+  </div>
+
+  <!-- Admin Search Tools -->
+  <div class="card mb-6">
+    <div class="card-header">
+      <h2 class="card-title"><span data-icon="search"></span> Data Search Tools</h2>
+    </div>
+    <div class="card-body">
+
+      <div id="search-tabs" class="tabs tabs-pills">
+        <ul class="tab-list">
+          <li class="tab-item active">Postcode Lookup</li>
+          <li class="tab-item">Browse Postcodes</li>
+          <li class="tab-item">Address Search</li>
+        </ul>
+        <div class="tab-content">
+
+          <!-- Panel: Exact postcode lookup -->
+          <div class="tab-panel active">
+            <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 0.75rem; align-items: end; max-width: 600px; margin-bottom: 1.5rem;">
+              <div>
+                <label class="form-label">Full Postcode</label>
+                <input type="text" id="test-postcode-input" class="form-input" placeholder="e.g. SW1A 1AA" maxlength="10" style="text-transform: uppercase;">
+              </div>
+              <div>
+                <label class="form-label">Tier</label>
+                <select id="test-lookup-tier" class="form-input">
+                  <option value="full">Full (1 credit)</option>
+                  <option value="validate">Validate only (free)</option>
+                </select>
+              </div>
+              <button id="test-lookup-btn" class="btn btn-primary">
+                <span data-icon="search"></span> Lookup
+              </button>
+            </div>
+            <div id="test-lookup-result" style="display: none;"></div>
+          </div>
+
+          <!-- Panel: Partial postcode browse -->
+          <div class="tab-panel">
+            <p class="text-muted mb-3" style="font-size:0.875rem;">Enter a partial postcode (e.g. <strong>CH8</strong>, <strong>SW1A</strong>) to browse all matching postcodes in the local database.</p>
+            <div style="display: flex; gap: 0.75rem; align-items: flex-end; max-width: 480px; margin-bottom: 1.5rem;">
+              <div style="flex:1;">
+                <label class="form-label">Postcode Prefix</label>
+                <input type="text" id="browse-postcode-input" class="form-input" placeholder="e.g. CH8 or SW1A" maxlength="8" style="text-transform: uppercase;">
+              </div>
+              <button id="browse-postcode-btn" class="btn btn-primary">
+                <span data-icon="search"></span> Browse
+              </button>
+            </div>
+            <div id="browse-postcode-result" style="display: none;"></div>
+          </div>
+
+          <!-- Panel: Address text search -->
+          <div class="tab-panel">
+            <p class="text-muted mb-3" style="font-size:0.875rem;">Search for a property name or street across the local database. Narrow by postcode prefix to speed up results.</p>
+            <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 0.75rem; align-items: flex-end; max-width: 700px; margin-bottom: 1.5rem;">
+              <div>
+                <label class="form-label">Address / Property Name / Street</label>
+                <input type="text" id="addr-search-input" class="form-input" placeholder="e.g. Trem-y-Ffynnon or Penn Road">
+              </div>
+              <div>
+                <label class="form-label">Postcode Prefix <span class="text-muted">(optional)</span></label>
+                <input type="text" id="addr-search-postcode" class="form-input" placeholder="e.g. CH8" maxlength="8" style="text-transform: uppercase; width: 120px;">
+              </div>
+              <button id="addr-search-btn" class="btn btn-primary">
+                <span data-icon="search"></span> Search
+              </button>
+            </div>
+            <div id="addr-search-result" style="display: none;"></div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
 

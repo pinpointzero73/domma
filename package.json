@@ -44,7 +44,7 @@
     "build:info": "node scripts/build-info.js",
     "build:metadata": "node scripts/copy-metadata.js",
     "copy:themes": "node scripts/copy-theme-css.js",
-"build:miniapps": "node scripts/build-miniapp.js && node scripts/copy-miniapps.js",
+    "build:miniapps": "node scripts/build-miniapp.js && node scripts/copy-miniapps.js",
     "build:miniapp:garage": "node scripts/build-miniapp.js garage",
     "build:miniapp:address": "node scripts/build-miniapp.js address",
     "watch:miniapps": "node scripts/watch-miniapps.js",

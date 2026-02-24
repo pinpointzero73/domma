@@ -4,6 +4,7 @@
  */
 
 import config from '../../shared/config.js';
+import { InactivityTimer } from '../../shared/inactivity-timer.js';
 import { lookupBlueprint, feedbackBlueprint, apiKeyBlueprint, saveAddressBlueprint, contactBlueprint } from './blueprints.js';
 import preferences from './preferences.js';
 
@@ -22,6 +23,22 @@ class AddressApp {
       activeKeys: 0,
       savedCount: 0
     };
+
+    this._inactivityTimer = new InactivityTimer({
+      timeoutMs: config.sessionTimeoutMs,
+      warningMs: config.sessionWarningMs,
+      onWarning: () => {
+        Domma.elements.toast(
+          'Your session will expire in 1 minute due to inactivity.',
+          { type: 'warning', duration: 10000 }
+        );
+      },
+      onTimeout: () => {
+        Domma.elements.toast('Signed out due to inactivity.', { type: 'info' });
+        Domma.auth.logout();
+      }
+    });
+
     this.init();
   }
 
@@ -155,6 +172,12 @@ class AddressApp {
 
     // Uncloak the page
     $('body').removeClass('dm-cloaked');
+
+    // Handle return from Stripe Checkout (detects ?session_id= in URL)
+    this.handleCheckoutReturn();
+
+    // Start inactivity auto-logout timer
+    this._inactivityTimer.start();
   }
 
   /**
@@ -338,6 +361,9 @@ class AddressApp {
   }
 
   handleLogout() {
+    // Stop inactivity timer
+    this._inactivityTimer.stop();
+
     // Clear current lookup result
     this.currentLookupResult = null;
 
@@ -403,6 +429,11 @@ class AddressApp {
         icon: 'bookmark',
         section: 'saved',
         badge: this.stats.savedCount || null
+      },
+      {
+        text: 'Buy Credits',
+        icon: 'credit-card',
+        section: 'buyCredits'
       },
       {
         text: 'Feedback',
@@ -478,6 +509,12 @@ class AddressApp {
     if (sectionName === 'contact' && !this._contactRendered) {
       this.renderContactSection();
       this._contactRendered = true;
+    }
+
+    // Load Buy Credits section on first visit
+    if (sectionName === 'buyCredits' && !this._buyCreditsRendered) {
+      this.loadCreditPacks();
+      this._buyCreditsRendered = true;
     }
 
     // Sections already load their data in loadInitialData()
@@ -648,6 +685,123 @@ class AddressApp {
       console.error('Load credit balance error:', error);
       $('#creditBalance').text('0');
     }
+  }
+
+  /**
+   * Load available credit packs from the API and render pack cards.
+   */
+  async loadCreditPacks() {
+    const $section = $('#buyCreditsSection');
+    if (!$section.length) return;
+
+    $section.html('<p class="text-muted">Loading credit packs…</p>');
+
+    try {
+      const response = await fetch(`${this.config.apiUrl}/address/credits/packs`, {
+        headers: Domma.auth.getHeaders()
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const data = await response.json();
+      const packs = data.packs || data;
+
+      const cardsHtml = packs.map(pack => `
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card${pack.popular ? ' border-primary' : ''}">
+            ${pack.popular ? '<div class="card-header bg-primary text-white text-center py-1"><small>Most Popular</small></div>' : ''}
+            <div class="card-body text-center">
+              <h3 class="card-title">${_.escape(pack.name)}</h3>
+              <p class="text-muted mb-2">${_.escape(pack.description)}</p>
+              <div class="text-3xl font-bold mb-1">£${pack.price.toFixed(2)}</div>
+              <div class="text-muted mb-3">${pack.credits.toLocaleString()} credits</div>
+              <small class="text-muted d-block mb-3">~£${(pack.price / pack.credits).toFixed(4)} per lookup</small>
+              <button class="btn ${pack.popular ? 'btn-primary' : 'btn-outline-primary'} btn-block btn-buy-pack"
+                      data-pack-id="${_.escape(pack.id)}">
+                <span data-icon="credit-card" data-icon-size="16"></span>
+                Buy Now
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      $section.html(`
+        <div class="mb-4">
+          <h2>Buy Credits</h2>
+          <p class="text-muted">Credits never expire. Use them for full address lookups and property data.</p>
+        </div>
+        <div class="row g-3">${cardsHtml}</div>
+      `, { safe: false });
+
+      // Attach click handlers for buy buttons
+      $section.on('click', '.btn-buy-pack', async (e) => {
+        const $btn = $(e.target).closest('.btn-buy-pack');
+        const packId = $btn.attr('data-pack-id');
+        await this.initiateCheckout(packId);
+      });
+
+      if (Domma.icons) Domma.icons.scan();
+
+    } catch (error) {
+      console.error('Load credit packs error:', error);
+      $section.html('<p class="text-danger">Failed to load credit packs. Please try again.</p>');
+    }
+  }
+
+  /**
+   * Create a Stripe Checkout session and redirect the user.
+   * @param {string} packId - The credit pack ID to purchase
+   */
+  async initiateCheckout(packId) {
+    try {
+      const response = await fetch(`${this.config.apiUrl}/address/credits/checkout`, {
+        method: 'POST',
+        headers: {
+          ...Domma.auth.getHeaders(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ packId })
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.message || `HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL returned');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      Domma.elements.toast(`Failed to start checkout: ${error.message}`, { type: 'error' });
+    }
+  }
+
+  /**
+   * Handle a successful Stripe Checkout return.
+   * Detects ?session_id= in the URL, shows a toast, and refreshes the credit balance.
+   */
+  handleCheckoutReturn() {
+    const params    = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    if (!sessionId) return;
+
+    // Clean the URL so a refresh doesn't re-trigger this
+    const cleanUrl = window.location.pathname;
+    window.history.replaceState({}, '', cleanUrl);
+
+    // Give the webhook a moment to process then refresh the balance
+    Domma.elements.toast('Payment successful! Your credits are being added…', { type: 'success', duration: 5000 });
+
+    setTimeout(async () => {
+      await this.loadCreditBalance();
+      Domma.elements.toast('Credit balance updated.', { type: 'info' });
+    }, 3000);
   }
 
   // ============================================================================

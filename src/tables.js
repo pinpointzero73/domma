@@ -23,7 +23,7 @@ class TableInstance {
         'warning-tint': 'rgba(255, 193, 7, 0.05)',
         'danger-tint': 'rgba(220, 53, 69, 0.05)',
         'info-tint': 'rgba(23, 162, 184, 0.05)',
-        default: '#f9f9f9'  // Current hardcoded value for backwards compatibility
+        default: 'var(--dm-table-stripe-bg, #f9f9f9)'
     };
 
     static hoverColors = {
@@ -32,7 +32,7 @@ class TableInstance {
         light: 'var(--dm-gray-300, #dee2e6)',
         medium: 'var(--dm-gray-400, #ced4da)',
         dark: 'var(--dm-gray-500, #adb5bd)',
-        default: '#f0f0f0'  // Current hardcoded value for backwards compatibility
+        default: 'var(--dm-hover-bg, #f0f0f0)'
     };
 
     constructor(element, options = {}) {

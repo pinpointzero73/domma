@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Lookup API - Documentation</title>
+    <meta name="description" content="Complete API documentation for the Domma Address Lookup service. UK postcode validation, full address lookups, and property data endpoints.">
+    <link rel="icon" type="image/svg+xml" href="../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../dist/domma.css">
+    <link rel="stylesheet" href="../dist/grid.css">
+    <link rel="stylesheet" href="../dist/elements.css">
+    <link rel="stylesheet" href="../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../showcase/css/domma-showcase.css">
+    <style>
+        /* ── Endpoint method badges ───────────────────── */
+        .method-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 0.15em 0.55em;
+            border-radius: 4px;
+            margin-right: 0.5em;
+            font-family: var(--font-mono, monospace);
+            vertical-align: middle;
+        }
+        .method-get  { background: #d1fae5; color: #065f46; }
+        .method-post { background: #dbeafe; color: #1e40af; }
+        .method-patch { background: #fef3c7; color: #92400e; }
+        .method-delete { background: #fee2e2; color: #991b1b; }
+
+        /* ── Endpoint row ─────────────────────────────── */
+        .endpoint-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            padding: 0.75em 1em;
+            border: 1px solid var(--border-color, #e5e7eb);
+            border-radius: 6px;
+            margin-bottom: 0.5em;
+            background: var(--surface-color, #f9fafb);
+            font-family: var(--font-mono, monospace);
+            font-size: 0.875rem;
+        }
+        .endpoint-desc {
+            margin-left: auto;
+            font-family: var(--font-sans, sans-serif);
+            font-size: 0.8rem;
+            color: var(--text-muted, #6b7280);
+        }
+
+        /* ── Parameter table ──────────────────────────── */
+        .param-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; margin-bottom: 1em; }
+        .param-table th {
+            text-align: left;
+            padding: 0.5em 0.75em;
+            background: var(--surface-color, #f3f4f6);
+            border-bottom: 2px solid var(--border-color, #e5e7eb);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--text-muted, #6b7280);
+        }
+        .param-table td { padding: 0.5em 0.75em; border-bottom: 1px solid var(--border-color, #e5e7eb); vertical-align: top; }
+        .param-name { font-family: var(--font-mono, monospace); font-weight: 600; color: var(--primary, #3b82f6); }
+        .param-type { font-family: var(--font-mono, monospace); font-size: 0.8rem; color: var(--text-muted, #6b7280); }
+        .param-required { font-size: 0.75rem; font-weight: 600; color: #dc2626; }
+        .param-optional { font-size: 0.75rem; color: var(--text-muted, #6b7280); }
+
+        /* ── Credit cost badge ────────────────────────── */
+        .credit-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3em;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.2em 0.6em;
+            border-radius: 20px;
+        }
+        .credit-free    { background: #d1fae5; color: #065f46; }
+        .credit-one     { background: #dbeafe; color: #1e40af; }
+        .credit-three   { background: #ede9fe; color: #5b21b6; }
+
+        /* ── Section intro callout ────────────────────── */
+        .callout {
+            padding: 1em 1.25em;
+            border-left: 4px solid;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 1.5em;
+            font-size: 0.9rem;
+        }
+        .callout-info    { background: #eff6ff; border-color: #3b82f6; }
+        .callout-success { background: #f0fdf4; border-color: #22c55e; }
+        .callout-warning { background: #fffbeb; border-color: #f59e0b; }
+        .callout-danger  { background: #fef2f2; border-color: #ef4444; }
+
+        /* ── Response block label ─────────────────────── */
+        .code-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted, #6b7280);
+            margin-bottom: 0.35em;
+        }
+
+        /* ── Quick-reference grid ─────────────────────── */
+        .quick-ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1em;
+            margin-top: 1em;
+        }
+        .quick-ref-card {
+            padding: 1em;
+            border: 1px solid var(--border-color, #e5e7eb);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .quick-ref-card .qr-label { font-size: 0.75rem; color: var(--text-muted, #6b7280); text-transform: uppercase; margin-bottom: 0.25em; }
+        .quick-ref-card .qr-value { font-size: 1.25rem; font-weight: 700; }
+        .quick-ref-card .qr-sub   { font-size: 0.8rem; color: var(--text-muted, #6b7280); margin-top: 0.25em; }
+
+        /* ── Two-col layout for request+response ──────── */
+        .req-res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1em; }
+        @media (max-width: 768px) { .req-res-grid { grid-template-columns: 1fr; } }
+
+        /* ── Tier comparison table ────────────────────── */
+        .tier-table { width: 100%; border-collapse: collapse; }
+        .tier-table th, .tier-table td { padding: 0.6em 1em; border: 1px solid var(--border-color, #e5e7eb); text-align: left; }
+        .tier-table thead th { background: var(--surface-color, #f3f4f6); font-weight: 600; }
+        .tier-check { color: #22c55e; font-size: 1.1em; }
+        .tier-cross  { color: #d1d5db; }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="subpage">
+
+<!-- Hero -->
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Address Lookup API</div>
+        <div class="hero-subtitle">UK postcode validation, full address lookups, and property data — all in a single REST API.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- 1. INTRODUCTION                               -->
+    <!-- ══════════════════════════════════════════════ -->
+    <section class="card mb-6" data-section="Introduction">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Introduction</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                The <strong>Domma Address Lookup API</strong> provides comprehensive UK address data across three tiers of detail.
+                Whether you need simple postcode validation or full transaction history for a specific property, a single API
+                endpoint family covers it all.
+            </p>
+
+            <div class="quick-ref-grid mb-6">
+                <div class="quick-ref-card">
+                    <div class="qr-label">Postcodes</div>
+                    <div class="qr-value">2.7M+</div>
+                    <div class="qr-sub">All active UK postcodes</div>
+                </div>
+                <div class="quick-ref-card">
+                    <div class="qr-label">Addresses</div>
+                    <div class="qr-value">30M+</div>
+                    <div class="qr-sub">Residential &amp; commercial</div>
+                </div>
+                <div class="quick-ref-card">
+                    <div class="qr-label">Businesses</div>
+                    <div class="qr-value">5M+</div>
+                    <div class="qr-sub">Companies House records</div>
+                </div>
+                <div class="quick-ref-card">
+                    <div class="qr-label">Sold Prices</div>
+                    <div class="qr-value">27M+</div>
+                    <div class="qr-sub">Land Registry transactions</div>
+                </div>
+            </div>
+
+            <h3 class="text-lg font-semibold mb-3">Data Sources</h3>
+            <ul class="mb-4">
+                <li class="mb-1"><strong>ONS (Office for National Statistics)</strong> — Postcode directory with geography fields: coordinates, local authority, constituency, NHS region, urban classification, and more.</li>
+                <li class="mb-1"><strong>Land Registry (LR)</strong> — Full residential addresses and property transaction history (sold prices, dates, property type).</li>
+                <li class="mb-1"><strong>Companies House (CH)</strong> — Registered business addresses, company names, and registration numbers.</li>
+            </ul>
+
+            <h3 class="text-lg font-semibold mb-3">Service Tiers</h3>
+            <table class="tier-table">
+                <thead>
+                    <tr>
+                        <th>Tier</th>
+                        <th>What You Get</th>
+                        <th>Credit Cost</th>
+                        <th>Use Case</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="credit-badge credit-free">Free</span></td>
+                        <td>Postcode validity + ONS geography</td>
+                        <td>0 credits</td>
+                        <td>Validate postcodes, get coordinates and region data</td>
+                    </tr>
+                    <tr>
+                        <td><span class="credit-badge credit-one">Premium</span></td>
+                        <td>Full address list (LR + CH data)</td>
+                        <td>1 credit</td>
+                        <td>Address autocomplete, form lookup, delivery validation</td>
+                    </tr>
+                    <tr>
+                        <td><span class="credit-badge credit-three">Property</span></td>
+                        <td>Transaction history, valuations, comparables</td>
+                        <td>3 credits</td>
+                        <td>Estate agents, mortgage brokers, property analytics</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- 2. GETTING STARTED                            -->
+    <!-- ══════════════════════════════════════════════ -->
+    <section class="card mb-6" data-section="Getting Started">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Getting Started</h2>
+        </div>
+        <div class="card-body">
+            <h3 class="text-base font-semibold mb-3">1. Get an API Key</h3>
+            <p class="mb-3">
+                Sign in to your Domma account and navigate to <strong>Settings → API Keys</strong> to create your first key.
+                Free-tier keys are available immediately; premium and property tiers require purchasing a credit pack.
+            </p>
+
+            <h3 class="text-base font-semibold mb-3">2. Make Your First Request</h3>
+            <p class="mb-2">Look up a postcode using <code>curl</code>:</p>
+            <div class="code-label">Shell</div>
+            <pre class="code-block language-bash">curl -X POST https://api.domma.dev/api/address/v1/lookup \
+  -H "Authorization: Bearer addr_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"postcode": "SW1A 1AA"}'</pre>
+
+            <h3 class="text-base font-semibold mt-4 mb-3">3. Inspect the Response</h3>
+            <p class="mb-2">A successful response returns a <code>200 OK</code> with JSON:</p>
+            <div class="code-label">JSON Response</div>
+            <pre class="code-block language-json">{
+  "success": true,
+  "postcode": "SW1A 1AA",
+  "tier": "free",
+  "creditsUsed": 0,
+  "data": {
+    "postcode": "SW1A 1AA",
+    "latitude": 51.50081,
+    "longitude": -0.14145,
+    "region": "London",
+    "localAuthority": "Westminster",
+    "constituency": "Cities of London and Westminster"
+  }
+}</pre>
+
+            <div class="callout callout-info mt-4">
+                <strong>Tip:</strong> The free tier requires no credits and is ideal for integrating postcode validation into forms
+                before committing to a premium lookup.
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- 3. AUTHENTICATION                             -->
+    <!-- ══════════════════════════════════════════════ -->
+    <section class="card mb-6" data-section="Authentication">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Authentication</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                All API requests must be authenticated. The API supports two authentication methods depending on your use case.
+            </p>
+
+            <h3 class="text-base font-semibold mb-2">API Key (B2B / Server-side)</h3>
+            <p class="mb-2">
+                Pass your API key as a <code>Bearer</code> token in the <code>Authorization</code> header.
+                API keys are in the format <code>addr_xxxxxxxxxxxxxxxxxx</code>.
+            </p>
+            <div class="code-label">HTTP Header</div>
+            <pre class="code-block language-http">Authorization: Bearer addr_xxxxxxxxxxxxxxxxxx</pre>
+
+            <h3 class="text-base font-semibold mt-4 mb-2">Session Cookie (Web UI)</h3>
+            <p class="mb-4">
+                Authenticated users accessing the API through the Domma web interface use JWT session cookies.
+                These are set automatically on login and do not require manual configuration.
+            </p>
+
+            <h3 class="text-base font-semibold mb-3">Authentication Errors</h3>
+            <table class="param-table">
+                <thead>
+                    <tr><th>Status</th><th>Code</th><th>Meaning</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>401</code></td>
+                        <td><code>MISSING_AUTH</code></td>
+                        <td>No <code>Authorization</code> header or session cookie provided</td>
+                    </tr>
+                    <tr>
+                        <td><code>401</code></td>
+                        <td><code>INVALID_KEY</code></td>
+                        <td>API key is malformed, expired, or has been revoked</td>
+                    </tr>
+                    <tr>
+                        <td><code>403</code></td>
+                        <td><code>PERMISSION_DENIED</code></td>
+                        <td>Key exists but lacks the required permission for this endpoint</td>
+                    </tr>
+                    <tr>
+                        <td><code>403</code></td>
+                        <td><code>INSUFFICIENT_CREDITS</code></td>
+                        <td>Account has insufficient credits for the requested tier</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-warning">
+                <strong>Keep your API key secret.</strong> Never expose it in client-side JavaScript, public repositories,
+                or build artefacts. Use environment variables or a secrets manager.
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- 4. BASE URL                                   -->
+    <!-- ══════════════════════════════════════════════ -->
+    <section class="card mb-6" data-section="Base URL">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Base URL</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">All endpoints are relative to the following base URL:</p>
+            <div class="endpoint-row" style="font-size:1rem;">
+                <strong>https://api.domma.dev/api/address</strong>
+            </div>
+            <p class="mt-3 mb-4">All requests must be made over <strong>HTTPS</strong>. HTTP requests will be rejected.</p>
+
+            <h3 class="text-base font-semibold mb-3">API Versioning</h3>
+            <p class="mb-2">
+                Endpoints are versioned via the URL path (e.g. <code>/v1/lookup</code>). Breaking changes
+                are introduced only in new major versions. The current stable version is <strong>v1</strong>.
+            </p>
+            <table class="param-table">
+                <thead>
+                    <tr><th>Version</th><th>Status</th><th>Full Base URL</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>v1</code></td>
+                        <td><span class="badge badge-success badge-sm">Current</span></td>
+                        <td><code>https://api.domma.dev/api/address/v1</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- 5. ADDRESS LOOKUP                             -->
+    <!-- ══════════════════════════════════════════════ -->
+    <section class="card mb-6" data-section="Address Lookup">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Address Lookup</h2>
+        </div>
+        <div class="card-body">
+
+            <!-- Single lookup -->
+            <h3 class="text-base font-semibold mb-2">Single Postcode Lookup</h3>
+            <div class="endpoint-row">
+                <span class="method-badge method-post">POST</span>
+                /v1/lookup
+                <span class="endpoint-desc">1 request → 1 postcode</span>
+            </div>
+
+            <h4 class="font-semibold mt-4 mb-2">Request Body</h4>
+            <table class="param-table">
+                <thead>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="param-name">postcode</td>
+                        <td class="param-type">string</td>
+                        <td class="param-required">Required</td>
+                        <td>UK postcode in any common format (<code>SW1A 1AA</code>, <code>sw1a1aa</code>, etc.). Normalised automatically.</td>
+                    </tr>
+                    <tr>
+                        <td class="param-name">tier</td>
+                        <td class="param-type">string</td>
+                        <td class="param-optional">Optional</td>
+                        <td>Response tier: <code>"free"</code> (default) or <code>"premium"</code>. Premium returns full addresses and uses 1 credit.</td>
+                    </tr>
+                    <tr>
+                        <td class="param-name">forceRefresh</td>
+                        <td class="param-type">boolean</td>
+                        <td class="param-optional">Optional</td>
+                        <td>Bypass cached results and re-fetch from source data. Defaults to <code>false</code>.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Free tier response -->
+            <h4 class="font-semibold mt-4 mb-2">
+                Free Tier Response
+                <span class="credit-badge credit-free ms-2">0 credits</span>
+            </h4>
+            <p class="mb-2 text-sm text-muted">ONS postcode data — coordinates, geography, and classification fields.</p>
+            <pre class="code-block language-json">{
+  "success": true,
+  "postcode": "SW1A 1AA",
+  "tier": "free",
+  "creditsUsed": 0,
+  "data": {
+    "postcode": "SW1A 1AA",
+    "latitude": 51.50081,
+    "longitude": -0.14145,
+    "easting": 529090,
+    "northing": 179645,
+    "gridRef": "TQ2909079645",
+    "country": "England",
+    "region": "London",
+    "localAuthority": "Westminster",
+    "localAuthorityCode": "E09000033",
+    "constituency": "Cities of London and Westminster",
+    "ward": "St James's",
+    "parish": null,
+    "nhsRegion": "London",
+    "ccg": "NHS North West London",
+    "imd": "3",
+    "urbanRural": "Urban major conurbation",
+    "populationDensity": "high"
+  }
+}</pre>
+
+            <!-- Premium tier response -->
+            <h4 class="font-semibold mt-4 mb-2">
+                Premium Tier Response
+                <span class="credit-badge credit-one ms-2">1 credit</span>
+            </h4>
+            <p class="mb-2 text-sm text-muted">Full address list with residential and business records.</p>
+            <pre class="code-block language-json">{
+  "success": true,
+  "postcode": "SW1A 1AA",
+  "tier": "premium",
+  "creditsUsed": 1,
+  "data": {
+    "postcode": "SW1A 1AA",
+    "latitude": 51.50081,
+    "longitude": -0.14145,
+    "region": "London",
+    "localAuthority": "Westminster",
+    "addresses": [
+      {
+        "id": "lr_abc123",
+        "source": "land_registry",
+        "fullAddress": "Flat 1, Buckingham Gate, London, SW1A 1AA",
+        "buildingNumber": "1",
+        "buildingName": "Flat 1",
+        "street": "Buckingham Gate",
+        "locality": null,
+        "town": "London",
+        "postcode": "SW1A 1AA"
+      }
+    ],
+    "businesses": [
+      {
+        "id": "ch_xyz456",
+        "source": "companies_house",
+        "companyName": "Example Company Ltd",
+        "companyNumber": "01234567",
+        "fullAddress": "1 Buckingham Gate, London, SW1A 1AA",
+        "status": "Active"
+      }
+    ],
+    "addressCount": 1,
+    "businessCount": 1
+  }
+}</pre>
+
+            <!-- Bulk lookup -->
+            <h3 class="text-base font-semibold mt-6 mb-2">Bulk Lookup</h3>
+            <div class="endpoint-row">
+                <span class="method-badge method-post">POST</span>
+                /v1/bulk-lookup
+                <span class="endpoint-desc">Up to 100 postcodes per request</span>
+            </div>
+            <p class="mt-2 mb-3 text-sm">
+                Look up multiple postcodes in a single HTTP request. Each postcode is processed independently
+                and counted separately towards your credit balance.
+            </p>
+
+            <h4 class="font-semibold mb-2">Request Body</h4>
+            <table class="param-table">
+                <thead>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="param-name">postcodes</td>
+                        <td class="param-type">string[]</td>
+                        <td class="param-required">Required</td>
+                        <td>Array of UK postcodes. Maximum 100 per request.</td>
+                    </tr>
+                    <tr>
+                        <td class="param-name">tier</td>
+                        <td class="param-type">string</td>
+                        <td class="param-optional">Optional</td>
+                        <td><code>"free"</code> (default) or <code>"premium"</code>. Applied to all postcodes in the batch.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="req-res-grid mt-3">
+                <div>
+                    <div class="code-label">Request</div>
+                    <pre class="code-block language-json">{
+  "postcodes": [
+    "SW1A 1AA",
+    "EC1A 1BB",
+    "W1A 0AX"
+  ],
+  "tier": "free"
+}</pre>
+                </div>
+                <div>
+                    <div class="code-label">Response</div>
+                    <pre class="code-block language-json">{
+  "success": true,
+  "creditsUsed": 0,
+  "results": [
+    {
+      "postcode": "SW1A 1AA",
+      "success": true,
+      "data": { ... }
+    },
+    {
+      "postcode": "EC1A 1BB",
+      "success": true,
+      "data": { ... }
+    }
+  ],
+  "errors": []
+}</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- 6. PROPERTY DATA                              -->
+    <!-- ══════════════════════════════════════════════ -->
+    <section class="card mb-6" data-section="Property Data">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Property Data</h2>
+        </div>
+        <div class="card-body">
+            <div class="callout callout-info mb-4">
+                Property endpoints consume <strong>3 credits</strong> per call and require the
+                <code>propertyData</code> permission on your API key.
+                Data is sourced from HM Land Registry price paid data.
+            </div>
+
+            <!-- Transaction history -->
+            <h3 class="text-base font-semibold mb-2">
+                Transaction History
+                <span class="credit-badge credit-three ms-2">3 credits</span>
+            </h3>
+            <div class="endpoint-row">
+                <span class="method-badge method-post">POST</span>
+                /v1/property/history
+                <span class="endpoint-desc">All sales for one address</span>
+            </div>
+            <p class="mt-2 mb-3 text-sm">Returns the full sold-price history for a specific property address.</p>
+            <table class="param-table">
+                <thead>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="param-name">address</td>
+                        <td class="param-type">string</td>
+                        <td class="param-required">Required</td>
+                        <td>Full property address as returned in a premium lookup response.</td>
+                    </tr>
+                    <tr>
+                        <td class="param-name">postcode</td>
+                        <td class="param-type">string</td>
+                        <td class="param-required">Required</td>
+                        <td>Postcode to scope the address search.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <pre class="code-block language-json">{
+  "success": true,
+  "creditsUsed": 3,
+  "address": "Flat 1, Buckingham Gate, London, SW1A 1AA",
+  "transactions": [
+    {
+      "price": 450000,
+      "date": "2022-06-15",
+      "propertyType": "Flat",
+      "tenure": "Leasehold",
+      "newBuild": false
+    },
+    {
+      "price": 385000,
+      "date": "2018-03-20",
+      "propertyType": "Flat",
+      "tenure": "Leasehold",
+      "newBuild": false
+    }
+  ],
+  "transactionCount": 2
+}</pre>
+
+            <!-- Postcode sold prices -->
+            <h3 class="text-base font-semibold mt-5 mb-2">
+                Postcode Sold Prices
+                <span class="credit-badge credit-three ms-2">3 credits</span>
+            </h3>
+            <div class="endpoint-row">
+                <span class="method-badge method-post">POST</span>
+                /v1/property/postcode
+                <span class="endpoint-desc">All sales within a postcode</span>
+            </div>
+            <p class="mt-2 mb-3 text-sm">Returns all recorded sales for every address within a postcode area.</p>
+            <table class="param-table">
+                <thead>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="param-name">postcode</td>
+                        <td class="param-type">string</td>
+                        <td class="param-required">Required</td>
+                        <td>UK postcode to retrieve all property sales for.</td>
+                    </tr>
+                    <tr>
+                        <td class="param-name">limit</td>
+                        <td class="param-type">number</td>
+                        <td class="param-optional">Optional</td>
+                        <td>Maximum number of transactions to return. Defaults to 50, max 500.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Comparables -->
+            <h3 class="text-base font-semibold mt-5 mb-2">
+                Comparable Sales
+                <span class="credit-badge credit-three ms-2">3 credits</span>
+            </h3>
+            <div class="endpoint-row">
+                <span class="method-badge method-post">POST</span>
+                /v1/property/comparables
+                <span class="endpoint-desc">Similar recent sales nearby</span>
+            </div>
+            <p class="mt-2 mb-3 text-sm">
+                Returns comparable sold prices for similar properties in the same area.
+                Useful for estate agents and mortgage applications.
+            </p>
+            <table class="param-table">
+                <thead>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="param-name">postcode</td>
+                        <td class="param-type">string</td>
+                        <td class="param-required">Required</td>
+                        <td>Target postcode for comparables search.</td>
+                    </tr>
+                    <tr>
+                        <td class="param-name">propertyType</td>
+                        <td class="param-type">string</td>
+                        <td class="param-optional">Optional</td>
+                        <td>Filter by type: <code>"detached"</code>, <code>"semi-detached"</code>, <code>"terraced"</code>, <code>"flat"</code>, <code>"other"</code>.</td>
+                    </tr>
+                    <tr>
+                        <td class="param-name">months</td>
+                        <td class="param-type">number</td>
+                        <td class="param-optional">Optional</td>
+                        <td>How far back to search. Defaults to <code>12</code> months, max <code>60</code>.</td>
+                    </tr>
+                    <tr>
+                        <td class="param-name">radius</td>
+                        <td class="param-type">string</td>
+                        <td class="param-optional">Optional</td>
+                        <td>Search radius: <code>"postcode"</code> (default), <code>"sector"</code>, or <code>"district"</code>.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Valuation -->
+            <h3 class="text-base font-semibold mt-5 mb-2">
+                Property Valuation
+                <span class="credit-badge credit-three ms-2">3 credits</span>
+            </h3>
+            <div class="endpoint-row">
+                <span class="method-badge method-post">POST</span>
+                /v1/property/valuation
+                <span class="endpoint-desc">HPI-adjusted estimate</span>
+            </div>
+            <p class="mt-2 mb-3 text-sm">
+                Returns an estimated current value based on the most recent sold price adjusted using the UK
+                House Price Index (HPI). Not a formal valuation; use as an indicative guide only.
+            </p>
+            <table class="param-table">
+                <thead>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="param-name">address</td>
+                        <td class="param-type">string</td>
+                        <td class="param-required">Required</td>
+                        <td>Full property address.</td>
+                    </tr>
+                    <tr>
+                        <td class="param-name">postcode</td>
+                        <td class="param-type">string</td>
+                        <td class="param-required">Required</td>
+                        <td>Postcode of the property.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <pre class="code-block language-json">{
+  "success": true,
+  "creditsUsed": 3,
+  "address": "Flat 1, Buckingham Gate, London, SW1A 1AA",
+  "valuation": {
+    "estimatedValue": 498500,
+    "lastSoldPrice": 450000,
+    "lastSoldDate": "2022-06-15",
+    "hpiAdjustmentFactor": 1.108,
+    "region": "London",
+    "confidence": "medium",
+    "note": "Indicative estimate only, not a formal valuation."
+  }
+}</pre>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- 7. API KEY MANAGEMENT                         -->
+    <!-- ══════════════════════════════════════════════ -->
+    <section class="card mb-6" data-section="API Key Management">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">API Key Management</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Manage API keys programmatically or through the <strong>Settings → API Keys</strong> dashboard.</p>
+
+            <div class="endpoint-row"><span class="method-badge method-get">GET</span>  /keys <span class="endpoint-desc">List all keys for account</span></div>
+            <div class="endpoint-row"><span class="method-badge method-post">POST</span> /keys <span class="endpoint-desc">Create a new API key</span></div>
+            <div class="endpoint-row"><span class="method-badge method-patch">PATCH</span> /keys/:id <span class="endpoint-desc">Update name, permissions, or rate limits</span></div>
+            <div class="endpoint-row"><span class="method-badge method-delete">DELETE</span> /keys/:id <span class="endpoint-desc">Revoke and delete a key</span></div>
+            <div class="endpoint-row"><span class="method-badge method-post">POST</span> /keys/:id/regenerate <span class="endpoint-desc">Rotate the secret value</span></div>
+            <div class="endpoint-row"><span class="method-badge method-get">GET</span>  /keys/:id/stats <span class="endpoint-desc">Usage statistics for a key</span></div>
+
+            <h3 class="text-base font-semibold mt-5 mb-3">Creating a Key</h3>
+            <div class="req-res-grid">
+                <div>
+                    <div class="code-label">POST /keys — Request</div>
+                    <pre class="code-block language-json">{
+  "name": "Production Backend",
+  "permissions": [
+    "freeLookup",
+    "premiumLookup"
+  ],
+  "rateLimit": {
+    "requestsPerMinute": 60,
+    "requestsPerDay": 10000
+  }
+}</pre>
+                </div>
+                <div>
+                    <div class="code-label">Response</div>
+                    <pre class="code-block language-json">{
+  "success": true,
+  "key": {
+    "id": "key_abc123",
+    "name": "Production Backend",
+    "value": "addr_xxxxxxxxxxxxxxxxxxxx",
+    "permissions": [
+      "freeLookup",
+      "premiumLookup"
+    ],
+    "rateLimit": {
+      "requestsPerMinute": 60,
+      "requestsPerDay": 10000
+    },
+    "createdAt": "2026-02-23T12:00:00Z",
+    "lastUsedAt": null
+  },
+  "note": "Store this value securely. It will not be shown again."
+}</pre>
+                </div>
+            </div>
+
+            <h3 class="text-base font-semibold mt-5 mb-3">Permissions</h3>
+            <table class="param-table">
+                <thead>
+                    <tr><th>Permission</th><th>Allows</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="param-name">freeLookup</td>
+                        <td>ONS postcode validation with geography fields (0 credits)</td>
+                    </tr>
+                    <tr>
+                        <td class="param-name">premiumLookup</td>
+                        <td>Full address lists from Land Registry and Companies House (1 credit)</td>
+                    </tr>
+                    <tr>
+                        <td class="param-name">propertyData</td>
+                        <td>Transaction history, comparables, and valuations (3 credits each)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- 8. CREDITS & PRICING                          -->
+    <!-- ══════════════════════════════════════════════ -->
+    <section class="card mb-6" data-section="Credits & Pricing">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Credits &amp; Pricing</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Credits are the currency for premium and property lookups. Purchase a pack and they never expire.</p>
+
+            <h3 class="text-base font-semibold mb-3">Credit Packs</h3>
+            <table class="tier-table mb-5">
+                <thead>
+                    <tr><th>Pack</th><th>Credits</th><th>Price</th><th>Cost per Credit</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Starter</td><td>50</td><td>£2.99</td><td>~£0.060</td></tr>
+                    <tr><td>Basic</td><td>100</td><td>£4.99</td><td>~£0.050</td></tr>
+                    <tr><td>Professional</td><td>500</td><td>£19.99</td><td>~£0.040</td></tr>
+                    <tr><td>Business</td><td>1,000</td><td>£34.99</td><td>~£0.035</td></tr>
+                    <tr><td>Enterprise</td><td>5,000</td><td>£149.99</td><td>~£0.030</td></tr>
+                    <tr><td>Corporate</td><td>10,000</td><td>£300.00</td><td>£0.030</td></tr>
+                    <tr><td>Platform</td><td>25,000</td><td>£750.00</td><td>£0.030</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-base font-semibold mb-3">Cost Per Operation</h3>
+            <table class="param-table mb-5">
+                <thead>
+                    <tr><th>Operation</th><th>Endpoint</th><th>Credits</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Postcode validation (ONS)</td>
+                        <td><code>POST /v1/lookup</code> with <code>tier: "free"</code></td>
+                        <td><span class="credit-badge credit-free">0</span></td>
+                    </tr>
+                    <tr>
+                        <td>Full address lookup</td>
+                        <td><code>POST /v1/lookup</code> with <code>tier: "premium"</code></td>
+                        <td><span class="credit-badge credit-one">1</span></td>
+                    </tr>
+                    <tr>
+                        <td>Bulk lookup (per postcode)</td>
+                        <td><code>POST /v1/bulk-lookup</code></td>
+                        <td><span class="credit-badge credit-one">0–1</span></td>
+                    </tr>
+                    <tr>
+                        <td>Property transaction history</td>
+                        <td><code>POST /v1/property/history</code></td>
+                        <td><span class="credit-badge credit-three">3</span></td>
+                    </tr>
+                    <tr>
+                        <td>Postcode sold prices</td>
+                        <td><code>POST /v1/property/postcode</code></td>
+                        <td><span class="credit-badge credit-three">3</span></td>
+                    </tr>
+                    <tr>
+                        <td>Comparable sales</td>
+                        <td><code>POST /v1/property/comparables</code></td>
+                        <td><span class="credit-badge credit-three">3</span></td>
+                    </tr>
+                    <tr>
+                        <td>Property valuation</td>
+                        <td><code>POST /v1/property/valuation</code></td>
+                        <td><span class="credit-badge credit-three">3</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-base font-semibold mb-3">Credit Endpoints</h3>
+            <div class="endpoint-row"><span class="method-badge method-get">GET</span>  /credits <span class="endpoint-desc">Current balance</span></div>
+            <div class="endpoint-row"><span class="method-badge method-get">GET</span>  /credits/packs <span class="endpoint-desc">Available credit packs</span></div>
+            <div class="endpoint-row"><span class="method-badge method-get">GET</span>  /credits/history <span class="endpoint-desc">Transaction log (purchases + usage)</span></div>
+
+            <div class="req-res-grid mt-4">
+                <div>
+                    <div class="code-label">GET /credits — Response</div>
+                    <pre class="code-block language-json">{
+  "success": true,
+  "balance": 1450,
+  "lastUpdated": "2026-02-23T11:30:00Z"
+}</pre>
+                </div>
+                <div>
+                    <div class="code-label">GET /credits/history — Response</div>
+                    <pre class="code-block language-json">{
+  "success": true,
+  "history": [
+    {
+      "type": "purchase",
+      "credits": 500,
+      "amount": "£19.99",
+      "date": "2026-02-20T09:00:00Z"
+    },
+    {
+      "type": "usage",
+      "credits": -1,
+      "operation": "premiumLookup",
+      "postcode": "SW1A 1AA",
+      "date": "2026-02-23T11:30:00Z"
+    }
+  ]
+}</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- 9. RATE LIMITS                                -->
+    <!-- ══════════════════════════════════════════════ -->
+    <section class="card mb-6" data-section="Rate Limits">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Rate Limits</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Rate limits are applied per API key and per user account. They prevent abuse and ensure fair
+                usage across all customers.
+            </p>
+
+            <h3 class="text-base font-semibold mb-3">Default Limits</h3>
+            <table class="param-table">
+                <thead>
+                    <tr><th>Scope</th><th>Default Limit</th><th>Configurable?</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Requests per minute (per key)</td>
+                        <td>60</td>
+                        <td>Yes — via <code>PATCH /keys/:id</code></td>
+                    </tr>
+                    <tr>
+                        <td>Requests per day (per key)</td>
+                        <td>10,000</td>
+                        <td>Yes — via <code>PATCH /keys/:id</code></td>
+                    </tr>
+                    <tr>
+                        <td>Bulk lookup batch size</td>
+                        <td>100 postcodes</td>
+                        <td>No</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-base font-semibold mt-4 mb-3">Rate Limit Headers</h3>
+            <p class="mb-2 text-sm">Every API response includes the following headers:</p>
+            <pre class="code-block language-http">X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 57
+X-RateLimit-Reset: 1740309660</pre>
+
+            <h3 class="text-base font-semibold mt-4 mb-3">429 — Too Many Requests</h3>
+            <pre class="code-block language-json">{
+  "success": false,
+  "error": {
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "You have exceeded the rate limit of 60 requests per minute.",
+    "retryAfter": 43
+  }
+}</pre>
+            <p class="mt-2 text-sm">
+                Back off and retry after <code>retryAfter</code> seconds, or check the
+                <code>X-RateLimit-Reset</code> header for the exact Unix timestamp when the window resets.
+            </p>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- 10. ERROR HANDLING                            -->
+    <!-- ══════════════════════════════════════════════ -->
+    <section class="card mb-6" data-section="Error Handling">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Error Handling</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                All errors follow a consistent JSON envelope with a machine-readable <code>code</code>
+                and a human-readable <code>message</code>.
+            </p>
+
+            <h3 class="text-base font-semibold mb-2">Error Envelope</h3>
+            <pre class="code-block language-json">{
+  "success": false,
+  "error": {
+    "code": "INVALID_POSTCODE",
+    "message": "The postcode 'ZZ99 ZZZ' could not be validated.",
+    "field": "postcode"
+  }
+}</pre>
+
+            <h3 class="text-base font-semibold mt-4 mb-3">HTTP Status Codes</h3>
+            <table class="param-table">
+                <thead>
+                    <tr><th>Status</th><th>Meaning</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>200</code></td><td>Request succeeded</td></tr>
+                    <tr><td><code>400</code></td><td>Bad request — invalid or missing parameters</td></tr>
+                    <tr><td><code>401</code></td><td>Unauthorised — missing or invalid credentials</td></tr>
+                    <tr><td><code>403</code></td><td>Forbidden — insufficient permissions or credits</td></tr>
+                    <tr><td><code>404</code></td><td>Not found — resource does not exist</td></tr>
+                    <tr><td><code>429</code></td><td>Too many requests — rate limit exceeded</td></tr>
+                    <tr><td><code>500</code></td><td>Internal server error — try again shortly</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-base font-semibold mt-4 mb-3">Common Error Codes</h3>
+            <table class="param-table">
+                <thead>
+                    <tr><th>Code</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="param-name">MISSING_AUTH</td><td>No authentication credentials provided</td></tr>
+                    <tr><td class="param-name">INVALID_KEY</td><td>API key is malformed, expired, or revoked</td></tr>
+                    <tr><td class="param-name">PERMISSION_DENIED</td><td>Key lacks the required permission for this endpoint</td></tr>
+                    <tr><td class="param-name">INSUFFICIENT_CREDITS</td><td>Account balance is too low for the requested tier</td></tr>
+                    <tr><td class="param-name">INVALID_POSTCODE</td><td>Postcode format is invalid or not in the ONS database</td></tr>
+                    <tr><td class="param-name">POSTCODE_NOT_FOUND</td><td>Postcode is valid format but has no records (discontinued postcode)</td></tr>
+                    <tr><td class="param-name">RATE_LIMIT_EXCEEDED</td><td>Per-minute or per-day rate limit reached</td></tr>
+                    <tr><td class="param-name">BATCH_TOO_LARGE</td><td>Bulk lookup request contains more than 100 postcodes</td></tr>
+                    <tr><td class="param-name">VALIDATION_ERROR</td><td>One or more request body fields failed validation</td></tr>
+                    <tr><td class="param-name">INTERNAL_ERROR</td><td>Unexpected server error — retry after a short delay</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- 11. CODE EXAMPLES                             -->
+    <!-- ══════════════════════════════════════════════ -->
+    <section class="card mb-6" data-section="Code Examples">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Code Examples</h2>
+        </div>
+        <div class="card-body">
+
+            <!-- curl -->
+            <h3 class="text-base font-semibold mb-2">
+                <span data-icon="terminal" class="me-1"></span>
+                curl
+            </h3>
+            <pre class="code-block language-bash"># Free tier — postcode validation
+curl -X POST https://api.domma.dev/api/address/v1/lookup \
+  -H "Authorization: Bearer addr_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"postcode": "SW1A 1AA"}'
+
+# Premium tier — full addresses (uses 1 credit)
+curl -X POST https://api.domma.dev/api/address/v1/lookup \
+  -H "Authorization: Bearer addr_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"postcode": "SW1A 1AA", "tier": "premium"}'
+
+# Property transaction history (uses 3 credits)
+curl -X POST https://api.domma.dev/api/address/v1/property/history \
+  -H "Authorization: Bearer addr_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"address": "Flat 1, Buckingham Gate, London", "postcode": "SW1A 1AA"}'</pre>
+
+            <!-- JavaScript (fetch) -->
+            <h3 class="text-base font-semibold mt-5 mb-2">
+                <span data-icon="code" class="me-1"></span>
+                JavaScript (Browser / Node.js fetch)
+            </h3>
+            <pre class="code-block language-javascript">const API_KEY = 'addr_your_key_here';
+const BASE_URL = 'https://api.domma.dev/api/address';
+
+async function lookupPostcode(postcode, tier = 'free') {
+    const response = await fetch(`${BASE_URL}/v1/lookup`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${API_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ postcode, tier })
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error?.message || 'Lookup failed');
+    }
+
+    return response.json();
+}
+
+// Usage
+const result = await lookupPostcode('SW1A 1AA', 'premium');
+console.log(result.data.addresses);</pre>
+
+            <!-- Node.js -->
+            <h3 class="text-base font-semibold mt-5 mb-2">
+                <span data-icon="server" class="me-1"></span>
+                Node.js (Express middleware example)
+            </h3>
+            <pre class="code-block language-javascript">import express from 'express';
+
+const router = express.Router();
+const BASE_URL = 'https://api.domma.dev/api/address';
+
+router.post('/validate-address', async (req, res) => {
+    const { postcode } = req.body;
+
+    try {
+        const response = await fetch(`${BASE_URL}/v1/lookup`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${process.env.ADDRESS_API_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ postcode, tier: 'premium' })
+        });
+
+        const data = await response.json();
+
+        if (!data.success) {
+            return res.status(400).json({ error: data.error.message });
+        }
+
+        res.json({
+            valid: true,
+            addresses: data.data.addresses,
+            region: data.data.region
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Address lookup unavailable' });
+    }
+});
+
+export default router;</pre>
+
+            <!-- Python -->
+            <h3 class="text-base font-semibold mt-5 mb-2">
+                <span data-icon="layers" class="me-1"></span>
+                Python
+            </h3>
+            <pre class="code-block language-python">import os
+import requests
+
+API_KEY = os.environ.get("ADDRESS_API_KEY")
+BASE_URL = "https://api.domma.dev/api/address"
+
+def lookup_postcode(postcode: str, tier: str = "free") -> dict:
+    """Look up a UK postcode via the Domma Address API."""
+    response = requests.post(
+        f"{BASE_URL}/v1/lookup",
+        headers={
+            "Authorization": f"Bearer {API_KEY}",
+            "Content-Type": "application/json"
+        },
+        json={"postcode": postcode, "tier": tier},
+        timeout=10
+    )
+    response.raise_for_status()
+    data = response.json()
+
+    if not data.get("success"):
+        raise ValueError(data.get("error", {}).get("message", "Lookup failed"))
+
+    return data
+
+def get_property_history(address: str, postcode: str) -> list:
+    """Retrieve transaction history for a specific address."""
+    response = requests.post(
+        f"{BASE_URL}/v1/property/history",
+        headers={
+            "Authorization": f"Bearer {API_KEY}",
+            "Content-Type": "application/json"
+        },
+        json={"address": address, "postcode": postcode},
+        timeout=10
+    )
+    response.raise_for_status()
+    data = response.json()
+    return data.get("transactions", [])
+
+
+# Example usage
+result = lookup_postcode("SW1A 1AA", tier="premium")
+print(f"Found {result['data']['addressCount']} addresses")</pre>
+
+        </div>
+    </section>
+
+</div><!-- /container -->
+
+<script src="../dist/domma.min.js"></script>
+<script type="module" src="../layouts/js/layout.js"></script>
+</body>
+</html>

@@ -27,9 +27,11 @@
   <!-- Main Content -->
   <main class="admin-main">
     <!-- Page Header -->
-    <div class="admin-header">
-      <h1>Users Dashboard</h1>
-      <p>Manage user accounts, roles, and permissions</p>
+    <div class="hero hero-sm bg-ambient-float-blobs">
+      <div class="hero-content">
+        <div class="hero-title">Users Dashboard</div>
+        <div class="hero-subtitle">Manage user accounts, roles, and permissions</div>
+      </div>
     </div>
 
     <!-- Page Content -->
@@ -86,7 +88,7 @@
             <div class="col-span-6">
               <input type="text" id="user-search" class="form-input" placeholder="Search by email or name...">
             </div>
-            <div class="col-span-3">
+            <div class="col-span-2">
               <select id="role-filter" class="form-input">
                 <option value="">All Roles</option>
                 <option value="admin">Admin</option>
@@ -94,8 +96,13 @@
                 <option value="guest">Guest</option>
               </select>
             </div>
-            <div class="col-span-3">
+            <div class="col-span-2">
               <button id="refresh-users" class="btn btn-primary btn-block">Refresh</button>
+            </div>
+            <div class="col-span-2">
+              <button id="bulk-delete-btn" class="btn btn-danger btn-block">
+                <span data-icon="trash" data-icon-size="16"></span> Delete Selected
+              </button>
             </div>
           </div>
 

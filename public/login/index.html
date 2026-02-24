@@ -94,7 +94,7 @@
         // Check if already logged in
         if (Domma.auth.isAuthenticated()) {
           console.log('[Login] User already authenticated, redirecting...');
-          window.location.href = '../index.html';
+          window.location.href = Domma.auth.isAdmin() ? '../admin/' : '../miniapps/address/';
           return;
         }
 
@@ -124,7 +124,7 @@
           Domma.auth.createLoginForm('#loginFormContainer', {
             showLabels: true,
             onSuccess: () => {
-              window.location.href = '../index.html';
+              window.location.href = Domma.auth.isAdmin() ? '../admin/' : '../miniapps/address/';
             },
             onError: (error) => {
               Domma.elements.toast(error.message || 'Login failed', {type: 'error'});
@@ -141,7 +141,7 @@
           Domma.auth.createRegisterForm('#registerFormContainer', {
             showLabels: true,
             onSuccess: () => {
-              window.location.href = '../index.html';
+              window.location.href = Domma.auth.isAdmin() ? '../admin/' : '../miniapps/address/';
             },
             onError: (error) => {
               Domma.elements.toast(error.message || 'Registration failed', {type: 'error'});

@@ -34,6 +34,23 @@ export const config = {
   version: '%%APP_VERSION%%',
 
   /**
+   * Inactivity auto-logout timeout in milliseconds.
+   * User is signed out after this period of no mouse, keyboard, scroll, or touch activity.
+   * Default: 20 minutes. Change here to apply across all MiniApps and Admin pages.
+   *
+   * @type {number}
+   */
+  sessionTimeoutMs: 20 * 60 * 1000,
+
+  /**
+   * Warning shown before auto-logout (ms before timeout).
+   * Default: 60 seconds before logout.
+   *
+   * @type {number}
+   */
+  sessionWarningMs: 60 * 1000,
+
+  /**
    * Check if running in development (localhost)
    * @returns {boolean}
    */

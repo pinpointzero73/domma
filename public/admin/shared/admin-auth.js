@@ -3,6 +3,9 @@
  * Shared auth check for all admin pages
  */
 
+import { InactivityTimer } from '../../miniapps/shared/inactivity-timer.js';
+import config from '../../miniapps/shared/config.js';
+
 const AdminAuth = {
     /**
      * Initialise admin authentication
@@ -28,6 +31,25 @@ const AdminAuth = {
         }
 
         console.log(`[Admin] Access granted - user role: ${user.role}`);
+
+        // Start inactivity auto-logout timer
+        const timer = new InactivityTimer({
+            timeoutMs: config.sessionTimeoutMs,
+            warningMs: config.sessionWarningMs,
+            onWarning: () => {
+                Domma.elements.toast(
+                    'Your session will expire in 1 minute due to inactivity.',
+                    { type: 'warning', duration: 10000 }
+                );
+            },
+            onTimeout: () => {
+                Domma.elements.toast('Signed out due to inactivity.', { type: 'info' });
+                Domma.auth.logout();
+                window.location.href = '/login/index.html';
+            }
+        });
+        timer.start();
+
         return true;
     },
 

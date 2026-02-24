@@ -53,6 +53,10 @@ const AdminSidebar = {
             return !item.roles || item.roles.includes(userRole);
         });
 
+        // Determine sidebar variant based on current theme
+        const theme = window.Domma.theme;
+        const getVariant = () => (theme && theme.isDark()) ? 'dark' : 'light';
+
         // Create sidebar using Domma component
         this.sidebarInstance = Domma.elements.sidebar('#admin-sidebar', {
             position: 'left',
@@ -66,7 +70,7 @@ const AdminSidebar = {
                 icon: null
             },
             items: filteredItems,
-            variant: 'dark',
+            variant: getVariant(),
             collapsible: true,
             collapsibleDesktop: true,         // Enable desktop collapse
             persistCollapsed: true,            // Save collapse state
@@ -80,6 +84,17 @@ const AdminSidebar = {
                 // Allow default link behavior
             }
         });
+
+        // React to theme changes — swap sidebar variant class
+        if (theme && theme.onChange) {
+            theme.onChange(() => {
+                const el = document.getElementById('admin-sidebar');
+                if (!el) return;
+                const variant = getVariant();
+                el.classList.remove('sidebar-dark', 'sidebar-light');
+                el.classList.add(`sidebar-${variant}`);
+            });
+        }
 
         // Load badge counts if apiUrl provided
         if (apiUrl) {
