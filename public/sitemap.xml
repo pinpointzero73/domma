@@ -1,765 +1,508 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Sitemap for dommajs.org
-
-  Maintenance: When adding new public pages, add entries here with appropriate priority:
-  - Main pages (home, about, download): priority 1.0
-  - Content hubs (blog, changelog, showcase): priority 0.8
-  - Showcase modules and tools: priority 0.7
-  - Element pages, examples, miniapps: priority 0.6
-  - Legal pages: priority 0.3
-
-  Update lastmod when pages receive significant content updates.
-  Current lastmod baseline: 2026-02-20
--->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <!-- ============================================ -->
-  <!-- MAIN PAGES (Priority 1.0)                   -->
-  <!-- ============================================ -->
-
-  <url>
-    <loc>https://dommajs.org/</loc>
-    <lastmod>2026-02-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-
   <url>
     <loc>https://dommajs.org/about/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.8</priority>
   </url>
-
-  <url>
-    <loc>https://dommajs.org/download/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/quickstart/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/faq/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/kickstart/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-  </url>
-
   <url>
     <loc>https://dommajs.org/api/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-02-25</lastmod>
     <priority>0.8</priority>
   </url>
-
-  <!-- ============================================ -->
-  <!-- CONTENT PAGES (Priority 0.8)                -->
-  <!-- ============================================ -->
-
   <url>
     <loc>https://dommajs.org/blog/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-02-25</lastmod>
     <priority>0.8</priority>
   </url>
-
   <url>
     <loc>https://dommajs.org/changelog/</loc>
-    <lastmod>2026-02-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/docs/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/examples/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- SHOWCASE MODULES + TOOLS (Priority 0.7)     -->
-  <!-- ============================================ -->
-
-  <url>
-    <loc>https://dommajs.org/showcase/dom/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/utils/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/dates/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/models/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/blueprints/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/forms/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/tables/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/config/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/http/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/storage/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/icons/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/themes/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/grid/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/components/</loc>
-    <lastmod>2026-02-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/effects/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/auth/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/router/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/theme-roller/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/page-roller/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/editor/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/print-to-pdf/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/miniapps/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/layouts/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- ELEMENTS SUB-PAGES (Priority 0.6)           -->
-  <!-- ============================================ -->
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/modal/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-02-25</lastmod>
     <priority>0.6</priority>
   </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/tabs/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/accordion/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/tooltip/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/carousel/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/card/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/dropdown/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/toast/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/dialog/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/loader/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/badge/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/back-to-top/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/button-group/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/breadcrumbs/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/navbar/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/sidebar/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/footer/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/desktop-notification/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/timer/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/alarm/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/hero/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/slideover/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/progression/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/autocomplete/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/elements/pillbox/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- FORMS SUB-PAGES (Priority 0.6)              -->
-  <!-- ============================================ -->
-
-  <url>
-    <loc>https://dommajs.org/showcase/forms/builder/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/forms/modal/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/forms/wizard/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/forms/crud/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- EFFECTS SUB-PAGES (Priority 0.6)            -->
-  <!-- ============================================ -->
-
-  <url>
-    <loc>https://dommajs.org/showcase/effects/breathe/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/effects/pulse/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/effects/scribe/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/effects/reveal/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/effects/scramble/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/effects/counter/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/effects/ripple/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/effects/shake/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/effects/twinkle.html</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- MINIAPPS (Priority 0.6)                     -->
-  <!-- ============================================ -->
-
-  <url>
-    <loc>https://dommajs.org/showcase/miniapps/calculator/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/miniapps/color-picker/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/miniapps/markdown-editor/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/miniapps/password-generator/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/miniapps/qr-code-generator/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/miniapps/stopwatch/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/miniapps/unit-converter/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- LAYOUTS SUB-PAGES (Priority 0.6)            -->
-  <!-- ============================================ -->
-
-  <url>
-    <loc>https://dommajs.org/showcase/layouts/presets/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/layouts/modules/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/showcase/layouts/config-driven/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- EXAMPLES (Priority 0.6)                     -->
-  <!-- ============================================ -->
-
-  <url>
-    <loc>https://dommajs.org/examples/todo/</loc>
-    <lastmod>2026-02-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/examples/calculator/</loc>
-    <lastmod>2026-02-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/examples/markdown/</loc>
-    <lastmod>2026-02-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/examples/notes/</loc>
-    <lastmod>2026-02-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/examples/contacts/</loc>
-    <lastmod>2026-02-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/examples/spa/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/examples/dashboard/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/examples/landing-page/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- DOCS SUB-PAGES (Priority 0.6)               -->
-  <!-- ============================================ -->
-
-  <url>
-    <loc>https://dommajs.org/docs/getting-started/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/docs/api/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/docs/guides/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- BLOG POSTS (Priority 0.6)                   -->
-  <!-- ============================================ -->
-
-  <url>
-    <loc>https://dommajs.org/blog/introducing-domma/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/blog/domma-vs-jquery/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://dommajs.org/blog/building-with-domma/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- ============================================ -->
-  <!-- LEGAL PAGES (Priority 0.3)                  -->
-  <!-- ============================================ -->
-
   <url>
     <loc>https://dommajs.org/cookie-policy/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
   </url>
-
+  <url>
+    <loc>https://dommajs.org/download/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/examples/calculator/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/examples/celebrations/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/examples/contacts/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/examples/gallery/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/examples/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/examples/markdown/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/examples/notes/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/examples/todo/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/examples/weather/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/faq/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/feedback/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/miniapps/address/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/miniapps/docs/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/miniapps/garage/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/miniapps/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/miniapps/nexus/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
   <url>
     <loc>https://dommajs.org/privacy-policy/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
   </url>
-
+  <url>
+    <loc>https://dommajs.org/quickstart/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/quickstart/mpa/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/quickstart/spa/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/blueprints/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/components/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/config/all-components.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/config/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/dates/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/dom/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/ambient.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/animations.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/breathe.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/counter.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/filters.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/fireworks.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/glow.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/gradients.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/javascript.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/pulse.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/reveal.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/ripple.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/scramble.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/scribe.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/shadows.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/shake.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/effects/twinkle.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/accordion/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/alarm/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/autocomplete/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/back-to-top/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/badge/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/breadcrumbs/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/button-group/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/card/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/carousel/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/cookie-consent/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/css-customisation/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/dialog/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/dropdown/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/editor/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/forms/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/hero/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/loader/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/modal/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/navbar/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/notification/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/pillbox/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/progression/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/slideover/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/tabs/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/timeline/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/timer/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/toast/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/tooltip/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/elements/treeview/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/footer/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/forms/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/grid/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/http/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/icons/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/integrations/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/models/dot-notation.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/models/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/page-roller/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/print-to-pdf/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/reference/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/router/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/schema-builder/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/sidebar/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/storage/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/tables/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/theme-roller/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/themes/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dommajs.org/showcase/utils/</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
 </urlset>

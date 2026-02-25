@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Download - Domma</title>
+    <link rel="canonical" href="https://dommajs.org/download/">
   <link rel="icon" type="image/svg+xml" href="../assets/logo/domma-icon.svg">
   <link rel="stylesheet" href="../dist/domma.css">
   <link rel="stylesheet" href="../dist/grid.css">
@@ -39,7 +40,7 @@
   <!-- Download Cards -->
   <section class="mb-8" id="core-library">
     <h2 class="text-2xl font-semibold mb-6 text-center">Core Library</h2>
-    <div class="grid grid-cols-3 grid-cols-md-3 gap-6">
+    <div class="grid grid-cols-2 grid-cols-md-2 gap-6">
       <!-- UMD Bundle -->
       <div class="card download-card-styles">
         <div class="card-body">
@@ -76,22 +77,6 @@
         </div>
       </div>
 
-      <!-- Kickstart Starter Kit -->
-      <div class="card download-card-styles">
-        <div class="card-body">
-          <div class="download-icon-style" data-icon="zap" data-icon-size="48"></div>
-          <h3 class="text-xl font-semibold mb-2">QuickStart Starter</h3>
-          <p class="download-description-text">
-            Complete starter kit with Domma, themes, CSS, and a ready-to-use template.<br/>
-            Extract and start building immediately.
-          </p>
-          <p class="download-size-text" id="quickstart-size">~260 KB</p>
-          <a href="../dist/quickstart.tar.gz" download class="btn btn-success btn-block mt-auto">
-            <span data-icon="download" data-icon-size="16"></span>
-            Download QuickStart
-          </a>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -152,71 +137,6 @@
           <p class="text-sm text-muted mb-2">172KB JS + 155KB CSS</p>
           <p class="text-xs text-muted mb-3">Tables and data tools</p>
           <a href="../dist/archives/domma-data-focused.tar.gz" download class="btn btn-sm btn-outline btn-block">
-            <span data-icon="download" data-icon-size="14"></span>
-            Download
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Kickstart Templates (UPDATED) -->
-  <section class="mb-8">
-    <h2 class="text-2xl font-semibold mb-6 text-center">QuickStart Templates</h2>
-    <p class="text-center text-muted mb-6">
-      Ready-to-use project templates with preset-matched Domma bundles. Extract and start coding.
-    </p>
-    <div class="grid grid-cols-2 grid-cols-md-4 gap-4">
-      <!-- QuickStart Minimal -->
-      <div class="card download-card-styles">
-        <div class="card-body">
-          <div class="download-icon-style" data-icon="zap" data-icon-size="32"></div>
-          <h3 class="font-semibold mb-2">Minimal</h3>
-          <p class="text-sm text-muted mb-2">~67KB</p>
-          <p class="text-xs text-muted mb-3">Lightweight starter</p>
-          <a href="../dist/quickstart-minimal.tar.gz" download class="btn btn-sm btn-outline btn-block">
-            <span data-icon="download" data-icon-size="14"></span>
-            Download
-          </a>
-        </div>
-      </div>
-
-      <!-- QuickStart Essentials -->
-      <div class="card download-card-styles">
-        <div class="card-body">
-          <div class="download-icon-style" data-icon="zap" data-icon-size="32"></div>
-          <h3 class="font-semibold mb-2">Essentials</h3>
-          <p class="text-sm text-muted mb-2">~89KB</p>
-          <p class="text-xs text-muted mb-3">Recommended starter</p>
-          <a href="../dist/quickstart-essentials.tar.gz" download class="btn btn-sm btn-success btn-block">
-            <span data-icon="download" data-icon-size="14"></span>
-            Download
-          </a>
-        </div>
-      </div>
-
-      <!-- QuickStart Full -->
-      <div class="card download-card-styles">
-        <div class="card-body">
-          <div class="download-icon-style" data-icon="zap" data-icon-size="32"></div>
-          <h3 class="font-semibold mb-2">Full</h3>
-          <p class="text-sm text-muted mb-2">~102KB</p>
-          <p class="text-xs text-muted mb-3">Complete starter</p>
-          <a href="../dist/quickstart-full.tar.gz" download class="btn btn-sm btn-outline btn-block">
-            <span data-icon="download" data-icon-size="14"></span>
-            Download
-          </a>
-        </div>
-      </div>
-
-      <!-- QuickStart Data-Focused -->
-      <div class="card download-card-styles">
-        <div class="card-body">
-          <div class="download-icon-style" data-icon="zap" data-icon-size="32"></div>
-          <h3 class="font-semibold mb-2">Data-Focused</h3>
-          <p class="text-sm text-muted mb-2">~76KB</p>
-          <p class="text-xs text-muted mb-3">Data tools starter</p>
-          <a href="../dist/quickstart-data-focused.tar.gz" download class="btn btn-sm btn-outline btn-block">
             <span data-icon="download" data-icon-size="14"></span>
             Download
           </a>
@@ -723,62 +643,6 @@
         console.warn('Could not load build info:', err);
       });
 
-    // Load quickstart metadata and update download links
-    fetch('../dist/quickstart-latest.json')
-      .then(r => r.json())
-      .then(metadata => {
-        const {files, timestamp, buildDate} = metadata;
-
-        // Update all quickstart download links with timestamped filenames
-        const linkMap = {
-          'quickstart.tar.gz': files.alias,
-          'quickstart-minimal.tar.gz': files.minimal,
-          'quickstart-essentials.tar.gz': files.essentials,
-          'quickstart-full.tar.gz': files.full,
-          'quickstart-data-focused.tar.gz': files.dataFocused
-        };
-
-        // Update all download links
-        document.querySelectorAll('a[download]').forEach(link => {
-          const href = link.getAttribute('href');
-          Object.keys(linkMap).forEach(oldFile => {
-            if (href.includes(oldFile)) {
-              const newHref = href.replace(oldFile, linkMap[oldFile]);
-              link.setAttribute('href', newHref);
-            }
-          });
-        });
-
-        // Load and display quickstart size using the alias file
-        fetch(`../dist/${files.alias}`)
-          .then(r => r.blob())
-          .then(blob => {
-            const sizeKB = Math.round(blob.size / 1024);
-            const sizeEl = document.getElementById('quickstart-size');
-            if (sizeEl) {
-              sizeEl.textContent = `~${sizeKB} KB`;
-            }
-          })
-          .catch(err => {
-            console.error('Could not load quickstart size:', err);
-          });
-      })
-      .catch(err => {
-        console.error('Could not load quickstart metadata:', err);
-        // Fallback to old behaviour if metadata not available
-        fetch('../dist/quickstart.tar.gz')
-          .then(r => r.blob())
-          .then(blob => {
-            const sizeKB = Math.round(blob.size / 1024);
-            const sizeEl = document.getElementById('quickstart-size');
-            if (sizeEl) {
-              sizeEl.textContent = `~${sizeKB} KB`;
-            }
-          })
-          .catch(err => {
-            console.error('Could not load quickstart.tar.gz size:', err);
-          });
-      });
   });
 </script>
 </body>
