@@ -4,3 +4,4 @@ dist
 coverage
 .env
 public/dist/
+public/download/kickstart-files/

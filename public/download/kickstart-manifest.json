@@ -1,0 +1,626 @@
+{
+  "version": "0.18.1",
+  "generated": "2026-02-25T21:51:21.006Z",
+  "spa": [
+    {
+      "source": "kickstart-files/spa/.claude/memory/MEMORY.md",
+      "path": ".claude/memory/MEMORY.md",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/.claude/settings.json",
+      "path": ".claude/settings.json",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/.claude/snippets.md",
+      "path": ".claude/snippets.md",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/CLAUDE.md",
+      "path": "CLAUDE.md",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/README.md",
+      "path": "README.md",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/backend/README.md",
+      "path": "backend/README.md",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/blueprints/README.md",
+      "path": "blueprints/README.md",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/blueprints/common/contact.js",
+      "path": "blueprints/common/contact.js",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/blueprints/common/settings.js",
+      "path": "blueprints/common/settings.js",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/blueprints/common/user.js",
+      "path": "blueprints/common/user.js",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/blueprints/crud/product.js",
+      "path": "blueprints/crud/product.js",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/blueprints/crud/task.js",
+      "path": "blueprints/crud/task.js",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/blueprints/forms/login.js",
+      "path": "blueprints/forms/login.js",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/blueprints/forms/registration.js",
+      "path": "blueprints/forms/registration.js",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/frontend/assets/logo/placeholder.svg",
+      "path": "frontend/assets/logo/placeholder.svg",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/frontend/css/custom.css",
+      "path": "frontend/css/custom.css",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/frontend/domma.config.json",
+      "path": "frontend/domma.config.json",
+      "category": "config",
+      "required": true,
+      "group": "core",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/frontend/index.html",
+      "path": "frontend/index.html",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/frontend/js/app.js",
+      "path": "frontend/js/app.js",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/frontend/js/views/404.js",
+      "path": "frontend/js/views/404.js",
+      "category": "view",
+      "required": true,
+      "group": "404",
+      "mode": "spa",
+      "label": "404 Page"
+    },
+    {
+      "source": "kickstart-files/spa/frontend/js/views/about.js",
+      "path": "frontend/js/views/about.js",
+      "category": "view",
+      "required": false,
+      "group": "about",
+      "mode": "spa",
+      "label": "About"
+    },
+    {
+      "source": "kickstart-files/spa/frontend/js/views/contact.js",
+      "path": "frontend/js/views/contact.js",
+      "category": "view",
+      "required": false,
+      "group": "contact",
+      "mode": "spa",
+      "label": "Contact"
+    },
+    {
+      "source": "kickstart-files/spa/frontend/js/views/home.js",
+      "path": "frontend/js/views/home.js",
+      "category": "view",
+      "required": true,
+      "group": "home",
+      "mode": "spa",
+      "label": "Home"
+    },
+    {
+      "source": "kickstart-files/spa/frontend/js/views/index.js",
+      "path": "frontend/js/views/index.js",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "spa"
+    },
+    {
+      "source": "kickstart-files/spa/frontend/js/views/templates/404.html",
+      "path": "frontend/js/views/templates/404.html",
+      "category": "view",
+      "required": true,
+      "group": "404",
+      "mode": "spa",
+      "label": "404 Page"
+    },
+    {
+      "source": "kickstart-files/spa/frontend/js/views/templates/about.html",
+      "path": "frontend/js/views/templates/about.html",
+      "category": "view",
+      "required": false,
+      "group": "about",
+      "mode": "spa",
+      "label": "About"
+    },
+    {
+      "source": "kickstart-files/spa/frontend/js/views/templates/contact.html",
+      "path": "frontend/js/views/templates/contact.html",
+      "category": "view",
+      "required": false,
+      "group": "contact",
+      "mode": "spa",
+      "label": "Contact"
+    },
+    {
+      "source": "kickstart-files/spa/frontend/js/views/templates/home.html",
+      "path": "frontend/js/views/templates/home.html",
+      "category": "view",
+      "required": true,
+      "group": "home",
+      "mode": "spa",
+      "label": "Home"
+    }
+  ],
+  "mpa": [
+    {
+      "source": "kickstart-files/mpa/.claude/settings.json",
+      "path": ".claude/settings.json",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/.claude/snippets.md",
+      "path": ".claude/snippets.md",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/CLAUDE.md",
+      "path": "CLAUDE.md",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/README.md",
+      "path": "README.md",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/backend/.gitkeep",
+      "path": "backend/.gitkeep",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/backend/README.md",
+      "path": "backend/README.md",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/blueprints/README.md",
+      "path": "blueprints/README.md",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/blueprints/common/contact.js",
+      "path": "blueprints/common/contact.js",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/blueprints/common/settings.js",
+      "path": "blueprints/common/settings.js",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/blueprints/common/user.js",
+      "path": "blueprints/common/user.js",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/blueprints/crud/product.js",
+      "path": "blueprints/crud/product.js",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/blueprints/crud/task.js",
+      "path": "blueprints/crud/task.js",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/blueprints/forms/login.js",
+      "path": "blueprints/forms/login.js",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/blueprints/forms/registration.js",
+      "path": "blueprints/forms/registration.js",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/domma.config.json",
+      "path": "domma.config.json",
+      "category": "config",
+      "required": true,
+      "group": "core",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/assets/logo/placeholder.svg",
+      "path": "frontend/assets/logo/placeholder.svg",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/config/footer.json",
+      "path": "frontend/config/footer.json",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/config/navbar.json",
+      "path": "frontend/config/navbar.json",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/css/custom.css",
+      "path": "frontend/css/custom.css",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/js/app.js",
+      "path": "frontend/js/app.js",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/about/about.js",
+      "path": "frontend/pages/about/about.js",
+      "category": "page",
+      "required": false,
+      "group": "about",
+      "mode": "mpa",
+      "label": "About"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/about/index.html",
+      "path": "frontend/pages/about/index.html",
+      "category": "page",
+      "required": false,
+      "group": "about",
+      "mode": "mpa",
+      "label": "About"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/blog/blog.js",
+      "path": "frontend/pages/blog/blog.js",
+      "category": "page",
+      "required": false,
+      "group": "blog",
+      "mode": "mpa",
+      "label": "Blog"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/blog/index.html",
+      "path": "frontend/pages/blog/index.html",
+      "category": "page",
+      "required": false,
+      "group": "blog",
+      "mode": "mpa",
+      "label": "Blog"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/contact/contact.js",
+      "path": "frontend/pages/contact/contact.js",
+      "category": "page",
+      "required": false,
+      "group": "contact",
+      "mode": "mpa",
+      "label": "Contact"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/contact/index.html",
+      "path": "frontend/pages/contact/index.html",
+      "category": "page",
+      "required": false,
+      "group": "contact",
+      "mode": "mpa",
+      "label": "Contact"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/cookies/cookies.js",
+      "path": "frontend/pages/cookies/cookies.js",
+      "category": "page",
+      "required": false,
+      "group": "cookies",
+      "mode": "mpa",
+      "label": "Cookies"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/cookies/index.html",
+      "path": "frontend/pages/cookies/index.html",
+      "category": "page",
+      "required": false,
+      "group": "cookies",
+      "mode": "mpa",
+      "label": "Cookies"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/docs/docs.js",
+      "path": "frontend/pages/docs/docs.js",
+      "category": "page",
+      "required": false,
+      "group": "docs",
+      "mode": "mpa",
+      "label": "Docs"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/docs/index.html",
+      "path": "frontend/pages/docs/index.html",
+      "category": "page",
+      "required": false,
+      "group": "docs",
+      "mode": "mpa",
+      "label": "Docs"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/index.html",
+      "path": "frontend/pages/index.html",
+      "category": "page",
+      "required": true,
+      "group": "home",
+      "mode": "mpa",
+      "label": "Home"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/index.js",
+      "path": "frontend/pages/index.js",
+      "category": "page",
+      "required": true,
+      "group": "home",
+      "mode": "mpa",
+      "label": "Home"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/privacy/index.html",
+      "path": "frontend/pages/privacy/index.html",
+      "category": "page",
+      "required": false,
+      "group": "privacy",
+      "mode": "mpa",
+      "label": "Privacy"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/privacy/privacy.js",
+      "path": "frontend/pages/privacy/privacy.js",
+      "category": "page",
+      "required": false,
+      "group": "privacy",
+      "mode": "mpa",
+      "label": "Privacy"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/terms/index.html",
+      "path": "frontend/pages/terms/index.html",
+      "category": "page",
+      "required": false,
+      "group": "terms",
+      "mode": "mpa",
+      "label": "Terms"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/pages/terms/terms.js",
+      "path": "frontend/pages/terms/terms.js",
+      "category": "page",
+      "required": false,
+      "group": "terms",
+      "mode": "mpa",
+      "label": "Terms"
+    },
+    {
+      "source": "kickstart-files/mpa/frontend/types/domma.d.ts",
+      "path": "frontend/types/domma.d.ts",
+      "category": "core",
+      "required": true,
+      "group": "core",
+      "mode": "mpa"
+    }
+  ],
+  "dist": [
+    {
+      "source": "kickstart-files/dist/domma.min.js",
+      "path": "frontend/dist/domma/domma.min.js",
+      "category": "dist",
+      "required": true,
+      "group": "dist",
+      "mode": "both"
+    },
+    {
+      "source": "kickstart-files/dist/domma.css",
+      "path": "frontend/dist/domma/domma.css",
+      "category": "dist",
+      "required": true,
+      "group": "dist",
+      "mode": "both"
+    },
+    {
+      "source": "kickstart-files/dist/grid.css",
+      "path": "frontend/dist/domma/grid.css",
+      "category": "dist",
+      "required": true,
+      "group": "dist",
+      "mode": "both"
+    },
+    {
+      "source": "kickstart-files/dist/elements.css",
+      "path": "frontend/dist/domma/elements.css",
+      "category": "dist",
+      "required": true,
+      "group": "dist",
+      "mode": "both"
+    },
+    {
+      "source": "kickstart-files/dist/syntax.css",
+      "path": "frontend/dist/domma/syntax.css",
+      "category": "dist",
+      "required": true,
+      "group": "dist",
+      "mode": "both"
+    },
+    {
+      "source": "kickstart-files/dist/domma-syntax.min.js",
+      "path": "frontend/dist/domma/domma-syntax.min.js",
+      "category": "dist",
+      "required": true,
+      "group": "dist",
+      "mode": "both"
+    },
+    {
+      "source": "kickstart-files/dist/themes/core.css",
+      "path": "frontend/dist/domma/themes/core.css",
+      "category": "dist",
+      "required": true,
+      "group": "dist",
+      "mode": "both"
+    },
+    {
+      "source": "kickstart-files/dist/themes/domma-themes.css",
+      "path": "frontend/dist/domma/themes/domma-themes.css",
+      "category": "dist",
+      "required": true,
+      "group": "dist",
+      "mode": "both"
+    },
+    {
+      "source": "kickstart-files/dist/themes/grayve.css",
+      "path": "frontend/dist/domma/themes/grayve.css",
+      "category": "dist",
+      "required": true,
+      "group": "dist",
+      "mode": "both"
+    }
+  ]
+}

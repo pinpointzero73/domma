@@ -24,7 +24,10 @@
         Choose from pre-built bundles or create your own custom package.
       </p>
       <div class="hero-actions">
-        <a href="#core-library" class="btn btn-lg btn-primary">
+        <a href="#kickstart" class="btn btn-lg btn-primary">
+          <span data-icon="zap"></span> Kickstart
+        </a>
+        <a href="#core-library" class="btn btn-lg btn-outline-primary">
           <span data-icon="download"></span> Core Library
         </a>
         <a href="#custom-bundle-builder" class="btn btn-lg btn-outline-primary">
@@ -36,6 +39,67 @@
 </section>
 
 <main class="container py-8">
+
+  <!-- Kickstart Section -->
+  <section class="mb-8" id="kickstart">
+    <h2 class="text-2xl font-semibold mb-2 text-center">Kickstart a New Project</h2>
+    <p class="text-center text-muted mb-6">
+      Scaffold a complete project in seconds — navbar, footer, themes, routing, and pages all included.
+    </p>
+    <div class="grid grid-cols-2 grid-cols-md-2 gap-6 mb-6">
+
+      <!-- SPA Kickstart Card -->
+      <div class="card download-card-styles" style="border: 2px solid var(--dm-success);">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="download-icon-style" data-icon="zap" data-icon-size="32" style="color: var(--dm-success);"></div>
+            <div>
+              <h3 class="font-semibold mb-0">SPA Kickstart</h3>
+              <span class="badge badge-success" style="font-size: 0.7rem;">Recommended</span>
+            </div>
+          </div>
+          <p class="text-sm text-muted mb-3">
+            Single Page Application with client-side routing, instant transitions, and shared state between views.
+          </p>
+          <div class="command-block mb-3" style="font-size: 0.85rem;">
+            <span class="command-prompt">$</span> npx domma init --spa
+          </div>
+          <div class="mt-auto d-flex gap-2">
+            <a href="../quickstart/spa/" class="btn btn-sm btn-success flex-grow-1">
+              <span data-icon="book-open" data-icon-size="14"></span> QuickStart Guide
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MPA Kickstart Card -->
+      <div class="card download-card-styles" style="border: 2px solid var(--dm-primary);">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="download-icon-style" data-icon="file-text" data-icon-size="32" style="color: var(--dm-primary);"></div>
+            <div>
+              <h3 class="font-semibold mb-0">MPA Kickstart</h3>
+            </div>
+          </div>
+          <p class="text-sm text-muted mb-3">
+            Multi-Page Application with traditional HTML pages — ideal for content-heavy sites where SEO is critical.
+          </p>
+          <div class="command-block mb-3" style="font-size: 0.85rem;">
+            <span class="command-prompt">$</span> npx domma init --mpa
+          </div>
+          <div class="mt-auto d-flex gap-2">
+            <a href="../quickstart/mpa/" class="btn btn-sm btn-primary flex-grow-1">
+              <span data-icon="book-open" data-icon-size="14"></span> QuickStart Guide
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- JSZip Builder -->
+    <div id="kickstart-builder"></div>
+  </section>
 
   <!-- Download Cards -->
   <section class="mb-8" id="core-library">
@@ -645,5 +709,8 @@
 
   });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2/dist/FileSaver.min.js"></script>
+<script src="kickstart-builder.js"></script>
 </body>
 </html>

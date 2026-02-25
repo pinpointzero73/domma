@@ -1,7 +1,7 @@
 # Domma Development Makefile
 # Makes local development builds easier with proper environment settings
 
-.PHONY: help build build-dev build-prod dev garage garage-prod docs miniapps kickstart clean kill-ports
+.PHONY: help build build-dev build-prod dev garage garage-prod docs miniapps clean kill-ports
 
 # Default target
 help:
@@ -22,9 +22,6 @@ help:
 	@echo "Core Domma:"
 	@echo "  make core           - Build Domma core only (domma.min.js)"
 	@echo "  make css            - Build CSS only"
-	@echo ""
-	@echo "Distribution:"
-	@echo "  make kickstart      - Build kickstart bundles with fresh timestamps"
 	@echo ""
 	@echo "Utilities:"
 	@echo "  make clean          - Clean dist and build artifacts"
@@ -101,20 +98,6 @@ watch-garage:
 # Quick rebuild after Domma core changes
 rebuild-after-core: core garage
 	@echo "✓ Rebuilt Domma core and garage app"
-
-# Kickstart bundles - Build with fresh JavaScript bundles and timestamps
-kickstart:
-	@echo "📦 Building kickstart bundles..."
-	@echo "   - Rebuilding JavaScript bundles"
-	@echo "   - Generating build info"
-	@echo "   - Creating timestamped archives"
-	@echo ""
-	npm run build:kickstart
-	@echo ""
-	@echo "✅ Kickstart bundles complete!"
-	@echo "   - Fresh JavaScript with current timestamps"
-	@echo "   - Each bundle includes info.json metadata"
-	@echo "   - Ready for distribution"
 
 # Kill processes on development ports
 # Usage: make kill-ports PORTS="3000 3001 3010"

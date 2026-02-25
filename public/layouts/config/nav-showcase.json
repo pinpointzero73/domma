@@ -13,16 +13,24 @@
           "divider": true
         },
         {
+          "text": "SPA",
+          "url": "quickstart/spa/index.html",
+          "section": "quickstart-spa",
+          "badge": "New"
+        },
+        {
           "text": "MPA",
           "url": "quickstart/mpa/index.html",
           "section": "quickstart-mpa",
           "badge": "New"
         },
         {
-          "text": "SPA",
-          "url": "quickstart/spa/index.html",
-          "section": "quickstart-spa",
-          "badge": "New"
+          "divider": true
+        },
+        {
+          "text": "Kickstart Builder",
+          "url": "download/index.html#kickstart",
+          "section": "kickstart-builder"
         }
       ]
     },
@@ -522,6 +530,14 @@
     {
       "text": "Resources",
       "items": [
+        {
+          "text": "Download",
+          "url": "download/index.html",
+          "section": "download"
+        },
+        {
+          "divider": true
+        },
         {
           "text": "About Us",
           "url": "about/index.html",

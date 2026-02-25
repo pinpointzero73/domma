@@ -51,7 +51,22 @@ npm install
 npm run build
 ```
 
-Outputs minified + obfuscated bundles to `dist/`.
+Full build chain (in order):
+1. `generate:bundles` — generate preset bundle entry points
+2. `rollup -c` — compile JS bundles to `public/dist/`
+3. `build:info` — write `build-info.json`
+4. `build:metadata` — copy `bundle-metadata.json`
+5. `copy:themes` — copy theme CSS files to `public/dist/themes/`
+6. `build:css` — compile CSS source → `public/dist/*.css`
+7. `build:css-bundles` — compile preset CSS bundles
+8. `build:archives` — generate `.tar.gz` preset archives
+9. **`build:kickstart-files`** — copy templates + dist files to `public/download/kickstart-files/` and generate `kickstart-manifest.json`
+10. `build:miniapps` — build all miniapps
+
+**Kickstart files only** (fast, no JS/CSS rebuild needed):
+```bash
+npm run build:kickstart-files
+```
 
 **Showcase:**
 
@@ -240,12 +255,22 @@ public/
 │   ├── themes/
 │   ├── grid/
 │   ├── theme-roller/
-│   ├── page-roller/
-│   └── download/
+│   └── page-roller/
+├── download/            # Downloads page + Kickstart Builder
+│   ├── index.html
+│   ├── bundle-builder.js
+│   ├── kickstart-builder.js     # Browser-side JSZip scaffolder
+│   ├── kickstart-manifest.json  # GENERATED — do not edit manually
+│   └── kickstart-files/         # GENERATED — gitignored build artefact
+│       ├── mpa/                 # MPA template files (served statically)
+│       ├── spa/                 # SPA template files (served statically)
+│       └── dist/                # Domma dist files for kickstart zips
 ├── examples/            # Working example applications
 │   └── todo/
-├── kickstart/           # Template for quick project setup
-│   └── index.html
+├── quickstart/          # Getting-started docs (SPA-first)
+│   ├── index.html       # Hub page — SPA listed first
+│   ├── spa/             # SPA QuickStart guide
+│   └── mpa/             # MPA QuickStart guide
 ├── layouts/             # Layout system (presets, modules, config)
 │   ├── css/
 │   ├── js/
@@ -268,6 +293,62 @@ public/
 - Only `index.html` exists at root level - everything else is in subdirectories
 - This structure ensures clean, consistent URLs (`/about/`, `/faq/`, etc.)
 - Test files and backups are not stored in the public directory
+
+## Kickstart & Distribution
+
+Three overlapping but distinct distribution concepts:
+
+| Concept | What it is | Entry point |
+|---------|-----------|-------------|
+| **QuickStart** | Step-by-step getting-started docs | `public/quickstart/index.html` |
+| **Kickstart** | Project scaffold templates (`npx domma init`) | `templates/kickstart/` (MPA), `templates/kickstart-spa/` (SPA) |
+| **Preset Archives** | Downloadable `.tar.gz` bundles (JS + CSS only) | `public/dist/archives/` |
+
+### CLI Default
+
+`npx domma init` defaults to **SPA** mode. Pass `--mpa` to scaffold a Multi-Page Application.
+
+```bash
+npx domma init            # SPA (default)
+npx domma init --spa      # explicit SPA
+npx domma init --mpa      # Multi-Page Application
+```
+
+### Template Directories (npm published)
+
+Only these template directories are included in the npm package (`"files"` in `package.json`):
+
+```
+templates/
+├── kickstart/        # MPA scaffold (published)
+├── kickstart-spa/    # SPA scaffold (published)
+├── page-template/    # Add-a-page helper (published)
+└── view-template/    # Add-a-view helper (published)
+```
+
+`templates/kickstart-old/` has been removed. Do not recreate it.
+
+### Browser-Side Kickstart Builder (`public/download/`)
+
+The Downloads page hosts a browser-side zip assembler powered by JSZip + FileSaver.js.
+
+**How it works:**
+1. `npm run build:kickstart-files` (`scripts/build-kickstart-files.js`) copies template files and dist assets to `public/download/kickstart-files/` and writes `public/download/kickstart-manifest.json`
+2. The browser loads the manifest, lets the user configure their project (mode, name, theme, pages, AI files), then fetches the selected files, applies `{{placeholder}}` substitution in-memory, and triggers a `.zip` download — no server needed
+
+**Build artefacts** (both gitignored, regenerated on every build):
+- `public/download/kickstart-files/` — raw template and dist files served statically
+- `public/download/kickstart-manifest.json` — file index with category/group/required metadata
+
+**Key files:**
+- `scripts/build-kickstart-files.js` — build script (classifies files as `core`, `page`, `view`, `ai`, `config`, `dist`)
+- `public/download/kickstart-builder.js` — browser UI (uses DOMPurify for innerHTML, JSZip for zipping, FileSaver for download)
+
+**Template variable substitutions** (applied to all non-binary files at download time):
+- `{{projectName}}` — user's chosen project name
+- `{{year}}` — current year
+- `{{theme}}` — chosen theme (e.g. `charcoal-dark`)
+- `{{includeThemeSelector}}` — `"true"` or `"false"`
 
 ## Project Guidelines
 

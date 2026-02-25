@@ -69,14 +69,14 @@
 
             <!-- Two CTA Buttons -->
             <div class="d-flex gap-3 justify-content-center flex-wrap mb-0">
-                <a href="mpa/" class="cta">
-                    <span data-icon="file-text" data-icon-size="20"></span>
-                    QuickStart: MPA
-                    <span class="cta-arrow">&rarr;</span>
-                </a>
-                <a href="spa/" class="cta cta-secondary">
+                <a href="spa/" class="cta">
                     <span data-icon="zap" data-icon-size="20"></span>
                     QuickStart: SPA
+                    <span class="cta-arrow">&rarr;</span>
+                </a>
+                <a href="mpa/" class="cta cta-secondary">
+                    <span data-icon="file-text" data-icon-size="20"></span>
+                    QuickStart: MPA
                     <span class="cta-arrow">&rarr;</span>
                 </a>
             </div>
@@ -87,7 +87,7 @@
   <div class="command-block" style="max-width: 600px; margin: 2rem auto; text-align: left;">
     <div><span class="command-prompt">$</span> npm init -y</div>
     <div><span class="command-prompt">$</span> npm install domma-js</div>
-    <div><span class="command-prompt">$</span> npx domma init <span style="opacity: 0.6;">--mpa | --spa</span></div>
+    <div><span class="command-prompt">$</span> npx domma init <span style="opacity: 0.6;">--spa | --mpa</span></div>
     <p class="text-center mt-3" style="opacity: 0.8;">
       Choose Multi-Page (MPA) or Single Page (SPA) mode!
     </p>
@@ -217,45 +217,6 @@
   <p class="text-center text-secondary mb-5 lead">Both modes include Navbar, Footer, 16+ Themes, Icons, Grid, Components, and Mobile Responsive design</p>
 
   <div class="row g-5 justify-content-center">
-    <!-- MPA Card -->
-    <div class="col-12 col-lg-6">
-      <div class="card h-100 card-hover" style="border: 2px solid var(--dm-primary); transition: all 0.3s ease;">
-        <div class="card-body p-5">
-          <!-- Icon -->
-          <div class="text-center mb-4">
-            <span data-icon="file-text" data-icon-size="64" style="color: var(--dm-primary);"></span>
-          </div>
-
-          <!-- Title -->
-          <h3 class="text-center h3 mb-3">Multi-Page Application</h3>
-          <p class="text-center text-secondary mb-4">Traditional site with separate HTML pages</p>
-
-          <!-- Command -->
-          <div class="command-block text-center" style="font-size: 1rem;">
-            <span class="command-prompt">$</span> npx domma init --mpa
-          </div>
-
-          <!-- Benefits -->
-          <h4 class="h6 mt-4 mb-3">Perfect For:</h4>
-          <ul class="list-unstyled mb-4">
-            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> Content-heavy sites (blogs, docs, marketing)</li>
-            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> SEO is critical</li>
-            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> Works without JavaScript</li>
-            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> Simple static hosting</li>
-            <li class="mb-0"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> Independent pages</li>
-          </ul>
-
-          <!-- CTA -->
-          <div class="text-center mt-4">
-            <a href="mpa/" class="btn btn-lg btn-primary w-100">
-              <span data-icon="arrow-right" data-icon-size="20"></span>
-              Get Started with MPA
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- SPA Card -->
     <div class="col-12 col-lg-6">
       <div class="card h-100 card-hover" style="border: 2px solid var(--dm-success); transition: all 0.3s ease;">
@@ -294,11 +255,50 @@
         </div>
       </div>
     </div>
+
+    <!-- MPA Card -->
+    <div class="col-12 col-lg-6">
+      <div class="card h-100 card-hover" style="border: 2px solid var(--dm-primary); transition: all 0.3s ease;">
+        <div class="card-body p-5">
+          <!-- Icon -->
+          <div class="text-center mb-4">
+            <span data-icon="file-text" data-icon-size="64" style="color: var(--dm-primary);"></span>
+          </div>
+
+          <!-- Title -->
+          <h3 class="text-center h3 mb-3">Multi-Page Application</h3>
+          <p class="text-center text-secondary mb-4">Traditional site with separate HTML pages</p>
+
+          <!-- Command -->
+          <div class="command-block text-center" style="font-size: 1rem;">
+            <span class="command-prompt">$</span> npx domma init --mpa
+          </div>
+
+          <!-- Benefits -->
+          <h4 class="h6 mt-4 mb-3">Perfect For:</h4>
+          <ul class="list-unstyled mb-4">
+            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> Content-heavy sites (blogs, docs, marketing)</li>
+            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> SEO is critical</li>
+            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> Works without JavaScript</li>
+            <li class="mb-2"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> Simple static hosting</li>
+            <li class="mb-0"><span data-icon="check" data-icon-size="18" style="color: var(--dm-primary); margin-right: 0.5rem;"></span> Independent pages</li>
+          </ul>
+
+          <!-- CTA -->
+          <div class="text-center mt-4">
+            <a href="mpa/" class="btn btn-lg btn-primary w-100">
+              <span data-icon="arrow-right" data-icon-size="20"></span>
+              Get Started with MPA
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="text-center mt-6 p-4" style="background: var(--dm-surface-raised); border-radius: var(--dm-radius-lg); border: 1px solid var(--dm-border);">
     <span data-icon="info" data-icon-size="24" style="color: var(--dm-info); margin-right: 0.5rem;"></span>
-    <strong>Not sure which to choose?</strong> Start with MPA - it's simpler and works everywhere. You can always rebuild as SPA later.
+    <strong>Not sure which to choose?</strong> Start with SPA — it's the modern approach with instant transitions. Choose MPA for content-heavy sites where SEO is critical.
   </div>
 </section>
 

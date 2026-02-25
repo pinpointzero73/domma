@@ -84,26 +84,26 @@ async function handleInit() {
   let projectName = 'my-app';
   let theme = 'charcoal-dark';
   let includeThemeSelector = false;
-  let projectMode = 'mpa'; // Default to multi-page
+  let projectMode = 'spa'; // Default to single-page
 
   // Determine project mode
-  if (spaFlag) {
-    projectMode = 'spa';
-  } else if (mpaFlag) {
+  if (mpaFlag) {
     projectMode = 'mpa';
+  } else if (spaFlag) {
+    projectMode = 'spa';
   } else if (!quickMode) {
     // Prompt user to choose mode
     const rl = readline.createInterface({input, output});
 
     console.log(`\n  Choose project type:`);
-    console.log(`    ❯ Multi-Page Application (MPA) - Traditional multi-page website (default)`);
-    console.log(`      Single Page Application (SPA) - Client-side routing with view switching`);
+    console.log(`    ❯ Single Page Application (SPA) - Client-side routing with view switching (default)`);
+    console.log(`      Multi-Page Application (MPA) - Traditional multi-page website`);
 
-    const modeAnswer = await rl.question(`\n  Enter choice (mpa/spa): `);
+    const modeAnswer = await rl.question(`\n  Enter choice (spa/mpa): `);
     const modeInput = modeAnswer.trim().toLowerCase();
 
-    if (modeInput === 'spa' || modeInput === 's') {
-      projectMode = 'spa';
+    if (modeInput === 'mpa' || modeInput === 'm') {
+      projectMode = 'mpa';
     }
 
     rl.close();
