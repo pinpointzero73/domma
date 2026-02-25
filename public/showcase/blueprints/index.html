@@ -14,8 +14,8 @@
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
     <style>
         .blueprint-code {
-            background: #282c34;
-            color: #abb2bf;
+            background: var(--dm-code-bg, #282c34);
+            color: var(--dm-slate-300, #abb2bf);
             padding: 1rem;
             border-radius: 4px;
             overflow-x: auto;
@@ -25,15 +25,15 @@
         }
 
         .result-pane {
-            background: var(--dm-bg-secondary, #f8f9fa);
-            border: 1px solid var(--dm-border, #dee2e6);
+            background: var(--dm-surface-raised);
+            border: 1px solid var(--dm-border);
             border-radius: 4px;
             padding: 1.5rem;
             min-height: 200px;
         }
 
         .model-state {
-            background: var(--dm-bg-tertiary, #e9ecef);
+            background: var(--dm-surface-raised);
             border-radius: 4px;
             padding: 1rem;
             margin-top: 1rem;
@@ -46,7 +46,7 @@
 
         .model-state pre {
             margin: 0;
-            background: var(--dm-surface, #fff);
+            background: var(--dm-surface);
             padding: 0.75rem;
             border-radius: 4px;
             font-size: 12px;
@@ -61,8 +61,8 @@
         }
 
         .blueprint-method {
-            background: var(--dm-primary-bg, #e7f3ff);
-            color: var(--dm-primary, #007bff);
+            background: var(--dm-primary-bg);
+            color: var(--dm-primary);
             padding: 0.5rem 1rem;
             border-radius: 4px;
             font-family: 'Courier New', monospace;
