@@ -1,137 +1,108 @@
 {
-  "version": "0.18.0",
-  "releaseDate": "2026-02-20",
-  "codename": "DommaComponents",
+  "version": "0.18.1",
+  "releaseDate": "2026-02-25",
+  "codename": "CanonicalSweep",
   "changes": {
     "features": [
       {
-        "title": "Domma.component() — Web Components API",
-        "description": "New first-class Web Components system allowing developers to define reusable, encapsulated UI components with a clean declarative API",
-        "impact": "critical",
-        "files": [
-          "src/component-factory.js",
-          "src/template-compiler.js",
-          "src/plugins/",
-          "src/web-components/base/domma-element.js",
-          "src/index.js"
-        ],
-        "details": "<p><strong>Domma.component(name, definition)</strong> registers a native Web Component (Custom Element) with Shadow DOM encapsulation. The definition object mirrors the familiar Domma conventions:</p><ul><li><strong>data()</strong> — Returns the component's initial reactive state object</li><li><strong>computed</strong> — Object of functions that derive values from <code>this.data</code>, recalculated on every update</li><li><strong>methods</strong> — Event handler and utility functions, all bound to the component instance</li><li><strong>props</strong> — Type-validated, default-valued attributes observed from HTML (<code>M.types.*</code> type system)</li><li><strong>style</strong> — CSS string injected into the Shadow DOM; fully encapsulated, cannot leak or be overridden from outside</li><li><strong>templateUrl</strong> — Path to an external <code>.html</code> file for the component's markup; loaded and cached on first mount</li><li><strong>onBeforeMount()</strong> — Called before the template is inserted; use for data pre-fetching</li><li><strong>onMount($container)</strong> — Called after template is in the Shadow DOM; wire event listeners here</li><li><strong>onUpdated(changedData)</strong> — Called after any <code>this.set()</code> call; perform targeted DOM refreshes</li><li><strong>onUnmount()</strong> — Called before the element is removed; clean up timers and listeners</li></ul><p><strong>CSS variable passthrough:</strong> All <code>--dm-*</code> CSS variables flow from the host page into the Shadow DOM, so components theme-adapt automatically.</p>"
-      },
-      {
-        "title": "Template Compiler with Mustache Bindings",
-        "description": "New template compiler supporting {{variable}}, {{#if}}, {{#each}}, and {{#unless}} within component templates",
+        "title": "Canonical Tags — All 119 Public Pages",
+        "description": "Added <link rel=\"canonical\"> to every public HTML page to resolve Google Search Console's 'duplicate without user-selected canonical' warnings",
         "impact": "high",
         "files": [
-          "src/template-compiler.js"
+          "scripts/add-canonical-tags.js",
+          "public/**/*.html"
         ],
-        "details": "<p>The template compiler processes component HTML templates before insertion into the Shadow DOM:</p><ul><li><code>{{variable}}</code> — Interpolates data and computed values (HTML-escaped by default)</li><li><code>{{{variable}}}</code> — Unescaped HTML interpolation (use with caution)</li><li><code>{{#if condition}}...{{/if}}</code> — Conditional blocks</li><li><code>{{#unless condition}}...{{/unless}}</code> — Inverted conditional blocks</li><li><code>{{#each items}}...{{/each}}</code> — Iteration with <code>{{this}}</code> and <code>{{@index}}</code></li></ul><p><strong>Static template pattern:</strong> Components with user-editable inputs use zero-binding templates and drive all updates through targeted <code>onUpdated()</code> methods, preventing full re-renders from destroying focused elements.</p>"
+        "details": "<p><strong>scripts/add-canonical-tags.js</strong> — New idempotent Node.js script that walks <code>public/</code> recursively and inserts <code>&lt;link rel=\"canonical\" href=\"...\"&gt;</code> immediately after <code>&lt;/title&gt;</code> in every real page. Template fragments (<code>layouts/templates/*</code>, <code>examples/*/template.html</code>) are automatically skipped.</p><ul><li>Root <code>index.html</code> → <code>https://dommajs.org/</code></li><li>Any <code>index.html</code> in a subdirectory → trailing-slash directory URL</li><li>Non-index <code>.html</code> files → full path with extension</li><li>Idempotent — safe to re-run; skips files that already have a canonical tag</li><li>119 pages injected, 11 template fragments correctly skipped</li></ul>"
       },
       {
-        "title": "Four Example DommaComponents",
-        "description": "Calculator, To-Do List, Markdown Editor, and Notes App converted to self-contained <domma-*> Web Components",
+        "title": "Sitemap Rebuild Script",
+        "description": "New script generates public/sitemap.xml from actual HTML files on disk, replacing 30+ phantom URLs with 101 real ones",
         "impact": "high",
         "files": [
-          "public/examples/calculator/component.js",
-          "public/examples/calculator/template.html",
-          "public/examples/todo/component.js",
-          "public/examples/todo/template.html",
-          "public/examples/markdown/component.js",
-          "public/examples/markdown/template.html",
-          "public/examples/notes/component.js",
-          "public/examples/notes/template.html"
+          "scripts/rebuild-sitemap.js",
+          "public/sitemap.xml"
         ],
-        "details": "<p>Each example app was converted from a standalone page script into a downloadable <code>&lt;domma-*&gt;</code> component:</p><ul><li><strong>&lt;domma-calculator&gt;</strong> — Basic and scientific modes, memory (M+/M−/MR/MC), angle toggle (DEG/RAD), full keyboard support, <code>initialMode</code> prop</li><li><strong>&lt;domma-todo&gt;</strong> — Add/edit/delete tasks, priority (Low/Medium/High/Critical), status (To-Do/In Progress/Done/Cancelled), search filter, localStorage persistence via <code>storageKey</code> prop</li><li><strong>&lt;domma-markdown-editor&gt;</strong> — Split-pane live preview, toolbar shortcuts, debounced auto-save, Ctrl+B/Ctrl+I/Ctrl+K keyboard shortcuts, word and character count, configurable <code>autoSaveDelay</code> prop</li><li><strong>&lt;domma-notes&gt;</strong> — Notes grid, overlay editor, rich-text toolbar, category tagging, full-text search, last-saved relative timestamp via <code>D().fromNow()</code></li></ul><p>All four components: use <code>S.get()</code>/<code>S.set()</code> for persistence, <code>E.toast()</code>/<code>E.confirm()</code>/<code>E.prompt()</code> for dialogs (light-DOM, works from Shadow DOM), <code>I.scan()</code> for icon rendering, and <code>_.render()</code> + <code>_.escape()</code> for safe HTML generation. Drop in with a single tag — no configuration required.</p>"
-      },
-      {
-        "title": "DommaComponents Showcase",
-        "description": "New dedicated showcase page covering the full component API with live demos, code examples, and a comprehensive tutorial",
-        "impact": "medium",
-        "files": [
-          "public/showcase/components/index.html"
-        ],
-        "details": "<p>The Components showcase at <code>/showcase/components/</code> covers:</p><ul><li>Live interactive demo of a custom <code>&lt;domma-card&gt;</code> component</li><li>Full API reference: data, computed, methods, props, style, templateUrl, lifecycle</li><li>Shadow DOM encapsulation explained with visual examples</li><li>CSS variable passthrough and theming patterns</li><li>Static template pattern for form-heavy components</li><li>Event delegation pattern for dynamic lists</li><li>Comparison with vanilla Custom Elements showing the DX improvement</li></ul>"
-      },
-      {
-        "title": "Splash Page — Examples Row",
-        "description": "Eight example tiles added to the landing page above MiniApps, with Scribe typewriter descriptions on hover",
-        "impact": "medium",
-        "files": [
-          "public/index.html"
-        ],
-        "details": "<p>The landing page now surfaces all eight example applications in a tile row above the MiniApps section:</p><ul><li>To-Do List, Calculator, Markdown Editor, Notes, Contacts, Gallery, Weather, Celebrations</li><li>Hovering a tile fires a second <code>Domma.effects.scribe()</code> instance in a dedicated description container beneath the row</li><li>The two scribe instances (splash tagline and example description) operate independently with no state conflicts</li><li>Both instances clean up correctly when animations are disabled via the motion toggle</li><li>Tiles animate in with the same stagger effect as the feature cards</li></ul><p>Also standardised the <code>View All Examples →</code> and <code>View All MiniApps →</code> buttons to identical <code>btn btn-outline btn-sm</code> styling, and increased vertical spacing between the two sections.</p>"
+        "details": "<p><strong>scripts/rebuild-sitemap.js</strong> — New Node.js ESM script that walks <code>public/</code> and generates a valid <code>sitemap.xml</code> from actual HTML files. Uses the same skip rules as the canonical script.</p><ul><li>Priority tiers: 1.0 (root), 0.8 (top-level hubs), 0.7 (module-level pages), 0.6 (sub-pages), 0.3 (legal)</li><li>Idempotent — safe to re-run; always regenerates from current file state</li><li>101 real URLs replacing the previous sitemap which contained 30+ phantom entries</li><li><code>&lt;lastmod&gt;</code> set to today's date on every run</li></ul>"
       }
     ],
     "enhancements": [
       {
-        "title": "Component Plugin System",
-        "description": "Extensible plugin architecture for registering component behaviours and mixins",
+        "title": "Blueprint Showcase — Theme Awareness",
+        "description": "Fixed result panes, model state panels, and blueprint method badges to use correct Domma CSS variables instead of hardcoded light-mode colours",
         "impact": "medium",
         "files": [
-          "src/plugins/"
+          "public/showcase/blueprints/index.html"
         ],
-        "details": "<p>A lightweight plugin system allows framework-level behaviours to be registered and shared across components without modifying the core factory. Plugins receive the component instance at mount time and can add methods, watchers, or lifecycle extensions.</p>"
-      },
-      {
-        "title": "DommaElement Base Class",
-        "description": "Shared HTMLElement base class providing common utilities to all Domma web components",
-        "impact": "medium",
-        "files": [
-          "src/web-components/base/domma-element.js"
-        ],
-        "details": "<p>All registered Domma components extend <code>DommaElement</code>, which provides:</p><ul><li>Shadow root initialisation with <code>mode: 'open'</code></li><li>Safe <code>this.set(key, value)</code> method that merges state and triggers <code>onUpdated()</code></li><li>Attribute observation wired to prop definitions</li><li>Automatic cleanup of event listeners on disconnect</li></ul>"
-      },
-      {
-        "title": "Rollup Plugin for Component Bundling",
-        "description": "Rollup configuration updated to handle component files and external HTML templates",
-        "impact": "low",
-        "files": [
-          "rollup.config.js"
-        ],
-        "details": "<p>The build pipeline now handles component <code>.js</code> files and can inline or reference companion <code>template.html</code> files during bundling, enabling production-ready component distribution.</p>"
+        "details": "<p>The showcase's inline <code>&lt;style&gt;</code> block referenced three CSS variables that do not exist in Domma's theme system (<code>--dm-bg-secondary</code>, <code>--dm-bg-tertiary</code>, and a hardcoded <code>#fff</code> fallback), causing all example areas to render with hardcoded light-grey backgrounds regardless of the active theme.</p><ul><li><code>.result-pane</code> — <code>var(--dm-bg-secondary, #f8f9fa)</code> → <code>var(--dm-surface-raised)</code></li><li><code>.model-state</code> — <code>var(--dm-bg-tertiary, #e9ecef)</code> → <code>var(--dm-surface-raised)</code></li><li><code>.model-state pre</code> — <code>var(--dm-surface, #fff)</code> → <code>var(--dm-surface)</code></li><li><code>.blueprint-method</code> — removed hardcoded light-mode fallbacks from <code>--dm-primary-bg</code> and <code>--dm-primary</code></li><li><code>.blueprint-code</code> — <code>#282c34</code> hardcoded background → <code>var(--dm-code-bg, #282c34)</code> so dark themes use the theme's code surface</li></ul>"
       }
     ],
     "bugFixes": [
       {
-        "title": "Fixed E.prompt(), E.confirm(), E.alert() Silent Failures",
-        "description": "Corrected British/American spelling mismatch in the internal sanitization module that caused dialog methods and tooltip HTML rendering to silently fail",
-        "impact": "critical",
+        "title": "Dead Link — effects/javascript.html: typewriter → scribe",
+        "description": "Fixed broken link pointing to non-existent typewriter.html; effect was renamed to scribe",
+        "impact": "low",
         "files": [
-          "src/elements.js"
+          "public/showcase/effects/javascript.html"
         ],
-        "details": "<p><strong>Root cause:</strong> <code>sanitize.js</code> exports its function as <code>sanitise</code> (British spelling), but <code>elements.js</code> was calling <code>sanitizeModule.sanitize()</code> (American spelling). This resolved to <code>undefined</code>, throwing <code>TypeError: r.sanitize is not a function</code> silently inside promise chains.</p><p><strong>Affected:</strong> <code>E.prompt()</code>, <code>E.confirm()</code>, <code>E.alert()</code>, tooltips with HTML content, toast messages containing HTML, and the slideover component.</p><p><strong>Fix:</strong> Replaced all 12 occurrences of <code>sanitizeModule.sanitize</code> with <code>sanitizeModule.sanitise</code> in <code>elements.js</code>. Rebuilt bundles.</p><p><strong>Discovery:</strong> Found while testing the <code>&lt;domma-todo&gt;</code> edit function, which calls <code>E.prompt()</code> to pre-fill the task text for editing.</p>"
+        "details": "<p>The JavaScript effects overview page listed <code>typewriter()</code> linking to <code>typewriter.html</code>, which no longer exists. The effect was renamed to <code>scribe()</code> during the v0.14.x series. Updated to <code>&lt;a href=\"scribe.html\"&gt;scribe()&lt;/a&gt;</code>.</p>"
+      },
+      {
+        "title": "Dead Link — timer showcase: progress → progression",
+        "description": "Fixed 'View Progress' related-card link pointing to non-existent ../progress/ directory",
+        "impact": "low",
+        "files": [
+          "public/showcase/elements/timer/index.html"
+        ],
+        "details": "<p>The timer showcase's related components card referenced <code>../progress/</code> with the label 'Progress Bar'. The component was renamed to Progression in v0.14.0. Updated heading to 'Progression' and link to <code>../progression/</code>.</p>"
+      },
+      {
+        "title": "Dead Link — address miniapp: /docs → /api/",
+        "description": "Fixed 'View full API documentation' link pointing to non-existent /docs path",
+        "impact": "low",
+        "files": [
+          "public/miniapps/address/index.html"
+        ],
+        "details": "<p>The address miniapp's documentation sidebar linked to <code>/docs</code> which returns a 404. Updated to <code>/api/</code> which is the correct documentation URL.</p>"
+      },
+      {
+        "title": "Dead Nav Entry — Invoicing System removed from showcase nav",
+        "description": "Removed phantom 'Invoicing System' nav entry pointing to a miniapp that does not yet exist",
+        "impact": "low",
+        "files": [
+          "public/layouts/config/nav-showcase.json"
+        ],
+        "details": "<p>The showcase navigation dropdown included an 'Invoicing System' entry pointing to <code>miniapps/invoicing/index.html</code>. The miniapp has not been built yet. Removed the entry to prevent 404s from the navigation.</p>"
+      },
+      {
+        "title": "Dead Content — download page: removed non-existent quickstart archives",
+        "description": "Removed QuickStart Starter card, QuickStart Templates section, and dead quickstart-latest.json metadata JS from the download page",
+        "impact": "medium",
+        "files": [
+          "public/download/index.html"
+        ],
+        "details": "<p>The download page contained two sections and a JavaScript block referencing quickstart archive files that do not exist on disk or CDN:</p><ul><li><strong>QuickStart Starter card</strong> — Linked to <code>../dist/quickstart.tar.gz</code> (missing). Removed.</li><li><strong>QuickStart Templates section</strong> — Four cards linking to <code>quickstart-minimal.tar.gz</code>, <code>quickstart-essentials.tar.gz</code>, <code>quickstart-full.tar.gz</code>, <code>quickstart-data-focused.tar.gz</code> (all missing). Entire section removed.</li><li><strong>quickstart-latest.json JS block</strong> — Dead <code>fetch('../dist/quickstart-latest.json')</code> call that logged errors on every page load. Removed.</li><li>Core Library grid updated from 3-column to 2-column to match the remaining two cards.</li></ul>"
       }
     ],
     "breaking": []
   },
   "buildInfo": {
     "commit": "latest",
-    "buildDate": "2026-02-20T12:00:00Z"
+    "buildDate": "2026-02-25T00:00:00Z"
   },
   "stats": {
-    "totalFiles": 18,
-    "linesAdded": 1840,
-    "linesRemoved": 95,
+    "totalFiles": 9,
+    "linesAdded": 320,
+    "linesRemoved": 115,
     "filesChanged": [
-      "src/component-factory.js",
-      "src/template-compiler.js",
-      "src/plugins/",
-      "src/web-components/base/domma-element.js",
-      "src/web-components/components/domma-card.js",
-      "src/index.js",
-      "src/elements.js",
-      "rollup.config.js",
-      "public/examples/calculator/component.js",
-      "public/examples/calculator/template.html",
-      "public/examples/todo/component.js",
-      "public/examples/todo/template.html",
-      "public/examples/markdown/component.js",
-      "public/examples/markdown/template.html",
-      "public/examples/notes/component.js",
-      "public/examples/notes/template.html",
-      "public/showcase/components/index.html",
-      "public/index.html",
-      "public/data/releases.json",
-      "release.json"
+      "scripts/add-canonical-tags.js",
+      "scripts/rebuild-sitemap.js",
+      "public/sitemap.xml",
+      "public/showcase/blueprints/index.html",
+      "public/showcase/effects/javascript.html",
+      "public/showcase/elements/timer/index.html",
+      "public/miniapps/address/index.html",
+      "public/layouts/config/nav-showcase.json",
+      "public/download/index.html"
     ]
   }
 }
