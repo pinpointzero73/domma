@@ -340,6 +340,12 @@ import {SiteSearch} from './modules/search.js';
         /* Christmas - CORRECTED */
         .variant-dot-christmas-dark { background: linear-gradient(135deg, #7f1d1d, #14532d); }
         .variant-dot-christmas-light { background: linear-gradient(135deg, #ef4444, #86efac); }
+        /* Unicorn */
+        .variant-dot-unicorn-dark { background: linear-gradient(135deg, #1a0e24, #4a2660); }
+        .variant-dot-unicorn-light { background: linear-gradient(135deg, #e91e90, #9b59b6); }
+        /* Dreamy */
+        .variant-dot-dreamy-dark { background: linear-gradient(135deg, #1c1410, #4e342e); }
+        .variant-dot-dreamy-light { background: linear-gradient(135deg, #d7ccc8, #8d6e63); }
         .variant-dot::after {
           content: attr(data-tooltip);
           position: absolute;
@@ -583,7 +589,7 @@ import {SiteSearch} from './modules/search.js';
 
         const themeSelectorHtml = `
             <div class="${selectorClass}" id="variant-selector">
-                <button class="variant-trigger" data-tooltip="Theme variants (16)"></button>
+                <button class="variant-trigger" data-tooltip="Theme variants (20)"></button>
                 <div class="variant-options">
                     <button class="variant-dot variant-dot-ocean-light" data-theme="ocean-light" data-tooltip="Ocean Light ☀️"></button>
                     <button class="variant-dot variant-dot-ocean-dark" data-theme="ocean-dark" data-tooltip="Ocean Dark 🌙"></button>
@@ -601,6 +607,10 @@ import {SiteSearch} from './modules/search.js';
                     <button class="variant-dot variant-dot-charcoal-dark" data-theme="charcoal-dark" data-tooltip="Charcoal Dark 🌙"></button>
                     <button class="variant-dot variant-dot-christmas-light" data-theme="christmas-light" data-tooltip="Christmas Light ☀️"></button>
                     <button class="variant-dot variant-dot-christmas-dark" data-theme="christmas-dark" data-tooltip="Christmas Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-unicorn-light" data-theme="unicorn-light" data-tooltip="Unicorn Light ☀️"></button>
+                    <button class="variant-dot variant-dot-unicorn-dark" data-theme="unicorn-dark" data-tooltip="Unicorn Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-dreamy-light" data-theme="dreamy-light" data-tooltip="Dreamy Light ☀️"></button>
+                    <button class="variant-dot variant-dot-dreamy-dark" data-theme="dreamy-dark" data-tooltip="Dreamy Dark 🌙"></button>
                 </div>
             </div>
         `;

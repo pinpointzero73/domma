@@ -50,6 +50,12 @@ const themeFiles = [
   // Christmas themes
   'public/assets/themes/christmas-light.css',
   'public/assets/themes/christmas-dark.css',
+  // Unicorn themes
+  'public/assets/themes/unicorn-light.css',
+  'public/assets/themes/unicorn-dark.css',
+  // Dreamy themes
+  'public/assets/themes/dreamy-light.css',
+  'public/assets/themes/dreamy-dark.css',
   // Custom themes
   'public/dist/themes/grayve.css'
 ];

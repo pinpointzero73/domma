@@ -18,6 +18,8 @@ const AVAILABLE_THEMES = [
     'silver-light', 'silver-dark',
     'charcoal-light', 'charcoal-dark',
     'christmas-light', 'christmas-dark',
+    'unicorn-light', 'unicorn-dark',
+    'dreamy-light', 'dreamy-dark',
     'grayve',
     'core-light'
 ];
@@ -251,7 +253,7 @@ class ThemeEngine {
      * @returns {string[]}
      */
     listBases() {
-        return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas'];
+        return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas', 'unicorn', 'dreamy'];
     }
 
     /**

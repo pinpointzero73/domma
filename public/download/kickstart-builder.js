@@ -15,6 +15,7 @@
     'charcoal-dark', 'ocean-dark', 'forest-dark', 'sunset-dark',
     'royal-dark', 'silver-light', 'ocean-light', 'forest-light',
     'sunset-light', 'lemon-light',
+    'unicorn-light', 'unicorn-dark', 'dreamy-light', 'dreamy-dark',
   ];
 
   const DEFAULT_THEME   = 'charcoal-dark';

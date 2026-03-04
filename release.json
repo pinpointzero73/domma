@@ -1,108 +1,86 @@
 {
-  "version": "0.18.1",
-  "releaseDate": "2026-02-25",
-  "codename": "CanonicalSweep",
+  "version": "0.19.0",
+  "releaseDate": "2026-03-04",
+  "codename": "UnicornDreamy",
   "changes": {
     "features": [
       {
-        "title": "Canonical Tags — All 119 Public Pages",
-        "description": "Added <link rel=\"canonical\"> to every public HTML page to resolve Google Search Console's 'duplicate without user-selected canonical' warnings",
-        "impact": "high",
+        "title": "Unicorn Theme — Pink & Purple Palette",
+        "description": "Two new variants (light + dark) with amethyst purple and hot pink as primary/secondary colours",
+        "impact": "medium",
         "files": [
-          "scripts/add-canonical-tags.js",
-          "public/**/*.html"
+          "public/assets/themes/unicorn-light.css",
+          "public/assets/themes/unicorn-dark.css"
         ],
-        "details": "<p><strong>scripts/add-canonical-tags.js</strong> — New idempotent Node.js script that walks <code>public/</code> recursively and inserts <code>&lt;link rel=\"canonical\" href=\"...\"&gt;</code> immediately after <code>&lt;/title&gt;</code> in every real page. Template fragments (<code>layouts/templates/*</code>, <code>examples/*/template.html</code>) are automatically skipped.</p><ul><li>Root <code>index.html</code> → <code>https://dommajs.org/</code></li><li>Any <code>index.html</code> in a subdirectory → trailing-slash directory URL</li><li>Non-index <code>.html</code> files → full path with extension</li><li>Idempotent — safe to re-run; skips files that already have a canonical tag</li><li>119 pages injected, 11 template fragments correctly skipped</li></ul>"
+        "details": "<p>A vibrant pink-and-purple theme inspired by unicorn aesthetics.</p><ul><li><strong>unicorn-light</strong> — Amethyst purple primary (<code>#9b59b6</code>), hot pink secondary (<code>#e91e90</code>), white surfaces with faint lavender tint (<code>#faf5fc</code>), dark aubergine text (<code>#2d1b3d</code>), light purple borders (<code>#e1bee7</code>)</li><li><strong>unicorn-dark</strong> — Deep purple-black backgrounds (<code>#1a0e24</code> / <code>#241432</code>), lighter purple primary (<code>#ce93d8</code>) for dark-mode contrast, lighter pink secondary (<code>#f48fb1</code>), muted purple borders (<code>#4a2660</code>), warm lavender-white text (<code>#f3e5f5</code>)</li></ul>"
       },
       {
-        "title": "Sitemap Rebuild Script",
-        "description": "New script generates public/sitemap.xml from actual HTML files on disk, replacing 30+ phantom URLs with 101 real ones",
-        "impact": "high",
+        "title": "Dreamy Theme — Beige & Biscuit Palette",
+        "description": "Two new variants (light + dark) with warm brown and dusty taupe as primary/secondary colours",
+        "impact": "medium",
         "files": [
-          "scripts/rebuild-sitemap.js",
-          "public/sitemap.xml"
+          "public/assets/themes/dreamy-light.css",
+          "public/assets/themes/dreamy-dark.css"
         ],
-        "details": "<p><strong>scripts/rebuild-sitemap.js</strong> — New Node.js ESM script that walks <code>public/</code> and generates a valid <code>sitemap.xml</code> from actual HTML files. Uses the same skip rules as the canonical script.</p><ul><li>Priority tiers: 1.0 (root), 0.8 (top-level hubs), 0.7 (module-level pages), 0.6 (sub-pages), 0.3 (legal)</li><li>Idempotent — safe to re-run; always regenerates from current file state</li><li>101 real URLs replacing the previous sitemap which contained 30+ phantom entries</li><li><code>&lt;lastmod&gt;</code> set to today's date on every run</li></ul>"
+        "details": "<p>A calm, earthy theme built around warm cream, biscuit, and chocolate tones.</p><ul><li><strong>dreamy-light</strong> — Warm brown primary (<code>#8d6e63</code>), dusty rose-brown secondary (<code>#a1887f</code>), warm cream surfaces (<code>#fffdf9</code> / <code>#f5f0eb</code>), dark chocolate text (<code>#3e2723</code>), light biscuit borders (<code>#d7ccc8</code>)</li><li><strong>dreamy-dark</strong> — Dark espresso backgrounds (<code>#1c1410</code> / <code>#2a1f1a</code>), lighter taupe primary (<code>#bcaaa4</code>) for dark-mode contrast, warm off-white text (<code>#efebe9</code>), dark brown borders (<code>#4e342e</code>), code background (<code>#1a1210</code>)</li></ul>"
       }
     ],
     "enhancements": [
       {
-        "title": "Blueprint Showcase — Theme Awareness",
-        "description": "Fixed result panes, model state panels, and blueprint method badges to use correct Domma CSS variables instead of hardcoded light-mode colours",
+        "title": "Theme Registration — All 6 Surfaces",
+        "description": "Both new themes registered in AVAILABLE_THEMES, listBases(), build-css.js, theme-roller dropdown, layout variant dots (count 16→20), and kickstart builder",
         "impact": "medium",
         "files": [
-          "public/showcase/blueprints/index.html"
+          "src/theme.js",
+          "src/theme-roller.js",
+          "scripts/build-css.js",
+          "public/layouts/js/layout.js",
+          "public/download/kickstart-builder.js"
         ],
-        "details": "<p>The showcase's inline <code>&lt;style&gt;</code> block referenced three CSS variables that do not exist in Domma's theme system (<code>--dm-bg-secondary</code>, <code>--dm-bg-tertiary</code>, and a hardcoded <code>#fff</code> fallback), causing all example areas to render with hardcoded light-grey backgrounds regardless of the active theme.</p><ul><li><code>.result-pane</code> — <code>var(--dm-bg-secondary, #f8f9fa)</code> → <code>var(--dm-surface-raised)</code></li><li><code>.model-state</code> — <code>var(--dm-bg-tertiary, #e9ecef)</code> → <code>var(--dm-surface-raised)</code></li><li><code>.model-state pre</code> — <code>var(--dm-surface, #fff)</code> → <code>var(--dm-surface)</code></li><li><code>.blueprint-method</code> — removed hardcoded light-mode fallbacks from <code>--dm-primary-bg</code> and <code>--dm-primary</code></li><li><code>.blueprint-code</code> — <code>#282c34</code> hardcoded background → <code>var(--dm-code-bg, #282c34)</code> so dark themes use the theme's code surface</li></ul>"
+        "details": "<p>All five registration points updated so the new themes are reachable from every surface:</p><ul><li><strong>src/theme.js</strong> — Added <code>'unicorn-light'</code>, <code>'unicorn-dark'</code>, <code>'dreamy-light'</code>, <code>'dreamy-dark'</code> to <code>AVAILABLE_THEMES</code>; added <code>'unicorn'</code> and <code>'dreamy'</code> to <code>listBases()</code></li><li><strong>scripts/build-css.js</strong> — Added 4 CSS file entries so themes are concatenated into <code>public/dist/themes/domma-themes.css</code></li><li><strong>src/theme-roller.js</strong> — Added two new <code>&lt;optgroup&gt;</code> blocks to the theme picker dropdown</li><li><strong>public/layouts/js/layout.js</strong> — Added gradient CSS rules for variant dot swatches; added 4 dot buttons; updated tooltip count from 16 to 20</li><li><strong>public/download/kickstart-builder.js</strong> — Added 4 entries to the <code>THEMES</code> array for the Kickstart Builder theme selector</li></ul>"
       }
     ],
-    "bugFixes": [
+    "bugFixes": [],
+    "breaking": [],
+    "housekeeping": [
       {
-        "title": "Dead Link — effects/javascript.html: typewriter → scribe",
-        "description": "Fixed broken link pointing to non-existent typewriter.html; effect was renamed to scribe",
+        "title": "Codebase Cleanup — Backup & Debug Files Removed",
+        "description": "Deleted 8 stale files and 2 auto-generated directories that had accumulated during development",
         "impact": "low",
         "files": [
-          "public/showcase/effects/javascript.html"
+          "src/dom.js.backup-20260112-094013",
+          "src/dom.js.backup-manual",
+          "src/elements.js.backup-xss-20260112-100253",
+          "public/layouts/js/modules/celebrations/themes/st-davids.js.bak",
+          "public/layouts/js/modules/celebrations/themes/st-georges.js.bak",
+          "public/layouts/js/modules/celebrations/themes/st-patricks.js.bak",
+          "debug-wizard.html",
+          "firebase-debug.log",
+          "coverage/",
+          ".playwright-mcp/"
         ],
-        "details": "<p>The JavaScript effects overview page listed <code>typewriter()</code> linking to <code>typewriter.html</code>, which no longer exists. The effect was renamed to <code>scribe()</code> during the v0.14.x series. Updated to <code>&lt;a href=\"scribe.html\"&gt;scribe()&lt;/a&gt;</code>.</p>"
-      },
-      {
-        "title": "Dead Link — timer showcase: progress → progression",
-        "description": "Fixed 'View Progress' related-card link pointing to non-existent ../progress/ directory",
-        "impact": "low",
-        "files": [
-          "public/showcase/elements/timer/index.html"
-        ],
-        "details": "<p>The timer showcase's related components card referenced <code>../progress/</code> with the label 'Progress Bar'. The component was renamed to Progression in v0.14.0. Updated heading to 'Progression' and link to <code>../progression/</code>.</p>"
-      },
-      {
-        "title": "Dead Link — address miniapp: /docs → /api/",
-        "description": "Fixed 'View full API documentation' link pointing to non-existent /docs path",
-        "impact": "low",
-        "files": [
-          "public/miniapps/address/index.html"
-        ],
-        "details": "<p>The address miniapp's documentation sidebar linked to <code>/docs</code> which returns a 404. Updated to <code>/api/</code> which is the correct documentation URL.</p>"
-      },
-      {
-        "title": "Dead Nav Entry — Invoicing System removed from showcase nav",
-        "description": "Removed phantom 'Invoicing System' nav entry pointing to a miniapp that does not yet exist",
-        "impact": "low",
-        "files": [
-          "public/layouts/config/nav-showcase.json"
-        ],
-        "details": "<p>The showcase navigation dropdown included an 'Invoicing System' entry pointing to <code>miniapps/invoicing/index.html</code>. The miniapp has not been built yet. Removed the entry to prevent 404s from the navigation.</p>"
-      },
-      {
-        "title": "Dead Content — download page: removed non-existent quickstart archives",
-        "description": "Removed QuickStart Starter card, QuickStart Templates section, and dead quickstart-latest.json metadata JS from the download page",
-        "impact": "medium",
-        "files": [
-          "public/download/index.html"
-        ],
-        "details": "<p>The download page contained two sections and a JavaScript block referencing quickstart archive files that do not exist on disk or CDN:</p><ul><li><strong>QuickStart Starter card</strong> — Linked to <code>../dist/quickstart.tar.gz</code> (missing). Removed.</li><li><strong>QuickStart Templates section</strong> — Four cards linking to <code>quickstart-minimal.tar.gz</code>, <code>quickstart-essentials.tar.gz</code>, <code>quickstart-full.tar.gz</code>, <code>quickstart-data-focused.tar.gz</code> (all missing). Entire section removed.</li><li><strong>quickstart-latest.json JS block</strong> — Dead <code>fetch('../dist/quickstart-latest.json')</code> call that logged errors on every page load. Removed.</li><li>Core Library grid updated from 3-column to 2-column to match the remaining two cards.</li></ul>"
+        "details": "<p>Removed development artefacts that had no ongoing purpose:</p><ul><li><strong>Source backups (3)</strong> — <code>dom.js.backup-20260112-094013</code>, <code>dom.js.backup-manual</code>, <code>elements.js.backup-xss-20260112-100253</code></li><li><strong>Celebration theme .bak files (3)</strong> — Superseded by updated <code>.js</code> versions dated 2026-02-08+</li><li><strong>debug-wizard.html</strong> — One-off debugging page</li><li><strong>firebase-debug.log</strong> — Runtime log from 2026-03-03</li><li><strong>coverage/ directory</strong> — Auto-generated Vitest coverage reports</li><li><strong>.playwright-mcp/ directory</strong> — Auto-generated browser screenshots and console logs</li></ul>"
       }
-    ],
-    "breaking": []
+    ]
   },
   "buildInfo": {
     "commit": "latest",
-    "buildDate": "2026-02-25T00:00:00Z"
+    "buildDate": "2026-03-04T00:00:00Z"
   },
   "stats": {
     "totalFiles": 9,
-    "linesAdded": 320,
-    "linesRemoved": 115,
+    "linesAdded": 720,
+    "linesRemoved": 10,
     "filesChanged": [
-      "scripts/add-canonical-tags.js",
-      "scripts/rebuild-sitemap.js",
-      "public/sitemap.xml",
-      "public/showcase/blueprints/index.html",
-      "public/showcase/effects/javascript.html",
-      "public/showcase/elements/timer/index.html",
-      "public/miniapps/address/index.html",
-      "public/layouts/config/nav-showcase.json",
-      "public/download/index.html"
+      "public/assets/themes/unicorn-light.css",
+      "public/assets/themes/unicorn-dark.css",
+      "public/assets/themes/dreamy-light.css",
+      "public/assets/themes/dreamy-dark.css",
+      "src/theme.js",
+      "src/theme-roller.js",
+      "scripts/build-css.js",
+      "public/layouts/js/layout.js",
+      "public/download/kickstart-builder.js"
     ]
   }
 }

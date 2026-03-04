@@ -1,0 +1,212 @@
+/**
+ * Domma Dreamy Dark Theme
+ * Predominantly beige and biscuit tones
+ * Dark mode variant - dark espresso backgrounds with warm taupe accents
+ */
+
+.dm-theme-dreamy-dark {
+    color-scheme: dark;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Dark Mode Base
+       ================================================ */
+
+    /* Backgrounds - Dark espresso and coffee grounds */
+    --dm-background: #1c1410;
+    --dm-background-alt: #2a1f1a;
+    --dm-surface: #2a1f1a;
+    --dm-surface-raised: #3a2c26;
+    --dm-surface-overlay: #3a2c26;
+
+    /* Text - Warm off-white for readability on dark */
+    --dm-text: #efebe9;
+    --dm-text-secondary: #d7ccc8;
+    --dm-text-muted: #bcaaa4;
+    --dm-text-disabled: #6d4c41;
+    --dm-text-inverse: #1c1410;
+
+    /* Borders - Dark brown on dark backgrounds */
+    --dm-border: #4e342e;
+    --dm-border-light: #3a2c26;
+    --dm-border-dark: #6d4c41;
+
+    /* ================================================
+       DREAMY PRIMARY COLOURS - Lighter taupe for contrast
+       ================================================ */
+    --dm-primary: #bcaaa4;
+    --dm-primary-hover: #d7ccc8;
+    --dm-primary-active: #efebe9;
+    --dm-primary-light: #efebe9;
+    --dm-primary-dark: #a1887f;
+
+    /* Focus ring with warm taupe colour */
+    --dm-focus-ring: 0 0 0 3px rgba(188, 170, 164, 0.35);
+    --dm-border-focus: #bcaaa4;
+
+    /* ================================================
+       SECONDARY COLOURS - Lighter biscuit for contrast
+       ================================================ */
+    --dm-secondary: #d7ccc8;
+    --dm-secondary-hover: #efebe9;
+    --dm-secondary-active: #ffffff;
+    --dm-secondary-light: #faf5f0;
+    --dm-secondary-dark: #bcaaa4;
+
+    /* ================================================
+       STATUS COLOURS
+       ================================================ */
+    --dm-success: #81c784;
+    --dm-success-hover: #a5d6a7;
+    --dm-success-active: #c8e6c9;
+    --dm-success-light: rgba(129, 199, 132, 0.2);
+    --dm-success-dark: #4caf50;
+
+    --dm-info: #64b5f6;
+    --dm-info-hover: #90caf9;
+    --dm-info-active: #bbdefb;
+    --dm-info-light: rgba(100, 181, 246, 0.2);
+    --dm-info-dark: #2196f3;
+
+    --dm-warning: #ffb74d;
+    --dm-warning-hover: #ffcc80;
+    --dm-warning-active: #ffe0b2;
+    --dm-warning-light: rgba(255, 183, 77, 0.2);
+    --dm-warning-dark: #ff9800;
+    --dm-warning-text: #ffcc80;
+
+    --dm-danger: #e57373;
+    --dm-danger-hover: #ef9a9a;
+    --dm-danger-active: #ffcdd2;
+    --dm-danger-light: rgba(229, 115, 115, 0.2);
+    --dm-danger-dark: #f44336;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #efebe9; /* Warm off-white */
+    --dm-accent-2: #d7ccc8; /* Light biscuit */
+    --dm-accent-3: #bcaaa4; /* Muted taupe */
+    --dm-accent-4: #a1887f; /* Dusty rose-brown */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(188, 170, 164, 0.1);
+    --dm-active-bg: rgba(188, 170, 164, 0.15);
+    --dm-selected-bg: rgba(188, 170, 164, 0.15);
+    --dm-disabled-opacity: 0.4;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-md);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #2a1f1a;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(188, 170, 164, 0.04);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #1c1410;
+    --dm-tooltip-text: #efebe9;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+    --dm-tab-active-border: #bcaaa4;
+    --dm-tab-active-text: #bcaaa4;
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-primary);
+    --dm-badge-text: #1c1410;
+
+    /* Progress */
+    --dm-progress-bg: #3a2c26;
+    --dm-progress-bar: #bcaaa4;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #2a1f1a;
+    --dm-scrollbar-thumb: #4e342e;
+    --dm-scrollbar-thumb-hover: #6d4c41;
+
+    /* Code */
+    --dm-code-bg: #1a1210;
+    --dm-code-text: #d7ccc8;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Subtle for dark mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* ================================================
+       ELEVATION / DEPTH
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+}

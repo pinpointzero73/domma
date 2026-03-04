@@ -684,7 +684,7 @@ container.addEventListener('click', (e) => {
   // Restart animations on button click for demo
   document.addEventListener('DOMContentLoaded', () => {
     // Add click to restart for demo boxes
-    $('.demo-box').forEach(box => {
+    $('.demo-box').each((box) => {
       box.style.cursor = 'pointer';
       box.addEventListener('click', () => {
         const fireworks = box.querySelectorAll('.firework');

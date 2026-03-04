@@ -1,7 +1,9 @@
 # Domma Development Makefile
 # Makes local development builds easier with proper environment settings
 
-.PHONY: help build build-dev build-prod dev garage garage-prod docs miniapps clean kill-ports
+.PHONY: help build build-dev build-prod dev garage garage-prod docs miniapps clean kill-ports release-gh release-npm
+
+VERSION := $(shell node -e "process.stdout.write(require('./package.json').version)")
 
 # Default target
 help:
@@ -22,6 +24,10 @@ help:
 	@echo "Core Domma:"
 	@echo "  make core           - Build Domma core only (domma.min.js)"
 	@echo "  make css            - Build CSS only"
+	@echo ""
+	@echo "Release:"
+	@echo "  make release-gh     - Build, tag, and publish a GitHub release"
+	@echo "  make release-npm    - Build and publish to npmjs.com"
 	@echo ""
 	@echo "Utilities:"
 	@echo "  make clean          - Clean dist and build artifacts"
@@ -108,6 +114,34 @@ kill-ports:
 		lsof -ti:$$port | xargs -r kill -9 2>/dev/null || true; \
 	done; \
 	echo "✅ Ports cleared"
+
+# Release to GitHub
+release-gh: build-prod
+	@echo ""
+	@echo "🏷️  Releasing v$(VERSION) to GitHub..."
+	@echo ""
+	@git tag -a v$(VERSION) -m "Release v$(VERSION)" 2>/dev/null || echo "   Tag v$(VERSION) already exists — skipping tag creation"
+	@git push origin v$(VERSION)
+	@awk '/^### v$(VERSION)/{p=1} p && /^### v[0-9]/ && !/^### v$(VERSION)/{p=0} p' docs/RELEASE_NOTES.md > /tmp/domma-release-notes.md
+	@gh release create v$(VERSION) \
+		--title "Domma v$(VERSION)" \
+		--notes-file /tmp/domma-release-notes.md
+	@rm -f /tmp/domma-release-notes.md
+	@echo ""
+	@echo "✅ GitHub release v$(VERSION) published!"
+	@echo "   https://github.com/pinpointzero73/domma/releases/tag/v$(VERSION)"
+	@echo ""
+
+# Release to npm
+release-npm: build-prod
+	@echo ""
+	@echo "📦 Publishing domma-js@$(VERSION) to npm..."
+	@echo ""
+	@npm publish
+	@echo ""
+	@echo "✅ Published domma-js@$(VERSION) to npm!"
+	@echo "   https://www.npmjs.com/package/domma-js"
+	@echo ""
 
 # Making Live
 enliven:
