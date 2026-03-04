@@ -10,13 +10,96 @@
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .theme-card {
+            border: 2px solid var(--dm-border);
+            border-radius: 10px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+            background: var(--dm-surface);
+        }
+
+        .theme-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--dm-shadow-md);
+            border-color: var(--dm-primary);
+        }
+
+        .theme-card.active {
+            border-color: var(--dm-primary);
+            box-shadow: 0 0 0 3px var(--dm-focus-ring, rgba(0,0,0,0.1));
+        }
+
+        .theme-card-preview {
+            height: 64px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .theme-card-accent {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .theme-card-body {
+            padding: 0.5rem 0.75rem;
+            border-top: 1px solid var(--dm-border-light);
+        }
+
+        .theme-card-name {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--dm-text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .theme-card-mode {
+            font-size: 0.65rem;
+            color: var(--dm-text-muted);
+            margin-top: 1px;
+        }
+
+        .theme-family-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--dm-text-muted);
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        .theme-family-label:first-child {
+            margin-top: 0;
+        }
+
+        .theme-pair {
+            display: contents;
+        }
+    </style>
 </head>
 <body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
 
 <div class="hero hero-center bg-ambient-float-orbs">
     <div class="hero-content">
         <div class="hero-title">Domma Themes</div>
-        <div class="hero-subtitle">Beautiful, consistent theming with light & dark modes plus 7 colour variants. Zero JavaScript required.</div>
+        <div class="hero-subtitle">Beautiful, consistent theming with light &amp; dark modes across 11 colour families. Zero configuration required.</div>
     </div>
 </div>
 
@@ -26,125 +109,280 @@
         <h2 class="themes-section-title">Choose a Theme</h2>
         <p class="text-muted mb-4">Click any theme to preview it instantly. Changes apply to the entire page.</p>
 
-        <h4 class="font-semibold mb-3">Base Themes</h4>
-        <div class="themes-theme-grid mb-6" id="base-themes">
-            <!-- Light Theme -->
-            <div class="themes-theme-card active" data-theme="light" data-variant="">
-                <div class="themes-theme-preview">
-                    <div class="themes-theme-preview-bg" style="background: #ffffff;">
-                        <span style="color: #1a1a2e; font-weight: 600;">Aa</span>
-                    </div>
-                    <div class="themes-theme-preview-accent" style="background: #4f46e5;"></div>
+        <div class="theme-family-label">Ocean</div>
+        <div class="theme-grid">
+            <div class="theme-card" data-theme="ocean-light">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #e0f7fa, #b2ebf2);">
+                    <span style="color: #006064;">Aa</span>
+                    <div class="theme-card-accent" style="background: #0077b6;"></div>
                 </div>
-                <div class="themes-theme-card-body">
-                    <div class="themes-theme-name">Light</div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Ocean</div>
+                    <div class="theme-card-mode">☀️ Light</div>
                 </div>
             </div>
-
-            <!-- Dark Theme -->
-            <div class="themes-theme-card" data-theme="dark" data-variant="">
-                <div class="themes-theme-preview">
-                    <div class="themes-theme-preview-bg" style="background: #1a1a2e;">
-                        <span style="color: #f8f9fa; font-weight: 600;">Aa</span>
-                    </div>
-                    <div class="themes-theme-preview-accent" style="background: #818cf8;"></div>
+            <div class="theme-card" data-theme="ocean-dark">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #023e8a, #0077b6);">
+                    <span style="color: #caf0f8;">Aa</span>
+                    <div class="theme-card-accent" style="background: #00b4d8;"></div>
                 </div>
-                <div class="themes-theme-card-body">
-                    <div class="themes-theme-name">Dark</div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Ocean</div>
+                    <div class="theme-card-mode">🌙 Dark</div>
                 </div>
             </div>
         </div>
 
-        <h4 class="font-semibold mb-3">Colour Variants</h4>
-        <div class="themes-theme-grid" id="variant-themes">
-            <!-- Ocean -->
-            <div class="themes-theme-card" data-theme="light" data-variant="ocean">
-                <div class="themes-theme-preview">
-                    <div class="themes-theme-preview-bg" style="background: linear-gradient(135deg, #e0f7fa, #b2ebf2);">
-                        <span style="color: #006064; font-weight: 600;">Aa</span>
-                    </div>
-                    <div class="themes-theme-preview-accent" style="background: #0077b6;"></div>
+        <div class="theme-family-label">Forest</div>
+        <div class="theme-grid">
+            <div class="theme-card" data-theme="forest-light">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
+                    <span style="color: #1b5e20;">Aa</span>
+                    <div class="theme-card-accent" style="background: #2d6a4f;"></div>
                 </div>
-                <div class="themes-theme-card-body">
-                    <div class="themes-theme-name">Ocean</div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Forest</div>
+                    <div class="theme-card-mode">☀️ Light</div>
                 </div>
             </div>
-
-            <!-- Forest -->
-            <div class="themes-theme-card" data-theme="light" data-variant="forest">
-                <div class="themes-theme-preview">
-                    <div class="themes-theme-preview-bg" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
-                        <span style="color: #1b5e20; font-weight: 600;">Aa</span>
-                    </div>
-                    <div class="themes-theme-preview-accent" style="background: #2d6a4f;"></div>
+            <div class="theme-card" data-theme="forest-dark">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1b4332, #2d6a4f);">
+                    <span style="color: #95d5b2;">Aa</span>
+                    <div class="theme-card-accent" style="background: #52b788;"></div>
                 </div>
-                <div class="themes-theme-card-body">
-                    <div class="themes-theme-name">Forest</div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Forest</div>
+                    <div class="theme-card-mode">🌙 Dark</div>
                 </div>
             </div>
+        </div>
 
-            <!-- Sunset -->
-            <div class="themes-theme-card" data-theme="light" data-variant="sunset">
-                <div class="themes-theme-preview">
-                    <div class="themes-theme-preview-bg" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2);">
-                        <span style="color: #e65100; font-weight: 600;">Aa</span>
-                    </div>
-                    <div class="themes-theme-preview-accent" style="background: #e85d04;"></div>
+        <div class="theme-family-label">Sunset</div>
+        <div class="theme-grid">
+            <div class="theme-card" data-theme="sunset-light">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2);">
+                    <span style="color: #bf360c;">Aa</span>
+                    <div class="theme-card-accent" style="background: #c67b5c;"></div>
                 </div>
-                <div class="themes-theme-card-body">
-                    <div class="themes-theme-name">Sunset</div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Sunset</div>
+                    <div class="theme-card-mode">☀️ Light</div>
                 </div>
             </div>
-
-            <!-- Royal -->
-            <div class="themes-theme-card" data-theme="light" data-variant="royal">
-                <div class="themes-theme-preview">
-                    <div class="themes-theme-preview-bg" style="background: linear-gradient(135deg, #ede7f6, #d1c4e9);">
-                        <span style="color: #4a148c; font-weight: 600;">Aa</span>
-                    </div>
-                    <div class="themes-theme-preview-accent" style="background: #7c3aed;"></div>
+            <div class="theme-card" data-theme="sunset-dark">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #2d1b12, #4a2c1a);">
+                    <span style="color: #e8c9a8;">Aa</span>
+                    <div class="theme-card-accent" style="background: #c67b5c;"></div>
                 </div>
-                <div class="themes-theme-card-body">
-                    <div class="themes-theme-name">Royal</div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Sunset</div>
+                    <div class="theme-card-mode">🌙 Dark</div>
                 </div>
             </div>
+        </div>
 
-            <!-- Lemon -->
-            <div class="themes-theme-card" data-theme="light" data-variant="lemon">
-                <div class="themes-theme-preview">
-                    <div class="themes-theme-preview-bg" style="background: linear-gradient(135deg, #fffde7, #fff9c4);">
-                        <span style="color: #f57f17; font-weight: 600;">Aa</span>
-                    </div>
-                    <div class="themes-theme-preview-accent" style="background: #fbbf24;"></div>
+        <div class="theme-family-label">Royal</div>
+        <div class="theme-grid">
+            <div class="theme-card" data-theme="royal-light">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #ede7f6, #d1c4e9);">
+                    <span style="color: #4a148c;">Aa</span>
+                    <div class="theme-card-accent" style="background: #7c3aed;"></div>
                 </div>
-                <div class="themes-theme-card-body">
-                    <div class="themes-theme-name">Lemon</div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Royal</div>
+                    <div class="theme-card-mode">☀️ Light</div>
                 </div>
             </div>
-
-            <!-- Silver -->
-            <div class="themes-theme-card" data-theme="light" data-variant="silver">
-                <div class="themes-theme-preview">
-                    <div class="themes-theme-preview-bg" style="background: linear-gradient(135deg, #fafafa, #eeeeee);">
-                        <span style="color: #424242; font-weight: 600;">Aa</span>
-                    </div>
-                    <div class="themes-theme-preview-accent" style="background: #6b7280;"></div>
+            <div class="theme-card" data-theme="royal-dark">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1e3a8a, #2b4c9e);">
+                    <span style="color: #c7d2fe;">Aa</span>
+                    <div class="theme-card-accent" style="background: #6495ed;"></div>
                 </div>
-                <div class="themes-theme-card-body">
-                    <div class="themes-theme-name">Silver</div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Royal</div>
+                    <div class="theme-card-mode">🌙 Dark</div>
                 </div>
             </div>
+        </div>
 
-            <!-- Charcoal -->
-            <div class="themes-theme-card" data-theme="dark" data-variant="charcoal">
-                <div class="themes-theme-preview">
-                    <div class="themes-theme-preview-bg" style="background: linear-gradient(135deg, #212121, #424242);">
-                        <span style="color: #e0e0e0; font-weight: 600;">Aa</span>
-                    </div>
-                    <div class="themes-theme-preview-accent" style="background: #78909c;"></div>
+        <div class="theme-family-label">Lemon</div>
+        <div class="theme-grid">
+            <div class="theme-card" data-theme="lemon-light">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #fffde7, #fff9c4);">
+                    <span style="color: #f57f17;">Aa</span>
+                    <div class="theme-card-accent" style="background: #fbbf24;"></div>
                 </div>
-                <div class="themes-theme-card-body">
-                    <div class="themes-theme-name">Charcoal</div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Lemon</div>
+                    <div class="theme-card-mode">☀️ Light</div>
+                </div>
+            </div>
+            <div class="theme-card" data-theme="lemon-dark">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a1200, #2d2000);">
+                    <span style="color: #fef3c7;">Aa</span>
+                    <div class="theme-card-accent" style="background: #d97706;"></div>
+                </div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Lemon</div>
+                    <div class="theme-card-mode">🌙 Dark</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="theme-family-label">Silver</div>
+        <div class="theme-grid">
+            <div class="theme-card" data-theme="silver-light">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #fafafa, #eeeeee);">
+                    <span style="color: #424242;">Aa</span>
+                    <div class="theme-card-accent" style="background: #6b7280;"></div>
+                </div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Silver</div>
+                    <div class="theme-card-mode">☀️ Light</div>
+                </div>
+            </div>
+            <div class="theme-card" data-theme="silver-dark">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a1f2e, #252d3d);">
+                    <span style="color: #e2e8f0;">Aa</span>
+                    <div class="theme-card-accent" style="background: #94a3b8;"></div>
+                </div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Silver</div>
+                    <div class="theme-card-mode">🌙 Dark</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="theme-family-label">Charcoal</div>
+        <div class="theme-grid">
+            <div class="theme-card" data-theme="charcoal-light">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #f5f5f5, #e0e0e0);">
+                    <span style="color: #212121;">Aa</span>
+                    <div class="theme-card-accent" style="background: #78909c;"></div>
+                </div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Charcoal</div>
+                    <div class="theme-card-mode">☀️ Light</div>
+                </div>
+            </div>
+            <div class="theme-card active" data-theme="charcoal-dark">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a202c, #2d3748);">
+                    <span style="color: #e2e8f0;">Aa</span>
+                    <div class="theme-card-accent" style="background: #78909c;"></div>
+                </div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Charcoal</div>
+                    <div class="theme-card-mode">🌙 Dark</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="theme-family-label">Christmas</div>
+        <div class="theme-grid">
+            <div class="theme-card" data-theme="christmas-light">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #fff5f5, #ffe0e0);">
+                    <span style="color: #7f1d1d;">Aa</span>
+                    <div class="theme-card-accent" style="background: #ef4444;"></div>
+                </div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Christmas</div>
+                    <div class="theme-card-mode">☀️ Light</div>
+                </div>
+            </div>
+            <div class="theme-card" data-theme="christmas-dark">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #14532d, #7f1d1d);">
+                    <span style="color: #fca5a5;">Aa</span>
+                    <div class="theme-card-accent" style="background: #86efac;"></div>
+                </div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Christmas</div>
+                    <div class="theme-card-mode">🌙 Dark</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="theme-family-label">Unicorn</div>
+        <div class="theme-grid">
+            <div class="theme-card" data-theme="unicorn-light">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #fce4ec, #f8bbd0);">
+                    <span style="color: #880e4f;">Aa</span>
+                    <div class="theme-card-accent" style="background: #e91e90;"></div>
+                </div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Unicorn</div>
+                    <div class="theme-card-mode">☀️ Light</div>
+                </div>
+            </div>
+            <div class="theme-card" data-theme="unicorn-dark">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a0e24, #4a2660);">
+                    <span style="color: #f8bbd0;">Aa</span>
+                    <div class="theme-card-accent" style="background: #e91e90;"></div>
+                </div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Unicorn</div>
+                    <div class="theme-card-mode">🌙 Dark</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="theme-family-label">Dreamy</div>
+        <div class="theme-grid">
+            <div class="theme-card" data-theme="dreamy-light">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #efebe9, #d7ccc8);">
+                    <span style="color: #3e2723;">Aa</span>
+                    <div class="theme-card-accent" style="background: #8d6e63;"></div>
+                </div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Dreamy</div>
+                    <div class="theme-card-mode">☀️ Light</div>
+                </div>
+            </div>
+            <div class="theme-card" data-theme="dreamy-dark">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1c1410, #4e342e);">
+                    <span style="color: #d7ccc8;">Aa</span>
+                    <div class="theme-card-accent" style="background: #a1887f;"></div>
+                </div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Dreamy</div>
+                    <div class="theme-card-mode">🌙 Dark</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="theme-family-label">Grayve</div>
+        <div class="theme-grid">
+            <div class="theme-card" data-theme="grayve-light">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #f8f9fa, #e0f7fa);">
+                    <span style="color: #006064;">Aa</span>
+                    <div class="theme-card-accent" style="background: #00838f;"></div>
+                </div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Grayve</div>
+                    <div class="theme-card-mode">☀️ Light</div>
+                </div>
+            </div>
+            <div class="theme-card" data-theme="grayve-dark">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a1e21, #343A40);">
+                    <span style="color: #DEE2E6;">Aa</span>
+                    <div class="theme-card-accent" style="background: #00bcd4;"></div>
+                </div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Grayve</div>
+                    <div class="theme-card-mode">🌙 Dark</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="theme-family-label">Special</div>
+        <div class="theme-grid">
+            <div class="theme-card" data-theme="core-light">
+                <div class="theme-card-preview" style="background: linear-gradient(135deg, #ffffff, #f3f4f6);">
+                    <span style="color: #111827;">Aa</span>
+                    <div class="theme-card-accent" style="background: #4f46e5;"></div>
+                </div>
+                <div class="theme-card-body">
+                    <div class="theme-card-name">Core</div>
+                    <div class="theme-card-mode">☀️ Light only</div>
                 </div>
             </div>
         </div>
@@ -247,30 +485,31 @@
         <div class="themes-component-grid">
             <div class="themes-preview-card">
                 <h3>CSS Only</h3>
-                <div class="themes-code-block language-javascript">
-                    <span class="comment"><!-- Include themes CSS --></span>
-                    <link rel="stylesheet" href="<span class="string">domma-themes.css</span>">
+                <div class="themes-code-block language-html">
+                    <span class="comment">&lt;!-- Include themes CSS --&gt;</span>
+                    &lt;<span class="keyword">link</span> <span class="function">rel</span>=<span class="string">"stylesheet"</span> <span class="function">href</span>=<span class="string">"domma-themes.css"</span>&gt;
 
-                    <span class="comment"><!-- Apply via class --></span>
-                  <body class="<span class=" dm-cloaked string
-                  ">dm-theme-dark dm-theme-ocean</span>">
+                    <span class="comment">&lt;!-- Apply via class --&gt;</span>
+                    &lt;<span class="keyword">body</span> <span class="function">class</span>=<span class="string">"dm-theme-grayve-dark"</span>&gt;
                 </div>
             </div>
 
             <div class="themes-preview-card">
                 <h3>JavaScript API</h3>
                 <div class="themes-code-block language-javascript">
-                    <span class="comment">// Initialise with options</span>
+                    <span class="comment">// Initialise with a theme</span>
                     Domma.theme.<span class="function">init</span>({
-                    theme: <span class="string">'dark'</span>,
-                    variant: <span class="string">'ocean'</span>,
-                    autoDetect: <span class="keyword">true</span>
+                      theme: <span class="string">'grayve-dark'</span>,
+                      autoDetect: <span class="keyword">true</span>
                     });
 
-                    <span class="comment">// Runtime control</span>
-                    Domma.theme.<span class="function">toggle</span>();
-                    Domma.theme.<span class="function">set</span>(<span class="string">'dark'</span>);
-                    Domma.theme.<span class="function">setVariant</span>(<span class="string">'sunset'</span>);
+                    <span class="comment">// Switch at runtime</span>
+                    Domma.theme.<span class="function">set</span>(<span class="string">'ocean-light'</span>);
+
+                    <span class="comment">// Query current state</span>
+                    Domma.theme.<span class="function">get</span>();      <span class="comment">// 'grayve-dark'</span>
+                    Domma.theme.<span class="function">getBase</span>(); <span class="comment">// 'grayve'</span>
+                    Domma.theme.<span class="function">isDark</span>(); <span class="comment">// true</span>
                 </div>
             </div>
         </div>
@@ -284,23 +523,21 @@
 <script src="../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
-    // Colour definitions
+    // Colour tokens to display in the palette
     const colours = [
-        {name: 'Primary', var: '--dm-primary'},
-        {name: 'Secondary', var: '--dm-secondary'},
-        {name: 'Success', var: '--dm-success'},
-        {name: 'Danger', var: '--dm-danger'},
-        {name: 'Warning', var: '--dm-warning'},
-        {name: 'Info', var: '--dm-info'},
+        {name: 'Primary',    var: '--dm-primary'},
+        {name: 'Secondary',  var: '--dm-secondary'},
+        {name: 'Success',    var: '--dm-success'},
+        {name: 'Danger',     var: '--dm-danger'},
+        {name: 'Warning',    var: '--dm-warning'},
+        {name: 'Info',       var: '--dm-info'},
         {name: 'Background', var: '--dm-background'},
-        {name: 'Surface', var: '--dm-surface'},
-        {name: 'Text', var: '--dm-text'},
-        {name: 'Border', var: '--dm-border'}
+        {name: 'Surface',    var: '--dm-surface'},
+        {name: 'Text',       var: '--dm-text'},
+        {name: 'Border',     var: '--dm-border'}
     ];
 
-    // Render colour palette
     function renderPalette() {
-        const style = getComputedStyle(document.body);
         const html = colours.map(c => `
             <div class="themes-colour-swatch">
                 <div class="themes-colour-circle" style="background: var(${c.var})"></div>
@@ -310,46 +547,29 @@
         $('#colour-palette').html(html);
     }
 
-    // Update badge
-    function updateBadge() {
-        const theme = Domma.theme.get();
-        const variant = Domma.theme.getVariant();
-        const text = variant ? `${theme} + ${variant}` : theme;
-        $('#badge-text').text(text.charAt(0).toUpperCase() + text.slice(1));
+    function updateActiveStates() {
+        const current = Domma.theme.get();
+        $('.theme-card').removeClass('active');
+        $(`.theme-card[data-theme="${current}"]`).addClass('active');
     }
 
-    // Update active states
-    function updateActiveStates(theme, variant) {
-        $('.themes-theme-card').removeClass('active');
-        if (variant) {
-            $(`.themes-theme-card[data-variant="${variant}"]`).addClass('active');
-        } else {
-            $(`.themes-theme-card[data-theme="${theme}"][data-variant=""]`).addClass('active');
-        }
-    }
-
-    // Theme card click handler
-    $('.themes-theme-card').on('click', function () {
+    // Theme card click handler — single call with full theme name
+    $('.theme-card').on('click', function () {
         const theme = $(this).data('theme');
-        const variant = $(this).data('variant');
-
         Domma.theme.set(theme);
-        Domma.theme.setVariant(variant || null);
-
-        updateActiveStates(theme, variant);
-        updateBadge();
+        updateActiveStates();
         setTimeout(renderPalette, 50);
     });
 
     // Initialise
-    Domma.theme.init({autoDetect: false});
+    Domma.theme.init({persist: true, autoDetect: false});
     Domma.icons.scan();
-    updateBadge();
+    updateActiveStates();
     renderPalette();
 
-    // Listen for external changes
+    // Keep palette in sync with external theme changes (e.g. variant selector)
     Domma.theme.onChange(() => {
-        updateBadge();
+        updateActiveStates();
         setTimeout(renderPalette, 50);
     });
 </script>

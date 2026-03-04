@@ -671,6 +671,10 @@ class ThemeRoller {
                                 <option value="dreamy-light" ${currentTheme === 'dreamy-light' ? 'selected' : ''}>Dreamy Light ☀️</option>
                                 <option value="dreamy-dark" ${currentTheme === 'dreamy-dark' ? 'selected' : ''}>Dreamy Dark 🌙</option>
                             </optgroup>
+                            <optgroup label="Grayve">
+                                <option value="grayve-light" ${currentTheme === 'grayve-light' ? 'selected' : ''}>Grayve Light ☀️</option>
+                                <option value="grayve-dark" ${currentTheme === 'grayve-dark' ? 'selected' : ''}>Grayve Dark 🌙</option>
+                            </optgroup>
                         </select>
                     </div>
                 </div>

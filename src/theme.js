@@ -20,7 +20,7 @@ const AVAILABLE_THEMES = [
     'christmas-light', 'christmas-dark',
     'unicorn-light', 'unicorn-dark',
     'dreamy-light', 'dreamy-dark',
-    'grayve',
+    'grayve-light', 'grayve-dark',
     'core-light'
 ];
 
@@ -141,8 +141,7 @@ class ThemeEngine {
      */
     isDark() {
         const mode = this.getMode();
-        // Special case: grayve is a dark theme without '-dark' suffix
-        return mode === 'dark' || this._theme === 'grayve';
+        return mode === 'dark';
     }
 
     /**
@@ -253,7 +252,7 @@ class ThemeEngine {
      * @returns {string[]}
      */
     listBases() {
-        return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas', 'unicorn', 'dreamy'];
+        return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas', 'unicorn', 'dreamy', 'grayve'];
     }
 
     /**

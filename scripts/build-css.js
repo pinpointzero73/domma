@@ -56,8 +56,9 @@ const themeFiles = [
   // Dreamy themes
   'public/assets/themes/dreamy-light.css',
   'public/assets/themes/dreamy-dark.css',
-  // Custom themes
-  'public/dist/themes/grayve.css'
+  // Grayve themes
+  'public/assets/themes/grayve-light.css',
+  'public/assets/themes/grayve-dark.css'
 ];
 
 // Build banner

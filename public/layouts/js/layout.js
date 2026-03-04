@@ -346,6 +346,9 @@ import {SiteSearch} from './modules/search.js';
         /* Dreamy */
         .variant-dot-dreamy-dark { background: linear-gradient(135deg, #1c1410, #4e342e); }
         .variant-dot-dreamy-light { background: linear-gradient(135deg, #d7ccc8, #8d6e63); }
+        /* Grayve */
+        .variant-dot-grayve-dark { background: linear-gradient(135deg, #1a1e21, #343A40); }
+        .variant-dot-grayve-light { background: linear-gradient(135deg, #e0f7fa, #00838f); }
         .variant-dot::after {
           content: attr(data-tooltip);
           position: absolute;
@@ -589,7 +592,7 @@ import {SiteSearch} from './modules/search.js';
 
         const themeSelectorHtml = `
             <div class="${selectorClass}" id="variant-selector">
-                <button class="variant-trigger" data-tooltip="Theme variants (20)"></button>
+                <button class="variant-trigger" data-tooltip="Theme variants (22)"></button>
                 <div class="variant-options">
                     <button class="variant-dot variant-dot-ocean-light" data-theme="ocean-light" data-tooltip="Ocean Light ☀️"></button>
                     <button class="variant-dot variant-dot-ocean-dark" data-theme="ocean-dark" data-tooltip="Ocean Dark 🌙"></button>
@@ -611,6 +614,8 @@ import {SiteSearch} from './modules/search.js';
                     <button class="variant-dot variant-dot-unicorn-dark" data-theme="unicorn-dark" data-tooltip="Unicorn Dark 🌙"></button>
                     <button class="variant-dot variant-dot-dreamy-light" data-theme="dreamy-light" data-tooltip="Dreamy Light ☀️"></button>
                     <button class="variant-dot variant-dot-dreamy-dark" data-theme="dreamy-dark" data-tooltip="Dreamy Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-grayve-light" data-theme="grayve-light" data-tooltip="Grayve Light ☀️"></button>
+                    <button class="variant-dot variant-dot-grayve-dark" data-theme="grayve-dark" data-tooltip="Grayve Dark 🌙"></button>
                 </div>
             </div>
         `;

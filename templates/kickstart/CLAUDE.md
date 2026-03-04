@@ -554,7 +554,7 @@ $(document.body).on('themechange', (e) => {
 - **Silver:** `silver-light`, `silver-dark` - Cool gray tones
 - **Charcoal:** `charcoal-light`, `charcoal-dark` - Professional gray (default)
 - **Christmas:** `christmas-light`, `christmas-dark` - Festive red/green
-- **Grayve:** `grayve` - Monochrome design theme
+- **Grayve:** `grayve-light`, `grayve-dark` - Monochrome slate theme
 - **Core:** `core-light` - Minimal, clean theme
 
 ### Icons (`I` / `Domma.icons`)

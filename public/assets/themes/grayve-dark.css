@@ -1,0 +1,233 @@
+/**
+ * Domma Grayve Dark Theme
+ * Slate/cyan monochrome palette — adapted from Bootswatch Slate
+ * Dark mode variant
+ */
+
+.dm-theme-grayve-dark {
+    color-scheme: dark;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Dark Mode Base
+       ================================================ */
+
+    /* Backgrounds - Slate dark backgrounds */
+    --dm-background: #1a1e21;     /* slate-900 */
+    --dm-background-alt: #212529; /* slate-800 */
+    --dm-surface: #212529;        /* slate-800 */
+    --dm-surface-raised: #343A40; /* slate-700 */
+    --dm-surface-overlay: #343A40;/* slate-700 */
+
+    /* Text - Light colours for readability on dark */
+    --dm-text: #DEE2E6;           /* slate-200 */
+    --dm-text-secondary: #ADB5BD; /* slate-400 */
+    --dm-text-muted: #6C757D;     /* slate-500 */
+    --dm-text-disabled: #495057;  /* slate-600 */
+    --dm-text-inverse: #1a1e21;   /* slate-900 */
+
+    /* Borders - Subtle on dark backgrounds */
+    --dm-border: #343A40;         /* slate-700 */
+    --dm-border-light: #212529;   /* slate-800 */
+    --dm-border-dark: #495057;    /* slate-600 */
+
+    /* ================================================
+       GRAYVE ACCENT COLORS - Cyan/teal tones
+       ================================================ */
+
+    /* PRIMARY COLOURS - Cyan Teal */
+    --dm-primary: #00bcd4;
+    --dm-primary-hover: #00acc1;
+    --dm-primary-active: #26c6da;
+    --dm-primary-light: #e0f7fa;
+    --dm-primary-dark: #0097a7;
+
+    /* Focus ring with cyan colour */
+    --dm-focus-ring: 0 0 0 3px rgba(0, 188, 212, 0.3);
+    --dm-border-focus: #00bcd4;
+
+    /* ================================================
+       SECONDARY COLOURS - Blue Grey
+       ================================================ */
+    --dm-secondary: #6C757D;
+    --dm-secondary-hover: #ADB5BD;
+    --dm-secondary-active: #CED4DA;
+    --dm-secondary-light: #E9ECEF;
+    --dm-secondary-dark: #495057;
+
+    /* ================================================
+       STATUS COLOURS
+       ================================================ */
+    --dm-success: #28a745;
+    --dm-success-hover: #49cc61;
+    --dm-success-active: #218838;
+    --dm-success-light: rgba(40, 167, 69, 0.2);
+    --dm-success-dark: #1e7e34;
+
+    --dm-info: #17a2b8;
+    --dm-info-hover: #26d2e9;
+    --dm-info-active: #138496;
+    --dm-info-light: rgba(23, 162, 184, 0.2);
+    --dm-info-dark: #117a8b;
+
+    --dm-warning: #ffc107;
+    --dm-warning-hover: #ffcd38;
+    --dm-warning-active: #e0a800;
+    --dm-warning-text: #856404;
+    --dm-warning-light: rgba(255, 193, 7, 0.2);
+    --dm-warning-dark: #d39e00;
+
+    --dm-danger: #dc3545;
+    --dm-danger-hover: #e35a67;
+    --dm-danger-active: #c82333;
+    --dm-danger-light: rgba(220, 53, 69, 0.2);
+    --dm-danger-dark: #bd2130;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #80deea; /* Cyan 200 */
+    --dm-accent-2: #4dd0e1; /* Cyan 300 */
+    --dm-accent-3: #00bcd4; /* Cyan 500 */
+    --dm-accent-4: #0097a7; /* Cyan 700 */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(255, 255, 255, 0.07);
+    --dm-active-bg: rgba(255, 255, 255, 0.1);
+    --dm-selected-bg: #00838f;
+    --dm-disabled-opacity: 0.4;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-md);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-disabled-bg: #212529;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #1a1e21;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #1a1e21;
+
+    /* Pills */
+    --dm-pill-bg: #343A40;
+    --dm-pill-color: var(--dm-text);
+    --dm-pill-hover-bg: #495057;
+
+    /* Autocomplete / Pillbox */
+    --dm-autocomplete-bg: var(--dm-surface);
+    --dm-autocomplete-border: var(--dm-border);
+    --dm-autocomplete-shadow: var(--dm-shadow-md);
+    --dm-autocomplete-item-hover: var(--dm-hover-bg);
+    --dm-autocomplete-item-active: var(--dm-selected-bg);
+    --dm-autocomplete-highlight: var(--dm-primary-light);
+    --dm-pillbox-bg: var(--dm-surface);
+    --dm-pillbox-border: var(--dm-border);
+
+    /* Progress */
+    --dm-progress-bg: #343A40;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #212529;
+    --dm-scrollbar-thumb: #495057;
+    --dm-scrollbar-thumb-hover: #6C757D;
+
+    /* Code */
+    --dm-code-bg: #1a1e21;
+    --dm-code-text: #80deea;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Subtle for dark mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+}
+
+/* Syntax highlighting tokens for grayve-dark */
+.dm-theme-grayve-dark .code-block .syntax-keyword {
+    color: #c792ea; /* Purple */
+    font-weight: 500;
+}
+
+.dm-theme-grayve-dark .code-block .syntax-string,
+.dm-theme-grayve-dark .code-block .syntax-template-string {
+    color: #c3e88d; /* Green */
+}
+
+.dm-theme-grayve-dark .code-block .syntax-function {
+    color: #82aaff; /* Light Blue */
+}

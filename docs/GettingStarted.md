@@ -336,7 +336,7 @@ Domma includes 16+ built-in themes:
 - **silver** (light/dark)
 - **charcoal** (light/dark) - **default**
 - **christmas** (light/dark)
-- **grayve** (special theme)
+- **grayve** (light/dark)
 
 Change themes with:
 
