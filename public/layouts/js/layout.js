@@ -83,6 +83,11 @@ import {SiteSearch} from './modules/search.js';
             await renderNavbar(presetConfig.navbar, data, presetConfig);
         }
 
+        // Render breadcrumbs
+        if (presetConfig.breadcrumbs && presetConfig.breadcrumbs.enabled) {
+            renderBreadcrumbs(presetConfig.breadcrumbs, depth);
+        }
+
         // Render theme controls
         if (presetConfig.theme && (presetConfig.theme.toggle || presetConfig.theme.variantSelector)) {
             await renderThemeControls(presetConfig.theme);
@@ -577,6 +582,69 @@ import {SiteSearch} from './modules/search.js';
             width: 100%;
           }
         }
+        /* Breadcrumbs pill overlay */
+        .layout-breadcrumbs-pill {
+          position: absolute;
+          top: 1rem;
+          left: 1.5rem;
+          z-index: 10;
+          display: inline-flex;
+          align-items: center;
+          background: rgba(0, 0, 0, 0.35);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+          border-radius: 999px;
+          padding: 0.35rem 0.9rem;
+          font-size: 0.8rem;
+        }
+
+        .layout-breadcrumbs-pill .dm-breadcrumbs {
+          padding: 0;
+          margin: 0;
+          font-size: inherit;
+          gap: 0.35rem;
+        }
+
+        .layout-breadcrumbs-pill .dm-breadcrumbs-item {
+          color: rgba(255, 255, 255, 0.75);
+        }
+
+        .layout-breadcrumbs-pill .dm-breadcrumbs-link:hover {
+          color: white;
+        }
+
+        .layout-breadcrumbs-pill .dm-breadcrumbs-separator {
+          color: rgba(255, 255, 255, 0.4);
+          opacity: 1;
+        }
+
+        .layout-breadcrumbs-pill .dm-breadcrumbs-item.active {
+          color: white;
+          font-weight: 500;
+        }
+
+        /* Fallback bar when no hero exists */
+        .layout-breadcrumbs-bar {
+          padding: 0.5rem 2rem;
+          background: var(--dm-surface, #fff);
+          border-bottom: 1px solid var(--dm-border, #dee2e6);
+        }
+
+        .layout-breadcrumbs-bar .dm-breadcrumbs {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0;
+        }
+
+        @media (max-width: 576px) {
+          .layout-breadcrumbs-pill {
+            top: 0.5rem;
+            left: 0.75rem;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+          }
+        }
+
       </style>
     `;
 
@@ -1074,6 +1142,133 @@ import {SiteSearch} from './modules/search.js';
             console.log('[Domma Layout] Footer rendered');
         } catch (error) {
             console.error('[Domma Layout] Footer render failed:', error);
+        }
+    }
+
+    /**
+     * Build breadcrumb items from the current URL path
+     * @param {Object} config - Breadcrumb config
+     * @param {number} depth - Page depth
+     * @returns {Array} Items array for Domma Breadcrumbs component
+     */
+    function buildBreadcrumbItems(config, depth) {
+        const labelMap = {
+            dom: 'DOM', utils: 'Utils', http: 'HTTP', css: 'CSS',
+            faq: 'FAQs', api: 'API', spa: 'SPA', mpa: 'MPA',
+            'theme-roller': 'Theme Roller', 'page-roller': 'Page Roller',
+            'button-group': 'Button Group', 'back-to-top': 'Back to Top',
+            'cookie-consent': 'Cookie Consent',
+            'desktop-notification': 'Desktop Notification',
+            'print-to-pdf': 'Print to PDF',
+            ...(config.labelOverrides || {})
+        };
+
+        const toLabel = (segment) => {
+            if (labelMap[segment]) return labelMap[segment];
+            return segment
+                .replace(/-/g, ' ')
+                .replace(/\b\w/g, c => c.toUpperCase());
+        };
+
+        const path = window.location.pathname;
+        // Filter out empty segments, 'public', and 'index.html'
+        const segments = path.split('/').filter(s => s && s !== 'public' && s !== 'index.html');
+
+        // Need at least 2 segments (e.g. showcase + dom) to show breadcrumbs
+        if (segments.length < 1) return [];
+
+        const base = PathResolver.getBasePath(depth);
+        const homeLabel = config.homeLabel || 'Home';
+        const homeUrl = config.homeUrl || 'index.html';
+
+        const items = [
+            {
+                text: homeLabel,
+                url: base + homeUrl
+            }
+        ];
+
+        // Build intermediate items
+        for (let i = 0; i < segments.length - 1; i++) {
+            const stepsUp = depth - (i + 1);
+            const segUrl = stepsUp > 0
+                ? '../'.repeat(stepsUp) + 'index.html'
+                : 'index.html';
+            items.push({
+                text: toLabel(segments[i]),
+                url: segUrl
+            });
+        }
+
+        // Last segment — extract label from <title>, stripping common suffixes
+        const lastSegment = segments[segments.length - 1];
+        let lastText = toLabel(lastSegment);
+        const titleText = document.title;
+        if (titleText) {
+            const stripped = titleText
+                .replace(/\s*[·\-|]\s*(Domma(JS)?( Showcase| Framework)?)/gi, '')
+                .trim();
+            if (stripped) lastText = stripped;
+        }
+
+        items.push({ text: lastText, active: true });
+
+        return items;
+    }
+
+    /**
+     * Render frosted glass breadcrumb pill into the hero section (or a fallback bar)
+     * @param {Object} config - Breadcrumb config from preset
+     * @param {number} depth - Page depth
+     */
+    function renderBreadcrumbs(config, depth) {
+        try {
+            const items = buildBreadcrumbItems(config, depth);
+            if (!items.length) return;
+
+            // Outer wrapper holds the pill styling; inner div is the Domma target
+            // (Breadcrumbs._render() overwrites element.className, so we need two layers)
+            const hero = document.querySelector('.hero');
+            let wrapperEl;
+
+            if (hero) {
+                wrapperEl = document.createElement('nav');
+                wrapperEl.id = 'layout-breadcrumbs';
+                wrapperEl.setAttribute('aria-label', 'Breadcrumb navigation');
+                wrapperEl.className = 'layout-breadcrumbs-pill';
+                hero.prepend(wrapperEl);
+            } else {
+                // Fallback: insert a bar below the navbar
+                wrapperEl = document.createElement('nav');
+                wrapperEl.id = 'layout-breadcrumbs';
+                wrapperEl.setAttribute('aria-label', 'Breadcrumb navigation');
+                wrapperEl.className = 'layout-breadcrumbs-bar';
+                const navbar = document.querySelector('.navbar, nav[class*="navbar"], #layout-navbar');
+                if (navbar && navbar.nextSibling) {
+                    navbar.parentNode.insertBefore(wrapperEl, navbar.nextSibling);
+                } else {
+                    document.body.prepend(wrapperEl);
+                }
+            }
+
+            // Inner target for the Domma Breadcrumbs component
+            const inner = document.createElement('div');
+            inner.id = 'layout-breadcrumbs-inner';
+            wrapperEl.appendChild(inner);
+
+            if (typeof Domma !== 'undefined' && Domma.elements && Domma.elements.breadcrumbs) {
+                Domma.elements.breadcrumbs('#layout-breadcrumbs-inner', {
+                    items,
+                    separator: config.separator || 'chevron',
+                    homeIcon: config.homeIcon || false,
+                    responsive: true
+                });
+                console.log('[Domma Layout] Breadcrumbs rendered');
+            } else {
+                console.warn('[Domma Layout] Domma.elements.breadcrumbs not available');
+            }
+        } catch (error) {
+            console.error('[Domma Layout] Breadcrumbs render failed:', error);
         }
     }
 

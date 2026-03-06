@@ -32,6 +32,9 @@
       "minSize": 1,
       "maxSize": 3
     },
+    "breadcrumbs": {
+      "enabled": false
+    },
     "features": [
       "back-to-top",
       "code-copy",
@@ -67,6 +70,9 @@
         },
         "celebrations": {
           "toggle": true
+        },
+        "breadcrumbs": {
+          "enabled": false
         },
         "features": [
           "back-to-top",
@@ -104,6 +110,13 @@
         },
         "celebrations": {
           "toggle": true
+        },
+        "breadcrumbs": {
+          "enabled": true,
+          "separator": "chevron",
+          "homeIcon": true,
+          "homeUrl": "index.html",
+          "homeLabel": "Home"
         },
         "features": [
           "back-to-top",
@@ -144,6 +157,13 @@
         "celebrations": {
           "toggle": true
         },
+        "breadcrumbs": {
+          "enabled": true,
+          "separator": "chevron",
+          "homeIcon": true,
+          "homeUrl": "index.html",
+          "homeLabel": "Home"
+        },
         "features": [
           "back-to-top",
           "code-copy",
@@ -182,6 +202,13 @@
         "celebrations": {
           "toggle": true
         },
+        "breadcrumbs": {
+          "enabled": true,
+          "separator": "chevron",
+          "homeIcon": true,
+          "homeUrl": "index.html",
+          "homeLabel": "Home"
+        },
         "features": [
           "back-to-top",
           "code-copy",
@@ -218,6 +245,13 @@
     "celebrations": {
       "toggle": true
     },
+    "breadcrumbs": {
+      "enabled": true,
+      "separator": "chevron",
+      "homeIcon": true,
+      "homeUrl": "index.html",
+      "homeLabel": "Home"
+    },
     "features": [
       "back-to-top"
     ]
@@ -230,6 +264,9 @@
     },
     "theme": {
       "variantSelector": false
+    },
+    "breadcrumbs": {
+      "enabled": false
     },
     "features": []
   },
@@ -260,6 +297,9 @@
       "variantSelector": true,
       "position": "fixed-right"
     },
+    "breadcrumbs": {
+      "enabled": false
+    },
     "features": []
   },
   "celebrations-demo": {
@@ -288,6 +328,9 @@
     },
     "celebrations": {
       "toggle": false
+    },
+    "breadcrumbs": {
+      "enabled": false
     },
     "features": [
       "back-to-top",
