@@ -4897,14 +4897,6 @@ class Breadcrumbs extends Component {
         }
 
         this.element.setAttribute('aria-label', 'Breadcrumb');
-        this.element.style.cssText = `
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            font-size: var(--dm-text-sm, 0.875rem);
-            color: var(--dm-text-muted, #6c757d);
-        `;
 
         let html = '';
         items.forEach((item, index) => {
@@ -4913,11 +4905,7 @@ class Breadcrumbs extends Component {
 
             // Add separator (except before first item)
             if (index > 0) {
-                html += `<span class="dm-breadcrumb-separator" aria-hidden="true" style="
-                    display: inline-flex;
-                    align-items: center;
-                    opacity: 0.5;
-                ">${separatorHTML}</span>`;
+                html += `<span class="dm-breadcrumbs-separator" aria-hidden="true">${separatorHTML}</span>`;
             }
 
             // Item content
@@ -4927,16 +4915,9 @@ class Breadcrumbs extends Component {
             }
 
             if (isLast || item.active) {
-                html += `<span class="dm-breadcrumb-item active" aria-current="page" style="
-                    color: var(--dm-text, #212529);
-                    font-weight: 500;
-                ">${content}</span>`;
+                html += `<span class="dm-breadcrumbs-item active" aria-current="page">${content}</span>`;
             } else {
-                html += `<a href="${item.url || '#'}" class="dm-breadcrumb-item dm-breadcrumb-link" data-index="${index}" style="
-                    color: inherit;
-                    text-decoration: none;
-                    transition: color 0.15s ease;
-                ">${content}</a>`;
+                html += `<a href="${item.url || '#'}" class="dm-breadcrumbs-item dm-breadcrumbs-link" data-index="${index}">${content}</a>`;
             }
         });
 
@@ -4947,29 +4928,12 @@ class Breadcrumbs extends Component {
     }
 
     _injectStyles() {
-        if (document.getElementById('dm-breadcrumbs-styles')) return;
-
-        const style = document.createElement('style');
-        style.id = 'dm-breadcrumbs-styles';
-        style.textContent = `
-            .dm-breadcrumb-link:hover {
-                color: var(--dm-primary, #6495ED) !important;
-            }
-            @media (max-width: 576px) {
-                .dm-breadcrumbs-responsive .dm-breadcrumb-item:not(:last-child):not(:first-child) {
-                    display: none;
-                }
-                .dm-breadcrumbs-responsive .dm-breadcrumb-separator:not(:first-of-type):not(:last-of-type) {
-                    display: none;
-                }
-            }
-        `;
-        document.head.appendChild(style);
+        // Styling handled by elements.css
     }
 
     _bindEvents() {
         this._addEventListener(this.element, 'click', (e) => {
-            const link = e.target.closest('.dm-breadcrumb-link');
+            const link = e.target.closest('.dm-breadcrumbs-link');
             if (link) {
                 const index = parseInt(link.dataset.index, 10);
                 if (this.options.onChange) {
