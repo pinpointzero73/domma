@@ -275,7 +275,7 @@ class Forma {
     let html = `<div class="${fieldClassName}${spanClass}" data-field="${fieldName}">`;
 
     // Label (skip for boolean types as they have inline labels)
-    if (showLabels && label && type !== 'hidden' && type !== 'boolean') {
+    if (showLabels && label && type !== 'hidden' && type !== 'boolean' && type !== 'checkbox') {
       const labelClass = this.options.labelClassName;
       const requiredMark = required ? ' <span class="text-danger">*</span>' : '';
       const tooltipAttr = tooltip ? ` data-tooltip="${this.utils.escapeHtml(tooltip)}"` : '';
@@ -370,6 +370,7 @@ class Forma {
       case 'checkbox-group':
         return this._buildCheckboxGroup(fieldName, fieldDef, attrs, value);
 
+      case 'checkbox': // alias for boolean
       case 'boolean':
         const checked = value ? 'checked' : '';
         const labelText = fieldDef.label || this.utils.capitalize(fieldName);
