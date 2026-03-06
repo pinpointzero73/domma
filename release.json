@@ -1,86 +1,83 @@
 {
-  "version": "0.19.0",
-  "releaseDate": "2026-03-04",
-  "codename": "UnicornDreamy",
+  "version": "0.19.3",
+  "releaseDate": "2026-03-06",
+  "codename": "BreadcrumbPill",
   "changes": {
     "features": [
       {
-        "title": "Unicorn Theme — Pink & Purple Palette",
-        "description": "Two new variants (light + dark) with amethyst purple and hot pink as primary/secondary colours",
+        "title": "Layout System — Auto-Generated Breadcrumbs",
+        "description": "Frosted glass breadcrumb pill auto-generated from the URL, overlaid top-left on hero sections across showcase and public pages",
         "impact": "medium",
         "files": [
-          "public/assets/themes/unicorn-light.css",
-          "public/assets/themes/unicorn-dark.css"
+          "public/layouts/js/layout.js",
+          "public/layouts/config/presets.json"
         ],
-        "details": "<p>A vibrant pink-and-purple theme inspired by unicorn aesthetics.</p><ul><li><strong>unicorn-light</strong> — Amethyst purple primary (<code>#9b59b6</code>), hot pink secondary (<code>#e91e90</code>), white surfaces with faint lavender tint (<code>#faf5fc</code>), dark aubergine text (<code>#2d1b3d</code>), light purple borders (<code>#e1bee7</code>)</li><li><strong>unicorn-dark</strong> — Deep purple-black backgrounds (<code>#1a0e24</code> / <code>#241432</code>), lighter purple primary (<code>#ce93d8</code>) for dark-mode contrast, lighter pink secondary (<code>#f48fb1</code>), muted purple borders (<code>#4a2660</code>), warm lavender-white text (<code>#f3e5f5</code>)</li></ul>"
-      },
-      {
-        "title": "Dreamy Theme — Beige & Biscuit Palette",
-        "description": "Two new variants (light + dark) with warm brown and dusty taupe as primary/secondary colours",
-        "impact": "medium",
-        "files": [
-          "public/assets/themes/dreamy-light.css",
-          "public/assets/themes/dreamy-dark.css"
-        ],
-        "details": "<p>A calm, earthy theme built around warm cream, biscuit, and chocolate tones.</p><ul><li><strong>dreamy-light</strong> — Warm brown primary (<code>#8d6e63</code>), dusty rose-brown secondary (<code>#a1887f</code>), warm cream surfaces (<code>#fffdf9</code> / <code>#f5f0eb</code>), dark chocolate text (<code>#3e2723</code>), light biscuit borders (<code>#d7ccc8</code>)</li><li><strong>dreamy-dark</strong> — Dark espresso backgrounds (<code>#1c1410</code> / <code>#2a1f1a</code>), lighter taupe primary (<code>#bcaaa4</code>) for dark-mode contrast, warm off-white text (<code>#efebe9</code>), dark brown borders (<code>#4e342e</code>), code background (<code>#1a1210</code>)</li></ul>"
+        "details": "<p>The layout system now derives breadcrumb navigation automatically from <code>window.location.pathname</code> — no per-page markup needed.</p><ul><li><strong>renderBreadcrumbs(config, depth)</strong> — Creates a <code>&lt;nav class=\"layout-breadcrumbs-pill\"&gt;</code> wrapper prepended into the <code>.hero</code> element (or a fallback bar below the navbar on hero-less pages); uses a two-layer DOM so the Domma Breadcrumbs component's class overwrite doesn't disturb the pill styling</li><li><strong>buildBreadcrumbItems(config, depth)</strong> — Splits the pathname, maps each segment through a built-in label dictionary (<code>dom → DOM</code>, <code>http → HTTP</code>, <code>spa → SPA</code>, <code>theme-roller → Theme Roller</code>, etc.), title-cases anything not in the map, and extracts the last crumb's label from <code>&lt;title&gt;</code> (stripping Domma suffixes)</li><li><strong>Preset config</strong> — <code>breadcrumbs.enabled: true</code> for <code>showcase:subpage</code>, <code>showcase:effects</code>, <code>showcase:element</code>, and <code>public</code>; <code>false</code> for landing, index, minimal, admin, and demo presets</li><li><strong>Responsive</strong> — Pill shrinks at ≤576px</li></ul>"
       }
     ],
-    "enhancements": [
+    "enhancements": [],
+    "bugFixes": [
       {
-        "title": "Theme Registration — All 6 Surfaces",
-        "description": "Both new themes registered in AVAILABLE_THEMES, listBases(), build-css.js, theme-roller dropdown, layout variant dots (count 16→20), and kickstart builder",
-        "impact": "medium",
+        "title": "Forms — Checkbox Label Duplication",
+        "description": "Checkbox fields no longer receive a redundant standalone label element; label rendering is now skipped for checkbox inputs",
+        "impact": "low",
         "files": [
+          "src/forms.js"
+        ],
+        "details": "<p>The label injection logic in <code>forms.js</code> previously emitted a visible <code>&lt;label&gt;</code> element for every field type, including checkboxes. Checkboxes embed their label within their own markup, so the extra element caused doubled text. The label-rendering path now explicitly excludes <code>type === 'checkbox'</code>.</p>"
+      },
+      {
+        "title": "Breadcrumbs — item.text vs item.label",
+        "description": "buildBreadcrumbItems() was building items with a 'label' property; the Domma Breadcrumbs component reads 'text', causing [object Object] to render",
+        "impact": "low",
+        "files": [
+          "public/layouts/js/layout.js"
+        ],
+        "details": "<p><code>Breadcrumbs._render()</code> reads <code>item.text || item</code> (line 4912 of elements.js). The initial implementation used <code>label</code> as the property name, producing <code>[object Object]</code> in the rendered breadcrumb trail. All item objects now use <code>text</code>.</p>"
+      }
+    ],
+    "breaking": [],
+    "housekeeping": [
+      {
+        "title": "Grayve Theme — Slate & Steel Palette (v0.19.1)",
+        "description": "Two new theme variants (grayve-light, grayve-dark) registered across all theming surfaces; theme count 20 → 22",
+        "impact": "low",
+        "files": [
+          "public/assets/themes/grayve-light.css",
+          "public/assets/themes/grayve-dark.css",
           "src/theme.js",
           "src/theme-roller.js",
           "scripts/build-css.js",
           "public/layouts/js/layout.js",
           "public/download/kickstart-builder.js"
         ],
-        "details": "<p>All five registration points updated so the new themes are reachable from every surface:</p><ul><li><strong>src/theme.js</strong> — Added <code>'unicorn-light'</code>, <code>'unicorn-dark'</code>, <code>'dreamy-light'</code>, <code>'dreamy-dark'</code> to <code>AVAILABLE_THEMES</code>; added <code>'unicorn'</code> and <code>'dreamy'</code> to <code>listBases()</code></li><li><strong>scripts/build-css.js</strong> — Added 4 CSS file entries so themes are concatenated into <code>public/dist/themes/domma-themes.css</code></li><li><strong>src/theme-roller.js</strong> — Added two new <code>&lt;optgroup&gt;</code> blocks to the theme picker dropdown</li><li><strong>public/layouts/js/layout.js</strong> — Added gradient CSS rules for variant dot swatches; added 4 dot buttons; updated tooltip count from 16 to 20</li><li><strong>public/download/kickstart-builder.js</strong> — Added 4 entries to the <code>THEMES</code> array for the Kickstart Builder theme selector</li></ul>"
-      }
-    ],
-    "bugFixes": [],
-    "breaking": [],
-    "housekeeping": [
+        "details": "<p>Added in v0.19.1. Cool slate-and-steel palette suited to neutral, data-heavy interfaces.</p>"
+      },
       {
-        "title": "Codebase Cleanup — Backup & Debug Files Removed",
-        "description": "Deleted 8 stale files and 2 auto-generated directories that had accumulated during development",
+        "title": "Breadcrumbs CSS — Moved from JS to elements.css (v0.19.1)",
+        "description": "Inline runtime styles for .dm-breadcrumbs-item, .dm-breadcrumbs-separator, and .dm-breadcrumbs-link moved to elements.css as static rules; separator class name corrected",
         "impact": "low",
         "files": [
-          "src/dom.js.backup-20260112-094013",
-          "src/dom.js.backup-manual",
-          "src/elements.js.backup-xss-20260112-100253",
-          "public/layouts/js/modules/celebrations/themes/st-davids.js.bak",
-          "public/layouts/js/modules/celebrations/themes/st-georges.js.bak",
-          "public/layouts/js/modules/celebrations/themes/st-patricks.js.bak",
-          "debug-wizard.html",
-          "firebase-debug.log",
-          "coverage/",
-          ".playwright-mcp/"
+          "src/elements.js",
+          "src/css/elements.css"
         ],
-        "details": "<p>Removed development artefacts that had no ongoing purpose:</p><ul><li><strong>Source backups (3)</strong> — <code>dom.js.backup-20260112-094013</code>, <code>dom.js.backup-manual</code>, <code>elements.js.backup-xss-20260112-100253</code></li><li><strong>Celebration theme .bak files (3)</strong> — Superseded by updated <code>.js</code> versions dated 2026-02-08+</li><li><strong>debug-wizard.html</strong> — One-off debugging page</li><li><strong>firebase-debug.log</strong> — Runtime log from 2026-03-03</li><li><strong>coverage/ directory</strong> — Auto-generated Vitest coverage reports</li><li><strong>.playwright-mcp/ directory</strong> — Auto-generated browser screenshots and console logs</li></ul>"
+        "details": "<p>Added in v0.19.1. The <code>_injectStyles()</code> method in the Breadcrumbs class was injecting a <code>&lt;style&gt;</code> block at runtime. These rules have been moved to <code>src/css/elements.css</code> as static declarations. The separator selector was also corrected from <code>.dm-breadcrumb-separator</code> to <code>.dm-breadcrumbs-separator</code>.</p>"
       }
     ]
   },
   "buildInfo": {
     "commit": "latest",
-    "buildDate": "2026-03-04T00:00:00Z"
+    "buildDate": "2026-03-06T00:00:00Z"
   },
   "stats": {
-    "totalFiles": 9,
-    "linesAdded": 720,
-    "linesRemoved": 10,
+    "totalFiles": 4,
+    "linesAdded": 238,
+    "linesRemoved": 0,
     "filesChanged": [
-      "public/assets/themes/unicorn-light.css",
-      "public/assets/themes/unicorn-dark.css",
-      "public/assets/themes/dreamy-light.css",
-      "public/assets/themes/dreamy-dark.css",
-      "src/theme.js",
-      "src/theme-roller.js",
-      "scripts/build-css.js",
       "public/layouts/js/layout.js",
-      "public/download/kickstart-builder.js"
+      "public/layouts/config/presets.json",
+      "src/forms.js",
+      "public/data/releases.json"
     ]
   }
 }

@@ -1,6 +1,24 @@
 {
   "releases": [
     {
+      "year": "v0.19.3",
+      "title": "Auto-Generated Breadcrumbs in the Layout System",
+      "description": "<p><strong>Feature Release:</strong> The layout system now auto-generates frosted glass breadcrumb pills, overlaid top-left on hero sections and derived entirely from the page URL — no per-page configuration required.</p><p><strong>Layout System Breadcrumbs:</strong></p><ul><li><strong>Frosted glass pill</strong> — Semi-transparent black backdrop with <code>backdrop-filter: blur(6px)</code> sits at the top-left of every <code>.hero</code> section; falls back to a surface bar below the navbar on pages without a hero</li><li><strong>URL-driven label generation</strong> — Path segments are mapped through a built-in dictionary (<code>dom → DOM</code>, <code>http → HTTP</code>, <code>spa → SPA</code>, <code>theme-roller → Theme Roller</code>, etc.); anything unrecognised is title-cased automatically</li><li><strong>Title extraction</strong> — The last crumb's label is pulled from <code>&lt;title&gt;</code>, stripping common suffixes such as <code>· Domma Showcase</code>, for a precise page name</li><li><strong>Preset-driven</strong> — Enabled via <code>breadcrumbs.enabled: true</code> in <code>presets.json</code>; active for <code>showcase:subpage</code>, <code>showcase:effects</code>, <code>showcase:element</code>, and <code>public</code> presets; off for landing, index, minimal, admin, and demo pages</li><li><strong>Responsive</strong> — Pill shrinks at ≤576px (font-size 0.7 rem, tighter padding)</li><li><strong>Two-layer DOM</strong> — Outer <code>&lt;nav&gt;</code> holds the pill class; inner <code>&lt;div&gt;</code> is the Domma Breadcrumbs target, preserving component class isolation</li></ul><p><strong>Forms Fix:</strong> Checkbox fields no longer render a redundant label element alongside the input; the label is now handled by the checkbox markup itself.</p>",
+      "date": "2026-03-06"
+    },
+    {
+      "year": "v0.19.2",
+      "title": "Forms — Checkbox Label Fix",
+      "description": "<p><strong>Patch Release:</strong> Corrected label rendering logic in <code>forms.js</code> so that checkbox fields are excluded from the standard label output. Previously, a visible label element was injected alongside the checkbox even when the label was already embedded within the checkbox markup, causing doubled text on checkbox-type fields.</p>",
+      "date": "2026-03-06"
+    },
+    {
+      "year": "v0.19.1",
+      "title": "Grayve — Slate & Steel Theme Palette",
+      "description": "<p><strong>Feature Release:</strong> A new <strong>Grayve</strong> theme palette — two variants (light + dark) built around cool slate and steel-grey tones, bringing the total theme count to 22.</p><p><strong>Grayve Theme:</strong></p><ul><li><strong>grayve-light</strong> — Steel-blue primary, light slate surfaces, dark navy text, and soft grey borders; a neutral professional palette suited to data-heavy interfaces</li><li><strong>grayve-dark</strong> — Deep charcoal backgrounds, lighter steel primary for contrast, muted slate borders, and off-white text</li></ul><p><strong>Registered across all surfaces:</strong> Available in the Theme Roller dropdown, the layout variant dot selector (count 20 → 22), the Kickstart Builder theme picker, and the <code>Domma.theme</code> API.</p><p><strong>Breadcrumbs CSS Refactor:</strong> Inline styles previously injected by <code>elements.js</code> at runtime for <code>.dm-breadcrumbs-item</code>, <code>.dm-breadcrumbs-separator</code>, and <code>.dm-breadcrumbs-link</code> were moved to <code>elements.css</code> as static rules. The separator selector was also corrected from <code>.dm-breadcrumb-separator</code> (singular) to <code>.dm-breadcrumbs-separator</code> (plural) for consistency.</p>",
+      "date": "2026-03-05"
+    },
+    {
       "year": "v0.19.0",
       "title": "Unicorn & Dreamy — Two New Theme Palettes",
       "description": "<p><strong>Feature Release:</strong> Two new fully theme-aware colour palettes — <strong>Unicorn</strong> (pink and purple) and <strong>Dreamy</strong> (beige and biscuit) — each with light and dark variants, bringing the total theme count to 20.</p><p><strong>Unicorn Theme:</strong></p><ul><li><strong>unicorn-light</strong> — Amethyst purple primary (<code>#9b59b6</code>), hot pink secondary (<code>#e91e90</code>), white surfaces with soft lavender tint (<code>#faf5fc</code>), dark aubergine text (<code>#2d1b3d</code>), and light purple borders (<code>#e1bee7</code>)</li><li><strong>unicorn-dark</strong> — Deep purple-black backgrounds (<code>#1a0e24</code> / <code>#241432</code>), lighter purple primary (<code>#ce93d8</code>) for contrast, lighter pink secondary (<code>#f48fb1</code>), and muted purple borders (<code>#4a2660</code>)</li></ul><p><strong>Dreamy Theme:</strong></p><ul><li><strong>dreamy-light</strong> — Warm brown primary (<code>#8d6e63</code>), warm cream surfaces (<code>#fffdf9</code> / <code>#f5f0eb</code>), dark chocolate text (<code>#3e2723</code>), and light biscuit borders (<code>#d7ccc8</code>)</li><li><strong>dreamy-dark</strong> — Dark espresso backgrounds (<code>#1c1410</code> / <code>#2a1f1a</code>), lighter taupe primary (<code>#bcaaa4</code>) for contrast, warm off-white text (<code>#efebe9</code>), and dark brown borders (<code>#4e342e</code>)</li></ul><p><strong>Registered across all surfaces:</strong> Both themes are available in the Theme Roller dropdown, the layout variant dot selector, the Kickstart Builder theme picker, and the <code>Domma.theme</code> API (<code>listThemes()</code> / <code>listBases()</code>). The variant dot count in the layout controls is updated from 16 to 20.</p><p><strong>Codebase Cleanup:</strong> Removed six stale backup and <code>.bak</code> files (<code>dom.js.backup-*</code>, <code>elements.js.backup-xss-*</code>, three celebration theme <code>.bak</code> files), the one-off <code>debug-wizard.html</code>, <code>firebase-debug.log</code>, the auto-generated <code>coverage/</code> directory, and the <code>.playwright-mcp/</code> screenshot cache.</p>",
@@ -139,5 +157,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.19.0"
+  "latestVersion": "v0.19.3"
 }
