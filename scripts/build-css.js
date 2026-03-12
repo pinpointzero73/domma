@@ -58,7 +58,10 @@ const themeFiles = [
   'public/assets/themes/dreamy-dark.css',
   // Grayve themes
   'public/assets/themes/grayve-light.css',
-  'public/assets/themes/grayve-dark.css'
+  'public/assets/themes/grayve-dark.css',
+  // Mint themes
+  'public/assets/themes/mint-light.css',
+  'public/assets/themes/mint-dark.css'
 ];
 
 // Build banner

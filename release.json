@@ -1,4 +1,34 @@
 {
+  "version": "0.19.4",
+  "releaseDate": "2026-03-12",
+  "codename": "MintCondition",
+  "changes": {
+    "features": [
+      {
+        "title": "Mint Theme — Fresh Spearmint Colour Palette",
+        "description": "Two new theme variants (mint-light, mint-dark) registered across all theming surfaces; theme count 22 → 24",
+        "impact": "low",
+        "files": [
+          "public/assets/themes/mint-light.css",
+          "public/assets/themes/mint-dark.css",
+          "public/assets/themes/mint.css",
+          "src/theme.js",
+          "src/theme-roller.js",
+          "scripts/build-css.js",
+          "public/layouts/js/layout.js",
+          "public/showcase/themes/index.html",
+          "public/download/index.html"
+        ],
+        "details": "<p>A fresh <strong>Mint</strong> theme palette — two variants (light + dark) built around cool spearmint and seafoam green tones, bringing the total theme count to 24.</p><ul><li><strong>mint-light</strong> — Rich eucalyptus primary (<code>#2e9e6e</code>), seafoam secondary (<code>#5b8a7a</code>), white surfaces with a subtle mint-tinted alt background (<code>#f0faf5</code>), near-black forest text (<code>#1a2e25</code>), and soft celadon borders (<code>#c8e6d8</code>)</li><li><strong>mint-dark</strong> — Deep slate-900 backgrounds with a dark mint-tinted surface (<code>#1e3a2f</code>), bright spearmint primary (<code>#6dd5a8</code>) for contrast, mint-tinted text (<code>#d4f5e4</code>), and dark teal borders (<code>#2a4a3a</code>)</li><li><strong>mint.css</strong> — Legacy compound-selector variant (<code>.dm-theme-mint</code> + dark override) for projects using the base/variant pattern</li></ul><p>Registered across all theming surfaces: Theme Roller dropdown, layout variant dot selector (count updated to 24), themes showcase card grid, and the <code>Domma.theme</code> API (<code>listThemes()</code> / <code>listBases()</code>). Download page swatch corrected to use proper <code>.theme-swatch</code> classes and updated to reflect 12 colour families.</p>"
+      }
+    ],
+    "enhancements": [],
+    "bugFixes": [],
+    "breaking": [],
+    "housekeeping": []
+  }
+},
+{
   "version": "0.19.3",
   "releaseDate": "2026-03-06",
   "codename": "BreadcrumbPill",

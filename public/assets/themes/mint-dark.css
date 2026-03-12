@@ -1,0 +1,214 @@
+/**
+ * Domma Mint Dark Theme
+ * Fresh spearmint colour palette inspired by cool green-blue tones
+ * Dark mode variant - dark backgrounds with bright mint greens
+ */
+
+.dm-theme-mint-dark {
+    color-scheme: dark;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Dark Mode Base
+       ================================================ */
+
+    /* Backgrounds - Dark slate/charcoal backgrounds */
+    --dm-background: #0f172a; /* slate-900 */
+    --dm-background-alt: #1e293b; /* slate-800 */
+    --dm-surface: #1e293b; /* slate-800 */
+    --dm-surface-raised: #1e3a2f; /* dark mint-tinted slate */
+    --dm-surface-overlay: #243d32; /* slightly lighter mint-tinted */
+
+    /* Text - Light colors for readability on dark */
+    --dm-text: #d4f5e4; /* mint-tinted slate-200 */
+    --dm-text-secondary: #93bfad; /* muted mint */
+    --dm-text-muted: #5e8a78; /* slate-500 with mint tint */
+    --dm-text-disabled: #3d5e50; /* slate-600 with mint tint */
+    --dm-text-inverse: #0f172a; /* slate-900 */
+
+    /* Borders - Subtle on dark backgrounds */
+    --dm-border: #2a4a3a; /* dark mint border */
+    --dm-border-light: #1e3a2f; /* darker mint border */
+    --dm-border-dark: #3d6650; /* lighter mint border */
+
+    /* ================================================
+       MINT ACCENT COLORS - Bright greens for dark mode
+       ================================================ */
+
+    /* Primary - Bright mint green */
+    --dm-primary: #6dd5a8;
+    --dm-primary-hover: #82ddb5;
+    --dm-primary-active: #96e4c2;
+    --dm-primary-light: rgba(109, 213, 168, 0.15);
+    --dm-primary-dark: #48b896;
+
+    /* Focus ring with mint colour */
+    --dm-focus-ring: 0 0 0 3px rgba(109, 213, 168, 0.35);
+    --dm-border-focus: #6dd5a8;
+
+    /* ================================================
+       SECONDARY COLOURS - Muted seafoam
+       ================================================ */
+    --dm-secondary: #93bfad;
+    --dm-secondary-hover: #a6ccbc;
+    --dm-secondary-active: #b8d9cc;
+    --dm-secondary-light: rgba(147, 191, 173, 0.15);
+    --dm-secondary-dark: #6e9888;
+
+    /* ================================================
+       STATUS COLOURS
+       ================================================ */
+    --dm-success: #7dcea0;
+    --dm-success-hover: #92d8b0;
+    --dm-success-active: #a6e1c0;
+    --dm-success-light: rgba(125, 206, 160, 0.15);
+    --dm-success-dark: #5aae80;
+
+    --dm-info: #82d8b5;
+    --dm-info-hover: #96dfbf;
+    --dm-info-active: #aae6ca;
+    --dm-info-light: rgba(130, 216, 181, 0.15);
+    --dm-info-dark: #60b898;
+
+    --dm-warning: #f5c97e;
+    --dm-warning-hover: #f7d396;
+    --dm-warning-active: #f9ddb0;
+    --dm-warning-light: rgba(245, 201, 126, 0.15);
+    --dm-warning-text: #f5c97e;
+
+    --dm-danger: #ef4444;
+    --dm-danger-hover: #f87171;
+    --dm-danger-active: #fca5a5;
+    --dm-danger-light: rgba(248, 113, 113, 0.15);
+    --dm-danger-dark: #dc2626;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #96e4c2; /* Bright seafoam */
+    --dm-accent-2: #6dd5a8; /* Mint */
+    --dm-accent-3: #48b896; /* Jade */
+    --dm-accent-4: #2e6e52; /* Deep pine */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(255, 255, 255, 0.07);
+    --dm-active-bg: rgba(255, 255, 255, 0.1);
+    --dm-selected-bg: rgba(109, 213, 168, 0.2);
+    --dm-disabled-opacity: 0.4;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-sm);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-focus-shadow: var(--dm-focus-ring);
+    --dm-input-disabled-bg: #1e293b;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #0f172a;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+    --dm-tab-active-border: #6dd5a8;
+    --dm-tab-active-text: #6dd5a8;
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #0f172a;
+
+    /* Progress */
+    --dm-progress-bg: #2a4a3a;
+    --dm-progress-bar: #6dd5a8;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #1e293b;
+    --dm-scrollbar-thumb: #2a4a3a;
+    --dm-scrollbar-thumb-hover: #3d6650;
+
+    /* Code */
+    --dm-code-bg: #0f172a;
+    --dm-code-text: #fca5a5;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Subtle for dark mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    /* ================================================
+       ELEVATION / DEPTH
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+}

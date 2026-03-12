@@ -21,6 +21,7 @@ const AVAILABLE_THEMES = [
     'unicorn-light', 'unicorn-dark',
     'dreamy-light', 'dreamy-dark',
     'grayve-light', 'grayve-dark',
+    'mint-light', 'mint-dark',
     'core-light'
 ];
 
@@ -252,7 +253,7 @@ class ThemeEngine {
      * @returns {string[]}
      */
     listBases() {
-        return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas', 'unicorn', 'dreamy', 'grayve'];
+        return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas', 'unicorn', 'dreamy', 'grayve', 'mint'];
     }
 
     /**

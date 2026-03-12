@@ -1,0 +1,98 @@
+/**
+ * Domma Mint Theme Variant
+ * Fresh spearmint colour palette inspired by cool green-blue tones
+ * Combinable with light or dark theme: .dm-theme-dark.dm-theme-mint
+ */
+
+.dm-theme-mint {
+    /* ================================================
+       PRIMARY COLOURS - Mint Green
+       ================================================ */
+    --dm-primary: #2e9e6e;
+    --dm-primary-hover: #279060;
+    --dm-primary-active: #1f7a50;
+    --dm-primary-light: #d4f5e4;
+    --dm-primary-dark: #1b5e3a;
+
+    /* Focus ring with mint colour */
+    --dm-focus-ring: 0 0 0 3px rgba(46, 158, 110, 0.3);
+    --dm-border-focus: #2e9e6e;
+
+    /* ================================================
+       SECONDARY COLOURS - Seafoam
+       ================================================ */
+    --dm-secondary: #5b8a7a;
+    --dm-secondary-hover: #6b9e8c;
+    --dm-secondary-active: #7cb29e;
+    --dm-secondary-light: #e8f5ef;
+    --dm-secondary-dark: #446858;
+
+    /* ================================================
+       STATUS COLOURS - Mint-tinted
+       ================================================ */
+    --dm-success: #27ae60;
+    --dm-success-hover: #2ebd6b;
+    --dm-success-active: #52cc82;
+    --dm-success-light: #d4f5e4;
+    --dm-success-dark: #1e8a4a;
+
+    --dm-info: #48b896;
+    --dm-info-hover: #56c8a5;
+    --dm-info-active: #70d4b5;
+    --dm-info-light: #d8f3eb;
+    --dm-info-dark: #35907a;
+
+    --dm-warning: #f0ad4e;
+    --dm-warning-hover: #f3bc6a;
+    --dm-warning-active: #f5c97e;
+    --dm-warning-light: #fef6e7;
+    --dm-warning-dark: #c88a2a;
+    --dm-warning-text: #c88a2a;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #82d8b5; /* Seafoam */
+    --dm-accent-2: #48b896; /* Jade */
+    --dm-accent-3: #2e9e6e; /* Eucalyptus */
+    --dm-accent-4: #1b5e3a; /* Pine */
+
+    /* ================================================
+       SELECTION
+       ================================================ */
+    --dm-selected-bg: rgba(46, 158, 110, 0.15);
+    --dm-tab-active-border: #2e9e6e;
+    --dm-tab-active-text: #2e9e6e;
+    --dm-progress-bar: #2e9e6e;
+}
+
+/* Dark mode adjustments for mint */
+.dm-theme-dark.dm-theme-mint {
+    --dm-primary: #6dd5a8;
+    --dm-primary-hover: #82ddb5;
+    --dm-primary-active: #96e4c2;
+    --dm-primary-light: rgba(109, 213, 168, 0.15);
+    --dm-primary-dark: #48b896;
+
+    --dm-secondary: #93bfad;
+    --dm-secondary-hover: #a6ccbc;
+    --dm-secondary-active: #b8d9cc;
+    --dm-secondary-light: rgba(147, 191, 173, 0.15);
+    --dm-secondary-dark: #6e9888;
+
+    --dm-success: #7dcea0;
+    --dm-success-light: rgba(125, 206, 160, 0.15);
+
+    --dm-info: #82d8b5;
+    --dm-info-light: rgba(130, 216, 181, 0.15);
+
+    --dm-warning: #f5c97e;
+    --dm-warning-light: rgba(245, 201, 126, 0.15);
+    --dm-warning-text: #f5c97e;
+
+    --dm-focus-ring: 0 0 0 3px rgba(109, 213, 168, 0.35);
+    --dm-selected-bg: rgba(109, 213, 168, 0.2);
+    --dm-tab-active-border: #6dd5a8;
+    --dm-tab-active-text: #6dd5a8;
+    --dm-progress-bar: #6dd5a8;
+}
