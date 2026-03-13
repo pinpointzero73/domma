@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration - Domma CMS</title>
+    <link rel="canonical" href="https://dommajs.org/cms/configuration/">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/cms-showcase.css">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="cms" data-layout-variant="subpage">
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Configuration</div>
+        <div class="hero-subtitle">Site settings, navigation, layouts, themes, and server configuration</div>
+    </div>
+</div>
+<main class="container py-8">
+
+    <!-- 1. Site Settings -->
+    <section class="card mb-6" data-section="Site Settings">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Site Settings</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Managed at <strong>Admin → Settings</strong>. Stored in <code>config/site.json</code>. These values control the identity, typography, SEO, email delivery, footer, social links, and several opt-in UI features of your site.</p>
+            <pre><code class="language-json">{
+  "identity": {
+    "title": "My Site",                        // Browser tab title and OG title
+    "tagline": "Fast. Flexible. Beautiful.",   // Short strapline shown in hero/footer
+    "description": "A site built with Domma CMS.",
+    "logo": "/assets/logo.svg",                // Path to logo image
+    "favicon": "/assets/favicon.svg",          // Shown in browser tab
+    "url": "https://mysite.example.com"        // Canonical base URL (no trailing slash)
+  },
+
+  "typography": {
+    "headingFont": "Inter",                    // Google Font name or 'system'
+    "bodyFont": "Inter"                        // Applied to body text
+  },
+
+  "seo": {
+    "googleAnalytics": "G-XXXXXXXXXX",         // GA4 measurement ID (leave blank to disable)
+    "sitemapEnabled": true,                    // Auto-generates /sitemap.xml on build
+    "robotsTxt": "User-agent: *\nAllow: /"    // Written verbatim to /robots.txt
+  },
+
+  "smtp": {
+    "host": "smtp.gmail.com",                  // SMTP server hostname
+    "port": 587,                               // 587 (STARTTLS) or 465 (SSL)
+    "user": "you@example.com",                 // SMTP username
+    "password": "your-app-password",           // SMTP password or app-specific password
+    "from": "noreply@mysite.example.com"       // From address for outbound emails
+  },
+
+  "footer": {
+    "copyright": "© 2026 My Site. All rights reserved.",
+    "links": [
+      { "text": "Privacy Policy", "url": "/privacy" },
+      { "text": "Terms of Service", "url": "/terms" }
+    ]
+  },
+
+  "social": {
+    "twitter": "https://x.com/myhandle",
+    "github": "https://github.com/myorg",
+    "linkedin": "https://linkedin.com/company/myorg",
+    "youtube": "https://youtube.com/@mychannel"
+  },
+
+  "backToTop": {
+    "enabled": true,
+    "position": "fixed-right"                 // fixed-right | fixed-left
+  },
+
+  "cookies": {
+    "enabled": true,
+    "message": "We use cookies to improve your experience.",
+    "acceptButtonText": "Got it",
+    "policyUrl": "/privacy#cookies"
+  },
+
+  "breadcrumbs": {
+    "enabled": true,
+    "separator": "/"                           // Any character or HTML entity
+  }
+}</code></pre>
+        </div>
+    </section>
+
+    <!-- 2. Navigation -->
+    <section class="card mb-6" data-section="Navigation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Navigation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Managed at <strong>Admin → Navigation</strong>. Stored in <code>config/navigation.json</code>. Defines the top navbar brand, link items, optional dropdown groups, visual variant, and action slots (e.g. theme selector).</p>
+            <pre><code class="language-json">{
+  "brand": { "text": "My Site", "url": "/" },
+  "items": [
+    { "text": "Home", "url": "/" },
+    { "text": "Blog", "url": "/blog" },
+    { "text": "About", "url": "/about" },
+    {
+      "text": "More",
+      "items": [
+        { "text": "Contact", "url": "/contact" },
+        { "text": "FAQ", "url": "/faq" }
+      ]
+    }
+  ],
+  "variant": "dark",
+  "actions": [{ "type": "theme-selector" }]
+}</code></pre>
+            <div class="mt-4">
+                <h3 class="font-semibold mb-2">Key details</h3>
+                <ul class="list-disc pl-6">
+                    <li class="mb-1">Supports flat <code>items</code> and nested dropdown groups via a child <code>items</code> array.</li>
+                    <li class="mb-1"><strong>variant</strong> accepts <code>default</code>, <code>dark</code>, or <code>transparent</code>.</li>
+                    <li class="mb-1"><strong>actions</strong> is a slot array rendered to the right of the nav links. Currently supports <code>theme-selector</code>.</li>
+                    <li class="mb-1"><strong>Mobile</strong>: collapses automatically to a hamburger menu — no additional configuration required.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Layout Presets -->
+    <section class="card mb-6" data-section="Layout Presets">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Layout Presets</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Managed in <code>config/layouts.json</code>. A layout preset controls which chrome (navbar, sidebar, footer, breadcrumbs) wraps a page's content.</p>
+            <div class="table-responsive mb-4">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Preset</th>
+                            <th>Navbar</th>
+                            <th>Sidebar</th>
+                            <th>Footer</th>
+                            <th>Breadcrumbs</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>default</code></td>
+                            <td><span data-icon="check"></span></td>
+                            <td>—</td>
+                            <td><span data-icon="check"></span></td>
+                            <td><span data-icon="check"></span></td>
+                            <td>Standard content pages</td>
+                        </tr>
+                        <tr>
+                            <td><code>with-sidebar</code></td>
+                            <td><span data-icon="check"></span></td>
+                            <td>Auto (from h2s)</td>
+                            <td><span data-icon="check"></span></td>
+                            <td><span data-icon="check"></span></td>
+                            <td>Sidebar generated from page headings</td>
+                        </tr>
+                        <tr>
+                            <td><code>minimal</code></td>
+                            <td><span data-icon="check"></span></td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>Great for landing pages</td>
+                        </tr>
+                        <tr>
+                            <td><code>landing</code></td>
+                            <td><span data-icon="check"></span></td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>Full-width hero, no breadcrumbs</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="mb-2"><strong>Per-page override</strong> — add a <code>layout</code> key to the page's frontmatter:</p>
+            <pre><code class="language-yaml">---
+title: My Landing Page
+layout: minimal
+---</code></pre>
+            <p class="mt-3">Custom layouts can be added to <code>layouts.json</code> and referenced by any page.</p>
+        </div>
+    </section>
+
+    <!-- 4. 24 Themes -->
+    <section class="card mb-6" data-section="Themes">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">24 Themes (Light &amp; Dark)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma CMS uses the Domma theme system with <strong>24 built-in themes</strong> — 12 families, each with a dark and light variant. Set the active theme at <strong>Admin → Settings → Appearance</strong>. The default is <code>charcoal-dark</code>.</p>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Theme Family</th>
+                            <th>Dark Variant</th>
+                            <th>Light Variant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Charcoal</td>
+                            <td><code>charcoal-dark</code> <span class="badge badge-sm">Default</span></td>
+                            <td><code>charcoal-light</code></td>
+                        </tr>
+                        <tr>
+                            <td>Ocean</td>
+                            <td><code>ocean-dark</code></td>
+                            <td><code>ocean-light</code></td>
+                        </tr>
+                        <tr>
+                            <td>Forest</td>
+                            <td><code>forest-dark</code></td>
+                            <td><code>forest-light</code></td>
+                        </tr>
+                        <tr>
+                            <td>Sunset</td>
+                            <td><code>sunset-dark</code></td>
+                            <td><code>sunset-light</code></td>
+                        </tr>
+                        <tr>
+                            <td>Royal</td>
+                            <td><code>royal-dark</code></td>
+                            <td><code>royal-light</code></td>
+                        </tr>
+                        <tr>
+                            <td>Lemon</td>
+                            <td><code>lemon-dark</code></td>
+                            <td><code>lemon-light</code></td>
+                        </tr>
+                        <tr>
+                            <td>Silver</td>
+                            <td><code>silver-dark</code></td>
+                            <td><code>silver-light</code></td>
+                        </tr>
+                        <tr>
+                            <td>Grayve</td>
+                            <td><code>grayve-dark</code></td>
+                            <td><code>grayve-light</code></td>
+                        </tr>
+                        <tr>
+                            <td>Mint</td>
+                            <td><code>mint-dark</code></td>
+                            <td><code>mint-light</code></td>
+                        </tr>
+                        <tr>
+                            <td>Christmas</td>
+                            <td><code>christmas-dark</code></td>
+                            <td><code>christmas-light</code></td>
+                        </tr>
+                        <tr>
+                            <td>Unicorn</td>
+                            <td><code>unicorn-dark</code></td>
+                            <td><code>unicorn-light</code></td>
+                        </tr>
+                        <tr>
+                            <td>Dreamy</td>
+                            <td><code>dreamy-dark</code></td>
+                            <td><code>dreamy-light</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Per-Page Theme Override -->
+    <section class="card mb-6" data-section="Per-Page Theme Override">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Per-Page Theme Override</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Any page can override the site-wide theme using a <code>theme</code> key in its frontmatter. Only that page is affected — all other pages continue to use the site default.</p>
+            <pre><code class="language-yaml">---
+title: My Landing Page
+theme: ocean-dark
+layout: landing
+---</code></pre>
+            <p class="mt-4">This is particularly useful for:</p>
+            <ul class="list-disc pl-6 mt-2">
+                <li class="mb-1"><strong>Seasonal pages</strong> — e.g. apply <code>christmas-dark</code> to a holiday promotion page</li>
+                <li class="mb-1"><strong>Campaign pages</strong> — match a campaign's brand palette without changing the site theme</li>
+                <li class="mb-1"><strong>Varied section aesthetics</strong> — give distinct visual identity to different areas of a site</li>
+                <li class="mb-1"><strong>Landing pages</strong> — pair with <code>layout: landing</code> for fully custom entry points</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 6. Theme Roller Plugin -->
+    <section class="card mb-6" data-section="Theme Roller Plugin">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Theme Roller Plugin</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The bundled <strong>Theme Roller</strong> plugin adds a visual theme customisation tool, accessible from the admin toolbar. It lets you fine-tune any theme without touching CSS source files.</p>
+            <h3 class="font-semibold mb-2">Capabilities</h3>
+            <ul class="list-disc pl-6 mb-4">
+                <li class="mb-1"><strong>Live preview</strong> — changes are applied instantly in the browser, no reload required</li>
+                <li class="mb-1"><strong>CSS variable overrides</strong> — tweak colours, spacing, radius, and typography tokens</li>
+                <li class="mb-1"><strong>Export custom theme</strong> — download your overrides as a standalone CSS file</li>
+                <li class="mb-1"><strong>Apply site-wide or per-page</strong> — exported CSS can be placed in <code>config/custom.css</code> or scoped with a page selector</li>
+            </ul>
+            <p class="mb-2">Enable the plugin in <code>config/plugins.json</code>:</p>
+            <pre><code class="language-json">{ "slug": "theme-roller", "enabled": true }</code></pre>
+            <p class="mt-3">Once enabled, a <span data-icon="palette"></span> <strong>Theme Roller</strong> button appears in the admin toolbar on every public page when you are logged in.</p>
+        </div>
+    </section>
+
+    <!-- 7. Server Configuration -->
+    <section class="card mb-6" data-section="Server Configuration">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Server Configuration</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Server-level configuration is stored in a <code>.env</code> file at the project root. The CMS server reads this file via <code>dotenv</code> on startup. Never commit <code>.env</code> to version control.</p>
+            <pre><code class="language-bash">PORT=3000
+NODE_ENV=production
+JWT_SECRET=auto-generated-by-setup
+
+# Database (Pro only)
+MONGO_URI=mongodb://localhost:27017/domma-cms
+
+# SMTP (also configurable via Admin → Settings)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=you@example.com
+SMTP_PASS=your-app-password
+SMTP_FROM=noreply@yourdomain.com</code></pre>
+            <div class="mt-4">
+                <h3 class="font-semibold mb-2">Notes</h3>
+                <ul class="list-disc pl-6">
+                    <li class="mb-1"><code>JWT_SECRET</code> is auto-generated during <code>npx domma-cms init</code> and should never be changed in production without invalidating all active sessions.</li>
+                    <li class="mb-1"><code>MONGO_URI</code> is only required for the <strong>Pro</strong> edition. The standard edition uses a flat-file store.</li>
+                    <li class="mb-1">SMTP values in <code>.env</code> take precedence over values set in <code>config/site.json</code>, allowing different credentials per environment.</li>
+                    <li class="mb-1">Set <code>NODE_ENV=production</code> to enable minification, caching headers, and error suppression in responses.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Auth Configuration -->
+    <section class="card mb-6" data-section="Auth Configuration">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Auth Configuration</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Authentication behaviour is controlled by the <code>auth</code> key in <code>config/site.json</code>. These settings govern registration, session lifetimes, and brute-force protection.</p>
+            <pre><code class="language-json">{
+  "auth": {
+    "allowRegistration": false,         // Disable public sign-up (invite-only sites)
+    "requireEmailVerification": false,  // Send verification email before login allowed
+    "sessionTimeout": "7d",             // Sliding session window (e.g. 1h, 24h, 7d)
+    "accessTokenExpiry": "15m",         // JWT access token lifetime
+    "passwordMinLength": 8,             // Minimum characters for new passwords
+    "maxLoginAttempts": 5,              // Failed attempts before lockout
+    "lockoutDuration": "15m"            // How long a locked account remains locked
+  }
+}</code></pre>
+            <div class="mt-4">
+                <h3 class="font-semibold mb-2">Recommended production defaults</h3>
+                <ul class="list-disc pl-6">
+                    <li class="mb-1">Set <code>allowRegistration: false</code> unless your site has a public user base — admin accounts are created via CLI on first run.</li>
+                    <li class="mb-1">Keep <code>accessTokenExpiry</code> short (15 – 30 minutes) and rely on the sliding <code>sessionTimeout</code> for long-lived sessions.</li>
+                    <li class="mb-1"><code>maxLoginAttempts</code> and <code>lockoutDuration</code> together mitigate credential-stuffing attacks without permanently blocking legitimate users.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Custom CSS -->
+    <section class="card mb-6" data-section="Custom CSS">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Custom CSS</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Inject additional CSS into every public page without modifying Domma's source files. This is the recommended way to apply brand-specific overrides.</p>
+            <h3 class="font-semibold mb-2">How it works</h3>
+            <ul class="list-disc pl-6 mb-4">
+                <li class="mb-1">Navigate to <strong>Admin → Settings → Custom CSS</strong> and paste your rules into the editor.</li>
+                <li class="mb-1">The content is saved to <code>config/custom.css</code> and served as a static file.</li>
+                <li class="mb-1">It is loaded <strong>after</strong> the theme CSS on every public page, giving it full specificity over theme variables.</li>
+                <li class="mb-1">The admin panel is <strong>not</strong> affected — custom CSS applies only to the public-facing site.</li>
+            </ul>
+            <h3 class="font-semibold mb-2">Example overrides</h3>
+            <pre><code class="language-css">/* Override primary brand colour */
+:root {
+    --color-primary: #e63946;
+}
+
+/* Custom heading font weight */
+h1, h2, h3 {
+    font-weight: 800;
+}
+
+/* Hide the back-to-top button on the homepage */
+body.page-home .back-to-top {
+    display: none;
+}</code></pre>
+            <p class="mt-4">For larger style overrides, consider creating a dedicated stylesheet and linking it via a custom layout rather than accumulating rules in <code>custom.css</code>.</p>
+        </div>
+    </section>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>Domma.icons.scan();</script>
+</body>
+</html>

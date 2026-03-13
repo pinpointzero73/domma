@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro: Views &amp; Actions - Domma CMS</title>
+    <link rel="canonical" href="https://dommajs.org/cms/data-pro/">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/cms-showcase.css">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="cms" data-layout-variant="subpage">
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Pro: Views &amp; Actions</div>
+        <div class="hero-subtitle">MongoDB-powered aggregation pipelines and multi-step workflow automation</div>
+    </div>
+</div>
+<main class="container py-8">
+
+    <!-- Pro Mode Required notice -->
+    <div class="card card-pro mb-6">
+        <div class="card-body d-flex align-items-center gap-3">
+            <span data-icon="zap" style="flex-shrink:0;font-size:1.5rem;"></span>
+            <div>
+                <strong>Pro Mode Required</strong> — Views and Actions require MongoDB. Enable with
+                <code>npm run pro</code>. See the
+                <a href="../getting-started/#pro">Getting Started: Pro section</a> for full setup instructions.
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. What Pro Unlocks -->
+    <section class="card mb-6" data-section="What Pro Unlocks">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">What Pro Unlocks</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Pro mode (enabled with <code>npm run pro</code> plus a MongoDB connection) adds four
+                powerful capabilities on top of the standard Domma CMS:</p>
+            <ul class="mb-4">
+                <li class="mb-2">
+                    <strong>Views</strong> — MongoDB aggregation pipelines exposed as named data sources,
+                    embeddable in any page. Query, group, sort and project data from one or more collections and
+                    display the results as a table, card grid, list or chart.
+                </li>
+                <li class="mb-2">
+                    <strong>Actions</strong> — Multi-step automated workflows triggered manually or by collection
+                    events. Chain HTTP requests, collection writes, emails, conditional branches and wait steps
+                    in a visual editor.
+                </li>
+                <li class="mb-2">
+                    <strong>Row-Level Access</strong> — Per-collection, per-entry access rules evaluated at query
+                    time. Rules are expressed as MongoDB filter objects and can reference the current user's id,
+                    role, department, or any profile field.
+                </li>
+                <li class="mb-2">
+                    <strong>MongoAdapter</strong> — Collections backed by MongoDB instead of flat JSON files.
+                    Unlimited scale, full query power, and live aggregation — with no changes to the admin UI or
+                    the public content API.
+                </li>
+            </ul>
+            <div class="alert alert-info">
+                <strong>Note:</strong> Everything else in Domma CMS — pages, collections, media, users, themes,
+                the full admin UI — works without Pro. Pro is purely additive; enabling it does not change
+                existing behaviour.
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Enabling Pro Mode -->
+    <section class="card mb-6" data-section="Enabling Pro Mode">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Enabling Pro Mode</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Pro mode is activated by running the setup command once your MongoDB connection
+                string is in place.</p>
+
+            <pre class="code-block mb-4"><code class="language-bash"># Set MONGO_URI in .env first
+echo "MONGO_URI=mongodb://localhost:27017/domma-cms" >> .env
+
+# Run the Pro setup
+npm run pro
+
+# Or supply the URI inline without touching .env:
+MONGO_URI=mongodb://localhost:27017/domma-cms npm run pro</code></pre>
+
+            <p class="mb-3"><strong>What <code>npm run pro</code> does:</strong></p>
+            <ol class="mb-4">
+                <li class="mb-1">Validates the MongoDB connection using the supplied URI.</li>
+                <li class="mb-1">Creates the necessary internal collections inside MongoDB
+                    (<code>_views</code>, <code>_actions</code>, <code>_action_logs</code>, <code>_access_rules</code>).
+                </li>
+                <li class="mb-1">Sets <code>PRO_MODE=true</code> in your <code>.env</code> file.</li>
+                <li class="mb-1">Prints a confirmation message — restart the server to activate Pro features.</li>
+            </ol>
+
+            <div class="alert alert-warning">
+                <strong>Restart required.</strong> After <code>npm run pro</code> completes, restart your Domma
+                CMS server (<code>npm start</code> or your process manager) for the changes to take effect.
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. MongoDB Connections -->
+    <section class="card mb-6" data-section="MongoDB Connections">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">MongoDB Connections</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The <code>MONGO_URI</code> environment variable accepts any valid MongoDB connection
+                string:</p>
+
+            <pre class="code-block mb-4"><code class="language-bash"># Local development
+mongodb://localhost:27017/domma-cms
+
+# MongoDB Atlas (cloud)
+mongodb+srv://username:password@cluster.mongodb.net/domma-cms
+
+# Replica set or self-hosted with authentication
+mongodb://username:password@host:27017/domma-cms</code></pre>
+
+            <p class="mb-3"><strong>Connection management</strong></p>
+            <p class="mb-4">The connection is handled internally by <code>connectionManager.js</code>, which
+                provides:</p>
+            <ul class="mb-4">
+                <li class="mb-1"><strong>Automatic reconnect</strong> — exponential back-off on connection failure,
+                    no manual intervention needed.</li>
+                <li class="mb-1"><strong>Connection pooling</strong> — the native MongoDB driver pool is used; the
+                    default pool size is 10 and is configurable via the URI options.</li>
+                <li class="mb-1"><strong>Graceful shutdown</strong> — the connection is closed cleanly on
+                    <code>SIGTERM</code> / <code>SIGINT</code>, avoiding in-flight write loss.</li>
+            </ul>
+
+            <div class="alert alert-info">
+                The database name at the end of the URI (<code>/domma-cms</code>) determines where all CMS data
+                and Pro collections are stored. Use a dedicated database — do not share with another application.
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Views (Aggregation Pipelines) -->
+    <section class="card mb-6" data-section="Views (Aggregation Pipelines)">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Views (Aggregation Pipelines)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">A <strong>View</strong> is a saved MongoDB aggregation pipeline given a human-readable
+                name and slug. Views are exposed via the content API and can be embedded directly into pages
+                using the <code>&#123;&#123;view&#125;&#125;</code> template tag.</p>
+
+            <p class="mb-3"><strong>Creating a View</strong></p>
+            <ol class="mb-4">
+                <li class="mb-1">Navigate to <strong>Admin → Views → New View</strong>.</li>
+                <li class="mb-1">Enter a name, slug and optional description.</li>
+                <li class="mb-1">Select the source collection to run the pipeline against.</li>
+                <li class="mb-1">Build the pipeline using the stage builder or JSON editor.</li>
+                <li class="mb-1">Choose a display mode: <strong>table</strong>, <strong>cards</strong>,
+                    <strong>list</strong>, or <strong>chart</strong> (bar / line / pie).</li>
+                <li class="mb-1">Save and preview live results before publishing.</li>
+            </ol>
+
+            <p class="mb-3"><strong>Example pipeline — top posts by view count:</strong></p>
+            <pre class="code-block mb-4"><code class="language-json">[
+  { "$match": { "published": true } },
+  { "$sort": { "views": -1 } },
+  { "$limit": 10 },
+  { "$project": { "title": 1, "slug": 1, "views": 1, "author": 1 } }
+]</code></pre>
+
+            <p class="mb-3"><strong>Display modes</strong></p>
+            <ul class="mb-0">
+                <li class="mb-1"><strong>table</strong> — sortable, paginated data table with configurable columns.</li>
+                <li class="mb-1"><strong>cards</strong> — responsive card grid, useful for media-rich results.</li>
+                <li class="mb-1"><strong>list</strong> — compact vertical list, ideal for sidebars and widgets.</li>
+                <li class="mb-1"><strong>chart</strong> — bar, line or pie chart rendered from aggregated numeric data.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 5. View Editor -->
+    <section class="card mb-6" data-section="View Editor">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">View Editor</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The View Editor in the admin panel provides a visual environment for building and
+                testing aggregation pipelines without writing raw JSON.</p>
+
+            <p class="mb-3"><strong>Editor features</strong></p>
+            <ul class="mb-4">
+                <li class="mb-2"><strong>Stage builder</strong> — add pipeline stages from a dropdown; each stage
+                    type renders a dedicated form (e.g. field selector for <code>$project</code>, sort order
+                    toggles for <code>$sort</code>).</li>
+                <li class="mb-2"><strong>JSON editor</strong> — switch to raw JSON at any time for full pipeline
+                    control; changes sync back to the stage builder.</li>
+                <li class="mb-2"><strong>Live preview</strong> — run the pipeline against real data and inspect
+                    results before saving.</li>
+                <li class="mb-2"><strong>Column configuration</strong> — for table display mode, choose which
+                    result fields to show, set header labels and control column width.</li>
+                <li class="mb-2"><strong>Permissions</strong> — restrict which user roles can query this View
+                    via the API.</li>
+            </ul>
+
+            <p class="mb-3"><strong>Allowed pipeline stages</strong></p>
+            <p class="mb-2">The editor permits the following stages:</p>
+            <p class="mb-4">
+                <code>$match</code>, <code>$group</code>, <code>$sort</code>, <code>$limit</code>,
+                <code>$project</code>, <code>$lookup</code>, <code>$unwind</code>, <code>$count</code>,
+                <code>$addFields</code>
+            </p>
+
+            <div class="alert alert-danger mb-0">
+                <strong>Forbidden stages:</strong> <code>$out</code> and <code>$merge</code> are blocked to prevent
+                accidental data modification from within a View. Use Actions for write operations.
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Actions (Multi-Step Workflows) -->
+    <section class="card mb-6" data-section="Actions (Multi-Step Workflows)">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Actions (Multi-Step Workflows)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">An <strong>Action</strong> is an automated workflow composed of ordered steps. Actions
+                can be triggered manually from the admin panel or fired automatically in response to collection
+                events (entry created, updated, or deleted).</p>
+
+            <p class="mb-3"><strong>Creating an Action</strong></p>
+            <ol class="mb-4">
+                <li class="mb-1">Navigate to <strong>Admin → Actions → New Action</strong>.</li>
+                <li class="mb-1">Enter a name, slug and optional description.</li>
+                <li class="mb-1">Choose a trigger: <strong>manual</strong> or a collection event
+                    (<code>onCreate</code>, <code>onUpdate</code>, <code>onDelete</code>).</li>
+                <li class="mb-1">Add steps in sequence using the visual step editor.</li>
+                <li class="mb-1">Configure input mapping and error handling per step.</li>
+                <li class="mb-1">Use the test runner to execute the Action with sample data before going live.</li>
+            </ol>
+
+            <p class="mb-3"><strong>Step types</strong></p>
+            <div class="table-responsive mb-4">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>HTTP Request</strong></td>
+                            <td>Send a GET, POST, PUT or DELETE request to any external URL. Supports custom
+                                headers and a Mustache body template. Response is available to subsequent steps.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Collection Write</strong></td>
+                            <td>Create, update or delete an entry in any CMS collection. Fields are populated
+                                using template interpolation from earlier step output or trigger data.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email</strong></td>
+                            <td>Send an email via the site's configured SMTP credentials. Subject and body
+                                accept Mustache templates with access to all step variables.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Condition</strong></td>
+                            <td>Branch the workflow based on a JavaScript expression evaluated against previous
+                                step output. Supports if / else paths, each with their own step sequence.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Wait</strong></td>
+                            <td>Pause execution for a configurable duration (seconds to minutes) before
+                                proceeding to the next step.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="mb-3"><strong>Template interpolation</strong></p>
+            <p class="mb-2">Use double-brace syntax to reference data within step configuration fields:</p>
+            <ul class="mb-0">
+                <li class="mb-1"><code>&#123;&#123;input.fieldName&#125;&#125;</code> — trigger input data (e.g. form submission or collection entry)</li>
+                <li class="mb-1"><code>&#123;&#123;steps.step1.response.id&#125;&#125;</code> — output from a named earlier step</li>
+                <li class="mb-1"><code>&#123;&#123;user.email&#125;&#125;</code> — the user who triggered the Action (if authenticated)</li>
+                <li class="mb-1"><code>&#123;&#123;site.title&#125;&#125;</code> — global site configuration values</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 7. Action Editor -->
+    <section class="card mb-6" data-section="Action Editor">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Action Editor</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The Action Editor provides a full visual environment for building, testing and
+                monitoring automated workflows.</p>
+
+            <p class="mb-3"><strong>Editor features</strong></p>
+            <ul class="mb-4">
+                <li class="mb-2"><strong>Visual step list</strong> — steps are displayed as an ordered list;
+                    drag to reorder at any time without losing configuration.</li>
+                <li class="mb-2"><strong>Step forms</strong> — selecting a step type renders a context-aware
+                    form; for example, HTTP Request shows URL, method, headers and body fields, while Email
+                    shows recipient, subject and body.</li>
+                <li class="mb-2"><strong>Input mapping</strong> — for each step, map data from the trigger
+                    payload or prior step responses into the current step's variables.</li>
+                <li class="mb-2"><strong>Test runner</strong> — supply a sample input payload and execute the
+                    entire Action, seeing step-by-step output, status and response data in a collapsible panel.</li>
+                <li class="mb-2"><strong>Error handling</strong> — configure a retry count (0–5) and choose an
+                    on-error branch: stop, continue to next step, or jump to a named step.</li>
+                <li class="mb-2"><strong>Execution log</strong> — view a paginated history of recent runs,
+                    each showing trigger time, total duration, per-step status, and any error messages for
+                    failed steps.</li>
+            </ul>
+
+            <div class="alert alert-info mb-0">
+                Action runs are stored in the <code>_action_logs</code> collection and are retained for 30 days
+                by default. Adjust the retention period in <strong>Admin → Settings → Pro</strong>.
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Row-Level Access Control -->
+    <section class="card mb-6" data-section="Row-Level Access Control">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Row-Level Access Control</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Row-level access rules let you restrict which entries a user can read or write,
+                based on the content of each document rather than just the collection as a whole. Rules are
+                evaluated at query time inside MongoDB, so unauthorised entries are never transmitted to the
+                client.</p>
+
+            <p class="mb-3"><strong>How rules work</strong></p>
+            <ul class="mb-4">
+                <li class="mb-1">Rules are defined per collection in the collection schema.</li>
+                <li class="mb-1">Each rule is a MongoDB filter object that may reference the current user via
+                    <code>&#123;&#123;user.*&#125;&#125;</code> placeholders — these are substituted server-side
+                    before the query is executed.</li>
+                <li class="mb-1">The rule filter is merged with any other query filters using
+                    <code>$and</code>, ensuring it cannot be bypassed by the client.</li>
+                <li class="mb-1">Roles with the <code>bypassRowRules</code> permission (e.g. <code>admin</code>)
+                    skip row-level filtering entirely and always see all entries.</li>
+            </ul>
+
+            <p class="mb-3"><strong>Example rules</strong></p>
+            <div class="table-responsive mb-4">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Use case</th>
+                            <th>Rule</th>
+                            <th>Effect</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Owner access</td>
+                            <td><code>&#123; "createdBy": "&#123;&#123;user.id&#125;&#125;" &#125;</code></td>
+                            <td>Users only see entries they created.</td>
+                        </tr>
+                        <tr>
+                            <td>Published filter</td>
+                            <td><code>&#123; "published": true &#125;</code></td>
+                            <td>Guests only see published entries; drafts are hidden.</td>
+                        </tr>
+                        <tr>
+                            <td>Department scope</td>
+                            <td><code>&#123; "department": "&#123;&#123;user.department&#125;&#125;" &#125;</code></td>
+                            <td>Users only see entries belonging to their department.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="mb-3"><strong>Configuring access rules</strong></p>
+            <p class="mb-4">Navigate to <strong>Admin → Collections → [Collection Name] → Access Rules</strong>.
+                You can define separate read and write rules, and configure which roles bypass row-level
+                filtering.</p>
+
+            <div class="alert alert-info mb-0">
+                Row-level access rules are a Pro feature and require the MongoAdapter. Collections using the
+                default JSON file adapter do not support row-level rules.
+            </div>
+        </div>
+    </section>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>Domma.icons.scan();</script>
+</body>
+</html>

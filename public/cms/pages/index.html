@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pages & Content - Domma CMS</title>
+    <link rel="canonical" href="https://dommajs.org/cms/pages/">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/cms-showcase.css">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="cms" data-layout-variant="subpage">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Pages &amp; Content</div>
+        <div class="hero-subtitle">Markdown-powered pages with frontmatter, shortcodes, and SSR</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <!-- 1. Overview — URL Mapping -->
+    <section class="card mb-6" data-section="Overview — URL Mapping">
+        <div class="card-header"><h2 class="text-xl font-semibold">Overview — URL Mapping</h2></div>
+        <div class="card-body">
+            <p class="mb-4">Pages are Markdown files stored in your project's <code>content/pages/</code> directory. The file path maps directly to the public URL — no configuration required.</p>
+
+            <table class="table mb-4">
+                <thead>
+                    <tr>
+                        <th>File path</th>
+                        <th>Public URL</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>content/pages/about.md</code></td>
+                        <td><code>/about</code></td>
+                        <td>Top-level page</td>
+                    </tr>
+                    <tr>
+                        <td><code>content/pages/blog/post.md</code></td>
+                        <td><code>/blog/post</code></td>
+                        <td>Nested page</td>
+                    </tr>
+                    <tr>
+                        <td><code>content/pages/blog/index.md</code></td>
+                        <td><code>/blog</code></td>
+                        <td>Index file — maps to parent slug</td>
+                    </tr>
+                    <tr>
+                        <td><code>content/pages/index.md</code></td>
+                        <td><code>/</code></td>
+                        <td>Site root / home page</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="mb-2">
+                <span data-icon="info"></span>
+                Each page is rendered <strong>server-side</strong> using the layout configured for that page (or the site default). Pages can override their layout individually via frontmatter.
+            </p>
+            <p class="text-muted">
+                Deep nesting is supported to any depth. Directory names become URL segments automatically.
+            </p>
+        </div>
+    </section>
+
+    <!-- 2. Frontmatter Fields -->
+    <section class="card mb-6" data-section="Frontmatter Fields">
+        <div class="card-header"><h2 class="text-xl font-semibold">Frontmatter Fields</h2></div>
+        <div class="card-body">
+            <p class="mb-4">Each Markdown page may open with a YAML frontmatter block delimited by <code>---</code>. All fields are optional unless otherwise noted.</p>
+
+            <pre><code class="language-yaml">---
+title: My Page Title
+description: SEO meta description
+layout: default    # default | with-sidebar | minimal | landing
+theme: ocean-dark  # Override site theme for this page
+draft: false       # true hides page from public
+published: true
+author: Admin
+tags: [blog, news]
+image: /media/hero.jpg
+---</code></pre>
+
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>title</code></td>
+                        <td>string</td>
+                        <td>Page title used in the <code>&lt;title&gt;</code> tag and headings. Falls back to site title if omitted.</td>
+                    </tr>
+                    <tr>
+                        <td><code>description</code></td>
+                        <td>string</td>
+                        <td>SEO meta description. Populated into <code>&lt;meta name="description"&gt;</code> and Open Graph tags.</td>
+                    </tr>
+                    <tr>
+                        <td><code>layout</code></td>
+                        <td>string</td>
+                        <td>Layout template to use for this page. Overrides the site-wide default. Options: <code>default</code>, <code>with-sidebar</code>, <code>minimal</code>, <code>landing</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><code>theme</code></td>
+                        <td>string</td>
+                        <td>Override the active Domma theme for this page only (e.g. <code>ocean-dark</code>, <code>forest-light</code>).</td>
+                    </tr>
+                    <tr>
+                        <td><code>draft</code></td>
+                        <td>boolean</td>
+                        <td>When <code>true</code>, the page is hidden from public routes but still accessible and previewable in the admin panel.</td>
+                    </tr>
+                    <tr>
+                        <td><code>published</code></td>
+                        <td>boolean</td>
+                        <td>When <code>false</code>, the page is completely excluded from navigation, sitemaps, and public access.</td>
+                    </tr>
+                    <tr>
+                        <td><code>author</code></td>
+                        <td>string</td>
+                        <td>Author name. Displayed in page metadata and used in structured data output.</td>
+                    </tr>
+                    <tr>
+                        <td><code>tags</code></td>
+                        <td>array</td>
+                        <td>List of tags. Used for filtering, related content, and tag archive pages.</td>
+                    </tr>
+                    <tr>
+                        <td><code>image</code></td>
+                        <td>string</td>
+                        <td>Path to a hero or thumbnail image. Used as <code>og:image</code> and in layout hero sections.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 3. Markdown Content -->
+    <section class="card mb-6" data-section="Markdown Content">
+        <div class="card-header"><h2 class="text-xl font-semibold">Markdown Content</h2></div>
+        <div class="card-body">
+            <p class="mb-4">All page content below the frontmatter block is written in <strong>CommonMark</strong> Markdown with several extensions enabled by default.</p>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <h3 class="font-semibold mb-2">
+                        <span data-icon="check-circle"></span> Supported Syntax
+                    </h3>
+                    <ul class="mb-0">
+                        <li>Standard CommonMark (headings, bold, italic, blockquotes, lists)</li>
+                        <li>Tables — GitHub Flavoured Markdown table syntax</li>
+                        <li>Task lists — <code>- [ ]</code> and <code>- [x]</code></li>
+                        <li>Fenced code blocks with optional language identifier</li>
+                        <li>Syntax highlighting via <code>domma-syntax</code></li>
+                        <li>Footnotes — <code>[^1]</code> reference style</li>
+                        <li>Definition lists</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-2">
+                        <span data-icon="image"></span> Images &amp; Links
+                    </h3>
+                    <ul class="mb-0">
+                        <li><code>![alt](src)</code> renders with responsive styling and lazy loading applied automatically</li>
+                        <li>Internal links use relative paths; the CMS resolves them correctly regardless of base URL</li>
+                        <li>External links automatically receive <code>target="_blank" rel="noopener"</code></li>
+                        <li>Media uploaded via the admin is accessible at <code>/media/filename</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <pre><code class="language-markdown">---
+title: Example Page
+---
+
+# Welcome
+
+This is **bold** and this is _italic_.
+
+## A Table
+
+| Name  | Role    |
+|-------|---------|
+| Alice | Editor  |
+| Bob   | Author  |
+
+## Task List
+
+- [x] Write content
+- [ ] Review and publish
+
+```js
+console.log('Hello from a fenced code block');
+```</code></pre>
+
+            <p class="mt-4 text-muted">
+                <span data-icon="info"></span>
+                The frontmatter <code>---</code> separator is stripped before rendering. Only the body below the second <code>---</code> is passed to the Markdown parser.
+            </p>
+        </div>
+    </section>
+
+    <!-- 4. Built-in Shortcodes -->
+    <section class="card mb-6" data-section="Built-in Shortcodes">
+        <div class="card-header"><h2 class="text-xl font-semibold">Built-in Shortcodes</h2></div>
+        <div class="card-body">
+            <p class="mb-4">Shortcodes extend Markdown with dynamic, reusable components. They are processed server-side before the Markdown parser runs.</p>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Shortcode</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><pre class="mb-0"><code>[grid cols="3"]...[/grid]</code></pre></td>
+                        <td>Wraps content in a responsive Domma grid. The <code>cols</code> attribute sets the column count (1–6). Stacks automatically on mobile.</td>
+                    </tr>
+                    <tr>
+                        <td><pre class="mb-0"><code>[card title="Title"]...[/card]</code></pre></td>
+                        <td>Renders a styled Domma <code>.card</code> component with an optional header title and body content.</td>
+                    </tr>
+                    <tr>
+                        <td><pre class="mb-0"><code>[hero title="Title" subtitle="Sub"]</code></pre></td>
+                        <td>Inserts a full-width hero section. Supports <code>title</code>, <code>subtitle</code>, <code>variant</code>, and <code>bg</code> attributes.</td>
+                    </tr>
+                    <tr>
+                        <td><pre class="mb-0"><code>[collection slug="posts" limit="5"]</code></pre></td>
+                        <td>Displays a list of Collection entries. Supports <code>slug</code>, <code>limit</code>, <code>sort</code>, and <code>template</code> attributes.</td>
+                    </tr>
+                    <tr>
+                        <td><pre class="mb-0"><code>[form slug="contact"]</code></pre></td>
+                        <td>Embeds a CMS-managed Form by its slug. The form schema, validation, and submission handling are all configured in the admin.</td>
+                    </tr>
+                    <tr>
+                        <td><pre class="mb-0"><code>[view slug="my-view"]</code></pre></td>
+                        <td>
+                            <span class="badge badge-primary">Pro</span>
+                            Embeds a Pro View component by slug. Useful for interactive widgets and data-driven sections.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><pre class="mb-0"><code>[cta text="Click Here" url="/page"]</code></pre></td>
+                        <td>Renders a call-to-action button. Supports <code>text</code>, <code>url</code>, <code>variant</code> (primary/secondary/outline), and <code>size</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><pre class="mb-0"><code>[slideover]...[/slideover]</code></pre></td>
+                        <td>Wraps content in a Domma Slideover off-canvas panel. A trigger button is automatically generated unless <code>trigger="false"</code> is set.</td>
+                    </tr>
+                    <tr>
+                        <td><pre class="mb-0"><code>[effect type="breathe"]...[/effect]</code></pre></td>
+                        <td>Wraps content in a Domma Effect animation. Supports all <code>Domma.effects</code> types: <code>breathe</code>, <code>pulse</code>, <code>reveal</code>, <code>scramble</code>, <code>counter</code>, <code>shake</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><pre class="mb-0"><code>[celebrate]</code></pre></td>
+                        <td>Inserts a trigger that fires a Domma fireworks celebration animation when clicked or when the page loads (use <code>on="load"</code>).</td>
+                    </tr>
+                    <tr>
+                        <td><pre class="mb-0"><code>[dconfig key="site.title"]</code></pre></td>
+                        <td>Outputs a config value dynamically at render time. Dot-notation keys reference values in <code>config/site.json</code> and other config files.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="mt-4 text-muted">
+                <span data-icon="info"></span>
+                Custom shortcodes can be registered in <code>config/shortcodes.js</code>. Each shortcode receives parsed attributes and inner content as arguments.
+            </p>
+        </div>
+    </section>
+
+    <!-- 5. Drafts & Visibility -->
+    <section class="card mb-6" data-section="Drafts & Visibility">
+        <div class="card-header"><h2 class="text-xl font-semibold">Drafts &amp; Visibility</h2></div>
+        <div class="card-body">
+            <p class="mb-4">Two frontmatter flags control page visibility independently of one another.</p>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="font-semibold">
+                            <span data-icon="edit"></span> <code>draft: true</code>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="mb-0">
+                            <li>Page is hidden from all public routes</li>
+                            <li>Still accessible and editable in the admin panel</li>
+                            <li>Admins and Managers can preview the page via the admin preview link</li>
+                            <li>Does <strong>not</strong> appear in navigation menus or sitemaps</li>
+                            <li>Appears with a <span class="badge badge-warning">Draft</span> badge in the admin pages list</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="font-semibold">
+                            <span data-icon="eye-off"></span> <code>published: false</code>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="mb-0">
+                            <li>Completely removes the page from public access</li>
+                            <li>Excluded from navigation, sitemaps, and collection queries</li>
+                            <li>Returns a <code>404</code> if visited directly</li>
+                            <li>Still visible and editable in the admin panel</li>
+                            <li>Use when archiving or permanently hiding content</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>State</th>
+                        <th>Public access</th>
+                        <th>Admin preview</th>
+                        <th>Navigation / Sitemap</th>
+                        <th>Admin badge</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>draft: false, published: true</code></td>
+                        <td><span class="badge badge-success">Yes</span></td>
+                        <td><span class="badge badge-success">Yes</span></td>
+                        <td><span class="badge badge-success">Included</span></td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td><code>draft: true</code></td>
+                        <td><span class="badge badge-danger">No</span></td>
+                        <td><span class="badge badge-success">Yes</span></td>
+                        <td><span class="badge badge-danger">Excluded</span></td>
+                        <td><span class="badge badge-warning">Draft</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>published: false</code></td>
+                        <td><span class="badge badge-danger">No (404)</span></td>
+                        <td><span class="badge badge-success">Yes</span></td>
+                        <td><span class="badge badge-danger">Excluded</span></td>
+                        <td><span class="badge badge-secondary">Unpublished</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 6. Per-Page Layouts -->
+    <section class="card mb-6" data-section="Per-Page Layouts">
+        <div class="card-header"><h2 class="text-xl font-semibold">Per-Page Layouts</h2></div>
+        <div class="card-body">
+            <p class="mb-4">The site-wide default layout is set in <code>config/site.json</code>. Individual pages can override this by specifying a <code>layout</code> key in their frontmatter.</p>
+
+            <table class="table mb-4">
+                <thead>
+                    <tr>
+                        <th>Layout</th>
+                        <th>Navbar</th>
+                        <th>Footer</th>
+                        <th>Sidebar</th>
+                        <th>Breadcrumbs</th>
+                        <th>Best for</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>default</code></td>
+                        <td>Full</td>
+                        <td>Full</td>
+                        <td>None</td>
+                        <td>Yes</td>
+                        <td>General content pages</td>
+                    </tr>
+                    <tr>
+                        <td><code>with-sidebar</code></td>
+                        <td>Full</td>
+                        <td>Full</td>
+                        <td>Left</td>
+                        <td>Yes</td>
+                        <td>Documentation, long-form content</td>
+                    </tr>
+                    <tr>
+                        <td><code>minimal</code></td>
+                        <td>Slim</td>
+                        <td>Minimal</td>
+                        <td>None</td>
+                        <td>No</td>
+                        <td>Login, error, legal pages</td>
+                    </tr>
+                    <tr>
+                        <td><code>landing</code></td>
+                        <td>Transparent</td>
+                        <td>Full</td>
+                        <td>None</td>
+                        <td>No</td>
+                        <td>Marketing, campaign pages</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <pre><code class="language-yaml">---
+title: Contact Us
+layout: minimal
+---</code></pre>
+
+            <p class="mt-4 mb-2">
+                <span data-icon="settings"></span>
+                <strong>Custom layouts</strong> can be created by adding entries to <code>config/layouts.json</code>. Each layout definition specifies which layout components to include and their configuration.
+            </p>
+
+            <pre><code class="language-json">// config/layouts.json
+{
+  "my-custom": {
+    "navbar": "slim",
+    "footer": "columns",
+    "sidebar": false,
+    "breadcrumbs": true
+  }
+}</code></pre>
+
+            <p class="mt-4 text-muted">
+                Layout templates are stored in <code>layouts/</code> at the project root. Each layout is an HTML file that receives the rendered page content as a <code>{{content}}</code> variable.
+            </p>
+        </div>
+    </section>
+
+    <!-- 7. SEO -->
+    <section class="card mb-6" data-section="SEO">
+        <div class="card-header"><h2 class="text-xl font-semibold">SEO</h2></div>
+        <div class="card-body">
+            <p class="mb-4">The CMS handles common SEO concerns automatically. Frontmatter fields feed directly into the generated <code>&lt;head&gt;</code> tags.</p>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <h3 class="font-semibold mb-2">
+                        <span data-icon="tag"></span> Meta Tags
+                    </h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tag</th>
+                                <th>Source</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>&lt;title&gt;</code></td>
+                                <td>Frontmatter <code>title</code>, falls back to <code>config/site.json → title</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>meta[description]</code></td>
+                                <td>Frontmatter <code>description</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>og:title</code></td>
+                                <td>Frontmatter <code>title</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>og:description</code></td>
+                                <td>Frontmatter <code>description</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>og:image</code></td>
+                                <td>Frontmatter <code>image</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>link[canonical]</code></td>
+                                <td>Derived from <code>site.baseUrl</code> + page slug</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-2">
+                        <span data-icon="globe"></span> Sitemaps &amp; Crawling
+                    </h3>
+                    <ul class="mb-0">
+                        <li>Sitemap at <code>/sitemap.xml</code> is auto-generated at startup</li>
+                        <li>Pages with <code>draft: true</code> or <code>published: false</code> are excluded</li>
+                        <li>Sitemap generation can be disabled in <code>config/site.json → seo.sitemap: false</code></li>
+                        <li>Place a custom <code>robots.txt</code> in <code>public/</code> — it will be served as-is</li>
+                        <li>If no <code>robots.txt</code> is present, the CMS serves a permissive default</li>
+                        <li>Structured data (JSON-LD) can be added via a <code>schema</code> frontmatter key</li>
+                    </ul>
+                </div>
+            </div>
+
+            <pre><code class="language-yaml">---
+title: About Us
+description: Learn about our team and mission.
+image: /media/about-hero.jpg
+schema:
+  "@type": "AboutPage"
+---</code></pre>
+        </div>
+    </section>
+
+    <!-- 8. Server-Side Rendering -->
+    <section class="card mb-6" data-section="Server-Side Rendering">
+        <div class="card-header"><h2 class="text-xl font-semibold">Server-Side Rendering</h2></div>
+        <div class="card-body">
+            <p class="mb-4">All pages are rendered server-side by the <strong>Fastify</strong> backend using the built-in Markdown service. There is no client-side routing for page loads.</p>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <h3 class="font-semibold mb-2">
+                        <span data-icon="server"></span> Render Pipeline
+                    </h3>
+                    <ol class="mb-0">
+                        <li>Fastify receives the request</li>
+                        <li>The router maps the URL to a file in <code>content/pages/</code></li>
+                        <li>Frontmatter is parsed and stripped</li>
+                        <li>Shortcodes are expanded server-side</li>
+                        <li>Template variables are substituted</li>
+                        <li>Markdown is converted to HTML</li>
+                        <li>The result is injected into the selected layout template</li>
+                        <li>The final HTML response is sent and cached</li>
+                    </ol>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-2">
+                        <span data-icon="code"></span> Template Variables
+                    </h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Variable</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>&#123;&#123;site.title&#125;&#125;</code></td>
+                                <td>Value from <code>config/site.json → title</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>&#123;&#123;site.baseUrl&#125;&#125;</code></td>
+                                <td>Configured base URL</td>
+                            </tr>
+                            <tr>
+                                <td><code>&#123;&#123;page.title&#125;&#125;</code></td>
+                                <td>Current page frontmatter <code>title</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>&#123;&#123;page.slug&#125;&#125;</code></td>
+                                <td>Current page URL slug</td>
+                            </tr>
+                            <tr>
+                                <td><code>&#123;&#123;year&#125;&#125;</code></td>
+                                <td>Current four-digit year</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3 class="font-semibold mb-2">
+                <span data-icon="layers"></span> Partials
+            </h3>
+            <p class="mb-2">Reusable content snippets stored in <code>content/partials/</code> can be embedded into any page using the block shortcode:</p>
+            <pre><code class="language-markdown">[block slug="cta-banner"]</code></pre>
+            <p class="mb-4 text-muted">Partials are rendered as Markdown and support the same shortcodes and template variables as full pages.</p>
+
+            <h3 class="font-semibold mb-2">
+                <span data-icon="zap"></span> Caching
+            </h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Setting</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>cache.enabled</code></td>
+                        <td><code>true</code></td>
+                        <td>Toggle in-memory render cache on or off</td>
+                    </tr>
+                    <tr>
+                        <td><code>cache.ttl</code></td>
+                        <td><code>300</code></td>
+                        <td>Time-to-live in seconds before a cached render is invalidated</td>
+                    </tr>
+                    <tr>
+                        <td><code>cache.invalidateOnSave</code></td>
+                        <td><code>true</code></td>
+                        <td>Automatically clears the cache entry for a page when it is saved in the admin</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="mt-4 mb-2">
+                <span data-icon="refresh-cw"></span>
+                <strong>Development mode</strong> disables caching and enables hot reload — pages re-render on every request so edits are visible immediately without restarting the server.
+            </p>
+            <pre><code class="language-json">// config/site.json
+{
+  "env": "development",
+  "cache": {
+    "enabled": false
+  }
+}</code></pre>
+        </div>
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>Domma.icons.scan();</script>
+</body>
+</html>

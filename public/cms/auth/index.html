@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication & Roles - Domma CMS</title>
+    <link rel="canonical" href="https://dommajs.org/cms/auth/">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/cms-showcase.css">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="cms" data-layout-variant="subpage">
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Authentication &amp; Roles</div>
+        <div class="hero-subtitle">JWT-based auth with four built-in roles and a granular permission registry</div>
+    </div>
+</div>
+<main class="container py-8">
+
+    <!-- 1. Overview -->
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Overview</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma CMS uses JWT-based authentication for all admin operations. The role-and-permission system allows granular access control across 11 resource types. Authentication is handled server-side by Fastify routes, with tokens stored in localStorage on the client.</p>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="card card-subtle p-4 text-center">
+                    <span data-icon="lock" class="d-block mb-2" style="font-size:2rem;"></span>
+                    <div class="font-semibold mb-1">JWT Tokens</div>
+                    <div class="text-sm text-muted">Short-lived access tokens + long-lived refresh tokens</div>
+                </div>
+                <div class="card card-subtle p-4 text-center">
+                    <span data-icon="users" class="d-block mb-2" style="font-size:2rem;"></span>
+                    <div class="font-semibold mb-1">4 Built-in Roles</div>
+                    <div class="text-sm text-muted">Admin, Manager, Editor, Subscriber — plus custom roles</div>
+                </div>
+                <div class="card card-subtle p-4 text-center">
+                    <span data-icon="shield" class="d-block mb-2" style="font-size:2rem;"></span>
+                    <div class="font-semibold mb-1">44 Permission Flags</div>
+                    <div class="text-sm text-muted">11 resources × 4 actions (create, read, update, delete)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Login Flow -->
+    <section class="card mb-6" data-section="Login Flow">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Login Flow</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The login sequence follows a standard JWT handshake with automatic silent refresh.</p>
+            <ol class="mb-4" style="padding-left:1.5rem;line-height:2;">
+                <li>User visits <code>/admin</code> — redirected to login if not authenticated</li>
+                <li>Enter email and password — <code>POST /api/auth/login</code></li>
+                <li>Server validates credentials (bcrypt compare) — returns <code>{ accessToken, refreshToken }</code></li>
+                <li>Access token stored in localStorage; refresh token stored in an httpOnly cookie</li>
+                <li>Subsequent requests include <code>Authorization: Bearer {token}</code> header</li>
+                <li>Access token expires in <strong>15 minutes</strong>; auto-refreshed using refresh token (<strong>7 days</strong>)</li>
+            </ol>
+            <div class="alert alert-info">
+                <span data-icon="info"></span>
+                <strong>Silent refresh</strong> — The CMS client intercepts 401 responses, attempts a token refresh, then retries the original request transparently. Users are only prompted to log in again when the refresh token itself expires.
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Registration (First-Run Setup) -->
+    <section class="card mb-6" data-section="Registration">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Registration (First-Run Setup)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Registration is intentionally restricted to prevent unauthorised account creation on production sites.</p>
+            <ul class="mb-4" style="padding-left:1.5rem;line-height:2;">
+                <li>Registration is <strong>disabled by default</strong> after initial setup</li>
+                <li>First admin account created via <code>npm run setup</code> interactive wizard</li>
+                <li>Additional users created by admins: <strong>Admin → Users → New User</strong></li>
+                <li>Optional: enable self-registration in config (<code>auth.allowRegistration: true</code>)</li>
+                <li>When enabled, users self-register at <code>/register</code> with email verification (if SMTP is configured)</li>
+                <li>New self-registered users are assigned the <code>subscriber</code> role by default</li>
+            </ul>
+            <div class="alert alert-warning">
+                <span data-icon="alert-triangle"></span>
+                <strong>Production note</strong> — Keep <code>auth.allowRegistration</code> set to <code>false</code> unless you specifically need a self-service sign-up flow. Enabling it on a public site without email verification exposes the admin area to spam accounts.
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Forgot / Reset Password -->
+    <section class="card mb-6" data-section="Forgot / Reset Password">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Forgot / Reset Password</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Password resets use a time-limited, single-use token delivered by email. SMTP must be configured in site settings for this flow to work.</p>
+            <ol class="mb-4" style="padding-left:1.5rem;line-height:2;">
+                <li>User clicks <strong>"Forgot password"</strong> on the login page</li>
+                <li>Enter email address — <code>POST /api/auth/forgot-password</code></li>
+                <li>If the email exists, the server sends a reset email with a time-limited token (<strong>1 hour</strong>)</li>
+                <li>User clicks the link — token is validated — user sets a new password</li>
+                <li>All existing sessions are invalidated immediately on password reset</li>
+                <li>Requires SMTP configured under <strong>Admin → Settings → Email</strong></li>
+            </ol>
+            <div class="alert alert-info">
+                <span data-icon="info"></span>
+                The server always returns a success response to the forgot-password endpoint regardless of whether the email exists, to prevent user enumeration attacks.
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. JWT Tokens -->
+    <section class="card mb-6" data-section="JWT Tokens">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">JWT Tokens</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma CMS uses a two-token system to balance security (short-lived access) with usability (transparent refresh).</p>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="card card-subtle p-4">
+                    <div class="font-semibold mb-2">
+                        <span data-icon="zap" class="mr-1"></span>
+                        Access Token
+                    </div>
+                    <ul style="padding-left:1.2rem;line-height:1.8;" class="text-sm">
+                        <li>Short-lived — <strong>15 minutes</strong></li>
+                        <li>Carries: <code>userId</code>, <code>email</code>, <code>role</code>, <code>iat</code>, <code>exp</code></li>
+                        <li>Stored in <strong>localStorage</strong></li>
+                        <li>Sent with every API request as a Bearer token</li>
+                    </ul>
+                </div>
+                <div class="card card-subtle p-4">
+                    <div class="font-semibold mb-2">
+                        <span data-icon="refresh-cw" class="mr-1"></span>
+                        Refresh Token
+                    </div>
+                    <ul style="padding-left:1.2rem;line-height:1.8;" class="text-sm">
+                        <li>Long-lived — <strong>7 days</strong></li>
+                        <li>Stored as an <strong>httpOnly cookie</strong> (not accessible via JS)</li>
+                        <li>Used only to obtain new access tokens silently</li>
+                        <li>Rotated on each use</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="mb-3">The <code>JWT_SECRET</code> is generated automatically during the <code>npm run setup</code> wizard and stored in your <code>.env</code> file. Rotate it by regenerating and restarting — all active sessions will be invalidated.</p>
+            <p class="text-sm text-muted">Token payload example: <code>{ "userId": "abc123", "email": "admin@example.com", "role": "admin", "iat": 1700000000, "exp": 1700000900 }</code></p>
+        </div>
+    </section>
+
+    <!-- 6. Four Built-in Roles -->
+    <section class="card mb-6" data-section="Four Built-in Roles">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Four Built-in Roles</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Built-in roles cover the most common team structures. Each role is cumulative — higher roles include all permissions of roles below them.</p>
+            <table class="table table-striped mb-4">
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Slug</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge badge-danger">admin</span></td>
+                        <td><code>admin</code></td>
+                        <td>Full access to everything: all content, all users, all settings, and all admin features. Cannot be deleted.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-warning">manager</span></td>
+                        <td><code>manager</code></td>
+                        <td>Manage all content (pages, collections, forms, media, blocks) but <strong>not</strong> user management or system settings.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-info">editor</span></td>
+                        <td><code>editor</code></td>
+                        <td>Create and edit content (pages, media) but <strong>not</strong> delete or manage collections/forms.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-secondary">subscriber</span></td>
+                        <td><code>subscriber</code></td>
+                        <td>Read-only access to the admin dashboard; primarily used for members-only content on the public site.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="alert alert-info">
+                <span data-icon="info"></span>
+                Built-in roles cannot be renamed or deleted, but you can create unlimited <strong>custom roles</strong> (see next section) to model your exact team structure.
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Custom Roles -->
+    <section class="card mb-6" data-section="Custom Roles">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Custom Roles</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Custom roles let you define exactly the right access level for your team without over-provisioning permissions.</p>
+            <div class="grid grid-cols-2 gap-6 mb-4">
+                <div>
+                    <h3 class="font-semibold mb-2">Creating a Custom Role</h3>
+                    <ol style="padding-left:1.5rem;line-height:2;" class="text-sm">
+                        <li>Navigate to <strong>Admin → Roles → New Role</strong></li>
+                        <li>Enter a role name and slug (e.g. <em>Content Reviewer</em> / <code>content-reviewer</code>)</li>
+                        <li>Configure permissions per resource (11 resources × 4 actions = 44 flags)</li>
+                        <li>Save the role</li>
+                    </ol>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-2">Assigning a Custom Role</h3>
+                    <ol style="padding-left:1.5rem;line-height:2;" class="text-sm">
+                        <li>Navigate to <strong>Admin → Users</strong></li>
+                        <li>Select the user to update</li>
+                        <li>Open the <strong>Edit User</strong> panel</li>
+                        <li>Change the <strong>Role</strong> dropdown to your custom role</li>
+                        <li>Save — changes take effect on the user's next request</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="alert alert-warning">
+                <span data-icon="alert-triangle"></span>
+                Custom roles inherit <strong>no permissions by default</strong> — you must explicitly opt in to each resource + action pair. This prevents accidental over-permission when creating new roles.
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Permission Registry -->
+    <section class="card mb-6" data-section="Permission Registry">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Permission Registry (11 Resources × 4 Actions)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Every admin action is governed by a permission flag. The table below shows the default grants for each built-in role.</p>
+            <div style="overflow-x:auto;">
+                <table class="table table-striped mb-4" style="min-width:700px;">
+                    <thead>
+                        <tr>
+                            <th>Resource</th>
+                            <th>Action</th>
+                            <th><span class="badge badge-danger">admin</span></th>
+                            <th><span class="badge badge-warning">manager</span></th>
+                            <th><span class="badge badge-info">editor</span></th>
+                            <th><span class="badge badge-secondary">subscriber</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- pages -->
+                        <tr><td rowspan="4"><strong>pages</strong></td><td>create</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td></tr>
+                        <tr><td>read</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-success">✓</td></tr>
+                        <tr><td>update</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td></tr>
+                        <tr><td>delete</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <!-- media -->
+                        <tr><td rowspan="4"><strong>media</strong></td><td>create</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td></tr>
+                        <tr><td>read</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-success">✓</td></tr>
+                        <tr><td>update</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td></tr>
+                        <tr><td>delete</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <!-- collections -->
+                        <tr><td rowspan="4"><strong>collections</strong></td><td>create</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>read</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td></tr>
+                        <tr><td>update</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>delete</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <!-- forms -->
+                        <tr><td rowspan="4"><strong>forms</strong></td><td>create</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>read</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td></tr>
+                        <tr><td>update</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>delete</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <!-- blocks -->
+                        <tr><td rowspan="4"><strong>blocks</strong></td><td>create</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>read</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td></tr>
+                        <tr><td>update</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>delete</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <!-- views (Pro) -->
+                        <tr><td rowspan="4"><strong>views</strong> <span class="badge badge-sm">Pro</span></td><td>create</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>read</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td></tr>
+                        <tr><td>update</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>delete</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <!-- actions (Pro) -->
+                        <tr><td rowspan="4"><strong>actions</strong> <span class="badge badge-sm">Pro</span></td><td>create</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>read</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td></tr>
+                        <tr><td>update</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>delete</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <!-- settings -->
+                        <tr><td rowspan="4"><strong>settings</strong></td><td>create</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>read</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>update</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>delete</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <!-- navigation -->
+                        <tr><td rowspan="4"><strong>navigation</strong></td><td>create</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>read</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td></tr>
+                        <tr><td>update</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>delete</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <!-- plugins -->
+                        <tr><td rowspan="4"><strong>plugins</strong></td><td>create</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>read</td><td class="text-success">✓</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>update</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>delete</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <!-- users -->
+                        <tr><td rowspan="4"><strong>users</strong></td><td>create</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>read</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>update</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                        <tr><td>delete</td><td class="text-success">✓</td><td class="text-danger">✗</td><td class="text-danger">✗</td><td class="text-danger">✗</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-sm text-muted">Pro resources (views, actions) are available on Pro and Enterprise plans. Custom roles can be configured with any combination of the above 44 flags.</p>
+        </div>
+    </section>
+
+    <!-- 9. User Profiles -->
+    <section class="card mb-6" data-section="User Profiles">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">User Profiles</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Every authenticated user has an extended profile beyond their core auth fields. Profiles are stored as a preset collection linked to the auth user record by <code>userId</code>.</p>
+            <div class="grid grid-cols-2 gap-6 mb-4">
+                <div>
+                    <h3 class="font-semibold mb-2">Profile Fields</h3>
+                    <ul style="padding-left:1.5rem;line-height:2;" class="text-sm">
+                        <li><code>displayName</code> — public-facing name</li>
+                        <li><code>bio</code> — short biography (textarea)</li>
+                        <li><code>avatar</code> — media picker (linked to Media Library)</li>
+                        <li><code>website</code> — personal or professional URL</li>
+                        <li><code>socialLinks</code> — object of platform → URL pairs</li>
+                        <li><code>location</code> — city / country free text</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-2">Accessing Profiles</h3>
+                    <ul style="padding-left:1.5rem;line-height:2;" class="text-sm">
+                        <li><strong>Admin UI</strong>: Users → [User] → Profile tab</li>
+                        <li><strong>API</strong>: <code>GET /api/users/{id}/profile</code></li>
+                        <li><strong>Templates</strong>: <code>&#123;&#123;user.profile.*&#125;&#125;</code> on auth-gated pages</li>
+                        <li>Users can edit their own profile under Account Settings</li>
+                        <li>Admins can edit any user's profile</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="alert alert-info">
+                <span data-icon="info"></span>
+                Profile data is only exposed in page templates when the page has <code>requiresAuth: true</code> configured. On public pages, <code>&#123;&#123;user.profile.*&#125;&#125;</code> variables resolve to empty strings.
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. API Authentication -->
+    <section class="card mb-6" data-section="API Authentication">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">API Authentication</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Use Domma CMS as a headless CMS by authenticating programmatically and including the access token with every request.</p>
+            <h3 class="font-semibold mb-2">Login and obtain tokens</h3>
+            <pre class="code-block mb-4"><code>POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "your-password"
+}
+
+// Response
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+            <h3 class="font-semibold mb-2">Use the access token in subsequent requests</h3>
+            <pre class="code-block mb-4"><code>GET /api/collections/posts/entries
+Authorization: Bearer {accessToken}</code></pre>
+            <h3 class="font-semibold mb-2">Refresh the access token</h3>
+            <pre class="code-block mb-4"><code>POST /api/auth/refresh
+Cookie: refreshToken={token}
+
+// Response
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+            <div class="alert alert-warning">
+                <span data-icon="alert-triangle"></span>
+                <strong>Security</strong> — Never expose your access token in client-side code that is publicly readable. For server-to-server integrations, consider creating a dedicated service account with the minimum required permissions.
+            </div>
+        </div>
+    </section>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>Domma.icons.scan();</script>
+</body>
+</html>

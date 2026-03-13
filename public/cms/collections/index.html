@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collections - Domma CMS</title>
+    <link rel="canonical" href="https://dommajs.org/cms/collections/">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/cms-showcase.css">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="cms" data-layout-variant="subpage">
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Collections</div>
+        <div class="hero-subtitle">Schema-first structured data with 16 field types and flexible storage adapters</div>
+    </div>
+</div>
+<main class="container py-8">
+
+    <!-- 1. Overview -->
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Overview</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Collections are structured data sets defined by a schema. Think of them like database tables but stored as JSON files (or MongoDB documents in Pro mode). Each collection has a name, a URL slug, and a list of typed fields that define the shape of every entry.</p>
+            <p class="mb-4">Collections power the content layer of Domma CMS. Once defined, each collection automatically gets an admin UI for managing entries and a REST API for reading and writing data.</p>
+            <h3 class="font-semibold mb-3">Common use cases</h3>
+            <div class="grid grid-cols-4 gap-3">
+                <div class="card p-3 text-center">
+                    <span data-icon="file-text" class="d-block mb-2"></span>
+                    <div class="font-semibold">Blog Posts</div>
+                    <div class="text-sm text-muted">Articles with rich text, tags, and author</div>
+                </div>
+                <div class="card p-3 text-center">
+                    <span data-icon="shopping-bag" class="d-block mb-2"></span>
+                    <div class="font-semibold">Products</div>
+                    <div class="text-sm text-muted">E-commerce catalogue with pricing and stock</div>
+                </div>
+                <div class="card p-3 text-center">
+                    <span data-icon="users" class="d-block mb-2"></span>
+                    <div class="font-semibold">Team Members</div>
+                    <div class="text-sm text-muted">Staff profiles with bios and photos</div>
+                </div>
+                <div class="card p-3 text-center">
+                    <span data-icon="help-circle" class="d-block mb-2"></span>
+                    <div class="font-semibold">FAQs</div>
+                    <div class="text-sm text-muted">Question and answer pairs by category</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Schema Definition -->
+    <section class="card mb-6" data-section="Schema Definition">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Schema Definition</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Each collection is defined in the admin panel with a name, slug, storage adapter, and a list of fields. The schema is stored as a JSON file in <code>data/schemas/{slug}.schema.json</code> and can be version-controlled alongside your project.</p>
+            <p class="mb-4">Below is the full schema for a typical Blog Posts collection. Each field specifies its <code>name</code>, <code>type</code>, and optional constraints such as <code>required</code> or <code>default</code>.</p>
+            <pre><code class="language-json">{
+  "name": "Blog Posts",
+  "slug": "posts",
+  "adapter": "file",
+  "fields": [
+    { "name": "title",       "type": "string",   "required": true },
+    { "name": "content",     "type": "richtext"                   },
+    { "name": "published",   "type": "boolean",  "default": false },
+    { "name": "publishedAt", "type": "date"                       },
+    { "name": "tags",        "type": "tags"                       },
+    { "name": "image",       "type": "media"                      }
+  ]
+}</code></pre>
+            <div class="alert alert-info mt-4">
+                <span data-icon="info"></span>
+                <strong>Tip:</strong> Collection schemas can be exported from the admin panel and committed to your repository, making schema changes part of your normal development workflow.
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. 16 Field Types -->
+    <section class="card mb-6" data-section="Field Types">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">16 Field Types</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma CMS supports 16 built-in field types covering text, media, relational, and specialised inputs. Every field type renders an appropriate input in the admin entry editor and applies the correct validation and serialisation.</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Storage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>string</code></td>
+                        <td>Single-line text input</td>
+                        <td>String</td>
+                    </tr>
+                    <tr>
+                        <td><code>text</code></td>
+                        <td>Multi-line textarea</td>
+                        <td>String</td>
+                    </tr>
+                    <tr>
+                        <td><code>richtext</code></td>
+                        <td>Rich text editor (WYSIWYG) — outputs HTML</td>
+                        <td>HTML string</td>
+                    </tr>
+                    <tr>
+                        <td><code>number</code></td>
+                        <td>Numeric value — integer or decimal</td>
+                        <td>Number</td>
+                    </tr>
+                    <tr>
+                        <td><code>boolean</code></td>
+                        <td>True/false toggle switch</td>
+                        <td>Boolean</td>
+                    </tr>
+                    <tr>
+                        <td><code>date</code></td>
+                        <td>Date picker (no time component)</td>
+                        <td>ISO 8601 date string</td>
+                    </tr>
+                    <tr>
+                        <td><code>datetime</code></td>
+                        <td>Date and time picker</td>
+                        <td>ISO 8601 datetime string</td>
+                    </tr>
+                    <tr>
+                        <td><code>select</code></td>
+                        <td>Single-choice dropdown from a defined options list</td>
+                        <td>String</td>
+                    </tr>
+                    <tr>
+                        <td><code>multiselect</code></td>
+                        <td>Multiple-choice dropdown from a defined options list</td>
+                        <td>Array of strings</td>
+                    </tr>
+                    <tr>
+                        <td><code>tags</code></td>
+                        <td>Free-form tag input — type and press Enter to add</td>
+                        <td>Array of strings</td>
+                    </tr>
+                    <tr>
+                        <td><code>media</code></td>
+                        <td>File or image picker from the Media Library</td>
+                        <td>Media ID / URL string</td>
+                    </tr>
+                    <tr>
+                        <td><code>relation</code></td>
+                        <td>Link to an entry in another collection</td>
+                        <td>Entry ID string</td>
+                    </tr>
+                    <tr>
+                        <td><code>email</code></td>
+                        <td>Email address with format validation</td>
+                        <td>String</td>
+                    </tr>
+                    <tr>
+                        <td><code>url</code></td>
+                        <td>URL with format validation</td>
+                        <td>String</td>
+                    </tr>
+                    <tr>
+                        <td><code>color</code></td>
+                        <td>Colour picker — outputs hex value</td>
+                        <td>Hex string (e.g. <code>#3b82f6</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><code>json</code></td>
+                        <td>Raw JSON input with syntax validation</td>
+                        <td>Parsed JSON object/array</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 4. Creating Collections -->
+    <section class="card mb-6" data-section="Creating Collections">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Creating Collections</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">New collections are created through the admin panel. Once saved, the collection is immediately available via the REST API and appears in the admin navigation under <strong>Collections</strong>.</p>
+            <h3 class="font-semibold mb-3">Steps to create a collection</h3>
+            <ol class="mb-5" style="line-height:2;padding-left:1.5rem;">
+                <li>Navigate to <strong>Admin panel → Collections → New Collection</strong></li>
+                <li>Enter a human-readable <strong>Name</strong> (e.g. <em>Blog Posts</em>)</li>
+                <li>The <strong>Slug</strong> is auto-generated from the name (e.g. <code>posts</code>) — edit if needed</li>
+                <li>Choose a <strong>Storage adapter</strong>: <code>file</code> (default) or <code>mongo</code> (Pro)</li>
+                <li>Click <strong>Add Field</strong> to define each field — set its name, type, and constraints</li>
+                <li>Reorder fields by dragging the row handle</li>
+                <li>Click <strong>Save Collection</strong> — the schema is written to <code>data/schemas/{slug}.schema.json</code></li>
+            </ol>
+            <h3 class="font-semibold mb-3">Import &amp; export schemas</h3>
+            <p class="mb-3">Collections can be exported as JSON schema files and re-imported into any Domma CMS instance. This is useful for sharing schemas between projects or seeding a fresh installation.</p>
+            <pre><code class="language-bash"># Export a schema from the CLI
+npx domma cms schema:export posts
+
+# Import a schema file
+npx domma cms schema:import ./posts.schema.json</code></pre>
+            <div class="alert alert-success mt-4">
+                <span data-icon="check-circle"></span>
+                After saving, visit <strong>Collections → Blog Posts → Entries</strong> to start adding content, or call <code>GET /api/collections/posts/entries</code> to read from the API.
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Entry CRUD -->
+    <section class="card mb-6" data-section="Entry CRUD">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Entry CRUD</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Every collection gets a full Create, Read, Update, Delete interface in the admin panel and a matching REST API. Both surfaces are generated automatically from the field schema — no additional configuration is needed.</p>
+
+            <div class="grid grid-cols-2 gap-4 mb-5">
+                <div>
+                    <h3 class="font-semibold mb-3">Admin panel operations</h3>
+                    <ul style="line-height:2;padding-left:1.5rem;">
+                        <li><strong>Create:</strong> Admin → Collections → [Name] → New Entry → fill fields → Save</li>
+                        <li><strong>Read:</strong> Entries are listed in a paginated, searchable admin table</li>
+                        <li><strong>Update:</strong> Click any entry row to open the edit form → make changes → Save</li>
+                        <li><strong>Delete:</strong> Select one or more entries → Delete (confirmation dialog shown)</li>
+                        <li><strong>Bulk delete:</strong> Tick the header checkbox to select all visible entries → Delete</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">REST API endpoints</h3>
+                    <pre><code class="language-http">GET    /api/collections/{slug}/entries
+POST   /api/collections/{slug}/entries
+GET    /api/collections/{slug}/entries/{id}
+PUT    /api/collections/{slug}/entries/{id}
+DELETE /api/collections/{slug}/entries/{id}</code></pre>
+                    <p class="text-sm text-muted mt-2">All endpoints require a valid JWT bearer token unless the collection is marked <code>public: true</code>.</p>
+                </div>
+            </div>
+
+            <h3 class="font-semibold mb-3">Example: create an entry via the API</h3>
+            <pre><code class="language-javascript">const response = await H.post('/api/collections/posts/entries', {
+    title:       'Hello World',
+    content:     '&lt;p&gt;My first post.&lt;/p&gt;',
+    published:   true,
+    publishedAt: '2026-03-13',
+    tags:        ['intro', 'news']
+});
+
+E.toast('Post created', { type: 'success' });</code></pre>
+        </div>
+    </section>
+
+    <!-- 6. FileAdapter vs MongoAdapter -->
+    <section class="card mb-6" data-section="FileAdapter vs MongoAdapter">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">FileAdapter vs MongoAdapter</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma CMS supports two storage adapters. The default <strong>FileAdapter</strong> requires zero configuration and is ideal for small-to-medium collections. The <strong>MongoAdapter</strong> (Pro) unlocks unlimited scale and advanced query capabilities.</p>
+            <table class="table mb-5">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>FileAdapter <span class="badge badge-success ml-1">Default</span></th>
+                        <th>MongoAdapter <span class="badge badge-warning ml-1">Pro</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Setup required</td>
+                        <td>None</td>
+                        <td>MongoDB connection string in <code>.env</code></td>
+                    </tr>
+                    <tr>
+                        <td>Storage format</td>
+                        <td>JSON file — <code>data/{slug}.json</code></td>
+                        <td>MongoDB collection</td>
+                    </tr>
+                    <tr>
+                        <td>Recommended entry limit</td>
+                        <td>Up to ~1,000 entries</td>
+                        <td>Unlimited</td>
+                    </tr>
+                    <tr>
+                        <td>Complex queries</td>
+                        <td>Basic filter/sort only</td>
+                        <td>Full MongoDB query language</td>
+                    </tr>
+                    <tr>
+                        <td>Transactions</td>
+                        <td>Not supported</td>
+                        <td>Supported</td>
+                    </tr>
+                    <tr>
+                        <td>Views &amp; aggregations</td>
+                        <td>Not supported</td>
+                        <td>Supported</td>
+                    </tr>
+                    <tr>
+                        <td>Row-level access control</td>
+                        <td>Not supported</td>
+                        <td>Supported</td>
+                    </tr>
+                    <tr>
+                        <td>Version-controllable</td>
+                        <td>Yes — commit <code>data/</code> to git</td>
+                        <td>Via mongodump snapshots</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3 class="font-semibold mb-3">Switching adapters</h3>
+            <p class="mb-3">To switch an existing collection to MongoDB, update the <code>adapter</code> field in the schema and run the migration command. Pro mode must be active.</p>
+            <pre><code class="language-json">// In data/schemas/posts.schema.json — change:
+{ "adapter": "file" }
+
+// To:
+{ "adapter": "mongo" }</code></pre>
+            <pre><code class="language-bash"># Migrate existing JSON data into MongoDB
+npx domma cms migrate:adapter posts --from=file --to=mongo</code></pre>
+            <div class="alert alert-warning mt-4">
+                <span data-icon="alert-triangle"></span>
+                <strong>Pro mode required.</strong> Attempting to use <code>adapter: "mongo"</code> without a valid Pro licence will fall back to the FileAdapter with a warning in the console.
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. 8 Preset Collections -->
+    <section class="card mb-6" data-section="Preset Collections">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">8 Preset Collections</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma CMS ships with 8 optional preset collections. These cover the most common content modelling patterns and can be seeded into a fresh installation with a single command — complete with schemas and sample data.</p>
+            <pre><code class="language-bash">npm run seed</code></pre>
+            <div class="grid grid-cols-2 gap-4 mt-4">
+                <div class="card p-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <span data-icon="file-text" class="mr-2"></span>
+                        <strong>Posts</strong>
+                        <span class="badge badge-info ml-auto">slug: posts</span>
+                    </div>
+                    <p class="text-sm text-muted mb-1">Blog posts with title, content, author, tags, and published status.</p>
+                    <div class="text-sm"><code>string, richtext, relation, tags, boolean, date</code></div>
+                </div>
+                <div class="card p-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <span data-icon="shopping-bag" class="mr-2"></span>
+                        <strong>Products</strong>
+                        <span class="badge badge-info ml-auto">slug: products</span>
+                    </div>
+                    <p class="text-sm text-muted mb-1">E-commerce items with name, price, description, image, and stock level.</p>
+                    <div class="text-sm"><code>string, text, number, media, boolean</code></div>
+                </div>
+                <div class="card p-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <span data-icon="users" class="mr-2"></span>
+                        <strong>Team</strong>
+                        <span class="badge badge-info ml-auto">slug: team</span>
+                    </div>
+                    <p class="text-sm text-muted mb-1">Team members with name, role, bio, photo, and social links.</p>
+                    <div class="text-sm"><code>string, text, media, url</code></div>
+                </div>
+                <div class="card p-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <span data-icon="calendar" class="mr-2"></span>
+                        <strong>Events</strong>
+                        <span class="badge badge-info ml-auto">slug: events</span>
+                    </div>
+                    <p class="text-sm text-muted mb-1">Events with title, date, location, and description.</p>
+                    <div class="text-sm"><code>string, datetime, text</code></div>
+                </div>
+                <div class="card p-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <span data-icon="help-circle" class="mr-2"></span>
+                        <strong>FAQs</strong>
+                        <span class="badge badge-info ml-auto">slug: faqs</span>
+                    </div>
+                    <p class="text-sm text-muted mb-1">Question and answer pairs with category grouping.</p>
+                    <div class="text-sm"><code>string, text, select</code></div>
+                </div>
+                <div class="card p-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <span data-icon="star" class="mr-2"></span>
+                        <strong>Testimonials</strong>
+                        <span class="badge badge-info ml-auto">slug: testimonials</span>
+                    </div>
+                    <p class="text-sm text-muted mb-1">Customer reviews with name, company, star rating, and review text.</p>
+                    <div class="text-sm"><code>string, number, text, media</code></div>
+                </div>
+                <div class="card p-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <span data-icon="image" class="mr-2"></span>
+                        <strong>Gallery</strong>
+                        <span class="badge badge-info ml-auto">slug: gallery</span>
+                    </div>
+                    <p class="text-sm text-muted mb-1">Media gallery items with title, image, and description.</p>
+                    <div class="text-sm"><code>string, media, text</code></div>
+                </div>
+                <div class="card p-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <span data-icon="user" class="mr-2"></span>
+                        <strong>User Profiles</strong>
+                        <span class="badge badge-info ml-auto">slug: profiles</span>
+                    </div>
+                    <p class="text-sm text-muted mb-1">Extended user data that links to authenticated users via a <code>relation</code> field.</p>
+                    <div class="text-sm"><code>relation, string, media, text, url</code></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Import & Export -->
+    <section class="card mb-6" data-section="Import and Export">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Import &amp; Export</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Collection entries can be exported to CSV or JSON and re-imported at any time. This is useful for data migrations, backups, bulk edits in a spreadsheet, or seeding a staging environment from production data.</p>
+
+            <div class="grid grid-cols-2 gap-5 mb-5">
+                <div>
+                    <h3 class="font-semibold mb-3">
+                        <span data-icon="download" class="mr-1"></span> Export entries
+                    </h3>
+                    <ol style="line-height:2;padding-left:1.5rem;">
+                        <li>Admin → Collections → [Name]</li>
+                        <li>Click <strong>Export</strong> in the toolbar</li>
+                        <li>Choose <strong>CSV</strong> or <strong>JSON</strong></li>
+                        <li>The file downloads immediately</li>
+                    </ol>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">
+                        <span data-icon="upload" class="mr-1"></span> Import entries
+                    </h3>
+                    <ol style="line-height:2;padding-left:1.5rem;">
+                        <li>Admin → Collections → [Name]</li>
+                        <li>Click <strong>Import</strong> in the toolbar</li>
+                        <li>Upload a <strong>CSV</strong> or <strong>JSON</strong> file</li>
+                        <li>Review the preview, then confirm</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3 class="font-semibold mb-3">Format requirements</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-sm font-semibold mb-2">CSV</p>
+                    <pre><code class="language-csv">title,published,tags
+"Hello World",true,"intro,news"
+"Second Post",false,""</code></pre>
+                    <p class="text-sm text-muted mt-2">Column headers must match field <code>name</code> values exactly. Array fields are comma-separated within a quoted cell.</p>
+                </div>
+                <div>
+                    <p class="text-sm font-semibold mb-2">JSON</p>
+                    <pre><code class="language-json">[
+  {
+    "title": "Hello World",
+    "published": true,
+    "tags": ["intro", "news"]
+  },
+  {
+    "title": "Second Post",
+    "published": false,
+    "tags": []
+  }
+]</code></pre>
+                    <p class="text-sm text-muted mt-2">An array of entry objects. Unknown fields are ignored; missing required fields will fail validation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Collection Shortcode -->
+    <section class="card mb-6" data-section="Collection Shortcode">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Collection Shortcode</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Collection entries can be embedded directly in Markdown pages using the <code>[collection]</code> shortcode. The shortcode fetches entries at build time (or at request time in server-rendered mode) and renders them using the collection's configured block template.</p>
+            <pre><code class="language-markdown">[collection slug="posts" limit="5" orderBy="publishedAt" order="desc"]
+[collection slug="team" template="card"]
+[collection slug="products" filter="published:true" limit="12"]</code></pre>
+
+            <h3 class="font-semibold mt-5 mb-3">Shortcode attributes</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>slug</code></td>
+                        <td>— (required)</td>
+                        <td>The collection slug to fetch entries from</td>
+                    </tr>
+                    <tr>
+                        <td><code>limit</code></td>
+                        <td><code>10</code></td>
+                        <td>Maximum number of entries to render</td>
+                    </tr>
+                    <tr>
+                        <td><code>orderBy</code></td>
+                        <td><code>createdAt</code></td>
+                        <td>Field name to sort by</td>
+                    </tr>
+                    <tr>
+                        <td><code>order</code></td>
+                        <td><code>desc</code></td>
+                        <td><code>asc</code> or <code>desc</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>filter</code></td>
+                        <td>—</td>
+                        <td>Simple equality filter: <code>field:value</code> — multiple filters separated by spaces</td>
+                    </tr>
+                    <tr>
+                        <td><code>template</code></td>
+                        <td><code>list</code></td>
+                        <td>Block template name: <code>list</code>, <code>card</code>, <code>grid</code>, or a custom template path</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="alert alert-info mt-4">
+                <span data-icon="info"></span>
+                Custom block templates are stored in <code>templates/blocks/{name}.html</code> and have access to the full entry object as template variables.
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. Public API Access -->
+    <section class="card mb-6" data-section="Public API Access">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Public API Access</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">By default all collection API endpoints require a valid JWT bearer token. Collections marked <code>public: true</code> in their schema are also accessible via a separate unauthenticated public API — useful for reading content in front-end applications without exposing credentials.</p>
+
+            <div class="grid grid-cols-2 gap-5 mb-5">
+                <div>
+                    <h3 class="font-semibold mb-3">
+                        <span data-icon="globe" class="mr-1"></span> Public API (no auth)
+                    </h3>
+                    <p class="text-sm text-muted mb-3">Available when the collection schema includes <code>"public": true</code>. Read-only.</p>
+                    <pre><code class="language-http">GET /api/public/collections/{slug}/entries
+GET /api/public/collections/{slug}/entries/{id}</code></pre>
+                    <p class="text-sm text-muted mt-2">Supports <code>?limit</code>, <code>?offset</code>, <code>?orderBy</code>, and <code>?order</code> query parameters.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">
+                        <span data-icon="lock" class="mr-1"></span> Authenticated API (JWT required)
+                    </h3>
+                    <p class="text-sm text-muted mb-3">Full CRUD access. Pass the token in the <code>Authorization</code> header.</p>
+                    <pre><code class="language-http">GET    /api/collections/{slug}/entries
+POST   /api/collections/{slug}/entries
+PUT    /api/collections/{slug}/entries/{id}
+DELETE /api/collections/{slug}/entries/{id}</code></pre>
+                </div>
+            </div>
+
+            <h3 class="font-semibold mb-3">Example: fetch public posts with Domma HTTP</h3>
+            <pre><code class="language-javascript">// Read public collection — no auth needed
+const { entries } = await H.get('/api/public/collections/posts/entries', {
+    params: { limit: 5, orderBy: 'publishedAt', order: 'desc' }
+});
+
+T.create('#posts-table', {
+    data: entries,
+    columns: [
+        { key: 'title',       label: 'Title'      },
+        { key: 'publishedAt', label: 'Published'  },
+        { key: 'tags',        label: 'Tags'       }
+    ]
+});</code></pre>
+
+            <h3 class="font-semibold mt-5 mb-3">Enabling public access on a collection</h3>
+            <pre><code class="language-json">// In data/schemas/posts.schema.json — add:
+{
+  "name":    "Blog Posts",
+  "slug":    "posts",
+  "adapter": "file",
+  "public":  true,
+  "fields":  [ ... ]
+}</code></pre>
+            <div class="alert alert-warning mt-4">
+                <span data-icon="alert-triangle"></span>
+                <strong>Note:</strong> Public collections expose <em>all</em> entries to unauthenticated requests. Do not mark collections public if they contain sensitive or user-specific data. Use the authenticated API with scoped permissions for anything non-public.
+            </div>
+        </div>
+    </section>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>Domma.icons.scan();</script>
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Domma CMS</title>
+    <link rel="canonical" href="https://dommajs.org/cms/admin-panel/">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/cms-showcase.css">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="cms" data-layout-variant="subpage">
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Admin Panel</div>
+        <div class="hero-subtitle">A Domma SPA with 30+ views — the admin UI is built entirely with Domma</div>
+    </div>
+</div>
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Overview</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The admin panel is a client-side SPA built entirely with Domma. It serves as both the CMS administration interface AND a real-world example of a production Domma application. It demonstrates every major Domma feature:</p>
+            <ul class="list-unstyled mb-0">
+                <li class="mb-2"><span data-icon="route" class="me-2 text-primary"></span><strong>Router (<code>R</code>)</strong> — 30+ routes with sub-views</li>
+                <li class="mb-2"><span data-icon="form" class="me-2 text-primary"></span><strong>Forms (<code>F</code>)</strong> — Blueprint-driven forms for every entity</li>
+                <li class="mb-2"><span data-icon="model" class="me-2 text-primary"></span><strong>Models (<code>M</code>)</strong> — Reactive data throughout the admin</li>
+                <li class="mb-2"><span data-icon="elements" class="me-2 text-primary"></span><strong>Elements (<code>E</code>)</strong> — Modals, tabs, accordions, toasts, sidebars</li>
+                <li class="mb-2"><span data-icon="table" class="me-2 text-primary"></span><strong>Tables (<code>T</code>)</strong> — Paginated, searchable, filterable data tables</li>
+                <li class="mb-2"><span data-icon="icon" class="me-2 text-primary"></span><strong>Icons (<code>I</code>)</strong> — 200+ icons via <code>data-icon</code> attributes</li>
+                <li class="mb-2"><span data-icon="storage" class="me-2 text-primary"></span><strong>Storage (<code>S</code>)</strong> — Session state, preferences</li>
+                <li class="mb-2"><span data-icon="http" class="me-2 text-primary"></span><strong>HTTP (<code>H</code>)</strong> — All API communication</li>
+                <li class="mb-2"><span data-icon="sparkles" class="me-2 text-primary"></span><strong>Effects</strong> — Animations and visual effects</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Dashboard">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Dashboard</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The dashboard is the first view after login. It gives an at-a-glance summary of the entire CMS state.</p>
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold mb-3">Summary Cards</h3>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><span data-icon="document" class="me-2 text-muted"></span>Page count</li>
+                        <li class="mb-2"><span data-icon="collection" class="me-2 text-muted"></span>Collection entry count</li>
+                        <li class="mb-2"><span data-icon="inbox" class="me-2 text-muted"></span>Pending form submissions</li>
+                        <li class="mb-2"><span data-icon="users" class="me-2 text-muted"></span>Active users</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">Quick Actions</h3>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><span data-icon="plus" class="me-2 text-muted"></span>New Page</li>
+                        <li class="mb-2"><span data-icon="plus" class="me-2 text-muted"></span>New Collection Entry</li>
+                        <li class="mb-2"><span data-icon="eye" class="me-2 text-muted"></span>View Submissions</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">Recent Activity Feed</h3>
+                    <p class="text-muted mb-0">Last 10 changes across all content types, showing who made the change, what was changed, and when.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">Site Health &amp; Charts</h3>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><span data-icon="disk" class="me-2 text-muted"></span>Disk usage</li>
+                        <li class="mb-2"><span data-icon="clock" class="me-2 text-muted"></span>Last backup date</li>
+                        <li class="mb-2"><span data-icon="chart" class="me-2 text-muted"></span>Page views over 7 days <span class="badge badge-sm badge-warning ms-2">Pro</span></li>
+                        <li class="mb-2"><span data-icon="star" class="me-2 text-muted"></span>Top pages <span class="badge badge-sm badge-warning ms-2">Pro</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Page Editor">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Page Editor</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">A full-featured Markdown page editor with a split-pane layout — Markdown source on the left, live preview on the right.</p>
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold mb-3">Toolbar</h3>
+                    <p class="text-muted mb-3">Formatting buttons for:</p>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-1"><span data-icon="bold" class="me-2 text-muted"></span>Bold, Italic</li>
+                        <li class="mb-1"><span data-icon="heading" class="me-2 text-muted"></span>Headings (H1–H3)</li>
+                        <li class="mb-1"><span data-icon="link" class="me-2 text-muted"></span>Link, Image</li>
+                        <li class="mb-1"><span data-icon="code" class="me-2 text-muted"></span>Inline code, Code block</li>
+                        <li class="mb-1"><span data-icon="table" class="me-2 text-muted"></span>Table, Blockquote</li>
+                        <li class="mb-1"><span data-icon="list" class="me-2 text-muted"></span>Ordered &amp; unordered lists</li>
+                        <li class="mb-1"><span data-icon="minus" class="me-2 text-muted"></span>Divider</li>
+                        <li class="mb-1"><span data-icon="shortcode" class="me-2 text-muted"></span>Insert shortcode</li>
+                        <li class="mb-1"><span data-icon="image" class="me-2 text-muted"></span>Media library (inserts image syntax)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">Frontmatter Editor</h3>
+                    <p class="text-muted mb-3">Structured form for page metadata:</p>
+                    <ul class="list-unstyled mb-3">
+                        <li class="mb-1">Title, description, layout, theme</li>
+                        <li class="mb-1">Draft toggle, tags</li>
+                        <li class="mb-1">SEO, canonical URL, social preview</li>
+                    </ul>
+                    <h3 class="font-semibold mb-3">Auto-save &amp; Publishing</h3>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-1"><span data-icon="save" class="me-2 text-muted"></span>Auto-save every 30 seconds to browser storage</li>
+                        <li class="mb-1"><span data-icon="upload" class="me-2 text-muted"></span>Publish button</li>
+                        <li class="mb-1"><span data-icon="draft" class="me-2 text-muted"></span>Save Draft button</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Media Library (Admin)">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Media Library (Admin)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">A full media management interface for uploading, organising, editing, and inserting media assets.</p>
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold mb-3">Upload &amp; Browse</h3>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><span data-icon="upload" class="me-2 text-muted"></span>Drag-and-drop upload zone or click to browse</li>
+                        <li class="mb-2"><span data-icon="grid" class="me-2 text-muted"></span>Grid view with image preview thumbnails</li>
+                        <li class="mb-2"><span data-icon="copy" class="me-2 text-muted"></span>Copy URL to clipboard</li>
+                        <li class="mb-2"><span data-icon="trash" class="me-2 text-muted"></span>Delete with confirmation dialog</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">Image Editor</h3>
+                    <p class="text-muted mb-3">Click any image to open the inline editor:</p>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-1">Crop, resize, rotate, flip</li>
+                        <li class="mb-1">Filters (brightness, contrast, saturation)</li>
+                    </ul>
+                    <h3 class="font-semibold mb-3 mt-4">Filtering &amp; Sorting</h3>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-1">Filter by type: images, documents, all</li>
+                        <li class="mb-1">Sort by date, name, size</li>
+                        <li class="mb-1">Search by filename</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Collection &amp; Form Editors">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Collection &amp; Form Editors</h2>
+        </div>
+        <div class="card-body">
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold mb-3">Collection Editor</h3>
+                    <p class="text-muted mb-3">A visual schema builder for defining collection structure:</p>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><span data-icon="drag" class="me-2 text-muted"></span>Add, remove, and reorder fields visually</li>
+                        <li class="mb-2"><span data-icon="settings" class="me-2 text-muted"></span>Field settings panel: name, type, required, default, validation, display label</li>
+                        <li class="mb-2"><span data-icon="toggle" class="me-2 text-muted"></span>Adapter toggle: file ↔ mongo <span class="badge badge-sm badge-warning ms-2">Pro</span></li>
+                        <li class="mb-2"><span data-icon="code" class="me-2 text-muted"></span>Preview schema as JSON</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">Form Editor</h3>
+                    <p class="text-muted mb-3">Similar field builder to collections, with additional capabilities:</p>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><span data-icon="layout" class="me-2 text-muted"></span>Layout selector (stacked, grid, inline)</li>
+                        <li class="mb-2"><span data-icon="check-circle" class="me-2 text-muted"></span>Success message configuration</li>
+                        <li class="mb-2"><span data-icon="steps" class="me-2 text-muted"></span>Step configuration (wizard mode)</li>
+                        <li class="mb-2"><span data-icon="branch" class="me-2 text-muted"></span>Conditional logic: <em>"Show [field] when [other field] [operator] [value]"</em></li>
+                        <li class="mb-2"><span data-icon="bell" class="me-2 text-muted"></span>Trigger configuration: email, webhook, action</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="View &amp; Action Editors (Pro)">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">View &amp; Action Editors <span class="badge badge-warning ms-2">Pro</span></h2>
+        </div>
+        <div class="card-body">
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold mb-3">View Editor</h3>
+                    <p class="text-muted mb-3">Build custom data views with a visual pipeline builder:</p>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><span data-icon="drag" class="me-2 text-muted"></span>Pipeline stage list with drag-to-reorder</li>
+                        <li class="mb-2"><span data-icon="settings" class="me-2 text-muted"></span>Stage type selector + configuration form per stage</li>
+                        <li class="mb-2"><span data-icon="eye" class="me-2 text-muted"></span>Live preview table: run pipeline, see results instantly</li>
+                        <li class="mb-2"><span data-icon="columns" class="me-2 text-muted"></span>Column display configuration</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">Action Editor</h3>
+                    <p class="text-muted mb-3">Compose multi-step automation actions:</p>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><span data-icon="drag" class="me-2 text-muted"></span>Step list with drag-to-reorder</li>
+                        <li class="mb-2"><span data-icon="settings" class="me-2 text-muted"></span>Step type selector + type-specific configuration form</li>
+                        <li class="mb-2"><span data-icon="play" class="me-2 text-muted"></span>Test runner panel: input sample data, step through execution</li>
+                        <li class="mb-2"><span data-icon="history" class="me-2 text-muted"></span>Execution history table</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Permission-Aware Sidebar">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Permission-Aware Sidebar</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The admin sidebar adapts dynamically to the logged-in user's role. It is generated from the user's permissions and enabled plugins, with sections that expand and collapse with <code>localStorage</code> persistence via <code>S.set()</code>.</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Visible Sections</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge badge-danger">admin</span></td>
+                        <td>Content, Collections, Forms, Media, Blocks, Views, Actions, Users, Roles, Plugins, Settings</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-warning">manager</span></td>
+                        <td>Content, Collections, Forms, Media, Blocks <em class="text-muted">(no Users / Roles / Settings)</em></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-info">editor</span></td>
+                        <td>Pages, Media</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-secondary">subscriber</span></td>
+                        <td>Dashboard, My Profile</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Keyboard Shortcuts">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Keyboard Shortcuts</h2>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Shortcut</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>S</kbd></td>
+                        <td>Save current editor content</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>P</kbd></td>
+                        <td>Preview current page</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>/</kbd></td>
+                        <td>Toggle sidebar</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>K</kbd></td>
+                        <td>Open quick search (pages, collections, settings)</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>N</kbd></td>
+                        <td>New item — context-aware (e.g. new page when in pages view)</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>Escape</kbd></td>
+                        <td>Close modal or dialog</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Dogfooding Domma">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Dogfooding Domma</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The admin panel is a first-class consumer of every Domma module. The table below shows how each namespace is put to work in the admin UI:</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Domma Module</th>
+                        <th>How Used in Admin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>R</code> Router</td>
+                        <td>30+ named routes: <code>/dashboard</code>, <code>/pages</code>, <code>/pages/:id</code>, <code>/collections/:slug</code>, etc.</td>
+                    </tr>
+                    <tr>
+                        <td><code>F</code> Forms</td>
+                        <td>Blueprint-driven forms for pages, collections, forms, users, settings</td>
+                    </tr>
+                    <tr>
+                        <td><code>M</code> Models</td>
+                        <td>Reactive page state, form data, table state, user session</td>
+                    </tr>
+                    <tr>
+                        <td><code>E</code> Elements</td>
+                        <td>Modals (confirm delete), Tabs (page editor panels), Toast (save notifications), Sidebar (nav), Accordion (settings groups)</td>
+                    </tr>
+                    <tr>
+                        <td><code>T</code> Tables</td>
+                        <td>Collections list, entries table, submissions, users, media grid</td>
+                    </tr>
+                    <tr>
+                        <td><code>I</code> Icons</td>
+                        <td><code>data-icon</code> attributes throughout — 50+ icons in use</td>
+                    </tr>
+                    <tr>
+                        <td><code>S</code> Storage</td>
+                        <td>Session token, sidebar state, editor auto-save, user preferences</td>
+                    </tr>
+                    <tr>
+                        <td><code>H</code> HTTP</td>
+                        <td>All API calls: GET / POST / PUT / DELETE for every content type</td>
+                    </tr>
+                    <tr>
+                        <td>Effects</td>
+                        <td>Reveal animations on dashboard load, celebrations on first publish</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>Domma.icons.scan();</script>
+</body>
+</html>

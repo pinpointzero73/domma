@@ -218,6 +218,91 @@
       }
     }
   },
+  "cms": {
+    "variants": {
+      "index": {
+        "navbar": {
+          "type": "dropdowns",
+          "brand": {
+            "text": "Domma",
+            "url": "../index.html"
+          },
+          "items": "nav-showcase",
+          "variant": null,
+          "actions": [
+            { "type": "search" },
+            { "type": "auth", "loginUrl": "../login/index.html" },
+            { "type": "theme-selector", "position": "inline" }
+          ]
+        },
+        "footer": "footer-landing",
+        "sidebar": {
+          "enabled": false
+        },
+        "theme": {
+          "toggle": true,
+          "variantSelector": true,
+          "position": "fixed-right"
+        },
+        "celebrations": {
+          "toggle": true
+        },
+        "breadcrumbs": {
+          "enabled": false
+        },
+        "features": [
+          "back-to-top",
+          "code-copy",
+          "icon-scan"
+        ]
+      },
+      "subpage": {
+        "navbar": {
+          "type": "dropdowns",
+          "brand": {
+            "text": "Domma",
+            "url": "../../index.html"
+          },
+          "items": "nav-showcase",
+          "variant": null,
+          "actions": [
+            { "type": "search" },
+            { "type": "auth", "loginUrl": "../../login/index.html" },
+            { "type": "theme-selector", "position": "inline" }
+          ]
+        },
+        "footer": "footer-landing",
+        "sidebar": {
+          "enabled": true,
+          "autoGenerate": true,
+          "prependNav": "nav-cms",
+          "selector": "[data-section]",
+          "fallbackSelector": ".card-header h2, .card-header h3"
+        },
+        "theme": {
+          "toggle": true,
+          "variantSelector": true,
+          "position": "fixed-right"
+        },
+        "celebrations": {
+          "toggle": true
+        },
+        "breadcrumbs": {
+          "enabled": true,
+          "separator": "chevron",
+          "homeIcon": true,
+          "homeUrl": "index.html",
+          "homeLabel": "Home"
+        },
+        "features": [
+          "back-to-top",
+          "code-copy",
+          "icon-scan",
+          "scroll-spy"
+        ]
+      }
+    }
+  },
   "public": {
     "navbar": {
       "type": "dropdowns",

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blocks - Domma CMS</title>
+    <link rel="canonical" href="https://dommajs.org/cms/blocks/">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/cms-showcase.css">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="cms" data-layout-variant="subpage">
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Blocks</div>
+        <div class="hero-subtitle">Reusable HTML templates with Mustache interpolation, embeddable anywhere via shortcode</div>
+    </div>
+</div>
+<main class="container py-8">
+
+    <!-- 1. Overview -->
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Overview</h2>
+        </div>
+        <div class="card-body">
+            <p>Blocks are reusable HTML/Mustache templates stored in the CMS. They can be embedded in any Markdown page using the <code>[block slug="name"]</code> shortcode. Use blocks to create consistent UI patterns — cards, callouts, feature grids, CTAs — without repeating HTML across pages.</p>
+        </div>
+    </section>
+
+    <!-- 2. Creating Blocks -->
+    <section class="card mb-6" data-section="Creating Blocks">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Creating Blocks</h2>
+        </div>
+        <div class="card-body">
+            <ol class="list-decimal pl-6 mb-0">
+                <li class="mb-2">Navigate to <strong>Admin → Blocks → New Block</strong></li>
+                <li class="mb-2">Set a block <strong>name</strong> and <strong>slug</strong></li>
+                <li class="mb-2">Write the HTML template — Mustache syntax is fully supported</li>
+                <li class="mb-2">Templates have access to: site config variables and any collection entries</li>
+                <li>Save — the block is immediately available in all pages via shortcode</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- 3. Mustache Variables -->
+    <section class="card mb-6" data-section="Mustache Variables">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Mustache Variables</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Blocks use Mustache (<code>{{}}</code>) for interpolation:</p>
+            <pre class="code-block mb-5"><code>&lt;div class="callout callout-{{type}}"&gt;
+    &lt;h3&gt;{{title}}&lt;/h3&gt;
+    &lt;p&gt;{{body}}&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+            <p class="mb-3 font-semibold">Available variables:</p>
+            <ul class="list-disc pl-6 mb-4">
+                <li class="mb-2"><code>{{site.title}}</code> — Site title from config</li>
+                <li class="mb-2"><code>{{site.tagline}}</code> — Site tagline</li>
+                <li class="mb-2"><code>{{page.title}}</code> — Current page title (if in page context)</li>
+                <li class="mb-2"><code>{{year}}</code> — Current year</li>
+            </ul>
+            <p class="mb-3 font-semibold">Conditional sections:</p>
+            <pre class="code-block mb-5"><code>{{#showCta}}&lt;a href="{{ctaUrl}}"&gt;{{ctaText}}&lt;/a&gt;{{/showCta}}</code></pre>
+            <p class="mb-3 font-semibold">Loops:</p>
+            <pre class="code-block mb-5"><code>{{#items}}&lt;li&gt;{{name}}&lt;/li&gt;{{/items}}</code></pre>
+            <p class="mb-3 font-semibold">Inverted sections (falsy / empty):</p>
+            <pre class="code-block mb-0"><code>{{^items}}&lt;p&gt;No items found.&lt;/p&gt;{{/items}}</code></pre>
+        </div>
+    </section>
+
+    <!-- 4. Using in Pages -->
+    <section class="card mb-6" data-section="Using in Pages">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Using in Pages</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Embed a block in any Markdown page using the <code>[block]</code> shortcode:</p>
+            <pre class="code-block mb-5"><code>[block slug="callout"]
+[block slug="cta-banner" title="Get Started" ctaUrl="/getting-started" ctaText="Start Now"]
+[block slug="feature-grid"]</code></pre>
+            <ul class="list-disc pl-6 mb-0">
+                <li class="mb-2">Parameters after <code>slug=</code> are passed as Mustache variables to the template</li>
+                <li class="mb-2">Blocks are rendered server-side before the page is served</li>
+                <li>Block changes propagate to all pages on the next request</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 5. Default Blocks -->
+    <section class="card mb-6" data-section="Default Blocks">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Default Blocks (5 Seeded)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Running <code>npm run seed</code> installs these 5 starter blocks:</p>
+            <ul class="list-disc pl-6 mb-0">
+                <li class="mb-2"><strong>callout</strong> — Info/warning/success/danger callout box with icon and message</li>
+                <li class="mb-2"><strong>cta-banner</strong> — Full-width call-to-action banner with heading, subtext, and button</li>
+                <li class="mb-2"><strong>feature-grid</strong> — 3-column feature showcase with icons, titles, and descriptions</li>
+                <li class="mb-2"><strong>social-links</strong> — Social media icon link row (Twitter/X, GitHub, LinkedIn, YouTube)</li>
+                <li><strong>newsletter-signup</strong> — Email signup widget with input and submit button</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 6. Example Patterns -->
+    <section class="card mb-6" data-section="Example Patterns">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Example Patterns</h2>
+        </div>
+        <div class="card-body">
+
+            <h3 class="text-lg font-semibold mb-2">Example 1 — Alert Block</h3>
+            <pre class="code-block mb-3"><code>&lt;!-- slug: alert --&gt;
+&lt;div class="alert alert-{{type|default:info}}"&gt;
+    &lt;span data-icon="{{icon|default:info-circle}}"&gt;&lt;/span&gt;
+    &lt;strong&gt;{{title}}&lt;/strong&gt;
+    {{#message}}&lt;p&gt;{{message}}&lt;/p&gt;{{/message}}
+&lt;/div&gt;</code></pre>
+            <p class="mb-6">Used as: <code>[block slug="alert" type="warning" title="Note" message="This feature requires Pro mode."]</code></p>
+
+            <h3 class="text-lg font-semibold mb-2">Example 2 — Stats Block</h3>
+            <pre class="code-block mb-6"><code>&lt;!-- slug: stats --&gt;
+&lt;div class="grid grid-cols-3 gap-4 text-center"&gt;
+    {{#stats}}
+    &lt;div&gt;
+        &lt;div class="text-3xl font-bold text-primary"&gt;{{value}}&lt;/div&gt;
+        &lt;div class="text-sm text-muted"&gt;{{label}}&lt;/div&gt;
+    &lt;/div&gt;
+    {{/stats}}
+&lt;/div&gt;</code></pre>
+
+            <h3 class="text-lg font-semibold mb-2">Example 3 — Profile Card Block</h3>
+            <pre class="code-block mb-0"><code>&lt;!-- slug: profile-card --&gt;
+&lt;div class="card text-center p-4"&gt;
+    &lt;img src="{{avatar}}" alt="{{name}}" class="rounded-full w-20 h-20 mx-auto mb-3"&gt;
+    &lt;h3 class="font-semibold"&gt;{{name}}&lt;/h3&gt;
+    &lt;p class="text-muted text-sm"&gt;{{role}}&lt;/p&gt;
+    {{#bio}}&lt;p class="mt-2"&gt;{{bio}}&lt;/p&gt;{{/bio}}
+&lt;/div&gt;</code></pre>
+
+        </div>
+    </section>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>Domma.icons.scan();</script>
+</body>
+</html>

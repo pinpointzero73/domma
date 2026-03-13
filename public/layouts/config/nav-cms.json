@@ -1,0 +1,23 @@
+{
+  "type": "grouped",
+  "groups": [
+    {
+      "title": "Domma CMS",
+      "items": [
+        { "text": "Overview", "url": "../index.html", "slug": "cms" },
+        { "text": "Getting Started", "url": "../getting-started/index.html", "slug": "getting-started" },
+        { "text": "Pages & Content", "url": "../pages/index.html", "slug": "pages" },
+        { "text": "Media", "url": "../media/index.html", "slug": "media" },
+        { "text": "Collections", "url": "../collections/index.html", "slug": "collections" },
+        { "text": "Forms", "url": "../forms/index.html", "slug": "forms" },
+        { "text": "Blocks", "url": "../blocks/index.html", "slug": "blocks" },
+        { "text": "Pro: Views & Actions", "url": "../data-pro/index.html", "slug": "data-pro" },
+        { "text": "Authentication", "url": "../auth/index.html", "slug": "auth" },
+        { "text": "Configuration", "url": "../configuration/index.html", "slug": "configuration" },
+        { "text": "Plugins", "url": "../plugins/index.html", "slug": "plugins" },
+        { "text": "Admin Panel", "url": "../admin-panel/index.html", "slug": "admin-panel" },
+        { "text": "Tutorials", "url": "../tutorials/index.html", "slug": "tutorials" }
+      ]
+    }
+  ]
+}

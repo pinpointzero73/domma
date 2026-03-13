@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorials - Domma CMS</title>
+    <link rel="canonical" href="https://dommajs.org/cms/tutorials/">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/cms-showcase.css">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="cms" data-layout-variant="subpage">
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Tutorials</div>
+        <div class="hero-subtitle">Step-by-step guides to build real things with Domma CMS</div>
+    </div>
+</div>
+<main class="container py-8">
+
+    <!-- Tutorial 1: Your First Page -->
+    <section class="card mb-6" data-section="Your First Page">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">1. Your First Page</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4"><strong>Goal:</strong> Create a published page that appears on your site.</p>
+
+            <h3 class="text-lg font-semibold mb-3">Steps</h3>
+            <ol class="mb-4" style="padding-left: 1.5rem; line-height: 2;">
+                <li><strong>Make sure your server is running:</strong>
+                    <pre><code class="language-bash">npm run dev</code></pre>
+                </li>
+                <li>In admin, navigate to <strong>Pages → New Page</strong>.</li>
+                <li>Set the title to <strong>"About Us"</strong>.</li>
+                <li>In the editor, write some Markdown content:
+                    <pre><code class="language-markdown">## Welcome to our site
+
+We are a team passionate about building great web experiences.
+
+Our story started in 2020 when we decided to...</code></pre>
+                </li>
+                <li>Set the frontmatter field: <code>description: "Learn about our team and mission"</code></li>
+                <li>Change <code>draft</code> to <strong>false</strong> to publish the page.</li>
+                <li>Click <strong>Save</strong>.</li>
+                <li>Visit <code>http://localhost:3000/about</code> to see your page live.</li>
+            </ol>
+
+            <div class="card bg-surface-2 p-4">
+                <h4 class="font-semibold mb-2"><span data-icon="check-circle"></span> What you learned</h4>
+                <p>URL mapping, frontmatter fields, publishing workflow, and Markdown editing in the CMS editor.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tutorial 2: Contact Form -->
+    <section class="card mb-6" data-section="Contact Form">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">2. Contact Form</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4"><strong>Goal:</strong> Build a contact form that sends email notifications and stores submissions.</p>
+
+            <h3 class="text-lg font-semibold mb-3">Steps</h3>
+            <ol class="mb-4" style="padding-left: 1.5rem; line-height: 2;">
+                <li>
+                    <strong>Create a collection for contacts</strong> (to store submissions):
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>Admin → <strong>Collections → New Collection</strong></li>
+                        <li>Name: <strong>"Contact Submissions"</strong>, slug: <code>contact-submissions</code></li>
+                        <li>Add fields: <code>name</code> (string, required), <code>email</code> (email, required), <code>message</code> (textarea, required), <code>createdAt</code> (datetime)</li>
+                        <li>Click <strong>Save</strong></li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Build the form:</strong>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>Admin → <strong>Forms → New Form</strong></li>
+                        <li>Name: <strong>"Contact"</strong>, slug: <code>contact</code></li>
+                        <li>Add fields: Name (text, required), Email (email, required), Message (textarea, required)</li>
+                        <li>Submit button text: <strong>"Send Message"</strong></li>
+                        <li>Success message: <strong>"Thank you! We'll be in touch soon."</strong></li>
+                        <li>Click <strong>Save</strong></li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Add an email trigger:</strong>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>In the form editor → <strong>Triggers</strong> tab → <strong>Add Trigger → Email</strong></li>
+                        <li>To: <code>your@email.com</code></li>
+                        <li>Subject: <code>New contact from &#123;&#123;name&#125;&#125;</code></li>
+                        <li>Body:
+                            <pre><code class="language-text">Name: {{name}}
+Email: {{email}}
+Message: {{message}}</code></pre>
+                        </li>
+                        <li>Click <strong>Save</strong></li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Embed the form in a page:</strong>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>Admin → Pages → New Page: <strong>"Contact Us"</strong>, slug <code>contact</code></li>
+                        <li>Add this content:
+                            <pre><code class="language-markdown">## Get in Touch
+
+We'd love to hear from you.
+
+[form slug="contact"]</code></pre>
+                        </li>
+                    </ul>
+                </li>
+                <li>Visit <code>http://localhost:3000/contact</code> — fill and submit the form.</li>
+                <li>Check <strong>Admin → Forms → Contact → Submissions</strong> to see the stored entry.</li>
+            </ol>
+
+            <div class="card bg-surface-2 p-4">
+                <h4 class="font-semibold mb-2"><span data-icon="check-circle"></span> What you learned</h4>
+                <p>Creating collections to store data, using the form builder, configuring email triggers, and embedding forms via shortcodes.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tutorial 3: Blog with Collections -->
+    <section class="card mb-6" data-section="Blog with Collections">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">3. Blog with Collections</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4"><strong>Goal:</strong> Create a blog with a posts collection, listing page, and article pages.</p>
+
+            <h3 class="text-lg font-semibold mb-3">Steps</h3>
+            <ol class="mb-4" style="padding-left: 1.5rem; line-height: 2;">
+                <li>
+                    <strong>Create Posts collection:</strong>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>Admin → <strong>Collections → New Collection</strong></li>
+                        <li>Name: <strong>"Posts"</strong>, slug: <code>posts</code></li>
+                        <li>Add fields: <code>title</code> (string, required), <code>slug</code> (string, required), <code>content</code> (richtext), <code>excerpt</code> (text), <code>publishedAt</code> (date), <code>author</code> (string), <code>tags</code> (tags), <code>image</code> (media), <code>published</code> (boolean, default: false)</li>
+                        <li>Click <strong>Save</strong></li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Create a few posts:</strong>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>Admin → Collections → Posts → <strong>New Entry</strong></li>
+                        <li>Fill: title <strong>"Hello World"</strong>, slug <code>hello-world</code>, content <em>"My first post!"</em>, published: <strong>true</strong></li>
+                        <li>Click <strong>Save</strong>. Repeat for 2 more posts.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Create a listing page:</strong>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>Admin → Pages → New Page: <strong>"Blog"</strong>, slug <code>blog</code></li>
+                        <li>Add this content:
+                            <pre><code class="language-markdown"># Blog
+
+Latest articles from our team.
+
+[collection slug="posts" filter="published:true" orderBy="publishedAt" order="desc" limit="10"]</code></pre>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Customise with a block template:</strong>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>Admin → <strong>Blocks → New Block</strong>: <strong>"Post Card"</strong>, slug <code>post-card</code></li>
+                        <li>Template:
+                            <pre><code class="language-html">&lt;div class="card mb-4"&gt;
+    &#123;&#123;#image&#125;&#125;&lt;img src="&#123;&#123;image&#125;&#125;" alt="&#123;&#123;title&#125;&#125;" class="card-img-top"&gt;&#123;&#123;/image&#125;&#125;
+    &lt;div class="card-body"&gt;
+        &lt;h3&gt;&lt;a href="/blog/&#123;&#123;slug&#125;&#125;"&gt;&#123;&#123;title&#125;&#125;&lt;/a&gt;&lt;/h3&gt;
+        &lt;p class="text-muted text-sm"&gt;&#123;&#123;publishedAt&#125;&#125; &middot; &#123;&#123;author&#125;&#125;&lt;/p&gt;
+        &lt;p&gt;&#123;&#123;excerpt&#125;&#125;&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </li>
+                    </ul>
+                </li>
+                <li>Visit <code>http://localhost:3000/blog</code> to see your post listing.</li>
+            </ol>
+
+            <div class="card bg-surface-2 p-4">
+                <h4 class="font-semibold mb-2"><span data-icon="check-circle"></span> What you learned</h4>
+                <p>Defining collections with multiple field types, using the <code>[collection]</code> shortcode with filtering and ordering, and creating block templates to control how entries are rendered.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tutorial 4: User Roles -->
+    <section class="card mb-6" data-section="User Roles">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">4. User Roles</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4"><strong>Goal:</strong> Create a "Moderator" role that can manage content but not system settings.</p>
+
+            <h3 class="text-lg font-semibold mb-3">Steps</h3>
+            <ol class="mb-4" style="padding-left: 1.5rem; line-height: 2;">
+                <li>
+                    <strong>Create the role:</strong>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>Admin → <strong>Roles → New Role</strong></li>
+                        <li>Name: <strong>"Moderator"</strong>, slug: <code>moderator</code></li>
+                        <li><strong>Enable</strong> permissions: pages (create, read, update, delete), collections (read, update), forms (read), media (create, read, update, delete), blocks (read, update)</li>
+                        <li><strong>Leave disabled:</strong> users, roles, settings, navigation, plugins</li>
+                        <li>Click <strong>Save</strong></li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Create a test user:</strong>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>Admin → <strong>Users → New User</strong></li>
+                        <li>Name: <strong>"Jane Doe"</strong>, email: <code>jane@example.com</code>, password: (set one)</li>
+                        <li>Role: <strong>Moderator</strong></li>
+                        <li>Click <strong>Save</strong></li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Test the permissions:</strong>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>Log out (top-right → <strong>Sign Out</strong>)</li>
+                        <li>Log in as <code>jane@example.com</code></li>
+                        <li>Verify: <strong>Pages</strong>, <strong>Media</strong>, <strong>Blocks</strong> are visible in the sidebar</li>
+                        <li>Verify: <strong>Users</strong>, <strong>Settings</strong> are <em>not</em> visible</li>
+                    </ul>
+                </li>
+                <li><strong>Observe the sidebar adapts</strong> — only permitted sections appear based on the role's permission set.</li>
+            </ol>
+
+            <div class="card bg-surface-2 p-4">
+                <h4 class="font-semibold mb-2"><span data-icon="check-circle"></span> What you learned</h4>
+                <p>Creating custom roles with granular permission sets, assigning roles to users, and how the admin sidebar adapts dynamically to the authenticated user's permissions.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tutorial 5: Going Pro -->
+    <section class="card mb-6" data-section="Going Pro">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">5. Going Pro</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4"><strong>Goal:</strong> Enable Pro mode, connect MongoDB, create a View, and create an Action.</p>
+
+            <div class="card bg-surface-2 p-4 mb-4">
+                <h4 class="font-semibold mb-1"><span data-icon="info"></span> Pre-requisite</h4>
+                <p>MongoDB running locally or a connection string to MongoDB Atlas.</p>
+            </div>
+
+            <h3 class="text-lg font-semibold mb-3">Steps</h3>
+            <ol class="mb-4" style="padding-left: 1.5rem; line-height: 2;">
+                <li>
+                    <strong>Set <code>MONGO_URI</code> in your environment:</strong>
+                    <pre><code class="language-bash">echo "MONGO_URI=mongodb://localhost:27017/domma-cms" >> .env</code></pre>
+                </li>
+                <li>
+                    <strong>Enable Pro mode:</strong>
+                    <pre><code class="language-bash">npm run pro</code></pre>
+                    Then restart the server:
+                    <pre><code class="language-bash">npm run dev</code></pre>
+                </li>
+                <li>
+                    <strong>Create a View</strong> (Top Published Posts):
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>Admin → <strong>Views → New View</strong></li>
+                        <li>Name: <strong>"Top Posts"</strong>, slug: <code>top-posts</code></li>
+                        <li>Source: <strong>Posts</strong> collection</li>
+                        <li>Pipeline:
+                            <pre><code class="language-json">[
+  { "$match": { "published": true } },
+  { "$sort": { "publishedAt": -1 } },
+  { "$limit": 5 }
+]</code></pre>
+                        </li>
+                        <li>Display mode: <strong>table</strong></li>
+                        <li>Click <strong>Save</strong>, then <strong>Preview</strong> to see results.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Embed the View in a page:</strong>
+                    <pre><code class="language-markdown">## Featured Posts
+
+[view slug="top-posts"]</code></pre>
+                </li>
+                <li>
+                    <strong>Create an Action</strong> (New User Welcome Email):
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>Admin → <strong>Actions → New Action</strong></li>
+                        <li>Name: <strong>"Welcome Email"</strong>, slug: <code>welcome-email</code></li>
+                        <li>Add step: <strong>Email</strong></li>
+                        <li>To: <code>&#123;&#123;input.email&#125;&#125;</code></li>
+                        <li>Subject: <code>Welcome to &#123;&#123;site.title&#125;&#125;!</code></li>
+                        <li>Body:
+                            <pre><code class="language-text">Hi {{input.name}},
+
+Welcome aboard! Visit our site at {{site.url}}
+
+Cheers,
+{{site.title}} Team</code></pre>
+                        </li>
+                        <li>Click <strong>Save</strong></li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Test the Action:</strong>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>In Action Editor → <strong>Test</strong> tab</li>
+                        <li>Input:
+                            <pre><code class="language-json">{ "email": "test@example.com", "name": "Test User" }</code></pre>
+                        </li>
+                        <li>Click <strong>Run</strong> — check your inbox for the test email.</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <div class="card bg-surface-2 p-4">
+                <h4 class="font-semibold mb-2"><span data-icon="check-circle"></span> What you learned</h4>
+                <p>Setting up Pro mode with a MongoDB connection, building Views using MongoDB aggregation pipelines, embedding views via the <code>[view]</code> shortcode, and creating Actions to automate multi-step workflows such as sending welcome emails.</p>
+            </div>
+        </div>
+    </section>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>Domma.icons.scan();</script>
+</body>
+</html>

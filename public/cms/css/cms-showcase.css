@@ -1,0 +1,290 @@
+/**
+ * CMS Showcase Styles
+ * Domma CMS demo and documentation styles
+ */
+
+:root {
+  --cms-accent-gold: #f59e0b;
+  --cms-accent-dark: #1f2937;
+  --cms-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --cms-card-hover-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== Feature Card Grid ===== */
+.cms-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+@media (max-width: 768px) {
+  .cms-features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cms-features-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* ===== Feature Card ===== */
+.cms-feature-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: var(--cms-card-shadow);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cms-feature-card:hover {
+  box-shadow: var(--cms-card-hover-shadow);
+  border-color: var(--cms-accent-gold);
+  transform: translateY(-2px);
+}
+
+.cms-feature-card-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.cms-feature-card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--cms-accent-dark);
+}
+
+.cms-feature-card-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  flex: 1;
+  margin-bottom: 0.75rem;
+}
+
+.cms-feature-card-badge {
+  display: inline-block;
+  align-self: flex-start;
+}
+
+/* ===== Pro Badge ===== */
+.badge-pro {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background-color: var(--cms-accent-gold);
+  color: var(--cms-accent-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Install Command Block ===== */
+.cms-install-cmd {
+  display: block;
+  padding: 1rem;
+  background-color: #1f2937;
+  color: #e5e7eb;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+  position: relative;
+  border: 1px solid #374151;
+}
+
+.cms-install-cmd-wrapper {
+  position: relative;
+  margin: 1rem 0;
+}
+
+.cms-install-cmd-copy {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--cms-accent-gold);
+  color: var(--cms-accent-dark);
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cms-install-cmd-copy:hover {
+  background-color: #fbbf24;
+}
+
+/* ===== Differentiators Grid ===== */
+.cms-differentiators {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+@media (max-width: 768px) {
+  .cms-differentiators {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cms-differentiators {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* ===== Differentiator Item ===== */
+.cms-differentiator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+}
+
+.cms-differentiator-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cms-differentiator-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--cms-accent-dark);
+  margin-bottom: 0.5rem;
+}
+
+.cms-differentiator-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* ===== Dogfooding Section ===== */
+.cms-dogfood-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.cms-dogfood-tag {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #f3f4f6;
+  color: var(--cms-accent-dark);
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.cms-dogfood-tag:hover {
+  background-color: #e5e7eb;
+}
+
+/* ===== Section Intro ===== */
+.cms-section-intro {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: #4b5563;
+  margin: 1.5rem 0;
+  max-width: 65ch;
+}
+
+/* ===== CMS Hero Section ===== */
+.cms-hero {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+}
+
+.cms-hero-subtitle {
+  max-width: 70ch;
+  margin: 0 auto;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+.cms-hero-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--cms-accent-dark);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  .cms-hero {
+    padding: 3rem 1.5rem;
+  }
+
+  .cms-hero-title {
+    font-size: 2rem;
+  }
+
+  .cms-hero-subtitle {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cms-hero {
+    padding: 2rem 1rem;
+  }
+
+  .cms-hero-title {
+    font-size: 1.5rem;
+  }
+
+  .cms-hero-subtitle {
+    font-size: 0.95rem;
+  }
+}
+
+/* ===== Utility Overrides ===== */
+.cms-spaced-section {
+  margin: 3rem 0;
+}
+
+.cms-text-center {
+  text-align: center;
+}
+
+.cms-text-muted {
+  color: #6b7280;
+}
+
+.cms-mt-large {
+  margin-top: 2rem;
+}
+
+.cms-mb-large {
+  margin-bottom: 2rem;
+}

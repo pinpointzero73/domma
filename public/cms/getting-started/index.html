@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started - Domma CMS</title>
+    <link rel="canonical" href="https://dommajs.org/cms/getting-started/">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/cms-showcase.css">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="cms" data-layout-variant="subpage">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Getting Started</div>
+        <div class="hero-subtitle">Install Domma CMS and have your site running in minutes</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <!-- 1. Installation -->
+    <section class="card mb-6" data-section="Installation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="download"></span> Installation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The fastest way to get started with Domma CMS is via the <code>npx</code> scaffolder. You will need <strong>Node.js 18+</strong> and <strong>npm 7+</strong> installed on your machine.</p>
+
+            <h3 class="text-lg font-semibold mb-2">Prerequisites</h3>
+            <ul class="mb-4">
+                <li><span data-icon="check-circle"></span> Node.js 18 or higher — <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a></li>
+                <li><span data-icon="check-circle"></span> npm 7 or higher (bundled with Node.js)</li>
+                <li><span data-icon="check-circle"></span> A terminal / command prompt</li>
+            </ul>
+
+            <h3 class="text-lg font-semibold mb-2">Create a new project</h3>
+            <p class="mb-3">Run the following command, replacing <code>my-site</code> with your desired project name:</p>
+
+            <pre class="mb-4"><code>npx domma-cms my-site</code></pre>
+
+            <p class="mb-4">This single command will:</p>
+            <ol class="mb-4">
+                <li>Scaffold a new Domma CMS project into the <code>my-site/</code> directory</li>
+                <li>Install all npm dependencies automatically</li>
+                <li>Launch the interactive <strong>Setup Wizard</strong> to configure your site</li>
+                <li>Start the development server once setup is complete</li>
+            </ol>
+
+            <h3 class="text-lg font-semibold mb-2">Specifying a directory name</h3>
+            <p class="mb-3">Pass a project name to scaffold directly into a named directory:</p>
+            <pre class="mb-4"><code>npx domma-cms my-blog
+npx domma-cms portfolio
+npx domma-cms company-site</code></pre>
+
+            <p>After installation, open your browser and navigate to <code>http://localhost:3000</code> to see your new site, and <code>http://localhost:3000/admin</code> to access the admin panel.</p>
+        </div>
+    </section>
+
+    <!-- 2. Setup Wizard -->
+    <section class="card mb-6" data-section="Setup Wizard">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="settings"></span> Setup Wizard</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The Setup Wizard runs automatically after <code>npm install</code> completes. It guides you through the essential configuration steps needed to get your site up and running.</p>
+
+            <h3 class="text-lg font-semibold mb-3">What the wizard configures</h3>
+
+            <h4 class="font-semibold mb-2">Admin Account</h4>
+            <p class="mb-3">You will be prompted to enter an email address and password for the initial administrator account. Passwords are hashed using <strong>bcrypt</strong> (12 rounds) before storage — your plaintext password is never persisted.</p>
+
+            <h4 class="font-semibold mb-2">Site Identity</h4>
+            <p class="mb-3">Set your site's title and tagline. These are saved to <code>config/site.json</code> and are available throughout your templates as <code>{{site.title}}</code> and <code>{{site.tagline}}</code>.</p>
+
+            <h4 class="font-semibold mb-2">Theme Selection</h4>
+            <p class="mb-3">Choose from 24 built-in Domma themes — 12 families, each with a dark and light variant:</p>
+            <div class="grid grid-cols-4 gap-2 mb-4">
+                <code class="badge">charcoal-dark</code>
+                <code class="badge">charcoal-light</code>
+                <code class="badge">ocean-dark</code>
+                <code class="badge">ocean-light</code>
+                <code class="badge">forest-dark</code>
+                <code class="badge">forest-light</code>
+                <code class="badge">sunset-dark</code>
+                <code class="badge">sunset-light</code>
+                <code class="badge">royal-dark</code>
+                <code class="badge">royal-light</code>
+                <code class="badge">lemon-dark</code>
+                <code class="badge">lemon-light</code>
+                <code class="badge">silver-dark</code>
+                <code class="badge">silver-light</code>
+                <code class="badge">grayve-dark</code>
+                <code class="badge">grayve-light</code>
+                <code class="badge">mint-dark</code>
+                <code class="badge">mint-light</code>
+                <code class="badge">christmas-dark</code>
+                <code class="badge">christmas-light</code>
+                <code class="badge">unicorn-dark</code>
+                <code class="badge">unicorn-light</code>
+                <code class="badge">dreamy-dark</code>
+                <code class="badge">dreamy-light</code>
+            </div>
+
+            <h4 class="font-semibold mb-2">Security</h4>
+            <p class="mb-4">A cryptographically random <code>JWT_SECRET</code> is generated automatically and written to your <code>.env</code> file. You do not need to set this manually.</p>
+
+            <div class="alert alert-info mb-0">
+                <span data-icon="info"></span>
+                <strong>Re-run the wizard at any time</strong> with <code>npm run setup</code>. Running setup again will prompt you to overwrite existing values or keep them.
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Project Structure -->
+    <section class="card mb-6" data-section="Project Structure">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="folder"></span> Project Structure</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">A freshly scaffolded Domma CMS project has the following layout:</p>
+
+            <pre class="mb-4"><code>my-site/
+├── admin/              # Domma SPA admin panel (read-only)
+├── config/             # Site configuration files
+│   ├── site.json       #   Global site settings (title, tagline, theme)
+│   ├── navigation.json #   Primary navigation structure
+│   └── plugins.json    #   Enabled plugins and their options
+├── content/
+│   └── pages/          # Markdown content files (one file per page)
+├── media/              # Uploaded media files (images, PDFs, etc.)
+├── plugins/            # Custom and third-party plugins
+├── server/             # Fastify server internals (edit with care)
+├── .env                # Environment variables (gitignored)
+├── package.json
+└── server.js           # Entry point — run this to start the server</code></pre>
+
+            <h3 class="text-lg font-semibold mb-3">Key directories explained</h3>
+
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>Directory / File</th>
+                        <th>Purpose</th>
+                        <th>Edit?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>admin/</code></td>
+                        <td>The Domma-powered SPA admin panel. Updated via npm.</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td><code>config/</code></td>
+                        <td>JSON configuration for your site's structure and behaviour.</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td><code>content/pages/</code></td>
+                        <td>Markdown files representing your site's pages and collections.</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td><code>media/</code></td>
+                        <td>Static media uploaded via the admin panel.</td>
+                        <td>Managed</td>
+                    </tr>
+                    <tr>
+                        <td><code>plugins/</code></td>
+                        <td>Extend CMS functionality with custom or community plugins.</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td><code>server/</code></td>
+                        <td>Fastify server internals, routing, and API handlers.</td>
+                        <td>Rarely</td>
+                    </tr>
+                    <tr>
+                        <td><code>.env</code></td>
+                        <td>Secrets and environment-specific settings. Never commit this file.</td>
+                        <td>Yes</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 4. Requirements -->
+    <section class="card mb-6" data-section="Requirements">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="server"></span> Requirements</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma CMS is designed to run on any standard Node.js hosting environment. The core system has minimal requirements.</p>
+
+            <table class="table mb-4">
+                <thead>
+                    <tr>
+                        <th>Dependency</th>
+                        <th>Version</th>
+                        <th>Required?</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Node.js</strong></td>
+                        <td>18+</td>
+                        <td><span class="badge badge-success">Required</span></td>
+                        <td>LTS recommended</td>
+                    </tr>
+                    <tr>
+                        <td><strong>npm</strong></td>
+                        <td>7+</td>
+                        <td><span class="badge badge-success">Required</span></td>
+                        <td>Bundled with Node.js 15+</td>
+                    </tr>
+                    <tr>
+                        <td><strong>pm2</strong></td>
+                        <td>Any</td>
+                        <td><span class="badge badge-secondary">Optional</span></td>
+                        <td>Recommended for production process management</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MongoDB</strong></td>
+                        <td>6+</td>
+                        <td><span class="badge badge-secondary">Optional</span></td>
+                        <td>Pro mode only — not required for file-based operation</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mb-2">Default port</h3>
+            <p class="mb-0">Domma CMS listens on port <code>3000</code> by default. This can be changed by setting <code>PORT</code> in your <code>.env</code> file. For production deployments behind a reverse proxy (nginx, Caddy, etc.), it is recommended to keep the default internal port and expose only 80/443 externally.</p>
+        </div>
+    </section>
+
+    <!-- 5. File-Only Mode -->
+    <section class="card mb-6" data-section="File-Only Mode">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="file-text"></span> File-Only Mode <span class="badge badge-success ml-2">Default</span></h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Out of the box, Domma CMS operates in <strong>File-Only Mode</strong> — no database required. All content, collections, and form submissions are stored as flat files on disk.</p>
+
+            <h3 class="text-lg font-semibold mb-3">What is stored where?</h3>
+
+            <table class="table mb-4">
+                <thead>
+                    <tr>
+                        <th>Data type</th>
+                        <th>Storage format</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Pages</td>
+                        <td>Markdown with YAML front matter</td>
+                        <td><code>content/pages/</code></td>
+                    </tr>
+                    <tr>
+                        <td>Collections</td>
+                        <td>JSON files</td>
+                        <td><code>content/collections/</code></td>
+                    </tr>
+                    <tr>
+                        <td>Form submissions</td>
+                        <td>JSON files (one per submission)</td>
+                        <td><code>content/submissions/</code></td>
+                    </tr>
+                    <tr>
+                        <td>Admin user</td>
+                        <td>JSON</td>
+                        <td><code>config/admin.json</code></td>
+                    </tr>
+                    <tr>
+                        <td>Media</td>
+                        <td>Raw files</td>
+                        <td><code>media/</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mb-3">Is it right for your project?</h3>
+            <p class="mb-3">File-Only Mode is an excellent choice for:</p>
+            <ul class="mb-4">
+                <li><span data-icon="check-circle"></span> Blogs, documentation sites, and portfolios</li>
+                <li><span data-icon="check-circle"></span> Sites with up to approximately <strong>10,000 pages</strong></li>
+                <li><span data-icon="check-circle"></span> Teams that want their content version-controlled alongside code</li>
+                <li><span data-icon="check-circle"></span> Deployments to shared hosting or environments without a database</li>
+                <li><span data-icon="check-circle"></span> Rapid prototyping and proof-of-concept projects</li>
+            </ul>
+
+            <div class="alert alert-info mb-0">
+                <span data-icon="info"></span>
+                Files in <code>content/</code> are plain text and can be edited directly in your IDE, committed to Git, and deployed like any other source file.
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Pro Mode -->
+    <section class="card mb-6" data-section="Pro Mode">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="star"></span> Pro Mode <span class="badge badge-warning ml-2">MongoDB</span></h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">For sites that require advanced querying, large-scale collections, or complex workflow automation, <strong>Pro Mode</strong> unlocks MongoDB-backed storage and additional capabilities.</p>
+
+            <h3 class="text-lg font-semibold mb-2">Enabling Pro Mode</h3>
+            <p class="mb-3">First, ensure MongoDB 6+ is running and accessible, then run:</p>
+            <pre class="mb-4"><code>npm run pro</code></pre>
+            <p class="mb-4">The wizard will prompt for your MongoDB connection string and write it to <code>.env</code>:</p>
+            <pre class="mb-4"><code>MONGO_URI=mongodb://localhost:27017/domma-cms</code></pre>
+
+            <h3 class="text-lg font-semibold mb-3">What Pro Mode unlocks</h3>
+
+            <table class="table mb-4">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Views</strong></td>
+                        <td>Define reusable MongoDB aggregation pipelines via the admin panel — no code required</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Actions</strong></td>
+                        <td>Multi-step automated workflows triggered by content events (create, update, delete, schedule)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Row-Level Access Control</strong></td>
+                        <td>Restrict read and write access to individual collection entries per user or role</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MongoAdapter</strong></td>
+                        <td>Collections transparently backed by MongoDB for high-volume, high-concurrency workloads</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Full-Text Search</strong></td>
+                        <td>Atlas Search or native MongoDB text indexes for content-wide search</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mb-2">Seed sample data</h3>
+            <p class="mb-3">To populate your MongoDB instance with example content and collections:</p>
+            <pre class="mb-4"><code>npm run seed</code></pre>
+
+            <div class="alert alert-warning mb-0">
+                <span data-icon="alert-triangle"></span>
+                <strong>Migration note:</strong> Switching from File-Only to Pro Mode does not automatically migrate existing content. Use <code>npm run migrate</code> (available in Pro Mode) to import your flat-file content into MongoDB.
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. npm Scripts -->
+    <section class="card mb-6" data-section="npm Scripts">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="terminal"></span> npm Scripts</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">All common tasks are available as npm scripts. Run them from the root of your project directory.</p>
+
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>Script</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>npm run dev</code></td>
+                        <td>Start the development server with hot reload. File changes are reflected immediately without a restart.</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm start</code></td>
+                        <td>Start the production server. No file watching or hot reload — optimised for stability.</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm run setup</code></td>
+                        <td>Re-run the interactive Setup Wizard. Prompts you to update or keep existing configuration values.</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm run seed</code></td>
+                        <td>Populate your site with sample pages, collections, and media to explore the CMS features.</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm run reset</code></td>
+                        <td><strong class="text-danger">Destructive.</strong> Resets the site to factory defaults. All content and configuration will be deleted. Prompts for confirmation.</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm run pro</code></td>
+                        <td>Enable Pro Mode by configuring a MongoDB connection. Unlocks advanced features.</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm run backup</code></td>
+                        <td>Create a timestamped <code>.tar.gz</code> backup archive of your content, config, and media directories.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 8. Environment Variables -->
+    <section class="card mb-6" data-section="Environment Variables">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="lock"></span> Environment Variables</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma CMS uses a <code>.env</code> file in the project root to manage secrets and environment-specific settings. This file is automatically created by the Setup Wizard and is included in <code>.gitignore</code> by default.</p>
+
+            <h3 class="text-lg font-semibold mb-2">Default <code>.env</code> contents</h3>
+
+            <pre class="mb-4"><code># ─── Server ───────────────────────────────────────────────────────────────────
+PORT=3000                    # Port the server listens on (default: 3000)
+NODE_ENV=production          # 'development' enables verbose logging and hot reload
+
+# ─── Security ─────────────────────────────────────────────────────────────────
+JWT_SECRET=&lt;auto-generated&gt;  # Secret key for signing JWTs — do not change after launch
+
+# ─── Pro Mode (optional) ──────────────────────────────────────────────────────
+MONGO_URI=                   # MongoDB connection string — leave blank for File-Only Mode</code></pre>
+
+            <h3 class="text-lg font-semibold mb-3">Variable reference</h3>
+
+            <table class="table mb-4">
+                <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>PORT</code></td>
+                        <td><code>3000</code></td>
+                        <td>The TCP port the Fastify server binds to. Change this if another service occupies port 3000.</td>
+                    </tr>
+                    <tr>
+                        <td><code>NODE_ENV</code></td>
+                        <td><code>production</code></td>
+                        <td>Set to <code>development</code> for verbose error output, detailed logging, and hot reload.</td>
+                    </tr>
+                    <tr>
+                        <td><code>JWT_SECRET</code></td>
+                        <td>Auto-generated</td>
+                        <td>A random 64-character secret used to sign and verify admin session tokens. Changing this after launch will invalidate all active sessions.</td>
+                    </tr>
+                    <tr>
+                        <td><code>MONGO_URI</code></td>
+                        <td><em>empty</em></td>
+                        <td>MongoDB connection string. When empty, Domma CMS runs in File-Only Mode. Set via <code>npm run pro</code>.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-danger mb-0">
+                <span data-icon="alert-triangle"></span>
+                <strong>Never commit your <code>.env</code> file to version control.</strong> It contains your <code>JWT_SECRET</code> and potentially your database credentials. The scaffolder adds <code>.env</code> to <code>.gitignore</code> automatically, but always double-check before pushing to a public repository.
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>Domma.icons.scan();</script>
+</body>
+</html>

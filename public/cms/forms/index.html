@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms - Domma CMS</title>
+    <link rel="canonical" href="https://dommajs.org/cms/forms/">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/cms-showcase.css">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="cms" data-layout-variant="subpage">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Forms</div>
+        <div class="hero-subtitle">Blueprint-driven form builder with wizard mode, conditional logic and triggers</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <!-- 1. Overview -->
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="layers"></span> Overview</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Forms are first-class citizens in Domma CMS. Create forms in the admin panel, define fields with validation, and embed them in any page with a single shortcode. Submissions are stored and manageable in the admin, with optional email and webhook triggers.</p>
+
+            <p class="mb-4">Every form is powered by Domma's blueprint-driven <strong>Form Builder</strong> — the same engine used throughout the Domma framework. This means forms automatically benefit from client-side validation, reactive models, and consistent styling with zero additional configuration.</p>
+
+            <h3 class="text-lg font-semibold mb-3">How it works</h3>
+            <ol class="mb-4">
+                <li><span data-icon="edit"></span> <strong>Build</strong> — Create and configure a form in the admin panel (Admin → Forms → New Form)</li>
+                <li><span data-icon="check-circle"></span> <strong>Validate</strong> — Define per-field validation rules with custom error messages</li>
+                <li><span data-icon="code"></span> <strong>Embed</strong> — Drop a shortcode on any page: <code>[form slug="contact"]</code></li>
+                <li><span data-icon="inbox"></span> <strong>Collect</strong> — Submissions are stored and viewable in the admin, with optional trigger actions</li>
+            </ol>
+
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <div class="card card-sm text-center">
+                    <div class="card-body">
+                        <div class="text-2xl font-bold text-primary mb-1">15</div>
+                        <div class="text-sm text-muted">Field Types</div>
+                    </div>
+                </div>
+                <div class="card card-sm text-center">
+                    <div class="card-body">
+                        <div class="text-2xl font-bold text-primary mb-1">3</div>
+                        <div class="text-sm text-muted">Trigger Types</div>
+                    </div>
+                </div>
+                <div class="card card-sm text-center">
+                    <div class="card-body">
+                        <div class="text-2xl font-bold text-primary mb-1">8</div>
+                        <div class="text-sm text-muted">Condition Operators</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info mb-0">
+                <span data-icon="info"></span>
+                Forms work in both <strong>File-Only Mode</strong> (submissions stored as JSON files) and <strong>Pro Mode</strong> (submissions stored in MongoDB with advanced querying and filtering).
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Form Builder -->
+    <section class="card mb-6" data-section="Form Builder">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="tool"></span> Form Builder</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The visual Form Builder lets you construct and configure forms entirely from the admin panel — no code required. Navigate to <strong>Admin → Forms → New Form</strong> to get started.</p>
+
+            <h3 class="text-lg font-semibold mb-3">Form settings</h3>
+            <p class="mb-3">Before adding fields, configure the top-level form properties:</p>
+
+            <table class="table mb-5">
+                <thead>
+                    <tr>
+                        <th>Setting</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Form Name</strong></td>
+                        <td>Internal label used in the admin panel</td>
+                        <td><code>Contact Form</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Slug</strong></td>
+                        <td>URL-safe identifier used in the embed shortcode</td>
+                        <td><code>contact</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Submit Button Text</strong></td>
+                        <td>Label shown on the submit button</td>
+                        <td><code>Send Message</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Success Message</strong></td>
+                        <td>Message shown to the user after a successful submission</td>
+                        <td><code>Thanks! We'll be in touch shortly.</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Layout</strong></td>
+                        <td>Visual arrangement of fields</td>
+                        <td><code>stacked</code>, <code>2-column grid</code>, <code>inline</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Wizard Mode</strong></td>
+                        <td>Split the form into multiple steps with a progress indicator</td>
+                        <td><code>true</code> / <code>false</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mb-3">Adding and arranging fields</h3>
+            <ol class="mb-4">
+                <li>Click <strong>Add Field</strong> and choose a field type from the panel on the right</li>
+                <li>Fill in the field label, name (used as the key in submission data), and placeholder text</li>
+                <li>Configure validation rules and set a custom error message for each rule</li>
+                <li><strong>Drag fields</strong> up and down the list to reorder them — the order here matches the rendered form</li>
+                <li>In Wizard Mode, assign each field to a <strong>Step</strong> using the step selector on the field card</li>
+            </ol>
+
+            <h3 class="text-lg font-semibold mb-2">Live preview</h3>
+            <p class="mb-0">A live preview pane on the right-hand side of the builder renders the form exactly as it will appear to visitors, including validation states and the current theme. Changes are reflected in real time as you add, remove, or reorder fields.</p>
+        </div>
+    </section>
+
+    <!-- 3. Field Types -->
+    <section class="card mb-6" data-section="Field Types">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="list"></span> Field Types</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma CMS supports 15 field types covering every common input scenario. All types are natively styled to match your site's active theme.</p>
+
+            <table class="table mb-4">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>text</code></td>
+                        <td>Single-line text input</td>
+                        <td>Default type for general text fields</td>
+                    </tr>
+                    <tr>
+                        <td><code>email</code></td>
+                        <td>Email address with format validation</td>
+                        <td>Automatically applies email pattern validation</td>
+                    </tr>
+                    <tr>
+                        <td><code>password</code></td>
+                        <td>Password input (masked)</td>
+                        <td>Value is never included in plain-text email triggers</td>
+                    </tr>
+                    <tr>
+                        <td><code>textarea</code></td>
+                        <td>Multi-line text</td>
+                        <td>Configurable rows; supports <code>minLength</code> / <code>maxLength</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>number</code></td>
+                        <td>Numeric input</td>
+                        <td>Supports <code>min</code>, <code>max</code>, and <code>step</code> attributes</td>
+                    </tr>
+                    <tr>
+                        <td><code>select</code></td>
+                        <td>Single-choice dropdown</td>
+                        <td>Options defined as a comma-separated list or JSON array</td>
+                    </tr>
+                    <tr>
+                        <td><code>multiselect</code></td>
+                        <td>Multiple-choice dropdown</td>
+                        <td>Stored as an array in submission data</td>
+                    </tr>
+                    <tr>
+                        <td><code>checkbox</code></td>
+                        <td>Single boolean checkbox</td>
+                        <td>Stored as <code>true</code> or <code>false</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>checkbox-group</code></td>
+                        <td>Multiple checkboxes from a defined option list</td>
+                        <td>Selected values stored as an array</td>
+                    </tr>
+                    <tr>
+                        <td><code>radio</code></td>
+                        <td>Radio button group — pick one from several options</td>
+                        <td>Rendered as styled pill-style radio buttons</td>
+                    </tr>
+                    <tr>
+                        <td><code>date</code></td>
+                        <td>Native date picker</td>
+                        <td>Supports <code>min</code> and <code>max</code> date constraints</td>
+                    </tr>
+                    <tr>
+                        <td><code>file</code></td>
+                        <td>File upload</td>
+                        <td>Configurable accepted types and max file size; uploads saved to <code>media/uploads/</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>hidden</code></td>
+                        <td>Hidden value — not shown to the user</td>
+                        <td>Static value or dynamically populated from a URL query parameter</td>
+                    </tr>
+                    <tr>
+                        <td><code>rating</code></td>
+                        <td>Star rating (1–5)</td>
+                        <td>Rendered as interactive star icons; stored as an integer</td>
+                    </tr>
+                    <tr>
+                        <td><code>signature</code></td>
+                        <td>Canvas signature input</td>
+                        <td>Stored as a base64-encoded PNG data URI; downloadable from the submissions panel</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-info mb-0">
+                <span data-icon="info"></span>
+                All field types participate fully in <strong>Conditional Logic</strong> — any field can show or hide other fields based on its current value. See the Conditional Logic Engine section below.
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Validation -->
+    <section class="card mb-6" data-section="Validation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="shield"></span> Validation</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma CMS enforces validation on <strong>both the client and server</strong>. Client-side validation provides instant feedback; server-side validation ensures data integrity even when JavaScript is bypassed or disabled.</p>
+
+            <h3 class="text-lg font-semibold mb-3">Available validation rules</h3>
+
+            <table class="table mb-5">
+                <thead>
+                    <tr>
+                        <th>Rule</th>
+                        <th>Applies to</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>required</code></td>
+                        <td>All types</td>
+                        <td>Field must have a non-empty value before the form can be submitted</td>
+                    </tr>
+                    <tr>
+                        <td><code>minLength</code></td>
+                        <td><code>text</code>, <code>textarea</code>, <code>password</code></td>
+                        <td>Value must be at least <em>n</em> characters long</td>
+                    </tr>
+                    <tr>
+                        <td><code>maxLength</code></td>
+                        <td><code>text</code>, <code>textarea</code>, <code>password</code></td>
+                        <td>Value must not exceed <em>n</em> characters</td>
+                    </tr>
+                    <tr>
+                        <td><code>min</code></td>
+                        <td><code>number</code>, <code>date</code></td>
+                        <td>Value must be greater than or equal to <em>n</em></td>
+                    </tr>
+                    <tr>
+                        <td><code>max</code></td>
+                        <td><code>number</code>, <code>date</code></td>
+                        <td>Value must be less than or equal to <em>n</em></td>
+                    </tr>
+                    <tr>
+                        <td><code>pattern</code></td>
+                        <td><code>text</code>, <code>email</code></td>
+                        <td>Value must match the supplied regular expression</td>
+                    </tr>
+                    <tr>
+                        <td><code>email</code></td>
+                        <td><code>email</code></td>
+                        <td>Value must be a syntactically valid email address</td>
+                    </tr>
+                    <tr>
+                        <td><code>url</code></td>
+                        <td><code>text</code></td>
+                        <td>Value must be a syntactically valid URL (includes protocol)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mb-3">Custom error messages</h3>
+            <p class="mb-3">Every validation rule accepts a custom error message. Define it alongside the rule in the field configuration:</p>
+
+            <pre class="mb-4"><code>{
+  "name": "phone",
+  "type": "text",
+  "label": "Phone Number",
+  "validation": {
+    "required": { "value": true, "message": "Please enter your phone number." },
+    "pattern": {
+      "value": "^[\\d\\s\\+\\-\\(\\)]{7,20}$",
+      "message": "Please enter a valid phone number."
+    }
+  }
+}</code></pre>
+
+            <p class="mb-0">When no custom message is provided, Domma CMS falls back to sensible defaults (e.g. <em>"This field is required"</em>, <em>"Must be at least 8 characters"</em>).</p>
+        </div>
+    </section>
+
+    <!-- 5. Wizard Mode -->
+    <section class="card mb-6" data-section="Wizard Mode">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="arrow-right-circle"></span> Wizard Mode</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Wizard Mode splits a long form into a series of focused steps, each with its own title and progress indicator. This significantly improves completion rates for complex forms such as booking flows, registration processes, or multi-stage surveys.</p>
+
+            <h3 class="text-lg font-semibold mb-2">Enabling Wizard Mode</h3>
+            <p class="mb-3">Toggle <strong>Wizard Mode</strong> in the form settings panel in the admin. The <code>wizard</code> property is set to <code>true</code> in the stored form JSON:</p>
+
+            <pre class="mb-5"><code>{
+  "slug": "booking",
+  "wizard": true,
+  "steps": [
+    { "title": "Your Details" },
+    { "title": "Choose a Date" },
+    { "title": "Extras" },
+    { "title": "Confirm &amp; Submit" }
+  ]
+}</code></pre>
+
+            <h3 class="text-lg font-semibold mb-3">Assigning fields to steps</h3>
+            <p class="mb-3">Each field has a <code>stepTitle</code> property that assigns it to a named step. In the admin builder, use the <strong>Step</strong> dropdown on each field card:</p>
+
+            <pre class="mb-5"><code>{
+  "name": "full_name",
+  "type": "text",
+  "label": "Full Name",
+  "stepTitle": "Your Details"
+}</code></pre>
+
+            <h3 class="text-lg font-semibold mb-3">Wizard behaviour</h3>
+
+            <table class="table mb-4">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Behaviour</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Validation per step</strong></td>
+                        <td>Each step validates before the user can advance. Invalid fields are highlighted inline.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Progress bar</strong></td>
+                        <td>Displays the current step number and total (e.g. "Step 2 of 4") above the active fields.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Back button</strong></td>
+                        <td>Available on all steps after the first. Previously entered values are preserved when navigating back.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Summary step</strong></td>
+                        <td>Optionally display a read-only summary of all entered values on the final step before submission. Enable with <code>"summary": true</code> on the last step.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Step skip</strong></td>
+                        <td>Steps can be marked optional and skipped via a "Skip" link. Set <code>"optional": true</code> on a step definition.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-info mb-0">
+                <span data-icon="info"></span>
+                Wizard Mode is fully compatible with <strong>Conditional Logic</strong> — entire steps can be shown or hidden based on values entered in earlier steps.
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Conditional Logic Engine -->
+    <section class="card mb-6" data-section="Conditional Logic Engine">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="git-branch"></span> Conditional Logic Engine</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The Conditional Logic Engine allows fields and wizard steps to appear or disappear in real time based on values entered elsewhere in the form. Conditions are evaluated client-side as the user types — no page reload required.</p>
+
+            <h3 class="text-lg font-semibold mb-3">Condition syntax</h3>
+            <p class="mb-3">Each field or step accepts a <code>showIf</code> property containing a condition object or an array of condition objects:</p>
+
+            <pre class="mb-4"><code>{
+  "name": "company_name",
+  "type": "text",
+  "label": "Company Name",
+  "showIf": {
+    "field": "account_type",
+    "operator": "equals",
+    "value": "business"
+  }
+}</code></pre>
+
+            <h3 class="text-lg font-semibold mb-3">Available operators</h3>
+
+            <table class="table mb-5">
+                <thead>
+                    <tr>
+                        <th>Operator</th>
+                        <th>Description</th>
+                        <th>Works with</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>equals</code></td>
+                        <td>Field value exactly matches the given value</td>
+                        <td>All types</td>
+                    </tr>
+                    <tr>
+                        <td><code>notEquals</code></td>
+                        <td>Field value does not match the given value</td>
+                        <td>All types</td>
+                    </tr>
+                    <tr>
+                        <td><code>contains</code></td>
+                        <td>Field value includes the given string or array element</td>
+                        <td><code>text</code>, <code>multiselect</code>, <code>checkbox-group</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>notContains</code></td>
+                        <td>Field value does not include the given string or array element</td>
+                        <td><code>text</code>, <code>multiselect</code>, <code>checkbox-group</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>greaterThan</code></td>
+                        <td>Field value is numerically greater than the given value</td>
+                        <td><code>number</code>, <code>rating</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>lessThan</code></td>
+                        <td>Field value is numerically less than the given value</td>
+                        <td><code>number</code>, <code>rating</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>isEmpty</code></td>
+                        <td>Field has no value (empty string, null, or unchecked)</td>
+                        <td>All types</td>
+                    </tr>
+                    <tr>
+                        <td><code>isNotEmpty</code></td>
+                        <td>Field has any value</td>
+                        <td>All types</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mb-3">Multiple conditions with AND / OR</h3>
+            <p class="mb-3">Pass an array of condition objects and set a <code>combinator</code> to join them:</p>
+
+            <pre class="mb-4"><code>{
+  "name": "discount_code",
+  "type": "text",
+  "label": "Discount Code",
+  "showIf": {
+    "combinator": "AND",
+    "conditions": [
+      { "field": "plan",     "operator": "equals",    "value": "pro"  },
+      { "field": "referral", "operator": "isNotEmpty"                 }
+    ]
+  }
+}</code></pre>
+
+            <p class="mb-0">Conditions also apply to <strong>wizard steps</strong> — set <code>showIf</code> on a step definition using the same syntax to skip entire steps when they are not relevant to the user's choices.</p>
+        </div>
+    </section>
+
+    <!-- 7. Submissions Management -->
+    <section class="card mb-6" data-section="Submissions Management">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="inbox"></span> Submissions Management</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Every form submission is automatically stored and accessible from the admin panel. Navigate to <strong>Admin → Forms → [Form Name] → Submissions</strong> to view, filter, export, and delete entries.</p>
+
+            <h3 class="text-lg font-semibold mb-3">Submissions table</h3>
+            <p class="mb-3">The submissions view displays entries in a sortable, searchable table. Each column corresponds to a form field, and the table supports:</p>
+            <ul class="mb-4">
+                <li><span data-icon="arrow-up-down"></span> <strong>Column sorting</strong> — click any column header to sort ascending or descending</li>
+                <li><span data-icon="search"></span> <strong>Full-text search</strong> — filter entries across all field values</li>
+                <li><span data-icon="filter"></span> <strong>Date range filter</strong> — narrow submissions to a specific time window</li>
+                <li><span data-icon="eye"></span> <strong>Row detail view</strong> — click any row to see the full submission with all field values and metadata</li>
+            </ul>
+
+            <h3 class="text-lg font-semibold mb-3">Export</h3>
+            <p class="mb-3">Export all visible submissions (respecting active filters) to CSV with a single click. The exported file includes a header row and all field values, including arrays (joined with a semicolon).</p>
+
+            <h3 class="text-lg font-semibold mb-3">Deletion</h3>
+            <p class="mb-3">Delete submissions individually using the <strong>Delete</strong> button on the row detail panel, or select multiple rows and use the <strong>Delete Selected</strong> bulk action. Deletion is permanent and cannot be undone.</p>
+
+            <h3 class="text-lg font-semibold mb-3">Storage locations</h3>
+
+            <table class="table mb-4">
+                <thead>
+                    <tr>
+                        <th>Mode</th>
+                        <th>Location</th>
+                        <th>Format</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>File-Only Mode</strong></td>
+                        <td><code>data/forms/{slug}-submissions.json</code></td>
+                        <td>JSON array — one object per submission, appended on each submit</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pro Mode</strong></td>
+                        <td>MongoDB collection <code>form_submissions</code></td>
+                        <td>BSON documents with indexed <code>formSlug</code> and <code>submittedAt</code> fields</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-warning mb-0">
+                <span data-icon="alert-triangle"></span>
+                <strong>GDPR / data retention:</strong> Form submissions may contain personal data. Configure a <strong>retention period</strong> in form settings (e.g. auto-delete after 90 days) to limit how long personal data is held. Domma CMS does not automatically purge data unless a retention period is explicitly set.
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Anti-Spam -->
+    <section class="card mb-6" data-section="Anti-Spam">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="shield-off"></span> Anti-Spam</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma CMS ships with two complementary anti-spam mechanisms enabled by default. Both operate server-side and require no third-party service or CAPTCHA widget.</p>
+
+            <h3 class="text-lg font-semibold mb-3"><span data-icon="eye-off"></span> Honeypot field</h3>
+            <p class="mb-3">An invisible field is injected into every rendered form. It is hidden from human visitors via CSS (<code>display: none; visibility: hidden;</code>) but is visible to automated bots that parse raw HTML. When the server receives a submission where the honeypot field is populated, the submission is silently rejected with a <code>200 OK</code> response (to avoid revealing the mechanism to the bot).</p>
+            <p class="mb-4">The honeypot field name is randomised per form to prevent bots from explicitly targeting and ignoring it by name.</p>
+
+            <h3 class="text-lg font-semibold mb-3"><span data-icon="clock"></span> Rate limiting</h3>
+            <p class="mb-3">A per-form, per-IP rate limit prevents flooding. The default limit is <strong>5 submissions per IP address per hour</strong>. When the limit is exceeded, the server returns <code>429 Too Many Requests</code> and the form displays a user-friendly message.</p>
+            <p class="mb-3">Configure limits per form in the form settings:</p>
+
+            <pre class="mb-4"><code>{
+  "slug": "contact",
+  "antispam": {
+    "honeypot": true,
+    "rateLimit": {
+      "enabled": true,
+      "max": 5,
+      "windowMinutes": 60
+    }
+  }
+}</code></pre>
+
+            <table class="table mb-4">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>honeypot</code></td>
+                        <td><code>true</code></td>
+                        <td>Inject and enforce the honeypot hidden field</td>
+                    </tr>
+                    <tr>
+                        <td><code>rateLimit.enabled</code></td>
+                        <td><code>true</code></td>
+                        <td>Enable per-IP rate limiting for this form</td>
+                    </tr>
+                    <tr>
+                        <td><code>rateLimit.max</code></td>
+                        <td><code>5</code></td>
+                        <td>Maximum number of submissions allowed within the window</td>
+                    </tr>
+                    <tr>
+                        <td><code>rateLimit.windowMinutes</code></td>
+                        <td><code>60</code></td>
+                        <td>Rolling window duration in minutes</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-info mb-0">
+                <span data-icon="info"></span>
+                Both mechanisms can be disabled individually per form. Set <code>"honeypot": false</code> or <code>"rateLimit.enabled": false</code> in form settings. Disabling both is not recommended for publicly accessible forms.
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Triggers -->
+    <section class="card mb-6" data-section="Triggers">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="zap"></span> Triggers</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Triggers run automatically after a form submission passes validation and is stored. Multiple triggers can be attached to a single form and they execute in parallel. Configure triggers under <strong>Admin → Forms → [Form Name] → Triggers</strong>.</p>
+
+            <h3 class="text-lg font-semibold mb-3"><span data-icon="mail"></span> Email trigger</h3>
+            <p class="mb-3">Send a notification email to one or more addresses when a form is submitted. The email body is a template that can reference any field value using <code>&#123;&#123;field.name&#125;&#125;</code> placeholders.</p>
+
+            <pre class="mb-4"><code>{
+  "type": "email",
+  "to": ["admin@example.com", "support@example.com"],
+  "subject": "New contact form submission from {{field.full_name}}",
+  "body": "Name: {{field.full_name}}\nEmail: {{field.email}}\n\nMessage:\n{{field.message}}"
+}</code></pre>
+
+            <p class="mb-3">Email triggers use the SMTP credentials configured in <code>config/site.json</code> under the <code>smtp</code> key. All submission field values are available as <code>&#123;&#123;field.*&#125;&#125;</code> and metadata as <code>&#123;&#123;meta.submittedAt&#125;&#125;</code>, <code>&#123;&#123;meta.ip&#125;&#125;</code>, etc.</p>
+
+            <h3 class="text-lg font-semibold mb-3"><span data-icon="globe"></span> Webhook trigger</h3>
+            <p class="mb-3">POST the submission data to an external URL as a JSON payload. Useful for integrating with CRMs, Slack, Zapier, Make, or any HTTP endpoint.</p>
+
+            <pre class="mb-4"><code>{
+  "type": "webhook",
+  "url": "https://hooks.example.com/form-submissions",
+  "headers": {
+    "Authorization": "Bearer your-token",
+    "X-Source": "domma-cms"
+  },
+  "fieldMap": {
+    "name":  "field.full_name",
+    "email": "field.email",
+    "body":  "field.message"
+  }
+}</code></pre>
+
+            <p class="mb-3">The <code>fieldMap</code> property is optional. When omitted, all field values are sent as-is. When provided, only the mapped fields are included in the webhook payload under the specified key names.</p>
+
+            <h3 class="text-lg font-semibold mb-3"><span data-icon="play-circle"></span> Action trigger <span class="badge badge-warning ml-2">Pro</span></h3>
+            <p class="mb-3">Invoke a <strong>Domma CMS Action workflow</strong> with the submission data as input. Actions are server-side workflow definitions (Pro Mode only) that can orchestrate complex multi-step processes such as creating collection entries, sending personalised emails, or calling third-party APIs.</p>
+
+            <pre class="mb-4"><code>{
+  "type": "action",
+  "actionSlug": "onboard-new-user",
+  "inputMap": {
+    "userName":  "field.full_name",
+    "userEmail": "field.email",
+    "plan":      "field.selected_plan"
+  }
+}</code></pre>
+
+            <div class="alert alert-info mb-0">
+                <span data-icon="info"></span>
+                All triggers are executed <strong>asynchronously after the response is sent to the user</strong>. A trigger failure will not cause the form submission to appear to fail — errors are logged to <code>logs/triggers.log</code> for review.
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. Embedding Forms -->
+    <section class="card mb-6" data-section="Embedding Forms">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold"><span data-icon="code"></span> Embedding Forms</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Once a form has been created in the admin panel, embed it on any Markdown page or content block using the <code>[form]</code> shortcode. The shortcode is replaced with a fully rendered, functional Domma form at render time.</p>
+
+            <h3 class="text-lg font-semibold mb-3">Shortcode syntax</h3>
+
+            <pre class="mb-4"><code>[form slug="contact"]
+[form slug="newsletter" title="false"]
+[form slug="booking" class="my-form"]</code></pre>
+
+            <h3 class="text-lg font-semibold mb-3">Shortcode attributes</h3>
+
+            <table class="table mb-5">
+                <thead>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Required</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>slug</code></td>
+                        <td><span class="badge badge-success">Yes</span></td>
+                        <td>—</td>
+                        <td>The slug of the form to embed, as defined in the admin panel</td>
+                    </tr>
+                    <tr>
+                        <td><code>title</code></td>
+                        <td>No</td>
+                        <td><code>"true"</code></td>
+                        <td>Whether to render the form name as a visible heading above the form. Set to <code>"false"</code> to hide it.</td>
+                    </tr>
+                    <tr>
+                        <td><code>class</code></td>
+                        <td>No</td>
+                        <td>—</td>
+                        <td>One or more additional CSS classes applied to the outer form wrapper for custom styling</td>
+                    </tr>
+                    <tr>
+                        <td><code>prefill</code></td>
+                        <td>No</td>
+                        <td>—</td>
+                        <td>Comma-separated list of <code>field:param</code> pairs to pre-fill from URL query parameters (e.g. <code>"email:utm_email"</code>)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mb-3">Submission behaviour</h3>
+            <ul class="mb-4">
+                <li><span data-icon="refresh-cw"></span> Submissions are handled via <strong>AJAX</strong> — the page does not reload on submit</li>
+                <li><span data-icon="check-circle"></span> The success message configured in the form settings is displayed inline, replacing the form</li>
+                <li><span data-icon="alert-circle"></span> Validation errors and server-side errors are shown inline beneath the relevant field or at the top of the form</li>
+                <li><span data-icon="loader"></span> A loading state is applied to the submit button during submission to prevent duplicate requests</li>
+            </ul>
+
+            <h3 class="text-lg font-semibold mb-3">Custom styling</h3>
+            <p class="mb-3">Forms inherit your site's active Domma theme automatically. To apply additional styles, target the <code>.dm-form</code> wrapper or use the <code>class</code> shortcode attribute to add a custom class:</p>
+
+            <pre class="mb-4"><code>[form slug="contact" class="form-wide form-shadowed"]</code></pre>
+
+            <pre class="mb-0"><code>/* In your custom CSS */
+.form-wide  { max-width: 800px; margin: 0 auto; }
+.form-shadowed .dm-form-inner { box-shadow: 0 4px 24px rgba(0,0,0,0.15); border-radius: 12px; padding: 2rem; }</code></pre>
+        </div>
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>Domma.icons.scan();</script>
+</body>
+</html>

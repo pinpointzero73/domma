@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plugins - Domma CMS</title>
+    <link rel="canonical" href="https://dommajs.org/cms/plugins/">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/cms-showcase.css">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="cms" data-layout-variant="subpage">
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Plugins</div>
+        <div class="hero-subtitle">Extend Domma CMS with custom routes, admin views, hooks, and public injections</div>
+    </div>
+</div>
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Architecture">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Architecture (3 Mandatory Files)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">A plugin is a self-contained directory inside <code>plugins/</code> consisting of exactly three required files. Each file has a distinct responsibility: the manifest declares metadata, the server file registers backend logic, and the admin file provides the frontend integration.</p>
+            <pre><code class="language-text">plugins/
+└── my-plugin/
+    ├── plugin.json     # Manifest — name, slug, description, version, author
+    ├── server.js       # Backend: Fastify routes, hooks
+    └── admin.js        # Frontend: admin views, sidebar entries</code></pre>
+            <p class="mt-4 mb-4">Enable or disable any plugin by editing <code>config/plugins.json</code>. The CMS will not load a plugin unless its entry is present and <code>enabled</code> is set to <code>true</code>.</p>
+            <pre><code class="language-json">[
+  { "slug": "my-plugin", "enabled": true }
+]</code></pre>
+            <p class="mt-4">Disabling a plugin (<code>"enabled": false</code>) is non-destructive — the directory and all its data remain intact.</p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Manifest">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Plugin Manifest (plugin.json)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The manifest is the single source of truth for plugin identity and capabilities. The CMS reads it before loading any code, so mismatches here will prevent the plugin from mounting.</p>
+            <pre><code class="language-json">{
+  "name": "My Plugin",
+  "slug": "my-plugin",
+  "version": "1.0.0",
+  "description": "Does something useful",
+  "author": "Your Name",
+  "minCmsVersion": "0.5.0",
+  "permissions": ["pages:read", "collections:read"],
+  "public": {
+    "injectHead": "head.html",
+    "injectBody": "body.html"
+  },
+  "adminNav": {
+    "text": "My Plugin",
+    "icon": "package",
+    "view": "my-plugin"
+  }
+}</code></pre>
+            <div class="mt-4">
+                <p class="mb-2 font-semibold">Key fields:</p>
+                <ul class="list-disc pl-5">
+                    <li class="mb-1"><code>slug</code> — Must match the directory name and the entry in <code>config/plugins.json</code>. Lowercase, hyphenated.</li>
+                    <li class="mb-1"><code>minCmsVersion</code> — The CMS will refuse to load the plugin if the running version is older. Use semantic versioning.</li>
+                    <li class="mb-1"><code>permissions</code> — Declares which CMS data scopes the plugin accesses. Shown to the user at install time.</li>
+                    <li class="mb-1"><code>public.injectHead</code> / <code>public.injectBody</code> — Paths to HTML snippets for server-side injection into public pages (see Section 6).</li>
+                    <li class="mb-1"><code>adminNav</code> — Registers a sidebar entry. The <code>view</code> key must match a view name exported by <code>admin.js</code>.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Backend">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Backend Plugin (server.js)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The <code>server.js</code> file exports a standard Fastify plugin function. The CMS passes an <code>opts</code> object containing a <code>cms</code> property which exposes the full CMS service layer — content, collections, media, users, and hooks.</p>
+            <pre><code class="language-javascript">export default async function(fastify, opts) {
+    const { cms } = opts;  // Access to CMS service layer
+
+    // Register Fastify routes
+    fastify.get('/api/my-plugin/data', async (request, reply) => {
+        // Access CMS services:
+        const pages = await cms.content.getAll();
+        return { pages };
+    });
+
+    fastify.post('/api/my-plugin/action', {
+        preHandler: [fastify.authenticate]  // Require auth
+    }, async (request, reply) => {
+        // ...
+    });
+}</code></pre>
+            <div class="mt-4">
+                <p class="mb-2 font-semibold">Notes:</p>
+                <ul class="list-disc pl-5">
+                    <li class="mb-1">Plugin routes are automatically scoped and registered by the CMS — you do not need to call <code>fastify.register()</code> yourself.</li>
+                    <li class="mb-1">Use <code>fastify.authenticate</code> as a <code>preHandler</code> to restrict routes to logged-in admin users.</li>
+                    <li class="mb-1">Access any CMS service via <code>cms</code>: <code>cms.content</code>, <code>cms.collections</code>, <code>cms.media</code>, <code>cms.users</code>, <code>cms.hooks</code>.</li>
+                    <li class="mb-1">The function must be <code>async</code> and the default export must be the plugin function directly (not an object).</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Admin">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Admin Integration (admin.js)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The <code>admin.js</code> file exports a view definition that the Domma CMS admin SPA registers at runtime. Views are mounted inside the admin shell — the full Domma API is available in <code>onMount</code>.</p>
+            <pre><code class="language-javascript">export default {
+    views: {
+        'my-plugin': {
+            title: 'My Plugin',
+            template: `
+                &lt;div class="container py-6"&gt;
+                    &lt;h1&gt;My Plugin&lt;/h1&gt;
+                    &lt;!-- Domma components work here --&gt;
+                &lt;/div&gt;
+            `,
+            onMount($el) {
+                H.get('/api/my-plugin/data').then(data => {
+                    T.create('#my-table', { data: data.pages, columns: [...] });
+                });
+            }
+        }
+    },
+    sidebar: [
+        { text: 'My Plugin', icon: 'package', view: 'my-plugin' }
+    ]
+}</code></pre>
+            <div class="mt-4">
+                <p class="mb-2 font-semibold">Available Domma APIs inside <code>onMount</code>:</p>
+                <ul class="list-disc pl-5">
+                    <li class="mb-1"><code>H.get()</code>, <code>H.post()</code>, <code>H.put()</code>, <code>H.delete()</code> — HTTP requests to your plugin's backend routes</li>
+                    <li class="mb-1"><code>T.create()</code> — DataTable with sorting, filtering, pagination</li>
+                    <li class="mb-1"><code>E.modal()</code>, <code>E.toast()</code>, <code>E.confirm()</code> — UI components</li>
+                    <li class="mb-1"><code>F.create()</code> — Blueprint-driven form generation</li>
+                    <li class="mb-1"><code>M.create()</code> — Reactive models for state management</li>
+                    <li class="mb-1"><code>$el</code> — Domma-wrapped container element for scoped DOM operations</li>
+                </ul>
+                <p class="mt-3">The view key (<code>'my-plugin'</code>) must match the <code>adminNav.view</code> value declared in <code>plugin.json</code>.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Hooks">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Hook System</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Plugins can intercept CMS lifecycle events by registering hook callbacks via <code>cms.hooks.on()</code>. Hooks allow plugins to modify content before rendering, react to form submissions, register custom shortcodes, and sanitise HTML output — all without patching core CMS code.</p>
+            <pre><code class="language-javascript">// In server.js
+cms.hooks.on('page:before-render', (page) => {
+    // Modify page before rendering
+    page.content += '\n&lt;!-- rendered by my-plugin --&gt;';
+    return page;
+});
+
+cms.hooks.on('form:submission', async (submission) => {
+    // React to form submissions
+    await sendToExternalCRM(submission);
+});
+
+// Register a custom shortcode
+cms.hooks.registerShortcode('my-widget', (attrs) => {
+    return `&lt;div class="my-widget"&gt;${attrs.content}&lt;/div&gt;`;
+});
+
+// Sanitize hook (modify HTML after rendering)
+cms.hooks.on('html:sanitize', (html) => html.replace(/foo/g, 'bar'));</code></pre>
+            <div class="mt-4">
+                <p class="mb-2 font-semibold">Available events:</p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Event</th>
+                                <th>Triggered when</th>
+                                <th>Payload</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>page:before-render</code></td>
+                                <td>A public page is about to be rendered</td>
+                                <td>Page object (mutable)</td>
+                            </tr>
+                            <tr>
+                                <td><code>page:after-render</code></td>
+                                <td>A public page has finished rendering</td>
+                                <td>Rendered HTML string</td>
+                            </tr>
+                            <tr>
+                                <td><code>form:submission</code></td>
+                                <td>A CMS form receives a submission</td>
+                                <td>Submission data object</td>
+                            </tr>
+                            <tr>
+                                <td><code>media:upload</code></td>
+                                <td>A file is uploaded via the media manager</td>
+                                <td>File metadata object</td>
+                            </tr>
+                            <tr>
+                                <td><code>collection:entry-save</code></td>
+                                <td>A collection entry is created or updated</td>
+                                <td>Entry object with collection name</td>
+                            </tr>
+                            <tr>
+                                <td><code>user:login</code></td>
+                                <td>An admin user logs in</td>
+                                <td>User object (read-only)</td>
+                            </tr>
+                            <tr>
+                                <td><code>user:register</code></td>
+                                <td>A new admin user is registered</td>
+                                <td>New user object</td>
+                            </tr>
+                            <tr>
+                                <td><code>html:sanitize</code></td>
+                                <td>After HTML rendering, before output</td>
+                                <td>HTML string (return modified string)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="mt-3">Hooks that return a value replace the original payload. Async hooks are <code>await</code>ed by the CMS before proceeding. Multiple plugins may register the same event — they run in registration order.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="PublicInjection">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Public Injection (Head/Body Slots)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Plugins can inject HTML into every public page without touching the theme templates. Two injection slots are available, both declared in <code>plugin.json</code> under the <code>public</code> key and resolved relative to the plugin directory.</p>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <p class="mb-2 font-semibold"><span data-icon="arrow-up"></span> <code>injectHead</code> — inserted in <code>&lt;head&gt;</code></p>
+                    <p class="mb-3 text-sm text-muted">Use for CSS, meta tags, preload hints, fonts, and anything that must be parsed before the page renders.</p>
+                    <pre><code class="language-html">&lt;!-- head.html --&gt;
+&lt;link rel="stylesheet" href="/plugins/my-plugin/style.css"&gt;
+&lt;meta name="my-plugin-version" content="1.0.0"&gt;</code></pre>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-2 font-semibold"><span data-icon="arrow-down"></span> <code>injectBody</code> — inserted before <code>&lt;/body&gt;</code></p>
+                    <p class="mb-3 text-sm text-muted">Use for JavaScript, analytics snippets, chat widgets, or anything that should load after page content.</p>
+                    <pre><code class="language-html">&lt;!-- body.html --&gt;
+&lt;script src="/plugins/my-plugin/tracker.js"&gt;&lt;/script&gt;</code></pre>
+                </div>
+            </div>
+            <div class="alert alert-info">
+                <span data-icon="info-circle"></span>
+                <strong>Server-side injection</strong> — both slots are rendered by the CMS server before the response is sent. The injected content is always present in the initial HTML, making it compatible with SEO crawlers and non-JavaScript environments.
+            </div>
+            <p class="mt-4">Injections are only active when the plugin is enabled. Disabling the plugin immediately removes all injections from public pages without requiring a restart.</p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="BundledPlugins">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Bundled Plugins</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Domma CMS ships with a set of ready-to-enable plugins. They are installed but disabled by default — add the relevant entry to <code>config/plugins.json</code> to activate any of them.</p>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex align-items-center gap-2">
+                            <span data-icon="sparkles"></span>
+                            <strong>domma-effects</strong>
+                        </div>
+                        <div class="card-body">
+                            <p>Adds Domma's full visual effects library to public pages — <code>breathe</code>, <code>reveal</code>, <code>scribe</code>, <code>scramble</code>, <code>counter</code>, <code>ripple</code>, and more. Configure which effects are active and their default options via the plugin settings view in admin.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex align-items-center gap-2">
+                            <span data-icon="bar-chart"></span>
+                            <strong>analytics</strong>
+                        </div>
+                        <div class="card-body">
+                            <p>Simple self-hosted analytics: page views, unique visitor counts, top pages, referrers, and device breakdown. All data stays on your server — no third-party tracking. A dashboard view is added to the admin sidebar.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex align-items-center gap-2">
+                            <span data-icon="palette"></span>
+                            <strong>theme-roller</strong>
+                        </div>
+                        <div class="card-body">
+                            <p>Visual theme customisation tool accessible from the admin toolbar. Live preview of CSS variable overrides, theme selection, and one-click export. Changes can be saved as a custom theme file or applied directly to the site config.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex align-items-center gap-2">
+                            <span data-icon="shield"></span>
+                            <strong>cookie-consent</strong>
+                        </div>
+                        <div class="card-body">
+                            <p>GDPR-compliant cookie consent banner with configurable consent categories (necessary, analytics, marketing), customisable copy, and a link to your privacy policy. Consent state is stored in <code>localStorage</code> and respected across sessions.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex align-items-center gap-2">
+                            <span data-icon="arrow-up-circle"></span>
+                            <strong>back-to-top</strong>
+                        </div>
+                        <div class="card-body">
+                            <p>Injects a configurable back-to-top button into all public pages. Appears after the user scrolls past a configurable threshold. Smooth scroll behaviour, position, and appearance are all configurable via <code>plugin.json</code>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-2">Enable any bundled plugin by adding its slug to <code>config/plugins.json</code>:</p>
+            <pre><code class="language-json">[
+  { "slug": "analytics",      "enabled": true },
+  { "slug": "cookie-consent", "enabled": true },
+  { "slug": "back-to-top",    "enabled": true }
+]</code></pre>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="StepByStep">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Building a Plugin (Step-by-Step)</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Follow these steps to build and register a minimal working plugin — a simple hit counter with an admin view and an increment button.</p>
+            <ol class="list-decimal pl-5">
+                <li class="mb-4">
+                    <strong>Create the directory</strong>
+                    <pre class="mt-2"><code class="language-bash">mkdir plugins/my-counter</code></pre>
+                </li>
+                <li class="mb-4">
+                    <strong>Write <code>plugin.json</code></strong> — name, slug, version, description
+                    <pre class="mt-2"><code class="language-json">{
+  "name": "My Counter",
+  "slug": "my-counter",
+  "version": "1.0.0",
+  "description": "A simple hit counter",
+  "author": "Your Name",
+  "adminNav": {
+    "text": "Counter",
+    "icon": "hash",
+    "view": "my-counter"
+  }
+}</code></pre>
+                </li>
+                <li class="mb-4">
+                    <strong>Write <code>server.js</code></strong> — register <code>GET /api/my-counter/count</code> returning a stored count
+                    <pre class="mt-2"><code class="language-javascript">export default async function(fastify, opts) {
+    const { cms } = opts;
+    let count = 0;
+
+    fastify.get('/api/my-counter/count', async () => ({ count }));
+
+    fastify.post('/api/my-counter/increment', {
+        preHandler: [fastify.authenticate]
+    }, async () => {
+        count += 1;
+        return { count };
+    });
+}</code></pre>
+                </li>
+                <li class="mb-4">
+                    <strong>Write <code>admin.js</code></strong> — view with a counter display and increment button using Domma UI
+                    <pre class="mt-2"><code class="language-javascript">export default {
+    views: {
+        'my-counter': {
+            title: 'Counter',
+            template: `
+                &lt;div class="container py-6"&gt;
+                    &lt;h1 class="mb-4"&gt;Hit Counter&lt;/h1&gt;
+                    &lt;p class="text-xl mb-4"&gt;Count: &lt;strong id="count-display"&gt;...&lt;/strong&gt;&lt;/p&gt;
+                    &lt;button id="increment-btn" class="btn btn-primary"&gt;Increment&lt;/button&gt;
+                &lt;/div&gt;
+            `,
+            onMount($el) {
+                H.get('/api/my-counter/count').then(data => {
+                    $el.find('#count-display').text(data.count);
+                });
+
+                $el.find('#increment-btn').on('click', () => {
+                    H.post('/api/my-counter/increment').then(data => {
+                        $el.find('#count-display').text(data.count);
+                        E.toast('Counter incremented', { type: 'success' });
+                    });
+                });
+            }
+        }
+    },
+    sidebar: [
+        { text: 'Counter', icon: 'hash', view: 'my-counter' }
+    ]
+}</code></pre>
+                </li>
+                <li class="mb-4">
+                    <strong>Register the plugin</strong> — add to <code>config/plugins.json</code>
+                    <pre class="mt-2"><code class="language-json">[
+  { "slug": "my-counter", "enabled": true }
+]</code></pre>
+                </li>
+                <li class="mb-4">
+                    <strong>Start the server</strong>
+                    <pre class="mt-2"><code class="language-bash">npm run dev</code></pre>
+                </li>
+                <li class="mb-4">
+                    <strong>View in admin</strong> — the <em>Counter</em> sidebar entry appears automatically. Navigate to it to see the counter and increment button.
+                </li>
+                <li class="mb-1">
+                    <strong>Public injection (optional)</strong> — create <code>head.html</code> and/or <code>body.html</code> in the plugin directory and declare them under the <code>public</code> key in <code>plugin.json</code> to inject content into every public page.
+                </li>
+            </ol>
+        </div>
+    </section>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>Domma.icons.scan();</script>
+</body>
+</html>

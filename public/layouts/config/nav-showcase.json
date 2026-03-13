@@ -528,6 +528,54 @@
       ]
     },
     {
+      "text": "CMS",
+      "items": [
+        {
+          "text": "Overview",
+          "url": "cms/index.html",
+          "section": "cms",
+          "badge": "New"
+        },
+        { "divider": true },
+        {
+          "text": "Getting Started",
+          "url": "cms/getting-started/index.html",
+          "section": "cms-getting-started"
+        },
+        {
+          "text": "Pages & Content",
+          "url": "cms/pages/index.html",
+          "section": "cms-pages"
+        },
+        {
+          "text": "Collections",
+          "url": "cms/collections/index.html",
+          "section": "cms-collections"
+        },
+        {
+          "text": "Forms",
+          "url": "cms/forms/index.html",
+          "section": "cms-forms"
+        },
+        {
+          "text": "Auth & Roles",
+          "url": "cms/auth/index.html",
+          "section": "cms-auth"
+        },
+        {
+          "text": "Pro Features",
+          "url": "cms/data-pro/index.html",
+          "section": "cms-pro"
+        },
+        { "divider": true },
+        {
+          "text": "Tutorials",
+          "url": "cms/tutorials/index.html",
+          "section": "cms-tutorials"
+        }
+      ]
+    },
+    {
       "text": "Resources",
       "items": [
         {
