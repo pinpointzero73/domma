@@ -57,7 +57,7 @@
 npx domma-cms portfolio
 npx domma-cms company-site</code></pre>
 
-            <p>After installation, open your browser and navigate to <code>http://localhost:3000</code> to see your new site, and <code>http://localhost:3000/admin</code> to access the admin panel.</p>
+            <p>After installation, open your browser and navigate to <code>http://localhost:4096</code> to see your new site, and <code>http://localhost:4096/admin</code> to access the admin panel.</p>
         </div>
     </section>
 
@@ -236,7 +236,7 @@ npx domma-cms company-site</code></pre>
             </table>
 
             <h3 class="text-lg font-semibold mb-2">Default port</h3>
-            <p class="mb-0">Domma CMS listens on port <code>3000</code> by default. This can be changed by setting <code>PORT</code> in your <code>.env</code> file. For production deployments behind a reverse proxy (nginx, Caddy, etc.), it is recommended to keep the default internal port and expose only 80/443 externally.</p>
+            <p class="mb-0">Domma CMS listens on port <code>4096</code> by default. This can be changed by setting <code>PORT</code> in your <code>.env</code> file. For production deployments behind a reverse proxy (nginx, Caddy, etc.), it is recommended to keep the default internal port and expose only 80/443 externally.</p>
         </div>
     </section>
 
@@ -422,7 +422,7 @@ npx domma-cms company-site</code></pre>
             <h3 class="text-lg font-semibold mb-2">Default <code>.env</code> contents</h3>
 
             <pre class="mb-4"><code># ─── Server ───────────────────────────────────────────────────────────────────
-PORT=3000                    # Port the server listens on (default: 3000)
+PORT=4096                    # Port the server listens on (default: 4096)
 NODE_ENV=production          # 'development' enables verbose logging and hot reload
 
 # ─── Security ─────────────────────────────────────────────────────────────────
@@ -444,8 +444,8 @@ MONGO_URI=                   # MongoDB connection string — leave blank for Fil
                 <tbody>
                     <tr>
                         <td><code>PORT</code></td>
-                        <td><code>3000</code></td>
-                        <td>The TCP port the Fastify server binds to. Change this if another service occupies port 3000.</td>
+                        <td><code>4096</code></td>
+                        <td>The TCP port the Fastify server binds to. Change this if another service occupies port 4096.</td>
                     </tr>
                     <tr>
                         <td><code>NODE_ENV</code></td>
