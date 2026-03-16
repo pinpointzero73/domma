@@ -6,108 +6,109 @@
 
 .dm-theme-christmas {
     /* ================================================
-       PRIMARY COLOURS - Christmas Red
+       PRIMARY COLOURS - Rich Holly Green
        ================================================ */
-    --dm-primary: #c41e3a;
-    --dm-primary-hover: #d42c48;
-    --dm-primary-active: #e43a56;
-    --dm-primary-light: #fce4e8;
-    --dm-primary-dark: #9a1830;
+    --dm-primary: #2D6B3F;
+    --dm-primary-hover: #367D4A;
+    --dm-primary-active: #248F35;
+    --dm-primary-light: rgba(45, 107, 63, 0.12);
+    --dm-primary-dark: #1E5230;
 
-    /* Focus ring with festive red */
-    --dm-focus-ring: 0 0 0 3px rgba(196, 30, 58, 0.3);
-    --dm-border-focus: #c41e3a;
+    /* Focus ring with holly green */
+    --dm-focus-ring: 0 0 0 3px rgba(45, 107, 63, 0.3);
+    --dm-border-focus: #2D6B3F;
 
     /* ================================================
-       SECONDARY COLOURS - Christmas Green
+       SECONDARY COLOURS - Classic Christmas Red
        ================================================ */
-    --dm-secondary: #165b33;
-    --dm-secondary-hover: #1e7a45;
-    --dm-secondary-active: #269957;
-    --dm-secondary-light: #e3f2e9;
-    --dm-secondary-dark: #0f3d23;
+    --dm-secondary: #C41E3A;
+    --dm-secondary-hover: #D42C48;
+    --dm-secondary-active: #A8182E;
+    --dm-secondary-light: rgba(196, 30, 58, 0.12);
+    --dm-secondary-dark: #9A1830;
 
     /* ================================================
        STATUS COLOURS - Festive tinted
        ================================================ */
-    --dm-success: #228b22;
-    --dm-success-hover: #2ea02e;
-    --dm-success-active: #3ab53a;
-    --dm-success-light: #e6f4e6;
-    --dm-success-dark: #1a6b1a;
+    --dm-success: #228B22;
+    --dm-success-hover: #2EA02E;
+    --dm-success-active: #3AB53A;
+    --dm-success-light: rgba(34, 139, 34, 0.12);
+    --dm-success-dark: #1A6B1A;
 
-    --dm-info: #a8d5e5;
-    --dm-info-hover: #b8dde9;
-    --dm-info-active: #c8e5ed;
-    --dm-info-light: #f0f9fc;
-    --dm-info-dark: #6bb8d1;
+    --dm-info: #A8D5E5;
+    --dm-info-hover: #B8DDE9;
+    --dm-info-active: #C8E5ED;
+    --dm-info-light: rgba(168, 213, 229, 0.12);
+    --dm-info-dark: #6BB8D1;
 
-    --dm-warning: #d4af37;
-    --dm-warning-hover: #dabb4f;
-    --dm-warning-active: #e0c767;
-    --dm-warning-light: #faf6e7;
-    --dm-warning-dark: #b8962d;
-    --dm-warning-text: #8b7021;
+    --dm-warning: #D4AF37;
+    --dm-warning-hover: #DABB4F;
+    --dm-warning-active: #E0C767;
+    --dm-warning-light: rgba(212, 175, 55, 0.12);
+    --dm-warning-dark: #B8962D;
+    --dm-warning-text: #8B7021;
 
-    --dm-danger: #bb2528;
-    --dm-danger-hover: #cc3336;
-    --dm-danger-active: #dd4144;
-    --dm-danger-light: #fce8e8;
-    --dm-danger-dark: #991e20;
+    --dm-danger: #BB2528;
+    --dm-danger-hover: #CC3336;
+    --dm-danger-active: #DD4144;
+    --dm-danger-light: rgba(187, 37, 40, 0.12);
+    --dm-danger-dark: #991E20;
 
     /* ================================================
        ACCENT COLOURS
        ================================================ */
-    --dm-accent-1: #d4af37; /* Gold */
-    --dm-accent-2: #bb2528; /* Holly Berry */
-    --dm-accent-3: #228b22; /* Pine Green */
-    --dm-accent-4: #f5f5f5; /* Snow White */
+    --dm-accent-1: #D4AF37; /* Gold */
+    --dm-accent-2: #BB2528; /* Holly Berry */
+    --dm-accent-3: #228B22; /* Pine Green */
+    --dm-accent-4: #A8D5E5; /* Ice Blue */
 
     /* ================================================
        SELECTION
        ================================================ */
-    --dm-selected-bg: rgba(196, 30, 58, 0.12);
-    --dm-tab-active-border: #c41e3a;
-    --dm-tab-active-text: #c41e3a;
-    --dm-progress-bar: #c41e3a;
+    --dm-selected-bg: rgba(45, 107, 63, 0.12);
+    --dm-tab-active-border: #2D6B3F;
+    --dm-tab-active-text: #2D6B3F;
+    --dm-progress-bar: #2D6B3F;
 }
 
 /* Dark mode adjustments for christmas */
 .dm-theme-dark.dm-theme-christmas {
-    --dm-primary: #ef5566;
-    --dm-primary-hover: #f16d7a;
-    --dm-primary-active: #f3858e;
-    --dm-primary-light: rgba(239, 85, 102, 0.15);
-    --dm-primary-dark: #e43a56;
+    --dm-primary: #5CB875;
+    --dm-primary-hover: #70C487;
+    --dm-primary-active: #84D09A;
+    --dm-primary-light: rgba(92, 184, 117, 0.15);
+    --dm-primary-dark: #3A9455;
 
-    --dm-secondary: #5cb85c;
-    --dm-secondary-hover: #6dc46d;
-    --dm-secondary-active: #7ed07e;
-    --dm-secondary-light: rgba(92, 184, 92, 0.15);
-    --dm-secondary-dark: #4cae4c;
+    --dm-secondary: #E85565;
+    --dm-secondary-hover: #F06B78;
+    --dm-secondary-active: #D44050;
+    --dm-secondary-light: rgba(232, 85, 101, 0.15);
+    --dm-secondary-dark: #C41E3A;
 
-    --dm-success: #6dd66d;
-    --dm-success-light: rgba(109, 214, 109, 0.15);
+    --dm-success: #4DB86A;
+    --dm-success-light: rgba(77, 184, 106, 0.15);
 
-    --dm-info: #a8d5e5;
-    --dm-info-light: rgba(168, 213, 229, 0.15);
+    --dm-info: #7EC8E3;
+    --dm-info-light: rgba(126, 200, 227, 0.15);
 
-    --dm-warning: #f0d264;
+    --dm-warning: #F0D264;
     --dm-warning-light: rgba(240, 210, 100, 0.15);
-    --dm-warning-text: #f0d264;
+    --dm-warning-text: #F0D264;
 
-    --dm-danger: #ef6b6b;
-    --dm-danger-light: rgba(239, 107, 107, 0.15);
+    --dm-danger: #F07070;
+    --dm-danger-light: rgba(240, 112, 112, 0.15);
 
-    /* Gold accents pop nicely on dark */
-    --dm-accent-1: #f0d264;
-    --dm-accent-2: #ef6b6b;
-    --dm-accent-3: #6dd66d;
-    --dm-accent-4: #e0e0e0;
+    /* Bright accents for dark backgrounds */
+    --dm-accent-1: #F0D264;
+    --dm-accent-2: #E85565;
+    --dm-accent-3: #5CB875;
+    --dm-accent-4: #F0ECE4;
 
-    --dm-focus-ring: 0 0 0 3px rgba(239, 85, 102, 0.35);
-    --dm-selected-bg: rgba(239, 85, 102, 0.2);
-    --dm-tab-active-border: #ef5566;
-    --dm-tab-active-text: #ef5566;
-    --dm-progress-bar: #ef5566;
+    --dm-focus-ring: 0 0 0 3px rgba(92, 184, 117, 0.35);
+    --dm-border-focus: #5CB875;
+    --dm-selected-bg: rgba(92, 184, 117, 0.15);
+    --dm-tab-active-border: #5CB875;
+    --dm-tab-active-text: #5CB875;
+    --dm-progress-bar: #5CB875;
 }

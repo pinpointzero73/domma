@@ -1,4 +1,31 @@
 {
+  "version": "0.19.6",
+  "releaseDate": "2026-03-16",
+  "codename": "FrostyMorning",
+  "changes": {
+    "features": [],
+    "enhancements": [
+      {
+        "title": "Christmas Theme Overhaul — \"Frosty Morning\" & \"Christmas Eve\"",
+        "description": "Full palette rewrite of both Christmas theme variants with distinctive festive backgrounds, decorative CSS effects, and updated labels",
+        "impact": "low",
+        "files": [
+          "public/assets/themes/christmas-light.css",
+          "public/assets/themes/christmas-dark.css",
+          "public/assets/themes/christmas.css",
+          "src/theme-roller.js",
+          "public/layouts/js/layout.js",
+          "public/showcase/themes/index.html"
+        ],
+        "details": "<p>Complete overhaul of both Christmas theme variants — moving from generic white/slate backgrounds to genuinely festive palettes.</p><ul><li><strong>christmas-light — \"Frosty Morning\"</strong> — Ice-blue tinted backgrounds (<code>#F5F8FC</code>) evoking frost on windows, deep pine-green text (<code>#1A2A1E</code>), classic Christmas Red primary (<code>#C41E3A</code>), rich Holly Green secondary (<code>#2D6B3F</code>), and frosty blue-tinted shadows</li><li><strong>christmas-dark — \"Christmas Eve\"</strong> — Deep forest green backgrounds (<code>#0A1A10</code>) replacing generic slate, warm candlelight cream text (<code>#F0ECE4</code>), brighter red primary (<code>#E85565</code>) for dark-mode readability, bright holly secondary (<code>#5CB875</code>), and warm firelight-tinted shadows</li><li><strong>Decorative CSS</strong> — Snow-dust radial-gradient dot pattern on the page root, red-gold-green gradient top-border on cards via <code>border-image</code>, candy-stripe repeating-linear-gradient on progress bars, and festive syntax highlighting (red keywords, green strings, gold functions)</li><li><strong>Labels updated</strong> — Theme Roller dropdown and variant dot tooltips now read \"Christmas Day ❄️\" and \"Christmas Eve 🎄\" (mirrors Wedding Day/Evening pattern)</li></ul>"
+      }
+    ],
+    "bugFixes": [],
+    "breaking": [],
+    "housekeeping": []
+  }
+},
+{
   "version": "0.19.5",
   "releaseDate": "2026-03-16",
   "codename": "WeddingBells",

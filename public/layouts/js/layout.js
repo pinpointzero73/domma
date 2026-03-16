@@ -343,8 +343,8 @@ import {SiteSearch} from './modules/search.js';
         .variant-dot-charcoal-dark { background: linear-gradient(135deg, #1a202c, #2d3748); }
         .variant-dot-charcoal-light { background: linear-gradient(135deg, #a0aec0, #cbd5e0); }
         /* Christmas - CORRECTED */
-        .variant-dot-christmas-dark { background: linear-gradient(135deg, #7f1d1d, #14532d); }
-        .variant-dot-christmas-light { background: linear-gradient(135deg, #ef4444, #86efac); }
+        .variant-dot-christmas-dark { background: linear-gradient(135deg, #0A1A10, #1A3020); }
+        .variant-dot-christmas-light { background: linear-gradient(135deg, #228B22, #C41E3A); }
         /* Unicorn */
         .variant-dot-unicorn-dark { background: linear-gradient(135deg, #1a0e24, #4a2660); }
         .variant-dot-unicorn-light { background: linear-gradient(135deg, #e91e90, #9b59b6); }
@@ -682,8 +682,8 @@ import {SiteSearch} from './modules/search.js';
                     <button class="variant-dot variant-dot-silver-dark" data-theme="silver-dark" data-tooltip="Silver Dark 🌙"></button>
                     <button class="variant-dot variant-dot-charcoal-light" data-theme="charcoal-light" data-tooltip="Charcoal Light ☀️"></button>
                     <button class="variant-dot variant-dot-charcoal-dark" data-theme="charcoal-dark" data-tooltip="Charcoal Dark 🌙"></button>
-                    <button class="variant-dot variant-dot-christmas-light" data-theme="christmas-light" data-tooltip="Christmas Light ☀️"></button>
-                    <button class="variant-dot variant-dot-christmas-dark" data-theme="christmas-dark" data-tooltip="Christmas Dark 🌙"></button>
+                    <button class="variant-dot variant-dot-christmas-light" data-theme="christmas-light" data-tooltip="Christmas Day ❄️"></button>
+                    <button class="variant-dot variant-dot-christmas-dark" data-theme="christmas-dark" data-tooltip="Christmas Eve 🎄"></button>
                     <button class="variant-dot variant-dot-unicorn-light" data-theme="unicorn-light" data-tooltip="Unicorn Light ☀️"></button>
                     <button class="variant-dot variant-dot-unicorn-dark" data-theme="unicorn-dark" data-tooltip="Unicorn Dark 🌙"></button>
                     <button class="variant-dot variant-dot-dreamy-light" data-theme="dreamy-light" data-tooltip="Dreamy Light ☀️"></button>

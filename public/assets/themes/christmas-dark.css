@@ -1,114 +1,99 @@
 /**
- * Domma Christmas Dark Theme
- * Traditional festive colour palette: red, green, gold
- * Dark mode variant
+ * Domma Christmas Dark Theme — "Christmas Eve"
+ * Deep forest green backgrounds, pure moonlit-white text, green/red undertones in interaction
+ * Bright Holly Green primary, Christmas Red secondary; firelight-ember shadows
  */
 
 .dm-theme-christmas-dark {
     color-scheme: dark;
 
     /* ================================================
-       FOUNDATIONAL COLORS - Dark Mode Base
+       FOUNDATIONAL COLORS - Christmas Eve Base
        ================================================ */
 
-    /* Backgrounds - Dark slate/charcoal backgrounds */
-    --dm-background: #0f172a; /* slate-900 */
-    --dm-background-alt: #1e293b; /* slate-800 */
-    --dm-surface: #1e293b; /* slate-800 */
-    --dm-surface-raised: #334155; /* slate-700 */
-    --dm-surface-overlay: #334155; /* slate-700 */
+    /* Backgrounds - Deep forest green (single biggest change from generic slate) */
+    --dm-background: #0A1A10;
+    --dm-background-alt: #122416;
+    --dm-surface: #1A3020;
+    --dm-surface-raised: #243A2C;
+    --dm-surface-overlay: #243A2C;
 
-    /* Text - Light colors for readability on dark */
-    --dm-text: #e2e8f0; /* slate-200 */
-    --dm-text-secondary: #94a3b8; /* slate-400 */
-    --dm-text-muted: #64748b; /* slate-500 */
-    --dm-text-disabled: #475569; /* slate-600 */
-    --dm-text-inverse: #0f172a; /* slate-900 */
+    /* Text - Pure snow white; no green tint — moonlight on fresh snow */
+    --dm-text: #FFFFFF;
+    --dm-text-secondary: #D0D0D0;
+    --dm-text-muted: #8A8A8A;
+    --dm-text-disabled: #505050;
+    --dm-text-inverse: #0A1A10;
 
-    /* Borders - Subtle on dark backgrounds */
-    --dm-border: #334155; /* slate-700 */
-    --dm-border-light: #1e293b; /* slate-800 */
-    --dm-border-dark: #475569; /* slate-600 */
-
+    /* Borders - Dark forest tones */
+    --dm-border: #1E3828;
+    --dm-border-light: #162E1E;
+    --dm-border-dark: #2A4A34;
 
     /* ================================================
-       PRIMARY COLOURS - Christmas Red
+       PRIMARY COLOURS - Bright Holly Green (dark-mode readability)
        ================================================ */
-    --dm-primary: #c41e3a;
-    --dm-primary-hover: #d42c48;
-    --dm-primary-active: #e43a56;
-    --dm-primary-light: rgba(196, 30, 58, 0.15);
-    --dm-primary-dark: #9a1830;
+    --dm-primary: #5CB875;
+    --dm-primary-hover: #70C487;
+    --dm-primary-active: #84D09A;
+    --dm-primary-light: rgba(92, 184, 117, 0.15);
+    --dm-primary-dark: #3A9455;
 
-    /* Focus ring with festive red */
-    --dm-focus-ring: 0 0 0 3px rgba(196, 30, 58, 0.3);
-    --dm-border-focus: #c41e3a;
+    /* Focus ring with holly green glow */
+    --dm-focus-ring: 0 0 0 3px rgba(92, 184, 117, 0.35);
+    --dm-border-focus: #5CB875;
 
     /* ================================================
-       SECONDARY COLOURS - Christmas Green
+       SECONDARY COLOURS - Bright Christmas Red (dark-mode convention)
        ================================================ */
-    --dm-secondary: #3cb371;
-    --dm-secondary-hover: #1e7a45;
-    --dm-secondary-active: #269957;
-    --dm-secondary-light: rgba(60, 179, 113, 0.15);
-    --dm-secondary-dark: #0f3d23;
+    --dm-secondary: #E85565;
+    --dm-secondary-hover: #F06B78;
+    --dm-secondary-active: #D44050;
+    --dm-secondary-light: rgba(232, 85, 101, 0.15);
+    --dm-secondary-dark: #C41E3A;
 
     /* ================================================
-       STATUS COLOURS - Festive tinted
+       STATUS COLOURS - Festive-tinted for dark backgrounds
        ================================================ */
-    --dm-success: #228b22;
-    --dm-success-hover: #2ea02e;
-    --dm-success-active: #3ab53a;
-    --dm-success-light: rgba(34, 139, 34, 0.15);
-    --dm-success-dark: #1a6b1a;
+    --dm-success: #4DB86A;
+    --dm-success-hover: #60C47A;
+    --dm-success-active: #74D08A;
+    --dm-success-light: rgba(77, 184, 106, 0.15);
+    --dm-success-dark: #2E9A4E;
 
-    --dm-info: #a8d5e5;
-    --dm-info-hover: #b8dde9;
-    --dm-info-active: #c8e5ed;
-    --dm-info-light: rgba(168, 213, 229, 0.15);
-    --dm-info-dark: #6bb8d1;
+    --dm-info: #7EC8E3;
+    --dm-info-hover: #96D4EC;
+    --dm-info-active: #AEE0F5;
+    --dm-info-light: rgba(126, 200, 227, 0.15);
+    --dm-info-dark: #5AACCF;
 
-    --dm-warning: #d4af37;
-    --dm-warning-hover: #dabb4f;
-    --dm-warning-active: #e0c767;
-    --dm-warning-light: rgba(212, 175, 55, 0.15);
-    --dm-warning-dark: #b8962d;
-    --dm-warning-text: #d4af37;
+    --dm-warning: #F0D264;
+    --dm-warning-hover: #F5DC7A;
+    --dm-warning-active: #F8E491;
+    --dm-warning-light: rgba(240, 210, 100, 0.15);
+    --dm-warning-dark: #D4B040;
+    --dm-warning-text: #F0D264;
 
-    --dm-danger: #bb2528;
-    --dm-danger-hover: #cc3336;
-    --dm-danger-active: #dd4144;
-    --dm-danger-light: rgba(187, 37, 40, 0.15);
-    --dm-danger-dark: #991e20;
+    --dm-danger: #F07070;
+    --dm-danger-hover: #F58888;
+    --dm-danger-active: #FA9E9E;
+    --dm-danger-light: rgba(240, 112, 112, 0.15);
+    --dm-danger-dark: #D44444;
 
     /* ================================================
-       ACCENT COLOURS
+       ACCENT COLOURS - Bright festive palette for dark backgrounds
        ================================================ */
-    --dm-accent-1: #d4af37; /* Gold */
-    --dm-accent-2: #bb2528; /* Holly Berry */
-    --dm-accent-3: #228b22; /* Pine Green */
-    --dm-accent-4: #f5f5f5; /* Snow White */
-
-    /* ================================================
-       SELECTION
-       ================================================ */
-    --dm-selected-bg: rgba(196, 30, 58, 0.12);
-    --dm-tab-active-border: #c41e3a;
-    --dm-tab-active-text: #c41e3a;
-    --dm-progress-bar: #c41e3a;
-
-    /* Danger - Standard red */
-    --dm-danger: #dc3545;
-    --dm-danger-hover: #bb2d3b;
-    --dm-danger-active: #b02a37;
-    --dm-danger-light: rgba(220, 53, 69, 0.15);
-    --dm-danger-dark: #842029;
+    --dm-accent-1: #F0D264; /* Bright Gold */
+    --dm-accent-2: #E85565; /* Bright Berry */
+    --dm-accent-3: #5CB875; /* Bright Pine */
+    --dm-accent-4: #F5F5F5; /* Snow White */
 
     /* ================================================
        INTERACTIVE STATES
        ================================================ */
-    --dm-hover-bg: rgba(255, 255, 255, 0.07);
-    --dm-active-bg: rgba(255, 255, 255, 0.1);
+    --dm-hover-bg: rgba(92, 184, 117, 0.09);   /* pine-tree ambient glow */
+    --dm-active-bg: rgba(232, 85, 101, 0.11);  /* Christmas-light warmth */
+    --dm-selected-bg: rgba(92, 184, 117, 0.15);
     --dm-disabled-opacity: 0.4;
 
     /* ================================================
@@ -126,7 +111,8 @@
     --dm-input-text: var(--dm-text);
     --dm-input-placeholder: var(--dm-text-muted);
     --dm-input-focus-border: var(--dm-primary);
-    --dm-input-disabled-bg: #1e293b;
+    --dm-input-focus-shadow: var(--dm-focus-ring);
+    --dm-input-disabled-bg: #122416;
 
     /* Buttons */
     --dm-btn-text: var(--dm-text);
@@ -138,14 +124,14 @@
     --dm-table-border: var(--dm-border);
     --dm-table-header-bg: var(--dm-background-alt);
     --dm-table-header-text: var(--dm-text);
-    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+    --dm-table-stripe-bg: rgba(92, 184, 117, 0.05); /* faint pine-shadow stripe */
     --dm-table-hover-bg: var(--dm-hover-bg);
     --dm-table-selected-bg: var(--dm-selected-bg);
 
     /* Modals */
     --dm-modal-bg: var(--dm-surface);
     --dm-modal-border: var(--dm-border);
-    --dm-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --dm-modal-backdrop: rgba(4, 18, 8, 0.84); /* dark forest night, not flat black */
     --dm-modal-shadow: var(--dm-shadow-xl);
 
     /* Dropdowns */
@@ -156,8 +142,8 @@
     --dm-dropdown-item-active: var(--dm-selected-bg);
 
     /* Tooltips */
-    --dm-tooltip-bg: #0f172a;
-    --dm-tooltip-text: #ffffff;
+    --dm-tooltip-bg: #0A1A10;
+    --dm-tooltip-text: #FFFFFF;
 
     /* Toasts */
     --dm-toast-bg: var(--dm-surface);
@@ -179,6 +165,8 @@
     /* Tabs */
     --dm-tab-border: var(--dm-border);
     --dm-tab-hover-bg: var(--dm-hover-bg);
+    --dm-tab-active-border: #5CB875;
+    --dm-tab-active-text: #5CB875;
 
     /* Accordion */
     --dm-accordion-bg: var(--dm-surface);
@@ -187,31 +175,103 @@
     --dm-accordion-header-hover: var(--dm-hover-bg);
 
     /* Badges */
-    --dm-badge-bg: var(--dm-secondary);
-    --dm-badge-text: #0f172a;
+    --dm-badge-bg: var(--dm-primary);
+    --dm-badge-text: #0A1A10;
+
+    /* Pills */
+    --dm-pill-bg: #243A2C;
+    --dm-pill-color: var(--dm-text);
+    --dm-pill-hover-bg: #2A4A34;
+
+    /* Autocomplete / Pillbox */
+    --dm-autocomplete-bg: var(--dm-surface);
+    --dm-autocomplete-border: var(--dm-border);
+    --dm-autocomplete-shadow: var(--dm-shadow-md);
+    --dm-autocomplete-item-hover: var(--dm-hover-bg);
+    --dm-autocomplete-item-active: var(--dm-selected-bg);
+    --dm-autocomplete-highlight: var(--dm-primary-light);
+    --dm-pillbox-bg: var(--dm-surface);
+    --dm-pillbox-border: var(--dm-border);
 
     /* Progress */
-    --dm-progress-bg: #334155;
+    --dm-progress-bg: #1E3828;
+    --dm-progress-bar: #5CB875;
 
     /* Scrollbar */
-    --dm-scrollbar-track: #1e293b;
-    --dm-scrollbar-thumb: #475569;
-    --dm-scrollbar-thumb-hover: #64748b;
+    --dm-scrollbar-track: #122416;
+    --dm-scrollbar-thumb: #2A4A34;
+    --dm-scrollbar-thumb-hover: #E85565;
 
     /* Code */
-    --dm-code-bg: #0f172a;
-    --dm-code-text: #fca5a5;
+    --dm-code-bg: #0A1A10;
+    --dm-code-text: #F0D264;
     --dm-code-border: var(--dm-border);
 
     /* ================================================
-       SHADOWS - Subtle for dark mode
+       SHADOWS - Warm firelight tint (black base + red ember glow)
        ================================================ */
-    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.45), 0 2px 4px -2px rgb(180 60 40 / 0.05);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(180 60 40 / 0.07);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.55), 0 8px 10px -6px rgb(180 60 40 / 0.08);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.65);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.25);
 
+    /* ================================================
+       ELEVATION / DEPTH - Warm firelight undertone
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(180, 60, 40, 0.05);
+    --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(180, 60, 40, 0.06);
+    --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.45), 0 4px 6px rgba(180, 60, 40, 0.07);
+    --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.5), 0 10px 10px rgba(180, 60, 40, 0.08);
+}
+
+/* ============================================================
+   DECORATIVE CSS — "Christmas Eve" festive embellishments
+   ============================================================ */
+
+/* Snow-dust background — three festive dot layers: white snow, green pine, red Christmas lights */
+.dm-theme-christmas-dark {
+    background-image:
+        radial-gradient(circle, rgba(255, 255, 255, 0.13) 1px, transparent 1px),
+        radial-gradient(circle, rgba(92, 184, 117, 0.09) 1px, transparent 1px),
+        radial-gradient(circle, rgba(232, 85, 101, 0.06) 1px, transparent 1px);
+    background-size: 40px 40px, 65px 65px, 95px 95px;
+    background-position: 0 0, 20px 20px, 47px 11px;
+}
+
+/* Green-Gold-Red gradient stripe on card tops (darker, richer tones) */
+.dm-theme-christmas-dark .card {
+    border-top: 3px solid transparent;
+    border-image: linear-gradient(90deg, #5CB875 0%, #F0D264 50%, #E85565 100%) 1;
+    border-image-slice: 1;
+}
+
+/* Candy-stripe progress bars using surface colour for stripes */
+.dm-theme-christmas-dark .dm-progression-progress-bar,
+.dm-theme-christmas-dark .progress-bar {
+    background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 6px,
+        rgba(26, 48, 32, 0.4) 6px,
+        rgba(26, 48, 32, 0.4) 12px
+    );
+    background-color: #5CB875;
+}
+
+/* Festive syntax highlighting — brighter versions for dark backgrounds */
+.dm-theme-christmas-dark .code-block .syntax-keyword {
+    color: #5CB875;
+    font-weight: 600;
+}
+
+.dm-theme-christmas-dark .code-block .syntax-string,
+.dm-theme-christmas-dark .code-block .syntax-template-string {
+    color: #E85565;
+}
+
+.dm-theme-christmas-dark .code-block .syntax-function {
+    color: #F0D264;
 }

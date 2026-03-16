@@ -660,8 +660,8 @@ class ThemeRoller {
                                 <option value="charcoal-dark" ${currentTheme === 'charcoal-dark' ? 'selected' : ''}>Charcoal Dark 🌙</option>
                             </optgroup>
                             <optgroup label="Christmas">
-                                <option value="christmas-light" ${currentTheme === 'christmas-light' ? 'selected' : ''}>Christmas Light ☀️</option>
-                                <option value="christmas-dark" ${currentTheme === 'christmas-dark' ? 'selected' : ''}>Christmas Dark 🌙</option>
+                                <option value="christmas-light" ${currentTheme === 'christmas-light' ? 'selected' : ''}>Christmas Day ❄️</option>
+                                <option value="christmas-dark" ${currentTheme === 'christmas-dark' ? 'selected' : ''}>Christmas Eve 🎄</option>
                             </optgroup>
                             <optgroup label="Unicorn">
                                 <option value="unicorn-light" ${currentTheme === 'unicorn-light' ? 'selected' : ''}>Unicorn Light ☀️</option>
