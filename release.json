@@ -1,4 +1,36 @@
 {
+  "version": "0.19.5",
+  "releaseDate": "2026-03-16",
+  "codename": "WeddingBells",
+  "changes": {
+    "features": [
+      {
+        "title": "Wedding Theme — Classic Antique Gold Palette",
+        "description": "Two new theme variants (wedding-light, wedding-dark) registered across all theming surfaces; theme count 24 → 26",
+        "impact": "low",
+        "files": [
+          "public/assets/themes/wedding-light.css",
+          "public/assets/themes/wedding-dark.css",
+          "public/assets/themes/wedding.css",
+          "src/theme.js",
+          "src/theme-roller.js",
+          "scripts/build-css.js",
+          "public/layouts/js/layout.js",
+          "public/showcase/themes/index.html",
+          "public/download/index.html",
+          "public/download/kickstart-builder.js",
+          "public/assets/ide/phpstorm/theme.d.ts"
+        ],
+        "details": "<p>A classic <strong>Wedding</strong> theme palette — two variants (Day + Evening) built around antique gold (<code>#C5A55A</code>) and silver (<code>#A8A9AD</code>) tones, bringing the total theme count to 26.</p><ul><li><strong>wedding-light (Day)</strong> — Warm cream backgrounds (<code>#FFFDF7</code>), antique gold primary (<code>#C5A55A</code>), antique silver secondary (<code>#A8A9AD</code>), dark warm text (<code>#2C2416</code>), warm tan borders (<code>#E8DCC8</code>), and warm gold-tinted shadows for a timeless, refined feel</li><li><strong>wedding-dark (Evening)</strong> — Deep midnight navy backgrounds (<code>#12121F</code> / <code>#1A1A2E</code>), antique gold primary with lighter hover (<code>#D4B66A</code>) following dark-mode convention, warm cream text (<code>#F0E8D8</code>), indigo borders (<code>#2A2A40</code>), and subtle gold-glow shadows</li><li><strong>wedding.css</strong> — Legacy compound-selector variant (<code>.dm-theme-wedding</code> + dark override) for projects using the base/variant pattern</li></ul><p>Registered across all theming surfaces: Theme Roller dropdown (Day ☀️ / Evening 🌙 labels), layout variant dot selector (count 24 → 26), themes showcase card grid, Kickstart Builder theme picker, and the <code>Domma.theme</code> API (<code>listThemes()</code> / <code>listBases()</code>). PhpStorm IDE type definitions updated to include <code>'wedding'</code> in <code>ThemeVariant</code>.</p>"
+      }
+    ],
+    "enhancements": [],
+    "bugFixes": [],
+    "breaking": [],
+    "housekeeping": []
+  }
+},
+{
   "version": "0.19.4",
   "releaseDate": "2026-03-12",
   "codename": "MintCondition",

@@ -61,7 +61,10 @@ const themeFiles = [
   'public/assets/themes/grayve-dark.css',
   // Mint themes
   'public/assets/themes/mint-light.css',
-  'public/assets/themes/mint-dark.css'
+  'public/assets/themes/mint-dark.css',
+  // Wedding themes
+  'public/assets/themes/wedding-light.css',
+  'public/assets/themes/wedding-dark.css'
 ];
 
 // Build banner

@@ -1,0 +1,64 @@
+/**
+ * Domma Wedding Theme (Legacy Combinable Variant)
+ * Classic antique gold palette — warm, muted, timeless
+ * Use wedding-light.css or wedding-dark.css for full theme files.
+ * This file provides brand/accent overrides for combinable usage.
+ */
+
+/* Day (light) variant */
+.dm-theme-wedding {
+    --dm-primary: #C5A55A;
+    --dm-primary-hover: #B8964D;
+    --dm-primary-active: #A8823F;
+    --dm-primary-light: #FDF5E0;
+    --dm-primary-dark: #8B7335;
+
+    --dm-secondary: #A8A9AD;
+    --dm-secondary-hover: #97989C;
+    --dm-secondary-active: #87888C;
+    --dm-secondary-light: #F0F0F1;
+    --dm-secondary-dark: #6B6C6F;
+
+    --dm-focus-ring: 0 0 0 3px rgba(197, 165, 90, 0.3);
+    --dm-border-focus: #C5A55A;
+
+    --dm-tab-active-border: #C5A55A;
+    --dm-tab-active-text: #C5A55A;
+
+    --dm-progress-bar: #C5A55A;
+    --dm-selected-bg: rgba(197, 165, 90, 0.15);
+
+    --dm-accent-1: #E8DCC8;
+    --dm-accent-2: #C5A55A;
+    --dm-accent-3: #A8A9AD;
+    --dm-accent-4: #8B7335;
+}
+
+/* Evening (dark) variant */
+.dm-theme-dark.dm-theme-wedding {
+    --dm-primary: #C5A55A;
+    --dm-primary-hover: #D4B66A;
+    --dm-primary-active: #B8964D;
+    --dm-primary-light: #2A2520;
+    --dm-primary-dark: #8B7335;
+
+    --dm-secondary: #C0C0C0;
+    --dm-secondary-hover: #D0D0D0;
+    --dm-secondary-active: #E0E0E0;
+    --dm-secondary-light: rgba(192, 192, 192, 0.15);
+    --dm-secondary-dark: #909090;
+
+    --dm-focus-ring: 0 0 0 3px rgba(197, 165, 90, 0.35);
+    --dm-border-focus: #C5A55A;
+
+    --dm-tab-active-border: #C5A55A;
+    --dm-tab-active-text: #C5A55A;
+
+    --dm-progress-bar: #C5A55A;
+    --dm-selected-bg: rgba(197, 165, 90, 0.2);
+
+    --dm-accent-1: #D4C4A8;
+    --dm-accent-2: #C5A55A;
+    --dm-accent-3: #C0C0C0;
+    --dm-accent-4: #5C4E3C;
+}

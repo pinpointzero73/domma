@@ -1,0 +1,214 @@
+/**
+ * Domma Wedding Dark Theme
+ * Classic antique gold palette — warm, muted, timeless
+ * Evening variant - deep midnight navy with antique gold highlights
+ */
+
+.dm-theme-wedding-dark {
+    color-scheme: dark;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Evening Mode Base
+       ================================================ */
+
+    /* Backgrounds - Deep midnight navy */
+    --dm-background: #12121F;
+    --dm-background-alt: #1A1A2E;
+    --dm-surface: #22223A;
+    --dm-surface-raised: #2A2A45;
+    --dm-surface-overlay: #2E2E4A;
+
+    /* Text - Warm cream for readability on dark */
+    --dm-text: #F0E8D8;
+    --dm-text-secondary: #D4C4A8;
+    --dm-text-muted: #8B7355;
+    --dm-text-disabled: #4A4060;
+    --dm-text-inverse: #12121F;
+
+    /* Borders - Indigo/midnight */
+    --dm-border: #2A2A40;
+    --dm-border-light: #22223A;
+    --dm-border-dark: #3A3A55;
+
+    /* ================================================
+       GOLD ACCENT COLORS - Antique gold for evening mode
+       ================================================ */
+
+    /* PRIMARY COLOURS - Antique Gold (lighter hover for dark mode) */
+    --dm-primary: #C5A55A;
+    --dm-primary-hover: #D4B66A;
+    --dm-primary-active: #B8964D;
+    --dm-primary-light: #2A2520;
+    --dm-primary-dark: #8B7335;
+
+    /* Focus ring with warm gold colour */
+    --dm-focus-ring: 0 0 0 3px rgba(197, 165, 90, 0.35);
+    --dm-border-focus: #C5A55A;
+
+    /* ================================================
+       SECONDARY COLOURS - Brighter silver for evening
+       ================================================ */
+    --dm-secondary: #C0C0C0;
+    --dm-secondary-hover: #D0D0D0;
+    --dm-secondary-active: #E0E0E0;
+    --dm-secondary-light: rgba(192, 192, 192, 0.15);
+    --dm-secondary-dark: #909090;
+
+    /* ================================================
+       STATUS COLOURS - Harmonised with warm dark palette
+       ================================================ */
+    --dm-success: #5DB875;
+    --dm-success-hover: #70C487;
+    --dm-success-active: #85CF9A;
+    --dm-success-light: rgba(93, 184, 117, 0.15);
+    --dm-success-dark: #4A9460;
+
+    --dm-info: #5A9BC4;
+    --dm-info-hover: #6CACD4;
+    --dm-info-active: #82BCE0;
+    --dm-info-light: rgba(90, 155, 196, 0.15);
+    --dm-info-dark: #447AA0;
+
+    --dm-warning: #E0A040;
+    --dm-warning-hover: #ECAF52;
+    --dm-warning-active: #F5C060;
+    --dm-warning-light: rgba(224, 160, 64, 0.15);
+    --dm-warning-text: #E0A040;
+
+    --dm-danger: #E05555;
+    --dm-danger-hover: #ED6B6B;
+    --dm-danger-active: #F58080;
+    --dm-danger-light: rgba(224, 85, 85, 0.15);
+    --dm-danger-dark: #C03030;
+
+    /* ================================================
+       ACCENT COLOURS - Evening wedding palette
+       ================================================ */
+    --dm-accent-1: #D4C4A8; /* Muted champagne */
+    --dm-accent-2: #C5A55A; /* Gold */
+    --dm-accent-3: #C0C0C0; /* Bright silver */
+    --dm-accent-4: #5C4E3C; /* Dark bronze */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(255, 255, 255, 0.07);
+    --dm-active-bg: rgba(255, 255, 255, 0.1);
+    --dm-selected-bg: rgba(197, 165, 90, 0.2);
+    --dm-disabled-opacity: 0.4;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-sm);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-focus-shadow: var(--dm-focus-ring);
+    --dm-input-disabled-bg: #1A1A2E;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+    --dm-table-hover-bg: var(--dm-hover-bg);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.75);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #12121F;
+    --dm-tooltip-text: #F0E8D8;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+    --dm-tab-active-border: #C5A55A;
+    --dm-tab-active-text: #C5A55A;
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #12121F;
+
+    /* Progress */
+    --dm-progress-bg: #2A2A40;
+    --dm-progress-bar: #C5A55A;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #1A1A2E;
+    --dm-scrollbar-thumb: #2A2A40;
+    --dm-scrollbar-thumb-hover: #C5A55A;
+
+    /* Code */
+    --dm-code-bg: #12121F;
+    --dm-code-text: #D4B66A;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Subtle gold glow for evening mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(197 165 90 / 0.05);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(197 165 90 / 0.05);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(197 165 90 / 0.05);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.45), 0 8px 10px -6px rgb(197 165 90 / 0.05);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.6);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.2);
+
+    /* ================================================
+       ELEVATION / DEPTH
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+    --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2);
+    --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.35), 0 4px 6px rgba(0, 0, 0, 0.2);
+    --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.4), 0 10px 10px rgba(0, 0, 0, 0.2);
+}

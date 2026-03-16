@@ -1,0 +1,215 @@
+/**
+ * Domma Wedding Light Theme
+ * Classic antique gold palette — warm, muted, timeless
+ * Day variant - cream/ivory backgrounds with antique gold highlights
+ */
+
+.dm-theme-wedding-light {
+    color-scheme: light;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Day Mode Base
+       ================================================ */
+
+    /* Backgrounds - Warm cream/ivory */
+    --dm-background: #FFFDF7;
+    --dm-background-alt: #FFF8E7;
+    --dm-surface: #FFFFFF;
+    --dm-surface-raised: #FFFCF2;
+    --dm-surface-overlay: #FFF8E7;
+
+    /* Text - Dark warm tones for readability on cream */
+    --dm-text: #2C2416;
+    --dm-text-secondary: #5C4E3C;
+    --dm-text-muted: #8B7355;
+    --dm-text-disabled: #C4B49A;
+    --dm-text-inverse: #FFFFFF;
+
+    /* Borders - Warm tan */
+    --dm-border: #E8DCC8;
+    --dm-border-light: #F0E8D8;
+    --dm-border-dark: #D4C4A0;
+
+    /* ================================================
+       GOLD ACCENT COLORS - Antique gold for day mode
+       ================================================ */
+
+    /* PRIMARY COLOURS - Antique Gold */
+    --dm-primary: #C5A55A;
+    --dm-primary-hover: #B8964D;
+    --dm-primary-active: #A8823F;
+    --dm-primary-light: #FDF5E0;
+    --dm-primary-dark: #8B7335;
+
+    /* Focus ring with warm gold colour */
+    --dm-focus-ring: 0 0 0 3px rgba(197, 165, 90, 0.3);
+    --dm-border-focus: #C5A55A;
+
+    /* ================================================
+       SECONDARY COLOURS - Antique Silver
+       ================================================ */
+    --dm-secondary: #A8A9AD;
+    --dm-secondary-hover: #97989C;
+    --dm-secondary-active: #87888C;
+    --dm-secondary-light: #F0F0F1;
+    --dm-secondary-dark: #6B6C6F;
+
+    /* ================================================
+       STATUS COLOURS - Harmonised with warm palette
+       ================================================ */
+    --dm-success: #4A8C5C;
+    --dm-success-hover: #56A06A;
+    --dm-success-active: #62B478;
+    --dm-success-light: #E8F5EC;
+    --dm-success-dark: #3A6E48;
+
+    --dm-info: #4A7FA8;
+    --dm-info-hover: #5490BC;
+    --dm-info-active: #6AA1CC;
+    --dm-info-light: #E6F0F8;
+    --dm-info-dark: #3A6484;
+
+    --dm-warning: #C8882A;
+    --dm-warning-hover: #DC9A36;
+    --dm-warning-active: #EAA842;
+    --dm-warning-light: #FEF3E0;
+    --dm-warning-dark: #A06C20;
+    --dm-warning-text: #A06C20;
+
+    --dm-danger: #C0392B;
+    --dm-danger-hover: #D44333;
+    --dm-danger-active: #E05040;
+    --dm-danger-light: #FDECEA;
+    --dm-danger-dark: #992D22;
+
+    /* ================================================
+       ACCENT COLOURS - Wedding palette
+       ================================================ */
+    --dm-accent-1: #E8DCC8; /* Champagne */
+    --dm-accent-2: #C5A55A; /* Gold */
+    --dm-accent-3: #A8A9AD; /* Silver */
+    --dm-accent-4: #8B7335; /* Bronze */
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-active-bg: rgba(0, 0, 0, 0.08);
+    --dm-selected-bg: rgba(197, 165, 90, 0.15);
+    --dm-disabled-opacity: 0.65;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-md);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-focus-shadow: var(--dm-focus-ring);
+    --dm-input-disabled-bg: #FFF8E7;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(0, 0, 0, 0.02);
+    --dm-table-hover-bg: rgba(0, 0, 0, 0.04);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(44, 36, 22, 0.5);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #2C2416;
+    --dm-tooltip-text: #FFFDF7;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+    --dm-tab-active-border: #C5A55A;
+    --dm-tab-active-text: #C5A55A;
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #FFFFFF;
+
+    /* Progress */
+    --dm-progress-bg: #E8DCC8;
+    --dm-progress-bar: #C5A55A;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #FFF8E7;
+    --dm-scrollbar-thumb: #D4C4A0;
+    --dm-scrollbar-thumb-hover: #C5A55A;
+
+    /* Code */
+    --dm-code-bg: #FFF8E7;
+    --dm-code-text: #A8823F;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS - Warm gold-tinted for day mode
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(139 115 53 / 0.06);
+    --dm-shadow: 0 1px 3px 0 rgb(139 115 53 / 0.1), 0 1px 2px -1px rgb(139 115 53 / 0.08);
+    --dm-shadow-md: 0 4px 6px -1px rgb(139 115 53 / 0.1), 0 2px 4px -2px rgb(139 115 53 / 0.08);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(139 115 53 / 0.1), 0 4px 6px -4px rgb(139 115 53 / 0.07);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(139 115 53 / 0.1), 0 8px 10px -6px rgb(139 115 53 / 0.07);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(139 115 53 / 0.2);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(139 115 53 / 0.06);
+
+    /* ================================================
+       ELEVATION / DEPTH - Warm undertone
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(139, 115, 53, 0.1), 0 1px 2px rgba(139, 115, 53, 0.07);
+    --dm-elevation-2: 0 4px 6px rgba(139, 115, 53, 0.09), 0 2px 4px rgba(139, 115, 53, 0.06);
+    --dm-elevation-3: 0 10px 15px rgba(139, 115, 53, 0.09), 0 4px 6px rgba(139, 115, 53, 0.05);
+    --dm-elevation-4: 0 20px 25px rgba(139, 115, 53, 0.12), 0 10px 10px rgba(139, 115, 53, 0.04);
+}

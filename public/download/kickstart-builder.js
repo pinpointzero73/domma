@@ -17,6 +17,8 @@
     'sunset-light', 'lemon-light',
     'unicorn-light', 'unicorn-dark', 'dreamy-light', 'dreamy-dark',
     'grayve-light', 'grayve-dark',
+    'mint-light', 'mint-dark',
+    'wedding-light', 'wedding-dark',
   ];
 
   const DEFAULT_THEME   = 'charcoal-dark';

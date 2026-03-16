@@ -679,6 +679,10 @@ class ThemeRoller {
                                 <option value="mint-light" ${currentTheme === 'mint-light' ? 'selected' : ''}>Mint Light ☀️</option>
                                 <option value="mint-dark" ${currentTheme === 'mint-dark' ? 'selected' : ''}>Mint Dark 🌙</option>
                             </optgroup>
+                            <optgroup label="Wedding">
+                                <option value="wedding-light" ${currentTheme === 'wedding-light' ? 'selected' : ''}>Wedding Day ☀️</option>
+                                <option value="wedding-dark" ${currentTheme === 'wedding-dark' ? 'selected' : ''}>Wedding Evening 🌙</option>
+                            </optgroup>
                         </select>
                     </div>
                 </div>

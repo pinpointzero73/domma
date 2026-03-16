@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.19.5",
+      "title": "Wedding — Classic Antique Gold Theme Palette",
+      "description": "<p><strong>Feature Release:</strong> A new <strong>Wedding</strong> theme palette — two variants (Day + Evening) built around antique gold (<code>#C5A55A</code>) and silver tones, bringing the total theme count to 26.</p><p><strong>Wedding Theme:</strong></p><ul><li><strong>wedding-light (Day)</strong> — Warm cream backgrounds (<code>#FFFDF7</code>), antique gold primary (<code>#C5A55A</code>), antique silver secondary (<code>#A8A9AD</code>), dark warm text (<code>#2C2416</code>), warm tan borders (<code>#E8DCC8</code>), and warm gold-tinted shadows</li><li><strong>wedding-dark (Evening)</strong> — Deep midnight navy (<code>#12121F</code>), gold primary with lighter hover (<code>#D4B66A</code>), warm cream text (<code>#F0E8D8</code>), indigo borders (<code>#2A2A40</code>), and subtle gold-glow shadows</li></ul><p><strong>Registered across all surfaces:</strong> Available in the Theme Roller dropdown (Day ☀️ / Evening 🌙), the layout variant dot selector (count 24 → 26), the themes showcase card grid, the Kickstart Builder theme picker, and the <code>Domma.theme</code> API (<code>listThemes()</code> / <code>listBases()</code>).</p>",
+      "date": "2026-03-16"
+    },
+    {
       "year": "v0.19.4",
       "title": "Mint — Fresh Spearmint Theme Palette",
       "description": "<p><strong>Feature Release:</strong> A new <strong>Mint</strong> theme palette — two variants (light + dark) built around cool spearmint and seafoam green tones, bringing the total theme count to 24.</p><p><strong>Mint Theme:</strong></p><ul><li><strong>mint-light</strong> — Rich eucalyptus primary (<code>#2e9e6e</code>), seafoam secondary (<code>#5b8a7a</code>), white surfaces with a subtle mint-tinted alt background (<code>#f0faf5</code>), near-black forest text (<code>#1a2e25</code>), and soft celadon borders (<code>#c8e6d8</code>)</li><li><strong>mint-dark</strong> — Deep slate-900 backgrounds with a dark mint-tinted surface (<code>#1e3a2f</code>), bright spearmint primary (<code>#6dd5a8</code>) for contrast, mint-tinted text (<code>#d4f5e4</code>), and dark teal borders (<code>#2a4a3a</code>)</li></ul><p><strong>Registered across all surfaces:</strong> Available in the Theme Roller dropdown, the layout variant dot selector (count 22 → 24), the themes showcase card grid, and the <code>Domma.theme</code> API (<code>listThemes()</code> / <code>listBases()</code>).</p>",
