@@ -197,13 +197,8 @@
 .card-header {
     padding: var(--dm-space-4) var(--dm-space-6);
     border-bottom: 1px solid var(--dm-card-border);
-    background-color: var(--dm-surface-secondary);
+    background-color: var(--dm-card-header-bg, var(--dm-surface-secondary));
     color: var(--dm-text);
-}
-
-/* Darker header background in dark mode for better contrast */
-[data-mode="dark"] .card-header {
-    background-color: var(--dm-background-alt);
 }
 
 .card-body {
@@ -214,13 +209,8 @@
 .card-footer {
     padding: var(--dm-space-4) var(--dm-space-6);
     border-top: 1px solid var(--dm-card-border);
-    background-color: var(--dm-surface-secondary);
+    background-color: var(--dm-card-header-bg, var(--dm-surface-secondary));
     color: var(--dm-text);
-}
-
-/* Darker footer background in dark mode for better contrast */
-[data-mode="dark"] .card-footer {
-    background-color: var(--dm-background-alt);
 }
 
 .card-title {

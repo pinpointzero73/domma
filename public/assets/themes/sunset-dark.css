@@ -105,6 +105,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-md);
+    --dm-card-header-bg: var(--dm-primary-light);
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);
