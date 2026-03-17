@@ -249,6 +249,27 @@
     border-color: var(--dm-primary);
 }
 
+/* Card Variant - Accent (left border highlight) */
+.card-accent {
+    border-left: 4px solid var(--dm-primary);
+}
+
+.card-accent-success {
+    border-left: 4px solid var(--dm-success);
+}
+
+.card-accent-danger {
+    border-left: 4px solid var(--dm-danger);
+}
+
+.card-accent-warning {
+    border-left: 4px solid var(--dm-warning);
+}
+
+.card-accent-info {
+    border-left: 4px solid var(--dm-info);
+}
+
 /* Card Variant - Namespace/Feature Cards */
 .card.namespace-card {
     display: flex;

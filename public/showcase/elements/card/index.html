@@ -378,6 +378,170 @@ const productCard = Domma.elements.card('#product-card', {
         </div>
     </section>
 
+    <!-- SECTION 4.5: Accent Cards -->
+    <section class="card mb-6" data-section="Accent Cards">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold m-0">Accent Cards</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                The <code>.card-accent</code> variant adds a prominent left border to highlight a card without
+                changing its background colour. It is theme-aware — the border colour updates automatically when
+                the theme changes. Five colour modifiers are available.
+            </p>
+
+            <h4 class="category-title">Example 1: Basic Accent Card</h4>
+            <p class="mb-2">Left border using the primary theme colour (<code>.card-accent</code>):</p>
+            <div class="demo-area mb-4">
+                <div class="card card-accent" style="max-width: 420px;">
+                    <div class="card-body">
+                        <h3 class="card-title">Accent Card</h3>
+                        <p class="card-text">A simple accent card with a left border in the primary theme colour.
+                            Switch themes to see the border update automatically.</p>
+                    </div>
+                </div>
+            </div>
+            <pre><code>&lt;div class="card card-accent"&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h3 class="card-title"&gt;Accent Card&lt;/h3&gt;
+    &lt;p class="card-text"&gt;Content here&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+            <h4 class="category-title">Example 2: Colour Variants</h4>
+            <p class="mb-2">Four semantic colour modifiers map to the standard status design tokens:</p>
+            <div class="demo-area mb-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="card card-accent-success">
+                        <div class="card-body">
+                            <h5 class="card-title mb-1">Success</h5>
+                            <p class="card-text mb-0 text-sm">
+                                <code>.card-accent-success</code>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card card-accent-danger">
+                        <div class="card-body">
+                            <h5 class="card-title mb-1">Danger</h5>
+                            <p class="card-text mb-0 text-sm">
+                                <code>.card-accent-danger</code>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card card-accent-warning">
+                        <div class="card-body">
+                            <h5 class="card-title mb-1">Warning</h5>
+                            <p class="card-text mb-0 text-sm">
+                                <code>.card-accent-warning</code>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card card-accent-info">
+                        <div class="card-body">
+                            <h5 class="card-title mb-1">Info</h5>
+                            <p class="card-text mb-0 text-sm">
+                                <code>.card-accent-info</code>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <pre><code>&lt;div class="card card-accent-success"&gt;...&lt;/div&gt;
+&lt;div class="card card-accent-danger"&gt;...&lt;/div&gt;
+&lt;div class="card card-accent-warning"&gt;...&lt;/div&gt;
+&lt;div class="card card-accent-info"&gt;...&lt;/div&gt;</code></pre>
+
+            <h4 class="category-title">Example 3: Accent + Hover</h4>
+            <p class="mb-2">Combine <code>.card-accent</code> with <code>.card-hover</code> for an interactive card
+                that lifts on hover while keeping the accent border:</p>
+            <div class="demo-area mb-4">
+                <div class="card card-accent card-hover" style="max-width: 420px;">
+                    <div class="card-body">
+                        <h3 class="card-title">Hover over me</h3>
+                        <p class="card-text">The accent border remains visible during the hover lift animation.</p>
+                    </div>
+                </div>
+            </div>
+            <pre><code>&lt;div class="card card-accent card-hover"&gt;
+  &lt;div class="card-body"&gt;...&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+            <h4 class="category-title">Example 4: Full Card Structure</h4>
+            <p class="mb-2">Accent works seamlessly with the full header/body/footer structure:</p>
+            <div class="demo-area mb-4">
+                <div class="card card-accent" style="max-width: 420px;">
+                    <div class="card-header">
+                        <h5 class="m-0">Deployment Status</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Build <strong>#1,042</strong> completed successfully. All 148 tests
+                            passed.</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Deployed 2 minutes ago</small>
+                    </div>
+                </div>
+            </div>
+            <pre><code>&lt;div class="card card-accent"&gt;
+  &lt;div class="card-header"&gt;Deployment Status&lt;/div&gt;
+  &lt;div class="card-body"&gt;Build #1,042 passed all tests.&lt;/div&gt;
+  &lt;div class="card-footer"&gt;Deployed 2 minutes ago&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+            <h4 class="category-title">Example 5: Practical — Notification Cards</h4>
+            <p class="mb-2">A real-world pattern: status-aware notification cards using colour variants to convey
+                urgency at a glance:</p>
+            <div class="demo-area mb-4">
+                <div style="display: flex; flex-direction: column; gap: 12px; max-width: 500px;">
+                    <div class="card card-accent-danger card-hover">
+                        <div class="card-body" style="display: flex; align-items: flex-start; gap: 12px;">
+                            <span data-icon="alert-circle" style="color: var(--dm-danger); flex-shrink: 0; margin-top: 2px;"></span>
+                            <div>
+                                <strong>Critical: Database connection lost</strong>
+                                <p class="card-text mb-0 text-sm">The primary database is unreachable. Failover
+                                    initiated.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-accent-warning card-hover">
+                        <div class="card-body" style="display: flex; align-items: flex-start; gap: 12px;">
+                            <span data-icon="alert-triangle" style="color: var(--dm-warning); flex-shrink: 0; margin-top: 2px;"></span>
+                            <div>
+                                <strong>Warning: High memory usage</strong>
+                                <p class="card-text mb-0 text-sm">Server memory at 87%. Consider scaling up.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-accent-success card-hover">
+                        <div class="card-body" style="display: flex; align-items: flex-start; gap: 12px;">
+                            <span data-icon="check-circle" style="color: var(--dm-success); flex-shrink: 0; margin-top: 2px;"></span>
+                            <div>
+                                <strong>Deploy succeeded</strong>
+                                <p class="card-text mb-0 text-sm">Version 2.4.1 is live across all regions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="category-title">Example 6: JS Generation</h4>
+            <p class="mb-2">Pass <code>color: 'accent'</code> to generate an accent card via the JavaScript API.
+                The existing <code>card-${color}</code> pattern means no extra code is needed:</p>
+            <div class="demo-area mb-4">
+                <div id="accent-js-card" style="max-width: 420px;"></div>
+            </div>
+            <pre><code>// color: 'accent' produces .card-accent automatically
+E.card('#accent-js-card', {
+    title: 'Generated Accent Card',
+    icon: 'star',
+    color: 'accent',
+    content: '&lt;p&gt;Generated via JavaScript with color: "accent".&lt;/p&gt;',
+    collapsible: true
+});</code></pre>
+
+        </div>
+    </section>
+
     <!-- SECTION 9.5: HTML Generation (DataCard-style) -->
     <section class="card mb-6" data-section="HTML Generation">
         <div class="card-header">
@@ -849,6 +1013,26 @@ Domma.elements.card('#existing-card', { hover: true });
                     <td>Card with primary colour border and themed header</td>
                 </tr>
                 <tr>
+                    <td><code>.card-accent</code></td>
+                    <td>Left border highlight using the primary theme colour (<code>--dm-primary</code>)</td>
+                </tr>
+                <tr>
+                    <td><code>.card-accent-success</code></td>
+                    <td>Left border in the success colour (<code>--dm-success</code>)</td>
+                </tr>
+                <tr>
+                    <td><code>.card-accent-danger</code></td>
+                    <td>Left border in the danger colour (<code>--dm-danger</code>)</td>
+                </tr>
+                <tr>
+                    <td><code>.card-accent-warning</code></td>
+                    <td>Left border in the warning colour (<code>--dm-warning</code>)</td>
+                </tr>
+                <tr>
+                    <td><code>.card-accent-info</code></td>
+                    <td>Left border in the info colour (<code>--dm-info</code>)</td>
+                </tr>
+                <tr>
                     <td><code>.card-collapsible</code></td>
                     <td>Enables collapsible functionality with smooth transitions</td>
                 </tr>
@@ -1136,7 +1320,11 @@ $.setup({
                 <tr><td><code>--dm-card-shadow</code></td><td><code>var(--dm-shadow)</code></td><td>Card shadow intensity</td></tr>
                 <tr><td><code>--dm-radius-lg</code></td><td><code>0.5rem</code></td><td>Card corner radius</td></tr>
                 <tr><td><code>--dm-surface</code></td><td><code>var(--dm-white)</code></td><td>General surface colour (inherited)</td></tr>
-                <tr><td><code>--dm-primary</code></td><td><code>var(--dm-blue-600)</code></td><td>Primary colour for <code>.card-primary</code></td></tr>
+                <tr><td><code>--dm-primary</code></td><td><code>var(--dm-blue-600)</code></td><td>Primary colour for <code>.card-primary</code> and <code>.card-accent</code></td></tr>
+                <tr><td><code>--dm-success</code></td><td><em>theme-defined</em></td><td>Accent border colour for <code>.card-accent-success</code></td></tr>
+                <tr><td><code>--dm-danger</code></td><td><em>theme-defined</em></td><td>Accent border colour for <code>.card-accent-danger</code></td></tr>
+                <tr><td><code>--dm-warning</code></td><td><em>theme-defined</em></td><td>Accent border colour for <code>.card-accent-warning</code></td></tr>
+                <tr><td><code>--dm-info</code></td><td><em>theme-defined</em></td><td>Accent border colour for <code>.card-accent-info</code></td></tr>
             </table>
             <h4 class="category-title">Example Override</h4>
             <pre class="code-block language-css">
@@ -1219,6 +1407,17 @@ $.setup({
             onClick: () => {
                 alert('Product added to cart!');
             }
+        });
+
+        // Accent Cards section
+        I.scan();
+
+        E.card('#accent-js-card', {
+            title: 'Generated Accent Card',
+            icon: 'star',
+            color: 'accent',
+            content: '<p>Generated via JavaScript with <code>color: "accent"</code>.</p>',
+            collapsible: true
         });
 
         // Examples section
