@@ -1,0 +1,155 @@
+[     634ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[    1665ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[    1742ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[    1742ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  439612ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  440656ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  440714ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[  440715ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  444788ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  446103ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  446723ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  448003ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  448135ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  448334ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  448930ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  448980ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[  448981ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  451545ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  452367ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  452391ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[  452391ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  465153ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  465781ms] [ERROR] Failed to load template navbar: TypeError: Failed to fetch
+    at Object.load (http://localhost:3001/layouts/js/modules/template-loader.js:29:36)
+    at renderNavbar (http://localhost:3001/layouts/js/layout.js:798:55)
+    at http://localhost:3001/layouts/js/layout.js:83:19 @ http://localhost:3001/layouts/js/modules/template-loader.js:42
+[  465783ms] [ERROR] [Domma Layout] Navbar render failed: TypeError: Failed to execute 'insertBefore' on 'Node': parameter 1 is not of type 'Node'.
+    at renderNavbar (http://localhost:3001/layouts/js/layout.js:805:22)
+    at async http://localhost:3001/layouts/js/layout.js:83:13 @ http://localhost:3001/layouts/js/layout.js:981
+[  466588ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  467883ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  467953ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[  467954ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  473532ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  474022ms] [ERROR] Failed to load template navbar: TypeError: Failed to fetch
+    at Object.load (http://localhost:3001/layouts/js/modules/template-loader.js:29:36)
+    at renderNavbar (http://localhost:3001/layouts/js/layout.js:798:55)
+    at http://localhost:3001/layouts/js/layout.js:83:19 @ http://localhost:3001/layouts/js/modules/template-loader.js:42
+[  474024ms] [ERROR] [Domma Layout] Navbar render failed: TypeError: Failed to execute 'insertBefore' on 'Node': parameter 1 is not of type 'Node'.
+    at renderNavbar (http://localhost:3001/layouts/js/layout.js:805:22)
+    at async http://localhost:3001/layouts/js/layout.js:83:13 @ http://localhost:3001/layouts/js/layout.js:981
+[  474465ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  475578ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  475640ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[  475640ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  478472ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  478948ms] [ERROR] Failed to load template navbar: TypeError: Failed to fetch
+    at Object.load (http://localhost:3001/layouts/js/modules/template-loader.js:29:36)
+    at renderNavbar (http://localhost:3001/layouts/js/layout.js:798:55)
+    at http://localhost:3001/layouts/js/layout.js:83:19 @ http://localhost:3001/layouts/js/modules/template-loader.js:42
+[  478950ms] [ERROR] [Domma Layout] Navbar render failed: TypeError: Failed to execute 'insertBefore' on 'Node': parameter 1 is not of type 'Node'.
+    at renderNavbar (http://localhost:3001/layouts/js/layout.js:805:22)
+    at async http://localhost:3001/layouts/js/layout.js:83:13 @ http://localhost:3001/layouts/js/layout.js:981
+[  479310ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  479850ms] [WARNING] [SiteSearch] Could not load search index: TypeError: Failed to fetch
+    at Object.init (http://localhost:3001/layouts/js/modules/search.js:57:31)
+    at renderNavbar (http://localhost:3001/layouts/js/layout.js:965:32)
+    at async http://localhost:3001/layouts/js/layout.js:83:13 @ http://localhost:3001/layouts/js/modules/search.js:59
+[  480225ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  482186ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  482240ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[  482240ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  484999ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  485730ms] [ERROR] Failed to load template navbar: TypeError: Failed to fetch
+    at Object.load (http://localhost:3001/layouts/js/modules/template-loader.js:29:36)
+    at renderNavbar (http://localhost:3001/layouts/js/layout.js:798:55)
+    at http://localhost:3001/layouts/js/layout.js:83:19 @ http://localhost:3001/layouts/js/modules/template-loader.js:42
+[  485731ms] [ERROR] [Domma Layout] Navbar render failed: TypeError: Failed to execute 'insertBefore' on 'Node': parameter 1 is not of type 'Node'.
+    at renderNavbar (http://localhost:3001/layouts/js/layout.js:805:22)
+    at async http://localhost:3001/layouts/js/layout.js:83:13 @ http://localhost:3001/layouts/js/layout.js:981
+[  486614ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  486803ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  486969ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[  486969ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  495125ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  496494ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  496533ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[  496534ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  499517ms] [ERROR] Failed to load resource: net::ERR_NETWORK_CHANGED @ http://localhost:3001/layouts/js/modules/detector.js:0
+[  499575ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  499938ms] [ERROR] Failed to load resource: net::ERR_NETWORK_CHANGED @ http://localhost:3001/layouts/js/modules/path-resolver.js:0
+[  499941ms] [ERROR] Failed to load resource: net::ERR_NETWORK_CHANGED @ http://localhost:3001/layouts/js/modules/features.js:0
+[  499942ms] [ERROR] Failed to load resource: net::ERR_NETWORK_CHANGED @ http://localhost:3001/layouts/js/modules/sidebar.js:0
+[  500679ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  501513ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  501545ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[  501546ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  502207ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  502807ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  502833ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[  502834ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  505729ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  506286ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  506338ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[  506338ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  507970ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  508972ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  508995ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[  508995ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  509292ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  510023ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  510050ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[  510050ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71
+[  510198ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[  510903ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[  510972ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[  510972ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71

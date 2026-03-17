@@ -1,0 +1,7 @@
+[     651ms] [WARNING] Icon "alert-triangle" not found @ http://localhost:3001/dist/domma.min.js:7
+[    1388ms] [WARNING] Icon "alert" not found @ http://localhost:3001/dist/domma.min.js:7
+[    1422ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/analytics/pageview:0
+[    1422ms] [ERROR] [Analytics] Error tracking page view: TypeError: Failed to fetch
+    at trackPageView (http://localhost:3001/assets/js/analytics.js:60:30)
+    at http://localhost:3001/assets/js/analytics.js:80:5
+    at http://localhost:3001/assets/js/analytics.js:91:3 @ http://localhost:3001/assets/js/analytics.js:71

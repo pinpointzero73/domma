@@ -93,14 +93,22 @@ export class DommaCard extends DommaElement {
                 align-items: center;
                 justify-content: space-between;
                 padding: 0;
-                border-bottom: 1px solid var(--dm-border, #e5e7eb);
-                background: var(--dm-background-alt, #f8fafc);
-                transition: background-color var(--dm-transition-fast, 150ms ease);
+                border-bottom: 1px solid var(--dm-card-border, var(--dm-border, #e5e7eb));
+                background: var(--dm-card-header-bg, var(--dm-surface-secondary, #f8fafc));
             }
 
             .card-header-content {
                 flex: 1;
                 background: transparent;
+            }
+
+            /* Strip the slotted header's own background/border so the wrapper provides
+               a single uniform background across the full header row (text + icon).
+               Without this, the text area gets double-tinted and looks darker
+               than the transparent arrow area. */
+            :host([collapsible]) ::slotted(.card-header) {
+                background: transparent !important;
+                border-bottom: none !important;
             }
 
             .card-collapse-icon {
@@ -111,14 +119,6 @@ export class DommaCard extends DommaElement {
                 color: var(--dm-text-secondary);
                 background: transparent;
                 padding: 1rem 1.5rem;
-            }
-
-            :host([collapsible]) .card-header-wrapper:hover .card-collapse-icon {
-                color: var(--dm-text);
-            }
-
-            :host([collapsible]) .card-header-wrapper:hover {
-                background: var(--dm-hover-bg);
             }
 
             :host([collapsed]) .card-collapse-icon {
@@ -137,8 +137,8 @@ export class DommaCard extends DommaElement {
             ::slotted(.card-header) {
                 margin: 0;
                 padding: 1rem 1.5rem;
-                border-bottom: 1px solid var(--dm-border, #e5e7eb);
-                background: var(--dm-background-alt, #f8fafc);
+                border-bottom: 1px solid var(--dm-card-border, var(--dm-border, #e5e7eb));
+                background: var(--dm-card-header-bg, var(--dm-surface-secondary, #f8fafc));
             }
 
             ::slotted(.card-body) {
@@ -173,12 +173,11 @@ export class DommaCard extends DommaElement {
         // Create body wrapper for collapse animation
         this._bodyWrapper = document.createElement('div');
         this._bodyWrapper.className = 'card-body-wrapper';
-        
-        // Check for slotted header
-        const hasHeader = this.querySelector('[slot="header"]');
-        
-        if (collapsible && hasHeader) {
-            // Wrap header with collapse icon
+
+        if (collapsible) {
+            // Always create header wrapper when collapsible — do NOT gate on
+            // this.querySelector('[slot="header"]') here, because light-DOM children
+            // may not yet be queryable during connectedCallback (timing of replaceWith).
             this._headerWrapper = document.createElement('div');
             this._headerWrapper.className = 'card-header-wrapper';
             this._headerWrapper.setAttribute('data-collapsible', 'true');
@@ -217,17 +216,19 @@ export class DommaCard extends DommaElement {
         if (this._options.collapsible && this._headerWrapper) {
             this._addEventListener(this._headerWrapper, 'click', () => this.toggle());
         }
-
-        // Restore collapsed state from localStorage
-        this._restoreState();
     }
 
     _onAttributeChange(name, oldValue, newValue) {
         switch (name) {
-            case 'collapsed':
+            case 'collapsed': {
                 const isCollapsed = newValue === '' || newValue === 'true';
-                this._setCollapsed(isCollapsed, false);
+                // Guard: skip if state already matches (prevents re-entry when _setCollapsed
+                // itself calls setAttribute/removeAttribute, which triggers this callback)
+                if (this.isCollapsed() !== isCollapsed) {
+                    this._setCollapsed(isCollapsed, false);
+                }
                 break;
+            }
 
             case 'collapsible':
                 // Re-render to add/remove collapse icon
@@ -249,6 +250,13 @@ export class DommaCard extends DommaElement {
     }
 
     _onConnect() {
+        // Re-bind click handler if it was cleared by a DOM move (disconnect + reconnect
+        // triggers _cleanup() which empties _eventHandlers, but connectedCallback skips
+        // _bindEvents() for already-initialised elements).
+        if (this._options.collapsible && this._headerWrapper && this._eventHandlers.length === 0) {
+            this._addEventListener(this._headerWrapper, 'click', () => this.toggle());
+        }
+
         // Restore state after connection
         if (this._options.collapsible) {
             this._restoreState();
