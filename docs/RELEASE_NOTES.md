@@ -1,3 +1,26 @@
+### v0.19.7 - Card Accent Variant (2026-03-17)
+
+✨ **Enhancements**
+
+*   **`.card-accent` CSS Classes:** The left-border accent pattern is now a set of five first-class card variant classes instead of an inline style workaround:
+    *   `.card-accent` — primary colour left border (`--dm-primary`)
+    *   `.card-accent-success` — success green (`--dm-success`)
+    *   `.card-accent-danger` — danger red (`--dm-danger`)
+    *   `.card-accent-warning` — warning amber (`--dm-warning`)
+    *   `.card-accent-info` — info sky (`--dm-info`)
+*   **`--dm-card-accent` Theme Variable:** Added to all 26 theme files as a primary-colour alias, enabling per-theme accent customisation and supporting the JS `color: 'accent'` API option.
+*   **Showcase:** Dedicated *Card Accent* section added to the Elements showcase; inline `border-left` style on the elements index replaced with the new class.
+
+🧹 **Repo Hygiene**
+
+*   Removed stale backups: `src/css/domma.css.original`, `public/showcase/css/domma.css.original`.
+*   Removed stale TODO file: `public/showcase/elements/CSS_CUSTOMISATION_SECTIONS_TODO.md`.
+*   Removed empty directories: `public/showcase/js/`, `public/showcase/examples/`.
+*   Added `.superpowers/`, `firebase-debug.log`, and `release.json` to `.gitignore`.
+*   Fixed `src/CLAUDE.md` file reference: `quick-roller.js` → `page-roller.js`.
+
+---
+
 ### v0.19.0 - Unicorn & Dreamy Themes + Codebase Cleanup (2026-03-04)
 
 ✨ **New Themes**

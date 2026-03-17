@@ -6,3 +6,6 @@ coverage
 public/dist/
 public/download/kickstart-files/
 .worktrees/
+.superpowers/
+firebase-debug.log
+release.json

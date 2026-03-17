@@ -641,7 +641,7 @@ src/
 ├── theme.js         # Theme management
 ├── icons.js         # SVG icon system
 ├── theme-roller.js  # Theme customisation tool (tools bundle)
-├── quick-roller.js  # Page builder tool (tools bundle)
+├── page-roller.js   # Page builder tool (tools bundle)
 └── editor.js        # Content editor tool (tools bundle)
 ```
 
