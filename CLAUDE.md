@@ -551,6 +551,12 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - **Spacing:** Margin/padding utilities (`.m-*`, `.p-*`, `.mt-*`, `.mb-*`, etc.)
 - **Display:** `.d-block`, `.d-inline`, `.d-flex`, `.d-grid`, `.d-none`
 - **Colors:** Full color palette (slate, blue, green, red, amber, sky, etc.)
+- **Opacity:** Full scale `.opacity-0` → `.opacity-100` (steps of 10, plus `.opacity-25`, `.opacity-75`)
+- **Translucency:**
+  - Semantic: `.translucent-light` (0.85), `.translucent` (0.70), `.translucent-heavy` (0.50)
+  - Glass: `.translucent-glass` — semi-transparent background + `backdrop-filter: blur()`
+  - Hover variants: `.translucent-hover`, `.translucent-light-hover`, `.translucent-heavy-hover`
+  - All include `transition: opacity` for smooth state changes
 - **Effects:**
   - Glow: `.glow-primary`, `.glow-success`, `.glow-danger`, etc.
   - Shadows: `.shadow-sm`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`

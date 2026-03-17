@@ -2467,3 +2467,95 @@ Domma.utils.words('fred, barney, & pebbles');
 Domma.utils.words('fred, barney, & pebbles', /[^, ]+/g);
 // => ['fred', 'barney', '&', 'pebbles']
 ```
+
+---
+
+## CSS Utilities — Opacity &amp; Translucency
+
+### Opacity Scale
+
+Full opacity scale in steps of 10, plus `.opacity-25` and `.opacity-75` for fine-grained control.
+13 classes cover the full range from `opacity-0` (invisible) to `opacity-100` (fully visible).
+
+```html
+<div class="opacity-0">Invisible</div>
+<div class="opacity-10">10% visible</div>
+<div class="opacity-25">25%</div>
+<div class="opacity-50">50%</div>
+<div class="opacity-75">75%</div>
+<div class="opacity-90">90%</div>
+<div class="opacity-100">Fully visible</div>
+```
+
+**Full class list:** `.opacity-0`, `.opacity-10`, `.opacity-20`, `.opacity-25`, `.opacity-30`, `.opacity-40`,
+`.opacity-50`, `.opacity-60`, `.opacity-70`, `.opacity-75`, `.opacity-80`, `.opacity-90`, `.opacity-100`
+
+---
+
+### Translucent Utilities
+
+Semantic transparency classes with built-in `transition: opacity` so state changes animate without extra CSS.
+All values are driven by CSS custom properties and can be overridden per-theme.
+
+```html
+<!-- Named translucency levels -->
+<nav class="translucent-light">Subtle (0.85)</nav>
+<div class="translucent">Standard (0.70)</div>
+<img class="translucent-heavy" src="watermark.png" alt="watermark">
+```
+
+| Class               | Opacity | Use case                               |
+|---------------------|---------|----------------------------------------|
+| `.translucent-light`  | 0.85  | Subtle overlays, watermarks            |
+| `.translucent`        | 0.70  | Standard modal or overlay transparency |
+| `.translucent-heavy`  | 0.50  | Ghost elements, disabled-like states   |
+
+---
+
+### Frosted Glass
+
+`.translucent-glass` combines a semi-transparent white background with `backdrop-filter: blur()` for a
+frosted glass effect. Requires visible content behind the element.
+
+```html
+<!-- Position over a gradient or background image -->
+<div style="background-image: url(bg.jpg)">
+    <nav class="translucent-glass p-4">Frosted navbar</nav>
+</div>
+```
+
+The glass panel uses `rgba(255, 255, 255, 0.75)` by default. Override the CSS variables to adapt to dark themes:
+
+```css
+[data-theme-variant="dark"] .translucent-glass {
+    background-color: rgba(0, 0, 0, var(--dm-translucent-glass-opacity));
+}
+```
+
+---
+
+### Hover Variants
+
+Apply translucency only on `:hover`, with a built-in smooth transition:
+
+```html
+<button class="translucent-light-hover">Subtle fade on hover (0.85)</button>
+<button class="translucent-hover">Standard fade on hover (0.70)</button>
+<button class="translucent-heavy-hover">Strong fade on hover (0.50)</button>
+```
+
+---
+
+### CSS Custom Properties
+
+All translucency values are CSS variables, making them easy to override per-theme:
+
+```css
+:root {
+    --dm-translucent-light:         0.85;   /* .translucent-light */
+    --dm-translucent:               0.7;    /* .translucent */
+    --dm-translucent-heavy:         0.5;    /* .translucent-heavy */
+    --dm-translucent-glass-blur:    8px;    /* .translucent-glass blur */
+    --dm-translucent-glass-opacity: 0.75;   /* .translucent-glass alpha */
+}
+```

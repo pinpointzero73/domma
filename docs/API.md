@@ -884,6 +884,50 @@ Animated particle effects for celebrations and special moments:
 <div class="firework firework-burst firework-rainbow"></div>
 ```
 
+### Opacity Scale
+
+Full opacity scale in steps of 10, plus `.opacity-25` and `.opacity-75`:
+
+```html
+<div class="opacity-0">Invisible</div>
+<div class="opacity-10">10%</div>
+<div class="opacity-25">25%</div>
+<div class="opacity-50">50%</div>
+<div class="opacity-75">75%</div>
+<div class="opacity-100">Fully visible</div>
+```
+
+### Translucent Utilities
+
+Semantic transparency classes with built-in `transition: opacity` for smooth state changes:
+
+```html
+<!-- Named translucency levels -->
+<nav class="translucent-light">Subtle (opacity 0.85)</nav>
+<div class="translucent">Standard (opacity 0.70)</div>
+<img class="translucent-heavy" src="watermark.png" alt="">
+
+<!-- Frosted glass — semi-transparent background + backdrop blur -->
+<div class="translucent-glass">Frosted glass panel</div>
+
+<!-- Hover variants — translucency applied on :hover only -->
+<button class="translucent-hover">Fades on hover</button>
+<button class="translucent-light-hover">Subtle fade on hover</button>
+<button class="translucent-heavy-hover">Strong fade on hover</button>
+```
+
+**CSS custom properties** (override per-theme):
+
+```css
+:root {
+    --dm-translucent-light:         0.85;
+    --dm-translucent:               0.7;
+    --dm-translucent-heavy:         0.5;
+    --dm-translucent-glass-blur:    8px;
+    --dm-translucent-glass-opacity: 0.75;
+}
+```
+
 ### Shadows
 
 Box shadow and elevation utilities for depth and visual hierarchy:
