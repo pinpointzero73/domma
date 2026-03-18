@@ -11,67 +11,100 @@
   <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
   <link rel="stylesheet" href="../../css/domma-showcase.css">
   <style>
-    /* Demo area helpers */
-    .demo-icon-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 2.5rem;
-      height: 2.5rem;
-      font-size: 1.25rem;
-      cursor: pointer;
-    }
-
     .demo-avatar {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 2.5rem;
-      height: 2.5rem;
+      width: 2.75rem;
+      height: 2.75rem;
       border-radius: 9999px;
       background-color: var(--dm-primary);
       color: var(--dm-white);
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
+      flex-shrink: 0;
     }
 
-    .demo-variants-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    .demo-counter-block {
+    .demo-target-label {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.75rem;
-      color: var(--dm-text-muted);
     }
 
-    .js-demo-controls {
+    .demo-label {
+      font-size: 0.7rem;
+      color: var(--dm-text-muted);
+      text-align: center;
+    }
+
+    .demo-variants-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 1rem;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.25rem 0;
     }
 
-    .real-world-grid {
+    .demo-dot-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .demo-dot-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .demo-counters-row {
       display: flex;
       flex-wrap: wrap;
       gap: 2rem;
       align-items: flex-end;
     }
 
-    .real-world-item {
+    .live-count-display {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--dm-primary);
+      min-width: 3rem;
+      text-align: center;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mock-navbar {
+      background: var(--dm-surface-2);
+      border: 1px solid var(--dm-border);
+      border-radius: var(--dm-radius);
+      padding: 0.75rem 1.25rem;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 0.75rem;
-      color: var(--dm-text-muted);
+      justify-content: space-between;
+    }
+
+    .inbox-list {
+      max-width: 280px;
+      border: 1px solid var(--dm-border);
+      border-radius: var(--dm-radius);
+      overflow: hidden;
+    }
+
+    .inbox-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.625rem 1rem;
+      border-bottom: 1px solid var(--dm-border);
+      font-size: 0.875rem;
+    }
+
+    .inbox-row:last-child {
+      border-bottom: none;
     }
   </style>
 </head>
@@ -80,1014 +113,662 @@
 <div class="hero hero-center bg-ambient-float-orbs">
   <div class="hero-content">
     <div class="hero-title">Number Badge</div>
-    <div class="hero-subtitle">Notification counters and status dots — CSS-only standalone variants, a JavaScript API for live counters, and a declarative Web Component</div>
+    <div class="hero-subtitle">Notification counters and presence dots — positioned on icons, buttons, or avatars with a clean JavaScript API</div>
   </div>
 </div>
 
 <main class="container py-8">
 
-  <!-- ============================================================
-       Section 1: Overview
-       ============================================================ -->
   <section class="card mb-6" data-section="Overview">
     <div class="card-header">
       <h1 class="text-3xl font-semibold m-0">Number Badge</h1>
     </div>
     <div class="card-body">
       <p class="mb-4">
-        Number Badges are small circular counters or dot indicators that sit on top of another element —
-        typically an icon or button — to communicate an unread count or live status. Unlike the
-        general-purpose <a href="../badge/index.html">Badge</a> component (which labels text), Number Badge
-        is purpose-built for notification counters and presence indicators.
+        Number Badge extends Domma's badge system with positioned notification counters and presence dots.
+        Use CSS-only classes for static indicators, or the JavaScript API to programmatically manage counters
+        on any element — icons, buttons, avatars, and more.
       </p>
 
       <h3 class="category-title-style">Key Features</h3>
       <ul class="feature-list mb-4">
-        <li><strong>CSS-Only Standalone</strong> — <code>.badge-number</code> and <code>.badge-dot</code> with eight colour variants, no JavaScript needed</li>
-        <li><strong>CSS Counter Positioning</strong> — <code>.badge-counter-wrapper</code> + <code>.badge-counter</code> for manually positioned overlapping counters</li>
-        <li><strong>JavaScript API</strong> — <code>E.numberBadge(selector, options)</code> wraps any element in a live counter with increment/decrement/pulse controls</li>
-        <li><strong>Web Component</strong> — <code>&lt;domma-number-badge&gt;</code> for clean, declarative markup</li>
-        <li><strong>Auto-Hide</strong> — Counter hides automatically when count reaches zero</li>
-        <li><strong>Pulse Animation</strong> — Built-in <code>badge-pulse</code> animation for urgent indicators</li>
-        <li><strong>Accessibility</strong> — Counter element carries <code>aria-live="polite"</code> and <code>role="status"</code></li>
+        <li><strong>CSS-Only</strong> — standalone circular badges and dot indicators, no JS required</li>
+        <li><strong>JS API</strong> — attach and manage counters on any element with <code>E.numberBadge()</code></li>
+        <li><strong>Web Component</strong> — declarative <code>&lt;domma-number-badge&gt;</code> with slot support</li>
+        <li><strong>Auto-Hide</strong> — badge hides automatically when count reaches zero</li>
+        <li><strong>Dot Mode</strong> — small presence indicator with no text</li>
+        <li><strong>Pulse Animation</strong> — draw attention with a pulsing ring</li>
+        <li><strong>8 Colour Variants</strong> — matches all Domma semantic colours</li>
       </ul>
 
-      <h3 class="category-title-style">Quick Start — Three Approaches</h3>
-
-      <p class="mb-2 text-gray-600"><strong>1. CSS-only standalone badge</strong> — no wrapper needed</p>
-      <div class="code-block language-html mb-4">
-        <pre><code>
-&lt;!-- Circular counter --&gt;
-&lt;span class="badge-number badge-number-danger"&gt;5&lt;/span&gt;
-
-&lt;!-- Dot indicator --&gt;
-&lt;span class="badge-dot badge-dot-success"&gt;&lt;/span&gt;
-
-&lt;!-- Positioned counter on an icon --&gt;
-&lt;span class="badge-counter-wrapper"&gt;
-    &lt;button class="btn btn-secondary"&gt;
-        &lt;span data-icon="bell"&gt;&lt;/span&gt;
-    &lt;/button&gt;
-    &lt;span class="badge-counter badge-counter-danger"&gt;3&lt;/span&gt;
-&lt;/span&gt;
-</code></pre>
+      <h3 class="category-title-style">At a Glance</h3>
+      <div class="demo-area mb-4">
+        <div class="demo-counters-row">
+          <div class="demo-target-label">
+            <div class="badge-counter-wrapper">
+              <button class="btn btn-outline"><span data-icon="bell"></span></button>
+              <span class="badge-counter">5</span>
+            </div>
+            <span class="demo-label">CSS-only</span>
+          </div>
+          <div class="demo-target-label">
+            <button id="overview-js-target" class="btn btn-outline"><span data-icon="mail"></span></button>
+            <span class="demo-label">JS API</span>
+          </div>
+          <div class="demo-target-label">
+            <domma-number-badge count="12" variant="primary">
+              <button class="btn btn-outline"><span data-icon="shopping-cart"></span></button>
+            </domma-number-badge>
+            <span class="demo-label">Web Component</span>
+          </div>
+          <div class="demo-target-label">
+            <div class="badge-counter-wrapper">
+              <div class="demo-avatar">JD</div>
+              <span class="badge-counter badge-dot badge-counter-success"></span>
+            </div>
+            <span class="demo-label">Dot mode</span>
+          </div>
+          <div class="demo-target-label">
+            <div class="badge-counter-wrapper">
+              <button class="btn btn-outline"><span data-icon="bell"></span></button>
+              <span class="badge-counter badge-counter-warning badge-pulse">!</span>
+            </div>
+            <span class="demo-label">Pulse</span>
+          </div>
+        </div>
       </div>
 
-      <p class="mb-2 text-gray-600"><strong>2. JavaScript API</strong> — live, interactive counter</p>
-      <div class="code-block language-javascript mb-4">
-        <pre><code>
-const badge = E.numberBadge('#my-button', { count: 5, variant: 'danger' });
+      <div class="code-block language-javascript">
+        <pre><code>// CSS-only counter
+&lt;div class="badge-counter-wrapper"&gt;
+    &lt;button class="btn"&gt;&lt;span data-icon="bell"&gt;&lt;/span&gt;&lt;/button&gt;
+    &lt;span class="badge-counter"&gt;5&lt;/span&gt;
+&lt;/div&gt;
 
-badge.increment();       // 6
-badge.decrement();       // 5
-badge.setCount(0);       // hides automatically
-badge.setDot(true);      // switch to dot mode
-badge.setPulse(true);    // add pulse animation
-badge.setVariant('info');
-badge.getCount();        // → 0
-badge.destroy();
-</code></pre>
-      </div>
+// JavaScript API
+const nb = E.numberBadge('#bell-btn', { count: 5, variant: 'danger' });
+nb.increment();   // → 6
+nb.setCount(0);   // badge hides automatically
 
-      <p class="mb-2 text-gray-600"><strong>3. Web Component</strong> — declarative markup</p>
-      <div class="code-block language-html mb-4">
-        <pre><code>
-&lt;domma-number-badge count="3" variant="danger"&gt;
-    &lt;button class="btn btn-secondary"&gt;
-        &lt;span data-icon="bell"&gt;&lt;/span&gt; Notifications
-    &lt;/button&gt;
-&lt;/domma-number-badge&gt;
-</code></pre>
+// Web Component
+&lt;domma-number-badge count="5" variant="primary"&gt;
+    &lt;button class="btn"&gt;&lt;span data-icon="bell"&gt;&lt;/span&gt;&lt;/button&gt;
+&lt;/domma-number-badge&gt;</code></pre>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       Section 2: CSS-Only — Standalone Badges
-       ============================================================ -->
-  <section class="card mb-6" data-section="CSS-Only — Standalone Badges">
+  <section class="card mb-6" data-section="CSS-Only Usage">
     <div class="card-header">
-      <h2 class="text-xl font-semibold m-0">CSS-Only — Standalone Badges</h2>
+      <h2 class="text-xl font-semibold m-0">CSS-Only Usage</h2>
     </div>
     <div class="card-body">
-      <p class="mb-6 text-gray-600">
-        No JavaScript required. Add a class and a colour variant modifier to any inline element.
-      </p>
+      <p class="mb-6 text-gray-600">No JavaScript required. Apply CSS classes directly for static indicators.</p>
 
-      <!-- badge-number variants -->
-      <h3 class="category-title-style">.badge-number — Colour Variants</h3>
-      <p class="mb-3 text-gray-600">Circular counters that expand to a pill shape for larger numbers.</p>
-      <div class="demo-area mb-4">
-        <div class="demo-variants-grid">
-          <div class="demo-counter-block">
-            <span class="badge-number">9</span>
-            <span>default</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-number badge-number-primary">3</span>
-            <span>primary</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-number badge-number-secondary">7</span>
-            <span>secondary</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-number badge-number-success">2</span>
-            <span>success</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-number badge-number-danger">12</span>
-            <span>danger</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-number badge-number-warning">4</span>
-            <span>warning</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-number badge-number-info">99+</span>
-            <span>info</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-number badge-number-light">1</span>
-            <span>light</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-number badge-number-dark">5</span>
-            <span>dark</span>
-          </div>
-        </div>
-      </div>
-      <div class="code-block language-html mb-6">
-        <pre><code>
-&lt;span class="badge-number"&gt;9&lt;/span&gt;
-&lt;span class="badge-number badge-number-primary"&gt;3&lt;/span&gt;
-&lt;span class="badge-number badge-number-secondary"&gt;7&lt;/span&gt;
-&lt;span class="badge-number badge-number-success"&gt;2&lt;/span&gt;
-&lt;span class="badge-number badge-number-danger"&gt;12&lt;/span&gt;
-&lt;span class="badge-number badge-number-warning"&gt;4&lt;/span&gt;
-&lt;span class="badge-number badge-number-info"&gt;99+&lt;/span&gt;
-&lt;span class="badge-number badge-number-light"&gt;1&lt;/span&gt;
-&lt;span class="badge-number badge-number-dark"&gt;5&lt;/span&gt;
-</code></pre>
-      </div>
-
-      <!-- badge-dot variants -->
-      <h3 class="category-title-style">.badge-dot — Colour Variants</h3>
-      <p class="mb-3 text-gray-600">Small solid circles for presence indicators and status dots.</p>
-      <div class="demo-area mb-4">
-        <div class="demo-variants-grid">
-          <div class="demo-counter-block">
-            <span class="badge-dot"></span>
-            <span>default</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-dot badge-dot-primary"></span>
-            <span>primary</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-dot badge-dot-secondary"></span>
-            <span>secondary</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-dot badge-dot-success"></span>
-            <span>success</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-dot badge-dot-danger"></span>
-            <span>danger</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-dot badge-dot-warning"></span>
-            <span>warning</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-dot badge-dot-info"></span>
-            <span>info</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-dot badge-dot-light"></span>
-            <span>light</span>
-          </div>
-          <div class="demo-counter-block">
-            <span class="badge-dot badge-dot-dark"></span>
-            <span>dark</span>
-          </div>
-        </div>
-      </div>
-      <div class="code-block language-html mb-6">
-        <pre><code>
-&lt;span class="badge-dot"&gt;&lt;/span&gt;
-&lt;span class="badge-dot badge-dot-primary"&gt;&lt;/span&gt;
-&lt;span class="badge-dot badge-dot-success"&gt;&lt;/span&gt;
-&lt;span class="badge-dot badge-dot-danger"&gt;&lt;/span&gt;
-&lt;span class="badge-dot badge-dot-warning"&gt;&lt;/span&gt;
-&lt;span class="badge-dot badge-dot-info"&gt;&lt;/span&gt;
-</code></pre>
-      </div>
-
-      <!-- Manual counter positioning -->
-      <h3 class="category-title-style">Manual Counter Positioning</h3>
+      <h3 class="category-title-style">Standalone Number Badges</h3>
       <p class="mb-3 text-gray-600">
-        Use <code>.badge-counter-wrapper</code> to create a positioning context, then
-        <code>.badge-counter</code> for the overlapping corner badge. Apply a colour variant modifier
-        with the <code>.badge-counter-*</code> prefix.
+        Add <code>.badge-number</code> to any inline element. Single digits are circular; multi-digit numbers
+        expand to a pill shape automatically via <code>min-width</code>.
       </p>
       <div class="demo-area mb-4">
-        <div class="demo-variants-grid">
-          <div class="demo-counter-block">
-            <span class="badge-counter-wrapper">
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="bell"></span>
-              </button>
-              <span class="badge-counter badge-counter-danger">3</span>
-            </span>
-            <span>danger</span>
+        <div class="demo-variants-row">
+          <span class="badge-number">3</span>
+          <span class="badge-number badge-number-primary">7</span>
+          <span class="badge-number badge-number-secondary">12</span>
+          <span class="badge-number badge-number-success">42</span>
+          <span class="badge-number badge-number-danger">99</span>
+          <span class="badge-number badge-number-warning">8</span>
+          <span class="badge-number badge-number-info">1</span>
+          <span class="badge-number badge-number-dark">100</span>
+          <span class="badge-number badge-number-light">5</span>
+        </div>
+      </div>
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;span class="badge-number"&gt;3&lt;/span&gt;
+&lt;span class="badge-number badge-number-primary"&gt;7&lt;/span&gt;
+&lt;span class="badge-number badge-number-success"&gt;42&lt;/span&gt;
+&lt;span class="badge-number badge-number-danger"&gt;99&lt;/span&gt;
+&lt;span class="badge-number badge-number-warning"&gt;8&lt;/span&gt;
+&lt;span class="badge-number badge-number-info"&gt;1&lt;/span&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Dot Indicators</h3>
+      <p class="mb-3 text-gray-600">
+        Add <code>.badge-dot</code> for a small presence indicator with no text content — ideal for
+        online/offline status on avatars.
+      </p>
+      <div class="demo-area mb-4">
+        <div class="demo-dot-row">
+          <div class="demo-dot-item">
+            <span class="badge-dot"></span>
+            <span class="demo-label">Default</span>
           </div>
-          <div class="demo-counter-block">
-            <span class="badge-counter-wrapper">
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="mail"></span>
-              </button>
-              <span class="badge-counter badge-counter-primary">12</span>
-            </span>
-            <span>primary</span>
+          <div class="demo-dot-item">
+            <span class="badge-dot badge-dot-primary"></span>
+            <span class="demo-label">Primary</span>
           </div>
-          <div class="demo-counter-block">
-            <span class="badge-counter-wrapper">
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="cart"></span>
-              </button>
-              <span class="badge-counter badge-counter-success">2</span>
-            </span>
-            <span>success</span>
+          <div class="demo-dot-item">
+            <span class="badge-dot badge-dot-success"></span>
+            <span class="demo-label">Success</span>
           </div>
-          <div class="demo-counter-block">
-            <span class="badge-counter-wrapper">
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="bell"></span>
-              </button>
-              <span class="badge-counter badge-counter-danger badge-pulse">5</span>
-            </span>
-            <span>+ pulse</span>
+          <div class="demo-dot-item">
+            <span class="badge-dot badge-dot-danger"></span>
+            <span class="demo-label">Danger</span>
           </div>
-          <div class="demo-counter-block">
-            <span class="badge-counter-wrapper">
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="user"></span>
-              </button>
-              <span class="badge-counter badge-dot badge-dot-success"></span>
-            </span>
-            <span>dot variant</span>
+          <div class="demo-dot-item">
+            <span class="badge-dot badge-dot-warning"></span>
+            <span class="demo-label">Warning</span>
+          </div>
+          <div class="demo-dot-item">
+            <span class="badge-dot badge-dot-info"></span>
+            <span class="demo-label">Info</span>
           </div>
         </div>
       </div>
-      <div class="code-block language-html mb-4">
-        <pre><code>
-&lt;!-- Wrapper creates the positioning context --&gt;
-&lt;span class="badge-counter-wrapper"&gt;
-    &lt;button class="btn btn-secondary"&gt;
-        &lt;span data-icon="bell"&gt;&lt;/span&gt;
-    &lt;/button&gt;
-    &lt;span class="badge-counter badge-counter-danger"&gt;3&lt;/span&gt;
-&lt;/span&gt;
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;span class="badge-dot"&gt;&lt;/span&gt;
+&lt;span class="badge-dot badge-dot-success"&gt;&lt;/span&gt;
+&lt;span class="badge-dot badge-dot-danger"&gt;&lt;/span&gt;</code></pre>
+      </div>
 
-&lt;!-- Pulse animation --&gt;
-&lt;span class="badge-counter-wrapper"&gt;
-    &lt;button class="btn btn-secondary"&gt;
-        &lt;span data-icon="bell"&gt;&lt;/span&gt;
-    &lt;/button&gt;
-    &lt;span class="badge-counter badge-counter-danger badge-pulse"&gt;5&lt;/span&gt;
-&lt;/span&gt;
+      <h3 class="category-title-style">Positioned Counters</h3>
+      <p class="mb-3 text-gray-600">
+        Wrap any element in <code>.badge-counter-wrapper</code> and add a sibling <code>.badge-counter</code>
+        to position a counter at the top-right corner with a border ring.
+      </p>
+      <div class="demo-area mb-4">
+        <div class="demo-counters-row">
+          <div class="demo-target-label">
+            <div class="badge-counter-wrapper">
+              <button class="btn btn-outline"><span data-icon="bell"></span></button>
+              <span class="badge-counter">5</span>
+            </div>
+            <span class="demo-label">Default</span>
+          </div>
+          <div class="demo-target-label">
+            <div class="badge-counter-wrapper">
+              <button class="btn btn-primary"><span data-icon="mail"></span> Inbox</button>
+              <span class="badge-counter badge-counter-primary">3</span>
+            </div>
+            <span class="demo-label">On a button</span>
+          </div>
+          <div class="demo-target-label">
+            <div class="badge-counter-wrapper">
+              <div class="demo-avatar">JD</div>
+              <span class="badge-counter badge-dot badge-counter-success"></span>
+            </div>
+            <span class="demo-label">Presence dot</span>
+          </div>
+          <div class="demo-target-label">
+            <div class="badge-counter-wrapper">
+              <button class="btn btn-outline"><span data-icon="shopping-cart"></span></button>
+              <span class="badge-counter badge-counter-danger">12</span>
+            </div>
+            <span class="demo-label">Cart</span>
+          </div>
+          <div class="demo-target-label">
+            <div class="badge-counter-wrapper">
+              <button class="btn btn-outline"><span data-icon="bell"></span></button>
+              <span class="badge-counter badge-counter-warning badge-pulse">!</span>
+            </div>
+            <span class="demo-label">Pulsing</span>
+          </div>
+        </div>
+      </div>
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;!-- Notification counter --&gt;
+&lt;div class="badge-counter-wrapper"&gt;
+    &lt;button class="btn"&gt;&lt;span data-icon="bell"&gt;&lt;/span&gt;&lt;/button&gt;
+    &lt;span class="badge-counter"&gt;5&lt;/span&gt;
+&lt;/div&gt;
 
-&lt;!-- Dot mode — combine .badge-counter with .badge-dot --&gt;
-&lt;span class="badge-counter-wrapper"&gt;
-    &lt;button class="btn btn-secondary"&gt;
-        &lt;span data-icon="user"&gt;&lt;/span&gt;
-    &lt;/button&gt;
-    &lt;span class="badge-counter badge-dot badge-dot-success"&gt;&lt;/span&gt;
-&lt;/span&gt;
-</code></pre>
+&lt;!-- Presence dot on avatar --&gt;
+&lt;div class="badge-counter-wrapper"&gt;
+    &lt;div class="avatar"&gt;JD&lt;/div&gt;
+    &lt;span class="badge-counter badge-dot badge-counter-success"&gt;&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;!-- Colour variant --&gt;
+&lt;div class="badge-counter-wrapper"&gt;
+    &lt;button class="btn"&gt;Cart&lt;/button&gt;
+    &lt;span class="badge-counter badge-counter-danger"&gt;12&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;!-- Pulsing counter --&gt;
+&lt;div class="badge-counter-wrapper"&gt;
+    &lt;button class="btn"&gt;&lt;span data-icon="bell"&gt;&lt;/span&gt;&lt;/button&gt;
+    &lt;span class="badge-counter badge-counter-warning badge-pulse"&gt;!&lt;/span&gt;
+&lt;/div&gt;</code></pre>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       Section 3: JavaScript API
-       ============================================================ -->
   <section class="card mb-6" data-section="JavaScript API">
     <div class="card-header">
       <h2 class="text-xl font-semibold m-0">JavaScript API</h2>
     </div>
     <div class="card-body">
-      <p class="mb-4">
-        <code>E.numberBadge(selector, options)</code> wraps an existing element in a
-        <code>&lt;domma-number-badge&gt;</code> Web Component and returns a control object with a
-        fluent API. The original element is preserved as the slotted child.
+      <p class="mb-6 text-gray-600">
+        Use <code>E.numberBadge(selector, options)</code> to attach a managed counter to any element.
+        The badge tracks state, auto-shows/hides, and exposes a chainable API.
       </p>
 
-      <!-- Basic counter demo -->
-      <h3 class="category-title-style">Basic Counter — Bell Notifications</h3>
+      <h3 class="category-title-style">Initialisation</h3>
+      <div class="code-block language-javascript mb-6">
+        <pre><code>const nb = E.numberBadge('#bell-btn', {
+    count: 5,           // Initial count (default: 0)
+    variant: 'danger',  // Colour variant (default: 'danger')
+    dot: false,         // Dot mode — no text
+    pulse: false,       // Pulse animation
+    borderColor: null   // Custom border ring colour
+});
+
+nb.increment();         // +1 → 6
+nb.decrement();         // -1 → 5
+nb.increment(5);        // +5 → 10
+nb.setCount(0);         // Hides the badge automatically
+nb.setCount(3);         // Shows the badge again
+nb.setVariant('info');  // Change colour
+nb.setDot(true);        // Switch to dot mode
+nb.setPulse(true);      // Enable pulse
+nb.getCount();          // → current count
+nb.remove();            // Remove badge and restore element</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Interactive Demo</h3>
       <div class="demo-area mb-4">
-        <div class="demo-variants-grid">
-          <div class="demo-counter-block">
-            <button id="js-bell-btn" class="btn btn-secondary demo-icon-btn">
+        <div class="flex gap-8 flex-wrap items-start">
+          <div class="demo-target-label" style="padding-top: 0.5rem;">
+            <button id="js-demo-target" class="btn btn-outline btn-lg">
               <span data-icon="bell"></span>
             </button>
-            <span>bell notifications</span>
+            <span class="demo-label">Target element</span>
           </div>
-          <div class="demo-counter-block">
-            <button id="js-mail-btn" class="btn btn-secondary demo-icon-btn">
-              <span data-icon="mail"></span>
-            </button>
-            <span>mail count</span>
+          <div style="flex: 1; min-width: 220px;">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="text-gray-600 text-sm">Count:</span>
+              <span id="js-count-display" class="live-count-display">0</span>
+            </div>
+            <div class="flex gap-2 flex-wrap mb-3">
+              <button id="js-decrement" class="btn btn-sm btn-outline">− Decrement</button>
+              <button id="js-increment" class="btn btn-sm btn-primary">+ Increment</button>
+              <button id="js-add-5" class="btn btn-sm btn-outline">+5</button>
+              <button id="js-reset" class="btn btn-sm btn-outline-danger">Reset to 0</button>
+            </div>
+            <div class="flex gap-2 flex-wrap mb-3">
+              <button id="js-dot-toggle" class="btn btn-sm btn-outline">Enable Dot</button>
+              <button id="js-pulse-toggle" class="btn btn-sm btn-outline">Enable Pulse</button>
+            </div>
+            <div class="flex gap-2 flex-wrap items-center">
+              <span class="text-gray-600 text-sm">Variant:</span>
+              <button class="btn btn-sm btn-outline variant-btn" data-variant="primary">Primary</button>
+              <button class="btn btn-sm btn-outline variant-btn" data-variant="success">Success</button>
+              <button class="btn btn-sm btn-outline variant-btn" data-variant="danger">Danger</button>
+              <button class="btn btn-sm btn-outline variant-btn" data-variant="warning">Warning</button>
+              <button class="btn btn-sm btn-outline variant-btn" data-variant="info">Info</button>
+            </div>
           </div>
         </div>
-        <div class="js-demo-controls">
-          <button id="js-bell-inc" class="btn btn-sm btn-primary">Bell +1</button>
-          <button id="js-bell-dec" class="btn btn-sm btn-outline">Bell -1</button>
-          <button id="js-bell-reset" class="btn btn-sm btn-danger">Bell Reset</button>
-          <button id="js-mail-inc" class="btn btn-sm btn-info">Mail +1</button>
-          <button id="js-mail-dec" class="btn btn-sm btn-outline">Mail -1</button>
-        </div>
-      </div>
-      <div class="code-block language-javascript mb-6">
-        <pre><code>
-const bellBadge = E.numberBadge('#bell-btn', { count: 5, variant: 'danger' });
-const mailBadge = E.numberBadge('#mail-btn', { count: 3, variant: 'primary' });
-
-$('#bell-inc').on('click', () =&gt; bellBadge.increment());
-$('#bell-dec').on('click', () =&gt; bellBadge.decrement());
-
-// Count reaches 0 → badge hides automatically
-$('#bell-reset').on('click', () =&gt; bellBadge.setCount(0));
-
-$('#mail-inc').on('click', () =&gt; mailBadge.increment());
-$('#mail-dec').on('click', () =&gt; mailBadge.decrement());
-</code></pre>
       </div>
 
-      <!-- Toggle dot mode -->
-      <h3 class="category-title-style">Toggle Dot Mode</h3>
-      <p class="mb-3 text-gray-600">Switch between a numeric counter and a simple dot indicator at runtime.</p>
+      <h3 class="category-title-style">Multiple Independent Counters</h3>
+      <p class="mb-3 text-gray-600">Each <code>E.numberBadge()</code> call creates an independent instance.</p>
       <div class="demo-area mb-4">
-        <div class="demo-variants-grid">
-          <div class="demo-counter-block">
-            <button id="js-dot-btn" class="btn btn-secondary demo-icon-btn">
-              <span data-icon="user"></span>
-            </button>
-            <span>online status</span>
+        <div class="demo-counters-row mb-4">
+          <div class="demo-target-label">
+            <button id="multi-bell" class="btn btn-outline"><span data-icon="bell"></span></button>
+            <span class="demo-label">Notifications</span>
+          </div>
+          <div class="demo-target-label">
+            <button id="multi-mail" class="btn btn-outline"><span data-icon="mail"></span></button>
+            <span class="demo-label">Messages</span>
+          </div>
+          <div class="demo-target-label">
+            <button id="multi-cart" class="btn btn-outline"><span data-icon="shopping-cart"></span></button>
+            <span class="demo-label">Cart</span>
           </div>
         </div>
-        <div class="js-demo-controls">
-          <button id="js-dot-toggle" class="btn btn-sm btn-primary">Toggle Dot Mode</button>
-          <button id="js-dot-pulse" class="btn btn-sm btn-warning">Toggle Pulse</button>
+        <div class="flex gap-2 flex-wrap">
+          <button id="multi-add-all" class="btn btn-sm btn-primary">Add to all</button>
+          <button id="multi-clear-all" class="btn btn-sm btn-outline">Clear all</button>
         </div>
       </div>
-      <div class="code-block language-javascript mb-6">
-        <pre><code>
-let isDot = false;
-let isPulse = false;
-const dotBadge = E.numberBadge('#user-btn', { count: 2, variant: 'success' });
+      <div class="code-block language-javascript mb-2">
+        <pre><code>const bellBadge = E.numberBadge('#bell', { count: 3, variant: 'danger' });
+const mailBadge = E.numberBadge('#mail', { count: 12, variant: 'primary' });
+const cartBadge = E.numberBadge('#cart', { count: 0, variant: 'success' });
 
-$('#toggle-dot').on('click', () =&gt; {
-    isDot = !isDot;
-    dotBadge.setDot(isDot);
-});
-
-$('#toggle-pulse').on('click', () =&gt; {
-    isPulse = !isPulse;
-    dotBadge.setPulse(isPulse);
-});
-</code></pre>
-      </div>
-
-      <!-- Variant switcher -->
-      <h3 class="category-title-style">Variant Switcher</h3>
-      <div class="demo-area mb-4">
-        <div class="demo-variants-grid">
-          <div class="demo-counter-block">
-            <button id="js-variant-btn" class="btn btn-secondary demo-icon-btn">
-              <span data-icon="star"></span>
-            </button>
-            <span id="js-variant-label">variant: danger</span>
-          </div>
-        </div>
-        <div class="js-demo-controls">
-          <button class="btn btn-sm js-set-variant" data-variant="primary">primary</button>
-          <button class="btn btn-sm js-set-variant" data-variant="secondary">secondary</button>
-          <button class="btn btn-sm js-set-variant" data-variant="success">success</button>
-          <button class="btn btn-sm js-set-variant" data-variant="danger">danger</button>
-          <button class="btn btn-sm js-set-variant" data-variant="warning">warning</button>
-          <button class="btn btn-sm js-set-variant" data-variant="info">info</button>
-          <button class="btn btn-sm js-set-variant" data-variant="dark">dark</button>
-        </div>
-      </div>
-      <div class="code-block language-javascript mb-4">
-        <pre><code>
-const variantBadge = E.numberBadge('#star-btn', { count: 7, variant: 'danger' });
-
-$('.variant-btn').on('click', function () {
-    const v = $(this).data('variant');
-    variantBadge.setVariant(v);
-});
-</code></pre>
-      </div>
-
-      <div class="alert alert-info">
-        <strong>Auto-hide:</strong> When <code>setCount(0)</code> is called (or decrement reaches zero),
-        the counter element hides automatically. It reappears the moment the count goes above zero again.
-        Dot mode is never hidden regardless of count.
+bellBadge.increment();
+mailBadge.setCount(0);   // Hides automatically
+cartBadge.setCount(5);</code></pre>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       Section 4: Web Component
-       ============================================================ -->
   <section class="card mb-6" data-section="Web Component">
     <div class="card-header">
       <h2 class="text-xl font-semibold m-0">Web Component</h2>
     </div>
     <div class="card-body">
       <p class="mb-4">
-        Use <code>&lt;domma-number-badge&gt;</code> for clean, declarative markup. The child element
-        is slotted inside the component and the badge counter is rendered in Shadow DOM above it.
-        All attributes map directly to the options accepted by <code>E.numberBadge()</code>.
+        The <code>&lt;domma-number-badge&gt;</code> custom element uses Shadow DOM and a <code>&lt;slot&gt;</code>
+        to wrap any child content with a positioned counter. Declare it in HTML or create it with JS.
       </p>
 
-      <h3 class="category-title-style">Counter Variants</h3>
+      <h3 class="category-title-style">Declarative Usage</h3>
       <div class="demo-area mb-4">
-        <div class="demo-variants-grid">
-          <div class="demo-counter-block">
-            <domma-number-badge count="3" variant="danger">
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="bell"></span>
-              </button>
+        <div class="demo-counters-row">
+          <div class="demo-target-label">
+            <domma-number-badge count="5">
+              <button class="btn btn-outline"><span data-icon="bell"></span></button>
             </domma-number-badge>
-            <span>danger</span>
+            <span class="demo-label">Default (danger)</span>
           </div>
-          <div class="demo-counter-block">
-            <domma-number-badge count="12" variant="primary">
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="mail"></span>
-              </button>
+          <div class="demo-target-label">
+            <domma-number-badge count="3" variant="primary">
+              <button class="btn btn-outline"><span data-icon="mail"></span></button>
             </domma-number-badge>
-            <span>primary</span>
+            <span class="demo-label">Primary</span>
           </div>
-          <div class="demo-counter-block">
-            <domma-number-badge count="5" variant="success">
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="check"></span>
-              </button>
+          <div class="demo-target-label">
+            <domma-number-badge count="0" variant="success">
+              <button class="btn btn-outline"><span data-icon="check"></span></button>
             </domma-number-badge>
-            <span>success</span>
+            <span class="demo-label">Count = 0 (hidden)</span>
           </div>
-          <div class="demo-counter-block">
-            <domma-number-badge count="99" variant="warning">
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="star"></span>
-              </button>
-            </domma-number-badge>
-            <span>warning</span>
-          </div>
-          <div class="demo-counter-block">
-            <domma-number-badge count="8" variant="info">
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="info"></span>
-              </button>
-            </domma-number-badge>
-            <span>info</span>
-          </div>
-          <div class="demo-counter-block">
-            <domma-number-badge count="2" variant="dark">
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="settings"></span>
-              </button>
-            </domma-number-badge>
-            <span>dark</span>
-          </div>
-        </div>
-      </div>
-      <div class="code-block language-html mb-6">
-        <pre><code>
-&lt;domma-number-badge count="3" variant="danger"&gt;
-    &lt;button class="btn btn-secondary"&gt;
-        &lt;span data-icon="bell"&gt;&lt;/span&gt;
-    &lt;/button&gt;
-&lt;/domma-number-badge&gt;
-
-&lt;domma-number-badge count="12" variant="primary"&gt;
-    &lt;button class="btn btn-secondary"&gt;
-        &lt;span data-icon="mail"&gt;&lt;/span&gt;
-    &lt;/button&gt;
-&lt;/domma-number-badge&gt;
-</code></pre>
-      </div>
-
-      <h3 class="category-title-style">Dot Mode</h3>
-      <p class="mb-3 text-gray-600">Add the <code>dot</code> attribute to show a status dot instead of a counter.</p>
-      <div class="demo-area mb-4">
-        <div class="demo-variants-grid">
-          <div class="demo-counter-block">
+          <div class="demo-target-label">
             <domma-number-badge dot variant="success">
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="user"></span>
-              </button>
+              <div class="demo-avatar">AB</div>
             </domma-number-badge>
-            <span>online</span>
+            <span class="demo-label">Dot mode</span>
           </div>
-          <div class="demo-counter-block">
-            <domma-number-badge dot variant="danger">
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="user"></span>
-              </button>
+          <div class="demo-target-label">
+            <domma-number-badge count="7" pulse variant="warning">
+              <button class="btn btn-outline"><span data-icon="bell"></span></button>
             </domma-number-badge>
-            <span>do not disturb</span>
-          </div>
-          <div class="demo-counter-block">
-            <domma-number-badge dot variant="warning">
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="user"></span>
-              </button>
-            </domma-number-badge>
-            <span>away</span>
+            <span class="demo-label">Pulsing</span>
           </div>
         </div>
       </div>
       <div class="code-block language-html mb-6">
-        <pre><code>
-&lt;!-- dot attribute enables dot mode — count is ignored --&gt;
+        <pre><code>&lt;!-- Default counter --&gt;
+&lt;domma-number-badge count="5"&gt;
+    &lt;button class="btn"&gt;&lt;span data-icon="bell"&gt;&lt;/span&gt;&lt;/button&gt;
+&lt;/domma-number-badge&gt;
+
+&lt;!-- Primary variant --&gt;
+&lt;domma-number-badge count="3" variant="primary"&gt;
+    &lt;button class="btn"&gt;Inbox&lt;/button&gt;
+&lt;/domma-number-badge&gt;
+
+&lt;!-- Presence dot on avatar --&gt;
 &lt;domma-number-badge dot variant="success"&gt;
-    &lt;button class="btn btn-secondary"&gt;
-        &lt;span data-icon="user"&gt;&lt;/span&gt;
-    &lt;/button&gt;
+    &lt;div class="avatar"&gt;AB&lt;/div&gt;
 &lt;/domma-number-badge&gt;
-</code></pre>
+
+&lt;!-- Pulsing counter --&gt;
+&lt;domma-number-badge count="7" pulse variant="warning"&gt;
+    &lt;button class="btn"&gt;&lt;span data-icon="bell"&gt;&lt;/span&gt;&lt;/button&gt;
+&lt;/domma-number-badge&gt;</code></pre>
       </div>
 
-      <h3 class="category-title-style">Pulse Animation</h3>
-      <p class="mb-3 text-gray-600">Add the <code>pulse</code> attribute for an attention-grabbing glow effect.</p>
+      <h3 class="category-title-style">Programmatic API</h3>
       <div class="demo-area mb-4">
-        <div class="demo-variants-grid">
-          <div class="demo-counter-block">
-            <domma-number-badge count="3" variant="danger" pulse>
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="bell"></span>
-              </button>
+        <div class="flex gap-6 flex-wrap items-start">
+          <div class="demo-target-label" style="padding-top: 0.5rem;">
+            <domma-number-badge id="wc-demo" count="5" variant="primary">
+              <button class="btn btn-outline"><span data-icon="star"></span></button>
             </domma-number-badge>
-            <span>pulse counter</span>
+            <span class="demo-label">Web component target</span>
           </div>
-          <div class="demo-counter-block">
-            <domma-number-badge dot variant="danger" pulse>
-              <button class="btn btn-secondary demo-icon-btn">
-                <span data-icon="user"></span>
-              </button>
-            </domma-number-badge>
-            <span>pulse dot</span>
+          <div class="flex gap-2 flex-wrap items-start" style="padding-top: 0.5rem;">
+            <button class="btn btn-sm btn-primary" onclick="document.getElementById('wc-demo').increment()">+ Increment</button>
+            <button class="btn btn-sm btn-outline" onclick="document.getElementById('wc-demo').decrement()">− Decrement</button>
+            <button class="btn btn-sm btn-outline" onclick="document.getElementById('wc-demo').setVariant('success')">Success</button>
+            <button class="btn btn-sm btn-outline" onclick="document.getElementById('wc-demo').setVariant('danger')">Danger</button>
+            <button class="btn btn-sm btn-outline" onclick="document.getElementById('wc-demo').setCount(0)">Clear</button>
           </div>
         </div>
       </div>
-      <div class="code-block language-html mb-6">
-        <pre><code>
-&lt;domma-number-badge count="3" variant="danger" pulse&gt;
-    &lt;button class="btn btn-secondary"&gt;
-        &lt;span data-icon="bell"&gt;&lt;/span&gt;
-    &lt;/button&gt;
-&lt;/domma-number-badge&gt;
-</code></pre>
-      </div>
+      <div class="code-block language-javascript mb-2">
+        <pre><code>const badge = document.getElementById('my-badge');
 
-      <h3 class="category-title-style">Programmatic Control of Web Component</h3>
-      <p class="mb-3 text-gray-600">Access the element directly and call its API methods.</p>
-      <div class="code-block language-javascript mb-4">
-        <pre><code>
-const badge = $('domma-number-badge')[0];
-
-// All methods return `this` for chaining
+badge.increment();
+badge.decrement();
 badge.setCount(10);
-badge.increment(3);   // → 13
-badge.decrement();    // → 12
-badge.setVariant('primary');
+badge.setVariant('success');
 badge.setDot(true);
-badge.setPulse(true);
-badge.getCount();     // → 12 (dot mode preserves stored count)
-</code></pre>
+badge.setPulse(true);</code></pre>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       Section 5: Real-World Patterns
-       ============================================================ -->
   <section class="card mb-6" data-section="Real-World Patterns">
     <div class="card-header">
       <h2 class="text-xl font-semibold m-0">Real-World Patterns</h2>
     </div>
     <div class="card-body">
-
-      <h3 class="category-title-style">Notification Bell Icon with Count</h3>
+      <h3 class="category-title-style">App Navigation Bar</h3>
       <div class="demo-area mb-4">
-        <div class="real-world-grid">
-          <div class="real-world-item">
-            <span class="badge-counter-wrapper">
-              <button class="btn btn-ghost demo-icon-btn" title="Notifications">
-                <span data-icon="bell"></span>
-              </button>
-              <span class="badge-counter badge-counter-danger" id="notif-count">4</span>
-            </span>
-            <span>CSS-only</span>
+        <div class="mock-navbar">
+          <span class="font-semibold">MyApp</span>
+          <div class="flex gap-3 items-center">
+            <div class="badge-counter-wrapper">
+              <button class="btn btn-sm btn-outline"><span data-icon="bell"></span></button>
+              <span class="badge-counter badge-counter-danger">4</span>
+            </div>
+            <div class="badge-counter-wrapper">
+              <button class="btn btn-sm btn-outline"><span data-icon="mail"></span></button>
+              <span class="badge-counter badge-counter-primary">12</span>
+            </div>
+            <div class="badge-counter-wrapper">
+              <div class="demo-avatar" style="width: 2rem; height: 2rem; font-size: 0.7rem;">JD</div>
+              <span class="badge-counter badge-dot badge-counter-success"></span>
+            </div>
           </div>
-          <div class="real-world-item">
-            <button id="rw-notif-clear" class="btn btn-sm btn-outline">Mark all read</button>
+        </div>
+      </div>
+
+      <h3 class="category-title-style">Inbox with Unread Counts</h3>
+      <div class="demo-area mb-4">
+        <div class="inbox-list">
+          <div class="inbox-row">
+            <span>Inbox</span>
+            <span class="badge-number badge-number-primary">24</span>
+          </div>
+          <div class="inbox-row">
+            <span>Sent</span>
+          </div>
+          <div class="inbox-row">
+            <span>Drafts</span>
+            <span class="badge-number badge-number-warning">3</span>
+          </div>
+          <div class="inbox-row">
+            <span>Spam</span>
+            <span class="badge-number badge-number-danger">7</span>
+          </div>
+          <div class="inbox-row">
+            <span>Archived</span>
           </div>
         </div>
       </div>
       <div class="code-block language-html mb-6">
-        <pre><code>
-&lt;span class="badge-counter-wrapper"&gt;
-    &lt;button class="btn btn-ghost" title="Notifications"&gt;
-        &lt;span data-icon="bell"&gt;&lt;/span&gt;
-    &lt;/button&gt;
-    &lt;span class="badge-counter badge-counter-danger" id="notif-count"&gt;4&lt;/span&gt;
-&lt;/span&gt;
-
-&lt;script&gt;
-$('#mark-read').on('click', () =&gt; {
-    const $badge = $('#notif-count');
-    $badge.text('0').addClass('badge-counter-hidden');
-});
-&lt;/script&gt;
-</code></pre>
+        <pre><code>&lt;div class="nav-item"&gt;
+    Inbox &lt;span class="badge-number badge-number-primary"&gt;24&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="nav-item"&gt;
+    Drafts &lt;span class="badge-number badge-number-warning"&gt;3&lt;/span&gt;
+&lt;/div&gt;</code></pre>
       </div>
 
-      <h3 class="category-title-style">Inbox / Mail Count on Button</h3>
+      <h3 class="category-title-style">Online User List</h3>
       <div class="demo-area mb-4">
-        <div class="real-world-grid">
-          <div class="real-world-item">
-            <button class="btn btn-primary" id="rw-inbox-btn">
-              <span data-icon="mail"></span> Inbox
-            </button>
-            <span>JS API</span>
+        <div class="flex gap-5 flex-wrap">
+          <div class="demo-target-label">
+            <div class="badge-counter-wrapper">
+              <div class="demo-avatar">AL</div>
+              <span class="badge-counter badge-dot badge-counter-success"></span>
+            </div>
+            <span class="demo-label">Online</span>
           </div>
-          <div class="real-world-item">
-            <button id="rw-inbox-add" class="btn btn-sm btn-outline">+ New message</button>
+          <div class="demo-target-label">
+            <div class="badge-counter-wrapper">
+              <div class="demo-avatar" style="background: var(--dm-secondary)">BM</div>
+              <span class="badge-counter badge-dot badge-counter-warning"></span>
+            </div>
+            <span class="demo-label">Away</span>
+          </div>
+          <div class="demo-target-label">
+            <div class="badge-counter-wrapper">
+              <div class="demo-avatar" style="background: var(--dm-text-muted)">CN</div>
+              <span class="badge-counter badge-dot"></span>
+            </div>
+            <span class="demo-label">Offline</span>
+          </div>
+          <div class="demo-target-label">
+            <div class="badge-counter-wrapper">
+              <div class="demo-avatar" style="background: var(--dm-danger)">DR</div>
+              <span class="badge-counter badge-dot badge-counter-danger badge-pulse"></span>
+            </div>
+            <span class="demo-label">Busy</span>
           </div>
         </div>
-      </div>
-      <div class="code-block language-javascript mb-6">
-        <pre><code>
-const inboxBadge = E.numberBadge('#inbox-btn', {
-    count: 7,
-    variant: 'danger'
-});
-
-// Simulate a new message arriving
-$('#new-msg-btn').on('click', () =&gt; inboxBadge.increment());
-</code></pre>
-      </div>
-
-      <h3 class="category-title-style">Cart Button with Item Count</h3>
-      <div class="demo-area mb-4">
-        <div class="real-world-grid">
-          <div class="real-world-item">
-            <button class="btn btn-secondary" id="rw-cart-btn">
-              <span data-icon="cart"></span> Cart
-            </button>
-            <span>Web Component</span>
-          </div>
-          <div class="real-world-item">
-            <button id="rw-cart-add" class="btn btn-sm btn-success">Add to cart</button>
-            <button id="rw-cart-remove" class="btn btn-sm btn-outline">Remove</button>
-          </div>
-        </div>
-      </div>
-      <div class="code-block language-html mb-6">
-        <pre><code>
-&lt;domma-number-badge id="cart-badge" count="0" variant="success"&gt;
-    &lt;button id="cart-btn" class="btn btn-secondary"&gt;
-        &lt;span data-icon="cart"&gt;&lt;/span&gt; Cart
-    &lt;/button&gt;
-&lt;/domma-number-badge&gt;
-
-&lt;script&gt;
-const cartBadge = E.numberBadge('#cart-btn', { count: 0, variant: 'success' });
-
-$('#add-to-cart').on('click', () =&gt; {
-    cartBadge.increment();
-    E.toast('Item added to cart', { type: 'success' });
-});
-
-$('#remove-from-cart').on('click', () =&gt; cartBadge.decrement());
-&lt;/script&gt;
-</code></pre>
-      </div>
-
-      <h3 class="category-title-style">Avatar with Online Status Dot</h3>
-      <div class="demo-area mb-4">
-        <div class="real-world-grid">
-          <div class="real-world-item">
-            <span class="badge-counter-wrapper">
-              <span class="demo-avatar">JD</span>
-              <span class="badge-counter badge-dot badge-dot-success"></span>
-            </span>
-            <span>online</span>
-          </div>
-          <div class="real-world-item">
-            <span class="badge-counter-wrapper">
-              <span class="demo-avatar">AK</span>
-              <span class="badge-counter badge-dot badge-dot-warning"></span>
-            </span>
-            <span>away</span>
-          </div>
-          <div class="real-world-item">
-            <span class="badge-counter-wrapper">
-              <span class="demo-avatar">MR</span>
-              <span class="badge-counter badge-dot badge-dot-danger"></span>
-            </span>
-            <span>busy</span>
-          </div>
-          <div class="real-world-item">
-            <span class="badge-counter-wrapper">
-              <span class="demo-avatar">PL</span>
-              <span class="badge-counter badge-dot badge-dot-secondary"></span>
-            </span>
-            <span>offline</span>
-          </div>
-        </div>
-      </div>
-      <div class="code-block language-html mb-4">
-        <pre><code>
-&lt;span class="badge-counter-wrapper"&gt;
-    &lt;span class="avatar"&gt;JD&lt;/span&gt;
-    &lt;span class="badge-counter badge-dot badge-dot-success"&gt;&lt;/span&gt;
-&lt;/span&gt;
-
-&lt;span class="badge-counter-wrapper"&gt;
-    &lt;span class="avatar"&gt;AK&lt;/span&gt;
-    &lt;span class="badge-counter badge-dot badge-dot-warning"&gt;&lt;/span&gt;
-&lt;/span&gt;
-</code></pre>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       Section 6: Accessibility
-       ============================================================ -->
-  <section class="card mb-6" data-section="Accessibility">
+  <section class="card mb-6" data-section="Best Practices">
     <div class="card-header">
-      <h2 class="text-xl font-semibold m-0">Accessibility</h2>
+      <h2 class="text-xl font-semibold m-0">Best Practices</h2>
     </div>
     <div class="card-body">
-      <h3 class="category-title-style">Screen Reader Behaviour</h3>
-      <p class="mb-4">
-        When using the JavaScript API or Web Component, the internal counter element is rendered with:
-      </p>
+      <h3 class="category-title-style">Accessibility</h3>
       <ul class="mb-4">
-        <li><code>aria-live="polite"</code> — announces count changes to screen readers without interrupting the current reading flow</li>
-        <li><code>role="status"</code> — identifies the element as a live status region</li>
+        <li><strong>aria-live built-in</strong> — The JS API adds <code>aria-live="polite"</code> and <code>role="status"</code> automatically so screen readers announce count changes.</li>
+        <li><strong>Label the target</strong> — Add descriptive <code>aria-label</code> to icon buttons: <code>aria-label="Notifications, 5 unread"</code></li>
+        <li><strong>Dot mode</strong> — Pair dot-only badges with a visible label or tooltip; the dot alone conveys nothing to screen readers.</li>
       </ul>
-      <p class="mb-4">
-        This means that when <code>badge.increment()</code> or <code>setCount()</code> is called, assistive
-        technologies will announce the updated value to the user without requiring focus on the badge.
-      </p>
 
-      <h3 class="category-title-style">CSS-Only Considerations</h3>
-      <p class="mb-4">
-        When using the CSS-only <code>.badge-counter</code> approach you are responsible for adding
-        ARIA attributes manually. Pair the counter with a visually hidden label or add
-        <code>aria-label</code> to the parent button:
-      </p>
-      <div class="code-block language-html mb-4">
-        <pre><code>
-&lt;!-- Describe count in the button's accessible name --&gt;
-&lt;span class="badge-counter-wrapper"&gt;
-    &lt;button class="btn btn-ghost" aria-label="Notifications, 4 unread"&gt;
-        &lt;span data-icon="bell" aria-hidden="true"&gt;&lt;/span&gt;
-    &lt;/button&gt;
-    &lt;span class="badge-counter badge-counter-danger" aria-hidden="true"&gt;4&lt;/span&gt;
-&lt;/span&gt;
-
-&lt;!-- OR use aria-live on the counter itself --&gt;
-&lt;span class="badge-counter badge-counter-danger"
-      aria-live="polite"
-      role="status"&gt;4&lt;/span&gt;
-</code></pre>
-      </div>
-
-      <div class="alert alert-info">
-        <strong>Tip:</strong> For pulse animations, consider
-        <code>@media (prefers-reduced-motion: reduce)</code> in your custom styles to disable the
-        animation for users who prefer reduced motion. Domma's Web Component respects this automatically.
-      </div>
+      <h3 class="category-title-style">Design Guidelines</h3>
+      <ul class="mb-4">
+        <li><strong>Trust auto-hide</strong> — The badge hides when count reaches 0; resist the urge to show "0"</li>
+        <li><strong>Danger for alerts</strong> — Red counters signal unread/urgent items; use primary/info for neutral counts</li>
+        <li><strong>Pulse sparingly</strong> — Reserve pulse for genuinely urgent alerts; overuse erodes its impact</li>
+        <li><strong>Dot for presence</strong> — Use dot mode for online/away/offline indicators, not for counts</li>
+      </ul>
     </div>
   </section>
 
-  <!-- ============================================================
-       Section 7: API Reference
-       ============================================================ -->
   <section class="card mb-6" data-section="API Reference">
     <div class="card-header">
       <h2 class="text-xl font-semibold m-0">API Reference</h2>
     </div>
     <div class="card-body">
+      <h3 class="category-title-style">Options</h3>
+      <table class="option-table mb-6">
+        <thead>
+          <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>count</code></td><td>number</td><td><code>0</code></td><td>Initial counter value</td></tr>
+          <tr><td><code>variant</code></td><td>string</td><td><code>'danger'</code></td><td>Colour variant: primary, secondary, success, danger, warning, info, light, dark</td></tr>
+          <tr><td><code>dot</code></td><td>boolean</td><td><code>false</code></td><td>Show as a dot (no text)</td></tr>
+          <tr><td><code>pulse</code></td><td>boolean</td><td><code>false</code></td><td>Enable pulse animation</td></tr>
+          <tr><td><code>borderColor</code></td><td>string|null</td><td><code>null</code></td><td>Custom border ring colour (overrides theme default)</td></tr>
+        </tbody>
+      </table>
 
-      <h3 class="category-title-style">Factory</h3>
-      <div class="code-block language-javascript mb-4">
-        <pre><code>
-const badge = E.numberBadge(selector, options);
+      <h3 class="category-title-style">Methods</h3>
+      <table class="option-table mb-6">
+        <thead>
+          <tr><th>Method</th><th>Returns</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>setCount(n)</code></td><td>this</td><td>Set count to exact value; hides at 0 in non-dot mode</td></tr>
+          <tr><td><code>increment(by?)</code></td><td>this</td><td>Increment count by 1 (or by <code>by</code>)</td></tr>
+          <tr><td><code>decrement(by?)</code></td><td>this</td><td>Decrement count by 1 (or by <code>by</code>); minimum 0</td></tr>
+          <tr><td><code>getCount()</code></td><td>number</td><td>Return current count</td></tr>
+          <tr><td><code>setVariant(v)</code></td><td>this</td><td>Change colour variant</td></tr>
+          <tr><td><code>setDot(bool)</code></td><td>this</td><td>Toggle dot mode on/off</td></tr>
+          <tr><td><code>setPulse(bool)</code></td><td>this</td><td>Toggle pulse animation on/off</td></tr>
+          <tr><td><code>remove()</code></td><td>void</td><td>Remove counter and restore element to original DOM position</td></tr>
+          <tr><td><code>destroy()</code></td><td>void</td><td>Alias for <code>remove()</code></td></tr>
+        </tbody>
+      </table>
 
-// options:
-// {
-//   count:       number   — initial count (default: 0)
-//   variant:     string   — colour variant (default: 'danger')
-//   dot:         boolean  — dot mode, hides count (default: false)
-//   pulse:       boolean  — pulse glow animation (default: false)
-//   borderColor: string   — custom border colour (default: null)
-// }
-</code></pre>
-      </div>
-
-      <h3 class="category-title-style">Instance Methods</h3>
+      <h3 class="category-title-style">CSS Classes</h3>
       <div class="option-table-accordion">
         <table class="api-table-accordion">
           <thead>
-          <tr>
-            <th>Method</th>
-            <th>Parameters</th>
-            <th>Returns</th>
-            <th>Description</th>
-          </tr>
+            <tr><th>Class</th><th>Description</th></tr>
           </thead>
           <tbody>
-          <tr>
-            <td><code>setCount(count)</code></td>
-            <td><code>number</code></td>
-            <td><code>this</code></td>
-            <td>Set the counter to an exact value. Hides badge if count is 0 (not in dot mode).</td>
-          </tr>
-          <tr>
-            <td><code>increment(by)</code></td>
-            <td><code>number</code> (default: 1)</td>
-            <td><code>this</code></td>
-            <td>Increase the count by <em>by</em>.</td>
-          </tr>
-          <tr>
-            <td><code>decrement(by)</code></td>
-            <td><code>number</code> (default: 1)</td>
-            <td><code>this</code></td>
-            <td>Decrease the count by <em>by</em>. Will not go below zero.</td>
-          </tr>
-          <tr>
-            <td><code>setDot(dot)</code></td>
-            <td><code>boolean</code></td>
-            <td><code>this</code></td>
-            <td>Toggle dot mode. When <code>true</code>, hides the counter text and shows a small dot.</td>
-          </tr>
-          <tr>
-            <td><code>setVariant(variant)</code></td>
-            <td><code>string</code></td>
-            <td><code>this</code></td>
-            <td>Change the colour variant. Accepts: <code>primary</code>, <code>secondary</code>, <code>success</code>, <code>danger</code>, <code>warning</code>, <code>info</code>, <code>light</code>, <code>dark</code>.</td>
-          </tr>
-          <tr>
-            <td><code>setPulse(pulse)</code></td>
-            <td><code>boolean</code></td>
-            <td><code>this</code></td>
-            <td>Enable or disable the pulsing glow animation.</td>
-          </tr>
-          <tr>
-            <td><code>getCount()</code></td>
-            <td>—</td>
-            <td><code>number</code></td>
-            <td>Return the current count value.</td>
-          </tr>
-          <tr>
-            <td><code>remove()</code></td>
-            <td>—</td>
-            <td><code>void</code></td>
-            <td>Remove the badge wrapper from the DOM, restoring the original element in place.</td>
-          </tr>
-          <tr>
-            <td><code>destroy()</code></td>
-            <td>—</td>
-            <td><code>void</code></td>
-            <td>Destroy the Web Component and clean up all resources.</td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3 class="category-title-style mt-6">Web Component Attributes</h3>
-      <div class="option-table-accordion">
-        <table class="api-table-accordion">
-          <thead>
-          <tr>
-            <th>Attribute</th>
-            <th>Type</th>
-            <th>Default</th>
-            <th>Description</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td><code>count</code></td>
-            <td>number</td>
-            <td><code>0</code></td>
-            <td>The numeric counter value.</td>
-          </tr>
-          <tr>
-            <td><code>variant</code></td>
-            <td>string</td>
-            <td><code>danger</code></td>
-            <td>Colour variant: <code>primary</code>, <code>secondary</code>, <code>success</code>, <code>danger</code>, <code>warning</code>, <code>info</code>, <code>light</code>, <code>dark</code>.</td>
-          </tr>
-          <tr>
-            <td><code>dot</code></td>
-            <td>boolean (presence)</td>
-            <td>—</td>
-            <td>When present, renders a dot instead of a counter.</td>
-          </tr>
-          <tr>
-            <td><code>pulse</code></td>
-            <td>boolean (presence)</td>
-            <td>—</td>
-            <td>When present, applies the pulsing glow animation.</td>
-          </tr>
-          <tr>
-            <td><code>border-color</code></td>
-            <td>string (CSS colour)</td>
-            <td><code>var(--dm-background)</code></td>
-            <td>Custom border colour for the counter ring. Useful when the background behind the badge is not the page background.</td>
-          </tr>
+            <tr><td><code>.badge-number</code></td><td>Standalone circular/pill number badge</td></tr>
+            <tr><td><code>.badge-number-{variant}</code></td><td>Colour variant (primary, success, danger, warning, info, secondary, light, dark)</td></tr>
+            <tr><td><code>.badge-dot</code></td><td>Small circular dot indicator (8px)</td></tr>
+            <tr><td><code>.badge-dot-{variant}</code></td><td>Colour variant for dot</td></tr>
+            <tr><td><code>.badge-counter-wrapper</code></td><td>Relative-positioned container for element + counter</td></tr>
+            <tr><td><code>.badge-counter</code></td><td>Absolute-positioned counter at top-right corner</td></tr>
+            <tr><td><code>.badge-counter-{variant}</code></td><td>Colour variant for counter</td></tr>
+            <tr><td><code>.badge-pulse</code></td><td>Apply pulse animation to <code>.badge-counter</code></td></tr>
+            <tr><td><code>.badge-counter-hidden</code></td><td>Hides the counter (applied automatically when count = 0)</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       Section 8: CSS Classes Reference
-       ============================================================ -->
-  <section class="card mb-6" data-section="CSS Classes Reference">
+  <section class="card mb-6" data-section="Config Engine">
     <div class="card-header">
-      <h2 class="text-xl font-semibold m-0">CSS Classes Reference</h2>
+      <h2 class="text-xl font-semibold m-0">Config Engine</h2>
     </div>
     <div class="card-body">
-      <div class="option-table-accordion">
-        <table class="api-table-accordion">
-          <thead>
-          <tr>
-            <th>Class</th>
-            <th>Purpose</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td><code>.badge-number</code></td>
-            <td>Standalone circular counter badge. Expands to pill for multi-digit numbers.</td>
-          </tr>
-          <tr>
-            <td><code>.badge-number-{variant}</code></td>
-            <td>Colour modifier for <code>.badge-number</code>. Variants: <code>primary</code>, <code>secondary</code>, <code>success</code>, <code>danger</code>, <code>warning</code>, <code>info</code>, <code>light</code>, <code>dark</code>.</td>
-          </tr>
-          <tr>
-            <td><code>.badge-dot</code></td>
-            <td>Small solid circle for presence and status indicators.</td>
-          </tr>
-          <tr>
-            <td><code>.badge-dot-{variant}</code></td>
-            <td>Colour modifier for <code>.badge-dot</code>. Same eight variants as above.</td>
-          </tr>
-          <tr>
-            <td><code>.badge-counter-wrapper</code></td>
-            <td>Positioning context for an overlapping counter. Set on the parent element containing the target and the badge.</td>
-          </tr>
-          <tr>
-            <td><code>.badge-counter</code></td>
-            <td>The overlapping counter pill that sits in the top-right corner of its wrapper. Requires <code>.badge-counter-wrapper</code> on the parent.</td>
-          </tr>
-          <tr>
-            <td><code>.badge-counter-{variant}</code></td>
-            <td>Colour modifier for <code>.badge-counter</code>. Same eight variants.</td>
-          </tr>
-          <tr>
-            <td><code>.badge-counter-hidden</code></td>
-            <td>Hides the counter with <code>display: none !important</code>. Applied automatically when count is zero by the JS API.</td>
-          </tr>
-          <tr>
-            <td><code>.badge-pulse</code></td>
-            <td>Applies a pulsing glow animation to <code>.badge-counter</code>. Can be combined with any variant.</td>
-          </tr>
-          </tbody>
-        </table>
+      <p class="mb-4">Number Badge is supported in the declarative config engine via <code>$.setup()</code>.</p>
+      <div class="code-block language-javascript">
+        <pre><code>$.setup({
+    '#bell-btn': {
+        component: 'numberBadge',
+        options: {
+            count: 0,
+            variant: 'danger'
+        }
+    }
+});</code></pre>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       Related
-       ============================================================ -->
+  <section class="card mb-6" data-section="CSS Customisation">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">CSS Customisation</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">Number Badge uses standard Domma semantic colour tokens. Override globally or per-scope.</p>
+      <table class="option-table mb-6">
+        <tr><th>Variable</th><th>Controls</th></tr>
+        <tr><td><code>--dm-danger</code></td><td>Default counter background colour</td></tr>
+        <tr><td><code>--dm-primary</code></td><td>Primary variant colour</td></tr>
+        <tr><td><code>--dm-success</code></td><td>Success variant colour</td></tr>
+        <tr><td><code>--dm-background</code></td><td>Border ring colour (matches page background by default)</td></tr>
+        <tr><td><code>--dm-radius-full</code></td><td>Border radius (9999px = circular/pill)</td></tr>
+      </table>
+      <div class="code-block language-css mb-4">
+        <pre><code>/* Match border ring to a dark card background */
+.dark-card .badge-counter {
+    border-color: var(--dm-surface-2);
+}
+
+/* Larger counter text */
+.badge-counter {
+    font-size: 0.75rem;
+    min-width: 1.5rem;
+    height: 1.5rem;
+}</code></pre>
+      </div>
+      <p><a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a></p>
+    </div>
+  </section>
+
   <section class="card mb-6" data-section="Related">
     <div class="card-header">
       <h2 class="text-xl font-semibold m-0">Related Elements</h2>
@@ -1097,19 +778,19 @@ const badge = E.numberBadge(selector, options);
         <a href="../badge/index.html" class="card card-hover">
           <div class="card-body">
             <h3 class="card-title">Badge</h3>
-            <p class="card-text">Text labels for status, categories, and counts inline with content</p>
+            <p class="card-text">Inline text labels and status indicators</p>
           </div>
         </a>
         <a href="../toast/index.html" class="card card-hover">
           <div class="card-body">
             <h3 class="card-title">Toast</h3>
-            <p class="card-text">Show ephemeral notifications that accompany badge updates</p>
+            <p class="card-text">Non-blocking notification messages with auto-dismiss</p>
           </div>
         </a>
-        <a href="../loader/index.html" class="card card-hover">
+        <a href="../notification/index.html" class="card card-hover">
           <div class="card-body">
-            <h3 class="card-title">Loader</h3>
-            <p class="card-text">Indicate background activity while a badge count is loading</p>
+            <h3 class="card-title">DesktopNotification</h3>
+            <p class="card-text">Browser native desktop push notifications</p>
           </div>
         </a>
       </div>
@@ -1125,85 +806,66 @@ const badge = E.numberBadge(selector, options);
 <script src="../../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../../layouts/js/layout.js"></script>
 <script type="module">
-  import { createNumberBadgeWrapper } from '../../../src/web-components/wrappers/legacy-wrappers.js';
-
   $(() => {
-    // Scan icons
     I.scan();
 
-    // ----------------------------------------------------------
-    // Section 3: JavaScript API demos
-    // ----------------------------------------------------------
+    // Overview quick demo — JS API target
+    if ($('#overview-js-target').length) {
+      E.numberBadge('#overview-js-target', { count: 9, variant: 'danger' });
+    }
 
-    // Bell badge
-    const bellBadge = createNumberBadgeWrapper('#js-bell-btn', { count: 5, variant: 'danger' });
-    const mailBadge = createNumberBadgeWrapper('#js-mail-btn', { count: 3, variant: 'primary' });
-
-    $('#js-bell-inc').on('click', () => bellBadge && bellBadge.increment());
-    $('#js-bell-dec').on('click', () => bellBadge && bellBadge.decrement());
-    $('#js-bell-reset').on('click', () => bellBadge && bellBadge.setCount(0));
-    $('#js-mail-inc').on('click', () => mailBadge && mailBadge.increment());
-    $('#js-mail-dec').on('click', () => mailBadge && mailBadge.decrement());
-
-    // Dot / pulse demo
+    // Interactive JS API demo
+    let jsBadge = null;
     let isDot = false;
     let isPulse = false;
-    const dotBadge = createNumberBadgeWrapper('#js-dot-btn', { count: 2, variant: 'success' });
 
-    $('#js-dot-toggle').on('click', () => {
-      if (!dotBadge) return;
-      isDot = !isDot;
-      dotBadge.setDot(isDot);
-      $('#js-dot-toggle').text(isDot ? 'Switch to Counter' : 'Toggle Dot Mode');
-    });
+    if ($('#js-demo-target').length) {
+      jsBadge = E.numberBadge('#js-demo-target', { count: 0, variant: 'danger' });
 
-    $('#js-dot-pulse').on('click', () => {
-      if (!dotBadge) return;
-      isPulse = !isPulse;
-      dotBadge.setPulse(isPulse);
-      $('#js-dot-pulse').text(isPulse ? 'Remove Pulse' : 'Toggle Pulse');
-    });
+      const updateDisplay = () => {
+        $('#js-count-display').text(jsBadge.getCount());
+      };
 
-    // Variant switcher
-    const variantBadge = createNumberBadgeWrapper('#js-variant-btn', { count: 7, variant: 'danger' });
+      $('#js-increment').on('click', () => { jsBadge.increment(); updateDisplay(); });
+      $('#js-decrement').on('click', () => { jsBadge.decrement(); updateDisplay(); });
+      $('#js-add-5').on('click', () => { jsBadge.increment(5); updateDisplay(); });
+      $('#js-reset').on('click', () => { jsBadge.setCount(0); updateDisplay(); });
 
-    $('.js-set-variant').on('click', function () {
-      if (!variantBadge) return;
-      const v = $(this).data('variant');
-      variantBadge.setVariant(v);
-      $('#js-variant-label').text('variant: ' + v);
-    });
+      $('#js-dot-toggle').on('click', function() {
+        isDot = !isDot;
+        jsBadge.setDot(isDot);
+        $(this).text(isDot ? 'Disable Dot' : 'Enable Dot');
+      });
 
-    // ----------------------------------------------------------
-    // Section 5: Real-World Patterns demos
-    // ----------------------------------------------------------
+      $('#js-pulse-toggle').on('click', function() {
+        isPulse = !isPulse;
+        jsBadge.setPulse(isPulse);
+        $(this).text(isPulse ? 'Disable Pulse' : 'Enable Pulse');
+      });
 
-    // Notification bell — CSS-only, just manipulate DOM
-    $('#rw-notif-clear').on('click', () => {
-      const $badge = $('#notif-count');
-      $badge.text('0').addClass('badge-counter-hidden');
-      E.toast('All notifications marked as read', { type: 'success' });
-    });
+      $('.variant-btn').on('click', function() {
+        jsBadge.setVariant($(this).data('variant'));
+      });
+    }
 
-    // Inbox / mail — JS API
-    const inboxBadge = createNumberBadgeWrapper('#rw-inbox-btn', { count: 7, variant: 'danger' });
-    $('#rw-inbox-add').on('click', () => {
-      if (inboxBadge) inboxBadge.increment();
-      E.toast('New message received', { type: 'info' });
-    });
+    // Multiple counters demo
+    if ($('#multi-bell').length) {
+      const bellB = E.numberBadge('#multi-bell', { count: 3, variant: 'danger' });
+      const mailB = E.numberBadge('#multi-mail', { count: 12, variant: 'primary' });
+      const cartB = E.numberBadge('#multi-cart', { count: 0, variant: 'success' });
 
-    // Cart — JS API
-    const cartBadge = createNumberBadgeWrapper('#rw-cart-btn', { count: 0, variant: 'success' });
-    $('#rw-cart-add').on('click', () => {
-      if (cartBadge) cartBadge.increment();
-      E.toast('Item added to cart', { type: 'success' });
-    });
-    $('#rw-cart-remove').on('click', () => {
-      if (cartBadge) cartBadge.decrement();
-    });
+      $('#multi-add-all').on('click', () => {
+        bellB.increment();
+        mailB.increment();
+        cartB.increment();
+      });
 
-    // Rescan icons after dynamic DOM changes
-    I.scan();
+      $('#multi-clear-all').on('click', () => {
+        bellB.setCount(0);
+        mailB.setCount(0);
+        cartB.setCount(0);
+      });
+    }
   });
 </script>
 
