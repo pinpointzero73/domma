@@ -9,3 +9,4 @@ public/download/kickstart-files/
 .superpowers/
 firebase-debug.log
 release.json
+.playwright-mcp/
