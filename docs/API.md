@@ -2343,13 +2343,82 @@ console.log(`Overall progress: ${roadmap.getProgress()}%`);
 
 ---
 
+### NumberBadge
+
+A positioned notification counter that attaches to any element. Supports numeric counts, dot mode (no number), pulse animation, multiple colour variants, and a configurable overflow display (e.g. `99+`).
+
+**Basic usage:**
+
+```javascript
+// Attach a counter badge to a button
+const nb = Domma.elements.numberBadge('#inbox-btn', { count: 5 });
+
+// Increment / decrement
+nb.increment();
+nb.decrement();
+
+// Switch to dot mode (no number)
+nb.setDot(true);
+
+// Update variant
+nb.setVariant('success');
+```
+
+**CSS-only usage:**
+
+```html
+<!-- Wrap the target element -->
+<div class="badge-number-wrapper">
+  <button class="btn btn-primary">Inbox</button>
+  <span class="badge-number badge-number-primary">12</span>
+</div>
+
+<!-- Dot mode -->
+<div class="badge-number-wrapper">
+  <button class="btn btn-secondary">Alerts</button>
+  <span class="badge-number badge-number-danger badge-dot"></span>
+</div>
+```
+
+#### `elements.numberBadge(selector, options)`
+
+Creates a NumberBadge instance attached to the selected element.
+
+**Options:**
+
+| Option        | Type     | Default       | Description                                                    |
+|---------------|----------|---------------|----------------------------------------------------------------|
+| `count`       | Number   | `0`           | Initial numeric count to display                               |
+| `variant`     | String   | `'primary'`   | Colour variant: `'primary'`, `'danger'`, `'success'`, `'warning'`, `'info'` |
+| `dot`         | Boolean  | `false`       | Dot mode — renders a small indicator without a number          |
+| `pulse`       | Boolean  | `false`       | Enable pulsing animation to draw attention                     |
+| `max`         | Number   | `99`          | Maximum count before overflow label is shown (e.g. `99+`)      |
+| `borderColor` | String   | `''`          | CSS colour value for the border around the badge               |
+| `position`    | String   | `'top-right'` | Badge position: `'top-right'`, `'top-left'`, `'bottom-right'`, `'bottom-left'` |
+
+**Methods:**
+
+| Method                    | Returns        | Description                                           |
+|---------------------------|----------------|-------------------------------------------------------|
+| `setCount(n)`             | `NumberBadge`  | Set the count to `n`                                  |
+| `increment(by = 1)`       | `NumberBadge`  | Increment the count                                   |
+| `decrement(by = 1)`       | `NumberBadge`  | Decrement the count (minimum 0)                       |
+| `getCount()`              | `Number`       | Return the current raw count                          |
+| `setDot(enabled)`         | `NumberBadge`  | Toggle dot mode on or off                             |
+| `setVariant(variant)`     | `NumberBadge`  | Change the colour variant                             |
+| `setPulse(enabled)`       | `NumberBadge`  | Toggle the pulse animation                            |
+| `remove()`                | `void`         | Remove the badge element from the DOM                 |
+| `destroy()`               | `void`         | Alias for `remove()` — clean up the instance          |
+
+---
+
 ### Other UI Components
 
 The Elements namespace includes 27+ additional components. For complete documentation, see:
 
 - **Interactive**: `tabs`, `accordion`, `carousel`, `dropdown`, `tooltip`
 - **Forms**: `autocomplete`, `pillbox`, `buttonGroup`
-- **Feedback**: `toast`, `dialog`, `loader`, `badge`, `notification`
+- **Feedback**: `toast`, `dialog`, `loader`, `badge`, `numberBadge`, `notification`
 - **Navigation**: `navbar`, `sidebar`, `footer`, `breadcrumbs`, `backToTop`
 - **Utilities**: `timer`, `alarm`, `card`
 - **Tools**: `editor`, `themeRoller`, `pageRoller` (in tools bundle)

@@ -1253,6 +1253,114 @@ textarea:not([class])::placeholder {
 
 
 /* ============================================
+   NUMBER BADGE
+   ============================================ */
+
+/* Standalone number badge — circular for single digits, pill for multi-digit */
+.badge-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5em;
+    height: 1.5em;
+    padding: 0 0.35em;
+    font-size: var(--dm-font-size-xs);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    border-radius: var(--dm-radius-full);
+    background-color: var(--dm-danger);
+    color: var(--dm-white);
+}
+
+/* Dot indicator — small coloured presence circle */
+.badge-dot {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: var(--dm-radius-full);
+    background-color: var(--dm-danger);
+}
+
+/* Wrapper for positioned counter badges */
+.badge-counter-wrapper {
+    position: relative;
+    display: inline-flex;
+}
+
+/* Counter badge — overlapping corner with border ring (classic app-notification style) */
+.badge-counter {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    padding: 0 0.3em;
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    border-radius: var(--dm-radius-full);
+    border: 2px solid var(--dm-background, #fff);
+    z-index: 1;
+    background-color: var(--dm-danger);
+    color: var(--dm-white);
+}
+
+/* Dot variant of counter — smaller, no text */
+.badge-counter.badge-dot {
+    top: -2px;
+    right: -2px;
+    min-width: 0.5rem;
+    height: 0.5rem;
+    padding: 0;
+}
+
+/* Hidden state when count is zero */
+.badge-counter-hidden {
+    display: none !important;
+}
+
+/* Pulse animation reuse for counter badges */
+.badge-counter.badge-pulse {
+    animation: badge-pulse 2s ease-in-out infinite;
+}
+
+/* Colour variants for .badge-number */
+.badge-number.badge-number-primary   { background-color: var(--dm-primary); color: var(--dm-white); }
+.badge-number.badge-number-secondary { background-color: var(--dm-background-alt); color: var(--dm-text); }
+.badge-number.badge-number-success   { background-color: var(--dm-success); color: var(--dm-white); }
+.badge-number.badge-number-danger    { background-color: var(--dm-danger); color: var(--dm-white); }
+.badge-number.badge-number-warning   { background-color: var(--dm-warning); color: var(--dm-text); }
+.badge-number.badge-number-info      { background-color: var(--dm-info); color: var(--dm-white); }
+.badge-number.badge-number-light     { background-color: var(--dm-background-alt); color: var(--dm-text); }
+.badge-number.badge-number-dark      { background-color: var(--dm-surface-overlay); color: var(--dm-white); }
+
+/* Colour variants for .badge-dot */
+.badge-dot.badge-dot-primary   { background-color: var(--dm-primary); }
+.badge-dot.badge-dot-secondary { background-color: var(--dm-background-alt); }
+.badge-dot.badge-dot-success   { background-color: var(--dm-success); }
+.badge-dot.badge-dot-danger    { background-color: var(--dm-danger); }
+.badge-dot.badge-dot-warning   { background-color: var(--dm-warning); }
+.badge-dot.badge-dot-info      { background-color: var(--dm-info); }
+.badge-dot.badge-dot-light     { background-color: var(--dm-background-alt); }
+.badge-dot.badge-dot-dark      { background-color: var(--dm-surface-overlay); }
+
+/* Colour variants for .badge-counter */
+.badge-counter.badge-counter-primary   { background-color: var(--dm-primary); color: var(--dm-white); }
+.badge-counter.badge-counter-secondary { background-color: var(--dm-background-alt); color: var(--dm-text); }
+.badge-counter.badge-counter-success   { background-color: var(--dm-success); color: var(--dm-white); }
+.badge-counter.badge-counter-danger    { background-color: var(--dm-danger); color: var(--dm-white); }
+.badge-counter.badge-counter-warning   { background-color: var(--dm-warning); color: var(--dm-text); }
+.badge-counter.badge-counter-info      { background-color: var(--dm-info); color: var(--dm-white); }
+.badge-counter.badge-counter-light     { background-color: var(--dm-background-alt); color: var(--dm-text); }
+.badge-counter.badge-counter-dark      { background-color: var(--dm-surface-overlay); color: var(--dm-white); }
+
+
+/* ============================================
    PILL
    ============================================ */
 

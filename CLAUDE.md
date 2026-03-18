@@ -443,6 +443,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Dialog - Promise-based `alert()`, `confirm()`, `prompt()`
   - Loader - `loader()` with types (spinner, dots, pulse, bars)
   - Badge - `badge()` component
+  - NumberBadge - `numberBadge()` notification counter with positioning, dot mode, pulse
   - BackToTop - `backToTop()` with scroll behavior
   - ButtonGroup - `buttonGroup()` for radio/checkbox groups
   - Breadcrumbs - `breadcrumbs()` with separators

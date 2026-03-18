@@ -2470,6 +2470,87 @@ Domma.utils.words('fred, barney, & pebbles', /[^, ]+/g);
 
 ---
 
+## NumberBadge
+
+`NumberBadge` is a positioned notification counter that attaches to any element. It is distinct from the flat `Badge`
+component — a NumberBadge is absolutely positioned over its parent and is designed for notification counts, unread
+indicators, and attention-grabbing status dots.
+
+### CSS-Only Usage
+
+Wrap the target element and add a `badge-number` span:
+
+```html
+<!-- Numeric counter -->
+<div class="badge-number-wrapper">
+  <button class="btn btn-primary">Inbox</button>
+  <span class="badge-number badge-number-primary">5</span>
+</div>
+
+<!-- Dot mode — no number, just an indicator -->
+<div class="badge-number-wrapper">
+  <button class="btn btn-secondary">Alerts</button>
+  <span class="badge-number badge-number-danger badge-dot"></span>
+</div>
+
+<!-- With pulse animation -->
+<div class="badge-number-wrapper">
+  <button class="btn btn-info">Updates</button>
+  <span class="badge-number badge-number-warning badge-counter-pulse">3</span>
+</div>
+```
+
+Available colour modifier classes: `badge-number-primary`, `badge-number-danger`, `badge-number-success`,
+`badge-number-warning`, `badge-number-info`.
+
+### JavaScript API
+
+Use `Domma.elements.numberBadge()` (alias `E.numberBadge()`) to create and manage a badge programmatically:
+
+```javascript
+// Attach a counter to a button
+const nb = E.numberBadge('#inbox-btn', {
+    count: 5,
+    variant: 'danger',
+    pulse: true
+});
+
+// Update count
+nb.increment();       // 6
+nb.increment(4);      // 10
+nb.decrement();       // 9
+nb.setCount(0);       // 0
+
+// Read current value
+console.log(nb.getCount()); // 0
+
+// Switch to dot mode (useful when count is zero but you still want an indicator)
+nb.setDot(true);
+
+// Change colour variant
+nb.setVariant('success');
+
+// Toggle pulse animation
+nb.setPulse(false);
+
+// Remove from DOM when no longer needed
+nb.destroy();
+```
+
+**Common options:**
+
+| Option     | Default       | Description                                                           |
+|------------|---------------|-----------------------------------------------------------------------|
+| `count`    | `0`           | Initial count                                                         |
+| `variant`  | `'primary'`   | Colour: `'primary'`, `'danger'`, `'success'`, `'warning'`, `'info'`  |
+| `dot`      | `false`       | Show as a dot with no number                                          |
+| `pulse`    | `false`       | Pulsing animation                                                     |
+| `max`      | `99`          | Counts above this display as `99+` (or `{max}+`)                     |
+
+See the [NumberBadge showcase](../public/showcase/elements/number-badge/) for interactive examples.
+
+---
+
 ## CSS Utilities — Opacity &amp; Translucency
 
 ### Opacity Scale

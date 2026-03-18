@@ -4,6 +4,7 @@
  */
 
 import { DommaBadge } from '../components/domma-badge.js';
+import { DommaNumberBadge } from '../components/domma-number-badge.js';
 import { DommaTooltip } from '../components/domma-tooltip.js';
 import { DommaLoader } from '../components/domma-loader.js';
 import { DommaBackToTop } from '../components/domma-back-to-top.js';
@@ -89,6 +90,100 @@ export function createBadgeWrapper(selector, options = {}) {
         },
 
         remove() {
+            webComponent.remove();
+        },
+
+        destroy() {
+            webComponent.destroy();
+        }
+    };
+}
+
+/**
+ * NumberBadge Wrapper
+ * Maintains exact API: Domma.elements.numberBadge(selector, options)
+ */
+export function createNumberBadgeWrapper(selector, options = {}) {
+    const element = typeof selector === 'string'
+        ? document.querySelector(selector)
+        : selector;
+
+    if (!element) return null;
+
+    // Create web component, wrapping the target element
+    const webComponent = document.createElement('domma-number-badge');
+
+    // Apply options as attributes
+    if (options.count !== undefined) {
+        webComponent.setAttribute('count', String(options.count));
+    }
+    if (options.variant) {
+        webComponent.setAttribute('variant', options.variant);
+    }
+    if (options.dot) {
+        webComponent.setAttribute('dot', '');
+    }
+    if (options.pulse) {
+        webComponent.setAttribute('pulse', '');
+    }
+    if (options.borderColor) {
+        webComponent.setAttribute('border-color', options.borderColor);
+    }
+
+    // Replace element with wrapper containing the element inside
+    element.parentNode.insertBefore(webComponent, element);
+    webComponent.appendChild(element);
+
+    webComponent._dommaComponent = webComponent;
+
+    return {
+        element: webComponent,
+        options: webComponent._options,
+
+        setOptions(newOptions) {
+            webComponent.setOptions(newOptions);
+            return this;
+        },
+
+        setCount(count) {
+            webComponent.setCount(count);
+            return this;
+        },
+
+        increment(by = 1) {
+            webComponent.increment(by);
+            return this;
+        },
+
+        decrement(by = 1) {
+            webComponent.decrement(by);
+            return this;
+        },
+
+        setDot(dot) {
+            webComponent.setDot(dot);
+            return this;
+        },
+
+        setVariant(variant) {
+            webComponent.setVariant(variant);
+            return this;
+        },
+
+        setPulse(pulse) {
+            webComponent.setPulse(pulse);
+            return this;
+        },
+
+        getCount() {
+            return webComponent.getCount();
+        },
+
+        remove() {
+            // Unwrap element from web component before removing
+            if (webComponent.parentNode && element.parentNode === webComponent) {
+                webComponent.parentNode.insertBefore(element, webComponent);
+            }
             webComponent.remove();
         },
 

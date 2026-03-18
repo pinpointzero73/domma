@@ -12,6 +12,7 @@ import sanitizeModule from './sanitize.js';
 // Web Component wrappers for Phase 1 & 2 components
 import {
     createBadgeWrapper,
+    createNumberBadgeWrapper,
     createTooltipWrapper,
     createLoaderWrapper,
     createBackToTopWrapper,
@@ -1354,6 +1355,169 @@ class Badge extends Component {
             this.element.remove();
         }
         this.destroy();
+    }
+}
+
+// ============================================
+// NumberBadge Component
+// ============================================
+
+class NumberBadge {
+    static defaults = {
+        count: 0,
+        variant: 'danger',
+        dot: false,
+        pulse: false,
+        borderColor: null
+    };
+
+    static variants = {
+        primary:   { bg: 'var(--dm-primary, #4f46e5)',          color: '#fff' },
+        secondary: { bg: 'var(--dm-background-alt, #f3f4f6)',   color: 'var(--dm-text, #111)' },
+        success:   { bg: 'var(--dm-success, #10b981)',          color: '#fff' },
+        danger:    { bg: 'var(--dm-danger, #ef4444)',           color: '#fff' },
+        warning:   { bg: 'var(--dm-warning, #f59e0b)',          color: '#000' },
+        info:      { bg: 'var(--dm-info, #3b82f6)',             color: '#fff' },
+        light:     { bg: 'var(--dm-background-alt, #f3f4f6)',   color: 'var(--dm-text, #111)' },
+        dark:      { bg: 'var(--dm-surface-overlay, #1f2937)',  color: '#fff' }
+    };
+
+    constructor(selector, options = {}) {
+        const element = typeof selector === 'string'
+            ? document.querySelector(selector)
+            : selector;
+
+        if (!element) {
+            console.warn('NumberBadge: element not found for selector', selector);
+            this.element = null;
+            return;
+        }
+
+        this.element = element;
+        this.options = Object.assign({}, NumberBadge.defaults, options);
+        this._wrapper = null;
+        this._badge = null;
+        this._eventListeners = [];
+
+        this._init();
+    }
+
+    _init() {
+        this._wrapElement();
+        this._createBadge();
+        this._render();
+    }
+
+    _wrapElement() {
+        const wrapper = document.createElement('span');
+        wrapper.className = 'badge-counter-wrapper';
+
+        // Insert wrapper in place of element, then move element inside
+        this.element.parentNode.insertBefore(wrapper, this.element);
+        wrapper.appendChild(this.element);
+
+        this._wrapper = wrapper;
+    }
+
+    _createBadge() {
+        const badge = document.createElement('span');
+        badge.className = 'badge-counter';
+        badge.setAttribute('aria-live', 'polite');
+        badge.setAttribute('role', 'status');
+
+        this._wrapper.appendChild(badge);
+        this._badge = badge;
+    }
+
+    _render() {
+        const { count, variant, dot, pulse, borderColor } = this.options;
+
+        // Reset classes
+        this._badge.className = 'badge-counter';
+
+        // Apply variant class
+        if (variant && variant !== 'danger') {
+            this._badge.classList.add(`badge-counter-${variant}`);
+        }
+
+        // Dot mode
+        if (dot) {
+            this._badge.classList.add('badge-dot');
+            this._badge.textContent = '';
+        } else {
+            this._badge.textContent = String(count);
+        }
+
+        // Pulse animation
+        if (pulse) {
+            this._badge.classList.add('badge-pulse');
+        }
+
+        // Custom border colour
+        if (borderColor) {
+            this._badge.style.borderColor = borderColor;
+        } else {
+            this._badge.style.borderColor = '';
+        }
+
+        // Hide when count is zero and not in dot mode
+        if (!dot && count === 0) {
+            this._badge.classList.add('badge-counter-hidden');
+        }
+    }
+
+    setCount(count) {
+        this.options.count = count;
+        this._render();
+        return this;
+    }
+
+    increment(by = 1) {
+        this.options.count = (this.options.count || 0) + by;
+        this._render();
+        return this;
+    }
+
+    decrement(by = 1) {
+        this.options.count = Math.max(0, (this.options.count || 0) - by);
+        this._render();
+        return this;
+    }
+
+    setDot(dot) {
+        this.options.dot = dot;
+        this._render();
+        return this;
+    }
+
+    setVariant(variant) {
+        this.options.variant = variant;
+        this._render();
+        return this;
+    }
+
+    setPulse(pulse) {
+        this.options.pulse = pulse;
+        this._render();
+        return this;
+    }
+
+    getCount() {
+        return this.options.count;
+    }
+
+    remove() {
+        if (this._wrapper && this.element) {
+            // Unwrap the element back to its original position
+            this._wrapper.parentNode.insertBefore(this.element, this._wrapper);
+            this._wrapper.remove();
+            this._wrapper = null;
+            this._badge = null;
+        }
+    }
+
+    destroy() {
+        this.remove();
     }
 }
 
@@ -8670,6 +8834,16 @@ export const elements = {
         const result = createBadgeWrapper(selector, options);
 
         // Store instance for lifecycle management
+        if (result && result.element) {
+            this._instances.set(result.element, result);
+        }
+
+        return result;
+    },
+
+    numberBadge(selector, options = {}) {
+        const result = createNumberBadgeWrapper(selector, options);
+
         if (result && result.element) {
             this._instances.set(result.element, result);
         }

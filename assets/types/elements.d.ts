@@ -277,6 +277,54 @@ export interface BadgeInstance extends ComponentInstance {
     remove(): void;
 }
 
+/** Number badge colour variant */
+export type NumberBadgeVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+
+export interface NumberBadgeOptions {
+    /** Initial count to display */
+    count?: number;
+    /** Colour variant (default: 'danger') */
+    variant?: NumberBadgeVariant;
+    /** Show as dot indicator instead of number */
+    dot?: boolean;
+    /** Enable pulse animation */
+    pulse?: boolean;
+    /** Custom border ring colour */
+    borderColor?: string;
+}
+
+export interface NumberBadgeInstance {
+    /** The wrapper web component element */
+    element: HTMLElement;
+
+    /** Set the badge count */
+    setCount(count: number): this;
+
+    /** Increment the badge count */
+    increment(by?: number): this;
+
+    /** Decrement the badge count (min 0) */
+    decrement(by?: number): this;
+
+    /** Toggle dot mode */
+    setDot(dot: boolean): this;
+
+    /** Set the colour variant */
+    setVariant(variant: NumberBadgeVariant): this;
+
+    /** Toggle pulse animation */
+    setPulse(pulse: boolean): this;
+
+    /** Get the current count */
+    getCount(): number;
+
+    /** Remove the badge and unwrap the element */
+    remove(): void;
+
+    /** Destroy the component */
+    destroy(): void;
+}
+
 // ============================================
 // Dropdown Component
 // ============================================
@@ -574,6 +622,9 @@ export interface Elements {
 
     /** Create Badge(s) - returns array if multiple elements match */
     badge(selector: string | HTMLElement, options?: BadgeOptions): BadgeInstance | BadgeInstance[];
+
+    /** Create a NumberBadge notification counter on an element */
+    numberBadge(selector: string | HTMLElement, options?: NumberBadgeOptions): NumberBadgeInstance;
 
     /** Create a Dropdown component */
     dropdown(selector: string | HTMLElement, options?: DropdownOptions): DropdownInstance;
