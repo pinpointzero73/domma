@@ -2412,6 +2412,95 @@ Creates a NumberBadge instance attached to the selected element.
 
 ---
 
+### ListGroup
+
+A styled, accessible list component with optional selection, keyboard navigation, colour variants, and flush/sized modes.
+
+```javascript
+// Basic selectable list
+const list = Domma.elements.listGroup('#my-list', {
+    selectable: true,
+    keyboard: true,
+    onChange: (selected) => console.log('Selected indices:', selected)
+});
+
+// Multi-select
+const multi = Domma.elements.listGroup('#multi-list', {
+    selectable: true,
+    multiSelect: true,
+    selected: [0, 2]
+});
+
+// Programmatic control
+list.select(1);
+list.deselect(1);
+list.toggle(2);
+console.log(list.getSelected()); // [2]
+```
+
+**HTML structure:**
+
+```html
+<ul class="list-group" id="my-list">
+  <li class="list-group-item list-group-item-action">Item One</li>
+  <li class="list-group-item list-group-item-action">Item Two</li>
+  <li class="list-group-item list-group-item-action list-group-item-success">Item Three</li>
+</ul>
+```
+
+#### `elements.listGroup(selector, options)`
+
+Creates a ListGroup instance on the selected element.
+
+**Options:**
+
+| Option          | Type                      | Default                  | Description                                                      |
+|-----------------|---------------------------|--------------------------|------------------------------------------------------------------|
+| `selectable`    | Boolean                   | `false`                  | Enable item selection on click                                   |
+| `multiSelect`   | Boolean                   | `false`                  | Allow multiple items to be selected simultaneously               |
+| `keyboard`      | Boolean                   | `true`                   | Enable keyboard navigation (arrow keys, Home/End, Enter/Space)   |
+| `loop`          | Boolean                   | `true`                   | Wrap focus from last item back to first (and vice versa)         |
+| `itemSelector`  | String                    | `'.list-group-item'`     | CSS selector used to identify list items                         |
+| `selectedClass` | String                    | `'active'`               | CSS class applied to selected items                              |
+| `focusClass`    | String                    | `'focused'`              | CSS class applied to the currently focused item                  |
+| `selected`      | Number \| Number[] \| null | `null`                  | Initially selected item index or array of indices                |
+| `disabled`      | Boolean                   | `false`                  | Disable the entire list group on initialisation                  |
+| `onChange`      | Function                  | `null`                   | Callback fired when selection changes — receives `(selected: number[], items: HTMLElement[])` |
+
+**Methods:**
+
+| Method              | Returns     | Description                                                          |
+|---------------------|-------------|----------------------------------------------------------------------|
+| `select(index)`     | `ListGroup` | Select the item at the given index                                   |
+| `deselect(index)`   | `ListGroup` | Deselect the item at the given index                                 |
+| `toggle(index)`     | `ListGroup` | Toggle the selected state of the item at the given index             |
+| `selectAll()`       | `ListGroup` | Select all items (requires `multiSelect: true`)                      |
+| `deselectAll()`     | `ListGroup` | Deselect all items                                                   |
+| `getSelected()`     | `Number[]`  | Return an array of currently selected item indices                   |
+| `enable(index?)`    | `ListGroup` | Enable a specific item by index, or the whole list if omitted        |
+| `disable(index?)`   | `ListGroup` | Disable a specific item by index, or the whole list if omitted       |
+| `refresh()`         | `ListGroup` | Re-query items from the DOM and re-apply state after dynamic updates |
+| `destroy()`         | `void`      | Remove event listeners and clean up the component instance           |
+
+**CSS classes:**
+
+| Class                           | Description                                              |
+|---------------------------------|----------------------------------------------------------|
+| `.list-group`                   | Base container class                                     |
+| `.list-group-item`              | Individual list item                                     |
+| `.list-group-item-action`       | Makes an item interactive (hover/focus styles)           |
+| `.list-group-flush`             | Remove outer borders for seamless card/panel integration |
+| `.list-group-sm`                | Compact (small) padding variant                          |
+| `.list-group-lg`                | Spacious (large) padding variant                         |
+| `.list-group-item-primary`      | Primary colour variant                                   |
+| `.list-group-item-secondary`    | Secondary colour variant                                 |
+| `.list-group-item-success`      | Success colour variant                                   |
+| `.list-group-item-danger`       | Danger colour variant                                    |
+| `.list-group-item-warning`      | Warning colour variant                                   |
+| `.list-group-item-info`         | Info colour variant                                      |
+
+---
+
 ### Other UI Components
 
 The Elements namespace includes 27+ additional components. For complete documentation, see:

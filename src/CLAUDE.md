@@ -450,6 +450,10 @@ Accessed via `Domma.elements`:
     - Status Types: `'planned'`, `'in-progress'`, `'completed'`, `'blocked'`, `'cancelled'`
     - Features: Progress bars, status indicators with pulse animations, priority badges, interactive status changes
     - Backwards Compatible: `elements.timeline()` is an alias for `progression({ mode: 'timeline' })`
+- **ListGroup**: `elements.listGroup(selector, { selectable, multiSelect, keyboard, loop, onChange })` → `select()`, `deselect()`, `toggle()`, `selectAll()`, `deselectAll()`, `getSelected()`, `enable()`, `disable()`, `refresh()`, `destroy()`
+    - CSS classes: `.list-group`, `.list-group-item`, `.list-group-flush`, `.list-group-sm`, `.list-group-lg`, `.list-group-item-action`
+    - Colour variants: `list-group-item-primary/secondary/success/danger/warning/info`
+    - Keyboard: Arrow keys, Home/End, Enter/Space; roving tabindex pattern
 
 ### tables.js - DataTable-like functionality
 

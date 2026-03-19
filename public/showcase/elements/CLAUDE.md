@@ -46,6 +46,10 @@ Accessed via `Domma.elements` - provides 25+ UI components including modals, tab
 - **ThemeRoller** - Theme customiser (in tools bundle)
 - **PageRoller** - Page builder (in tools bundle)
 
+### List Components
+
+- **ListGroup** - Selectable lists with keyboard navigation, colour variants, and flush mode
+
 ### Layout Components
 
 - **Card** - Content cards

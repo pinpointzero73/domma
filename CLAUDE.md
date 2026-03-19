@@ -431,7 +431,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 
 #### Elements (`Domma.elements`)
 
-- **22 UI Components:**
+- **23 UI Components:**
   - Modal - `modal()` with backdrop, keyboard, animation options
   - Tabs - `tabs()` with active index, onChange
   - Accordion - `accordion()` with multiExpand
@@ -444,6 +444,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Loader - `loader()` with types (spinner, dots, pulse, bars)
   - Badge - `badge()` component
   - NumberBadge - `numberBadge()` notification counter with positioning, dot mode, pulse
+  - ListGroup - `listGroup()` selectable lists with keyboard nav, colour variants, flush mode
   - BackToTop - `backToTop()` with scroll behavior
   - ButtonGroup - `buttonGroup()` for radio/checkbox groups
   - Breadcrumbs - `breadcrumbs()` with separators

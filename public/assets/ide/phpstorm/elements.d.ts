@@ -277,6 +277,70 @@ export interface BadgeInstance extends ComponentInstance {
     remove(): void;
 }
 
+// ============================================
+// ListGroup Component
+// ============================================
+
+export type ListGroupVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info';
+
+export interface ListGroupOptions {
+    /** Enable item selection */
+    selectable?: boolean;
+    /** Allow multiple items to be selected simultaneously */
+    multiSelect?: boolean;
+    /** Enable keyboard navigation (arrow keys, Home/End, Enter/Space) */
+    keyboard?: boolean;
+    /** Wrap keyboard navigation from last item to first (and vice versa) */
+    loop?: boolean;
+    /** Selector for list items (default: '.list-group-item') */
+    itemSelector?: string;
+    /** CSS class applied to selected items */
+    selectedClass?: string;
+    /** CSS class applied to the focused item */
+    focusClass?: string;
+    /** Initially selected item index or array of indices */
+    selected?: number | number[] | null;
+    /** Disable the entire list group */
+    disabled?: boolean;
+    /** Callback fired when selection changes */
+    onChange?: (selected: number[], items: HTMLElement[]) => void;
+}
+
+export interface ListGroupInstance {
+    /** The root list-group element */
+    element: HTMLElement;
+
+    /** Select an item by index */
+    select(index: number): this;
+
+    /** Deselect an item by index */
+    deselect(index: number): this;
+
+    /** Toggle an item's selected state by index */
+    toggle(index: number): this;
+
+    /** Select all items */
+    selectAll(): this;
+
+    /** Deselect all items */
+    deselectAll(): this;
+
+    /** Get the indices of all currently selected items */
+    getSelected(): number[];
+
+    /** Enable a specific item by index, or the entire list group if no index is given */
+    enable(index?: number): this;
+
+    /** Disable a specific item by index, or the entire list group if no index is given */
+    disable(index?: number): this;
+
+    /** Re-query items from the DOM and re-apply state (useful after dynamic updates) */
+    refresh(): this;
+
+    /** Destroy the component and clean up event listeners */
+    destroy(): void;
+}
+
 /** Number badge colour variant */
 export type NumberBadgeVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
 
@@ -625,6 +689,9 @@ export interface Elements {
 
     /** Create a NumberBadge notification counter on an element */
     numberBadge(selector: string | HTMLElement, options?: NumberBadgeOptions): NumberBadgeInstance;
+
+    /** Create a ListGroup component — returns array if multiple elements match */
+    listGroup(selector: string | HTMLElement, options?: ListGroupOptions): ListGroupInstance | ListGroupInstance[];
 
     /** Create a Dropdown component */
     dropdown(selector: string | HTMLElement, options?: DropdownOptions): DropdownInstance;
