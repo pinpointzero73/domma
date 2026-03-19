@@ -547,7 +547,137 @@ const lg = E.listGroup('#my-list', {
   </section>
 
   <!-- ============================
-       SECTION 7: Interactive (JS API)
+       SECTION 7: Numbered
+       ============================ -->
+  <section class="card mb-6" data-section="Numbered">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Numbered</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Add <code>.list-group-numbered</code> to an <code>&lt;ol&gt;</code> to prepend auto-incrementing numbers to
+        each item via CSS counters — no JavaScript required. Works with all size and colour variants.
+      </p>
+
+      <div class="demo-area mb-4">
+        <div class="demo-row">
+          <div class="demo-col">
+            <p class="text-sm text-muted mb-2">Basic numbered</p>
+            <ol class="list-group list-group-numbered">
+              <li class="list-group-item">Cras justo odio</li>
+              <li class="list-group-item">Dapibus ac facilisis in</li>
+              <li class="list-group-item">Morbi leo risus</li>
+              <li class="list-group-item">Porta ac consectetur ac</li>
+              <li class="list-group-item">Vestibulum at eros</li>
+            </ol>
+          </div>
+          <div class="demo-col">
+            <p class="text-sm text-muted mb-2">Numbered with badges</p>
+            <ol class="list-group list-group-numbered">
+              <li class="list-group-item">
+                Inbox
+                <span class="list-group-item-trailing"><span class="badge badge-primary">14</span></span>
+              </li>
+              <li class="list-group-item">
+                Sent
+                <span class="list-group-item-trailing"><span class="badge badge-secondary">2</span></span>
+              </li>
+              <li class="list-group-item">
+                Starred
+                <span class="list-group-item-trailing"><span class="badge badge-warning">8</span></span>
+              </li>
+              <li class="list-group-item">
+                Spam
+                <span class="list-group-item-trailing"><span class="badge badge-danger">99+</span></span>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block language-html"><pre><code>&lt;ol class="list-group list-group-numbered"&gt;
+    &lt;li class="list-group-item"&gt;Cras justo odio&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Dapibus ac facilisis in&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Morbi leo risus&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;!-- With badges --&gt;
+&lt;ol class="list-group list-group-numbered"&gt;
+    &lt;li class="list-group-item"&gt;
+        Inbox
+        &lt;span class="list-group-item-trailing"&gt;&lt;span class="badge badge-primary"&gt;14&lt;/span&gt;&lt;/span&gt;
+    &lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 8: Horizontal
+       ============================ -->
+  <section class="card mb-6" data-section="Horizontal">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Horizontal</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Change the layout from vertical to horizontal with <code>.list-group-horizontal</code>. Use the responsive
+        variants — <code>.list-group-horizontal-sm</code>, <code>-md</code>, <code>-lg</code>, <code>-xl</code> — to
+        switch to horizontal only above a given breakpoint.
+      </p>
+
+      <div class="demo-area mb-4">
+        <div class="mb-4">
+          <p class="text-sm text-muted mb-2">Always horizontal</p>
+          <ul class="list-group list-group-horizontal">
+            <li class="list-group-item">An item</li>
+            <li class="list-group-item active">Active</li>
+            <li class="list-group-item">A third item</li>
+            <li class="list-group-item">A fourth item</li>
+          </ul>
+        </div>
+
+        <div class="mb-4">
+          <p class="text-sm text-muted mb-2">Horizontal above <code>md</code> (768px), stacked below</p>
+          <ul class="list-group list-group-horizontal-md">
+            <li class="list-group-item">One</li>
+            <li class="list-group-item">Two</li>
+            <li class="list-group-item">Three</li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="text-sm text-muted mb-2">Horizontal with action items</p>
+          <div class="list-group list-group-horizontal">
+            <a href="#" class="list-group-item list-group-item-action active">Home</a>
+            <a href="#" class="list-group-item list-group-item-action">Profile</a>
+            <a href="#" class="list-group-item list-group-item-action">Settings</a>
+            <a href="#" class="list-group-item list-group-item-action disabled">Help</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block language-html"><pre><code>&lt;!-- Always horizontal --&gt;
+&lt;ul class="list-group list-group-horizontal"&gt;
+    &lt;li class="list-group-item"&gt;An item&lt;/li&gt;
+    &lt;li class="list-group-item active"&gt;Active&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;A third item&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- Horizontal above md breakpoint (768px) --&gt;
+&lt;ul class="list-group list-group-horizontal-md"&gt;
+    &lt;li class="list-group-item"&gt;One&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Two&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Three&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- Available breakpoints: -sm (576px), -md (768px), -lg (992px), -xl (1200px) --&gt;</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 9: Interactive (JS API)
        ============================ -->
   <section class="card mb-6" data-section="Interactive">
     <div class="card-header">

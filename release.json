@@ -1,4 +1,35 @@
 {
+  "version": "0.22.0",
+  "releaseDate": "2026-03-19",
+  "codename": "LineItems",
+  "changes": {
+    "features": [
+      {
+        "title": "List Group — 23rd UI Element",
+        "description": "CSS-first list group component with numbered, horizontal, flush, and colour variants; JavaScript API for selectable lists with keyboard navigation and ARIA",
+        "impact": "medium",
+        "files": [
+          "src/css/elements.css",
+          "src/elements.js",
+          "src/config.js",
+          "public/showcase/elements/list-group/index.html",
+          "public/showcase/elements/index.html",
+          "public/layouts/config/nav-showcase.json",
+          "public/sitemap.xml",
+          "docs/API.md",
+          "public/assets/ide/phpstorm/elements.d.ts",
+          "CLAUDE.md"
+        ],
+        "details": "<p>A full-featured <strong>List Group</strong> element — Domma's 23rd UI component — providing polished, consistent list styling for settings panels, navigation menus, notification feeds, and content lists.</p><ul><li><strong>Base CSS</strong> — <code>.list-group</code> container with <code>.list-group-item</code> items; active, disabled, and action (<code>.list-group-item-action</code>) states; sub-element classes for rich content: <code>.list-group-item-icon</code>, <code>.list-group-item-content</code>, <code>.list-group-item-heading</code>, <code>.list-group-item-text</code>, <code>.list-group-item-trailing</code></li><li><strong>Variants</strong> — <code>.list-group-flush</code> (strips outer border/radius for card embedding); <code>.list-group-sm</code> / <code>.list-group-lg</code> size variants; 6 colour variants with left-border accent and tinted background: <code>-primary</code>, <code>-secondary</code>, <code>-success</code>, <code>-danger</code>, <code>-warning</code>, <code>-info</code></li><li><strong>Numbered</strong> — <code>.list-group-numbered</code> on <code>&lt;ol&gt;</code> prepends auto-incrementing counters via CSS — no JavaScript required</li><li><strong>Horizontal</strong> — <code>.list-group-horizontal</code> arranges items in a row; responsive variants <code>-sm</code> (576px), <code>-md</code> (768px), <code>-lg</code> (992px), <code>-xl</code> (1200px) switch to horizontal above the given breakpoint</li><li><strong>JavaScript API</strong> — <code>E.listGroup(selector, options)</code> enables selectable lists (single or multi-select), roving tabindex keyboard navigation (Arrow keys, Home/End, Enter/Space), and ARIA (<code>role=\"listbox\"</code>, <code>aria-selected</code>, <code>aria-disabled</code>, <code>aria-multiselectable</code>); public methods: <code>select()</code>, <code>deselect()</code>, <code>toggle()</code>, <code>selectAll()</code>, <code>deselectAll()</code>, <code>getSelected()</code>, <code>enable()</code>, <code>disable()</code>, <code>refresh()</code>, <code>destroy()</code></li><li><strong>Config Engine</strong> — <code>listGroup</code> added to the <code>componentMap</code> for declarative <code>$.setup()</code> initialisation</li><li><strong>Showcase</strong> — Dedicated page at <code>/showcase/elements/list-group/</code> with demos for all variants, numbered lists, horizontal layouts, interactive JS API (selection, multi-select, keyboard), tutorial (settings panel), API reference tables, and CSS customisation guide; linked from the Elements overview and Elements dropdown navigation</li></ul>"
+      }
+    ],
+    "enhancements": [],
+    "bugFixes": [],
+    "breaking": [],
+    "housekeeping": []
+  }
+},
+{
   "version": "0.19.6",
   "releaseDate": "2026-03-16",
   "codename": "FrostyMorning",

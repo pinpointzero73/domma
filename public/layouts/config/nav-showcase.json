@@ -252,6 +252,12 @@
           "section": "hero"
         },
         {
+          "text": "List Group",
+          "url": "showcase/elements/list-group/index.html",
+          "section": "list-group",
+          "badge": "New"
+        },
+        {
           "text": "Modal",
           "url": "showcase/elements/modal/index.html",
           "section": "modal"

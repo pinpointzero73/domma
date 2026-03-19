@@ -1568,6 +1568,66 @@ textarea:not([class])::placeholder {
     border-top-color: var(--dm-border);
 }
 
+/* Numbered list — CSS counter prepended to each item */
+.list-group-numbered {
+    list-style-type: none;
+    counter-reset: list-group-counter;
+}
+
+.list-group-numbered > .list-group-item::before {
+    content: counters(list-group-counter, ".") ". ";
+    counter-increment: list-group-counter;
+    flex-shrink: 0;
+    font-weight: 600;
+    margin-right: var(--dm-space-2);
+    min-width: 1.5em;
+    color: var(--dm-text-muted);
+}
+
+/* Horizontal layout — items arranged in a row */
+.list-group-horizontal {
+    flex-direction: row;
+}
+
+.list-group-horizontal .list-group-item {
+    border-bottom: none;
+    border-right: 1px solid var(--dm-border-light);
+}
+
+.list-group-horizontal .list-group-item:last-child {
+    border-right: none;
+}
+
+/* Flush + horizontal: undo the top-border flush adds to the first item */
+.list-group-flush.list-group-horizontal .list-group-item:first-child {
+    border-top: none;
+}
+
+/* Responsive horizontal breakpoints */
+@media (min-width: 576px) {
+    .list-group-horizontal-sm { flex-direction: row; }
+    .list-group-horizontal-sm .list-group-item { border-bottom: none; border-right: 1px solid var(--dm-border-light); }
+    .list-group-horizontal-sm .list-group-item:last-child { border-right: none; }
+}
+
+@media (min-width: 768px) {
+    .list-group-horizontal-md { flex-direction: row; }
+    .list-group-horizontal-md .list-group-item { border-bottom: none; border-right: 1px solid var(--dm-border-light); }
+    .list-group-horizontal-md .list-group-item:last-child { border-right: none; }
+}
+
+@media (min-width: 992px) {
+    .list-group-horizontal-lg { flex-direction: row; }
+    .list-group-horizontal-lg .list-group-item { border-bottom: none; border-right: 1px solid var(--dm-border-light); }
+    .list-group-horizontal-lg .list-group-item:last-child { border-right: none; }
+}
+
+@media (min-width: 1200px) {
+    .list-group-horizontal-xl { flex-direction: row; }
+    .list-group-horizontal-xl .list-group-item { border-bottom: none; border-right: 1px solid var(--dm-border-light); }
+    .list-group-horizontal-xl .list-group-item:last-child { border-right: none; }
+}
+
 
 /* ============================================
    PILL
