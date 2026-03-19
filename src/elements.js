@@ -1965,8 +1965,12 @@ class ListGroup extends Component {
         this._items.forEach(item => {
             if (item.classList.contains(this.options.disabledClass)) {
                 item.setAttribute('aria-disabled', 'true');
+            } else {
+                item.removeAttribute('aria-disabled');
             }
         });
+
+        this._initTabindex();
 
         return this;
     }
