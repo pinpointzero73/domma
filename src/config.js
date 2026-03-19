@@ -186,6 +186,7 @@ export const configEngine = {
             dropdown: elements.dropdown,
             badge: elements.badge,
             numberBadge: elements.numberBadge,
+            listGroup: elements.listGroup,
             cookieConsent: elements.cookieConsent,
             backToTop: elements.backToTop,
             buttonGroup: elements.buttonGroup,
