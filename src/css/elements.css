@@ -1410,8 +1410,8 @@ textarea:not([class])::placeholder {
 
 /* Large size variant */
 .list-group-lg .list-group-item {
-    padding: var(--dm-space-4) var(--dm-space-4);
-    font-size: 1rem;
+    padding: var(--dm-space-4);
+    font-size: var(--dm-font-size-base);
 }
 
 /* Actionable items — pointer cursor and hover highlight */
@@ -1424,7 +1424,7 @@ textarea:not([class])::placeholder {
     background-color: var(--dm-background-alt);
 }
 
-.list-group-item-action:focus:not(.disabled) {
+.list-group-item-action:focus-visible:not(.disabled) {
     outline: none;
     box-shadow: inset 0 0 0 2px var(--dm-border-focus);
 }
@@ -1548,17 +1548,6 @@ textarea:not([class])::placeholder {
 }
 
 /* ---- Dark Mode ---- */
-
-[data-mode="dark"] .list-group {
-    background-color: var(--dm-surface);
-    border-color: var(--dm-border);
-}
-
-[data-mode="dark"] .list-group-item {
-    background-color: var(--dm-surface);
-    border-bottom-color: var(--dm-border);
-    color: var(--dm-text);
-}
 
 [data-mode="dark"] .list-group-item-action:hover:not(.disabled) {
     background-color: var(--dm-background-alt);
