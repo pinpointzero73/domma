@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List Group - Elements - Domma Showcase</title>
+  <link rel="canonical" href="https://dommajs.org/showcase/elements/list-group/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+  <link rel="stylesheet" href="../../../dist/domma.css">
+  <link rel="stylesheet" href="../../../dist/elements.css">
+  <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
+  <style>
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .demo-col {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .demo-label {
+      font-size: 0.7rem;
+      color: var(--dm-text-muted);
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .demo-output {
+      margin-top: 0.75rem;
+      padding: 0.625rem 0.875rem;
+      border: 1px dashed var(--dm-border);
+      border-radius: var(--dm-radius);
+      font-size: 0.8125rem;
+      color: var(--dm-text-muted);
+      min-height: 2.25rem;
+    }
+
+    .settings-layout {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .settings-sidebar {
+      flex: 0 0 200px;
+    }
+
+    .settings-panel {
+      flex: 1;
+      padding: 1.25rem;
+      border: 1px solid var(--dm-border);
+      border-radius: var(--dm-radius-md);
+      background-color: var(--dm-surface);
+      min-height: 160px;
+    }
+
+    @media (max-width: 640px) {
+      .settings-layout {
+        flex-direction: column;
+      }
+      .settings-sidebar {
+        flex: none;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+  <div class="hero-content">
+    <div class="hero-title">List Group</div>
+    <div class="hero-subtitle">Flexible and powerful lists for content display, navigation, and interactive item selection — with full keyboard navigation and accessibility support</div>
+  </div>
+</div>
+
+<main class="container py-8">
+
+  <!-- ============================
+       SECTION 1: Overview
+       ============================ -->
+  <section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+      <h1 class="text-3xl font-semibold m-0">List Group</h1>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        List Group is a flexible component for rendering sequential content — from simple navigation links to
+        rich content rows with icons, descriptive text, and trailing badges. Items can be made interactive
+        with hover states, active selection, and full JavaScript control via <code>E.listGroup()</code>.
+      </p>
+
+      <h3 class="category-title-style">Key Features</h3>
+      <ul class="feature-list mb-4">
+        <li><strong>CSS-Only</strong> — works with plain HTML classes, no JavaScript required for static lists</li>
+        <li><strong>JS API</strong> — <code>E.listGroup()</code> enables single- and multi-select, keyboard navigation, and callbacks</li>
+        <li><strong>Colour Variants</strong> — six semantic colour modifiers (primary, secondary, success, danger, warning, info)</li>
+        <li><strong>Size Variants</strong> — compact <code>.list-group-sm</code> and spacious <code>.list-group-lg</code></li>
+        <li><strong>Flush Mode</strong> — <code>.list-group-flush</code> removes outer border for embedding inside cards</li>
+        <li><strong>Rich Items</strong> — icon, heading, descriptive text, and trailing area all built-in</li>
+        <li><strong>Full Accessibility</strong> — roving tabindex, ARIA roles, keyboard navigation (arrows, Home, End)</li>
+      </ul>
+
+      <h3 class="category-title-style">At a Glance</h3>
+      <div class="demo-area mb-4">
+        <div class="demo-row">
+          <div class="demo-col" style="max-width: 260px;">
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-action active">
+                <span class="list-group-item-icon"><span data-icon="home"></span></span>
+                <span class="list-group-item-content">
+                  <span class="list-group-item-heading">Dashboard</span>
+                </span>
+              </li>
+              <li class="list-group-item list-group-item-action">
+                <span class="list-group-item-icon"><span data-icon="user"></span></span>
+                <span class="list-group-item-content">
+                  <span class="list-group-item-heading">Profile</span>
+                </span>
+                <span class="list-group-item-trailing">
+                  <span class="badge badge-primary">New</span>
+                </span>
+              </li>
+              <li class="list-group-item list-group-item-action">
+                <span class="list-group-item-icon"><span data-icon="settings"></span></span>
+                <span class="list-group-item-content">
+                  <span class="list-group-item-heading">Settings</span>
+                </span>
+              </li>
+              <li class="list-group-item list-group-item-action disabled">
+                <span class="list-group-item-icon"><span data-icon="lock"></span></span>
+                <span class="list-group-item-content">
+                  <span class="list-group-item-heading">Admin</span>
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div class="demo-col" style="max-width: 300px;">
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-success">
+                <span class="list-group-item-content">
+                  <span class="list-group-item-heading">Deployment complete</span>
+                  <span class="list-group-item-text">Production — 2 minutes ago</span>
+                </span>
+                <span class="list-group-item-trailing"><span class="badge badge-success">Live</span></span>
+              </li>
+              <li class="list-group-item list-group-item-warning">
+                <span class="list-group-item-content">
+                  <span class="list-group-item-heading">High memory usage</span>
+                  <span class="list-group-item-text">Server A — 87% used</span>
+                </span>
+                <span class="list-group-item-trailing"><span class="badge badge-warning">Warn</span></span>
+              </li>
+              <li class="list-group-item list-group-item-danger">
+                <span class="list-group-item-content">
+                  <span class="list-group-item-heading">Database connection lost</span>
+                  <span class="list-group-item-text">DB-02 — 14 seconds ago</span>
+                </span>
+                <span class="list-group-item-trailing"><span class="badge badge-danger">Error</span></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block language-html">
+        <pre><code>&lt;!-- CSS-only static list --&gt;
+&lt;ul class="list-group"&gt;
+    &lt;li class="list-group-item active"&gt;Dashboard&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Profile&lt;/li&gt;
+    &lt;li class="list-group-item disabled"&gt;Admin&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- Interactive JS API --&gt;
+const lg = E.listGroup('#my-list', {
+    selectable: true,
+    onChange: (selected) =&gt; console.log(selected)
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 2: Getting Started
+       ============================ -->
+  <section class="card mb-6" data-section="Getting Started">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Getting Started</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        The simplest List Group is a <code>&lt;ul&gt;</code> with <code>.list-group</code> and
+        <code>&lt;li&gt;</code> children with <code>.list-group-item</code>. No JavaScript needed.
+      </p>
+
+      <div class="demo-area mb-4">
+        <ul class="list-group" style="max-width: 320px;">
+          <li class="list-group-item">Apples</li>
+          <li class="list-group-item">Oranges</li>
+          <li class="list-group-item">Bananas</li>
+          <li class="list-group-item">Strawberries</li>
+        </ul>
+      </div>
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;ul class="list-group"&gt;
+    &lt;li class="list-group-item"&gt;Apples&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Oranges&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Bananas&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Strawberries&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      </div>
+
+      <p class="mb-4">
+        Add <code>.list-group-item-action</code> to make items interactive — cursor pointer and hover highlight:
+      </p>
+      <div class="demo-area mb-4">
+        <ul class="list-group" style="max-width: 320px;">
+          <li class="list-group-item list-group-item-action active">Dashboard</li>
+          <li class="list-group-item list-group-item-action">Analytics</li>
+          <li class="list-group-item list-group-item-action">Reports</li>
+          <li class="list-group-item list-group-item-action disabled">Archive</li>
+        </ul>
+      </div>
+      <div class="code-block language-html">
+        <pre><code>&lt;ul class="list-group"&gt;
+    &lt;li class="list-group-item list-group-item-action active"&gt;Dashboard&lt;/li&gt;
+    &lt;li class="list-group-item list-group-item-action"&gt;Analytics&lt;/li&gt;
+    &lt;li class="list-group-item list-group-item-action"&gt;Reports&lt;/li&gt;
+    &lt;li class="list-group-item list-group-item-action disabled"&gt;Archive&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 3: Basic Variants
+       ============================ -->
+  <section class="card mb-6" data-section="Basic Variants">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Basic Variants</h2>
+    </div>
+    <div class="card-body">
+
+      <h3 class="category-title-style">Plain Items</h3>
+      <p class="mb-3">The default appearance — a clean bordered list.</p>
+      <div class="demo-area mb-4">
+        <ul class="list-group" style="max-width: 300px;">
+          <li class="list-group-item">First item</li>
+          <li class="list-group-item">Second item</li>
+          <li class="list-group-item">Third item</li>
+          <li class="list-group-item">Fourth item</li>
+        </ul>
+      </div>
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;ul class="list-group"&gt;
+    &lt;li class="list-group-item"&gt;First item&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Second item&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Third item&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">With Icons</h3>
+      <p class="mb-3">
+        Use <code>.list-group-item-icon</code> for a left-aligned icon or avatar area.
+        Pair with <code><span>&lt;span data-icon="..."&gt;</span></code> and call <code>I.scan()</code>.
+      </p>
+      <div class="demo-area mb-4">
+        <ul class="list-group" style="max-width: 300px;">
+          <li class="list-group-item">
+            <span class="list-group-item-icon"><span data-icon="mail"></span></span>
+            Inbox
+          </li>
+          <li class="list-group-item">
+            <span class="list-group-item-icon"><span data-icon="send"></span></span>
+            Sent
+          </li>
+          <li class="list-group-item">
+            <span class="list-group-item-icon"><span data-icon="edit"></span></span>
+            Drafts
+          </li>
+          <li class="list-group-item">
+            <span class="list-group-item-icon"><span data-icon="trash"></span></span>
+            Bin
+          </li>
+        </ul>
+      </div>
+      <div class="code-block language-html mb-6">
+        <pre><code>&lt;ul class="list-group"&gt;
+    &lt;li class="list-group-item"&gt;
+        &lt;span class="list-group-item-icon"&gt;
+            &lt;span data-icon="mail"&gt;&lt;/span&gt;
+        &lt;/span&gt;
+        Inbox
+    &lt;/li&gt;
+    &lt;li class="list-group-item"&gt;
+        &lt;span class="list-group-item-icon"&gt;
+            &lt;span data-icon="send"&gt;&lt;/span&gt;
+        &lt;/span&gt;
+        Sent
+    &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">With Content (Heading + Text + Trailing)</h3>
+      <p class="mb-3">
+        Combine <code>.list-group-item-content</code>, <code>.list-group-item-heading</code>,
+        <code>.list-group-item-text</code>, and <code>.list-group-item-trailing</code> for rich rows.
+      </p>
+      <div class="demo-area mb-4">
+        <ul class="list-group" style="max-width: 400px;">
+          <li class="list-group-item list-group-item-action">
+            <span class="list-group-item-icon"><span data-icon="user"></span></span>
+            <span class="list-group-item-content">
+              <span class="list-group-item-heading">Alice Brennan</span>
+              <span class="list-group-item-text">alice@example.com</span>
+            </span>
+            <span class="list-group-item-trailing">
+              <span class="badge badge-success">Admin</span>
+            </span>
+          </li>
+          <li class="list-group-item list-group-item-action">
+            <span class="list-group-item-icon"><span data-icon="user"></span></span>
+            <span class="list-group-item-content">
+              <span class="list-group-item-heading">Bob Clarke</span>
+              <span class="list-group-item-text">bob@example.com</span>
+            </span>
+            <span class="list-group-item-trailing">
+              <span class="badge badge-secondary">Editor</span>
+            </span>
+          </li>
+          <li class="list-group-item list-group-item-action">
+            <span class="list-group-item-icon"><span data-icon="user"></span></span>
+            <span class="list-group-item-content">
+              <span class="list-group-item-heading">Carol Davies</span>
+              <span class="list-group-item-text">carol@example.com</span>
+            </span>
+            <span class="list-group-item-trailing">
+              <span class="badge badge-secondary">Viewer</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="code-block language-html">
+        <pre><code>&lt;li class="list-group-item list-group-item-action"&gt;
+    &lt;span class="list-group-item-icon"&gt;
+        &lt;span data-icon="user"&gt;&lt;/span&gt;
+    &lt;/span&gt;
+    &lt;span class="list-group-item-content"&gt;
+        &lt;span class="list-group-item-heading"&gt;Alice Brennan&lt;/span&gt;
+        &lt;span class="list-group-item-text"&gt;alice@example.com&lt;/span&gt;
+    &lt;/span&gt;
+    &lt;span class="list-group-item-trailing"&gt;
+        &lt;span class="badge badge-success"&gt;Admin&lt;/span&gt;
+    &lt;/span&gt;
+&lt;/li&gt;</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 4: Colour Variants
+       ============================ -->
+  <section class="card mb-6" data-section="Colour Variants">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Colour Variants</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Add a semantic colour class to any <code>.list-group-item</code> — it applies a left border accent and
+        a lightly tinted background.
+      </p>
+
+      <div class="demo-area mb-4">
+        <ul class="list-group" style="max-width: 420px;">
+          <li class="list-group-item list-group-item-primary">
+            <span class="list-group-item-content">
+              <span class="list-group-item-heading">Primary</span>
+              <span class="list-group-item-text">.list-group-item-primary</span>
+            </span>
+          </li>
+          <li class="list-group-item list-group-item-secondary">
+            <span class="list-group-item-content">
+              <span class="list-group-item-heading">Secondary</span>
+              <span class="list-group-item-text">.list-group-item-secondary</span>
+            </span>
+          </li>
+          <li class="list-group-item list-group-item-success">
+            <span class="list-group-item-content">
+              <span class="list-group-item-heading">Success</span>
+              <span class="list-group-item-text">.list-group-item-success</span>
+            </span>
+          </li>
+          <li class="list-group-item list-group-item-danger">
+            <span class="list-group-item-content">
+              <span class="list-group-item-heading">Danger</span>
+              <span class="list-group-item-text">.list-group-item-danger</span>
+            </span>
+          </li>
+          <li class="list-group-item list-group-item-warning">
+            <span class="list-group-item-content">
+              <span class="list-group-item-heading">Warning</span>
+              <span class="list-group-item-text">.list-group-item-warning</span>
+            </span>
+          </li>
+          <li class="list-group-item list-group-item-info">
+            <span class="list-group-item-content">
+              <span class="list-group-item-heading">Info</span>
+              <span class="list-group-item-text">.list-group-item-info</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="code-block language-html">
+        <pre><code>&lt;ul class="list-group"&gt;
+    &lt;li class="list-group-item list-group-item-primary"&gt;Primary&lt;/li&gt;
+    &lt;li class="list-group-item list-group-item-secondary"&gt;Secondary&lt;/li&gt;
+    &lt;li class="list-group-item list-group-item-success"&gt;Success&lt;/li&gt;
+    &lt;li class="list-group-item list-group-item-danger"&gt;Danger&lt;/li&gt;
+    &lt;li class="list-group-item list-group-item-warning"&gt;Warning&lt;/li&gt;
+    &lt;li class="list-group-item list-group-item-info"&gt;Info&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 5: Size Variants
+       ============================ -->
+  <section class="card mb-6" data-section="Size Variants">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Size Variants</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Apply <code>.list-group-sm</code> for a compact list or <code>.list-group-lg</code> for extra
+        padding and larger text — useful in sidebars or content-heavy interfaces.
+      </p>
+
+      <div class="demo-row mb-6">
+        <div class="demo-col">
+          <p class="demo-label">Small — .list-group-sm</p>
+          <ul class="list-group list-group-sm">
+            <li class="list-group-item list-group-item-action">Home</li>
+            <li class="list-group-item list-group-item-action active">Products</li>
+            <li class="list-group-item list-group-item-action">About</li>
+            <li class="list-group-item list-group-item-action">Contact</li>
+          </ul>
+        </div>
+        <div class="demo-col">
+          <p class="demo-label">Default</p>
+          <ul class="list-group">
+            <li class="list-group-item list-group-item-action">Home</li>
+            <li class="list-group-item list-group-item-action active">Products</li>
+            <li class="list-group-item list-group-item-action">About</li>
+            <li class="list-group-item list-group-item-action">Contact</li>
+          </ul>
+        </div>
+        <div class="demo-col">
+          <p class="demo-label">Large — .list-group-lg</p>
+          <ul class="list-group list-group-lg">
+            <li class="list-group-item list-group-item-action">Home</li>
+            <li class="list-group-item list-group-item-action active">Products</li>
+            <li class="list-group-item list-group-item-action">About</li>
+            <li class="list-group-item list-group-item-action">Contact</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="code-block language-html">
+        <pre><code>&lt;!-- Compact --&gt;
+&lt;ul class="list-group list-group-sm"&gt; ... &lt;/ul&gt;
+
+&lt;!-- Default --&gt;
+&lt;ul class="list-group"&gt; ... &lt;/ul&gt;
+
+&lt;!-- Spacious --&gt;
+&lt;ul class="list-group list-group-lg"&gt; ... &lt;/ul&gt;</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 6: Flush
+       ============================ -->
+  <section class="card mb-6" data-section="Flush">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Flush</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        <code>.list-group-flush</code> removes the outer border and border-radius so the list blends seamlessly
+        when embedded inside a card. A top border is added to the first item to maintain separation from card content above it.
+      </p>
+
+      <div class="demo-area mb-4">
+        <div class="card" style="max-width: 360px;">
+          <div class="card-header">
+            <strong>Recent Notifications</strong>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item list-group-item-action">
+              <span class="list-group-item-icon"><span data-icon="bell"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">New comment on your post</span>
+                <span class="list-group-item-text">5 minutes ago</span>
+              </span>
+            </li>
+            <li class="list-group-item list-group-item-action">
+              <span class="list-group-item-icon"><span data-icon="mail"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">You have a new message</span>
+                <span class="list-group-item-text">1 hour ago</span>
+              </span>
+            </li>
+            <li class="list-group-item list-group-item-action">
+              <span class="list-group-item-icon"><span data-icon="check-circle"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">Deployment succeeded</span>
+                <span class="list-group-item-text">3 hours ago</span>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="code-block language-html">
+        <pre><code>&lt;div class="card"&gt;
+    &lt;div class="card-header"&gt;Recent Notifications&lt;/div&gt;
+    &lt;ul class="list-group list-group-flush"&gt;
+        &lt;li class="list-group-item list-group-item-action"&gt;
+            &lt;span class="list-group-item-content"&gt;
+                &lt;span class="list-group-item-heading"&gt;New comment on your post&lt;/span&gt;
+                &lt;span class="list-group-item-text"&gt;5 minutes ago&lt;/span&gt;
+            &lt;/span&gt;
+        &lt;/li&gt;
+        ...
+    &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 7: Interactive (JS API)
+       ============================ -->
+  <section class="card mb-6" data-section="Interactive">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Interactive — JavaScript API</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Use <code>E.listGroup(selector, options)</code> to enable selectable behaviour, keyboard navigation,
+        and callbacks. Set <code>selectable: true</code> and add <code>.list-group-item-action</code> to items.
+      </p>
+
+      <h3 class="category-title-style">Single Select</h3>
+      <p class="mb-3">
+        Clicking an item selects it and deselects any previously selected item.
+        The <code>onChange</code> callback receives an array of the currently selected DOM elements.
+      </p>
+      <div class="demo-area mb-4">
+        <div class="flex gap-6 flex-wrap items-start">
+          <ul id="single-select-list" class="list-group" style="min-width: 220px; max-width: 260px;">
+            <li class="list-group-item list-group-item-action">
+              <span class="list-group-item-icon"><span data-icon="bar-chart"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">Overview</span>
+              </span>
+            </li>
+            <li class="list-group-item list-group-item-action">
+              <span class="list-group-item-icon"><span data-icon="trending-up"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">Analytics</span>
+              </span>
+            </li>
+            <li class="list-group-item list-group-item-action">
+              <span class="list-group-item-icon"><span data-icon="file-text"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">Reports</span>
+              </span>
+            </li>
+            <li class="list-group-item list-group-item-action disabled">
+              <span class="list-group-item-icon"><span data-icon="lock"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">Billing (disabled)</span>
+              </span>
+            </li>
+          </ul>
+          <div style="flex: 1; min-width: 180px;">
+            <p class="text-sm text-muted mb-2">Selected item:</p>
+            <div id="single-select-output" class="demo-output">None selected</div>
+            <div class="flex gap-2 flex-wrap mt-3">
+              <button id="single-select-btn" class="btn btn-sm btn-primary">Select Analytics</button>
+              <button id="single-deselect-btn" class="btn btn-sm btn-outline">Deselect All</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="code-block language-javascript mb-6">
+        <pre><code>const lg = E.listGroup('#my-list', {
+    selectable: true,
+    onChange: (selected) =&gt; {
+        const label = selected[0]
+            ? selected[0].querySelector('.list-group-item-heading').textContent
+            : 'None selected';
+        $('#output').text(label);
+    }
+});
+
+// Programmatic selection
+lg.select(1);         // Select item at index 1
+lg.deselect(1);       // Deselect item at index 1
+lg.deselectAll();     // Clear all selections
+lg.getSelected();     // → [HTMLElement, ...]</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 8: Multi-Select
+       ============================ -->
+  <section class="card mb-6" data-section="Multi-Select">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Multi-Select</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Set <code>multiSelect: true</code> alongside <code>selectable: true</code> to allow multiple items
+        to be active simultaneously. The list container receives <code>aria-multiselectable="true"</code>
+        automatically.
+      </p>
+
+      <div class="demo-area mb-4">
+        <div class="flex gap-6 flex-wrap items-start">
+          <ul id="multi-select-list" class="list-group" style="min-width: 240px; max-width: 280px;">
+            <li class="list-group-item list-group-item-action">
+              <span class="list-group-item-icon"><span data-icon="tag"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">Design</span>
+              </span>
+            </li>
+            <li class="list-group-item list-group-item-action">
+              <span class="list-group-item-icon"><span data-icon="code"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">Development</span>
+              </span>
+            </li>
+            <li class="list-group-item list-group-item-action">
+              <span class="list-group-item-icon"><span data-icon="clipboard"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">Project Management</span>
+              </span>
+            </li>
+            <li class="list-group-item list-group-item-action">
+              <span class="list-group-item-icon"><span data-icon="bar-chart"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">Analytics</span>
+              </span>
+            </li>
+            <li class="list-group-item list-group-item-action">
+              <span class="list-group-item-icon"><span data-icon="users"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">HR &amp; Hiring</span>
+              </span>
+            </li>
+          </ul>
+          <div style="flex: 1; min-width: 180px;">
+            <p class="text-sm text-muted mb-2">Selected categories:</p>
+            <div id="multi-select-output" class="demo-output">None selected</div>
+            <div class="flex gap-2 flex-wrap mt-3">
+              <button id="multi-select-all-btn" class="btn btn-sm btn-primary">Select All</button>
+              <button id="multi-deselect-all-btn" class="btn btn-sm btn-outline">Clear All</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="code-block language-javascript">
+        <pre><code>const lg = E.listGroup('#my-list', {
+    selectable: true,
+    multiSelect: true,    // Allow multiple active items
+    onChange: (selected) =&gt; {
+        const labels = selected.map(el =&gt;
+            el.querySelector('.list-group-item-heading').textContent
+        );
+        console.log('Selected:', labels);
+    }
+});
+
+lg.selectAll();     // Select every non-disabled item
+lg.deselectAll();   // Clear all selections
+lg.toggle(2);       // Toggle item at index 2</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 9: Tutorial
+       ============================ -->
+  <section class="card mb-6" data-section="Tutorial">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Tutorial — Settings Panel</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Build a settings panel where the left-hand List Group acts as a navigation menu
+        and the right panel updates to show the relevant settings on each selection.
+      </p>
+
+      <h3 class="category-title-style">Step 1: Create the HTML structure</h3>
+      <div class="code-block language-html mb-5">
+        <pre><code>&lt;div class="settings-layout"&gt;
+    &lt;ul id="settings-nav" class="list-group list-group-sm settings-sidebar"&gt;
+        &lt;li class="list-group-item list-group-item-action active"&gt;
+            &lt;span class="list-group-item-icon"&gt;&lt;span data-icon="settings"&gt;&lt;/span&gt;&lt;/span&gt;
+            &lt;span class="list-group-item-heading"&gt;General&lt;/span&gt;
+        &lt;/li&gt;
+        &lt;li class="list-group-item list-group-item-action"&gt;
+            &lt;span class="list-group-item-icon"&gt;&lt;span data-icon="lock"&gt;&lt;/span&gt;&lt;/span&gt;
+            &lt;span class="list-group-item-heading"&gt;Security&lt;/span&gt;
+        &lt;/li&gt;
+        ...
+    &lt;/ul&gt;
+    &lt;div id="settings-panel" class="settings-panel"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Step 2: Initialise with onChange callback</h3>
+      <div class="code-block language-javascript mb-5">
+        <pre><code>const panels = {
+    0: { title: 'General', body: 'Manage your language, timezone, and display preferences.' },
+    1: { title: 'Security', body: 'Update your password and configure two-factor authentication.' },
+    2: { title: 'Notifications', body: 'Choose how and when you receive alerts.' },
+    3: { title: 'Privacy', body: 'Control data sharing and visibility settings.' },
+};
+
+const settingsNav = E.listGroup('#settings-nav', {
+    selectable: true,
+    onChange: (selected) =&gt; {
+        const index = lg.getItems().indexOf(selected[0]);
+        const p = panels[index];
+        $('#settings-panel').html(
+            `&lt;h4&gt;${p.title}&lt;/h4&gt;&lt;p&gt;${p.body}&lt;/p&gt;`
+        );
+    }
+});</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Step 3: Live Demo</h3>
+      <div class="demo-area">
+        <div class="settings-layout">
+          <ul id="tutorial-settings-nav" class="list-group list-group-sm settings-sidebar">
+            <li class="list-group-item list-group-item-action active">
+              <span class="list-group-item-icon"><span data-icon="settings"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">General</span>
+              </span>
+            </li>
+            <li class="list-group-item list-group-item-action">
+              <span class="list-group-item-icon"><span data-icon="lock"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">Security</span>
+              </span>
+            </li>
+            <li class="list-group-item list-group-item-action">
+              <span class="list-group-item-icon"><span data-icon="bell"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">Notifications</span>
+              </span>
+            </li>
+            <li class="list-group-item list-group-item-action">
+              <span class="list-group-item-icon"><span data-icon="eye"></span></span>
+              <span class="list-group-item-content">
+                <span class="list-group-item-heading">Privacy</span>
+              </span>
+            </li>
+          </ul>
+          <div id="tutorial-settings-panel" class="settings-panel">
+            <h4 class="font-semibold mb-2">General</h4>
+            <p class="text-muted">Manage your language, timezone, and display preferences.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 10: JavaScript API
+       ============================ -->
+  <section class="card mb-6" data-section="JavaScript API">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">JavaScript API</h2>
+    </div>
+    <div class="card-body">
+      <h3 class="category-title-style">Initialisation</h3>
+      <div class="code-block language-javascript mb-6">
+        <pre><code>const lg = E.listGroup('#my-list', {
+    selectable: true,         // Enable click-to-select behaviour
+    multiSelect: false,       // Allow multiple active items (default: false)
+    activeClass: 'active',    // CSS class for selected state (default: 'active')
+    disabledClass: 'disabled',// CSS class for disabled items (default: 'disabled')
+    itemSelector: '.list-group-item', // Item query selector (default: '.list-group-item')
+    keyboard: true,           // Enable arrow-key navigation (default: true)
+    loop: true,               // Wrap focus at list boundaries (default: true)
+    focusOnInit: false,       // Focus first enabled item on init (default: false)
+    onChange:  (selected, event) =&gt; {},  // Fires on selection change
+    onSelect:  (item, index, event) =&gt; {},  // Fires when item selected
+    onDeselect:(item, index, event) =&gt; {},  // Fires when item deselected
+});</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Selection Methods</h3>
+      <div class="code-block language-javascript mb-6">
+        <pre><code>lg.select(index)       // Select item at index (fires callbacks)
+lg.deselect(index)     // Deselect item at index (fires callbacks)
+lg.toggle(index)       // Toggle selection at index
+lg.selectAll()         // Select all non-disabled items (multiSelect mode only)
+lg.deselectAll()       // Deselect all items
+lg.getSelected()       // → HTMLElement[] of currently active items
+lg.isSelected(index)   // → boolean</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Item Methods</h3>
+      <div class="code-block language-javascript mb-6">
+        <pre><code>lg.getItems()          // → HTMLElement[] — all items
+lg.getItem(index)      // → HTMLElement | null
+lg.enable(index)       // Remove disabled class and aria-disabled
+lg.disable(index)      // Add disabled class and aria-disabled
+lg.refresh()           // Re-query items from DOM (use after dynamic changes)
+lg.destroy()           // Remove event listeners and clean up ARIA attributes</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 11: Keyboard Navigation
+       ============================ -->
+  <section class="card mb-6" data-section="Keyboard Navigation">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Keyboard Navigation</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        When keyboard navigation is enabled (default), users can move between items without using the mouse.
+        The component uses a roving <code>tabindex</code> pattern — only the focused item is in the tab order at any time.
+      </p>
+
+      <table class="option-table mb-4">
+        <thead>
+          <tr><th>Key</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>Tab</code></td><td>Move focus into (or away from) the list</td></tr>
+          <tr><td><code>↓</code> / <code>→</code></td><td>Move focus to the next enabled item</td></tr>
+          <tr><td><code>↑</code> / <code>←</code></td><td>Move focus to the previous enabled item</td></tr>
+          <tr><td><code>Home</code></td><td>Move focus to the first enabled item</td></tr>
+          <tr><td><code>End</code></td><td>Move focus to the last enabled item</td></tr>
+          <tr><td><code>Enter</code> / <code>Space</code></td><td>Select (or toggle) the focused item (when <code>selectable: true</code>)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-block language-javascript">
+        <pre><code>// Disable keyboard navigation
+const lg = E.listGroup('#my-list', {
+    selectable: true,
+    keyboard: false   // Turn off arrow-key navigation
+});
+
+// Disable looping at boundaries
+const lg = E.listGroup('#my-list', {
+    selectable: true,
+    loop: false  // Focus stops at first / last item
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 12: Accessibility
+       ============================ -->
+  <section class="card mb-6" data-section="Accessibility">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Accessibility</h2>
+    </div>
+    <div class="card-body">
+      <h3 class="category-title-style">Automatic ARIA Attributes</h3>
+      <p class="mb-4">
+        When <code>selectable: true</code> is set, the JS API manages ARIA attributes automatically —
+        no manual <code>aria-*</code> attributes needed in your HTML.
+      </p>
+      <table class="option-table mb-6">
+        <thead>
+          <tr><th>Element</th><th>Attribute</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>.list-group</code></td><td><code>role</code></td><td><code>"listbox"</code></td></tr>
+          <tr><td><code>.list-group</code> (multi)</td><td><code>aria-multiselectable</code></td><td><code>"true"</code></td></tr>
+          <tr><td><code>.list-group-item</code></td><td><code>aria-selected</code></td><td><code>"true"</code> or <code>"false"</code></td></tr>
+          <tr><td><code>.list-group-item.disabled</code></td><td><code>aria-disabled</code></td><td><code>"true"</code></td></tr>
+          <tr><td><code>.list-group-item</code></td><td><code>tabindex</code></td><td>Roving: <code>0</code> (focused) or <code>-1</code></td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="category-title-style">CSS-Only Guidance</h3>
+      <p class="mb-4">
+        For CSS-only (non-JS) lists, add ARIA attributes yourself when semantics matter:
+      </p>
+      <div class="code-block language-html mb-4">
+        <pre><code>&lt;!-- Navigation list — use &lt;nav&gt; + &lt;ul&gt; --&gt;
+&lt;nav aria-label="Main navigation"&gt;
+    &lt;ul class="list-group"&gt;
+        &lt;li class="list-group-item"&gt;
+            &lt;a href="/dashboard" aria-current="page"&gt;Dashboard&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li class="list-group-item"&gt;&lt;a href="/reports"&gt;Reports&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;
+
+&lt;!-- Content list — plain &lt;ul&gt; is fine --&gt;
+&lt;ul class="list-group" aria-label="Notifications"&gt;
+    &lt;li class="list-group-item"&gt;...&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Screen Reader Notes</h3>
+      <ul class="mb-4">
+        <li>In <code>selectable</code> mode the list is announced as a <em>listbox</em>; each item as an <em>option</em>.</li>
+        <li>Selected state is announced via <code>aria-selected</code>, so avoid relying on colour alone.</li>
+        <li>Icon-only list items should include visually-hidden text or an <code>aria-label</code> on the item for context.</li>
+        <li>Disabled items receive <code>aria-disabled="true"</code> and <code>pointer-events: none</code>, so keyboard focus skips them automatically.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 13: Config Engine
+       ============================ -->
+  <section class="card mb-6" data-section="Config Engine">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Config Engine</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        List Group is supported in the declarative config engine via <code>$.setup()</code>,
+        allowing you to initialise the component without writing imperative JavaScript.
+      </p>
+      <div class="code-block language-javascript mb-4">
+        <pre><code>$.setup({
+    '#my-list': {
+        component: 'listGroup',
+        options: {
+            selectable: true,
+            multiSelect: false,
+            onChange: (selected) =&gt; {
+                console.log('Selection changed:', selected.length, 'item(s) selected');
+            }
+        }
+    }
+});</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Live Config Engine Demo</h3>
+      <div class="demo-area">
+        <ul id="config-engine-list" class="list-group" style="max-width: 280px;">
+          <li class="list-group-item list-group-item-action">Initialised via Config Engine</li>
+          <li class="list-group-item list-group-item-action">Click to select an item</li>
+          <li class="list-group-item list-group-item-action">Works exactly like JS API</li>
+        </ul>
+        <div id="config-engine-output" class="demo-output mt-3" style="max-width: 280px;">No selection</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 14: CSS Customisation
+       ============================ -->
+  <section class="card mb-6" data-section="CSS Customisation">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">CSS Customisation</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        List Group uses standard Domma design tokens. Override these variables globally or scoped to a
+        specific container.
+      </p>
+      <table class="option-table mb-6">
+        <thead>
+          <tr><th>Variable</th><th>Controls</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>--dm-border</code></td><td>Outer border colour of the list group</td></tr>
+          <tr><td><code>--dm-border-light</code></td><td>Separator colour between items</td></tr>
+          <tr><td><code>--dm-surface</code></td><td>Item background colour</td></tr>
+          <tr><td><code>--dm-background-alt</code></td><td>Item hover background colour</td></tr>
+          <tr><td><code>--dm-border-focus</code></td><td>Focus ring colour (inset box-shadow)</td></tr>
+          <tr><td><code>--dm-primary</code></td><td>Active item background colour</td></tr>
+          <tr><td><code>--dm-radius-md</code></td><td>Border radius of the list group container</td></tr>
+          <tr><td><code>--dm-space-3</code> / <code>--dm-space-4</code></td><td>Default item padding</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-block language-css mb-4">
+        <pre><code>/* Tighter separators and softer border */
+#my-list {
+    --dm-border: rgba(0, 0, 0, 0.08);
+    --dm-border-light: rgba(0, 0, 0, 0.04);
+}
+
+/* Custom active colour (override primary) */
+#my-list .list-group-item.active {
+    background-color: #16a34a;   /* Green */
+    border-bottom-color: #15803d;
+}
+
+/* Borderless items with rounded container */
+#my-list {
+    --dm-radius-md: 1rem;
+}
+#my-list .list-group-item {
+    border-bottom: none;
+    margin-bottom: 2px;
+}</code></pre>
+      </div>
+      <p><a href="../css-customisation/index.html">Full CSS Customisation Cheat-Sheet &rarr;</a></p>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 15: API Reference
+       ============================ -->
+  <section class="card mb-6" data-section="API Reference">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">API Reference</h2>
+    </div>
+    <div class="card-body">
+      <h3 class="category-title-style">Options</h3>
+      <table class="option-table mb-6">
+        <thead>
+          <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>selectable</code></td><td>boolean</td><td><code>false</code></td><td>Enable click-to-select behaviour and ARIA listbox roles</td></tr>
+          <tr><td><code>multiSelect</code></td><td>boolean</td><td><code>false</code></td><td>Allow more than one item to be active at a time</td></tr>
+          <tr><td><code>activeClass</code></td><td>string</td><td><code>'active'</code></td><td>CSS class applied to selected items</td></tr>
+          <tr><td><code>disabledClass</code></td><td>string</td><td><code>'disabled'</code></td><td>CSS class that marks items as non-interactive</td></tr>
+          <tr><td><code>itemSelector</code></td><td>string</td><td><code>'.list-group-item'</code></td><td>Query selector used to discover child items</td></tr>
+          <tr><td><code>keyboard</code></td><td>boolean</td><td><code>true</code></td><td>Enable arrow-key / Home / End navigation</td></tr>
+          <tr><td><code>loop</code></td><td>boolean</td><td><code>true</code></td><td>Wrap focus when navigating past first / last item</td></tr>
+          <tr><td><code>focusOnInit</code></td><td>boolean</td><td><code>false</code></td><td>Automatically focus the first enabled item on initialisation</td></tr>
+          <tr><td><code>onChange</code></td><td>function</td><td><code>null</code></td><td><code>(selected: HTMLElement[], event) =&gt; void</code> — fires on any selection change</td></tr>
+          <tr><td><code>onSelect</code></td><td>function</td><td><code>null</code></td><td><code>(item: HTMLElement, index: number, event) =&gt; void</code> — fires when an item is selected</td></tr>
+          <tr><td><code>onDeselect</code></td><td>function</td><td><code>null</code></td><td><code>(item: HTMLElement, index: number, event) =&gt; void</code> — fires when an item is deselected</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="category-title-style">Methods</h3>
+      <table class="option-table mb-6">
+        <thead>
+          <tr><th>Method</th><th>Returns</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>select(index)</code></td><td>this</td><td>Select item at index; fires onSelect and onChange</td></tr>
+          <tr><td><code>deselect(index)</code></td><td>this</td><td>Deselect item at index; fires onDeselect and onChange</td></tr>
+          <tr><td><code>toggle(index)</code></td><td>this</td><td>Toggle selection at index</td></tr>
+          <tr><td><code>selectAll()</code></td><td>this</td><td>Select all non-disabled items (multiSelect mode only)</td></tr>
+          <tr><td><code>deselectAll()</code></td><td>this</td><td>Deselect all items; fires callbacks</td></tr>
+          <tr><td><code>getSelected()</code></td><td>HTMLElement[]</td><td>Returns array of currently active items</td></tr>
+          <tr><td><code>isSelected(index)</code></td><td>boolean</td><td>Whether item at index is currently selected</td></tr>
+          <tr><td><code>getItems()</code></td><td>HTMLElement[]</td><td>Returns all item elements as a shallow copy</td></tr>
+          <tr><td><code>getItem(index)</code></td><td>HTMLElement|null</td><td>Returns single item element at index</td></tr>
+          <tr><td><code>enable(index)</code></td><td>this</td><td>Remove disabled class and aria-disabled from item</td></tr>
+          <tr><td><code>disable(index)</code></td><td>this</td><td>Add disabled class and aria-disabled to item</td></tr>
+          <tr><td><code>refresh()</code></td><td>this</td><td>Re-query items from DOM; call after dynamic content changes</td></tr>
+          <tr><td><code>destroy()</code></td><td>void</td><td>Remove event listeners and clean up all ARIA attributes</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="category-title-style">CSS Classes</h3>
+      <table class="option-table">
+        <thead>
+          <tr><th>Class</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>.list-group</code></td><td>Container — flex column, rounded border, overflow hidden</td></tr>
+          <tr><td><code>.list-group-flush</code></td><td>Modifier — remove outer border and radius (for card embedding)</td></tr>
+          <tr><td><code>.list-group-sm</code></td><td>Modifier — reduced padding and smaller font size</td></tr>
+          <tr><td><code>.list-group-lg</code></td><td>Modifier — increased padding and base font size</td></tr>
+          <tr><td><code>.list-group-item</code></td><td>Item — flex row, vertically centred, bottom separator</td></tr>
+          <tr><td><code>.list-group-item-action</code></td><td>Modifier — pointer cursor and hover highlight</td></tr>
+          <tr><td><code>.list-group-item.active</code></td><td>Selected/active state — primary background, white text</td></tr>
+          <tr><td><code>.list-group-item.disabled</code></td><td>Non-interactive state — dimmed, no pointer events</td></tr>
+          <tr><td><code>.list-group-item-icon</code></td><td>Left-aligned icon/avatar slot</td></tr>
+          <tr><td><code>.list-group-item-content</code></td><td>Flex-grow text wrapper</td></tr>
+          <tr><td><code>.list-group-item-heading</code></td><td>Primary text — semi-bold, truncated with ellipsis</td></tr>
+          <tr><td><code>.list-group-item-text</code></td><td>Secondary/muted text — smaller, truncated</td></tr>
+          <tr><td><code>.list-group-item-trailing</code></td><td>Right-aligned area (badges, timestamps, icons)</td></tr>
+          <tr><td><code>.list-group-item-primary</code></td><td>Colour variant — left border + tinted background</td></tr>
+          <tr><td><code>.list-group-item-secondary</code></td><td>Colour variant</td></tr>
+          <tr><td><code>.list-group-item-success</code></td><td>Colour variant</td></tr>
+          <tr><td><code>.list-group-item-danger</code></td><td>Colour variant</td></tr>
+          <tr><td><code>.list-group-item-warning</code></td><td>Colour variant</td></tr>
+          <tr><td><code>.list-group-item-info</code></td><td>Colour variant</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 16: Related Elements
+       ============================ -->
+  <section class="card mb-6" data-section="Related Elements">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Related Elements</h2>
+    </div>
+    <div class="card-body">
+      <div class="grid grid-cols-1 gap-4 grid-auto-fit-250">
+        <a href="../tabs/index.html" class="card card-hover">
+          <div class="card-body">
+            <h3 class="card-title">Tabs</h3>
+            <p class="card-text">Horizontally organised panels — use when content fits across a top bar rather than a side list</p>
+          </div>
+        </a>
+        <a href="../accordion/index.html" class="card card-hover">
+          <div class="card-body">
+            <h3 class="card-title">Accordion</h3>
+            <p class="card-text">Collapsible sections — ideal when each item has a large content area to reveal or hide</p>
+          </div>
+        </a>
+        <a href="../button-group/index.html" class="card card-hover">
+          <div class="card-body">
+            <h3 class="card-title">Button Group</h3>
+            <p class="card-text">Inline radio/checkbox groups — better for compact option sets where a list layout is not needed</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script type="module">
+  $(() => {
+    I.scan();
+
+    // ——————————————————————————
+    // Section 7: Single Select
+    // ——————————————————————————
+    const singleLg = E.listGroup('#single-select-list', {
+      selectable: true,
+      onChange: (selected) => {
+        const label = selected[0]
+          ? selected[0].querySelector('.list-group-item-heading').textContent
+          : 'None selected';
+        $('#single-select-output').text(label);
+      }
+    });
+
+    $('#single-select-btn').on('click', () => {
+      singleLg.select(1); // Select "Analytics" (index 1)
+      const sel = singleLg.getSelected();
+      const label = sel[0]
+        ? sel[0].querySelector('.list-group-item-heading').textContent
+        : 'None selected';
+      $('#single-select-output').text(label);
+    });
+
+    $('#single-deselect-btn').on('click', () => {
+      singleLg.deselectAll();
+      $('#single-select-output').text('None selected');
+    });
+
+    // ——————————————————————————
+    // Section 8: Multi-Select
+    // ——————————————————————————
+    const updateMultiOutput = (selected) => {
+      const labels = selected.map(el =>
+        el.querySelector('.list-group-item-heading').textContent
+      );
+      $('#multi-select-output').text(
+        labels.length ? labels.join(', ') : 'None selected'
+      );
+    };
+
+    const multiLg = E.listGroup('#multi-select-list', {
+      selectable: true,
+      multiSelect: true,
+      onChange: updateMultiOutput
+    });
+
+    $('#multi-select-all-btn').on('click', () => {
+      multiLg.selectAll();
+      updateMultiOutput(multiLg.getSelected());
+    });
+
+    $('#multi-deselect-all-btn').on('click', () => {
+      multiLg.deselectAll();
+      updateMultiOutput(multiLg.getSelected());
+    });
+
+    // ——————————————————————————
+    // Section 9: Tutorial — Settings Panel
+    // ——————————————————————————
+    const settingsPanels = [
+      { title: 'General',       body: 'Manage your language, timezone, and display preferences.' },
+      { title: 'Security',      body: 'Update your password and configure two-factor authentication.' },
+      { title: 'Notifications', body: 'Choose how and when you receive email, SMS, and push alerts.' },
+      { title: 'Privacy',       body: 'Control data sharing, visibility settings, and download your data.' },
+    ];
+
+    const tutorialLg = E.listGroup('#tutorial-settings-nav', {
+      selectable: true,
+      onChange: (selected) => {
+        if (!selected.length) return;
+        const index = tutorialLg.getItems().indexOf(selected[0]);
+        const p = settingsPanels[index];
+        if (p) {
+          $('#tutorial-settings-panel').html(
+            `<h4 class="font-semibold mb-2">${_.escape(p.title)}</h4><p class="text-muted">${_.escape(p.body)}</p>`
+          );
+        }
+      }
+    });
+
+    // Pre-select General on load
+    tutorialLg.select(0);
+
+    // ——————————————————————————
+    // Section 13: Config Engine
+    // ——————————————————————————
+    $.setup({
+      '#config-engine-list': {
+        component: 'listGroup',
+        options: {
+          selectable: true,
+          onChange: (selected) => {
+            const label = selected[0]
+              ? selected[0].textContent.trim()
+              : 'No selection';
+            $('#config-engine-output').text(label);
+          }
+        }
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
