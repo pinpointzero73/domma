@@ -1558,14 +1558,26 @@ class ListGroup extends Component {
             if (this.options.multiSelect) {
                 this.element.setAttribute('aria-multiselectable', 'true');
             }
-
-            this._items.forEach((item, index) => {
-                this._addEventListener(item, 'click', (e) => {
-                    if (item.classList.contains(this.options.disabledClass)) return;
-                    this._handleItemClick(index, e);
-                });
-            });
         }
+
+        // Delegated click handler — works for items added after init (e.g. via refresh())
+        this._addEventListener(this.element, 'click', (e) => {
+            if (!this.options.selectable) return;
+            const item = e.target.closest(this.options.itemSelector);
+            if (!item || !this.element.contains(item)) return;
+            if (item.classList.contains(this.options.disabledClass)) return;
+            const index = this._items.indexOf(item);
+            if (index === -1) return;
+            this._handleItemClick(index, e);
+        });
+
+        // Delegated focus handler — keeps roving tabindex tracking correct for new items
+        this._addEventListener(this.element, 'focusin', (e) => {
+            const item = e.target.closest(this.options.itemSelector);
+            if (!item || !this.element.contains(item)) return;
+            const index = this._items.indexOf(item);
+            if (index !== -1) this._focusedIndex = index;
+        });
 
         this._items.forEach((item) => {
             if (item.classList.contains(this.options.disabledClass)) {
@@ -1637,12 +1649,7 @@ class ListGroup extends Component {
             }
         });
 
-        // Track focused item via focus events for roving tabindex
-        this._items.forEach((item, index) => {
-            this._addEventListener(item, 'focus', () => {
-                this._focusedIndex = index;
-            });
-        });
+        // Focus tracking is now handled by the delegated focusin listener set up in _init()
     }
 
     _nextEnabledIndex(from, direction) {
@@ -1693,7 +1700,7 @@ class ListGroup extends Component {
         }
 
         this._items[index].setAttribute('tabindex', '0');
-        this._items[index].focus();
+        this._items[index].focus({ preventScroll: true });
         this._focusedIndex = index;
     }
 
@@ -1725,6 +1732,15 @@ class ListGroup extends Component {
                 if (this.options.onSelect) {
                     this.options.onSelect(item, index, event);
                 }
+            } else {
+                // Item was already selected — deselect it and fire callbacks
+                item.classList.remove(this.options.activeClass);
+                if (this.options.selectable) {
+                    item.setAttribute('aria-selected', 'false');
+                }
+                if (this.options.onDeselect) this.options.onDeselect(item, index, event);
+                if (this.options.onChange) this.options.onChange(this.getSelected(), event);
+                return;
             }
         } else {
             // Multi select — toggle this item
@@ -1938,12 +1954,11 @@ class ListGroup extends Component {
             this.element.querySelectorAll(this.options.itemSelector)
         );
 
-        // Re-apply ARIA attributes after refresh
+        // Sync aria-selected with current DOM state (handles pre-existing activeClass and new items)
         if (this.options.selectable) {
             this._items.forEach(item => {
-                if (!item.hasAttribute('aria-selected')) {
-                    item.setAttribute('aria-selected', 'false');
-                }
+                item.setAttribute('aria-selected',
+                    item.classList.contains(this.options.activeClass) ? 'true' : 'false');
             });
         }
 
