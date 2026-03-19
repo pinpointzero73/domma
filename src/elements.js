@@ -1670,7 +1670,7 @@ class ListGroup extends Component {
             }
 
             steps++;
-            if (steps > total) return from; // No enabled items found
+            if (steps > total) return -1; // All items disabled — no valid target
         } while (this._items[index].classList.contains(this.options.disabledClass));
 
         return index;
@@ -1794,9 +1794,12 @@ class ListGroup extends Component {
         if (item.classList.contains(this.options.disabledClass)) return this;
 
         if (!this.options.multiSelect) {
-            this._items.forEach(el => {
-                el.classList.remove(this.options.activeClass);
-                if (this.options.selectable) el.setAttribute('aria-selected', 'false');
+            this._items.forEach((el, i) => {
+                if (el.classList.contains(this.options.activeClass)) {
+                    el.classList.remove(this.options.activeClass);
+                    if (this.options.selectable) el.setAttribute('aria-selected', 'false');
+                    if (this.options.onDeselect) this.options.onDeselect(el, i, null);
+                }
             });
         }
 
@@ -1981,6 +1984,7 @@ class ListGroup extends Component {
     destroy() {
         this._items.forEach(item => {
             item.removeAttribute('tabindex');
+            item.removeAttribute('aria-disabled');
         });
 
         if (this.options.selectable) {
