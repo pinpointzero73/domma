@@ -1522,6 +1522,462 @@ class NumberBadge {
 }
 
 // ============================================
+// ListGroup Component
+// ============================================
+
+class ListGroup extends Component {
+    static defaults = {
+        selectable: false,
+        multiSelect: false,
+        activeClass: 'active',
+        disabledClass: 'disabled',
+        itemSelector: '.list-group-item',
+        keyboard: true,
+        loop: true,
+        focusOnInit: false,
+        onChange: null,
+        onSelect: null,
+        onDeselect: null
+    };
+
+    constructor(selector, options = {}) {
+        super(selector, options);
+        this._items = [];
+        this._focusedIndex = -1;
+        this._init();
+    }
+
+    _init() {
+        if (!this.element) return;
+
+        this.refresh();
+
+        if (this.options.selectable) {
+            this.element.setAttribute('role', 'listbox');
+
+            if (this.options.multiSelect) {
+                this.element.setAttribute('aria-multiselectable', 'true');
+            }
+
+            this._items.forEach((item, index) => {
+                this._addEventListener(item, 'click', (e) => {
+                    if (item.classList.contains(this.options.disabledClass)) return;
+                    this._handleItemClick(index, e);
+                });
+            });
+        }
+
+        this._items.forEach((item) => {
+            if (item.classList.contains(this.options.disabledClass)) {
+                item.setAttribute('aria-disabled', 'true');
+            }
+        });
+
+        if (this.options.keyboard) {
+            this._setupKeyboard();
+        }
+
+        this._initTabindex();
+
+        if (this.options.focusOnInit && this._items.length > 0) {
+            const firstEnabled = this._items.findIndex(
+                item => !item.classList.contains(this.options.disabledClass)
+            );
+            if (firstEnabled !== -1) {
+                this._moveFocus(firstEnabled);
+            }
+        }
+    }
+
+    _initTabindex() {
+        const firstEnabled = this._items.findIndex(
+            item => !item.classList.contains(this.options.disabledClass)
+        );
+
+        this._items.forEach((item, index) => {
+            item.setAttribute('tabindex', index === firstEnabled ? '0' : '-1');
+        });
+
+        if (firstEnabled !== -1) {
+            this._focusedIndex = firstEnabled;
+        }
+    }
+
+    _setupKeyboard() {
+        this._addEventListener(this.element, 'keydown', (e) => {
+            switch (e.key) {
+                case 'ArrowDown':
+                case 'ArrowRight':
+                    e.preventDefault();
+                    this._moveFocus(this._nextEnabledIndex(this._focusedIndex, 1));
+                    break;
+                case 'ArrowUp':
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    this._moveFocus(this._nextEnabledIndex(this._focusedIndex, -1));
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    this._moveFocus(this._firstEnabledIndex());
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    this._moveFocus(this._lastEnabledIndex());
+                    break;
+                case 'Enter':
+                case ' ':
+                    e.preventDefault();
+                    if (this.options.selectable && this._focusedIndex !== -1) {
+                        const item = this._items[this._focusedIndex];
+                        if (item && !item.classList.contains(this.options.disabledClass)) {
+                            this._handleItemClick(this._focusedIndex, e);
+                        }
+                    }
+                    break;
+            }
+        });
+
+        // Track focused item via focus events for roving tabindex
+        this._items.forEach((item, index) => {
+            this._addEventListener(item, 'focus', () => {
+                this._focusedIndex = index;
+            });
+        });
+    }
+
+    _nextEnabledIndex(from, direction) {
+        const total = this._items.length;
+        if (total === 0) return -1;
+
+        let index = from;
+        let steps = 0;
+
+        do {
+            index = index + direction;
+
+            if (this.options.loop) {
+                index = ((index % total) + total) % total;
+            } else {
+                if (index < 0) return this._firstEnabledIndex();
+                if (index >= total) return this._lastEnabledIndex();
+            }
+
+            steps++;
+            if (steps > total) return from; // No enabled items found
+        } while (this._items[index].classList.contains(this.options.disabledClass));
+
+        return index;
+    }
+
+    _firstEnabledIndex() {
+        return this._items.findIndex(
+            item => !item.classList.contains(this.options.disabledClass)
+        );
+    }
+
+    _lastEnabledIndex() {
+        for (let i = this._items.length - 1; i >= 0; i--) {
+            if (!this._items[i].classList.contains(this.options.disabledClass)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    _moveFocus(index) {
+        if (index === -1 || index >= this._items.length) return;
+
+        // Update roving tabindex
+        if (this._focusedIndex !== -1 && this._items[this._focusedIndex]) {
+            this._items[this._focusedIndex].setAttribute('tabindex', '-1');
+        }
+
+        this._items[index].setAttribute('tabindex', '0');
+        this._items[index].focus();
+        this._focusedIndex = index;
+    }
+
+    _handleItemClick(index, event) {
+        const item = this._items[index];
+        const isSelected = item.classList.contains(this.options.activeClass);
+
+        if (!this.options.multiSelect) {
+            // Single select — deselect all others first
+            const previouslySelected = this._items.filter(
+                (el, i) => i !== index && el.classList.contains(this.options.activeClass)
+            );
+            previouslySelected.forEach(el => {
+                el.classList.remove(this.options.activeClass);
+                if (this.options.selectable) {
+                    el.setAttribute('aria-selected', 'false');
+                }
+                const i = this._items.indexOf(el);
+                if (this.options.onDeselect) {
+                    this.options.onDeselect(el, i, event);
+                }
+            });
+
+            if (!isSelected) {
+                item.classList.add(this.options.activeClass);
+                if (this.options.selectable) {
+                    item.setAttribute('aria-selected', 'true');
+                }
+                if (this.options.onSelect) {
+                    this.options.onSelect(item, index, event);
+                }
+            }
+        } else {
+            // Multi select — toggle this item
+            if (isSelected) {
+                item.classList.remove(this.options.activeClass);
+                if (this.options.selectable) {
+                    item.setAttribute('aria-selected', 'false');
+                }
+                if (this.options.onDeselect) {
+                    this.options.onDeselect(item, index, event);
+                }
+            } else {
+                item.classList.add(this.options.activeClass);
+                if (this.options.selectable) {
+                    item.setAttribute('aria-selected', 'true');
+                }
+                if (this.options.onSelect) {
+                    this.options.onSelect(item, index, event);
+                }
+            }
+        }
+
+        if (this.options.onChange) {
+            this.options.onChange(this.getSelected(), event);
+        }
+    }
+
+    _updateAriaSelected() {
+        if (!this.options.selectable) return;
+
+        this._items.forEach(item => {
+            item.setAttribute(
+                'aria-selected',
+                String(item.classList.contains(this.options.activeClass))
+            );
+        });
+    }
+
+    // ——————————————————————————————
+    // Public API
+    // ——————————————————————————————
+
+    /**
+     * Select item at index
+     * @param {number} index
+     * @returns {this}
+     */
+    select(index) {
+        if (index < 0 || index >= this._items.length) return this;
+        const item = this._items[index];
+        if (item.classList.contains(this.options.disabledClass)) return this;
+
+        if (!this.options.multiSelect) {
+            this._items.forEach(el => {
+                el.classList.remove(this.options.activeClass);
+                if (this.options.selectable) el.setAttribute('aria-selected', 'false');
+            });
+        }
+
+        item.classList.add(this.options.activeClass);
+        if (this.options.selectable) item.setAttribute('aria-selected', 'true');
+
+        if (this.options.onSelect) this.options.onSelect(item, index, null);
+        if (this.options.onChange) this.options.onChange(this.getSelected(), null);
+
+        return this;
+    }
+
+    /**
+     * Deselect item at index
+     * @param {number} index
+     * @returns {this}
+     */
+    deselect(index) {
+        if (index < 0 || index >= this._items.length) return this;
+        const item = this._items[index];
+
+        item.classList.remove(this.options.activeClass);
+        if (this.options.selectable) item.setAttribute('aria-selected', 'false');
+
+        if (this.options.onDeselect) this.options.onDeselect(item, index, null);
+        if (this.options.onChange) this.options.onChange(this.getSelected(), null);
+
+        return this;
+    }
+
+    /**
+     * Toggle selection at index
+     * @param {number} index
+     * @returns {this}
+     */
+    toggle(index) {
+        if (index < 0 || index >= this._items.length) return this;
+        const item = this._items[index];
+
+        if (item.classList.contains(this.options.activeClass)) {
+            return this.deselect(index);
+        }
+        return this.select(index);
+    }
+
+    /**
+     * Select all non-disabled items (multiSelect mode only)
+     * @returns {this}
+     */
+    selectAll() {
+        if (!this.options.multiSelect) return this;
+
+        this._items.forEach((item, index) => {
+            if (!item.classList.contains(this.options.disabledClass)) {
+                item.classList.add(this.options.activeClass);
+                if (this.options.selectable) item.setAttribute('aria-selected', 'true');
+                if (this.options.onSelect) this.options.onSelect(item, index, null);
+            }
+        });
+
+        if (this.options.onChange) this.options.onChange(this.getSelected(), null);
+
+        return this;
+    }
+
+    /**
+     * Deselect all items
+     * @returns {this}
+     */
+    deselectAll() {
+        this._items.forEach((item, index) => {
+            if (item.classList.contains(this.options.activeClass)) {
+                item.classList.remove(this.options.activeClass);
+                if (this.options.selectable) item.setAttribute('aria-selected', 'false');
+                if (this.options.onDeselect) this.options.onDeselect(item, index, null);
+            }
+        });
+
+        if (this.options.onChange) this.options.onChange(this.getSelected(), null);
+
+        return this;
+    }
+
+    /**
+     * Return array of selected DOM elements
+     * @returns {HTMLElement[]}
+     */
+    getSelected() {
+        return this._items.filter(item =>
+            item.classList.contains(this.options.activeClass)
+        );
+    }
+
+    /**
+     * Return whether item at index is selected
+     * @param {number} index
+     * @returns {boolean}
+     */
+    isSelected(index) {
+        if (index < 0 || index >= this._items.length) return false;
+        return this._items[index].classList.contains(this.options.activeClass);
+    }
+
+    /**
+     * Enable item at index (remove disabled class)
+     * @param {number} index
+     * @returns {this}
+     */
+    enable(index) {
+        if (index < 0 || index >= this._items.length) return this;
+        const item = this._items[index];
+        item.classList.remove(this.options.disabledClass);
+        item.removeAttribute('aria-disabled');
+        return this;
+    }
+
+    /**
+     * Disable item at index (add disabled class)
+     * @param {number} index
+     * @returns {this}
+     */
+    disable(index) {
+        if (index < 0 || index >= this._items.length) return this;
+        const item = this._items[index];
+        item.classList.add(this.options.disabledClass);
+        item.setAttribute('aria-disabled', 'true');
+        return this;
+    }
+
+    /**
+     * Return all item elements as array
+     * @returns {HTMLElement[]}
+     */
+    getItems() {
+        return [...this._items];
+    }
+
+    /**
+     * Return single item element at index
+     * @param {number} index
+     * @returns {HTMLElement|null}
+     */
+    getItem(index) {
+        return this._items[index] || null;
+    }
+
+    /**
+     * Re-query items from the DOM (call after dynamic DOM changes)
+     * @returns {this}
+     */
+    refresh() {
+        if (!this.element) return this;
+
+        this._items = Array.from(
+            this.element.querySelectorAll(this.options.itemSelector)
+        );
+
+        // Re-apply ARIA attributes after refresh
+        if (this.options.selectable) {
+            this._items.forEach(item => {
+                if (!item.hasAttribute('aria-selected')) {
+                    item.setAttribute('aria-selected', 'false');
+                }
+            });
+        }
+
+        this._items.forEach(item => {
+            if (item.classList.contains(this.options.disabledClass)) {
+                item.setAttribute('aria-disabled', 'true');
+            }
+        });
+
+        return this;
+    }
+
+    /**
+     * Remove event listeners, restore tabindex, and clean up ARIA attributes
+     */
+    destroy() {
+        this._items.forEach(item => {
+            item.removeAttribute('tabindex');
+        });
+
+        if (this.options.selectable) {
+            this.element.removeAttribute('role');
+            this.element.removeAttribute('aria-multiselectable');
+
+            this._items.forEach(item => {
+                item.removeAttribute('aria-selected');
+            });
+        }
+
+        super.destroy();
+    }
+}
+
+// ============================================
 // Dropdown Component
 // ============================================
 
@@ -9089,6 +9545,25 @@ export const elements = {
             this._instances.set(instance.element, instance);
         }
         return instance;
+    },
+
+    listGroup(selector, options = {}) {
+        // Support multiple elements
+        const selectorElements = typeof selector === 'string'
+            ? document.querySelectorAll(selector)
+            : [selector];
+
+        const instances = [];
+
+        for (const el of selectorElements) {
+            const instance = new ListGroup(el, options);
+            if (instance.element) {
+                this._instances.set(el, instance);
+            }
+            instances.push(instance);
+        }
+
+        return instances.length === 1 ? instances[0] : instances;
     },
 
     timeline(selector, options = {}) {
