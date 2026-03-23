@@ -37,6 +37,7 @@ git push origin "v${VERSION}"
 
 # 4. Push main branch
 echo -e "${YELLOW}⬆️  Pushing to GitHub...${NC}"
+git pull --rebase origin main
 git push origin main
 
 # 5. Publish to npm
