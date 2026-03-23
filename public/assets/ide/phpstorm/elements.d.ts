@@ -668,6 +668,74 @@ export interface BackToTopInstance extends ComponentInstance {
 // Elements Module
 // ============================================
 
+// ============================================
+// Signature Component
+// ============================================
+
+export interface SignatureOptions {
+    /** Canvas height in px (default: 180) */
+    height?: number;
+    /** Default pen colour (default: '#000000') */
+    penColour?: string;
+    /** Default pen width in px (default: 2) */
+    penWidth?: number;
+    /** Export format: 'png' or 'svg' (default: 'png') */
+    format?: 'png' | 'svg';
+    /** Toolbar label text (default: 'Signature') */
+    label?: string;
+    /** Show dashed guide line (default: true) */
+    guideLine?: boolean;
+    /** Placeholder text (default: 'Sign here') */
+    placeholder?: string;
+    /** Colour swatches to show in toolbar */
+    colours?: string[];
+    /** Pen width options to show in toolbar */
+    widths?: number[];
+    /** Show or hide toolbar (default: true) */
+    toolbar?: boolean;
+    /** Name attribute for the hidden input (default: 'signature') */
+    name?: string;
+    /** Disable the pad (default: false) */
+    disabled?: boolean;
+    /** Enable Draw / Type toggle mode (default: false) */
+    typeFallback?: boolean;
+    /** Minimum number of points to register a stroke (default: 3) */
+    minStrokeLength?: number;
+    /** Honour prefers-reduced-motion (default: true) */
+    respectMotionPreference?: boolean;
+    /** Fired when the signature changes — receives base64 data URL */
+    onChange?: (base64: string) => void;
+    /** Fired when the signature is cleared */
+    onClear?: () => void;
+    /** Fired when a new stroke begins */
+    onBegin?: (stroke: object) => void;
+    /** Fired when a stroke ends */
+    onEnd?: (stroke: object) => void;
+}
+
+export interface SignatureInstance extends ComponentInstance {
+    /** Export signature as a base64 data URL */
+    toBase64(format?: 'png' | 'svg'): string;
+
+    /** True if no strokes have been drawn */
+    isEmpty(): boolean;
+
+    /** Clear the signature (undoable unless silent=true) */
+    clear(silent?: boolean): void;
+
+    /** Undo the last stroke */
+    undo(): void;
+
+    /** Redo the last undone stroke */
+    redo(): void;
+
+    /** Disable the signature pad */
+    disable(): void;
+
+    /** Enable the signature pad */
+    enable(): void;
+}
+
 export interface Elements {
     /** Create a Card component */
     card(selector: string | HTMLElement, options?: CardOptions): CardInstance;
@@ -704,6 +772,9 @@ export interface Elements {
 
     /** Toast notification system */
     toast: ToastStatic;
+
+    /** Create a Signature capture pad */
+    signature(selector: string | HTMLElement, options?: SignatureOptions): SignatureInstance;
 
     /** Get component instance for an element */
     get(selector: string | HTMLElement): ComponentInstance | undefined;
