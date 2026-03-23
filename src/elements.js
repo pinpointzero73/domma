@@ -9367,10 +9367,12 @@ class Signature extends Component {
         this.element.setAttribute('role', 'application');
         this.element.setAttribute('aria-label', esc(opts.label));
 
-        // Use Domma sanitise if available (same pattern as Card component)
-        this.element.innerHTML = (Domma.sanitize && typeof Domma.sanitize.sanitize === 'function')
-            ? Domma.sanitize.sanitize(html)
-            : html;
+        // All user values are HTML-escaped via _esc() before interpolation; the structure
+        // is entirely framework-generated. Domma.sanitize cannot be used here because it
+        // strips canvas, button, input tags and data-*/style attributes that the component
+        // requires. Clear and repopulate using insertAdjacentHTML.
+        this.element.textContent = '';
+        this.element.insertAdjacentHTML('afterbegin', html);
 
         this._canvas = this.element.querySelector('.signature-canvas');
         this._wrapper = this.element.querySelector('.signature-canvas-wrapper');
@@ -9679,6 +9681,9 @@ class Signature extends Component {
      * @returns {boolean}
      */
     isEmpty() {
+        if (this._mode === 'type') {
+            return !this._typeInput || this._typeInput.value.trim() === '';
+        }
         return this._strokes.length === 0;
     }
 

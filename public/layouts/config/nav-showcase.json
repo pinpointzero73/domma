@@ -279,6 +279,12 @@
           "badge": "New"
         },
         {
+          "text": "Signature",
+          "url": "showcase/elements/signature/index.html",
+          "section": "signature",
+          "badge": "New"
+        },
+        {
           "text": "Sidebar",
           "url": "showcase/sidebar/index.html",
           "section": "sidebar"
