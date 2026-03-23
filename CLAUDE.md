@@ -445,6 +445,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Badge - `badge()` component
   - NumberBadge - `numberBadge()` notification counter with positioning, dot mode, pulse
   - ListGroup - `listGroup()` selectable lists with keyboard nav, colour variants, flush mode
+  - Signature - `signature()` canvas signature pad — mouse/touch/stylus, undo/redo, PNG/SVG export, type fallback
   - BackToTop - `backToTop()` with scroll behavior
   - ButtonGroup - `buttonGroup()` for radio/checkbox groups
   - Breadcrumbs - `breadcrumbs()` with separators

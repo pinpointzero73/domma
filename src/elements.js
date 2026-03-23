@@ -9240,6 +9240,529 @@ class Progression extends Component {
 }
 
 // ============================================
+// Signature Component
+// ============================================
+
+class Signature extends Component {
+    static defaults = {
+        width: null,
+        height: 180,
+        penColour: '#000000',
+        penWidth: 2,
+        format: 'png',
+        label: 'Signature',
+        guideLine: true,
+        placeholder: 'Sign here',
+        colours: ['#000000', '#1e40af', '#15803d', '#b91c1c'],
+        widths: [1, 2, 4],
+        toolbar: true,
+        name: 'signature',
+        disabled: false,
+        typeFallback: false,
+        minStrokeLength: 3,
+        respectMotionPreference: true,
+        onChange: null,
+        onClear: null,
+        onBegin: null,
+        onEnd: null
+    };
+
+    constructor(selector, options = {}) {
+        super(selector, options);
+        if (!this.element) return;
+
+        this._strokes = [];
+        this._undoneStrokes = [];
+        this._currentStroke = null;
+        this._mode = 'draw';
+        this._isDrawing = false;
+        this._currentColour = this.options.penColour;
+        this._currentWidth = this.options.penWidth;
+        this._resizeObserver = null;
+        this._canvas = null;
+        this._ctx = null;
+        this._canvasW = 0;
+        this._canvasH = 0;
+        this._dpr = 1;
+
+        this._render();
+        this._initCanvas();
+        this._initEvents();
+
+        if (this.options.disabled) this.disable();
+    }
+
+    // Escape HTML attribute and content values to prevent XSS
+    _esc(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    _render() {
+        const opts = this.options;
+        const esc = this._esc.bind(this);
+
+        const colourSwatches = opts.colours.map((colour) => {
+            const safeColour = esc(colour);
+            const isActive = colour === this._currentColour;
+            return `<button class="signature-colour-swatch${isActive ? ' active' : ''}" data-colour="${safeColour}" style="background:${safeColour}" aria-label="Pen colour ${safeColour}" aria-pressed="${isActive}" title="${safeColour}"></button>`;
+        }).join('');
+
+        const widthBtns = opts.widths.map((width) => {
+            const w = parseFloat(width) || 2;
+            const isActive = w === this._currentWidth;
+            const dotSize = Math.max(2, Math.min(w * 2.5, 12));
+            return `<button class="signature-width-btn${isActive ? ' active' : ''}" data-width="${w}" aria-label="Pen width ${w}px" aria-pressed="${isActive}">
+                <span class="signature-width-dot" style="width:${dotSize}px;height:${dotSize}px;"></span>
+            </button>`;
+        }).join('');
+
+        const modeToggle = opts.typeFallback ? `
+            <div class="signature-mode-toggle" role="group" aria-label="Input mode">
+                <button class="signature-mode-btn active" data-mode="draw" aria-pressed="true">Draw</button>
+                <button class="signature-mode-btn" data-mode="type" aria-pressed="false">Type</button>
+            </div>` : '';
+
+        const toolbar = opts.toolbar ? `
+            <div class="signature-toolbar">
+                <span class="signature-label">${esc(opts.label)}</span>
+                <div class="signature-colours" role="group" aria-label="Pen colour">${colourSwatches}</div>
+                <div class="signature-widths" role="group" aria-label="Pen width">${widthBtns}</div>
+                <div class="signature-actions">
+                    <button class="signature-btn" data-action="undo" aria-label="Undo" disabled>
+                        <span data-icon="undo" style="font-size:0.875rem;"></span>
+                    </button>
+                    <button class="signature-btn" data-action="redo" aria-label="Redo" disabled>
+                        <span data-icon="redo" style="font-size:0.875rem;"></span>
+                    </button>
+                    <button class="signature-btn signature-btn-clear" data-action="clear" aria-label="Clear signature">Clear</button>
+                </div>
+                ${modeToggle}
+            </div>` : '';
+
+        const heightPx = parseInt(opts.height, 10) || 180;
+        const formatLabel = esc(opts.format.toUpperCase());
+        const safeName = esc(opts.name);
+        const safePlaceholder = esc(opts.placeholder);
+
+        const html = `
+            ${toolbar}
+            <div class="signature-canvas-wrapper" style="height:${heightPx}px;">
+                <canvas class="signature-canvas" tabindex="0" aria-label="Draw your signature here"></canvas>
+                ${opts.guideLine ? '<div class="signature-guide-line" aria-hidden="true"></div>' : ''}
+                <div class="signature-placeholder" aria-hidden="true">${safePlaceholder}</div>
+                <input class="signature-type-input" type="text" placeholder="${safePlaceholder}" style="display:none;" aria-label="Type your signature">
+            </div>
+            <div class="signature-footer">
+                <span class="signature-status" aria-live="polite">Draw your signature above</span>
+                <span class="signature-format-badge">${formatLabel}</span>
+            </div>
+            <input type="hidden" name="${safeName}" value="">
+        `;
+
+        this.element.classList.add('signature');
+        this.element.setAttribute('role', 'application');
+        this.element.setAttribute('aria-label', esc(opts.label));
+
+        // Use Domma sanitise if available (same pattern as Card component)
+        this.element.innerHTML = (Domma.sanitize && typeof Domma.sanitize.sanitize === 'function')
+            ? Domma.sanitize.sanitize(html)
+            : html;
+
+        this._canvas = this.element.querySelector('.signature-canvas');
+        this._wrapper = this.element.querySelector('.signature-canvas-wrapper');
+        this._placeholder = this.element.querySelector('.signature-placeholder');
+        this._statusEl = this.element.querySelector('.signature-status');
+        this._hiddenInput = this.element.querySelector('input[type="hidden"]');
+        this._typeInput = this.element.querySelector('.signature-type-input');
+
+        if (typeof Domma !== 'undefined' && Domma.icons && typeof Domma.icons.scan === 'function') {
+            Domma.icons.scan(this.element);
+        }
+    }
+
+    _initCanvas() {
+        if (!this._canvas) return;
+        this._ctx = this._canvas.getContext('2d');
+        this._scaleCanvas();
+
+        if (typeof ResizeObserver !== 'undefined') {
+            this._resizeObserver = new ResizeObserver(() => {
+                this._scaleCanvas();
+                this._redraw();
+            });
+            this._resizeObserver.observe(this._wrapper);
+        }
+    }
+
+    _scaleCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        const w = this._wrapper.clientWidth;
+        const h = this._wrapper.clientHeight;
+        this._canvas.width = w * dpr;
+        this._canvas.height = h * dpr;
+        this._ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        this._dpr = dpr;
+        this._canvasW = w;
+        this._canvasH = h;
+    }
+
+    _initEvents() {
+        const canvas = this._canvas;
+        if (!canvas) return;
+
+        this._addEventListener(canvas, 'pointerdown', (e) => this._onPointerDown(e));
+        this._addEventListener(canvas, 'pointermove', (e) => this._onPointerMove(e));
+        this._addEventListener(canvas, 'pointerup', (e) => this._onPointerUp(e));
+        this._addEventListener(canvas, 'pointercancel', (e) => this._onPointerUp(e));
+        this._addEventListener(canvas, 'pointerleave', (e) => {
+            if (this._isDrawing) this._onPointerUp(e);
+        });
+
+        this._addEventListener(this.element, 'click', (e) => {
+            const actionBtn = e.target.closest('[data-action]');
+            if (actionBtn) {
+                const action = actionBtn.dataset.action;
+                if (action === 'undo') this.undo();
+                else if (action === 'redo') this.redo();
+                else if (action === 'clear') this.clear();
+                return;
+            }
+            const swatch = e.target.closest('.signature-colour-swatch');
+            if (swatch) { this._setColour(swatch.dataset.colour); return; }
+            const widthBtn = e.target.closest('.signature-width-btn');
+            if (widthBtn) { this._setPenWidth(parseFloat(widthBtn.dataset.width)); return; }
+            const modeBtn = e.target.closest('.signature-mode-btn');
+            if (modeBtn) this._setMode(modeBtn.dataset.mode);
+        });
+
+        if (this._typeInput) {
+            this._addEventListener(this._typeInput, 'input', () => this._renderTypeToCanvas());
+        }
+    }
+
+    _onPointerDown(e) {
+        if (this.options.disabled || this._mode !== 'draw') return;
+        e.preventDefault();
+        this._canvas.setPointerCapture(e.pointerId);
+        this._isDrawing = true;
+        this.element.classList.add('signature-signing');
+        const {x, y} = this._getPoint(e);
+        const pressure = e.pressure || 0.5;
+        this._currentStroke = {
+            points: [{x, y, pressure}],
+            colour: this._currentColour,
+            width: this._currentWidth
+        };
+        this._undoneStrokes = [];
+        this._updateState();
+        if (typeof this.options.onBegin === 'function') this.options.onBegin(this._currentStroke);
+    }
+
+    _onPointerMove(e) {
+        if (!this._isDrawing || !this._currentStroke) return;
+        e.preventDefault();
+        const {x, y} = this._getPoint(e);
+        const pressure = e.pressure || 0.5;
+        this._currentStroke.points.push({x, y, pressure});
+        this._redrawCurrentStroke();
+    }
+
+    _onPointerUp(e) {
+        if (!this._isDrawing) return;
+        this._isDrawing = false;
+        this.element.classList.remove('signature-signing');
+        if (this._currentStroke && this._currentStroke.points.length >= this.options.minStrokeLength) {
+            this._strokes.push(this._currentStroke);
+        }
+        const stroke = this._currentStroke;
+        this._currentStroke = null;
+        this._redraw();
+        this._updateState();
+        this._updateHiddenInput();
+        if (typeof this.options.onEnd === 'function' && stroke) this.options.onEnd(stroke);
+        if (typeof this.options.onChange === 'function') this.options.onChange(this._hiddenInput.value);
+    }
+
+    _getPoint(e) {
+        const rect = this._canvas.getBoundingClientRect();
+        return {
+            x: (e.clientX - rect.left) / this._canvasW,
+            y: (e.clientY - rect.top) / this._canvasH
+        };
+    }
+
+    _redraw() {
+        if (!this._ctx) return;
+        const w = this._canvasW;
+        const h = this._canvasH;
+        this._ctx.clearRect(0, 0, w, h);
+        for (const stroke of this._strokes) {
+            this._drawStroke(this._ctx, stroke, w, h);
+        }
+        if (this._placeholder) {
+            this._placeholder.style.display = this._strokes.length > 0 ? 'none' : '';
+        }
+    }
+
+    _redrawCurrentStroke() {
+        this._redraw();
+        if (this._currentStroke) {
+            this._drawStroke(this._ctx, this._currentStroke, this._canvasW, this._canvasH);
+        }
+    }
+
+    _drawStroke(ctx, stroke, w, h) {
+        const pts = stroke.points;
+        if (pts.length === 0) return;
+
+        ctx.save();
+        ctx.strokeStyle = stroke.colour;
+        ctx.fillStyle = stroke.colour;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        if (pts.length === 1) {
+            const lineWidth = stroke.width * (0.4 + 0.6 * pts[0].pressure);
+            ctx.beginPath();
+            ctx.arc(pts[0].x * w, pts[0].y * h, lineWidth / 2, 0, Math.PI * 2);
+            ctx.fill();
+        } else {
+            ctx.beginPath();
+            ctx.moveTo(pts[0].x * w, pts[0].y * h);
+            for (let i = 1; i < pts.length - 1; i++) {
+                const midX = (pts[i].x + pts[i + 1].x) / 2 * w;
+                const midY = (pts[i].y + pts[i + 1].y) / 2 * h;
+                ctx.lineWidth = stroke.width * (0.4 + 0.6 * pts[i].pressure);
+                ctx.quadraticCurveTo(pts[i].x * w, pts[i].y * h, midX, midY);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(midX, midY);
+            }
+            const last = pts[pts.length - 1];
+            ctx.lineWidth = stroke.width * (0.4 + 0.6 * last.pressure);
+            ctx.lineTo(last.x * w, last.y * h);
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+
+    _updateState() {
+        const undoBtn = this.element.querySelector('[data-action="undo"]');
+        const redoBtn = this.element.querySelector('[data-action="redo"]');
+        if (undoBtn) undoBtn.disabled = this._strokes.length === 0;
+        if (redoBtn) redoBtn.disabled = this._undoneStrokes.length === 0;
+        if (this._statusEl) {
+            if (this._isDrawing) {
+                this._statusEl.textContent = 'Signing\u2026';
+            } else if (this._strokes.length > 0) {
+                this._statusEl.textContent = 'Signature captured';
+            } else {
+                this._statusEl.textContent = 'Draw your signature above';
+            }
+        }
+    }
+
+    _setColour(colour) {
+        this._currentColour = colour;
+        this.element.querySelectorAll('.signature-colour-swatch').forEach(s => {
+            const active = s.dataset.colour === colour;
+            s.classList.toggle('active', active);
+            s.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+    }
+
+    _setPenWidth(width) {
+        this._currentWidth = width;
+        this.element.querySelectorAll('.signature-width-btn').forEach(b => {
+            const active = parseFloat(b.dataset.width) === width;
+            b.classList.toggle('active', active);
+            b.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+    }
+
+    _setMode(mode) {
+        if (this._mode === mode) return;
+        this._mode = mode;
+
+        this.element.querySelectorAll('.signature-mode-btn').forEach(b => {
+            const active = b.dataset.mode === mode;
+            b.classList.toggle('active', active);
+            b.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+
+        const toolbarControls = this.element.querySelectorAll(
+            '.signature-colours, .signature-widths, [data-action="undo"], [data-action="redo"]'
+        );
+        toolbarControls.forEach(el => { el.style.display = mode === 'type' ? 'none' : ''; });
+
+        if (mode === 'type') {
+            this._canvas.style.display = 'none';
+            if (this._typeInput) { this._typeInput.style.display = ''; this._typeInput.focus(); }
+        } else {
+            this._canvas.style.display = '';
+            if (this._typeInput) this._typeInput.style.display = 'none';
+        }
+
+        this.clear(true);
+    }
+
+    _renderTypeToCanvas() {
+        const text = this._typeInput ? this._typeInput.value.trim() : '';
+        this._strokes = [];
+        this._undoneStrokes = [];
+        const ctx = this._ctx;
+        const w = this._canvasW;
+        const h = this._canvasH;
+        ctx.clearRect(0, 0, w, h);
+        if (text) {
+            ctx.save();
+            ctx.fillStyle = this._currentColour;
+            ctx.font = `${Math.min(h * 0.55, 72)}px 'Brush Script MT', 'Segoe Script', cursive`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            // fillText renders to canvas — not HTML, safe from XSS
+            ctx.fillText(text, w / 2, h / 2);
+            ctx.restore();
+        }
+        this._updateHiddenInput();
+        if (typeof this.options.onChange === 'function') this.options.onChange(this._hiddenInput.value);
+    }
+
+    _updateHiddenInput() {
+        if (!this._hiddenInput) return;
+        const isEmpty = this.isEmpty() && this._mode !== 'type';
+        this._hiddenInput.value = isEmpty ? '' : this.toBase64();
+    }
+
+    /**
+     * Export the signature as a base64 data URL.
+     * @param {string} [format] - Override the instance format: 'png' or 'svg'
+     * @returns {string} Base64-encoded data URL
+     */
+    toBase64(format) {
+        const fmt = format || this.options.format;
+        return fmt === 'svg' ? this._toSVGBase64() : this._canvas.toDataURL('image/png');
+    }
+
+    _toSVGBase64() {
+        const w = this._canvasW;
+        const h = this._canvasH;
+        let pathsHtml = '';
+        for (const stroke of this._strokes) {
+            const pts = stroke.points;
+            if (pts.length === 0) continue;
+            let d = `M ${(pts[0].x * w).toFixed(2)} ${(pts[0].y * h).toFixed(2)}`;
+            for (let i = 1; i < pts.length - 1; i++) {
+                const midX = ((pts[i].x + pts[i + 1].x) / 2 * w).toFixed(2);
+                const midY = ((pts[i].y + pts[i + 1].y) / 2 * h).toFixed(2);
+                d += ` Q ${(pts[i].x * w).toFixed(2)} ${(pts[i].y * h).toFixed(2)} ${midX} ${midY}`;
+            }
+            if (pts.length > 1) {
+                const last = pts[pts.length - 1];
+                d += ` L ${(last.x * w).toFixed(2)} ${(last.y * h).toFixed(2)}`;
+            }
+            const avgPressure = pts.reduce((sum, p) => sum + p.pressure, 0) / pts.length;
+            const sw = (stroke.width * (0.4 + 0.6 * avgPressure)).toFixed(2);
+            // Stroke colour comes from _setColour — validated against developer-supplied opts.colours array
+            pathsHtml += `<path d="${d}" stroke="${stroke.colour}" stroke-width="${sw}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>\n`;
+        }
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">\n${pathsHtml}</svg>`;
+        return 'data:image/svg+xml;base64,' + btoa(svg);
+    }
+
+    /**
+     * Check whether the pad contains any drawn content.
+     * @returns {boolean}
+     */
+    isEmpty() {
+        return this._strokes.length === 0;
+    }
+
+    /**
+     * Clear the signature. Undoable unless silent=true.
+     * @param {boolean} [silent=false]
+     */
+    clear(silent = false) {
+        if (!silent && this._strokes.length > 0) {
+            this._undoneStrokes = [...this._strokes, ...this._undoneStrokes];
+        }
+        this._strokes = [];
+        this._currentStroke = null;
+        this._redraw();
+        this._updateState();
+        if (this._hiddenInput) this._hiddenInput.value = '';
+        if (!silent) {
+            if (this._statusEl) this._statusEl.textContent = 'Signature cleared';
+            if (typeof this.options.onClear === 'function') this.options.onClear();
+            if (typeof this.options.onChange === 'function') this.options.onChange('');
+        }
+    }
+
+    /**
+     * Undo the last stroke.
+     */
+    undo() {
+        if (this._strokes.length === 0) return;
+        this._undoneStrokes.unshift(this._strokes.pop());
+        this._redraw();
+        this._updateState();
+        this._updateHiddenInput();
+        if (typeof this.options.onChange === 'function') this.options.onChange(this._hiddenInput.value);
+    }
+
+    /**
+     * Redo the last undone stroke.
+     */
+    redo() {
+        if (this._undoneStrokes.length === 0) return;
+        this._strokes.push(this._undoneStrokes.shift());
+        this._redraw();
+        this._updateState();
+        this._updateHiddenInput();
+        if (typeof this.options.onChange === 'function') this.options.onChange(this._hiddenInput.value);
+    }
+
+    /**
+     * Disable the signature pad.
+     */
+    disable() {
+        this.options.disabled = true;
+        this.element.classList.add('signature-disabled');
+        if (this._canvas) this._canvas.setAttribute('aria-disabled', 'true');
+        if (this._typeInput) this._typeInput.disabled = true;
+        this.element.querySelectorAll('[data-action]').forEach(b => { b.disabled = true; });
+    }
+
+    /**
+     * Enable the signature pad.
+     */
+    enable() {
+        this.options.disabled = false;
+        this.element.classList.remove('signature-disabled');
+        if (this._canvas) this._canvas.removeAttribute('aria-disabled');
+        if (this._typeInput) this._typeInput.disabled = false;
+        this._updateState();
+        const clearBtn = this.element.querySelector('[data-action="clear"]');
+        if (clearBtn) clearBtn.disabled = false;
+    }
+
+    /**
+     * Full cleanup — disconnects ResizeObserver and removes all event listeners.
+     */
+    destroy() {
+        if (this._resizeObserver) {
+            this._resizeObserver.disconnect();
+            this._resizeObserver = null;
+        }
+        super.destroy();
+    }
+}
+
+// ============================================
 // Elements Module Export
 // ============================================
 
@@ -9626,6 +10149,14 @@ export const elements = {
 
     // Note: themeRoller() and pageRoller() are in domma-tools.min.js
     // Load that bundle to enable: Domma.elements.themeRoller(), Domma.elements.pageRoller()
+
+    signature(selector, options = {}) {
+        const instance = new Signature(selector, options);
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
 
     get(selector) {
         const el = typeof selector === 'string'

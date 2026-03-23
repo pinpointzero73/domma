@@ -2501,6 +2501,90 @@ Creates a ListGroup instance on the selected element.
 
 ---
 
+### Signature
+
+Canvas-based handwriting pad for capturing signatures. Supports mouse, touch, and stylus input via the Pointer Events API. Stores strokes as normalised co-ordinates so signatures reflow correctly on resize.
+
+```javascript
+const sig = E.signature('#my-pad', {
+    label:        'Your Signature',
+    height:       180,
+    penColour:    '#000000',
+    penWidth:     2,
+    colours:      ['#000000', '#1e40af', '#15803d', '#b91c1c'],
+    widths:       [1, 2, 4],
+    format:       'png',          // 'png' | 'svg'
+    guideLine:    true,
+    placeholder:  'Sign here',
+    toolbar:      true,
+    name:         'signature',    // Hidden input name attribute
+    typeFallback: false,          // Show Draw / Type toggle
+    disabled:     false,
+    onChange:     (base64) => {},
+    onClear:      () => {},
+    onBegin:      (stroke) => {},
+    onEnd:        (stroke) => {},
+});
+
+// Export
+const png = sig.toBase64('png');  // PNG data URL
+const svg = sig.toBase64('svg');  // SVG data URL (rebuilt from strokes)
+
+// State
+sig.isEmpty();  // → boolean
+
+// History
+sig.undo();
+sig.redo();
+sig.clear();        // Undoable clear
+sig.clear(true);    // Silent clear — no redo, no callbacks
+
+// Enable / disable
+sig.disable();
+sig.enable();
+
+// Cleanup
+sig.destroy();
+```
+
+#### `elements.signature(selector, options)`
+
+Creates a Signature instance on the selected element.
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `height` | number | `180` | Canvas height in px |
+| `label` | string | `'Signature'` | Toolbar label text |
+| `placeholder` | string | `'Sign here'` | Canvas placeholder |
+| `guideLine` | boolean | `true` | Show dashed baseline |
+| `toolbar` | boolean | `true` | Show/hide toolbar |
+| `penColour` | string | `'#000000'` | Default pen colour |
+| `penWidth` | number | `2` | Default pen width (px) |
+| `colours` | string[] | `['#000',…]` | Colour swatches |
+| `widths` | number[] | `[1,2,4]` | Width options |
+| `format` | string | `'png'` | Default export format: `'png'` or `'svg'` |
+| `name` | string | `'signature'` | Hidden input `name` attribute |
+| `disabled` | boolean | `false` | Start in disabled state |
+| `typeFallback` | boolean | `false` | Show Draw/Type mode toggle |
+| `minStrokeLength` | number | `3` | Min pointer events to commit a stroke |
+| `onChange` | function | `null` | Called with base64 after each stroke or type input |
+| `onClear` | function | `null` | Called after a non-silent `clear()` |
+| `onBegin` | function | `null` | Called on `pointerdown` with stroke object |
+| `onEnd` | function | `null` | Called on `pointerup` with stroke object |
+
+| Method | Returns | Description |
+|---|---|---|
+| `toBase64(format?)` | `string` | Export as base64 data URL; `format` overrides instance default |
+| `isEmpty()` | `boolean` | `true` if no strokes have been drawn |
+| `clear(silent?)` | `void` | Clear all strokes; pass `true` for a silent (non-undoable) clear |
+| `undo()` | `void` | Remove the last stroke and push it to the redo stack |
+| `redo()` | `void` | Restore the last undone stroke |
+| `disable()` | `void` | Lock the pad |
+| `enable()` | `void` | Unlock the pad |
+| `destroy()` | `void` | Remove event listeners and disconnect `ResizeObserver` |
+
+---
+
 ### Other UI Components
 
 The Elements namespace includes 27+ additional components. For complete documentation, see:

@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signature - Elements - Domma Showcase</title>
+  <link rel="canonical" href="https://dommajs.org/showcase/elements/signature/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+  <link rel="stylesheet" href="../../../dist/domma.css">
+  <link rel="stylesheet" href="../../../dist/elements.css">
+  <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../css/domma-showcase.css">
+  <style>
+    .sig-output {
+      margin-top: 0.75rem;
+      padding: 0.625rem 0.875rem;
+      border: 1px dashed var(--dm-border);
+      border-radius: var(--dm-radius);
+      font-size: 0.8125rem;
+      color: var(--dm-text-muted);
+      min-height: 2.25rem;
+    }
+    .sig-preview-img {
+      max-width: 100%;
+      border: 1px solid var(--dm-border);
+      border-radius: var(--dm-radius);
+      background: #fff;
+      display: block;
+      margin-top: 0.5rem;
+    }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      align-items: start;
+    }
+  </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+  <div class="hero-content">
+    <div class="hero-title">Signature</div>
+    <div class="hero-subtitle">Capture handwritten signatures with mouse, touch, or stylus — with undo/redo, colour and width controls, SVG/PNG export, and type-your-name fallback</div>
+  </div>
+</div>
+
+<main class="container py-8">
+
+  <!-- ============================
+       SECTION 1: Overview
+       ============================ -->
+  <section class="card mb-6" data-section="Overview">
+    <div class="card-header">
+      <h1 class="text-3xl font-semibold m-0">Signature</h1>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        The Signature component provides a canvas-based pad for capturing handwritten signatures.
+        It uses the Pointer Events API to support mouse, touch, and stylus input with optional
+        pressure sensitivity. Strokes are stored as normalised co-ordinates so signatures
+        scale correctly when the browser is resized.
+      </p>
+      <h3 class="category-title-style">Key Features</h3>
+      <ul class="feature-list mb-4">
+        <li><strong>Pointer Events</strong> — mouse, touch, and stylus all work the same way; pressure-sensitive line width on stylus</li>
+        <li><strong>Smooth curves</strong> — midpoint quadratic Bézier algorithm prevents jagged strokes</li>
+        <li><strong>Undo / Redo</strong> — full stroke-level history; <code>clear()</code> is also undoable</li>
+        <li><strong>Dual export</strong> — PNG data URL or SVG (rebuilt from stored strokes)</li>
+        <li><strong>Responsive</strong> — <code>ResizeObserver</code> reflows strokes when the container changes width</li>
+        <li><strong>Type fallback</strong> — cursive-font text entry alternative for keyboard users</li>
+        <li><strong>Form integration</strong> — hidden input auto-populated; works with <code>F.create()</code> blueprints</li>
+        <li><strong>Config Engine</strong> — declarative init via <code>$.setup()</code></li>
+      </ul>
+
+      <h3 class="category-title-style">Live Demo</h3>
+      <div class="demo-area">
+        <div id="sig-overview" style="max-width: 560px;"></div>
+        <div class="flex gap-3 mt-3 flex-wrap">
+          <button id="overview-export-btn" class="btn btn-primary btn-sm">Export PNG</button>
+          <button id="overview-isEmpty-btn" class="btn btn-outline btn-sm">isEmpty()</button>
+        </div>
+        <div id="overview-output" class="sig-output">Interact with the pad above, then click a button.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 2: Getting Started
+       ============================ -->
+  <section class="card mb-6" data-section="Getting Started">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Getting Started</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">Create an empty container element and pass its selector to <code>E.signature()</code>.</p>
+
+      <h3 class="category-title-style">Step 1: HTML</h3>
+      <div class="code-block language-html mb-5">
+        <pre><code>&lt;div id="my-signature"&gt;&lt;/div&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Step 2: JavaScript</h3>
+      <div class="code-block language-javascript mb-5">
+        <pre><code>const sig = E.signature('#my-signature', {
+    label: 'Your Signature',
+    name: 'signature',           // Name attribute on the hidden input
+    guideLine: true,             // Show a dashed baseline
+    onChange: (base64) =&gt; {
+        console.log('Updated:', base64.slice(0, 40) + '...');
+    }
+});</code></pre>
+      </div>
+
+      <p class="mb-4">
+        The component renders a toolbar, canvas, guide line, and footer inside the container.
+        A hidden <code>&lt;input type="hidden"&gt;</code> is automatically kept in sync so the
+        base64 value is included in any surrounding <code>&lt;form&gt;</code> submission.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 3: Pen Options
+       ============================ -->
+  <section class="card mb-6" data-section="Pen Options">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Pen Options</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Configure the default pen colour and width, and the swatches shown in the toolbar.
+        Pen width values are also used for the dot indicators in the toolbar.
+      </p>
+
+      <div class="demo-grid mb-5">
+        <div>
+          <p class="demo-label">Custom colour swatches</p>
+          <div id="sig-colours" style="max-width: 440px;"></div>
+        </div>
+        <div>
+          <p class="demo-label">Thin pen, no guide line</p>
+          <div id="sig-thin" style="max-width: 440px;"></div>
+        </div>
+      </div>
+
+      <div class="code-block language-javascript">
+        <pre><code>// Custom colour swatches + default to blue
+E.signature('#sig-colours', {
+    penColour: '#1e40af',
+    colours: ['#000000', '#1e40af', '#15803d', '#b91c1c', '#7c3aed', '#ea580c'],
+    widths: [1, 2, 4],
+});
+
+// Single thin pen
+E.signature('#sig-thin', {
+    penColour: '#111',
+    penWidth: 1,
+    widths: [1],
+    guideLine: false,
+    placeholder: 'Sign with a fine nib',
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 4: Export Formats
+       ============================ -->
+  <section class="card mb-6" data-section="Export Formats">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Export Formats</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Call <code>sig.toBase64()</code> to export as a PNG data URL (default) or
+        <code>sig.toBase64('svg')</code> to get an SVG data URL rebuilt from the stored strokes.
+        The SVG export uses the same Bézier algorithm as the canvas renderer, so output is visually identical.
+      </p>
+
+      <div class="demo-area mb-5">
+        <div id="sig-export" style="max-width: 560px;"></div>
+        <div class="flex gap-3 mt-3 flex-wrap">
+          <button id="export-png-btn" class="btn btn-primary btn-sm">Export PNG</button>
+          <button id="export-svg-btn" class="btn btn-secondary btn-sm">Export SVG</button>
+        </div>
+        <img id="export-preview" class="sig-preview-img" src="" alt="Signature preview" style="display:none; max-height:120px;">
+        <p id="export-label" class="text-xs text-muted mt-1" style="display:none;"></p>
+      </div>
+
+      <div class="code-block language-javascript">
+        <pre><code>const sig = E.signature('#my-pad', { format: 'png' });
+
+// Get PNG data URL (respects instance format)
+const png = sig.toBase64();
+
+// Override per-call
+const svg = sig.toBase64('svg');
+
+// Use in an &lt;img&gt; tag
+document.querySelector('#preview').src = png;</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 5: Undo / Redo / Clear
+       ============================ -->
+  <section class="card mb-6" data-section="Undo, Redo &amp; Clear">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Undo, Redo &amp; Clear</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Each completed stroke is pushed onto a history stack. The toolbar undo/redo buttons
+        operate on individual strokes. <code>clear()</code> moves all strokes to the redo stack,
+        so the entire pad can be restored.
+      </p>
+
+      <div class="demo-area mb-5">
+        <div id="sig-undo" style="max-width: 560px;"></div>
+        <div class="flex gap-3 mt-3 flex-wrap">
+          <button id="undo-btn" class="btn btn-outline btn-sm">sig.undo()</button>
+          <button id="redo-btn" class="btn btn-outline btn-sm">sig.redo()</button>
+          <button id="clear-btn" class="btn btn-danger btn-sm btn-outline">sig.clear()</button>
+        </div>
+      </div>
+
+      <div class="code-block language-javascript">
+        <pre><code>const sig = E.signature('#my-pad');
+
+sig.undo();      // Remove last stroke (moves to redo stack)
+sig.redo();      // Restore last undone stroke
+sig.clear();     // Clear all strokes (undoable — undo restores them all)
+sig.clear(true); // Silent clear — cannot be undone, no callbacks fired</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 6: Type Fallback
+       ============================ -->
+  <section class="card mb-6" data-section="Type Fallback">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Type Fallback</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Enable <code>typeFallback: true</code> to show a Draw / Type toggle in the toolbar.
+        In Type mode, users type their name into a text input rendered in a cursive web-safe font.
+        The text is rendered to the canvas so <code>toBase64()</code> still returns an image.
+      </p>
+
+      <div class="demo-area mb-5">
+        <div id="sig-type" style="max-width: 560px;"></div>
+      </div>
+
+      <div class="code-block language-javascript">
+        <pre><code>E.signature('#my-pad', {
+    typeFallback: true,   // Show Draw / Type toggle in toolbar
+    placeholder: 'Sign here or switch to Type mode',
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 7: Disabled State
+       ============================ -->
+  <section class="card mb-6" data-section="Disabled State">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Disabled State</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Use <code>disabled: true</code> in options or call <code>sig.disable()</code> /
+        <code>sig.enable()</code> at runtime to lock or unlock the pad.
+      </p>
+
+      <div class="demo-area mb-5">
+        <div id="sig-disabled" style="max-width: 560px;"></div>
+        <div class="flex gap-3 mt-3">
+          <button id="enable-btn" class="btn btn-primary btn-sm">sig.enable()</button>
+          <button id="disable-btn" class="btn btn-outline btn-sm">sig.disable()</button>
+        </div>
+      </div>
+
+      <div class="code-block language-javascript">
+        <pre><code>const sig = E.signature('#my-pad', { disabled: true });
+
+sig.enable();   // Allow drawing again
+sig.disable();  // Lock the pad (canvas becomes non-interactive)</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 8: Form Integration
+       ============================ -->
+  <section class="card mb-6" data-section="Form Integration">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Form Integration</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Use <code>type: 'signature'</code> in a Domma blueprint to include a signature field in
+        any <code>F.create()</code> form. The component syncs automatically with the form model,
+        and the hidden input value is included when the form is submitted.
+      </p>
+
+      <h3 class="category-title-style">Blueprint</h3>
+      <div class="code-block language-javascript mb-5">
+        <pre><code>const contractBlueprint = {
+    name: {
+        type: M.types.string,
+        required: true,
+        label: 'Full Name',
+    },
+    agreed: {
+        type: M.types.boolean,
+        label: 'I agree to the terms &amp; conditions',
+        required: true,
+    },
+    signature: {
+        type: 'signature',
+        label: 'Signature',
+        required: true,
+    }
+};
+
+F.create('#contract-form', {
+    blueprint: contractBlueprint,
+    onSubmit: (data) =&gt; {
+        console.log('Name:', data.name);
+        console.log('Agreed:', data.agreed);
+        console.log('Signature (PNG):', data.signature.slice(0, 40));
+    }
+});</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Plain HTML Form</h3>
+      <div class="code-block language-javascript mb-5">
+        <pre><code>&lt;!-- The hidden input is rendered inside the component --&gt;
+&lt;form id="my-form"&gt;
+    &lt;input type="text" name="name" placeholder="Your name"&gt;
+    &lt;div id="my-pad"&gt;&lt;/div&gt;
+    &lt;!-- #my-pad will contain: &lt;input type="hidden" name="signature"&gt; --&gt;
+    &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;script type="module"&gt;
+    E.signature('#my-pad', { name: 'signature' });
+
+    $('#my-form').on('submit', (e) =&gt; {
+        e.preventDefault();
+        const data = new FormData(e.target);
+        console.log(data.get('signature')); // base64 PNG
+    });
+&lt;/script&gt;</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 9: Config Engine
+       ============================ -->
+  <section class="card mb-6" data-section="Config Engine">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Config Engine</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Initialise signature pads declaratively using <code>$.setup()</code>. This is useful for
+        MPA pages where you want to configure components in a central JavaScript file without
+        importing the element constructor directly.
+      </p>
+      <div class="code-block language-javascript">
+        <pre><code>$.setup({
+    '#contract-sig': {
+        component: 'signature',
+        options: {
+            label: 'Client Signature',
+            penColour: '#1a1a2e',
+            guideLine: true,
+            typeFallback: true,
+            onChange: (base64) =&gt; {
+                console.log('Signature updated');
+            }
+        }
+    }
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 10: Tutorial
+       ============================ -->
+  <section class="card mb-6" data-section="Tutorial">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Tutorial — Contract Signing Form</h2>
+    </div>
+    <div class="card-body">
+      <p class="mb-4">
+        Build a contract signing widget: the user fills in their name, ticks a consent checkbox,
+        signs the pad, and the complete form data (including the base64 signature) is displayed
+        for submission.
+      </p>
+
+      <h3 class="category-title-style">Step 1: HTML</h3>
+      <div class="code-block language-html mb-5">
+        <pre><code>&lt;form id="contract-form"&gt;
+    &lt;div class="mb-4"&gt;
+        &lt;label class="form-label"&gt;Full Name&lt;/label&gt;
+        &lt;input type="text" class="form-input" name="fullName" required&gt;
+    &lt;/div&gt;
+    &lt;div class="mb-4"&gt;
+        &lt;label class="form-check-label"&gt;
+            &lt;input type="checkbox" name="agreed" required&gt;
+            I agree to the terms &amp;amp; conditions
+        &lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class="mb-4"&gt;
+        &lt;label class="form-label"&gt;Signature&lt;/label&gt;
+        &lt;div id="contract-sig"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;button type="submit" class="btn btn-primary"&gt;Sign &amp;amp; Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Step 2: JavaScript</h3>
+      <div class="code-block language-javascript mb-5">
+        <pre><code>const sig = E.signature('#contract-sig', {
+    label: 'Your Signature',
+    name: 'signature',
+    typeFallback: true,
+    onChange: () =&gt; {
+        submitBtn.disabled = sig.isEmpty();
+    }
+});
+
+const submitBtn = document.querySelector('[type="submit"]');
+submitBtn.disabled = true; // require signature
+
+$('#contract-form').on('submit', async (e) =&gt; {
+    e.preventDefault();
+
+    if (sig.isEmpty()) {
+        E.toast('Please add your signature.', { type: 'warning' });
+        return;
+    }
+
+    const formData = new FormData(e.target);
+    const payload = {
+        fullName:  formData.get('fullName'),
+        agreed:    formData.get('agreed') === 'on',
+        signature: sig.toBase64('png'),
+    };
+
+    await E.confirm('Submit this signed contract?');
+    console.log('Submitted:', payload);
+    E.toast('Contract signed successfully!', { type: 'success' });
+});</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Step 3: Live Demo</h3>
+      <div class="demo-area">
+        <form id="tutorial-contract-form" style="max-width: 560px;">
+          <div class="mb-4">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-input" name="fullName" placeholder="Jane Smith" required>
+          </div>
+          <div class="mb-4">
+            <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+              <input type="checkbox" name="agreed" id="tutorial-agreed">
+              I agree to the terms &amp; conditions
+            </label>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Signature</label>
+            <div id="tutorial-sig"></div>
+          </div>
+          <button type="submit" id="tutorial-submit-btn" class="btn btn-primary" disabled>Sign &amp; Submit</button>
+        </form>
+        <div id="tutorial-output" class="sig-output mt-4" style="display:none;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 11: JavaScript API
+       ============================ -->
+  <section class="card mb-6" data-section="JavaScript API">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">JavaScript API</h2>
+    </div>
+    <div class="card-body">
+      <h3 class="category-title-style">Initialisation</h3>
+      <div class="code-block language-javascript mb-5">
+        <pre><code>const sig = E.signature('#el', {
+    // Layout
+    height: 180,              // Canvas height in px (default: 180)
+    label: 'Signature',       // Toolbar label (default: 'Signature')
+    placeholder: 'Sign here', // Placeholder text (default: 'Sign here')
+    guideLine: true,          // Show dashed guide line (default: true)
+    toolbar: true,            // Show/hide toolbar (default: true)
+
+    // Pen
+    penColour: '#000000',     // Default pen colour (default: '#000000')
+    penWidth: 2,              // Default pen width in px (default: 2)
+    colours: ['#000', '#1e40af', '#15803d', '#b91c1c'],  // Colour swatches
+    widths: [1, 2, 4],        // Width options
+
+    // Output
+    format: 'png',            // 'png' | 'svg' (default: 'png')
+    name: 'signature',        // Hidden input name attribute (default: 'signature')
+
+    // Behaviour
+    disabled: false,          // Start disabled (default: false)
+    typeFallback: false,      // Show Draw / Type toggle (default: false)
+    minStrokeLength: 3,       // Min pointer points to register a stroke (default: 3)
+    respectMotionPreference: true, // Honour prefers-reduced-motion (default: true)
+
+    // Callbacks
+    onChange: (base64) =&gt; {}, // Fired after every stroke or type input
+    onClear:  ()       =&gt; {}, // Fired when clear() is called (non-silent)
+    onBegin:  (stroke) =&gt; {}, // Fired on pointerdown (stroke in progress)
+    onEnd:    (stroke) =&gt; {}, // Fired on pointerup (stroke committed)
+});</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Instance Methods</h3>
+      <div class="code-block language-javascript mb-5">
+        <pre><code>sig.toBase64()          // Export as PNG data URL (uses instance format)
+sig.toBase64('png')     // Export as PNG data URL
+sig.toBase64('svg')     // Export as SVG data URL (rebuilt from stored strokes)
+
+sig.isEmpty()           // → boolean — true if no strokes drawn
+sig.clear()             // Clear all strokes (undoable)
+sig.clear(true)         // Silent clear — no redo history, no callbacks
+sig.undo()              // Remove last stroke → move to redo stack
+sig.redo()              // Restore last undone stroke
+sig.disable()           // Lock the pad
+sig.enable()            // Unlock the pad
+sig.destroy()           // Remove all events and disconnect ResizeObserver</code></pre>
+      </div>
+
+      <h3 class="category-title-style">Options Reference</h3>
+      <table class="option-table">
+        <thead>
+          <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>height</code></td><td>number</td><td>180</td><td>Canvas height in px</td></tr>
+          <tr><td><code>label</code></td><td>string</td><td>'Signature'</td><td>Toolbar label</td></tr>
+          <tr><td><code>placeholder</code></td><td>string</td><td>'Sign here'</td><td>Canvas placeholder text</td></tr>
+          <tr><td><code>guideLine</code></td><td>boolean</td><td>true</td><td>Show dashed baseline</td></tr>
+          <tr><td><code>toolbar</code></td><td>boolean</td><td>true</td><td>Show/hide entire toolbar</td></tr>
+          <tr><td><code>penColour</code></td><td>string</td><td>'#000000'</td><td>Default pen colour (CSS colour value)</td></tr>
+          <tr><td><code>penWidth</code></td><td>number</td><td>2</td><td>Default pen width in px</td></tr>
+          <tr><td><code>colours</code></td><td>string[]</td><td>['#000',…]</td><td>Colour swatches in toolbar</td></tr>
+          <tr><td><code>widths</code></td><td>number[]</td><td>[1,2,4]</td><td>Width options in toolbar</td></tr>
+          <tr><td><code>format</code></td><td>'png'|'svg'</td><td>'png'</td><td>Default export format</td></tr>
+          <tr><td><code>name</code></td><td>string</td><td>'signature'</td><td>Hidden input name attribute</td></tr>
+          <tr><td><code>disabled</code></td><td>boolean</td><td>false</td><td>Start in disabled state</td></tr>
+          <tr><td><code>typeFallback</code></td><td>boolean</td><td>false</td><td>Show Draw/Type mode toggle</td></tr>
+          <tr><td><code>minStrokeLength</code></td><td>number</td><td>3</td><td>Minimum pointer events to commit a stroke</td></tr>
+          <tr><td><code>onChange</code></td><td>function</td><td>null</td><td>Called with base64 after each change</td></tr>
+          <tr><td><code>onClear</code></td><td>function</td><td>null</td><td>Called after a non-silent clear</td></tr>
+          <tr><td><code>onBegin</code></td><td>function</td><td>null</td><td>Called on pointerdown with stroke object</td></tr>
+          <tr><td><code>onEnd</code></td><td>function</td><td>null</td><td>Called on pointerup with stroke object</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 12: Accessibility
+       ============================ -->
+  <section class="card mb-6" data-section="Accessibility">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Accessibility</h2>
+    </div>
+    <div class="card-body">
+      <ul class="feature-list mb-4">
+        <li><code>role="application"</code> on the container with an <code>aria-label</code></li>
+        <li>All toolbar buttons use <code>&lt;button&gt;</code> with <code>aria-label</code> and <code>aria-pressed</code></li>
+        <li>The status bar uses <code>aria-live="polite"</code> to announce state changes (Signing…, Signature captured, Signature cleared)</li>
+        <li><code>typeFallback: true</code> provides a keyboard-accessible alternative to drawing</li>
+        <li><code>tabindex="0"</code> on the canvas allows focus; use <code>:focus-visible</code> ring for visibility</li>
+        <li><code>respectMotionPreference: true</code> (default) disables transitions for users who prefer reduced motion</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 13: Related Elements
+       ============================ -->
+  <section class="card mb-6" data-section="Related Elements">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold m-0">Related Elements</h2>
+    </div>
+    <div class="card-body">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+        <a href="../../../showcase/elements/index.html" class="card card-hover">
+          <div class="card-body">
+            <h3 class="card-title">All Elements</h3>
+            <p class="card-text">Browse every UI component in Domma Elements</p>
+          </div>
+        </a>
+        <a href="../pillbox/index.html" class="card card-hover">
+          <div class="card-body">
+            <h3 class="card-title">Pillbox</h3>
+            <p class="card-text">Multi-select tag input — another specialist form component</p>
+          </div>
+        </a>
+        <a href="../modal/index.html" class="card card-hover">
+          <div class="card-body">
+            <h3 class="card-title">Modal</h3>
+            <p class="card-text">Present a signature pad inside a confirmation dialog</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script type="module">
+  $(() => {
+    I.scan();
+
+    // ── Section 1: Overview ──────────────────────────────────────────
+    const overviewSig = E.signature('#sig-overview', {
+      label: 'Signature Pad',
+      placeholder: 'Draw your signature here',
+    });
+
+    $('#overview-export-btn').on('click', () => {
+      if (overviewSig.isEmpty()) {
+        E.toast('Pad is empty — draw something first.', { type: 'warning' });
+        return;
+      }
+      const b64 = overviewSig.toBase64('png');
+      $('#overview-output').html(`<img src="${b64}" style="max-height:80px;background:#fff;border-radius:4px;padding:4px;">`);
+    });
+
+    $('#overview-isEmpty-btn').on('click', () => {
+      const empty = overviewSig.isEmpty();
+      $('#overview-output').text(`isEmpty() → ${empty}`);
+    });
+
+    // ── Section 3: Pen Options ───────────────────────────────────────
+    E.signature('#sig-colours', {
+      penColour: '#1e40af',
+      colours: ['#000000', '#1e40af', '#15803d', '#b91c1c', '#7c3aed', '#ea580c'],
+      widths: [1, 2, 4],
+    });
+
+    E.signature('#sig-thin', {
+      penColour: '#111',
+      penWidth: 1,
+      widths: [1],
+      guideLine: false,
+      placeholder: 'Sign with a fine nib',
+    });
+
+    // ── Section 4: Export Formats ────────────────────────────────────
+    const exportSig = E.signature('#sig-export', {
+      label: 'Export Demo',
+    });
+
+    function showExport(format) {
+      if (exportSig.isEmpty()) {
+        E.toast('Draw a signature first.', { type: 'warning' });
+        return;
+      }
+      const data = exportSig.toBase64(format);
+      $('#export-preview').attr('src', data).show();
+      $('#export-label').text(`Format: ${format.toUpperCase()} | Length: ${data.length} chars`).show();
+    }
+
+    $('#export-png-btn').on('click', () => showExport('png'));
+    $('#export-svg-btn').on('click', () => showExport('svg'));
+
+    // ── Section 5: Undo / Redo ───────────────────────────────────────
+    const undoSig = E.signature('#sig-undo', {
+      label: 'Undo / Redo Demo',
+    });
+
+    $('#undo-btn').on('click', () => undoSig.undo());
+    $('#redo-btn').on('click', () => undoSig.redo());
+    $('#clear-btn').on('click', () => undoSig.clear());
+
+    // ── Section 6: Type Fallback ─────────────────────────────────────
+    E.signature('#sig-type', {
+      label: 'Draw or Type',
+      typeFallback: true,
+      placeholder: 'Switch to Type mode to type your name',
+    });
+
+    // ── Section 7: Disabled ──────────────────────────────────────────
+    const disabledSig = E.signature('#sig-disabled', {
+      label: 'Locked Pad',
+      disabled: true,
+      placeholder: 'This pad is currently locked',
+    });
+
+    $('#enable-btn').on('click', () => disabledSig.enable());
+    $('#disable-btn').on('click', () => disabledSig.disable());
+
+    // ── Section 10: Tutorial ─────────────────────────────────────────
+    const tutSig = E.signature('#tutorial-sig', {
+      label: 'Your Signature',
+      name: 'signature',
+      typeFallback: true,
+      onChange: () => {
+        $('#tutorial-submit-btn').prop('disabled', tutSig.isEmpty());
+      }
+    });
+
+    $('#tutorial-contract-form').on('submit', async (e) => {
+      e.preventDefault();
+      if (tutSig.isEmpty()) {
+        E.toast('Please add your signature before submitting.', { type: 'warning' });
+        return;
+      }
+      const agreed = $('#tutorial-agreed').prop('checked');
+      if (!agreed) {
+        E.toast('You must agree to the terms.', { type: 'warning' });
+        return;
+      }
+      const fullName = e.target.querySelector('[name="fullName"]').value.trim();
+      const confirmed = await E.confirm('Submit this signed contract?');
+      if (!confirmed) return;
+
+      const b64 = tutSig.toBase64('png');
+      const output = `
+        <strong>Submitted!</strong><br>
+        Name: ${_.escapeHtml ? _.escapeHtml(fullName) : fullName}<br>
+        Agreed: ${agreed}<br>
+        Signature: <img src="${b64}" style="height:40px;vertical-align:middle;background:#fff;border-radius:4px;padding:2px;margin-left:4px;">
+      `;
+      $('#tutorial-output').html(output).show();
+      E.toast('Contract signed successfully!', { type: 'success' });
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -200,6 +200,7 @@ export const configEngine = {
             alarm: elements.alarm,
             autocomplete: elements.autocomplete,
             pillbox: elements.pillbox,
+            signature: elements.signature,
             form: forms.create,
             // Effects
             breathe: effects.breathe,

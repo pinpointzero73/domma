@@ -454,6 +454,12 @@ Accessed via `Domma.elements`:
     - CSS classes: `.list-group`, `.list-group-item`, `.list-group-flush`, `.list-group-sm`, `.list-group-lg`, `.list-group-item-action`
     - Colour variants: `list-group-item-primary/secondary/success/danger/warning/info`
     - Keyboard: Arrow keys, Home/End, Enter/Space; roving tabindex pattern
+- **Signature**: `elements.signature(selector, options)` → `toBase64(format?)`, `isEmpty()`, `clear(silent?)`, `undo()`, `redo()`, `disable()`, `enable()`, `destroy()`
+    - Pointer Events API — mouse, touch, and stylus (pressure-sensitive line width)
+    - Smooth Bézier curves; strokes stored as normalised (0–1) co-ordinates
+    - ResizeObserver reflows strokes on container resize
+    - Export: `'png'` (canvas data URL) or `'svg'` (rebuilt from stored strokes)
+    - `typeFallback: true` shows a Draw / Type toggle; type mode renders cursive text to canvas
 
 ### tables.js - DataTable-like functionality
 

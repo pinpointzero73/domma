@@ -81,7 +81,8 @@ class Forma {
     color: 'color',
     range: 'range',
     file: 'file',
-    hidden: 'hidden'
+    hidden: 'hidden',
+    signature: 'signature'
   };
 
   constructor(schema, data = {}, options = {}) {
@@ -387,6 +388,11 @@ class Forma {
         const multiple = formConfig.multiple ? 'multiple' : '';
         return `<input type="file" ${attrString} accept="${accept}" ${multiple}>`;
 
+      case 'signature':
+        // Container div initialised post-render by _initSignatureFields()
+        // The Signature component renders its own hidden input internally
+        return `<div class="domma-signature-field" id="${id}" data-signature-field="${fieldName}"></div>`;
+
       default:
         const inputType = Forma.inputTypes[type] || 'text';
         const escapedValue = this.utils.escapeHtml(value);
@@ -527,6 +533,29 @@ class Forma {
         e.preventDefault();
         this.reset();
       }
+    });
+
+    // Initialise Signature fields — runs after the form HTML is in the DOM
+    this._initSignatureFields(formElement);
+  }
+
+  /**
+   * Initialise any signature fields inside a rendered form.
+   * @param {HTMLElement} formElement
+   */
+  _initSignatureFields(formElement) {
+    const sigContainers = formElement.querySelectorAll('[data-signature-field]');
+    if (!sigContainers.length) return;
+    if (!window.Domma || typeof window.Domma.elements?.signature !== 'function') return;
+
+    sigContainers.forEach(container => {
+      const fieldName = container.dataset.signatureField;
+      window.Domma.elements.signature(container, {
+        name: fieldName,
+        onChange: (base64) => {
+          if (this.model) this.model.set({[fieldName]: base64});
+        }
+      });
     });
   }
 
