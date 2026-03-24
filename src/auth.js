@@ -25,7 +25,7 @@ export const auth = {
    */
   init(config = {}) {
     this.config = {
-      apiUrl: config.apiUrl || 'http://localhost:3001/api',
+      apiUrl: config.apiUrl || `http://${typeof window !== 'undefined' ? window.location.hostname : 'localhost'}:3000/api`,
       storageKey: config.storageKey || 'auth_token',
       userStorageKey: config.userStorageKey || 'auth_user',
       autoCheck: config.autoCheck !== false

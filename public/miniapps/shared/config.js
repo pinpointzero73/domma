@@ -5,21 +5,24 @@
  * @module miniapps/shared/config
  */
 
-// Detect environment at runtime based on hostname
-const isLocal = typeof window !== 'undefined' &&
-  (window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1');
+// Detect environment at runtime based on hostname and port
+// Dev server runs on port 3001; standard web ports (80/443) indicate production
+const _hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+const _port = typeof window !== 'undefined' ? parseInt(window.location.port || '80') : 80;
+const _isDevPort = _port !== 80 && _port !== 443;
+const _isLocalHost = _hostname === 'localhost' || _hostname === '127.0.0.1';
+const isLocal = _isLocalHost || _isDevPort;
 
 export const config = {
   /**
    * Backend API base URL
    * Automatically detects environment:
-   * - localhost: http://localhost:3000/api
-   * - production: /api (relative to current domain)
+   * - dev (non-standard port or localhost): http://{hostname}:3000/api
+   * - production (port 80/443): /api (proxied by web server)
    *
    * @type {string}
    */
-  apiUrl: isLocal ? 'http://localhost:3000/api' : '/api',
+  apiUrl: isLocal ? `http://${_hostname}:3000/api` : '/api',
 
   /**
    * Current environment: 'development' | 'production'

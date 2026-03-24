@@ -61,7 +61,7 @@
 <!-- DOMPurify for XSS protection -->
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
 
-<script src="../dist/domma.min.js?v=3"></script>
+<script src="../dist/domma.min.js?v=4"></script>
 
 <!-- Layout System -->
 <script type="module" src="../layouts/js/layout.js"></script>
@@ -87,9 +87,8 @@
 
         // Initialize auth module
         console.log('[Login] Initializing auth module...');
-        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         Domma.auth.init({
-          apiUrl: isLocal ? 'http://localhost:3000/api' : '/api'
+          apiUrl: `http://${window.location.hostname}:3000/api`
         });
 
         // Check if already logged in

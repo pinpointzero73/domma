@@ -58,9 +58,10 @@ const AdminAuth = {
      * @returns {string} API URL
      */
     getApiUrl() {
-        const isLocal = window.location.hostname === 'localhost' ||
-                        window.location.hostname === '127.0.0.1';
-        return isLocal ? 'http://localhost:3000/api' : '/api';
+        const port = parseInt(window.location.port || '80');
+        const isDevPort = port !== 80 && port !== 443;
+        const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        return (isLocalHost || isDevPort) ? `http://${window.location.hostname}:3000/api` : '/api';
     },
 
     /**
