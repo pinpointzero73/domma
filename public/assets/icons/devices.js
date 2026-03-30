@@ -203,6 +203,15 @@ export const devices = {
         strokeLinejoin: 'round'
     },
     // Storage
+    'database': {
+        viewBox: '0 0 24 24',
+        path: 'M12 2C6.477 2 2 3.582 2 5.5v3C2 10.418 6.477 12 12 12s10-1.582 10-3.5v-3C22 3.582 17.523 2 12 2zM2 8.5v4C2 14.418 6.477 16 12 16s10-1.582 10-3.5v-4M2 12.5v4C2 18.418 6.477 20 12 20s10-1.582 10-3.5v-4',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
     'hard-drive': {
         viewBox: '0 0 24 24',
         path: 'M22 12H2M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11zM6 16h.01M10 16h.01',

@@ -23,6 +23,15 @@ export const finance = {
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
     },
+    'bar-chart': {
+        viewBox: '0 0 24 24',
+        path: 'M12 20V10M6 20v-4M18 20V4',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
     'chart-bar-horizontal': {
         viewBox: '0 0 24 24',
         path: 'M4 12h10M4 6h4M4 18h14',
