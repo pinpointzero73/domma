@@ -88,7 +88,7 @@
         // Initialize auth module
         console.log('[Login] Initializing auth module...');
         Domma.auth.init({
-          apiUrl: `http://${window.location.hostname}:3000/api`
+          apiUrl: (['localhost', '127.0.0.1'].includes(window.location.hostname) ? `http://${window.location.hostname}:3000` : window.location.origin) + '/api'
         });
 
         // Check if already logged in

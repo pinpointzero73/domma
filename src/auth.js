@@ -25,7 +25,12 @@ export const auth = {
    */
   init(config = {}) {
     this.config = {
-      apiUrl: config.apiUrl || `http://${typeof window !== 'undefined' ? window.location.hostname : 'localhost'}:3000/api`,
+      apiUrl: config.apiUrl || (() => {
+        if (typeof window === 'undefined') return 'http://localhost:3000/api';
+        const { hostname, origin } = window.location;
+        const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+        return isLocalhost ? `http://${hostname}:3000/api` : `${origin}/api`;
+      })(),
       storageKey: config.storageKey || 'auth_token',
       userStorageKey: config.userStorageKey || 'auth_user',
       autoCheck: config.autoCheck !== false
