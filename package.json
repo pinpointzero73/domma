@@ -1,93 +1,93 @@
 {
-  "name": "domma-js",
-  "version": "0.22.0",
-  "description": "Dynamic Object Manipulation & Modeling API - A complete front-end toolkit.",
-  "main": "public/dist/domma.min.js",
-  "module": "public/dist/domma.esm.js",
-  "types": "assets/types/index.d.ts",
-  "bin": {
-    "domma": "./bin/domma-cli.js"
-  },
-  "files": [
-    "bin/",
-    "templates/kickstart/",
-    "templates/kickstart-spa/",
-    "templates/page-template/",
-    "templates/view-template/",
-    "public/dist/domma.min.js",
-    "public/dist/domma.esm.js",
-    "public/dist/domma.css",
-    "public/dist/bundles/",
-    "public/dist/elements.css",
-    "public/dist/grid.css",
-    "public/dist/syntax.css",
-    "public/dist/domma-syntax.min.js",
-    "public/dist/themes/",
-    "assets/types/",
-    "LICENSE",
-    "README.md"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pinpointzero73/domma.git"
-  },
-  "type": "module",
-  "scripts": {
-    "postinstall": "node bin/postinstall.js",
-    "start": "node bin/domma-cli.js serve",
-    "serve": "node bin/domma-cli.js serve",
-    "serve:3096": "node bin/domma-cli.js serve --port 3096",
-    "dev": "NODE_ENV=development npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run build:css && npm run build:miniapps && live-server public --port=3001 --open=/index.html",
-    "dev:watch": "NODE_ENV=development npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run build:css && npm run build:miniapps && npm run watch:miniapps",
-    "build": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run build:css && npm run build:css-bundles && npm run build:archives && npm run build:kickstart-files && npm run build:miniapps",
-    "build:js": "rollup -c",
-    "build:css": "node scripts/build-css.js",
-    "build:css-bundles": "node scripts/build-css-bundles.js",
-    "build:archives": "node scripts/build-archives.js",
-    "build:kickstart-files": "node scripts/build-kickstart-files.js",
-    "build:info": "node scripts/build-info.js",
-    "build:metadata": "node scripts/copy-metadata.js",
-    "copy:themes": "node scripts/copy-theme-css.js",
-    "build:miniapps": "node scripts/build-miniapp.js && node scripts/copy-miniapps.js",
-    "build:miniapp:garage": "node scripts/build-miniapp.js garage",
-    "build:miniapp:address": "node scripts/build-miniapp.js address",
-    "watch:miniapps": "node scripts/watch-miniapps.js",
-    "generate:bundles": "node scripts/generate-bundles.js",
-    "release": "bash scripts/release.sh",
-    "release:patch": "npm version patch && npm run release",
-    "release:minor": "npm version minor && npm run release",
-    "release:major": "npm version major && npm run release",
-    "test:vitest": "vitest",
-    "test": "vitest",
-    "cypress:run": "cypress run"
-  },
-  "keywords": [
-    "dom",
-    "http",
-    "utils",
-    "toolkit",
-    "json-config"
-  ],
-  "author": "Darryl Waterhouse",
-  "license": "ISC",
-  "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.3.0",
-    "@rollup/plugin-replace": "^6.0.3",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@vitest/coverage-v8": "^4.0.16",
-    "cypress": "^15.8.1",
-    "dotenv": "^17.2.3",
-    "jsdom": "^24.1.0",
-    "live-server": "^1.2.0",
-    "puppeteer": "^24.34.0",
-    "rollup": "^4.28.0",
-    "rollup-plugin-obfuscator": "^1.1.0",
-    "vitest": "^4.0.16"
-  },
-  "dependencies": {
-    "@fastify/cors": "^11.2.0"
-  },
-  "optionalDependencies": {
-    "live-server": "^1.2.0"
-  }
+    "name": "domma-js",
+    "version": "0.22.2",
+    "description": "Dynamic Object Manipulation & Modeling API - A complete front-end toolkit.",
+    "main": "public/dist/domma.min.js",
+    "module": "public/dist/domma.esm.js",
+    "types": "assets/types/index.d.ts",
+    "bin": {
+        "domma": "./bin/domma-cli.js"
+    },
+    "files": [
+        "bin/",
+        "templates/kickstart/",
+        "templates/kickstart-spa/",
+        "templates/page-template/",
+        "templates/view-template/",
+        "public/dist/domma.min.js",
+        "public/dist/domma.esm.js",
+        "public/dist/domma.css",
+        "public/dist/bundles/",
+        "public/dist/elements.css",
+        "public/dist/grid.css",
+        "public/dist/syntax.css",
+        "public/dist/domma-syntax.min.js",
+        "public/dist/themes/",
+        "assets/types/",
+        "LICENSE",
+        "README.md"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/pinpointzero73/domma.git"
+    },
+    "type": "module",
+    "scripts": {
+        "postinstall": "node bin/postinstall.js",
+        "start": "node bin/domma-cli.js serve",
+        "serve": "node bin/domma-cli.js serve",
+        "serve:3096": "node bin/domma-cli.js serve --port 3096",
+        "dev": "NODE_ENV=development npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run build:css && npm run build:miniapps && live-server public --port=3001 --open=/index.html",
+        "dev:watch": "NODE_ENV=development npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run build:css && npm run build:miniapps && npm run watch:miniapps",
+        "build": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run build:css && npm run build:css-bundles && npm run build:archives && npm run build:kickstart-files && npm run build:miniapps",
+        "build:js": "rollup -c",
+        "build:css": "node scripts/build-css.js",
+        "build:css-bundles": "node scripts/build-css-bundles.js",
+        "build:archives": "node scripts/build-archives.js",
+        "build:kickstart-files": "node scripts/build-kickstart-files.js",
+        "build:info": "node scripts/build-info.js",
+        "build:metadata": "node scripts/copy-metadata.js",
+        "copy:themes": "node scripts/copy-theme-css.js",
+        "build:miniapps": "node scripts/build-miniapp.js && node scripts/copy-miniapps.js",
+        "build:miniapp:garage": "node scripts/build-miniapp.js garage",
+        "build:miniapp:address": "node scripts/build-miniapp.js address",
+        "watch:miniapps": "node scripts/watch-miniapps.js",
+        "generate:bundles": "node scripts/generate-bundles.js",
+        "release": "bash scripts/release.sh",
+        "release:patch": "npm version patch && npm run release",
+        "release:minor": "npm version minor && npm run release",
+        "release:major": "npm version major && npm run release",
+        "test:vitest": "vitest",
+        "test": "vitest",
+        "cypress:run": "cypress run"
+    },
+    "keywords": [
+        "dom",
+        "http",
+        "utils",
+        "toolkit",
+        "json-config"
+    ],
+    "author": "Darryl Waterhouse",
+    "license": "ISC",
+    "devDependencies": {
+        "@rollup/plugin-node-resolve": "^15.3.0",
+        "@rollup/plugin-replace": "^6.0.3",
+        "@rollup/plugin-terser": "^0.4.4",
+        "@vitest/coverage-v8": "^4.0.16",
+        "cypress": "^15.8.1",
+        "dotenv": "^17.2.3",
+        "jsdom": "^24.1.0",
+        "live-server": "^1.2.0",
+        "puppeteer": "^24.34.0",
+        "rollup": "^4.28.0",
+        "rollup-plugin-obfuscator": "^1.1.0",
+        "vitest": "^4.0.16"
+    },
+    "dependencies": {
+        "@fastify/cors": "^11.2.0"
+    },
+    "optionalDependencies": {
+        "live-server": "^1.2.0"
+    }
 }
