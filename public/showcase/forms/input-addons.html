@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input Addons – Domma Forms</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+  <link rel="stylesheet" href="../../dist/domma.css">
+  <link rel="stylesheet" href="../../dist/grid.css">
+  <link rel="stylesheet" href="../../dist/elements.css">
+  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+  <link rel="stylesheet" href="../../showcase/css/domma-showcase.css">
+  <style>
+    .demo-card {
+      background: var(--dm-surface);
+      border: 1px solid var(--dm-border);
+      border-radius: var(--dm-radius-md);
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    .demo-card h3 { margin-top: 0; }
+    .demo-card pre {
+      background: var(--dm-bg-muted, #0b0b0b);
+      color: #eee;
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase">
+
+<main class="container py-8" style="max-width: 780px;">
+  <h1>Input Addons</h1>
+  <p>Decorative prefix / suffix slots for <code>F.create</code> inputs. Set
+    <code>formConfig.prefix</code> and/or <code>formConfig.suffix</code> to an object
+    with one of: <code>{ icon: 'name' }</code>, <code>{ text: '$' }</code>, or
+    <code>{ html: '&lt;kbd&gt;K&lt;/kbd&gt;' }</code>. Addons are decoration only —
+    pointer events are disabled on them.</p>
+
+  <div class="demo-card">
+    <h3>Icon prefix — search field</h3>
+    <div id="form-icon-prefix"></div>
+    <pre><code>search: {
+  type: 'text',
+  label: 'Search',
+  formConfig: { prefix: { icon: 'search' } }
+}</code></pre>
+  </div>
+
+  <div class="demo-card">
+    <h3>Text prefix &amp; suffix — price field</h3>
+    <div id="form-text-addons"></div>
+    <pre><code>price: {
+  type: 'number',
+  label: 'Price',
+  formConfig: {
+    prefix: { text: '£' },
+    suffix: { text: '.00' }
+  }
+}</code></pre>
+  </div>
+
+  <div class="demo-card">
+    <h3>HTML suffix — keyboard hint</h3>
+    <div id="form-html-suffix"></div>
+    <pre><code>query: {
+  type: 'text',
+  label: 'Quick search',
+  formConfig: {
+    prefix: { icon: 'search' },
+    suffix: { html: '&lt;kbd&gt;⌘K&lt;/kbd&gt;' }
+  }
+}</code></pre>
+  </div>
+
+  <div class="demo-card">
+    <h3>Mixed — icon prefix, icon suffix</h3>
+    <div id="form-mixed"></div>
+    <pre><code>email: {
+  type: 'email',
+  label: 'Email',
+  formConfig: {
+    prefix: { icon: 'mail' },
+    suffix: { icon: 'check-circle' }
+  }
+}</code></pre>
+  </div>
+</main>
+
+<script src="../../dist/domma.min.js"></script>
+<script>
+  const F = Domma.forms;
+
+  F.create({
+    search: {
+      type: 'text',
+      label: 'Search',
+      formConfig: { prefix: { icon: 'search' }, placeholder: 'Type to search…' }
+    }
+  }, {}, { layout: 'stacked' }).renderTo('#form-icon-prefix');
+
+  F.create({
+    price: {
+      type: 'number',
+      label: 'Price',
+      formConfig: {
+        prefix: { text: '£' },
+        suffix: { text: '.00' },
+        placeholder: '0'
+      }
+    }
+  }, {}, { layout: 'stacked' }).renderTo('#form-text-addons');
+
+  F.create({
+    query: {
+      type: 'text',
+      label: 'Quick search',
+      formConfig: {
+        prefix: { icon: 'search' },
+        suffix: { html: '<kbd>⌘K</kbd>' },
+        placeholder: 'Search anywhere…'
+      }
+    }
+  }, {}, { layout: 'stacked' }).renderTo('#form-html-suffix');
+
+  F.create({
+    email: {
+      type: 'email',
+      label: 'Email',
+      formConfig: {
+        prefix: { icon: 'mail' },
+        suffix: { icon: 'check-circle' },
+        placeholder: 'you@example.com'
+      }
+    }
+  }, {}, { layout: 'stacked' }).renderTo('#form-mixed');
+</script>
+</body>
+</html>

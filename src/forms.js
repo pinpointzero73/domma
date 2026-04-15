@@ -396,8 +396,46 @@ class Forma {
       default:
         const inputType = Forma.inputTypes[type] || 'text';
         const escapedValue = this.utils.escapeHtml(value);
-        return `<input type="${inputType}" ${attrString} value="${escapedValue}">`;
+        const inputHtml = `<input type="${inputType}" ${attrString} value="${escapedValue}">`;
+
+        const prefixHtml = this._buildAddon(formConfig.prefix, 'left');
+        const suffixHtml = this._buildAddon(formConfig.suffix, 'right');
+        if (!prefixHtml && !suffixHtml) return inputHtml;
+
+        const wrapperClasses = [
+          'input-group-icon',
+          prefixHtml && 'has-addon-left',
+          suffixHtml && 'has-addon-right'
+        ].filter(Boolean).join(' ');
+        return `<div class="${wrapperClasses}">${prefixHtml}${inputHtml}${suffixHtml}</div>`;
     }
+  }
+
+  /**
+   * Builds an input-group addon (prefix or suffix) for decoration inside a form input.
+   *
+   * Accepts a slot descriptor object from formConfig.prefix / formConfig.suffix:
+   *   { icon: 'search' }   → renders a Domma icon
+   *   { text: '$' }        → renders escaped plain text (currency, units, etc.)
+   *   { html: '<kbd>K</kbd>' } → renders raw HTML (caller takes responsibility)
+   *
+   * @param {Object|undefined} slot  The prefix/suffix descriptor, or falsy to skip.
+   * @param {'left'|'right'} side    Which side the addon renders on.
+   * @return {string} The addon HTML, or '' if no addon should be rendered.
+   */
+  _buildAddon(slot, side) {
+    if (!slot || typeof slot !== 'object') return '';
+    const base = `input-group-addon input-group-addon-${side}`;
+    let inner = '';
+    if (slot.icon && /^[a-z0-9-]+$/i.test(slot.icon)) {
+      inner = `<span data-icon="${slot.icon}"></span>`;
+    } else if (slot.text !== undefined && slot.text !== null) {
+      inner = this.utils.escapeHtml(String(slot.text));
+    } else if (typeof slot.html === 'string') {
+      inner = slot.html;
+    }
+    if (!inner) return '';
+    return `<span class="${base}">${inner}</span>`;
   }
 
   /**
