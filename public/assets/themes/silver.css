@@ -57,6 +57,16 @@
     --dm-tab-active-border: #708090;
     --dm-tab-active-text: #4a5568;
     --dm-progress-bar: #708090;
+
+    /* Button text contrast overrides (auto-generated) */
+    --dm-primary-text: #1a1a1a;
+    --dm-primary-hover-text: #1a1a1a;
+    --dm-secondary-text: #1a1a1a;
+    --dm-secondary-hover-text: #1a1a1a;
+    --dm-success-text: #1a1a1a;
+    --dm-success-hover-text: #1a1a1a;
+    --dm-info-text: #1a1a1a;
+    --dm-info-hover-text: #1a1a1a;
 }
 
 /* Dark mode adjustments for silver */

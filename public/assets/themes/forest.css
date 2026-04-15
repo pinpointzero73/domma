@@ -64,6 +64,18 @@
     --dm-tab-active-border: #2d6a4f;
     --dm-tab-active-text: #2d6a4f;
     --dm-progress-bar: #2d6a4f;
+
+    /* Button text contrast overrides (auto-generated) */
+    --dm-primary-text: #ffffff;
+    --dm-primary-hover-text: #1a1a1a;
+    --dm-secondary-text: #ffffff;
+    --dm-secondary-hover-text: #1a1a1a;
+    --dm-success-text: #1a1a1a;
+    --dm-success-hover-text: #1a1a1a;
+    --dm-info-text: #ffffff;
+    --dm-info-hover-text: #1a1a1a;
+    --dm-warning-text: #1a1a1a;
+    --dm-warning-hover-text: #1a1a1a;
 }
 
 /* Dark mode adjustments for forest */

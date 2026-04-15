@@ -187,4 +187,12 @@
     --dm-accent-2: #74c69d;
     --dm-accent-3: #52b788;
     --dm-accent-4: #1b4332;
+
+    /* Button text contrast overrides (auto-generated) */
+    --dm-primary-text: #1a1a1a;
+    --dm-primary-hover-text: #1a1a1a;
+    --dm-secondary-text: #1a1a1a;
+    --dm-secondary-hover-text: #1a1a1a;
+    --dm-danger-text: #1a1a1a;
+    --dm-danger-hover-text: #1a1a1a;
 }

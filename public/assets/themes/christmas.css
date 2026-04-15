@@ -70,6 +70,20 @@
     --dm-tab-active-border: #2D6B3F;
     --dm-tab-active-text: #2D6B3F;
     --dm-progress-bar: #2D6B3F;
+
+    /* Button text contrast overrides (auto-generated) */
+    --dm-primary-text: #ffffff;
+    --dm-primary-hover-text: #ffffff;
+    --dm-secondary-text: #ffffff;
+    --dm-secondary-hover-text: #ffffff;
+    --dm-success-text: #ffffff;
+    --dm-success-hover-text: #1a1a1a;
+    --dm-danger-text: #ffffff;
+    --dm-danger-hover-text: #ffffff;
+    --dm-info-text: #1a1a1a;
+    --dm-info-hover-text: #1a1a1a;
+    --dm-warning-text: #1a1a1a;
+    --dm-warning-hover-text: #1a1a1a;
 }
 
 /* Dark mode adjustments for christmas */

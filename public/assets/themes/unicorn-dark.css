@@ -210,4 +210,18 @@
     --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
     --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
     --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+
+    /* Button text contrast overrides (auto-generated) */
+    --dm-primary-text: #1a1a1a;
+    --dm-primary-hover-text: #1a1a1a;
+    --dm-secondary-text: #1a1a1a;
+    --dm-secondary-hover-text: #1a1a1a;
+    --dm-success-text: #1a1a1a;
+    --dm-success-hover-text: #1a1a1a;
+    --dm-danger-text: #1a1a1a;
+    --dm-danger-hover-text: #1a1a1a;
+    --dm-info-text: #1a1a1a;
+    --dm-info-hover-text: #1a1a1a;
+    --dm-warning-text: #1a1a1a;
+    --dm-warning-hover-text: #1a1a1a;
 }

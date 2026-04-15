@@ -32,6 +32,12 @@
     --dm-accent-2: #C5A55A;
     --dm-accent-3: #A8A9AD;
     --dm-accent-4: #8B7335;
+
+    /* Button text contrast overrides (auto-generated) */
+    --dm-primary-text: #1a1a1a;
+    --dm-primary-hover-text: #1a1a1a;
+    --dm-secondary-text: #1a1a1a;
+    --dm-secondary-hover-text: #1a1a1a;
 }
 
 /* Evening (dark) variant */

@@ -209,4 +209,17 @@
     --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
     --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
 
+    /* Button text contrast overrides (auto-generated) */
+    --dm-primary-text: #1a1a1a;
+    --dm-primary-hover-text: #1a1a1a;
+    --dm-secondary-text: #1a1a1a;
+    --dm-secondary-hover-text: #1a1a1a;
+    --dm-success-text: #1a1a1a;
+    --dm-success-hover-text: #1a1a1a;
+    --dm-danger-text: #ffffff;
+    --dm-danger-hover-text: #ffffff;
+    --dm-info-text: #1a1a1a;
+    --dm-info-hover-text: #1a1a1a;
+    --dm-warning-text: #1a1a1a;
+    --dm-warning-hover-text: #1a1a1a;
 }

@@ -57,6 +57,16 @@
     --dm-tab-active-border: #4169e1;
     --dm-tab-active-text: #4169e1;
     --dm-progress-bar: #4169e1;
+
+    /* Button text contrast overrides (auto-generated) */
+    --dm-primary-text: #ffffff;
+    --dm-primary-hover-text: #1a1a1a;
+    --dm-secondary-text: #ffffff;
+    --dm-secondary-hover-text: #1a1a1a;
+    --dm-success-text: #1a1a1a;
+    --dm-success-hover-text: #1a1a1a;
+    --dm-info-text: #1a1a1a;
+    --dm-info-hover-text: #1a1a1a;
 }
 
 /* Dark mode adjustments for royal */

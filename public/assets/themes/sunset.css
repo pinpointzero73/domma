@@ -70,6 +70,20 @@
     --dm-tab-active-border: #c67b5c;
     --dm-tab-active-text: #a66349;
     --dm-progress-bar: #c67b5c;
+
+    /* Button text contrast overrides (auto-generated) */
+    --dm-primary-text: #1a1a1a;
+    --dm-primary-hover-text: #1a1a1a;
+    --dm-secondary-text: #1a1a1a;
+    --dm-secondary-hover-text: #1a1a1a;
+    --dm-success-text: #1a1a1a;
+    --dm-success-hover-text: #1a1a1a;
+    --dm-danger-text: #ffffff;
+    --dm-danger-hover-text: #1a1a1a;
+    --dm-info-text: #1a1a1a;
+    --dm-info-hover-text: #1a1a1a;
+    --dm-warning-text: #1a1a1a;
+    --dm-warning-hover-text: #1a1a1a;
 }
 
 /* Dark mode adjustments for sunset */
