@@ -241,6 +241,24 @@ export const ui = {
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
     },
+    'edit-2': {
+        viewBox: '0 0 24 24',
+        path: 'M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5z',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'edit-3': {
+        viewBox: '0 0 24 24',
+        path: 'M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4z',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
     'trash': {
         viewBox: '0 0 24 24',
         path: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16',

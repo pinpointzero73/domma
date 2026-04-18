@@ -213,6 +213,24 @@ export const social = {
         strokeWidth: 2,
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
+    },
+    'facebook': {
+        viewBox: '0 0 24 24',
+        path: 'M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'instagram': {
+        viewBox: '0 0 24 24',
+        path: 'M2 7a5 5 0 015-5h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5zM16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
     }
 };
 

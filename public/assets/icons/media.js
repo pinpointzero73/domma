@@ -253,6 +253,25 @@ export const media = {
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
     },
+    'maximise': {
+        viewBox: '0 0 24 24',
+        path: 'M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'minimise': {
+        viewBox: '0 0 24 24',
+        path: 'M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    // US-spelled aliases — retained for backwards compatibility.
     'maximize': {
         viewBox: '0 0 24 24',
         path: 'M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3',
@@ -265,6 +284,52 @@ export const media = {
     'minimize': {
         viewBox: '0 0 24 24',
         path: 'M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'maximise-2': {
+        viewBox: '0 0 24 24',
+        path: 'M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'minimise-2': {
+        viewBox: '0 0 24 24',
+        path: 'M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    // US-spelled aliases (share identical paths — safe for backwards compat)
+    'maximize-2': {
+        viewBox: '0 0 24 24',
+        path: 'M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'minimize-2': {
+        viewBox: '0 0 24 24',
+        path: 'M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'scissors': {
+        viewBox: '0 0 24 24',
+        path: 'M6 9a3 3 0 100-6 3 3 0 000 6zM6 21a3 3 0 100-6 3 3 0 000 6zM20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12',
         stroke: 'currentColor',
         fill: 'none',
         strokeWidth: 2,
