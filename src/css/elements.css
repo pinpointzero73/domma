@@ -3007,6 +3007,7 @@ code {
 .hero-overlay-light > * {
     position: relative;
     z-index: 2;
+    color: #111;
 }
 
 /* Dark overlay (for bright images) */
@@ -3026,6 +3027,7 @@ code {
 .hero-overlay-dark > * {
     position: relative;
     z-index: 2;
+    color: #fff;
 }
 
 /* Extra dark overlay for maximum contrast */
@@ -3045,6 +3047,7 @@ code {
 .hero-overlay-darker > * {
     position: relative;
     z-index: 2;
+    color: #fff;
 }
 
 /* Gradient overlay (bottom to top fade) */
@@ -3064,6 +3067,7 @@ code {
 .hero-overlay-gradient > * {
     position: relative;
     z-index: 2;
+    color: #fff;
 }
 
 /* Gradient overlay variant - top to bottom */
@@ -3083,6 +3087,7 @@ code {
 .hero-overlay-gradient-reverse > * {
     position: relative;
     z-index: 2;
+    color: #fff;
 }
 
 /* 3. Announcement Badges - Small notification badges */
