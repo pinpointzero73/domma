@@ -11,6 +11,10 @@ import {SidebarModule} from './modules/sidebar.js';
 import {SiteSearch} from './modules/search.js';
 
 (async function () {
+    // Inject canonical tag as early as possible (before DOMContentLoaded await)
+    // so search engines see it even if later layout steps fail.
+    injectCanonicalTag();
+
     // Wait for DOM
     if (document.readyState === 'loading') {
         await new Promise(resolve => {
@@ -105,7 +109,7 @@ import {SiteSearch} from './modules/search.js';
 
         // Render footer
         if (presetConfig.footer) {
-            await renderFooter(presetConfig.footer, data, configBase);
+            await renderFooter(presetConfig.footer, data, configBase, depth);
         }
 
         // Initialize cookie consent
@@ -1074,9 +1078,41 @@ import {SiteSearch} from './modules/search.js';
     }
 
     /**
+     * Resolve footer URLs to prevent path-doubling from relative hrefs
+     * (e.g. "blog/index.html" from depth-2 page → "../../blog/index.html")
+     */
+    function resolveFooterConfig(config, depth) {
+        const resolveUrl = (url) => (url ? PathResolver.resolve(url, depth) : url);
+        const resolved = {...config};
+
+        if (resolved.brand && resolved.brand.url) {
+            resolved.brand = {...resolved.brand, url: resolveUrl(resolved.brand.url)};
+        }
+
+        if (Array.isArray(resolved.columns)) {
+            resolved.columns = resolved.columns.map(col => ({
+                ...col,
+                links: (col.links || []).map(link => {
+                    if (link.external || !link.url || link.url === '#' || link.url.startsWith('#')) return link;
+                    return {...link, url: resolveUrl(link.url)};
+                })
+            }));
+        }
+
+        if (Array.isArray(resolved.links)) {
+            resolved.links = resolved.links.map(link => {
+                if (link.external || !link.url || link.url === '#' || link.url.startsWith('#')) return link;
+                return {...link, url: resolveUrl(link.url)};
+            });
+        }
+
+        return resolved;
+    }
+
+    /**
      * Render footer
      */
-    async function renderFooter(configName, data, configBase) {
+    async function renderFooter(configName, data, configBase, depth = 0) {
         try {
             // Load footer config
             const response = await fetch(configBase + configName + '.json');
@@ -1090,10 +1126,13 @@ import {SiteSearch} from './modules/search.js';
                 footerDiv.id = footerId;
                 document.body.appendChild(footerDiv);
 
+                // Resolve URLs (brand, column links) so relative paths don't double-up
+                const resolvedConfig = resolveFooterConfig(config, depth);
+
                 // Process copyright template
                 const footerOptions = {
-                    ...config,
-                    copyright: processTemplate(config.copyright || '', data)
+                    ...resolvedConfig,
+                    copyright: processTemplate(resolvedConfig.copyright || '', data)
                 };
 
                 // Remove 'type' from options (not a valid Domma.elements.footer option)
@@ -1114,7 +1153,7 @@ import {SiteSearch} from './modules/search.js';
 
             // Handle different footer layouts
             if (config.layout === 'nav') {
-                // Public footer with navigation
+                // Public footer with navigation — resolve URLs to prevent path-doubling
                 const navLinks = config.content.nav.map(item => {
                     // Build attributes string if present
                     let attrs = '';
@@ -1123,7 +1162,10 @@ import {SiteSearch} from './modules/search.js';
                           .map(([key, value]) => `${key}="${value}"`)
                           .join(' ');
                     }
-                    return `<a href="${item.url}"${attrs ? ' ' + attrs : ''}>${item.text}</a>`;
+                    const resolvedUrl = (!item.url || item.url === '#' || item.url.startsWith('#'))
+                        ? item.url
+                        : PathResolver.resolve(item.url, depth);
+                    return `<a href="${resolvedUrl}"${attrs ? ' ' + attrs : ''}>${item.text}</a>`;
                 }).join('\n        ');
 
                 html = `
@@ -1543,6 +1585,29 @@ import {SiteSearch} from './modules/search.js';
     function processTemplate(template, data) {
         if (!template) return '';
         return template.replace(/\{\{(\w+)\}\}/g, (match, key) => data[key] || match);
+    }
+
+    /**
+     * Inject <link rel="canonical"> into <head>.
+     * Canonical domain is https://dommajs.org (no www), trailing /index.html stripped.
+     * Skips injection if a canonical tag is already present (per-page override).
+     */
+    function injectCanonicalTag() {
+        try {
+            if (document.querySelector('link[rel="canonical"]')) return;
+
+            const host = 'https://dommajs.org';
+            let path = window.location.pathname || '/';
+            path = path.replace(/\/index\.html$/i, '/');
+            if (!path.startsWith('/')) path = '/' + path;
+
+            const link = document.createElement('link');
+            link.setAttribute('rel', 'canonical');
+            link.setAttribute('href', host + path);
+            document.head.appendChild(link);
+        } catch (_) {
+            // Canonical injection is best-effort; never break the page
+        }
     }
 
 })();

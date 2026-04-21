@@ -1,0 +1,91 @@
+# Apache 2 config for dommajs.org
+# Canonical domain: https://dommajs.org (no www)
+
+# ----------------------------------------------------------------------
+# 1. Canonicalisation — force HTTPS + non-www
+# ----------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect www → non-www (and force HTTPS in same hop)
+    RewriteCond %{HTTP_HOST} ^www\.dommajs\.org$ [NC]
+    RewriteRule ^(.*)$ https://dommajs.org/$1 [R=301,L]
+
+    # Redirect http → https (for non-www requests)
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP_HOST} ^dommajs\.org$ [NC]
+    RewriteRule ^(.*)$ https://dommajs.org/$1 [R=301,L]
+
+    # Strip trailing /index.html (but allow requests that are actually the file)
+    RewriteCond %{THE_REQUEST} \s/+(.*?)/index\.html[\s?] [NC]
+    RewriteRule ^ /%1/ [R=301,L]
+
+    # ------------------------------------------------------------------
+    # 2. Renamed / moved pages — 301 permanent redirects
+    # ------------------------------------------------------------------
+    RewriteRule ^cookies/?$ /cookie-policy/ [R=301,L]
+    RewriteRule ^privacy/?$ /privacy-policy/ [R=301,L]
+    RewriteRule ^showcase/editor/?$ /showcase/elements/editor/ [R=301,L]
+    RewriteRule ^showcase/elements/desktop-notification/?$ /showcase/elements/notification/ [R=301,L]
+
+    # Effects pages are files, not folders
+    RewriteRule ^showcase/effects/scribe/?$ /showcase/effects/scribe.html [R=301,L]
+    RewriteRule ^showcase/effects/scramble/?$ /showcase/effects/scramble.html [R=301,L]
+
+    # Misrouted miniapps paths
+    RewriteRule ^showcase/miniapps/?$ /miniapps/ [R=301,L]
+    RewriteRule ^showcase/miniapps/(.+)$ /miniapps/$1 [R=301,L]
+
+    # Misrouted forms builder
+    RewriteRule ^showcase/forms/builder/?$ /showcase/forms/ [R=301,L]
+
+    # ------------------------------------------------------------------
+    # 3. Removed content — 410 Gone (Google drops these faster than 404)
+    # ------------------------------------------------------------------
+    RewriteRule ^miniapps/invoicing/?$ - [R=410,L]
+    RewriteRule ^miniapps/password-generator/?$ - [R=410,L]
+</IfModule>
+
+# ----------------------------------------------------------------------
+# 4. Custom error documents (optional — uncomment if you have pages)
+# ----------------------------------------------------------------------
+# ErrorDocument 404 /404.html
+# ErrorDocument 410 /404.html
+
+# ----------------------------------------------------------------------
+# 5. Compression
+# ----------------------------------------------------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+    AddOutputFilterByType DEFLATE application/javascript application/json application/xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ----------------------------------------------------------------------
+# 6. Browser caching
+# ----------------------------------------------------------------------
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType text/html "access plus 1 hour"
+</IfModule>
+
+# ----------------------------------------------------------------------
+# 7. Security headers
+# ----------------------------------------------------------------------
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
