@@ -18,7 +18,7 @@ help:
 	@echo "MiniApps:"
 	@echo "  make garage         - Build garage app (development mode)"
 	@echo "  make garage-prod    - Build garage app (production mode)"
-	@echo "  make docs           - Build docs app (development mode)"
+	@echo "  make docs           - Build docs app (development mode)"Ó
 	@echo "  make miniapps       - Build all miniapps (development mode)"
 	@echo ""
 	@echo "Core Domma:"
