@@ -95,7 +95,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-md);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);
@@ -181,7 +181,7 @@
 
     /* Code */
     --dm-code-bg: #f8f9fa;
-    --dm-code-text: #e83e8c;
+    --dm-code-text: #bf1d68;
     --dm-code-border: var(--dm-border);
 
     /* ================================================

@@ -6,36 +6,66 @@
     <title>Themes - Domma Showcase</title>
     <link rel="canonical" href="https://dommajs.org/showcase/themes/">
     <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
-    <link rel="stylesheet" href="../../dist/domma.css">
-    <link rel="stylesheet" href="../../dist/elements.css">
-    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../dist/domma.css?v=1777751200">
+    <link rel="stylesheet" href="../../dist/elements.css?v=1777751200">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css?v=1777751200">
     <link rel="stylesheet" href="../css/domma-showcase.css">
     <style>
+        /* Outer grid: 3 themes per row */
         .theme-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 0.75rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
 
-        .theme-card {
+        @media (max-width: 900px) {
+            .theme-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 560px) {
+            .theme-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Each theme = one headerless card containing the L/D pair */
+        .theme-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             border: 2px solid var(--dm-border);
             border-radius: 10px;
-            cursor: pointer;
             overflow: hidden;
-            transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
             background: var(--dm-surface);
+            transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
         }
-
-        .theme-card:hover {
+        .theme-pair:hover {
             transform: translateY(-2px);
             box-shadow: var(--dm-shadow-md);
             border-color: var(--dm-primary);
         }
 
+        /* Inner halves: clickable, no border, divider between them */
+        .theme-card {
+            cursor: pointer;
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            transition: background 0.15s ease;
+            min-width: 0;
+        }
+        .theme-card + .theme-card {
+            border-left: 1px solid var(--dm-border);
+        }
+        .theme-card:hover {
+            background: var(--dm-surface-alt, rgba(0,0,0,0.04));
+        }
+
+        /* Active half gets a primary inset outline */
         .theme-card.active {
-            border-color: var(--dm-primary);
-            box-shadow: 0 0 0 3px var(--dm-focus-ring, rgba(0,0,0,0.1));
+            box-shadow: inset 0 0 0 3px var(--dm-primary);
+        }
+
+        /* Core (light-only) — its single half spans the whole pair card */
+        .theme-card:only-child {
+            grid-column: 1 / -1;
         }
 
         .theme-card-preview {
@@ -76,21 +106,138 @@
             margin-top: 1px;
         }
 
-        .theme-family-label {
-            font-size: 0.75rem;
+
+        /* ── Component preview / contrast audit additions ─────────────── */
+        .audit-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--dm-surface);
+            border-bottom: 1px solid var(--dm-border);
+            padding: 0.75rem 1rem;
+            margin: 0 -1rem 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .audit-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+        .audit-toggle {
+            display: flex; align-items: center; gap: 0.4rem;
+            padding: 0.4rem 0.75rem;
+            border: 1px solid var(--dm-border);
+            border-radius: 6px;
+            cursor: pointer;
+            background: var(--dm-surface);
+            font-size: 0.85rem; font-weight: 500;
+            transition: all 0.15s ease;
+        }
+        .audit-toggle.active { background: var(--dm-danger); color: #fff; border-color: var(--dm-danger); }
+        .audit-summary { font-size: 0.85rem; font-weight: 600; padding: 0.4rem 0.75rem; border-radius: 6px; }
+        .audit-summary.has-issues { background: rgba(239, 68, 68, 0.15); color: #b91c1c; }
+        .audit-summary.clean      { background: rgba(34, 197, 94, 0.15); color: #15803d; }
+        .audit-summary.idle       { background: var(--dm-surface-alt, rgba(0,0,0,0.05)); color: var(--dm-text-secondary); }
+
+        .audit-fail {
+            outline: 2px dashed #ef4444 !important;
+            outline-offset: 2px !important;
+            position: relative;
+        }
+        .audit-fail::after {
+            content: attr(data-audit-ratio) ":1";
+            position: absolute;
+            top: -9px; right: -9px;
+            background: #ef4444; color: #fff;
+            font-size: 10px; font-weight: 700;
+            padding: 1px 5px; border-radius: 3px;
+            font-family: monospace; z-index: 10;
+            pointer-events: none; white-space: nowrap;
+        }
+
+        .audit-section { margin-bottom: 1.5rem; }
+        .audit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 0.75rem;
+        }
+        .audit-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; }
+        .audit-label {
+            font-size: 0.75rem; font-weight: 600;
+            color: var(--dm-text-secondary);
+            text-transform: uppercase; letter-spacing: 0.04em;
+            margin: 0.5rem 0 0.4rem;
+        }
+        .audit-block {
+            padding: 0.75rem;
+            background: var(--dm-surface-alt, rgba(0,0,0,0.02));
+            border-radius: 6px;
+            border: 1px solid var(--dm-border);
+            margin-bottom: 0.75rem;
+        }
+        .audit-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+        .branding-strip {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .branding-strip > div {
+            padding: 0.85rem 0.6rem;
+            border-radius: 6px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--dm-text-muted);
-            margin: 1.5rem 0 0.5rem;
+            font-size: 0.85rem;
+            text-align: center;
         }
-
-        .theme-family-label:first-child {
-            margin-top: 0;
+        .swatch-primary   { background: var(--dm-primary);   color: var(--dm-primary-text,   #fff); }
+        .swatch-secondary { background: var(--dm-secondary); color: var(--dm-secondary-text, #fff); }
+        .swatch-success   { background: var(--dm-success);   color: var(--dm-success-text,   #fff); }
+        .swatch-warning   { background: var(--dm-warning);   color: var(--dm-warning-text,   #fff); }
+        .swatch-danger    { background: var(--dm-danger);    color: var(--dm-danger-text,    #fff); }
+        .swatch-info      { background: var(--dm-info);      color: var(--dm-info-text,      #fff); }
+        .surface-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
         }
+        .surface-strip > div {
+            padding: 1rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            border: 1px solid var(--dm-border);
+        }
+        .surf-bg      { background: var(--dm-background);   color: var(--dm-text); }
+        .surf-surface { background: var(--dm-surface);      color: var(--dm-text); }
+        .surf-alt     { background: var(--dm-surface-alt);  color: var(--dm-text); }
+        .surf-raised  { background: var(--dm-surface-raised, var(--dm-surface)); color: var(--dm-text); }
 
-        .theme-pair {
-            display: contents;
+        /* Make accent borders unmissable: thicker border + visible label */
+        .audit-section .card-accent { border-left-width: 6px; min-height: 110px; }
+        .accent-tag {
+            display: inline-block;
+            font-size: 0.7rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            padding: 0.15rem 0.45rem;
+            border-radius: 999px;
+            margin-bottom: 0.4rem;
+        }
+        .accent-tag.primary { background: var(--dm-primary); color: var(--dm-primary-text, #fff); }
+        .accent-tag.success { background: var(--dm-success); color: var(--dm-success-text, #fff); }
+        .accent-tag.warning { background: var(--dm-warning); color: var(--dm-warning-text, #fff); }
+        .accent-tag.danger  { background: var(--dm-danger);  color: var(--dm-danger-text,  #fff); }
+        .accent-tag.info    { background: var(--dm-info);    color: var(--dm-info-text,    #fff); }
+
+        #audit-table-host { max-width: 100%; overflow-x: auto; }
+        .modal-inline {
+            position: relative; display: block; inset: auto; transform: none;
+            opacity: 1; visibility: visible; max-width: 100%;
         }
     </style>
 </head>
@@ -109,420 +256,879 @@
         <h2 class="themes-section-title">Choose a Theme</h2>
         <p class="text-muted mb-4">Click any theme to preview it instantly. Changes apply to the entire page.</p>
 
-        <div class="theme-family-label">Ocean</div>
         <div class="theme-grid">
-            <div class="theme-card" data-theme="ocean-light">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #e0f7fa, #b2ebf2);">
-                    <span style="color: #006064;">Aa</span>
-                    <div class="theme-card-accent" style="background: #0077b6;"></div>
+            <div class="theme-pair">
+                <div class="theme-card" data-theme="ocean-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #e0f7fa, #b2ebf2);">
+                        <span style="color: #006064;">Aa</span>
+                        <div class="theme-card-accent" style="background: #0077b6;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Ocean</div>
+                        <div class="theme-card-mode">☀️ Light</div>
+                    </div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Ocean</div>
-                    <div class="theme-card-mode">☀️ Light</div>
-                </div>
-            </div>
-            <div class="theme-card" data-theme="ocean-dark">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #023e8a, #0077b6);">
-                    <span style="color: #caf0f8;">Aa</span>
-                    <div class="theme-card-accent" style="background: #00b4d8;"></div>
-                </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Ocean</div>
-                    <div class="theme-card-mode">🌙 Dark</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="theme-family-label">Forest</div>
-        <div class="theme-grid">
-            <div class="theme-card" data-theme="forest-light">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
-                    <span style="color: #1b5e20;">Aa</span>
-                    <div class="theme-card-accent" style="background: #2d6a4f;"></div>
-                </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Forest</div>
-                    <div class="theme-card-mode">☀️ Light</div>
+                <div class="theme-card" data-theme="ocean-dark">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #023e8a, #0077b6);">
+                        <span style="color: #caf0f8;">Aa</span>
+                        <div class="theme-card-accent" style="background: #00b4d8;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Ocean</div>
+                        <div class="theme-card-mode">🌙 Dark</div>
+                    </div>
                 </div>
             </div>
-            <div class="theme-card" data-theme="forest-dark">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1b4332, #2d6a4f);">
-                    <span style="color: #95d5b2;">Aa</span>
-                    <div class="theme-card-accent" style="background: #52b788;"></div>
+            <div class="theme-pair">
+                <div class="theme-card" data-theme="forest-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
+                        <span style="color: #1b5e20;">Aa</span>
+                        <div class="theme-card-accent" style="background: #2d6a4f;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Forest</div>
+                        <div class="theme-card-mode">☀️ Light</div>
+                    </div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Forest</div>
-                    <div class="theme-card-mode">🌙 Dark</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="theme-family-label">Sunset</div>
-        <div class="theme-grid">
-            <div class="theme-card" data-theme="sunset-light">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2);">
-                    <span style="color: #bf360c;">Aa</span>
-                    <div class="theme-card-accent" style="background: #c67b5c;"></div>
-                </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Sunset</div>
-                    <div class="theme-card-mode">☀️ Light</div>
+                <div class="theme-card" data-theme="forest-dark">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #1b4332, #2d6a4f);">
+                        <span style="color: #95d5b2;">Aa</span>
+                        <div class="theme-card-accent" style="background: #52b788;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Forest</div>
+                        <div class="theme-card-mode">🌙 Dark</div>
+                    </div>
                 </div>
             </div>
-            <div class="theme-card" data-theme="sunset-dark">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #2d1b12, #4a2c1a);">
-                    <span style="color: #e8c9a8;">Aa</span>
-                    <div class="theme-card-accent" style="background: #c67b5c;"></div>
+            <div class="theme-pair">
+                <div class="theme-card" data-theme="sunset-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2);">
+                        <span style="color: #bf360c;">Aa</span>
+                        <div class="theme-card-accent" style="background: #c67b5c;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Sunset</div>
+                        <div class="theme-card-mode">☀️ Light</div>
+                    </div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Sunset</div>
-                    <div class="theme-card-mode">🌙 Dark</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="theme-family-label">Royal</div>
-        <div class="theme-grid">
-            <div class="theme-card" data-theme="royal-light">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #ede7f6, #d1c4e9);">
-                    <span style="color: #4a148c;">Aa</span>
-                    <div class="theme-card-accent" style="background: #7c3aed;"></div>
-                </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Royal</div>
-                    <div class="theme-card-mode">☀️ Light</div>
+                <div class="theme-card" data-theme="sunset-dark">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #2d1b12, #4a2c1a);">
+                        <span style="color: #e8c9a8;">Aa</span>
+                        <div class="theme-card-accent" style="background: #c67b5c;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Sunset</div>
+                        <div class="theme-card-mode">🌙 Dark</div>
+                    </div>
                 </div>
             </div>
-            <div class="theme-card" data-theme="royal-dark">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1e3a8a, #2b4c9e);">
-                    <span style="color: #c7d2fe;">Aa</span>
-                    <div class="theme-card-accent" style="background: #6495ed;"></div>
+            <div class="theme-pair">
+                <div class="theme-card" data-theme="royal-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #ede7f6, #d1c4e9);">
+                        <span style="color: #4a148c;">Aa</span>
+                        <div class="theme-card-accent" style="background: #7c3aed;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Royal</div>
+                        <div class="theme-card-mode">☀️ Light</div>
+                    </div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Royal</div>
-                    <div class="theme-card-mode">🌙 Dark</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="theme-family-label">Lemon</div>
-        <div class="theme-grid">
-            <div class="theme-card" data-theme="lemon-light">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #fffde7, #fff9c4);">
-                    <span style="color: #f57f17;">Aa</span>
-                    <div class="theme-card-accent" style="background: #fbbf24;"></div>
-                </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Lemon</div>
-                    <div class="theme-card-mode">☀️ Light</div>
+                <div class="theme-card" data-theme="royal-dark">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #1e3a8a, #2b4c9e);">
+                        <span style="color: #c7d2fe;">Aa</span>
+                        <div class="theme-card-accent" style="background: #6495ed;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Royal</div>
+                        <div class="theme-card-mode">🌙 Dark</div>
+                    </div>
                 </div>
             </div>
-            <div class="theme-card" data-theme="lemon-dark">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a1200, #2d2000);">
-                    <span style="color: #fef3c7;">Aa</span>
-                    <div class="theme-card-accent" style="background: #d97706;"></div>
+            <div class="theme-pair">
+                <div class="theme-card" data-theme="lemon-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #fffde7, #fff9c4);">
+                        <span style="color: #f57f17;">Aa</span>
+                        <div class="theme-card-accent" style="background: #fbbf24;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Lemon</div>
+                        <div class="theme-card-mode">☀️ Light</div>
+                    </div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Lemon</div>
-                    <div class="theme-card-mode">🌙 Dark</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="theme-family-label">Silver</div>
-        <div class="theme-grid">
-            <div class="theme-card" data-theme="silver-light">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #fafafa, #eeeeee);">
-                    <span style="color: #424242;">Aa</span>
-                    <div class="theme-card-accent" style="background: #6b7280;"></div>
-                </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Silver</div>
-                    <div class="theme-card-mode">☀️ Light</div>
+                <div class="theme-card" data-theme="lemon-dark">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a1200, #2d2000);">
+                        <span style="color: #fef3c7;">Aa</span>
+                        <div class="theme-card-accent" style="background: #d97706;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Lemon</div>
+                        <div class="theme-card-mode">🌙 Dark</div>
+                    </div>
                 </div>
             </div>
-            <div class="theme-card" data-theme="silver-dark">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a1f2e, #252d3d);">
-                    <span style="color: #e2e8f0;">Aa</span>
-                    <div class="theme-card-accent" style="background: #94a3b8;"></div>
+            <div class="theme-pair">
+                <div class="theme-card" data-theme="silver-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #fafafa, #eeeeee);">
+                        <span style="color: #424242;">Aa</span>
+                        <div class="theme-card-accent" style="background: #6b7280;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Silver</div>
+                        <div class="theme-card-mode">☀️ Light</div>
+                    </div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Silver</div>
-                    <div class="theme-card-mode">🌙 Dark</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="theme-family-label">Charcoal</div>
-        <div class="theme-grid">
-            <div class="theme-card" data-theme="charcoal-light">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #f5f5f5, #e0e0e0);">
-                    <span style="color: #212121;">Aa</span>
-                    <div class="theme-card-accent" style="background: #78909c;"></div>
-                </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Charcoal</div>
-                    <div class="theme-card-mode">☀️ Light</div>
+                <div class="theme-card" data-theme="silver-dark">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a1f2e, #252d3d);">
+                        <span style="color: #e2e8f0;">Aa</span>
+                        <div class="theme-card-accent" style="background: #94a3b8;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Silver</div>
+                        <div class="theme-card-mode">🌙 Dark</div>
+                    </div>
                 </div>
             </div>
-            <div class="theme-card active" data-theme="charcoal-dark">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a202c, #2d3748);">
-                    <span style="color: #e2e8f0;">Aa</span>
-                    <div class="theme-card-accent" style="background: #78909c;"></div>
+            <div class="theme-pair">
+                <div class="theme-card" data-theme="charcoal-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #f5f5f5, #e0e0e0);">
+                        <span style="color: #212121;">Aa</span>
+                        <div class="theme-card-accent" style="background: #78909c;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Charcoal</div>
+                        <div class="theme-card-mode">☀️ Light</div>
+                    </div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Charcoal</div>
-                    <div class="theme-card-mode">🌙 Dark</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="theme-family-label">Christmas</div>
-        <div class="theme-grid">
-            <div class="theme-card" data-theme="christmas-light">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #F5F8FC, #EDF2F8);">
-                    <span style="color: #1A2A1E;">Aa</span>
-                    <div class="theme-card-accent" style="background: #2D6B3F;"></div>
-                </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Christmas</div>
-                    <div class="theme-card-mode">❄️ Day</div>
+                <div class="theme-card" data-theme="charcoal-dark">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a202c, #2d3748);">
+                        <span style="color: #e2e8f0;">Aa</span>
+                        <div class="theme-card-accent" style="background: #78909c;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Charcoal</div>
+                        <div class="theme-card-mode">🌙 Dark</div>
+                    </div>
                 </div>
             </div>
-            <div class="theme-card" data-theme="christmas-dark">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #0A1A10, #1A3020);">
-                    <span style="color: #F0ECE4;">Aa</span>
-                    <div class="theme-card-accent" style="background: #5CB875;"></div>
+            <div class="theme-pair">
+                <div class="theme-card" data-theme="christmas-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #F5F8FC, #EDF2F8);">
+                        <span style="color: #1A2A1E;">Aa</span>
+                        <div class="theme-card-accent" style="background: #2D6B3F;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Christmas</div>
+                        <div class="theme-card-mode">❄️ Day</div>
+                    </div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Christmas</div>
-                    <div class="theme-card-mode">🎄 Eve</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="theme-family-label">Unicorn</div>
-        <div class="theme-grid">
-            <div class="theme-card" data-theme="unicorn-light">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #fce4ec, #f8bbd0);">
-                    <span style="color: #880e4f;">Aa</span>
-                    <div class="theme-card-accent" style="background: #e91e90;"></div>
-                </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Unicorn</div>
-                    <div class="theme-card-mode">☀️ Light</div>
+                <div class="theme-card" data-theme="christmas-dark">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #0A1A10, #1A3020);">
+                        <span style="color: #F0ECE4;">Aa</span>
+                        <div class="theme-card-accent" style="background: #5CB875;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Christmas</div>
+                        <div class="theme-card-mode">🎄 Eve</div>
+                    </div>
                 </div>
             </div>
-            <div class="theme-card" data-theme="unicorn-dark">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a0e24, #4a2660);">
-                    <span style="color: #f8bbd0;">Aa</span>
-                    <div class="theme-card-accent" style="background: #e91e90;"></div>
+            <div class="theme-pair">
+                <div class="theme-card" data-theme="unicorn-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #fce4ec, #f8bbd0);">
+                        <span style="color: #880e4f;">Aa</span>
+                        <div class="theme-card-accent" style="background: #e91e90;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Unicorn</div>
+                        <div class="theme-card-mode">☀️ Light</div>
+                    </div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Unicorn</div>
-                    <div class="theme-card-mode">🌙 Dark</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="theme-family-label">Dreamy</div>
-        <div class="theme-grid">
-            <div class="theme-card" data-theme="dreamy-light">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #efebe9, #d7ccc8);">
-                    <span style="color: #3e2723;">Aa</span>
-                    <div class="theme-card-accent" style="background: #8d6e63;"></div>
-                </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Dreamy</div>
-                    <div class="theme-card-mode">☀️ Light</div>
+                <div class="theme-card" data-theme="unicorn-dark">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a0e24, #4a2660);">
+                        <span style="color: #f8bbd0;">Aa</span>
+                        <div class="theme-card-accent" style="background: #e91e90;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Unicorn</div>
+                        <div class="theme-card-mode">🌙 Dark</div>
+                    </div>
                 </div>
             </div>
-            <div class="theme-card" data-theme="dreamy-dark">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1c1410, #4e342e);">
-                    <span style="color: #d7ccc8;">Aa</span>
-                    <div class="theme-card-accent" style="background: #a1887f;"></div>
+            <div class="theme-pair">
+                <div class="theme-card" data-theme="dreamy-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #efebe9, #d7ccc8);">
+                        <span style="color: #3e2723;">Aa</span>
+                        <div class="theme-card-accent" style="background: #8d6e63;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Dreamy</div>
+                        <div class="theme-card-mode">☀️ Light</div>
+                    </div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Dreamy</div>
-                    <div class="theme-card-mode">🌙 Dark</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="theme-family-label">Grayve</div>
-        <div class="theme-grid">
-            <div class="theme-card" data-theme="grayve-light">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #f8f9fa, #e0f7fa);">
-                    <span style="color: #006064;">Aa</span>
-                    <div class="theme-card-accent" style="background: #00838f;"></div>
-                </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Grayve</div>
-                    <div class="theme-card-mode">☀️ Light</div>
+                <div class="theme-card" data-theme="dreamy-dark">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #1c1410, #4e342e);">
+                        <span style="color: #d7ccc8;">Aa</span>
+                        <div class="theme-card-accent" style="background: #a1887f;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Dreamy</div>
+                        <div class="theme-card-mode">🌙 Dark</div>
+                    </div>
                 </div>
             </div>
-            <div class="theme-card" data-theme="grayve-dark">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a1e21, #343A40);">
-                    <span style="color: #DEE2E6;">Aa</span>
-                    <div class="theme-card-accent" style="background: #00bcd4;"></div>
+            <div class="theme-pair">
+                <div class="theme-card" data-theme="grayve-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #f8f9fa, #e0f7fa);">
+                        <span style="color: #006064;">Aa</span>
+                        <div class="theme-card-accent" style="background: #00838f;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Grayve</div>
+                        <div class="theme-card-mode">☀️ Light</div>
+                    </div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Grayve</div>
-                    <div class="theme-card-mode">🌙 Dark</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="theme-family-label">Mint</div>
-        <div class="theme-grid">
-            <div class="theme-card" data-theme="mint-light">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #f0faf5, #d4f5e4);">
-                    <span style="color: #1a2e25;">Aa</span>
-                    <div class="theme-card-accent" style="background: #2e9e6e;"></div>
-                </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Mint</div>
-                    <div class="theme-card-mode">☀️ Light</div>
+                <div class="theme-card" data-theme="grayve-dark">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #1a1e21, #343A40);">
+                        <span style="color: #DEE2E6;">Aa</span>
+                        <div class="theme-card-accent" style="background: #00bcd4;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Grayve</div>
+                        <div class="theme-card-mode">🌙 Dark</div>
+                    </div>
                 </div>
             </div>
-            <div class="theme-card" data-theme="mint-dark">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #0f172a, #1e3a2f);">
-                    <span style="color: #d4f5e4;">Aa</span>
-                    <div class="theme-card-accent" style="background: #6dd5a8;"></div>
+            <div class="theme-pair">
+                <div class="theme-card" data-theme="mint-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #f0faf5, #d4f5e4);">
+                        <span style="color: #1a2e25;">Aa</span>
+                        <div class="theme-card-accent" style="background: #2e9e6e;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Mint</div>
+                        <div class="theme-card-mode">☀️ Light</div>
+                    </div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Mint</div>
-                    <div class="theme-card-mode">🌙 Dark</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="theme-family-label">Wedding</div>
-        <div class="theme-grid">
-            <div class="theme-card" data-theme="wedding-light">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #FFFDF7, #FDF5E0);">
-                    <span style="color: #2C2416;">Aa</span>
-                    <div class="theme-card-accent" style="background: #C5A55A;"></div>
-                </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Wedding</div>
-                    <div class="theme-card-mode">☀️ Day</div>
+                <div class="theme-card" data-theme="mint-dark">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #0f172a, #1e3a2f);">
+                        <span style="color: #d4f5e4;">Aa</span>
+                        <div class="theme-card-accent" style="background: #6dd5a8;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Mint</div>
+                        <div class="theme-card-mode">🌙 Dark</div>
+                    </div>
                 </div>
             </div>
-            <div class="theme-card" data-theme="wedding-dark">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #12121F, #1A1A2E);">
-                    <span style="color: #F0E8D8;">Aa</span>
-                    <div class="theme-card-accent" style="background: #C5A55A;"></div>
+            <div class="theme-pair">
+                <div class="theme-card" data-theme="wedding-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #FFFDF7, #FDF5E0);">
+                        <span style="color: #2C2416;">Aa</span>
+                        <div class="theme-card-accent" style="background: #C5A55A;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Wedding</div>
+                        <div class="theme-card-mode">☀️ Day</div>
+                    </div>
                 </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Wedding</div>
-                    <div class="theme-card-mode">🌙 Evening</div>
+                <div class="theme-card" data-theme="wedding-dark">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #12121F, #1A1A2E);">
+                        <span style="color: #F0E8D8;">Aa</span>
+                        <div class="theme-card-accent" style="background: #C5A55A;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Wedding</div>
+                        <div class="theme-card-mode">🌙 Evening</div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="theme-family-label">Special</div>
-        <div class="theme-grid">
-            <div class="theme-card" data-theme="core-light">
-                <div class="theme-card-preview" style="background: linear-gradient(135deg, #ffffff, #f3f4f6);">
-                    <span style="color: #111827;">Aa</span>
-                    <div class="theme-card-accent" style="background: #4f46e5;"></div>
-                </div>
-                <div class="theme-card-body">
-                    <div class="theme-card-name">Core</div>
-                    <div class="theme-card-mode">☀️ Light only</div>
+            <div class="theme-pair">
+                <div class="theme-card" data-theme="core-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #ffffff, #f3f4f6);">
+                        <span style="color: #111827;">Aa</span>
+                        <div class="theme-card-accent" style="background: #4f46e5;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Core</div>
+                        <div class="theme-card-mode">☀️ Light only</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Component Preview -->
-    <section class="preview-section" data-section="Component Preview">
-        <h2 class="themes-section-title">Component Preview</h2>
-        <p class="text-muted mb-4">See how components look with the selected theme.</p>
+    <!-- Sticky audit bar — always visible while scrolling components -->
+    <div class="audit-bar">
+        <div>
+            <strong>Live preview</strong>
+            <p class="text-muted" style="margin: 0; font-size: 0.85rem;">Switch themes above; every component on this page reflects your choice instantly.</p>
+        </div>
+        <div class="audit-actions">
+            <span class="audit-summary idle" id="audit-summary">Audit off</span>
+            <button class="audit-toggle" id="audit-toggle">
+                <span data-icon="eye" data-icon-size="16"></span>
+                <span id="audit-toggle-text">Highlight contrast issues</span>
+            </button>
+            <button class="audit-toggle" id="audit-dump" title="Copy failures to clipboard for sharing">
+                <span data-icon="clipboard" data-icon-size="16"></span>
+                <span>Copy failures</span>
+            </button>
+        </div>
+    </div>
 
-        <div class="themes-component-grid">
-            <!-- Buttons -->
-            <div class="themes-preview-card">
-                <h3>Buttons</h3>
-                <div class="themes-button-showcase">
-                    <button class="btn btn-primary">Primary</button>
-                    <button class="btn btn-secondary">Secondary</button>
-                    <button class="btn btn-success">Success</button>
-                    <button class="btn btn-danger">Danger</button>
-                    <button class="btn btn-warning">Warning</button>
-                    <button class="btn btn-info">Info</button>
-                    <button class="btn btn-outline">Outline</button>
-                    <button class="btn btn-primary" disabled>Disabled</button>
-                </div>
+    <!-- ───────── 1. Branding & Surfaces ───────── -->
+    <section class="card audit-section" data-section="Branding">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">1. Branding &amp; Surfaces</h2></div>
+        <div class="card-body">
+            <div class="audit-label">Brand colours (text on coloured background)</div>
+            <div class="branding-strip">
+                <div class="swatch-primary">Primary</div>
+                <div class="swatch-secondary">Secondary</div>
+                <div class="swatch-success">Success</div>
+                <div class="swatch-warning">Warning</div>
+                <div class="swatch-danger">Danger</div>
+                <div class="swatch-info">Info</div>
             </div>
 
-            <!-- Alerts -->
-            <div class="themes-preview-card">
-                <h3>Alerts</h3>
-                <div class="themes-alert-showcase">
-                    <div class="themes-alert-base themes-alert-success">
-                        <span data-icon="check-circle" data-icon-size="18"></span>
-                        Success! Operation completed.
-                    </div>
-                    <div class="themes-alert-base themes-alert-danger">
-                        <span data-icon="x-circle" data-icon-size="18"></span>
-                        Error! Something went wrong.
-                    </div>
-                    <div class="themes-alert-base themes-alert-warning">
-                        <span data-icon="warning" data-icon-size="18"></span>
-                        Warning! Please review.
-                    </div>
-                    <div class="themes-alert-base themes-alert-info">
-                        <span data-icon="info" data-icon-size="18"></span>
-                        Info: Updates available.
-                    </div>
-                </div>
+            <div class="audit-label">Surface tokens (text on neutral backgrounds)</div>
+            <div class="surface-strip">
+                <div class="surf-bg">Background — body text</div>
+                <div class="surf-surface">Surface — card text</div>
+                <div class="surf-alt">Surface alt — subtle text</div>
+                <div class="surf-raised">Surface raised — elevated text</div>
             </div>
 
-            <!-- Form -->
-            <div class="themes-preview-card">
-                <h3>Form Elements</h3>
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-input" placeholder="you@example.com">
+            <div class="audit-label">Colour palette (every theme token)</div>
+            <div id="colour-palette" class="themes-colour-palette"></div>
+        </div>
+    </section>
+
+    <!-- ───────── 2. Typography ───────── -->
+    <section class="card audit-section" data-section="Typography">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">2. Typography</h2></div>
+        <div class="card-body">
+            <h1>H1 — Quarterly performance overview</h1>
+            <h2>H2 — Revenue grew 23% year on year</h2>
+            <h3>H3 — Engineering team headcount</h3>
+            <h4>H4 — Customer satisfaction up four points</h4>
+            <h5>H5 — Migration completed last Tuesday</h5>
+            <h6>H6 — Last updated by Darryl on 22 April 2026</h6>
+
+            <p>Standard paragraph text — the rain in Spain falls mainly on the plain. <a href="#">This is a hyperlink</a> with an <strong>inline strong</strong>, an <em>inline emphasis</em>, and some <code>inline code</code>. Visited links should also have legible colour.</p>
+
+            <blockquote>
+                <p>"Design is not just what it looks like and feels like. Design is how it works." — Steve Jobs</p>
+            </blockquote>
+
+            <p class="text-muted">Muted helper text — usually used for form hints or metadata.</p>
+            <p class="text-secondary">Secondary text — slightly de-emphasised body copy.</p>
+
+            <hr>
+
+            <pre class="code-block language-javascript"><code>const order = { id: 'INV-2026-0042', customer: 'Acme Ltd', total: 4250.00 };
+Domma.http.post('/api/invoices', order).then(res =&gt; {
+  E.toast('Invoice saved', { type: 'success' });
+});</code></pre>
+        </div>
+    </section>
+
+    <!-- ───────── 3. Buttons ───────── -->
+    <section class="card audit-section" data-section="Buttons">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">3. Buttons</h2></div>
+        <div class="card-body">
+            <div class="audit-label">Solid variants</div>
+            <div class="audit-row">
+                <button class="btn btn-primary">Primary</button>
+                <button class="btn btn-secondary">Secondary</button>
+                <button class="btn btn-success">Success</button>
+                <button class="btn btn-warning">Warning</button>
+                <button class="btn btn-danger">Danger</button>
+                <button class="btn btn-info">Info</button>
+                <button class="btn btn-ghost">Ghost</button>
+            </div>
+
+            <div class="audit-label">Outline &amp; size variants</div>
+            <div class="audit-row">
+                <button class="btn btn-outline">Outline</button>
+                <button class="btn btn-primary btn-sm">Small primary</button>
+                <button class="btn btn-primary btn-lg">Large primary</button>
+                <button class="btn btn-primary" disabled>Disabled primary</button>
+                <button class="btn btn-secondary" disabled>Disabled secondary</button>
+            </div>
+
+            <div class="audit-label">Buttons with icons</div>
+            <div class="audit-row">
+                <button class="btn btn-primary"><span data-icon="check" data-icon-size="16"></span> Approve</button>
+                <button class="btn btn-danger"><span data-icon="trash" data-icon-size="16"></span> Delete</button>
+                <button class="btn btn-info"><span data-icon="info" data-icon-size="16"></span> Details</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───────── 4. Forms ───────── -->
+    <section class="card audit-section" data-section="Forms">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">4. Forms</h2></div>
+        <div class="card-body">
+            <div class="audit-label">Bare HTML inputs (.form-input)</div>
+            <div class="audit-form-grid">
+                <div>
+                    <label for="in-text">Customer name</label>
+                    <input id="in-text" type="text" class="form-input" value="Alice Bloggs">
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Select</label>
-                    <select class="form-select">
-                        <option>Option One</option>
-                        <option>Option Two</option>
+                <div>
+                    <label for="in-email">Email address</label>
+                    <input id="in-email" type="email" class="form-input" value="alice@example.com">
+                </div>
+                <div>
+                    <label for="in-pass">Password</label>
+                    <input id="in-pass" type="password" class="form-input" value="hunter2hunter2">
+                </div>
+                <div>
+                    <label for="in-num">Order quantity</label>
+                    <input id="in-num" type="number" class="form-input" value="42">
+                </div>
+                <div>
+                    <label for="in-date">Invoice date</label>
+                    <input id="in-date" type="date" class="form-input" value="2026-04-22">
+                </div>
+                <div>
+                    <label for="in-select">Status</label>
+                    <select id="in-select" class="form-input">
+                        <option>Draft</option>
+                        <option selected>In review</option>
+                        <option>Approved</option>
+                        <option>Rejected</option>
                     </select>
                 </div>
-                <button class="btn btn-primary">Submit</button>
+                <div style="grid-column: 1 / -1;">
+                    <label for="in-textarea">Notes</label>
+                    <textarea id="in-textarea" class="form-input" rows="3">Customer requested next-day delivery; left a note to wrap securely.</textarea>
+                </div>
+                <div>
+                    <label><input type="checkbox" checked> Subscribe to weekly digest</label><br>
+                    <label><input type="checkbox"> Receive marketing emails</label>
+                </div>
+                <div>
+                    <label><input type="radio" name="r-priority" checked> Standard priority</label><br>
+                    <label><input type="radio" name="r-priority"> Express priority</label>
+                </div>
+                <div>
+                    <label for="in-file">Upload signed PDF</label>
+                    <input id="in-file" type="file" class="form-input">
+                </div>
             </div>
 
-            <!-- Card -->
-            <div class="themes-preview-card">
-                <h3>Nested Card</h3>
+            <div class="audit-label">F.create() — blueprint-driven form</div>
+            <div id="audit-form-host"></div>
+        </div>
+    </section>
+
+    <!-- ───────── 5. Cards (with all four header/footer combinations + accents) ───────── -->
+    <section class="card audit-section" data-section="Cards">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">5. Cards — header / footer combinations</h2></div>
+        <div class="card-body">
+
+            <div class="audit-label">Four standard combinations</div>
+            <div class="audit-grid">
+
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="font-semibold mb-2">Card Title</h4>
-                        <p class="text-muted text-sm">This card demonstrates nested surfaces and proper contrast.</p>
+                        <p class="card-text"><strong>Body only.</strong> No header, no footer. Just a single padded surface.</p>
                     </div>
-                    <div class="card-footer">
-                        <button class="btn btn-primary btn-sm">Action</button>
-                        <button class="btn btn-outline btn-sm">Cancel</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h4 class="card-title">Header only</h4></div>
+                    <div class="card-body">
+                        <p class="card-text">Header above, body below. No footer.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text">Body with a footer beneath. No header.</p>
+                    </div>
+                    <div class="card-footer">Footer content</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h4 class="card-title">Header and footer</h4></div>
+                    <div class="card-body">
+                        <p class="card-text">Full sandwich — header, body, and footer.</p>
+                    </div>
+                    <div class="card-footer">Footer content</div>
+                </div>
+            </div>
+
+            <div class="audit-label">Hover &amp; primary variants</div>
+            <div class="audit-grid">
+                <div class="card card-hover">
+                    <div class="card-header"><h4 class="card-title">Hover card</h4></div>
+                    <div class="card-body"><p class="card-text">Hover the card to see the elevation effect adjust to the active theme.</p></div>
+                </div>
+                <div class="card card-primary">
+                    <div class="card-header"><h4 class="card-title">card-primary</h4></div>
+                    <div class="card-body"><p class="card-text">Solid primary-tinted card. Watch this one carefully on light themes — header text often breaks here.</p></div>
+                    <div class="card-footer">Footer content</div>
+                </div>
+            </div>
+
+            <div class="audit-label">Accent cards (left-border colour cue + label)</div>
+            <div class="audit-grid">
+                <div class="card card-accent">
+                    <div class="card-header"><h4 class="card-title"><span class="accent-tag primary">Primary</span> card-accent</h4></div>
+                    <div class="card-body"><p class="card-text">Default accent — uses <code>--dm-primary</code> for the left border.</p></div>
+                </div>
+                <div class="card card-accent card-accent-success">
+                    <div class="card-header"><h4 class="card-title"><span class="accent-tag success">Success</span> card-accent-success</h4></div>
+                    <div class="card-body"><p class="card-text">Tinted accent with a green left border. Use for confirmation and completion states.</p></div>
+                </div>
+                <div class="card card-accent card-accent-warning">
+                    <div class="card-header"><h4 class="card-title"><span class="accent-tag warning">Warning</span> card-accent-warning</h4></div>
+                    <div class="card-body"><p class="card-text">Yellow accent. Lemon-light theme has historically broken this combination.</p></div>
+                </div>
+                <div class="card card-accent card-accent-danger">
+                    <div class="card-header"><h4 class="card-title"><span class="accent-tag danger">Danger</span> card-accent-danger</h4></div>
+                    <div class="card-body"><p class="card-text">Red accent. Used for destructive confirmation flows.</p></div>
+                </div>
+                <div class="card card-accent card-accent-info">
+                    <div class="card-header"><h4 class="card-title"><span class="accent-tag info">Info</span> card-accent-info</h4></div>
+                    <div class="card-body"><p class="card-text">Blue accent. Mint-light historically had cyan-on-mint contrast issues here.</p></div>
+                </div>
+                <div class="card card-collapsible" id="audit-card-collapsible">
+                    <div class="card-header"><h4 class="card-title">Collapsible card</h4></div>
+                    <div class="card-body"><p class="card-text">Click the header to toggle. State persists to localStorage.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───────── 6. Badges, Pills, NumberBadge ───────── -->
+    <section class="card audit-section" data-section="Badges">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">6. Badges, Pills &amp; Number Badges</h2></div>
+        <div class="card-body">
+            <div class="audit-label">Badges</div>
+            <div class="audit-row">
+                <span class="badge badge-primary">Primary</span>
+                <span class="badge badge-secondary">Secondary</span>
+                <span class="badge badge-success">Success</span>
+                <span class="badge badge-warning">Warning</span>
+                <span class="badge badge-danger">Danger</span>
+                <span class="badge badge-info">Info</span>
+            </div>
+
+            <div class="audit-label">Pills</div>
+            <div class="audit-row">
+                <span class="pill pill-primary">Primary pill</span>
+                <span class="pill pill-secondary">Secondary pill</span>
+                <span class="pill pill-light">Light pill</span>
+                <span class="pill pill-outline">Outline pill</span>
+                <span class="pill pill-outline-primary">Outline primary</span>
+                <span class="pill pill-sm pill-primary">Small</span>
+                <span class="pill pill-lg pill-primary">Large</span>
+            </div>
+
+            <div class="audit-label">Number badges (notification counters)</div>
+            <div class="audit-row">
+                <button class="btn btn-primary" id="numbadge-host-1" style="position:relative;">Inbox</button>
+                <button class="btn btn-secondary" id="numbadge-host-2" style="position:relative;">Tasks</button>
+                <button class="btn btn-danger" id="numbadge-host-3" style="position:relative;">Alerts</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───────── 7. Alerts ───────── -->
+    <section class="card audit-section" data-section="Alerts">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">7. Alerts</h2></div>
+        <div class="card-body">
+            <div class="alert alert-primary"><strong>Primary alert.</strong> System maintenance scheduled for 02:00–04:00 on Sunday.</div>
+            <div class="alert alert-success"><strong>Success.</strong> All overnight CI jobs completed without errors.</div>
+            <div class="alert alert-warning"><strong>Warning.</strong> Disk usage on prod-db-01 is at 85% — consider archiving older logs.</div>
+            <div class="alert alert-danger"><strong>Danger.</strong> Webhook delivery to Stripe failed three consecutive times.</div>
+            <div class="alert alert-info"><strong>Info.</strong> A new release of Domma is available — see the changelog.</div>
+        </div>
+    </section>
+
+    <!-- ───────── 8. Tabs & Accordion ───────── -->
+    <section class="card audit-section" data-section="Tabs &amp; Accordion">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">8. Tabs &amp; Accordion</h2></div>
+        <div class="card-body">
+            <div id="audit-tabs" class="tabs">
+                <ul class="tab-list">
+                    <li class="tab-item active" data-tab="0">Overview</li>
+                    <li class="tab-item" data-tab="1">Activity</li>
+                    <li class="tab-item" data-tab="2">Settings</li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-panel active"><p>Tab content one — body text rendered inside the active panel. Headings, links and emphasised text should remain legible across all themes.</p></div>
+                    <div class="tab-panel"><p>Tab content two — secondary tab. <a href="#">Inline link</a> visibility check.</p></div>
+                    <div class="tab-panel"><p>Tab content three — settings tab content.</p></div>
+                </div>
+            </div>
+
+            <div id="audit-accordion" class="accordion" style="margin-top: 1rem;">
+                <div class="accordion-item">
+                    <button class="accordion-header" type="button">First section header</button>
+                    <div class="accordion-body"><p>Accordion body text. The chevron icon and the header background should both be readable.</p></div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header" type="button">Second section header</button>
+                    <div class="accordion-body"><p>Body of the second section.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───────── 9. Tables ───────── -->
+    <section class="card audit-section" data-section="Tables">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">9. Tables</h2></div>
+        <div class="card-body">
+            <div class="audit-label">Bare HTML table (.table)</div>
+            <table class="table" style="width:100%; margin-bottom:1rem;">
+                <thead>
+                    <tr><th>ID</th><th>Customer</th><th>Status</th><th class="text-right">Total</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>INV-0001</td><td>Acme Ltd</td><td><span class="badge badge-success">Paid</span></td><td class="text-right">£4,250.00</td></tr>
+                    <tr><td>INV-0002</td><td>Globex</td><td><span class="badge badge-warning">Pending</span></td><td class="text-right">£1,180.00</td></tr>
+                    <tr><td>INV-0003</td><td>Initech</td><td><span class="badge badge-danger">Overdue</span></td><td class="text-right">£760.00</td></tr>
+                    <tr><td>INV-0004</td><td>Soylent Corp</td><td><span class="badge badge-success">Paid</span></td><td class="text-right">£12,500.00</td></tr>
+                </tbody>
+            </table>
+
+            <div class="audit-label">T.create() — sortable, searchable, paginated</div>
+            <div id="audit-table-host"></div>
+        </div>
+    </section>
+
+    <!-- ───────── 10. Lists & ListGroup ───────── -->
+    <section class="card audit-section" data-section="Lists">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">10. Lists &amp; List Groups</h2></div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="audit-label">Standard lists</div>
+                    <ul>
+                        <li>Onboarding session with the new client</li>
+                        <li>Migrate legacy invoices to the new system</li>
+                        <li>Review Q2 procurement reports</li>
+                    </ul>
+                    <ol>
+                        <li>Stage the migration</li>
+                        <li>Run the dry-run script</li>
+                        <li>Cut over and verify</li>
+                    </ol>
+                    <dl>
+                        <dt>API key</dt>
+                        <dd>A unique identifier used to authenticate requests.</dd>
+                        <dt>Rate limit</dt>
+                        <dd>1,000 requests per hour, per key.</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <div class="audit-label">List group with colour variants</div>
+                    <div id="audit-listgroup" class="list-group">
+                        <div class="list-group-item list-group-item-action">Q1 sales report</div>
+                        <div class="list-group-item list-group-item-action active">Selected item</div>
+                        <div class="list-group-item list-group-item-action list-group-item-primary">Primary tinted</div>
+                        <div class="list-group-item list-group-item-action list-group-item-success">Success tinted</div>
+                        <div class="list-group-item list-group-item-action list-group-item-warning">Warning tinted</div>
+                        <div class="list-group-item list-group-item-action list-group-item-danger">Danger tinted</div>
+                        <div class="list-group-item list-group-item-action list-group-item-info">Info tinted</div>
+                        <div class="list-group-item list-group-item-action disabled">Disabled item</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Colour Palette -->
-    <section class="preview-section" data-section="Colour Palette">
-        <h2 class="themes-section-title">Colour Palette</h2>
-        <p class="text-muted mb-4">Current theme colours update as you switch themes.</p>
+    <!-- ───────── 11. Navigation ───────── -->
+    <section class="card audit-section" data-section="Navigation">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">11. Navigation Components</h2></div>
+        <div class="card-body">
+            <div class="audit-label">Breadcrumbs</div>
+            <div id="audit-breadcrumbs"></div>
 
-        <div class="themes-preview-card">
-            <div class="themes-colour-palette" id="colour-palette">
-                <!-- Generated by JS -->
+            <div class="audit-label">Pagination</div>
+            <nav class="pagination">
+                <a href="#" class="page-link">‹ Prev</a>
+                <a href="#" class="page-link">1</a>
+                <a href="#" class="page-link active">2</a>
+                <a href="#" class="page-link">3</a>
+                <a href="#" class="page-link">4</a>
+                <span class="page-link disabled">…</span>
+                <a href="#" class="page-link">12</a>
+                <a href="#" class="page-link">Next ›</a>
+            </nav>
+
+            <div class="audit-label">Button group — single-select</div>
+            <div id="audit-bg-single" class="btn-group" role="group">
+                <button class="btn btn-outline active" data-value="d">Daily</button>
+                <button class="btn btn-outline" data-value="w">Weekly</button>
+                <button class="btn btn-outline" data-value="m">Monthly</button>
+                <button class="btn btn-outline" data-value="q">Quarterly</button>
             </div>
+
+            <div class="audit-label">Dropdown</div>
+            <div id="audit-dropdown" class="dropdown" style="display:inline-block;">
+                <button class="btn btn-secondary dropdown-toggle">Actions ▾</button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Edit record</a>
+                    <a href="#" class="dropdown-item">Duplicate</a>
+                    <a href="#" class="dropdown-item">Archive</a>
+                    <hr>
+                    <a href="#" class="dropdown-item text-danger">Delete permanently</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───────── 12. Loaders & Progress ───────── -->
+    <section class="card audit-section" data-section="Loaders">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">12. Loaders &amp; Progress</h2></div>
+        <div class="card-body">
+            <div class="audit-grid">
+                <div class="audit-block"><div class="audit-label">Spinner</div><div id="loader-spin" style="height:48px;"></div></div>
+                <div class="audit-block"><div class="audit-label">Dots</div><div id="loader-dots" style="height:48px;"></div></div>
+                <div class="audit-block"><div class="audit-label">Pulse</div><div id="loader-pulse" style="height:48px;"></div></div>
+                <div class="audit-block"><div class="audit-label">Bars</div><div id="loader-bars" style="height:48px;"></div></div>
+            </div>
+
+            <div class="audit-label">Progress bars</div>
+            <div class="progress" style="margin-bottom:0.5rem;"><div class="progress-bar" style="width: 32%;">32%</div></div>
+            <div class="progress" style="margin-bottom:0.5rem;"><div class="progress-bar progress-bar-success" style="width: 100%;">Complete</div></div>
+            <div class="progress" style="margin-bottom:0.5rem;"><div class="progress-bar progress-bar-warning" style="width: 67%;">67%</div></div>
+            <div class="progress" style="margin-bottom:0.5rem;"><div class="progress-bar progress-bar-danger" style="width: 12%;">12%</div></div>
+        </div>
+    </section>
+
+    <!-- ───────── 13. Tooltips ───────── -->
+    <section class="card audit-section" data-section="Tooltips">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">13. Tooltips</h2></div>
+        <div class="card-body">
+            <div class="audit-row">
+                <button class="btn btn-primary" data-tooltip="Tooltip on top" data-tooltip-position="top">Hover (top)</button>
+                <button class="btn btn-secondary" data-tooltip="Tooltip on bottom" data-tooltip-position="bottom">Hover (bottom)</button>
+                <button class="btn btn-info" data-tooltip="Tooltip on left" data-tooltip-position="left">Hover (left)</button>
+                <button class="btn btn-warning" data-tooltip="Tooltip on right" data-tooltip-position="right">Hover (right)</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───────── 14. Modals, Dialogs & Toasts ───────── -->
+    <section class="card audit-section" data-section="Modals">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">14. Modals, Dialogs &amp; Toasts</h2></div>
+        <div class="card-body">
+            <div class="audit-label">Trigger buttons</div>
+            <div class="audit-row">
+                <button class="btn btn-primary" id="audit-open-modal">Open modal</button>
+                <button class="btn btn-info" id="audit-open-alert">Show alert dialog</button>
+                <button class="btn btn-warning" id="audit-open-confirm">Show confirm dialog</button>
+                <button class="btn btn-secondary" id="audit-open-prompt">Show prompt dialog</button>
+                <button class="btn btn-success" id="audit-toast-success">Toast: success</button>
+                <button class="btn btn-danger" id="audit-toast-error">Toast: error</button>
+            </div>
+
+            <div class="audit-label">Inline modal (forced visible for inspection)</div>
+            <div class="modal modal-inline" id="audit-inline-modal">
+                <div class="modal-header"><h5 class="modal-title">Confirm payment</h5></div>
+                <div class="modal-body">
+                    <p>Are you sure you want to process the payment of <strong>£4,250.00</strong> to <strong>Acme Ltd</strong>?</p>
+                    <p class="text-secondary">A receipt will be emailed to the registered billing address.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Confirm payment</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───────── 15. Slideovers ───────── -->
+    <section class="card audit-section" data-section="Slideovers">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">15. Slideovers</h2></div>
+        <div class="card-body">
+            <div class="audit-row">
+                <button class="btn btn-primary" id="slideover-left">From left</button>
+                <button class="btn btn-primary" id="slideover-right">From right</button>
+                <button class="btn btn-primary" id="slideover-top">From top</button>
+                <button class="btn btn-primary" id="slideover-bottom">From bottom</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───────── 16. Autocomplete & Pillbox ───────── -->
+    <section class="card audit-section" data-section="Autocomplete">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">16. Autocomplete &amp; Pillbox</h2></div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="audit-label">Autocomplete</div>
+                    <input id="audit-autocomplete" class="form-input" placeholder="Type a country…">
+                </div>
+                <div class="col-md-6">
+                    <div class="audit-label">Pillbox (multi-select)</div>
+                    <div id="audit-pillbox"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───────── 17. Progression ───────── -->
+    <section class="card audit-section" data-section="Progression">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">17. Progression — Timeline &amp; Roadmap</h2></div>
+        <div class="card-body">
+            <div class="audit-label">Timeline mode</div>
+            <div id="audit-timeline"></div>
+
+            <div class="audit-label">Roadmap mode (status colours)</div>
+            <div id="audit-roadmap"></div>
+        </div>
+    </section>
+
+    <!-- ───────── 18. Carousel ───────── -->
+    <section class="card audit-section" data-section="Carousel">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">18. Carousel</h2></div>
+        <div class="card-body">
+            <div id="audit-carousel" class="carousel" style="max-width: 600px; margin: 0 auto;">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div style="background: var(--dm-primary); color: var(--dm-primary-text, #fff); padding: 3rem 1rem; text-align:center; border-radius:8px;">
+                            <h3 style="color: inherit; margin: 0;">Slide one — primary background</h3>
+                            <p style="color: inherit; margin: 0.5rem 0 0;">Caption text rendered against the primary brand colour.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div style="background: var(--dm-success); color: var(--dm-success-text, #fff); padding: 3rem 1rem; text-align:center; border-radius:8px;">
+                            <h3 style="color: inherit; margin: 0;">Slide two — success background</h3>
+                            <p style="color: inherit; margin: 0.5rem 0 0;">Same caption pattern using success colour.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div style="background: var(--dm-warning); color: var(--dm-warning-text, #fff); padding: 3rem 1rem; text-align:center; border-radius:8px;">
+                            <h3 style="color: inherit; margin: 0;">Slide three — warning background</h3>
+                            <p style="color: inherit; margin: 0.5rem 0 0;">Common contrast hot-spot in light themes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───────── 19. Code & quotes ───────── -->
+    <section class="card audit-section" data-section="Code">
+        <div class="card-header"><h2 style="margin:0; font-size: 1.1rem;">19. Code &amp; quotes</h2></div>
+        <div class="card-body">
+            <p>Inline code: <code>const x = Domma.theme.set('mint-light')</code> should remain readable.</p>
+            <pre class="code-block"><code>function audit() {
+  const issues = [];
+  document.querySelectorAll('*').forEach(el =&gt; {
+    if (failsContrast(el)) issues.push(el);
+  });
+  return issues;
+}</code></pre>
         </div>
     </section>
 
@@ -571,55 +1177,549 @@
 <script src="../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
-    // Colour tokens to display in the palette
-    const colours = [
-        {name: 'Primary',    var: '--dm-primary'},
-        {name: 'Secondary',  var: '--dm-secondary'},
-        {name: 'Success',    var: '--dm-success'},
-        {name: 'Danger',     var: '--dm-danger'},
-        {name: 'Warning',    var: '--dm-warning'},
-        {name: 'Info',       var: '--dm-info'},
-        {name: 'Background', var: '--dm-background'},
-        {name: 'Surface',    var: '--dm-surface'},
-        {name: 'Text',       var: '--dm-text'},
-        {name: 'Border',     var: '--dm-border'}
-    ];
+document.addEventListener('DOMContentLoaded', () => {
 
-    function renderPalette() {
-        const html = colours.map(c => `
-            <div class="themes-colour-swatch">
-                <div class="themes-colour-circle" style="background: var(${c.var})"></div>
-                <div class="themes-colour-label">${c.name}</div>
-            </div>
-        `).join('');
-        $('#colour-palette').html(html);
-    }
+  // ── Colour palette swatches ───────────────────────────────────────────
+  const colours = [
+      {name: 'Primary',    var: '--dm-primary'},
+      {name: 'Secondary',  var: '--dm-secondary'},
+      {name: 'Success',    var: '--dm-success'},
+      {name: 'Danger',     var: '--dm-danger'},
+      {name: 'Warning',    var: '--dm-warning'},
+      {name: 'Info',       var: '--dm-info'},
+      {name: 'Background', var: '--dm-background'},
+      {name: 'Surface',    var: '--dm-surface'},
+      {name: 'Text',       var: '--dm-text'},
+      {name: 'Border',     var: '--dm-border'}
+  ];
 
-    function updateActiveStates() {
-        const current = Domma.theme.get();
-        $('.theme-card').removeClass('active');
-        $(`.theme-card[data-theme="${current}"]`).addClass('active');
-    }
-
-    // Theme card click handler — single call with full theme name
-    $('.theme-card').on('click', function () {
-        const theme = $(this).data('theme');
-        Domma.theme.set(theme);
-        updateActiveStates();
-        setTimeout(renderPalette, 50);
+  function renderPalette() {
+    const host = document.getElementById('colour-palette');
+    if (!host) return;
+    host.replaceChildren();
+    colours.forEach(c => {
+      const swatch = document.createElement('div');
+      swatch.className = 'themes-colour-swatch';
+      const circle = document.createElement('div');
+      circle.className = 'themes-colour-circle';
+      circle.style.background = `var(${c.var})`;
+      const label = document.createElement('div');
+      label.className = 'themes-colour-label';
+      label.textContent = c.name;
+      swatch.appendChild(circle);
+      swatch.appendChild(label);
+      host.appendChild(swatch);
     });
+  }
 
-    // Initialise
-    Domma.theme.init({persist: true, autoDetect: false});
-    Domma.icons.scan();
+  function updateActiveStates() {
+    const current = Domma.theme.get();
+    document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll(`.theme-card[data-theme="${current}"]`).forEach(c => c.classList.add('active'));
+  }
+
+  document.querySelectorAll('.theme-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const theme = card.dataset.theme;
+      Domma.theme.set(theme);
+    });
+  });
+
+  Domma.theme.init({ persist: true, autoDetect: false });
+  updateActiveStates();
+  renderPalette();
+
+  Domma.theme.onChange(() => {
     updateActiveStates();
-    renderPalette();
+    setTimeout(() => {
+      renderPalette();
+      if (auditEnabled) runAudit();
+    }, 80);
+  });
 
-    // Keep palette in sync with external theme changes (e.g. variant selector)
-    Domma.theme.onChange(() => {
-        updateActiveStates();
-        setTimeout(renderPalette, 50);
+  // ── Contrast checker (WCAG AA) ────────────────────────────────────────
+  let auditEnabled = false;
+  const toggleBtn = document.getElementById('audit-toggle');
+  const toggleText = document.getElementById('audit-toggle-text');
+  const summaryEl = document.getElementById('audit-summary');
+
+  function parseRgb(str) {
+    if (!str) return null;
+    const m = str.match(/rgba?\(([^)]+)\)/);
+    if (!m) return null;
+    const parts = m[1].split(',').map(p => parseFloat(p.trim()));
+    if (parts.length < 3) return null;
+    const a = parts[3] === undefined ? 1 : parts[3];
+    return { r: parts[0], g: parts[1], b: parts[2], a };
+  }
+
+  function relLuminance(c) {
+    const norm = v => {
+      v /= 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    };
+    return 0.2126 * norm(c.r) + 0.7152 * norm(c.g) + 0.0722 * norm(c.b);
+  }
+
+  function contrastRatio(fg, bg) {
+    const l1 = relLuminance(fg);
+    const l2 = relLuminance(bg);
+    const [light, dark] = l1 > l2 ? [l1, l2] : [l2, l1];
+    return (light + 0.05) / (dark + 0.05);
+  }
+
+  // Alpha-composite "src" over "dst" using standard "over" operator.
+  // Returns an opaque colour (a=1) approximating the rendered result.
+  function composite(src, dst) {
+    if (!src) return dst;
+    if (src.a >= 0.999) return { r: src.r, g: src.g, b: src.b, a: 1 };
+    const a = src.a + dst.a * (1 - src.a);
+    const r = (src.r * src.a + dst.r * dst.a * (1 - src.a)) / (a || 1);
+    const g = (src.g * src.a + dst.g * dst.a * (1 - src.a)) / (a || 1);
+    const b = (src.b * src.a + dst.b * dst.a * (1 - src.a)) / (a || 1);
+    return { r: Math.round(r), g: Math.round(g), b: Math.round(b), a: 1 };
+  }
+
+  function effectiveBg(el) {
+    // Walk up the ancestor chain collecting every translucent layer, then
+    // composite them top-down so a `rgba(brand, 0.15)` over a dark surface
+    // resolves to its real visual colour rather than the brand colour itself.
+    const layers = [];
+    let cur = el;
+    while (cur && cur !== document.documentElement) {
+      const bg = parseRgb(getComputedStyle(cur).backgroundColor);
+      if (bg && bg.a > 0) {
+        layers.push(bg);
+        if (bg.a >= 0.999) break;
+      }
+      cur = cur.parentElement;
+    }
+    let base = parseRgb(getComputedStyle(document.body).backgroundColor) || { r: 255, g: 255, b: 255, a: 1 };
+    if (!base.a || base.a < 0.999) base = { r: base.r || 255, g: base.g || 255, b: base.b || 255, a: 1 };
+    // layers[0] is the element itself, layers[N] is closest opaque ancestor; composite from back to front
+    for (let i = layers.length - 1; i >= 0; i--) base = composite(layers[i], base);
+    return base;
+  }
+
+  function hasOwnText(el) {
+    return Array.from(el.childNodes).some(n => n.nodeType === 3 && n.textContent.trim().length > 1);
+  }
+
+  function clearAuditMarks() {
+    document.querySelectorAll('.audit-fail').forEach(el => {
+      el.classList.remove('audit-fail');
+      el.removeAttribute('data-audit-ratio');
     });
+  }
+
+  // Web-component hosts present known false-positives for background detection
+  // (their Shadow DOM slots reparent children for layout while keeping them in
+  // light DOM, which confuses ancestor-walk-based bg detection). Skip elements
+  // inside these wrappers; the underlying button colours are tested elsewhere.
+  function isInsideUnauditedHost(el) {
+    let cur = el;
+    while (cur && cur !== document.body) {
+      const tag = cur.tagName ? cur.tagName.toLowerCase() : '';
+      if (tag === 'domma-tooltip' || tag === 'domma-number-badge') return true;
+      cur = cur.parentElement;
+    }
+    return false;
+  }
+
+  function runAudit() {
+    clearAuditMarks();
+    let failures = 0;
+    document.querySelectorAll('.audit-section *').forEach(el => {
+      if (!hasOwnText(el)) return;
+      if (isInsideUnauditedHost(el)) return;
+      const styles = getComputedStyle(el);
+      if (styles.visibility === 'hidden' || styles.display === 'none') return;
+      const fg = parseRgb(styles.color);
+      const bg = effectiveBg(el);
+      if (!fg || !bg || fg.a < 0.1) return;
+
+      const ratio = contrastRatio(fg, bg);
+      const fontSize = parseFloat(styles.fontSize);
+      const fontWeight = parseInt(styles.fontWeight) || 400;
+      const isLarge = fontSize >= 24 || (fontSize >= 18.66 && fontWeight >= 700);
+      const threshold = isLarge ? 3 : 4.5;
+
+      if (ratio < threshold) {
+        el.classList.add('audit-fail');
+        el.setAttribute('data-audit-ratio', ratio.toFixed(2));
+        failures++;
+      }
+    });
+
+    summaryEl.classList.remove('idle', 'has-issues', 'clean');
+    if (failures === 0) {
+      summaryEl.textContent = 'No issues found';
+      summaryEl.classList.add('clean');
+    } else {
+      summaryEl.textContent = `${failures} contrast issue${failures === 1 ? '' : 's'}`;
+      summaryEl.classList.add('has-issues');
+    }
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    auditEnabled = !auditEnabled;
+    toggleBtn.classList.toggle('active', auditEnabled);
+    toggleText.textContent = auditEnabled ? 'Hide contrast issues' : 'Highlight contrast issues';
+    if (auditEnabled) {
+      runAudit();
+    } else {
+      clearAuditMarks();
+      summaryEl.classList.remove('has-issues', 'clean');
+      summaryEl.classList.add('idle');
+      summaryEl.textContent = 'Audit off';
+    }
+  });
+
+  // ── Dump failures ─────────────────────────────────────────────────────
+  // Collects every failing element with its CSS-path-style selector and
+  // copies a structured report to the clipboard for sharing.
+  function describeElement(el) {
+    const parts = [];
+    let cur = el;
+    while (cur && cur !== document.body && parts.length < 5) {
+      let s = cur.tagName.toLowerCase();
+      if (cur.id) s += `#${cur.id}`;
+      else if (cur.className && typeof cur.className === 'string') {
+        const classes = cur.className.trim().split(/\s+/).slice(0, 4).join('.');
+        if (classes) s += `.${classes}`;
+      }
+      parts.unshift(s);
+      cur = cur.parentElement;
+    }
+    return parts.join(' > ');
+  }
+
+  document.getElementById('audit-dump').addEventListener('click', async () => {
+    let report = '';
+    try {
+      const allThemes = (Domma.theme && Domma.theme.listThemes) ? Domma.theme.listThemes() : [];
+      const originalTheme = (Domma.theme && Domma.theme.get) ? Domma.theme.get() : null;
+      const wasEnabled = auditEnabled;
+
+      report = `# Contrast failure dump — generated ${new Date().toISOString()}\n`;
+      report += `Themes scanned: ${allThemes.length}\n\n`;
+
+      const summary = [];
+
+      for (const theme of allThemes) {
+        // Apply theme and let CSS settle before measuring
+        if (Domma.theme && Domma.theme.set) Domma.theme.set(theme);
+        // Two RAFs + a settle delay so style/layout recalculation finishes
+        // before the audit reads computed values; otherwise dumps occasionally
+        // capture transitional state (e.g. half-applied theme classes).
+        await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+        await new Promise(r => setTimeout(r, 200));
+
+        clearAuditMarks();
+        runAudit();
+
+        const fails = [];
+        document.querySelectorAll('.audit-fail').forEach(el => {
+          try {
+            const styles = getComputedStyle(el);
+            const fg = parseRgb(styles.color);
+            const bg = effectiveBg(el);
+            fails.push({
+              ratio: parseFloat(el.getAttribute('data-audit-ratio')) || 0,
+              path: describeElement(el),
+              text: (el.textContent || '').trim().slice(0, 60).replace(/\s+/g, ' '),
+              fg: fg ? `rgb(${fg.r},${fg.g},${fg.b})` : (styles.color || 'unknown'),
+              bg: bg ? `rgb(${bg.r},${bg.g},${bg.b})` : 'unknown',
+              fontSize: parseFloat(styles.fontSize) || 0,
+              fontWeight: parseInt(styles.fontWeight) || 400
+            });
+          } catch (innerErr) {
+            fails.push({ ratio: 0, path: '(error)', text: String(innerErr.message || innerErr), fg: '?', bg: '?', fontSize: 0, fontWeight: 0 });
+          }
+        });
+        fails.sort((a, b) => a.ratio - b.ratio);
+        summary.push({ theme, count: fails.length });
+
+        report += `\n══════════════════════════════════════════════\n`;
+        report += `THEME: ${theme}  —  ${fails.length} failures\n`;
+        report += `══════════════════════════════════════════════\n`;
+        // Limit to 30 worst per theme to keep report manageable
+        const sample = fails.slice(0, 30);
+        sample.forEach((f, i) => {
+          report += `${i + 1}. [${f.ratio.toFixed(2)}:1] ${f.path}\n`;
+          report += `   text: "${f.text}"\n   fg=${f.fg}  bg=${f.bg}  ${f.fontSize}px/${f.fontWeight}\n`;
+        });
+        if (fails.length > sample.length) {
+          report += `... and ${fails.length - sample.length} more (truncated)\n`;
+        }
+      }
+
+      // Restore original theme
+      if (originalTheme && Domma.theme && Domma.theme.set) Domma.theme.set(originalTheme);
+
+      if (!wasEnabled) {
+        clearAuditMarks();
+        summaryEl.classList.remove('has-issues', 'clean');
+        summaryEl.classList.add('idle');
+        summaryEl.textContent = 'Audit off';
+      } else {
+        runAudit();
+      }
+
+      const totalReport = '# SUMMARY\n' + summary.map(s => `  ${s.theme.padEnd(20)} ${s.count}`).join('\n') + '\n\n' + report;
+      report = totalReport;
+      console.log(report);
+    } catch (err) {
+      report = '# DUMP ERROR\n' + (err && err.stack ? err.stack : String(err));
+      console.error(report);
+    }
+
+    // Show a modal-style textarea with the report so the user can copy it
+    // regardless of clipboard API availability.
+    const existing = document.getElementById('audit-dump-modal');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.id = 'audit-dump-modal';
+    Object.assign(overlay.style, {
+      position: 'fixed', inset: '0',
+      background: 'rgba(0,0,0,0.55)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      zIndex: '99999', padding: '2rem'
+    });
+
+    const panel = document.createElement('div');
+    Object.assign(panel.style, {
+      background: '#fff', color: '#000',
+      borderRadius: '8px',
+      maxWidth: '800px', maxHeight: '80vh', width: '100%',
+      display: 'flex', flexDirection: 'column', overflow: 'hidden',
+      boxShadow: '0 12px 40px rgba(0,0,0,0.4)'
+    });
+
+    const header = document.createElement('div');
+    header.style.cssText = 'padding: 0.75rem 1rem; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;';
+    const title = document.createElement('strong');
+    title.textContent = 'Contrast failure dump (Ctrl+A then Ctrl+C to copy)';
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '×';
+    closeBtn.style.cssText = 'background: none; border: none; font-size: 1.5rem; cursor: pointer; line-height: 1; color: #000;';
+    closeBtn.addEventListener('click', () => overlay.remove());
+    header.appendChild(title);
+    header.appendChild(closeBtn);
+
+    const ta = document.createElement('textarea');
+    ta.value = report;
+    ta.readOnly = true;
+    Object.assign(ta.style, {
+      flex: '1', width: '100%', border: 'none',
+      padding: '1rem', fontFamily: 'monospace', fontSize: '12px',
+      resize: 'none', outline: 'none', background: '#f8f9fa', color: '#000'
+    });
+
+    panel.appendChild(header);
+    panel.appendChild(ta);
+    overlay.appendChild(panel);
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+    setTimeout(() => { ta.focus(); ta.select(); }, 50);
+
+    // Best-effort attempt at modern clipboard, but never block the modal.
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(report).catch(() => {});
+    }
+  });
+
+  // ── Initialise every Domma component ─────────────────────────────────
+  E.tabs('#audit-tabs');
+  E.accordion('#audit-accordion');
+  E.tooltip('[data-tooltip]');
+  E.carousel('#audit-carousel', { autoplay: true, interval: 5000, pauseOnHover: true });
+  E.dropdown('#audit-dropdown');
+  E.listGroup('#audit-listgroup', { selectable: true, multiSelect: false });
+  E.buttonGroup('#audit-bg-single', { mode: 'single' });
+
+  E.breadcrumbs('#audit-breadcrumbs', {
+    items: [
+      { text: 'Home', url: '#' },
+      { text: 'Showcase', url: '#' },
+      { text: 'Themes', active: true }
+    ],
+    separator: 'chevron'
+  });
+
+  E.loader('#loader-spin',  { type: 'spinner', size: 'medium' }).show();
+  E.loader('#loader-dots',  { type: 'dots',    size: 'medium' }).show();
+  E.loader('#loader-pulse', { type: 'pulse',   size: 'medium' }).show();
+  E.loader('#loader-bars',  { type: 'bars',    size: 'medium' }).show();
+
+  if (E.numberBadge) {
+    E.numberBadge('#numbadge-host-1', { count: 12 });
+    E.numberBadge('#numbadge-host-2', { count: 4 });
+    E.numberBadge('#numbadge-host-3', { count: 99, max: 99 });
+  }
+  if (E.card) E.card('#audit-card-collapsible', { collapsible: true });
+
+  E.autocomplete('#audit-autocomplete', {
+    data: ['United Kingdom', 'United States', 'France', 'Germany', 'Spain', 'Italy', 'Japan', 'Australia', 'Brazil', 'Canada', 'Norway', 'Sweden', 'Denmark', 'Finland', 'Netherlands'],
+    minChars: 1,
+    maxResults: 8
+  });
+  E.pillbox('#audit-pillbox', {
+    data: ['JavaScript', 'TypeScript', 'CSS', 'HTML', 'Domma', 'Node.js', 'PHP', 'Python', 'Rust', 'Go'],
+    value: ['JavaScript', 'Domma'],
+    creatable: true,
+    placeholder: 'Add a tag…'
+  });
+
+  E.progression('#audit-timeline', {
+    mode: 'timeline',
+    items: [
+      { year: 2023, title: 'Founded', description: 'Company established and first round of seed funding raised.' },
+      { year: 2024, title: 'Series A', description: 'Closed a £10m Series A led by Acme Ventures.' },
+      { year: 2025, title: 'Expansion', description: 'Opened offices in Berlin, Paris, and Amsterdam.' },
+      { year: 2026, title: 'Public release', description: 'Domma 1.0 ships to general availability.' }
+    ]
+  });
+  E.progression('#audit-roadmap', {
+    mode: 'roadmap',
+    items: [
+      { id: 1, title: 'API v2',     status: 'completed',   description: 'New REST endpoints with pagination.' },
+      { id: 2, title: 'Mobile app', status: 'in-progress', description: 'iOS and Android clients in beta.' },
+      { id: 3, title: 'Analytics',  status: 'planned',     description: 'Self-service reporting dashboard.' },
+      { id: 4, title: 'Compliance', status: 'blocked',     description: 'Awaiting legal review.' }
+    ]
+  });
+
+  // F.create() — schema, data, options → renderTo(selector)
+  if (window.F && F.create) {
+    try {
+      const blueprint = {
+        name:    { type: M.types.string, required: true, label: 'Customer name' },
+        email:   { type: M.types.string, required: true, label: 'Email', formConfig: { inputType: 'email' } },
+        country: { type: M.types.string, label: 'Country', formConfig: { component: 'select', options: ['United Kingdom', 'United States', 'France', 'Germany'] } },
+        notes:   { type: M.types.string, label: 'Notes', formConfig: { component: 'textarea' } }
+      };
+      F.create(blueprint, {}, { layout: 'grid', columns: 2, submitLabel: 'Save customer' }).renderTo('#audit-form-host');
+    } catch (err) {
+      const host = document.getElementById('audit-form-host');
+      const fallback = document.createElement('div');
+      fallback.className = 'alert alert-warning';
+      fallback.textContent = 'F.create() blueprint demo unavailable: ' + err.message;
+      host.appendChild(fallback);
+    }
+  }
+
+  if (window.T && T.create) {
+    const data = [
+      { id: 'INV-0001', customer: 'Acme Ltd',     status: 'Paid',    total: 4250.00 },
+      { id: 'INV-0002', customer: 'Globex',       status: 'Pending', total: 1180.00 },
+      { id: 'INV-0003', customer: 'Initech',      status: 'Overdue', total:  760.00 },
+      { id: 'INV-0004', customer: 'Soylent Corp', status: 'Paid',    total: 12500.00 },
+      { id: 'INV-0005', customer: 'Stark Inds.',  status: 'Paid',    total: 8700.50 },
+      { id: 'INV-0006', customer: 'Wayne Ent.',   status: 'Pending', total: 3200.00 },
+      { id: 'INV-0007', customer: 'Oscorp',       status: 'Overdue', total: 1900.00 },
+      { id: 'INV-0008', customer: 'Tyrell Corp',  status: 'Paid',    total: 5450.75 }
+    ];
+    T.create('#audit-table-host', {
+      data,
+      columns: [
+        { key: 'id', label: 'Invoice' },
+        { key: 'customer', label: 'Customer' },
+        { key: 'status', label: 'Status' },
+        { key: 'total', label: 'Total', format: v => '£' + v.toLocaleString('en-GB', { minimumFractionDigits: 2 }) }
+      ],
+      pagination: true,
+      pageSize: 5,
+      striped: true
+    });
+  }
+
+  // Modal trigger
+  function buildPopupModal() {
+    const m = document.createElement('div');
+    m.id = 'audit-popup-modal';
+    m.className = 'modal';
+
+    const header = document.createElement('div');
+    header.className = 'modal-header';
+    const title = document.createElement('h5');
+    title.className = 'modal-title';
+    title.textContent = 'Modal popup';
+    const closeX = document.createElement('button');
+    closeX.className = 'modal-close';
+    closeX.setAttribute('aria-label', 'Close');
+    closeX.textContent = '×';
+    header.appendChild(title);
+    header.appendChild(closeX);
+
+    const body = document.createElement('div');
+    body.className = 'modal-body';
+    const p = document.createElement('p');
+    p.textContent = 'This is a popup modal. Inspect the header, body, footer and close-button contrast.';
+    body.appendChild(p);
+
+    const footer = document.createElement('div');
+    footer.className = 'modal-footer';
+    const btnCancel = document.createElement('button');
+    btnCancel.className = 'btn btn-secondary modal-close';
+    btnCancel.textContent = 'Cancel';
+    const btnConfirm = document.createElement('button');
+    btnConfirm.className = 'btn btn-primary modal-close';
+    btnConfirm.textContent = 'Confirm';
+    footer.appendChild(btnCancel);
+    footer.appendChild(btnConfirm);
+
+    m.appendChild(header);
+    m.appendChild(body);
+    m.appendChild(footer);
+    document.body.appendChild(m);
+    return m;
+  }
+
+  document.getElementById('audit-open-modal').addEventListener('click', () => {
+    if (!document.getElementById('audit-popup-modal')) buildPopupModal();
+    E.modal('#audit-popup-modal').open();
+  });
+  document.getElementById('audit-open-alert').addEventListener('click', () => {
+    E.alert('Alert dialog content', { title: 'Notice' });
+  });
+  document.getElementById('audit-open-confirm').addEventListener('click', () => {
+    E.confirm('Are you sure you want to proceed with this action?', { title: 'Confirm action' });
+  });
+  document.getElementById('audit-open-prompt').addEventListener('click', () => {
+    E.prompt('Enter your name:', { title: 'Identify yourself', inputValue: 'Darryl' });
+  });
+  document.getElementById('audit-toast-success').addEventListener('click', () => {
+    E.toast('Operation completed successfully', { type: 'success' });
+  });
+  document.getElementById('audit-toast-error').addEventListener('click', () => {
+    E.toast('Something went wrong — please try again', { type: 'error' });
+  });
+
+  function openSlideover(position) {
+    const id = 'audit-slideover-' + position;
+    let host = document.getElementById(id);
+    if (!host) {
+      host = document.createElement('div');
+      host.id = id;
+      document.body.appendChild(host);
+    }
+    E.slideover('#' + id, {
+      position,
+      title: 'Slideover — ' + position,
+      content: 'This is the slideover panel. Inspect heading colour, body text and the close-button contrast.',
+      backdrop: true,
+      backdropClose: true
+    }).open();
+  }
+  document.getElementById('slideover-left').addEventListener('click', () => openSlideover('left'));
+  document.getElementById('slideover-right').addEventListener('click', () => openSlideover('right'));
+  document.getElementById('slideover-top').addEventListener('click', () => openSlideover('top'));
+  document.getElementById('slideover-bottom').addEventListener('click', () => openSlideover('bottom'));
+
+  Domma.icons.scan(document.body);
+});
 </script>
 </body>
 </html>

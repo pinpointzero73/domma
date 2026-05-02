@@ -21,7 +21,7 @@
     /* Text - Pure snow white; no green tint — moonlight on fresh snow */
     --dm-text: #FFFFFF;
     --dm-text-secondary: #D0D0D0;
-    --dm-text-muted: #8A8A8A;
+    --dm-text-muted: #a8a8a8;
     --dm-text-disabled: #505050;
     --dm-text-inverse: #0A1A10;
 
@@ -104,7 +104,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-md);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);
@@ -263,9 +263,9 @@
     border-image-slice: 1;
 }
 
-/* Candy-stripe progress bars using surface colour for stripes */
+/* Candy-stripe progress bars (default + plain variant only — variants keep their semantic colour) */
 .dm-theme-christmas-dark .dm-progression-progress-bar,
-.dm-theme-christmas-dark .progress-bar {
+.dm-theme-christmas-dark .progress > .progress-bar:not([class*="progress-bar-"]) {
     background-image: repeating-linear-gradient(
         45deg,
         transparent,
@@ -274,6 +274,7 @@
         rgba(26, 48, 32, 0.4) 12px
     );
     background-color: #5CB875;
+    color: #1a1a1a;
 }
 
 /* Festive syntax highlighting — brighter versions for dark backgrounds */

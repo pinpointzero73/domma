@@ -21,7 +21,7 @@
     /* Text - Dark warm tones for readability on cream */
     --dm-text: #2C2416;
     --dm-text-secondary: #5C4E3C;
-    --dm-text-muted: #8B7355;
+    --dm-text-muted: #6e5942;
     --dm-text-disabled: #C4B49A;
     --dm-text-inverse: #FFFFFF;
 
@@ -57,13 +57,13 @@
     /* ================================================
        STATUS COLOURS - Harmonised with warm palette
        ================================================ */
-    --dm-success: #4A8C5C;
+    --dm-success: #3a6e48;
     --dm-success-hover: #56A06A;
     --dm-success-active: #62B478;
     --dm-success-light: #E8F5EC;
     --dm-success-dark: #3A6E48;
 
-    --dm-info: #4A7FA8;
+    --dm-info: #3a6788;
     --dm-info-hover: #5490BC;
     --dm-info-active: #6AA1CC;
     --dm-info-light: #E6F0F8;
@@ -106,7 +106,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-md);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);
@@ -192,7 +192,7 @@
 
     /* Code */
     --dm-code-bg: #FFF8E7;
-    --dm-code-text: #A8823F;
+    --dm-code-text: #735628;
     --dm-code-border: var(--dm-border);
 
     /* ================================================
@@ -219,7 +219,7 @@
     --dm-primary-hover-text: #1a1a1a;
     --dm-secondary-text: #1a1a1a;
     --dm-secondary-hover-text: #1a1a1a;
-    --dm-success-text: #1a1a1a;
+    --dm-success-text: #ffffff;
     --dm-success-hover-text: #1a1a1a;
     --dm-danger-text: #ffffff;
     --dm-danger-hover-text: #ffffff;

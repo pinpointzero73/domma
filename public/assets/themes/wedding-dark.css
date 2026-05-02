@@ -21,7 +21,7 @@
     /* Text - Warm cream for readability on dark */
     --dm-text: #F0E8D8;
     --dm-text-secondary: #D4C4A8;
-    --dm-text-muted: #8B7355;
+    --dm-text-muted: #b39977;
     --dm-text-disabled: #4A4060;
     --dm-text-inverse: #12121F;
 
@@ -38,7 +38,7 @@
     --dm-primary: #C5A55A;
     --dm-primary-hover: #D4B66A;
     --dm-primary-active: #B8964D;
-    --dm-primary-light: #2A2520;
+    --dm-primary-light: rgba(197, 165, 90, 0.15);
     --dm-primary-dark: #8B7335;
 
     /* Focus ring with warm gold colour */
@@ -105,7 +105,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-sm);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);

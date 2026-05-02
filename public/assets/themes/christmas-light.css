@@ -21,7 +21,7 @@
     /* Text - Deep pine green for festive character */
     --dm-text: #1A2A1E;
     --dm-text-secondary: #3D5444;
-    --dm-text-muted: #6B8074;
+    --dm-text-muted: #5a6f63;
     --dm-text-disabled: #A4B5AC;
     --dm-text-inverse: #FFFFFF;
 
@@ -55,13 +55,13 @@
     /* ================================================
        STATUS COLOURS - Festive-harmonised
        ================================================ */
-    --dm-success: #228B22;
+    --dm-success: #1a6b1a;
     --dm-success-hover: #2EA02E;
     --dm-success-active: #3AB53A;
     --dm-success-light: rgba(34, 139, 34, 0.12);
     --dm-success-dark: #1A6B1A;
 
-    --dm-info: #3A7FB5;
+    --dm-info: #2a6da0;
     --dm-info-hover: #4A8FC5;
     --dm-info-active: #5A9FD5;
     --dm-info-light: rgba(58, 127, 181, 0.12);
@@ -104,7 +104,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-md);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);
@@ -262,9 +262,9 @@
     border-image-slice: 1;
 }
 
-/* Candy-stripe progress bars */
+/* Candy-stripe progress bars (default + plain variant only — variants keep their semantic colour) */
 .dm-theme-christmas-light .dm-progression-progress-bar,
-.dm-theme-christmas-light .progress-bar {
+.dm-theme-christmas-light .progress > .progress-bar:not([class*="progress-bar-"]) {
     background-image: repeating-linear-gradient(
         45deg,
         transparent,
@@ -273,6 +273,7 @@
         rgba(255, 255, 255, 0.25) 12px
     );
     background-color: #2D6B3F;
+    color: #ffffff;
 }
 
 /* Festive syntax highlighting — green keywords, red strings, gold functions */
@@ -287,5 +288,5 @@
 }
 
 .dm-theme-christmas-light .code-block .syntax-function {
-    color: #9A7A1A;
+    color: #6B5311;
 }

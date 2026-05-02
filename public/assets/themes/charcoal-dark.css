@@ -21,7 +21,7 @@
     /* Text - Light colors for readability on dark */
     --dm-text: #e2e8f0; /* slate-200 */
     --dm-text-secondary: #94a3b8; /* slate-400 */
-    --dm-text-muted: #64748b; /* slate-500 */
+    --dm-text-muted: #94a3b8; /* slate-500 */
     --dm-text-disabled: #475569; /* slate-600 */
     --dm-text-inverse: #0f172a; /* slate-900 */
 
@@ -48,7 +48,7 @@
        SECONDARY COLOURS - Slate
        ================================================ */
     --dm-secondary: #5f6f7a;
-    --dm-secondary-hover: #738290;
+    --dm-secondary-hover: #5d6f7a;
     --dm-secondary-active: #8795a0;
     --dm-secondary-light: rgba(95, 111, 122, 0.15);
     --dm-secondary-dark: #3d4a52;
@@ -60,7 +60,7 @@
     --dm-success-hover: #61b965;
     --dm-success-active: #76c37a;
     --dm-success-light: rgba(76, 175, 80, 0.15);
-    --dm-success-dark: #388e3c;
+    --dm-success-dark: #2a6e2e;
 
     --dm-info: #2196f3;
     --dm-info-hover: #42a5f5;
@@ -106,7 +106,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-md);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);
@@ -206,7 +206,7 @@
     --dm-primary-text: #1a1a1a;
     --dm-primary-hover-text: #ffffff;
     --dm-secondary-text: #ffffff;
-    --dm-secondary-hover-text: #1a1a1a;
+    --dm-secondary-hover-text: #ffffff;
     --dm-success-text: #1a1a1a;
     --dm-success-hover-text: #1a1a1a;
     --dm-danger-text: #ffffff;

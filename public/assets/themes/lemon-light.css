@@ -51,7 +51,7 @@
 
     --dm-warning: #e2c46d;
     --dm-warning-light: rgba(226, 196, 109, 0.15);
-    --dm-warning-text: #e2c46d;
+    --dm-warning-text: #1a1a1a;
 
     --dm-focus-ring: 0 0 0 3px rgba(212, 192, 106, 0.35);
     --dm-selected-bg: rgba(212, 192, 106, 0.2);
@@ -60,7 +60,7 @@
     --dm-progress-bar: #d4c06a;
 
     /* Danger - Bright red (standard dark mode) */
-    --dm-danger: #ef4444; /* red-500 */
+    --dm-danger: #dc2626; /* red-600 */
     --dm-danger-hover: #f87171; /* red-400 */
     --dm-danger-active: #fca5a5; /* red-300 */
     --dm-danger-light: rgba(248, 113, 113, 0.15);
@@ -81,7 +81,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-sm);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);
@@ -163,7 +163,7 @@
 
     /* Code */
     --dm-code-bg: #f8f9fa;
-    --dm-code-text: #e83e8c;
+    --dm-code-text: #bf1d68;
     --dm-code-border: var(--dm-border);
 
     /* ================================================
@@ -190,6 +190,8 @@
     --dm-primary-hover-text: #1a1a1a;
     --dm-secondary-text: #1a1a1a;
     --dm-secondary-hover-text: #1a1a1a;
-    --dm-danger-text: #1a1a1a;
-    --dm-danger-hover-text: #1a1a1a;
+    --dm-danger-text: #ffffff;
+    --dm-danger-hover-text: #ffffff;
+    --dm-success-text: #1a1a1a;
+    --dm-info-text: #1a1a1a;
 }

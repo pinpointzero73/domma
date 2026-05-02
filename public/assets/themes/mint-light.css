@@ -21,7 +21,7 @@
     /* Text - Dark colors for readability on light */
     --dm-text: #1a2e25;
     --dm-text-secondary: #3d5a4a;
-    --dm-text-muted: #6c8a7a;
+    --dm-text-muted: #557565;
     --dm-text-disabled: #adc4b8;
     --dm-text-inverse: #ffffff;
 
@@ -36,7 +36,7 @@
 
     /* PRIMARY COLOURS - Mint Green */
     --dm-primary: #2e9e6e;
-    --dm-primary-hover: #279060;
+    --dm-primary-hover: #1a6b46;
     --dm-primary-active: #1f7a50;
     --dm-primary-light: #d4f5e4;
     --dm-primary-dark: #1b5e3a;
@@ -48,7 +48,7 @@
     /* ================================================
        SECONDARY COLOURS - Seafoam
        ================================================ */
-    --dm-secondary: #5b8a7a;
+    --dm-secondary: #446b5d;
     --dm-secondary-hover: #6b9e8c;
     --dm-secondary-active: #7cb29e;
     --dm-secondary-light: #e8f5ef;
@@ -76,7 +76,7 @@
     --dm-warning-dark: #c88a2a;
     --dm-warning-text: #c88a2a;
 
-    --dm-danger: #e53e3e;
+    --dm-danger: #c92929;
     --dm-danger-hover: #e85656;
     --dm-danger-active: #ed7676;
     --dm-danger-light: #fde8e8;
@@ -106,7 +106,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-md);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);
@@ -192,7 +192,7 @@
 
     /* Code */
     --dm-code-bg: #f0faf5;
-    --dm-code-text: #e83e8c;
+    --dm-code-text: #bf1d68;
     --dm-code-border: var(--dm-border);
 
     /* ================================================
@@ -216,12 +216,12 @@
 
     /* Button text contrast overrides (auto-generated) */
     --dm-primary-text: #1a1a1a;
-    --dm-primary-hover-text: #1a1a1a;
-    --dm-secondary-text: #1a1a1a;
+    --dm-primary-hover-text: #ffffff;
+    --dm-secondary-text: #ffffff;
     --dm-secondary-hover-text: #1a1a1a;
     --dm-success-text: #1a1a1a;
     --dm-success-hover-text: #1a1a1a;
-    --dm-danger-text: #1a1a1a;
+    --dm-danger-text: #ffffff;
     --dm-danger-hover-text: #1a1a1a;
     --dm-info-text: #1a1a1a;
     --dm-info-hover-text: #1a1a1a;

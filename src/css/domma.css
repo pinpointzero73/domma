@@ -158,11 +158,12 @@
     /* ================================================
        STATUS COLORS
        ================================================ */
-    --dm-success: var(--dm-green-600);
-    --dm-success-hover: var(--dm-green-700);
-    --dm-success-active: var(--dm-green-800);
+    --dm-success: var(--dm-green-700);
+    --dm-success-hover: var(--dm-green-800);
+    --dm-success-active: var(--dm-green-900, #14532d);
     --dm-success-light: var(--dm-green-100);
     --dm-success-dark: var(--dm-green-800);
+    --dm-success-text: var(--dm-white);
 
     --dm-danger: var(--dm-red-600);
     --dm-danger-hover: var(--dm-red-700);
@@ -171,17 +172,19 @@
     --dm-danger-dark: var(--dm-red-800);
 
     --dm-warning: var(--dm-amber-500);
+    /* amber-950 ensures ≥6.9:1 contrast on amber-500 backgrounds (badges, alerts, btn-warning) */
     --dm-warning-hover: var(--dm-amber-600);
     --dm-warning-active: var(--dm-amber-700);
-    --dm-warning-text: var(--dm-amber-900);
+    --dm-warning-text: var(--dm-amber-950);
     --dm-warning-light: var(--dm-amber-100);
     --dm-warning-dark: var(--dm-amber-800);
 
-    --dm-info: var(--dm-sky-500);
-    --dm-info-hover: var(--dm-sky-600);
-    --dm-info-active: var(--dm-sky-700);
+    --dm-info: var(--dm-sky-700);
+    --dm-info-hover: var(--dm-sky-800);
+    --dm-info-active: var(--dm-sky-900, #0c4a6e);
     --dm-info-light: var(--dm-sky-100);
     --dm-info-dark: var(--dm-sky-800);
+    --dm-info-text: var(--dm-white);
 
     /* ================================================
        BACKGROUND TINTS (Lighter versions for backgrounds)
@@ -412,13 +415,13 @@ body {
 }
 
 a {
-    color: var(--dm-primary);
+    color: var(--dm-link, color-mix(in oklab, var(--dm-primary, #0070d6), var(--dm-text, #1a1a1a) 55%));
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
 a:hover {
-    color: var(--dm-primary-hover);
+    color: var(--dm-link-hover, color-mix(in oklab, var(--dm-primary, #0070d6), var(--dm-text, #1a1a1a) 25%));
     text-decoration: none;
 }
 
@@ -1204,7 +1207,7 @@ code, pre {
 }
 
 .text-secondary {
-    color: var(--dm-secondary);
+    color: var(--dm-text-secondary);
 }
 
 .text-success {
@@ -2555,7 +2558,7 @@ code, pre {
 .btn-group > .btn-outline.active {
     background-color: var(--dm-primary);
     border-color: var(--dm-primary);
-    color: var(--dm-white);
+    color: var(--dm-primary-text, var(--dm-white));
 }
 
 .btn-group > .btn-secondary.active {

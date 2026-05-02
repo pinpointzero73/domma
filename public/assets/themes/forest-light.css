@@ -48,8 +48,8 @@
     /* ================================================
        SECONDARY COLOURS - Earth Brown
        ================================================ */
-    --dm-secondary: #6b705c;
-    --dm-secondary-hover: #7d826d;
+    --dm-secondary: #525747;
+    --dm-secondary-hover: #65695a;
     --dm-secondary-active: #8f937e;
     --dm-secondary-light: #f0efe9;
     --dm-secondary-dark: #52554a;
@@ -63,7 +63,7 @@
     --dm-success-light: #d8f3dc;
     --dm-success-dark: #2d6a4f;
 
-    --dm-info: #588157;
+    --dm-info: #3a6a3a;
     --dm-info-hover: #6b9669;
     --dm-info-active: #7eab7c;
     --dm-info-light: #e2f0e1;
@@ -102,7 +102,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-md);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);
@@ -188,7 +188,7 @@
 
     /* Code */
     --dm-code-bg: #f8f9fa;
-    --dm-code-text: #e83e8c;
+    --dm-code-text: #bf1d68;
     --dm-code-border: var(--dm-border);
 
     /* ================================================

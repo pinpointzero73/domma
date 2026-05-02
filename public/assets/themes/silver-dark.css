@@ -21,7 +21,7 @@
     /* Text - Light colors for readability on dark */
     --dm-text: #e2e8f0; /* slate-200 */
     --dm-text-secondary: #94a3b8; /* slate-400 */
-    --dm-text-muted: #64748b; /* slate-500 */
+    --dm-text-muted: #94a3b8; /* slate-500 */
     --dm-text-disabled: #475569; /* slate-600 */
     --dm-text-inverse: #0f172a; /* slate-900 */
 
@@ -34,7 +34,7 @@
     /* ================================================
        PRIMARY COLOURS - Silver Gray
        ================================================ */
-    --dm-primary: #708090;
+    --dm-primary: #8a99a8;
     --dm-primary-hover: #84929f;
     --dm-primary-active: #98a4ae;
     --dm-primary-light: rgba(112, 128, 144, 0.15);
@@ -82,7 +82,7 @@
     --dm-selected-bg: rgba(112, 128, 144, 0.12);
     --dm-tab-active-border: #708090;
     --dm-tab-active-text: #a0aec0;
-    --dm-progress-bar: #708090;
+    --dm-progress-bar: #8a99a8;
 
     /* Danger - Standard red */
     --dm-danger: #dc3545;
@@ -106,7 +106,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-md);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);

@@ -22,7 +22,7 @@
        SECONDARY COLOURS - Slate
        ================================================ */
     --dm-secondary: #5f6f7a;
-    --dm-secondary-hover: #738290;
+    --dm-secondary-hover: #5d6f7a;
     --dm-secondary-active: #8795a0;
     --dm-secondary-light: #f0f2f3;
     --dm-secondary-dark: #3d4a52;
@@ -34,7 +34,7 @@
     --dm-success-hover: #61b965;
     --dm-success-active: #76c37a;
     --dm-success-light: #e8f5e9;
-    --dm-success-dark: #388e3c;
+    --dm-success-dark: #2a6e2e;
 
     --dm-info: #2196f3;
     --dm-info-hover: #42a5f5;

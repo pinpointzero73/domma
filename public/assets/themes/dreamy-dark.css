@@ -36,7 +36,7 @@
     --dm-primary: #bcaaa4;
     --dm-primary-hover: #d7ccc8;
     --dm-primary-active: #efebe9;
-    --dm-primary-light: #efebe9;
+    --dm-primary-light: rgba(188, 170, 164, 0.15);
     --dm-primary-dark: #a1887f;
 
     /* Focus ring with warm taupe colour */
@@ -49,7 +49,7 @@
     --dm-secondary: #d7ccc8;
     --dm-secondary-hover: #efebe9;
     --dm-secondary-active: #ffffff;
-    --dm-secondary-light: #faf5f0;
+    --dm-secondary-light: rgba(215, 204, 200, 0.15);
     --dm-secondary-dark: #bcaaa4;
 
     /* ================================================
@@ -104,7 +104,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-md);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);

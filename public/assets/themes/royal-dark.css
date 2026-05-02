@@ -21,7 +21,7 @@
     /* Text - Light colors for readability on dark */
     --dm-text: #e2e8f0; /* slate-200 */
     --dm-text-secondary: #94a3b8; /* slate-400 */
-    --dm-text-muted: #64748b; /* slate-500 */
+    --dm-text-muted: #94a3b8; /* slate-500 */
     --dm-text-disabled: #475569; /* slate-600 */
     --dm-text-inverse: #0f172a; /* slate-900 */
 
@@ -37,7 +37,7 @@
     --dm-primary: #4169e1;
     --dm-primary-hover: #5a7de6;
     --dm-primary-active: #7391eb;
-    --dm-primary-light: #e8edfc;
+    --dm-primary-light: rgba(65, 105, 225, 0.15);
     --dm-primary-dark: #2c4a9e;
 
     /* Focus ring with royal colour */
@@ -48,9 +48,9 @@
        SECONDARY COLOURS - Purple Blue
        ================================================ */
     --dm-secondary: #6a5acd;
-    --dm-secondary-hover: #7d6fd4;
+    --dm-secondary-hover: #665aab;
     --dm-secondary-active: #9084db;
-    --dm-secondary-light: #f0eefa;
+    --dm-secondary-light: rgba(106, 90, 205, 0.15);
     --dm-secondary-dark: #483d8b;
 
     /* ================================================
@@ -59,13 +59,13 @@
     --dm-success: #32cd32;
     --dm-success-hover: #4ad34a;
     --dm-success-active: #62d962;
-    --dm-success-light: #e6f9e6;
+    --dm-success-light: rgba(50, 205, 50, 0.15);
     --dm-success-dark: #228b22;
 
     --dm-info: #6495ed;
     --dm-info-hover: #79a5f0;
     --dm-info-active: #8eb5f3;
-    --dm-info-light: #ebf1fd;
+    --dm-info-light: rgba(100, 149, 237, 0.15);
     --dm-info-dark: #4169e1;
 
     /* ================================================
@@ -88,7 +88,7 @@
     --dm-danger: #dc3545;
     --dm-danger-hover: #bb2d3b;
     --dm-danger-active: #b02a37;
-    --dm-danger-light: #f8d7da;
+    --dm-danger-light: rgba(220, 53, 69, 0.15);
     --dm-danger-dark: #842029;
 
     /* ================================================
@@ -106,7 +106,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-md);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);
@@ -206,7 +206,7 @@
     --dm-primary-text: #ffffff;
     --dm-primary-hover-text: #1a1a1a;
     --dm-secondary-text: #ffffff;
-    --dm-secondary-hover-text: #1a1a1a;
+    --dm-secondary-hover-text: #ffffff;
     --dm-success-text: #1a1a1a;
     --dm-success-hover-text: #1a1a1a;
     --dm-danger-text: #ffffff;

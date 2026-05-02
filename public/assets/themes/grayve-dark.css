@@ -21,7 +21,7 @@
     /* Text - Light colours for readability on dark */
     --dm-text: #DEE2E6;           /* slate-200 */
     --dm-text-secondary: #ADB5BD; /* slate-400 */
-    --dm-text-muted: #6C757D;     /* slate-500 */
+    --dm-text-muted: #a8b1ba;     /* slate-500 */
     --dm-text-disabled: #495057;  /* slate-600 */
     --dm-text-inverse: #1a1e21;   /* slate-900 */
 
@@ -38,7 +38,7 @@
     --dm-primary: #00bcd4;
     --dm-primary-hover: #00acc1;
     --dm-primary-active: #26c6da;
-    --dm-primary-light: #e0f7fa;
+    --dm-primary-light: rgba(0, 188, 212, 0.15);
     --dm-primary-dark: #0097a7;
 
     /* Focus ring with cyan colour */
@@ -51,7 +51,7 @@
     --dm-secondary: #6C757D;
     --dm-secondary-hover: #ADB5BD;
     --dm-secondary-active: #CED4DA;
-    --dm-secondary-light: #E9ECEF;
+    --dm-secondary-light: rgba(108, 117, 125, 0.15);
     --dm-secondary-dark: #495057;
 
     /* ================================================
@@ -106,7 +106,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-md);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);

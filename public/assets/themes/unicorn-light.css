@@ -21,7 +21,7 @@
     /* Text - Dark colours for readability on light */
     --dm-text: #2d1b3d;
     --dm-text-secondary: #5d3a6e;
-    --dm-text-muted: #8e6b9e;
+    --dm-text-muted: #735580;
     --dm-text-disabled: #c4a8d0;
     --dm-text-inverse: #ffffff;
 
@@ -46,7 +46,7 @@
     /* ================================================
        SECONDARY COLOURS - Hot Pink
        ================================================ */
-    --dm-secondary: #e91e90;
+    --dm-secondary: #c1187a;
     --dm-secondary-hover: #d81b7f;
     --dm-secondary-active: #c2176e;
     --dm-secondary-light: #fce4ec;
@@ -59,7 +59,7 @@
     --dm-success-hover: #57a85b;
     --dm-success-active: #43a047;
     --dm-success-light: rgba(102, 187, 106, 0.15);
-    --dm-success-dark: #388e3c;
+    --dm-success-dark: #2a6e2e;
 
     --dm-info: #42a5f5;
     --dm-info-hover: #2196f3;
@@ -74,8 +74,8 @@
     --dm-warning-dark: #e65100;
     --dm-warning-text: #e65100;
 
-    --dm-danger: #ef5350;
-    --dm-danger-hover: #e53935;
+    --dm-danger: #dc2626;
+    --dm-danger-hover: #c62828;
     --dm-danger-active: #c62828;
     --dm-danger-light: rgba(239, 83, 80, 0.15);
     --dm-danger-dark: #c62828;
@@ -104,7 +104,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-sm);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);
@@ -190,7 +190,7 @@
 
     /* Code */
     --dm-code-bg: #faf5fc;
-    --dm-code-text: #e91e90;
+    --dm-code-text: #a8125f;
     --dm-code-border: var(--dm-border);
 
     /* ================================================
@@ -215,11 +215,11 @@
     /* Button text contrast overrides (auto-generated) */
     --dm-primary-text: #ffffff;
     --dm-primary-hover-text: #ffffff;
-    --dm-secondary-text: #1a1a1a;
+    --dm-secondary-text: #ffffff;
     --dm-secondary-hover-text: #ffffff;
     --dm-success-text: #1a1a1a;
     --dm-success-hover-text: #1a1a1a;
-    --dm-danger-text: #1a1a1a;
+    --dm-danger-text: #ffffff;
     --dm-danger-hover-text: #ffffff;
     --dm-info-text: #1a1a1a;
     --dm-info-hover-text: #1a1a1a;

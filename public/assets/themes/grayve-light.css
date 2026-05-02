@@ -49,7 +49,7 @@
        SECONDARY COLOURS - Blue Grey
        ================================================ */
     --dm-secondary: #546e7a;
-    --dm-secondary-hover: #607d8b;
+    --dm-secondary-hover: #4f6470;
     --dm-secondary-active: #78909c;
     --dm-secondary-light: rgba(84, 110, 122, 0.15);
     --dm-secondary-dark: #455a64;
@@ -58,7 +58,7 @@
        STATUS COLOURS
        ================================================ */
     --dm-success: #2e7d32;
-    --dm-success-hover: #388e3c;
+    --dm-success-hover: #2a6e2e;
     --dm-success-active: #1b5e20;
     --dm-success-light: rgba(46, 125, 50, 0.1);
     --dm-success-dark: #1b5e20;
@@ -106,7 +106,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-md);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);
@@ -203,7 +203,7 @@
 
     /* Code */
     --dm-code-bg: #f8f9fa;
-    --dm-code-text: #00838f;
+    --dm-code-text: #006670;
     --dm-code-border: var(--dm-border);
 
     /* ================================================
@@ -223,7 +223,7 @@
     --dm-secondary-text: #ffffff;
     --dm-secondary-hover-text: #ffffff;
     --dm-success-text: #ffffff;
-    --dm-success-hover-text: #1a1a1a;
+    --dm-success-hover-text: #ffffff;
     --dm-danger-text: #ffffff;
     --dm-danger-hover-text: #ffffff;
     --dm-info-text: #ffffff;
@@ -234,7 +234,7 @@
 
 /* Syntax highlighting tokens for grayve-light */
 .dm-theme-grayve-light .code-block .syntax-keyword {
-    color: #7c4dff; /* Deep Purple */
+    color: #5a2dcc; /* Deep Purple — darkened for ≥4.5:1 on #f5f5f5 */
     font-weight: 500;
 }
 
@@ -244,5 +244,5 @@
 }
 
 .dm-theme-grayve-light .code-block .syntax-function {
-    color: #00838f; /* Cyan */
+    color: #006873; /* Cyan — darkened for ≥4.5:1 on #f5f5f5 */
 }

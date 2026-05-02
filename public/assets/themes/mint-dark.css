@@ -21,7 +21,7 @@
     /* Text - Light colors for readability on dark */
     --dm-text: #d4f5e4; /* mint-tinted slate-200 */
     --dm-text-secondary: #93bfad; /* muted mint */
-    --dm-text-muted: #5e8a78; /* slate-500 with mint tint */
+    --dm-text-muted: #7ea895; /* slate-500 with mint tint */
     --dm-text-disabled: #3d5e50; /* slate-600 with mint tint */
     --dm-text-inverse: #0f172a; /* slate-900 */
 
@@ -105,7 +105,7 @@
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);
     --dm-card-shadow: var(--dm-shadow-sm);
-    --dm-card-header-bg: var(--dm-primary-light);
+    --dm-card-header-bg: var(--dm-surface-alt, var(--dm-background-alt));
 
     /* Inputs */
     --dm-input-bg: var(--dm-surface);
