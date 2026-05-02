@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticker Tape Effect - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/effects/ticker-tape.html">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .effect-controls {
+            display: flex;
+            gap: 0.6rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 4px;
+            background: var(--dm-primary-t10, rgba(13, 110, 253, 0.1));
+            text-decoration: none;
+            color: var(--dm-primary);
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--dm-primary-t20, rgba(13, 110, 253, 0.2));
+            transform: translateY(-2px);
+        }
+
+        .tape-container {
+            position: relative;
+            min-height: 320px;
+            background:
+                linear-gradient(180deg, #1a1f2e 0%, #0a0f1a 100%);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tape-container-label {
+            position: relative;
+            z-index: 10;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+            pointer-events: none;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-badge.running {
+            background: rgba(34, 197, 94, 0.15);
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-badge.stopped {
+            background: rgba(107, 114, 128, 0.15);
+            color: #6b7280;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+
+        .status-badge.paused {
+            background: rgba(234, 179, 8, 0.15);
+            color: #ca8a04;
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .status-dot.pulse-dot {
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.6); }
+        }
+
+        .palette-swatches {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .palette-card {
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            background: var(--dm-surface, #fff);
+            transition: all 0.2s ease;
+            min-width: 140px;
+        }
+
+        .palette-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .palette-card.active {
+            border-color: var(--dm-primary);
+            box-shadow: 0 0 0 4px var(--dm-primary-light, rgba(0,0,0,0.05));
+        }
+
+        .palette-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+            text-transform: capitalize;
+        }
+
+        .palette-stripes {
+            display: flex;
+            gap: 2px;
+            height: 16px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .palette-stripes span {
+            flex: 1;
+            display: block;
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .slider-row label {
+            min-width: 140px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .slider-row input[type="range"] {
+            flex: 1;
+            max-width: 220px;
+        }
+
+        .slider-row span {
+            min-width: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--dm-primary);
+        }
+
+        .options-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .options-table th,
+        .options-table td {
+            padding: 0.6rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--dm-border-color, rgba(0,0,0,0.1));
+        }
+
+        .options-table th {
+            font-weight: 600;
+            background: var(--dm-surface-alt, rgba(0,0,0,0.03));
+        }
+
+        .options-table code {
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="effects">
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Ticker Tape Effect</div>
+        <div class="hero-subtitle">A canvas-based ticker-tape parade. Colourful rectangular strips drop, sway, rotate, and fade — full-page or container-scoped, with theme-aware palettes.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <!-- See Also -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+        <h3 class="text-lg font-semibold mb-2">
+            <span data-icon="arrow-left" data-icon-size="20"></span>
+            See Also
+        </h3>
+        <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="twinkle.html" class="nav-link">Twinkle</a>
+        <a href="breathe.html" class="nav-link">Breathe</a>
+        <a href="pulse.html" class="nav-link">Pulse</a>
+        <a href="reveal.html" class="nav-link">Reveal</a>
+        <a href="ripple.html" class="nav-link">Ripple</a>
+        <a href="shake.html" class="nav-link">Shake</a>
+        <a href="../../examples/celebrations/index.html" class="nav-link">Celebrations</a>
+    </div>
+
+    <!-- Motion Preference Notice -->
+    <div id="motion-notice" class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded" style="display:none;">
+        <div class="flex items-start gap-3">
+            <span style="font-size: 20px; flex-shrink: 0;">&#x2139;&#xFE0F;</span>
+            <div>
+                <h4 class="font-semibold mb-1">Motion Preference Detected</h4>
+                <p>Your system has <code>prefers-reduced-motion</code> enabled. This demo page overrides that setting to demonstrate effects. In production, use <code>respectMotionPreference: true</code> (the default) to honour user preferences.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overview -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Domma.effects.tickerTape()</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Drops thin coloured rectangles from the top of a container — or the entire viewport — as if released
+                from a stack of windows during a ticker-tape parade. Each strip falls, sways gently from side to side,
+                rotates as it tumbles, and fades to nothing before reaching the bottom. Pass <code>null</code> for a
+                full-page overlay, or a selector for a scoped effect.
+            </p>
+
+            <pre class="code-block language-javascript">
+// Full-page overlay using current theme colours
+const ticker = Domma.effects.tickerTape(null);
+
+// Container-scoped, festive palette, slower fall
+Domma.effects.tickerTape('#celebration', {
+  palette: 'festive',
+  density: 60,
+  speed: 0.7
+});
+
+// One-shot burst — strips arrive and the effect ends naturally
+Domma.effects.tickerTape('#stage', {
+  burst: true,
+  burstCount: 200,
+  palette: 'gold'
+});
+
+// Control methods
+ticker.pause();
+ticker.resume();
+ticker.stop();
+ticker.restart();
+ticker.destroy();
+</pre>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Options</h3>
+            <div class="table-responsive">
+                <table class="options-table">
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>palette</code></td>
+                            <td><code>string | string[]</code></td>
+                            <td><code>'theme'</code></td>
+                            <td>Named palette or custom colour array. <code>'theme'</code> reads CSS variables from the current Domma theme.</td>
+                        </tr>
+                        <tr>
+                            <td><code>density</code></td>
+                            <td><code>number</code></td>
+                            <td><code>50</code></td>
+                            <td>Average number of strips on screen at any moment</td>
+                        </tr>
+                        <tr>
+                            <td><code>speed</code></td>
+                            <td><code>number</code></td>
+                            <td><code>1</code></td>
+                            <td>Fall-speed multiplier (lower = slower drift)</td>
+                        </tr>
+                        <tr>
+                            <td><code>sway</code></td>
+                            <td><code>number</code></td>
+                            <td><code>60</code></td>
+                            <td>Horizontal sway amplitude in pixels</td>
+                        </tr>
+                        <tr>
+                            <td><code>rotationSpeed</code></td>
+                            <td><code>number</code></td>
+                            <td><code>6</code></td>
+                            <td>Maximum rotation in degrees per frame</td>
+                        </tr>
+                        <tr>
+                            <td><code>minWidth</code> / <code>maxWidth</code></td>
+                            <td><code>number</code></td>
+                            <td><code>5</code> / <code>9</code></td>
+                            <td>Strip width range in pixels</td>
+                        </tr>
+                        <tr>
+                            <td><code>minHeight</code> / <code>maxHeight</code></td>
+                            <td><code>number</code></td>
+                            <td><code>12</code> / <code>22</code></td>
+                            <td>Strip height range in pixels</td>
+                        </tr>
+                        <tr>
+                            <td><code>fadeStart</code></td>
+                            <td><code>number</code></td>
+                            <td><code>0.55</code></td>
+                            <td>Fraction of the fall (0–1) at which fade begins</td>
+                        </tr>
+                        <tr>
+                            <td><code>burst</code></td>
+                            <td><code>boolean</code></td>
+                            <td><code>false</code></td>
+                            <td>If true, drops a single batch and stops respawning</td>
+                        </tr>
+                        <tr>
+                            <td><code>burstCount</code></td>
+                            <td><code>number</code></td>
+                            <td><code>150</code></td>
+                            <td>Strips emitted when <code>burst: true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>zIndex</code></td>
+                            <td><code>number</code></td>
+                            <td><code>1</code></td>
+                            <td>Canvas stacking order</td>
+                        </tr>
+                        <tr>
+                            <td><code>respectMotionPreference</code></td>
+                            <td><code>boolean</code></td>
+                            <td><code>true</code></td>
+                            <td>Honour <code>prefers-reduced-motion</code> OS setting</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Built-in Palettes</h3>
+            <p class="mb-3">Pass any of these names as the <code>palette</code> option — or supply your own array of colour strings.</p>
+            <div class="palette-swatches" id="palette-preview"></div>
+        </div>
+    </section>
+
+    <!-- Demo 1: Container-scoped (theme palette) -->
+    <section class="card mb-6" data-section="container">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Theme-Aware Palette</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The default palette resolves the active theme's CSS variables, so the same call produces different colours under different themes. Try switching the theme variant in the toolbar above.</p>
+
+            <div class="tape-container" id="tape-container-1">
+                <div class="tape-container-label">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">&#x1F389;</div>
+                    <div>Press Start to release the tape</div>
+                </div>
+            </div>
+
+            <div class="effect-controls mt-4">
+                <span id="status-1" class="status-badge stopped"><span class="status-dot"></span><span class="status-text">Stopped</span></span>
+                <button class="btn btn-primary" id="start-1">Start</button>
+                <button class="btn btn-secondary" id="pause-1">Pause</button>
+                <button class="btn btn-secondary" id="resume-1">Resume</button>
+                <button class="btn btn-secondary" id="restart-1">Restart</button>
+                <button class="btn btn-danger" id="destroy-1">Destroy</button>
+            </div>
+
+            <pre class="code-block language-javascript mt-4">
+const ticker = Domma.effects.tickerTape('#tape-container', {
+  palette: 'theme',   // pull from --dm-primary, --dm-success, etc.
+  density: 50,
+  speed: 1
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 2: Palette picker -->
+    <section class="card mb-6" data-section="palettes">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Choose a Palette</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Click a palette to swap colours instantly.</p>
+
+            <div class="palette-swatches" id="palette-picker"></div>
+
+            <div class="tape-container mt-3" id="tape-container-2" style="min-height: 280px;"></div>
+        </div>
+    </section>
+
+    <!-- Demo 3: Customisation -->
+    <section class="card mb-6" data-section="customisation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Tune the Physics</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Adjust the controls and click <strong>Apply</strong>.</p>
+
+            <div class="slider-row">
+                <label>Density</label>
+                <input type="range" id="opt-density" min="10" max="200" value="60">
+                <span id="val-density">60</span>
+            </div>
+            <div class="slider-row">
+                <label>Speed</label>
+                <input type="range" id="opt-speed" min="0.2" max="3" step="0.1" value="1">
+                <span id="val-speed">1</span>
+            </div>
+            <div class="slider-row">
+                <label>Sway</label>
+                <input type="range" id="opt-sway" min="0" max="200" step="5" value="60">
+                <span id="val-sway">60</span>
+            </div>
+            <div class="slider-row">
+                <label>Rotation</label>
+                <input type="range" id="opt-rotation" min="0" max="20" step="0.5" value="6">
+                <span id="val-rotation">6</span>
+            </div>
+            <div class="slider-row">
+                <label>Fade Start</label>
+                <input type="range" id="opt-fade" min="0.1" max="0.95" step="0.05" value="0.55">
+                <span id="val-fade">0.55</span>
+            </div>
+
+            <div class="tape-container mt-4" id="tape-container-3"></div>
+
+            <div class="effect-controls mt-3">
+                <button class="btn btn-primary" id="apply-3">Apply</button>
+                <button class="btn btn-danger" id="destroy-3">Destroy</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo 4: One-shot burst -->
+    <section class="card mb-6" data-section="burst">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: One-Shot Burst</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">In burst mode, a single batch of strips is released and the effect winds down naturally — perfect for confirmation moments (form submission, achievement unlocked, sale completed).</p>
+
+            <div class="tape-container" id="tape-container-4">
+                <div class="tape-container-label">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">&#x1F38A;</div>
+                    <div>Click "Celebrate" for a one-shot burst</div>
+                </div>
+            </div>
+
+            <div class="effect-controls mt-3">
+                <button class="btn btn-primary" id="burst-4">Celebrate!</button>
+            </div>
+
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.tickerTape('#stage', {
+  burst: true,
+  burstCount: 200,
+  palette: 'gold',
+  speed: 1.4
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 5: Full-page overlay -->
+    <section class="card mb-6" data-section="fullpage">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Full-Page Overlay</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Pass <code>null</code> as the selector to drop tape across the whole viewport. Pieces sit behind page content via <code>pointer-events: none</code>.</p>
+
+            <div class="effect-controls">
+                <span id="status-5" class="status-badge stopped"><span class="status-dot"></span><span class="status-text">Stopped</span></span>
+                <button class="btn btn-primary" id="start-5">Start Full-Page</button>
+                <button class="btn btn-secondary" id="pause-5">Pause</button>
+                <button class="btn btn-secondary" id="resume-5">Resume</button>
+                <button class="btn btn-danger" id="destroy-5">Destroy</button>
+            </div>
+
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.tickerTape(null, {
+  palette: 'rainbow',
+  density: 80,
+  zIndex: 9999
+});
+</pre>
+        </div>
+    </section>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+    // Reduced-motion notice
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      $('#motion-notice').show();
+    }
+
+    // ── Status badge helper ───────────────────────────────────────────────
+
+    function setStatus(badgeEl, state) {
+      if (!badgeEl) return;
+      badgeEl.className = 'status-badge ' + state;
+      const dot = badgeEl.querySelector('.status-dot');
+      const text = badgeEl.querySelector('.status-text');
+      const labels = { running: 'Running', paused: 'Paused', stopped: 'Stopped' };
+      if (dot) dot.className = 'status-dot' + (state === 'running' ? ' pulse-dot' : '');
+      if (text) text.textContent = labels[state] || state;
+    }
+
+    // ── Render palette swatches ──────────────────────────────────────────
+
+    const palettes = {
+      theme:   ['var(--dm-primary)', 'var(--dm-success)', 'var(--dm-warning)', 'var(--dm-danger)', 'var(--dm-info)'],
+      rainbow: ['#ef4444', '#f97316', '#facc15', '#22c55e', '#0ea5e9', '#6366f1', '#a855f7', '#ec4899'],
+      festive: ['#dc2626', '#16a34a', '#fbbf24', '#3b82f6', '#a855f7', '#ec4899'],
+      gold:    ['#fbbf24', '#f59e0b', '#fde68a', '#fffbeb', '#d97706', '#fcd34d'],
+      silver:  ['#e5e7eb', '#cbd5e1', '#94a3b8', '#f8fafc', '#9ca3af', '#d1d5db'],
+      pastel:  ['#fbcfe8', '#bae6fd', '#bbf7d0', '#fef3c7', '#ddd6fe', '#fed7aa'],
+      mono:    ['#1f2937', '#4b5563', '#9ca3af', '#d1d5db', '#f3f4f6'],
+      sunset:  ['#f43f5e', '#fb923c', '#facc15', '#f59e0b', '#ec4899'],
+      ocean:   ['#0ea5e9', '#22d3ee', '#06b6d4', '#3b82f6', '#6366f1'],
+      forest:  ['#16a34a', '#65a30d', '#84cc16', '#22c55e', '#15803d'],
+      bridal:  ['#ffffff', '#fef3c7', '#fce7f3', '#fbcfe8', '#f9a8d4']
+    };
+
+    function renderPaletteCard(name, isPicker) {
+      const stripes = palettes[name].map(c => `<span style="background:${c}"></span>`).join('');
+      return `
+        <div class="palette-card${(isPicker && name === 'theme') ? ' active' : ''}" data-palette="${name}">
+          <div class="palette-name">${name}</div>
+          <div class="palette-stripes">${stripes}</div>
+        </div>`;
+    }
+
+    // Note: pass {safe: false} because Domma's default html() sanitiser strips
+    // both inline `style` attributes and `data-*` attributes — we'd lose the
+    // swatch colours AND the data-palette hook the click handler reads.
+    const previewMarkup = Object.keys(palettes).map(n => renderPaletteCard(n, false)).join('');
+    $('#palette-preview').html(previewMarkup, { safe: false });
+
+    const pickerMarkup = Object.keys(palettes).map(n => renderPaletteCard(n, true)).join('');
+    $('#palette-picker').html(pickerMarkup, { safe: false });
+
+    // ── Demo 1: Theme-aware container ────────────────────────────────────
+
+    let ctrl1 = null;
+    const badge1 = document.getElementById('status-1');
+
+    $('#start-1').on('click', () => {
+      if (ctrl1) ctrl1.destroy();
+      ctrl1 = Domma.effects.tickerTape('#tape-container-1', {
+        palette: 'theme',
+        density: 50,
+        respectMotionPreference: false
+      });
+      setStatus(badge1, 'running');
+    });
+    $('#pause-1').on('click', () => { if (ctrl1) { ctrl1.pause(); setStatus(badge1, 'paused'); } });
+    $('#resume-1').on('click', () => { if (ctrl1) { ctrl1.resume(); setStatus(badge1, 'running'); } });
+    $('#restart-1').on('click', () => { if (ctrl1) { ctrl1.restart(); setStatus(badge1, 'running'); } });
+    $('#destroy-1').on('click', () => { if (ctrl1) { ctrl1.destroy(); ctrl1 = null; setStatus(badge1, 'stopped'); } });
+
+    // ── Demo 2: Palette picker ───────────────────────────────────────────
+
+    let ctrl2 = Domma.effects.tickerTape('#tape-container-2', {
+      palette: 'theme',
+      density: 50,
+      respectMotionPreference: false
+    });
+
+    document.getElementById('palette-picker').addEventListener('click', (e) => {
+      const card = e.target.closest('.palette-card');
+      if (!card) return;
+      document.querySelectorAll('#palette-picker .palette-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      const name = card.getAttribute('data-palette');
+      if (ctrl2) ctrl2.destroy();
+      ctrl2 = Domma.effects.tickerTape('#tape-container-2', {
+        palette: name,
+        density: 50,
+        respectMotionPreference: false
+      });
+    });
+
+    // ── Demo 3: Customisation ────────────────────────────────────────────
+
+    const sliders = ['density', 'speed', 'sway', 'rotation', 'fade'];
+    sliders.forEach(name => {
+      $(`#opt-${name}`).on('input', (e) => {
+        $(`#val-${name}`).text(e.target.value);
+      });
+    });
+
+    let ctrl3 = null;
+
+    function applyDemo3() {
+      if (ctrl3) ctrl3.destroy();
+      ctrl3 = Domma.effects.tickerTape('#tape-container-3', {
+        palette: 'rainbow',
+        density: parseInt($('#opt-density').val(), 10),
+        speed: parseFloat($('#opt-speed').val()),
+        sway: parseInt($('#opt-sway').val(), 10),
+        rotationSpeed: parseFloat($('#opt-rotation').val()),
+        fadeStart: parseFloat($('#opt-fade').val()),
+        respectMotionPreference: false
+      });
+    }
+
+    $('#apply-3').on('click', applyDemo3);
+    $('#destroy-3').on('click', () => { if (ctrl3) { ctrl3.destroy(); ctrl3 = null; } });
+    applyDemo3();
+
+    // ── Demo 4: Burst ────────────────────────────────────────────────────
+
+    $('#burst-4').on('click', () => {
+      Domma.effects.tickerTape('#tape-container-4', {
+        palette: 'gold',
+        burst: true,
+        burstCount: 220,
+        speed: 1.4,
+        respectMotionPreference: false
+      });
+    });
+
+    // ── Demo 5: Full-page overlay ───────────────────────────────────────
+
+    let ctrl5 = null;
+    const badge5 = document.getElementById('status-5');
+
+    $('#start-5').on('click', () => {
+      if (ctrl5) ctrl5.destroy();
+      ctrl5 = Domma.effects.tickerTape(null, {
+        palette: 'rainbow',
+        density: 80,
+        zIndex: 9999,
+        respectMotionPreference: false
+      });
+      setStatus(badge5, 'running');
+    });
+    $('#pause-5').on('click', () => { if (ctrl5) { ctrl5.pause(); setStatus(badge5, 'paused'); } });
+    $('#resume-5').on('click', () => { if (ctrl5) { ctrl5.resume(); setStatus(badge5, 'running'); } });
+    $('#destroy-5').on('click', () => { if (ctrl5) { ctrl5.destroy(); ctrl5 = null; setStatus(badge5, 'stopped'); } });
+
+    // ── Cleanup full-page on navigation ─────────────────────────────────
+    window.addEventListener('beforeunload', () => {
+      if (ctrl5) ctrl5.destroy();
+    });
+
+    // Scan icons
+    if (window.Domma && Domma.icons) Domma.icons.scan(document.body);
+  });
+</script>
+</body>
+</html>

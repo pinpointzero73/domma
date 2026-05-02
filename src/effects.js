@@ -2148,6 +2148,396 @@ export function twinkle(selector, options = {}) {
   };
 }
 
+/**
+ * Ticker tape effect — colourful rectangular strips drop from the top of a
+ * container (or the viewport), spinning, swaying, and fading as they fall.
+ * Reminiscent of a ticker-tape parade. Pass `null` (or omit the selector)
+ * for a full-page fixed overlay, or provide a selector to scope strips
+ * inside a specific container.
+ *
+ * @param {string|Element|NodeList|HTMLElement[]|null} selector
+ * @param {Object} options
+ * @param {string|string[]} [options.palette] - Named theme palette (e.g.
+ *   'theme', 'rainbow', 'gold', 'silver', 'festive', 'pastel', 'mono') or
+ *   a custom array of CSS colour strings.
+ * @param {number} [options.density] - Average strips on screen at any moment
+ * @param {number} [options.speed] - Fall speed multiplier (1 = default)
+ * @param {number} [options.sway] - Horizontal sway amplitude in pixels
+ * @param {number} [options.rotationSpeed] - Max rotation degrees per frame
+ * @param {number} [options.minWidth] - Minimum strip width in pixels
+ * @param {number} [options.maxWidth] - Maximum strip width in pixels
+ * @param {number} [options.minHeight] - Minimum strip height in pixels
+ * @param {number} [options.maxHeight] - Maximum strip height in pixels
+ * @param {number} [options.fadeStart] - Fraction of fall (0–1) before fade begins
+ * @param {boolean} [options.burst] - If true, drops a single batch and stops respawning
+ * @param {number} [options.burstCount] - Strips emitted in burst mode
+ * @param {number} [options.zIndex]
+ * @param {boolean} [options.respectMotionPreference]
+ *
+ * @example
+ * // Full-page overlay using current theme colours
+ * Domma.effects.tickerTape(null);
+ *
+ * @example
+ * // Container-scoped, festive palette, slower fall
+ * Domma.effects.tickerTape('#celebration', {
+ *   palette: 'festive',
+ *   density: 60,
+ *   speed: 0.7
+ * });
+ *
+ * @example
+ * // One-shot burst (parade arrives, then settles)
+ * Domma.effects.tickerTape('#stage', { burst: true, burstCount: 200 });
+ */
+export function tickerTape(selector, options = {}) {
+  const defaults = {
+    palette: 'theme',
+    density: 50,
+    speed: 1,
+    sway: 60,
+    rotationSpeed: 6,
+    minWidth: 5,
+    maxWidth: 9,
+    minHeight: 12,
+    maxHeight: 22,
+    fadeStart: 0.55,
+    burst: false,
+    burstCount: 150,
+    zIndex: 1,
+    respectMotionPreference: true
+  };
+
+  const opts = { ...defaults, ...options };
+
+  if (opts.respectMotionPreference &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    console.log('[Domma.effects.tickerTape] Disabled due to prefers-reduced-motion');
+    return noopControl();
+  }
+
+  const isFullPage = !selector || selector === 'body' || selector === document.body;
+
+  let containers = [];
+  if (!isFullPage) {
+    if (typeof selector === 'string') {
+      containers = Array.from(document.querySelectorAll(selector));
+    } else if (selector instanceof Element) {
+      containers = [selector];
+    } else if (selector instanceof NodeList || Array.isArray(selector)) {
+      containers = Array.from(selector);
+    }
+    if (containers.length === 0) {
+      console.warn('[Domma.effects.tickerTape] No elements found for selector:', selector);
+      return null;
+    }
+  }
+
+  const colours = resolveTickerPalette(opts.palette);
+
+  let running = false;
+  let paused = false;
+  let animationFrame = null;
+  const instanceId = `domma-ticker-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const canvases = [];
+  let resizeObserver = null;
+
+  // ── Particle (rectangular tape strip) ────────────────────────────────────
+
+  function createParticle(width, height, fromTop) {
+    const stripW = opts.minWidth + Math.random() * (opts.maxWidth - opts.minWidth);
+    const stripH = opts.minHeight + Math.random() * (opts.maxHeight - opts.minHeight);
+    return {
+      x: Math.random() * width,
+      // Stagger initial Y across the height when seeding the canvas; otherwise spawn just above
+      y: fromTop ? -stripH - Math.random() * 40 : Math.random() * -height,
+      vy: (1 + Math.random() * 2.2) * opts.speed,           // base fall velocity
+      vx: (Math.random() - 0.5) * 0.4 * opts.speed,         // gentle drift
+      swayPhase: Math.random() * Math.PI * 2,
+      swayFreq: 0.005 + Math.random() * 0.01,
+      width: stripW,
+      height: stripH,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: ((Math.random() - 0.5) * opts.rotationSpeed * Math.PI) / 180,
+      colour: colours[Math.floor(Math.random() * colours.length)],
+      alive: true
+    };
+  }
+
+  function updateParticle(p, height) {
+    p.swayPhase += p.swayFreq;
+    p.x += p.vx + Math.sin(p.swayPhase) * (opts.sway * 0.02);
+    p.y += p.vy;
+    p.rotation += p.rotationSpeed;
+
+    // Determine fade based on vertical position
+    const progress = p.y / height;
+    if (progress >= opts.fadeStart) {
+      const fadeRange = 1 - opts.fadeStart;
+      const fadeProgress = (progress - opts.fadeStart) / fadeRange;
+      p.alpha = Math.max(0, 1 - fadeProgress);
+    } else {
+      p.alpha = 1;
+    }
+
+    // Mark dead once invisible or off-screen
+    if (p.y - p.height > height || p.alpha <= 0.01) {
+      p.alive = false;
+    }
+  }
+
+  function drawParticle(ctx, p) {
+    if (p.alpha <= 0) return;
+    ctx.save();
+    ctx.globalAlpha = p.alpha;
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation);
+    ctx.fillStyle = p.colour;
+    ctx.fillRect(-p.width / 2, -p.height / 2, p.width, p.height);
+    ctx.restore();
+  }
+
+  // ── Canvas setup ─────────────────────────────────────────────────────────
+
+  function createCanvas(container, isFixed) {
+    const canvas = document.createElement('canvas');
+    canvas.id = instanceId + (canvases.length > 0 ? `-${canvases.length}` : '');
+    canvas.setAttribute('data-domma-effect', 'ticker-tape');
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = opts.zIndex;
+
+    if (isFixed) {
+      canvas.style.position = 'fixed';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      document.body.appendChild(canvas);
+    } else {
+      const computedPosition = window.getComputedStyle(container).position;
+      if (computedPosition === 'static') {
+        container.style.position = 'relative';
+      }
+      canvas.style.position = 'absolute';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      canvas.width = container.offsetWidth || container.getBoundingClientRect().width;
+      canvas.height = container.offsetHeight || container.getBoundingClientRect().height;
+      container.appendChild(canvas);
+    }
+
+    const ctx = canvas.getContext('2d');
+    return { canvas, ctx, particles: [], container, burstFired: false };
+  }
+
+  function seedParticles(entry) {
+    entry.particles = [];
+    if (opts.burst) {
+      // In burst mode, scatter all strips above the canvas at varied heights
+      for (let i = 0; i < opts.burstCount; i++) {
+        const p = createParticle(entry.canvas.width, entry.canvas.height, false);
+        // Stagger Y so they cascade rather than all arriving simultaneously
+        p.y = -Math.random() * entry.canvas.height * 1.5;
+        entry.particles.push(p);
+      }
+      entry.burstFired = true;
+    } else {
+      // Continuous mode: pre-fill so canvas isn't empty on start
+      const initial = Math.floor(opts.density * 0.5);
+      for (let i = 0; i < initial; i++) {
+        entry.particles.push(createParticle(entry.canvas.width, entry.canvas.height, false));
+      }
+    }
+  }
+
+  function resizeCanvas(entry) {
+    if (entry.isFixed) {
+      entry.canvas.width = window.innerWidth;
+      entry.canvas.height = window.innerHeight;
+    } else {
+      const rect = entry.container.getBoundingClientRect();
+      entry.canvas.width = rect.width || entry.container.offsetWidth;
+      entry.canvas.height = rect.height || entry.container.offsetHeight;
+    }
+  }
+
+  // ── Initialise ──────────────────────────────────────────────────────────
+
+  if (isFullPage) {
+    const entry = createCanvas(document.body, true);
+    entry.isFixed = true;
+    seedParticles(entry);
+    canvases.push(entry);
+
+    const onWindowResize = () => canvases.forEach(e => resizeCanvas(e));
+    window.addEventListener('resize', onWindowResize);
+    canvases[0]._resizeHandler = onWindowResize;
+  } else {
+    containers.forEach(container => {
+      const entry = createCanvas(container, false);
+      entry.isFixed = false;
+      seedParticles(entry);
+      canvases.push(entry);
+    });
+
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        canvases.forEach(e => resizeCanvas(e));
+      });
+      containers.forEach(c => resizeObserver.observe(c));
+    }
+  }
+
+  // ── Animation loop ──────────────────────────────────────────────────────
+
+  function animate() {
+    if (!running || paused) return;
+
+    canvases.forEach(entry => {
+      const { canvas, ctx, particles } = entry;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Update and draw alive particles
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        updateParticle(p, canvas.height);
+        if (p.alive) {
+          drawParticle(ctx, p);
+        } else {
+          particles.splice(i, 1);
+        }
+      }
+
+      // Top up to maintain density (continuous mode only)
+      if (!opts.burst) {
+        const target = opts.density;
+        // Stochastic spawn — gives a natural rather than uniform stream
+        while (particles.length < target && Math.random() < 0.6) {
+          particles.push(createParticle(canvas.width, canvas.height, true));
+        }
+      }
+    });
+
+    animationFrame = requestAnimationFrame(animate);
+  }
+
+  function startAnimation() {
+    if (running) return;
+    running = true;
+    paused = false;
+    animate();
+  }
+
+  startAnimation();
+  console.log(`[Domma.effects.tickerTape] Initialised (${isFullPage ? 'full-page' : 'container'} mode, palette: ${Array.isArray(opts.palette) ? 'custom' : opts.palette})`);
+
+  return {
+    pause() {
+      if (!running || paused) return;
+      paused = true;
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+      }
+    },
+    resume() {
+      if (!running || !paused) return;
+      paused = false;
+      animate();
+    },
+    stop() {
+      running = false;
+      paused = false;
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+      }
+    },
+    restart() {
+      this.stop();
+      canvases.forEach(e => seedParticles(e));
+      startAnimation();
+    },
+    destroy() {
+      this.stop();
+      if (isFullPage && canvases[0]?._resizeHandler) {
+        window.removeEventListener('resize', canvases[0]._resizeHandler);
+      }
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+        resizeObserver = null;
+      }
+      canvases.forEach(({ canvas }) => {
+        if (canvas && canvas.parentNode) {
+          canvas.parentNode.removeChild(canvas);
+        }
+      });
+      canvases.length = 0;
+    },
+    isRunning() {
+      return running && !paused;
+    },
+    isPaused() {
+      return running && paused;
+    }
+  };
+}
+
+// ── Ticker tape palette resolution ──────────────────────────────────────────
+
+const TICKER_PALETTES = {
+  rainbow:  ['#ef4444', '#f97316', '#facc15', '#22c55e', '#0ea5e9', '#6366f1', '#a855f7', '#ec4899'],
+  festive:  ['#dc2626', '#16a34a', '#fbbf24', '#3b82f6', '#a855f7', '#ec4899'],
+  gold:     ['#fbbf24', '#f59e0b', '#fde68a', '#fffbeb', '#d97706', '#fcd34d'],
+  silver:   ['#e5e7eb', '#cbd5e1', '#94a3b8', '#f8fafc', '#9ca3af', '#d1d5db'],
+  pastel:   ['#fbcfe8', '#bae6fd', '#bbf7d0', '#fef3c7', '#ddd6fe', '#fed7aa'],
+  mono:     ['#1f2937', '#4b5563', '#9ca3af', '#d1d5db', '#f3f4f6'],
+  sunset:   ['#f43f5e', '#fb923c', '#facc15', '#f59e0b', '#ec4899'],
+  ocean:    ['#0ea5e9', '#22d3ee', '#06b6d4', '#3b82f6', '#6366f1'],
+  forest:   ['#16a34a', '#65a30d', '#84cc16', '#22c55e', '#15803d'],
+  bridal:   ['#ffffff', '#fef3c7', '#fce7f3', '#fbcfe8', '#f9a8d4']
+};
+
+/**
+ * Resolve a palette specifier into an array of CSS colour strings.
+ * - Named keys ('rainbow', 'festive', etc.) → preset palette.
+ * - 'theme' → reads CSS custom properties from the active Domma theme.
+ * - Array → returned as-is.
+ */
+function resolveTickerPalette(spec) {
+  if (Array.isArray(spec) && spec.length > 0) {
+    return spec;
+  }
+  if (typeof spec === 'string' && TICKER_PALETTES[spec]) {
+    return TICKER_PALETTES[spec];
+  }
+  if (spec === 'theme' || !spec) {
+    const root = document.documentElement;
+    const styles = getComputedStyle(root);
+    const vars = [
+      '--dm-primary',
+      '--dm-secondary',
+      '--dm-success',
+      '--dm-warning',
+      '--dm-danger',
+      '--dm-info'
+    ];
+    const resolved = vars
+      .map(name => styles.getPropertyValue(name).trim())
+      .filter(value => value && value !== 'transparent');
+    if (resolved.length > 0) return resolved;
+    // Fallback if theme variables aren't loaded
+    return TICKER_PALETTES.rainbow;
+  }
+  // Unknown string → fall back to rainbow rather than throwing
+  console.warn(`[Domma.effects.tickerTape] Unknown palette '${spec}', using rainbow.`);
+  return TICKER_PALETTES.rainbow;
+}
+
 // Export as default for module usage
 export default {
   breathe,
@@ -2158,5 +2548,6 @@ export default {
   counter,
   ripple,
   shake,
-  twinkle
+  twinkle,
+  tickerTape
 };

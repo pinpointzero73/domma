@@ -1458,6 +1458,104 @@ Domma.effects.shake('.invalid-field', {
 
 ---
 
+### `effects.twinkle(selector, options)`
+
+Canvas-based twinkling stars animation. Pass `null` for a full-page fixed overlay, or a selector for a container-scoped effect.
+
+**Parameters:**
+- `selector`: CSS selector string, HTMLElement, NodeList, Array, or `null` for full-page mode
+- `options` (optional): Configuration object
+
+**Options:**
+- `count` (number): Number of stars. Default: `100`
+- `minSize` / `maxSize` (number): Star radius range in pixels. Defaults: `1` / `3`
+- `twinkleSpeed` (number): Base oscillation speed per frame. Default: `0.003`
+- `colour` (string): Star colour. Default: `'rgba(255, 240, 200, 1)'`
+- `zIndex` (number): Canvas stacking order. Default: `1`
+- `shape` (string): `'star'` (4-pointed with glow) or `'circle'`. Default: `'star'`
+- `respectMotionPreference` (boolean): Honour prefers-reduced-motion. Default: `true`
+
+**Returns:** Control object with `pause()`, `resume()`, `stop()`, `restart()`, `destroy()`, `isRunning()`, `isPaused()`
+
+**Examples:**
+
+```javascript
+// Full-page ambient overlay
+Domma.effects.twinkle(null);
+
+// Container-scoped, blue circles
+Domma.effects.twinkle('#hero-section', {
+  count: 80,
+  shape: 'circle',
+  colour: 'rgba(180, 210, 255, 0.9)'
+});
+```
+
+---
+
+### `effects.tickerTape(selector, options)`
+
+Canvas-based ticker-tape parade. Coloured rectangular strips drop from the top of the container (or the viewport), sway, rotate, and fade as they fall.
+
+**Parameters:**
+- `selector`: CSS selector string, HTMLElement, NodeList, Array, or `null` for full-page mode
+- `options` (optional): Configuration object
+
+**Options:**
+- `palette` (string | string[]): Named palette or custom array of CSS colour strings. Default: `'theme'`
+  - Named values: `'theme'` (reads `--dm-primary`, `--dm-success`, `--dm-warning`, `--dm-danger`, `--dm-info` from active theme), `'rainbow'`, `'festive'`, `'gold'`, `'silver'`, `'pastel'`, `'mono'`, `'sunset'`, `'ocean'`, `'forest'`, `'bridal'`
+- `density` (number): Average number of strips on screen at any moment. Default: `50`
+- `speed` (number): Fall-speed multiplier. Default: `1`
+- `sway` (number): Horizontal sway amplitude in pixels. Default: `60`
+- `rotationSpeed` (number): Maximum rotation in degrees per frame. Default: `6`
+- `minWidth` / `maxWidth` (number): Strip width range. Defaults: `5` / `9`
+- `minHeight` / `maxHeight` (number): Strip height range. Defaults: `12` / `22`
+- `fadeStart` (number): Fraction of fall (0–1) at which fade begins. Default: `0.55`
+- `burst` (boolean): If true, drops a single batch and stops respawning. Default: `false`
+- `burstCount` (number): Strips emitted in burst mode. Default: `150`
+- `zIndex` (number): Canvas stacking order. Default: `1`
+- `respectMotionPreference` (boolean): Honour prefers-reduced-motion. Default: `true`
+
+**Returns:** Control object with `pause()`, `resume()`, `stop()`, `restart()`, `destroy()`, `isRunning()`, `isPaused()`
+
+**Examples:**
+
+```javascript
+// Full-page parade using current theme colours
+Domma.effects.tickerTape(null);
+
+// Container-scoped, festive palette, slower fall
+Domma.effects.tickerTape('#celebration', {
+  palette: 'festive',
+  density: 60,
+  speed: 0.7
+});
+
+// One-shot burst on form success
+form.addEventListener('submit', (e) => {
+  if (validate(e.target)) {
+    Domma.effects.tickerTape('#stage', {
+      burst: true,
+      burstCount: 200,
+      palette: 'gold'
+    });
+  }
+});
+
+// Custom palette
+Domma.effects.tickerTape('#brand-banner', {
+  palette: ['#0044CC', '#FFB400', '#FFFFFF']
+});
+```
+
+**Use Cases:**
+- Celebration moments (form success, achievement unlocked, sale completed)
+- Branded parades using a custom colour array matching corporate identity
+- Themed ambient overlays (festive seasons, weddings, sporting events)
+- Subtle theme-aware decoration that adapts to the active Domma theme
+
+---
+
 ## Elements (`Domma.elements`)
 
 UI component library providing 25+ interactive elements including modals, tabs, carousels, tooltips, and more.

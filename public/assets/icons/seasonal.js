@@ -186,5 +186,27 @@ export const seasonal = {
         strokeWidth: 1.5,
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
+    },
+
+    // Party popper / ticker-tape parade
+    'party-popper': {
+        viewBox: '0 0 24 24',
+        paths: [
+            'M5.8 11.3 2 22l10.7-3.79',
+            'M4 3h.01',
+            'M22 8h.01',
+            'M15 2h.01',
+            'M22 20h.01',
+            'M22 2 19.79 7.3 16 8l3.79.79L22 14',
+            'M9.6 14.4 14 10',
+            'M22 13c-1.93 1.93-5.07 1.93-7 0',
+            'M11 8c1.93-1.93 1.93-5.07 0-7',
+            'M2 13c1.93 1.93 5.07 1.93 7 0'
+        ],
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 1.5,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
     }
 };

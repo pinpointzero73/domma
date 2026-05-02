@@ -544,6 +544,11 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - **shake()** - Attention/error shake animation
   - Directions: `horizontal`, `vertical`, `both`
   - Features: Configurable intensity, iterations, stagger, onComplete callback
+- **tickerTape()** - Canvas-based ticker-tape parade — coloured rectangular strips drop from above, sway, rotate, and fade
+  - Modes: full-page overlay (`null` selector) or container-scoped
+  - Palettes: `'theme'` (auto from CSS variables), `'rainbow'`, `'festive'`, `'gold'`, `'silver'`, `'pastel'`, `'mono'`, `'sunset'`, `'ocean'`, `'forest'`, `'bridal'`, or a custom array of CSS colour strings
+  - Behaviour: continuous stream with configurable density, or one-shot `burst` for celebration moments
+  - Tunable: `speed`, `sway`, `rotationSpeed`, `fadeStart`, strip width/height ranges, `zIndex`
 - All effects support `respectMotionPreference` and return control objects with `pause()`, `resume()`, `stop()`, `restart()`, `destroy()`
 
 ### CSS Features

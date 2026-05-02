@@ -336,6 +336,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://dommajs.org/showcase/effects/ticker-tape.html</loc>
+    <lastmod>2026-04-22</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://dommajs.org/showcase/elements/</loc>
     <lastmod>2026-03-23</lastmod>
     <priority>0.7</priority>

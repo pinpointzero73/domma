@@ -58,6 +58,7 @@ Programmatic animation effects accessed via `Domma.effects`:
 - **ripple()** - Material Design click ripple effect
 - **shake()** - Attention/error shake animation
 - **twinkle()** - Canvas-based twinkling stars animation (full-page overlay or container-scoped)
+- **tickerTape()** - Canvas-based ticker-tape parade — coloured rectangles drop, sway, rotate, and fade. Theme-aware palettes plus 10 named presets; supports continuous and one-shot burst modes.
 
 All JS effects support `respectMotionPreference` and return control objects with `pause()`, `resume()`, `stop()`, `restart()`, `destroy()`.
 
@@ -76,6 +77,7 @@ public/showcase/effects/
 ├── ripple.html         # Ripple effect showcase
 ├── shake.html          # Shake effect showcase
 ├── twinkle.html        # Twinkle (twinkling stars) effect showcase
+├── ticker-tape.html    # Ticker-tape parade effect showcase
 └── CLAUDE.md           # This file
 ```
 

@@ -152,6 +152,51 @@ export interface TwinkleOptions {
     respectMotionPreference?: boolean;
 }
 
+export type TickerTapePalette =
+    | 'theme'
+    | 'rainbow'
+    | 'festive'
+    | 'gold'
+    | 'silver'
+    | 'pastel'
+    | 'mono'
+    | 'sunset'
+    | 'ocean'
+    | 'forest'
+    | 'bridal'
+    | string[];
+
+export interface TickerTapeOptions {
+    /** Named palette or custom array of CSS colour strings (default 'theme') */
+    palette?: TickerTapePalette;
+    /** Average number of strips on screen at once (default 50) */
+    density?: number;
+    /** Fall-speed multiplier (default 1) */
+    speed?: number;
+    /** Horizontal sway amplitude in pixels (default 60) */
+    sway?: number;
+    /** Maximum rotation in degrees per frame (default 6) */
+    rotationSpeed?: number;
+    /** Minimum strip width in pixels (default 5) */
+    minWidth?: number;
+    /** Maximum strip width in pixels (default 9) */
+    maxWidth?: number;
+    /** Minimum strip height in pixels (default 12) */
+    minHeight?: number;
+    /** Maximum strip height in pixels (default 22) */
+    maxHeight?: number;
+    /** Fraction of fall before fade begins, 0–1 (default 0.55) */
+    fadeStart?: number;
+    /** Drop a single batch and stop respawning (default false) */
+    burst?: boolean;
+    /** Number of strips emitted in burst mode (default 150) */
+    burstCount?: number;
+    /** Canvas stacking order (default 1) */
+    zIndex?: number;
+    /** Honour prefers-reduced-motion OS setting (default true) */
+    respectMotionPreference?: boolean;
+}
+
 export interface Effects {
     /** Sinusoidal floating animation */
     breathe(selector: Selector, options?: BreatheOptions): EffectControl | null;
@@ -171,6 +216,8 @@ export interface Effects {
     shake(selector: Selector, options?: ShakeOptions): EffectControl | null;
     /** Canvas-based twinkling stars animation */
     twinkle(selector: Selector | null, options?: TwinkleOptions): EffectControl | null;
+    /** Canvas-based ticker-tape parade — colourful rectangles fall, sway, rotate, and fade */
+    tickerTape(selector: Selector | null, options?: TickerTapeOptions): EffectControl | null;
 }
 
 export const effects: Effects;

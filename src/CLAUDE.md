@@ -566,6 +566,7 @@ Accessed via `Domma.effects`:
 - **ripple**: `effects.ripple(selector, { colour, duration, opacity, unbounded, centered, trigger })` - Material Design click ripple effect
 - **shake**: `effects.shake(selector, { intensity, duration, direction, easing, iterations, stagger, onComplete })` - Attention/error shake animation
 - **twinkle**: `effects.twinkle(selector | null, { count, minSize, maxSize, twinkleSpeed, colour, zIndex, shape, respectMotionPreference })` - Canvas-based twinkling stars; pass `null` for full-page overlay or a selector for container-scoped mode
+- **tickerTape**: `effects.tickerTape(selector | null, { palette, density, speed, sway, rotationSpeed, minWidth, maxWidth, minHeight, maxHeight, fadeStart, burst, burstCount, zIndex, respectMotionPreference })` - Canvas-based ticker-tape parade; coloured rectangles drop, sway, rotate, and fade. Pass `null` for full-page overlay. Built-in palettes: `theme`, `rainbow`, `festive`, `gold`, `silver`, `pastel`, `mono`, `sunset`, `ocean`, `forest`, `bridal`, or supply a custom colour array.
 
 **Scribe Modes:**
 - `mode: 'typewriter'` - Character-by-character rendering (default)
