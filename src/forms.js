@@ -186,10 +186,10 @@ class Forma {
       html += `<div class="form-group form-buttons mt-4 ${alignmentClass}">`;
 
       if (resetText) {
-        html += `<button type="button" class="btn btn-secondary mr-2" data-action="reset">${resetText}</button>`;
+        html += `<button type="button" class="btn btn-secondary mr-2" data-action="reset">${this.utils.escapeHtml(resetText)}</button>`;
       }
 
-      html += `<button type="submit" class="btn btn-primary">${submitText}</button>`;
+      html += `<button type="submit" class="btn btn-primary">${this.utils.escapeHtml(submitText)}</button>`;
       html += '</div>';
     }
 
@@ -211,7 +211,7 @@ class Forma {
 
     if (section.title) {
       html += `<fieldset class="domma-form-section">`;
-      html += `<legend class="domma-form-section-title">${section.title}</legend>`;
+      html += `<legend class="domma-form-section-title">${this.utils.escapeHtml(section.title)}</legend>`;
     }
 
     // Handle section layout
@@ -283,8 +283,8 @@ class Forma {
       const tooltipAttr = tooltip ? ` data-tooltip="${this.utils.escapeHtml(tooltip)}"` : '';
       const tooltipClass = tooltip ? ' has-tooltip' : '';
 
-      html += `<label for="field-${fieldName}" class="${labelClass}${tooltipClass}"${tooltipAttr}>`;
-      html += `${label}${requiredMark}`;
+      html += `<label for="field-${this.utils.escapeHtml(fieldName)}" class="${labelClass}${tooltipClass}"${tooltipAttr}>`;
+      html += `${this.utils.escapeHtml(label)}${requiredMark}`;
 
       // Tooltip icon
       if (tooltip) {
@@ -293,7 +293,7 @@ class Forma {
 
       // Hint next to label
       if (showHints && hint) {
-        html += ` <small class="${this.options.hintClassName}">${hint}</small>`;
+        html += ` <small class="${this.options.hintClassName}">${this.utils.escapeHtml(hint)}</small>`;
       }
 
       html += '</label>';

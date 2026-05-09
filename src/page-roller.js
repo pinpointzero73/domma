@@ -300,13 +300,31 @@ ${cardsHtml}
             {key: 'method', type: 'select', label: 'Method', options: ['GET', 'POST']}
         ],
         template: (config) => {
-            const bgStyle = config.backgroundColor ? `background-color: ${config.backgroundColor};` : '';
+            // Local escape — same surface as `_escapeHtml`; needed here because
+            // the SECTION_REGISTRY object is defined outside the class instance.
+            const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            })[c]);
+
+            // Strict allowlist for `field.type` used in the input element. Anything
+            // not in this set is treated as `text` to prevent attribute injection
+            // and invalid `<input type=…>` values.
+            const ALLOWED_INPUT_TYPES = new Set([
+                'text', 'email', 'password', 'number', 'date', 'datetime-local',
+                'time', 'tel', 'url', 'color', 'range', 'file', 'hidden'
+            ]);
+            const safeInputType = (t) => ALLOWED_INPUT_TYPES.has(t) ? t : 'text';
+
+            const bgStyle = config.backgroundColor ? `background-color: ${esc(config.backgroundColor)};` : '';
             const layoutClass = config.layout === 'inline' ? 'form-inline' :
                 config.layout === 'two-column' ? 'grid grid-cols-2 gap-4' : '';
 
             const fieldsHtml = config.fields.map(field => {
                 const requiredAttr = field.required ? 'required' : '';
                 const requiredMark = field.required ? ' <span class="text-danger">*</span>' : '';
+                const labelHtml = esc(field.label);
+                const nameAttr = esc(field.name);
+                const placeholderAttr = esc(field.placeholder || '');
 
                 if (field.type === 'chooser') {
                     // Hydrated post-render by the canvas hydrator (see _renderCanvasSections)
@@ -326,35 +344,75 @@ ${cardsHtml}
                         required: !!field.required
                     }).replace(/"/g, '&quot;');
                     return `            <div class="form-group">
-                <label>${field.label}${requiredMark}</label>
-                <div class="domma-chooser-field" data-chooser-field="${field.name}" data-chooser-config="${chooserCfg}"></div>
+                <label>${labelHtml}${requiredMark}</label>
+                <div class="domma-chooser-field" data-chooser-field="${nameAttr}" data-chooser-config="${chooserCfg}"></div>
             </div>`;
                 }
 
                 if (field.type === 'textarea') {
                     return `            <div class="form-group">
-                <label for="${field.name}">${field.label}${requiredMark}</label>
-                <textarea class="form-input" id="${field.name}" name="${field.name}" placeholder="${field.placeholder || ''}" rows="4" ${requiredAttr}></textarea>
+                <label for="${nameAttr}">${labelHtml}${requiredMark}</label>
+                <textarea class="form-input" id="${nameAttr}" name="${nameAttr}" placeholder="${placeholderAttr}" rows="4" ${requiredAttr}></textarea>
+            </div>`;
+                }
+
+                if (field.type === 'select') {
+                    const opts = (field.options || []).map((opt) => {
+                        const v = typeof opt === 'string' ? opt : opt.value;
+                        const l = typeof opt === 'string' ? opt : (opt.label || opt.value);
+                        return `<option value="${esc(v)}">${esc(l)}</option>`;
+                    }).join('');
+                    return `            <div class="form-group">
+                <label for="${nameAttr}">${labelHtml}${requiredMark}</label>
+                <select class="form-input" id="${nameAttr}" name="${nameAttr}" ${requiredAttr}>${opts}</select>
+            </div>`;
+                }
+
+                if (field.type === 'radio' || field.type === 'checkbox-group') {
+                    const inputType = field.type === 'radio' ? 'radio' : 'checkbox';
+                    const groupName = field.type === 'checkbox-group' ? `${nameAttr}[]` : nameAttr;
+                    const opts = (field.options || []).map((opt, idx) => {
+                        const v = typeof opt === 'string' ? opt : opt.value;
+                        const l = typeof opt === 'string' ? opt : (opt.label || opt.value);
+                        const id = `${nameAttr}-${idx}`;
+                        return `<div class="form-check"><input type="${inputType}" id="${esc(id)}" name="${groupName}" value="${esc(v)}"><label for="${esc(id)}">${esc(l)}</label></div>`;
+                    }).join('');
+                    return `            <div class="form-group">
+                <label>${labelHtml}${requiredMark}</label>
+                ${opts}
+            </div>`;
+                }
+
+                if (field.type === 'boolean' || field.type === 'checkbox') {
+                    return `            <div class="form-group form-check">
+                <input type="checkbox" id="${nameAttr}" name="${nameAttr}" class="form-check-input" ${requiredAttr}>
+                <label for="${nameAttr}" class="form-check-label">${labelHtml}${requiredMark}</label>
             </div>`;
                 }
 
                 return `            <div class="form-group">
-                <label for="${field.name}">${field.label}${requiredMark}</label>
-                <input type="${field.type}" class="form-input" id="${field.name}" name="${field.name}" placeholder="${field.placeholder || ''}" ${requiredAttr}>
+                <label for="${nameAttr}">${labelHtml}${requiredMark}</label>
+                <input type="${safeInputType(field.type)}" class="form-input" id="${nameAttr}" name="${nameAttr}" placeholder="${placeholderAttr}" ${requiredAttr}>
             </div>`;
             }).join('\n');
+
+            const titleHtml = esc(config.title);
+            const descriptionHtml = esc(config.description);
+            const submitTextHtml = esc(config.submitText || 'Submit');
+            const actionAttr = esc(config.action || '');
+            const methodAttr = esc(config.method || 'POST');
 
             return `<section class="py-12" style="${bgStyle}">
     <div class="container">
         <div class="max-w-lg mx-auto">
             <div class="text-center mb-6">
-                <h2 class="text-3xl font-bold mb-2">${config.title}</h2>
-                ${config.description ? `<p class="text-muted">${config.description}</p>` : ''}
+                <h2 class="text-3xl font-bold mb-2">${titleHtml}</h2>
+                ${config.description ? `<p class="text-muted">${descriptionHtml}</p>` : ''}
             </div>
-            <form action="${config.action}" method="${config.method}" class="${layoutClass}">
+            <form action="${actionAttr}" method="${methodAttr}" class="${layoutClass}">
 ${fieldsHtml}
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block">${config.submitText}</button>
+                    <button type="submit" class="btn btn-primary btn-block">${submitTextHtml}</button>
                 </div>
             </form>
         </div>
@@ -3302,10 +3360,21 @@ ${columnsHtml}
         const section = this._sections[this._selectedIndex];
         if (!section || section.type !== 'form') return;
         const fields = Array.isArray(section.config.fields) ? section.config.fields : [];
+
+        // Generate a unique default name for new choosers, avoiding collisions
+        // with existing field names in the same form.
+        const generateUniqueName = (base) => {
+            const existing = new Set(fields.map((f) => f.name));
+            if (!existing.has(base)) return base;
+            let i = 2;
+            while (existing.has(`${base}-${i}`)) i++;
+            return `${base}-${i}`;
+        };
+
         const initial = (editIndex !== null && fields[editIndex])
             ? JSON.parse(JSON.stringify(fields[editIndex]))
             : {
-                name: 'choice',
+                name: generateUniqueName('choice'),
                 label: 'Choose',
                 type: 'chooser',
                 variant: 'card',
@@ -3325,22 +3394,32 @@ ${columnsHtml}
                 ]
             };
 
-        const slideoverHost = document.createElement('div');
-        slideoverHost.className = 'qr-chooser-slideover';
+        // Build the slideover via the factory so we get the standard header
+        // with title + close button. The body content is appended into the
+        // factory's `.dm-slideover-body` slot below.
         const body = this._buildChooserSlideoverBody(initial);
-        slideoverHost.appendChild(body);
-        document.body.appendChild(slideoverHost);
+        const subtitle = (editIndex !== null && initial.name)
+            ? ` <span class="text-muted">— editing field: <code>${this._escapeHtml(initial.name)}</code></span>`
+            : '';
 
-        const slideover = (typeof Domma !== 'undefined' && Domma.elements && typeof Domma.elements.slideover === 'function')
-            ? Domma.elements.slideover(slideoverHost, {
-                position: 'right',
-                size: '520px',
-                title: editIndex !== null ? 'Edit Chooser' : 'Add Chooser',
-                keyboard: true,
-                backdropClose: false
-            })
-            : null;
-        if (slideover && typeof slideover.open === 'function') slideover.open();
+        const slideover = Domma.elements.slideover({
+            title: (editIndex !== null ? 'Edit Chooser' : 'Add Chooser') + subtitle,
+            content: body,
+            position: 'right',
+            size: '520px',
+            backdrop: true,
+            backdropClose: false,
+            closeOnEscape: true,
+            closable: true,
+            // Defer host removal until the close animation finishes so the
+            // panel slides out cleanly rather than disappearing instantly.
+            onClosed: () => {
+                if (slideover && slideover.element && slideover.element.parentNode) {
+                    slideover.element.parentNode.removeChild(slideover.element);
+                }
+            }
+        });
+        slideover.open();
 
         const state = JSON.parse(JSON.stringify(initial));
         const previewHost = body.querySelector('[data-chooser-preview]');
@@ -3367,44 +3446,92 @@ ${columnsHtml}
             });
         };
 
+        // Track whether the user has manually edited the name field. Until
+        // they have, typing in `label` auto-fills `name` with a slug. Once
+        // they edit name directly, we leave it alone.
+        const nameInput = body.querySelector('[data-state="name"]');
+        const labelInput = body.querySelector('[data-state="label"]');
+        let nameAutoFilled = (initial.name === '' || initial.name === 'choice');
+
+        if (nameInput) {
+            nameInput.addEventListener('input', () => {
+                nameAutoFilled = false;
+            });
+        }
+
         body.querySelectorAll('[data-state]').forEach((inp) => {
             const key = inp.getAttribute('data-state');
-            inp.addEventListener('input', () => {
+            const handler = () => {
                 let v = inp.type === 'checkbox' ? inp.checked : inp.value;
                 if (key === 'columns') v = parseInt(v, 10) || 1;
                 state[key] = v;
+                if (key === 'label' && nameAutoFilled && nameInput) {
+                    const slug = this._slugifyChooserName(v);
+                    nameInput.value = slug;
+                    state.name = slug;
+                }
                 renderPreview();
-            });
-            inp.addEventListener('change', () => {
-                let v = inp.type === 'checkbox' ? inp.checked : inp.value;
-                if (key === 'columns') v = parseInt(v, 10) || 1;
-                state[key] = v;
-                renderPreview();
-            });
+            };
+            inp.addEventListener('input', handler);
+            inp.addEventListener('change', handler);
         });
 
         this._wireChooserOptionsEditor(body, state, renderPreview);
         renderPreview();
 
+        // Track whether the user has changed anything since opening, for the
+        // cancel-confirmation prompt. The state object is mutated by handlers,
+        // so we compare against a serialised initial snapshot.
+        const initialSerialised = JSON.stringify(initial);
+        const isDirty = () => JSON.stringify({ ...state, type: 'chooser' }) !== initialSerialised;
+
         const closeAndCleanup = () => {
             if (slideover && typeof slideover.close === 'function') slideover.close();
-            slideoverHost.remove();
+            // Host removal happens in the onClosed callback above.
         };
 
         body.querySelector('[data-action="save"]').addEventListener('click', () => {
-            const next = { ...state, type: 'chooser' };
+            // Save-time validation
+            const errors = [];
+            const trimmedName = String(state.name || '').trim();
+            const trimmedLabel = String(state.label || '').trim();
+            if (!trimmedName) errors.push('Field name is required.');
+            if (!trimmedLabel) errors.push('Label is required.');
+            if (!Array.isArray(state.options) || state.options.length === 0) {
+                errors.push('At least one option is required.');
+            } else {
+                const seen = new Set();
+                for (const opt of state.options) {
+                    const v = String(opt.value || '').trim();
+                    if (!v) { errors.push('Every option needs a value.'); break; }
+                    if (seen.has(v)) { errors.push(`Duplicate option value: ${v}.`); break; }
+                    seen.add(v);
+                }
+            }
+            // Disallow collisions with other fields (but allow editing the same field)
+            const colliding = fields.some((f, i) => i !== editIndex && f.name === trimmedName);
+            if (colliding) errors.push(`Field name "${trimmedName}" is already in use in this form.`);
+
+            if (errors.length) {
+                if (Domma.elements && typeof Domma.elements.toast === 'function') {
+                    Domma.elements.toast(errors[0], { type: 'danger' });
+                }
+                return;
+            }
+
+            const next = { ...state, name: trimmedName, label: trimmedLabel, type: 'chooser' };
             const newFields = fields.slice();
             if (editIndex !== null) newFields[editIndex] = next;
             else newFields.push(next);
             section.config.fields = newFields;
 
             // Reflect into the JSON textarea (still the canonical store)
-            const textarea = this._refs.editPanel?.querySelector('.qr-json');
+            const textarea = this._refs.editPanel.querySelector('.qr-json');
             if (textarea) textarea.value = JSON.stringify(newFields, null, 2);
 
             this._renderCanvasSections();
-            this._markDirty?.();
-            this._refreshPreview?.();
+            this._markDirty();
+            this._refreshPreview();
 
             closeAndCleanup();
             if (Domma.elements && typeof Domma.elements.toast === 'function') {
@@ -3412,13 +3539,25 @@ ${columnsHtml}
             }
         });
 
-        body.querySelector('[data-action="cancel"]').addEventListener('click', closeAndCleanup);
+        body.querySelector('[data-action="cancel"]').addEventListener('click', () => {
+            if (isDirty()) {
+                if (Domma.elements && typeof Domma.elements.confirm === 'function') {
+                    Domma.elements.confirm('Discard unsaved changes?').then((ok) => {
+                        if (ok) closeAndCleanup();
+                    });
+                    return;
+                }
+            }
+            closeAndCleanup();
+        });
     }
 
     /**
      * Build the slideover body for the chooser editor. Returns a DOM
      * fragment built entirely via createElement / appendChild — no inner-HTML
      * assignment. User-supplied strings flow through textContent / setAttribute.
+     * Uses Domma form classes (.form-input) and themed group styling so the
+     * slideover matches the rest of the framework's visual language.
      *
      * @param {Object} initial - initial chooser config
      * @returns {HTMLElement} the body root element
@@ -3427,62 +3566,93 @@ ${columnsHtml}
     _buildChooserSlideoverBody(initial) {
         const body = document.createElement('div');
         body.className = 'qr-chooser-slideover-body';
-        body.style.padding = '1rem';
 
-        const heading = document.createElement('h3');
-        heading.textContent = 'Chooser';
-        heading.style.marginTop = '0';
-        body.appendChild(heading);
-
+        // Live preview at the top
+        const previewSection = document.createElement('div');
+        previewSection.className = 'qr-chooser-preview';
+        const previewLabel = document.createElement('div');
+        previewLabel.className = 'qr-chooser-preview-label';
+        previewLabel.textContent = 'Live preview';
+        previewSection.appendChild(previewLabel);
         const previewHost = document.createElement('div');
         previewHost.setAttribute('data-chooser-preview', '');
-        previewHost.style.cssText = 'margin-bottom:1.25rem; padding:0.75rem; border:1px dashed var(--dm-border); border-radius:var(--dm-radius);';
-        body.appendChild(previewHost);
+        previewSection.appendChild(previewHost);
+        body.appendChild(previewSection);
 
-        body.appendChild(this._buildChooserSlideoverFieldset('Field', [
-            { type: 'text',     key: 'name',     label: 'Name (data key)', value: initial.name },
-            { type: 'text',     key: 'label',    label: 'Label',           value: initial.label },
-            { type: 'checkbox', key: 'required', label: 'Required',        value: !!initial.required }
+        // Field info section
+        body.appendChild(this._buildChooserSection('Field', [
+            { type: 'text',     key: 'name',     label: 'Name (data key)', value: initial.name,
+              help: 'The blueprint key. Auto-generated from label if left blank.' },
+            { type: 'text',     key: 'label',    label: 'Label', value: initial.label,
+              help: 'The visible label rendered above the picker.' },
+            { type: 'checkbox', key: 'required', label: 'Required', value: !!initial.required,
+              help: 'Validation will fail if no option is selected (or the array is empty for multi-select).' }
         ]));
 
-        body.appendChild(this._buildChooserSlideoverFieldset('Chooser', [
-            { type: 'select',   key: 'variant',  label: 'Variant',  value: initial.variant,  options: [['card', 'Card'], ['chip', 'Chip']] },
-            { type: 'checkbox', key: 'multiple', label: 'Multi-select', value: !!initial.multiple },
-            { type: 'select',   key: 'density',  label: 'Density',  value: initial.density,  options: [['comfortable', 'Comfortable'], ['compact', 'Compact']] },
-            { type: 'number',   key: 'columns',  label: 'Columns',  value: initial.columns,  min: 1, max: 6 }
+        // Chooser layout section
+        body.appendChild(this._buildChooserSection('Layout', [
+            { type: 'select',   key: 'variant',  label: 'Variant',  value: initial.variant,
+              options: [['card', 'Card — rich tiles'], ['chip', 'Chip — compact pills']],
+              help: 'Card variant supports description and grid columns. Chips wrap on a flex row.' },
+            { type: 'checkbox', key: 'multiple', label: 'Multi-select', value: !!initial.multiple,
+              help: 'Off: single-select (radio). On: multi-select (checkbox); value becomes an array.' },
+            { type: 'select',   key: 'density',  label: 'Density',  value: initial.density,
+              options: [['comfortable', 'Comfortable'], ['compact', 'Compact']],
+              help: 'Compact strips description and tightens padding (card variant only).' },
+            { type: 'number',   key: 'columns',  label: 'Columns',  value: initial.columns,  min: 1, max: 6,
+              help: 'Grid columns for card variant (1–6). Ignored for chips.' }
         ]));
 
-        body.appendChild(this._buildChooserSlideoverFieldset('Visual', [
-            { type: 'text',     key: 'accent',       label: 'Accent (semantic name or #hex)',    value: initial.accent || '' },
-            { type: 'select',   key: 'accentStyle',  label: 'Accent style',                       value: initial.accentStyle || 'border',
-              options: [['border', 'Border'], ['solid', 'Solid'], ['glow', 'Glow'], ['overlay', 'Overlay'], ['underline', 'Underline']] },
-            { type: 'checkbox', key: 'glow',         label: 'Glow on selected',                   value: !!initial.glow },
-            { type: 'text',     key: 'glowColour',   label: 'Glow colour (optional, semantic or #hex)', value: initial.glowColour || '' },
-            { type: 'select',   key: 'shadow',       label: 'Shadow weight',                      value: initial.shadow || 'none',
-              options: [['none', 'None'], ['sm', 'Small'], ['md', 'Medium'], ['lg', 'Large'], ['xl', 'Extra Large']] },
-            { type: 'text',     key: 'shadowColour', label: 'Shadow colour (optional, hex/rgb)',  value: initial.shadowColour || '' }
+        // Visual options section
+        body.appendChild(this._buildChooserSection('Visual', [
+            { type: 'text',     key: 'accent', label: 'Accent', value: initial.accent || '',
+              placeholder: 'primary  /  success  /  #ec4899',
+              help: 'Selected/recommended highlight colour. Semantic name (primary/success/info/warning/danger) stays theme-aware; any other CSS colour is applied directly.' },
+            { type: 'select',   key: 'accentStyle', label: 'Accent style', value: initial.accentStyle || 'border',
+              options: [['border', 'Border (default)'], ['solid', 'Solid — filled tile'], ['glow', 'Glow — ring'], ['overlay', 'Overlay — translucent'], ['underline', 'Underline — minimal']],
+              help: 'Visual treatment of the selected state.' },
+            { type: 'checkbox', key: 'glow', label: 'Glow on selected option', value: !!initial.glow,
+              help: 'Adds a soft outer glow when an option is selected.' },
+            { type: 'text',     key: 'glowColour', label: 'Glow colour (optional)', value: initial.glowColour || '',
+              placeholder: 'defaults to accent',
+              help: 'Semantic name or any CSS colour. Leave blank to use the accent colour.' },
+            { type: 'select',   key: 'shadow', label: 'Shadow weight', value: initial.shadow || 'none',
+              options: [['none', 'None'], ['sm', 'Small'], ['md', 'Medium'], ['lg', 'Large'], ['xl', 'Extra Large']],
+              help: 'Drop shadow applied to every option tile.' },
+            { type: 'text',     key: 'shadowColour', label: 'Shadow colour (optional)', value: initial.shadowColour || '',
+              placeholder: 'rgba(0,0,0,0.1)',
+              help: 'Optional shadow tint. Any CSS colour string.' }
         ]));
 
-        const optionsFs = document.createElement('fieldset');
-        optionsFs.style.cssText = 'border:0; padding:0; margin:0 0 1rem;';
-        const optionsLegend = document.createElement('legend');
-        optionsLegend.textContent = 'Options';
-        optionsLegend.style.cssText = 'font-weight:600; padding:0;';
-        optionsFs.appendChild(optionsLegend);
+        // Options section (handled separately by _wireChooserOptionsEditor)
+        const optionsSection = document.createElement('div');
+        optionsSection.className = 'qr-chooser-section';
+        const optionsHeader = document.createElement('div');
+        optionsHeader.className = 'qr-chooser-section-header';
+        optionsHeader.textContent = 'Options';
+        optionsSection.appendChild(optionsHeader);
+        const optionsBody = document.createElement('div');
+        optionsBody.className = 'qr-chooser-section-body';
         const optionsList = document.createElement('div');
+        optionsList.className = 'qr-chooser-options-list';
         optionsList.setAttribute('data-options-editor', '');
-        optionsFs.appendChild(optionsList);
+        optionsBody.appendChild(optionsList);
         const addBtn = document.createElement('button');
         addBtn.type = 'button';
         addBtn.setAttribute('data-action', 'add-option');
         addBtn.className = 'btn btn-secondary btn-sm';
-        addBtn.style.marginTop = '0.5rem';
-        addBtn.textContent = '+ Add option';
-        optionsFs.appendChild(addBtn);
-        body.appendChild(optionsFs);
+        const addIcon = document.createElement('span');
+        addIcon.setAttribute('data-icon', 'plus');
+        addIcon.setAttribute('data-icon-size', '14');
+        addBtn.appendChild(addIcon);
+        addBtn.appendChild(document.createTextNode(' Add option'));
+        optionsBody.appendChild(addBtn);
+        optionsSection.appendChild(optionsBody);
+        body.appendChild(optionsSection);
 
+        // Save / Cancel actions
         const actions = document.createElement('div');
-        actions.style.cssText = 'display:flex; gap:0.5rem; justify-content:flex-end; margin-top:1rem;';
+        actions.className = 'qr-chooser-actions';
         const cancelBtn = document.createElement('button');
         cancelBtn.type = 'button';
         cancelBtn.setAttribute('data-action', 'cancel');
@@ -3492,7 +3662,11 @@ ${columnsHtml}
         saveBtn.type = 'button';
         saveBtn.setAttribute('data-action', 'save');
         saveBtn.className = 'btn btn-primary';
-        saveBtn.textContent = 'Save';
+        const saveIcon = document.createElement('span');
+        saveIcon.setAttribute('data-icon', 'check');
+        saveIcon.setAttribute('data-icon-size', '14');
+        saveBtn.appendChild(saveIcon);
+        saveBtn.appendChild(document.createTextNode(' Save chooser'));
         actions.appendChild(cancelBtn);
         actions.appendChild(saveBtn);
         body.appendChild(actions);
@@ -3501,62 +3675,116 @@ ${columnsHtml}
     }
 
     /**
-     * Build one fieldset of inputs for the slideover. Each input is tagged
-     * with `data-state="<key>"` so a delegated handler updates the working
-     * state object.
+     * Build one structured section (header + body) for the slideover.
+     * Each field def supports help text and placeholder.
      *
-     * @param {string} legendText
+     * @param {string} headerText
      * @param {Array<Object>} fieldDefs
      * @returns {HTMLElement}
      * @private
      */
-    _buildChooserSlideoverFieldset(legendText, fieldDefs) {
-        const fs = document.createElement('fieldset');
-        fs.style.cssText = 'border:0; padding:0; margin:0 0 1rem;';
-        const legend = document.createElement('legend');
-        legend.textContent = legendText;
-        legend.style.cssText = 'font-weight:600; padding:0;';
-        fs.appendChild(legend);
+    _buildChooserSection(headerText, fieldDefs) {
+        const section = document.createElement('div');
+        section.className = 'qr-chooser-section';
+        const header = document.createElement('div');
+        header.className = 'qr-chooser-section-header';
+        header.textContent = headerText;
+        section.appendChild(header);
+        const body = document.createElement('div');
+        body.className = 'qr-chooser-section-body';
+        section.appendChild(body);
 
-        fieldDefs.forEach((def) => {
-            const wrapper = document.createElement('label');
-            wrapper.style.cssText = 'display:block; margin-top:0.5rem;';
-            if (def.type === 'checkbox') {
-                const input = document.createElement('input');
-                input.type = 'checkbox';
-                input.setAttribute('data-state', def.key);
-                input.checked = !!def.value;
-                wrapper.appendChild(input);
-                wrapper.appendChild(document.createTextNode(' ' + def.label));
-            } else {
-                wrapper.textContent = def.label;
-                let input;
-                if (def.type === 'select') {
-                    input = document.createElement('select');
-                    (def.options || []).forEach(([v, l]) => {
-                        const opt = document.createElement('option');
-                        opt.value = v;
-                        opt.textContent = l;
-                        if (v === def.value) opt.selected = true;
-                        input.appendChild(opt);
-                    });
-                } else {
-                    input = document.createElement('input');
-                    input.type = def.type || 'text';
-                    if (def.type === 'number') {
-                        if (def.min !== undefined) input.min = String(def.min);
-                        if (def.max !== undefined) input.max = String(def.max);
-                    }
-                    input.value = def.value === undefined || def.value === null ? '' : String(def.value);
-                }
-                input.setAttribute('data-state', def.key);
-                input.className = 'qr-input';
-                wrapper.appendChild(input);
+        fieldDefs.forEach((def) => body.appendChild(this._buildChooserField(def)));
+        return section;
+    }
+
+    /**
+     * Build a single field control (label + input + help text). The input
+     * carries `data-state="<key>"` so the delegated handler in
+     * `_openChooserSlideover` updates the working state.
+     *
+     * @param {Object} def
+     * @returns {HTMLElement}
+     * @private
+     */
+    _buildChooserField(def) {
+        if (def.type === 'checkbox') {
+            const wrap = document.createElement('div');
+            const row = document.createElement('label');
+            row.className = 'qr-chooser-checkbox-row';
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.setAttribute('data-state', def.key);
+            input.checked = !!def.value;
+            row.appendChild(input);
+            row.appendChild(document.createTextNode(' ' + def.label));
+            wrap.appendChild(row);
+            if (def.help) {
+                const help = document.createElement('div');
+                help.className = 'qr-chooser-field-help';
+                help.textContent = def.help;
+                wrap.appendChild(help);
             }
-            fs.appendChild(wrapper);
-        });
+            return wrap;
+        }
 
-        return fs;
+        const wrap = document.createElement('div');
+        const labelEl = document.createElement('label');
+        labelEl.className = 'qr-chooser-field-label';
+        labelEl.textContent = def.label;
+        wrap.appendChild(labelEl);
+
+        let input;
+        if (def.type === 'select') {
+            input = document.createElement('select');
+            input.className = 'form-input';
+            (def.options || []).forEach(([v, l]) => {
+                const opt = document.createElement('option');
+                opt.value = v;
+                opt.textContent = l;
+                if (v === def.value) opt.selected = true;
+                input.appendChild(opt);
+            });
+        } else {
+            input = document.createElement('input');
+            input.type = def.type || 'text';
+            input.className = 'form-input';
+            if (def.type === 'number') {
+                if (def.min !== undefined) input.min = String(def.min);
+                if (def.max !== undefined) input.max = String(def.max);
+            }
+            input.value = def.value === undefined || def.value === null ? '' : String(def.value);
+            if (def.placeholder) input.placeholder = def.placeholder;
+        }
+        input.setAttribute('data-state', def.key);
+        wrap.appendChild(input);
+
+        if (def.help) {
+            const help = document.createElement('div');
+            help.className = 'qr-chooser-field-help';
+            help.textContent = def.help;
+            wrap.appendChild(help);
+        }
+        return wrap;
+    }
+
+    /**
+     * Slugify a label into a valid blueprint key. Strips non-alphanumerics,
+     * collapses spaces to hyphens, and lowercases the result. Used by the
+     * slideover to auto-fill the `name` field as the user types in `label`.
+     *
+     * @param {string} text
+     * @returns {string}
+     * @private
+     */
+    _slugifyChooserName(text) {
+        return String(text || '')
+            .toLowerCase()
+            .trim()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .replace(/-{2,}/g, '-')
+            || 'field';
     }
 
     /**
@@ -3573,19 +3801,22 @@ ${columnsHtml}
     _wireChooserOptionsEditor(root, state, renderPreview) {
         const wrap = root.querySelector('[data-options-editor]');
 
-        const optInput = (key, value, placeholder, style = {}) => {
+        const optInput = (key, value, placeholder, flex = '1') => {
             const inp = document.createElement('input');
             inp.type = 'text';
-            inp.className = 'qr-input';
+            inp.className = 'form-input';
             inp.setAttribute('data-opt-key', key);
             inp.value = value;
             inp.placeholder = placeholder;
-            Object.assign(inp.style, style);
+            inp.style.flex = flex;
             return inp;
         };
 
         const optCheckbox = (key, checked, labelText) => {
             const w = document.createElement('label');
+            w.style.display = 'inline-flex';
+            w.style.alignItems = 'center';
+            w.style.gap = '0.3rem';
             const inp = document.createElement('input');
             inp.type = 'checkbox';
             inp.setAttribute('data-opt-key', key);
@@ -3595,21 +3826,31 @@ ${columnsHtml}
             return w;
         };
 
+        const rowFlex = () => {
+            const r = document.createElement('div');
+            r.style.cssText = 'display:flex; gap:0.4rem; align-items:center;';
+            return r;
+        };
+
         const buildRow = (opt, idx) => {
             const row = document.createElement('div');
-            row.className = 'qr-option-row';
+            row.className = 'qr-chooser-option-row';
             row.setAttribute('data-idx', String(idx));
-            row.style.cssText = 'border:1px solid var(--dm-border); border-radius:var(--dm-radius-sm); padding:0.5rem; margin-bottom:0.4rem;';
 
-            const top = document.createElement('div');
-            top.style.cssText = 'display:flex; gap:0.4rem; align-items:center;';
-            top.appendChild(optInput('value', opt.value || '', 'value', { flex: '1' }));
-            top.appendChild(optInput('label', opt.label || '', 'label', { flex: '2' }));
+            // Track whether the option's `value` was auto-filled from `label`.
+            // Once the user manually edits value, we leave it alone.
+            const valueAutoFilled = !opt.value || opt.value === 'new';
+            row.dataset.valueAutoFilled = valueAutoFilled ? '1' : '0';
+
+            // Top row: value + label + remove
+            const top = rowFlex();
+            top.appendChild(optInput('value', opt.value || '', 'value', '1'));
+            top.appendChild(optInput('label', opt.label || '', 'label (visible to users)', '2'));
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button';
-            removeBtn.className = 'btn btn-sm';
+            removeBtn.className = 'btn btn-secondary btn-sm';
             removeBtn.setAttribute('data-action', 'remove-option');
-            removeBtn.title = 'Remove';
+            removeBtn.title = 'Remove option';
             const xIcon = document.createElement('span');
             xIcon.setAttribute('data-icon', 'x');
             xIcon.setAttribute('data-icon-size', '14');
@@ -3617,18 +3858,18 @@ ${columnsHtml}
             top.appendChild(removeBtn);
             row.appendChild(top);
 
-            const mid = document.createElement('div');
-            mid.style.cssText = 'display:flex; gap:0.4rem; margin-top:0.4rem;';
-            mid.appendChild(optInput('icon', opt.icon || '', 'icon (e.g. rocket)', { flex: '1' }));
-            mid.appendChild(optInput('description', opt.description || '', 'description (card only)', { flex: '2' }));
+            // Middle row: icon + description
+            const mid = rowFlex();
+            mid.appendChild(optInput('icon', opt.icon || '', 'icon (e.g. rocket)', '1'));
+            mid.appendChild(optInput('description', opt.description || '', 'description (card + comfortable only)', '2'));
             row.appendChild(mid);
 
-            const bot = document.createElement('div');
-            bot.style.cssText = 'display:flex; gap:0.4rem; margin-top:0.4rem;';
-            bot.appendChild(optInput('tooltip', opt.tooltip || '', 'tooltip', { flex: '2' }));
-            bot.appendChild(optInput('badge.text', opt.badge?.text || '', 'badge text', { flex: '1' }));
+            // Bottom row: tooltip + badge text + badge type
+            const bot = rowFlex();
+            bot.appendChild(optInput('tooltip', opt.tooltip || '', 'tooltip (hover hint)', '2'));
+            bot.appendChild(optInput('badge.text', opt.badge?.text || '', 'badge text', '1'));
             const badgeTypeSel = document.createElement('select');
-            badgeTypeSel.className = 'qr-input';
+            badgeTypeSel.className = 'form-input';
             badgeTypeSel.setAttribute('data-opt-key', 'badge.type');
             badgeTypeSel.style.flex = '1';
             [['', 'no badge'], ['primary', 'primary'], ['success', 'success'], ['info', 'info'], ['warning', 'warning'], ['danger', 'danger']].forEach(([v, l]) => {
@@ -3641,8 +3882,9 @@ ${columnsHtml}
             bot.appendChild(badgeTypeSel);
             row.appendChild(bot);
 
+            // Flags row
             const flags = document.createElement('div');
-            flags.style.cssText = 'display:flex; gap:1rem; margin-top:0.4rem;';
+            flags.className = 'qr-chooser-option-row-flags';
             flags.appendChild(optCheckbox('recommended', !!opt.recommended, 'Recommended'));
             flags.appendChild(optCheckbox('disabled', !!opt.disabled, 'Disabled'));
             row.appendChild(flags);
@@ -3657,13 +3899,19 @@ ${columnsHtml}
         };
 
         wrap.addEventListener('input', (e) => {
-            const row = e.target.closest('.qr-option-row');
+            const row = e.target.closest('.qr-chooser-option-row');
             if (!row) return;
             const idx = parseInt(row.getAttribute('data-idx'), 10);
             const key = e.target.getAttribute('data-opt-key');
             if (!key) return;
             const opt = state.options[idx];
             const v = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+
+            // Track whether value was manually edited
+            if (key === 'value') {
+                row.dataset.valueAutoFilled = '0';
+            }
+
             if (key === 'badge.text') {
                 opt.badge = opt.badge || {};
                 opt.badge.text = v;
@@ -3675,11 +3923,20 @@ ${columnsHtml}
             } else {
                 opt[key] = v;
             }
+
+            // Auto-fill option value from label while value is still default
+            if (key === 'label' && row.dataset.valueAutoFilled === '1') {
+                const slug = this._slugifyChooserName(v);
+                opt.value = slug;
+                const valueInp = row.querySelector('input[data-opt-key="value"]');
+                if (valueInp) valueInp.value = slug;
+            }
+
             renderPreview();
         });
 
         wrap.addEventListener('change', (e) => {
-            const row = e.target.closest('.qr-option-row');
+            const row = e.target.closest('.qr-chooser-option-row');
             if (!row) return;
             const idx = parseInt(row.getAttribute('data-idx'), 10);
             const key = e.target.getAttribute('data-opt-key');
@@ -3697,7 +3954,7 @@ ${columnsHtml}
         wrap.addEventListener('click', (e) => {
             const remove = e.target.closest('[data-action="remove-option"]');
             if (remove) {
-                const idx = parseInt(remove.closest('.qr-option-row').getAttribute('data-idx'), 10);
+                const idx = parseInt(remove.closest('.qr-chooser-option-row').getAttribute('data-idx'), 10);
                 state.options.splice(idx, 1);
                 renderRows();
                 renderPreview();
