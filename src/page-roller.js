@@ -300,107 +300,30 @@ ${cardsHtml}
             {key: 'method', type: 'select', label: 'Method', options: ['GET', 'POST']}
         ],
         template: (config) => {
-            // Local escape — same surface as `_escapeHtml`; needed here because
-            // the SECTION_REGISTRY object is defined outside the class instance.
+            // Local escape for the wrapper section — title/description still
+            // need escaping because they live in the static markup outside
+            // the form host.
             const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({
                 '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
             })[c]);
 
-            // Strict allowlist for `field.type` used in the input element. Anything
-            // not in this set is treated as `text` to prevent attribute injection
-            // and invalid `<input type=…>` values.
-            const ALLOWED_INPUT_TYPES = new Set([
-                'text', 'email', 'password', 'number', 'date', 'datetime-local',
-                'time', 'tel', 'url', 'color', 'range', 'file', 'hidden'
-            ]);
-            const safeInputType = (t) => ALLOWED_INPUT_TYPES.has(t) ? t : 'text';
-
             const bgStyle = config.backgroundColor ? `background-color: ${esc(config.backgroundColor)};` : '';
-            const layoutClass = config.layout === 'inline' ? 'form-inline' :
-                config.layout === 'two-column' ? 'grid grid-cols-2 gap-4' : '';
-
-            const fieldsHtml = config.fields.map(field => {
-                const requiredAttr = field.required ? 'required' : '';
-                const requiredMark = field.required ? ' <span class="text-danger">*</span>' : '';
-                const labelHtml = esc(field.label);
-                const nameAttr = esc(field.name);
-                const placeholderAttr = esc(field.placeholder || '');
-
-                if (field.type === 'chooser') {
-                    // Hydrated post-render by the canvas hydrator (see _renderCanvasSections)
-                    const chooserCfg = JSON.stringify({
-                        variant: field.variant || 'card',
-                        multiple: !!field.multiple,
-                        density: field.density || 'comfortable',
-                        columns: field.columns || 3,
-                        accent: field.accent || 'primary',
-                        accentStyle: field.accentStyle || 'border',
-                        glow: !!field.glow,
-                        glowColour: field.glowColour || null,
-                        shadow: field.shadow || 'none',
-                        shadowColour: field.shadowColour || null,
-                        options: field.options || [],
-                        name: field.name,
-                        required: !!field.required
-                    }).replace(/"/g, '&quot;');
-                    return `            <div class="form-group">
-                <label>${labelHtml}${requiredMark}</label>
-                <div class="domma-chooser-field" data-chooser-field="${nameAttr}" data-chooser-config="${chooserCfg}"></div>
-            </div>`;
-                }
-
-                if (field.type === 'textarea') {
-                    return `            <div class="form-group">
-                <label for="${nameAttr}">${labelHtml}${requiredMark}</label>
-                <textarea class="form-input" id="${nameAttr}" name="${nameAttr}" placeholder="${placeholderAttr}" rows="4" ${requiredAttr}></textarea>
-            </div>`;
-                }
-
-                if (field.type === 'select') {
-                    const opts = (field.options || []).map((opt) => {
-                        const v = typeof opt === 'string' ? opt : opt.value;
-                        const l = typeof opt === 'string' ? opt : (opt.label || opt.value);
-                        return `<option value="${esc(v)}">${esc(l)}</option>`;
-                    }).join('');
-                    return `            <div class="form-group">
-                <label for="${nameAttr}">${labelHtml}${requiredMark}</label>
-                <select class="form-input" id="${nameAttr}" name="${nameAttr}" ${requiredAttr}>${opts}</select>
-            </div>`;
-                }
-
-                if (field.type === 'radio' || field.type === 'checkbox-group') {
-                    const inputType = field.type === 'radio' ? 'radio' : 'checkbox';
-                    const groupName = field.type === 'checkbox-group' ? `${nameAttr}[]` : nameAttr;
-                    const opts = (field.options || []).map((opt, idx) => {
-                        const v = typeof opt === 'string' ? opt : opt.value;
-                        const l = typeof opt === 'string' ? opt : (opt.label || opt.value);
-                        const id = `${nameAttr}-${idx}`;
-                        return `<div class="form-check"><input type="${inputType}" id="${esc(id)}" name="${groupName}" value="${esc(v)}"><label for="${esc(id)}">${esc(l)}</label></div>`;
-                    }).join('');
-                    return `            <div class="form-group">
-                <label>${labelHtml}${requiredMark}</label>
-                ${opts}
-            </div>`;
-                }
-
-                if (field.type === 'boolean' || field.type === 'checkbox') {
-                    return `            <div class="form-group form-check">
-                <input type="checkbox" id="${nameAttr}" name="${nameAttr}" class="form-check-input" ${requiredAttr}>
-                <label for="${nameAttr}" class="form-check-label">${labelHtml}${requiredMark}</label>
-            </div>`;
-                }
-
-                return `            <div class="form-group">
-                <label for="${nameAttr}">${labelHtml}${requiredMark}</label>
-                <input type="${safeInputType(field.type)}" class="form-input" id="${nameAttr}" name="${nameAttr}" placeholder="${placeholderAttr}" ${requiredAttr}>
-            </div>`;
-            }).join('\n');
-
             const titleHtml = esc(config.title);
             const descriptionHtml = esc(config.description);
-            const submitTextHtml = esc(config.submitText || 'Submit');
-            const actionAttr = esc(config.action || '');
-            const methodAttr = esc(config.method || 'POST');
+
+            // The form section is rendered through Forma at hydration time so
+            // every field type behaves exactly as F.create() would render it
+            // at runtime — full validation, model binding, accessibility,
+            // chooser hydration, etc. We emit a placeholder div with the
+            // serialised section config; the canvas hydrator reads it,
+            // builds a blueprint, and calls Forma(blueprint).renderTo(host).
+            const formCfg = JSON.stringify({
+                fields: config.fields || [],
+                layout: config.layout || 'stacked',
+                submitText: config.submitText || 'Submit',
+                action: config.action || '',
+                method: config.method || 'POST'
+            }).replace(/"/g, '&quot;');
 
             return `<section class="py-12" style="${bgStyle}">
     <div class="container">
@@ -409,12 +332,7 @@ ${cardsHtml}
                 <h2 class="text-3xl font-bold mb-2">${titleHtml}</h2>
                 ${config.description ? `<p class="text-muted">${descriptionHtml}</p>` : ''}
             </div>
-            <form action="${actionAttr}" method="${methodAttr}" class="${layoutClass}">
-${fieldsHtml}
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block">${submitTextHtml}</button>
-                </div>
-            </form>
+            <div class="domma-form-host" data-form-host data-form-config="${formCfg}"></div>
         </div>
     </div>
 </section>`;
@@ -1356,8 +1274,9 @@ class PageRoller {
     _bindEvents() {
         // Header actions
         this._on(this.element, 'click', '[data-action]', (e) => {
-            const action = e.target.closest('[data-action]').dataset.action;
-            this._handleAction(action);
+            const target = e.target.closest('[data-action]');
+            if (!target) return;
+            this._handleAction(target.dataset.action, target, e);
         });
 
         // Template name change
@@ -1535,7 +1454,7 @@ class PageRoller {
      * Handle toolbar actions
      * @private
      */
-    async _handleAction(action) {
+    async _handleAction(action, target, event) {
         switch (action) {
             case 'new':
                 this.newPage();
@@ -1561,7 +1480,113 @@ class PageRoller {
             case 'add-chooser':
                 this._openChooserSlideover(null);
                 break;
+            case 'add-field': {
+                const t = target?.dataset.fieldType;
+                if (t) this._addFieldOfType(t);
+                break;
+            }
+            case 'edit-field': {
+                const idx = parseInt(target?.dataset.fieldIndex, 10);
+                if (Number.isFinite(idx)) this._openChooserSlideover(idx);
+                break;
+            }
+            case 'move-field-up': {
+                const idx = parseInt(target?.dataset.fieldIndex, 10);
+                if (Number.isFinite(idx)) this._moveField(idx, -1);
+                break;
+            }
+            case 'move-field-down': {
+                const idx = parseInt(target?.dataset.fieldIndex, 10);
+                if (Number.isFinite(idx)) this._moveField(idx, 1);
+                break;
+            }
+            case 'delete-field': {
+                const idx = parseInt(target?.dataset.fieldIndex, 10);
+                if (Number.isFinite(idx)) this._deleteField(idx);
+                break;
+            }
         }
+    }
+
+    /**
+     * Common helper used by every field-list mutation: persist the updated
+     * fields array, refresh the JSON textarea, re-render the editor panel
+     * (so the field summary list reflects the change), re-render the canvas
+     * preview, and mark dirty.
+     *
+     * @param {Array<Object>} newFields
+     * @private
+     */
+    _commitFieldsChange(newFields) {
+        const section = this._sections[this._selectedIndex];
+        if (!section || section.type !== 'form') return;
+        section.config.fields = newFields;
+        const textarea = this._refs.editor?.querySelector('.qr-json');
+        if (textarea) textarea.value = JSON.stringify(newFields, null, 2);
+        this._renderEditor();
+        this._renderCanvasSections();
+        this._markDirty();
+        this._refreshPreview();
+    }
+
+    /**
+     * Add a new field of the given type using `_defaultFieldForType`. Used
+     * by every palette tile except Chooser (which opens the slideover).
+     *
+     * @param {string} type
+     * @private
+     */
+    _addFieldOfType(type) {
+        const section = this._sections[this._selectedIndex];
+        if (!section || section.type !== 'form') return;
+        const fields = Array.isArray(section.config.fields) ? section.config.fields.slice() : [];
+        const draft = this._defaultFieldForType(type);
+        // Auto-suffix the default name to avoid collisions
+        const existing = new Set(fields.map((f) => f.name));
+        let candidate = draft.name;
+        let i = 2;
+        while (existing.has(candidate)) candidate = `${draft.name}-${i++}`;
+        draft.name = candidate;
+        fields.push(draft);
+        this._commitFieldsChange(fields);
+    }
+
+    /**
+     * Move a field up or down by one position in the fields array.
+     * @param {number} index
+     * @param {1|-1} delta
+     * @private
+     */
+    _moveField(index, delta) {
+        const section = this._sections[this._selectedIndex];
+        if (!section || section.type !== 'form') return;
+        const fields = (section.config.fields || []).slice();
+        const target = index + delta;
+        if (index < 0 || index >= fields.length || target < 0 || target >= fields.length) return;
+        const [item] = fields.splice(index, 1);
+        fields.splice(target, 0, item);
+        this._commitFieldsChange(fields);
+    }
+
+    /**
+     * Delete a field by index, with confirmation.
+     * @param {number} index
+     * @private
+     */
+    async _deleteField(index) {
+        const section = this._sections[this._selectedIndex];
+        if (!section || section.type !== 'form') return;
+        const fields = (section.config.fields || []);
+        const f = fields[index];
+        if (!f) return;
+        const fieldLabel = f.label || f.name || `field ${index + 1}`;
+        const ok = (Domma.elements && typeof Domma.elements.confirm === 'function')
+            ? await Domma.elements.confirm(`Delete the field "${fieldLabel}"?`)
+            : true;
+        if (!ok) return;
+        const next = fields.slice();
+        next.splice(index, 1);
+        this._commitFieldsChange(next);
     }
 
     /**
@@ -1866,20 +1891,20 @@ class PageRoller {
                 `;
 
             case 'formFields':
-                // Form fields editor: JSON textarea (canonical store) plus a
-                // structured-builder palette for richer field types like
-                // chooser. Clicking "Add Chooser" opens a slideover with a
-                // live-preview options editor that writes back into the JSON.
+                // Form fields editor — three layers stacked:
+                //   1. Palette tiles to add new fields of any common type
+                //   2. Sortable summary list of existing fields with edit/delete
+                //   3. JSON textarea (canonical store) collapsed under a details
+                //      element for advanced editing
                 return `
                     <div class="qr-field" data-field="${field.key}">
                         <label class="qr-field-label">${field.label}</label>
-                        <div class="qr-field-palette" style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.5rem;">
-                            <button type="button" class="qr-palette-tile btn btn-sm" data-action="add-chooser" data-field="${field.key}">
-                                <span data-icon="check-square" data-icon-size="14"></span> Add Chooser
-                            </button>
-                        </div>
-                        <p class="qr-field-note" style="font-size: 0.875rem; color: var(--dm-text-muted, #6c757d); margin: 0.25rem 0;">Edit JSON directly, or use the palette above for richer field types.</p>
-                        <textarea class="qr-input qr-textarea qr-json" rows="12" style="font-family: monospace; font-size: 0.875rem;">${JSON.stringify(value, null, 2)}</textarea>
+                        ${this._buildFieldPalette()}
+                        ${this._buildFieldSummaryList(value)}
+                        <details class="qr-fields-json-details" style="margin-top: 0.6rem;">
+                            <summary style="cursor: pointer; font-size: 0.8rem; color: var(--dm-text-muted); padding: 0.25rem 0;">Advanced — edit JSON directly</summary>
+                            <textarea class="qr-input qr-textarea qr-json" rows="10" style="font-family: monospace; font-size: 0.85rem; margin-top: 0.4rem;">${JSON.stringify(value, null, 2)}</textarea>
+                        </details>
                     </div>
                 `;
 
@@ -2226,14 +2251,41 @@ class PageRoller {
             Domma.icons.scan(this._refs.canvas);
         }
 
-        // Hydrate any chooser placeholders rendered inside form sections.
-        // The placeholder is a structural <div data-chooser-field> with a
-        // JSON config in data-chooser-config; Domma.elements.chooser() builds
-        // the live DOM via createElement (no inner-HTML assignment) so user
-        // option content is always passed through textContent / setAttribute.
+        // Hydrate any form-section placeholders. Each placeholder carries
+        // the serialised field config; we convert it into a Forma blueprint
+        // and let Forma render the form, which guarantees the preview
+        // matches what F.create() produces at runtime (validation, model
+        // binding, accessibility, chooser hydration, etc.).
+        if (typeof Domma !== 'undefined' && Domma.forms && typeof Domma.forms.create === 'function') {
+            this._refs.canvas.querySelectorAll('[data-form-host]').forEach((node) => {
+                if (node.querySelector('form')) return;
+                try {
+                    const formCfg = JSON.parse((node.getAttribute('data-form-config') || '{}').replace(/&quot;/g, '"'));
+                    const blueprint = {};
+                    (formCfg.fields || []).forEach((f) => {
+                        if (!f || !f.name) return;
+                        // The whole field object IS the blueprint entry; we just key it by name.
+                        const { name, ...rest } = f;
+                        blueprint[name] = rest;
+                    });
+                    const form = Domma.forms.create(blueprint, {}, {
+                        layout: formCfg.layout || 'stacked',
+                        submitText: formCfg.submitText || 'Submit'
+                    });
+                    form.renderTo(node);
+                } catch (err) {
+                    console.warn('[page-roller] failed to hydrate form section', err);
+                }
+            });
+        }
+
+        // Standalone chooser hydration (for any chooser placeholders rendered
+        // outside a form section — e.g. in custom shortcodes or future section
+        // types). Form-section choosers are hydrated by Forma above.
         if (typeof Domma !== 'undefined' && Domma.elements && typeof Domma.elements.chooser === 'function') {
             this._refs.canvas.querySelectorAll('[data-chooser-field]').forEach((node) => {
                 if (node.querySelector('.domma-chooser')) return;
+                if (node.closest('[data-form-host]')) return;
                 try {
                     const cfg = JSON.parse((node.getAttribute('data-chooser-config') || '{}').replace(/&quot;/g, '"'));
                     Domma.elements.chooser(node, cfg);
@@ -3472,8 +3524,11 @@ ${columnsHtml}
                 }
                 renderPreview();
             };
-            inp.addEventListener('input', handler);
-            inp.addEventListener('change', handler);
+            // Single binding per input — `input` for free-text/number,
+            // `change` for selects/checkboxes. Avoids the double-fire that
+            // happened previously when both events were bound on every input.
+            const evt = (inp.tagName === 'SELECT' || inp.type === 'checkbox') ? 'change' : 'input';
+            inp.addEventListener(evt, handler);
         });
 
         this._wireChooserOptionsEditor(body, state, renderPreview);
@@ -3526,7 +3581,7 @@ ${columnsHtml}
             section.config.fields = newFields;
 
             // Reflect into the JSON textarea (still the canonical store)
-            const textarea = this._refs.editPanel.querySelector('.qr-json');
+            const textarea = this._refs.editor.querySelector('.qr-json');
             if (textarea) textarea.value = JSON.stringify(newFields, null, 2);
 
             this._renderCanvasSections();
@@ -3605,21 +3660,21 @@ ${columnsHtml}
 
         // Visual options section
         body.appendChild(this._buildChooserSection('Visual', [
-            { type: 'text',     key: 'accent', label: 'Accent', value: initial.accent || '',
+            { type: 'colour',   key: 'accent', label: 'Accent', value: initial.accent || '',
               placeholder: 'primary  /  success  /  #ec4899',
-              help: 'Selected/recommended highlight colour. Semantic name (primary/success/info/warning/danger) stays theme-aware; any other CSS colour is applied directly.' },
+              help: 'Selected/recommended highlight colour. Semantic name (primary/success/info/warning/danger) stays theme-aware; any other CSS colour is applied directly. Use the swatch to pick a custom hex.' },
             { type: 'select',   key: 'accentStyle', label: 'Accent style', value: initial.accentStyle || 'border',
               options: [['border', 'Border (default)'], ['solid', 'Solid — filled tile'], ['glow', 'Glow — ring'], ['overlay', 'Overlay — translucent'], ['underline', 'Underline — minimal']],
               help: 'Visual treatment of the selected state.' },
             { type: 'checkbox', key: 'glow', label: 'Glow on selected option', value: !!initial.glow,
               help: 'Adds a soft outer glow when an option is selected.' },
-            { type: 'text',     key: 'glowColour', label: 'Glow colour (optional)', value: initial.glowColour || '',
+            { type: 'colour',   key: 'glowColour', label: 'Glow colour (optional)', value: initial.glowColour || '',
               placeholder: 'defaults to accent',
               help: 'Semantic name or any CSS colour. Leave blank to use the accent colour.' },
             { type: 'select',   key: 'shadow', label: 'Shadow weight', value: initial.shadow || 'none',
               options: [['none', 'None'], ['sm', 'Small'], ['md', 'Medium'], ['lg', 'Large'], ['xl', 'Extra Large']],
               help: 'Drop shadow applied to every option tile.' },
-            { type: 'text',     key: 'shadowColour', label: 'Shadow colour (optional)', value: initial.shadowColour || '',
+            { type: 'colour',   key: 'shadowColour', label: 'Shadow colour (optional)', value: initial.shadowColour || '',
               placeholder: 'rgba(0,0,0,0.1)',
               help: 'Optional shadow tint. Any CSS colour string.' }
         ]));
@@ -3734,6 +3789,47 @@ ${columnsHtml}
         labelEl.textContent = def.label;
         wrap.appendChild(labelEl);
 
+        // Hybrid colour input: a free-text input (accepts semantic names like
+        // 'primary' or any CSS colour) sitting next to a native colour-picker
+        // swatch. Picking a colour from the swatch fills the text input with
+        // its hex value; the text input is still free-typeable.
+        if (def.type === 'colour') {
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex; gap:0.4rem; align-items:stretch;';
+            const text = document.createElement('input');
+            text.type = 'text';
+            text.className = 'form-input';
+            text.value = def.value === undefined || def.value === null ? '' : String(def.value);
+            if (def.placeholder) text.placeholder = def.placeholder;
+            text.setAttribute('data-state', def.key);
+            text.style.flex = '1';
+
+            const swatch = document.createElement('input');
+            swatch.type = 'color';
+            swatch.title = 'Pick a colour';
+            swatch.style.cssText = 'width:36px; height:auto; padding:0; border:1px solid var(--dm-border); border-radius:var(--dm-radius-sm); background:transparent; cursor:pointer;';
+            // Seed swatch with current hex if applicable
+            const hexMatch = String(text.value).match(/^#[0-9a-fA-F]{3,8}$/);
+            swatch.value = hexMatch ? text.value : '#000000';
+            swatch.addEventListener('input', () => {
+                text.value = swatch.value;
+                // Manually fire an input event so the slideover state handler picks it up
+                text.dispatchEvent(new Event('input', { bubbles: true }));
+            });
+
+            row.appendChild(text);
+            row.appendChild(swatch);
+            wrap.appendChild(row);
+
+            if (def.help) {
+                const help = document.createElement('div');
+                help.className = 'qr-chooser-field-help';
+                help.textContent = def.help;
+                wrap.appendChild(help);
+            }
+            return wrap;
+        }
+
         let input;
         if (def.type === 'select') {
             input = document.createElement('select');
@@ -3766,6 +3862,127 @@ ${columnsHtml}
             wrap.appendChild(help);
         }
         return wrap;
+    }
+
+    /**
+     * Default config for a freshly-added form field. The palette uses these
+     * to seed new fields when the user clicks an "Add …" tile. The chooser
+     * type goes through `_openChooserSlideover` instead and never enters
+     * this map.
+     *
+     * @param {string} type
+     * @returns {Object} default field shape
+     * @private
+     */
+    _defaultFieldForType(type) {
+        const base = (extra) => ({ name: 'field', label: 'Field', required: false, ...extra });
+        switch (type) {
+            case 'text':           return base({ type: 'text',           placeholder: '' });
+            case 'email':          return base({ type: 'email',          placeholder: 'name@example.com' });
+            case 'password':       return base({ type: 'password',       placeholder: '' });
+            case 'number':         return base({ type: 'number' });
+            case 'date':           return base({ type: 'date' });
+            case 'tel':            return base({ type: 'tel' });
+            case 'url':            return base({ type: 'url' });
+            case 'textarea':       return base({ type: 'textarea',       placeholder: '' });
+            case 'select':         return base({ type: 'select',
+                                                 options: [{ value: 'a', label: 'Option A' }, { value: 'b', label: 'Option B' }] });
+            case 'radio':          return base({ type: 'radio',
+                                                 options: [{ value: 'a', label: 'Option A' }, { value: 'b', label: 'Option B' }] });
+            case 'checkbox-group': return base({ type: 'checkbox-group',
+                                                 options: [{ value: 'a', label: 'Option A' }, { value: 'b', label: 'Option B' }] });
+            case 'boolean':        return base({ type: 'boolean' });
+            case 'file':           return base({ type: 'file' });
+            case 'signature':      return base({ type: 'signature' });
+            default:               return base({ type: 'text' });
+        }
+    }
+
+    /**
+     * Build the field-type palette (a row of clickable tiles, one per
+     * supported field type). Each tile carries `data-action="add-field"`
+     * and `data-field-type="<type>"` so the existing action delegator can
+     * route the click. Chooser is special-cased to open the slideover.
+     *
+     * @returns {string} HTML
+     * @private
+     */
+    _buildFieldPalette() {
+        const tiles = [
+            { type: 'text',           label: 'Text',     icon: 'type' },
+            { type: 'email',          label: 'Email',    icon: 'mail' },
+            { type: 'number',         label: 'Number',   icon: 'hash' },
+            { type: 'date',           label: 'Date',     icon: 'calendar' },
+            { type: 'textarea',       label: 'Textarea', icon: 'file-text' },
+            { type: 'select',         label: 'Select',   icon: 'list' },
+            { type: 'radio',          label: 'Radio',    icon: 'circle' },
+            { type: 'checkbox-group', label: 'Checks',   icon: 'check-square' },
+            { type: 'boolean',        label: 'Toggle',   icon: 'toggle-right' },
+            { type: 'file',           label: 'File',     icon: 'paperclip' }
+        ];
+        const tilesHtml = tiles.map((t) =>
+            `<button type="button" class="qr-palette-tile btn btn-sm btn-secondary" data-action="add-field" data-field-type="${t.type}" title="Add ${t.label}"><span data-icon="${t.icon}" data-icon-size="14"></span> ${t.label}</button>`
+        ).join('');
+        const chooserTile = `<button type="button" class="qr-palette-tile btn btn-sm btn-primary" data-action="add-chooser" title="Add Chooser (opens visual builder)"><span data-icon="grid" data-icon-size="14"></span> Chooser</button>`;
+        return `
+            <div class="qr-field-palette" style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.5rem;">
+                ${tilesHtml}
+                ${chooserTile}
+            </div>
+        `;
+    }
+
+    /**
+     * Build the visual list of existing fields. Each row shows the field's
+     * label/name + type, with reorder/edit/delete controls. Chooser fields
+     * get a special "Edit visually" affordance pointing at the slideover.
+     *
+     * @param {Array<Object>} fields
+     * @returns {string} HTML
+     * @private
+     */
+    _buildFieldSummaryList(fields) {
+        if (!Array.isArray(fields) || fields.length === 0) {
+            return `<div class="qr-fields-empty" style="padding:0.6rem; border:1px dashed var(--dm-border); border-radius:var(--dm-radius-sm); text-align:center; font-size:0.8rem; color:var(--dm-text-muted);">No fields yet — click a tile above to add one.</div>`;
+        }
+        const escape = (s) => this._escapeHtml(String(s ?? ''));
+        const rowsHtml = fields.map((f, i) => {
+            const isChooser = f.type === 'chooser';
+            const editBtn = isChooser
+                ? `<button type="button" class="qr-btn qr-btn-sm" data-action="edit-field" data-field-index="${i}" title="Edit visually"><span data-icon="edit-2" data-icon-size="12"></span></button>`
+                : '';
+            const variantSummary = isChooser
+                ? ` · ${escape(f.variant || 'card')}${f.multiple ? ', multi' : ''}`
+                : '';
+            const optionCount = (f.options && f.options.length)
+                ? ` · ${f.options.length} option${f.options.length === 1 ? '' : 's'}`
+                : '';
+            return `
+                <div class="qr-field-summary" data-field-index="${i}" draggable="true" style="display:flex; align-items:center; gap:0.4rem; padding:0.4rem 0.6rem; border:1px solid var(--dm-border); border-radius:var(--dm-radius-sm); background:var(--dm-card-bg); margin-bottom:0.3rem;">
+                    <span data-icon="more-vertical" data-icon-size="14" style="opacity:0.5; cursor:grab;" title="Drag to reorder"></span>
+                    <span data-icon="${isChooser ? 'grid' : 'box'}" data-icon-size="14" style="color:var(--dm-primary);"></span>
+                    <span style="flex:1; min-width:0;">
+                        <strong style="display:block; font-size:0.85rem; color:var(--dm-text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escape(f.label || f.name || '(unnamed)')}</strong>
+                        <small style="display:block; font-size:0.72rem; color:var(--dm-text-muted);">
+                            <code>${escape(f.name || '')}</code> · ${escape(f.type || 'text')}${variantSummary}${optionCount}${f.required ? ' · required' : ''}
+                        </small>
+                    </span>
+                    <div style="display:flex; gap:0.2rem; flex-shrink:0;">
+                        <button type="button" class="qr-btn qr-btn-sm" data-action="move-field-up" data-field-index="${i}" title="Move up" ${i === 0 ? 'disabled' : ''}>
+                            <span data-icon="chevron-up" data-icon-size="12"></span>
+                        </button>
+                        <button type="button" class="qr-btn qr-btn-sm" data-action="move-field-down" data-field-index="${i}" title="Move down" ${i === fields.length - 1 ? 'disabled' : ''}>
+                            <span data-icon="chevron-down" data-icon-size="12"></span>
+                        </button>
+                        ${editBtn}
+                        <button type="button" class="qr-btn qr-btn-sm" data-action="delete-field" data-field-index="${i}" title="Delete">
+                            <span data-icon="trash" data-icon-size="12"></span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        return `<div class="qr-fields-list">${rowsHtml}</div>`;
     }
 
     /**
@@ -3842,8 +4059,35 @@ ${columnsHtml}
             const valueAutoFilled = !opt.value || opt.value === 'new';
             row.dataset.valueAutoFilled = valueAutoFilled ? '1' : '0';
 
-            // Top row: value + label + remove
+            // Top row: reorder controls + value + label + remove
             const top = rowFlex();
+
+            const reorder = document.createElement('div');
+            reorder.style.cssText = 'display:flex; flex-direction:column; gap:1px;';
+            const upBtn = document.createElement('button');
+            upBtn.type = 'button';
+            upBtn.className = 'btn btn-secondary btn-sm';
+            upBtn.setAttribute('data-action', 'move-option-up');
+            upBtn.title = 'Move up';
+            upBtn.style.padding = '0.1rem 0.3rem';
+            const upIcon = document.createElement('span');
+            upIcon.setAttribute('data-icon', 'chevron-up');
+            upIcon.setAttribute('data-icon-size', '12');
+            upBtn.appendChild(upIcon);
+            const downBtn = document.createElement('button');
+            downBtn.type = 'button';
+            downBtn.className = 'btn btn-secondary btn-sm';
+            downBtn.setAttribute('data-action', 'move-option-down');
+            downBtn.title = 'Move down';
+            downBtn.style.padding = '0.1rem 0.3rem';
+            const downIcon = document.createElement('span');
+            downIcon.setAttribute('data-icon', 'chevron-down');
+            downIcon.setAttribute('data-icon-size', '12');
+            downBtn.appendChild(downIcon);
+            reorder.appendChild(upBtn);
+            reorder.appendChild(downBtn);
+            top.appendChild(reorder);
+
             top.appendChild(optInput('value', opt.value || '', 'value', '1'));
             top.appendChild(optInput('label', opt.label || '', 'label (visible to users)', '2'));
             const removeBtn = document.createElement('button');
@@ -3953,11 +4197,33 @@ ${columnsHtml}
 
         wrap.addEventListener('click', (e) => {
             const remove = e.target.closest('[data-action="remove-option"]');
+            const moveUp = e.target.closest('[data-action="move-option-up"]');
+            const moveDown = e.target.closest('[data-action="move-option-down"]');
             if (remove) {
                 const idx = parseInt(remove.closest('.qr-chooser-option-row').getAttribute('data-idx'), 10);
                 state.options.splice(idx, 1);
                 renderRows();
                 renderPreview();
+                return;
+            }
+            if (moveUp) {
+                const idx = parseInt(moveUp.closest('.qr-chooser-option-row').getAttribute('data-idx'), 10);
+                if (idx > 0) {
+                    const [item] = state.options.splice(idx, 1);
+                    state.options.splice(idx - 1, 0, item);
+                    renderRows();
+                    renderPreview();
+                }
+                return;
+            }
+            if (moveDown) {
+                const idx = parseInt(moveDown.closest('.qr-chooser-option-row').getAttribute('data-idx'), 10);
+                if (idx < state.options.length - 1) {
+                    const [item] = state.options.splice(idx, 1);
+                    state.options.splice(idx + 1, 0, item);
+                    renderRows();
+                    renderPreview();
+                }
             }
         });
 
