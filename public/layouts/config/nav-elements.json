@@ -80,6 +80,11 @@
           "slug": "carousel"
         },
         {
+          "text": "Chooser",
+          "url": "../chooser/index.html",
+          "slug": "chooser"
+        },
+        {
           "text": "Dialog",
           "url": "../dialog/index.html",
           "slug": "dialog"

@@ -192,8 +192,76 @@ When used with Forms, `type` also determines the HTML input element:
 | `select` | `<select>` | Requires `options` array |
 | `radio` | Radio group | Requires `options` array |
 | `checkbox-group` | Checkbox group | Requires `options` array |
+| `chooser` | Visual option-picker (cards or chips) | Requires `options` array; supports rich per-option metadata |
 | `textarea` | `<textarea>` | Use `rows` for height |
 | `file` | `<input type="file">` | |
+
+#### Chooser fields
+
+The `chooser` type renders options as visually rich tiles — the form-friendly
+equivalent of native radio/checkbox controls when richer presentation is
+needed. A single component covers four combinations driven by parameters.
+
+```javascript
+plan: {
+  type: 'chooser',
+  variant: 'card',           // 'card' | 'chip'
+  multiple: false,           // false = radio, true = checkbox semantics
+  density: 'comfortable',    // 'comfortable' | 'compact'
+  columns: 3,                // grid columns (cards only — chips wrap)
+  required: true,
+  label: 'Choose your plan',
+  options: [
+    { value: 'starter', label: 'Starter', icon: 'rocket',
+      description: 'For solo builders.' },
+    { value: 'pro',     label: 'Pro',     icon: 'zap',
+      description: 'Teams up to 10.',
+      badge: { text: 'POPULAR', type: 'success' },
+      recommended: true,
+      tooltip: 'Most-bought plan' },
+    { value: 'ent',     label: 'Enterprise', icon: 'briefcase',
+      description: 'Custom limits + SSO.' }
+  ]
+}
+
+// Chip variant, multi-select
+tags: {
+  type: 'chooser',
+  variant: 'chip',
+  multiple: true,
+  options: [
+    { value: 'js',   label: 'JavaScript', icon: 'code' },
+    { value: 'css',  label: 'CSS',        icon: 'palette' },
+    { value: 'wasm', label: 'WASM',       icon: 'cpu', disabled: true }
+  ]
+}
+```
+
+**Per-option keys:** `value`, `label`, `icon`, `description`, `tooltip`,
+`badge: { text, type }`, `recommended`, `disabled`.
+
+**Visual options (top-level):**
+
+| Key | Type | Default | Description |
+|---|---|---|---|
+| `accent` | semantic name or `'#hex'` | `'primary'` | Colour for selected/recommended highlights |
+| `accentStyle` | `'border' \| 'solid' \| 'glow' \| 'overlay' \| 'underline'` | `'border'` | Visual treatment of the selected state |
+| `glow` | `boolean` | `false` | Soft outer glow on the selected option |
+| `glowColour` | semantic name or `'#hex'` | `null` (uses accent) | Glow colour override |
+| `shadow` | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'none'` | Shadow weight applied to every option |
+| `shadowColour` | CSS colour string | `null` | Optional shadow tint |
+
+Semantic colour names (`primary`, `success`, `info`, `warning`, `danger`) map
+to existing Domma CSS variables and stay theme-aware. Any other string is
+treated as a literal CSS colour and applied as an inline custom property.
+
+**Value shape:** When `multiple: false`, the field stores a string. When
+`multiple: true`, it stores an array of strings. The form pipeline handles
+both — no separate data-type declaration is needed. Required validation
+treats an empty array as empty for multi-select.
+
+See the chooser showcase at `/showcase/elements/chooser/` for a comprehensive
+visual reference.
 
 ---
 

@@ -5,6 +5,7 @@
 
 import {utils} from './utils.js';
 import {models} from './models.js';
+import {elements} from './elements.js';
 
 /**
  * Utility function to extract data from form element
@@ -371,6 +372,9 @@ class Forma {
       case 'checkbox-group':
         return this._buildCheckboxGroup(fieldName, fieldDef, attrs, value);
 
+      case 'chooser':
+        return this._buildChooser(fieldName, fieldDef, attrs, value);
+
       case 'checkbox': // alias for boolean
       case 'boolean':
         const checked = value ? 'checked' : '';
@@ -534,6 +538,40 @@ class Forma {
   }
 
   /**
+   * Build a placeholder element for a chooser field. The element is
+   * hydrated post-render by `_initChooserFields`, which instantiates
+   * `Domma.elements.chooser()` inside it. The configuration is round-tripped
+   * via a dataset attribute (JSON, attribute-quoted) so the form pipeline
+   * stays string-based until hydration time.
+   *
+   * @param {string} fieldName  blueprint key
+   * @param {Object} fieldDef   blueprint definition
+   * @param {Object} attrs      attribute object built by _buildField
+   * @param {*} currentValue    current model value (string or array)
+   * @returns {string} HTML string
+   */
+  _buildChooser(fieldName, fieldDef, attrs, currentValue) {
+    const cfg = {
+      variant: fieldDef.variant || 'card',
+      multiple: !!fieldDef.multiple,
+      density: fieldDef.density || 'comfortable',
+      columns: fieldDef.columns || 3,
+      accent: fieldDef.accent || 'primary',
+      accentStyle: fieldDef.accentStyle || 'border',
+      glow: !!fieldDef.glow,
+      glowColour: fieldDef.glowColour || null,
+      shadow: fieldDef.shadow || 'none',
+      shadowColour: fieldDef.shadowColour || null,
+      options: fieldDef.options || [],
+      value: currentValue !== undefined ? currentValue : (fieldDef.multiple ? [] : null),
+      name: fieldName,
+      required: !!fieldDef.required
+    };
+    const cfgJson = JSON.stringify(cfg).replace(/"/g, '&quot;');
+    return `<div class="domma-chooser-field" id="${attrs.id}" data-chooser-field="${fieldName}" data-chooser-config="${cfgJson}"></div>`;
+  }
+
+  /**
    * Bind events to form
    */
   _bindEvents(formElement) {
@@ -575,6 +613,47 @@ class Forma {
 
     // Initialise Signature fields — runs after the form HTML is in the DOM
     this._initSignatureFields(formElement);
+
+    // Initialise Chooser fields — same lifecycle as signature
+    this._initChooserFields(formElement);
+  }
+
+  /**
+   * Locate every `[data-chooser-field]` placeholder in the rendered form
+   * and instantiate `Domma.elements.chooser()` inside it. Stores each
+   * control instance on `this._choosers` keyed by field name so
+   * `_getFieldValueByName` and `validateField` can read its current value.
+   *
+   * @param {HTMLElement} formElement
+   * @private
+   */
+  _initChooserFields(formElement) {
+    if (!this._choosers) this._choosers = {};
+    const fields = formElement.querySelectorAll('[data-chooser-field]');
+    if (!fields.length) return;
+
+    // Prefer the imported `elements` module over the (test-volatile) window.Domma global.
+    const chooserFn = (typeof elements?.chooser === 'function')
+      ? elements.chooser.bind(elements)
+      : (window.Domma?.elements?.chooser?.bind(window.Domma.elements));
+    if (!chooserFn) return;
+
+    fields.forEach((node) => {
+      const cfg = JSON.parse((node.getAttribute('data-chooser-config') || '{}').replace(/&quot;/g, '"'));
+      const fieldName = node.getAttribute('data-chooser-field');
+      const inst = chooserFn(node, {
+        ...cfg,
+        onChange: (v) => {
+          if (this.model) {
+            try { this.model.set(fieldName, v); }
+            catch (err) { this.setFieldError(fieldName, err.message); }
+          } else {
+            this.data[fieldName] = v;
+          }
+        }
+      });
+      if (inst) this._choosers[fieldName] = inst;
+    });
   }
 
   /**
@@ -763,6 +842,12 @@ class Forma {
    * Get field value by field name
    */
   _getFieldValueByName(fieldName) {
+    // Chooser values are read directly from the control instance — they
+    // don't live in a single name= input but in the chooser's internal state.
+    if (this._choosers && this._choosers[fieldName]) {
+      return this._choosers[fieldName].getValue();
+    }
+
     if (this.formElement) {
       const element = this.formElement.querySelector(`[name="${fieldName}"]`);
       if (element) {
@@ -778,13 +863,19 @@ class Forma {
    * Validate field value against schema definition
    */
   _validateFieldValue(fieldName, value, fieldDef) {
+    // Chooser fields: empty means null/undefined OR an empty array
+    const isChooser = fieldDef.type === 'chooser';
+    const isEmpty = isChooser
+      ? (value === null || value === undefined || (Array.isArray(value) && value.length === 0) || value === '')
+      : (value === null || value === undefined || value === '');
+
     // Required check
-    if (fieldDef.required && (value === null || value === undefined || value === '')) {
+    if (fieldDef.required && isEmpty) {
       return {valid: false, error: `${fieldDef.label || fieldName} is required`};
     }
 
     // Skip further validation if value is empty and not required
-    if (value === null || value === undefined || value === '') {
+    if (isEmpty) {
       return {valid: true};
     }
 

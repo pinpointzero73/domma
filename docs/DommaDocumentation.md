@@ -2551,6 +2551,99 @@ See the [NumberBadge showcase](../public/showcase/elements/number-badge/) for in
 
 ---
 
+## Chooser
+
+The Chooser is a visual option-picker — the form-friendly equivalent of native radio/checkbox controls when richer presentation is needed. A single component covers four combinations driven by parameters:
+
+|                | `multiple: false` | `multiple: true` |
+|----------------|-------------------|------------------|
+| `variant: 'card'` | Single-select cards (radio-style) | Multi-select cards (checkbox-style) |
+| `variant: 'chip'` | Single-select chips | Multi-select chips |
+
+Each combination supports `density: 'comfortable' | 'compact'` and per-option metadata: `icon`, `description`, `tooltip`, `badge: { text, type }`, `recommended`, `disabled`.
+
+```javascript
+// Standalone
+Domma.elements.chooser('#host', {
+    variant: 'card',
+    columns: 3,
+    options: [
+        { value: 'starter', label: 'Starter', icon: 'rocket',
+          description: 'For solo builders.' },
+        { value: 'pro',     label: 'Pro',     icon: 'zap',
+          description: 'Teams up to 10.',
+          recommended: true,
+          badge: { text: 'POPULAR', type: 'success' } },
+        { value: 'ent',     label: 'Enterprise', icon: 'briefcase',
+          description: 'Custom limits + SSO.' }
+    ],
+    onChange: (value) => console.log('Picked:', value)
+});
+
+// Inside a form blueprint
+Domma.forms.create({
+    plan: {
+        type: 'chooser',
+        variant: 'card',
+        label: 'Choose your plan',
+        required: true,
+        options: [/* … */]
+    }
+}).renderTo('#my-form');
+```
+
+### Visual options
+
+Six top-level options polish the look of any chooser. All accept either a semantic colour name (`primary`, `success`, `info`, `warning`, `danger`) which maps to a Domma CSS variable, or any literal CSS colour string (`#hex`, `rgb()`, `hsl()`).
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `accent` | semantic name or CSS colour | `'primary'` | Selected/recommended highlight colour |
+| `accentStyle` | `'border'` \| `'solid'` \| `'glow'` \| `'overlay'` \| `'underline'` | `'border'` | Visual treatment of the selected state |
+| `glow` | `boolean` | `false` | Soft outer glow on the selected option |
+| `glowColour` | semantic name or CSS colour, or `null` | `null` (uses `accent`) | Glow colour override |
+| `shadow` | `'none'` \| `'sm'` \| `'md'` \| `'lg'` \| `'xl'` | `'none'` | Shadow weight applied to every option |
+| `shadowColour` | CSS colour string | `null` | Optional shadow tint |
+
+```javascript
+Domma.elements.chooser('#host', {
+    variant: 'card',
+    accent: '#ec4899',          // any CSS colour
+    accentStyle: 'glow',        // five styles available
+    glow: true,
+    glowColour: '#ec4899',
+    shadow: 'lg',
+    options: [/* … */]
+});
+```
+
+**Accent style at a glance:**
+
+- `border` — coloured border + subtle tinted background (default)
+- `solid` — fully filled tile in the accent colour, white text
+- `glow` — clean transparent border with a glowing accent ring
+- `overlay` — heavier translucent fill over the card background
+- `underline` — minimal: only a thick coloured bottom border
+
+Semantic colours stay theme-aware automatically (they reference Domma CSS variables); arbitrary hex/rgb values are applied as inline CSS custom properties on the chooser root, so they retint nothing but remain consistent across the four matrix combinations.
+
+### Theme awareness
+
+The chooser uses Domma's CSS variables (`--dm-primary`, `--dm-card-bg`, `--dm-border`, `--dm-success`, `--dm-text-muted`), so it retints automatically across all themes (charcoal, ocean, forest, sunset, lemon, mint, dreamy, christmas) and both light/dark variants — no per-theme overrides required. Switch themes at runtime via `Domma.theme.set('ocean-dark')` and the chooser updates live.
+
+### Accessibility
+
+- `multiple: false` → `role="radiogroup"`; arrow keys move and select; Enter/Space confirm
+- `multiple: true` → `role="group"`; Tab between options; Space toggles
+- `aria-checked` reflects each option's selection state
+- Disabled options skipped by keyboard navigation
+- Hidden native `<input type="radio|checkbox">` elements emit when `name` is set, so the value is captured by `FormData` even with JS disabled
+- Respects `prefers-reduced-motion`
+
+See the [Chooser showcase](../public/showcase/elements/chooser/) for interactive examples covering all four matrix combinations, every per-option flag, theme switching, accessibility, and form integration. See [Blueprints.md](./Blueprints.md#chooser-fields) for the blueprint shape.
+
+---
+
 ## CSS Utilities — Opacity &amp; Translucency
 
 ### Opacity Scale

@@ -7401,3 +7401,326 @@ code {
         order: -1;
     }
 }
+
+/* ============================================================
+ * Chooser — visual option-picker (card/chip × single/multi)
+ * ============================================================ */
+.domma-chooser {
+    --picker-radius: var(--dm-radius);
+    display: block;
+}
+
+.domma-chooser .picker-label {
+    display: block;
+    margin-bottom: var(--dm-space-2);
+    font-weight: 600;
+    color: var(--dm-text);
+}
+
+.domma-chooser .picker-required {
+    color: var(--dm-danger);
+    margin-left: 0.25rem;
+}
+
+/* Variant: card */
+.domma-chooser[data-variant="card"] .picker-options {
+    display: grid;
+    grid-template-columns: repeat(var(--picker-cols, 3), 1fr);
+    gap: 0.6rem;
+}
+
+.domma-chooser[data-variant="card"] .picker-option {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.85rem 0.95rem;
+    border: 2px solid var(--dm-border);
+    border-radius: var(--picker-radius);
+    background: var(--dm-card-bg);
+    color: var(--dm-text);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.domma-chooser[data-variant="card"] .picker-option:hover:not(.is-disabled) {
+    border-color: var(--picker-accent, var(--dm-primary));
+}
+
+.domma-chooser[data-variant="card"] .picker-option.is-selected {
+    border-color: var(--picker-accent, var(--dm-primary));
+    background: color-mix(in srgb, var(--picker-accent, var(--dm-primary)) 10%, var(--dm-card-bg));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--picker-accent, var(--dm-primary)) 22%, transparent);
+}
+
+.domma-chooser[data-variant="card"] .picker-option:focus-visible {
+    outline: 2px solid var(--picker-accent, var(--dm-primary));
+    outline-offset: 2px;
+}
+
+.domma-chooser .picker-option-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--dm-radius-sm);
+    background: color-mix(in srgb, var(--picker-accent, var(--dm-primary)) 12%, transparent);
+    color: var(--picker-accent, var(--dm-primary));
+    flex-shrink: 0;
+}
+
+.domma-chooser .picker-option-label {
+    font-weight: 600;
+    color: var(--dm-text);
+    font-size: 0.95rem;
+}
+
+.domma-chooser .picker-option-desc {
+    font-size: 0.8rem;
+    color: var(--dm-text-muted);
+    line-height: 1.4;
+}
+
+.domma-chooser[data-variant="card"] .picker-option-tick {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--picker-accent, var(--dm-primary));
+    color: #fff;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.domma-chooser[data-variant="card"] .picker-option.is-selected .picker-option-tick {
+    display: inline-flex;
+}
+
+.domma-chooser .picker-option-badge {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+}
+
+/* Density: compact */
+.domma-chooser[data-variant="card"][data-density="compact"] .picker-option {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.75rem;
+}
+
+.domma-chooser[data-variant="card"][data-density="compact"] .picker-option-icon {
+    width: 24px;
+    height: 24px;
+    background: transparent;
+}
+
+.domma-chooser[data-variant="card"][data-density="compact"] .picker-option-desc {
+    display: none;
+}
+
+.domma-chooser[data-variant="card"][data-density="compact"] .picker-option-tick {
+    position: static;
+}
+
+/* Variant: chip */
+.domma-chooser[data-variant="chip"] .picker-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.domma-chooser[data-variant="chip"] .picker-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.85rem;
+    border: 1.5px solid var(--dm-border);
+    border-radius: 999px;
+    background: var(--dm-card-bg);
+    color: var(--dm-text);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.domma-chooser[data-variant="chip"] .picker-option:hover:not(.is-disabled) {
+    border-color: var(--picker-accent, var(--dm-primary));
+}
+
+.domma-chooser[data-variant="chip"] .picker-option.is-selected {
+    border-color: var(--picker-accent, var(--dm-primary));
+    background: var(--picker-accent, var(--dm-primary));
+    color: #fff;
+}
+
+.domma-chooser[data-variant="chip"] .picker-option:focus-visible {
+    outline: 2px solid var(--picker-accent, var(--dm-primary));
+    outline-offset: 2px;
+}
+
+.domma-chooser[data-variant="chip"] .picker-option-icon {
+    width: auto;
+    height: auto;
+    background: transparent;
+    padding: 0;
+    color: inherit;
+}
+
+.domma-chooser[data-variant="chip"] .picker-option-tick {
+    display: none !important;
+}
+
+/* Shared states */
+.domma-chooser .picker-option.is-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.domma-chooser .picker-option.is-recommended {
+    border-color: var(--picker-rec-accent, var(--dm-success));
+}
+
+/* Hidden native input for graceful submission */
+.domma-chooser .picker-native-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .domma-chooser .picker-option {
+        transition: none;
+    }
+}
+
+/* ============================================================
+ * Chooser — accent colour, accent style, glow, shadow extensions
+ * ============================================================ */
+
+/* Default the accent variables on every chooser */
+.domma-chooser {
+    --picker-accent: var(--dm-primary);
+    --picker-rec-accent: var(--dm-success);
+    --picker-glow-colour: var(--picker-accent);
+    --picker-shadow-colour: rgba(0, 0, 0, 0.1);
+}
+
+/* Semantic accent colours */
+.domma-chooser[data-accent="primary"] { --picker-accent: var(--dm-primary); }
+.domma-chooser[data-accent="success"] { --picker-accent: var(--dm-success); }
+.domma-chooser[data-accent="info"]    { --picker-accent: var(--dm-info); }
+.domma-chooser[data-accent="warning"] { --picker-accent: var(--dm-warning); }
+.domma-chooser[data-accent="danger"]  { --picker-accent: var(--dm-danger); }
+
+/* Semantic glow colours (overrides accent) */
+.domma-chooser[data-glow-colour="primary"] { --picker-glow-colour: var(--dm-primary); }
+.domma-chooser[data-glow-colour="success"] { --picker-glow-colour: var(--dm-success); }
+.domma-chooser[data-glow-colour="info"]    { --picker-glow-colour: var(--dm-info); }
+.domma-chooser[data-glow-colour="warning"] { --picker-glow-colour: var(--dm-warning); }
+.domma-chooser[data-glow-colour="danger"]  { --picker-glow-colour: var(--dm-danger); }
+
+/* Glow on selected option */
+.domma-chooser[data-glow="true"] .picker-option.is-selected {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--picker-accent) 22%, transparent),
+                0 0 18px color-mix(in srgb, var(--picker-glow-colour) 60%, transparent);
+}
+
+/* Shadow weights — applied to all options */
+.domma-chooser[data-shadow="sm"] .picker-option {
+    box-shadow: 0 1px 2px var(--picker-shadow-colour, rgba(0, 0, 0, 0.08));
+}
+.domma-chooser[data-shadow="md"] .picker-option {
+    box-shadow: 0 2px 6px var(--picker-shadow-colour, rgba(0, 0, 0, 0.10));
+}
+.domma-chooser[data-shadow="lg"] .picker-option {
+    box-shadow: 0 6px 16px var(--picker-shadow-colour, rgba(0, 0, 0, 0.12));
+}
+.domma-chooser[data-shadow="xl"] .picker-option {
+    box-shadow: 0 12px 28px var(--picker-shadow-colour, rgba(0, 0, 0, 0.14));
+}
+
+/* When both glow + shadow are set, the selected option keeps glow on top */
+.domma-chooser[data-glow="true"][data-shadow="sm"] .picker-option.is-selected,
+.domma-chooser[data-glow="true"][data-shadow="md"] .picker-option.is-selected,
+.domma-chooser[data-glow="true"][data-shadow="lg"] .picker-option.is-selected,
+.domma-chooser[data-glow="true"][data-shadow="xl"] .picker-option.is-selected {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--picker-accent) 22%, transparent),
+                0 0 18px color-mix(in srgb, var(--picker-glow-colour) 60%, transparent);
+}
+
+/* === Accent styles (default 'border' is the existing behaviour) === */
+
+/* Solid: filled tile in the accent colour, white text */
+.domma-chooser[data-accent-style="solid"][data-variant="card"] .picker-option.is-selected {
+    background: var(--picker-accent);
+    border-color: var(--picker-accent);
+    color: #fff;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--picker-accent) 22%, transparent);
+}
+.domma-chooser[data-accent-style="solid"][data-variant="card"] .picker-option.is-selected .picker-option-label,
+.domma-chooser[data-accent-style="solid"][data-variant="card"] .picker-option.is-selected .picker-option-desc,
+.domma-chooser[data-accent-style="solid"][data-variant="card"] .picker-option.is-selected .picker-option-icon {
+    color: #fff;
+}
+.domma-chooser[data-accent-style="solid"][data-variant="card"] .picker-option.is-selected .picker-option-icon {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Glow style: clean transparent border, glowing accent ring */
+.domma-chooser[data-accent-style="glow"][data-variant="card"] .picker-option.is-selected {
+    background: var(--dm-card-bg);
+    border-color: transparent;
+    box-shadow: 0 0 0 2px var(--picker-accent),
+                0 0 22px color-mix(in srgb, var(--picker-glow-colour) 65%, transparent);
+}
+
+/* Overlay style: heavier translucent fill */
+.domma-chooser[data-accent-style="overlay"][data-variant="card"] .picker-option.is-selected {
+    background: color-mix(in srgb, var(--picker-accent) 28%, var(--dm-card-bg));
+    border-color: var(--picker-accent);
+    box-shadow: none;
+}
+
+/* Underline style: only a thick coloured bottom border */
+.domma-chooser[data-accent-style="underline"][data-variant="card"] .picker-option {
+    border-bottom-width: 4px;
+    border-bottom-color: transparent;
+}
+.domma-chooser[data-accent-style="underline"][data-variant="card"] .picker-option.is-selected {
+    background: var(--dm-card-bg);
+    border-color: var(--dm-border);
+    border-bottom-color: var(--picker-accent);
+    box-shadow: none;
+}
+
+/* Chip variant: solid + glow + overlay also work for chips */
+.domma-chooser[data-accent-style="solid"][data-variant="chip"] .picker-option.is-selected {
+    background: var(--picker-accent);
+    border-color: var(--picker-accent);
+    color: #fff;
+}
+.domma-chooser[data-accent-style="glow"][data-variant="chip"] .picker-option.is-selected {
+    background: var(--dm-card-bg);
+    color: var(--dm-text);
+    border-color: var(--picker-accent);
+    box-shadow: 0 0 0 1px var(--picker-accent),
+                0 0 16px color-mix(in srgb, var(--picker-glow-colour) 55%, transparent);
+}
+.domma-chooser[data-accent-style="overlay"][data-variant="chip"] .picker-option.is-selected {
+    background: color-mix(in srgb, var(--picker-accent) 30%, var(--dm-card-bg));
+    border-color: var(--picker-accent);
+    color: var(--dm-text);
+}

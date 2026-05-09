@@ -2683,12 +2683,96 @@ Creates a Signature instance on the selected element.
 
 ---
 
+### Chooser
+
+Visual option-picker — card or chip variants, single or multi-select, with rich per-option metadata (icon, description, tooltip, badge, recommended, disabled). Available standalone via `Domma.elements.chooser()` and as a form-input type via blueprint `type: 'chooser'`.
+
+```javascript
+// Standalone
+Domma.elements.chooser('#host', {
+    variant: 'card',
+    columns: 3,
+    options: [
+        { value: 'starter', label: 'Starter', icon: 'rocket',
+          description: 'For solo builders.' },
+        { value: 'pro',     label: 'Pro',     icon: 'zap',
+          description: 'Teams up to 10.',
+          recommended: true,
+          badge: { text: 'POPULAR', type: 'success' } },
+        { value: 'ent',     label: 'Enterprise', icon: 'briefcase',
+          description: 'Custom limits + SSO.' }
+    ],
+    onChange: (value) => console.log('Picked:', value)
+});
+
+// Inside a form blueprint
+Domma.forms.create({
+    plan: { type: 'chooser', variant: 'card', /* ... */ }
+}).renderTo('#my-form');
+```
+
+#### `elements.chooser(selector, options)`
+
+Creates a Chooser instance on the selected host element.
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `variant` | `'card' \| 'chip'` | `'card'` | Visual style |
+| `multiple` | `boolean` | `false` | Toggles single ↔ multi-select |
+| `density` | `'comfortable' \| 'compact'` | `'comfortable'` | Compact removes description, tightens padding |
+| `columns` | number (1–6) | `3` | Grid columns for card variant; chips wrap freely |
+| `label` | string | — | Optional label rendered above the picker |
+| `required` | boolean | `false` | Required indicator |
+| `name` | string | — | Hidden-input name for native form submission |
+| `value` | string \| string[] | — | Initial selection (string for single, array for multi) |
+| `accent` | semantic name or `'#hex'` | `'primary'` | Selected/recommended highlight colour |
+| `accentStyle` | `'border' \| 'solid' \| 'glow' \| 'overlay' \| 'underline'` | `'border'` | Visual treatment of the selected state |
+| `glow` | boolean | `false` | Soft outer glow on the selected option |
+| `glowColour` | semantic name, `'#hex'`, or `null` | `null` (uses accent) | Glow colour override |
+| `shadow` | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'none'` | Shadow weight applied to every option |
+| `shadowColour` | CSS colour string | `null` | Optional shadow tint |
+| `options` | `ChooserOption[]` | required | Option definitions (see below) |
+| `onChange` | function | — | Called with the new value on selection change |
+
+Semantic colour names (`primary`, `success`, `info`, `warning`, `danger`) map to existing Domma CSS variables and stay theme-aware. Any other value is treated as a literal CSS colour string.
+
+**Per-option keys:**
+
+| Key | Type | Description |
+|---|---|---|
+| `value` | string \| number | Required — the option's value |
+| `label` | string | Required — the visible label |
+| `icon` | string | Optional — Domma icon name |
+| `description` | string | Optional — sub-text under label (card + comfortable only) |
+| `tooltip` | string | Optional — hover hint (uses `data-tooltip`) |
+| `badge` | `{ text, type }` | Optional — corner badge; type is `primary \| success \| info \| warning \| danger` |
+| `recommended` | boolean | Optional — success-coloured border ring |
+| `disabled` | boolean | Optional — non-interactive, muted |
+
+**Methods:**
+
+| Method | Returns | Description |
+|---|---|---|
+| `getValue()` | string \| string[] \| null | Current selection — string for single, array for multi |
+| `setValue(value)` | `void` | Programmatically set the selection (does not fire `onChange`) |
+| `disable()` | `void` | Mark all options non-interactive |
+| `enable()` | `void` | Restore interactivity |
+| `destroy()` | `void` | Remove the chooser DOM |
+
+#### Inside a form blueprint
+
+Use `type: 'chooser'` and the form pipeline handles validation, model binding, and submission automatically. Required validation treats an empty array as empty for multi-select.
+
+See the [chooser showcase](/showcase/elements/chooser/) for a comprehensive visual reference covering all four matrix combinations, every per-option flag, theme awareness, accessibility, and the in-form integration.
+
+---
+
 ### Other UI Components
 
 The Elements namespace includes 27+ additional components. For complete documentation, see:
 
 - **Interactive**: `tabs`, `accordion`, `carousel`, `dropdown`, `tooltip`
-- **Forms**: `autocomplete`, `pillbox`, `buttonGroup`
+- **Forms**: `autocomplete`, `pillbox`, `buttonGroup`, `chooser`
 - **Feedback**: `toast`, `dialog`, `loader`, `badge`, `numberBadge`, `notification`
 - **Navigation**: `navbar`, `sidebar`, `footer`, `breadcrumbs`, `backToTop`
 - **Utilities**: `timer`, `alarm`, `card`

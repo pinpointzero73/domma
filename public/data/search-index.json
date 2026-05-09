@@ -287,6 +287,13 @@
     "keywords": ["tags", "multi-select", "chips", "E.pillbox", "input", "token"]
   },
   {
+    "title": "Chooser",
+    "description": "Visual option-picker — card or chip variants, single or multi-select, with rich per-option metadata, accent styles, glow and shadow",
+    "category": "Elements",
+    "url": "showcase/elements/chooser/index.html",
+    "keywords": ["chooser", "picker", "option picker", "radio", "checkbox", "card picker", "chip picker", "E.chooser", "form input", "blueprint", "accent", "glow", "shadow"]
+  },
+  {
     "title": "Progression",
     "description": "Unified timeline and roadmap component with status tracking and dual modes",
     "category": "Elements",

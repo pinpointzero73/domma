@@ -10060,6 +10060,283 @@ export const elements = {
         return instance;
     },
 
+    /**
+     * Create a chooser — visual option-picker (card or chip variants,
+     * single or multi-select). All DOM is built via createElement +
+     * appendChild; user-supplied strings flow through textContent /
+     * setAttribute, never inner-HTML assignment.
+     *
+     * Visual options (accent, accentStyle, glow, shadow) accept either a
+     * semantic colour name — 'primary' | 'success' | 'info' | 'warning' |
+     * 'danger' — which maps to an existing Domma CSS variable and stays
+     * theme-aware, or any literal CSS colour string (e.g. '#ec4899',
+     * 'rgb(99,102,241)') which is applied as an inline CSS custom property
+     * on the chooser root.
+     *
+     * @param {string|HTMLElement} selector  host element selector or node
+     * @param {Object}    [options]
+     * @param {'card'|'chip'}    [options.variant='card']        visual style
+     * @param {boolean}          [options.multiple=false]        multi-select toggle
+     * @param {'comfortable'|'compact'} [options.density='comfortable']  density
+     * @param {number}           [options.columns=3]             grid columns (card variant)
+     * @param {string}           [options.label]                 label rendered above
+     * @param {boolean}          [options.required=false]        required indicator
+     * @param {string}           [options.name]                  hidden-input name for native form submission
+     * @param {string|string[]}  [options.value]                 initial selection
+     * @param {string}           [options.accent='primary']      selected/recommended highlight colour (semantic name or CSS colour)
+     * @param {'border'|'solid'|'glow'|'overlay'|'underline'} [options.accentStyle='border']  visual treatment of the selected state
+     * @param {boolean}          [options.glow=false]            soft outer glow on the selected option
+     * @param {string|null}      [options.glowColour=null]       glow colour override (semantic name or CSS colour); defaults to accent when null
+     * @param {'none'|'sm'|'md'|'lg'|'xl'} [options.shadow='none']  shadow weight applied to every option
+     * @param {string|null}      [options.shadowColour=null]     optional shadow tint (any CSS colour string)
+     * @param {Array<Object>}     options.options                option definitions
+     * @param {Function}         [options.onChange]              called with the new value
+     * @returns {{getValue:Function,setValue:Function,disable:Function,enable:Function,destroy:Function,_root:HTMLElement}|null}
+     */
+    chooser(selector, options = {}) {
+        const host = typeof selector === 'string'
+            ? document.querySelector(selector)
+            : selector;
+        if (!host) {
+            console.warn('[Domma.elements.chooser] host not found:', selector);
+            return null;
+        }
+
+        const cfg = {
+            variant: 'card',
+            multiple: false,
+            density: 'comfortable',
+            columns: 3,
+            // Visual options — all theme-aware. Semantic colour names map
+            // to existing Domma CSS vars; arbitrary hex/rgb values become
+            // inline CSS variables so the picker still retints when the
+            // wider theme changes.
+            glow: false,
+            glowColour: null,                  // 'primary' | 'success' | … | '#hex' | null
+            shadow: 'none',                    // 'none' | 'sm' | 'md' | 'lg' | 'xl'
+            shadowColour: null,                // optional tint, hex/rgb
+            accent: 'primary',                 // semantic name OR '#hex' for the selected highlight
+            accentStyle: 'border',             // 'border' | 'solid' | 'glow' | 'overlay' | 'underline'
+            options: [],
+            ...options
+        };
+
+        let value = cfg.value !== undefined
+            ? cfg.value
+            : (cfg.multiple ? [] : null);
+
+        const root = document.createElement('div');
+        root.className = 'domma-chooser';
+        root.setAttribute('data-variant', cfg.variant);
+        root.setAttribute('data-density', cfg.density);
+        root.style.setProperty('--picker-cols', String(cfg.columns));
+
+        // Visual option attributes / inline CSS variables
+        const SEMANTIC = { primary: 1, success: 1, info: 1, warning: 1, danger: 1 };
+        const isSemantic = (v) => typeof v === 'string' && SEMANTIC[v];
+        if (cfg.glow) root.setAttribute('data-glow', 'true');
+        if (cfg.glowColour) {
+            if (isSemantic(cfg.glowColour)) root.setAttribute('data-glow-colour', cfg.glowColour);
+            else root.style.setProperty('--picker-glow-colour', cfg.glowColour);
+        }
+        if (cfg.shadow && cfg.shadow !== 'none') root.setAttribute('data-shadow', cfg.shadow);
+        if (cfg.shadowColour) root.style.setProperty('--picker-shadow-colour', cfg.shadowColour);
+        if (cfg.accent) {
+            if (isSemantic(cfg.accent)) root.setAttribute('data-accent', cfg.accent);
+            else root.style.setProperty('--picker-accent', cfg.accent);
+        }
+        if (cfg.accentStyle && cfg.accentStyle !== 'border') {
+            root.setAttribute('data-accent-style', cfg.accentStyle);
+        }
+
+        if (cfg.label) {
+            const labelEl = document.createElement('label');
+            labelEl.className = 'picker-label';
+            labelEl.textContent = cfg.label;
+            if (cfg.required) {
+                const req = document.createElement('span');
+                req.className = 'picker-required';
+                req.textContent = '*';
+                labelEl.appendChild(req);
+            }
+            root.appendChild(labelEl);
+        }
+
+        const list = document.createElement('div');
+        list.className = 'picker-options';
+        list.setAttribute('role', cfg.multiple ? 'group' : 'radiogroup');
+        root.appendChild(list);
+
+        const isSelected = (optValue) => {
+            const v = String(optValue);
+            if (cfg.multiple) return Array.isArray(value) && value.map(String).includes(v);
+            return value !== null && value !== undefined && String(value) === v;
+        };
+
+        const buildOption = (opt, idx) => {
+            const el = document.createElement('div');
+            el.className = 'picker-option';
+            el.setAttribute('role', cfg.multiple ? 'checkbox' : 'radio');
+            el.setAttribute('tabindex', cfg.multiple ? '0' : (idx === 0 ? '0' : '-1'));
+            el.setAttribute('data-value', String(opt.value));
+            el.setAttribute('aria-checked', isSelected(opt.value) ? 'true' : 'false');
+            if (isSelected(opt.value)) el.classList.add('is-selected');
+            if (opt.disabled) {
+                el.classList.add('is-disabled');
+                el.setAttribute('aria-disabled', 'true');
+            }
+            if (opt.recommended) el.classList.add('is-recommended');
+
+            if (opt.icon) {
+                const iconWrap = document.createElement('span');
+                iconWrap.className = 'picker-option-icon';
+                iconWrap.setAttribute('data-icon', opt.icon);
+                el.appendChild(iconWrap);
+            }
+
+            const labelEl = document.createElement('span');
+            labelEl.className = 'picker-option-label';
+            labelEl.textContent = opt.label;
+            el.appendChild(labelEl);
+
+            if (opt.description && cfg.density !== 'compact' && cfg.variant === 'card') {
+                const desc = document.createElement('span');
+                desc.className = 'picker-option-desc';
+                desc.textContent = opt.description;
+                el.appendChild(desc);
+            }
+
+            if (cfg.variant === 'card') {
+                const tick = document.createElement('span');
+                tick.className = 'picker-option-tick';
+                tick.setAttribute('aria-hidden', 'true');
+                const tickIcon = document.createElement('span');
+                tickIcon.setAttribute('data-icon', 'check');
+                tickIcon.setAttribute('data-icon-size', '12');
+                tick.appendChild(tickIcon);
+                el.appendChild(tick);
+            }
+
+            if (opt.badge && opt.badge.text) {
+                const badgeWrap = document.createElement('span');
+                badgeWrap.className = 'picker-option-badge';
+                const badge = document.createElement('span');
+                badge.className = 'badge badge-' + (opt.badge.type || 'primary');
+                badge.textContent = opt.badge.text;
+                badgeWrap.appendChild(badge);
+                el.appendChild(badgeWrap);
+            }
+
+            if (opt.tooltip) el.setAttribute('data-tooltip', opt.tooltip);
+
+            if (cfg.name) {
+                const nativeInput = document.createElement('input');
+                nativeInput.className = 'picker-native-input';
+                nativeInput.type = cfg.multiple ? 'checkbox' : 'radio';
+                nativeInput.name = cfg.multiple ? cfg.name + '[]' : cfg.name;
+                nativeInput.value = String(opt.value);
+                nativeInput.checked = isSelected(opt.value);
+                nativeInput.disabled = !!opt.disabled;
+                nativeInput.tabIndex = -1;
+                el.appendChild(nativeInput);
+            }
+
+            return el;
+        };
+
+        const rerender = () => {
+            list.replaceChildren();
+            cfg.options.forEach((opt, idx) => list.appendChild(buildOption(opt, idx)));
+            if (typeof Domma !== 'undefined' && Domma.icons && typeof Domma.icons.scan === 'function') {
+                Domma.icons.scan(list);
+            }
+        };
+
+        const setValueInternal = (next, shouldNotify = true) => {
+            value = next;
+            rerender();
+            if (shouldNotify && typeof cfg.onChange === 'function') cfg.onChange(value);
+        };
+
+        list.addEventListener('click', (e) => {
+            const optEl = e.target.closest('.picker-option');
+            if (!optEl || optEl.classList.contains('is-disabled')) return;
+            const optValue = optEl.getAttribute('data-value');
+            if (cfg.multiple) {
+                const arr = Array.isArray(value) ? value.slice() : [];
+                const i = arr.indexOf(optValue);
+                if (i >= 0) arr.splice(i, 1);
+                else arr.push(optValue);
+                setValueInternal(arr);
+            } else {
+                setValueInternal(optValue);
+            }
+        });
+
+        list.addEventListener('keydown', (e) => {
+            const optEl = e.target.closest('.picker-option');
+            if (!optEl) return;
+            const all = Array.from(list.querySelectorAll('.picker-option'));
+            const enabled = all.filter((o) => !o.classList.contains('is-disabled'));
+            const idx = enabled.indexOf(optEl);
+
+            if (cfg.multiple) {
+                if (e.key === ' ' || e.key === 'Spacebar') {
+                    e.preventDefault();
+                    if (optEl.classList.contains('is-disabled')) return;
+                    const optValue = optEl.getAttribute('data-value');
+                    const arr = Array.isArray(value) ? value.slice() : [];
+                    const i = arr.indexOf(optValue);
+                    if (i >= 0) arr.splice(i, 1);
+                    else arr.push(optValue);
+                    setValueInternal(arr);
+                }
+                return;
+            }
+
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (optEl.classList.contains('is-disabled')) return;
+                setValueInternal(optEl.getAttribute('data-value'));
+                return;
+            }
+
+            let nextIdx = null;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextIdx = idx + 1;
+            else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') nextIdx = idx - 1;
+            else return;
+
+            e.preventDefault();
+            if (nextIdx < 0) nextIdx = enabled.length - 1;
+            if (nextIdx >= enabled.length) nextIdx = 0;
+            const target = enabled[nextIdx];
+            if (target) {
+                const targetValue = target.getAttribute('data-value');
+                setValueInternal(targetValue);
+                const refreshed = list.querySelector(
+                    '.picker-option[data-value="' + targetValue.replace(/"/g, '\\"') + '"]'
+                );
+                if (refreshed && typeof refreshed.focus === 'function') refreshed.focus();
+            }
+        });
+
+        host.appendChild(root);
+        rerender();
+
+        return {
+            _root: root,
+            getValue() { return value; },
+            setValue(v) { setValueInternal(v, false); },
+            disable() {
+                root.querySelectorAll('.picker-option').forEach((el) => el.classList.add('is-disabled'));
+            },
+            enable() {
+                root.querySelectorAll('.picker-option').forEach((el) => el.classList.remove('is-disabled'));
+            },
+            destroy() { root.remove(); }
+        };
+    },
+
     treeView(selector, options = {}) {
         const instance = new TreeView(selector, options);
         if (instance.element) {

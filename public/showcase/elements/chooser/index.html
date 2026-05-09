@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chooser - Elements - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/elements/chooser/">
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+    <style>
+        .demo-host { padding: 1rem; border: 1px solid var(--dm-border); border-radius: var(--dm-radius); margin-bottom: 0.75rem; background: var(--dm-bg); }
+        .demo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
+        @media (max-width: 768px) { .demo-row { grid-template-columns: 1fr; } }
+        .matrix-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+        @media (max-width: 768px) { .matrix-grid { grid-template-columns: 1fr; } }
+        .matrix-cell h4 { margin: 0 0 0.5rem; font-size: 0.95rem; color: var(--dm-text); }
+        .badge-demo-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
+        @media (max-width: 768px) { .badge-demo-grid { grid-template-columns: repeat(2, 1fr); } }
+        .theme-demo-controls { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
+        .theme-demo-controls label { font-size: 0.85rem; }
+        .theme-demo-controls select { padding: 0.3rem 0.6rem; border-radius: var(--dm-radius-sm); border: 1px solid var(--dm-border); background: var(--dm-input-bg); color: var(--dm-text); }
+        .a11y-output { font-family: var(--dm-font-mono, ui-monospace, monospace); font-size: 0.8rem; padding: 0.5rem; background: var(--dm-bg-alt, var(--dm-gray-100)); border-radius: var(--dm-radius-sm); margin-top: 0.5rem; color: var(--dm-text); }
+        .form-demo-output { margin-top: 0.75rem; padding: 0.75rem; background: var(--dm-bg-alt, var(--dm-gray-100)); border-radius: var(--dm-radius-sm); font-family: var(--dm-font-mono, ui-monospace, monospace); font-size: 0.8rem; color: var(--dm-text); white-space: pre; }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Chooser</div>
+        <div class="hero-subtitle">Visual option-picker — card or chip variants, single or multi-select, with icons, descriptions, badges, tooltips and recommendations.</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Chooser</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                The Chooser component renders a set of options as visually rich, click-to-select tiles.
+                A single component covers four combinations driven by blueprint parameters: cards or chips,
+                single or multi-select. Each option supports icons, descriptions, tooltips, badges, and
+                "recommended" / "disabled" states.
+            </p>
+
+            <h3 class="category-title-style">Key Features</h3>
+            <ul class="feature-list mb-4">
+                <li><strong>Two visual variants</strong> — cards (rich tiles) or chips (compact pills)</li>
+                <li><strong>Single or multi-select</strong> — radio or checkbox semantics from one option</li>
+                <li><strong>Density control</strong> — comfortable (with description) or compact (label only)</li>
+                <li><strong>Per-option metadata</strong> — icon, description, tooltip, badge, recommended, disabled</li>
+                <li><strong>Theme-aware</strong> — uses Domma CSS variables; retints automatically across all themes</li>
+                <li><strong>Full keyboard support</strong> — arrows for radio, tab+space for checkbox; disabled options skipped</li>
+                <li><strong>Native form integration</strong> — hidden inputs degrade gracefully when JS is unavailable</li>
+                <li><strong>Blueprint-driven</strong> — drop into <code>F.create()</code> with <code>type: 'chooser'</code></li>
+            </ul>
+
+            <h3 class="category-title-style">When to Use</h3>
+            <ul class="feature-list mb-4">
+                <li>Pricing-plan pickers with descriptions and "POPULAR" badges</li>
+                <li>Feature-toggle multi-select with icons</li>
+                <li>Tag pickers (chip variant) for categorisation</li>
+                <li>Theme/skin pickers with compact density</li>
+                <li>Anywhere a native radio/checkbox feels visually weak for the choice at hand</li>
+            </ul>
+
+            <h3 class="category-title-style">Basic Usage</h3>
+            <div class="code-block language-javascript">
+            <pre><code>// Standalone
+Domma.elements.chooser('#host', {
+    variant: 'card',
+    options: [
+        { value: 'a', label: 'Alpha', icon: 'rocket' },
+        { value: 'b', label: 'Beta',  icon: 'zap' }
+    ],
+    onChange: (v) =&gt; console.log('Picked:', v)
+});
+
+// Inside a form blueprint
+Domma.forms.create({
+    plan: {
+        type: 'chooser',
+        variant: 'card',
+        label: 'Choose your plan',
+        options: [&hellip;]
+    }
+}).renderTo('#my-form');</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Matrix">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">The four matrix combinations</h2></div>
+        <div class="card-body">
+            <p class="mb-4">All four <code>variant × multiple</code> combinations share the same component and parameter surface. Click to select.</p>
+
+            <div class="matrix-grid">
+                <div class="matrix-cell">
+                    <h4>Card · single-select</h4>
+                    <div class="demo-host" id="matrix-card-single"></div>
+                    <div class="code-block language-javascript">
+                        <pre><code>{ variant: 'card', multiple: false }</code></pre>
+                    </div>
+                </div>
+                <div class="matrix-cell">
+                    <h4>Card · multi-select</h4>
+                    <div class="demo-host" id="matrix-card-multi"></div>
+                    <div class="code-block language-javascript">
+                        <pre><code>{ variant: 'card', multiple: true }</code></pre>
+                    </div>
+                </div>
+                <div class="matrix-cell">
+                    <h4>Chip · single-select</h4>
+                    <div class="demo-host" id="matrix-chip-single"></div>
+                    <div class="code-block language-javascript">
+                        <pre><code>{ variant: 'chip', multiple: false }</code></pre>
+                    </div>
+                </div>
+                <div class="matrix-cell">
+                    <h4>Chip · multi-select</h4>
+                    <div class="demo-host" id="matrix-chip-multi"></div>
+                    <div class="code-block language-javascript">
+                        <pre><code>{ variant: 'chip', multiple: true }</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Density">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Density</h2></div>
+        <div class="card-body">
+            <p class="mb-4">Comfortable shows the description; compact strips it for dense layouts.</p>
+            <div class="demo-row">
+                <div>
+                    <h4>Comfortable</h4>
+                    <div class="demo-host" id="density-comfortable"></div>
+                </div>
+                <div>
+                    <h4>Compact</h4>
+                    <div class="demo-host" id="density-compact"></div>
+                </div>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>{ variant: 'card', density: 'compact', columns: 4 }</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Columns">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Columns</h2></div>
+        <div class="card-body">
+            <p class="mb-4">The card variant accepts <code>columns: 1–6</code>. Chips wrap freely.</p>
+            <h4>1 column</h4><div class="demo-host" id="cols-1"></div>
+            <h4>2 columns</h4><div class="demo-host" id="cols-2"></div>
+            <h4>3 columns</h4><div class="demo-host" id="cols-3"></div>
+            <h4>4 columns</h4><div class="demo-host" id="cols-4"></div>
+            <h4>6 columns</h4><div class="demo-host" id="cols-6"></div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Per-option flags">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Per-option flags</h2></div>
+        <div class="card-body">
+            <p class="mb-4">Each option supports rich metadata. Flags are independent — combine freely.</p>
+
+            <h3 class="category-title-style">icon</h3>
+            <div class="demo-host" id="opt-icon"></div>
+            <div class="code-block language-javascript"><pre><code>{ value: 'a', label: 'Alpha', icon: 'rocket' }</code></pre></div>
+
+            <h3 class="category-title-style">description</h3>
+            <div class="demo-host" id="opt-desc"></div>
+            <div class="code-block language-javascript"><pre><code>{ value: 'a', label: 'Alpha', description: 'Sub-text under the label' }</code></pre></div>
+
+            <h3 class="category-title-style">tooltip</h3>
+            <p class="mb-2">Hover any option to see its tooltip.</p>
+            <div class="demo-host" id="opt-tooltip"></div>
+            <div class="code-block language-javascript"><pre><code>{ value: 'a', label: 'Alpha', tooltip: 'Helpful hover hint' }</code></pre></div>
+
+            <h3 class="category-title-style">badge — five types</h3>
+            <div class="badge-demo-grid">
+                <div><h4>primary</h4><div class="demo-host" id="badge-primary"></div></div>
+                <div><h4>success</h4><div class="demo-host" id="badge-success"></div></div>
+                <div><h4>info</h4><div class="demo-host" id="badge-info"></div></div>
+                <div><h4>warning</h4><div class="demo-host" id="badge-warning"></div></div>
+                <div><h4>danger</h4><div class="demo-host" id="badge-danger"></div></div>
+            </div>
+            <div class="code-block language-javascript"><pre><code>{ value: 'a', label: 'Alpha', badge: { text: 'NEW', type: 'success' } }</code></pre></div>
+
+            <h3 class="category-title-style">recommended</h3>
+            <div class="demo-host" id="opt-recommended"></div>
+            <div class="code-block language-javascript"><pre><code>{ value: 'b', label: 'Beta', recommended: true }   // success-coloured ring</code></pre></div>
+
+            <h3 class="category-title-style">disabled</h3>
+            <div class="demo-host" id="opt-disabled"></div>
+            <div class="code-block language-javascript"><pre><code>{ value: 'c', label: 'Gamma', disabled: true }     // muted, non-interactive</code></pre></div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Visual options">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Visual options — accent, accent-style, glow, shadow</h2></div>
+        <div class="card-body">
+            <p class="mb-4">Six new options polish the look of every chooser. All accept semantic colour names (<code>primary</code>, <code>success</code>, <code>info</code>, <code>warning</code>, <code>danger</code>) or any custom hex/rgb value.</p>
+
+            <h3 class="category-title-style">accent — selected/recommended highlight colour</h3>
+            <p class="mb-2">Five semantic colours and a custom hex example.</p>
+            <h4>primary (default)</h4><div class="demo-host" id="accent-primary"></div>
+            <h4>success</h4><div class="demo-host" id="accent-success"></div>
+            <h4>info</h4><div class="demo-host" id="accent-info"></div>
+            <h4>warning</h4><div class="demo-host" id="accent-warning"></div>
+            <h4>danger</h4><div class="demo-host" id="accent-danger"></div>
+            <h4>custom hex (#9333ea)</h4><div class="demo-host" id="accent-hex"></div>
+            <div class="code-block language-javascript"><pre><code>{ accent: 'success' }     // semantic
+{ accent: '#9333ea' }     // custom hex</code></pre></div>
+
+            <h3 class="category-title-style">accentStyle — five visual treatments for the selected state</h3>
+            <h4>border (default) — coloured border + tinted bg</h4><div class="demo-host" id="style-border"></div>
+            <h4>solid — fully filled tile</h4><div class="demo-host" id="style-solid"></div>
+            <h4>glow — transparent border + glowing ring</h4><div class="demo-host" id="style-glow"></div>
+            <h4>overlay — heavier translucent fill</h4><div class="demo-host" id="style-overlay"></div>
+            <h4>underline — minimal: thick coloured bottom border</h4><div class="demo-host" id="style-underline"></div>
+            <div class="code-block language-javascript"><pre><code>{ accentStyle: 'solid' }   // 'border' | 'solid' | 'glow' | 'overlay' | 'underline'</code></pre></div>
+
+            <h3 class="category-title-style">glow — soft outer glow on the selected option</h3>
+            <h4>glow only (uses accent colour)</h4><div class="demo-host" id="glow-default"></div>
+            <h4>glow with custom <code>glowColour: 'info'</code></h4><div class="demo-host" id="glow-info"></div>
+            <h4>glow with custom hex <code>glowColour: '#ff66cc'</code></h4><div class="demo-host" id="glow-hex"></div>
+            <div class="code-block language-javascript"><pre><code>{ glow: true }                       // glow uses accent colour
+{ glow: true, glowColour: 'info' }   // override with semantic name
+{ glow: true, glowColour: '#ff66cc' } // or any hex/rgb</code></pre></div>
+
+            <h3 class="category-title-style">shadow — depth on every option</h3>
+            <h4>sm</h4><div class="demo-host" id="shadow-sm"></div>
+            <h4>md</h4><div class="demo-host" id="shadow-md"></div>
+            <h4>lg</h4><div class="demo-host" id="shadow-lg"></div>
+            <h4>xl</h4><div class="demo-host" id="shadow-xl"></div>
+            <h4>xl with custom shadow colour</h4><div class="demo-host" id="shadow-tinted"></div>
+            <div class="code-block language-javascript"><pre><code>{ shadow: 'md' }
+{ shadow: 'xl', shadowColour: 'rgba(99, 102, 241, 0.35)' }</code></pre></div>
+
+            <h3 class="category-title-style">All together</h3>
+            <p class="mb-2">Combine glow + shadow + custom accent + a non-default style for a full look.</p>
+            <div class="demo-host" id="visual-combo"></div>
+            <div class="code-block language-javascript"><pre><code>{
+    accent: '#ec4899',
+    accentStyle: 'glow',
+    glow: true,
+    glowColour: '#ec4899',
+    shadow: 'lg'
+}</code></pre></div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Theme awareness">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Theme awareness</h2></div>
+        <div class="card-body">
+            <p class="mb-3">The chooser uses Domma's CSS variables. Switch theme + variant below — the chooser retints live with no JavaScript redraw.</p>
+            <div class="theme-demo-controls">
+                <label>Theme:
+                    <select id="theme-select">
+                        <option value="charcoal">Charcoal</option>
+                        <option value="ocean">Ocean</option>
+                        <option value="forest">Forest</option>
+                        <option value="sunset">Sunset</option>
+                        <option value="lemon">Lemon</option>
+                        <option value="mint">Mint</option>
+                        <option value="dreamy">Dreamy</option>
+                    </select>
+                </label>
+                <label>Variant:
+                    <select id="theme-variant">
+                        <option value="dark">Dark</option>
+                        <option value="light">Light</option>
+                    </select>
+                </label>
+            </div>
+            <div class="demo-host" id="theme-demo"></div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Accessibility">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Accessibility &amp; keyboard</h2></div>
+        <div class="card-body">
+            <ul class="feature-list mb-3">
+                <li><strong>Single-select</strong> uses <code>role="radiogroup"</code>; arrow keys move and select; Enter/Space confirm</li>
+                <li><strong>Multi-select</strong> uses <code>role="group"</code>; Tab between options; Space toggles</li>
+                <li><strong>Disabled options are skipped</strong> by arrow navigation and cannot be toggled by keyboard</li>
+                <li><code>aria-checked</code> reflects each option's selection state for screen readers</li>
+                <li>Hidden native <code>&lt;input type="radio|checkbox"&gt;</code> elements are emitted when <code>name</code> is set so the value is captured by <code>FormData</code> even with JS disabled</li>
+            </ul>
+            <h4>Try it: focus the picker, then use ArrowRight / ArrowLeft</h4>
+            <div class="demo-host" id="a11y-demo"></div>
+            <div class="a11y-output" id="a11y-output">value: (none)</div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Inside a form">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Inside a form (<code>F.create</code>)</h2></div>
+        <div class="card-body">
+            <p class="mb-3">Use <code>type: 'chooser'</code> in your blueprint and the rest works automatically — validation, model binding, submission.</p>
+            <div id="form-demo-host"></div>
+            <div class="form-demo-output" id="form-demo-output">Submit the form to see captured values</div>
+            <div class="code-block language-javascript">
+                <pre><code>const form = Domma.forms.create({
+    plan: {
+        type: 'chooser',
+        variant: 'card',
+        label: 'Choose your plan',
+        required: true,
+        options: [
+            { value: 'starter', label: 'Starter', icon: 'rocket', description: 'For solo builders.' },
+            { value: 'pro',     label: 'Pro',     icon: 'zap',     description: 'Teams up to 10.', recommended: true,
+              badge: { text: 'POPULAR', type: 'success' } },
+            { value: 'ent',     label: 'Enterprise', icon: 'briefcase', description: 'Custom limits + SSO.' }
+        ]
+    },
+    addons: {
+        type: 'chooser',
+        variant: 'chip',
+        multiple: true,
+        label: 'Optional add-ons',
+        options: [
+            { value: 'sso',    label: 'SSO',    icon: 'lock' },
+            { value: 'audit',  label: 'Audit log', icon: 'file-text' },
+            { value: 'sla',    label: '24/7 SLA', icon: 'phone' }
+        ]
+    }
+});
+form.renderTo('#my-form');</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Standalone">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Standalone usage (<code>E.chooser</code>)</h2></div>
+        <div class="card-body">
+            <p class="mb-3">Outside of a form, instantiate the chooser directly. The control object exposes <code>getValue()</code>, <code>setValue()</code>, <code>disable()</code>, <code>enable()</code>, <code>destroy()</code>.</p>
+            <div class="demo-host" id="standalone-demo"></div>
+            <button class="btn btn-secondary btn-sm" id="standalone-set-a">setValue('alpha')</button>
+            <button class="btn btn-secondary btn-sm" id="standalone-set-b">setValue('beta')</button>
+            <button class="btn btn-secondary btn-sm" id="standalone-clear">setValue(null)</button>
+            <button class="btn btn-secondary btn-sm" id="standalone-disable">disable</button>
+            <button class="btn btn-secondary btn-sm" id="standalone-enable">enable</button>
+            <div class="a11y-output" id="standalone-output" style="margin-top: 0.75rem;">value: (none)</div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Tutorial">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Tutorial</h2></div>
+        <div class="card-body">
+            <h3 class="category-title-style">When to reach for a chooser</h3>
+            <p class="mb-3">Use a chooser instead of a native <code>&lt;input type="radio"&gt;</code> or <code>&lt;input type="checkbox"&gt;</code> when the choice itself deserves visual weight — pricing plans, feature toggles, theme selection, tag pickers. Native controls are perfect for terse forms; the chooser is for surfaces where the option's identity (icon + label + description) is part of the experience.</p>
+
+            <h3 class="category-title-style">Blueprint shape</h3>
+            <p class="mb-3">Inside a form blueprint:</p>
+            <div class="code-block language-javascript"><pre><code>fieldName: {
+    type: 'chooser',                    // required — selects this control
+    variant: 'card' | 'chip',           // visual style (default: 'card')
+    multiple: false | true,             // single (radio) vs multi (checkbox); default false
+    density: 'comfortable' | 'compact', // default 'comfortable'
+    columns: 1..6,                      // grid columns for cards (chips wrap); default 3
+    required: false | true,             // standard form flag
+    label: 'Field label',               // standard form flag
+    default: 'value' | ['v1', 'v2'],    // initial selection (string for single, array for multi)
+    options: [
+        {
+            value: 'unique-id',         // required
+            label: 'Visible label',     // required
+            icon: 'icon-name',          // optional — Domma icon
+            description: 'Sub-text',    // optional — card+comfortable only
+            tooltip: 'Hover hint',      // optional
+            badge: {                    // optional — corner badge
+                text: 'POPULAR',
+                type: 'success'         // primary | success | info | warning | danger
+            },
+            recommended: true,          // optional — success-coloured ring
+            disabled: true              // optional — muted, non-interactive
+        }
+    ]
+}</code></pre></div>
+
+            <h3 class="category-title-style">Common patterns</h3>
+            <h4>1. Pricing-plan picker</h4>
+            <div class="code-block language-javascript"><pre><code>plan: {
+    type: 'chooser', variant: 'card', columns: 3, required: true,
+    options: [
+        { value: 'starter', label: 'Starter', icon: 'rocket',
+          description: 'For solo builders.' },
+        { value: 'pro',     label: 'Pro',     icon: 'zap',
+          description: 'Teams up to 10.',
+          recommended: true,
+          badge: { text: 'POPULAR', type: 'success' } },
+        { value: 'ent',     label: 'Enterprise', icon: 'briefcase',
+          description: 'Custom limits + SSO.' }
+    ]
+}</code></pre></div>
+
+            <h4>2. Tag picker (multi-select chips)</h4>
+            <div class="code-block language-javascript"><pre><code>tags: {
+    type: 'chooser', variant: 'chip', multiple: true,
+    options: [
+        { value: 'js',   label: 'JavaScript', icon: 'code' },
+        { value: 'css',  label: 'CSS',        icon: 'palette' },
+        { value: 'a11y', label: 'A11y',       icon: 'eye' },
+        { value: 'wasm', label: 'WASM',       icon: 'cpu', disabled: true }
+    ]
+}</code></pre></div>
+
+            <h4>3. Compact theme picker</h4>
+            <div class="code-block language-javascript"><pre><code>theme: {
+    type: 'chooser', variant: 'card', density: 'compact', columns: 4,
+    options: [
+        { value: 'charcoal', label: 'Charcoal', icon: 'moon' },
+        { value: 'ocean',    label: 'Ocean',    icon: 'droplet' },
+        { value: 'forest',   label: 'Forest',   icon: 'leaf' },
+        { value: 'sunset',   label: 'Sunset',   icon: 'sun' }
+    ]
+}</code></pre></div>
+
+            <h3 class="category-title-style">Gotchas</h3>
+            <ul class="feature-list mb-4">
+                <li><strong>Description only renders</strong> when <code>variant: 'card'</code> and <code>density: 'comfortable'</code>. Chips ignore it; compact strips it.</li>
+                <li><strong>Columns is a card-only prop.</strong> Chips wrap freely on a flex row.</li>
+                <li><strong>Value type follows <code>multiple</code>.</strong> Single-select stores a string; multi-select stores an array of strings. The form pipeline handles both.</li>
+                <li><strong>Required for multi-select</strong> means at least one option must be selected (empty array is invalid).</li>
+                <li><strong>Disabled options are non-interactive end to end</strong> — click ignored, keyboard skipped, hidden native input also disabled.</li>
+                <li><strong>Tooltip uses <code>data-tooltip</code></strong>; combine with <code>E.tooltip()</code> if you want full Domma tooltip styling on hover.</li>
+            </ul>
+        </div>
+    </section>
+
+</main>
+
+<script src="../../../dist/domma.min.js"></script>
+<script>
+    const E = Domma.elements;
+
+    // ---- Matrix ----
+    E.chooser('#matrix-card-single', {
+        variant: 'card',
+        columns: 2,
+        options: [
+            { value: 'starter', label: 'Starter', icon: 'rocket', description: 'For solo builders.' },
+            { value: 'pro', label: 'Pro', icon: 'zap', description: 'Teams up to 10.' }
+        ]
+    });
+    E.chooser('#matrix-card-multi', {
+        variant: 'card',
+        multiple: true,
+        columns: 2,
+        options: [
+            { value: 'auth', label: 'Auth', icon: 'lock', description: 'OAuth + 2FA' },
+            { value: 'pay', label: 'Payments', icon: 'credit-card', description: 'Stripe + invoices' }
+        ]
+    });
+    E.chooser('#matrix-chip-single', {
+        variant: 'chip',
+        options: [
+            { value: 'js', label: 'JavaScript', icon: 'code' },
+            { value: 'ts', label: 'TypeScript', icon: 'type' },
+            { value: 'rust', label: 'Rust', icon: 'package' }
+        ]
+    });
+    E.chooser('#matrix-chip-multi', {
+        variant: 'chip',
+        multiple: true,
+        options: [
+            { value: 'react', label: 'React', icon: 'box' },
+            { value: 'vue', label: 'Vue', icon: 'box' },
+            { value: 'svelte', label: 'Svelte', icon: 'box' },
+            { value: 'solid', label: 'Solid', icon: 'box' }
+        ]
+    });
+
+    // ---- Density ----
+    const densityOptions = [
+        { value: 'a', label: 'Compact mode', icon: 'square', description: 'Description visible' },
+        { value: 'b', label: 'Cosy', icon: 'square', description: 'Description visible' },
+        { value: 'c', label: 'Spacious', icon: 'square', description: 'Description visible' }
+    ];
+    E.chooser('#density-comfortable', { variant: 'card', density: 'comfortable', columns: 1, options: densityOptions });
+    E.chooser('#density-compact',     { variant: 'card', density: 'compact',     columns: 1, options: densityOptions });
+
+    // ---- Columns ----
+    const colOpts = (n) => Array.from({ length: n }, (_, i) => ({ value: 'c' + i, label: 'Item ' + (i + 1), icon: 'box' }));
+    E.chooser('#cols-1', { variant: 'card', density: 'compact', columns: 1, options: colOpts(3) });
+    E.chooser('#cols-2', { variant: 'card', density: 'compact', columns: 2, options: colOpts(4) });
+    E.chooser('#cols-3', { variant: 'card', density: 'compact', columns: 3, options: colOpts(6) });
+    E.chooser('#cols-4', { variant: 'card', density: 'compact', columns: 4, options: colOpts(8) });
+    E.chooser('#cols-6', { variant: 'card', density: 'compact', columns: 6, options: colOpts(12) });
+
+    // ---- Per-option flags ----
+    E.chooser('#opt-icon', {
+        variant: 'card', density: 'compact', columns: 3,
+        options: [
+            { value: 'a', label: 'Rocket', icon: 'rocket' },
+            { value: 'b', label: 'Zap', icon: 'zap' },
+            { value: 'c', label: 'Briefcase', icon: 'briefcase' }
+        ]
+    });
+    E.chooser('#opt-desc', {
+        variant: 'card', columns: 2,
+        options: [
+            { value: 'a', label: 'Alpha', description: 'A short description under the label' },
+            { value: 'b', label: 'Beta',  description: 'Another option with its own description' }
+        ]
+    });
+    E.chooser('#opt-tooltip', {
+        variant: 'chip',
+        options: [
+            { value: 'a', label: 'Hover me',    icon: 'info', tooltip: 'This is a tooltip on a chip' },
+            { value: 'b', label: 'And me too', icon: 'info', tooltip: 'Each option may have its own tooltip' }
+        ]
+    });
+
+    const badgeMaker = (type, text) => ({
+        variant: 'card', columns: 1,
+        options: [
+            { value: 'a', label: 'Featured option', icon: 'star', description: 'Has a corner badge', badge: { text, type } }
+        ]
+    });
+    E.chooser('#badge-primary', badgeMaker('primary', 'NEW'));
+    E.chooser('#badge-success', badgeMaker('success', 'POPULAR'));
+    E.chooser('#badge-info',    badgeMaker('info',    'INFO'));
+    E.chooser('#badge-warning', badgeMaker('warning', 'BETA'));
+    E.chooser('#badge-danger',  badgeMaker('danger',  'LIMITED'));
+
+    E.chooser('#opt-recommended', {
+        variant: 'card', columns: 3,
+        options: [
+            { value: 'a', label: 'Standard', icon: 'square' },
+            { value: 'b', label: 'Best value', icon: 'star', recommended: true, description: 'Recommended option' },
+            { value: 'c', label: 'Premium', icon: 'gem' }
+        ]
+    });
+    E.chooser('#opt-disabled', {
+        variant: 'card', columns: 3,
+        options: [
+            { value: 'a', label: 'Available',   icon: 'check' },
+            { value: 'b', label: 'Coming soon', icon: 'clock', disabled: true, description: 'Not yet available' },
+            { value: 'c', label: 'Available',   icon: 'check' }
+        ]
+    });
+
+    // ---- Visual options demos ----
+    const visualOptions = [
+        { value: 'a', label: 'Alpha', icon: 'star', description: 'Selected by default' },
+        { value: 'b', label: 'Beta',  icon: 'circle' },
+        { value: 'c', label: 'Gamma', icon: 'square' }
+    ];
+    const visualBase = { variant: 'card', columns: 3, options: visualOptions, value: 'a' };
+
+    // Accent colour
+    E.chooser('#accent-primary', { ...visualBase, accent: 'primary' });
+    E.chooser('#accent-success', { ...visualBase, accent: 'success' });
+    E.chooser('#accent-info',    { ...visualBase, accent: 'info' });
+    E.chooser('#accent-warning', { ...visualBase, accent: 'warning' });
+    E.chooser('#accent-danger',  { ...visualBase, accent: 'danger' });
+    E.chooser('#accent-hex',     { ...visualBase, accent: '#9333ea' });
+
+    // Accent styles
+    E.chooser('#style-border',    { ...visualBase, accentStyle: 'border'    });
+    E.chooser('#style-solid',     { ...visualBase, accentStyle: 'solid'     });
+    E.chooser('#style-glow',      { ...visualBase, accentStyle: 'glow'      });
+    E.chooser('#style-overlay',   { ...visualBase, accentStyle: 'overlay'   });
+    E.chooser('#style-underline', { ...visualBase, accentStyle: 'underline' });
+
+    // Glow
+    E.chooser('#glow-default', { ...visualBase, glow: true });
+    E.chooser('#glow-info',    { ...visualBase, glow: true, glowColour: 'info' });
+    E.chooser('#glow-hex',     { ...visualBase, glow: true, glowColour: '#ff66cc' });
+
+    // Shadow
+    E.chooser('#shadow-sm', { ...visualBase, shadow: 'sm' });
+    E.chooser('#shadow-md', { ...visualBase, shadow: 'md' });
+    E.chooser('#shadow-lg', { ...visualBase, shadow: 'lg' });
+    E.chooser('#shadow-xl', { ...visualBase, shadow: 'xl' });
+    E.chooser('#shadow-tinted', { ...visualBase, shadow: 'xl', shadowColour: 'rgba(99, 102, 241, 0.35)' });
+
+    // All together
+    E.chooser('#visual-combo', {
+        ...visualBase,
+        accent: '#ec4899',
+        accentStyle: 'glow',
+        glow: true,
+        glowColour: '#ec4899',
+        shadow: 'lg'
+    });
+
+    // ---- Theme demo ----
+    const themeChooser = E.chooser('#theme-demo', {
+        variant: 'card', columns: 3,
+        options: [
+            { value: 'auth',   label: 'Authentication', icon: 'lock',        description: 'Single sign-on' },
+            { value: 'pay',    label: 'Payments',       icon: 'credit-card', description: 'Stripe-powered' },
+            { value: 'mail',   label: 'Email',          icon: 'mail',        description: 'Transactional', badge: { text: 'NEW', type: 'success' } }
+        ]
+    });
+    const themeSel = document.getElementById('theme-select');
+    const variantSel = document.getElementById('theme-variant');
+    const applyTheme = () => {
+        if (Domma.theme && typeof Domma.theme.set === 'function') {
+            Domma.theme.set(themeSel.value + '-' + variantSel.value);
+        }
+    };
+    themeSel.addEventListener('change', applyTheme);
+    variantSel.addEventListener('change', applyTheme);
+
+    // ---- Accessibility demo ----
+    const a11yOutput = document.getElementById('a11y-output');
+    E.chooser('#a11y-demo', {
+        variant: 'card', columns: 3,
+        options: [
+            { value: 'small',  label: 'Small',  icon: 'minimize' },
+            { value: 'medium', label: 'Medium', icon: 'square' },
+            { value: 'large',  label: 'Large',  icon: 'maximize' }
+        ],
+        onChange: (v) => { a11yOutput.textContent = 'value: ' + v; }
+    });
+
+    // ---- Inside a form demo ----
+    const form = Domma.forms.create({
+        plan: {
+            type: 'chooser',
+            variant: 'card',
+            columns: 3,
+            label: 'Choose your plan',
+            required: true,
+            options: [
+                { value: 'starter', label: 'Starter', icon: 'rocket', description: 'For solo builders.' },
+                { value: 'pro', label: 'Pro', icon: 'zap', description: 'Teams up to 10.', recommended: true,
+                  badge: { text: 'POPULAR', type: 'success' } },
+                { value: 'ent', label: 'Enterprise', icon: 'briefcase', description: 'Custom limits + SSO.' }
+            ]
+        },
+        addons: {
+            type: 'chooser',
+            variant: 'chip',
+            multiple: true,
+            label: 'Optional add-ons',
+            options: [
+                { value: 'sso',   label: 'SSO',        icon: 'lock' },
+                { value: 'audit', label: 'Audit log',  icon: 'file-text' },
+                { value: 'sla',   label: '24/7 SLA',   icon: 'phone' }
+            ]
+        }
+    });
+    form.renderTo('#form-demo-host');
+    const formContainer = document.getElementById('form-demo-host');
+    const formOutput = document.getElementById('form-demo-output');
+    formContainer.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const ok = form.validate();
+        if (!ok) {
+            formOutput.textContent = 'Validation failed — Plan is required.';
+            return;
+        }
+        formOutput.textContent = JSON.stringify(form.getData(), null, 2);
+    });
+    // Add a submit button (Forma renders one by default — check if so; otherwise add)
+    if (!formContainer.querySelector('button[type="submit"]')) {
+        const submitBtn = document.createElement('button');
+        submitBtn.type = 'submit';
+        submitBtn.className = 'btn btn-primary';
+        submitBtn.textContent = 'Submit';
+        const formEl = formContainer.querySelector('form');
+        if (formEl) formEl.appendChild(submitBtn);
+    }
+
+    // ---- Standalone control demo ----
+    const standalone = E.chooser('#standalone-demo', {
+        variant: 'card',
+        columns: 3,
+        options: [
+            { value: 'alpha', label: 'Alpha', icon: 'star' },
+            { value: 'beta',  label: 'Beta',  icon: 'circle' },
+            { value: 'gamma', label: 'Gamma', icon: 'square' }
+        ],
+        onChange: (v) => { document.getElementById('standalone-output').textContent = 'value: ' + JSON.stringify(v); }
+    });
+    document.getElementById('standalone-set-a').addEventListener('click', () => {
+        standalone.setValue('alpha');
+        document.getElementById('standalone-output').textContent = 'value: ' + JSON.stringify(standalone.getValue());
+    });
+    document.getElementById('standalone-set-b').addEventListener('click', () => {
+        standalone.setValue('beta');
+        document.getElementById('standalone-output').textContent = 'value: ' + JSON.stringify(standalone.getValue());
+    });
+    document.getElementById('standalone-clear').addEventListener('click', () => {
+        standalone.setValue(null);
+        document.getElementById('standalone-output').textContent = 'value: (none)';
+    });
+    document.getElementById('standalone-disable').addEventListener('click', () => standalone.disable());
+    document.getElementById('standalone-enable').addEventListener('click', () => standalone.enable());
+
+    // Scan icons
+    if (Domma.icons) Domma.icons.scan();
+
+    // Init tooltips on any data-tooltip elements
+    if (E.tooltip) {
+        document.querySelectorAll('[data-tooltip]').forEach((el) => {
+            E.tooltip(el, { trigger: 'hover', position: 'top' });
+        });
+    }
+</script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+</body>
+</html>

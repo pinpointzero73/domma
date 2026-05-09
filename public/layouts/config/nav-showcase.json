@@ -227,6 +227,12 @@
           "section": "carousel"
         },
         {
+          "text": "Chooser",
+          "url": "showcase/elements/chooser/index.html",
+          "section": "chooser",
+          "badge": "New"
+        },
+        {
           "text": "Dialog",
           "url": "showcase/elements/dialog/index.html",
           "section": "dialog"

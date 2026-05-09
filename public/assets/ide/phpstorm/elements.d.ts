@@ -736,6 +736,61 @@ export interface SignatureInstance extends ComponentInstance {
     enable(): void;
 }
 
+// ============================================================
+// Chooser
+// ============================================================
+
+export interface ChooserBadge {
+    text: string;
+    type?: 'success' | 'info' | 'warning' | 'danger' | 'primary';
+}
+
+export interface ChooserOption {
+    value: string | number;
+    label: string;
+    icon?: string;
+    description?: string;
+    tooltip?: string;
+    badge?: ChooserBadge;
+    recommended?: boolean;
+    disabled?: boolean;
+}
+
+export type ChooserSemanticColour = 'primary' | 'success' | 'info' | 'warning' | 'danger';
+
+export interface ChooserOptions {
+    variant?: 'card' | 'chip';
+    multiple?: boolean;
+    density?: 'comfortable' | 'compact';
+    columns?: number;
+    label?: string;
+    required?: boolean;
+    name?: string;
+    value?: string | string[] | null;
+    /** Selected/recommended highlight colour — semantic name or any CSS colour string */
+    accent?: ChooserSemanticColour | string;
+    /** Visual style of the selected state */
+    accentStyle?: 'border' | 'solid' | 'glow' | 'overlay' | 'underline';
+    /** Soft outer glow on the selected option */
+    glow?: boolean;
+    /** Glow colour override — semantic name or any CSS colour string. Defaults to the accent colour. */
+    glowColour?: ChooserSemanticColour | string | null;
+    /** Shadow weight applied to every option */
+    shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+    /** Optional shadow tint — any CSS colour string */
+    shadowColour?: string | null;
+    options: ChooserOption[];
+    onChange?: (value: string | string[] | null) => void;
+}
+
+export interface ChooserInstance {
+    getValue(): string | string[] | null;
+    setValue(value: string | string[] | null): void;
+    disable(): void;
+    enable(): void;
+    destroy(): void;
+}
+
 export interface Elements {
     /** Create a Card component */
     card(selector: string | HTMLElement, options?: CardOptions): CardInstance;
@@ -775,6 +830,13 @@ export interface Elements {
 
     /** Create a Signature capture pad */
     signature(selector: string | HTMLElement, options?: SignatureOptions): SignatureInstance;
+
+    /**
+     * Visual option-picker — card or chip variants, single or multi-select,
+     * with rich per-option metadata (icon, description, tooltip, badge,
+     * recommended, disabled).
+     */
+    chooser(selector: string | HTMLElement, options: ChooserOptions): ChooserInstance | null;
 
     /** Get component instance for an element */
     get(selector: string | HTMLElement): ComponentInstance | undefined;

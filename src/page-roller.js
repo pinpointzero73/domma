@@ -308,6 +308,29 @@ ${cardsHtml}
                 const requiredAttr = field.required ? 'required' : '';
                 const requiredMark = field.required ? ' <span class="text-danger">*</span>' : '';
 
+                if (field.type === 'chooser') {
+                    // Hydrated post-render by the canvas hydrator (see _renderCanvasSections)
+                    const chooserCfg = JSON.stringify({
+                        variant: field.variant || 'card',
+                        multiple: !!field.multiple,
+                        density: field.density || 'comfortable',
+                        columns: field.columns || 3,
+                        accent: field.accent || 'primary',
+                        accentStyle: field.accentStyle || 'border',
+                        glow: !!field.glow,
+                        glowColour: field.glowColour || null,
+                        shadow: field.shadow || 'none',
+                        shadowColour: field.shadowColour || null,
+                        options: field.options || [],
+                        name: field.name,
+                        required: !!field.required
+                    }).replace(/"/g, '&quot;');
+                    return `            <div class="form-group">
+                <label>${field.label}${requiredMark}</label>
+                <div class="domma-chooser-field" data-chooser-field="${field.name}" data-chooser-config="${chooserCfg}"></div>
+            </div>`;
+                }
+
                 if (field.type === 'textarea') {
                     return `            <div class="form-group">
                 <label for="${field.name}">${field.label}${requiredMark}</label>
@@ -1320,6 +1343,27 @@ class PageRoller {
         // Canvas section click to select
         this._on(this._refs.canvas, 'click', '.qr-section', (e) => {
             if (e.target.closest('.qr-section-controls')) return;
+
+            // Click on a hydrated chooser field inside a form section opens
+            // the chooser slideover pre-populated for editing.
+            const chooserField = e.target.closest('.domma-chooser-field');
+            if (chooserField) {
+                const sectionEl = chooserField.closest('.qr-section');
+                if (sectionEl) {
+                    const sectionIdx = parseInt(sectionEl.dataset.index, 10);
+                    if (this._sections[sectionIdx]?.type === 'form') {
+                        const fieldName = chooserField.getAttribute('data-chooser-field');
+                        const fieldIdx = (this._sections[sectionIdx].config.fields || []).findIndex((f) => f.name === fieldName);
+                        if (fieldIdx >= 0) {
+                            e.stopPropagation();
+                            this._selectedIndex = sectionIdx;
+                            this._openChooserSlideover(fieldIdx);
+                            return;
+                        }
+                    }
+                }
+            }
+
             const index = parseInt(e.target.closest('.qr-section').dataset.index);
             this._selectSection(index);
         });
@@ -1455,6 +1499,9 @@ class PageRoller {
                 break;
             case 'preview-full':
                 this.openPreviewWindow();
+                break;
+            case 'add-chooser':
+                this._openChooserSlideover(null);
                 break;
         }
     }
@@ -1760,9 +1807,26 @@ class PageRoller {
                     </div>
                 `;
 
+            case 'formFields':
+                // Form fields editor: JSON textarea (canonical store) plus a
+                // structured-builder palette for richer field types like
+                // chooser. Clicking "Add Chooser" opens a slideover with a
+                // live-preview options editor that writes back into the JSON.
+                return `
+                    <div class="qr-field" data-field="${field.key}">
+                        <label class="qr-field-label">${field.label}</label>
+                        <div class="qr-field-palette" style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.5rem;">
+                            <button type="button" class="qr-palette-tile btn btn-sm" data-action="add-chooser" data-field="${field.key}">
+                                <span data-icon="check-square" data-icon-size="14"></span> Add Chooser
+                            </button>
+                        </div>
+                        <p class="qr-field-note" style="font-size: 0.875rem; color: var(--dm-text-muted, #6c757d); margin: 0.25rem 0;">Edit JSON directly, or use the palette above for richer field types.</p>
+                        <textarea class="qr-input qr-textarea qr-json" rows="12" style="font-family: monospace; font-size: 0.875rem;">${JSON.stringify(value, null, 2)}</textarea>
+                    </div>
+                `;
+
             case 'buttons':
             case 'cards':
-            case 'formFields':
             case 'links':
             case 'footerColumns':
             case 'socialLinks':
@@ -2102,6 +2166,23 @@ class PageRoller {
         // Scan icons
         if (typeof Domma !== 'undefined' && Domma.icons) {
             Domma.icons.scan(this._refs.canvas);
+        }
+
+        // Hydrate any chooser placeholders rendered inside form sections.
+        // The placeholder is a structural <div data-chooser-field> with a
+        // JSON config in data-chooser-config; Domma.elements.chooser() builds
+        // the live DOM via createElement (no inner-HTML assignment) so user
+        // option content is always passed through textContent / setAttribute.
+        if (typeof Domma !== 'undefined' && Domma.elements && typeof Domma.elements.chooser === 'function') {
+            this._refs.canvas.querySelectorAll('[data-chooser-field]').forEach((node) => {
+                if (node.querySelector('.domma-chooser')) return;
+                try {
+                    const cfg = JSON.parse((node.getAttribute('data-chooser-config') || '{}').replace(/&quot;/g, '"'));
+                    Domma.elements.chooser(node, cfg);
+                } catch (err) {
+                    console.warn('[page-roller] failed to hydrate chooser', err);
+                }
+            });
         }
     }
 
@@ -3199,6 +3280,437 @@ ${columnsHtml}
         // Clear element
         this.element.classList.remove('qr-container');
         this.element.innerHTML = '';
+    }
+
+    // ============================================================
+    // Chooser slideover — structured editor for chooser form fields.
+    // ============================================================
+
+    /**
+     * Open a slideover containing the structured chooser editor. Reads the
+     * existing chooser config from `formFields[editIndex]` if `editIndex` is
+     * provided, otherwise starts from a new default. On Save, the slideover
+     * serialises its state and either appends or replaces the entry in the
+     * `formFields` JSON textarea (still the canonical store), then re-renders
+     * the canvas preview.
+     *
+     * @param {number|null} editIndex - position in fields array to edit, or
+     *   null for a new field.
+     * @private
+     */
+    _openChooserSlideover(editIndex) {
+        const section = this._sections[this._selectedIndex];
+        if (!section || section.type !== 'form') return;
+        const fields = Array.isArray(section.config.fields) ? section.config.fields : [];
+        const initial = (editIndex !== null && fields[editIndex])
+            ? JSON.parse(JSON.stringify(fields[editIndex]))
+            : {
+                name: 'choice',
+                label: 'Choose',
+                type: 'chooser',
+                variant: 'card',
+                multiple: false,
+                density: 'comfortable',
+                columns: 3,
+                required: false,
+                accent: 'primary',
+                accentStyle: 'border',
+                glow: false,
+                glowColour: '',
+                shadow: 'none',
+                shadowColour: '',
+                options: [
+                    { value: 'a', label: 'Option A' },
+                    { value: 'b', label: 'Option B' }
+                ]
+            };
+
+        const slideoverHost = document.createElement('div');
+        slideoverHost.className = 'qr-chooser-slideover';
+        const body = this._buildChooserSlideoverBody(initial);
+        slideoverHost.appendChild(body);
+        document.body.appendChild(slideoverHost);
+
+        const slideover = (typeof Domma !== 'undefined' && Domma.elements && typeof Domma.elements.slideover === 'function')
+            ? Domma.elements.slideover(slideoverHost, {
+                position: 'right',
+                size: '520px',
+                title: editIndex !== null ? 'Edit Chooser' : 'Add Chooser',
+                keyboard: true,
+                backdropClose: false
+            })
+            : null;
+        if (slideover && typeof slideover.open === 'function') slideover.open();
+
+        const state = JSON.parse(JSON.stringify(initial));
+        const previewHost = body.querySelector('[data-chooser-preview]');
+        let previewInst = null;
+
+        const renderPreview = () => {
+            if (previewInst && typeof previewInst.destroy === 'function') {
+                previewInst.destroy();
+                previewInst = null;
+            }
+            if (!Domma || !Domma.elements || !Domma.elements.chooser) return;
+            previewInst = Domma.elements.chooser(previewHost, {
+                variant: state.variant,
+                multiple: state.multiple,
+                density: state.density,
+                columns: state.columns,
+                accent: state.accent || 'primary',
+                accentStyle: state.accentStyle || 'border',
+                glow: !!state.glow,
+                glowColour: state.glowColour || null,
+                shadow: state.shadow || 'none',
+                shadowColour: state.shadowColour || null,
+                options: state.options
+            });
+        };
+
+        body.querySelectorAll('[data-state]').forEach((inp) => {
+            const key = inp.getAttribute('data-state');
+            inp.addEventListener('input', () => {
+                let v = inp.type === 'checkbox' ? inp.checked : inp.value;
+                if (key === 'columns') v = parseInt(v, 10) || 1;
+                state[key] = v;
+                renderPreview();
+            });
+            inp.addEventListener('change', () => {
+                let v = inp.type === 'checkbox' ? inp.checked : inp.value;
+                if (key === 'columns') v = parseInt(v, 10) || 1;
+                state[key] = v;
+                renderPreview();
+            });
+        });
+
+        this._wireChooserOptionsEditor(body, state, renderPreview);
+        renderPreview();
+
+        const closeAndCleanup = () => {
+            if (slideover && typeof slideover.close === 'function') slideover.close();
+            slideoverHost.remove();
+        };
+
+        body.querySelector('[data-action="save"]').addEventListener('click', () => {
+            const next = { ...state, type: 'chooser' };
+            const newFields = fields.slice();
+            if (editIndex !== null) newFields[editIndex] = next;
+            else newFields.push(next);
+            section.config.fields = newFields;
+
+            // Reflect into the JSON textarea (still the canonical store)
+            const textarea = this._refs.editPanel?.querySelector('.qr-json');
+            if (textarea) textarea.value = JSON.stringify(newFields, null, 2);
+
+            this._renderCanvasSections();
+            this._markDirty?.();
+            this._refreshPreview?.();
+
+            closeAndCleanup();
+            if (Domma.elements && typeof Domma.elements.toast === 'function') {
+                Domma.elements.toast('Chooser saved', { type: 'success' });
+            }
+        });
+
+        body.querySelector('[data-action="cancel"]').addEventListener('click', closeAndCleanup);
+    }
+
+    /**
+     * Build the slideover body for the chooser editor. Returns a DOM
+     * fragment built entirely via createElement / appendChild — no inner-HTML
+     * assignment. User-supplied strings flow through textContent / setAttribute.
+     *
+     * @param {Object} initial - initial chooser config
+     * @returns {HTMLElement} the body root element
+     * @private
+     */
+    _buildChooserSlideoverBody(initial) {
+        const body = document.createElement('div');
+        body.className = 'qr-chooser-slideover-body';
+        body.style.padding = '1rem';
+
+        const heading = document.createElement('h3');
+        heading.textContent = 'Chooser';
+        heading.style.marginTop = '0';
+        body.appendChild(heading);
+
+        const previewHost = document.createElement('div');
+        previewHost.setAttribute('data-chooser-preview', '');
+        previewHost.style.cssText = 'margin-bottom:1.25rem; padding:0.75rem; border:1px dashed var(--dm-border); border-radius:var(--dm-radius);';
+        body.appendChild(previewHost);
+
+        body.appendChild(this._buildChooserSlideoverFieldset('Field', [
+            { type: 'text',     key: 'name',     label: 'Name (data key)', value: initial.name },
+            { type: 'text',     key: 'label',    label: 'Label',           value: initial.label },
+            { type: 'checkbox', key: 'required', label: 'Required',        value: !!initial.required }
+        ]));
+
+        body.appendChild(this._buildChooserSlideoverFieldset('Chooser', [
+            { type: 'select',   key: 'variant',  label: 'Variant',  value: initial.variant,  options: [['card', 'Card'], ['chip', 'Chip']] },
+            { type: 'checkbox', key: 'multiple', label: 'Multi-select', value: !!initial.multiple },
+            { type: 'select',   key: 'density',  label: 'Density',  value: initial.density,  options: [['comfortable', 'Comfortable'], ['compact', 'Compact']] },
+            { type: 'number',   key: 'columns',  label: 'Columns',  value: initial.columns,  min: 1, max: 6 }
+        ]));
+
+        body.appendChild(this._buildChooserSlideoverFieldset('Visual', [
+            { type: 'text',     key: 'accent',       label: 'Accent (semantic name or #hex)',    value: initial.accent || '' },
+            { type: 'select',   key: 'accentStyle',  label: 'Accent style',                       value: initial.accentStyle || 'border',
+              options: [['border', 'Border'], ['solid', 'Solid'], ['glow', 'Glow'], ['overlay', 'Overlay'], ['underline', 'Underline']] },
+            { type: 'checkbox', key: 'glow',         label: 'Glow on selected',                   value: !!initial.glow },
+            { type: 'text',     key: 'glowColour',   label: 'Glow colour (optional, semantic or #hex)', value: initial.glowColour || '' },
+            { type: 'select',   key: 'shadow',       label: 'Shadow weight',                      value: initial.shadow || 'none',
+              options: [['none', 'None'], ['sm', 'Small'], ['md', 'Medium'], ['lg', 'Large'], ['xl', 'Extra Large']] },
+            { type: 'text',     key: 'shadowColour', label: 'Shadow colour (optional, hex/rgb)',  value: initial.shadowColour || '' }
+        ]));
+
+        const optionsFs = document.createElement('fieldset');
+        optionsFs.style.cssText = 'border:0; padding:0; margin:0 0 1rem;';
+        const optionsLegend = document.createElement('legend');
+        optionsLegend.textContent = 'Options';
+        optionsLegend.style.cssText = 'font-weight:600; padding:0;';
+        optionsFs.appendChild(optionsLegend);
+        const optionsList = document.createElement('div');
+        optionsList.setAttribute('data-options-editor', '');
+        optionsFs.appendChild(optionsList);
+        const addBtn = document.createElement('button');
+        addBtn.type = 'button';
+        addBtn.setAttribute('data-action', 'add-option');
+        addBtn.className = 'btn btn-secondary btn-sm';
+        addBtn.style.marginTop = '0.5rem';
+        addBtn.textContent = '+ Add option';
+        optionsFs.appendChild(addBtn);
+        body.appendChild(optionsFs);
+
+        const actions = document.createElement('div');
+        actions.style.cssText = 'display:flex; gap:0.5rem; justify-content:flex-end; margin-top:1rem;';
+        const cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.setAttribute('data-action', 'cancel');
+        cancelBtn.className = 'btn btn-secondary';
+        cancelBtn.textContent = 'Cancel';
+        const saveBtn = document.createElement('button');
+        saveBtn.type = 'button';
+        saveBtn.setAttribute('data-action', 'save');
+        saveBtn.className = 'btn btn-primary';
+        saveBtn.textContent = 'Save';
+        actions.appendChild(cancelBtn);
+        actions.appendChild(saveBtn);
+        body.appendChild(actions);
+
+        return body;
+    }
+
+    /**
+     * Build one fieldset of inputs for the slideover. Each input is tagged
+     * with `data-state="<key>"` so a delegated handler updates the working
+     * state object.
+     *
+     * @param {string} legendText
+     * @param {Array<Object>} fieldDefs
+     * @returns {HTMLElement}
+     * @private
+     */
+    _buildChooserSlideoverFieldset(legendText, fieldDefs) {
+        const fs = document.createElement('fieldset');
+        fs.style.cssText = 'border:0; padding:0; margin:0 0 1rem;';
+        const legend = document.createElement('legend');
+        legend.textContent = legendText;
+        legend.style.cssText = 'font-weight:600; padding:0;';
+        fs.appendChild(legend);
+
+        fieldDefs.forEach((def) => {
+            const wrapper = document.createElement('label');
+            wrapper.style.cssText = 'display:block; margin-top:0.5rem;';
+            if (def.type === 'checkbox') {
+                const input = document.createElement('input');
+                input.type = 'checkbox';
+                input.setAttribute('data-state', def.key);
+                input.checked = !!def.value;
+                wrapper.appendChild(input);
+                wrapper.appendChild(document.createTextNode(' ' + def.label));
+            } else {
+                wrapper.textContent = def.label;
+                let input;
+                if (def.type === 'select') {
+                    input = document.createElement('select');
+                    (def.options || []).forEach(([v, l]) => {
+                        const opt = document.createElement('option');
+                        opt.value = v;
+                        opt.textContent = l;
+                        if (v === def.value) opt.selected = true;
+                        input.appendChild(opt);
+                    });
+                } else {
+                    input = document.createElement('input');
+                    input.type = def.type || 'text';
+                    if (def.type === 'number') {
+                        if (def.min !== undefined) input.min = String(def.min);
+                        if (def.max !== undefined) input.max = String(def.max);
+                    }
+                    input.value = def.value === undefined || def.value === null ? '' : String(def.value);
+                }
+                input.setAttribute('data-state', def.key);
+                input.className = 'qr-input';
+                wrapper.appendChild(input);
+            }
+            fs.appendChild(wrapper);
+        });
+
+        return fs;
+    }
+
+    /**
+     * Render and wire the options-editor list inside the slideover. Each
+     * option row has inputs for value, label, icon, description, tooltip,
+     * badge.text + badge.type, recommended, disabled. Changes mutate
+     * `state.options` in place and trigger `renderPreview`.
+     *
+     * @param {HTMLElement} root - slideover body element
+     * @param {Object} state - working state object (mutated)
+     * @param {Function} renderPreview - re-renders the live preview
+     * @private
+     */
+    _wireChooserOptionsEditor(root, state, renderPreview) {
+        const wrap = root.querySelector('[data-options-editor]');
+
+        const optInput = (key, value, placeholder, style = {}) => {
+            const inp = document.createElement('input');
+            inp.type = 'text';
+            inp.className = 'qr-input';
+            inp.setAttribute('data-opt-key', key);
+            inp.value = value;
+            inp.placeholder = placeholder;
+            Object.assign(inp.style, style);
+            return inp;
+        };
+
+        const optCheckbox = (key, checked, labelText) => {
+            const w = document.createElement('label');
+            const inp = document.createElement('input');
+            inp.type = 'checkbox';
+            inp.setAttribute('data-opt-key', key);
+            inp.checked = checked;
+            w.appendChild(inp);
+            w.appendChild(document.createTextNode(' ' + labelText));
+            return w;
+        };
+
+        const buildRow = (opt, idx) => {
+            const row = document.createElement('div');
+            row.className = 'qr-option-row';
+            row.setAttribute('data-idx', String(idx));
+            row.style.cssText = 'border:1px solid var(--dm-border); border-radius:var(--dm-radius-sm); padding:0.5rem; margin-bottom:0.4rem;';
+
+            const top = document.createElement('div');
+            top.style.cssText = 'display:flex; gap:0.4rem; align-items:center;';
+            top.appendChild(optInput('value', opt.value || '', 'value', { flex: '1' }));
+            top.appendChild(optInput('label', opt.label || '', 'label', { flex: '2' }));
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'btn btn-sm';
+            removeBtn.setAttribute('data-action', 'remove-option');
+            removeBtn.title = 'Remove';
+            const xIcon = document.createElement('span');
+            xIcon.setAttribute('data-icon', 'x');
+            xIcon.setAttribute('data-icon-size', '14');
+            removeBtn.appendChild(xIcon);
+            top.appendChild(removeBtn);
+            row.appendChild(top);
+
+            const mid = document.createElement('div');
+            mid.style.cssText = 'display:flex; gap:0.4rem; margin-top:0.4rem;';
+            mid.appendChild(optInput('icon', opt.icon || '', 'icon (e.g. rocket)', { flex: '1' }));
+            mid.appendChild(optInput('description', opt.description || '', 'description (card only)', { flex: '2' }));
+            row.appendChild(mid);
+
+            const bot = document.createElement('div');
+            bot.style.cssText = 'display:flex; gap:0.4rem; margin-top:0.4rem;';
+            bot.appendChild(optInput('tooltip', opt.tooltip || '', 'tooltip', { flex: '2' }));
+            bot.appendChild(optInput('badge.text', opt.badge?.text || '', 'badge text', { flex: '1' }));
+            const badgeTypeSel = document.createElement('select');
+            badgeTypeSel.className = 'qr-input';
+            badgeTypeSel.setAttribute('data-opt-key', 'badge.type');
+            badgeTypeSel.style.flex = '1';
+            [['', 'no badge'], ['primary', 'primary'], ['success', 'success'], ['info', 'info'], ['warning', 'warning'], ['danger', 'danger']].forEach(([v, l]) => {
+                const o = document.createElement('option');
+                o.value = v;
+                o.textContent = l;
+                if ((opt.badge?.type || '') === v) o.selected = true;
+                badgeTypeSel.appendChild(o);
+            });
+            bot.appendChild(badgeTypeSel);
+            row.appendChild(bot);
+
+            const flags = document.createElement('div');
+            flags.style.cssText = 'display:flex; gap:1rem; margin-top:0.4rem;';
+            flags.appendChild(optCheckbox('recommended', !!opt.recommended, 'Recommended'));
+            flags.appendChild(optCheckbox('disabled', !!opt.disabled, 'Disabled'));
+            row.appendChild(flags);
+
+            return row;
+        };
+
+        const renderRows = () => {
+            wrap.replaceChildren();
+            state.options.forEach((opt, idx) => wrap.appendChild(buildRow(opt, idx)));
+            if (typeof Domma !== 'undefined' && Domma.icons) Domma.icons.scan(wrap);
+        };
+
+        wrap.addEventListener('input', (e) => {
+            const row = e.target.closest('.qr-option-row');
+            if (!row) return;
+            const idx = parseInt(row.getAttribute('data-idx'), 10);
+            const key = e.target.getAttribute('data-opt-key');
+            if (!key) return;
+            const opt = state.options[idx];
+            const v = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+            if (key === 'badge.text') {
+                opt.badge = opt.badge || {};
+                opt.badge.text = v;
+                if (!v) delete opt.badge;
+            } else if (key === 'badge.type') {
+                opt.badge = opt.badge || {};
+                if (!v) delete opt.badge.type; else opt.badge.type = v;
+                if (!opt.badge.text && !opt.badge.type) delete opt.badge;
+            } else {
+                opt[key] = v;
+            }
+            renderPreview();
+        });
+
+        wrap.addEventListener('change', (e) => {
+            const row = e.target.closest('.qr-option-row');
+            if (!row) return;
+            const idx = parseInt(row.getAttribute('data-idx'), 10);
+            const key = e.target.getAttribute('data-opt-key');
+            if (!key) return;
+            const opt = state.options[idx];
+            const v = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+            if (key === 'badge.type') {
+                opt.badge = opt.badge || {};
+                if (!v) delete opt.badge.type; else opt.badge.type = v;
+                if (!opt.badge.text && !opt.badge.type) delete opt.badge;
+                renderPreview();
+            }
+        });
+
+        wrap.addEventListener('click', (e) => {
+            const remove = e.target.closest('[data-action="remove-option"]');
+            if (remove) {
+                const idx = parseInt(remove.closest('.qr-option-row').getAttribute('data-idx'), 10);
+                state.options.splice(idx, 1);
+                renderRows();
+                renderPreview();
+            }
+        });
+
+        root.querySelector('[data-action="add-option"]').addEventListener('click', () => {
+            state.options.push({ value: 'new', label: 'New option' });
+            renderRows();
+            renderPreview();
+        });
+
+        renderRows();
     }
 }
 
