@@ -337,8 +337,10 @@ Accessed via `Domma.elements`:
 - **Tooltip**: `elements.tooltip(selector, { content, position, trigger, delay, animation })` → `show()`, `hide()`,
   `toggle()`, `setContent()`
 - **Carousel**:
-  `elements.carousel(selector, { autoplay, interval, pauseOnHover, loop, animation, showArrows, showIndicators, onChange })` →
+  `elements.carousel(selector, { autoplay, interval, pauseOnHover, loop, animation, animationDuration, animationEasing, showArrows, showIndicators, onChange })` →
   `next()`, `prev()`, `goTo()`, `play()`, `pause()`, `getIndex()`, `getSlide()`
+    - `animation`: `'slide'` (default — horizontal track translate), `'fade'` (clean opacity swap), or `'crossfade'` (overlapping opacity in both directions)
+    - `animationEasing`: any CSS timing function (`'ease'`, `'linear'`, `'ease-in-out'`, `'cubic-bezier(...)'`)
 - **hero**: CSS-only component with Tailwind-inspired utilities for modern hero sections
     - **Base**: `.hero`, `.hero-content`, `.hero-title`, `.hero-subtitle`, `.hero-actions`,
       `.hero-note`

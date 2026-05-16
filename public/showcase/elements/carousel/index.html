@@ -153,6 +153,166 @@ Domma.elements.carousel('#my-carousel', {
     </div>
 </section>
 
+<section class="card mb-6" data-section="Transitions">
+    <div class="card-header"><h2 class="text-xl font-semibold m-0">Transitions</h2></div>
+    <div class="card-body">
+        <style>
+            .transition-demo { height: 480px; border-radius: var(--dm-radius-lg); overflow: hidden; }
+            .transition-demo .carousel-slide {
+                height: 480px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                text-align: center;
+                padding: 2rem;
+            }
+            .transition-demo .slide-eyebrow {
+                font-size: 0.875rem;
+                font-weight: 600;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                opacity: 0.85;
+                margin-bottom: 0.75rem;
+                text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+            }
+            .transition-demo .slide-title {
+                font-size: clamp(2.5rem, 5vw, 4rem);
+                font-weight: 800;
+                line-height: 1.05;
+                margin: 0 0 0.75rem;
+                text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+            }
+            .transition-demo .slide-sub {
+                font-size: 1.15rem;
+                max-width: 38rem;
+                opacity: 0.92;
+                text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+            }
+            .easing-demo { height: 320px; border-radius: var(--dm-radius-lg); overflow: hidden; }
+            .easing-demo .carousel-slide {
+                height: 320px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                font-size: 2.25rem;
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+            }
+            .slide-aurora-1 { background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); }
+            .slide-aurora-2 { background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%); }
+            .slide-aurora-3 { background: linear-gradient(135deg, #00c9ff 0%, #92fe9d 100%); }
+            .slide-dusk-1   { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); }
+            .slide-dusk-2   { background: linear-gradient(135deg, #5614b0 0%, #dbd65c 100%); }
+            .slide-dusk-3   { background: linear-gradient(135deg, #ff512f 0%, #dd2476 100%); }
+            .slide-pop-1    { background: linear-gradient(135deg, #0061ff 0%, #60efff 100%); }
+            .slide-pop-2    { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+            .slide-pop-3    { background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); color: #1a1a1a; text-shadow: 0 2px 6px rgba(255, 255, 255, 0.4); }
+        </style>
+
+        <p class="mb-4">Three transition modes are available via the <code>animation</code> option, and any CSS timing function can be supplied via <code>animationEasing</code>.</p>
+
+        <h3 class="category-title">Fade</h3>
+        <p class="mb-4 text-gray-600">Active slide opacity drops to zero before the incoming slide fades in — a clean swap with no overlap.</p>
+        <div class="demo-area mb-4">
+            <div id="fade-carousel" class="carousel transition-demo">
+                <div class="carousel-track">
+                    <div class="carousel-slide slide-aurora-1">
+                        <div class="slide-eyebrow">Chapter one</div>
+                        <h3 class="slide-title">Aurora Rising</h3>
+                        <p class="slide-sub">Deep amethyst meets electric blue. A clean fade lets each composition breathe.</p>
+                    </div>
+                    <div class="carousel-slide slide-aurora-2">
+                        <div class="slide-eyebrow">Chapter two</div>
+                        <h3 class="slide-title">Ember Bloom</h3>
+                        <p class="slide-sub">Magenta sun bleeding into molten orange — no motion to compete with the colour.</p>
+                    </div>
+                    <div class="carousel-slide slide-aurora-3">
+                        <div class="slide-eyebrow">Chapter three</div>
+                        <h3 class="slide-title">Glacier Spring</h3>
+                        <p class="slide-sub">Arctic teal washing into fresh moss. The swap is decisive, not gradual.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="code-block language-javascript mb-6">
+            <pre><code>
+Domma.elements.carousel('#fade-carousel', {
+    animation: 'fade',
+    animationDuration: 900,
+    autoplay: true,
+    interval: 4000,
+    pauseOnHover: true
+});
+</code></pre>
+        </div>
+
+        <h3 class="category-title">Crossfade</h3>
+        <p class="mb-4 text-gray-600">Outgoing and incoming slides transition opacity <em>at the same time</em>, briefly overlapping. Softer, more cinematic — particularly good for hero imagery and feature reels.</p>
+        <div class="demo-area mb-4">
+            <div id="crossfade-carousel" class="carousel transition-demo">
+                <div class="carousel-track">
+                    <div class="carousel-slide slide-dusk-1">
+                        <div class="slide-eyebrow">Reel · 01</div>
+                        <h3 class="slide-title">Midnight Coast</h3>
+                        <p class="slide-sub">Indigo dissolving into slate — the overlap reads as the camera blinking.</p>
+                    </div>
+                    <div class="carousel-slide slide-dusk-2">
+                        <div class="slide-eyebrow">Reel · 02</div>
+                        <h3 class="slide-title">Royal Saffron</h3>
+                        <p class="slide-sub">Imperial purple bleeding into pollen gold. Watch both gradients share the frame.</p>
+                    </div>
+                    <div class="carousel-slide slide-dusk-3">
+                        <div class="slide-eyebrow">Reel · 03</div>
+                        <h3 class="slide-title">Sunset Bazaar</h3>
+                        <p class="slide-sub">Cinnamon flame fading through to deep ruby. Slow easing makes the overlap luxurious.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="code-block language-javascript mb-6">
+            <pre><code>
+Domma.elements.carousel('#crossfade-carousel', {
+    animation: 'crossfade',
+    animationDuration: 1400,
+    animationEasing: 'ease-in-out',
+    autoplay: true,
+    interval: 4500,
+    pauseOnHover: true
+});
+</code></pre>
+        </div>
+
+        <h3 class="category-title">Custom Easing</h3>
+        <p class="mb-4 text-gray-600">Any CSS timing function works — <code>'linear'</code>, <code>'ease-in-out'</code>, <code>'cubic-bezier(...)'</code>. Here the slide overshoots then settles, courtesy of a bouncy cubic-bezier.</p>
+        <div class="demo-area mb-4">
+            <div id="easing-carousel" class="carousel easing-demo">
+                <div class="carousel-track">
+                    <div class="carousel-slide slide-pop-1">Bounce in</div>
+                    <div class="carousel-slide slide-pop-2">Overshoot</div>
+                    <div class="carousel-slide slide-pop-3">Settle</div>
+                </div>
+            </div>
+        </div>
+        <div class="code-block language-javascript mb-6">
+            <pre><code>
+Domma.elements.carousel('#easing-carousel', {
+    animation: 'slide',
+    animationDuration: 900,
+    animationEasing: 'cubic-bezier(0.68, -0.55, 0.27, 1.55)'
+});
+</code></pre>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>When to choose what:</strong> <code>slide</code> for photo galleries where motion implies sequence; <code>fade</code> for content slides where motion would distract; <code>crossfade</code> for hero imagery where the overlap reads as polish.
+        </div>
+    </div>
+</section>
+
 <section class="card mb-6" data-section="Best Practices">
     <div class="card-header"><h2 class="text-xl font-semibold m-0">Best Practices</h2></div>
     <div class="card-body">
@@ -200,7 +360,19 @@ Domma.elements.carousel('#my-carousel', {
                     <td><code>animation</code></td>
                     <td>String</td>
                     <td><code>'slide'</code></td>
-                    <td>'slide' or 'fade'</td>
+                    <td><code>'slide'</code>, <code>'fade'</code>, or <code>'crossfade'</code></td>
+                </tr>
+                <tr>
+                    <td><code>animationDuration</code></td>
+                    <td>Number</td>
+                    <td><code>500</code></td>
+                    <td>Transition duration in milliseconds</td>
+                </tr>
+                <tr>
+                    <td><code>animationEasing</code></td>
+                    <td>String</td>
+                    <td><code>'ease'</code></td>
+                    <td>Any CSS timing function (<code>'ease'</code>, <code>'linear'</code>, <code>'ease-in-out'</code>, <code>'cubic-bezier(...)'</code>)</td>
                 </tr>
                 </tbody>
             </table>
@@ -373,6 +545,9 @@ $.setup({
 <script>
     Domma.elements.carousel('#quick-carousel', {autoplay: false, showArrows: true, showIndicators: true});
     Domma.elements.carousel('#autoplay-carousel', {autoplay: true, interval: 3000, pauseOnHover: true});
+    Domma.elements.carousel('#fade-carousel', {animation: 'fade', animationDuration: 900, autoplay: true, interval: 4000, pauseOnHover: true});
+    Domma.elements.carousel('#crossfade-carousel', {animation: 'crossfade', animationDuration: 1400, animationEasing: 'ease-in-out', autoplay: true, interval: 4500, pauseOnHover: true});
+    Domma.elements.carousel('#easing-carousel', {animation: 'slide', animationDuration: 900, animationEasing: 'cubic-bezier(0.68, -0.55, 0.27, 1.55)'});
 </script>
 
 </body>

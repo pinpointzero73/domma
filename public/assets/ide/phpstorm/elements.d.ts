@@ -571,10 +571,12 @@ export interface CarouselOptions {
     pauseOnHover?: boolean;
     /** Loop back to start */
     loop?: boolean;
-    /** Animation type: 'slide' or 'fade' */
-    animation?: 'slide' | 'fade';
+    /** Animation type: 'slide' (track translate), 'fade' (clean swap), or 'crossfade' (overlapping opacity) */
+    animation?: 'slide' | 'fade' | 'crossfade';
     /** Animation duration in ms */
     animationDuration?: number;
+    /** Any CSS timing function ('ease', 'linear', 'ease-in-out', 'cubic-bezier(...)' etc.) */
+    animationEasing?: string;
     /** Show navigation arrows */
     showArrows?: boolean;
     /** Show indicator dots */

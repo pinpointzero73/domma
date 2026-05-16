@@ -3757,8 +3757,9 @@ class Carousel extends Component {
         interval: 5000,
         pauseOnHover: true,
         loop: true,
-        animation: 'slide',
+        animation: 'slide',          // 'slide' | 'fade' | 'crossfade'
         animationDuration: 500,
+        animationEasing: 'ease',     // any CSS timing function ('ease', 'linear', 'ease-in-out', 'cubic-bezier(...)', etc.)
         showArrows: true,
         showIndicators: true,
         slideSelector: '.carousel-slide, [data-slide]',
@@ -3787,9 +3788,11 @@ class Carousel extends Component {
         this.element.style.position = 'relative';
         this.element.style.overflow = 'hidden';
 
+        const isOverlay = opts.animation === 'fade' || opts.animation === 'crossfade';
+
         // Setup slides
         this._slides.forEach((slide, i) => {
-            if (opts.animation === 'fade') {
+            if (isOverlay) {
                 // First slide stays relative to maintain container height
                 // Other slides are absolutely positioned on top
                 slide.style.position = i === 0 ? 'relative' : 'absolute';
@@ -3798,7 +3801,7 @@ class Carousel extends Component {
                 slide.style.width = '100%';
                 slide.style.opacity = i === 0 ? '1' : '0';
                 slide.style.zIndex = i === 0 ? '1' : '0';
-                slide.style.transition = `opacity ${opts.animationDuration}ms ease`;
+                slide.style.transition = `opacity ${opts.animationDuration}ms ${opts.animationEasing}`;
             } else {
                 slide.style.position = 'relative';
                 slide.style.width = '100%';
@@ -3809,7 +3812,7 @@ class Carousel extends Component {
         // Setup track for slide animation
         if (opts.animation === 'slide' && this._track) {
             this._track.style.display = 'flex';
-            this._track.style.transition = `transform ${opts.animationDuration}ms ease`;
+            this._track.style.transition = `transform ${opts.animationDuration}ms ${opts.animationEasing}`;
         }
 
         // Create arrows
@@ -3920,7 +3923,7 @@ class Carousel extends Component {
         this._indicators = indicators;
     }
 
-    _updateState() {
+    _updateState(oldIndex = null) {
         const opts = this.options;
 
         // Update slides
@@ -3932,6 +3935,18 @@ class Carousel extends Component {
                 slide.style.opacity = isActive ? '1' : '0';
                 slide.style.zIndex = isActive ? '1' : '0';
             });
+        } else if (opts.animation === 'crossfade') {
+            if (oldIndex === null || oldIndex === this._currentIndex) {
+                // Initial render / no real transition — fall back to fade-style setup
+                this._slides.forEach((slide, i) => {
+                    const isActive = i === this._currentIndex;
+                    slide.style.position = isActive ? 'relative' : 'absolute';
+                    slide.style.opacity = isActive ? '1' : '0';
+                    slide.style.zIndex = isActive ? '1' : '0';
+                });
+            } else {
+                this._applyCrossfade(oldIndex, this._currentIndex);
+            }
         } else if (this._track) {
             this._track.style.transform = `translateX(-${this._currentIndex * 100}%)`;
         }
@@ -3954,6 +3969,51 @@ class Carousel extends Component {
             this._nextBtn.style.opacity = this._currentIndex === this._slides.length - 1 ? '0.3' : '1';
             this._nextBtn.style.pointerEvents = this._currentIndex === this._slides.length - 1 ? 'none' : 'auto';
         }
+    }
+
+    _applyCrossfade(oldIndex, newIndex) {
+        const oldSlide = this._slides[oldIndex];
+        const newSlide = this._slides[newIndex];
+
+        // Stage incoming slide on top, invisible — outgoing stays in flow
+        // (position: relative) so the container keeps its height for the
+        // whole overlap, not just at the end.
+        newSlide.style.position = 'absolute';
+        newSlide.style.opacity = '0';
+        newSlide.style.zIndex = '2';
+
+        oldSlide.style.position = 'relative';
+        oldSlide.style.opacity = '1';
+        oldSlide.style.zIndex = '1';
+
+        // Park every other slide out of the way
+        this._slides.forEach((slide, i) => {
+            if (i !== oldIndex && i !== newIndex) {
+                slide.style.position = 'absolute';
+                slide.style.opacity = '0';
+                slide.style.zIndex = '0';
+            }
+        });
+
+        // Force a reflow so the staged opacity is committed before we change it,
+        // otherwise the browser may collapse both writes into one frame and skip the transition.
+        void newSlide.offsetWidth;
+
+        // Trigger the simultaneous opacity swap on the next frame
+        requestAnimationFrame(() => {
+            newSlide.style.opacity = '1';
+            oldSlide.style.opacity = '0';
+        });
+
+        // After the transition, promote the new slide to the height-keeper role
+        if (this._crossfadeSwapTimer) clearTimeout(this._crossfadeSwapTimer);
+        this._crossfadeSwapTimer = setTimeout(() => {
+            newSlide.style.position = 'relative';
+            newSlide.style.zIndex = '1';
+            oldSlide.style.position = 'absolute';
+            oldSlide.style.zIndex = '0';
+            this._crossfadeSwapTimer = null;
+        }, this.options.animationDuration);
     }
 
     _startAutoplay() {
@@ -3990,7 +4050,7 @@ class Carousel extends Component {
 
         this._isAnimating = true;
         this._currentIndex = index;
-        this._updateState();
+        this._updateState(oldIndex);
 
         setTimeout(() => {
             this._isAnimating = false;
@@ -4032,6 +4092,10 @@ class Carousel extends Component {
     destroy() {
         super.destroy();
         this._stopAutoplay();
+        if (this._crossfadeSwapTimer) {
+            clearTimeout(this._crossfadeSwapTimer);
+            this._crossfadeSwapTimer = null;
+        }
     }
 }
 

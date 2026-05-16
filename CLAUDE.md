@@ -436,7 +436,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Tabs - `tabs()` with active index, onChange
   - Accordion - `accordion()` with multiExpand
   - Tooltip - `tooltip()` with positioning, triggers
-  - Carousel - `carousel()` with autoplay, interval, loop
+  - Carousel - `carousel()` with autoplay, interval, loop, and three transition modes (`slide` / `fade` / `crossfade`) plus configurable easing
   - Card - `card()` with hover, clickable, **collapsible** (with localStorage persistence)
   - Dropdown - `dropdown()` with positioning
   - Toast - Static `toast()` method with types
