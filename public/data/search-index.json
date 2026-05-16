@@ -225,10 +225,10 @@
   },
   {
     "title": "Carousel",
-    "description": "Image and content slideshow with autoplay, loop, and touch support",
+    "description": "Image and content slideshow with autoplay, loop, three transition modes (slide / fade / crossfade), and configurable easing",
     "category": "Elements",
     "url": "showcase/elements/carousel/index.html",
-    "keywords": ["slider", "slideshow", "gallery", "image", "autoplay", "E.carousel"]
+    "keywords": ["slider", "slideshow", "gallery", "image", "autoplay", "E.carousel", "fade", "crossfade", "transition", "easing", "animation", "cubic-bezier"]
   },
   {
     "title": "Dialog",

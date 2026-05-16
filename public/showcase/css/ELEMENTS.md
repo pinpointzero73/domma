@@ -538,6 +538,34 @@ Image carousel with navigation.
 - `.carousel-fade` - Fade animation
 - `.carousel-sm` / `.carousel-lg` / `.carousel-full` - Size variants
 
+**Transition modes** *(JavaScript API — `animation` option)*:
+
+| Mode         | Behaviour                                                                          |
+|--------------|------------------------------------------------------------------------------------|
+| `slide`      | Default. Horizontal track translate, momentum-style sequencing.                    |
+| `fade`       | Clean opacity swap — outgoing hits zero before incoming appears.                   |
+| `crossfade`  | Outgoing and incoming transition opacity in parallel; brief overlap, cinematic.    |
+
+`animationEasing` accepts any CSS timing function (`'ease'`, `'linear'`, `'ease-in-out'`, `'cubic-bezier(...)'`).
+
+**Demo Gradient Palette** *(showcase-internal, defined in `domma-showcase.css`)*:
+
+Nine reusable decorative gradients available for demo panels — carousels, hero placeholders, anywhere a vivid block of colour is wanted without sourcing an image. **Not part of the public framework API** — use Domma's theme variables for production styling.
+
+| Class                       | Direction | Stops                                                       |
+|-----------------------------|-----------|-------------------------------------------------------------|
+| `.demo-gradient-aurora-1`   | 135°      | `#6a11cb` → `#2575fc` (amethyst → electric blue)            |
+| `.demo-gradient-aurora-2`   | 135°      | `#ee0979` → `#ff6a00` (magenta → molten orange)             |
+| `.demo-gradient-aurora-3`   | 135°      | `#00c9ff` → `#92fe9d` (arctic teal → fresh moss)            |
+| `.demo-gradient-dusk-1`     | 135°      | `#0f2027` → `#203a43` → `#2c5364` (midnight → slate, 3-stop) |
+| `.demo-gradient-dusk-2`     | 135°      | `#5614b0` → `#dbd65c` (imperial purple → pollen gold)       |
+| `.demo-gradient-dusk-3`     | 135°      | `#ff512f` → `#dd2476` (cinnamon flame → deep ruby)          |
+| `.demo-gradient-pop-1`      | 135°      | `#0061ff` → `#60efff` (electric blue → cyan)                |
+| `.demo-gradient-pop-2`      | 135°      | `#11998e` → `#38ef7d` (deep mint → emerald)                 |
+| `.demo-gradient-pop-3`      | 135°      | `#f7971e` → `#ffd200` (sunshine → amber); ships with dark text + light text-shadow |
+
+The three palettes are organised by mood: **aurora** for vivid high-saturation pairings, **dusk** for cinematic atmospheric blends, **pop** for bright energetic combinations. Apply any class to a `.carousel-slide` or arbitrary panel.
+
 **Example:**
 
 ```html
