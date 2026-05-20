@@ -419,13 +419,155 @@
           }
       }
 
+      /* ============================================ */
+      /* Domma CMS Point-of-Sale Band                 */
+      /* ============================================ */
+      .cms-band {
+          position: relative;
+          margin: 4rem 0;
+          padding: 5rem 0;
+          overflow: hidden;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .cms-band-inner {
+          position: relative;
+          z-index: 2;
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 0 1.5rem;
+          text-align: center;
+      }
+
+      .cms-band-headline {
+          margin: 0 0 1rem 0;
+          font-size: clamp(2rem, 5.5vw, 4rem);
+          font-weight: 800;
+          line-height: 1.05;
+          letter-spacing: -0.03em;
+          color: #fff;
+          min-height: 1.05em; /* prevent layout shift while scribe types */
+          text-shadow: 0 2px 24px rgba(99, 102, 241, 0.35);
+      }
+
+      .cms-band-subhead {
+          margin: 0 auto 1rem auto;
+          max-width: 720px;
+          font-size: clamp(1.125rem, 2vw, 1.375rem);
+          font-weight: 500;
+          color: rgba(255, 255, 255, 0.92);
+      }
+
+      .cms-band-subhead strong {
+          color: var(--dm-primary);
+          font-weight: 700;
+      }
+
+      .cms-band-lead {
+          margin: 0 auto 2.5rem auto;
+          max-width: 640px;
+          font-size: 1.05rem;
+          line-height: 1.55;
+          color: rgba(255, 255, 255, 0.68);
+      }
+
+      .cms-band-stats {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1rem;
+          max-width: 760px;
+          margin: 0 auto 2.5rem auto;
+      }
+
+      .cms-stat {
+          padding: 1.25rem 0.75rem;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 12px;
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
+      }
+
+      .cms-stat-number {
+          display: block;
+          font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+          font-weight: 700;
+          line-height: 1;
+          color: var(--dm-primary);
+          margin-bottom: 0.35rem;
+          font-variant-numeric: tabular-nums;
+      }
+
+      .cms-stat-label {
+          display: block;
+          font-size: 0.78rem;
+          font-weight: 500;
+          letter-spacing: 0.03em;
+          color: rgba(255, 255, 255, 0.65);
+          line-height: 1.3;
+      }
+
+      .cms-band-cta {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+          flex-wrap: wrap;
+          margin-bottom: 1.5rem;
+      }
+
+      .cms-band-cta .btn {
+          min-width: 200px;
+      }
+
+      .cms-band-cta .btn-primary {
+          font-size: 1.0625rem;
+          padding: 0.85rem 1.75rem;
+      }
+
+      /* CMS band animations are user-requested and run regardless of motion preference */
+
+      .cms-band-tagline {
+          margin: 0;
+          font-size: 0.85rem;
+          color: rgba(255, 255, 255, 0.5);
+          letter-spacing: 0.02em;
+      }
+
+      .cms-band-tagline .sep {
+          margin: 0 0.5rem;
+          opacity: 0.6;
+      }
+
+      @media (max-width: 768px) {
+          .cms-band {
+              padding: 3.5rem 0;
+              margin: 2rem 0;
+          }
+
+          .cms-band-stats {
+              grid-template-columns: repeat(2, 1fr);
+              max-width: 380px;
+          }
+
+          .cms-band-cta {
+              flex-direction: column;
+              align-items: stretch;
+              padding: 0 1.5rem;
+          }
+
+          .cms-band-cta .btn {
+              width: 100%;
+          }
+      }
+
   </style>
 </head>
 <body class="dm-theme-charcoal-dark dm-cloaked" data-layout="splash">
 
 <nav id="main-navbar"></nav>
 
-<section class="splash-hero bg-dark bg-ambient-rotate-glow">
+<section class="splash-hero bg-dark bg-ambient-float-blobs">
   <div class="splash-hero-grid">
     <!-- Left column: Logo, heading, and backronym -->
     <div>
@@ -647,6 +789,45 @@
 <!--  </div>-->
 <!--  <br/>-->
   <br/>
+</section>
+
+<!-- === Domma CMS Point-of-Sale Band === -->
+<section class="cms-band bg-dark bg-ambient-float-blobs" id="cms-band" aria-labelledby="cms-band-headline">
+  <div class="cms-band-inner">
+    <h2 class="cms-band-headline" id="cms-band-headline">Want Domma JS power in a CMS?</h2>
+    <p class="cms-band-subhead">Meet <strong>Domma CMS</strong> — the CMS that actually delivers.</p>
+    <p class="cms-band-lead">Markdown-first, JSON or MongoDB, 28 themes, zero build step.</p>
+
+    <div class="cms-band-stats">
+      <div class="cms-stat">
+        <span class="cms-stat-number" data-cms-stat data-from="0" data-target="27">0</span>
+        <span class="cms-stat-label">Built-in shortcodes</span>
+      </div>
+      <div class="cms-stat">
+        <span class="cms-stat-number" data-cms-stat data-from="0" data-target="28">0</span>
+        <span class="cms-stat-label">Themes with live preview</span>
+      </div>
+      <div class="cms-stat">
+        <span class="cms-stat-number" data-cms-stat data-from="0" data-target="6">0</span>
+        <span class="cms-stat-label">Free plugins included</span>
+      </div>
+      <div class="cms-stat">
+        <span class="cms-stat-number" data-cms-stat data-from="60" data-target="0">60</span>
+        <span class="cms-stat-label">Build steps</span>
+      </div>
+    </div>
+
+    <div class="cms-band-cta">
+      <a href="https://cms.dommajs.org/" class="btn btn-primary btn-lg glow-primary" id="cms-band-cta-primary" target="_blank" rel="noopener">
+        Get Started Free →
+      </a>
+      <a href="https://cms.dommajs.org/#features" class="btn btn-outline btn-lg" id="cms-band-cta-secondary" target="_blank" rel="noopener">
+        See Features
+      </a>
+    </div>
+
+    <p class="cms-band-tagline">Built on Domma <span class="sep">·</span> Self-hosted <span class="sep">·</span> Free to try</p>
+  </div>
 </section>
 
 <!-- Examples Section -->
@@ -944,6 +1125,134 @@
         once: true,
       });
     }
+
+    // === Domma CMS POS Band: choreographed reveal ===
+    // ALL effects in this band force-run regardless of motion preferences,
+    // because the CMS pitch IS the point of the section — without motion it
+    // is just a flat advert. Users who want global reduced motion can still
+    // toggle the rest of the page via MotionControl.
+    const runCmsBandChoreography = () => {
+      // 1. Headline scribe (typewriter, looping — cycles through several pitches)
+      // Using loop: 999 instead of true — numeric loop path is more reliable in the bundle.
+      setTimeout(() => {
+        $('#cms-band-headline').text('');
+        Domma.effects.scribe('#cms-band-headline', {
+          mode: 'typewriter',
+          speed: 42,
+          deleteSpeed: 22,
+          loop: 999,
+          loopDelay: 300,
+          actions: [
+            { render: 'Want Domma JS power in a CMS?' },
+            { wait: 2600 },
+            { undoRender: 'all' },
+            { wait: 300 },
+            { render: 'Meet Domma CMS.' },
+            { wait: 2200 },
+            { undoRender: 'all' },
+            { wait: 300 },
+            { render: 'Markdown-first. Zero build step.' },
+            { wait: 2400 },
+            { undoRender: 'all' },
+            { wait: 300 },
+            { render: 'Self-hosted. Open. Ridiculously fast.' },
+            { wait: 2600 },
+            { undoRender: 'all' },
+            { wait: 300 }
+          ],
+          respectMotionPreference: false,
+          onLoop: (n) => console.log('[CMS scribe] loop iteration', n),
+          onRender: (text) => console.log('[CMS scribe] rendered:', text),
+          onUndoRender: () => console.log('[CMS scribe] erased')
+        });
+      }, 200);
+
+      // 2. Counter cascade — each stat reads its own from/to (one stat counts DOWN to 0)
+      setTimeout(() => {
+        const stats = document.querySelectorAll('#cms-band [data-cms-stat]');
+        stats.forEach((el, i) => {
+          const from = parseInt(el.dataset.from || '0', 10);
+          const to = parseInt(el.dataset.target, 10);
+          setTimeout(() => {
+            Domma.effects.counter(el, {
+              from,
+              to,
+              duration: 1400,
+              easing: 'ease-out',
+              respectMotionPreference: false
+            });
+          }, i * 100);
+        });
+      }, 900);
+
+      // 3. TickerTape burst — scoped to the band, theme palette
+      setTimeout(() => {
+        Domma.effects.tickerTape('#cms-band', {
+          palette: 'pastel',
+          burst: true,
+          burstCount: 40,
+          zIndex: 1,
+          respectMotionPreference: false
+        });
+      }, 1300);
+
+      // 4. Pulse on the secondary CTA — visible ongoing scale pulsation
+      setTimeout(() => {
+        Domma.effects.pulse('#cms-band-cta-secondary', {
+          scale: 1.08,
+          duration: 1500,
+          iterations: 'infinite',
+          pauseOnHover: true,
+          respectMotionPreference: false
+        });
+      }, 1500);
+    };
+
+    // Pre-empty headline so scribe types it without a flash of pre-rendered text
+    $('#cms-band-headline').text('');
+
+    // Pre-hide stat tiles for the manual stagger-in (avoids relying on Domma.effects.reveal
+    // which can stall when the band is already in the viewport on initial load)
+    document.querySelectorAll('#cms-band .cms-stat').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'scale(0.85) translateY(12px)';
+      el.style.transition = 'opacity 500ms ease-out, transform 500ms ease-out';
+    });
+
+    let cmsChoreographyFired = false;
+    const fireCmsChoreography = () => {
+      if (cmsChoreographyFired) return;
+      cmsChoreographyFired = true;
+      console.log('[CMS band] choreography firing');
+      runCmsBandChoreography();
+      // Stagger the stat tiles in (manual cascade — 4 tiles × 140ms = 560ms total)
+      document.querySelectorAll('#cms-band .cms-stat').forEach((el, i) => {
+        setTimeout(() => {
+          el.style.opacity = '1';
+          el.style.transform = 'scale(1) translateY(0)';
+        }, 350 + i * 140);
+      });
+    };
+
+    Domma.effects.reveal('#cms-band .cms-band-inner', {
+      animation: 'slide-up',
+      duration: 600,
+      threshold: 0.15,
+      once: true,
+      respectMotionPreference: false,
+      onReveal: fireCmsChoreography
+    });
+
+    // Belt-and-braces: if the band is already in the viewport on initial load
+    // (short page / tall viewport), nudge the choreography to fire even if the
+    // IntersectionObserver hasn't tripped yet. fireOnce guards against double-firing.
+    requestAnimationFrame(() => {
+      const band = document.getElementById('cms-band');
+      if (!band) return;
+      const rect = band.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight && rect.bottom > 0;
+      if (inView) fireCmsChoreography();
+    });
   });
 </script>
 
