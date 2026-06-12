@@ -18,6 +18,7 @@ export * from './storage';
 export * from './http';
 export * from './theme';
 export * from './icons';
+export * from './flags';
 export * from './effects';
 export * from './components';
 
@@ -33,6 +34,7 @@ import {Storage, storage} from './storage';
 import {Http, http} from './http';
 import {Theme, theme} from './theme';
 import {Icons, icons} from './icons';
+import {Flags} from './flags';
 import {Effects, effects} from './effects';
 import {Components, ComponentDefinition, ComponentContext, DommaElement} from './components';
 
@@ -84,6 +86,12 @@ export interface DommaStatic {
 
     /** Icon library */
     icons: Icons;
+
+    /** Nation flags (opt-in module — present when domma-flags is loaded) */
+    flags?: Flags;
+
+    /** Alias for {@link DommaStatic.flags} (opt-in module) */
+    FL?: Flags;
 
     /** Visual effects and animations */
     effects: Effects;

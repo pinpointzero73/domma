@@ -168,6 +168,13 @@
     "keywords": ["svg", "icon", "data-icon", "I.scan", "symbol", "glyph"]
   },
   {
+    "title": "Flags",
+    "description": "Nation flags as crisp inline SVG, keyed by ISO code, in rect, rounded, square or circle shapes — opt-in module",
+    "category": "UI",
+    "url": "showcase/flags/index.html",
+    "keywords": ["flag", "flags", "nation", "country", "data-flag", "FL.render", "iso", "world cup"]
+  },
+  {
     "title": "Themes",
     "description": "10+ built-in themes with light and dark variants — Ocean, Forest, Sunset, Charcoal",
     "category": "UI",

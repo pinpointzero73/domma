@@ -18,6 +18,7 @@ export * from './storage';
 export * from './http';
 export * from './theme';
 export * from './icons';
+export * from './flags';
 
 // Import types for the main Domma object
 import {dom, DommaCollection} from './dom';
@@ -31,6 +32,7 @@ import {Storage, storage} from './storage';
 import {Http, http} from './http';
 import {Theme, theme} from './theme';
 import {Icons, icons} from './icons';
+import {Flags} from './flags';
 
 // ============================================
 // Main Domma Interface
@@ -80,6 +82,12 @@ export interface DommaStatic {
 
     /** Icon library */
     icons: Icons;
+
+    /** Nation flags (opt-in module — present when domma-flags is loaded) */
+    flags?: Flags;
+
+    /** Alias for {@link DommaStatic.flags} (opt-in module) */
+    FL?: Flags;
 
     // ============================================
     // ConfigEngine Methods ($.setup, $.config, etc.)

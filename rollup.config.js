@@ -55,6 +55,16 @@ const syntaxBanner = `/*!
  * Commit: ${getGitCommit()}
  */`;
 
+const flagsBanner = `/*!
+ * Domma Flags v${pkg.version}
+ * Nation flags as inline SVG (opt-in module)
+ * (c) ${new Date().getFullYear()} Darryl Waterhouse & DCBW-IT
+ * Built: ${new Date().toISOString()}
+ * Commit: ${getGitCommit()}
+ *
+ * Requires: domma.min.js
+ */`;
+
 const extensionsBanner = `/*!
  * Domma Editor Extensions v${pkg.version}
  * Optional enhancements for Domma editor
@@ -189,6 +199,26 @@ export default [
                 format: 'es',
                 sourcemap: false,
                 banner: syntaxBanner
+            }
+        ],
+        plugins: commonPlugins
+    },
+    // Flags bundle (opt-in nation flags)
+    {
+        input: 'src/flags-bundle.js',
+        output: [
+            {
+                file: 'public/dist/domma-flags.min.js',
+                format: 'umd',
+                name: 'DommaFlags',
+                sourcemap: false,
+                banner: flagsBanner
+            },
+            {
+                file: 'public/dist/domma-flags.esm.js',
+                format: 'es',
+                sourcemap: false,
+                banner: flagsBanner
             }
         ],
         plugins: commonPlugins

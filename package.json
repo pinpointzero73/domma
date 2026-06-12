@@ -22,6 +22,8 @@
         "public/dist/grid.css",
         "public/dist/syntax.css",
         "public/dist/domma-syntax.min.js",
+        "public/dist/domma-flags.min.js",
+        "public/dist/domma-flags.esm.js",
         "public/dist/themes/",
         "assets/types/",
         "LICENSE",

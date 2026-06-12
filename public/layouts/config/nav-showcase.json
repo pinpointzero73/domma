@@ -166,6 +166,12 @@
           "section": "icons"
         },
         {
+          "text": "Flags",
+          "url": "showcase/flags/index.html",
+          "section": "flags",
+          "badge": "New"
+        },
+        {
           "text": "Themes",
           "url": "showcase/themes/index.html",
           "section": "themes"

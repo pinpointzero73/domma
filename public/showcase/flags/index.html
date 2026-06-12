@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https:; frame-src 'none'; object-src 'none';">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flags - Domma Showcase</title>
+    <meta name="description" content="Domma Flags — nation flags as crisp inline SVG, keyed by ISO code, with rectangular, rounded, square and circular shapes.">
+    <link rel="canonical" href="https://dommajs.org/showcase/flags/">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .flag-controls-bar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: var(--dm-surface, #1e1e24);
+            border-bottom: 1px solid var(--dm-border, rgba(255, 255, 255, .08));
+            padding: .75rem 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .flag-controls-inner {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .flag-search-input {
+            min-width: 220px;
+        }
+
+        .flag-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: .75rem;
+        }
+
+        .flag-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .4rem;
+            padding: .75rem .5rem;
+            border-radius: 10px;
+            background: var(--dm-surface-2, rgba(255, 255, 255, .03));
+            border: 1px solid var(--dm-border, rgba(255, 255, 255, .07));
+            cursor: pointer;
+            transition: transform .12s ease, border-color .12s ease;
+            text-align: center;
+        }
+
+        .flag-cell:hover {
+            transform: translateY(-2px);
+            border-color: var(--dm-primary, #6366f1);
+        }
+
+        .flag-cell svg {
+            display: block;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .25);
+        }
+
+        .flag-cell .flag-code {
+            font-family: monospace;
+            font-size: .72rem;
+            text-transform: uppercase;
+            opacity: .65;
+        }
+
+        .flag-cell .flag-name {
+            font-size: .78rem;
+            line-height: 1.1;
+        }
+
+        .flag-region-title {
+            margin: 2rem 0 .75rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .flag-shapes-demo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: flex-end;
+            padding: 1.5rem;
+        }
+
+        .flag-shapes-demo figure {
+            margin: 0;
+            text-align: center;
+        }
+
+        .flag-shapes-demo figcaption {
+            margin-top: .5rem;
+            font-size: .8rem;
+            opacity: .7;
+        }
+
+        .flag-no-results {
+            text-align: center;
+            padding: 3rem 1rem;
+            opacity: .6;
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Domma Flags</div>
+        <div class="hero-subtitle">Nation flags as crisp, scalable inline SVG — keyed by ISO code, themable into
+            rectangular, rounded, square or circular shapes. An opt-in module. Click any flag to copy.</div>
+    </div>
+</div>
+
+<!-- Shapes demo -->
+<section class="container" data-section="Shapes">
+    <h2 class="flag-region-title">One flag, four shapes</h2>
+    <div class="card">
+        <div class="flag-shapes-demo" id="shapes-demo"></div>
+    </div>
+</section>
+
+<!-- Controls -->
+<div class="flag-controls-bar">
+    <div class="container">
+        <div class="flag-controls-inner">
+            <input type="text" class="flag-search-input" id="search" placeholder="Search by name or code…">
+            <div class="d-flex gap-2 align-items-center">
+                <label class="text-sm opacity-75">Shape</label>
+                <select id="shape" class="dm-select" style="width:auto">
+                    <option value="rect">Rectangular</option>
+                    <option value="rounded">Rounded</option>
+                    <option value="square">Square</option>
+                    <option value="circle">Circle</option>
+                </select>
+                <label class="text-sm opacity-75 ml-2">Size</label>
+                <select id="size" class="dm-select" style="width:auto">
+                    <option value="32">32</option>
+                    <option value="48" selected>48</option>
+                    <option value="64">64</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main class="container pb-8">
+    <div id="gallery"></div>
+    <div class="flag-no-results" id="no-results" style="display:none">No flags match your search.</div>
+
+    <!-- Usage -->
+    <section class="mt-8" data-section="Usage">
+        <h2 class="flag-region-title">Usage</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <h3 class="text-lg font-semibold mb-2">HTML data attributes</h3>
+                <pre class="code-block language-html"><code>&lt;!-- after domma.min.js --&gt;
+&lt;script src="dist/domma-flags.min.js"&gt;&lt;/script&gt;
+
+&lt;span data-flag="gb"&gt;&lt;/span&gt;
+&lt;span data-flag="jp" data-flag-shape="circle"
+      data-flag-size="48" data-flag-border&gt;&lt;/span&gt;
+
+&lt;script&gt;FL.scan();&lt;/script&gt;</code></pre>
+            </div>
+            <div class="col-md-6">
+                <h3 class="text-lg font-semibold mb-2">JavaScript API</h3>
+                <pre class="code-block language-javascript"><code>// Render an SVG element
+const svg = FL.render('fr', { size: 48, shape: 'rounded' });
+document.body.appendChild(svg);
+
+// Inject into a target
+FL.inject('#country', 'de', { shape: 'circle', border: true });
+
+// Search & list
+FL.search('united');     // ['gb', 'us', 'ae']
+FL.list('europe');       // ['gb', 'fr', 'de', ...]
+FL.name('br');           // 'Brazil'
+
+// Register your own / override
+FL.register('eu', { name: 'European Union', region: 'europe',
+    bg: '#003399',
+    overlays: [{ type: 'star', cx: 30, cy: 20, r: 4, fill: '#FFCC00' }] });</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tutorial -->
+    <section class="mt-8" data-section="Tutorial">
+        <h2 class="flag-region-title">Tutorial: a country picker</h2>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-body">
+                        <label class="d-block mb-2 font-semibold">Choose a country</label>
+                        <select id="country-picker" class="dm-select w-full"></select>
+                        <div class="d-flex align-items-center gap-3 mt-4">
+                            <span id="picker-flag"></span>
+                            <div>
+                                <div id="picker-name" class="font-semibold"></div>
+                                <code id="picker-code" class="text-sm opacity-65"></code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <pre class="code-block language-javascript"><code>// Build options from the registry, sorted by name
+const codes = _.sortBy(FL.list(), c =&gt; FL.name(c));
+codes.forEach(code =&gt; {
+    $('#country-picker').append(
+        `&lt;option value="${code}"&gt;${FL.name(code)}&lt;/option&gt;`
+    );
+});
+
+// React to selection
+$('#country-picker').on('change', function () {
+    const code = $(this).val();
+    FL.inject('#picker-flag', code,
+        { size: 40, shape: 'rounded', border: true, position: 'replace' });
+    $('#picker-name').text(FL.name(code));
+    $('#picker-code').text(code.toUpperCase());
+});</code></pre>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-flags.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+    // ---- Shapes demo ----
+    const shapesHost = $('#shapes-demo');
+    ['rect', 'rounded', 'square', 'circle'].forEach(shape => {
+        const fig = document.createElement('figure');
+        fig.appendChild(FL.render('gb', {size: 72, shape, border: true}));
+        const cap = document.createElement('figcaption');
+        cap.textContent = shape;
+        fig.appendChild(cap);
+        shapesHost.append(fig);
+    });
+
+    // ---- Gallery ----
+    const regions = FL.listRegions();
+    let currentShape = 'rect';
+    let currentSize = 48;
+
+    function renderGallery(query = '') {
+        const gallery = $('#gallery');
+        gallery.html('');
+        const matches = query ? FL.search(query) : null;
+        let shown = 0;
+
+        _.each(regions, (meta, key) => {
+            const codes = meta.codes.filter(c => !matches || matches.includes(c));
+            if (!codes.length) {
+                return;
+            }
+            shown += codes.length;
+
+            const title = document.createElement('h2');
+            title.className = 'flag-region-title';
+            title.textContent = meta.name;
+            gallery.append(title);
+
+            const grid = document.createElement('div');
+            grid.className = 'flag-grid';
+            codes.forEach(code => {
+                const cell = document.createElement('div');
+                cell.className = 'flag-cell';
+                cell.appendChild(FL.render(code, {size: currentSize, shape: currentShape, border: true}));
+                const name = document.createElement('div');
+                name.className = 'flag-name';
+                name.textContent = FL.name(code);
+                const cd = document.createElement('div');
+                cd.className = 'flag-code';
+                cd.textContent = code;
+                cell.append(name, cd);
+                cell.addEventListener('click', () => copy(code));
+                grid.appendChild(cell);
+            });
+            gallery.append(grid);
+        });
+
+        $('#no-results').css('display', shown ? 'none' : 'block');
+    }
+
+    function copy(code) {
+        navigator.clipboard.writeText(`data-flag="${code}"`).then(() => {
+            E.toast.success(`Copied: ${code}`, {position: 'bottom-center', duration: 1800});
+        });
+    }
+
+    // Controls
+    let t;
+    $('#search').on('input', function () {
+        clearTimeout(t);
+        const v = $(this).val();
+        t = setTimeout(() => renderGallery(v), 180);
+    });
+    $('#shape').on('change', function () {
+        currentShape = $(this).val();
+        renderGallery($('#search').val());
+    });
+    $('#size').on('change', function () {
+        currentSize = parseInt($(this).val(), 10);
+        renderGallery($('#search').val());
+    });
+
+    // ---- Tutorial picker ----
+    _.sortBy(FL.list(), c => FL.name(c)).forEach(code => {
+        $('#country-picker').append(`<option value="${code}">${FL.name(code)}</option>`);
+    });
+
+    function updatePicker() {
+        const code = $('#country-picker').val();
+        FL.inject('#picker-flag', code, {size: 40, shape: 'rounded', border: true, position: 'replace'});
+        $('#picker-name').text(FL.name(code));
+        $('#picker-code').text(code.toUpperCase());
+    }
+
+    $('#country-picker').on('change', updatePicker);
+
+    // Initial render
+    renderGallery();
+    updatePicker();
+</script>
+</body>
+</html>

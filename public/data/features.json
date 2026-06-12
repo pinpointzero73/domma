@@ -99,6 +99,12 @@
           "iconSize": 42
         },
         {
+          "label": "Flags",
+          "url": "showcase/flags/index.html",
+          "icon": "flag",
+          "iconSize": 42
+        },
+        {
           "label": "Themes",
           "url": "showcase/themes/index.html",
           "icon": "sun",

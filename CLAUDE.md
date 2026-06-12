@@ -127,6 +127,7 @@ consult that folder's CLAUDE.md for detailed information.
 | `Domma.http`     | `H`   | `window.H` | HTTP client                      |
 | `Domma.elements` | `E`   | `window.E` | UI components                    |
 | `Domma.icons`    | `I`   | `window.I` | SVG icon system                  |
+| `Domma.flags`    | `FL`  | `window.FL`| Nation flags (opt-in module)     |
 | `Domma.tables`   | `T`   | `window.T` | DataTable functionality          |
 | `Domma.router`   | `R`   | `window.R` | Client-side router               |
 
@@ -520,6 +521,16 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - 200+ SVG icons in 15 categories
 - Methods: `render()`, `inject()`, `scan()` (auto-scan `data-icon` attributes)
 - Customizable size and color
+
+#### Flags (`Domma.flags` / `FL`) — opt-in module
+
+- **Separate bundle** (`domma-flags.min.js`), loaded after the core bundle — NOT in `domma.min.js`
+- Nation flags as inline SVG, keyed by ISO 3166-1 alpha-2 code (`gb`, `us`, `fr`…)
+- Lazy expansion: descriptors → SVG on first render, then memoised (~20 KB bundle)
+- Shapes: `rect`, `rounded`, `square`, `circle`; optional border
+- Methods: `render()`, `html()`, `inject()`, `scan()` (`data-flag`), `register()`, `search()`, `list(region)`, `name()`
+- Curated starter set across 5 regions; extend at runtime with `FL.register(code, def)`
+- See [docs/Flags.md](./docs/Flags.md)
 
 #### Effects (`Domma.effects`)
 

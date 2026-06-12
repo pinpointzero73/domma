@@ -77,6 +77,115 @@ export const sport = {
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
     },
+    'rugby': {
+        viewBox: '0 0 24 24',
+        path: 'M5 5c8-2 16 6 14 14C11 21 3 13 5 5zM9 9l6 6M11 9l-1 1M13 11l-1 1M15 13l-1 1',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'cricket': {
+        viewBox: '0 0 24 24',
+        path: 'M14 2l8 8-9 9-3-3 9-9M13 3l-9 9M7 17a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'hockey': {
+        viewBox: '0 0 24 24',
+        path: 'M7 2v11c0 3 2 5 5 5h3a3 3 0 0 0 0-6M19 18.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4z',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'table-tennis': {
+        viewBox: '0 0 24 24',
+        path: 'M14.5 3.5a7 7 0 0 0-9.9 9.9l-2.3 4.3a1 1 0 0 0 1.3 1.3l4.3-2.3a7 7 0 0 0 6.6-13.2zM17 15.5a3 3 0 1 0 0 6 3 3 0 0 0 0-6z',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    // Football / World Cup
+    'world-cup': {
+        viewBox: '0 0 24 24',
+        path: 'M12 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM7 7h10M12 2v10M9 3.2c-1.4 2-1.4 5.6 0 7.6M15 3.2c1.4 2 1.4 5.6 0 7.6M10 12l-1 4h6l-1-4M8 16h8M11 16v4M13 16v4M8 20h8',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'jersey': {
+        viewBox: '0 0 24 24',
+        path: 'M9 3L4 6l2.5 3.5L9 8M15 3l5 3-2.5 3.5L15 8M9 3a3 3 0 0 0 6 0M9 8v13h6V8',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'football-boot': {
+        viewBox: '0 0 24 24',
+        path: 'M3 7v5a3 3 0 0 0 3 3h11a4 4 0 0 0 1-7.9L9 7c-1-1-2.2-2-4-2H3zM5 18h2M9 18h2M13 18h2M17 18h2',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'goal': {
+        viewBox: '0 0 24 24',
+        path: 'M2 5h20v11H2zM2 5l3 3v8M22 5l-3 3v8M5 8h14v8M2 11h20M9 8v8M15 8v8',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'corner-flag': {
+        viewBox: '0 0 24 24',
+        path: 'M6 2v20M6 3h12l-3.5 4L18 11H6M3 22h6',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'referee-card': {
+        viewBox: '0 0 24 24',
+        path: 'M8.5 2.5l9 3a2 2 0 0 1 1.3 2.5l-4.6 13a2 2 0 0 1-2.5 1.3l-9-3a2 2 0 0 1-1.3-2.5l4.6-13a2 2 0 0 1 2.5-1.3z',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'stadium': {
+        viewBox: '0 0 24 24',
+        path: 'M2 8c0-2.2 4.5-4 10-4s10 1.8 10 4-4.5 4-10 4-10-1.8-10-4zM2 8v6c0 2.2 4.5 4 10 4s10-1.8 10-4V8M8 12.5V18M16 12.5V18',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+    'scoreboard': {
+        viewBox: '0 0 24 24',
+        path: 'M3 4h18v12H3zM3 16l3 4M21 16l-3 4M12 6v8M6 8h3v6H6zM15 8h3v6h-3z',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
     // Fitness
     'dumbbell': {
         viewBox: '0 0 24 24',

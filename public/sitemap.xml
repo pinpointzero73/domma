@@ -536,6 +536,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://dommajs.org/showcase/flags/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://dommajs.org/showcase/icons/</loc>
     <lastmod>2026-03-08</lastmod>
     <priority>0.7</priority>
