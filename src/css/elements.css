@@ -2455,7 +2455,7 @@ code {
     transition: transform 0.2s ease;
 }
 
-.navbar-dropdown.open .navbar-caret {
+.navbar-dropdown.open > .navbar-dropdown-toggle:not(.navbar-submenu-toggle) .navbar-caret {
     transform: rotate(180deg);
 }
 
@@ -2475,7 +2475,7 @@ code {
     z-index: var(--dm-z-dropdown, 1000);
 }
 
-.navbar-dropdown.open .navbar-dropdown-menu {
+.navbar-dropdown.open > .navbar-dropdown-menu {
     display: block;
 }
 
@@ -2530,6 +2530,89 @@ code {
 
 .navbar-dark .navbar-dropdown-divider {
     background: var(--dm-surface);
+}
+
+/* ============================================
+   NAVBAR - NESTED (MULTI-LEVEL) DROPDOWNS
+   ============================================ */
+
+.navbar-dropdown-sub {
+    position: relative;
+}
+
+/* A submenu toggle looks like a dropdown item but opens a nested menu */
+.navbar-submenu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    font-size: var(--dm-font-size-sm);
+    color: var(--dm-text, #212529);
+    text-align: left;
+    text-decoration: none;
+}
+
+.navbar-submenu-toggle:hover {
+    background: var(--dm-hover-bg, rgba(0, 0, 0, 0.05));
+}
+
+.navbar-light .navbar-submenu-toggle:hover,
+[data-mode="light"] .navbar-submenu-toggle:hover {
+    background: #1e293b !important;
+    color: #ffffff !important;
+    border-radius: var(--dm-radius-md);
+}
+
+.navbar-dark .navbar-submenu-toggle {
+    color: var(--dm-gray-400, #adb5bd);
+}
+
+.navbar-dark .navbar-submenu-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: var(--dm-text-inverse, var(--dm-white));
+}
+
+/* Submenu caret points to the side to signal a fly-out */
+.navbar-submenu-toggle .navbar-caret {
+    transform: rotate(-90deg);
+    margin-left: auto;
+}
+
+/* The nested menu flies out to the right of its parent entry (desktop) */
+.navbar-dropdown-submenu {
+    top: 0;
+    left: 100%;
+    margin: 0 0 0 0.25rem;
+}
+
+.navbar-dark .navbar-dropdown-submenu {
+    background: var(--dm-surface);
+    border-color: var(--dm-border-dark, var(--dm-border));
+}
+
+/* On mobile the nested menu stacks and indents instead of flying out */
+@media (max-width: 992px) {
+    .navbar-dropdown-submenu {
+        position: static;
+        left: auto;
+        margin: 0;
+        min-width: 0;
+        padding: 0 0 0 0.75rem;
+        border: none;
+        border-left: 1px solid var(--dm-border, #dee2e6);
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .navbar-submenu-toggle .navbar-caret {
+        transform: rotate(0deg);
+    }
 }
 
 /* Pill button styles (for Download button) */

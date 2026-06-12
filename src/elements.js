@@ -5761,40 +5761,8 @@ class Navbar extends Component {
         html += '<div class="navbar-collapse">';
         html += '<ul class="navbar-nav">';
 
-        items.forEach((item, index) => {
-            if (item.items && item.items.length > 0) {
-                // Dropdown
-                html += `<li class="navbar-item navbar-dropdown">`;
-                const dropdownIconHTML = item.icon ? `<span data-icon="${item.icon}" data-size="18" style="margin-right: 6px; vertical-align: middle;"></span>` : '';
-                html += `<button class="navbar-link navbar-dropdown-toggle" data-index="${index}">
-                    ${dropdownIconHTML}${item.text}
-                    <svg class="navbar-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M6 9l6 6 6-6"/>
-                    </svg>
-                </button>`;
-                html += '<ul class="navbar-dropdown-menu">';
-                item.items.forEach((subItem, subIndex) => {
-                    if (subItem.divider) {
-                        html += `<li class="navbar-dropdown-divider"></li>`;
-                    } else {
-                        // Check if URL is external (starts with http:// or https://) or has external flag
-                        const url = subItem.url || '#';
-                        const isExternal = subItem.external || url.startsWith('http://') || url.startsWith('https://');
-                        const target = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
-                        const iconHTML = subItem.icon ? `<span data-icon="${subItem.icon}" data-size="16" style="margin-right: 6px; vertical-align: middle;"></span>` : '';
-                        html += `<li><a href="${url}" class="navbar-dropdown-item" data-index="${index}" data-subindex="${subIndex}"${target}>${iconHTML}${subItem.text}</a></li>`;
-                    }
-                });
-                html += '</ul>';
-                html += '</li>';
-            } else {
-                // Regular item
-                html += `<li class="navbar-item">`;
-                const iconHTML = item.icon ? `<span data-icon="${item.icon}" data-size="18" style="margin-right: 6px; vertical-align: middle;"></span>` : '';
-                html += `<a href="${item.url || '#'}" class="navbar-link${item.active ? ' active' : ''}" data-index="${index}">${iconHTML}${item.text}</a>`;
-                html += '</li>';
-            }
-        });
+        // Render items recursively so dropdowns can nest to any depth.
+        html += this._renderItems(items, 0, '');
 
         html += '</ul>';
 
@@ -5820,6 +5788,58 @@ class Navbar extends Component {
 
         // Scan icons
         this._scanIcons();
+    }
+
+    /**
+     * Render a list of nav items as <li> markup, recursing into `items` so
+     * dropdowns can nest to arbitrary depth.
+     *   depth 0  -> top-level bar items (button toggle / plain link)
+     *   depth >0 -> dropdown-menu entries (submenu toggle / dropdown item)
+     * `pathPrefix` is the dotted index path of the parent ('' at the root),
+     * emitted as data-path so click handling works at any depth.
+     */
+    _renderItems(list, depth, pathPrefix) {
+        let html = '';
+        (list || []).forEach((item, i) => {
+            const path = pathPrefix === '' ? `${i}` : `${pathPrefix}.${i}`;
+            if (item.divider) {
+                html += `<li class="navbar-dropdown-divider"></li>`;
+                return;
+            }
+            const hasChildren = item.items && item.items.length > 0;
+            const iconSize = depth === 0 ? 18 : 16;
+            const iconHTML = item.icon ? `<span data-icon="${item.icon}" data-size="${iconSize}" style="margin-right: 6px; vertical-align: middle;"></span>` : '';
+            const caret = `<svg class="navbar-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>`;
+
+            if (hasChildren) {
+                if (depth === 0) {
+                    html += `<li class="navbar-item navbar-dropdown">`;
+                    html += `<button class="navbar-link navbar-dropdown-toggle" data-index="${i}" data-path="${path}">${iconHTML}${item.text}${caret}</button>`;
+                    html += `<ul class="navbar-dropdown-menu">`;
+                } else {
+                    // Nested submenu: a toggle styled like a dropdown item that
+                    // flies the child menu out to the side.
+                    html += `<li class="navbar-item navbar-dropdown navbar-dropdown-sub">`;
+                    html += `<button class="navbar-dropdown-toggle navbar-submenu-toggle" data-path="${path}">${iconHTML}${item.text}${caret}</button>`;
+                    html += `<ul class="navbar-dropdown-menu navbar-dropdown-submenu">`;
+                }
+                html += this._renderItems(item.items, depth + 1, path);
+                html += `</ul></li>`;
+            } else {
+                const url = item.url || '#';
+                const isExternal = item.external || url.startsWith('http://') || url.startsWith('https://');
+                const target = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+                if (depth === 0) {
+                    html += `<li class="navbar-item"><a href="${url}" class="navbar-link${item.active ? ' active' : ''}" data-index="${i}" data-path="${path}"${target}>${iconHTML}${item.text}</a></li>`;
+                } else {
+                    // Preserve the legacy data-index/data-subindex pair on the
+                    // first dropdown level so existing onItemClick callers keep working.
+                    const compat = depth === 1 ? ` data-index="${pathPrefix}" data-subindex="${i}"` : '';
+                    html += `<li><a href="${url}" class="navbar-dropdown-item" data-path="${path}"${compat}${target}>${iconHTML}${item.text}</a></li>`;
+                }
+            }
+        });
+        return html;
     }
 
     _scanIcons() {
@@ -5851,16 +5871,20 @@ class Navbar extends Component {
                 }
             }
 
-            // Dropdown item clicks
+            // Dropdown item clicks (resolved by data-path, any depth)
             const dropdownItem = e.target.closest('.navbar-dropdown-item');
-            if (dropdownItem) {
-                const index = parseInt(dropdownItem.dataset.index, 10);
-                const subIndex = parseInt(dropdownItem.dataset.subindex, 10);
-                if (this.options.onItemClick) {
-                    e.preventDefault();
-                    const parentItem = this.options.items[index];
-                    this.options.onItemClick(parentItem.items[subIndex], subIndex, e, parentItem);
-                }
+            if (dropdownItem && this.options.onItemClick) {
+                e.preventDefault();
+                const path = dropdownItem.dataset.path;
+                const parts = path
+                    ? path.split('.').map(n => parseInt(n, 10))
+                    : [parseInt(dropdownItem.dataset.index, 10), parseInt(dropdownItem.dataset.subindex, 10)];
+                let parent = {items: this.options.items};
+                for (let k = 0; k < parts.length - 1; k++) parent = parent.items[parts[k]];
+                const subIndex = parts[parts.length - 1];
+                const item = parent.items[subIndex];
+                const parentItem = parent.items === this.options.items ? null : parent;
+                this.options.onItemClick(item, subIndex, e, parentItem);
             }
         });
 
