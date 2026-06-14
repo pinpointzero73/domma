@@ -5695,6 +5695,7 @@ class Navbar extends Component {
         variant: 'light',       // 'light', 'dark', 'transparent'
         collapsible: true,      // Mobile hamburger menu
         collapseAt: 768,        // Breakpoint for collapse
+        appearOnHover: false,   // Desktop: reveal dropdowns/flyouts on hover (click still works as fallback)
         actions: [],            // Right-side buttons/elements [{ text, url, variant }]
         onItemClick: null
     };
@@ -5894,6 +5895,7 @@ class Navbar extends Component {
             if (toggle) {
                 const dropdown = toggle.closest('.navbar-dropdown');
                 dropdown.classList.toggle('open');
+                if (dropdown.classList.contains('open')) this._positionMenu(dropdown);
             }
         });
 
@@ -5913,6 +5915,77 @@ class Navbar extends Component {
                 this._isCollapsed = true;
                 if (this._toggle) {
                     this._toggle.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
+
+        // Optional hover-to-reveal (desktop). The click handlers above still
+        // apply, so touch and keyboard users keep a working fallback. A short
+        // close delay bridges the gap when the cursor crosses from a parent
+        // toggle into its flyout, preventing flicker.
+        if (this.options.appearOnHover) {
+            const CLOSE_DELAY = 150;
+            this.element.querySelectorAll('.navbar-dropdown').forEach((dd) => {
+                let closeTimer = null;
+                this._addEventListener(dd, 'mouseenter', () => {
+                    if (window.innerWidth < this.options.collapseAt) return;
+                    clearTimeout(closeTimer);
+                    if (!dd.classList.contains('open')) {
+                        dd.classList.add('open');
+                        this._positionMenu(dd);
+                    }
+                });
+                this._addEventListener(dd, 'mouseleave', () => {
+                    if (window.innerWidth < this.options.collapseAt) return;
+                    clearTimeout(closeTimer);
+                    closeTimer = setTimeout(() => {
+                        dd.classList.remove('open');
+                        dd.querySelectorAll('.navbar-dropdown.open').forEach(s => s.classList.remove('open'));
+                    }, CLOSE_DELAY);
+                });
+            });
+        }
+    }
+
+    /**
+     * Keep an opening dropdown/flyout inside the viewport. Dropdown menus are
+     * absolutely positioned (top-level opens downward at left:0; nested submenus
+     * fly out at left:100%/top:0) with no built-in collision handling, so deep or
+     * low menus would run off the right/bottom edge and be unreachable. On open we
+     * measure and reposition: flip horizontally past the right edge, and either
+     * shift a flyout up or cap+scroll a top-level list past the bottom edge.
+     * Desktop only — below collapseAt the menu renders inline in the drawer.
+     */
+    _positionMenu(dropdown) {
+        if (window.innerWidth < this.options.collapseAt) return;
+        const menu = dropdown.querySelector(':scope > .navbar-dropdown-menu');
+        if (!menu) return;
+        const isSub = menu.classList.contains('navbar-dropdown-submenu');
+        const M = 8; // viewport safety margin (px)
+        // Reset any previous adjustment so each open re-measures cleanly.
+        menu.classList.remove('navbar-dropdown-flip-x', 'navbar-dropdown-flip-end');
+        menu.style.top = '';
+        menu.style.maxHeight = '';
+        menu.style.overflowY = '';
+        requestAnimationFrame(() => {
+            let r = menu.getBoundingClientRect();
+            if (!r.width && !r.height) return; // not actually visible
+            // Horizontal: flip a sideways flyout to the left, or right-align a
+            // top-level menu, when it overruns the right edge.
+            if (r.right > window.innerWidth - M) {
+                menu.classList.add(isSub ? 'navbar-dropdown-flip-x' : 'navbar-dropdown-flip-end');
+                r = menu.getBoundingClientRect();
+            }
+            // Vertical: a flyout can move up freely; a top-level list is anchored
+            // under the bar, so cap its height and scroll instead — but only when
+            // it has no nested flyouts of its own (which scrolling would clip).
+            const over = r.bottom - (window.innerHeight - M);
+            if (over > 0) {
+                if (isSub) {
+                    menu.style.top = (-Math.min(Math.ceil(over), Math.floor(r.top - M))) + 'px';
+                } else if (!menu.querySelector('.navbar-dropdown-sub')) {
+                    menu.style.maxHeight = Math.max(120, Math.floor(window.innerHeight - r.top - M)) + 'px';
+                    menu.style.overflowY = 'auto';
                 }
             }
         });

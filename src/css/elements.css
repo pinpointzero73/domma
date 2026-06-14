@@ -2596,6 +2596,19 @@ code {
     border-color: var(--dm-border-dark, var(--dm-border));
 }
 
+/* Collision classes toggled by Navbar._positionMenu() to keep menus on-screen:
+   a flyout that overruns the right edge opens to the left of its parent instead,
+   and a top-level menu near the right edge right-aligns under its toggle. */
+.navbar-dropdown-submenu.navbar-dropdown-flip-x {
+    left: auto;
+    right: 100%;
+    margin: 0 0.25rem 0 0;
+}
+.navbar-dropdown-menu.navbar-dropdown-flip-end {
+    left: auto;
+    right: 0;
+}
+
 /* On mobile the nested menu stacks and indents instead of flying out */
 @media (max-width: 992px) {
     .navbar-dropdown-submenu {
