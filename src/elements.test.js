@@ -349,4 +349,65 @@ describe('Domma.elements - UI Components', () => {
     expect(typeof backToTop.scroll).toBe('function');
     backToTop.destroy();
   });
+
+  describe('Navbar appearOnHover', () => {
+    const ITEMS = [
+      {text: 'Home', url: '#'},
+      {text: 'Products', items: [{text: 'Widgets', url: '#a'}, {text: 'Gadgets', url: '#b'}]}
+    ];
+    // jsdom defaults window.innerWidth to 1024 (>= collapseAt), so the desktop
+    // hover path runs. mouseover/mouseout bubble, so dispatch from the toggle.
+    const fire = (el, type, relatedTarget = null) =>
+      el.dispatchEvent(new MouseEvent(type, {bubbles: true, relatedTarget}));
+
+    it('opens a dropdown on hover and closes it after the delay on leave', () => {
+      testContainer.innerHTML = '<nav id="nav-hover"></nav>';
+      const nav = Domma.elements.navbar('#nav-hover', {items: ITEMS, appearOnHover: true});
+      const dropdown = nav.element.querySelector('.navbar-dropdown');
+      const toggle = dropdown.querySelector('.navbar-dropdown-toggle');
+
+      fire(toggle, 'mouseover');
+      expect(dropdown.classList.contains('open')).toBe(true);
+
+      // Leaving the navbar entirely schedules a close after CLOSE_DELAY (150ms).
+      fire(toggle, 'mouseout', document.body);
+      expect(dropdown.classList.contains('open')).toBe(true); // still open before timer
+      vi.advanceTimersByTime(150);
+      expect(dropdown.classList.contains('open')).toBe(false);
+
+      nav.destroy();
+    });
+
+    it('keeps working after setItems() re-renders the dropdown DOM (regression)', () => {
+      testContainer.innerHTML = '<nav id="nav-rerender"></nav>';
+      const nav = Domma.elements.navbar('#nav-rerender', {items: ITEMS, appearOnHover: true});
+
+      // Re-render replaces the inner DOM, discarding the original dropdown nodes.
+      nav.setItems([
+        {text: 'Docs', url: '#'},
+        {text: 'More', items: [{text: 'Blog', url: '#c'}, {text: 'FAQ', url: '#d'}]}
+      ]);
+
+      const dropdown = nav.element.querySelector('.navbar-dropdown');
+      const toggle = dropdown.querySelector('.navbar-dropdown-toggle');
+
+      // Delegated on the persistent nav element, hover still resolves the new node.
+      fire(toggle, 'mouseover');
+      expect(dropdown.classList.contains('open')).toBe(true);
+
+      nav.destroy();
+    });
+
+    it('does not bind hover behaviour when appearOnHover is false', () => {
+      testContainer.innerHTML = '<nav id="nav-nohover"></nav>';
+      const nav = Domma.elements.navbar('#nav-nohover', {items: ITEMS});
+      const dropdown = nav.element.querySelector('.navbar-dropdown');
+      const toggle = dropdown.querySelector('.navbar-dropdown-toggle');
+
+      fire(toggle, 'mouseover');
+      expect(dropdown.classList.contains('open')).toBe(false);
+
+      nav.destroy();
+    });
+  });
 });

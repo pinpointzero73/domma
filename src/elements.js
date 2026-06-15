@@ -5919,30 +5919,50 @@ class Navbar extends Component {
             }
         });
 
-        // Optional hover-to-reveal (desktop). The click handlers above still
-        // apply, so touch and keyboard users keep a working fallback. A short
-        // close delay bridges the gap when the cursor crosses from a parent
-        // toggle into its flyout, preventing flicker.
+        // Optional hover-to-reveal (desktop). Delegated on this.element — like the
+        // click handlers above — so it survives setItems()/setActive() re-renders,
+        // which replace the inner DOM. Click stays a working fallback for touch and
+        // keyboard users. mouseover/mouseout bubble (unlike mouseenter/mouseleave),
+        // so one pair of listeners covers every present and future dropdown.
         if (this.options.appearOnHover) {
-            const CLOSE_DELAY = 150;
-            this.element.querySelectorAll('.navbar-dropdown').forEach((dd) => {
-                let closeTimer = null;
-                this._addEventListener(dd, 'mouseenter', () => {
-                    if (window.innerWidth < this.options.collapseAt) return;
-                    clearTimeout(closeTimer);
-                    if (!dd.classList.contains('open')) {
-                        dd.classList.add('open');
-                        this._positionMenu(dd);
+            const CLOSE_DELAY = 150; // bridges the cursor gap when leaving the navbar
+            let closeTimer = null;
+
+            // Open every .navbar-dropdown on the path from `target` up to the navbar
+            // (so a hovered flyout keeps its parents open) and close the rest.
+            const reconcile = (target) => {
+                const chain = new Set();
+                for (let n = target; n && n !== this.element; n = n.parentElement) {
+                    if (n.classList && n.classList.contains('navbar-dropdown')) chain.add(n);
+                }
+                this.element.querySelectorAll('.navbar-dropdown').forEach((dd) => {
+                    if (chain.has(dd)) {
+                        if (!dd.classList.contains('open')) {
+                            dd.classList.add('open');
+                            this._positionMenu(dd);
+                        }
+                    } else {
+                        dd.classList.remove('open');
                     }
                 });
-                this._addEventListener(dd, 'mouseleave', () => {
-                    if (window.innerWidth < this.options.collapseAt) return;
-                    clearTimeout(closeTimer);
-                    closeTimer = setTimeout(() => {
-                        dd.classList.remove('open');
-                        dd.querySelectorAll('.navbar-dropdown.open').forEach(s => s.classList.remove('open'));
-                    }, CLOSE_DELAY);
-                });
+            };
+
+            this._addEventListener(this.element, 'mouseover', (e) => {
+                if (window.innerWidth < this.options.collapseAt) return;
+                if (!e.target.closest('.navbar-dropdown')) return;
+                clearTimeout(closeTimer);
+                reconcile(e.target);
+            });
+
+            this._addEventListener(this.element, 'mouseout', (e) => {
+                if (window.innerWidth < this.options.collapseAt) return;
+                // Ignore moves that stay inside the navbar; only act on a real exit.
+                if (e.relatedTarget && this.element.contains(e.relatedTarget)) return;
+                clearTimeout(closeTimer);
+                closeTimer = setTimeout(() => {
+                    this.element.querySelectorAll('.navbar-dropdown.open')
+                        .forEach(dd => dd.classList.remove('open'));
+                }, CLOSE_DELAY);
             });
         }
     }
