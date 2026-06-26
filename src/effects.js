@@ -2487,9 +2487,653 @@ export function tickerTape(selector, options = {}) {
   };
 }
 
+/**
+ * Butterflies effect — procedurally drawn butterflies wander and rise with
+ * flapping wings. Pass `null` (or omit the selector) for a full-page fixed
+ * overlay, or a selector to scope them inside a container.
+ *
+ * @param {string|Element|NodeList|HTMLElement[]|null} selector
+ * @param {Object} options
+ * @param {string|string[]} [options.palette='meadow']
+ * @param {number} [options.density=18] - Target butterflies on screen at once
+ * @param {number} [options.speed=1] - Global speed multiplier
+ * @param {number} [options.wander=1] - Steering erraticness
+ * @param {number} [options.riseSpeed=0.4] - Upward drift bias
+ * @param {number} [options.flapSpeed=1] - Wingbeat rate multiplier
+ * @param {number} [options.minSize=14] - Minimum wingspan in pixels
+ * @param {number} [options.maxSize=26] - Maximum wingspan in pixels
+ * @param {boolean} [options.twoTone=true] - Use two palette colours per butterfly
+ * @param {boolean} [options.burst=false] - Release one batch then settle
+ * @param {number} [options.burstCount=40] - Butterflies released in burst mode
+ * @param {number} [options.zIndex=1]
+ * @param {boolean} [options.respectMotionPreference=true]
+ *
+ * @example
+ * Domma.effects.butterflies(null);                       // full-page meadow
+ * Domma.effects.butterflies('#hero', { palette: 'pastel', density: 24 });
+ * Domma.effects.butterflies('#card', { burst: true, burstCount: 30 });
+ */
+export function butterflies(selector, options = {}) {
+  const defaults = {
+    palette: 'meadow',
+    density: 18,
+    speed: 1,
+    wander: 1,
+    riseSpeed: 0.4,
+    flapSpeed: 1,
+    minSize: 14,
+    maxSize: 26,
+    twoTone: true,
+    burst: false,
+    burstCount: 40,
+    zIndex: 1,
+    respectMotionPreference: true
+  };
+
+  const opts = { ...defaults, ...options };
+
+  if (opts.respectMotionPreference &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    console.log('[Domma.effects.butterflies] Disabled due to prefers-reduced-motion');
+    return noopControl();
+  }
+
+  const isFullPage = !selector || selector === 'body' || selector === document.body;
+
+  let containers = [];
+  if (!isFullPage) {
+    if (typeof selector === 'string') {
+      containers = Array.from(document.querySelectorAll(selector));
+    } else if (selector instanceof Element) {
+      containers = [selector];
+    } else if (selector instanceof NodeList || Array.isArray(selector)) {
+      containers = Array.from(selector);
+    }
+    if (containers.length === 0) {
+      console.warn('[Domma.effects.butterflies] No elements found for selector:', selector);
+      return null;
+    }
+  }
+
+  const colours = resolvePalette(opts.palette);
+
+  let running = false;
+  let paused = false;
+  let animationFrame = null;
+  const instanceId = `domma-butterflies-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const canvases = [];
+  let resizeObserver = null;
+
+  // ── Particle (butterfly) ──────────────────────────────────────────────────
+
+  function createButterfly(w, h) {
+    const size = opts.minSize + Math.random() * (opts.maxSize - opts.minSize);
+    const edge = Math.random();
+    let x, y;
+    if (edge < 0.6) { x = Math.random() * w; y = h + size; }                 // bottom
+    else if (edge < 0.8) { x = -size; y = h * (0.4 + Math.random() * 0.6); } // lower-left
+    else { x = w + size; y = h * (0.4 + Math.random() * 0.6); }              // lower-right
+    const heading = -Math.PI / 2 + (Math.random() - 0.5) * 1.2;              // roughly upward
+    const upper = colours[Math.floor(Math.random() * colours.length)];
+    const lower = opts.twoTone ? colours[Math.floor(Math.random() * colours.length)] : upper;
+    return {
+      x, y, heading,
+      targetHeading: heading,
+      speed: 0.6 + Math.random() * 0.8,
+      wanderTimer: Math.random() * 60,
+      flapPhase: Math.random() * Math.PI * 2,
+      flapSpeed: (0.18 + Math.random() * 0.12) * opts.flapSpeed,
+      size,
+      colourUpper: upper,
+      colourLower: lower,
+      alpha: 1,
+      alive: true
+    };
+  }
+
+  // DEFAULT flight core — constants intended to be tuned later.
+  function updateButterfly(b, w, h) {
+    b.wanderTimer -= 1;
+    if (b.wanderTimer <= 0) {
+      b.targetHeading = -Math.PI / 2 + (Math.random() - 0.5) * (1.4 * opts.wander);
+      b.wanderTimer = 30 + Math.random() * (60 / Math.max(0.2, opts.wander));
+    }
+    let diff = b.targetHeading - b.heading;
+    while (diff > Math.PI) diff -= Math.PI * 2;
+    while (diff < -Math.PI) diff += Math.PI * 2;
+    b.heading += diff * 0.05 * opts.wander;
+
+    const v = b.speed * opts.speed;
+    b.x += Math.cos(b.heading) * v + Math.sin(b.flapPhase) * 0.3;
+    b.y += Math.sin(b.heading) * v - opts.riseSpeed * opts.speed;
+    b.flapPhase += b.flapSpeed;
+
+    if (b.y + b.size < 0 || b.y - b.size > h * 2 || b.x < -b.size * 3 || b.x > w + b.size * 3) {
+      b.alive = false;
+    }
+  }
+
+  function drawButterfly(ctx, b) {
+    const spread = Math.abs(Math.sin(b.flapPhase));     // 0 = edge-on, 1 = open
+    const wingW = (b.size * (0.25 + spread * 0.75)) / 2;
+    const wingH = b.size * 0.6;
+    ctx.save();
+    ctx.globalAlpha = b.alpha;
+    ctx.translate(b.x, b.y);
+    ctx.rotate(b.heading + Math.PI / 2);
+    ctx.fillStyle = b.colourUpper;
+    ctx.beginPath();
+    ctx.ellipse(-wingW, -wingH * 0.3, wingW, wingH * 0.6, 0, 0, Math.PI * 2);
+    ctx.ellipse(wingW, -wingH * 0.3, wingW, wingH * 0.6, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = b.colourLower;
+    ctx.beginPath();
+    ctx.ellipse(-wingW * 0.85, wingH * 0.35, wingW * 0.8, wingH * 0.5, 0, 0, Math.PI * 2);
+    ctx.ellipse(wingW * 0.85, wingH * 0.35, wingW * 0.8, wingH * 0.5, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(40,30,30,0.8)';
+    ctx.lineWidth = Math.max(1, b.size * 0.06);
+    ctx.beginPath();
+    ctx.moveTo(0, -wingH * 0.7);
+    ctx.lineTo(0, wingH * 0.7);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // ── Canvas setup (mirrors tickerTape) ─────────────────────────────────────
+
+  function createCanvas(container, isFixed) {
+    const canvas = document.createElement('canvas');
+    canvas.id = instanceId + (canvases.length > 0 ? `-${canvases.length}` : '');
+    canvas.setAttribute('data-domma-effect', 'butterflies');
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = opts.zIndex;
+
+    if (isFixed) {
+      canvas.style.position = 'fixed';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      document.body.appendChild(canvas);
+    } else {
+      if (window.getComputedStyle(container).position === 'static') {
+        container.style.position = 'relative';
+      }
+      canvas.style.position = 'absolute';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      canvas.width = container.offsetWidth || container.getBoundingClientRect().width;
+      canvas.height = container.offsetHeight || container.getBoundingClientRect().height;
+      container.appendChild(canvas);
+    }
+
+    const ctx = canvas.getContext('2d');
+    return { canvas, ctx, particles: [], container, burstFired: false };
+  }
+
+  function seedParticles(entry) {
+    entry.particles = [];
+    if (opts.burst) {
+      for (let i = 0; i < opts.burstCount; i++) {
+        entry.particles.push(createButterfly(entry.canvas.width, entry.canvas.height));
+      }
+      entry.burstFired = true;
+    } else {
+      const initial = Math.floor(opts.density * 0.5);
+      for (let i = 0; i < initial; i++) {
+        entry.particles.push(createButterfly(entry.canvas.width, entry.canvas.height));
+      }
+    }
+  }
+
+  function resizeCanvas(entry) {
+    if (entry.isFixed) {
+      entry.canvas.width = window.innerWidth;
+      entry.canvas.height = window.innerHeight;
+    } else {
+      const rect = entry.container.getBoundingClientRect();
+      entry.canvas.width = rect.width || entry.container.offsetWidth;
+      entry.canvas.height = rect.height || entry.container.offsetHeight;
+    }
+  }
+
+  // ── Initialise ────────────────────────────────────────────────────────────
+
+  if (isFullPage) {
+    const entry = createCanvas(document.body, true);
+    entry.isFixed = true;
+    seedParticles(entry);
+    canvases.push(entry);
+    const onWindowResize = () => canvases.forEach(e => resizeCanvas(e));
+    window.addEventListener('resize', onWindowResize);
+    canvases[0]._resizeHandler = onWindowResize;
+  } else {
+    containers.forEach(container => {
+      const entry = createCanvas(container, false);
+      entry.isFixed = false;
+      seedParticles(entry);
+      canvases.push(entry);
+    });
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => canvases.forEach(e => resizeCanvas(e)));
+      containers.forEach(c => resizeObserver.observe(c));
+    }
+  }
+
+  // ── Animation loop ────────────────────────────────────────────────────────
+
+  function animate() {
+    if (!running || paused) return;
+    canvases.forEach(entry => {
+      const { canvas, ctx, particles } = entry;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        updateButterfly(p, canvas.width, canvas.height);
+        if (p.alive) {
+          drawButterfly(ctx, p);
+        } else {
+          particles.splice(i, 1);
+        }
+      }
+      if (!opts.burst) {
+        while (particles.length < opts.density && Math.random() < 0.3) {
+          particles.push(createButterfly(canvas.width, canvas.height));
+        }
+      }
+    });
+    animationFrame = requestAnimationFrame(animate);
+  }
+
+  function startAnimation() {
+    if (running) return;
+    running = true;
+    paused = false;
+    animate();
+  }
+
+  startAnimation();
+  console.log(`[Domma.effects.butterflies] Initialised (${isFullPage ? 'full-page' : 'container'} mode, palette: ${Array.isArray(opts.palette) ? 'custom' : opts.palette})`);
+
+  return {
+    pause() {
+      if (!running || paused) return;
+      paused = true;
+      if (animationFrame) { cancelAnimationFrame(animationFrame); animationFrame = null; }
+    },
+    resume() {
+      if (!running || !paused) return;
+      paused = false;
+      animate();
+    },
+    stop() {
+      running = false;
+      paused = false;
+      if (animationFrame) { cancelAnimationFrame(animationFrame); animationFrame = null; }
+    },
+    restart() {
+      this.stop();
+      canvases.forEach(e => seedParticles(e));
+      startAnimation();
+    },
+    destroy() {
+      this.stop();
+      if (isFullPage && canvases[0]?._resizeHandler) {
+        window.removeEventListener('resize', canvases[0]._resizeHandler);
+      }
+      if (resizeObserver) { resizeObserver.disconnect(); resizeObserver = null; }
+      canvases.forEach(({ canvas }) => {
+        if (canvas && canvas.parentNode) canvas.parentNode.removeChild(canvas);
+      });
+      canvases.length = 0;
+    },
+    isRunning() { return running && !paused; },
+    isPaused() { return running && paused; }
+  };
+}
+
+// ── Strobe lighting presets ─────────────────────────────────────────────────
+
+export const STROBE_PRESETS = {
+  club:        { origins: ['tl', 'tr', 'bl', 'br'], motion: 'sweep',  sweepArc: 100, speed: 1,    beamWidth: 16, flicker: true,  hz: 10, colours: ['#ffffff', '#38bdf8', '#f472b6', '#a855f7'], intensity: 0.7 },
+  concert:     { origins: ['tl', 'tr'],             motion: 'sweep',  sweepArc: 120, speed: 0.8,  beamWidth: 18, flicker: true,  hz: 6,  colours: ['#f43f5e', '#fb923c', '#facc15', '#22c55e', '#3b82f6'], intensity: 0.75 },
+  police:      { origins: ['tl', 'tr'],             motion: 'sweep',  sweepArc: 70,  speed: 2.2,  beamWidth: 22, flicker: true,  hz: 8,  colours: ['#ef4444', '#3b82f6'], intensity: 0.85 },
+  searchlight: { origins: ['bl', 'br'],             motion: 'rotate', sweepArc: 90,  speed: 0.5,  beamWidth: 12, flicker: false, hz: 0,  colours: ['#fffbe6', '#fde68a'], intensity: 0.6 },
+  scanner:     { origins: ['tl', 'tr', 'bl', 'br'], motion: 'sweep',  sweepArc: 60,  speed: 1.6,  beamWidth: 8,  flicker: false, hz: 0,  colours: ['#22d3ee'], intensity: 0.7 },
+  mood:        { origins: ['tl', 'tr', 'bl', 'br'], motion: 'sweep',  sweepArc: 140, speed: 0.35, beamWidth: 28, flicker: false, hz: 0,  colours: ['#a855f7', '#6366f1', '#ec4899', '#38bdf8'], intensity: 0.45 }
+};
+
+/**
+ * Resolve a strobe-lighting preset name to its option bundle.
+ * Unknown names warn and fall back to 'club'.
+ * @param {string} name
+ * @returns {object}
+ */
+export function resolveStrobePreset(name) {
+  if (name && STROBE_PRESETS[name]) return STROBE_PRESETS[name];
+  if (name) console.warn(`[Domma.effects.strobe] Unknown preset '${name}', using 'club'.`);
+  return STROBE_PRESETS.club;
+}
+
+/** Convert a #rgb / #rrggbb hex colour to an rgba() string with the given alpha. */
+function hexToRgba(hex, alpha) {
+  let h = String(hex).replace('#', '');
+  if (h.length === 3) h = h.split('').map(c => c + c).join('');
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+/**
+ * Strobe lighting effect — light beams emanate from the chosen corners, sweep
+ * (or rotate), and brighten where they cross (additive blending). Pass `null`
+ * for a full-page overlay, or a selector for a container-scoped rig.
+ *
+ * Safety: disabled entirely under prefers-reduced-motion. The `flicker` rate
+ * (`hz`) is not clamped, but a console warning fires above 5 Hz since rapid
+ * flashing can trigger photosensitive seizures.
+ *
+ * @param {string|Element|NodeList|HTMLElement[]|null} selector
+ * @param {Object} options
+ * @param {string} [options.preset='club'] - Named preset (club|concert|police|searchlight|scanner|mood). Individual options override the preset.
+ * @param {string[]} [options.origins] - Corners beams emit from: any of 'tl','tr','bl','br'
+ * @param {string} [options.motion] - 'sweep' (fan back and forth) or 'rotate' (full circle)
+ * @param {number} [options.sweepArc] - Degrees a beam fans across in sweep mode
+ * @param {number} [options.speed] - Sweep/rotation speed multiplier
+ * @param {number} [options.beamWidth] - Angular width of each beam cone in degrees
+ * @param {boolean} [options.flicker] - Blink beams on/off (the strobe character)
+ * @param {number} [options.hz] - Flicker rate in flashes/sec (warns above 5)
+ * @param {string[]} [options.colours] - Beam colours, assigned per beam in order
+ * @param {number} [options.intensity] - Beam brightness 0–1
+ * @param {number|null} [options.duration=null] - Auto-stop after N ms
+ * @param {number} [options.zIndex=9999]
+ * @param {boolean} [options.respectMotionPreference=true]
+ *
+ * @example
+ * Domma.effects.strobe(null);                                  // full-page club lighting
+ * Domma.effects.strobe('#stage', { preset: 'police' });
+ * Domma.effects.strobe(null, { preset: 'club', flicker: false, colours: ['#fff'] });
+ */
+export function strobe(selector, options = {}) {
+  const HARD_DEFAULTS = {
+    preset: 'club',
+    origins: ['tl', 'tr', 'bl', 'br'],
+    motion: 'sweep',
+    sweepArc: 100,
+    speed: 1,
+    beamWidth: 16,
+    flicker: true,
+    hz: 10,
+    colours: ['#ffffff', '#38bdf8', '#f472b6', '#a855f7'],
+    intensity: 0.7,
+    duration: null,
+    zIndex: 9999,
+    respectMotionPreference: true
+  };
+
+  const preset = resolveStrobePreset(options.preset || 'club');
+  const opts = { ...HARD_DEFAULTS, ...preset, ...options };
+
+  if (opts.respectMotionPreference &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    console.log('[Domma.effects.strobe] Disabled due to prefers-reduced-motion');
+    return noopControl();
+  }
+
+  if (opts.flicker && opts.hz > 5) {
+    console.warn(`[Domma.effects.strobe] flicker hz=${opts.hz} exceeds 5Hz — rapid flashing can trigger photosensitive seizures.`);
+  }
+
+  const isFullPage = !selector || selector === 'body' || selector === document.body;
+
+  let containers = [];
+  if (!isFullPage) {
+    if (typeof selector === 'string') {
+      containers = Array.from(document.querySelectorAll(selector));
+    } else if (selector instanceof Element) {
+      containers = [selector];
+    } else if (selector instanceof NodeList || Array.isArray(selector)) {
+      containers = Array.from(selector);
+    }
+    if (containers.length === 0) {
+      console.warn('[Domma.effects.strobe] No elements found for selector:', selector);
+      return null;
+    }
+  }
+
+  let running = false;
+  let paused = false;
+  let animationFrame = null;
+  let stopTimer = null;
+  const instanceId = `domma-strobe-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const canvases = [];
+  let resizeObserver = null;
+
+  function cornerPos(corner, w, h) {
+    switch (corner) {
+      case 'tr': return { x: w, y: 0 };
+      case 'bl': return { x: 0, y: h };
+      case 'br': return { x: w, y: h };
+      case 'tl':
+      default:   return { x: 0, y: 0 };
+    }
+  }
+
+  function buildBeams() {
+    return opts.origins.map((corner, i) => ({
+      corner,
+      colour: opts.colours[i % opts.colours.length],
+      phase: (i / Math.max(1, opts.origins.length)) * Math.PI * 2
+    }));
+  }
+
+  // Soft feathered beam: a wide dim halo, the main beam, and a bright narrow
+  // core, layered additively so the cone has soft edges and a glowing centre
+  // line rather than a hard triangular wedge. `mul` scales brightness (used by
+  // the smooth flicker pulse).
+  const BEAM_LAYERS = [
+    { widthMul: 1.9, alphaMul: 0.16 },
+    { widthMul: 1.0, alphaMul: 0.5 },
+    { widthMul: 0.45, alphaMul: 1.0 }
+  ];
+
+  function drawBeam(ctx, ox, oy, angle, colour, w, h, mul) {
+    const len = Math.hypot(w, h) * 1.5;
+    const baseHalf = ((opts.beamWidth * Math.PI) / 180) / 2;
+    for (let i = 0; i < BEAM_LAYERS.length; i++) {
+      const layer = BEAM_LAYERS[i];
+      const half = baseHalf * layer.widthMul;
+      const a = opts.intensity * layer.alphaMul * mul;
+      if (a <= 0.003) continue;
+      const x1 = ox + Math.cos(angle - half) * len;
+      const y1 = oy + Math.sin(angle - half) * len;
+      const x2 = ox + Math.cos(angle + half) * len;
+      const y2 = oy + Math.sin(angle + half) * len;
+      const grad = ctx.createRadialGradient(ox, oy, 0, ox, oy, len);
+      grad.addColorStop(0, hexToRgba(colour, a));
+      grad.addColorStop(0.4, hexToRgba(colour, a * 0.4));
+      grad.addColorStop(1, hexToRgba(colour, 0));
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.closePath();
+      ctx.fill();
+    }
+  }
+
+  function createCanvas(container, isFixed) {
+    const canvas = document.createElement('canvas');
+    canvas.id = instanceId + (canvases.length > 0 ? `-${canvases.length}` : '');
+    canvas.setAttribute('data-domma-effect', 'strobe');
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = opts.zIndex;
+
+    if (isFixed) {
+      canvas.style.position = 'fixed';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      document.body.appendChild(canvas);
+    } else {
+      if (window.getComputedStyle(container).position === 'static') {
+        container.style.position = 'relative';
+      }
+      canvas.style.position = 'absolute';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      canvas.width = container.offsetWidth || container.getBoundingClientRect().width;
+      canvas.height = container.offsetHeight || container.getBoundingClientRect().height;
+      container.appendChild(canvas);
+    }
+
+    const ctx = canvas.getContext('2d');
+    return { canvas, ctx, container, beams: buildBeams() };
+  }
+
+  function resizeCanvas(entry) {
+    if (entry.isFixed) {
+      entry.canvas.width = window.innerWidth;
+      entry.canvas.height = window.innerHeight;
+    } else {
+      const rect = entry.container.getBoundingClientRect();
+      entry.canvas.width = rect.width || entry.container.offsetWidth;
+      entry.canvas.height = rect.height || entry.container.offsetHeight;
+    }
+  }
+
+  if (isFullPage) {
+    const entry = createCanvas(document.body, true);
+    entry.isFixed = true;
+    canvases.push(entry);
+    const onWindowResize = () => canvases.forEach(e => resizeCanvas(e));
+    window.addEventListener('resize', onWindowResize);
+    canvases[0]._resizeHandler = onWindowResize;
+  } else {
+    containers.forEach(container => {
+      const entry = createCanvas(container, false);
+      entry.isFixed = false;
+      canvases.push(entry);
+    });
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => canvases.forEach(e => resizeCanvas(e)));
+      containers.forEach(c => resizeObserver.observe(c));
+    }
+  }
+
+  function now() {
+    return (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+  }
+
+  function animate() {
+    if (!running || paused) return;
+    // Smooth brightness pulse instead of a hard on/off blink. Oscillates
+    // between a floor and full brightness at `hz` pulses per second, so the
+    // beams breathe rather than strobe harshly.
+    let flickerMul = 1;
+    if (opts.flicker) {
+      const cycle = 0.5 + 0.5 * Math.sin((now() / 1000) * opts.hz * Math.PI * 2);
+      flickerMul = 0.4 + 0.6 * cycle;
+    }
+    canvases.forEach(entry => {
+      const { canvas, ctx, beams } = entry;
+      const w = canvas.width;
+      const h = canvas.height;
+      // Fade the previous frame slightly (rather than clearing it) so beams
+      // leave a soft trail as they move — smooth motion, and it keeps the
+      // overlay transparent over the page (destination-out lowers alpha only).
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.14)';
+      ctx.fillRect(0, 0, w, h);
+      ctx.globalCompositeOperation = 'lighter';
+      const cx = w / 2;
+      const cy = h / 2;
+      beams.forEach(beam => {
+        const { x: ox, y: oy } = cornerPos(beam.corner, w, h);
+        let angle;
+        if (opts.motion === 'rotate') {
+          angle = beam.phase;
+          beam.phase += 0.01 * opts.speed;
+        } else {
+          const centre = Math.atan2(cy - oy, cx - ox);
+          angle = centre + Math.sin(beam.phase) * ((opts.sweepArc * Math.PI) / 180) / 2;
+          beam.phase += 0.02 * opts.speed;
+        }
+        drawBeam(ctx, ox, oy, angle, beam.colour, w, h, flickerMul);
+      });
+      ctx.globalCompositeOperation = 'source-over';
+    });
+    animationFrame = requestAnimationFrame(animate);
+  }
+
+  function startAnimation() {
+    if (running) return;
+    running = true;
+    paused = false;
+    animate();
+    if (opts.duration) {
+      stopTimer = setTimeout(() => api.stop(), opts.duration);
+    }
+  }
+
+  const api = {
+    pause() {
+      if (!running || paused) return;
+      paused = true;
+      if (animationFrame) { cancelAnimationFrame(animationFrame); animationFrame = null; }
+    },
+    resume() {
+      if (!running || !paused) return;
+      paused = false;
+      animate();
+    },
+    stop() {
+      running = false;
+      paused = false;
+      if (animationFrame) { cancelAnimationFrame(animationFrame); animationFrame = null; }
+      if (stopTimer) { clearTimeout(stopTimer); stopTimer = null; }
+      canvases.forEach(({ canvas, ctx }) => ctx && ctx.clearRect(0, 0, canvas.width, canvas.height));
+    },
+    restart() {
+      this.stop();
+      canvases.forEach(e => { e.beams = buildBeams(); });
+      startAnimation();
+    },
+    destroy() {
+      this.stop();
+      if (isFullPage && canvases[0]?._resizeHandler) {
+        window.removeEventListener('resize', canvases[0]._resizeHandler);
+      }
+      if (resizeObserver) { resizeObserver.disconnect(); resizeObserver = null; }
+      canvases.forEach(({ canvas }) => {
+        if (canvas && canvas.parentNode) canvas.parentNode.removeChild(canvas);
+      });
+      canvases.length = 0;
+    },
+    isRunning() { return running && !paused; },
+    isPaused() { return running && paused; }
+  };
+
+  startAnimation();
+  console.log(`[Domma.effects.strobe] Initialised (${isFullPage ? 'full-page' : 'container'} mode, preset: ${opts.preset})`);
+  return api;
+}
+
 // ── Ticker tape palette resolution ──────────────────────────────────────────
 
-const TICKER_PALETTES = {
+export const EFFECT_PALETTES = {
   rainbow:  ['#ef4444', '#f97316', '#facc15', '#22c55e', '#0ea5e9', '#6366f1', '#a855f7', '#ec4899'],
   festive:  ['#dc2626', '#16a34a', '#fbbf24', '#3b82f6', '#a855f7', '#ec4899'],
   gold:     ['#fbbf24', '#f59e0b', '#fde68a', '#fffbeb', '#d97706', '#fcd34d'],
@@ -2499,44 +3143,45 @@ const TICKER_PALETTES = {
   sunset:   ['#f43f5e', '#fb923c', '#facc15', '#f59e0b', '#ec4899'],
   ocean:    ['#0ea5e9', '#22d3ee', '#06b6d4', '#3b82f6', '#6366f1'],
   forest:   ['#16a34a', '#65a30d', '#84cc16', '#22c55e', '#15803d'],
-  bridal:   ['#ffffff', '#fef3c7', '#fce7f3', '#fbcfe8', '#f9a8d4']
+  bridal:   ['#ffffff', '#fef3c7', '#fce7f3', '#fbcfe8', '#f9a8d4'],
+  meadow:   ['#84cc16', '#a3e635', '#bbf7d0', '#bae6fd', '#fef08a', '#ddd6fe'],
+  firefly:  ['#fde68a', '#facc15', '#f59e0b', '#a3e635', '#fef9c3'],
+  aqua:     ['#a5f3fc', '#67e8f9', '#22d3ee', '#bae6fd', '#e0f2fe'],
+  autumn:   ['#b45309', '#d97706', '#f59e0b', '#ca8a04', '#92400e', '#dc2626']
 };
 
 /**
  * Resolve a palette specifier into an array of CSS colour strings.
- * - Named keys ('rainbow', 'festive', etc.) → preset palette.
+ * - Named keys ('meadow', 'rainbow', …) → preset palette.
  * - 'theme' → reads CSS custom properties from the active Domma theme.
  * - Array → returned as-is.
+ *
+ * @param {string|string[]} spec
+ * @returns {string[]}
  */
-function resolveTickerPalette(spec) {
+export function resolvePalette(spec) {
   if (Array.isArray(spec) && spec.length > 0) {
     return spec;
   }
-  if (typeof spec === 'string' && TICKER_PALETTES[spec]) {
-    return TICKER_PALETTES[spec];
+  if (typeof spec === 'string' && EFFECT_PALETTES[spec]) {
+    return EFFECT_PALETTES[spec];
   }
   if (spec === 'theme' || !spec) {
     const root = document.documentElement;
     const styles = getComputedStyle(root);
-    const vars = [
-      '--dm-primary',
-      '--dm-secondary',
-      '--dm-success',
-      '--dm-warning',
-      '--dm-danger',
-      '--dm-info'
-    ];
+    const vars = ['--dm-primary', '--dm-secondary', '--dm-success', '--dm-warning', '--dm-danger', '--dm-info'];
     const resolved = vars
       .map(name => styles.getPropertyValue(name).trim())
       .filter(value => value && value !== 'transparent');
     if (resolved.length > 0) return resolved;
-    // Fallback if theme variables aren't loaded
-    return TICKER_PALETTES.rainbow;
+    return EFFECT_PALETTES.rainbow;
   }
-  // Unknown string → fall back to rainbow rather than throwing
-  console.warn(`[Domma.effects.tickerTape] Unknown palette '${spec}', using rainbow.`);
-  return TICKER_PALETTES.rainbow;
+  console.warn(`[Domma.effects] Unknown palette '${spec}', using rainbow.`);
+  return EFFECT_PALETTES.rainbow;
 }
+
+// Back-compat alias — tickerTape still calls resolveTickerPalette internally.
+const resolveTickerPalette = resolvePalette;
 
 // Export as default for module usage
 export default {
@@ -2549,5 +3194,7 @@ export default {
   ripple,
   shake,
   twinkle,
-  tickerTape
+  tickerTape,
+  butterflies,
+  strobe
 };

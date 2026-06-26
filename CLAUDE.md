@@ -560,6 +560,15 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Palettes: `'theme'` (auto from CSS variables), `'rainbow'`, `'festive'`, `'gold'`, `'silver'`, `'pastel'`, `'mono'`, `'sunset'`, `'ocean'`, `'forest'`, `'bridal'`, or a custom array of CSS colour strings
   - Behaviour: continuous stream with configurable density, or one-shot `burst` for celebration moments
   - Tunable: `speed`, `sway`, `rotationSpeed`, `fadeStart`, strip width/height ranges, `zIndex`
+- **butterflies()** - Canvas-based butterflies that wander and rise with flapping wings
+  - Modes: full-page overlay (`null` selector) or container-scoped
+  - Palettes: `meadow` (default), `theme`, `pastel`, `rainbow`, `sunset`, or custom colour array
+  - Behaviour: continuous stream or one-shot `burst`
+  - Tunable: `density`, `speed`, `wander`, `riseSpeed`, `flapSpeed`, `minSize`/`maxSize`, `twoTone`
+- **strobe()** - Canvas strobe *lighting* — light beams from corners that sweep/rotate and brighten where they cross
+  - Presets: `club` (default), `concert`, `police`, `searchlight`, `scanner`, `mood`; individual options override the preset
+  - Tunable: `origins`, `motion` (sweep/rotate), `sweepArc`, `speed`, `beamWidth`, `flicker`, `hz`, `colours`, `intensity`
+  - Frequency (`hz`) warns above 5 Hz; disabled under prefers-reduced-motion
 - All effects support `respectMotionPreference` and return control objects with `pause()`, `resume()`, `stop()`, `restart()`, `destroy()`
 
 ### CSS Features

@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Butterflies Effect - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/effects/butterflies.html">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .effect-controls {
+            display: flex;
+            gap: 0.6rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 4px;
+            background: var(--dm-primary-t10, rgba(13, 110, 253, 0.1));
+            text-decoration: none;
+            color: var(--dm-primary);
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--dm-primary-t20, rgba(13, 110, 253, 0.2));
+            transform: translateY(-2px);
+        }
+
+        .butterfly-container {
+            position: relative;
+            min-height: 320px;
+            background: linear-gradient(180deg, #dff1ff 0%, #eafbe7 100%);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .butterfly-container-label {
+            position: relative;
+            z-index: 10;
+            color: rgba(30, 50, 40, 0.85);
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+            pointer-events: none;
+            text-shadow: 0 1px 4px rgba(255, 255, 255, 0.6);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-badge.running {
+            background: rgba(34, 197, 94, 0.15);
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-badge.stopped {
+            background: rgba(107, 114, 128, 0.15);
+            color: #6b7280;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+
+        .status-badge.paused {
+            background: rgba(234, 179, 8, 0.15);
+            color: #ca8a04;
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .status-dot.pulse-dot {
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.6); }
+        }
+
+        .palette-swatches {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .palette-card {
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            background: var(--dm-surface, #fff);
+            transition: all 0.2s ease;
+            min-width: 140px;
+        }
+
+        .palette-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .palette-card.active {
+            border-color: var(--dm-primary);
+            box-shadow: 0 0 0 4px var(--dm-primary-light, rgba(0,0,0,0.05));
+        }
+
+        .palette-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+            text-transform: capitalize;
+        }
+
+        .palette-stripes {
+            display: flex;
+            gap: 2px;
+            height: 16px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .palette-stripes span {
+            flex: 1;
+            display: block;
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .slider-row label {
+            min-width: 140px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .slider-row input[type="range"] {
+            flex: 1;
+            max-width: 220px;
+        }
+
+        .slider-row span {
+            min-width: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--dm-primary);
+        }
+
+        .options-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .options-table th,
+        .options-table td {
+            padding: 0.6rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--dm-border-color, rgba(0,0,0,0.1));
+        }
+
+        .options-table th {
+            font-weight: 600;
+            background: var(--dm-surface-alt, rgba(0,0,0,0.03));
+        }
+
+        .options-table code {
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="effects">
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Butterflies Effect</div>
+        <div class="hero-subtitle">A canvas effect where procedurally drawn butterflies wander and rise with flapping wings — full-page or container-scoped, with theme-aware palettes.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <!-- See Also -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+        <h3 class="text-lg font-semibold mb-2">
+            <span data-icon="arrow-left" data-icon-size="20"></span>
+            See Also
+        </h3>
+        <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="ticker-tape.html" class="nav-link">Ticker Tape</a>
+        <a href="twinkle.html" class="nav-link">Twinkle</a>
+        <a href="breathe.html" class="nav-link">Breathe</a>
+        <a href="reveal.html" class="nav-link">Reveal</a>
+        <a href="strobe.html" class="nav-link">Strobe</a>
+    </div>
+
+    <!-- Motion Preference Notice -->
+    <div id="motion-notice" class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded" style="display:none;">
+        <div class="flex items-start gap-3">
+            <span style="font-size: 20px; flex-shrink: 0;">&#x2139;&#xFE0F;</span>
+            <div>
+                <h4 class="font-semibold mb-1">Motion Preference Detected</h4>
+                <p>Your system has <code>prefers-reduced-motion</code> enabled. This demo page overrides that setting to demonstrate effects. In production, use <code>respectMotionPreference: true</code> (the default) to honour user preferences.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overview -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Domma.effects.butterflies()</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Releases procedurally drawn butterflies that drift up through a container — or the entire viewport — as
+                if crossing a meadow on a spring afternoon. Each one wanders along a gently bobbing path, beats its
+                wings, and slips away off the top edge. Pass <code>null</code> for a full-page overlay, or a selector
+                for a scoped effect. Colours can follow the active theme or any of the built-in palettes.
+            </p>
+
+            <pre class="code-block language-javascript">
+// Full-page overlay using the default meadow palette
+const flutter = Domma.effects.butterflies(null);
+
+// Container-scoped, pastel palette, denser swarm
+Domma.effects.butterflies('#hero', { palette: 'pastel', density: 24 });
+
+// One-shot release — a burst of butterflies that winds down naturally
+Domma.effects.butterflies('#card', { burst: true, burstCount: 30 });
+
+// Control methods
+flutter.pause();
+flutter.resume();
+flutter.stop();
+flutter.restart();
+flutter.destroy();
+</pre>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Options</h3>
+            <div class="table-responsive">
+                <table class="options-table">
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>palette</code></td>
+                            <td><code>string | string[]</code></td>
+                            <td><code>'meadow'</code></td>
+                            <td>Named palette or custom colour array. <code>'theme'</code> reads CSS variables from the current Domma theme.</td>
+                        </tr>
+                        <tr>
+                            <td><code>density</code></td>
+                            <td><code>number</code></td>
+                            <td><code>18</code></td>
+                            <td>Average number of butterflies on screen at any moment</td>
+                        </tr>
+                        <tr>
+                            <td><code>speed</code></td>
+                            <td><code>number</code></td>
+                            <td><code>1</code></td>
+                            <td>Overall flight-speed multiplier</td>
+                        </tr>
+                        <tr>
+                            <td><code>wander</code></td>
+                            <td><code>number</code></td>
+                            <td><code>1</code></td>
+                            <td>How much each butterfly meanders from a straight path</td>
+                        </tr>
+                        <tr>
+                            <td><code>riseSpeed</code></td>
+                            <td><code>number</code></td>
+                            <td><code>0.4</code></td>
+                            <td>Upward drift multiplier (higher = quicker rise)</td>
+                        </tr>
+                        <tr>
+                            <td><code>flapSpeed</code></td>
+                            <td><code>number</code></td>
+                            <td><code>1</code></td>
+                            <td>Wing-flap rate multiplier</td>
+                        </tr>
+                        <tr>
+                            <td><code>minSize</code></td>
+                            <td><code>number</code></td>
+                            <td><code>14</code></td>
+                            <td>Smallest butterfly wingspan in pixels</td>
+                        </tr>
+                        <tr>
+                            <td><code>maxSize</code></td>
+                            <td><code>number</code></td>
+                            <td><code>26</code></td>
+                            <td>Largest butterfly wingspan in pixels</td>
+                        </tr>
+                        <tr>
+                            <td><code>twoTone</code></td>
+                            <td><code>boolean</code></td>
+                            <td><code>true</code></td>
+                            <td>Give each butterfly two palette colours — one for the upper wings, one for the lower</td>
+                        </tr>
+                        <tr>
+                            <td><code>burst</code></td>
+                            <td><code>boolean</code></td>
+                            <td><code>false</code></td>
+                            <td>If true, releases a single batch and stops respawning</td>
+                        </tr>
+                        <tr>
+                            <td><code>burstCount</code></td>
+                            <td><code>number</code></td>
+                            <td><code>40</code></td>
+                            <td>Butterflies emitted when <code>burst: true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>zIndex</code></td>
+                            <td><code>number</code></td>
+                            <td><code>1</code></td>
+                            <td>Canvas stacking order</td>
+                        </tr>
+                        <tr>
+                            <td><code>respectMotionPreference</code></td>
+                            <td><code>boolean</code></td>
+                            <td><code>true</code></td>
+                            <td>Honour <code>prefers-reduced-motion</code> OS setting</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Built-in Palettes</h3>
+            <p class="mb-3">Pass any of these names as the <code>palette</code> option — or supply your own array of colour strings.</p>
+            <div class="palette-swatches" id="palette-preview"></div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="card mb-6" data-section="how-it-works">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">How It Works</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">
+                Each butterfly spawns just off the bottom edge — or low on the left and right sides — and is given a
+                random colour from the chosen palette, a wingspan between <code>minSize</code> and <code>maxSize</code>,
+                and a starting heading.
+            </p>
+            <p class="mb-3">
+                Every so often it picks a fresh heading that is biased gently upward, then eases toward it rather than
+                snapping across. That gradual turning is what gives the flight its characteristic bob and wander: the
+                butterfly is always chasing a target direction it never quite settles on. The <code>wander</code> option
+                widens how far those targets stray from straight up, while <code>riseSpeed</code> controls how strongly
+                the upward bias pulls.
+            </p>
+            <p class="mb-3">
+                The wings are drawn fresh each frame. A running <code>flapPhase</code> is advanced by
+                <code>flapSpeed</code>, and <code>Math.sin(flapPhase)</code> drives the wing spread — wide open at the
+                top of the beat, folded at the bottom — so the flap reads as a continuous, lifelike motion rather than a
+                two-frame toggle.
+            </p>
+            <p>
+                As a butterfly drifts past the top of the canvas it fades and is retired. In continuous mode a
+                replacement spawns from below to keep the swarm at roughly <code>density</code> members; in
+                <code>burst</code> mode no replacements are made, so the flutter thins out and ends on its own.
+            </p>
+        </div>
+    </section>
+
+    <!-- Demo 1: Container-scoped (meadow palette) -->
+    <section class="card mb-6" data-section="container">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Theme / Meadow Palette</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">The default <code>meadow</code> palette gives soft spring greens and skies. Press Start to release a wandering swarm into the container below.</p>
+
+            <div class="butterfly-container" id="butterfly-container-1">
+                <div class="butterfly-container-label">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">&#x1F98B;</div>
+                    <div>Press Start to release the butterflies</div>
+                </div>
+            </div>
+
+            <div class="effect-controls mt-4">
+                <span id="status-1" class="status-badge stopped"><span class="status-dot"></span><span class="status-text">Stopped</span></span>
+                <button class="btn btn-primary" id="start-1">Start</button>
+                <button class="btn btn-secondary" id="pause-1">Pause</button>
+                <button class="btn btn-secondary" id="resume-1">Resume</button>
+                <button class="btn btn-secondary" id="restart-1">Restart</button>
+                <button class="btn btn-danger" id="destroy-1">Destroy</button>
+            </div>
+
+            <pre class="code-block language-javascript mt-4">
+const flutter = Domma.effects.butterflies('#butterfly-container', {
+  palette: 'meadow',   // soft spring greens and skies
+  density: 18,
+  speed: 1
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 2: Palette picker -->
+    <section class="card mb-6" data-section="palettes">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Choose a Palette</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Click a palette to swap colours instantly.</p>
+
+            <div class="palette-swatches" id="palette-picker"></div>
+
+            <div class="butterfly-container mt-3" id="butterfly-container-2" style="min-height: 280px;"></div>
+        </div>
+    </section>
+
+    <!-- Demo 3: Customisation -->
+    <section class="card mb-6" data-section="customisation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Tune the Flight</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Adjust the controls and click <strong>Apply</strong>.</p>
+
+            <div class="slider-row">
+                <label>Density</label>
+                <input type="range" id="opt-density" min="5" max="60" value="18">
+                <span id="val-density">18</span>
+            </div>
+            <div class="slider-row">
+                <label>Speed</label>
+                <input type="range" id="opt-speed" min="0.2" max="3" step="0.1" value="1">
+                <span id="val-speed">1</span>
+            </div>
+            <div class="slider-row">
+                <label>Wander</label>
+                <input type="range" id="opt-wander" min="0.2" max="3" step="0.1" value="1">
+                <span id="val-wander">1</span>
+            </div>
+            <div class="slider-row">
+                <label>Rise Speed</label>
+                <input type="range" id="opt-rise" min="0" max="2" step="0.1" value="0.4">
+                <span id="val-rise">0.4</span>
+            </div>
+            <div class="slider-row">
+                <label>Flap Speed</label>
+                <input type="range" id="opt-flap" min="0.2" max="3" step="0.1" value="1">
+                <span id="val-flap">1</span>
+            </div>
+
+            <div class="butterfly-container mt-4" id="butterfly-container-3"></div>
+
+            <div class="effect-controls mt-3">
+                <button class="btn btn-primary" id="apply-3">Apply</button>
+                <button class="btn btn-danger" id="destroy-3">Destroy</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo 4: One-shot release -->
+    <section class="card mb-6" data-section="burst">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: One-Shot Release</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">In burst mode, a single flutter of butterflies is released and the effect winds down naturally — perfect for confirmation moments (form submission, achievement unlocked, sale completed).</p>
+
+            <div class="butterfly-container" id="butterfly-container-4">
+                <div class="butterfly-container-label">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">&#x1F33C;</div>
+                    <div>Click "Release a flutter" for a one-shot burst</div>
+                </div>
+            </div>
+
+            <div class="effect-controls mt-3">
+                <button class="btn btn-primary" id="burst-4">Release a flutter</button>
+            </div>
+
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.butterflies('#card', {
+  burst: true,
+  burstCount: 30,
+  palette: 'pastel',
+  speed: 1.2
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 5: Full-page overlay -->
+    <section class="card mb-6" data-section="fullpage">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Full-Page Overlay</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Pass <code>null</code> as the selector to release butterflies across the whole viewport. They drift behind page content via <code>pointer-events: none</code>.</p>
+
+            <div class="effect-controls">
+                <span id="status-5" class="status-badge stopped"><span class="status-dot"></span><span class="status-text">Stopped</span></span>
+                <button class="btn btn-primary" id="start-5">Start Full-Page</button>
+                <button class="btn btn-secondary" id="pause-5">Pause</button>
+                <button class="btn btn-secondary" id="resume-5">Resume</button>
+                <button class="btn btn-danger" id="destroy-5">Destroy</button>
+            </div>
+
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.butterflies(null, {
+  palette: 'rainbow',
+  density: 24,
+  zIndex: 9999
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="card mb-6" data-section="use-cases">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Use Cases</h2>
+        </div>
+        <div class="card-body">
+            <ul class="mb-0" style="line-height: 1.9;">
+                <li><strong>Success &amp; celebration moments</strong> — fire a one-shot <code>burst</code> on form submission, checkout completion, or an achievement unlock.</li>
+                <li><strong>Ambient hero backdrops</strong> — a low-density continuous swarm behind a landing-page headline adds life without distraction.</li>
+                <li><strong>Empty-state &amp; onboarding delight</strong> — soften a blank dashboard or welcome screen with a gentle flutter.</li>
+                <li><strong>Seasonal &amp; spring theming</strong> — pair the <code>meadow</code> or <code>pastel</code> palette with seasonal campaigns and promotions.</li>
+            </ul>
+        </div>
+    </section>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+    // Reduced-motion notice
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      $('#motion-notice').show();
+    }
+
+    // ── Status badge helper ───────────────────────────────────────────────
+
+    function setStatus(badgeEl, state) {
+      if (!badgeEl) return;
+      badgeEl.className = 'status-badge ' + state;
+      const dot = badgeEl.querySelector('.status-dot');
+      const text = badgeEl.querySelector('.status-text');
+      const labels = { running: 'Running', paused: 'Paused', stopped: 'Stopped' };
+      if (dot) dot.className = 'status-dot' + (state === 'running' ? ' pulse-dot' : '');
+      if (text) text.textContent = labels[state] || state;
+    }
+
+    // ── Render palette swatches ──────────────────────────────────────────
+
+    const palettes = {
+      theme:   ['var(--dm-primary)', 'var(--dm-success)', 'var(--dm-warning)', 'var(--dm-danger)', 'var(--dm-info)'],
+      meadow:  ['#84cc16', '#a3e635', '#bbf7d0', '#bae6fd', '#fef08a', '#ddd6fe'],
+      pastel:  ['#fbcfe8', '#bae6fd', '#bbf7d0', '#fef3c7', '#ddd6fe', '#fed7aa'],
+      rainbow: ['#ef4444', '#f97316', '#facc15', '#22c55e', '#0ea5e9', '#6366f1', '#a855f7', '#ec4899'],
+      sunset:  ['#f43f5e', '#fb923c', '#facc15', '#f59e0b', '#ec4899']
+    };
+
+    function renderPaletteCard(name, isPicker) {
+      const stripes = palettes[name].map(c => `<span style="background:${c}"></span>`).join('');
+      return `
+        <div class="palette-card${(isPicker && name === 'meadow') ? ' active' : ''}" data-palette="${name}">
+          <div class="palette-name">${name}</div>
+          <div class="palette-stripes">${stripes}</div>
+        </div>`;
+    }
+
+    // Note: pass {safe: false} because Domma's default html() sanitiser strips
+    // both inline `style` attributes and `data-*` attributes — we'd lose the
+    // swatch colours AND the data-palette hook the click handler reads.
+    const previewMarkup = Object.keys(palettes).map(n => renderPaletteCard(n, false)).join('');
+    $('#palette-preview').html(previewMarkup, { safe: false });
+
+    const pickerMarkup = Object.keys(palettes).map(n => renderPaletteCard(n, true)).join('');
+    $('#palette-picker').html(pickerMarkup, { safe: false });
+
+    // ── Demo 1: Theme / meadow container ─────────────────────────────────
+
+    let ctrl1 = null;
+    const badge1 = document.getElementById('status-1');
+
+    $('#start-1').on('click', () => {
+      if (ctrl1) ctrl1.destroy();
+      ctrl1 = Domma.effects.butterflies('#butterfly-container-1', {
+        palette: 'meadow',
+        density: 18,
+        respectMotionPreference: false
+      });
+      setStatus(badge1, 'running');
+    });
+    $('#pause-1').on('click', () => { if (ctrl1) { ctrl1.pause(); setStatus(badge1, 'paused'); } });
+    $('#resume-1').on('click', () => { if (ctrl1) { ctrl1.resume(); setStatus(badge1, 'running'); } });
+    $('#restart-1').on('click', () => { if (ctrl1) { ctrl1.restart(); setStatus(badge1, 'running'); } });
+    $('#destroy-1').on('click', () => { if (ctrl1) { ctrl1.destroy(); ctrl1 = null; setStatus(badge1, 'stopped'); } });
+
+    // ── Demo 2: Palette picker ───────────────────────────────────────────
+
+    let ctrl2 = Domma.effects.butterflies('#butterfly-container-2', {
+      palette: 'meadow',
+      density: 18,
+      respectMotionPreference: false
+    });
+
+    document.getElementById('palette-picker').addEventListener('click', (e) => {
+      const card = e.target.closest('.palette-card');
+      if (!card) return;
+      document.querySelectorAll('#palette-picker .palette-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      const name = card.getAttribute('data-palette');
+      if (ctrl2) ctrl2.destroy();
+      ctrl2 = Domma.effects.butterflies('#butterfly-container-2', {
+        palette: name,
+        density: 18,
+        respectMotionPreference: false
+      });
+    });
+
+    // ── Demo 3: Customisation ────────────────────────────────────────────
+
+    const sliders = ['density', 'speed', 'wander', 'rise', 'flap'];
+    sliders.forEach(name => {
+      $(`#opt-${name}`).on('input', (e) => {
+        $(`#val-${name}`).text(e.target.value);
+      });
+    });
+
+    let ctrl3 = null;
+
+    function applyDemo3() {
+      if (ctrl3) ctrl3.destroy();
+      ctrl3 = Domma.effects.butterflies('#butterfly-container-3', {
+        palette: 'meadow',
+        density:   parseInt($('#opt-density').val(), 10),
+        speed:     parseFloat($('#opt-speed').val()),
+        wander:    parseFloat($('#opt-wander').val()),
+        riseSpeed: parseFloat($('#opt-rise').val()),
+        flapSpeed: parseFloat($('#opt-flap').val()),
+        respectMotionPreference: false
+      });
+    }
+
+    $('#apply-3').on('click', applyDemo3);
+    $('#destroy-3').on('click', () => { if (ctrl3) { ctrl3.destroy(); ctrl3 = null; } });
+    applyDemo3();
+
+    // ── Demo 4: One-shot release ─────────────────────────────────────────
+
+    $('#burst-4').on('click', () => {
+      Domma.effects.butterflies('#butterfly-container-4', {
+        palette: 'pastel',
+        burst: true,
+        burstCount: 30,
+        speed: 1.2,
+        respectMotionPreference: false
+      });
+    });
+
+    // ── Demo 5: Full-page overlay ───────────────────────────────────────
+
+    let ctrl5 = null;
+    const badge5 = document.getElementById('status-5');
+
+    $('#start-5').on('click', () => {
+      if (ctrl5) ctrl5.destroy();
+      ctrl5 = Domma.effects.butterflies(null, {
+        palette: 'rainbow',
+        density: 24,
+        zIndex: 9999,
+        respectMotionPreference: false
+      });
+      setStatus(badge5, 'running');
+    });
+    $('#pause-5').on('click', () => { if (ctrl5) { ctrl5.pause(); setStatus(badge5, 'paused'); } });
+    $('#resume-5').on('click', () => { if (ctrl5) { ctrl5.resume(); setStatus(badge5, 'running'); } });
+    $('#destroy-5').on('click', () => { if (ctrl5) { ctrl5.destroy(); ctrl5 = null; setStatus(badge5, 'stopped'); } });
+
+    // ── Cleanup full-page on navigation ─────────────────────────────────
+    window.addEventListener('beforeunload', () => {
+      if (ctrl5) ctrl5.destroy();
+    });
+
+    // Scan icons
+    if (window.Domma && Domma.icons) Domma.icons.scan(document.body);
+  });
+</script>
+</body>
+</html>

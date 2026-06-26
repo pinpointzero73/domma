@@ -197,6 +197,64 @@ export interface TickerTapeOptions {
     respectMotionPreference?: boolean;
 }
 
+export interface ButterfliesOptions {
+    /** Named palette or custom array of CSS colour strings (default 'meadow') */
+    palette?: TickerTapePalette | string | string[];
+    /** Target butterflies on screen at once (default 18) */
+    density?: number;
+    /** Global speed multiplier (default 1) */
+    speed?: number;
+    /** Steering erraticness (default 1) */
+    wander?: number;
+    /** Upward drift bias (default 0.4) */
+    riseSpeed?: number;
+    /** Wingbeat rate multiplier (default 1) */
+    flapSpeed?: number;
+    /** Minimum wingspan in pixels (default 14) */
+    minSize?: number;
+    /** Maximum wingspan in pixels (default 26) */
+    maxSize?: number;
+    /** Use two palette colours per butterfly (default true) */
+    twoTone?: boolean;
+    /** Release a single batch then settle (default false) */
+    burst?: boolean;
+    /** Butterflies released in burst mode (default 40) */
+    burstCount?: number;
+    /** Canvas stacking order (default 1) */
+    zIndex?: number;
+    /** Honour prefers-reduced-motion OS setting (default true) */
+    respectMotionPreference?: boolean;
+}
+
+export interface StrobeOptions {
+    /** Named preset: 'club' | 'concert' | 'police' | 'searchlight' | 'scanner' | 'mood' (default 'club'). Individual options override the preset. */
+    preset?: string;
+    /** Corners beams emit from: any of 'tl', 'tr', 'bl', 'br' */
+    origins?: string[];
+    /** 'sweep' (fan back and forth) or 'rotate' (full circle) */
+    motion?: string;
+    /** Degrees a beam fans across in sweep mode */
+    sweepArc?: number;
+    /** Sweep/rotation speed multiplier */
+    speed?: number;
+    /** Angular width of each beam cone in degrees */
+    beamWidth?: number;
+    /** Blink beams on/off — the strobe character */
+    flicker?: boolean;
+    /** Flicker rate in flashes per second — warns above 5 */
+    hz?: number;
+    /** Beam colours (hex), assigned per beam in order */
+    colours?: string[];
+    /** Beam brightness, 0–1 */
+    intensity?: number;
+    /** Auto-stop after N milliseconds (default null) */
+    duration?: number | null;
+    /** Stacking order (default 9999) */
+    zIndex?: number;
+    /** Honour prefers-reduced-motion OS setting (default true) */
+    respectMotionPreference?: boolean;
+}
+
 export interface Effects {
     /** Sinusoidal floating animation */
     breathe(selector: Selector, options?: BreatheOptions): EffectControl | null;
@@ -218,6 +276,8 @@ export interface Effects {
     twinkle(selector: Selector | null, options?: TwinkleOptions): EffectControl | null;
     /** Canvas-based ticker-tape parade — colourful rectangles fall, sway, rotate, and fade */
     tickerTape(selector: Selector | null, options?: TickerTapeOptions): EffectControl | null;
+    butterflies(selector: Selector | null, options?: ButterfliesOptions): EffectControl | null;
+    strobe(selector: Selector | null, options?: StrobeOptions): EffectControl | null;
 }
 
 export const effects: Effects;

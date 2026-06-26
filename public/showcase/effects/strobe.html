@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strobe Lighting Effect - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/effects/strobe.html">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../css/domma-showcase.css">
+    <style>
+        .effect-controls {
+            display: flex;
+            gap: 0.6rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 4px;
+            background: var(--dm-primary-t10, rgba(13, 110, 253, 0.1));
+            text-decoration: none;
+            color: var(--dm-primary);
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--dm-primary-t20, rgba(13, 110, 253, 0.2));
+            transform: translateY(-2px);
+        }
+
+        .strobe-container {
+            position: relative;
+            min-height: 300px;
+            background: #0a0a12;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .strobe-container-label {
+            position: relative;
+            z-index: 10;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+            pointer-events: none;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-badge.running {
+            background: rgba(34, 197, 94, 0.15);
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-badge.stopped {
+            background: rgba(107, 114, 128, 0.15);
+            color: #6b7280;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+
+        .status-badge.paused {
+            background: rgba(234, 179, 8, 0.15);
+            color: #ca8a04;
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .status-dot.pulse-dot {
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.6); }
+        }
+
+        .preset-swatches {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .preset-card {
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            background: var(--dm-surface, #fff);
+            transition: all 0.2s ease;
+            min-width: 140px;
+        }
+
+        .preset-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .preset-card.active {
+            border-color: var(--dm-primary);
+            box-shadow: 0 0 0 4px var(--dm-primary-light, rgba(0,0,0,0.05));
+        }
+
+        .preset-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+            text-transform: capitalize;
+        }
+
+        .preset-dots {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .preset-dots span {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: block;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .slider-row label {
+            min-width: 140px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .slider-row input[type="range"] {
+            flex: 1;
+            max-width: 220px;
+        }
+
+        .slider-row input[type="color"] {
+            width: 48px;
+            height: 32px;
+            border: 1px solid var(--dm-border-color, rgba(0,0,0,0.15));
+            border-radius: 6px;
+            background: none;
+            cursor: pointer;
+        }
+
+        .slider-row span.readout {
+            min-width: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--dm-primary);
+        }
+
+        .options-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .options-table th,
+        .options-table td {
+            padding: 0.6rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--dm-border-color, rgba(0,0,0,0.1));
+        }
+
+        .options-table th {
+            font-weight: 600;
+            background: var(--dm-surface-alt, rgba(0,0,0,0.03));
+        }
+
+        .options-table code {
+            font-size: 0.85em;
+        }
+
+        .preset-list dt {
+            font-weight: 600;
+            text-transform: capitalize;
+            margin-top: 0.75rem;
+        }
+
+        .preset-list dd {
+            margin: 0.2rem 0 0.4rem 0;
+        }
+
+        .preset-list code {
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="effects">
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Strobe Lighting Effect</div>
+        <div class="hero-subtitle">Light beams emanate from the corners, sweep across, and brighten where they cross — full-page or container-scoped, with named presets.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <!-- See Also -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+        <h3 class="text-lg font-semibold mb-2">
+            <span data-icon="arrow-left" data-icon-size="20"></span>
+            See Also
+        </h3>
+        <a href="javascript.html" class="nav-link">All JavaScript Effects</a>
+        <a href="butterflies.html" class="nav-link">Butterflies</a>
+        <a href="ticker-tape.html" class="nav-link">Ticker Tape</a>
+        <a href="twinkle.html" class="nav-link">Twinkle</a>
+    </div>
+
+    <!-- Photosensitivity warning -->
+    <div class="alert alert-danger mb-6" role="alert">
+        <div class="flex items-start gap-3">
+            <span data-icon="alert-warning" data-icon-size="24" style="flex-shrink: 0;"></span>
+            <div>
+                <h4 class="font-semibold mb-1">Photosensitivity warning</h4>
+                <p class="mb-0">Rapid flashing can trigger photosensitive epileptic seizures in susceptible individuals. The demos on this page <strong>never autoplay</strong> — each one starts only when you press a button. Use the strobe effect <strong>sparingly</strong> in production, keep flicker frequencies low, and always give users a way to opt out.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Motion Preference Notice -->
+    <div id="motion-notice" class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded" style="display:none;">
+        <div class="flex items-start gap-3">
+            <span style="font-size: 20px; flex-shrink: 0;">&#x2139;&#xFE0F;</span>
+            <div>
+                <h4 class="font-semibold mb-1">Motion Preference Detected</h4>
+                <p>Your system has <code>prefers-reduced-motion</code> enabled. This demo page overrides that setting to demonstrate effects. In production, use <code>respectMotionPreference: true</code> (the default) to honour user preferences.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overview -->
+    <section class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Domma.effects.strobe()</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Renders a canvas of light beams that emanate from the corners of the page — or a container — and sweep
+                or rotate across the space. Where beams overlap, their light adds together and brightens, just like real
+                stage lighting. Pass <code>null</code> as the selector for a full-page lighting rig, or a selector to
+                scope it to a single element. Everything is driven by a named <code>preset</code>, and any individual
+                option overrides the preset's value. The effect returns a control object so you can pause, resume, stop,
+                restart or destroy it at any time. Under <code>prefers-reduced-motion</code> the lighting is disabled
+                entirely.
+            </p>
+
+            <pre class="code-block language-javascript">
+// Full-page club lighting
+const lights = Domma.effects.strobe(null);
+// A named preset
+Domma.effects.strobe('#stage', { preset: 'police' });
+// Preset + overrides
+Domma.effects.strobe(null, { preset: 'club', flicker: false, colours: ['#ffffff'] });
+lights.pause(); lights.resume(); lights.stop(); lights.destroy();
+</pre>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Options</h3>
+            <div class="table-responsive">
+                <table class="options-table">
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>preset</code></td>
+                            <td><code>string</code></td>
+                            <td><code>'club'</code></td>
+                            <td>Bundle of the options below. One of <code>club</code>, <code>concert</code>, <code>police</code>, <code>searchlight</code>, <code>scanner</code>, <code>mood</code>. Individual options override the preset.</td>
+                        </tr>
+                        <tr>
+                            <td><code>origins</code></td>
+                            <td><code>string[]</code></td>
+                            <td><em>preset</em></td>
+                            <td>Which corners beams emit from — any of <code>'tl'</code>, <code>'tr'</code>, <code>'bl'</code>, <code>'br'</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><code>motion</code></td>
+                            <td><code>string</code></td>
+                            <td><em>preset</em></td>
+                            <td><code>'sweep'</code> (fan back and forth) or <code>'rotate'</code> (full circle).</td>
+                        </tr>
+                        <tr>
+                            <td><code>sweepArc</code></td>
+                            <td><code>number</code></td>
+                            <td><em>preset</em></td>
+                            <td>Arc, in degrees, that beams fan through in <code>sweep</code> mode.</td>
+                        </tr>
+                        <tr>
+                            <td><code>speed</code></td>
+                            <td><code>number</code></td>
+                            <td><em>preset</em></td>
+                            <td>Sweep / rotation speed multiplier.</td>
+                        </tr>
+                        <tr>
+                            <td><code>beamWidth</code></td>
+                            <td><code>number</code></td>
+                            <td><em>preset</em></td>
+                            <td>Beam cone width in degrees.</td>
+                        </tr>
+                        <tr>
+                            <td><code>flicker</code></td>
+                            <td><code>boolean</code></td>
+                            <td><em>preset</em></td>
+                            <td>Blink the beams on and off.</td>
+                        </tr>
+                        <tr>
+                            <td><code>hz</code></td>
+                            <td><code>number</code></td>
+                            <td><em>preset</em></td>
+                            <td>Flicker rate (flashes per second). Values above <strong>5&nbsp;Hz</strong> log a console warning but are never clamped — keep it low for safety.</td>
+                        </tr>
+                        <tr>
+                            <td><code>colours</code></td>
+                            <td><code>string[]</code></td>
+                            <td><em>preset</em></td>
+                            <td>Hex colour strings, assigned one per beam.</td>
+                        </tr>
+                        <tr>
+                            <td><code>intensity</code></td>
+                            <td><code>number</code></td>
+                            <td><em>preset</em></td>
+                            <td>Overall brightness, <code>0</code>–<code>1</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><code>duration</code></td>
+                            <td><code>number | null</code></td>
+                            <td><code>null</code></td>
+                            <td>Auto-stop after this many milliseconds. <code>null</code> runs until stopped manually.</td>
+                        </tr>
+                        <tr>
+                            <td><code>zIndex</code></td>
+                            <td><code>number</code></td>
+                            <td><code>9999</code></td>
+                            <td>Canvas stacking order.</td>
+                        </tr>
+                        <tr>
+                            <td><code>respectMotionPreference</code></td>
+                            <td><code>boolean</code></td>
+                            <td><code>true</code></td>
+                            <td>Honour the <code>prefers-reduced-motion</code> OS setting. When true and reduced motion is set, the lighting does not run.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Presets -->
+    <section class="card mb-6" data-section="presets">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Presets</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Each preset bundles a complete lighting look. Start from one, then override any option you like.</p>
+            <dl class="preset-list mb-0">
+                <dt>club</dt>
+                <dd>Four-corner crisscross, multi-colour, fast flicker. <code>Domma.effects.strobe(null, { preset: 'club' })</code></dd>
+                <dt>concert</dt>
+                <dd>Two top beams fanning wide, rainbow, medium flicker. <code>Domma.effects.strobe(null, { preset: 'concert' })</code></dd>
+                <dt>police</dt>
+                <dd>Two beams red + blue, fast narrow sweep, hard flicker. <code>Domma.effects.strobe(null, { preset: 'police' })</code></dd>
+                <dt>searchlight</dt>
+                <dd>Bottom corners, smooth rotating white beams, no flicker. <code>Domma.effects.strobe(null, { preset: 'searchlight' })</code></dd>
+                <dt>scanner</dt>
+                <dd>Thin cyan beams, quick sweep, no flicker. <code>Domma.effects.strobe(null, { preset: 'scanner' })</code></dd>
+                <dt>mood</dt>
+                <dd>Slow wide pastel beams, smooth glow, no flicker. <code>Domma.effects.strobe(null, { preset: 'mood' })</code></dd>
+            </dl>
+        </div>
+    </section>
+
+    <!-- Demo 1: Preset picker -->
+    <section class="card mb-6" data-section="presets-demo">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Preset Picker</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Click a preset to select it, then press <strong>Start</strong> to light up the stage below. Nothing runs until you press Start.</p>
+
+            <div class="preset-swatches" id="preset-picker"></div>
+
+            <div class="strobe-container" id="strobe-container-1">
+                <div class="strobe-container-label">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">&#x1F526;</div>
+                    <div>Pick a preset and press Start</div>
+                </div>
+            </div>
+
+            <div class="effect-controls mt-4">
+                <span id="status-1" class="status-badge stopped"><span class="status-dot"></span><span class="status-text">Stopped</span></span>
+                <button class="btn btn-primary" id="start-1">Start</button>
+                <button class="btn btn-secondary" id="pause-1">Pause</button>
+                <button class="btn btn-secondary" id="resume-1">Resume</button>
+                <button class="btn btn-danger" id="stop-1">Stop</button>
+            </div>
+
+            <pre class="code-block language-javascript mt-4">
+Domma.effects.strobe('#strobe-container-1', {
+  preset: 'club'   // the selected preset
+});
+</pre>
+        </div>
+    </section>
+
+    <!-- Demo 2: Build your own -->
+    <section class="card mb-6" data-section="customisation">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Build Your Own</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Configure the beams from scratch, then press <strong>Apply</strong>.</p>
+
+            <div class="slider-row">
+                <label>Origins</label>
+                <label style="min-width:auto;"><input type="checkbox" class="opt-origin" value="tl" checked> Top-left</label>
+                <label style="min-width:auto;"><input type="checkbox" class="opt-origin" value="tr" checked> Top-right</label>
+                <label style="min-width:auto;"><input type="checkbox" class="opt-origin" value="bl" checked> Bottom-left</label>
+                <label style="min-width:auto;"><input type="checkbox" class="opt-origin" value="br" checked> Bottom-right</label>
+            </div>
+            <div class="slider-row">
+                <label>Motion</label>
+                <select class="form-control" id="opt-motion" style="max-width:180px;">
+                    <option value="sweep" selected>sweep</option>
+                    <option value="rotate">rotate</option>
+                </select>
+                <label style="min-width:auto;"><input type="checkbox" id="opt-flicker" checked> Flicker</label>
+            </div>
+            <div class="slider-row">
+                <label>Sweep arc (&deg;)</label>
+                <input type="range" id="opt-arc" min="20" max="180" step="5" value="100">
+                <span class="readout" id="val-arc">100</span>
+            </div>
+            <div class="slider-row">
+                <label>Flicker (Hz)</label>
+                <input type="range" id="opt-hz" min="1" max="15" step="1" value="10">
+                <span class="readout" id="val-hz">10</span>
+            </div>
+            <div class="slider-row">
+                <label>Speed</label>
+                <input type="range" id="opt-speed" min="0.2" max="3" step="0.1" value="1">
+                <span class="readout" id="val-speed">1</span>
+            </div>
+            <div class="slider-row">
+                <label>Beam width (&deg;)</label>
+                <input type="range" id="opt-beam" min="4" max="40" step="1" value="16">
+                <span class="readout" id="val-beam">16</span>
+            </div>
+            <div class="slider-row">
+                <label>Intensity</label>
+                <input type="range" id="opt-intensity" min="0.2" max="1" step="0.05" value="0.7">
+                <span class="readout" id="val-intensity">0.7</span>
+            </div>
+            <div class="slider-row">
+                <label>Colours</label>
+                <input type="color" id="colour-a" value="#ffffff">
+                <input type="color" id="colour-b" value="#38bdf8">
+            </div>
+
+            <p class="text-sm mb-3" style="color: var(--dm-text-muted, #6b7280);">With flicker on, setting the Hz above 5 logs a console warning — the value is never clamped, so keep it low for safety.</p>
+
+            <div class="strobe-container mt-3" id="strobe-container-2">
+                <div class="strobe-container-label">
+                    <div>Press Apply to light the stage with your settings</div>
+                </div>
+            </div>
+
+            <div class="effect-controls mt-3">
+                <button class="btn btn-primary" id="apply-2">Apply</button>
+                <button class="btn btn-danger" id="stop-2">Stop</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo 3: Full-page -->
+    <section class="card mb-6" data-section="fullpage">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Demo: Full-Page</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Pass <code>null</code> as the selector to light the entire viewport. This affects the <strong>whole page</strong> — it uses the preset selected in the Preset Picker above (or <code>club</code> by default), so use the Stop button to end it. It never autoplays and never stops on its own here.</p>
+
+            <div class="effect-controls">
+                <span id="status-3" class="status-badge stopped"><span class="status-dot"></span><span class="status-text">Stopped</span></span>
+                <button class="btn btn-primary" id="start-3">Start Full-Page Lighting</button>
+                <button class="btn btn-danger" id="stop-3">Stop</button>
+            </div>
+
+            <pre class="code-block language-javascript mt-4">
+const lights = Domma.effects.strobe(null, {
+  preset: 'club'
+});
+// ...later
+lights.stop();
+</pre>
+        </div>
+    </section>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+    // Reduced-motion notice
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      $('#motion-notice').show();
+    }
+
+    // ── Status badge helper ───────────────────────────────────────────────
+
+    function setStatus(badgeEl, state) {
+      if (!badgeEl) return;
+      badgeEl.className = 'status-badge ' + state;
+      const dot = badgeEl.querySelector('.status-dot');
+      const text = badgeEl.querySelector('.status-text');
+      const labels = { running: 'Running', paused: 'Paused', stopped: 'Stopped' };
+      if (dot) dot.className = 'status-dot' + (state === 'running' ? ' pulse-dot' : '');
+      if (text) text.textContent = labels[state] || state;
+    }
+
+    // ── Preset swatch colours (for the picker dots only) ─────────────────
+
+    const presetColours = {
+      club:        ['#ff0066', '#00e5ff', '#ffee00', '#00ff88'],
+      concert:     ['#ef4444', '#f97316', '#facc15', '#22c55e', '#0ea5e9', '#a855f7'],
+      police:      ['#ff2222', '#2244ff'],
+      searchlight: ['#ffffff', '#e5e7eb'],
+      scanner:     ['#22d3ee', '#06b6d4'],
+      mood:        ['#fbcfe8', '#bae6fd', '#bbf7d0', '#ddd6fe']
+    };
+
+    let activePreset = 'club';
+
+    function renderPresetCard(name) {
+      const dots = presetColours[name].map(c => `<span style="background:${c}"></span>`).join('');
+      return `
+        <div class="preset-card${name === activePreset ? ' active' : ''}" data-preset="${name}">
+          <div class="preset-name">${name}</div>
+          <div class="preset-dots">${dots}</div>
+        </div>`;
+    }
+
+    // Note: pass {safe: false} because Domma's default html() sanitiser strips
+    // both inline `style` attributes and `data-*` attributes — we'd lose the
+    // swatch colours AND the data-preset hook the click handler reads.
+    const pickerMarkup = Object.keys(presetColours).map(renderPresetCard).join('');
+    $('#preset-picker').html(pickerMarkup, { safe: false });
+
+    document.getElementById('preset-picker').addEventListener('click', (e) => {
+      const card = e.target.closest('.preset-card');
+      if (!card) return;
+      document.querySelectorAll('#preset-picker .preset-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      activePreset = card.getAttribute('data-preset');
+    });
+
+    // ── Demo 1: Preset picker ────────────────────────────────────────────
+
+    let ctrl1 = null;
+    const badge1 = document.getElementById('status-1');
+
+    $('#start-1').on('click', () => {
+      if (ctrl1) ctrl1.destroy();
+      ctrl1 = Domma.effects.strobe('#strobe-container-1', {
+        preset: activePreset,
+        respectMotionPreference: false
+      });
+      setStatus(badge1, 'running');
+    });
+    $('#pause-1').on('click', () => { if (ctrl1) { ctrl1.pause(); setStatus(badge1, 'paused'); } });
+    $('#resume-1').on('click', () => { if (ctrl1) { ctrl1.resume(); setStatus(badge1, 'running'); } });
+    $('#stop-1').on('click', () => { if (ctrl1) { ctrl1.stop(); ctrl1 = null; setStatus(badge1, 'stopped'); } });
+
+    // ── Demo 2: Build your own ───────────────────────────────────────────
+
+    const readouts = ['arc', 'hz', 'speed', 'beam', 'intensity'];
+    readouts.forEach(name => {
+      $(`#opt-${name}`).on('input', (e) => { $(`#val-${name}`).text(e.target.value); });
+    });
+
+    let ctrl2 = null;
+
+    $('#apply-2').on('click', () => {
+      if (ctrl2) ctrl2.destroy();
+      const origins = Array.from(document.querySelectorAll('.opt-origin:checked')).map(c => c.value);
+      ctrl2 = Domma.effects.strobe('#strobe-container-2', {
+        origins: origins.length ? origins : ['tl'],
+        motion: $('#opt-motion').val(),
+        flicker: document.getElementById('opt-flicker').checked,
+        sweepArc: parseFloat($('#opt-arc').val()),
+        hz: parseFloat($('#opt-hz').val()),
+        speed: parseFloat($('#opt-speed').val()),
+        beamWidth: parseFloat($('#opt-beam').val()),
+        intensity: parseFloat($('#opt-intensity').val()),
+        colours: [$('#colour-a').val(), $('#colour-b').val()],
+        respectMotionPreference: false
+      });
+    });
+    $('#stop-2').on('click', () => { if (ctrl2) { ctrl2.stop(); ctrl2 = null; } });
+
+    // ── Demo 3: Full-page ────────────────────────────────────────────────
+
+    let ctrl3 = null;
+    const badge3 = document.getElementById('status-3');
+
+    $('#start-3').on('click', () => {
+      if (ctrl3) ctrl3.destroy();
+      ctrl3 = Domma.effects.strobe(null, {
+        preset: activePreset,
+        respectMotionPreference: false
+      });
+      setStatus(badge3, 'running');
+    });
+    $('#stop-3').on('click', () => { if (ctrl3) { ctrl3.stop(); ctrl3 = null; setStatus(badge3, 'stopped'); } });
+
+    // ── Cleanup full-page on navigation ─────────────────────────────────
+    window.addEventListener('beforeunload', () => {
+      if (ctrl3) ctrl3.destroy();
+    });
+
+    // Scan icons
+    if (window.Domma && Domma.icons) Domma.icons.scan(document.body);
+  });
+</script>
+</body>
+</html>

@@ -435,6 +435,16 @@
           "section": "effects-ticker-tape"
         },
         {
+          "text": "Butterflies",
+          "url": "showcase/effects/butterflies.html",
+          "section": "effects-butterflies"
+        },
+        {
+          "text": "Strobe",
+          "url": "showcase/effects/strobe.html",
+          "section": "effects-strobe"
+        },
+        {
           "divider": true
         },
         {

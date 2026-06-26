@@ -59,6 +59,8 @@ Programmatic animation effects accessed via `Domma.effects`:
 - **shake()** - Attention/error shake animation
 - **twinkle()** - Canvas-based twinkling stars animation (full-page overlay or container-scoped)
 - **tickerTape()** - Canvas-based ticker-tape parade — coloured rectangles drop, sway, rotate, and fade. Theme-aware palettes plus 10 named presets; supports continuous and one-shot burst modes.
+- **butterflies()** - Canvas-based butterflies that wander and rise with flapping wings (full-page overlay or container-scoped). Theme-aware palettes plus a `meadow` preset; continuous and one-shot burst modes.
+- **strobe()** - Canvas strobe *lighting*: light beams emanate from the chosen corners, sweep or rotate, and brighten where they cross (additive blending). Named presets (`club`, `concert`, `police`, `searchlight`, `scanner`, `mood`) plus per-option overrides. Reduced-motion safe; flicker `hz` warns above 5.
 
 All JS effects support `respectMotionPreference` and return control objects with `pause()`, `resume()`, `stop()`, `restart()`, `destroy()`.
 
@@ -78,6 +80,8 @@ public/showcase/effects/
 ├── shake.html          # Shake effect showcase
 ├── twinkle.html        # Twinkle (twinkling stars) effect showcase
 ├── ticker-tape.html    # Ticker-tape parade effect showcase
+├── butterflies.html    # Butterflies effect showcase
+├── strobe.html         # Strobe (lighting beams) effect showcase
 └── CLAUDE.md           # This file
 ```
 
