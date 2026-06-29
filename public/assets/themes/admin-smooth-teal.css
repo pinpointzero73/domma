@@ -72,24 +72,28 @@
     --dm-success-light: rgba(46, 139, 80, 0.15);
     --dm-success-dark: #1c5733;
     --dm-success-text: #ffffff;
+    --dm-success-hover-text: #ffffff;
     --dm-danger: #c0432f;
     --dm-danger-hover: #a93a29;
     --dm-danger-active: #933223;
     --dm-danger-light: rgba(192, 67, 47, 0.15);
     --dm-danger-dark: #742719;
     --dm-danger-text: #ffffff;
+    --dm-danger-hover-text: #ffffff;
     --dm-warning: #8a6d1f;
     --dm-warning-hover: #79601b;
     --dm-warning-active: #675217;
     --dm-warning-light: rgba(138, 109, 31, 0.15);
     --dm-warning-dark: #4e3e11;
     --dm-warning-text: #ffffff;
+    --dm-warning-hover-text: #ffffff;
     --dm-info: #2f6fb0;
     --dm-info-hover: #296199;
     --dm-info-active: #235485;
     --dm-info-light: rgba(47, 111, 176, 0.15);
     --dm-info-dark: #1a3f64;
     --dm-info-text: #ffffff;
+    --dm-info-hover-text: #ffffff;
 
     --dm-card-bg: var(--dm-surface);
     --dm-card-border: var(--dm-border);

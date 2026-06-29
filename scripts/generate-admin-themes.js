@@ -80,10 +80,10 @@ export const ACCENTS = {
 // Status colours — shared across the whole family.
 // ---------------------------------------------------------------------------
 const STATUS = {
-  success: { base: '#2e8b50', hover: '#287d49', active: '#226b3f', dark: '#1c5733', rgb: '46, 139, 80',  solidLight: '#e3f3e8', text: '#ffffff' },
-  danger:  { base: '#c0432f', hover: '#a93a29', active: '#933223', dark: '#742719', rgb: '192, 67, 47',  solidLight: '#fbe6e1', text: '#ffffff' },
-  warning: { base: '#8a6d1f', hover: '#79601b', active: '#675217', dark: '#4e3e11', rgb: '138, 109, 31', solidLight: '#fbf0d6', text: '#ffffff' },
-  info:    { base: '#2f6fb0', hover: '#296199', active: '#235485', dark: '#1a3f64', rgb: '47, 111, 176', solidLight: '#e1ecf7', text: '#ffffff' }
+  success: { base: '#2e8b50', hover: '#287d49', active: '#226b3f', dark: '#1c5733', rgb: '46, 139, 80',  solidLight: '#e3f3e8', text: '#ffffff', hoverText: '#ffffff' },
+  danger:  { base: '#c0432f', hover: '#a93a29', active: '#933223', dark: '#742719', rgb: '192, 67, 47',  solidLight: '#fbe6e1', text: '#ffffff', hoverText: '#ffffff' },
+  warning: { base: '#8a6d1f', hover: '#79601b', active: '#675217', dark: '#4e3e11', rgb: '138, 109, 31', solidLight: '#fbf0d6', text: '#ffffff', hoverText: '#ffffff' },
+  info:    { base: '#2f6fb0', hover: '#296199', active: '#235485', dark: '#1a3f64', rgb: '47, 111, 176', solidLight: '#e1ecf7', text: '#ffffff', hoverText: '#ffffff' }
 };
 
 const FINISH_LABEL = { smooth: 'Smooth', sharp: 'Sharp' };
@@ -106,7 +106,8 @@ function statusBlock(tintStyle) {
       [`${name}-active`]: s.active,
       [`${name}-light`]: light,
       [`${name}-dark`]: s.dark,
-      [`${name}-text`]: s.text
+      [`${name}-text`]: s.text,
+      [`${name}-hover-text`]: s.hoverText
     }) + '\n';
   }
   return out.trimEnd();

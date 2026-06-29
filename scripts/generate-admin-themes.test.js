@@ -31,4 +31,20 @@ describe('generate-admin-themes', () => {
       expect(css).toContain(tok);
     });
   });
+
+  it('throws on an unknown finish or accent', () => {
+    expect(() => buildThemeCss('bad', 'steel')).toThrow();
+    expect(() => buildThemeCss('sharp', 'bad')).toThrow();
+  });
+
+  it('uses the lightened onDark accent for active text on the smooth finish', () => {
+    const css = buildThemeCss('smooth', 'teal');
+    expect(css).toContain('--dm-tab-active-text: #66c2b8;'); // onDark, not primary #2f8f86
+  });
+
+  it('emits status hover-text tokens', () => {
+    const css = buildThemeCss('sharp', 'steel');
+    ['--dm-success-hover-text', '--dm-danger-hover-text',
+     '--dm-warning-hover-text', '--dm-info-hover-text'].forEach(t => expect(css).toContain(t));
+  });
 });
