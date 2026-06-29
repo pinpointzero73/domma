@@ -55,6 +55,7 @@
         "build:miniapp:address": "node scripts/build-miniapp.js address",
         "watch:miniapps": "node scripts/watch-miniapps.js",
         "generate:bundles": "node scripts/generate-bundles.js",
+        "generate:themes": "node scripts/generate-admin-themes.js",
         "release": "bash scripts/release.sh",
         "release:patch": "npm version patch && npm run release",
         "release:minor": "npm version minor && npm run release",
