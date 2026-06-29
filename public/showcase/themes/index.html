@@ -626,15 +626,15 @@
         <div class="dm-grid dm-gap-4" style="grid-template-columns: 280px 1fr;">
             <div class="dm-card" style="padding: var(--dm-space-5);">
                 <div class="dm-label">1 · Finish</div>
-                <div class="btn-group" id="admin-finish" role="group" style="display:flex; gap:8px; margin-bottom:20px;">
+                <div class="btn-group" id="admin-finish" role="group" aria-label="Finish" style="display:flex; gap:8px; margin-bottom:20px;">
                     <button class="btn" data-finish="smooth">Smooth</button>
                     <button class="btn active" data-finish="sharp">Sharp</button>
                 </div>
                 <div class="dm-label">2 · Accent</div>
                 <div id="admin-accent" style="display:flex; gap:12px; margin-top:8px;">
-                    <button class="admin-acc active" data-accent="steel" data-tooltip="Steel Blue" style="flex:1; height:44px; border-radius:8px; border:2px solid var(--dm-text); background:#3b76bc;"></button>
-                    <button class="admin-acc" data-accent="indigo" data-tooltip="Indigo" style="flex:1; height:44px; border-radius:8px; border:2px solid transparent; background:#5b63a8;"></button>
-                    <button class="admin-acc" data-accent="teal" data-tooltip="Teal" style="flex:1; height:44px; border-radius:8px; border:2px solid transparent; background:#2a8178;"></button>
+                    <button class="admin-acc active" data-accent="steel" data-tooltip="Steel Blue" aria-label="Steel Blue accent" style="flex:1; height:44px; border-radius:8px; border:2px solid var(--dm-text); background:#3b76bc;"></button>
+                    <button class="admin-acc" data-accent="indigo" data-tooltip="Indigo" aria-label="Indigo accent" style="flex:1; height:44px; border-radius:8px; border:2px solid transparent; background:#5b63a8;"></button>
+                    <button class="admin-acc" data-accent="teal" data-tooltip="Teal" aria-label="Teal accent" style="flex:1; height:44px; border-radius:8px; border:2px solid transparent; background:#2a8178;"></button>
                 </div>
                 <div class="dm-mt-4 dm-text-sm dm-text-secondary">Theme: <code id="admin-current">admin-sharp-steel</code></div>
             </div>
@@ -1831,7 +1831,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentEl = document.getElementById('admin-current');
     const finishWrap = document.getElementById('admin-finish');
     const accentWrap = document.getElementById('admin-accent');
-    if (!finishWrap || !accentWrap) return;
+    if (!finishWrap || !accentWrap || !currentEl) return;
+
+    // Wire real tooltips so data-tooltip isn't dead markup (one instance per button)
+    if (window.Domma && Domma.elements && Domma.elements.tooltip) {
+      accentWrap.querySelectorAll('.admin-acc').forEach(btn => {
+        Domma.elements.tooltip(btn, { trigger: 'hover', position: 'top' });
+      });
+    }
 
     if (window.Domma && Domma.tables) {
       Domma.tables.create('#admin-preview-table', {
