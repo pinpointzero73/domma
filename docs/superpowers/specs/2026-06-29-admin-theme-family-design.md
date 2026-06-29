@@ -113,6 +113,10 @@ mid-tone surfaces (the generator derives this).
 | Indigo | `#5b63a8` | `#4f5694` | `#444a80` | `#3a3f6e` | `rgba(91,99,168,0.14)` |
 | Teal | `#2f8f86` | `#287d75` | `#226b64` | `#1d564f` | `rgba(47,143,134,0.14)` |
 
+> **Superseded by AA tuning (during implementation):** Steel and Teal `--dm-primary` were darkened
+> to meet WCAG AA for white button text — Steel is now `#3b76bc` and Teal `#2a8178` (Indigo
+> unchanged). The generator (`scripts/generate-admin-themes.js`) holds the authoritative values.
+
 Each accent also sets `--dm-primary-text: #ffffff`, `--dm-focus-ring`, `--dm-border-focus`,
 `--dm-tab-active-border`, `--dm-tab-active-text`, `--dm-progress-bar`, `--dm-selected-bg` (derived
 from primary).
