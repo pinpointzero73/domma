@@ -618,6 +618,53 @@
         </div>
     </section>
 
+    <!-- Admin Theme Builder -->
+    <section class="preview-section" data-section="Admin Builder" id="admin-builder">
+        <h2 class="themes-section-title">Admin Theme Builder</h2>
+        <p class="dm-text-secondary dm-mb-4">Pick a finish, then an accent. Six looks, two clicks.</p>
+
+        <div class="dm-grid dm-gap-4" style="grid-template-columns: 280px 1fr;">
+            <div class="dm-card" style="padding: var(--dm-space-5);">
+                <div class="dm-label">1 · Finish</div>
+                <div class="btn-group" id="admin-finish" role="group" style="display:flex; gap:8px; margin-bottom:20px;">
+                    <button class="btn" data-finish="smooth">Smooth</button>
+                    <button class="btn active" data-finish="sharp">Sharp</button>
+                </div>
+                <div class="dm-label">2 · Accent</div>
+                <div id="admin-accent" style="display:flex; gap:12px; margin-top:8px;">
+                    <button class="admin-acc active" data-accent="steel" data-tooltip="Steel Blue" style="flex:1; height:44px; border-radius:8px; border:2px solid var(--dm-text); background:#3b76bc;"></button>
+                    <button class="admin-acc" data-accent="indigo" data-tooltip="Indigo" style="flex:1; height:44px; border-radius:8px; border:2px solid transparent; background:#5b63a8;"></button>
+                    <button class="admin-acc" data-accent="teal" data-tooltip="Teal" style="flex:1; height:44px; border-radius:8px; border:2px solid transparent; background:#2a8178;"></button>
+                </div>
+                <div class="dm-mt-4 dm-text-sm dm-text-secondary">Theme: <code id="admin-current">admin-sharp-steel</code></div>
+            </div>
+
+            <div class="dm-card" id="admin-preview" style="padding:0; overflow:hidden;">
+                <div style="display:flex; min-height:300px;">
+                    <aside style="width:160px; background:var(--dm-sidebar-bg); color:var(--dm-sidebar-text); padding:16px;">
+                        <strong style="color:var(--dm-text-inverse,#fff); display:block; margin-bottom:16px;">Admin</strong>
+                        <div style="background:var(--dm-primary); color:#fff; padding:8px; border-radius:6px; margin-bottom:4px;">Dashboard</div>
+                        <div style="padding:8px;">Users</div>
+                        <div style="padding:8px;">Reports</div>
+                    </aside>
+                    <div style="flex:1; background:var(--dm-background); padding:16px;">
+                        <div class="dm-grid dm-gap-3 dm-mb-4" style="grid-template-columns:repeat(3,1fr);">
+                            <div class="dm-card" style="padding:12px;"><div class="dm-text-xs dm-text-muted">Revenue</div><div style="font-size:20px; font-weight:700;">£48k</div></div>
+                            <div class="dm-card" style="padding:12px;"><div class="dm-text-xs dm-text-muted">Orders</div><div style="font-size:20px; font-weight:700;">1,204</div></div>
+                            <div class="dm-card" style="padding:12px;"><div class="dm-text-xs dm-text-muted">Active</div><div style="font-size:20px; font-weight:700;">317</div></div>
+                        </div>
+                        <div id="admin-preview-table"></div>
+                        <div class="dm-mt-4" style="display:flex; gap:8px; align-items:center;">
+                            <button class="btn btn-primary">Save</button>
+                            <button class="btn">Cancel</button>
+                            <span class="badge badge-success">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Component Preview -->
     <!-- Sticky audit bar — always visible while scrolling components -->
     <div class="audit-bar">
@@ -1777,6 +1824,55 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('slideover-right').addEventListener('click', () => openSlideover('right'));
   document.getElementById('slideover-top').addEventListener('click', () => openSlideover('top'));
   document.getElementById('slideover-bottom').addEventListener('click', () => openSlideover('bottom'));
+
+  // --- Admin Theme Builder ---
+  (function initAdminBuilder() {
+    const state = { finish: 'sharp', accent: 'steel' };
+    const currentEl = document.getElementById('admin-current');
+    const finishWrap = document.getElementById('admin-finish');
+    const accentWrap = document.getElementById('admin-accent');
+    if (!finishWrap || !accentWrap) return;
+
+    if (window.Domma && Domma.tables) {
+      Domma.tables.create('#admin-preview-table', {
+        data: [
+          { customer: 'Acme Ltd', plan: 'Pro', status: 'Active' },
+          { customer: 'Globex', plan: 'Team', status: 'Trial' },
+          { customer: 'Initech', plan: 'Free', status: 'Active' }
+        ],
+        columns: [
+          { key: 'customer', title: 'Customer' },
+          { key: 'plan', title: 'Plan' },
+          { key: 'status', title: 'Status' }
+        ],
+        pagination: false
+      });
+    }
+
+    function apply() {
+      const name = `admin-${state.finish}-${state.accent}`;
+      currentEl.textContent = name;
+      Domma.theme.set(name);
+    }
+
+    finishWrap.querySelectorAll('[data-finish]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.finish = btn.dataset.finish;
+        finishWrap.querySelectorAll('[data-finish]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        apply();
+      });
+    });
+
+    accentWrap.querySelectorAll('[data-accent]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.accent = btn.dataset.accent;
+        accentWrap.querySelectorAll('[data-accent]').forEach(b => b.style.borderColor = 'transparent');
+        btn.style.borderColor = 'var(--dm-text)';
+        apply();
+      });
+    });
+  })();
 
   Domma.icons.scan(document.body);
 });
