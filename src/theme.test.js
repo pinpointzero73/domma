@@ -48,9 +48,17 @@ describe('Domma.theme - Theme Module (Refactored)', () => {
     admin.forEach(name => expect(themes).toContain(name));
   });
 
+  it('listBases() should include Admin finishes', () => {
+    const bases = Domma.theme.listBases();
+    expect(bases).toContain('admin-smooth');
+    expect(bases).toContain('admin-sharp');
+  });
+
   it('getBase() returns the finish for an Admin theme', () => {
     Domma.theme.set('admin-sharp-steel');
     expect(Domma.theme.getBase()).toBe('admin-sharp');
+    Domma.theme.set('admin-smooth-indigo');
+    expect(Domma.theme.getBase()).toBe('admin-smooth');
     Domma.theme.set('charcoal-light'); // restore
   });
 

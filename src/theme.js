@@ -125,7 +125,9 @@ class ThemeEngine {
     }
 
     /**
-     * Get the theme base colour (e.g., 'ocean' from 'ocean-dark')
+     * Get the theme base colour (everything before the final '-' segment).
+     * For standard themes this is the colour name (e.g., 'ocean' from 'ocean-dark').
+     * For Admin themes the base is the finish (e.g., 'admin-sharp' from 'admin-sharp-steel').
      * @returns {string}
      */
     getBase() {
@@ -133,7 +135,10 @@ class ThemeEngine {
     }
 
     /**
-     * Get the theme mode (e.g., 'dark' from 'ocean-dark', 'light' from 'forest-light')
+     * Get the final '-' segment of the theme name.
+     * For standard themes this is the light/dark mode (e.g., 'dark' from 'ocean-dark',
+     * 'light' from 'forest-light'). Admin themes have no light/dark mode, so this
+     * returns the accent name instead (e.g., 'steel', 'indigo', or 'teal').
      * @returns {string}
      */
     getMode() {
