@@ -10,7 +10,7 @@ describe('generate-admin-themes', () => {
   it('emits a correctly scoped rule with the accent primary and finish surface', () => {
     const css = buildThemeCss('sharp', 'steel');
     expect(css).toContain('.dm-theme-admin-sharp-steel {');
-    expect(css).toContain('--dm-primary: #3f7cc4;');
+    expect(css).toContain('--dm-primary: #3b76bc;');
     expect(css).toContain('--dm-background: #eef1f6;');
     expect(css).toContain('color-scheme: light;');
   });
@@ -18,7 +18,7 @@ describe('generate-admin-themes', () => {
   it('uses the dark color-scheme and mid-tone surface for the smooth finish', () => {
     const css = buildThemeCss('smooth', 'teal');
     expect(css).toContain('.dm-theme-admin-smooth-teal {');
-    expect(css).toContain('--dm-primary: #2f8f86;');
+    expect(css).toContain('--dm-primary: #2a8178;');
     expect(css).toContain('--dm-surface: #646d7c;');
     expect(css).toContain('color-scheme: dark;');
   });
@@ -39,7 +39,7 @@ describe('generate-admin-themes', () => {
 
   it('uses the lightened onDark accent for active text on the smooth finish', () => {
     const css = buildThemeCss('smooth', 'teal');
-    expect(css).toContain('--dm-tab-active-text: #66c2b8;'); // onDark, not primary #2f8f86
+    expect(css).toContain('--dm-tab-active-text: #66c2b8;'); // onDark, not primary #2a8178
   });
 
   it('emits status hover-text tokens', () => {
