@@ -71,9 +71,9 @@ export const FINISHES = {
 // active/selection text on the smooth finish so it stays legible.
 // ---------------------------------------------------------------------------
 export const ACCENTS = {
-  steel:  { primary: '#3f7cc4', hover: '#356bab', active: '#2d5c95', dark: '#274e7d', rgb: '63, 124, 196',  onDark: '#7fb0e0' },
+  steel:  { primary: '#3b76bc', hover: '#356bab', active: '#2d5c95', dark: '#274e7d', rgb: '59, 118, 188',  onDark: '#7fb0e0' },
   indigo: { primary: '#5b63a8', hover: '#4f5694', active: '#444a80', dark: '#3a3f6e', rgb: '91, 99, 168',   onDark: '#9aa0d4' },
-  teal:   { primary: '#2f8f86', hover: '#287d75', active: '#226b64', dark: '#1d564f', rgb: '47, 143, 134',  onDark: '#66c2b8' }
+  teal:   { primary: '#2a8178', hover: '#287d75', active: '#226b64', dark: '#1d564f', rgb: '42, 129, 120',  onDark: '#66c2b8' }
 };
 
 // ---------------------------------------------------------------------------

@@ -41,15 +41,15 @@
     --dm-code-text: #b3325a;
     --dm-progress-bg: #e4e8ef;
 
-    --dm-primary: #2f8f86;
+    --dm-primary: #2a8178;
     --dm-primary-hover: #287d75;
     --dm-primary-active: #226b64;
-    --dm-primary-light: rgba(47, 143, 134, 0.14);
+    --dm-primary-light: rgba(42, 129, 120, 0.14);
     --dm-primary-dark: #1d564f;
     --dm-primary-text: #ffffff;
     --dm-primary-hover-text: #ffffff;
-    --dm-focus-ring: 0 0 0 3px rgba(47, 143, 134, 0.35);
-    --dm-border-focus: #2f8f86;
+    --dm-focus-ring: 0 0 0 3px rgba(42, 129, 120, 0.35);
+    --dm-border-focus: #2a8178;
     --dm-secondary: #5f6f7a;
     --dm-secondary-hover: #52606b;
     --dm-secondary-active: #46535d;
@@ -57,10 +57,10 @@
     --dm-secondary-dark: #3d4a52;
     --dm-secondary-text: #ffffff;
     --dm-secondary-hover-text: #ffffff;
-    --dm-selected-bg: rgba(47, 143, 134, 0.12);
-    --dm-tab-active-border: #2f8f86;
-    --dm-tab-active-text: #2f8f86;
-    --dm-progress-bar: #2f8f86;
+    --dm-selected-bg: rgba(42, 129, 120, 0.12);
+    --dm-tab-active-border: #2a8178;
+    --dm-tab-active-text: #2a8178;
+    --dm-progress-bar: #2a8178;
     --dm-accent-1: #78909c;
     --dm-accent-2: #607d8b;
     --dm-accent-3: #455a64;
