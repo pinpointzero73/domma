@@ -683,6 +683,16 @@ class ThemeRoller {
                                 <option value="wedding-light" ${currentTheme === 'wedding-light' ? 'selected' : ''}>Wedding Day ☀️</option>
                                 <option value="wedding-dark" ${currentTheme === 'wedding-dark' ? 'selected' : ''}>Wedding Evening 🌙</option>
                             </optgroup>
+                            <optgroup label="Admin (Smooth)">
+                                <option value="admin-smooth-steel" ${currentTheme === 'admin-smooth-steel' ? 'selected' : ''}>Admin Smooth · Steel</option>
+                                <option value="admin-smooth-indigo" ${currentTheme === 'admin-smooth-indigo' ? 'selected' : ''}>Admin Smooth · Indigo</option>
+                                <option value="admin-smooth-teal" ${currentTheme === 'admin-smooth-teal' ? 'selected' : ''}>Admin Smooth · Teal</option>
+                            </optgroup>
+                            <optgroup label="Admin (Sharp)">
+                                <option value="admin-sharp-steel" ${currentTheme === 'admin-sharp-steel' ? 'selected' : ''}>Admin Sharp · Steel</option>
+                                <option value="admin-sharp-indigo" ${currentTheme === 'admin-sharp-indigo' ? 'selected' : ''}>Admin Sharp · Indigo</option>
+                                <option value="admin-sharp-teal" ${currentTheme === 'admin-sharp-teal' ? 'selected' : ''}>Admin Sharp · Teal</option>
+                            </optgroup>
                         </select>
                     </div>
                 </div>

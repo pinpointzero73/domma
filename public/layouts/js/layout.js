@@ -364,6 +364,13 @@ import {SiteSearch} from './modules/search.js';
         /* Wedding */
         .variant-dot-wedding-light { background: linear-gradient(135deg, #FFFDF7, #C5A55A); }
         .variant-dot-wedding-dark { background: linear-gradient(135deg, #12121F, #C5A55A); }
+        /* Admin */
+        .variant-dot-admin-smooth-steel { background: linear-gradient(135deg, #586170, #3b76bc); }
+        .variant-dot-admin-smooth-indigo { background: linear-gradient(135deg, #586170, #5b63a8); }
+        .variant-dot-admin-smooth-teal { background: linear-gradient(135deg, #586170, #2a8178); }
+        .variant-dot-admin-sharp-steel { background: linear-gradient(135deg, #eef1f6, #3b76bc); }
+        .variant-dot-admin-sharp-indigo { background: linear-gradient(135deg, #eef1f6, #5b63a8); }
+        .variant-dot-admin-sharp-teal { background: linear-gradient(135deg, #eef1f6, #2a8178); }
         .variant-dot::after {
           content: attr(data-tooltip);
           position: absolute;
@@ -698,6 +705,12 @@ import {SiteSearch} from './modules/search.js';
                     <button class="variant-dot variant-dot-mint-dark" data-theme="mint-dark" data-tooltip="Mint Dark 🌙"></button>
                     <button class="variant-dot variant-dot-wedding-light" data-theme="wedding-light" data-tooltip="Wedding Day ☀️"></button>
                     <button class="variant-dot variant-dot-wedding-dark" data-theme="wedding-dark" data-tooltip="Wedding Evening 🌙"></button>
+                    <button class="variant-dot variant-dot-admin-smooth-steel" data-theme="admin-smooth-steel" data-tooltip="Admin Smooth · Steel"></button>
+                    <button class="variant-dot variant-dot-admin-smooth-indigo" data-theme="admin-smooth-indigo" data-tooltip="Admin Smooth · Indigo"></button>
+                    <button class="variant-dot variant-dot-admin-smooth-teal" data-theme="admin-smooth-teal" data-tooltip="Admin Smooth · Teal"></button>
+                    <button class="variant-dot variant-dot-admin-sharp-steel" data-theme="admin-sharp-steel" data-tooltip="Admin Sharp · Steel"></button>
+                    <button class="variant-dot variant-dot-admin-sharp-indigo" data-theme="admin-sharp-indigo" data-tooltip="Admin Sharp · Indigo"></button>
+                    <button class="variant-dot variant-dot-admin-sharp-teal" data-theme="admin-sharp-teal" data-tooltip="Admin Sharp · Teal"></button>
                 </div>
             </div>
         `;

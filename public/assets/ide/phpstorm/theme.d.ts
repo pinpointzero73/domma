@@ -4,7 +4,12 @@
  */
 
 export type ThemeMode = 'light' | 'dark';
-export type ThemeVariant = 'ocean' | 'forest' | 'sunset' | 'royal' | 'lemon' | 'silver' | 'charcoal' | 'christmas' | 'unicorn' | 'dreamy' | 'grayve' | 'mint' | 'wedding' | 'default';
+export type ThemeVariant = 'ocean' | 'forest' | 'sunset' | 'royal' | 'lemon' | 'silver' | 'charcoal' | 'christmas' | 'unicorn' | 'dreamy' | 'grayve' | 'mint' | 'wedding' | 'admin-smooth' | 'admin-sharp' | 'default';
+
+/** Standalone Admin family (no light/dark) — finish-accent full names. */
+export type AdminTheme =
+    | 'admin-smooth-steel' | 'admin-smooth-indigo' | 'admin-smooth-teal'
+    | 'admin-sharp-steel' | 'admin-sharp-indigo' | 'admin-sharp-teal';
 
 export interface ThemeConfig {
     /** Current theme mode */
