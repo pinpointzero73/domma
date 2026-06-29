@@ -32,9 +32,26 @@ describe('Domma.theme - Theme Module (Refactored)', () => {
   it('listThemes() should return an array of all available themes', () => {
     const themes = Domma.theme.listThemes();
     expect(Array.isArray(themes)).toBe(true);
-    expect(themes.length).toBe(16);
+    expect(themes.length).toBe(33);
     expect(themes).toContain('forest-dark');
+    expect(themes).toContain('admin-smooth-steel');
+    expect(themes).toContain('admin-sharp-teal');
     expect(themes).not.toContain('light'); // Old format should not exist
+  });
+
+  it('should register all six Admin themes', () => {
+    const themes = Domma.theme.listThemes();
+    const admin = [
+      'admin-smooth-steel', 'admin-smooth-indigo', 'admin-smooth-teal',
+      'admin-sharp-steel', 'admin-sharp-indigo', 'admin-sharp-teal'
+    ];
+    admin.forEach(name => expect(themes).toContain(name));
+  });
+
+  it('getBase() returns the finish for an Admin theme', () => {
+    Domma.theme.set('admin-sharp-steel');
+    expect(Domma.theme.getBase()).toBe('admin-sharp');
+    Domma.theme.set('charcoal-light'); // restore
   });
 
   it('should switch between light and dark modes of a theme', () => {

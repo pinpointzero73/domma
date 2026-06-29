@@ -1,6 +1,6 @@
 /**
  * Domma Theme Engine v2.0 (v0.5.0a)
- * Unified theme system - 16 independent themes
+ * Unified theme system - 33 independent themes
  * Migrates from light/dark + variants to single theme names (e.g., 'ocean-dark', 'forest-light')
  */
 
@@ -23,7 +23,10 @@ const AVAILABLE_THEMES = [
     'grayve-light', 'grayve-dark',
     'mint-light', 'mint-dark',
     'wedding-light', 'wedding-dark',
-    'core-light'
+    'core-light',
+    // Admin family — standalone (no light/dark), finish × accent
+    'admin-smooth-steel', 'admin-smooth-indigo', 'admin-smooth-teal',
+    'admin-sharp-steel', 'admin-sharp-indigo', 'admin-sharp-teal'
 ];
 
 // Default theme
@@ -243,7 +246,7 @@ class ThemeEngine {
 
     /**
      * List all available themes
-     * @returns {string[]} Array of all 16 theme names
+     * @returns {string[]} Array of all 33 theme names
      */
     listThemes() {
         return [...AVAILABLE_THEMES];
@@ -254,7 +257,7 @@ class ThemeEngine {
      * @returns {string[]}
      */
     listBases() {
-        return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas', 'unicorn', 'dreamy', 'grayve', 'mint', 'wedding'];
+        return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas', 'unicorn', 'dreamy', 'grayve', 'mint', 'wedding', 'admin-smooth', 'admin-sharp'];
     }
 
     /**
