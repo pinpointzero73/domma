@@ -1,6 +1,6 @@
 {
     "name": "domma-js",
-    "version": "0.28.0",
+    "version": "0.29.0",
     "description": "Dynamic Object Manipulation & Modeling API - A complete front-end toolkit.",
     "main": "public/dist/domma.min.js",
     "module": "public/dist/domma.esm.js",
