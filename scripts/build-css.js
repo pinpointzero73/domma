@@ -64,7 +64,14 @@ const themeFiles = [
   'public/assets/themes/mint-dark.css',
   // Wedding themes
   'public/assets/themes/wedding-light.css',
-  'public/assets/themes/wedding-dark.css'
+  'public/assets/themes/wedding-dark.css',
+  // Admin family (generated)
+  'public/assets/themes/admin-smooth-steel.css',
+  'public/assets/themes/admin-smooth-indigo.css',
+  'public/assets/themes/admin-smooth-teal.css',
+  'public/assets/themes/admin-sharp-steel.css',
+  'public/assets/themes/admin-sharp-indigo.css',
+  'public/assets/themes/admin-sharp-teal.css'
 ];
 
 // Build banner
