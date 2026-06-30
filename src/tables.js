@@ -1557,11 +1557,42 @@ class TableInstance {
 
         this.element.appendChild(wrapper);
 
+        // render() runs on EVERY state change (search, sort, paginate, filter,
+        // pageSize, column toggle) and rebuilds the whole subtree via
+        // innerHTML. Re-process framework content within it so consumer cell
+        // markup produced by col.render() stays live across re-renders — icons
+        // (data-icon spans) get re-scanned and tooltips (data-tooltip triggers)
+        // get re-wired. Without this, action-button icons/popovers render once
+        // and then vanish on the first paginate/search/sort. Mirrors
+        // Form._initTooltips.
+        this._reinitRenderedContent();
+
         if (opts.onRender) {
             opts.onRender(this);
         }
 
         return this;
+    }
+
+    _reinitRenderedContent() {
+        // Icons: `icons` is a direct import, so scan the rebuilt subtree.
+        try {
+            icons.scan(this.element);
+        } catch { /* icons optional */ }
+
+        // Tooltips: reach the tooltip factory lazily via the window.Domma global
+        // to avoid a circular import between tables.js and elements.js (same
+        // approach as Form._initTooltips). Fresh DOM nodes each render means no
+        // duplicate-listener leak — old triggers are discarded with innerHTML.
+        const tooltip = typeof window !== 'undefined'
+            && window.Domma && window.Domma.elements && window.Domma.elements.tooltip;
+        if (typeof tooltip === 'function') {
+            this.element.querySelectorAll('[data-tooltip]').forEach((el) => {
+                try {
+                    tooltip(el, {position: 'top', trigger: 'hover', delay: {show: 200, hide: 0}});
+                } catch { /* tooltip optional */ }
+            });
+        }
     }
 
     // ============================================
