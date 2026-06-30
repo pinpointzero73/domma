@@ -209,42 +209,58 @@ export function createTooltipWrapper(selector, options = {}) {
     elements.forEach(el => {
         if (!el) return;
 
-        // Create Web Component wrapper
-        const webComponent = document.createElement('domma-tooltip');
+        // The <domma-tooltip> renders only its `content` attribute — it has no
+        // data-attribute fallback. Callers commonly wire by data-tooltip alone
+        // (the framework table re-render, forms.js label tooltips), passing no
+        // explicit content; without this fallback those tooltips render empty.
+        // Source the content from data-tooltip / title, matching the legacy
+        // Tooltip class behaviour.
+        const opts = (options.content === undefined || options.content === null || options.content === '')
+            ? { ...options, content: el.dataset.tooltip || el.title || '' }
+            : options;
 
-        // Apply options as attributes or event listeners
-        for (const [key, value] of Object.entries(options)) {
-            if (typeof value === 'function') {
-                // Handle callbacks via events
-                const eventName = key.replace(/^on/, '').toLowerCase();
-                webComponent.addEventListener(eventName, (e) => {
-                    value(webComponent);
-                });
-            } else if (key === 'delay' && typeof value === 'object') {
-                // Handle delay object {show: X, hide: Y}
-                if (value.show !== undefined) {
-                    webComponent.setAttribute('delay', String(value.show));
+        // Apply options as attributes or event listeners.
+        const applyOpts = (wc) => {
+            for (const [key, value] of Object.entries(opts)) {
+                if (typeof value === 'function') {
+                    // Handle callbacks via events
+                    const eventName = key.replace(/^on/, '').toLowerCase();
+                    wc.addEventListener(eventName, () => value(wc));
+                } else if (key === 'delay' && typeof value === 'object') {
+                    // Handle delay object {show: X, hide: Y}
+                    if (value.show !== undefined) wc.setAttribute('delay', String(value.show));
+                    if (value.hide !== undefined) wc.setAttribute('hide-delay', String(value.hide));
+                } else if (typeof value === 'boolean') {
+                    // Boolean attributes
+                    if (value) wc.setAttribute(toKebabCase(key), '');
+                } else if (value !== null && value !== undefined) {
+                    // Other attributes
+                    wc.setAttribute(toKebabCase(key), String(value));
                 }
-                if (value.hide !== undefined) {
-                    webComponent.setAttribute('hide-delay', String(value.hide));
-                }
-            } else if (typeof value === 'boolean') {
-                // Boolean attributes
-                if (value) {
-                    webComponent.setAttribute(toKebabCase(key), '');
-                }
-            } else if (value !== null && value !== undefined) {
-                // Other attributes
-                webComponent.setAttribute(toKebabCase(key), String(value));
             }
+        };
+
+        // Idempotent: if this element is ALREADY wrapped by a <domma-tooltip>,
+        // refresh that wrapper instead of nesting a second one. Double-wrapping
+        // breaks the tooltip, and it happens whenever two layers wire the same
+        // element — e.g. the framework table re-render and a view both calling
+        // E.tooltip on the same action button.
+        let webComponent;
+        if (el.parentNode && el.parentNode.tagName === 'DOMMA-TOOLTIP') {
+            webComponent = el.parentNode;
+            applyOpts(webComponent);
+        } else {
+            // Create Web Component wrapper
+            webComponent = document.createElement('domma-tooltip');
+            applyOpts(webComponent);
+
+            // Wrap the original element
+            el.parentNode.insertBefore(webComponent, el);
+            webComponent.appendChild(el);
+
+            // Store reference for retrieval
+            webComponent._dommaComponent = webComponent;
         }
-
-        // Wrap the original element
-        el.parentNode.insertBefore(webComponent, el);
-        webComponent.appendChild(el);
-
-        // Store reference for retrieval
-        webComponent._dommaComponent = webComponent;
 
         // Return API-compatible object
         instances.push({
