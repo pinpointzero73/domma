@@ -190,8 +190,20 @@ const dropdown = Domma.elements.dropdown('#user-dropdown', {
     <div class="card-body">
 
       <h3 class="category-title-style">Hover Trigger</h3>
-      <div class="demo-area mb-4 dropdown-text-center">
-            <button class="btn btn-outline" id="hover-dropdown">Hover Me</button>
+      <div class="demo-area mb-4">
+          <div class="dropdown-flex-center-wrap">
+                <button class="btn btn-outline" id="hover-dropdown">Hover Me</button>
+                <button class="btn btn-primary" id="hover-click-dropdown">Click Me (same menu)</button>
+            </div>
+            <div class="alert alert-info mt-4" role="note">
+                <strong>Verify the hover fix:</strong>
+                <ol class="mt-2 mb-0">
+                    <li>Hover <em>Hover Me</em> — the menu opens.</li>
+                    <li>Glide the pointer down onto the menu items — it must <strong>stay open</strong> (crossing the gap no longer closes it).</li>
+                    <li>Sweep the pointer rapidly between the button and the menu several times — it must never get stuck shut.</li>
+                    <li><em>Click Me</em> uses a click trigger — confirm it still opens and closes cleanly and is unaffected by the hover demo beside it.</li>
+                </ol>
+            </div>
         </div>
 
       <h3 class="category-title-style">Positioning</h3>
@@ -531,9 +543,25 @@ $.setup({
     Domma.elements.dropdown('#hover-dropdown', {
         trigger: 'hover',
         items: [
-            {text: 'Option 1', value: 'opt1'},
-            {text: 'Option 2', value: 'opt2'},
-            {text: 'Option 3', value: 'opt3'}
+            {text: 'Profile', value: 'profile'},
+            {text: 'Dashboard', value: 'dashboard'},
+            {text: 'Projects', value: 'projects'},
+            {text: 'Team', value: 'team'},
+            {text: 'Settings', value: 'settings'},
+            {text: 'Sign Out', value: 'signout'}
+        ]
+    });
+
+    // Same menu, click trigger — confirms click stays consistent alongside hover.
+    Domma.elements.dropdown('#hover-click-dropdown', {
+        trigger: 'click',
+        items: [
+            {text: 'Profile', value: 'profile'},
+            {text: 'Dashboard', value: 'dashboard'},
+            {text: 'Projects', value: 'projects'},
+            {text: 'Team', value: 'team'},
+            {text: 'Settings', value: 'settings'},
+            {text: 'Sign Out', value: 'signout'}
         ]
     });
 

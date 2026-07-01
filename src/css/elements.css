@@ -5295,6 +5295,32 @@ code {
     transform: translateY(0);
 }
 
+/*
+ * Hover bridge: the menu is rendered as a document.body sibling positioned with a
+ * small offset/margin gap from its trigger. On a hover-triggered dropdown that gap
+ * is a dead-zone — the pointer leaves the trigger before reaching the menu, firing
+ * the close. These transparent pseudo-elements extend the menu's hoverable area
+ * above and below it, so the trigger→menu path is one continuous hover surface.
+ * Only present on hover dropdowns, so click dropdowns are unaffected.
+ */
+.domma-dropdown-menu-hover::before,
+.domma-dropdown-menu-hover::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 0.75rem;
+    /* transparent — a hover surface only, never painted */
+}
+
+.domma-dropdown-menu-hover::before {
+    bottom: 100%; /* bridges the gap when the menu opens below the trigger */
+}
+
+.domma-dropdown-menu-hover::after {
+    top: 100%; /* bridges the gap when the menu opens above the trigger */
+}
+
 .domma-dropdown-item {
     display: block;
     width: 100%;

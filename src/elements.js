@@ -2011,6 +2011,7 @@ class Dropdown extends Component {
         offset: [0, 4],
         animation: true,
         animationDuration: 150,
+        hoverCloseDelay: 180,
         closeOnSelect: true,
         closeOnClickOutside: true,
         items: [],
@@ -2029,6 +2030,7 @@ class Dropdown extends Component {
         this._items = [...this.options.items];
         this._selectedValue = null;
         this._modelUnsubscribe = null;
+        this._hoverCloseTimer = null;
         this._init();
     }
 
@@ -2044,8 +2046,15 @@ class Dropdown extends Component {
                 this.toggle();
             });
         } else if (opts.trigger === 'hover') {
-            this._addEventListener(this.element, 'mouseenter', () => this.open());
-            this._addEventListener(this.element, 'mouseleave', () => this.close());
+            // The menu lives in document.body (a sibling, not a child), so hover must
+            // be tracked on both the heading and the menu. A cancellable delay bridges
+            // the offset gap between them: leaving the heading only closes if the cursor
+            // hasn't reached the menu (or come back) before the timer fires.
+            this._addEventListener(this.element, 'mouseenter', () => {
+                clearTimeout(this._hoverCloseTimer);
+                this.open();
+            });
+            this._addEventListener(this.element, 'mouseleave', () => this._scheduleHoverClose());
         }
 
         // Close on click outside
@@ -2107,18 +2116,17 @@ class Dropdown extends Component {
 
         const opts = this.options;
 
-        if (this._menu) {
-            this._menu.classList.remove('show');
-
-            setTimeout(() => {
-                if (this._menu) {
-                    this._menu.remove();
-                    this._menu = null;
-                }
-            }, opts.animationDuration);
-        }
-
+        // Detach state synchronously and let the removal timer own *this* node, so a
+        // rapid re-open (which builds a fresh menu) can never be torn down by an
+        // earlier close's timer, and _isOpen never desyncs from the visible menu.
         this._isOpen = false;
+        const menu = this._menu;
+        this._menu = null;
+
+        if (menu) {
+            menu.classList.remove('show');
+            setTimeout(() => menu.remove(), opts.animationDuration);
+        }
 
         if (opts.onClose) opts.onClose(this);
 
@@ -2134,14 +2142,34 @@ class Dropdown extends Component {
 
         this._menu = document.createElement('div');
         this._menu.className = 'domma-dropdown-menu';
+        // Hover triggers get a transparent bridge (CSS ::before) spanning the gap
+        // between trigger and menu, so the pointer never crosses a dead-zone that
+        // would fire the close. The menu is a document.body sibling, so without this
+        // the offset/margin gap breaks the hover path.
+        if (this.options.trigger === 'hover') {
+            this._menu.classList.add('domma-dropdown-menu-hover');
+        }
 
         this._renderMenu();
 
         document.body.appendChild(this._menu);
 
+        // Keep the dropdown open while the cursor is over the menu, and re-arm the
+        // close delay when it leaves — mirrors the heading's hover handling so the
+        // gap between heading and menu can be crossed in either direction.
+        if (opts.trigger === 'hover') {
+            this._addEventListener(this._menu, 'mouseenter', () => clearTimeout(this._hoverCloseTimer));
+            this._addEventListener(this._menu, 'mouseleave', () => this._scheduleHoverClose());
+        }
+
         // Trigger animation
         this._menu.offsetHeight;
         this._menu.classList.add('show');
+    }
+
+    _scheduleHoverClose() {
+        clearTimeout(this._hoverCloseTimer);
+        this._hoverCloseTimer = setTimeout(() => this.close(), this.options.hoverCloseDelay);
     }
 
     _renderMenu() {
@@ -2290,6 +2318,7 @@ class Dropdown extends Component {
 
     destroy() {
         super.destroy();
+        clearTimeout(this._hoverCloseTimer);
         if (this._outsideClickHandler) {
             document.removeEventListener('click', this._outsideClickHandler);
         }
