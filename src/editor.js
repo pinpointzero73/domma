@@ -99,12 +99,18 @@ class Editor extends Component {
             this._setupAutosave();
         }
 
-        // Model integration
-        if (this.model && typeof this.model.onChange === 'function') {
-            this._modelUnsubscribe = this.model.onChange((field, newVal) => {
-                if (field === this.modelKey && newVal !== this.getValue()) {
-                    this.setValue(newVal);
-                }
+        // Model integration.
+        // onFieldChange fires only for modelKey and passes the value
+        // positionally; onChange passes a single {field, newValue} object.
+        const onFieldValue = (newVal) => {
+            if (newVal !== this.getValue()) this.setValue(newVal);
+        };
+
+        if (this.model && typeof this.model.onFieldChange === 'function') {
+            this._modelUnsubscribe = this.model.onFieldChange(this.modelKey, onFieldValue);
+        } else if (this.model && typeof this.model.onChange === 'function') {
+            this._modelUnsubscribe = this.model.onChange(({field, newValue}) => {
+                if (field === this.modelKey) onFieldValue(newValue);
             });
         }
     }

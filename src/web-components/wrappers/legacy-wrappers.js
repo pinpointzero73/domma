@@ -20,6 +20,39 @@ function toKebabCase(str) {
 }
 
 /**
+ * Carry the host element's identity onto the web component that replaces it.
+ *
+ * These wrappers swap the author's element for a custom element via
+ * replaceWith(). Without this, the original id, classes and data-* attributes
+ * are discarded — so `#my-modal` simply stops existing once it is initialised,
+ * and every later selector lookup (including the config engine's own event
+ * bindings and $.update()/$.reset()) silently fails.
+ *
+ * Option-derived attributes already set on the web component win; only
+ * `class` is merged rather than overwritten.
+ *
+ * @param {Element} original
+ * @param {Element} webComponent
+ */
+function preserveIdentity(original, webComponent) {
+    if (!original || !webComponent) return;
+
+    for (const attr of Array.from(original.attributes)) {
+        const name = attr.name;
+
+        if (name === 'class') {
+            for (const cls of original.classList) webComponent.classList.add(cls);
+            continue;
+        }
+
+        // Never clobber an attribute the options already configured
+        if (webComponent.hasAttribute(name)) continue;
+
+        webComponent.setAttribute(name, attr.value);
+    }
+}
+
+/**
  * Badge Wrapper
  * Maintains exact API: Domma.elements.badge(selector, options)
  */
@@ -59,6 +92,7 @@ export function createBadgeWrapper(selector, options = {}) {
     }
 
     // Replace original element with Web Component
+    preserveIdentity(element, webComponent);
     element.replaceWith(webComponent);
 
     // Store reference for retrieval (compatibility with existing code)
@@ -702,6 +736,7 @@ export function createModalWrapper(selector, options = {}) {
     }
 
     // Replace original element
+    preserveIdentity(element, webComponent);
     element.replaceWith(webComponent);
 
     // Return API-compatible object
@@ -1001,6 +1036,7 @@ export function createCardWrapper(selector, options = {}) {
     });
 
     // Replace original element
+    preserveIdentity(element, webComponent);
     element.replaceWith(webComponent);
 
     // Return API-compatible object
