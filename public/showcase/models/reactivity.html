@@ -7,6 +7,7 @@
     <link rel="canonical" href="https://dommajs.org/showcase/models/reactivity.html">
     <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
     <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
     <link rel="stylesheet" href="../../dist/elements.css">
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <link rel="stylesheet" href="/showcase/css/domma-showcase.css">
@@ -51,7 +52,10 @@
         }
 
         .rx-flash.is-hot {
-            background-color: var(--dm-warning-bg, #fef3c7);
+            /* No literal fallback: --dm-warning-bg is defined for both the
+               light and dark variants, and a fallback would only ever fire
+               as a light-only colour on a dark page. */
+            background-color: var(--dm-warning-bg);
         }
     </style>
 </head>
@@ -92,19 +96,19 @@
             </div>
 
             <div class="row mb-4">
-                <div class="col-md-6">
+                <div class="col-6">
                     <label class="form-label" for="rx-price">Price (read by the computed)</label>
-                    <input type="number" class="form-control mb-3" id="rx-price" value="10">
+                    <input type="number" class="form-input mb-3" id="rx-price" value="10">
 
                     <label class="form-label" for="rx-qty">Quantity (read by the computed)</label>
-                    <input type="number" class="form-control mb-3" id="rx-qty" value="3">
+                    <input type="number" class="form-input mb-3" id="rx-qty" value="3">
 
                     <label class="form-label" for="rx-note">Note (<strong>not</strong> read by the computed)</label>
-                    <input type="text" class="form-control mb-3" id="rx-note" placeholder="Type here…">
+                    <input type="text" class="form-input mb-3" id="rx-note" placeholder="Type here…">
 
                     <button class="btn btn-outline" id="rx-read">Read total again</button>
                 </div>
-                <div class="col-md-6">
+                <div class="col-6">
                     <div class="row">
                         <div class="col-6 mb-3">
                             <div class="rx-stat">
@@ -164,23 +168,23 @@ total.get();              // 40 — a dependency moved, so it re-evaluates</pre>
             </div>
 
             <div class="row mb-4">
-                <div class="col-md-5">
+                <div class="col-5">
                     <label class="form-label" for="rx-user">Username (tracked)</label>
-                    <input type="text" class="form-control mb-3" id="rx-user" value="alice">
+                    <input type="text" class="form-input mb-3" id="rx-user" value="alice">
 
                     <label class="form-label" for="rx-theme">Theme (tracked)</label>
-                    <select class="form-control mb-3" id="rx-theme">
+                    <select class="form-select mb-3" id="rx-theme">
                         <option value="light">light</option>
                         <option value="dark">dark</option>
                     </select>
 
                     <label class="form-label" for="rx-secret">Session id (read untracked)</label>
-                    <input type="text" class="form-control mb-3" id="rx-secret" value="abc123">
+                    <input type="text" class="form-input mb-3" id="rx-secret" value="abc123">
 
                     <button class="btn btn-danger btn-sm" id="rx-stop">Stop effect</button>
                     <button class="btn btn-outline btn-sm" id="rx-clear-log">Clear log</button>
                 </div>
-                <div class="col-md-7">
+                <div class="col-7">
                     <div class="rx-log" id="rx-effect-log"></div>
                     <p class="text-sm mt-2">
                         Changing <strong>Session id</strong> does not re-run the effect — it is read inside
@@ -217,12 +221,12 @@ stop();   // unsubscribe</pre>
             </p>
 
             <div class="row mb-4">
-                <div class="col-md-6">
+                <div class="col-6">
                     <button class="btn btn-primary mb-2" id="rx-burst">Write 3 fields separately</button>
                     <button class="btn btn-primary mb-2" id="rx-batch">Write 3 fields in one set()</button>
                     <button class="btn btn-outline mb-2" id="rx-sync">Write, then M.flush()</button>
                 </div>
-                <div class="col-md-6">
+                <div class="col-6">
                     <div class="rx-stat">
                         <div class="rx-stat-label">Effect runs</div>
                         <div class="rx-counter" id="rx-runs">1</div>
@@ -261,20 +265,20 @@ M.flush();</pre>
             </p>
 
             <div class="row mb-4">
-                <div class="col-md-6">
+                <div class="col-6">
                     <label class="form-label" for="rx-mode">Mode</label>
-                    <select class="form-control mb-3" id="rx-mode">
+                    <select class="form-select mb-3" id="rx-mode">
                         <option value="x">Read X</option>
                         <option value="y">Read Y</option>
                     </select>
 
                     <label class="form-label" for="rx-x">X</label>
-                    <input type="number" class="form-control mb-3" id="rx-x" value="1">
+                    <input type="number" class="form-input mb-3" id="rx-x" value="1">
 
                     <label class="form-label" for="rx-y">Y</label>
-                    <input type="number" class="form-control mb-3" id="rx-y" value="100">
+                    <input type="number" class="form-input mb-3" id="rx-y" value="100">
                 </div>
-                <div class="col-md-6">
+                <div class="col-6">
                     <div class="rx-log" id="rx-branch-log"></div>
                     <p class="text-sm mt-2">
                         In <strong>Read X</strong> mode, editing Y does nothing. Switch modes and the roles swap.
@@ -307,13 +311,13 @@ M.effect(() => {
             </p>
 
             <div class="row mb-4">
-                <div class="col-md-6">
+                <div class="col-6">
                     <div id="rx-component-host" class="mb-3"></div>
                     <button class="btn btn-primary btn-sm" id="rx-add">Add item</button>
                     <button class="btn btn-outline btn-sm" id="rx-discount">Toggle discount</button>
                     <button class="btn btn-outline btn-sm" id="rx-touch">Touch unrelated field</button>
                 </div>
-                <div class="col-md-6">
+                <div class="col-6">
                     <div class="rx-log" id="rx-component-log"></div>
                     <p class="text-sm mt-2">
                         <strong>Touch unrelated field</strong> writes to the model but triggers neither a computed
@@ -586,10 +590,27 @@ Domma.component('order-summary', {
 
     Domma.component('rx-order-summary', {
         template: `
-            <div style="padding:1rem;border:1px solid #cbd5e1;border-radius:.5rem">
-                <p style="margin:0 0 .5rem">{{label}}</p>
+            <div class="rx-summary-box">
+                <p class="rx-summary-label">{{label}}</p>
                 {{#if freeDelivery}}<em>Free delivery applies</em>{{/if}}
             </div>
+        `,
+
+        // Theme variables are injected into every component's Shadow DOM, so
+        // var(--dm-*) resolves here and follows the light/dark variant. A
+        // literal colour would not.
+        style: `
+            .rx-summary-box {
+                padding: 1rem;
+                border: 1px solid var(--dm-border);
+                border-radius: 0.5rem;
+                background: var(--dm-surface, transparent);
+                color: var(--dm-text);
+            }
+
+            .rx-summary-label {
+                margin: 0 0 0.5rem;
+            }
         `,
 
         data() {

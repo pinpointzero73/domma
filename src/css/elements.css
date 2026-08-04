@@ -30,6 +30,10 @@
     cursor: pointer;
     transition: all var(--dm-transition-fast);
     text-decoration: none;
+    /* Base colour so a variant whose own colour declaration fails to resolve
+       inherits a readable value rather than whatever surrounds it. Without
+       this, an outline button could render white-on-white. */
+    color: var(--dm-text);
 }
 
 .btn:focus {
@@ -107,9 +111,17 @@
 }
 
 .btn-outline {
-    background-color: transparent;
+    /* Explicit surface and colour rather than `transparent` plus a color-mix()
+       blend. Transparent meant the contrast depended on whatever sat behind
+       the button, and the blend leaned 55% toward --dm-text, so in some themes
+       the label landed on top of its own background. Both vars below are
+       redefined by all 32 theme blocks, so this tracks the theme and is
+       always legible. */
+    background-color: var(--dm-surface);
     border-color: var(--dm-primary);
-    color: var(--dm-link, color-mix(in oklab, var(--dm-primary, #0070d6), var(--dm-text, #1a1a1a) 55%));
+    /* Body text colour: dark on light themes, light on dark ones. Guaranteed
+       readable because it is the same colour as the surrounding prose. */
+    color: var(--dm-text);
 }
 
 .btn-outline:hover:not(:disabled) {
@@ -621,6 +633,15 @@
     margin-left: var(--dm-space-2);
 }
 
+
+/* Wrapper that lets a wide table scroll horizontally instead of forcing the
+   page to. Used in 14 places across the showcase and previously undefined, so
+   those tables simply overflowed on narrow screens. */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
 
 .table {
     width: 100%;
