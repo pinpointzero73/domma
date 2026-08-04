@@ -36,33 +36,47 @@ global.__BUILD_COMMIT__ = getGitCommit();
 let domInstance;
 let localStorageStore = {}; // For localStorage mock
 
-// Function to setup JSDOM and mocks
-const setupJSDOM = () => {
-  domInstance = new JSDOM(`<!DOCTYPE html>
-    <body>
-        <div id="test"></div>
-        <div id="test-container">
-            <div id="parent">
-                <div id="child1" class="child"></div>
-                <div id="child2" class="child">
-                    <span id="grandchild"></span>
-                </div>
-                <div id="child3" class="child"></div>
+const FIXTURE_HTML = `
+    <div id="test"></div>
+    <div id="test-container">
+        <div id="parent">
+            <div id="child1" class="child"></div>
+            <div id="child2" class="child">
+                <span id="grandchild"></span>
             </div>
+            <div id="child3" class="child"></div>
         </div>
-    </body>
-`, {url: 'http://localhost/'}); // Set a base URL for JSDOM
+    </div>
+`;
 
-  // Expose window and document globals
-  global.window = domInstance.window;
-  global.document = domInstance.window.document;
-  global.HTMLElement = domInstance.window.HTMLElement;
-  global.NodeList = domInstance.window.NodeList;
-  global.HTMLCollection = domInstance.window.HTMLCollection;
-  global.Event = domInstance.window.Event;
-  global.CustomEvent = domInstance.window.CustomEvent;
-  global.MouseEvent = domInstance.window.MouseEvent;
-  global.KeyboardEvent = domInstance.window.KeyboardEvent; // Added for keyboard tests
+/**
+ * Reset the DOM to the fixture state.
+ *
+ * This deliberately reuses the jsdom window supplied by Vitest's `environment:
+ * 'jsdom'` rather than constructing a second JSDOM instance. Two windows meant
+ * two `customElements` registries and two `HTMLElement` constructors, so any
+ * class defined at module-import time extended a different HTMLElement than the
+ * document being rendered into — custom elements could never upgrade.
+ */
+const setupJSDOM = () => {
+  domInstance = globalThis.window;
+
+  // Expose window internals as bare globals, as the suite expects.
+  global.window = globalThis.window;
+  global.document = globalThis.window.document;
+  global.HTMLElement = globalThis.window.HTMLElement;
+  global.NodeList = globalThis.window.NodeList;
+  global.HTMLCollection = globalThis.window.HTMLCollection;
+  global.Event = globalThis.window.Event;
+  global.CustomEvent = globalThis.window.CustomEvent;
+  global.MouseEvent = globalThis.window.MouseEvent;
+  global.KeyboardEvent = globalThis.window.KeyboardEvent; // Added for keyboard tests
+  global.customElements = globalThis.window.customElements;
+
+  document.body.replaceChildren();
+  const fixture = document.createRange().createContextualFragment(FIXTURE_HTML);
+  document.body.appendChild(fixture);
+
   global.localStorage = createLocalStorageMock();
 };
 
