@@ -12,6 +12,35 @@
 
 ---
 
+## Corrections applied during execution
+
+The code blocks below were written as design sketches, not as tested source. Execution found real
+defects in three of them. **The corrections are recorded here and applied inline in the affected
+tasks** — an implementer following this plan should use the corrected code, not the original.
+
+| Task | Defect found | Resolution |
+|------|--------------|------------|
+| 2 | `seen = new WeakMap()` as a default parameter allocated on *every* call, including the primitive fast path — a measured 3–5× tax on the hottest path in the package | Public `isEqual(a, b)` wrapper delegating to an inner recursive function; map created lazily at the first structurally-compared pair |
+| 2 | All 8 supplied tests passed with the plain-object prototype gate deleted, and with the cycle guard's `return true` flipped to `return false` | Added class-instance, `Map`/`Set`, null-prototype and value-asserting cyclic tests. 15 tests |
+| 2 | Two invalid `Date`s compared unequal (`getTime()` is `NaN` on both, compared with `===`), contradicting the NaN rationale the tests state | `Object.is(a.getTime(), b.getTime())` |
+| 3 | "There are exactly two [call sites]" — wrong | One real call in `Computation.recompute()`, plus one doc-comment mention. Verify by grep, not by count |
+| 3 | The moved test `does not notify when a write sets an equal value` asserts a gate that lives in Domma's `Model.set`, not in the graph. Making it pass required adding a gate to the test's own stand-in, rendering it tautological | Dropped as a 4th Model-specific test. **11 moved tests, not 12.** The behaviour was ported into Domma's `models.test.js`, where it had no coverage at all |
+| 3 | `trackingProxy` is a public export with zero tests; four `drainPending` guarantees, `dispose()` and `DepMap.clear()` could each be removed without failing a test | 16 tests added. `graph.test.js` totals 27 |
+| 4 | **The supplied setter fails the supplied test.** The early return fires before `current = next`, so a write gated as "equal" never stored — yet `accepts a custom equality function` asserts `v.value` becomes 999 | Assign unconditionally, gate only the notification. Mirrors `models.js:122-125`, which Task 9 requires this primitive to stand in for |
+| 4 | `set(next) { this.value = next; }` throws `TypeError` when destructured or passed as a callback | `peek()` and `set()` are closures; `this` leaves the API surface |
+| 5 | **The supplied mutators cannot notify.** `inner.peek()` returns the live array, so an in-place mutation has already updated `current`; `arr.slice()` is then deep-equal to it and the gate swallows the change. The comment "new reference → always notifies" is false — the gate is `isEqual`, not reference identity | `observableArray` owns its own `Dep` and triggers it directly. O(1) per mutation; a no-op `sort()` notifying spuriously is the accepted cost. Chosen because the mutator knows it was a `push`, and that trigger point is where M4's keyed reconciler attaches patch information |
+
+**Method that found these:** for every claimed behaviour, apply a mutation that breaks it, confirm a
+test fails, restore. Three tasks running, three sets of supplied code with defects — hold the
+remaining tasks to the same standard.
+
+**Revised baselines.** Task 3 added two tests to Domma's `models.test.js` pinning the no-op-write
+gate, which had no coverage and which Task 9 re-derives by hand. Domma's baseline is therefore
+**437 passed | 3 skipped (440)**, not 435/3/438, and Task 10's expected post-deletion figure is
+**422**, not 420.
+
+---
+
 ## Prerequisites
 
 - Domma repo at `/home/darryl/src/js/domma`, on `main`, clean, tests green (435 passing / 3 skipped).
@@ -366,8 +395,10 @@ with
 import { isEqual } from './equal.js';
 ```
 
-and replace both call sites `utils.isEqual(` with `isEqual(`. There are exactly two — one in
-`Computation.recompute()`, one in the `drainPending` doc comment reference.
+and replace the `utils.isEqual(` references with `isEqual(`. **Corrected:** there is exactly ONE
+real call — in `Computation.recompute()` — plus one doc-comment mention in that method's JSDoc. The
+`drainPending` doc comment already says plain `isEqual` and needs no change. Verify by grep, not by
+count.
 
 Verify none remain:
 
@@ -413,10 +444,36 @@ Then mechanically convert each test: `M.create({...}, {a: 1})` becomes `bag({a: 
 `tracked() proxy ... routes writes through validation`, `leaves onChange semantics synchronous`,
 and `destroying a model detaches its dependents` — those belong to Domma and stay in its suite.
 
+**Corrected — drop a fourth.** `does not notify when a write sets an equal value` also belongs to
+Domma: the gate it asserts lives in `Model.set` (`models.js:125`), not in the graph. `Dep.trigger()`
+has no equality gate, so making this test pass requires adding one to the `bag()` stand-in, at which
+point the test asserts the stand-in rather than `graph.js`. Drop it, and keep `bag()` exactly as
+written above with no gate. **11 moved tests, not 12.**
+
+That behaviour had no coverage anywhere in Domma either — `models.test.js` proved `onChange` *fires*
+on a change but never that it stays *silent* on a no-op write, and Task 9 re-derives that gate by
+hand. Port it into `models.test.js` now rather than at Task 10. Cover a primitive **and** a
+structurally-equal object: degrading the gate to `!==` passes the primitive case and is caught only
+by the structural one.
+
+- [ ] **Step 2b: Cover `trackingProxy`, and the guarantees the doc block makes**
+
+`trackingProxy` enters the public API at Task 6 with zero tests. Four `drainPending` guarantees
+(effects fire last; unobserved computeds stay lazy; the `onNotify` exemption; cycles terminate with
+a warning), plus `Computation.dispose()` and `DepMap.clear()`, can each be removed without failing a
+test. Pin them before publication.
+
+Two that need care: reads are tracked one level deep, and the honest assertion is
+`expect(state.user).toBe(rawNestedObject)` — a behavioural test catches a *flat*-keyspace recursive
+proxy but not a *namespaced* one. And `MAX_VISITS` needs two tests, since "a cycle terminates and
+warns" still passes when the budget is crippled to 1 — pin the headroom side too (a legitimate
+diamond revisit completes *without* warning), without hard-coding the number.
+
 - [ ] **Step 3: Run the tests**
 
 Run: `cd /home/darryl/src/js/domma-reactive && npx vitest run src/graph.test.js`
-Expected: `Tests  12 passed (12)` (the 15 original minus the 3 Model-specific ones).
+Expected: 11 moved tests plus the coverage added in Step 2b (27 as executed). The requirement is
+**zero failures**, not a specific count.
 
 - [ ] **Step 4: Commit**
 
@@ -577,6 +634,22 @@ export function observable(initial, options = {}) {
     const dep = new Dep();
     let current = initial;
 
+    // The comparator gates the NOTIFICATION, not the write. It answers "is this
+    // worth waking the graph for?", not "is this worth remembering?" — a partial
+    // comparator (compare by id, compare by version) must not silently discard
+    // data, or a read after write returns something the caller never wrote.
+    // This mirrors Model._setField (models.js:122-125), which assigns
+    // unconditionally and gates only notification. Task 9 needs this primitive
+    // to be a drop-in for that field slot.
+    const write = (next) => {
+        const changed = !equals(current, next);
+        current = next;
+        if (changed) dep.trigger();
+    };
+
+    // peek() and set() are closures, not methods: `set(next) { this.value = next }`
+    // throws a bare TypeError when destructured or passed as a callback, which is
+    // ordinary usage of a signal-style API.
     return {
         get value() {
             dep.track();
@@ -584,20 +657,14 @@ export function observable(initial, options = {}) {
         },
 
         set value(next) {
-            if (equals(current, next)) return;
-            current = next;
-            dep.trigger();
+            write(next);
         },
 
         /** Read without registering a dependency. */
-        peek() {
-            return current;
-        },
+        peek: () => current,
 
         /** Imperative alias for assigning `.value`. */
-        set(next) {
-            this.value = next;
-        }
+        set: (next) => write(next)
     };
 }
 ```
@@ -692,10 +759,31 @@ describe('observableArray', () => {
         expect(runs).toBe(2);
     });
 
+    // CORRECTED: as originally written this asserted only that removeAll empties.
+    // No effect, no run count — half the name was untested.
     it('removeAll() empties and notifies', async () => {
         const items = observableArray([1, 2, 3]);
+        let runs = 0;
+        effect(() => { items.value; runs++; });
+
         items.removeAll();
+        await tick();
         expect(items.value).toEqual([]);
+        expect(runs).toBe(2);
+    });
+
+    // ADDED: the only test that pins the decided design. The seven-mutation test
+    // above cannot — every one of those mutations genuinely changes the contents,
+    // so a copy-and-compare implementation passes it identically. Only a no-op
+    // mutation distinguishes "notifies unconditionally" from "notifies on change".
+    it('notifies even when a mutation changes nothing', async () => {
+        const items = observableArray([1, 2, 3]);
+        let runs = 0;
+        effect(() => { items.value; runs++; });
+
+        items.splice(0, 0);          // removes nothing, inserts nothing
+        await tick();
+        expect(runs).toBe(2);        // notified anyway — the accepted cost
     });
 
     it('replacing value wholesale notifies', async () => {
@@ -751,39 +839,60 @@ const MUTATORS = ['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'
  * @returns {Object}
  */
 export function observableArray(initial = [], options = {}) {
-    const inner = observable(Array.isArray(initial) ? initial : [], options);
+    const equals = options.equals || isEqual;
+    const dep = new Dep();
+    let current = Array.isArray(initial) ? initial : [];
 
     const api = {
-        get value() { return inner.value; },
-        set value(next) { inner.value = Array.isArray(next) ? next : []; },
+        get value() { dep.track(); return current; },
 
-        peek() { return inner.peek(); },
-        set(next) { this.value = next; },
+        // Wholesale replacement is gated, exactly like a scalar observable:
+        // assign always, notify only on a real difference.
+        set value(next) {
+            const arr = Array.isArray(next) ? next : [];
+            const changed = !equals(current, arr);
+            current = arr;
+            if (changed) dep.trigger();
+        },
 
-        get length() { return inner.value.length; },
+        peek: () => current,
+        set: (next) => { api.value = next; },
+
+        // Tracked: a computation reading .length depends on the array just as
+        // surely as one reading .value. An untracked length would be a trap.
+        get length() { dep.track(); return current.length; },
 
         /** Remove every occurrence of a value. */
         remove(item) {
-            const next = inner.peek().filter(x => x !== item);
-            inner.value = next;
-            return this;
+            current = current.filter(x => x !== item);
+            dep.trigger();
+            return api;
         },
 
         /** Empty the array. */
         removeAll() {
-            inner.value = [];
-            return this;
+            current = [];
+            dep.trigger();
+            return api;
         }
     };
 
-    // In-place mutators: run against the live array, then notify unconditionally.
-    // The equality gate cannot see an in-place change, so we bypass it by
-    // assigning a fresh array reference.
+    // In-place mutators notify UNCONDITIONALLY, bypassing the equality gate.
+    //
+    // They must: a mutation happens in place, so `current` is already the new
+    // value by the time we could compare, and any copy of it is deep-equal.
+    // The gate would swallow every push. (The original plan assigned
+    // `arr.slice()` and claimed "new reference → always notifies" — false, since
+    // the gate is isEqual, not reference identity.)
+    //
+    // The cost is a spurious notification from a no-op sort() or splice(0, 0).
+    // The gain is that this trigger point knows *which* mutation ran, which is
+    // where M4's keyed reconciler attaches patch information to turn a push into
+    // one DOM insert rather than a full diff (spec §6).
     for (const name of MUTATORS) {
-        api[name] = function (...args) {
-            const arr = inner.peek();
-            const result = Array.prototype[name].apply(arr, args);
-            inner.value = arr.slice();   // new reference → always notifies
+        api[name] = (...args) => {
+            const result = Array.prototype[name].apply(current, args);
+            dep.trigger();
             return result;
         };
     }
@@ -905,8 +1014,9 @@ Expected: `dist/domma-reactive.min.js` and `dist/domma-reactive.esm.js` both pre
 - [ ] **Step 7: Run the whole suite**
 
 Run: `cd /home/darryl/src/js/domma-reactive && npx vitest run`
-Expected: `Tests  31 passed (31)` — 8 equal + 12 graph + 8 observable + 9 array + 2 index, minus
-overlap. Accept whatever the true total is; the requirement is **0 failures**.
+Expected as executed: **74** — 15 equal + 27 graph + 15 observable + 15 array + 2 index. (The
+original estimate of 31 predated the coverage the mutation testing showed was missing.) Accept
+whatever the true total is; the requirement is **0 failures**.
 
 - [ ] **Step 8: Commit**
 
@@ -1025,7 +1135,8 @@ move. `models.test.js` and `model-binding.test.js` in particular must pass untou
 ```bash
 cd /home/darryl/src/js/domma && npx vitest run 2>&1 | tail -3
 ```
-Expected: `Tests  435 passed | 3 skipped (438)`. Record this number; it must not drop.
+Expected: **`Tests  437 passed | 3 skipped (440)`** — Task 3 added two tests pinning the no-op-write
+gate this task re-derives by hand. Record this number; it must not drop.
 
 - [ ] **Step 2: Replace the imports**
 
@@ -1226,7 +1337,7 @@ investigate rather than editing the test.
 - [ ] **Step 11: Run the full suite**
 
 Run: `cd /home/darryl/src/js/domma && npx vitest run 2>&1 | tail -3`
-Expected: `Tests  435 passed | 3 skipped (438)` — identical to Step 1.
+Expected: `Tests  437 passed | 3 skipped (440)` — identical to Step 1.
 
 - [ ] **Step 12: Commit**
 
@@ -1278,15 +1389,21 @@ Expected: `clean` (only `src/reactive.js` and `src/reactive.test.js` themselves 
 cd /home/darryl/src/js/domma && git rm src/reactive.js src/reactive.test.js
 ```
 
-Their coverage now lives in `domma-reactive/src/graph.test.js`. The three Model-specific tests that
-were in `reactive.test.js` are already covered by `models.test.js` and `model-binding.test.js` — if
-any is not, port it into `models.test.js` before deleting.
+Their coverage now lives in `domma-reactive/src/graph.test.js`. **Do not assume** the Model-specific
+tests are already covered by `models.test.js` and `model-binding.test.js` — check each, and port any
+that is not. Task 3 found this is a real risk: `does not notify when a write sets an equal value` had
+no equivalent anywhere in Domma and was ported then.
+
+Specifically, `destroying a model detaches its dependents` is currently the **only** coverage
+anywhere for the Model-level teardown path, which Task 9 Step 9 rewrites (`_deps.clear()` becomes
+`_fields.clear()`). Port it into `models.test.js` before deleting the file, and verify the port
+catches a regression — gut `destroy()` and confirm it fails.
 
 - [ ] **Step 4: Run the full suite**
 
 Run: `cd /home/darryl/src/js/domma && npx vitest run 2>&1 | tail -3`
-Expected: `Tests  420 passed | 3 skipped (423)` — 435 minus the 15 reactive tests that moved to the
-package. **Zero failures** is the requirement.
+Expected: **`Tests  422 passed | 3 skipped (425)`** — 437 minus the 15 reactive tests that moved to
+the package. **Zero failures** is the requirement.
 
 - [ ] **Step 5: Commit**
 
