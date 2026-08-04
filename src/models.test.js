@@ -94,6 +94,125 @@ describe('Domma.models - Models Module Tests', () => {
     expect(onChangeSpy).toHaveBeenCalledTimes(1);
   });
 
+  it('Models - Date fields follow utils.isEqual, not domma-reactive\'s comparator', () => {
+    // Domma's utils.isEqual reports ANY two Date instances as equal: it walks
+    // own enumerable keys, and a Date has none. Replacing a Date with a
+    // completely different Date is therefore not seen as a change — neither by
+    // onChange nor by the observable backing the field, because the observables
+    // are created with {equals: utils.isEqual}.
+    //
+    // This is v0.30.1 behaviour, PINNED DELIBERATELY. It is a known latent bug:
+    // domma-reactive's own isEqual compares Dates by getTime() and would fire
+    // here. Do not "fix" this test to match the package — doing so changes
+    // Domma's change-detection semantics for every Date-valued field in every
+    // model, and that is a decision to take on purpose, not in passing.
+    const onChangeSpy = vi.fn();
+    const Event = Domma.models.create({
+      at: {type: 'date'}
+    }, {at: new Date('2020-01-01T00:00:00Z')});
+
+    const runs = [];
+    const stop = Domma.models.effect(() => runs.push(Event.get('at')));
+    expect(runs).toHaveLength(1);
+
+    Event.onChange(onChangeSpy);
+    Event.set('at', new Date('2031-06-30T12:00:00Z'));   // a genuinely different instant
+    Domma.models.flush();
+
+    expect(onChangeSpy).not.toHaveBeenCalled();          // no synchronous notification
+    expect(runs).toHaveLength(1);                        // and no reactive notification
+
+    // Guards against a vacuous assertion: utils.isEqual DOES separate a Date
+    // from null, so a real change still propagates down both paths.
+    Event.set('at', null);
+    Domma.models.flush();
+    expect(onChangeSpy).toHaveBeenCalledTimes(1);
+    expect(runs).toHaveLength(2);
+
+    stop();
+  });
+
+  it('Models - validate() does not link the model into a running computation', () => {
+    // validate() calls _snapshot() outside untracked(), so _snapshot() must read
+    // through peek(). If it read through .value instead, every validate() call
+    // inside a computed or effect would silently subscribe that computation to
+    // every field on the model.
+    const User = Domma.models.create({
+      tick: {type: 'number'},
+      name: {type: 'string'},
+      age: {type: 'number'}
+    }, {tick: 0, name: 'Alice', age: 30});
+
+    const body = vi.fn(() => {
+      User.get('tick');      // the effect's one intended dependency
+      User.validate();
+    });
+
+    const stop = Domma.models.effect(body);
+    expect(body).toHaveBeenCalledTimes(1);
+
+    User.set('name', 'Bob');           // never read directly by the effect
+    User.set('age', 31);
+    Domma.models.flush();
+    expect(body).toHaveBeenCalledTimes(1);
+
+    // Guard: the effect is genuinely live, it simply is not subscribed to the
+    // fields validate() walked.
+    User.set('tick', 1);
+    Domma.models.flush();
+    expect(body).toHaveBeenCalledTimes(2);
+
+    stop();
+  });
+
+  it('Models - toJSON() does not link the model into a running computation', () => {
+    // Serialisation is not a dependency. component-factory relies on this: a
+    // render effect that serialises the model must not thereby subscribe to
+    // every field it never displays.
+    const User = Domma.models.create({
+      tick: {type: 'number'},
+      name: {type: 'string'},
+      age: {type: 'number'}
+    }, {tick: 0, name: 'Alice', age: 30});
+
+    const body = vi.fn(() => {
+      User.get('tick');
+      User.toJSON();
+    });
+
+    const stop = Domma.models.effect(body);
+    expect(body).toHaveBeenCalledTimes(1);
+
+    User.set('name', 'Bob');
+    User.set('age', 31);
+    Domma.models.flush();
+    expect(body).toHaveBeenCalledTimes(1);
+
+    User.set('tick', 1);               // guard against a vacuous assertion
+    Domma.models.flush();
+    expect(body).toHaveBeenCalledTimes(2);
+
+    stop();
+  });
+
+  it('Models - tracked() view can be spread', () => {
+    // component-factory exposes the tracked proxy as `this.data`, and spreading
+    // it is ordinary usage. A proxy with an ownKeys trap but no matching
+    // getOwnPropertyDescriptor trap throws on spread, so both are required.
+    const User = Domma.models.create({
+      name: {type: 'string'},
+      age: {type: 'number'}
+    }, {name: 'Alice', age: 30});
+
+    const state = User.tracked();
+
+    expect({...state}).toEqual({name: 'Alice', age: 30});
+    expect(Object.keys(state)).toEqual(['name', 'age']);
+
+    User.set('age', 31);
+    expect({...state}).toEqual({name: 'Alice', age: 31});
+  });
+
   it('Models - validation required should throw error when setting invalid value', () => {
     const User = Domma.models.create({
       name: {type: 'string', required: true}
