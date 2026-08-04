@@ -127,6 +127,8 @@ Accessed via `Domma.models` or `M`:
 - **Model Factory**: `create(blueprint, initialData, options)` returns a Model instance
 - **Model Instance**: `get()`, `set()`, `toJSON()`, `validate()`, `onChange()`, `offChange()`, `reset()`
 - **Persistence**: `save()`, `load()`, `clearStorage()`, `isPersisted()`, `getPersistKey()`
+- **Observables**: `M.observable(value)`, `M.observableArray([])` — single reactive values, the primitive
+  beneath Models. Also published standalone as `domma-reactive`.
 - **Reactivity**: `M.computed(fn)`, `M.effect(fn)`, `M.untracked(fn)`, `M.flush()`, `model.tracked()` — dependency
   tracking with a batched microtask flush. See [docs/Reactivity.md](../docs/Reactivity.md)
 - **DOM Binding**: `M.bind(model, field, selector, options)`, `M.unbind()`

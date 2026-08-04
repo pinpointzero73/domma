@@ -298,6 +298,43 @@ describe('Domma.models - Models Module Tests', () => {
     stop();
   });
 
+  it('Models - M.observable holds a value and is tracked', () => {
+    const count = Domma.models.observable(2);
+    expect(count.value).toBe(2);
+
+    const doubled = Domma.models.computed(() => count.value * 2);
+    expect(doubled.get()).toBe(4);
+
+    count.value = 5;
+    expect(doubled.get()).toBe(10);
+  });
+
+  it('Models - M.observable peek() does not register a dependency', () => {
+    const v = Domma.models.observable(1);
+    const body = vi.fn(() => v.peek());
+    const stop = Domma.models.effect(body);
+
+    v.value = 2;
+    Domma.models.flush();
+    expect(body).toHaveBeenCalledTimes(1);
+
+    stop();
+  });
+
+  it('Models - M.observableArray notifies on push', () => {
+    const items = Domma.models.observableArray([]);
+    const body = vi.fn(() => items.value.length);
+    const stop = Domma.models.effect(body);
+    expect(body).toHaveBeenCalledTimes(1);
+
+    items.push('a');
+    Domma.models.flush();
+    expect(body).toHaveBeenCalledTimes(2);
+    expect(items.value).toEqual(['a']);
+
+    stop();
+  });
+
   it('Models - pub/sub subscribe and publish', () => {
     const subscriberSpy = vi.fn();
     Domma.models.subscribe('test-event', subscriberSpy);

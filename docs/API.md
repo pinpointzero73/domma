@@ -2835,6 +2835,57 @@ on it. Re-runs are batched into a single microtask flush.
 **See [Reactivity.md](./Reactivity.md) for the full guide**, including propagation policy, rules and limits, and
 compatibility notes.
 
+### `M.observable(initial, options?)`
+
+A single reactive value — the primitive beneath Models. Use `M.create()` when you want a schema,
+validation and persistence; use an observable when you want one tracked value and nothing else.
+
+```javascript
+const count = M.observable(0);
+const total = M.computed(() => count.value * 10);
+
+count.value = 3;
+total.get();          // 30
+count.peek();         // 3 — read without registering a dependency
+count.set(4);         // imperative alias for assigning .value
+```
+
+| Member | Description |
+|---|---|
+| `value` | Read (tracked) and write. Assigning notifies only on a real change. |
+| `peek()` | Current value **without** registering a dependency. |
+| `set(next)` | Imperative alias for assigning `.value`. |
+
+**Options:** `equals` — the change gate. Defaults to `domma-reactive`'s deep equality.
+
+### `M.observableArray(initial?, options?)`
+
+The array form. In-place mutators notify unconditionally, because an in-place mutation leaves the
+array deep-equal to any copy of it and the equality gate cannot see it.
+
+```javascript
+const items = M.observableArray([]);
+
+M.effect(() => console.log(items.length));
+items.push('a');      // effect re-runs on the next microtask
+items.remove('a');
+```
+
+| Member | Description |
+|---|---|
+| `value` | The underlying array — tracked on read, gated on wholesale assignment. |
+| `length` | Tracked item count. |
+| `peek()` | The live array, **without** registering a dependency. |
+| `set(next)` | Imperative alias for assigning `.value`. |
+| `push`, `pop`, `shift`, `unshift`, `splice`, `sort`, `reverse`, `fill`, `copyWithin` | Native behaviour and return value, then notify. |
+| `remove(item)` | Remove every occurrence, in place. Notifies even when nothing matched. |
+| `removeAll()` | Empty the array, in place. |
+
+**Options:** the same as `M.observable()`.
+
+Both are also published standalone as [`domma-reactive`](https://www.npmjs.com/package/domma-reactive),
+where they are bare `observable()` / `observableArray()` imports.
+
 ### `M.computed(fn, options?)`
 
 Creates a lazily-evaluated derived value. The body does not run until something reads it, and the cached value is

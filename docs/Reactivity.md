@@ -4,7 +4,8 @@ Domma tracks which fields a derivation actually reads, so a write re-runs exactl
 nothing else.
 
 The primitives live in the [`domma-reactive`](https://www.npmjs.com/package/domma-reactive) package and are exposed on
-the models namespace as `M.computed()`, `M.effect()`, `M.untracked()` and `M.flush()`.
+the models namespace as `M.observable()`, `M.observableArray()`, `M.computed()`, `M.effect()`,
+`M.untracked()` and `M.flush()`.
 
 ---
 
@@ -29,6 +30,48 @@ dependency actually changes.
 
 **Batching.** Writes never recompute anything synchronously. They mark dependents dirty and schedule a single microtask
 flush, so a burst of writes collapses into one propagation pass — and, in components, one render.
+
+---
+
+## Observables
+
+`M.observable(initial)` is a single reactive value — the primitive beneath Models.
+Use `M.create()` when you want a schema, validation and persistence; use an observable
+when you want one tracked value and nothing else.
+
+```javascript
+const price = M.observable(10);
+const qty   = M.observable(3);
+const total = M.computed(() => price.value * qty.value);
+
+M.effect(() => console.log('total', total.get()));
+qty.value = 4;   // effect re-runs on the next microtask
+```
+
+| Member | Description |
+|---|---|
+| `value` | Read (tracked) and write. Assigning notifies only if the comparator saw a change. |
+| `peek()` | Read **without** registering a dependency. |
+| `set(next)` | Imperative alias for assigning `.value`. |
+
+`M.observableArray()` is the array form. Its in-place mutators — `push`, `pop`, `shift`,
+`unshift`, `splice`, `sort`, `reverse`, `fill`, `copyWithin`, plus Domma's own `remove(item)`
+and `removeAll()` — notify unconditionally, because an in-place mutation leaves the array
+deep-equal to any copy of it and the equality gate cannot see it. Wholesale assignment to
+`.value` is gated, exactly as `observable()` is. It also exposes a tracked `length`.
+
+The initial array, and any array assigned wholesale, is copied rather than adopted, so a push
+through your original reference cannot desynchronise the graph. Take `peek()` if you genuinely
+want the live array.
+
+Both default to `domma-reactive`'s deep equality, which differs from `utils.isEqual` for NaN,
+Dates, class instances, Map/Set/RegExp and typed arrays. Pass `{equals}` if you need Domma's
+exact semantics — note that `_.isEqual` must be wrapped (`(a, b) => _.isEqual(a, b)`), as it
+recurses through its receiver and throws if handed over bare.
+
+Both are also published standalone as [`domma-reactive`](https://www.npmjs.com/package/domma-reactive),
+where they are bare `observable()` / `observableArray()` imports. Reactivity remains innate
+to Domma — the package is an additional way in, not a relocation.
 
 ---
 

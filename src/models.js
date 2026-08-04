@@ -7,6 +7,7 @@ import {utils} from './utils.js';
 import {storage} from './storage.js';
 import {
     observable,
+    observableArray,
     computed as createComputed,
     effect as createEffect,
     untracked as runUntracked,
@@ -722,6 +723,46 @@ export const models = {
     // ============================================
     // Dependency-Tracked Reactivity
     // ============================================
+
+    /**
+     * A single reactive value. The primitive beneath Models — use `create()`
+     * when you want a schema, validation and persistence; use this when you
+     * want one tracked value and nothing else.
+     *
+     *   const count = M.observable(0);
+     *   const total = M.computed(() => count.value * 10);
+     *   count.value = 3;   // total.get() → 30
+     *
+     * Also published standalone as `domma-reactive`, where the same function
+     * is a bare `observable()` import.
+     *
+     * @param {*} initial
+     * @param {Object}   [options]
+     * @param {Function} [options.equals] Change gate. Defaults to
+     *   domma-reactive's own deep equality, which differs from `utils.isEqual`
+     *   for NaN, Dates, class instances, Map/Set/RegExp and typed arrays. Pass
+     *   your own comparator if you need Domma's exact semantics.
+     * @returns {{value: *, peek: Function, set: Function}}
+     */
+    observable,
+
+    /**
+     * A reactive array whose in-place mutators notify.
+     *
+     *   const items = M.observableArray([]);
+     *   items.push('a');   // effects reading items.value re-run
+     *
+     * `push`, `pop`, `shift`, `unshift`, `splice`, `sort`, `reverse`, `fill`
+     * and `copyWithin` notify unconditionally — an in-place mutation leaves the
+     * array deep-equal to any copy of it, so the equality gate cannot see it.
+     * `remove(item)` and `removeAll()` follow the same rule. Wholesale
+     * assignment to `.value` is gated, exactly as `observable()` is.
+     *
+     * @param {Array}  [initial=[]]
+     * @param {Object} [options] Same options as observable()
+     * @returns {Object}
+     */
+    observableArray,
 
     /**
      * Create a lazily-evaluated derived value that tracks whatever it reads.

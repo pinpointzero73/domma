@@ -429,6 +429,8 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - Pub/Sub: `subscribe()`, `publish()`, `unsubscribe()`, `once()`
 - Model: `create()`, `get()`, `set()`, `toJSON()`, `validate()`, `onChange()`, `reset()`
 - Persistence: `save()`, `load()`, `clearStorage()`, `isPersisted()`
+- Observables: `M.observable(value)`, `M.observableArray([])` — single reactive values, the primitive
+  beneath Models. Also published standalone as `domma-reactive`.
 - Reactivity: `M.computed()`, `M.effect()`, `M.untracked()`, `M.flush()`, `model.tracked()` — dependency tracking,
   batched microtask flush. See [docs/Reactivity.md](./docs/Reactivity.md)
 - DOM Binding: `M.bind()`, `M.unbind()` (two-way binding)

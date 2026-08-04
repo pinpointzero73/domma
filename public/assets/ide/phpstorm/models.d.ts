@@ -48,6 +48,66 @@ export interface BindingOptions {
     twoWay?: boolean;
 }
 
+export interface ObservableOptions<T = any> {
+    /** Change gate. Defaults to domma-reactive's deep equality. */
+    equals?: (a: T, b: T) => boolean;
+}
+
+/**
+ * A single reactive value — the primitive beneath Models.
+ */
+export interface Observable<T = any> {
+    /** Read (tracked) and write. Assigning notifies only on a real change. */
+    value: T;
+
+    /** Read without registering a dependency. */
+    peek(): T;
+
+    /** Imperative alias for assigning `.value`. */
+    set(next: T): void;
+}
+
+/**
+ * A reactive array whose in-place mutators notify unconditionally.
+ */
+export interface ObservableArray<T = any> {
+    /** The underlying array — tracked on read, gated on wholesale assignment. */
+    value: T[];
+
+    /** Tracked item count. */
+    readonly length: number;
+
+    /** The live array, without registering a dependency. */
+    peek(): T[];
+
+    /** Imperative alias for assigning `.value`. */
+    set(next: T[]): void;
+
+    push(...items: T[]): number;
+
+    pop(): T | undefined;
+
+    shift(): T | undefined;
+
+    unshift(...items: T[]): number;
+
+    splice(start: number, deleteCount?: number, ...items: T[]): T[];
+
+    sort(compare?: (a: T, b: T) => number): T[];
+
+    reverse(): T[];
+
+    fill(value: T, start?: number, end?: number): T[];
+
+    copyWithin(target: number, start: number, end?: number): T[];
+
+    /** Remove every occurrence, in place. Notifies even when nothing matched. */
+    remove(item: T): ObservableArray<T>;
+
+    /** Empty the array, in place. */
+    removeAll(): ObservableArray<T>;
+}
+
 /**
  * A lazily-evaluated, dependency-tracked derived value.
  */
@@ -210,6 +270,17 @@ export interface Models {
     // ============================================
     // Dependency-Tracked Reactivity
     // ============================================
+
+    /**
+     * A single reactive value — the primitive beneath Models. Use `create()`
+     * for a schema, validation and persistence; use this for one tracked value.
+     */
+    observable<T = any>(initial: T, options?: ObservableOptions<T>): Observable<T>;
+
+    /**
+     * A reactive array whose in-place mutators notify unconditionally.
+     */
+    observableArray<T = any>(initial?: T[], options?: ObservableOptions<T[]>): ObservableArray<T>;
 
     /**
      * Create a lazily-evaluated derived value that tracks whatever it reads.
