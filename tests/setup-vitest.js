@@ -1,5 +1,6 @@
 // tests/setup-vitest.js
 import {JSDOM} from 'jsdom';
+import createDOMPurify from 'dompurify';
 import {readFileSync} from 'fs';
 import {execSync} from 'child_process';
 import {afterEach, beforeAll, beforeEach} from 'vitest';
@@ -73,6 +74,14 @@ const setupJSDOM = () => {
   global.KeyboardEvent = globalThis.window.KeyboardEvent; // Added for keyboard tests
   global.customElements = globalThis.window.customElements;
 
+  // Domma's sanitiser ESCAPES THE ENTIRE STRING when DOMPurify is absent
+  // (see sanitize.js). Without it, .html() and every other sanitised write
+  // silently degrades, so tests would assert the fallback rather than the
+  // behaviour Domma actually ships — every documented page loads DOMPurify.
+  if (!globalThis.window.DOMPurify) {
+    globalThis.window.DOMPurify = createDOMPurify(globalThis.window);
+  }
+
   document.body.replaceChildren();
   const fixture = document.createRange().createContextualFragment(FIXTURE_HTML);
   document.body.appendChild(fixture);
@@ -122,7 +131,26 @@ global.fetch = async (url, options) => {
     return {
       ok: false,
       status: 404,
+      statusText: 'Not Found',
       json: async () => ({error: 'Not Found'})
+    };
+  }
+  // Server supplies a `message` — it takes precedence over `error`
+  if (url === '/api/error-message') {
+    return {
+      ok: false,
+      status: 422,
+      statusText: 'Unprocessable Entity',
+      json: async () => ({message: 'Validation failed', error: 'should be ignored'})
+    };
+  }
+  // Non-JSON error body — http.js falls back to status + statusText
+  if (url === '/api/error-plain') {
+    return {
+      ok: false,
+      status: 500,
+      statusText: 'Internal Server Error',
+      json: async () => { throw new SyntaxError('Unexpected token < in JSON'); }
     };
   }
   // Mock external requests as well, for example to public/dist for bundle-builder tests

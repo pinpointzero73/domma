@@ -79,6 +79,7 @@
         "@rollup/plugin-terser": "^0.4.4",
         "@vitest/coverage-v8": "^4.0.16",
         "cypress": "^15.8.1",
+        "dompurify": "^3.4.13",
         "dotenv": "^17.2.3",
         "jsdom": "^24.1.0",
         "live-server": "^1.2.0",
