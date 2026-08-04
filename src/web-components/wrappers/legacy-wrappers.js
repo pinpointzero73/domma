@@ -31,17 +31,30 @@ function toKebabCase(str) {
  * Option-derived attributes already set on the web component win; only
  * `class` is merged rather than overwritten.
  *
+ * `baseClass` is the legacy class the component replaces (.modal, .card,
+ * .badge) and is deliberately NOT copied. Those rules in elements.css describe
+ * the hand-written, JS-free version of the component and are driven by class
+ * toggles the Web Component never performs — `.modal` sets
+ * `opacity: 0; pointer-events: none`, undone only by `.modal.active`, while the
+ * component shows itself via `:host([visible])`. Copying it onto the host lets
+ * outer-document CSS override the shadow styling and renders the component
+ * invisible. Author classes are still carried across.
+ *
  * @param {Element} original
  * @param {Element} webComponent
+ * @param {string} [baseClass] Legacy class to skip when merging
  */
-function preserveIdentity(original, webComponent) {
+function preserveIdentity(original, webComponent, baseClass) {
     if (!original || !webComponent) return;
 
     for (const attr of Array.from(original.attributes)) {
         const name = attr.name;
 
         if (name === 'class') {
-            for (const cls of original.classList) webComponent.classList.add(cls);
+            for (const cls of original.classList) {
+                if (cls === baseClass) continue;
+                webComponent.classList.add(cls);
+            }
             continue;
         }
 
@@ -92,7 +105,7 @@ export function createBadgeWrapper(selector, options = {}) {
     }
 
     // Replace original element with Web Component
-    preserveIdentity(element, webComponent);
+    preserveIdentity(element, webComponent, 'badge');
     element.replaceWith(webComponent);
 
     // Store reference for retrieval (compatibility with existing code)
@@ -736,7 +749,7 @@ export function createModalWrapper(selector, options = {}) {
     }
 
     // Replace original element
-    preserveIdentity(element, webComponent);
+    preserveIdentity(element, webComponent, 'modal');
     element.replaceWith(webComponent);
 
     // Return API-compatible object
@@ -1045,7 +1058,7 @@ export function createCardWrapper(selector, options = {}) {
     });
 
     // Replace original element
-    preserveIdentity(element, webComponent);
+    preserveIdentity(element, webComponent, 'card');
     element.replaceWith(webComponent);
 
     // Return API-compatible object
