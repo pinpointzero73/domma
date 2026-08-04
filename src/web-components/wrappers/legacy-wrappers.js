@@ -970,13 +970,22 @@ export function createCardWrapper(selector, options = {}) {
     // Create Web Component wrapper
     const webComponent = document.createElement('domma-card');
 
+    // Hoisted so callback closures can hand back the object this factory
+    // returns. Listeners only ever run after the assignment at the end.
+    let api = null;
+
     // Transfer options as attributes
     for (const [key, value] of Object.entries(options)) {
         if (typeof value === 'function') {
-            // Handle callbacks via events
+            // Handle callbacks via events.
+            //
+            // Callbacks receive the card instance, not e.detail. The component
+            // emits with the base class's default detail of {}, and native
+            // events (click) put the click COUNT in detail — so forwarding
+            // e.detail handed callers an empty object or the number 1.
             const eventName = key.replace(/^on/, '').toLowerCase();
-            webComponent.addEventListener(eventName, (e) => {
-                value(e.detail || webComponent);
+            webComponent.addEventListener(eventName, () => {
+                value(api || webComponent);
             });
         } else if (typeof value === 'boolean') {
             if (value) {
@@ -1040,7 +1049,7 @@ export function createCardWrapper(selector, options = {}) {
     element.replaceWith(webComponent);
 
     // Return API-compatible object
-    return {
+    api = {
         element: webComponent,
         options: webComponent._options,
 
@@ -1091,4 +1100,6 @@ export function createCardWrapper(selector, options = {}) {
             webComponent.destroy();
         }
     };
+
+    return api;
 }
