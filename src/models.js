@@ -6,13 +6,28 @@
 import {utils} from './utils.js';
 import {storage} from './storage.js';
 import {
-    DepMap,
-    trackingProxy,
+    observable,
     computed as createComputed,
     effect as createEffect,
     untracked as runUntracked,
     flushSync as flushReactive
-} from './reactive.js';
+} from 'domma-reactive';
+
+/**
+ * Domma's deep-equality check, bound to its receiver.
+ *
+ * utils.isEqual recurses through `this.isEqual`, so handing the bare method to
+ * an observable as its comparator would lose the receiver and throw on any
+ * nested object or array. Every equality decision in this module goes through
+ * this wrapper so the model's change-detection semantics stay exactly those of
+ * utils.isEqual — deliberately NOT domma-reactive's own isEqual, which differs
+ * for NaN, Dates, class instances, Map/Set/RegExp and typed arrays.
+ *
+ * @param {*} a
+ * @param {*} b
+ * @returns {boolean}
+ */
+const isEqual = (a, b) => utils.isEqual(a, b);
 
 /**
  * Reactive Model Class
@@ -20,16 +35,20 @@ import {
 class Model {
     constructor(schema, data = {}, options = {}) {
         this._schema = schema;
-        this._data = {};
         this._initialData = {};
         this._bindings = new Map();
         this._changeCallbacks = new Set();
         this._fieldCallbacks = new Map();
 
-        // Dependency-tracking slots — one Dep per field, created on first read.
-        // Reads via get()/tracked() register against the running computation;
-        // writes via _setField() trigger it.
-        this._deps = new DepMap();
+        // One observable per field, created up front from the schema and on
+        // first write for undeclared fields. Reads via get()/tracked() register
+        // against the running computation; writes via _setField() trigger it.
+        //
+        // utils.isEqual is passed as the equality gate so change detection stays
+        // byte-identical to the previous DepMap implementation, which compared
+        // with utils.isEqual before notifying.
+        /** @type {Map<string, {value: *, peek: Function, set: Function}>} */
+        this._fields = new Map();
         this._trackedView = null;
 
         // Persistence configuration
@@ -40,8 +59,9 @@ class Model {
         for (const field in schema) {
             const fieldDef = schema[field];
             const defaultVal = fieldDef.default !== undefined ? fieldDef.default : null;
-            this._data[field] = data[field] !== undefined ? data[field] : defaultVal;
-            this._initialData[field] = this._data[field];
+            const initial = data[field] !== undefined ? data[field] : defaultVal;
+            this._fields.set(field, observable(initial, {equals: isEqual}));
+            this._initialData[field] = initial;
         }
 
         // Load from storage if persist key provided (overrides initial data)
@@ -63,14 +83,48 @@ class Model {
      */
     get(field) {
         if (field) {
-            this._deps.for(field).track();
-            return this._data[field];
+            const obs = this._fields.get(field);
+            return obs ? obs.value : undefined;
         }
 
-        for (const key of Object.keys(this._data)) {
-            this._deps.for(key).track();
+        // No argument: tracks every field, as before
+        const out = {};
+        for (const [key, obs] of this._fields) out[key] = obs.value;
+        return out;
+    }
+
+    /**
+     * Get (creating if absent) the observable backing a field.
+     *
+     * Fields not declared in the schema are created on first write, matching
+     * the previous behaviour where _data accepted any key.
+     *
+     * @param {string} name
+     * @returns {{value: *, peek: Function, set: Function}}
+     * @private
+     */
+    _field(name) {
+        let obs = this._fields.get(name);
+        if (!obs) {
+            obs = observable(null, {equals: isEqual});
+            this._fields.set(name, obs);
         }
-        return {...this._data};
+        return obs;
+    }
+
+    /**
+     * Plain-object view of every field, read WITHOUT tracking.
+     *
+     * Used by toJSON(), persistence and validation — render-time and
+     * serialisation reads must not register dependencies.
+     *
+     * @returns {Object}
+     * @private
+     */
+    _snapshot() {
+        const out = {};
+        for (const [key, obs] of this._fields) out[key] = obs.peek();
+        return out;
     }
 
     /**
@@ -87,11 +141,39 @@ class Model {
      */
     tracked() {
         if (!this._trackedView) {
-            this._trackedView = trackingProxy(
-                this._data,
-                key => this._deps.for(key),
-                {onSet: (key, value) => this._setField(key, value)}
-            );
+            const self = this;
+            this._trackedView = new Proxy({}, {
+                get(_, key) {
+                    if (typeof key !== 'string') return undefined;
+                    const obs = self._fields.get(key);
+                    return obs ? obs.value : undefined;
+                },
+
+                set(_, key, value) {
+                    if (typeof key === 'string') self._setField(key, value);
+                    return true;
+                },
+
+                // Reading .value rather than consulting the Map keeps `'x' in state`
+                // a tracked read, as it was under trackingProxy — an `in` check
+                // inside a computed stays reactive to that field changing.
+                has(_, key) {
+                    if (typeof key !== 'string') return false;
+                    const obs = self._fields.get(key);
+                    if (!obs) return false;
+                    obs.value;
+                    return true;
+                },
+
+                ownKeys() {
+                    return [...self._fields.keys()];
+                },
+
+                // Required: without it, spreading the proxy ({...state}) throws.
+                getOwnPropertyDescriptor() {
+                    return {enumerable: true, configurable: true};
+                }
+            });
         }
         return this._trackedView;
     }
@@ -109,7 +191,11 @@ class Model {
     }
 
     _setField(field, value) {
-        const oldValue = this._data[field];
+        const obs = this._field(field);
+        // Captured before the write: the observable holds only the new value
+        // afterwards, and oldValue drives both change detection and the
+        // arguments handed to onChange/onFieldChange callbacks.
+        const oldValue = obs.peek();
 
         // Validate if schema exists for field
         if (this._schema[field]) {
@@ -119,16 +205,19 @@ class Model {
             }
         }
 
-        this._data[field] = value;
+        const changed = !isEqual(oldValue, value);
+
+        // The observable applies the same comparator, so this triggers its Dep
+        // only on a real change — queueing dependent computations for the next
+        // microtask flush.
+        obs.value = value;
 
         // Notify if changed
-        if (!utils.isEqual(oldValue, value)) {
-            // Synchronous listeners first — onChange/onFieldChange semantics and
-            // DOM bindings are unchanged. Dependency-tracked computations are
-            // only queued here; they settle on the next microtask flush.
+        if (changed) {
+            // Synchronous listeners — onChange/onFieldChange semantics and DOM
+            // bindings are unchanged.
             this._notifyChange(field, value, oldValue);
             this._updateBindings(field, value);
-            this._deps.trigger(field);
 
             // Auto-save to storage if persistence enabled
             if (this._persistKey && this._autoSave) {
@@ -186,9 +275,10 @@ class Model {
 
     validate() {
         const errors = [];
+        const data = this._snapshot();
 
         for (const field in this._schema) {
-            const validation = this._validateField(field, this._data[field]);
+            const validation = this._validateField(field, data[field]);
             if (!validation.valid) {
                 errors.push({field, error: validation.error});
             }
@@ -201,7 +291,9 @@ class Model {
     }
 
     toJSON() {
-        return {...this._data};
+        // Serialisation is not a dependency: untracked so a computation that
+        // happens to call toJSON() is not linked to every field.
+        return runUntracked(() => this._snapshot());
     }
 
     /**
@@ -310,7 +402,9 @@ class Model {
         this._changeCallbacks.clear();
         this._fieldCallbacks.clear();
         this._bindings.clear();
-        this._deps.clear();
+        // Dropping the observables drops their Deps with them, detaching every
+        // computation that was reading this model.
+        this._fields.clear();
         this._trackedView = null;
     }
 
@@ -368,7 +462,7 @@ class Model {
         if (!this._persistKey) return false;
 
         try {
-            return storage.set(`model:${this._persistKey}`, this._data);
+            return storage.set(`model:${this._persistKey}`, this._snapshot());
         } catch (e) {
             console.warn('Domma Model: Failed to save to storage', e);
             return false;
@@ -390,7 +484,7 @@ class Model {
                 // Merge stored data with current (stored takes precedence)
                 for (const field in stored) {
                     if (this._schema[field] !== undefined) {
-                        this._data[field] = stored[field];
+                        this._field(field).value = stored[field];
                     }
                 }
                 return true;
