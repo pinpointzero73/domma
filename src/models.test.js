@@ -62,6 +62,38 @@ describe('Domma.models - Models Module Tests', () => {
     );
   });
 
+  it('Models - onChange stays silent when a write sets an equal primitive', () => {
+    const onChangeSpy = vi.fn();
+    const User = Domma.models.create({
+      name: {type: 'string'}
+    }, {name: 'Alice'});
+    User.onChange(onChangeSpy);
+
+    User.set('name', 'Alice');           // no-op write
+    expect(onChangeSpy).not.toHaveBeenCalled();
+
+    User.set('name', 'Bob');             // guards against a vacuous assertion
+    expect(onChangeSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('Models - onChange stays silent when a write sets a structurally equal value', () => {
+    // The gate is isEqual, not !==, so a fresh object or array carrying the
+    // same contents must not count as a change.
+    const onChangeSpy = vi.fn();
+    const Settings = Domma.models.create({
+      prefs: {type: 'object'},
+      tags: {type: 'array'}
+    }, {prefs: {theme: 'dark', size: 2}, tags: ['a', 'b']});
+    Settings.onChange(onChangeSpy);
+
+    Settings.set('prefs', {theme: 'dark', size: 2});   // equal, new reference
+    Settings.set('tags', ['a', 'b']);                  // equal, new reference
+    expect(onChangeSpy).not.toHaveBeenCalled();
+
+    Settings.set('prefs', {theme: 'light', size: 2});  // genuinely different
+    expect(onChangeSpy).toHaveBeenCalledTimes(1);
+  });
+
   it('Models - validation required should throw error when setting invalid value', () => {
     const User = Domma.models.create({
       name: {type: 'string', required: true}
