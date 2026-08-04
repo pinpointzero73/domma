@@ -1,3 +1,60 @@
+### v0.31.0 - Reactive Core Extracted (2026-08-04)
+
+**This is an internal restructuring. There is no API change.** Every public method behaves exactly as
+it did in v0.30.1 — `M.create()`, `get`/`set`, validation, persistence, `onChange`, `onFieldChange`,
+`reset`, `destroy`, `toJSON`, `validate`, `model.tracked()`, `M.computed()`, `M.effect()`,
+`M.untracked()` and `M.flush()` are all untouched. Nothing to migrate.
+
+📦 **Reactivity is now a separate package**
+
+*   Domma's dependency-tracking core has been extracted into
+    [`domma-reactive`](https://www.npmjs.com/package/domma-reactive), published separately so it can
+    be used on its own. It provides `observable()`, `observableArray()`, `computed()`, `effect()`,
+    `untracked()` and `flushSync()`, with no dependency on Domma.
+
+*   **You do not need to install it.** Domma takes it as an exact-pinned build-time dependency and
+    Rollup inlines it, so `domma.min.js` remains a single self-contained file. The CDN story is
+    unchanged and consumers install nothing extra.
+
+🔧 **Internal**
+
+*   `Model` no longer stores fields in a plain object with a shared `DepMap`. Each field is now
+    backed by its own observable. Domma's `utils.isEqual` is passed explicitly as the change gate, so
+    change-detection semantics are byte-identical to v0.30.1 — including its existing treatment of
+    Date fields (see Known Issues).
+
+*   `src/reactive.js` has been deleted; its behaviour now lives in the package. `models.js` and
+    `component-factory.js` source their reactivity from `domma-reactive`.
+
+*   Test coverage grew from 435 to 436 tests while the reactive suite moved out to the package. The
+    additions pin contracts that previously had none: that a no-op write does not fire `onChange`,
+    that `toJSON()` and `validate()` do not register dependencies, that the `tracked()` view can be
+    spread, that destroying a model detaches its dependents, and that `onChange` stays synchronous
+    and per-field across a batch `set()`.
+
+*   New `src/examples.test.js` loads the built bundle into jsdom and verifies all five example apps
+    render without console errors, and that the calculator still computes.
+
+⚠️ **Known Issues**
+
+*   **Components whose templates contain no `{{ }}` bindings never fire `onUpdated()`.** Such a
+    component renders once and then stops updating: the model changes and persists correctly, but the
+    DOM is never told, and no error is raised. This affects the todo, notes, contacts and markdown
+    examples, which render their lists imperatively from `onUpdated`.
+
+    This is **not** new in v0.31.0 — it was introduced by the fine-grained binding work in v0.30.0 and
+    is present in v0.30.0 and v0.30.1. It is recorded here because it was found while verifying this
+    release. The cause is that `_wireBindings()` creates one effect per compiled binding and
+    `onUpdated` only fires from within those effects, so zero bindings means zero effects. A fix is
+    planned for the next release.
+
+*   **Date-valued fields do not fire change notifications.** `utils.isEqual` compares any two `Date`
+    instances as equal, because neither has own enumerable keys. This is long-standing v0.30.1
+    behaviour, preserved deliberately here so the extraction changed nothing observable; it is now
+    pinned by a test so that fixing it is a conscious decision rather than an accident.
+
+---
+
 ### v0.30.1 - Wrapper Regression & Card Callbacks (2026-08-04)
 
 🐛 **Bug Fixes**
