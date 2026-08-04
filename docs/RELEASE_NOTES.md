@@ -1,3 +1,81 @@
+### v0.32.0 - Observables, Badges & Readable Buttons (2026-08-04)
+
+✨ **New**
+
+*   **`M.observable()` and `M.observableArray()`.** The reactive primitives beneath Models are now
+    reachable from Domma. Use `M.create()` when you want a schema, validation and persistence; use an
+    observable when you want one tracked value and nothing else.
+
+    ```javascript
+    const price = M.observable(10);
+    const qty   = M.observable(3);
+    const total = M.computed(() => price.value * qty.value);
+
+    M.effect(() => console.log('total', total.get()));
+    qty.value = 4;   // effect re-runs on the next microtask
+    ```
+
+    `M.observableArray()` is the array form; its in-place mutators (`push`, `pop`, `shift`, `unshift`,
+    `splice`, `sort`, `reverse`, `fill`, `copyWithin`, plus `remove` and `removeAll`) notify
+    unconditionally, because an in-place mutation leaves the array deep-equal to any copy of it and the
+    equality gate cannot see it. Both are the same functions published standalone as `domma-reactive`.
+
+    Note their `equals` option defaults to **`domma-reactive`'s** `isEqual`, not Domma's `utils.isEqual`.
+    The two differ for `NaN`, `Date`, class instances, `Map`/`Set`/`RegExp` and typed arrays. To get
+    Domma's semantics, pass it wrapped: `{equals: (a, b) => _.isEqual(a, b)}` — passing `_.isEqual`
+    bare loses its receiver and throws.
+
+🐛 **Bug Fixes**
+
+*   **`onUpdated()` never fired for components whose templates contain no `{{ }}` bindings.** Such a
+    component rendered once and then stopped updating: the model changed and persisted correctly, but
+    the DOM was never told, and nothing was thrown. This affected the todo, notes, contacts and markdown
+    examples, which render their lists imperatively from `onUpdated`. Introduced by the fine-grained
+    binding work in v0.30.0 and present in v0.30.0 and v0.30.1.
+
+    The cause was that `_wireBindings()` creates one effect per compiled binding and `onUpdated` only
+    fired from within those effects, so zero bindings meant zero effects. Components now also carry a
+    watcher effect that tracks the whole model. **Writes made from `onUpdated` must converge** — set a
+    value that will compare equal on the next pass. A value that differs every time (`Date.now()`, a
+    counter) re-triggers the watcher indefinitely, and because it is a microtask chain it locks the page
+    rather than throwing.
+
+*   **Outline buttons could render unreadably.** `.btn-outline` used `background-color: transparent`
+    with a `color-mix()` blend leaning 55% toward `--dm-text`, so its contrast depended on whatever sat
+    behind it and the label could land on top of its own background. It now uses explicit
+    `var(--dm-surface)` and `var(--dm-text)`, both of which every theme redefines. `.btn` also gained a
+    base `color`, so a variant whose own colour declaration fails to resolve inherits something readable.
+
+*   **Eighteen showcase rules set a background that never changed with the theme.** Chips such as
+    `.models-method-item`, `.tables-method-item` and `.utils-method-item` used `var(--dm-gray-100)` —
+    a variable no theme overrides — with no `color` at all, so their labels became unreadable under the
+    dark variant. All now use themed variables with an explicit colour.
+
+*   **`.table-responsive` was used in 14 places and defined nowhere**, so wide tables overflowed instead
+    of scrolling. Added to `elements.css`.
+
+*   **Reactivity showcase** used `.form-control`, which is not a Domma class — the correct classes are
+    `.form-input` and `.form-select`, so nine inputs rendered as unstyled native controls. It also used
+    `.col-md-*`, which does not exist, and omitted `grid.css` entirely.
+
+🔧 **Internal**
+
+*   New tests pin contracts that previously had none: that a component without an `onUpdated` hook does
+    not pay for a watcher, that the hook fires after the flush that ran the binding effects, that it
+    coalesces to once per flush, and that it stops after disconnect.
+
+⚠️ **Known Issues**
+
+*   **`onUpdated` does not fire for fields absent from `data()`**, nor at all for a component that
+    declares no `data()`. Observables are created lazily, so a field that did not exist when the watcher
+    collected its dependencies is not tracked, and stays untracked until some declared field changes.
+    Declare every field in `data()`. Closing this properly needs a structural dependency inside `Model`.
+
+*   **Date-valued model fields do not fire change notifications**, because `utils.isEqual` compares any
+    two `Date` instances as equal. Long-standing behaviour, preserved deliberately, now pinned by a test.
+
+---
+
 ### v0.31.0 - Reactive Core Extracted (2026-08-04)
 
 **This is an internal restructuring. There is no API change.** Every public method behaves exactly as
