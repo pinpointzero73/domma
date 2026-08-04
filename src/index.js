@@ -84,6 +84,11 @@ Domma.update = (selector, changes) => configEngine.update(selector, changes);
 // Configuration retrieval method
 Domma.config = (selector) => configEngine.config(selector);
 
+// Live component instance created by $.setup() for a selector.
+// NOTE: named getComponent, not component — Domma.component() defines a
+// standalone Web Component and must not be shadowed.
+Domma.getComponent = (selector) => configEngine.getComponent(selector);
+
 // Configuration reset/destroy method
 Domma.reset = (selector) => configEngine.reset(selector);
 
