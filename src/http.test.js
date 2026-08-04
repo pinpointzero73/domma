@@ -15,14 +15,21 @@ describe('Domma.http - HTTP Utilities', () => {
     expect(result.received.test).toBe('data');
   });
 
-  it('http.request() error handling should catch HTTP errors', async () => {
-    let errorCaught = false;
-    try {
-      await Domma.http.request('GET', '/api/error');
-    } catch (e) {
-      errorCaught = true;
-      expect(e.message).toBe('HTTP Error: 404');
-    }
-    expect(errorCaught).toBe(true);
+  it('http.request() surfaces the error message from a JSON error body', async () => {
+    // http.js deliberately reports the server's own message rather than a
+    // generic 'HTTP Error: <status>', falling back to status + statusText only
+    // when the body is not JSON.
+    await expect(Domma.http.request('GET', '/api/error', null, {silent: true}))
+      .rejects.toThrow('Not Found');
+  });
+
+  it('http.request() prefers `message` over `error` in the body', async () => {
+    await expect(Domma.http.request('GET', '/api/error-message', null, {silent: true}))
+      .rejects.toThrow('Validation failed');
+  });
+
+  it('http.request() falls back to status and statusText for a non-JSON body', async () => {
+    await expect(Domma.http.request('GET', '/api/error-plain', null, {silent: true}))
+      .rejects.toThrow('HTTP Error: 500 Internal Server Error');
   });
 });

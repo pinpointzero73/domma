@@ -148,11 +148,15 @@ describe('Domma.elements - UI Components', () => {
       `;
       const card = Domma.elements.card('#collapsible-card', {collapsible: true});
 
-      expect(card.element.classList.contains('card-collapsible')).toBe(true);
-      const icon = card.element.querySelector('.card-collapse-icon');
-      expect(icon).not.toBeNull();
-      const contentWrapper = card.element.querySelector('.card-header-content');
-      expect(contentWrapper).not.toBeNull();
+      // Card renders as a <domma-card> Web Component. Collapsible state is a
+      // HOST ATTRIBUTE (its shadow CSS keys off :host([collapsible])), and the
+      // collapse chrome is built inside the SHADOW ROOT — not as light-DOM
+      // classes. The .card-collapsible/.card-collapsed rules in elements.css
+      // serve hand-written, JS-free cards; adding them to the host would make
+      // those rules double-apply to the slotted light-DOM nodes.
+      expect(card.element.hasAttribute('collapsible')).toBe(true);
+      expect(card.element.shadowRoot.querySelector('.card-collapse-icon')).not.toBeNull();
+      expect(card.element.shadowRoot.querySelector('.card-header-content')).not.toBeNull();
     });
 
     it('card() should collapse and expand', async () => {
@@ -172,13 +176,15 @@ describe('Domma.elements - UI Components', () => {
       card.collapse();
       await vi.advanceTimersByTimeAsync(10);
       expect(card.isCollapsed()).toBe(true);
-      expect(card.element.classList.contains('card-collapsed')).toBe(true);
+      // Collapsed state is a host attribute; shadow CSS collapses the body via
+      // :host([collapsed]) .card-body-wrapper
+      expect(card.element.hasAttribute('collapsed')).toBe(true);
 
       // Expand
       card.expand();
       await vi.advanceTimersByTimeAsync(10);
       expect(card.isCollapsed()).toBe(false);
-      expect(card.element.classList.contains('card-collapsed')).toBe(false);
+      expect(card.element.hasAttribute('collapsed')).toBe(false);
     });
 
     it('card() toggle() should switch collapsed state', async () => {
@@ -242,7 +248,7 @@ describe('Domma.elements - UI Components', () => {
       });
 
       expect(card.isCollapsed()).toBe(true);
-      expect(card.element.classList.contains('card-collapsed')).toBe(true);
+      expect(card.element.hasAttribute('collapsed')).toBe(true);
     });
 
     it('card() should persist state to localStorage with element ID', async () => {
@@ -307,7 +313,7 @@ describe('Domma.elements - UI Components', () => {
 
       // Should be collapsed based on localStorage
       expect(card.isCollapsed()).toBe(true);
-      expect(card.element.classList.contains('card-collapsed')).toBe(true);
+      expect(card.element.hasAttribute('collapsed')).toBe(true);
     });
 
     it('card() clicking header should toggle collapse', async () => {
