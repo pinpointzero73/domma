@@ -18,6 +18,7 @@ Domma is a lightweight JavaScript toolkit combining DOM manipulation, HTTP reque
   - [Dimensions](#dimensions)
 - [HTTP Client](#http-client)
 - [JSON Configuration](#json-configuration)
+- [Reactivity](#reactivity)
 - [Utilities Reference](#utilities-reference)
   - [Array Utilities](#array-utilities)
   - [Collection Utilities](#collection-utilities)
@@ -2756,3 +2757,118 @@ All translucency values are CSS variables, making them easy to override per-them
     --dm-translucent-glass-opacity: 0.75;   /* .translucent-glass alpha */
 }
 ```
+
+---
+
+## Reactivity
+
+Domma tracks which fields a derivation actually reads, so a write re-runs exactly the work that depends on it —
+and nothing else. Updates are batched into a single microtask flush.
+
+Full guide: **[Reactivity.md](./Reactivity.md)**. Live demos: **[Reactivity showcase](../public/showcase/models/reactivity.html)**.
+
+### Derived values
+
+`M.computed()` describes a value in terms of others. It is lazy — the body does not run until something reads it —
+and the result is cached until a field it read actually changes.
+
+```javascript
+const cart = M.create({
+    items:    { type: M.types.array,  default: [] },
+    shipping: { type: M.types.number, default: 4.99 }
+});
+
+const subtotal = M.computed(() =>
+    cart.get('items').reduce((sum, item) => sum + item.price, 0)
+);
+
+const total = M.computed(() => subtotal.get() + cart.get('shipping'));
+
+total.get();   // evaluated now
+total.get();   // cached — nothing re-runs
+```
+
+Computeds compose. `total` reading `subtotal` links the two automatically, and a computed shared by several
+readers is evaluated once per flush rather than once per reader.
+
+### Effects
+
+`M.effect()` runs immediately to collect its dependencies, then again whenever any of them change. It returns a
+stop function.
+
+```javascript
+const stop = M.effect(() => {
+    $('#cart-total').text(`£${total.get().toFixed(2)}`);
+});
+
+cart.set('shipping', 0);   // DOM updates on the next microtask
+
+stop();                    // unsubscribe
+```
+
+This replaces hand-wiring a subscription and comparing field names:
+
+```javascript
+// Manual — miss a field name and the total silently goes stale
+cart.onChange(({ field }) => {
+    if (field === 'items' || field === 'shipping') recalculate();
+});
+
+// Tracked — subscribes to exactly what it reads, every run
+M.effect(() => recalculate(cart.get('items'), cart.get('shipping')));
+```
+
+### Batching
+
+Writes never recompute anything synchronously. A burst of writes in the same tick collapses into one pass:
+
+```javascript
+cart.set('items', next);
+cart.set('shipping', 0);
+// → one effect run, one render
+
+M.flush();   // force it to settle now (tests, or reading straight after a write)
+```
+
+### Tracked model views
+
+`model.tracked()` returns a read-tracked, write-through proxy. Reads register dependencies; writes route through
+`set()`, so validation, change notification and persistence all still run.
+
+```javascript
+const state = cart.tracked();
+
+M.effect(() => console.log(state.shipping));
+state.shipping = 2.99;   // validated, notified, persisted
+```
+
+### Components
+
+`Domma.component()` uses tracking automatically — the definition syntax is unchanged. A computed re-evaluates only
+when a field it read changes, and a burst of writes produces one render.
+
+```javascript
+Domma.component('order-summary', {
+    template: '<p>{{label}}</p>',
+    data() { return { items: 1, unitPrice: 25, note: '' }; },
+    computed: {
+        // Writing 'note' costs nothing — it is not read here
+        label() { return `${this.data.items} × £${this.data.unitPrice}`; }
+    }
+});
+```
+
+### Rules
+
+1. **Derivations must be synchronous.** Dependency collection stops at the first `await`. Fetch first, then write
+   the result to the model.
+2. **Return new values, don't mutate old ones.** Propagation is gated on `utils.isEqual`, so a computed that edits
+   and returns the same object reads as unchanged.
+3. **`model.get()` with no argument tracks every field.** Prefer `model.get('field')` inside derivations.
+   `model.toJSON()` is deliberately untracked.
+4. **Props are not tracked** in components; an attribute change triggers a full re-render instead.
+
+### Compatibility
+
+Tracking is additive. `onChange`, `onFieldChange`, `M.bind()`, validation and persistence all behave exactly as
+before — only tracked computations are batched onto the microtask.

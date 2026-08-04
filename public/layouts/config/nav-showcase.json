@@ -102,6 +102,12 @@
           "section": "models"
         },
         {
+          "text": "Reactivity",
+          "url": "showcase/models/reactivity.html",
+          "section": "reactivity",
+          "badge": "New"
+        },
+        {
           "text": "Tables",
           "url": "showcase/tables/index.html",
           "section": "tables"

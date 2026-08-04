@@ -106,6 +106,7 @@ consult that folder's CLAUDE.md for detailed information.
 ### Additional Documentation
 
 - [docs/API.md](./docs/API.md) - Complete API reference
+- [docs/Reactivity.md](./docs/Reactivity.md) - Dependency tracking: `M.computed()`, `M.effect()`, batching rules
 - [docs/DommaDocumentation.md](./docs/DommaDocumentation.md) - Comprehensive user documentation
 - [docs/GettingStarted.md](./docs/GettingStarted.md) - Quick start guide
 - [README.md](./README.md) - Project overview
@@ -212,6 +213,7 @@ src/
 ├── utils.js         # Lodash-compatible utilities
 ├── dates.js         # Moment-style date manipulation
 ├── models.js        # Reactive models & pub/sub
+├── reactive.js      # Dependency tracking core (batched microtask flush)
 ├── elements.js      # UI components
 ├── tables.js        # DataTable functionality
 ├── config.js        # JSON configuration engine
@@ -427,6 +429,8 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - Pub/Sub: `subscribe()`, `publish()`, `unsubscribe()`, `once()`
 - Model: `create()`, `get()`, `set()`, `toJSON()`, `validate()`, `onChange()`, `reset()`
 - Persistence: `save()`, `load()`, `clearStorage()`, `isPersisted()`
+- Reactivity: `M.computed()`, `M.effect()`, `M.untracked()`, `M.flush()`, `model.tracked()` — dependency tracking,
+  batched microtask flush. See [docs/Reactivity.md](./docs/Reactivity.md)
 - DOM Binding: `M.bind()`, `M.unbind()` (two-way binding)
 - Types: `M.types.string`, `M.types.number`, `M.types.boolean`, `M.types.array`, `M.types.object`, `M.types.date`
 
