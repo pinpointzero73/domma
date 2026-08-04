@@ -282,6 +282,12 @@ const blueprint = {
             <p class="mb-4">Automatically sync model data with DOM elements.</p>
 
           <div class="alert alert-info mb-4">
+            <strong>Need derived values?</strong> <a href="reactivity.html" class="text-info underline">Reactivity</a>
+            covers <code>M.computed()</code> and <code>M.effect()</code> — dependency tracking that re-runs only the
+            work affected by a change, instead of wiring up <code>onChange</code> by hand.
+          </div>
+
+          <div class="alert alert-info mb-4">
             <strong>Working with Nested Data?</strong> Check out our <a href="dot-notation.html"
                                                                         class="text-info underline">Dot Notation with
             Forms</a> guide for handling complex nested structures using <code>_.get()</code> and <code>_.set()</code>

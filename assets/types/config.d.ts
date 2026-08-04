@@ -77,6 +77,15 @@ export interface ConfigEngine {
      * Reset/destroy configuration for a selector or all selectors
      * @param selector - Optional selector to reset
      */
+    /**
+     * Retrieve the live component instance created by setup() for a selector.
+     * Instances are NOT stored on the element — $(sel).data('component') is
+     * always undefined.
+     * @param selector - Selector the component was configured under
+     */
+    getComponent(selector: string): any | null;
+    getComponent(): Map<string, any>;
+
     reset(selector?: string): void;
 
     /**

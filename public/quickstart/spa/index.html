@@ -321,6 +321,173 @@ $(() => {
   </div>
 </section>
 
+<!-- Reactivity Walkthrough -->
+<section class="py-8">
+  <div class="container">
+    <h2 class="text-center mb-3">Keeping the UI in Sync</h2>
+    <p class="lead text-center mb-6">
+      Most SPA bugs come from forgetting to update something. Domma's dependency tracking removes that class of
+      bug — you describe what a value <em>is</em>, and it stays correct.
+    </p>
+
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <div class="card h-100">
+          <div class="card-header">
+            <h3 class="text-lg font-semibold mb-0">Step 1 — Hold state in a model</h3>
+          </div>
+          <div class="card-body">
+            <p>Start with a blueprint and a model. Nothing new here.</p>
+            <pre class="code-block language-javascript">
+const cart = M.create({
+    items:    { type: M.types.array,  default: [] },
+    shipping: { type: M.types.number, default: 4.99 },
+    query:    { type: M.types.string, default: '' }
+});</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <div class="card h-100">
+          <div class="card-header">
+            <h3 class="text-lg font-semibold mb-0">Step 2 — Derive, don't duplicate</h3>
+          </div>
+          <div class="card-body">
+            <p>
+              A <code>computed</code> describes a value in terms of others. It runs when first read, then caches
+              until something it read changes.
+            </p>
+            <pre class="code-block language-javascript">
+const subtotal = M.computed(() =>
+    cart.get('items')
+        .reduce((sum, i) => sum + i.price, 0)
+);
+
+const total = M.computed(() =>
+    subtotal.get() + cart.get('shipping')
+);
+
+total.get();   // computed once, then cached</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <div class="card h-100">
+          <div class="card-header">
+            <h3 class="text-lg font-semibold mb-0">Step 3 — React with an effect</h3>
+          </div>
+          <div class="card-body">
+            <p>
+              An effect subscribes to whatever it reads. Add a field to the calculation later and the subscription
+              updates itself — there is no list of field names to keep in step.
+            </p>
+            <pre class="code-block language-javascript">
+M.effect(() => {
+    $('#cart-total').text(`£${total.get().toFixed(2)}`);
+});
+
+// Anything that changes the total updates the DOM
+cart.set('shipping', 0);</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <div class="card h-100">
+          <div class="card-header">
+            <h3 class="text-lg font-semibold mb-0">Step 4 — Clean up on route change</h3>
+          </div>
+          <div class="card-body">
+            <p>
+              <code>M.effect()</code> returns a stop function. Call it in your view's <code>onLeave</code> so
+              effects don't outlive the view that created them.
+            </p>
+            <pre class="code-block language-javascript">
+export const cartView = {
+    templateUrl: 'js/views/templates/cart.html',
+
+    onMount($container) {
+        this._stop = M.effect(() => {
+            $container.find('#total')
+                      .text(total.get());
+        });
+    },
+
+    onLeave() {
+        this._stop();   // unsubscribe
+    }
+};</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="mb-3">Why this beats wiring it by hand</h3>
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3">
+        <div class="card border-danger h-100">
+          <div class="card-body">
+            <p class="mb-2"><strong>The manual way — quietly breaks</strong></p>
+            <pre class="code-block language-javascript">
+cart.onChange(({ field }) => {
+    // Miss a field name here and the
+    // total silently goes stale
+    if (field === 'items' ||
+        field === 'shipping') {
+        recalculate();
+    }
+});</pre>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <div class="card border-success h-100">
+          <div class="card-body">
+            <p class="mb-2"><strong>Tracked — cannot go stale</strong></p>
+            <pre class="code-block language-javascript">
+M.effect(() => {
+    // Subscribes to exactly what it
+    // reads, every time it runs
+    recalculate(
+        cart.get('items'),
+        cart.get('shipping')
+    );
+});</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-warning mb-4">
+      <strong>Two rules worth remembering.</strong>
+      <ol class="mb-0 mt-2">
+        <li>
+          <strong>Keep derivations synchronous.</strong> Dependency tracking stops at the first
+          <code>await</code>, so fetch first and write the result to the model — don't read model fields after
+          awaiting.
+        </li>
+        <li>
+          <strong>Return new values, don't mutate old ones.</strong> A computed that pushes to an existing array
+          and returns it looks unchanged, so nothing downstream updates. Return
+          <code>[...items, newItem]</code> instead.
+        </li>
+      </ol>
+    </div>
+
+    <div class="alert alert-info">
+      Updates are batched: several <code>set()</code> calls in the same tick produce one re-run on the next
+      microtask. If you need a derived value settled immediately — in a test, or when reading straight after a
+      write — call <code>M.flush()</code>.
+      <br><br>
+      <a href="../../showcase/models/reactivity.html" class="btn btn-sm btn-info mt-2">
+        Try it live in the Reactivity showcase
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- Next Steps -->
 <section class="bg-surface py-8">
   <div class="container text-center">

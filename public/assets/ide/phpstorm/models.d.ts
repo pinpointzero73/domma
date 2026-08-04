@@ -49,14 +49,51 @@ export interface BindingOptions {
 }
 
 /**
+ * A lazily-evaluated, dependency-tracked derived value.
+ */
+export interface ComputedRef<T = any> {
+    /** Current value, recomputing only if a dependency changed. */
+    get(): T;
+
+    /** Current value without registering a dependency on the caller. */
+    peek(): T;
+
+    /** Unlink from the dependency graph. */
+    dispose(): void;
+}
+
+export interface ComputedOptions<T = any> {
+    /** Debug label used in console warnings. */
+    label?: string;
+
+    /** Called with the new value whenever it changes. */
+    onChange?: (value: T) => void;
+}
+
+export interface EffectOptions {
+    /** Debug label used in console warnings. */
+    label?: string;
+}
+
+/**
  * Reactive Model class
  */
 export declare class Model {
     constructor(schema: Schema, data?: Record<string, any>, options?: ModelOptions);
 
-    /** Get field value or all data */
+    /**
+     * Get field value or all data.
+     * Reads inside a computed or effect are tracked as dependencies.
+     */
     get(): Record<string, any>;
     get(field: string): any;
+
+    /**
+     * Read-tracked, write-through view of the model's data.
+     * Property reads register a dependency; writes route through set(),
+     * preserving validation, change notification and persistence.
+     */
+    tracked(): Record<string, any>;
 
     /** Set field value(s) */
     set(field: string, value: any): Model;
@@ -68,8 +105,11 @@ export declare class Model {
     /** Get model data as JSON */
     toJSON(): Record<string, any>;
 
-    /** Subscribe to any change */
+    /** Subscribe to any change; callback receives {field, newValue, oldValue, model} */
     onChange(callback: ChangeCallback): UnsubscribeFn;
+
+    /** Subscribe to changes on a single field; callback receives the same change object */
+    onChange(field: string, callback: ChangeCallback): UnsubscribeFn;
 
     /** Subscribe to specific field change */
     onFieldChange(field: string, callback: FieldChangeCallback): UnsubscribeFn;
@@ -166,6 +206,29 @@ export interface Models {
 
     /** Omit specific fields from a blueprint */
     omit(blueprint: Schema, fields: string[]): Schema;
+
+    // ============================================
+    // Dependency-Tracked Reactivity
+    // ============================================
+
+    /**
+     * Create a lazily-evaluated derived value that tracks whatever it reads.
+     * The body must be synchronous — tracking stops at the first `await`.
+     */
+    computed<T = any>(fn: () => T, options?: ComputedOptions<T>): ComputedRef<T>;
+
+    /**
+     * Run a function now, and again whenever any field it read changes.
+     * Re-runs are batched into a single microtask flush.
+     * Returns a function that stops the effect.
+     */
+    effect(fn: () => void, options?: EffectOptions): UnsubscribeFn;
+
+    /** Read values without registering them as dependencies. */
+    untracked<T = any>(fn: () => T): T;
+
+    /** Settle pending reactive work immediately instead of on the microtask. */
+    flush(): void;
 
     // ============================================
     // Type Validators

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reactivity - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/models/reactivity.html">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="/showcase/css/domma-showcase.css">
+    <style>
+        .rx-counter {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .rx-stat {
+            border: 1px solid var(--dm-border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .rx-stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.7;
+        }
+
+        .rx-log {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 0.8125rem;
+            max-height: 190px;
+            overflow-y: auto;
+            border: 1px solid var(--dm-border);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+        }
+
+        .rx-log-time {
+            opacity: 0.55;
+            margin-right: 0.5rem;
+        }
+
+        .rx-flash {
+            transition: background-color 120ms ease-out;
+        }
+
+        .rx-flash.is-hot {
+            background-color: var(--dm-warning-bg, #fef3c7);
+        }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="subpage">
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Reactivity</div>
+        <div class="hero-subtitle">
+            Dependency tracking: derivations discover what they read, so a write re-runs exactly the work that
+            depends on it — and nothing else.
+        </div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <div class="alert alert-info mb-6">
+        <strong>New in Domma.</strong> <code>M.computed()</code> and <code>M.effect()</code> track their own
+        dependencies at runtime. See the <a href="index.html">Models showcase</a> for the underlying model API.
+    </div>
+
+    <!-- ================= Tracked Computeds ================= -->
+    <section class="card mb-6" data-section="Tracked Computeds">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Tracked Computeds</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                A computed is lazy: its body does not run until something reads it, and the cached value is reused
+                until a field it <em>actually read</em> changes. The counters below show how often each body runs.
+            </p>
+
+            <div class="models-method-grid mb-4">
+                <span class="models-method-item">M.computed()</span>
+                <span class="models-method-item">.get()</span>
+                <span class="models-method-item">.peek()</span>
+                <span class="models-method-item">.dispose()</span>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label class="form-label" for="rx-price">Price (read by the computed)</label>
+                    <input type="number" class="form-control mb-3" id="rx-price" value="10">
+
+                    <label class="form-label" for="rx-qty">Quantity (read by the computed)</label>
+                    <input type="number" class="form-control mb-3" id="rx-qty" value="3">
+
+                    <label class="form-label" for="rx-note">Note (<strong>not</strong> read by the computed)</label>
+                    <input type="text" class="form-control mb-3" id="rx-note" placeholder="Type here…">
+
+                    <button class="btn btn-outline" id="rx-read">Read total again</button>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <div class="rx-stat">
+                                <div class="rx-stat-label">Total</div>
+                                <div class="rx-counter" id="rx-total">30</div>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="rx-stat rx-flash" id="rx-evals-box">
+                                <div class="rx-stat-label">Body evaluations</div>
+                                <div class="rx-counter" id="rx-evals">1</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm">
+                        Change <strong>Price</strong> or <strong>Quantity</strong> and the counter rises. Type in
+                        <strong>Note</strong> — the model updates, but the computed never re-runs. Press
+                        <strong>Read total again</strong> to confirm repeated reads are served from cache.
+                    </p>
+                </div>
+            </div>
+
+            <pre class="code-block language-javascript">
+const order = M.create(
+    { price: {}, qty: {}, note: {} },
+    { price: 10, qty: 3, note: '' }
+);
+
+const total = M.computed(() => order.get('price') * order.get('qty'));
+
+total.get();              // 30 — body runs now
+total.get();              // 30 — cached, body does not run
+
+order.set('note', 'hi');  // 'note' was never read → no re-evaluation
+total.get();              // 30 — still cached
+
+order.set('qty', 4);
+total.get();              // 40 — a dependency moved, so it re-evaluates</pre>
+        </div>
+    </section>
+
+    <!-- ================= Effects ================= -->
+    <section class="card mb-6" data-section="Effects">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Effects</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                An effect runs immediately to collect its dependencies, then again whenever any of them change.
+                It replaces hand-wiring a subscription and comparing field names by hand.
+            </p>
+
+            <div class="models-method-grid mb-4">
+                <span class="models-method-item">M.effect()</span>
+                <span class="models-method-item">M.untracked()</span>
+                <span class="models-method-item">M.flush()</span>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-5">
+                    <label class="form-label" for="rx-user">Username (tracked)</label>
+                    <input type="text" class="form-control mb-3" id="rx-user" value="alice">
+
+                    <label class="form-label" for="rx-theme">Theme (tracked)</label>
+                    <select class="form-control mb-3" id="rx-theme">
+                        <option value="light">light</option>
+                        <option value="dark">dark</option>
+                    </select>
+
+                    <label class="form-label" for="rx-secret">Session id (read untracked)</label>
+                    <input type="text" class="form-control mb-3" id="rx-secret" value="abc123">
+
+                    <button class="btn btn-danger btn-sm" id="rx-stop">Stop effect</button>
+                    <button class="btn btn-outline btn-sm" id="rx-clear-log">Clear log</button>
+                </div>
+                <div class="col-md-7">
+                    <div class="rx-log" id="rx-effect-log"></div>
+                    <p class="text-sm mt-2">
+                        Changing <strong>Session id</strong> does not re-run the effect — it is read inside
+                        <code>M.untracked()</code>.
+                    </p>
+                </div>
+            </div>
+
+            <pre class="code-block language-javascript">
+const stop = M.effect(() => {
+    const user  = prefs.get('username');   // tracked
+    const theme = prefs.get('theme');      // tracked
+
+    // Read without subscribing to it
+    const session = M.untracked(() => prefs.get('sessionId'));
+
+    render(user, theme, session);
+});
+
+stop();   // unsubscribe</pre>
+        </div>
+    </section>
+
+    <!-- ================= Batching ================= -->
+    <section class="card mb-6" data-section="Batching">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Batching</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Writes never recompute anything synchronously. They mark dependents dirty and schedule a single
+                microtask flush, so a burst of writes collapses into one pass. Use <code>M.flush()</code> when you
+                need a derived value to settle immediately.
+            </p>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <button class="btn btn-primary mb-2" id="rx-burst">Write 3 fields separately</button>
+                    <button class="btn btn-primary mb-2" id="rx-batch">Write 3 fields in one set()</button>
+                    <button class="btn btn-outline mb-2" id="rx-sync">Write, then M.flush()</button>
+                </div>
+                <div class="col-md-6">
+                    <div class="rx-stat">
+                        <div class="rx-stat-label">Effect runs</div>
+                        <div class="rx-counter" id="rx-runs">1</div>
+                    </div>
+                    <p class="text-sm mt-2">
+                        Either button adds exactly <strong>one</strong> run: three writes in the same tick share
+                        one flush.
+                    </p>
+                </div>
+            </div>
+
+            <pre class="code-block language-javascript">
+// Three separate writes, same tick → ONE effect run
+form.set('a', 1);
+form.set('b', 2);
+form.set('c', 3);
+
+// One batched write → also ONE effect run
+form.set({ a: 1, b: 2, c: 3 });
+
+// Need it settled right now (tests, or reading straight after a write)?
+form.set('a', 9);
+M.flush();</pre>
+        </div>
+    </section>
+
+    <!-- ================= Conditional Dependencies ================= -->
+    <section class="card mb-6" data-section="Conditional Dependencies">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Conditional Dependencies</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Dependencies are re-collected on every run, so a derivation stops listening to the branch it no
+                longer takes. Switch the mode below and watch which input still triggers a re-run.
+            </p>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label class="form-label" for="rx-mode">Mode</label>
+                    <select class="form-control mb-3" id="rx-mode">
+                        <option value="x">Read X</option>
+                        <option value="y">Read Y</option>
+                    </select>
+
+                    <label class="form-label" for="rx-x">X</label>
+                    <input type="number" class="form-control mb-3" id="rx-x" value="1">
+
+                    <label class="form-label" for="rx-y">Y</label>
+                    <input type="number" class="form-control mb-3" id="rx-y" value="100">
+                </div>
+                <div class="col-md-6">
+                    <div class="rx-log" id="rx-branch-log"></div>
+                    <p class="text-sm mt-2">
+                        In <strong>Read X</strong> mode, editing Y does nothing. Switch modes and the roles swap.
+                    </p>
+                </div>
+            </div>
+
+            <pre class="code-block language-javascript">
+M.effect(() => {
+    // Only ONE of x / y is a dependency at any moment
+    const value = state.get('mode') === 'x'
+        ? state.get('x')
+        : state.get('y');
+
+    log(value);
+});</pre>
+        </div>
+    </section>
+
+    <!-- ================= Components ================= -->
+    <section class="card mb-6" data-section="Components">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Components</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>Domma.component()</code> uses tracking automatically — the definition syntax is unchanged.
+                Computeds re-evaluate only when a field they read changes, and a burst of writes produces one
+                render.
+            </p>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div id="rx-component-host" class="mb-3"></div>
+                    <button class="btn btn-primary btn-sm" id="rx-add">Add item</button>
+                    <button class="btn btn-outline btn-sm" id="rx-discount">Toggle discount</button>
+                    <button class="btn btn-outline btn-sm" id="rx-touch">Touch unrelated field</button>
+                </div>
+                <div class="col-md-6">
+                    <div class="rx-log" id="rx-component-log"></div>
+                    <p class="text-sm mt-2">
+                        <strong>Touch unrelated field</strong> writes to the model but triggers neither a computed
+                        re-evaluation nor a render.
+                    </p>
+                </div>
+            </div>
+
+            <pre class="code-block language-javascript">
+Domma.component('order-summary', {
+    template: '&lt;p&gt;{{label}}&lt;/p&gt;{{#if freeDelivery}}&lt;em&gt;Free delivery&lt;/em&gt;{{/if}}',
+
+    data() { return { items: 1, unitPrice: 25, discount: false, note: '' }; },
+
+    computed: {
+        // Re-evaluates only when items / unitPrice / discount change
+        label() {
+            const gross = this.data.items * this.data.unitPrice;
+            return `${this.data.items} item(s) — £${this.data.discount ? gross * 0.9 : gross}`;
+        },
+        freeDelivery() { return this.data.items * this.data.unitPrice &gt; 50; }
+    }
+});</pre>
+
+            <div class="alert alert-warning">
+                <strong>Computeds must be synchronous.</strong> Dependency collection ends at the first
+                <code>await</code>, so anything read after it is invisible to the graph. Fetch first, then write the
+                result to the model.
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= Method Reference ================= -->
+    <section class="card mb-6" data-section="Method Reference">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Method Reference</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Returns</th>
+                        <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><code>M.computed(fn, options?)</code></td>
+                        <td><code>ComputedRef</code></td>
+                        <td>Lazily-evaluated derived value. Caches until a tracked dependency changes.</td>
+                    </tr>
+                    <tr>
+                        <td><code>M.effect(fn, options?)</code></td>
+                        <td><code>Function</code></td>
+                        <td>Runs now, and again on dependency change. Returns a stop function.</td>
+                    </tr>
+                    <tr>
+                        <td><code>M.untracked(fn)</code></td>
+                        <td><code>any</code></td>
+                        <td>Read values without registering them as dependencies.</td>
+                    </tr>
+                    <tr>
+                        <td><code>M.flush()</code></td>
+                        <td><code>void</code></td>
+                        <td>Settle pending reactive work immediately rather than on the microtask.</td>
+                    </tr>
+                    <tr>
+                        <td><code>model.tracked()</code></td>
+                        <td><code>Proxy</code></td>
+                        <td>Read-tracked, write-through view. Writes still validate, notify and persist.</td>
+                    </tr>
+                    <tr>
+                        <td><code>ref.get()</code></td>
+                        <td><code>any</code></td>
+                        <td>Current value; registers a dependency on the caller.</td>
+                    </tr>
+                    <tr>
+                        <td><code>ref.peek()</code></td>
+                        <td><code>any</code></td>
+                        <td>Current value <em>without</em> registering a dependency.</td>
+                    </tr>
+                    <tr>
+                        <td><code>ref.dispose()</code></td>
+                        <td><code>void</code></td>
+                        <td>Unlink from the dependency graph.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-info mt-4">
+                <strong>Full guide:</strong> rules, limits and compatibility notes are in
+                <code>docs/Reactivity.md</code>.
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+    // ── Shared logging helper ─────────────────────────────────────────────
+    function logTo(selector, message) {
+        const time = D().format('HH:mm:ss');
+        $(selector).prepend(
+            `<div><span class="rx-log-time">[${time}]</span> ${message}</div>`
+        );
+    }
+
+    function flash(selector) {
+        const $el = $(selector).addClass('is-hot');
+        setTimeout(() => $el.removeClass('is-hot'), 220);
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // 1. Tracked Computeds
+    // ══════════════════════════════════════════════════════════════════════
+    const order = M.create(
+        {price: {}, qty: {}, note: {}},
+        {price: 10, qty: 3, note: ''}
+    );
+
+    let evalCount = 0;
+
+    const total = M.computed(() => {
+        evalCount++;
+        return order.get('price') * order.get('qty');
+    });
+
+    function renderTotal() {
+        $('#rx-total').text(total.get());
+        $('#rx-evals').text(evalCount);
+        flash('#rx-evals-box');
+    }
+
+    renderTotal();
+
+    $('#rx-price').on('input', function () {
+        order.set('price', Number($(this).val()) || 0);
+        renderTotal();
+    });
+
+    $('#rx-qty').on('input', function () {
+        order.set('qty', Number($(this).val()) || 0);
+        renderTotal();
+    });
+
+    $('#rx-note').on('input', function () {
+        // Writes to the model, but 'note' is not a dependency of `total`
+        order.set('note', $(this).val());
+        renderTotal();
+    });
+
+    $('#rx-read').on('click', function () {
+        renderTotal();
+        E.toast(`Read served from cache — still ${evalCount} evaluation(s)`, {type: 'info'});
+    });
+
+    // ══════════════════════════════════════════════════════════════════════
+    // 2. Effects
+    // ══════════════════════════════════════════════════════════════════════
+    const prefs = M.create(
+        {username: {}, theme: {}, sessionId: {}},
+        {username: 'alice', theme: 'light', sessionId: 'abc123'}
+    );
+
+    const stopEffect = M.effect(() => {
+        const user = prefs.get('username');
+        const theme = prefs.get('theme');
+        const session = M.untracked(() => prefs.get('sessionId'));
+
+        logTo('#rx-effect-log', `effect ran — user=<strong>${user}</strong> theme=<strong>${theme}</strong> session=${session}`);
+    });
+
+    $('#rx-user').on('input', function () {
+        prefs.set('username', $(this).val());
+    });
+
+    $('#rx-theme').on('change', function () {
+        prefs.set('theme', $(this).val());
+    });
+
+    $('#rx-secret').on('input', function () {
+        prefs.set('sessionId', $(this).val());
+        logTo('#rx-effect-log', '<em>sessionId changed — untracked, no re-run</em>');
+    });
+
+    $('#rx-stop').on('click', function () {
+        stopEffect();
+        logTo('#rx-effect-log', '<strong>effect stopped</strong>');
+        $(this).prop('disabled', true);
+        E.toast('Effect unsubscribed', {type: 'warning'});
+    });
+
+    $('#rx-clear-log').on('click', function () {
+        $('#rx-effect-log').html('');
+    });
+
+    // ══════════════════════════════════════════════════════════════════════
+    // 3. Batching
+    // ══════════════════════════════════════════════════════════════════════
+    const form = M.create({a: {}, b: {}, c: {}}, {a: 0, b: 0, c: 0});
+
+    let runCount = 0;
+    M.effect(() => {
+        form.get('a');
+        form.get('b');
+        form.get('c');
+        runCount++;
+        $('#rx-runs').text(runCount);
+    });
+
+    let nudge = 0;
+
+    $('#rx-burst').on('click', function () {
+        nudge++;
+        form.set('a', nudge);
+        form.set('b', nudge * 2);
+        form.set('c', nudge * 3);
+        E.toast('3 separate writes → 1 flush', {type: 'success'});
+    });
+
+    $('#rx-batch').on('click', function () {
+        nudge++;
+        form.set({a: nudge, b: nudge * 2, c: nudge * 3});
+        E.toast('1 batched write → 1 flush', {type: 'success'});
+    });
+
+    $('#rx-sync').on('click', function () {
+        nudge++;
+        form.set('a', nudge);
+        M.flush();
+        E.toast(`Settled synchronously — run count is already ${runCount}`, {type: 'info'});
+    });
+
+    // ══════════════════════════════════════════════════════════════════════
+    // 4. Conditional Dependencies
+    // ══════════════════════════════════════════════════════════════════════
+    const state = M.create({mode: {}, x: {}, y: {}}, {mode: 'x', x: 1, y: 100});
+
+    M.effect(() => {
+        const mode = state.get('mode');
+        const value = mode === 'x' ? state.get('x') : state.get('y');
+        logTo('#rx-branch-log', `re-ran — mode=<strong>${mode}</strong>, value=<strong>${value}</strong>`);
+    });
+
+    $('#rx-mode').on('change', function () {
+        state.set('mode', $(this).val());
+    });
+
+    $('#rx-x').on('input', function () {
+        state.set('x', Number($(this).val()) || 0);
+    });
+
+    $('#rx-y').on('input', function () {
+        state.set('y', Number($(this).val()) || 0);
+    });
+
+    // ══════════════════════════════════════════════════════════════════════
+    // 5. Components
+    // ══════════════════════════════════════════════════════════════════════
+    let labelEvals = 0;
+
+    Domma.component('rx-order-summary', {
+        template: `
+            <div style="padding:1rem;border:1px solid #cbd5e1;border-radius:.5rem">
+                <p style="margin:0 0 .5rem">{{label}}</p>
+                {{#if freeDelivery}}<em>Free delivery applies</em>{{/if}}
+            </div>
+        `,
+
+        data() {
+            return {items: 1, unitPrice: 25, discount: false, note: ''};
+        },
+
+        computed: {
+            label() {
+                labelEvals++;
+                const gross = this.data.items * this.data.unitPrice;
+                const net = this.data.discount ? gross * 0.9 : gross;
+                return `${this.data.items} item(s) — £${net.toFixed(2)}`;
+            },
+            freeDelivery() {
+                return this.data.items * this.data.unitPrice > 50;
+            }
+        },
+
+        // Controls live outside the component, so bind them here where the
+        // component context (and its reactive set()) is in scope.
+        onMount() {
+            $('#rx-add').on('click', () => {
+                this.set({items: this.data.items + 1});
+            });
+
+            $('#rx-discount').on('click', () => {
+                this.set({discount: !this.data.discount});
+            });
+
+            $('#rx-touch').on('click', () => {
+                this.set({note: `touched at ${D().format('HH:mm:ss')}`});
+                logTo('#rx-component-log',
+                    `<em>wrote 'note' — no computed re-run, no render (still ${labelEvals})</em>`);
+            });
+        },
+
+        onUpdated() {
+            logTo('#rx-component-log',
+                `render — label body has run <strong>${labelEvals}</strong> time(s)`);
+        }
+    });
+
+    $('#rx-component-host').append(document.createElement('rx-order-summary'));
+</script>
+</body>
+</html>

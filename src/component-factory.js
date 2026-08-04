@@ -35,6 +35,7 @@ import { DommaElement, getThemeVariables } from './web-components/base/domma-ele
 import { TemplateCompiler } from './template-compiler.js';
 import { models } from './models.js';
 import { utils } from './utils.js';
+import { computed as createComputed, effect as createEffect, untracked } from './reactive.js';
 
 // ── Template cache (shared across all instances) ──────────────────────────────
 const _templateCache = new Map();
@@ -162,13 +163,23 @@ export function createComponent(tagName, definition) {
             this._contentRoot  = null;
             this._context      = null;
             this._unsubs       = [];
+
+            // Dependency-tracked reactivity
+            this._computeds          = new Map();  // name → Computation
+            this._effects            = [];         // one per bound template field
+            this._updateQueued       = false;
+            this._teardown           = false;
         }
 
         // ── Web Component Lifecycle ───────────────────────────────────────────
 
         connectedCallback() {
             if (this._initialised) {
-                // Re-connected after being moved in the DOM — re-fire onMount
+                // Re-connected after being moved in the DOM — re-fire onMount.
+                // NOTE: reactive wiring is not rebuilt here. disconnectedCallback
+                // disposes the effects and destroys the model, so a relocated
+                // element is inert — pre-existing behaviour, see docs/Reactivity.md.
+                this._teardown = false;
                 onMount?.call(this._ctx());
                 return;
             }
@@ -176,6 +187,7 @@ export function createComponent(tagName, definition) {
             this._initialised = true;
             this._initProps();
             this._initModel();
+            this._initComputeds();
 
             // Inject theme variables + component styles into Shadow DOM
             this._injectStyles();
@@ -188,16 +200,23 @@ export function createComponent(tagName, definition) {
             onBeforeMount?.call(this._ctx());
 
             this._renderComponent().then(() => {
-                this._subscribeToModel();
+                this._wireBindings();
                 onMount?.call(this._ctx());
             });
         }
 
         disconnectedCallback() {
+            this._teardown = true;
             onBeforeUnmount?.call(this._ctx());
             this._cleanup();
             for (const unsub of this._unsubs) unsub();
             this._unsubs = [];
+
+            for (const eff of this._effects) eff.dispose();
+            this._effects = [];
+            for (const comp of this._computeds.values()) comp.dispose();
+            this._computeds.clear();
+
             if (this._model) this._model.destroy();
             onUnmount?.call(this._ctx());
         }
@@ -210,8 +229,11 @@ export function createComponent(tagName, definition) {
 
             onPropsChanged?.call(this._ctx(), propName, oldValue, newValue);
 
-            // Props change always triggers a full re-render (props are structural)
+            // Props change always triggers a full re-render (props are structural).
+            // Props are not dependency-tracked, so any computed that reads one
+            // must be invalidated by hand before the re-render reads it back.
             if (this._initialised && this._bindings) {
+                for (const comp of this._computeds.values()) comp.invalidate();
                 this._rerenderFull();
             }
         }
@@ -242,6 +264,23 @@ export function createComponent(tagName, definition) {
             this._model = models.create(schema, initialData);
         }
 
+        /**
+         * Wrap each declared computed in a tracked, memoised Computation.
+         *
+         * Evaluation is lazy: a computed's body does not run until something
+         * reads it, and the cached value is reused until a field it actually
+         * read changes. Because computeds are exposed on the context object,
+         * a computed reading another computed links the two automatically.
+         */
+        _initComputeds() {
+            for (const [name, fn] of Object.entries(computedDefs)) {
+                this._computeds.set(
+                    name,
+                    createComputed(() => fn.call(this._ctx()), { label: name })
+                );
+            }
+        }
+
         // ── Rendering ─────────────────────────────────────────────────────────
 
         /** Fetch template (if needed) then compile into the content root. */
@@ -265,69 +304,99 @@ export function createComponent(tagName, definition) {
             );
         }
 
-        /** Full re-render into the content root then rebuild bindings. */
+        /**
+         * Full re-render into the content root then re-index bindings.
+         * Only used for props changes — reactive data changes update surgically.
+         */
         _rerenderFull() {
             if (!this._bindings) return;
-            this._bindings.rerender(this._mergeData());
+            this._bindings.rerenderAll(this._mergeData());
             onUpdated?.call(this._ctx());
         }
 
-        // ── Model Subscription ────────────────────────────────────────────────
+        // ── Reactive Binding ──────────────────────────────────────────────────
 
-        /** Subscribe to model changes and wire them to template updates. */
-        _subscribeToModel() {
-            if (!this._model || !this._bindings) return;
+        /**
+         * Create one tracked effect per field the template actually binds.
+         *
+         * Each effect reads its own field — through the model's tracking proxy
+         * or through a computed — and so re-runs only when that specific value
+         * changes. A model field no template mentions costs nothing; a computed
+         * that does not read the field that changed is never re-evaluated.
+         *
+         * This replaces the previous strategy of re-running every computed and
+         * deep-comparing all of them on every single change.
+         */
+        _wireBindings() {
+            if (!this._bindings) return;
 
-            // Seed the computed cache with initial values so we can detect
-            // when a structural computed property actually changes.
-            const computedNames = Object.keys(computedDefs);
-            const computedCache = {};
-            const mergedInit = this._mergeData();
-            for (const name of computedNames) {
-                computedCache[name] = mergedInit[name];
-            }
+            for (const binding of this._bindings.bindings) {
+                // A binding whose dependencies are all props never re-runs —
+                // an attribute change re-renders in full instead.
+                const reactiveDeps = [...binding.deps].filter(dep =>
+                    this._computeds.has(dep) ||
+                    !Object.prototype.hasOwnProperty.call(this._props, dep)
+                );
+                if (reactiveDeps.length === 0) continue;
 
-            const unsub = this._model.onChange(({ field, newValue }) => {
-                // ── Structural model field → always full re-render ────────────
-                if (this._bindings.isStructural(field)) {
-                    this._rerenderFull();
-                    // Rebuild cache after re-render
-                    const rd = this._mergeData();
-                    for (const n of computedNames) computedCache[n] = rd[n];
-                    return;
-                }
+                let primed = false;
 
-                // ── Text-only model field → surgical update ───────────────────
-                this._bindings.update(field, newValue);
+                const eff = createEffect(() => {
+                    // Tracked reads — this is what subscribes the effect
+                    for (const dep of reactiveDeps) this._readBound(dep);
 
-                // Re-evaluate every computed property to detect changes.
-                const merged = this._mergeData();
-                let needsFullRerender = false;
-
-                for (const name of computedNames) {
-                    const newVal = merged[name];
-                    if (utils.isEqual(newVal, computedCache[name])) continue;
-
-                    computedCache[name] = newVal;
-
-                    if (this._bindings.isStructural(name)) {
-                        // Structural computed flipped (e.g. {{#if high}}) → re-render
-                        needsFullRerender = true;
-                    } else {
-                        this._bindings.update(name, newVal);
+                    // First run exists only to collect dependencies; the
+                    // initial render has already painted this binding.
+                    if (!primed) {
+                        primed = true;
+                        return;
                     }
-                }
 
-                if (needsFullRerender) {
-                    this._rerenderFull();
-                    const rd = this._mergeData();
-                    for (const n of computedNames) computedCache[n] = rd[n];
-                } else {
-                    onUpdated?.call(this._ctx());
-                }
+                    // The DOM write itself must not register dependencies —
+                    // _mergeData() reads every computed.
+                    untracked(() => {
+                        this._bindings.update(binding.id, this._mergeData());
+                        this._scheduleUpdate();
+                    });
+                }, { label: `${this.tagName.toLowerCase()}:${binding.id}` });
+
+                this._effects.push(eff);
+            }
+        }
+
+        /**
+         * Read a bound name from whichever source owns it, with tracking active.
+         * Resolution order matches _mergeData(): computed → prop → model field.
+         *
+         * @param {string} name
+         * @returns {*}
+         */
+        _readBound(name) {
+            if (this._computeds.has(name)) {
+                return this._computeds.get(name).get();
+            }
+            if (Object.prototype.hasOwnProperty.call(this._props, name)) {
+                return this._props[name];
+            }
+            return this._model ? this._model.get(name) : undefined;
+        }
+
+        /**
+         * Coalesce the onUpdated hook so it fires once per flush, however many
+         * bindings updated. The DOM writes themselves are already surgical and
+         * happen immediately in each effect — only the notification is batched.
+         */
+        _scheduleUpdate() {
+            if (this._updateQueued) return;
+            this._updateQueued = true;
+
+            Promise.resolve().then(() => {
+                this._updateQueued = false;
+                // A queued pass can outlive the element: effects are disposed on
+                // disconnect, but a microtask already in flight is not cancellable.
+                if (this._teardown || !this._initialised || !this._bindings) return;
+                onUpdated?.call(this._ctx());
             });
-
-            this._unsubs.push(unsub);
         }
 
         // ── Styles ────────────────────────────────────────────────────────────
@@ -349,8 +418,12 @@ export function createComponent(tagName, definition) {
 
             const self = this;
             const ctx = {
-                /** Live snapshot of reactive model data. */
-                get data()  { return self._model ? self._model.toJSON() : {}; },
+                /**
+                 * Live, read-tracked view of reactive model data.
+                 * Reads inside a computed or effect register a dependency;
+                 * writes route through the model's validation path.
+                 */
+                get data()  { return self._model ? self._model.tracked() : {}; },
                 /** Resolved props (after type coercion). */
                 get props() { return { ...self._props }; },
                 /** Shadow root reference. */
@@ -370,10 +443,15 @@ export function createComponent(tagName, definition) {
                 }
             };
 
-            // Attach computed properties as getters
+            // Attach computed properties as getters. These read through the
+            // memoised Computation rather than re-invoking the body, so a
+            // computed referenced by several others is evaluated once.
             for (const [name, fn] of Object.entries(computedDefs)) {
                 Object.defineProperty(ctx, name, {
-                    get()        { return fn.call(self._ctx()); },
+                    get() {
+                        const comp = self._computeds.get(name);
+                        return comp ? comp.get() : fn.call(self._ctx());
+                    },
                     enumerable:  true,
                     configurable: true
                 });
@@ -397,15 +475,14 @@ export function createComponent(tagName, definition) {
          * @returns {Object}
          */
         _mergeData() {
+            // toJSON() is deliberately untracked — this is a render-time read,
+            // not a dependency, and tracking it would link every field to
+            // whatever computation happens to be running.
             const data     = this._model ? this._model.toJSON() : {};
             const computed = {};
 
-            for (const [name, fn] of Object.entries(computedDefs)) {
-                try {
-                    computed[name] = fn.call(this._ctx());
-                } catch {
-                    computed[name] = null;
-                }
+            for (const [name, comp] of this._computeds.entries()) {
+                computed[name] = comp.get();
             }
 
             return { ...data, ...this._props, ...computed };

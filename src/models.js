@@ -5,6 +5,14 @@
 
 import {utils} from './utils.js';
 import {storage} from './storage.js';
+import {
+    DepMap,
+    trackingProxy,
+    computed as createComputed,
+    effect as createEffect,
+    untracked as runUntracked,
+    flushSync as flushReactive
+} from './reactive.js';
 
 /**
  * Reactive Model Class
@@ -17,6 +25,12 @@ class Model {
         this._bindings = new Map();
         this._changeCallbacks = new Set();
         this._fieldCallbacks = new Map();
+
+        // Dependency-tracking slots — one Dep per field, created on first read.
+        // Reads via get()/tracked() register against the running computation;
+        // writes via _setField() trigger it.
+        this._deps = new DepMap();
+        this._trackedView = null;
 
         // Persistence configuration
         this._persistKey = options.persist || null;
@@ -36,11 +50,50 @@ class Model {
         }
     }
 
+    /**
+     * Read a field, or the whole data object when called with no argument.
+     *
+     * Reads performed inside a computed or effect are tracked, so the caller is
+     * re-run when that field changes. Reading the whole object tracks every
+     * field currently present — the conservative choice, since the reader could
+     * touch any of them.
+     *
+     * @param {string} [field]
+     * @returns {*}
+     */
     get(field) {
         if (field) {
+            this._deps.for(field).track();
             return this._data[field];
         }
+
+        for (const key of Object.keys(this._data)) {
+            this._deps.for(key).track();
+        }
         return {...this._data};
+    }
+
+    /**
+     * A read-tracked, write-through view of the model's data.
+     *
+     * Property reads register a dependency; property writes are routed through
+     * set(), so validation, change notification and persistence all still run.
+     *
+     *   const state = model.tracked();
+     *   M.effect(() => console.log(state.count));   // re-runs when count changes
+     *   state.count = 5;                            // validated + notified
+     *
+     * @returns {Proxy}
+     */
+    tracked() {
+        if (!this._trackedView) {
+            this._trackedView = trackingProxy(
+                this._data,
+                key => this._deps.for(key),
+                {onSet: (key, value) => this._setField(key, value)}
+            );
+        }
+        return this._trackedView;
     }
 
     set(field, value) {
@@ -70,8 +123,12 @@ class Model {
 
         // Notify if changed
         if (!utils.isEqual(oldValue, value)) {
+            // Synchronous listeners first — onChange/onFieldChange semantics and
+            // DOM bindings are unchanged. Dependency-tracked computations are
+            // only queued here; they settle on the next microtask flush.
             this._notifyChange(field, value, oldValue);
             this._updateBindings(field, value);
+            this._deps.trigger(field);
 
             // Auto-save to storage if persistence enabled
             if (this._persistKey && this._autoSave) {
@@ -147,9 +204,44 @@ class Model {
         return {...this._data};
     }
 
-    onChange(callback) {
-        this._changeCallbacks.add(callback);
-        return () => this._changeCallbacks.delete(callback);
+    /**
+     * Subscribe to changes.
+     *
+     *   onChange(cb)          — every field; cb receives {field, newValue, oldValue, model}
+     *   onChange(field, cb)   — one field only; cb receives the same change object
+     *
+     * For positional arguments (newValue, oldValue, model), use onFieldChange().
+     *
+     * @param {string|Function} fieldOrCallback
+     * @param {Function} [maybeCallback]
+     * @returns {Function} Unsubscribe function
+     */
+    onChange(fieldOrCallback, maybeCallback) {
+        // Field-scoped overload
+        if (typeof fieldOrCallback === 'string') {
+            if (typeof maybeCallback !== 'function') {
+                throw new TypeError(
+                    `Model.onChange('${fieldOrCallback}', callback) requires a callback function`
+                );
+            }
+
+            const field = fieldOrCallback;
+            const wrapper = (change) => {
+                if (change.field === field) maybeCallback(change);
+            };
+
+            this._changeCallbacks.add(wrapper);
+            return () => this._changeCallbacks.delete(wrapper);
+        }
+
+        if (typeof fieldOrCallback !== 'function') {
+            throw new TypeError(
+                'Model.onChange expects a callback, or (field, callback)'
+            );
+        }
+
+        this._changeCallbacks.add(fieldOrCallback);
+        return () => this._changeCallbacks.delete(fieldOrCallback);
     }
 
     onFieldChange(field, callback) {
@@ -157,7 +249,10 @@ class Model {
             this._fieldCallbacks.set(field, new Set());
         }
         this._fieldCallbacks.get(field).add(callback);
-        return () => this._fieldCallbacks.get(field).delete(callback);
+        // Optional chaining: destroy() clears _fieldCallbacks, and callers
+        // commonly unsubscribe during their own teardown, after the model has
+        // already gone.
+        return () => this._fieldCallbacks.get(field)?.delete(callback);
     }
 
     _notifyChange(field, newValue, oldValue) {
@@ -215,6 +310,8 @@ class Model {
         this._changeCallbacks.clear();
         this._fieldCallbacks.clear();
         this._bindings.clear();
+        this._deps.clear();
+        this._trackedView = null;
     }
 
     // ============================================
@@ -526,6 +623,93 @@ export const models = {
         }
 
         return result;
+    },
+
+    // ============================================
+    // Dependency-Tracked Reactivity
+    // ============================================
+
+    /**
+     * Create a lazily-evaluated derived value that tracks whatever it reads.
+     *
+     * The body is not run until `.get()` is called, and afterwards the cached
+     * value is reused until one of the fields it read actually changes.
+     *
+     *   const model = M.create(blueprint, {price: 10, qty: 3});
+     *   const total = M.computed(() => model.get('price') * model.get('qty'));
+     *   total.get();                 // 30 — evaluated now
+     *   total.get();                 // 30 — cached, body not re-run
+     *   model.set('qty', 4);
+     *   total.get();                 // 40 — re-evaluated on demand
+     *
+     * The body must be synchronous: tracking stops at the first `await`.
+     *
+     * @param {Function} fn                 Synchronous derivation.
+     * @param {Object}   [options]
+     * @param {string}   [options.label]    Debug label used in warnings.
+     * @param {Function} [options.onChange] Called with the new value when it changes.
+     * @returns {{get: Function, peek: Function, dispose: Function}}
+     */
+    computed(fn, options = {}) {
+        const comp = createComputed(fn, {
+            label: options.label,
+            onNotify: options.onChange || null
+        });
+
+        return {
+            /** Current value, recomputing only if a dependency changed. */
+            get: () => comp.get(),
+            /** Current value without registering a dependency on the caller. */
+            peek: () => runUntracked(() => comp.get()),
+            /** Unlink from the dependency graph. */
+            dispose: () => comp.dispose(),
+            /** @internal escape hatch for framework code */
+            _computation: comp
+        };
+    },
+
+    /**
+     * Run a function now, and again whenever any field it read changes.
+     *
+     * Dependencies are re-collected on every run, so an effect whose branches
+     * change stops listening to the branch it no longer takes.
+     *
+     *   const stop = M.effect(() => {
+     *       $('#total').text(model.get('price') * model.get('qty'));
+     *   });
+     *   stop();   // unsubscribe
+     *
+     * Re-runs are batched: a burst of writes in the same tick produces a single
+     * run on the next microtask, not one per write.
+     *
+     * @param {Function} fn                Synchronous body.
+     * @param {Object}   [options]
+     * @param {string}   [options.label]   Debug label used in warnings.
+     * @returns {Function} Call to stop the effect.
+     */
+    effect(fn, options = {}) {
+        const comp = createEffect(fn, {label: options.label});
+        return () => comp.dispose();
+    },
+
+    /**
+     * Read values without registering them as dependencies of the enclosing
+     * computed or effect.
+     *
+     * @param {Function} fn
+     * @returns {*}
+     */
+    untracked(fn) {
+        return runUntracked(fn);
+    },
+
+    /**
+     * Settle all pending reactive work immediately rather than waiting for the
+     * microtask flush. Mainly useful in tests and when code must observe a
+     * derived value synchronously after a write.
+     */
+    flush() {
+        flushReactive();
     },
 
     // ============================================

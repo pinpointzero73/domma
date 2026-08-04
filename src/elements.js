@@ -2083,15 +2083,22 @@ class Dropdown extends Component {
                 this._items = [...value];
             }
 
-            // Subscribe to changes
-            if (typeof model.onChange === 'function') {
-                this._modelUnsubscribe = model.onChange((field, newVal) => {
-                    if (field === key && Array.isArray(newVal)) {
-                        this._items = [...newVal];
-                        if (this._isOpen) {
-                            this._renderMenu();
-                        }
-                    }
+            // Subscribe to changes.
+            // onFieldChange fires only for this key and passes the value
+            // positionally; onChange passes a single {field, newValue} object.
+            const onFieldValue = (newVal) => {
+                if (!Array.isArray(newVal)) return;
+                this._items = [...newVal];
+                if (this._isOpen) {
+                    this._renderMenu();
+                }
+            };
+
+            if (typeof model.onFieldChange === 'function') {
+                this._modelUnsubscribe = model.onFieldChange(key, onFieldValue);
+            } else if (typeof model.onChange === 'function') {
+                this._modelUnsubscribe = model.onChange(({field, newValue}) => {
+                    if (field === key) onFieldValue(newValue);
                 });
             }
         }
@@ -7155,12 +7162,18 @@ class Autocomplete extends Component {
         this._emptyEl = null;
         this._init();
 
-        // Subscribe to model changes
-        if (this.model && typeof this.model.onChange === 'function') {
-            this._modelUnsubscribe = this.model.onChange((field, newVal) => {
-                if (field === this.modelKey && newVal !== this.getValue()) {
-                    this.setValue(newVal);
-                }
+        // Subscribe to model changes.
+        // onFieldChange fires only for modelKey and passes the value
+        // positionally; onChange passes a single {field, newValue} object.
+        const onFieldValue = (newVal) => {
+            if (newVal !== this.getValue()) this.setValue(newVal);
+        };
+
+        if (this.model && typeof this.model.onFieldChange === 'function') {
+            this._modelUnsubscribe = this.model.onFieldChange(this.modelKey, onFieldValue);
+        } else if (this.model && typeof this.model.onChange === 'function') {
+            this._modelUnsubscribe = this.model.onChange(({field, newValue}) => {
+                if (field === this.modelKey) onFieldValue(newValue);
             });
         }
     }
@@ -7668,16 +7681,27 @@ class Pillbox extends Component {
         this._filteredData = [];
         this._init();
 
-        // Subscribe to model changes
-        if (this.model && typeof this.model.onChange === 'function') {
-            this._modelUnsubscribe = this.model.onChange((field, newVal) => {
-                if (field === this.modelKey && Array.isArray(newVal)) {
-                    const currentVal = this.getValue();
-                    // Only update if values differ (avoid infinite loops)
-                    if (JSON.stringify(currentVal) !== JSON.stringify(newVal)) {
-                        this.setValue(newVal);
-                    }
-                }
+        // Subscribe to model changes.
+        // onFieldChange fires only for modelKey and passes the value
+        // positionally; onChange passes a single {field, newValue} object.
+        const onFieldValue = (newVal) => {
+            if (!Array.isArray(newVal)) return;
+            const currentVal = this.getValue();
+            // Only update if values differ (avoid infinite loops)
+            if (JSON.stringify(currentVal) !== JSON.stringify(newVal)) {
+                this.setValue(newVal);
+            }
+        };
+
+        // Only bind once the structure exists — _init() bails on a non-input
+        // element, and a subscription firing into a half-built Pillbox throws.
+        if (!this._container) {
+            // no-op: initialisation failed, leave the model unbound
+        } else if (this.model && typeof this.model.onFieldChange === 'function') {
+            this._modelUnsubscribe = this.model.onFieldChange(this.modelKey, onFieldValue);
+        } else if (this.model && typeof this.model.onChange === 'function') {
+            this._modelUnsubscribe = this.model.onChange(({field, newValue}) => {
+                if (field === this.modelKey) onFieldValue(newValue);
             });
         }
     }

@@ -91,7 +91,15 @@ const allConfigs = $.config();         // Get all configs
 // Reset/destroy (removes component, unbinds events, clears config)
 $.reset('#selector');   // Reset specific selector
 $.reset();              // Reset all configurations
+
+// Retrieve the LIVE component instance to call its methods
+const modal = $.getComponent('#my-modal');
+modal.open();
+const all = $.getComponent();   // Map of selector -> instance
 ```
+
+> **Note:** instances are not stored on the element. `$('#sel').data('component')`
+> returns `undefined` — always use `$.getComponent(selector)`.
 
 ## Multiple Selectors
 
@@ -256,8 +264,10 @@ $.setup({
             '#trigger-btn': {
                 events: {
                     click: () => {
-                        // Access configured component
-                        $('#modal').data('component').open();
+                        // Access configured component.
+                        // $.setup() keeps instances internally — they are NOT
+                        // stored on the element, so use $.getComponent().
+                        $.getComponent('#modal').open();
                     }
                 }
             }

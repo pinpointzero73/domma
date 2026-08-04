@@ -2824,3 +2824,117 @@ Domma.forms.crud('#crud', userBlueprint, {
 - [Models Showcase](../public/showcase/models/) - Reactive model examples
 - [Forms Showcase](../public/showcase/forms/) - Form generation examples
 - [Blueprints Showcase](../public/showcase/blueprints/) - Interactive blueprint demos
+
+---
+
+## Reactivity (`Domma.models`)
+
+Dependency tracking: derivations discover which fields they read, so a write re-runs exactly the work that depends
+on it. Re-runs are batched into a single microtask flush.
+
+**See [Reactivity.md](./Reactivity.md) for the full guide**, including propagation policy, rules and limits, and
+compatibility notes.
+
+### `M.computed(fn, options?)`
+
+Creates a lazily-evaluated derived value. The body does not run until something reads it, and the cached value is
+reused until a tracked dependency changes.
+
+```javascript
+const order = M.create({ price: {}, qty: {} }, { price: 10, qty: 3 });
+
+const total = M.computed(() => order.get('price') * order.get('qty'));
+
+total.get();              // 30 — body runs now
+total.get();              // 30 — cached
+order.set('qty', 4);
+total.get();              // 40 — dependency moved, so it re-evaluates
+```
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `label` | `string` | Debug label used in console warnings |
+| `onChange` | `Function` | Called with the new value whenever it changes |
+
+**Returns** a `ComputedRef`:
+
+| Member | Returns | Description |
+|--------|---------|-------------|
+| `get()` | `any` | Current value; registers a dependency on the caller |
+| `peek()` | `any` | Current value **without** registering a dependency |
+| `dispose()` | `void` | Unlink from the dependency graph |
+
+Computeds compose — one reading another links them automatically, and a computed shared by several readers is
+evaluated once per flush.
+
+### `M.effect(fn, options?)`
+
+Runs immediately to collect dependencies, then again whenever any of them change. Returns a stop function.
+
+```javascript
+const stop = M.effect(() => {
+    $('#total').text(order.get('price') * order.get('qty'));
+});
+
+stop();   // unsubscribe
+```
+
+### `M.untracked(fn)`
+
+Read values without registering them as dependencies.
+
+```javascript
+M.effect(() => {
+    const live = model.get('count');                        // tracked
+    const seed = M.untracked(() => model.get('startedAt')); // not tracked
+    render(live, seed);
+});
+```
+
+### `M.flush()`
+
+Settles pending reactive work immediately rather than waiting for the microtask. Mainly for tests, and for code
+that must observe a derived value synchronously after a write.
+
+```javascript
+model.set('v', 7);
+M.flush();       // dependent effects have now run
+```
+
+### `model.tracked()`
+
+A read-tracked, write-through view of a model's data. Reads register dependencies; writes route through `set()`,
+so validation, change notification and persistence all still run.
+
+```javascript
+const state = model.tracked();
+
+M.effect(() => console.log(state.count));   // re-runs when count changes
+state.count = 5;                            // validated, notified, persisted
+```
+
+### Subscription methods compared
+
+| Method | Callback receives | Fires for |
+|--------|-------------------|-----------|
+| `model.onChange(cb)` | `{field, newValue, oldValue, model}` | Every field |
+| `model.onChange(field, cb)` | `{field, newValue, oldValue, model}` | That field only |
+| `model.onFieldChange(field, cb)` | `(newValue, oldValue, model)` | That field only |
+| `M.effect(fn)` | — (reads what it needs) | Whatever the body read |
+
+> **Note:** `onChange` passes a **single object**, whereas `onFieldChange` passes **positional** arguments.
+> Destructuring `onChange` positionally as `(field, newValue)` will silently never match. `M.effect()` avoids the
+> question entirely by subscribing to what it reads.
+
+### Rules
+
+- **Derivations must be synchronous.** Tracking stops at the first `await`.
+- **Return new values, don't mutate old ones.** Propagation is gated on `utils.isEqual`, so a mutated-in-place
+  object reads as unchanged.
+- **Props are not tracked** in components; an attribute change re-renders in full.
+- `model.get()` with no argument tracks **every** field; prefer `model.get('field')` inside derivations.
+  `model.toJSON()` is deliberately untracked.
+
+**See also:**
+- [Reactivity Showcase](../public/showcase/models/reactivity.html) - Live, interactive demos
+- [Reactivity.md](./Reactivity.md) - Full guide

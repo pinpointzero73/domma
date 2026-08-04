@@ -143,6 +143,21 @@ export const configEngine = {
     },
 
     /**
+     * Retrieve the live component instance created for a selector.
+     *
+     * $.setup() keeps instances internally, so page code has no other way to
+     * reach them — calling a component's methods (modal.open(), tabs.show(),
+     * timer.start()) requires this accessor.
+     *
+     * @param {string} [selector] - Selector the component was configured under
+     * @returns {Object|Map|null} The instance, or a Map of all when no selector
+     */
+    getComponent(selector) {
+        if (!selector) return new Map(this._components);
+        return this._components.get(selector) || null;
+    },
+
+    /**
      * Reset/destroy configuration for a selector or all selectors
      * @param {string} [selector] - Optional selector to reset
      */
