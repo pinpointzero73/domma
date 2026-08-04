@@ -362,6 +362,78 @@ export function createComponent(tagName, definition) {
 
                 this._effects.push(eff);
             }
+
+            this._wireUpdateWatcher();
+        }
+
+        /**
+         * Notify onUpdated for ANY data change, bound or not.
+         *
+         * The per-binding effects above only ever fire for fields the template
+         * mentions, so a component that renders imperatively — the documented
+         * pattern for lists — compiles to zero bindings and would never be
+         * told its data changed. onUpdated is a lifecycle hook, not a paint
+         * callback, so it needs a subscription of its own.
+         *
+         * A whole-model read is the subscription: get() with no argument reads
+         * every field with tracking active. The notification still routes
+         * through _scheduleUpdate(), whose microtask lands after the flush that
+         * ran the binding effects, and whose _updateQueued guard collapses this
+         * watcher and every binding effect into one call per flush.
+         *
+         * That is "after the flush", not an absolute "after the DOM is
+         * painted": a write made during a flush (from a raw M.effect, say)
+         * cascades in a follow-up drain scheduled after this notification, so
+         * the hook can observe a value whose repaint has not landed yet. That
+         * is pre-existing _scheduleUpdate behaviour, shared with the binding
+         * effects, and not something this watcher introduces.
+         *
+         * WRITES FROM onUpdated MUST CONVERGE
+         * The hook is the natural place to paint imperatively, and writing back
+         * to the model from it is legitimate — but only if the value settles.
+         * utils.isEqual on the observable is what stops the cycle: write the
+         * same value twice and the second write does not propagate. A value
+         * that differs every pass (Date.now(), a counter) re-triggers this
+         * watcher indefinitely, and because the chain is pure microtasks it
+         * never yields to the macrotask queue — the tab locks with no error and
+         * no frame, rather than throwing.
+         *
+         * KNOWN LIMITATION — fields absent from data()
+         * Model creates observables lazily, so a key never returned by data()
+         * has no observable when this effect collects its dependencies, and
+         * writing it does not re-run the watcher: onUpdated will not fire for
+         * it until some declared field changes (which re-runs the watcher and
+         * picks the new field up). A component with no data() at all gets a
+         * watcher with no dependencies, so its onUpdated never fires. Declare a
+         * data(), and declare every field in it — the documented pattern, and
+         * what all the bundled examples do. Closing the gap properly needs a
+         * structural dependency inside Model itself, not a workaround here.
+         */
+        _wireUpdateWatcher() {
+            // No hook, no watcher: tracking every field to call nothing would
+            // cost a re-run and a fresh all-fields object on every write.
+            if (!onUpdated || !this._model) return;
+
+            let primed = false;
+
+            const eff = createEffect(() => {
+                this._model.get();   // tracked read of every field
+
+                // First run exists only to collect dependencies.
+                if (!primed) {
+                    primed = true;
+                    return;
+                }
+
+                // untracked() guards nothing here — _scheduleUpdate performs
+                // no reactive reads and the hook runs in a later microtask,
+                // outside any tracking context. Kept for symmetry with
+                // _wireBindings, where the wrapper IS load-bearing because
+                // _mergeData() reads every computed.
+                untracked(() => this._scheduleUpdate());
+            }, { label: `${this.tagName.toLowerCase()}:updated` });
+
+            this._effects.push(eff);
         }
 
         /**

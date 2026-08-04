@@ -84,7 +84,7 @@ Domma.component('user-card', {
 
     onBeforeMount() { /* fired before first render */ },
     onMount()       { this.fetchUser(); I.scan(this.root); },
-    onUpdated()     { /* fired after each reactive DOM update */ },
+    onUpdated()     { /* fired after any data change, once per flush */ },
     onBeforeUnmount() { /* cleanup before removal */ },
     onUnmount()     { /* element removed from DOM */ },
     onPropsChanged(name, oldValue, newValue) {
@@ -156,17 +156,23 @@ Anything inside block tags or HTML attribute values → full re-render of the co
    ├── onBeforeMount()
    ├── _injectStyles()        → theme variables + component style
    ├── _renderComponent()     → fetch template, compile bindings
-   ├── _subscribeToModel()    → wire model.onChange to DOM updates
+   ├── _wireBindings()        → one effect per bound field, plus the
+   │                            whole-model watcher that fires onUpdated
    └── onMount()
 
 2. On model.set(field, value)
-   ├── If structural field  → full re-render → onUpdated()
-   └── If text-only field   → surgical textContent → onUpdated()
+   ├── If structural field  → full re-render
+   ├── If text-only field   → surgical textContent
+   └── onUpdated()          → once per flush, after the flush that ran the
+                              binding effects
 
 3. On attribute change
    ├── Update this.props[propName]
    ├── onPropsChanged(name, old, new)
-   └── full re-render (props are always structural)
+   ├── full re-render (props are always structural)
+   └── onUpdated()          → synchronous, and NOT coalesced with (2): a props
+                              change and a data change in the same tick call
+                              the hook twice
 
 4. disconnectedCallback()
    ├── onBeforeUnmount()
@@ -174,6 +180,59 @@ Anything inside block tags or HTML attribute values → full re-render of the co
    ├── model.destroy()
    └── onUnmount()
 ```
+
+### onUpdated
+
+`onUpdated()` is a data hook, not a paint hook. It fires once per reactive
+flush for **any** change to the component's model — including a field no
+`{{ }}` binding mentions — and it runs after the flush that applied the
+binding updates, so it can read what was just rendered.
+
+That makes it the place to paint content the template cannot express, which is
+the standard pattern for lists:
+
+```javascript
+Domma.component('task-list', {
+    templateUrl: 'template.html',     // contains <ul class="list"></ul>
+    data() { return {tasks: []}; },
+    onUpdated() { this._renderList(); }
+});
+```
+
+#### Writes from onUpdated must converge
+
+Writing to the model from inside `onUpdated()` is legitimate — deriving one
+field from another, for instance — but the value **must settle**. What stops
+the cycle is the equality check on each field: write the same value twice and
+the second write does not propagate, so the hook is not called again.
+
+```javascript
+onUpdated() {
+    // ✅ converges — after the first pass, slug already equals this value
+    this.set({slug: _.kebabCase(this.data.title)});
+
+    // ❌ never converges — a different value every pass, forever
+    this.set({lastTouched: Date.now()});
+}
+```
+
+A non-converging write does not throw and does not stop. The notification
+chain is built from microtasks, which run to exhaustion before the browser
+gets control back, so the page locks up with no error, no repaint and no
+stack trace to point at. Keep the rule in mind for the fields your template
+does not bind, too: those now reach `onUpdated` as well.
+
+#### Declare a `data()`, and declare every field in it
+
+Model creates observables lazily, so a key that `data()` never returned is
+invisible to the watcher that drives `onUpdated`: writes to it will not fire
+the hook until some declared field changes. A component with **no** `data()`
+at all has nothing to watch, so its `onUpdated` never fires.
+
+#### Not called when absent
+
+If a component declares no `onUpdated`, no watcher is created — the component
+keeps exactly one effect per bound field and pays nothing for the hook.
 
 ## Router Integration
 

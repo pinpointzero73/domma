@@ -17,46 +17,42 @@
 // end to end — through Model, through the reactive graph, through the template
 // binding engine, from minified output — which no unit test does.
 //
-// KNOWN GAP — deliberately not covered here
-// -----------------------------------------
-// Interaction tests for todo, notes, contacts and markdown are ABSENT ON
-// PURPOSE. They would fail today, and a red suite is worse than a documented
-// gap.
+// FIXED REGRESSION — now covered by the interaction specs below
+// -------------------------------------------------------------
+// Interaction tests for todo, notes, contacts and markdown were once absent on
+// purpose: they could not pass. Only calculator/template.html contains {{ }}
+// bindings; the other four render their content imperatively from an
+// onUpdated() hook (_renderList() / _renderGrid() / markdown's preview +
+// stats). But onUpdated was only ever fired by _scheduleUpdate(), called from
+// inside the per-binding effects created in _wireBindings()
+// (src/component-factory.js). A template with no bindings got no effects, so
+// onUpdated never fired at all:
 //
-// Only calculator/template.html contains {{ }} bindings. The other four render
-// their content imperatively from an onUpdated() hook (_renderList() /
-// _renderGrid() / markdown's preview + stats). But onUpdated is only ever
-// fired by _scheduleUpdate(), which is called from inside the per-binding
-// effects created in _wireBindings() (src/component-factory.js). A template
-// with no bindings therefore gets no effects, and onUpdated never fires at all:
-//
-//     calculator : 7 bindings compiled -> 7 effects wired   (works)
+//     calculator : 7 bindings compiled -> 7 effects wired   (worked)
 //     todo       : 0 bindings compiled -> 0 effects wired   (inert)
 //     notes      : 0 -> 0                                   (inert)
 //     contacts   : 0 -> 0                                   (inert)
 //     markdown   : 0 -> 0                                   (inert)
 //
-// The symptom is silent — no error is thrown. The model updates correctly
-// (adding a to-do does append to the todos array and does persist), but the
-// DOM is never told. Calling _renderList() by hand immediately paints the
-// item, so the render code is fine; only the trigger is missing.
+// The symptom was silent — no error was thrown. The model updated correctly
+// (adding a to-do did append to the todos array and did persist), but the DOM
+// was never told. Calling _renderList() by hand painted the item immediately,
+// so the render code was fine; only the trigger was missing.
 //
 // Introduced by 8961c64 "feat(components): compile templates to fine-grained
-// bindings", and shipped in v0.30.0 and v0.30.1. Verified by rebuilding
-// bundles either side of it: at its parent a521331 all four behave correctly
-// (todo list gains the item, markdown preview renders <h1>, both grids fill);
-// at 8961c64 and every commit since, none of them do. It is NOT a consequence
-// of backing Model with domma-reactive observables — that commit (9221536)
-// changed exactly one line of component-factory.js, the import source.
+// bindings", and shipped in v0.30.0, v0.30.1 and v0.31.0. It was NOT a
+// consequence of backing Model with domma-reactive observables — that commit
+// (9221536) changed exactly one line of component-factory.js, the import
+// source.
 //
-// WHEN THAT IS FIXED, add interaction specs here:
-//   todo     — type into .new-todo-input, click .add-todo-btn, expect one
-//              <li> in .todo-list
-//   markdown — set .markdown-input value + dispatch 'input', expect
-//              .preview-pane-content to contain <h1> and .stat-word-count > 0
-//   notes    — set({notes: [oneNote]}), expect .notes-grid to have a child
-//   contacts — set({contacts: [oneContact]}), expect .contacts-grid to have a
-//              child
+// Fixed by _wireUpdateWatcher(): one extra effect per component that reads the
+// whole model and schedules onUpdated, so the hook fires for any data change
+// rather than only for a binding repaint. The four specs below are the
+// regression guard — they fail against any bundle built before that fix.
+//
+// NOTE: these run against public/dist/domma.min.js, a gitignored build
+// artefact. Run `npm run build:js` after changing src/ or they test the old
+// code.
 
 import {beforeAll, describe, expect, it} from 'vitest';
 import {JSDOM, VirtualConsole} from 'jsdom';
@@ -232,6 +228,119 @@ describe('Example apps render from the built bundle', () => {
                 expect(display.textContent.trim()).toBe('15');
 
                 expect(errors, `calculator logged: ${errors.join(' | ')}`).toEqual([]);
+            } finally {
+                dom.window.close();
+            }
+        });
+    });
+
+    // The four apps below paint imperatively from onUpdated() and compile to
+    // zero template bindings. Each spec drives one change and asserts the DOM
+    // caught up — the exact thing that silently stopped working in v0.30.0.
+    describe('imperative apps repaint after a data change', () => {
+
+        beforeAll(() => {
+            if (!existsSync(BUNDLE)) throw new Error(BUNDLE_MISSING);
+        });
+
+        it('todo: adding a task appends an <li> to .todo-list', async () => {
+            const {window, el, errors, dom} = await mountExample(APPS.find(a => a.dir === 'todo'));
+
+            try {
+                const shadow = el.shadowRoot;
+                const input  = shadow.querySelector('.new-todo-input');
+                expect(input, 'todo has no .new-todo-input').toBeTruthy();
+
+                input.value = 'Write the regression test';
+                shadow.querySelector('.add-todo-btn')
+                    .dispatchEvent(new window.MouseEvent('click', {bubbles: true, composed: true}));
+                await tick(40);
+
+                expect(el._model.get('todos')).toHaveLength(1);
+
+                const items = shadow.querySelectorAll('.todo-list li');
+                expect(items.length, 'model gained the task but .todo-list stayed empty').toBe(1);
+                expect(items[0].textContent).toContain('Write the regression test');
+
+                expect(errors, `todo logged: ${errors.join(' | ')}`).toEqual([]);
+            } finally {
+                dom.window.close();
+            }
+        });
+
+        it('markdown: setting content renders the preview and word count', async () => {
+            const {el, errors, dom} = await mountExample(APPS.find(a => a.dir === 'markdown'));
+
+            try {
+                const shadow   = el.shadowRoot;
+                const textarea = shadow.querySelector('.markdown-input');
+                expect(textarea, 'markdown has no .markdown-input').toBeTruthy();
+
+                el._ctx().set({content: '# Heading\n\nTwo more words'});
+                await tick(40);
+
+                const preview = shadow.querySelector('.preview-pane-content');
+                expect(preview.querySelector('h1'), 'preview never rendered the heading').toBeTruthy();
+                expect(preview.querySelector('h1').textContent).toContain('Heading');
+
+                const words = Number(shadow.querySelector('.stat-word-count').textContent);
+                expect(words).toBeGreaterThan(0);
+
+                expect(errors, `markdown logged: ${errors.join(' | ')}`).toEqual([]);
+            } finally {
+                dom.window.close();
+            }
+        });
+
+        it('notes: setting notes fills .notes-grid', async () => {
+            const {el, errors, dom} = await mountExample(APPS.find(a => a.dir === 'notes'));
+
+            try {
+                el._ctx().set({
+                    notes: [{
+                        id:         'n1',
+                        title:      'Shopping list',
+                        content:    'Milk, bread, coffee',
+                        categories: ['Personal'],
+                        updated:    Date.now()
+                    }]
+                });
+                await tick(40);
+
+                const grid = el.shadowRoot.querySelector('.notes-grid');
+                expect(grid.children.length, 'model gained a note but .notes-grid stayed empty')
+                    .toBeGreaterThan(0);
+                expect(grid.textContent).toContain('Shopping list');
+
+                expect(errors, `notes logged: ${errors.join(' | ')}`).toEqual([]);
+            } finally {
+                dom.window.close();
+            }
+        });
+
+        it('contacts: setting contacts fills .contacts-grid', async () => {
+            const {el, errors, dom} = await mountExample(APPS.find(a => a.dir === 'contacts'));
+
+            try {
+                el._ctx().set({
+                    contacts: [{
+                        id:      'c1',
+                        name:    'Ada Lovelace',
+                        email:   'ada@example.com',
+                        mobile:  '07000 000000',
+                        title:   'Mathematician',
+                        company: 'Analytical Engine Co',
+                        groups:  []
+                    }]
+                });
+                await tick(40);
+
+                const grid = el.shadowRoot.querySelector('.contacts-grid');
+                expect(grid.children.length, 'model gained a contact but .contacts-grid stayed empty')
+                    .toBeGreaterThan(0);
+                expect(grid.textContent).toContain('Ada Lovelace');
+
+                expect(errors, `contacts logged: ${errors.join(' | ')}`).toEqual([]);
             } finally {
                 dom.window.close();
             }

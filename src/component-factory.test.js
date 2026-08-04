@@ -196,3 +196,162 @@ describe('Domma component-factory - dependency-tracked rendering', () => {
         expect(textOf(el)).toContain('1');
     });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// onUpdated is a component lifecycle hook — "your data changed" — not a
+// notification that a template binding repainted. It must fire for every
+// component whose model data changes, including one that renders imperatively
+// from the hook itself and therefore compiles to zero bindings.
+//
+// Regression: 8961c64 wired onUpdated exclusively to the per-binding effects,
+// so a mustache-free template silently stopped updating (v0.30.0 → v0.31.0).
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe('Domma component-factory - onUpdated lifecycle hook', () => {
+
+    beforeEach(() => {
+        document.body.replaceChildren();
+    });
+
+    async function mount(tag, definition, attrs = {}) {
+        Domma.component(tag, definition);
+        const el = document.createElement(tag);
+        for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+        document.body.appendChild(el);
+        await settle();
+        return el;
+    }
+
+    const textOf = (el) => el.shadowRoot.querySelector('.dm-component-root').textContent;
+
+    it('fires for a component whose template has no bindings', async () => {
+        const tag = uniqueTag('c-nobindings');
+        const onUpdated = vi.fn();
+
+        const el = await mount(tag, {
+            // No {{ }} anywhere — compiles to zero bindings, exactly like the
+            // todo/notes/contacts/markdown examples, which paint imperatively.
+            template: '<ul class="list"></ul>',
+            data() { return {items: []}; },
+            onUpdated
+        });
+
+        expect(el._bindings.bindings).toHaveLength(0);
+
+        // The initial paint is not an update — the watcher's priming run, which
+        // exists only to collect dependencies, must not notify.
+        expect(onUpdated).not.toHaveBeenCalled();
+
+        onUpdated.mockClear();
+        el._model.set('items', ['one']);
+        await settle();
+
+        expect(onUpdated).toHaveBeenCalledTimes(1);
+    });
+
+    it('fires exactly once per flush when several bound fields change together', async () => {
+        const tag = uniqueTag('c-onceperflush');
+        const onUpdated = vi.fn();
+
+        const el = await mount(tag, {
+            // Three bindings plus an unbound field: the watcher and every
+            // binding effect must collapse into a single notification.
+            template: '<p>{{a}}</p><p>{{b}}</p><p>{{sum}}</p>',
+            data() { return {a: 0, b: 0, hidden: 0}; },
+            computed: {
+                sum() { return this.data.a + this.data.b; }
+            },
+            onUpdated
+        });
+
+        expect(el._bindings.bindings.length).toBeGreaterThan(1);
+
+        onUpdated.mockClear();
+        el._model.set({a: 1, b: 2, hidden: 3});
+        await settle();
+
+        expect(onUpdated).toHaveBeenCalledTimes(1);
+        expect(textOf(el)).toContain('3');
+    });
+
+    it('fires only after the DOM already reflects the change', async () => {
+        const tag = uniqueTag('c-afterdom');
+        const seen = [];
+
+        const el = await mount(tag, {
+            template: '<p class="v">{{v}}</p>',
+            data() { return {v: 'before'}; },
+            onUpdated() {
+                seen.push(this.root.querySelector('.v').textContent);
+            }
+        });
+
+        seen.length = 0;
+        el._model.set('v', 'after');
+        await settle();
+
+        // The hook is documented as post-update: code inside it reads the
+        // painted DOM (the examples measure and decorate what was rendered).
+        expect(seen).toEqual(['after']);
+    });
+
+    it('does not fire once the element has been disconnected', async () => {
+        const tag = uniqueTag('c-disconnected');
+        const onUpdated = vi.fn();
+
+        const el = await mount(tag, {
+            template: '<div class="static">nothing bound here</div>',
+            data() { return {v: 1}; },
+            onUpdated
+        });
+
+        // The whole-model watcher is the only reactive work a mustache-free
+        // component has, and it must be owned by _effects so disconnect
+        // disposes it alongside the binding effects.
+        expect(el._effects.length).toBeGreaterThan(0);
+
+        el.remove();
+        await settle();
+        expect(el._effects).toHaveLength(0);
+
+        onUpdated.mockClear();
+        el._model.set('v', 2);
+        await settle();
+
+        expect(onUpdated).not.toHaveBeenCalled();
+    });
+
+    it('fires for a field no template binds', async () => {
+        const tag = uniqueTag('c-unbound');
+        const onUpdated = vi.fn();
+
+        const el = await mount(tag, {
+            template: '<p>{{shown}}</p>',
+            data() { return {shown: 'x', hidden: 0}; },
+            onUpdated
+        });
+
+        onUpdated.mockClear();
+        el._model.set('hidden', 99);
+        await settle();
+
+        // Deliberate: onUpdated means "the data changed", not "a binding
+        // repainted". This restores the pre-8961c64 contract.
+        expect(onUpdated).toHaveBeenCalledTimes(1);
+        expect(textOf(el)).toContain('x');
+    });
+
+    it('is not wired at all when the component declares no onUpdated', async () => {
+        const tag = uniqueTag('c-nohook');
+        const el = await mount(tag, {
+            template: '<p>{{a}}</p><p>{{b}}</p><p>{{c}}</p>',
+            data() { return {a: 1, b: 2, c: 3}; }
+        });
+
+        // Three bindings, three effects — and no whole-model watcher. Tracking
+        // every field to call a hook that does not exist would undo the
+        // fine-grained win for the commonest component shape.
+        expect(el._bindings.bindings).toHaveLength(3);
+        expect(el._effects).toHaveLength(3);
+    });
+});

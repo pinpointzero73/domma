@@ -506,7 +506,7 @@ export default {
                             <tbody>
                                 <tr><td><code>onBeforeMount()</code></td><td>Before template is rendered</td></tr>
                                 <tr><td><code>onMount()</code></td><td>After template rendered + bindings established</td></tr>
-                                <tr><td><code>onUpdated()</code></td><td>After any reactive field triggers a DOM update</td></tr>
+                                <tr><td><code>onUpdated()</code></td><td>After any data change, once per flush — including fields no binding uses</td></tr>
                                 <tr><td><code>onBeforeUnmount()</code></td><td>Before element is removed from DOM</td></tr>
                                 <tr><td><code>onUnmount()</code></td><td>After element removed and cleaned up</td></tr>
                                 <tr><td><code>onPropsChanged(name, old, new)</code></td><td>When an observed attribute changes</td></tr>
