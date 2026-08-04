@@ -3,8 +3,8 @@
 Domma tracks which fields a derivation actually reads, so a write re-runs exactly the work that depends on it and
 nothing else.
 
-The primitives live in `src/reactive.js` and are exposed on the models namespace as `M.computed()`, `M.effect()`,
-`M.untracked()` and `M.flush()`.
+The primitives live in the [`domma-reactive`](https://www.npmjs.com/package/domma-reactive) package and are exposed on
+the models namespace as `M.computed()`, `M.effect()`, `M.untracked()` and `M.flush()`.
 
 ---
 

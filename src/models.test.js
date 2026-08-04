@@ -239,6 +239,65 @@ describe('Domma.models - Models Module Tests', () => {
     expect(User.get('name')).toBe('Default');
   });
 
+  it('Models - tracked() proxy tracks reads and routes writes through validation', () => {
+    // Ported from the retired src/reactive.test.js. Read tracking is exercised
+    // indirectly by component-factory.test.js, but nothing outside that retired
+    // file asserted that a write through the proxy goes via set() — and so
+    // still validates, notifies and persists — rather than poking the
+    // observable directly.
+    const model = Domma.models.create({count: {type: 'number', min: 0}}, {count: 1});
+    const state = model.tracked();
+    const seen = [];
+    const onChangeSpy = vi.fn();
+
+    const stop = Domma.models.effect(() => seen.push(state.count));
+    expect(seen).toEqual([1]);
+
+    model.onChange(onChangeSpy);
+    state.count = 5;                                  // write-through
+    expect(model.get('count')).toBe(5);
+    expect(onChangeSpy).toHaveBeenCalledTimes(1);     // routed via set(), so notified
+    Domma.models.flush();
+    expect(seen).toEqual([1, 5]);
+
+    expect(() => { state.count = -1; }).toThrow();    // validation preserved
+    expect(model.get('count')).toBe(5);               // and the write was rejected
+
+    stop();
+  });
+
+  it('Models - onChange stays synchronous and per-field across a batch set', () => {
+    // Ported from the retired src/reactive.test.js. Nothing else pairs onChange
+    // with a batched set(), so nothing else pinned that a batch still produces
+    // one synchronous call per field, in field order.
+    const model = Domma.models.create({a: {}, b: {}}, {a: 0, b: 0});
+    const calls = [];
+
+    model.onChange(({field, newValue}) => calls.push([field, newValue]));
+    model.set({a: 1, b: 2});
+
+    expect(calls).toEqual([['a', 1], ['b', 2]]);
+  });
+
+  it('Models - destroying a model detaches its dependents', () => {
+    // destroy() drops the observables, and the Deps go with them, so a
+    // computation still reading the model is detached rather than left
+    // subscribed to a corpse. Ported from the retired src/reactive.test.js,
+    // which was the only place this teardown path was covered.
+    const model = Domma.models.create({v: {}}, {v: 0});
+    const body = vi.fn(() => model.get('v'));
+
+    const stop = Domma.models.effect(body);
+    expect(body).toHaveBeenCalledTimes(1);
+
+    model.destroy();
+    model.set('v', 1);
+    Domma.models.flush();
+    expect(body).toHaveBeenCalledTimes(1);
+
+    stop();
+  });
+
   it('Models - pub/sub subscribe and publish', () => {
     const subscriberSpy = vi.fn();
     Domma.models.subscribe('test-event', subscriberSpy);

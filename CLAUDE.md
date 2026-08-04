@@ -212,8 +212,8 @@ src/
 ├── dom.js           # jQuery-compatible DOM API
 ├── utils.js         # Lodash-compatible utilities
 ├── dates.js         # Moment-style date manipulation
-├── models.js        # Reactive models & pub/sub
-├── reactive.js      # Dependency tracking core (batched microtask flush)
+├── models.js        # Reactive models & pub/sub (dependency tracking via the
+│                    #   domma-reactive package, batched microtask flush)
 ├── elements.js      # UI components
 ├── tables.js        # DataTable functionality
 ├── config.js        # JSON configuration engine
