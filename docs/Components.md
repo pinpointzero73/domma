@@ -360,7 +360,9 @@ const registry = Domma.components.registry();  // Map<tagName, definition>
 
 ## See Also
 
-- [src/template-compiler.js](../src/template-compiler.js) — Binding compiler internals
+- [domma-reactive](https://www.npmjs.com/package/domma-reactive) — Binding compiler internals. The compiler moved out
+  of `src/template-compiler.js` into the `domma-reactive` package; Domma imports `TemplateCompiler` from there and
+  injects `utils.render` as the renderer.
 - [src/component-factory.js](../src/component-factory.js) — Factory + Custom Element builder
 - [src/plugins/rollup-plugin-domma.js](../src/plugins/rollup-plugin-domma.js) — SFC build plugin
 - [public/showcase/components/](../public/showcase/components/) — Interactive showcase

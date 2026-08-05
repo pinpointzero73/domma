@@ -32,10 +32,14 @@
  */
 
 import { DommaElement, getThemeVariables } from './web-components/base/domma-element.js';
-import { TemplateCompiler } from './template-compiler.js';
 import { models } from './models.js';
 import { utils } from './utils.js';
-import { computed as createComputed, effect as createEffect, untracked } from 'domma-reactive';
+import {
+    TemplateCompiler,
+    computed as createComputed,
+    effect as createEffect,
+    untracked
+} from 'domma-reactive';
 
 // ── Template cache (shared across all instances) ──────────────────────────────
 const _templateCache = new Map();

@@ -355,3 +355,167 @@ describe('Domma component-factory - onUpdated lifecycle hook', () => {
         expect(el._effects).toHaveLength(3);
     });
 });
+
+// ── Fine-grained bindings ─────────────────────────────────────────────────────
+//
+// These tests used to live in src/template-compiler.test.js. The compiler moved
+// to the domma-reactive package, but these did not go with it: they mount real
+// components and assert on shadow DOM, `_model` and the `onUpdated` hook, so
+// they exercise component-factory.js — the compiler is only the machinery
+// underneath. The package has its own tests driving `compile()` directly.
+//
+// What they protect is the integration: that the factory wires one effect per
+// binding, so a structural change re-renders its own block and leaves every
+// other node — and any user state living on it — untouched.
+
+describe('Domma component-factory - fine-grained updates', () => {
+
+    beforeEach(() => {
+        document.body.replaceChildren();
+    });
+
+    async function mount(tag, definition) {
+        Domma.component(tag, definition);
+        const el = document.createElement(tag);
+        document.body.appendChild(el);
+        await settle();
+        return el;
+    }
+
+    const root = (el) => el.shadowRoot.querySelector('.dm-component-root');
+
+    it('preserves DOM identity outside a block when the block flips', async () => {
+        const el = await mount(uniqueTag('c-t3'), {
+            template: '<p id="keep">{{label}}</p>{{#if open}}<span id="panel">P</span>{{/if}}',
+            data() { return {label: 'hello', open: false}; }
+        });
+
+        const keepBefore = root(el).querySelector('#keep');
+        expect(root(el).querySelector('#panel')).toBeNull();
+
+        el._model.set('open', true);
+        await settle();
+
+        // The block rendered...
+        expect(root(el).querySelector('#panel')).not.toBeNull();
+        // ...and the untouched paragraph is the SAME node, not a re-created one.
+        // Under the old full-re-render strategy this assertion fails.
+        expect(root(el).querySelector('#keep')).toBe(keepBefore);
+    });
+
+    it('keeps focus and user input across a structural change', async () => {
+        const el = await mount(uniqueTag('c-t3'), {
+            template: '<input id="field"><b>{{n}}</b>{{#if big}}<i id="flag">big</i>{{/if}}',
+            data() { return {n: 1, big: false}; }
+        });
+
+        const input = root(el).querySelector('#field');
+        input.value = 'typed by the user';
+
+        el._model.set('big', true);
+        await settle();
+
+        expect(root(el).querySelector('#flag')).not.toBeNull();
+        // A full re-render would have destroyed this input and its value.
+        expect(root(el).querySelector('#field').value).toBe('typed by the user');
+    });
+
+    it('updates a dynamic attribute without touching the rest of the DOM', async () => {
+        const el = await mount(uniqueTag('c-t3'), {
+            template: '<div id="box" class="card {{tone}}"><p id="body">{{text}}</p></div>',
+            data() { return {tone: 'is-quiet', text: 'hi'}; }
+        });
+
+        const box = root(el).querySelector('#box');
+        const body = root(el).querySelector('#body');
+        expect(box.getAttribute('class')).toBe('card is-quiet');
+
+        el._model.set('tone', 'is-loud');
+        await settle();
+
+        expect(box.getAttribute('class')).toBe('card is-loud');
+        expect(root(el).querySelector('#box')).toBe(box);
+        expect(root(el).querySelector('#body')).toBe(body);
+    });
+
+    it('re-renders an each block when its collection changes', async () => {
+        const el = await mount(uniqueTag('c-t3'), {
+            template: '<ul>{{#each items}}<li>{{.}}</li>{{/each}}</ul><p id="keep">static</p>',
+            data() { return {items: ['a']}; }
+        });
+
+        const keep = root(el).querySelector('#keep');
+        expect(root(el).querySelectorAll('li')).toHaveLength(1);
+
+        el._model.set('items', ['a', 'b', 'c']);
+        await settle();
+
+        expect(root(el).querySelectorAll('li')).toHaveLength(3);
+        expect(root(el).textContent).toContain('c');
+        expect(root(el).querySelector('#keep')).toBe(keep);
+    });
+
+    it('updates a text binding nested inside a rendered block', async () => {
+        const el = await mount(uniqueTag('c-t3'), {
+            template: '{{#if shown}}<b id="inner">{{name}}</b>{{/if}}',
+            data() { return {shown: true, name: 'alice'}; }
+        });
+
+        expect(root(el).textContent).toContain('alice');
+
+        el._model.set('name', 'bob');
+        await settle();
+        expect(root(el).textContent).toContain('bob');
+    });
+
+    it('binds text inside a block that was initially hidden', async () => {
+        const el = await mount(uniqueTag('c-t3'), {
+            template: '{{#if shown}}<b>{{name}}</b>{{/if}}',
+            data() { return {shown: false, name: 'alice'}; }
+        });
+
+        expect(root(el).textContent).not.toContain('alice');
+
+        el._model.set('shown', true);
+        await settle();
+        expect(root(el).textContent).toContain('alice');
+
+        // The nested binding must be live now that its block exists
+        el._model.set('name', 'bob');
+        await settle();
+        expect(root(el).textContent).toContain('bob');
+    });
+
+    it('does not touch a block whose condition did not change', async () => {
+        const onUpdated = vi.fn();
+        const el = await mount(uniqueTag('c-t3'), {
+            template: '{{#if open}}<span id="panel">P</span>{{/if}}<b>{{n}}</b>',
+            data() { return {open: true, n: 1}; },
+            onUpdated
+        });
+
+        const panel = root(el).querySelector('#panel');
+
+        el._model.set('n', 2);
+        await settle();
+
+        expect(root(el).textContent).toContain('2');
+        // Changing 'n' must not re-render the {{#if open}} region
+        expect(root(el).querySelector('#panel')).toBe(panel);
+        expect(onUpdated).toHaveBeenCalledTimes(1);
+    });
+
+    it('renders a triple-stache region as markup and updates it', async () => {
+        const el = await mount(uniqueTag('c-t3'), {
+            template: '<div>{{{markup}}}</div>',
+            data() { return {markup: '<em id="a">one</em>'}; }
+        });
+
+        expect(root(el).querySelector('#a')).not.toBeNull();
+
+        el._model.set('markup', '<strong id="b">two</strong>');
+        await settle();
+        expect(root(el).querySelector('#b')).not.toBeNull();
+        expect(root(el).querySelector('#a')).toBeNull();
+    });
+});
