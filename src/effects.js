@@ -449,6 +449,29 @@ export function pulse(selector, options = {}) {
  *   loop: true
  * });
  */
+/**
+ * Parse a wait duration for a scribe action: '2s', '500ms', or a raw number
+ * of milliseconds. Anything unreadable is 0.
+ *
+ * 'ms' MUST be tested before 's', because 'ms' also ends with 's'. Checking
+ * 's' first makes the 'ms' branch unreachable and multiplies every
+ * millisecond value by 1000 — a '300ms' wait became five minutes.
+ *
+ * @param {string|number} value
+ * @returns {number} milliseconds
+ */
+export function parseWait(value) {
+    if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+    if (typeof value !== 'string') return 0;
+
+    const parsed = parseFloat(value);
+    if (!Number.isFinite(parsed)) return 0;
+
+    if (value.endsWith('ms')) return parsed;
+    if (value.endsWith('s')) return parsed * 1000;
+    return 0;
+}
+
 export function scribe(selector, options = {}) {
   // Default options
   const defaults = {
@@ -506,20 +529,6 @@ export function scribe(selector, options = {}) {
       isRunning: () => false,
       isPaused: () => false
     };
-  }
-
-  // Parse wait duration (supports '2s', '500ms', or raw number)
-  function parseWait(value) {
-    if (typeof value === 'number') return value;
-    if (typeof value === 'string') {
-      if (value.endsWith('s')) {
-        return parseFloat(value) * 1000;
-      }
-      if (value.endsWith('ms')) {
-        return parseFloat(value);
-      }
-    }
-    return 0;
   }
 
   // State for each element

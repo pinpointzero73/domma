@@ -1,6 +1,6 @@
 // src/effects.test.js
 import {describe, expect, it, vi, beforeEach, afterEach} from 'vitest';
-import {resolvePalette, EFFECT_PALETTES} from './effects.js';
+import {resolvePalette, EFFECT_PALETTES, parseWait} from './effects.js';
 
 describe('Domma.effects — resolvePalette', () => {
   it('returns a named preset palette as an array', () => {
@@ -112,5 +112,34 @@ describe('Domma.effects — default export', () => {
   it('exposes butterflies and strobe on the default export', () => {
     expect(typeof effectsDefault.butterflies).toBe('function');
     expect(typeof effectsDefault.strobe).toBe('function');
+  });
+});
+
+describe('Domma.effects — parseWait', () => {
+  it('parses seconds', () => {
+    expect(parseWait('2s')).toBe(2000);
+    expect(parseWait('0.5s')).toBe(500);
+  });
+
+  it('parses milliseconds', () => {
+    // Regression: 'ms' also ends with 's', so an endsWith('s') test that runs
+    // first swallows it and multiplies by 1000 — a '300ms' wait became five
+    // minutes. Reported in the v0.25.2 notes and unfixed until v0.33.1.
+    expect(parseWait('300ms')).toBe(300);
+    expect(parseWait('50ms')).toBe(50);
+    expect(parseWait('1500ms')).toBe(1500);
+  });
+
+  it('passes a raw number straight through', () => {
+    expect(parseWait(750)).toBe(750);
+    expect(parseWait(0)).toBe(0);
+  });
+
+  it('returns 0 for anything it cannot read', () => {
+    expect(parseWait('soon')).toBe(0);
+    expect(parseWait('')).toBe(0);
+    expect(parseWait(null)).toBe(0);
+    expect(parseWait(undefined)).toBe(0);
+    expect(parseWait({})).toBe(0);
   });
 });
