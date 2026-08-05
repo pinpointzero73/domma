@@ -5873,7 +5873,7 @@ code {
 
 .domma-table-search-input.regex-mode {
     font-family: monospace;
-    background-color: var(--dm-purple-50);
+    background-color: var(--dm-info-bg);
 }
 
 /* Regex toggle button */
@@ -6038,10 +6038,6 @@ code {
 
 [data-mode="dark"] .domma-table-search-input:focus {
     border-color: var(--dm-primary);
-}
-
-[data-mode="dark"] .domma-table-search-input.regex-mode {
-    background-color: var(--dm-purple-900);
 }
 
 [data-mode="dark"] .domma-table-regex-button {

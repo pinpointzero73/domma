@@ -63,6 +63,30 @@ Full build chain (in order):
 9. **`build:kickstart-files`** — copy templates + dist files to `public/download/kickstart-files/` and generate `kickstart-manifest.json`
 10. `build:miniapps` — build all miniapps
 
+**Validators** (fast, no build needed — but read `public/dist/*.css`, so build CSS first):
+
+```bash
+npm run validate            # both
+npm run validate:classes    # CSS classes used in HTML that resolve to nothing
+npm run validate:theme      # fixed backgrounds that inherit a themed text colour
+```
+
+Both are **ratchets**, not clean gates: the repository carries a known backlog
+recorded in `scripts/*.baseline.json`, and each fails only when a file gets worse
+or a new offender appears. Fix something and lower its baseline with
+`--update-baseline`; raising one should be deliberate. `--strict` ignores the
+baseline and reports everything.
+
+They exist because both failure modes are **invisible** — no error, no failing
+test, just markup that renders wrong:
+
+- `.form-control`, `.col-md-*` and `.table-responsive` were all used while defined
+  nowhere. The kickstart templates alone carried 143 dead class usages, so every
+  scaffolded project rendered unstyled.
+- Eighteen rules set `background: var(--dm-gray-100)` — a variable no theme
+  redefines — with no `color`, so their text followed `--dm-text` and became
+  illegible under the dark variant.
+
 **Kickstart files only** (fast, no JS/CSS rebuild needed):
 ```bash
 npm run build:kickstart-files

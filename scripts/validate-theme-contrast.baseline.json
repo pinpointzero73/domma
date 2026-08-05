@@ -1,0 +1,13 @@
+[
+  "public/showcase/css/domma-showcase.css  .models-model-display",
+  "public/showcase/css/domma-showcase.css  .models-user-item",
+  "src/css/domma-tools.css  .dm-size-input-wrapper input[type=\"range\"]",
+  "src/css/domma-tools.css  .dm-theme-toggle",
+  "src/css/domma-tools.css  .qr-preview-container",
+  "src/css/domma.css  .btn-group > .btn-secondary.active",
+  "src/css/domma.css  .form-file-label:hover",
+  "src/css/domma.css  .form-range",
+  "src/css/domma.css  .form-range::-moz-range-track",
+  "src/css/domma.css  .form-switch-input",
+  "src/css/domma.css  .form-switch-input::after"
+]
