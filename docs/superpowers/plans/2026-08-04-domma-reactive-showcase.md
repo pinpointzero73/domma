@@ -583,7 +583,7 @@ Read `public/showcase/models/reactivity.html` in full — it is the closest sibl
 <body class="dm-cloaked" data-layout="showcase" data-layout-variant="subpage">
 ```
 
-That is the exact form all 26 existing showcase subpages use — **not** `data-layout="showcase:subpage"`, which is not a value the detector recognises. Layout system supplies header/footer/sidebar; call `Domma.init()` and `I.scan()` after load; use Domma throughout (`E.*`, `$`, `_`).
+That is the exact form all 26 existing showcase subpages use — **not** `data-layout="showcase:subpage"`, which is not a value the detector recognises. Layout system supplies header/footer/sidebar; call `I.scan()` after load (there is no `Domma.init()` — Domma self-initialises); use Domma throughout (`E.*`, `$`, `_`).
 
 **Theme rule:** every colour must resolve through a CSS variable. `--dm-border`, `--dm-warning-bg` and friends are redefined for the dark variant in `public/dist/domma.css`, so `var(--dm-border)` adapts and a literal like `#cbd5e1` does not. This applies inside `Domma.component()` templates too — `_injectStyles()` injects the theme variables into each Shadow DOM, so `var(--dm-border)` resolves there.
 

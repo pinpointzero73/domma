@@ -196,7 +196,15 @@ export const commerce = {
         strokeWidth: 2,
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
-    }
-};
+    },
+    'gem': {
+        viewBox: '0 0 24 24',
+        path: 'M6 3h12l4 6-10 12L2 9l4-6z M11 3L8 9l4 12 4-12-3-6 M2 9h20',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    }};
 
 export default commerce;

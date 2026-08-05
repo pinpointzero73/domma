@@ -26,6 +26,21 @@ class DommaCollection {
             this.elements = [];
         }
         this.length = this.elements.length;
+
+        // Numeric index properties, so `$('#el')[0]` works the way it does in
+        // jQuery — and the way this project's own DOM showcase documents it
+        // ("$('.items')[0]  // Same as get(0)"). Without them `[0]` was
+        // `undefined`, which is silent until something dereferences it: the
+        // dot-notation showcase did exactly that and died on `.tagName`.
+        //
+        // Safe to do here and only here: the constructor is the sole place
+        // `this.elements` is ever assigned, and no method mutates it in place,
+        // so the indices cannot drift out of step with the array. Assigning
+        // them also makes the collection array-LIKE, so `Array.from($('.x'))`
+        // and spread both work.
+        for (let i = 0; i < this.elements.length; i++) {
+            this[i] = this.elements[i];
+        }
     }
 
     // ============================================

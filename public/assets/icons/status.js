@@ -272,7 +272,15 @@ export const status = {
         strokeWidth: 2,
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
-    }
-};
+    },
+    'alert-triangle': {
+        viewBox: '0 0 24 24',
+        path: 'M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z M12 9v4 M12 17h.01',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    }};
 
 export default status;

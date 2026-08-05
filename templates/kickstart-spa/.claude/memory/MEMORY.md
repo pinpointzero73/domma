@@ -24,7 +24,7 @@ Quick reference for Domma conventions - enforces best practices across sessions.
 11. **Modals**: `E.modal(selector, options)` — NOT custom modal code
 12. **Templates**: `templateUrl: 'path.html'` — NOT large inline strings
 13. **Tabs**: `E.tabs()`, `E.accordion()` — NOT custom switching code
-14. **Init**: Call `Domma.init()` and `I.scan()` after DOM ready
+14. **Init**: Call `I.scan()` after DOM ready — Domma starts itself when the bundle loads; there is no `Domma.init()`
 15. **Events**: `.on()`, `.off()`, `.one()` — NOT `.addEventListener()`
 
 ## Aliases Quick Reference

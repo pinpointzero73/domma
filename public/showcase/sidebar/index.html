@@ -149,7 +149,7 @@ Domma.elements.sidebar('#my-sidebar', {
 
         <div class="demo-container mb-6">
             <aside id="sidebar-basic"></aside>
-            <div class="demo-content with-sidebar">
+            <div class="demo-content with-sidebar" id="demo-content-basic">
                 <h3>Main Content Area</h3>
                 <p>The sidebar is fixed to the left. Try clicking the navigation items!</p>
                 <button id="toggle-basic" class="btn btn-primary mt-4">Toggle Sidebar (Mobile)</button>
@@ -160,6 +160,7 @@ Domma.elements.sidebar('#my-sidebar', {
         <div class="code-block language-javascript">
             <pre><code>
 const sidebar = Domma.elements.sidebar('#sidebar-basic', {
+    contentSelector: '#demo-content-basic',
     position: 'left',
     fixed: true,
     width: '250px',
@@ -187,7 +188,7 @@ const sidebar = Domma.elements.sidebar('#sidebar-basic', {
 
         <div class="demo-container mb-6">
             <aside id="sidebar-nested"></aside>
-            <div class="demo-content with-sidebar">
+            <div class="demo-content with-sidebar" id="demo-content-nested">
                 <h3>Multi-Level Navigation</h3>
                 <p>Click on items with arrows to expand/collapse submenus. The component supports unlimited nesting depth.</p>
                 <button id="expand-all" class="btn btn-primary mt-4 mr-2">Expand All</button>
@@ -199,6 +200,7 @@ const sidebar = Domma.elements.sidebar('#sidebar-basic', {
         <div class="code-block language-javascript">
             <pre><code>
 const sidebar = Domma.elements.sidebar('#sidebar-nested', {
+    contentSelector: '#demo-content-nested',
     items: [
         { text: 'Dashboard', url: '#', icon: 'layout' },
         {
@@ -232,7 +234,7 @@ const sidebar = Domma.elements.sidebar('#sidebar-nested', {
 
         <div class="demo-container mb-6">
             <aside id="sidebar-badges"></aside>
-            <div class="demo-content with-sidebar">
+            <div class="demo-content with-sidebar" id="demo-content-badges">
                 <h3>Notification Badges</h3>
                 <p>Badges can display counts, status, or notifications.</p>
             </div>
@@ -242,6 +244,7 @@ const sidebar = Domma.elements.sidebar('#sidebar-nested', {
         <div class="code-block language-javascript">
             <pre><code>
 Domma.elements.sidebar('#sidebar-badges', {
+    contentSelector: '#demo-content-badges',
     items: [
         { text: 'Inbox', url: '#inbox', icon: 'mail', badge: '12' },
         { text: 'Notifications', url: '#notifications', icon: 'bell', badge: '3' },
@@ -259,7 +262,7 @@ Domma.elements.sidebar('#sidebar-badges', {
 
         <div class="demo-container mb-6">
             <aside id="sidebar-light"></aside>
-            <div class="demo-content with-sidebar">
+            <div class="demo-content with-sidebar" id="demo-content-light">
                 <h3>Light Sidebar Theme</h3>
                 <p>The sidebar component adapts to light or dark theme variants.</p>
             </div>
@@ -269,6 +272,7 @@ Domma.elements.sidebar('#sidebar-badges', {
         <div class="code-block language-javascript">
             <pre><code>
 Domma.elements.sidebar('#sidebar-light', {
+    contentSelector: '#demo-content-light',
     variant: 'light',  // or 'dark'
     items: [/* ... */]
 });
@@ -283,7 +287,7 @@ Domma.elements.sidebar('#sidebar-light', {
 
         <div class="demo-container mb-6">
             <aside id="sidebar-persist"></aside>
-            <div class="demo-content with-sidebar">
+            <div class="demo-content with-sidebar" id="demo-content-persist">
                 <h3>Persistent State</h3>
                 <p>Expand some menus, then reload the page. The expanded state will be remembered!</p>
                 <button id="reload-demo" class="btn btn-primary mt-4">Reload Page</button>
@@ -294,6 +298,7 @@ Domma.elements.sidebar('#sidebar-light', {
         <div class="code-block language-javascript">
             <pre><code>
 Domma.elements.sidebar('#sidebar-persist', {
+    contentSelector: '#demo-content-persist',
     persistExpanded: true,
     persistKey: 'my-app-sidebar',  // Unique key for this sidebar
     items: [/* ... */]
@@ -502,6 +507,7 @@ $.setup({
     document.addEventListener('DOMContentLoaded', () => {
         // Basic Example
         const sidebarBasic = Domma.elements.sidebar('#sidebar-basic', {
+            contentSelector: '#demo-content-basic',
             position: 'left',
             fixed: true,
             width: '250px',
@@ -526,6 +532,7 @@ $.setup({
 
         // Nested Example
         const sidebarNested = Domma.elements.sidebar('#sidebar-nested', {
+            contentSelector: '#demo-content-nested',
             position: 'left',
             fixed: true,
             width: '250px',
@@ -577,6 +584,7 @@ $.setup({
 
         // Badges Example
         Domma.elements.sidebar('#sidebar-badges', {
+            contentSelector: '#demo-content-badges',
             position: 'left',
             fixed: true,
             width: '250px',
@@ -593,6 +601,7 @@ $.setup({
 
         // Light Theme Example
         Domma.elements.sidebar('#sidebar-light', {
+            contentSelector: '#demo-content-light',
             position: 'left',
             fixed: true,
             width: '250px',
@@ -608,6 +617,7 @@ $.setup({
 
         // Persistence Example
         Domma.elements.sidebar('#sidebar-persist', {
+            contentSelector: '#demo-content-persist',
             position: 'left',
             fixed: true,
             width: '250px',

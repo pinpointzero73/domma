@@ -77,8 +77,10 @@ Always load CSS in this order:
 <script src="dist/domma.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script> <!-- For dynamic content -->
 <script>
-    // Initialize Domma BEFORE loading app scripts
-    Domma.init();
+    // Domma starts itself the moment the bundle loads — it registers its web
+    // components, manages the anti-FOUC cloak and defines the aliases. The only
+    // startup call a page needs is the icon scan, and it must run BEFORE the app
+    // scripts so `data-icon` elements in the initial markup are resolved.
     Domma.icons.scan();
 </script>
 <script type="module" src="js/app.js"></script>

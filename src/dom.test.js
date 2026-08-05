@@ -213,3 +213,68 @@ describe('Domma - Manipulation', () => {
     expect(el.get(0).style.display).not.toBe('none');
   });
 });
+// ── Array-like index access ───────────────────────────────────────────────────
+//
+// `$('#el')[0]` is one of the most-typed things in jQuery, and Domma's own DOM
+// showcase documents it — `$('.items')[0]  // Same as get(0)`. It was not the
+// same: DommaCollection exposed `.elements` and `.get(i)` but no numeric
+// properties, so `[0]` was `undefined` and the failure was silent until
+// something dereferenced it.
+//
+// It surfaced as `TypeError: Cannot read properties of undefined (reading
+// 'tagName')` on the dot-notation showcase, which did `$(selector)[0]` and
+// handed the result to `M.bind()`. 65 call sites across the repository use this
+// form.
+//
+// Indices are assigned in the constructor, which is the only place
+// `this.elements` is ever set — no method mutates it in place, so they cannot
+// drift out of step.
+
+describe('Domma - Array-like index access', () => {
+    beforeEach(() => {
+        document.body.innerHTML = `
+            <div id="solo"></div>
+            <ul><li class="row" id="r1"></li><li class="row" id="r2"></li></ul>`;
+    });
+
+    it('[0] is the element, and agrees with get(0)', () => {
+        const $el = Domma('#solo');
+        expect($el[0]).toBe(document.getElementById('solo'));
+        expect($el[0]).toBe($el.get(0));
+    });
+
+    it('indexes every element in a multi-element collection', () => {
+        const $rows = Domma('.row');
+        expect($rows.length).toBe(2);
+        expect($rows[0].id).toBe('r1');
+        expect($rows[1].id).toBe('r2');
+        expect($rows[2]).toBeUndefined();
+    });
+
+    it('an empty collection has no indices', () => {
+        const $none = Domma('.nothing-here');
+        expect($none.length).toBe(0);
+        expect($none[0]).toBeUndefined();
+    });
+
+    it('is array-like, so Array.from works', () => {
+        // Array-LIKE (length + indices), not iterable: there is no
+        // Symbol.iterator, so spread and for...of still do not work. jQuery 3
+        // added one; doing the same here is a separate decision, and claiming
+        // it without implementing it would be the more expensive mistake.
+        expect(Array.from(Domma('.row')).map(el => el.id)).toEqual(['r1', 'r2']);
+        expect(Array.prototype.map.call(Domma('.row'), el => el.id)).toEqual(['r1', 'r2']);
+    });
+
+    it('indexes a collection built from a node, a list and another collection', () => {
+        const node = document.getElementById('solo');
+        expect(Domma(node)[0]).toBe(node);
+        expect(Domma(document.querySelectorAll('.row'))[0].id).toBe('r1');
+        expect(Domma(Domma('.row'))[1].id).toBe('r2');
+    });
+
+    it('a derived collection is indexed too', () => {
+        expect(Domma('ul').find('.row')[1].id).toBe('r2');
+        expect(Domma('.row').first()[0].id).toBe('r1');
+    });
+});
