@@ -1,3 +1,85 @@
+### v0.36.0 - Thirteen Broken Pages (2026-08-05)
+
+**A browser-level test harness for the showcase, and the thirteen broken pages it found on its
+first run.** There was no such coverage before: the unit suite exercises `src/` modules in
+isolation and cannot see a page that renders wrong, so the failure mode was invisible — no
+error, no failing test, just a page that was broken for every visitor.
+
+✨ **New**
+
+*   **`$('#el')[0]` works.** `DommaCollection` exposed `.elements` and `.get(i)` but no numeric
+    index properties, so the most-typed thing in jQuery returned `undefined` — silently, until
+    something dereferenced it. The DOM showcase documents `$('.items')[0] // Same as get(0)`,
+    and **65 call sites** across the repository use the form.
+
+    ```javascript
+    $('#el')[0]                 // the element — same as .get(0)
+    $('.row')[1]                // second match
+    Array.from($('.row'))       // array-like: length + indices
+    ```
+
+    Still not iterable: there is no `Symbol.iterator`, so spread and `for...of` do not work.
+    jQuery 3 added one; doing the same here is a separate decision.
+
+*   **Four new icons** — `alert-triangle`, `sidebar`, `window` and `gem` — all of which were
+    already being used by showcase pages and silently rendering nothing. 520 icons in total.
+
+🐛 **Bug Fixes**
+
+*   **`Domma.init()` has never existed**, and calling it threw. On the CSS-utilities showcase it
+    sat at the top of the page's only script, so everything below it died — that page's
+    reference table, its main content, rendered *nothing*. Four separate documents instructed
+    you to call it: the SPA scaffold's `CLAUDE.md`, the scaffold's memory file, the global JS
+    conventions, and an unexecuted plan. All corrected.
+
+    Domma self-initialises when the bundle loads — it registers its web components, manages the
+    anti-FOUC cloak and defines the aliases. The only startup call a page needs is
+    `Domma.icons.scan()`, plus `Domma.setup({...})` if you want declarative component or theme
+    configuration.
+
+*   **Pillbox was handed a `<select>` and a `<div>`** on the pillbox and themes showcases. It
+    transforms an `<input>`; both logged a console error and rendered nothing.
+
+*   **The timeline showcase called its own deprecated alias six times**, on a page headed
+    "Component Deprecated". Its demos now use `progression({mode: 'timeline'})`, and the code
+    samples and API table moved with them so nothing on the page disagrees with what runs. The
+    deprecation notice stays — documenting that `timeline()` still works is the page's job.
+
+*   **Sidebar push mode** targeted its default `.main-content`, which the sidebar showcase does
+    not have, warning four times. Each demo's content element now has its own id and each
+    sidebar points at it — which demonstrates `contentSelector` properly into the bargain.
+
+*   **`theme: 'light'` is not a theme name.** The theme-roller showcase passed it to both
+    `theme.init()` and `themeRoller`'s `baseTheme`, warning twice and silently falling back.
+    Themes are `family-variant`; it now uses `charcoal-light`.
+
+🔧 **Internal**
+
+*   **`src/showcase-pages.test.js`** loads every page under `public/showcase/` into a fresh jsdom
+    window against the built bundle, runs its scripts in document order, and asserts the page
+    rendered and logged nothing.
+
+    | Command | Behaviour |
+    |---|---|
+    | `npm test` | included, adds roughly 20 seconds |
+    | `npm run validate:showcase` | ratchet against the baseline |
+    | `npm run validate:showcase:strict` | every finding, baseline ignored |
+    | `npm run validate:showcase:baseline` | accept the current state |
+
+    External *classic* scripts are rewritten inline in place, which preserves the browser's
+    execution order — bundle first, page code after. `type="module"` scripts are not executed,
+    because jsdom cannot; every skip is recorded rather than hidden, and a page consisting only
+    of module script is caught by the "rendered something" assertion rather than passing
+    vacuously.
+
+    **The baseline is empty.** All 85 pages pass in strict mode, so any finding is a failure.
+
+*   It was built as the prerequisite for the showcase conventions sweep — 191 Domma-convention
+    violations across 54 pages. Rewriting that many call sites without a harness is precisely
+    how a green suite and a broken site coexist.
+
+*   542 tests, up from 536.
+
 ### v0.35.0 - A List's Rows Can Act on the List (2026-08-05)
 
 **One new Domma API: `M.computed().value`.** Everything else arrives through the pinned
