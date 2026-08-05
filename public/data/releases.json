@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.33.0",
+      "title": "Working Scaffolds & a Real Reactivity Showcase",
+      "description": "<p><strong>Fixed — every scaffolded project rendered unstyled.</strong> The kickstart templates were written in Bootstrap class names while Domma ships Tailwind-style utilities, so <strong>143 class usages across 14 files resolved to nothing</strong>. Anyone who ran <code>npx domma init</code> got a project that looked broken on first load. Two components were dead rather than merely unstyled: the contact FAQ and docs pages used Bootstrap's collapse markup, and Bootstrap JS is never loaded — while <code>contact.js</code> and <code>docs.js</code> already called <code>Domma.elements.accordion()</code> and <code>.tabs()</code> against markup they could not recognise. Both work now.</p><p><strong>The Reactivity showcase is a showcase, not a reference.</strong> It had six sections, every one named after a mechanism and opening by explaining it — no statement of the problem, no benefit, no guidance on when not to use it. Now twelve sections named for outcomes, demonstration before explanation, opening with the code you stop writing, and a <em>When not to reach for it</em> section that shows the traps running live. Prose grew from 506 to 4,118 words; all 26 interactive demos preserved. See the <a href=\"../showcase/models/reactivity.html\">Reactivity showcase</a>.</p><p><strong>New:</strong> Try-it panes — editable code with live output on any showcase page — plus the <code>.list-none</code> and <code>.no-underline</code> utilities.</p><p><strong>Internal:</strong> the template compiler moved into <a href=\"https://www.npmjs.com/package/domma-reactive\">domma-reactive</a> 0.2.0, completing the extraction milestone that had shipped half-done.</p>",
+      "date": "2026-08-05"
+    },
+    {
       "year": "v0.32.0",
       "title": "Observables, Badges & Readable Buttons",
       "description": "<p><strong>New:</strong> <code>M.observable()</code> and <code>M.observableArray()</code> — the reactive primitives beneath Models are now reachable from Domma. Use <code>M.create()</code> when you want a schema, validation and persistence; use an observable when you want one tracked value and nothing else. Both are the same functions published standalone as <a href=\"https://www.npmjs.com/package/domma-reactive\">domma-reactive</a>.</p><p><strong>Fixed — components stopped updating.</strong> <code>onUpdated()</code> never fired for components whose templates contain no <code>{{ }}</code> bindings, so anything rendering its content imperatively rendered once and then went silent — the model updated and persisted, but the DOM was never told and nothing was thrown. This affected the todo, notes, contacts and markdown examples. Introduced in v0.30.0. Writes made from <code>onUpdated</code> must now converge on a value that compares equal, or the watcher re-triggers indefinitely.</p><p><strong>Fixed — unreadable controls.</strong> Outline buttons used a transparent background with a <code>color-mix()</code> blend, so their contrast depended on whatever sat behind them and the label could land on its own background. Eighteen showcase rules set a background from a variable no theme overrides, with no text colour at all. <code>.table-responsive</code> was used in fourteen places and defined nowhere. The Reactivity showcase used <code>.form-control</code> and <code>.col-md-*</code>, neither of which exists in Domma.</p><p><strong>Known issue:</strong> <code>onUpdated</code> still does not fire for fields absent from <code>data()</code> — declare every field you intend to change.</p>",
@@ -235,5 +241,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.32.0"
+  "latestVersion": "v0.33.0"
 }

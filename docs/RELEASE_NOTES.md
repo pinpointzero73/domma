@@ -1,3 +1,60 @@
+### v0.33.0 - Working Scaffolds & a Real Reactivity Showcase (2026-08-05)
+
+🐛 **Bug Fixes**
+
+*   **Every scaffolded project rendered unstyled.** The kickstart templates were written in Bootstrap
+    class names while Domma ships Tailwind-style utilities, so **143 class usages across 14 files
+    resolved to nothing**. `d-flex`, `justify-content-center`, `align-items-center`, `flex-column`,
+    `me-*`/`ms-*`, `lead`, `display-*`, `h3`–`h6`, `btn-outline-primary`, `form-control`, `col-lg-*`
+    and Tailwind's `lg:grid-cols-*` are all mapped to their Domma equivalents. Anyone who ran
+    `npx domma init` got a project that looked broken on first load.
+
+*   **Two scaffolded components were dead, not merely unstyled.** The contact FAQ and docs pages used
+    Bootstrap's `data-bs-toggle="collapse"` markup — and Bootstrap JS is never loaded — while
+    `contact.js` and `docs.js` already called `Domma.elements.accordion()` and `.tabs()` against markup
+    they could not recognise. Both work now.
+
+✨ **New**
+
+*   **`.list-none` and `.no-underline`** — standard utilities in the vocabulary Domma has adopted, and
+    genuinely absent from it until now.
+
+*   **Try-it panes in the showcase.** Editable code with live output, on any showcase page:
+
+    ```html
+    <div class="try-it" data-try-it="One value, no schema">
+        <textarea class="try-it-editor" rows="6">
+            const count = M.observable(0);
+            log('doubled:', M.computed(() => count.value * 2).get());
+        </textarea>
+    </div>
+    ```
+
+    Panes auto-run on load so a reader sees a result before touching anything, catch errors rather
+    than throwing, and render output as text so a snippet cannot inject markup.
+
+📖 **Documentation**
+
+*   **The Reactivity showcase is a showcase now, not a reference.** It had six sections, every one
+    named after a mechanism and opening by explaining that mechanism — with no statement of the
+    problem it solves, no benefit, no guidance on when *not* to use it, and no mention of
+    `M.observable`, `M.observableArray` or `domma-reactive` at all.
+
+    Now twelve sections, each named for an outcome, demonstration before explanation, opening with the
+    code you stop writing. A new **"When not to reach for it"** section shows the mutation trap and the
+    `Date`-field trap running live rather than describing them. Prose grew from 506 to 4,118 words;
+    all 26 existing interactive demos are preserved.
+
+🔧 **Internal**
+
+*   **The template compiler now lives in `domma-reactive` (0.2.0).** The extraction spec's M1 called
+    for moving the graph *and* the Tier 3 compiler; only the graph moved, so M1 shipped half-done. The
+    compiler takes its mustache renderer as a parameter, so the package gains the anchor and binding
+    machinery without gaining a template engine — which is the seam the expression evaluator plugs into
+    next. Domma still inlines the package at build time; consumers install nothing extra.
+
+---
+
 ### v0.32.0 - Observables, Badges & Readable Buttons (2026-08-04)
 
 ✨ **New**
