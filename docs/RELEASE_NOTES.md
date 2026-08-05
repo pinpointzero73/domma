@@ -1,3 +1,72 @@
+### v0.34.0 - CSP-Safe Expressions & a Binding Registry (2026-08-05)
+
+**No Domma API changes.** Everything below arrives through the pinned `domma-reactive` dependency,
+which Rollup still inlines — `domma.min.js` remains a single self-contained file and consumers install
+nothing extra.
+
+✨ **New in the reactive core** (`domma-reactive` 0.3.0)
+
+*   **A CSP-safe expression evaluator.** Tokeniser → Pratt parser → AST → tree-walking evaluator, with
+    a helper registry. It supports property paths, indexing, comparison, logical operators, ternaries,
+    arithmetic, string concatenation, literals, and calls to registered helpers only.
+
+    **There is no `eval` and no `Function` constructor anywhere in the source or in any built bundle.**
+    That matters: Knockout evaluates bindings with the `Function` constructor, which fails outright
+    under `script-src 'self'` without `unsafe-eval`. Domma's expressions work under a strict CSP.
+
+    Refused by design: arbitrary and member calls (`x.foo()`), assignment, `new`, and property access
+    through `__proto__`, `constructor` or `prototype` — in every form, including a computed key whose
+    value is only `'__proto__'` at runtime. A malformed expression warns and yields `undefined`; it
+    never throws mid-render.
+
+*   **A binding registry with `registerBinding()`**, plus four behaviour bindings on Domma-native
+    attributes:
+
+    | Binding | Purpose |
+    |---|---|
+    | `data-on-*` | Events. Your arguments first, the event last, `this` is the data; returning `false` calls `preventDefault()` |
+    | `data-bind-*` | Property or attribute. `class` is additive and remembers only what it applied, so static classes survive |
+    | `data-model` | Two-way. Requires a settable path; refuses the prototype keys in every form |
+    | `data-if` | Conditional. **Removes** the element rather than hiding it |
+
+    The four existing mustache kinds — text, attribute, block and raw — are now registered through the
+    same public `registerBinding()` the extension API uses, so a custom binding is not a second-class
+    citizen.
+
+    There is deliberately **no `data-bind-html`**: assigning `innerHTML` from data is an XSS hole, and
+    `{{{triple-stache}}}` already provides a visible, greppable opt-out.
+
+*   **The package now stands alone for templates.** `compile()` previously threw
+    `renderFn is not a function` unless you supplied a template engine. It now defaults to a renderer
+    built on the evaluator, so `npm install domma-reactive` gives you working `{{ }}` out of the box.
+    Domma continues to pass its own renderer and behaves identically.
+
+🐛 **Bug Fixes**
+
+*   **Seven rules painted with variables that are defined nowhere** — `--dm-bg-secondary`, `--dm-bg`,
+    `--dm-purple-50` and `--dm-purple-900`. An undefined variable makes the whole declaration invalid,
+    so those backgrounds were simply absent. Repointed at `--dm-surface-secondary`,
+    `--dm-background` and `--dm-info-bg`.
+
+🔧 **Internal**
+
+*   **Two repository validators**, wired as `npm run validate`:
+
+    | Command | Catches |
+    |---|---|
+    | `validate:classes` | CSS classes used in HTML that resolve to no rule |
+    | `validate:theme` | Rules painting a fixed background while inheriting a themed text colour |
+
+    Both exist because their failure modes are **invisible** — no error, no failing test, just markup
+    that renders wrong. `.form-control`, `.col-md-*` and `.table-responsive` all shipped while defined
+    nowhere; eighteen rules set a background from a variable no theme redefines, which is why the
+    showcase method chips were illegible in dark mode.
+
+    Both are ratchets against a recorded baseline, so they fail on new violations rather than on the
+    known backlog. `--update-baseline` accepts the current state; `--strict` reports everything.
+
+---
+
 ### v0.33.1 - Millisecond Waits (2026-08-05)
 
 🐛 **Bug Fixes**
