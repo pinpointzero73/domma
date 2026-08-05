@@ -101,8 +101,11 @@ export interface ObservableArray<T = any> {
 
     copyWithin(target: number, start: number, end?: number): T[];
 
-    /** Remove every occurrence, in place. Notifies even when nothing matched. */
-    remove(item: T): ObservableArray<T>;
+    /**
+     * Remove items in place — every occurrence of a value, or everything a test
+     * function accepts. Notifies even when nothing matched.
+     */
+    remove(match: T | ((item: T, index: number) => boolean)): ObservableArray<T>;
 
     /** Empty the array, in place. */
     removeAll(): ObservableArray<T>;
@@ -112,6 +115,12 @@ export interface ObservableArray<T = any> {
  * A lazily-evaluated, dependency-tracked derived value.
  */
 export interface ComputedRef<T = any> {
+    /**
+     * The same read as get(), spelled as a property — and the only one a template
+     * expression can use, since an expression cannot call a method.
+     */
+    readonly value: T;
+
     /** Current value, recomputing only if a dependency changed. */
     get(): T;
 

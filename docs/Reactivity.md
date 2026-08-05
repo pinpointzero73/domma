@@ -55,10 +55,18 @@ qty.value = 4;   // effect re-runs on the next microtask
 | `set(next)` | Imperative alias for assigning `.value`. |
 
 `M.observableArray()` is the array form. Its in-place mutators — `push`, `pop`, `shift`,
-`unshift`, `splice`, `sort`, `reverse`, `fill`, `copyWithin`, plus Domma's own `remove(item)`
+`unshift`, `splice`, `sort`, `reverse`, `fill`, `copyWithin`, plus Domma's own `remove()`
 and `removeAll()` — notify unconditionally, because an in-place mutation leaves the array
 deep-equal to any copy of it and the equality gate cannot see it. Wholesale assignment to
 `.value` is gated, exactly as `observable()` is. It also exposes a tracked `length`.
+
+`remove()` takes **either a value or a test**. A value matches by identity, which is what a
+reconciled list wants; a function is called with `(item, index)` and everything it accepts goes.
+
+```javascript
+rows.remove(row);              // that exact object
+rows.remove(r => r.id > 2);    // everything the test accepts
+```
 
 The initial array, and any array assigned wholesale, is copied rather than adopted, so a push
 through your original reference cannot desynchronise the graph. Take `peek()` if you genuinely
@@ -93,9 +101,18 @@ total.get();            // 40 — re-evaluated on demand
 
 | Member | Description |
 |---|---|
+| `value` | The same read as `get()`, spelled as a property. |
 | `get()` | Current value, recomputing only if a dependency changed. Registers a dependency on the caller. |
 | `peek()` | Current value **without** registering a dependency. |
 | `dispose()` | Unlink from the dependency graph. |
+
+`.value` and `get()` are interchangeable. Prefer `.value`: it is the only one a template
+expression can use — an expression cannot call a method, so `{{total.get()}}` will not parse —
+and it means `M.observable()` and `M.computed()` are read the same way.
+
+```html
+<p data-bind-text="total.value"></p>
+```
 
 **Options:** `label` (used in console warnings), `onChange` (called with the new value when it changes).
 

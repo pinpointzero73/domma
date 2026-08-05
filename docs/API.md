@@ -2845,7 +2845,7 @@ const count = M.observable(0);
 const total = M.computed(() => count.value * 10);
 
 count.value = 3;
-total.get();          // 30
+total.value;          // 30 — or total.get(), the same read
 count.peek();         // 3 — read without registering a dependency
 count.set(4);         // imperative alias for assigning .value
 ```
@@ -2868,7 +2868,8 @@ const items = M.observableArray([]);
 
 M.effect(() => console.log(items.length));
 items.push('a');      // effect re-runs on the next microtask
-items.remove('a');
+items.remove('a');                  // by value
+items.remove(s => s.startsWith('a'));   // or by test
 ```
 
 | Member | Description |
@@ -2878,7 +2879,7 @@ items.remove('a');
 | `peek()` | The live array, **without** registering a dependency. |
 | `set(next)` | Imperative alias for assigning `.value`. |
 | `push`, `pop`, `shift`, `unshift`, `splice`, `sort`, `reverse`, `fill`, `copyWithin` | Native behaviour and return value, then notify. |
-| `remove(item)` | Remove every occurrence, in place. Notifies even when nothing matched. |
+| `remove(valueOrTest)` | A value removes every occurrence by identity; a function is called with `(item, index)` and everything it accepts goes. Notifies even when nothing matched. |
 | `removeAll()` | Empty the array, in place. |
 
 **Options:** the same as `M.observable()`.
@@ -2911,9 +2912,13 @@ total.get();              // 40 — dependency moved, so it re-evaluates
 
 | Member | Returns | Description |
 |--------|---------|-------------|
+| `value` | `any` | The same read as `get()`, spelled as a property |
 | `get()` | `any` | Current value; registers a dependency on the caller |
 | `peek()` | `any` | Current value **without** registering a dependency |
 | `dispose()` | `void` | Unlink from the dependency graph |
+
+Prefer `.value`. It is the only one a template expression can use — an expression cannot call a method, so
+`{{total.get()}}` will not parse — and it means `M.observable()` and `M.computed()` are read the same way.
 
 Computeds compose — one reading another links them automatically, and a computed shared by several readers is
 evaluated once per flush.

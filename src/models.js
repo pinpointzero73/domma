@@ -783,7 +783,7 @@ export const models = {
      * @param {Object}   [options]
      * @param {string}   [options.label]    Debug label used in warnings.
      * @param {Function} [options.onChange] Called with the new value when it changes.
-     * @returns {{get: Function, peek: Function, dispose: Function}}
+     * @returns {{value: *, get: Function, peek: Function, dispose: Function}}
      */
     computed(fn, options = {}) {
         const comp = createComputed(fn, {
@@ -792,6 +792,19 @@ export const models = {
         });
 
         return {
+            /**
+             * Current value, recomputing only if a dependency changed.
+             *
+             * The same read as `get()`, spelled as a property, and the only one
+             * a template expression can use — an expression cannot call a
+             * method, so `{{total.get()}}` will not parse. It also stops
+             * `M.observable` and `M.computed` disagreeing about how you read
+             * them: an observable has always been `.value`.
+             */
+            get value() {
+                return comp.get();
+            },
+
             /** Current value, recomputing only if a dependency changed. */
             get: () => comp.get(),
             /** Current value without registering a dependency on the caller. */

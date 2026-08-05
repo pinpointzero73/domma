@@ -309,6 +309,39 @@ describe('Domma.models - Models Module Tests', () => {
     expect(doubled.get()).toBe(10);
   });
 
+  // M.observable is re-exported from domma-reactive untouched, so it is read
+  // through `.value`. M.computed is a facade — get/peek/dispose — and had no
+  // `.value` at all, which made the two halves of the same idea disagree about
+  // how you read them, and made a computed unreadable from a template
+  // expression, where a method cannot be called.
+  it('Models - M.computed().value is the same read as get()', () => {
+    const count = Domma.models.observable(2);
+    const doubled = Domma.models.computed(() => count.value * 2);
+
+    expect(doubled.value).toBe(4);
+    expect(doubled.value).toBe(doubled.get());
+
+    count.value = 5;
+    expect(doubled.value).toBe(10);
+
+    doubled.dispose();
+  });
+
+  it('Models - M.computed().value registers a dependency', async () => {
+    const count = Domma.models.observable(1);
+    const doubled = Domma.models.computed(() => count.value * 2);
+
+    const seen = [];
+    const stop = Domma.models.effect(() => seen.push(doubled.value));
+
+    count.value = 3;
+    Domma.models.flush();
+
+    expect(seen).toEqual([2, 6]);
+    stop();
+    doubled.dispose();
+  });
+
   it('Models - M.observable peek() does not register a dependency', () => {
     const v = Domma.models.observable(1);
     const body = vi.fn(() => v.peek());
