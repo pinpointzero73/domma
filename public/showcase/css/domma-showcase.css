@@ -1867,3 +1867,85 @@ body:has(.container.sidebar-push-active) .page-header {
     color: #1a1a1a;
     text-shadow: 0 2px 6px rgba(255, 255, 255, 0.4);
 }
+/* ── Try-it panes ─────────────────────────────────────────────────────────────
+   Editable code with live output. Every colour resolves through a variable
+   that all 32 theme blocks redefine, so the pane follows the active theme in
+   both light and dark. No literal colours: a literal here would be the same
+   bug that made the method chips unreadable. */
+
+.try-it {
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-md);
+    background: var(--dm-surface);
+    color: var(--dm-text);
+    overflow: hidden;
+    margin-bottom: var(--dm-space-4);
+}
+
+.try-it-header {
+    display: flex;
+    align-items: center;
+    gap: var(--dm-space-3);
+    padding: var(--dm-space-2) var(--dm-space-3);
+    background: var(--dm-hover-bg);
+    border-bottom: 1px solid var(--dm-border);
+}
+
+.try-it-label {
+    font-weight: 600;
+    font-size: var(--dm-font-size-sm);
+    color: var(--dm-text);
+}
+
+.try-it-hint {
+    font-size: 0.75rem;
+    color: var(--dm-text-muted);
+}
+
+.try-it-actions {
+    margin-left: auto;
+    display: flex;
+    gap: var(--dm-space-2);
+}
+
+.try-it-editor {
+    display: block;
+    width: 100%;
+    border: 0;
+    resize: vertical;
+    padding: var(--dm-space-3);
+    font-family: var(--dm-font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    tab-size: 4;
+    background: var(--dm-surface);
+    color: var(--dm-text);
+}
+
+.try-it-editor:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--dm-border-focus);
+}
+
+.try-it-output {
+    border-top: 1px solid var(--dm-border);
+    background: var(--dm-hover-bg);
+    color: var(--dm-text);
+    padding: var(--dm-space-3);
+    font-family: var(--dm-font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    min-height: 3rem;
+    max-height: 14rem;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
+
+.try-it-output.has-error {
+    background: var(--dm-danger-bg);
+}
+
+.try-it-line.is-error {
+    color: var(--dm-danger);
+    font-weight: 600;
+}

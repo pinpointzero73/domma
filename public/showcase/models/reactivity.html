@@ -12,6 +12,10 @@
     <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
     <link rel="stylesheet" href="/showcase/css/domma-showcase.css">
     <style>
+        /* Every colour below resolves through a --dm-* variable that the light
+           and dark blocks both redefine. A literal would be readable in one
+           variant and invisible in the other. */
+
         .rx-counter {
             font-size: 2rem;
             font-weight: 700;
@@ -57,6 +61,61 @@
                as a light-only colour on a dark page. */
             background-color: var(--dm-warning-bg);
         }
+
+        /* ── Before / after panes ──────────────────────────────────────────
+           Section 1 makes its case by subtraction, so the two versions have
+           to sit side by side and be readable as a pair. */
+
+        .rx-diff {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 768px) {
+            .rx-diff {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .rx-diff-pane {
+            border: 1px solid var(--dm-border);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .rx-diff-head {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--dm-text);
+            border-bottom: 1px solid var(--dm-border);
+        }
+
+        .rx-diff-before .rx-diff-head {
+            background-color: var(--dm-danger-bg);
+        }
+
+        .rx-diff-after .rx-diff-head {
+            background-color: var(--dm-success-bg);
+        }
+
+        .rx-diff .code-block {
+            margin: 0;
+            border: 0;
+            border-radius: 0;
+        }
+
+        .rx-lead {
+            font-size: 1.0625rem;
+            line-height: 1.7;
+        }
+
+        .rx-takeaway {
+            border-left: 3px solid var(--dm-primary);
+            padding: 0.25rem 0 0.25rem 0.875rem;
+            color: var(--dm-text);
+        }
     </style>
 </head>
 <body class="dm-cloaked" data-layout="showcase" data-layout-variant="subpage">
@@ -64,8 +123,8 @@
     <div class="hero-content">
         <div class="hero-title">Reactivity</div>
         <div class="hero-subtitle">
-            Dependency tracking: derivations discover what they read, so a write re-runs exactly the work that
-            depends on it — and nothing else.
+            Declare what a value is made of, once. Domma works out when it has to change, and re-runs exactly the
+            work that depends on it — and nothing else.
         </div>
     </div>
 </div>
@@ -73,27 +132,177 @@
 <div class="container py-8">
 
     <div class="alert alert-info mb-6">
-        <strong>New in Domma.</strong> <code>M.computed()</code> and <code>M.effect()</code> track their own
-        dependencies at runtime. See the <a href="index.html">Models showcase</a> for the underlying model API.
+        <strong>Never used reactive state before?</strong> This page assumes nothing. It starts with the code you
+        write today, shows what replaces it, and only then names the parts. Every demo counts how often work actually
+        happened, because that number <em>is</em> the benefit. The underlying model API lives in the
+        <a href="index.html">Models showcase</a>.
     </div>
 
-    <!-- ================= Tracked Computeds ================= -->
-    <section class="card mb-6" data-section="Tracked Computeds">
+    <!-- ================= 1. Why you'd want this ================= -->
+    <section class="card mb-6" id="sec-why" data-section="Why you'd want this">
         <div class="card-header">
-            <h2 class="text-xl font-semibold">Tracked Computeds</h2>
+            <h2 class="text-xl font-semibold">Why you'd want this</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">
-                A computed is lazy: its body does not run until something reads it, and the cached value is reused
-                until a field it <em>actually read</em> changes. The counters below show how often each body runs.
+
+            <div class="rx-diff mb-4">
+                <div class="rx-diff-pane rx-diff-before">
+                    <div class="rx-diff-head">Before — you own the wiring, and you own the bugs</div>
+                    <pre class="code-block language-javascript">
+let total = price * qty;
+
+priceInput.addEventListener('input', () =&gt; {
+    price = +priceInput.value;
+    total = price * qty;            // remember to recalculate
+    totalEl.textContent = total;    // remember to repaint
+    updateShippingBanner();         // remember what else depends on it
+});
+
+qtyInput.addEventListener('input', () =&gt; {
+    qty = +qtyInput.value;
+    total = price * qty;            // …all of it again
+    totalEl.textContent = total;
+    updateShippingBanner();
+});</pre>
+                </div>
+                <div class="rx-diff-pane rx-diff-after">
+                    <div class="rx-diff-head">After — you declare the relationship once</div>
+                    <pre class="code-block language-javascript">
+const order = M.create(
+    {price: {}, qty: {}},
+    {price: 10, qty: 3}
+);
+
+const total = M.computed(
+    () =&gt; order.get('price') * order.get('qty')
+);
+
+M.effect(() =&gt; totalEl.textContent = total.get());
+M.effect(() =&gt; updateShippingBanner(total.get()));</pre>
+                </div>
+            </div>
+
+            <p class="rx-lead mb-4">
+                Everything worth caring about is visible in that difference. On the left, the fact that
+                <code>total</code> is <em>made of</em> price and quantity is not written down anywhere. It is
+                implied, twice, by two handlers that happen to agree with each other. Nothing in the language, the
+                framework or your editor knows that they are supposed to agree — so the day someone adds a third
+                input, or a discount, or a currency selector, the two handlers quietly stop agreeing and the page
+                shows a number that was true a moment ago.
             </p>
 
-            <div class="models-method-grid mb-4">
-                <span class="models-method-item">M.computed()</span>
-                <span class="models-method-item">.get()</span>
-                <span class="models-method-item">.peek()</span>
-                <span class="models-method-item">.dispose()</span>
+            <p class="mb-3">On the left you are responsible for four separate things, and every one of them is a
+                place to be wrong:</p>
+
+            <ul class="mb-4">
+                <li><strong>Knowing what changed.</strong> Each listener knows only its own input.</li>
+                <li><strong>Knowing what that affects.</strong> You hold the dependency graph in your head and
+                    retype it in every handler.</li>
+                <li><strong>Recalculating.</strong> By hand, in the right order, so nothing reads a value that has
+                    not caught up yet.</li>
+                <li><strong>Repainting.</strong> Also by hand, and also in every handler — the classic bug where the
+                    number is right in memory and stale on screen.</li>
+            </ul>
+
+            <p class="mb-4">
+                On the right, you write down the <em>relationship</em> — total is price times quantity — and stop
+                there. Domma watches which values that expression actually reads while it runs, remembers them, and
+                re-runs the expression when one of them moves. Add a third input and you change nothing but the
+                expression. Add a fourth thing that depends on the total and you add one more
+                <code>M.effect()</code>; no existing line is touched. The wiring is not <em>simpler</em> — it is
+                gone, because nobody wrote it.
+            </p>
+
+            <p class="rx-takeaway mb-4">
+                The pitch for reactivity is subtraction. It is not a faster way to update the page; it is a way to
+                stop maintaining the list of things to update. That list is where the bugs live, and it is the part
+                that grows fastest as a screen gets more interesting.
+            </p>
+
+            <p class="mb-0">
+                There is a second, quieter benefit, and the demos below put a number on it. Because Domma knows
+                precisely which values each expression read, a write to something irrelevant costs nothing at all —
+                not a cheap re-run, not a fast comparison, but <strong>zero</strong> re-evaluations. Type into a
+                field the total does not read and the total's body does not run. You will see the counter refuse to
+                move.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= 2. In thirty seconds ================= -->
+    <section class="card mb-6" id="sec-thirty" data-section="In thirty seconds">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">In thirty seconds</h2>
+        </div>
+        <div class="card-body">
+
+            <p class="mb-4">
+                This is a complete, working program — it has already run, and its output is underneath it. Change a
+                number and press <strong>Run</strong>.
+            </p>
+
+            <div class="try-it" data-try-it="The whole idea, start to finish">
+                <textarea class="try-it-editor" rows="13" spellcheck="false">
+                    // A model holds the raw facts.
+                    const order = M.create({price: {}, qty: {}}, {price: 10, qty: 3});
+
+                    // A computed is a value defined by an expression, not by an assignment.
+                    const total = M.computed(() => order.get('price') * order.get('qty'));
+
+                    // An effect is work that should re-happen whenever what it read changes.
+                    M.effect(() => log('total is', total.get()));
+
+                    // Nobody calls the effect. Writing to the model is enough.
+                    order.set('qty', 4);
+                    M.flush();
+
+                    order.set('price', 12);
+                    M.flush();
+                </textarea>
             </div>
+
+            <p class="mb-4">
+                Three lines are doing the work, and each names one of the three ideas the rest of this page expands
+                on.
+            </p>
+
+            <ul class="mb-4">
+                <li><code>M.create()</code> — the <strong>state</strong>. Plain fields you write to.</li>
+                <li><code>M.computed()</code> — a <strong>derived value</strong>. You give it an expression; it
+                    gives you back something you read with <code>.get()</code>. It works out its own inputs by
+                    noticing what it reads.</li>
+                <li><code>M.effect()</code> — <strong>work to repeat</strong>. It runs once straight away, notes
+                    what it read, and runs again whenever any of that changes. Updating the DOM is the usual job.
+                </li>
+            </ul>
+
+            <p class="mb-4">
+                The one line that will look odd is <code>M.flush()</code>. By default Domma does not recalculate the
+                moment you write; it waits until the end of the current tick, so ten writes in a row cost one
+                re-run rather than ten (that is section&nbsp;7). Inside a snippet like this we want the output to
+                appear in reading order, so we ask it to settle immediately. In an application you almost never
+                write <code>M.flush()</code> — the wait is what makes it fast.
+            </p>
+
+            <p class="mb-0 rx-takeaway">
+                Nothing above subscribes to anything, names a field twice, or says which things to update. That is
+                the entire premise: you describe relationships, and the dependencies are discovered by running the
+                code.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= 3. Derived values that can't go stale ================= -->
+    <section class="card mb-6" id="sec-derived" data-section="Derived values that can't go stale">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Derived values that can't go stale</h2>
+        </div>
+        <div class="card-body">
+
+            <p class="mb-4">
+                Type in the three fields and watch the right-hand counter. It shows how many times the expression
+                <code>price × qty</code> has actually been evaluated since the page loaded.
+            </p>
 
             <div class="row mb-4">
                 <div class="col-6">
@@ -124,11 +333,42 @@
                         </div>
                     </div>
                     <p class="text-sm">
-                        Change <strong>Price</strong> or <strong>Quantity</strong> and the counter rises. Type in
-                        <strong>Note</strong> — the model updates, but the computed never re-runs. Press
-                        <strong>Read total again</strong> to confirm repeated reads are served from cache.
+                        Change <strong>Price</strong> or <strong>Quantity</strong> and the counter rises. Type a
+                        whole paragraph into <strong>Note</strong> — the model updates on every keystroke, and the
+                        counter does not move once. Press <strong>Read total again</strong> as often as you like:
+                        repeated reads are served from cache and cost nothing.
                     </p>
                 </div>
+            </div>
+
+            <p class="mb-3">
+                Say the numbers out loud, because they are the point. Twenty keystrokes in <strong>Note</strong>:
+                <strong>zero</strong> re-evaluations. Ten presses of <strong>Read total again</strong>:
+                <strong>zero</strong>. One keystroke in <strong>Quantity</strong>: exactly <strong>one</strong>.
+                A hand-written version gets that last case right and the first two wrong, because a change handler
+                that fires on any change has no way to tell whether the change mattered.
+            </p>
+
+            <p class="mb-4">
+                Two behaviours produce that. The first is that a computed is <strong>lazy</strong>: its expression
+                does not run when you create it, and does not run when something it depends on changes. It runs when
+                somebody asks for the value and the cached answer is known to be out of date. Work you never look at
+                is work that never happens. The second is that it <strong>caches</strong>: having run once, it hands
+                back the same answer to every subsequent reader until a value it genuinely read moves. Sharing one
+                computed between five parts of a screen costs one evaluation, not five.
+            </p>
+
+            <p class="mb-4">
+                Note what is <em>not</em> here: you never told Domma that the total depends on price and quantity.
+                It found out by watching the expression run. That matters more than it first appears — a declared
+                dependency list is another thing that can disagree with the code, and it always eventually does.
+            </p>
+
+            <div class="models-method-grid mb-4">
+                <span class="models-method-item">M.computed()</span>
+                <span class="models-method-item">.get()</span>
+                <span class="models-method-item">.peek()</span>
+                <span class="models-method-item">.dispose()</span>
             </div>
 
             <pre class="code-block language-javascript">
@@ -137,7 +377,7 @@ const order = M.create(
     { price: 10, qty: 3, note: '' }
 );
 
-const total = M.computed(() => order.get('price') * order.get('qty'));
+const total = M.computed(() =&gt; order.get('price') * order.get('qty'));
 
 total.get();              // 30 — body runs now
 total.get();              // 30 — cached, body does not run
@@ -147,25 +387,229 @@ total.get();              // 30 — still cached
 
 order.set('qty', 4);
 total.get();              // 40 — a dependency moved, so it re-evaluates</pre>
+
+            <p class="text-sm mt-3 mb-0">
+                Computeds compose. One computed reading another links the two automatically, and a computed shared
+                by several others is evaluated once per settle, not once per reader — so
+                <code>subtotal → vat → total</code> costs one evaluation of <code>subtotal</code>, not two. Use
+                <code>.peek()</code> to read a value without becoming dependent on it, and <code>.dispose()</code>
+                when a long-lived computed outlives the screen that needed it.
+            </p>
         </div>
     </section>
 
-    <!-- ================= Effects ================= -->
-    <section class="card mb-6" data-section="Effects">
+    <!-- ================= 4. One value, no schema ================= -->
+    <section class="card mb-6" id="sec-observable" data-section="One value, no schema">
         <div class="card-header">
-            <h2 class="text-xl font-semibold">Effects</h2>
+            <h2 class="text-xl font-semibold">One value, no schema</h2>
         </div>
         <div class="card-body">
+
+            <div class="try-it" data-try-it="M.observable — a single tracked value">
+                <textarea class="try-it-editor" rows="12" spellcheck="false">
+                    // No blueprint, no field names — just one value that other things can watch.
+                    const count = M.observable(0);
+
+                    const doubled = M.computed(() => count.value * 2);
+
+                    log('doubled is', doubled.get());
+
+                    count.value = 5;
+                    log('after the write:', doubled.get());
+
+                    // peek() reads without subscribing — handy inside a derivation
+                    // that needs a value but must not re-run when it changes.
+                    log('peek says:', count.peek());
+                </textarea>
+            </div>
+
             <p class="mb-4">
-                An effect runs immediately to collect its dependencies, then again whenever any of them change.
-                It replaces hand-wiring a subscription and comparing field names by hand.
+                An observable is a box with one value in it. Read it with <code>.value</code> and whatever
+                derivation is running becomes a dependent; write <code>.value</code> and every dependent is told.
+                That is the whole primitive, and everything else on this page is built on it — a model is, quite
+                literally, one observable per field.
+            </p>
+
+            <p class="mb-4">
+                Use <code>M.create()</code> when the data is a <em>record</em>: it has named fields, those fields
+                have types and validation rules, you want the same shape to drive a form via
+                <code>F.create()</code>, and you may want it persisted to storage. Use <code>M.observable()</code>
+                when the data is <em>one thing</em> and a schema would be ceremony: a sidebar's open/closed flag, a
+                search term, the id of the currently selected row, a loading boolean. Writing a three-line blueprint
+                to hold a boolean is the sort of friction that makes people give up and reach for a global variable.
+            </p>
+
+            <div class="table-responsive mb-4">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Reach for</th>
+                        <th>When</th>
+                        <th>Because</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><code>M.create(blueprint)</code></td>
+                        <td>A record with several named fields</td>
+                        <td>You get validation, defaults, <code>toJSON()</code>, persistence, and a shape that
+                            <code>F.create()</code> can turn into a form
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><code>M.observable(value)</code></td>
+                        <td>One value, on its own</td>
+                        <td>No schema to write and nothing to name twice; the tracking is identical</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="mb-4">
+                They mix freely. A computed can read three model fields and two loose observables in the same
+                expression, and the dependency graph does not care which is which.
+            </p>
+
+            <pre class="code-block language-javascript">
+const query   = M.observable('');
+const loading = M.observable(false);
+const results = M.observable([]);
+
+const summary = M.computed(() =&gt; {
+    if (loading.value) return 'Searching…';
+    if (!query.value)  return 'Type to search';
+    return `${results.value.length} match(es) for “${query.value}”`;
+});
+
+M.effect(() =&gt; $('#status').text(summary.get()));
+
+// Later, from anywhere — no subscription, no event name, no repaint call
+loading.value = true;</pre>
+
+            <div class="alert alert-warning mt-4 mb-0">
+                <strong>One gotcha worth knowing early.</strong> An observable only tells its dependents when the
+                new value differs from the old one, and it decides that by comparison. So changing an object or
+                array <em>in place</em> and assigning it back is invisible — the old and new values are the same
+                thing. Always assign a new value: <code>list.value = [...list.value, item]</code>, not
+                <code>list.value.push(item)</code>. Section&nbsp;10 has a runnable demonstration, and the next
+                section explains why arrays get an exception.
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= 5. Lists that update themselves ================= -->
+    <section class="card mb-6" id="sec-observable-array" data-section="Lists that update themselves">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Lists that update themselves</h2>
+        </div>
+        <div class="card-body">
+
+            <div class="try-it" data-try-it="M.observableArray — push, remove, and watch">
+                <textarea class="try-it-editor" rows="16" spellcheck="false">
+                    const items = M.observableArray(['milk', 'eggs']);
+
+                    const summary = M.computed(
+                        () => items.length + ' item(s): ' + items.value.join(', ')
+                    );
+
+                    M.effect(() => log(summary.get()));
+
+                    items.push('bread');
+                    M.flush();
+
+                    items.remove('eggs');
+                    M.flush();
+
+                    items.sort();
+                    M.flush();
+
+                    log('length is tracked too:', items.length);
+                </textarea>
+            </div>
+
+            <p class="mb-4">
+                A shopping list, a table's rows, a set of selected ids — most application state that is interesting
+                is a list, and the ordinary way to change a list is to mutate it. <code>M.observableArray()</code>
+                exists so that the natural code works: <code>push</code>, <code>pop</code>, <code>shift</code>,
+                <code>unshift</code>, <code>splice</code>, <code>sort</code>, <code>reverse</code>,
+                <code>fill</code> and <code>copyWithin</code> all notify, as do Domma's own
+                <code>remove(item)</code> and <code>removeAll()</code>.
+            </p>
+
+            <p class="mb-4">
+                Those mutators notify <strong>unconditionally</strong>, and the reason is the gotcha from the last
+                section. A comparison cannot detect an in-place change: after a <code>push</code>, the array is
+                still the same array, so comparing it against itself reports no difference no matter what happened.
+                Rather than keep a shadow copy and diff it on every mutation — O(n) per push, for a result that
+                throws away the useful detail — the array simply announces that it changed. The accepted cost is the
+                occasional notification from a mutator that changed nothing, such as a <code>sort()</code> on an
+                already-sorted list. That errs towards telling you too often rather than too rarely, which is the
+                safe direction: a redundant repaint is a wasted frame, a missed one is a bug your users report.
+            </p>
+
+            <p class="mb-4">
+                Assigning the whole array (<code>items.value = [...]</code>) behaves like an ordinary observable and
+                <em>is</em> compared, so replacing a list with an identical one stays quiet. Reading
+                <code>.length</code> is tracked, because rendering a count is the obvious use and a count that never
+                updated would be a trap.
+            </p>
+
+            <p class="mb-4">
+                One deliberate asymmetry to know about: the initial array, and any array assigned wholesale, is
+                <strong>copied</strong> rather than adopted. If it held your reference, a <code>push</code> through
+                your original variable would change what <code>.value</code> returns without ever reaching the
+                dependency graph — the data and the screen would disagree silently, with no event left to recover
+                by. <code>M.observable()</code> can safely adopt by reference precisely because it offers no
+                in-place path. If you genuinely want the live array, take it from <code>.peek()</code>; that is the
+                intended escape hatch.
             </p>
 
             <div class="models-method-grid mb-4">
-                <span class="models-method-item">M.effect()</span>
-                <span class="models-method-item">M.untracked()</span>
-                <span class="models-method-item">M.flush()</span>
+                <span class="models-method-item">M.observable()</span>
+                <span class="models-method-item">M.observableArray()</span>
+                <span class="models-method-item">.value</span>
+                <span class="models-method-item">.length</span>
+                <span class="models-method-item">.peek()</span>
+                <span class="models-method-item">.remove()</span>
+                <span class="models-method-item">.removeAll()</span>
             </div>
+
+            <pre class="code-block language-javascript">
+const todos = M.observableArray([]);
+
+const outstanding = M.computed(
+    () =&gt; todos.value.filter(t =&gt; !t.done).length
+);
+
+M.effect(() =&gt; $('#badge').text(outstanding.get()));
+
+todos.push({text: 'Buy milk', done: false});   // badge → 1
+todos.push({text: 'Post letter', done: false}); // badge → 2
+todos.removeAll();                              // badge → 0</pre>
+
+            <div class="alert alert-info mt-4 mb-0">
+                <strong>Comparison semantics differ slightly from <code>_.isEqual</code>.</strong>
+                <code>M.observable()</code> and <code>M.observableArray()</code> default to the reactive core's own
+                deep equality, which treats <code>NaN</code>, <code>Date</code>, class instances,
+                <code>Map</code>/<code>Set</code>/<code>RegExp</code> and typed arrays differently from Domma's
+                <code>utils.isEqual</code>. Pass <code>{equals}</code> if you need Domma's exact rules — and wrap
+                it, <code>{equals: (a, b) =&gt; _.isEqual(a, b)}</code>, because handing over <code>_.isEqual</code>
+                bare loses its receiver and throws.
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= 6. React to changes without wiring subscriptions ================= -->
+    <section class="card mb-6" id="sec-effects"
+             data-section="React to changes without wiring subscriptions">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">React to changes without wiring subscriptions</h2>
+        </div>
+        <div class="card-body">
+
+            <p class="mb-4">
+                Edit the fields on the left. The log on the right is written by a single effect that nobody calls.
+            </p>
 
             <div class="row mb-4">
                 <div class="col-5">
@@ -187,37 +631,94 @@ total.get();              // 40 — a dependency moved, so it re-evaluates</pre>
                 <div class="col-7">
                     <div class="rx-log" id="rx-effect-log"></div>
                     <p class="text-sm mt-2">
-                        Changing <strong>Session id</strong> does not re-run the effect — it is read inside
-                        <code>M.untracked()</code>.
+                        <strong>Session id</strong> is read by the same effect, on the same line as the others — and
+                        editing it never re-runs anything, because it is read inside <code>M.untracked()</code>.
+                        Press <strong>Stop effect</strong> and the log goes quiet for good.
                     </p>
                 </div>
             </div>
 
+            <p class="mb-4">
+                An effect is the answer to "when this changes, do that". It runs once immediately — which is how it
+                learns what it reads — and then again whenever any of those values move. It returns a stop function,
+                and calling it detaches the effect from everything at once. There is no event name to invent, no
+                handler to keep a reference to, and no list of fields to keep in step with the body.
+            </p>
+
+            <p class="mb-4">
+                Compare it with the version you would otherwise write. The manual form has a failure mode that
+                nothing catches: it is a string compared against a field name, so renaming <code>qty</code> leaves
+                you with code that runs, throws nothing, and silently never fires again.
+            </p>
+
+            <div class="rx-diff mb-4">
+                <div class="rx-diff-pane rx-diff-before">
+                    <div class="rx-diff-head">Hand-wired — a string that has to match a field name</div>
+                    <pre class="code-block language-javascript">
+model.onChange(({field, newValue}) =&gt; {
+    if (field === 'qty') recalculate();
+});
+
+// Renaming the field breaks this silently.
+// Reading a second field means editing the
+// condition as well as the body.</pre>
+                </div>
+                <div class="rx-diff-pane rx-diff-after">
+                    <div class="rx-diff-head">Tracked — subscribes to whatever it reads, and only that</div>
+                    <pre class="code-block language-javascript">
+M.effect(() =&gt; recalculate(model.get('qty')));
+
+// Read a second field and it is a dependency
+// from that moment on. Nothing else to update.</pre>
+                </div>
+            </div>
+
+            <p class="mb-4">
+                <code>M.untracked()</code> is the escape hatch for the case where you need a value but must not
+                depend on it — a session id, a start timestamp, a debug flag. Read it inside
+                <code>M.untracked(() =&gt; …)</code> and the graph looks the other way. Without it, effects have an
+                unfortunate habit of accumulating dependencies on things they merely mention.
+            </p>
+
+            <div class="models-method-grid mb-4">
+                <span class="models-method-item">M.effect()</span>
+                <span class="models-method-item">M.untracked()</span>
+                <span class="models-method-item">M.flush()</span>
+                <span class="models-method-item">model.tracked()</span>
+            </div>
+
             <pre class="code-block language-javascript">
-const stop = M.effect(() => {
+const stop = M.effect(() =&gt; {
     const user  = prefs.get('username');   // tracked
     const theme = prefs.get('theme');      // tracked
 
     // Read without subscribing to it
-    const session = M.untracked(() => prefs.get('sessionId'));
+    const session = M.untracked(() =&gt; prefs.get('sessionId'));
 
     render(user, theme, session);
 });
 
-stop();   // unsubscribe</pre>
+stop();   // unsubscribe from everything, in one call</pre>
+
+            <p class="text-sm mt-3 mb-0">
+                If you prefer property syntax to <code>get()</code>, <code>model.tracked()</code> hands back a
+                read-tracked, write-through view: <code>state.count</code> reads and tracks,
+                <code>state.count = 5</code> writes through <code>set()</code> so validation, notification and
+                persistence all still run. It is exactly what backs <code>this.data</code> inside components.
+            </p>
         </div>
     </section>
 
-    <!-- ================= Batching ================= -->
-    <section class="card mb-6" data-section="Batching">
+    <!-- ================= 7. One render per change, not one per write ================= -->
+    <section class="card mb-6" id="sec-batching" data-section="One render per change, not one per write">
         <div class="card-header">
-            <h2 class="text-xl font-semibold">Batching</h2>
+            <h2 class="text-xl font-semibold">One render per change, not one per write</h2>
         </div>
         <div class="card-body">
+
             <p class="mb-4">
-                Writes never recompute anything synchronously. They mark dependents dirty and schedule a single
-                microtask flush, so a burst of writes collapses into one pass. Use <code>M.flush()</code> when you
-                need a derived value to settle immediately.
+                Each button below writes to three fields that a single effect reads. Watch the counter: whichever
+                button you press, it goes up by <strong>one</strong>.
             </p>
 
             <div class="row mb-4">
@@ -232,11 +733,33 @@ stop();   // unsubscribe</pre>
                         <div class="rx-counter" id="rx-runs">1</div>
                     </div>
                     <p class="text-sm mt-2">
-                        Either button adds exactly <strong>one</strong> run: three writes in the same tick share
-                        one flush.
+                        Three writes, one run. The naive implementation would give you three renders and let the
+                        user see two intermediate states that never really existed.
                     </p>
                 </div>
             </div>
+
+            <p class="mb-4">
+                A write never recomputes anything on the spot. It marks whatever depends on it as out of date and
+                books a single tidy-up for the end of the current tick. Everything that fell out of date in that
+                tick is then settled together, in dependency order, once each. The benefit is not only speed — it is
+                that nobody ever observes a half-updated screen. If you set a price and a currency on consecutive
+                lines, no render happens in between showing the new price against the old currency.
+            </p>
+
+            <p class="mb-4">
+                This is also what makes the "write freely" style safe. A loop that assigns fifty fields costs one
+                settle. An event handler that touches four models costs one settle. You are never punished for
+                writing state in the order that reads most clearly, which is the usual reason people start batching
+                things by hand and end up with a manual <code>render()</code> call they must remember.
+            </p>
+
+            <p class="mb-4">
+                Ordering is guaranteed inside a settle: derived values are brought up to date first and effects run
+                last, so an effect never sees a computed that has not caught up. A computed that recomputes to the
+                same answer stops there and does not wake its own dependents, so a chain settles as soon as it
+                stops actually changing.
+            </p>
 
             <pre class="code-block language-javascript">
 // Three separate writes, same tick → ONE effect run
@@ -250,18 +773,27 @@ form.set({ a: 1, b: 2, c: 3 });
 // Need it settled right now (tests, or reading straight after a write)?
 form.set('a', 9);
 M.flush();</pre>
+
+            <p class="text-sm mt-3 mb-0">
+                <code>M.flush()</code> forces the settle to happen immediately. It exists for tests and for the rare
+                place that must read a derived value on the very next line after a write. Reaching for it in
+                ordinary application code usually means something is being read too eagerly — the wait is the
+                optimisation.
+            </p>
         </div>
     </section>
 
-    <!-- ================= Conditional Dependencies ================= -->
-    <section class="card mb-6" data-section="Conditional Dependencies">
+    <!-- ================= 8. It stops listening to what it stopped reading ================= -->
+    <section class="card mb-6" id="sec-conditional"
+             data-section="It stops listening to what it stopped reading">
         <div class="card-header">
-            <h2 class="text-xl font-semibold">Conditional Dependencies</h2>
+            <h2 class="text-xl font-semibold">It stops listening to what it stopped reading</h2>
         </div>
         <div class="card-body">
+
             <p class="mb-4">
-                Dependencies are re-collected on every run, so a derivation stops listening to the branch it no
-                longer takes. Switch the mode below and watch which input still triggers a re-run.
+                One effect, two possible inputs, and a switch that decides which one it reads. Edit the field the
+                effect is not currently reading and nothing happens at all.
             </p>
 
             <div class="row mb-4">
@@ -281,13 +813,36 @@ M.flush();</pre>
                 <div class="col-6">
                     <div class="rx-log" id="rx-branch-log"></div>
                     <p class="text-sm mt-2">
-                        In <strong>Read X</strong> mode, editing Y does nothing. Switch modes and the roles swap.
+                        In <strong>Read X</strong> mode, editing Y produces nothing — not a filtered-out run, no run
+                        at all. Switch modes and the roles swap immediately.
                     </p>
                 </div>
             </div>
 
+            <p class="mb-4">
+                Dependencies are collected afresh on every run, not once when the derivation is created. So a
+                derivation that took the <code>else</code> branch this time is subscribed to what the
+                <code>else</code> branch read, and to nothing the <code>if</code> branch touched. Take the other
+                branch next time and the subscriptions swap with it.
+            </p>
+
+            <p class="mb-4">
+                This is what stops reactivity degenerating as an application grows. Real screens are full of
+                conditions — a panel that only reads the filter when it is expanded, a total that only reads the
+                discount when one applies, a row that only reads the edit buffer while being edited. With a declared
+                dependency list, each of those has to declare everything either branch <em>might</em> read, so the
+                collapsed panel wakes up on every keystroke in a filter nobody can see. Here, the cost of a branch
+                you did not take is nothing, and it stays nothing without anybody maintaining it.
+            </p>
+
+            <p class="mb-4">
+                It also means a derivation cannot leak subscriptions over time. Whatever it read on its last run is
+                the complete set — old links are dropped rather than accumulated — so a long-lived effect whose
+                conditions shift does not slowly become subscribed to the whole application.
+            </p>
+
             <pre class="code-block language-javascript">
-M.effect(() => {
+M.effect(() =&gt; {
     // Only ONE of x / y is a dependency at any moment
     const value = state.get('mode') === 'x'
         ? state.get('x')
@@ -298,16 +853,16 @@ M.effect(() => {
         </div>
     </section>
 
-    <!-- ================= Components ================= -->
-    <section class="card mb-6" data-section="Components">
+    <!-- ================= 9. Already on in your components ================= -->
+    <section class="card mb-6" id="sec-components" data-section="Already on in your components">
         <div class="card-header">
-            <h2 class="text-xl font-semibold">Components</h2>
+            <h2 class="text-xl font-semibold">Already on in your components</h2>
         </div>
         <div class="card-body">
+
             <p class="mb-4">
-                <code>Domma.component()</code> uses tracking automatically — the definition syntax is unchanged.
-                Computeds re-evaluate only when a field they read changes, and a burst of writes produces one
-                render.
+                The component below is an ordinary <code>Domma.component()</code> with two computed properties. The
+                log records every render, and how many times the <code>label</code> expression has run.
             </p>
 
             <div class="row mb-4">
@@ -320,11 +875,34 @@ M.effect(() => {
                 <div class="col-6">
                     <div class="rx-log" id="rx-component-log"></div>
                     <p class="text-sm mt-2">
-                        <strong>Touch unrelated field</strong> writes to the model but triggers neither a computed
-                        re-evaluation nor a render.
+                        <strong>Touch unrelated field</strong> writes a real value to the component's model — and
+                        costs neither a computed re-evaluation nor a render. Nothing in the definition says so.
                     </p>
                 </div>
             </div>
+
+            <p class="mb-4">
+                There is no opt-in and no new syntax. If you already write components with a <code>data()</code> and
+                a <code>computed:</code> block, you are already getting all of this: each computed re-evaluates only
+                when a field it read changes, each <code>{{ }}</code> binding updates only the text it owns rather
+                than re-rendering the template, and a burst of writes such as
+                <code>this.set({price: 60, qty: 2})</code> produces one render and one <code>onUpdated()</code>
+                call.
+            </p>
+
+            <p class="mb-4">
+                The distinction worth knowing is between the two kinds of binding. A plain <code>{{label}}</code> is
+                a text binding, so a change updates that one text node surgically. A structural binding such as
+                <code>{{#if free}}</code> has to add or remove elements, so it re-renders — but only when the
+                condition actually flips, not every time something it reads is written. In practice that means the
+                expensive path is taken rarely and by itself.
+            </p>
+
+            <p class="mb-4">
+                Inside a component, <code>this.data</code> is a tracked view of the model, which is why reading
+                <code>this.data.items</code> in a computed is enough to subscribe to it. Writes go through
+                <code>this.set()</code> so validation and persistence still run.
+            </p>
 
             <pre class="code-block language-javascript">
 Domma.component('order-summary', {
@@ -342,18 +920,232 @@ Domma.component('order-summary', {
     }
 });</pre>
 
-            <div class="alert alert-warning">
+            <div class="alert alert-warning mt-4 mb-0">
                 <strong>Computeds must be synchronous.</strong> Dependency collection ends at the first
                 <code>await</code>, so anything read after it is invisible to the graph. Fetch first, then write the
-                result to the model.
+                result to the model and let the derivations react to that. The same applies to effects: track
+                synchronously, then act.
             </div>
         </div>
     </section>
 
-    <!-- ================= Method Reference ================= -->
-    <section class="card mb-6" data-section="Method Reference">
+    <!-- ================= 10. When not to reach for it ================= -->
+    <section class="card mb-6" id="sec-limits" data-section="When not to reach for it">
         <div class="card-header">
-            <h2 class="text-xl font-semibold">Method Reference</h2>
+            <h2 class="text-xl font-semibold">When <em>not</em> to reach for it</h2>
+        </div>
+        <div class="card-body">
+
+            <p class="rx-lead mb-4">
+                Reactivity is not free and it is not universal. Here is where it is the wrong tool, and where it has
+                edges you will otherwise find the hard way.
+            </p>
+
+            <h3 class="text-lg font-semibold mb-2">A value nothing derives from does not need to be observable</h3>
+
+            <p class="mb-4">
+                The whole benefit is that dependents are told. State with no dependents has no benefit to collect,
+                and wrapping it costs you a box to open on every read plus a graph node that will never fire. A
+                configuration object read once at start-up, a constant, a cached lookup table, a value used only
+                inside the function that produced it — leave them as plain variables. Reach for an observable at the
+                moment something else needs to follow the value, not before. Making everything reactive on principle
+                is the reactive equivalent of making every field private with a getter: ceremony that obscures the
+                three places where it mattered.
+            </p>
+
+            <h3 class="text-lg font-semibold mb-2">Derivations must return new values, not edit old ones</h3>
+
+            <p class="mb-4">
+                Change is detected by comparing the new value with the old one. If you mutate an object or array in
+                place and hand back the same reference, there is nothing to compare — the value is identical to
+                itself — and the change does not propagate. This one is not rare and it is not obvious, so run it:
+            </p>
+
+            <div class="try-it" data-try-it="The mutation trap — and the fix">
+                <textarea class="try-it-editor" rows="18" spellcheck="false">
+                    const list = M.observable(['a']);
+
+                    let runs = 0;
+                    M.effect(() => { runs++; list.value.length; });
+                    M.flush();
+                    log('effect runs after setup:', runs);
+
+                    // WRONG — mutate in place, then assign the same reference back.
+                    const live = list.peek();
+                    live.push('b');
+                    list.value = live;
+                    M.flush();
+                    log('after an in-place push:', runs, '(nothing was told)');
+
+                    // RIGHT — assign a new array.
+                    list.value = [...list.peek(), 'c'];
+                    M.flush();
+                    log('after assigning a new array:', runs, '(dependents woke up)');
+
+                    log('the value itself was correct all along:', list.peek().join(','));
+                </textarea>
+            </div>
+
+            <p class="mb-4">
+                Note the last line: the data was never wrong. The write always lands — only the <em>notification</em>
+                is gated. That is what makes the bug quietly awful, because the model and the screen disagree while
+                every value you inspect looks right. The rule is short: in a computed, return
+                <code>[...items, x]</code> rather than <code>items.push(x); return items</code>. The exception is
+                <code>M.observableArray()</code>, whose mutators exist precisely to make in-place list edits safe;
+                section&nbsp;5 explains why it can afford to skip the comparison.
+            </p>
+
+            <h3 class="text-lg font-semibold mb-2">Date-valued model fields do not notify</h3>
+
+            <p class="mb-4">
+                A real, documented limitation, pinned by a test so that changing it has to be a deliberate decision:
+                <code>utils.isEqual</code> considers <em>any</em> two <code>Date</code> instances equal, because
+                neither has own enumerable keys. A model field holding a <code>Date</code> therefore stores the new
+                value and tells nobody.
+            </p>
+
+            <div class="try-it" data-try-it="Date fields: the write lands, the notification does not">
+                <textarea class="try-it-editor" rows="16" spellcheck="false">
+                    const booking = M.create({when: {}}, {when: new Date('2026-01-01')});
+
+                    let fired = 0;
+                    booking.onChange(() => fired++);
+
+                    booking.set('when', new Date('2030-06-30'));
+                    M.flush();
+
+                    log('stored year:', booking.get('when').getFullYear(), '— the write landed');
+                    log('change notifications:', fired, '— nobody was told');
+
+                    // Workaround: store a timestamp, format it for display.
+                    const fixed = M.create({whenMs: {}}, {whenMs: Date.parse('2026-01-01')});
+                    let fired2 = 0;
+                    fixed.onChange(() => fired2++);
+                    fixed.set('whenMs', Date.parse('2030-06-30'));
+
+                    log('with a timestamp, notifications:', fired2);
+                    log('display it with D():', D(fixed.get('whenMs')).format('D MMM YYYY'));
+                </textarea>
+            </div>
+
+            <p class="mb-4">
+                Store timestamps (numbers) or ISO strings in reactive fields and turn them into dates at the point
+                of display with <code>D()</code>. That is good practice for serialisation and persistence anyway.
+                Note that <code>M.observable()</code> is <em>not</em> affected — its default comparison handles
+                <code>Date</code> correctly; the limitation belongs to model fields, which are deliberately gated
+                with Domma's own <code>utils.isEqual</code> to preserve long-standing behaviour.
+            </p>
+
+            <h3 class="text-lg font-semibold mb-2">Other edges worth knowing</h3>
+
+            <ul class="mb-4">
+                <li><strong>Nothing asynchronous is tracked past the first <code>await</code>.</strong> Tracking is
+                    collected while the function runs; once it suspends, the collector has moved on. Read what you
+                    need synchronously, then await.
+                </li>
+                <li><strong>Reading a whole model tracks every field.</strong> <code>model.get()</code> with no
+                    argument subscribes to all of them — the conservative choice, since the caller could touch any.
+                    Prefer <code>model.get('field')</code> inside derivations. <code>model.toJSON()</code> is
+                    deliberately untracked, for render-time and serialisation reads.
+                </li>
+                <li><strong>Writes made from <code>onUpdated()</code> must converge.</strong> Set a value that will
+                    compare equal on the next pass. A value that differs every time — <code>Date.now()</code>, an
+                    incrementing counter — re-triggers the watcher indefinitely, and because it is a microtask chain
+                    it locks the page rather than throwing.
+                </li>
+                <li><strong>Declare every field in <code>data()</code>.</strong> Observables are created lazily, so
+                    a component field that did not exist when the watcher collected its dependencies stays untracked
+                    until some declared field changes.
+                </li>
+                <li><strong>A moved component is inert.</strong> Disconnecting disposes its effects and destroys its
+                    model, so relocating an element in the DOM does not rebuild its reactive wiring. Pre-existing
+                    behaviour, unchanged by tracking.
+                </li>
+                <li><strong>Effects are not a place for imperative sequences.</strong> If code must run once, in
+                    order, in response to a user action, that is a click handler. An effect answers "keep this in
+                    step with that", and an effect that submits a form or navigates will eventually do so at a
+                    moment you did not intend.
+                </li>
+            </ul>
+
+            <p class="mb-0 rx-takeaway">
+                None of this argues against reactivity — it argues for using it where derivation is the actual
+                shape of the problem. The good instinct is: state that other state or the screen is a
+                <em>function of</em> belongs in the graph; everything else is just a variable.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= 11. Use it without Domma ================= -->
+    <section class="card mb-6" id="sec-standalone" data-section="Use it without Domma">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Use it without Domma</h2>
+        </div>
+        <div class="card-body">
+
+            <p class="mb-4">
+                Everything on this page is a thin namespace over a package published on its own:
+                <code>domma-reactive</code>. If you like the tracking but do not want a framework, install just
+                that.
+            </p>
+
+            <pre class="code-block language-bash">npm install domma-reactive</pre>
+
+            <pre class="code-block language-javascript mt-3">
+import {observable, computed, effect} from 'domma-reactive';
+
+const price = observable(10);
+const qty   = observable(3);
+
+const total = computed(() =&gt; price.value * qty.value);
+
+effect(() =&gt; console.log('total is', total.get()));
+
+qty.value = 4;   // effect re-runs on the next microtask</pre>
+
+            <p class="mb-4">
+                The snippet below is that example with one substitution: <code>M.observable</code> for
+                <code>observable</code>. They are not merely similar — they are the same functions, since Domma
+                takes the package as an exact-pinned build-time dependency and inlines it. Run it, then mentally
+                swap the names back.
+            </p>
+
+            <div class="try-it" data-try-it="The domma-reactive README example, running here">
+                <textarea class="try-it-editor" rows="13" spellcheck="false">
+                    // Standalone:  import {observable, computed, effect} from 'domma-reactive';
+                    // Here:        M.observable / M.computed / M.effect — the same functions.
+
+                    const price = M.observable(10);
+                    const qty   = M.observable(3);
+
+                    const total = M.computed(() => price.value * qty.value);
+
+                    M.effect(() => log('total is', total.get()));
+
+                    qty.value = 4;
+                    M.flush();      // the standalone package calls this flushSync()
+                </textarea>
+            </div>
+
+            <p class="mb-4">
+                The package exports <code>observable()</code>, <code>observableArray()</code>,
+                <code>computed()</code>, <code>effect()</code>, <code>untracked()</code> and
+                <code>flushSync()</code>, has no dependency on Domma and no dependency on the DOM. It ships ESM, CJS
+                and a browser build.
+            </p>
+
+            <div class="alert alert-info mb-0">
+                <strong>You do not need to install it to use Domma.</strong> Reactivity is innate — the package is
+                an additional way in, not a relocation. Rollup inlines it at build time, so
+                <code>domma.min.js</code> stays a single self-contained file and the CDN story is unchanged.
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= 12. Method reference ================= -->
+    <section class="card mb-6" id="sec-reference" data-section="Method reference">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Method reference</h2>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -367,9 +1159,25 @@ Domma.component('order-summary', {
                     </thead>
                     <tbody>
                     <tr>
+                        <td><code>M.observable(value, options?)</code></td>
+                        <td><code>Observable</code></td>
+                        <td>One tracked value, with no schema. Reading <code>.value</code> subscribes; writing it
+                            notifies when the comparison sees a change.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><code>M.observableArray(array?, options?)</code></td>
+                        <td><code>ObservableArray</code></td>
+                        <td>Tracked array. In-place mutators notify unconditionally; wholesale assignment is
+                            compared. Copies rather than adopts.
+                        </td>
+                    </tr>
+                    <tr>
                         <td><code>M.computed(fn, options?)</code></td>
                         <td><code>ComputedRef</code></td>
-                        <td>Lazily-evaluated derived value. Caches until a tracked dependency changes.</td>
+                        <td>Lazily-evaluated derived value. Caches until a tracked dependency changes. Options:
+                            <code>label</code>, <code>onChange</code>.
+                        </td>
                     </tr>
                     <tr>
                         <td><code>M.effect(fn, options?)</code></td>
@@ -392,6 +1200,31 @@ Domma.component('order-summary', {
                         <td>Read-tracked, write-through view. Writes still validate, notify and persist.</td>
                     </tr>
                     <tr>
+                        <td><code>observable.value</code></td>
+                        <td><code>any</code></td>
+                        <td>Read (tracked) and write. Assigning notifies only on a real change.</td>
+                    </tr>
+                    <tr>
+                        <td><code>observable.set(next)</code></td>
+                        <td><code>void</code></td>
+                        <td>Imperative alias for assigning <code>.value</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><code>observableArray.length</code></td>
+                        <td><code>number</code></td>
+                        <td>Tracked length, so a rendered count stays current.</td>
+                    </tr>
+                    <tr>
+                        <td><code>observableArray.remove(item)</code></td>
+                        <td><code>ObservableArray</code></td>
+                        <td>Remove every occurrence in place, then notify. Chainable.</td>
+                    </tr>
+                    <tr>
+                        <td><code>observableArray.removeAll()</code></td>
+                        <td><code>ObservableArray</code></td>
+                        <td>Empty the array in place, then notify. Chainable.</td>
+                    </tr>
+                    <tr>
                         <td><code>ref.get()</code></td>
                         <td><code>any</code></td>
                         <td>Current value; registers a dependency on the caller.</td>
@@ -410,9 +1243,10 @@ Domma.component('order-summary', {
                 </table>
             </div>
 
-            <div class="alert alert-info mt-4">
-                <strong>Full guide:</strong> rules, limits and compatibility notes are in
-                <code>docs/Reactivity.md</code>.
+            <div class="alert alert-info mt-4 mb-0">
+                <strong>Going further:</strong> the full rules, propagation policy and compatibility notes are in
+                <code>docs/Reactivity.md</code>; component specifics are in <code>docs/Components.md</code>; the
+                schema system that <code>M.create()</code> builds on is in <code>docs/Blueprints.md</code>.
             </div>
         </div>
     </section>
@@ -424,6 +1258,7 @@ Domma.component('order-summary', {
 
 <script src="../../dist/domma.min.js"></script>
 <script src="../../dist/domma-syntax.min.js"></script>
+<script src="../js/try-it.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
     // ── Shared logging helper ─────────────────────────────────────────────
@@ -589,9 +1424,13 @@ Domma.component('order-summary', {
     let labelEvals = 0;
 
     Domma.component('rx-order-summary', {
+        // Styling hooks are data-attributes rather than classes: these live in
+        // the component's Shadow DOM, where the page stylesheet cannot reach
+        // them, so a class here would look like an undefined page class to any
+        // audit of the document's CSS.
         template: `
-            <div class="rx-summary-box">
-                <p class="rx-summary-label">{{label}}</p>
+            <div data-rx-summary-box>
+                <p data-rx-summary-label>{{label}}</p>
                 {{#if freeDelivery}}<em>Free delivery applies</em>{{/if}}
             </div>
         `,
@@ -600,7 +1439,7 @@ Domma.component('order-summary', {
         // var(--dm-*) resolves here and follows the light/dark variant. A
         // literal colour would not.
         style: `
-            .rx-summary-box {
+            [data-rx-summary-box] {
                 padding: 1rem;
                 border: 1px solid var(--dm-border);
                 border-radius: 0.5rem;
@@ -608,7 +1447,7 @@ Domma.component('order-summary', {
                 color: var(--dm-text);
             }
 
-            .rx-summary-label {
+            [data-rx-summary-label] {
                 margin: 0 0 0.5rem;
             }
         `,
