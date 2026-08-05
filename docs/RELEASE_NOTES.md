@@ -1,3 +1,34 @@
+### v0.33.1 - Millisecond Waits (2026-08-05)
+
+🐛 **Bug Fixes**
+
+*   **A `'300ms'` wait ran for five minutes.** `parseWait()` in the scribe effect tested
+    `endsWith('s')` before `endsWith('ms')` — and because `'ms'` also ends with `'s'`, the millisecond
+    branch was unreachable. Every millisecond-suffixed wait was multiplied by 1000, so a sequence like
+
+    ```javascript
+    Domma.effects.scribe('.headline', {
+        actions: [{render: 'Hello'}, {wait: '300ms'}, {render: ' world'}]
+    });
+    ```
+
+    appeared to stop after the first render. Seconds (`'2s'`) and raw numbers were unaffected, which is
+    why it went unnoticed — the workaround was to pass milliseconds as a number.
+
+    This was reported in the v0.25.2 notes as "fix queued for a future patch release" and has been
+    present ever since.
+
+🔧 **Internal**
+
+*   `parseWait` was closure-local inside `scribe()` and therefore impossible to test. It is now a
+    module-scope export, matching how `resolvePalette` is already handled in that file, and is pinned
+    by tests that fail if the branch ordering is restored. It is not exposed on `Domma.effects` — the
+    public surface is unchanged.
+
+*   A non-finite number now returns `0` rather than letting `NaN` reach a timer.
+
+---
+
 ### v0.33.0 - Working Scaffolds & a Real Reactivity Showcase (2026-08-05)
 
 🐛 **Bug Fixes**

@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.33.1",
+      "title": "Millisecond Waits",
+      "description": "<p><strong>A <code>'300ms'</code> wait ran for five minutes.</strong> <code>parseWait()</code> in the scribe effect tested <code>endsWith('s')</code> before <code>endsWith('ms')</code> — and because <code>'ms'</code> also ends with <code>'s'</code>, the millisecond branch was unreachable. Every millisecond-suffixed wait was multiplied by 1000, so a scribe sequence with a <code>{wait: '300ms'}</code> step appeared to stop after the first render.</p><p>Seconds (<code>'2s'</code>) and raw numbers were unaffected, which is why it went unnoticed — the workaround was to pass milliseconds as a number. This was reported in the v0.25.2 notes as queued for a future patch and has been present ever since.</p><p><strong>Internal:</strong> the helper was closure-local inside <code>scribe()</code> and therefore impossible to test. It is now a module-scope export, matching <code>resolvePalette</code>, pinned by tests that fail if the branch ordering is restored. The public <code>Domma.effects</code> surface is unchanged.</p>",
+      "date": "2026-08-05"
+    },
+    {
       "year": "v0.33.0",
       "title": "Working Scaffolds & a Real Reactivity Showcase",
       "description": "<p><strong>Fixed — every scaffolded project rendered unstyled.</strong> The kickstart templates were written in Bootstrap class names while Domma ships Tailwind-style utilities, so <strong>143 class usages across 14 files resolved to nothing</strong>. Anyone who ran <code>npx domma init</code> got a project that looked broken on first load. Two components were dead rather than merely unstyled: the contact FAQ and docs pages used Bootstrap's collapse markup, and Bootstrap JS is never loaded — while <code>contact.js</code> and <code>docs.js</code> already called <code>Domma.elements.accordion()</code> and <code>.tabs()</code> against markup they could not recognise. Both work now.</p><p><strong>The Reactivity showcase is a showcase, not a reference.</strong> It had six sections, every one named after a mechanism and opening by explaining it — no statement of the problem, no benefit, no guidance on when not to use it. Now twelve sections named for outcomes, demonstration before explanation, opening with the code you stop writing, and a <em>When not to reach for it</em> section that shows the traps running live. Prose grew from 506 to 4,118 words; all 26 interactive demos preserved. See the <a href=\"../showcase/models/reactivity.html\">Reactivity showcase</a>.</p><p><strong>New:</strong> Try-it panes — editable code with live output on any showcase page — plus the <code>.list-none</code> and <code>.no-underline</code> utilities.</p><p><strong>Internal:</strong> the template compiler moved into <a href=\"https://www.npmjs.com/package/domma-reactive\">domma-reactive</a> 0.2.0, completing the extraction milestone that had shipped half-done.</p>",
@@ -241,5 +247,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.33.0"
+  "latestVersion": "v0.33.1"
 }
