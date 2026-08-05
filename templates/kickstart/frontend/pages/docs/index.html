@@ -50,8 +50,8 @@
 <section class="hero hero-center bg-dark bg-ambient-rotate-glow" style="min-height: 40vh; padding: 3rem 2rem;">
   <div class="hero-content">
     <span data-icon="book" data-icon-size="72" class="mb-3" style="color: var(--dm-white-t85);"></span>
-    <h1 class="display-2 mb-3" style="color: var(--dm-white);">Documentation</h1>
-    <p class="lead" style="color: var(--dm-white-t85); max-width: 700px;">
+    <h1 class="text-4xl font-bold mb-3" style="color: var(--dm-white);">Documentation</h1>
+    <p class="text-lg" style="color: var(--dm-white-t85); max-width: 700px;">
       Everything you need to know to build with {{projectName}}
     </p>
   </div>
@@ -59,12 +59,12 @@
 
 <!-- Documentation Layout -->
 <div class="container-fluid py-6">
-  <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+  <div class="grid grid-cols-1 grid-cols-4 gap-4">
     <!-- Sidebar Navigation -->
     <aside>
       <div class="docs-sidebar">
-        <h2 class="h5 mb-3">Documentation</h2>
-        <nav class="nav flex-column">
+        <h2 class="text-lg font-bold mb-3">Documentation</h2>
+        <nav class="flex flex-col">
           <a href="#getting-started" class="nav-link active">Getting Started</a>
           <a href="#installation" class="nav-link">Installation</a>
           <a href="#configuration" class="nav-link">Configuration</a>
@@ -77,41 +77,41 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="lg:col-span-3">
+    <main class="col-span-3">
       <!-- Getting Started -->
       <section id="getting-started" class="mb-8">
-        <h1 class="display-4 mb-4">Getting Started</h1>
-        <p class="lead">
+        <h1 class="text-3xl font-bold mb-4">Getting Started</h1>
+        <p class="text-lg">
           Welcome to {{projectName}}! This guide will help you get up and running quickly.
         </p>
       </section>
 
       <!-- Installation -->
       <section id="installation" class="mb-8">
-        <h2 class="h3 mb-4">Installation</h2>
+        <h2 class="text-2xl font-bold mb-4">Installation</h2>
 
         <div id="install-tabs" class="tabs mb-4">
-          <ul class="tabs-nav">
-            <li><a href="#npm-tab" class="active">npm</a></li>
-            <li><a href="#yarn-tab">Yarn</a></li>
-            <li><a href="#cdn-tab">CDN</a></li>
+          <ul class="tab-list">
+            <li class="tab-item active">npm</li>
+            <li class="tab-item">Yarn</li>
+            <li class="tab-item">CDN</li>
           </ul>
 
-          <div class="tabs-content">
+          <div class="tab-content">
             <!-- npm Tab -->
-            <div id="npm-tab" class="tabs-pane active">
+            <div id="npm-tab" class="tab-panel active">
               <p>Install via npm:</p>
               <pre><code class="language-bash">npm install domma-js</code></pre>
             </div>
 
             <!-- Yarn Tab -->
-            <div id="yarn-tab" class="tabs-pane">
+            <div id="yarn-tab" class="tab-panel">
               <p>Install via Yarn:</p>
               <pre><code class="language-bash">yarn add domma-js</code></pre>
             </div>
 
             <!-- CDN Tab -->
-            <div id="cdn-tab" class="tabs-pane">
+            <div id="cdn-tab" class="tab-panel">
               <p>Include from CDN:</p>
               <pre><code class="language-html">&lt;link rel="stylesheet" href="https://unpkg.com/domma-js/dist/domma.css"&gt;
 &lt;script src="https://unpkg.com/domma-js/dist/domma.min.js"&gt;&lt;/script&gt;</code></pre>
@@ -122,7 +122,7 @@
 
       <!-- Configuration -->
       <section id="configuration" class="mb-8">
-        <h2 class="h3 mb-4">Configuration</h2>
+        <h2 class="text-2xl font-bold mb-4">Configuration</h2>
         <p>
           Configure your project using the <code>domma.config.json</code> file:
         </p>
@@ -141,23 +141,23 @@
 }</code></pre>
 
         <div class="alert alert-info mt-4">
-          <span data-icon="info" class="me-2"></span>
+          <span data-icon="info" class="mr-2"></span>
           <strong>Tip:</strong> You can override any configuration value programmatically using JavaScript.
         </div>
       </section>
 
       <!-- Components -->
       <section id="components" class="mb-8">
-        <h2 class="h3 mb-4">Components</h2>
+        <h2 class="text-2xl font-bold mb-4">Components</h2>
         <p>
           Domma includes 19+ UI components out of the box. Here are some examples:
         </p>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+        <div class="grid grid-cols-1 grid-cols-2 gap-4 mt-3">
           <div class="card shadow-md">
             <div class="card-body">
-              <h3 class="h5 mb-2">Buttons</h3>
-              <div class="d-flex flex-wrap gap-2">
+              <h3 class="text-lg font-bold mb-2">Buttons</h3>
+              <div class="flex flex-wrap gap-2">
                 <button class="btn btn-primary">Primary</button>
                 <button class="btn btn-secondary">Secondary</button>
                 <button class="btn btn-success">Success</button>
@@ -168,8 +168,8 @@
 
           <div class="card shadow-md">
             <div class="card-body">
-              <h3 class="h5 mb-2">Badges</h3>
-              <div class="d-flex flex-wrap gap-2">
+              <h3 class="text-lg font-bold mb-2">Badges</h3>
+              <div class="flex flex-wrap gap-2">
                 <span class="badge badge-primary">Primary</span>
                 <span class="badge badge-success">Success</span>
                 <span class="badge badge-warning">Warning</span>
@@ -182,7 +182,7 @@
 
       <!-- Theming -->
       <section id="theming" class="mb-8">
-        <h2 class="h3 mb-4">Theming</h2>
+        <h2 class="text-2xl font-bold mb-4">Theming</h2>
         <p>
           Customize your theme by overriding CSS variables:
         </p>
@@ -201,11 +201,11 @@
 
       <!-- API Reference -->
       <section id="api" class="mb-8">
-        <h2 class="h3 mb-4">API Reference</h2>
+        <h2 class="text-2xl font-bold mb-4">API Reference</h2>
 
         <div class="card mb-4">
           <div class="card-body">
-            <h3 class="h5 mb-3">Domma ($ alias)</h3>
+            <h3 class="text-lg font-bold mb-3">Domma ($ alias)</h3>
             <p class="text-secondary mb-3">jQuery-compatible DOM manipulation</p>
             <pre><code class="language-javascript">$('#element').addClass('active');
 $('.items').each((el) => console.log(el));</code></pre>
@@ -214,7 +214,7 @@ $('.items').each((el) => console.log(el));</code></pre>
 
         <div class="card mb-4">
           <div class="card-body">
-            <h3 class="h5 mb-3">Domma.utils (_ alias)</h3>
+            <h3 class="text-lg font-bold mb-3">Domma.utils (_ alias)</h3>
             <p class="text-secondary mb-3">Lodash-compatible utilities</p>
             <pre><code class="language-javascript">_.chunk([1, 2, 3, 4], 2);  // [[1, 2], [3, 4]]
 _.debounce(fn, 300);</code></pre>
@@ -223,7 +223,7 @@ _.debounce(fn, 300);</code></pre>
 
         <div class="card">
           <div class="card-body">
-            <h3 class="h5 mb-3">Domma.theme</h3>
+            <h3 class="text-lg font-bold mb-3">Domma.theme</h3>
             <p class="text-secondary mb-3">Theme management</p>
             <pre><code class="language-javascript">Domma.theme.init({ theme: 'ocean-dark' });
 Domma.theme.get();  // 'ocean-dark'</code></pre>
@@ -233,46 +233,37 @@ Domma.theme.get();  // 'ocean-dark'</code></pre>
 
       <!-- FAQ -->
       <section id="faq" class="mb-8">
-        <h2 class="h3 mb-4">Frequently Asked Questions</h2>
+        <h2 class="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
 
         <div class="accordion" id="docs-faq">
           <div class="accordion-item">
-            <h3 class="accordion-header">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                Is Domma production-ready?
-              </button>
-            </h3>
-            <div id="faq1" class="accordion-collapse collapse show">
-              <div class="accordion-body">
+            <div class="accordion-header">
+              <span>Is Domma production-ready?</span>
+              <span class="accordion-icon">&#9660;</span>
+            </div>
+            <div class="accordion-body"><div class="accordion-content">
                 Yes! Domma is actively maintained and used in production applications.
-              </div>
-            </div>
+              </div></div>
           </div>
 
           <div class="accordion-item">
-            <h3 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                What browsers are supported?
-              </button>
-            </h3>
-            <div id="faq2" class="accordion-collapse collapse">
-              <div class="accordion-body">
+            <div class="accordion-header">
+              <span>What browsers are supported?</span>
+              <span class="accordion-icon">&#9660;</span>
+            </div>
+            <div class="accordion-body"><div class="accordion-content">
                 Domma supports all modern browsers (Chrome, Firefox, Safari, Edge). IE11 is not supported.
-              </div>
-            </div>
+              </div></div>
           </div>
 
           <div class="accordion-item">
-            <h3 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                Can I use Domma with React/Vue/Angular?
-              </button>
-            </h3>
-            <div id="faq3" class="accordion-collapse collapse">
-              <div class="accordion-body">
-                Yes! While Domma works standalone, you can integrate it with any framework for utilities and theming.
-              </div>
+            <div class="accordion-header">
+              <span>Can I use Domma with React/Vue/Angular?</span>
+              <span class="accordion-icon">&#9660;</span>
             </div>
+            <div class="accordion-body"><div class="accordion-content">
+                Yes! While Domma works standalone, you can integrate it with any framework for utilities and theming.
+              </div></div>
           </div>
         </div>
       </section>

@@ -22,8 +22,8 @@
 <section class="hero hero-center bg-dark bg-ambient-rotate-glow" style="min-height: 40vh; padding: 3rem 2rem;">
   <div class="hero-content">
     <span data-icon="document" data-icon-size="72" class="mb-3" style="color: var(--dm-white-t85);"></span>
-    <h1 class="display-2 mb-3" style="color: var(--dm-white);">Blog</h1>
-    <p class="lead" style="color: var(--dm-white-t85); max-width: 600px;">
+    <h1 class="text-4xl font-bold mb-3" style="color: var(--dm-white);">Blog</h1>
+    <p class="text-lg" style="color: var(--dm-white-t85); max-width: 600px;">
       Latest updates, tutorials, and insights from our team.
     </p>
   </div>
@@ -31,13 +31,13 @@
 
 <!-- Filters -->
 <section class="container pb-4">
-  <div class="d-flex flex-wrap align-items-center gap-3">
+  <div class="flex flex-wrap items-center gap-3">
     <span class="text-secondary">Filter by:</span>
     <div class="btn-group">
       <button class="btn btn-sm btn-primary">All</button>
-      <button class="btn btn-sm btn-outline-primary">Tutorials</button>
-      <button class="btn btn-sm btn-outline-primary">Updates</button>
-      <button class="btn btn-sm btn-outline-primary">News</button>
+      <button class="btn btn-sm btn-outline">Tutorials</button>
+      <button class="btn btn-sm btn-outline">Updates</button>
+      <button class="btn btn-sm btn-outline">News</button>
     </div>
   </div>
 </section>
@@ -48,18 +48,18 @@
     <!-- Blog Post 1 -->
     <article class="card card-hover shadow-lg">
         <div class="card-body">
-          <div class="d-flex gap-2 mb-3">
+          <div class="flex gap-2 mb-3">
             <span class="badge badge-primary">Tutorial</span>
-            <span class="badge badge-outline">5 min read</span>
+            <span class="badge badge-secondary">5 min read</span>
           </div>
-          <h2 class="h5 mb-2">
-            <a href="#" class="text-decoration-none">Getting Started with Domma</a>
+          <h2 class="text-lg font-bold mb-2">
+            <a href="#" class="no-underline">Getting Started with Domma</a>
           </h2>
           <p class="text-secondary mb-3">
             Learn the basics of Domma and build your first application in minutes.
           </p>
-          <div class="d-flex align-items-center text-secondary text-sm">
-            <span data-icon="calendar" class="me-2"></span>
+          <div class="flex items-center text-secondary text-sm">
+            <span data-icon="calendar" class="mr-2"></span>
             <time>January 15, {{year}}</time>
           </div>
         </div>
@@ -68,18 +68,18 @@
     <!-- Blog Post 2 -->
     <article class="card card-hover shadow-lg">
         <div class="card-body">
-          <div class="d-flex gap-2 mb-3">
+          <div class="flex gap-2 mb-3">
             <span class="badge badge-success">Update</span>
-            <span class="badge badge-outline">3 min read</span>
+            <span class="badge badge-secondary">3 min read</span>
           </div>
-          <h2 class="h5 mb-2">
-            <a href="#" class="text-decoration-none">Version 2.0 Released</a>
+          <h2 class="text-lg font-bold mb-2">
+            <a href="#" class="no-underline">Version 2.0 Released</a>
           </h2>
           <p class="text-secondary mb-3">
             Announcing our biggest update yet with enhanced performance and new features.
           </p>
-          <div class="d-flex align-items-center text-secondary text-sm">
-            <span data-icon="calendar" class="me-2"></span>
+          <div class="flex items-center text-secondary text-sm">
+            <span data-icon="calendar" class="mr-2"></span>
             <time>January 10, {{year}}</time>
           </div>
         </div>
@@ -88,78 +88,78 @@
     <!-- Blog Post 3 -->
     <article class="card card-hover shadow-lg">
         <div class="card-body">
-          <div class="d-flex gap-2 mb-3">
+          <div class="flex gap-2 mb-3">
             <span class="badge badge-warning">News</span>
-            <span class="badge badge-outline">4 min read</span>
+            <span class="badge badge-secondary">4 min read</span>
           </div>
-          <h2 class="h5 mb-2">
-            <a href="#" class="text-decoration-none">Building Responsive Layouts</a>
+          <h2 class="text-lg font-bold mb-2">
+            <a href="#" class="no-underline">Building Responsive Layouts</a>
           </h2>
           <p class="text-secondary mb-3">
             Master the grid system and create beautiful responsive designs.
           </p>
-          <div class="d-flex align-items-center text-secondary text-sm">
-            <span data-icon="calendar" class="me-2"></span>
+          <div class="flex items-center text-secondary text-sm">
+            <span data-icon="calendar" class="mr-2"></span>
             <time>January 5, {{year}}</time>
           </div>
         </div>
       </article>
 
     <!-- Blog Post 4 -->
-    <article class="card h-100 hover shadow-md">
+    <article class="card h-full card-hover shadow-md">
         <div class="card-body">
-          <div class="d-flex gap-2 mb-3">
+          <div class="flex gap-2 mb-3">
             <span class="badge badge-primary">Tutorial</span>
-            <span class="badge badge-outline">7 min read</span>
+            <span class="badge badge-secondary">7 min read</span>
           </div>
-          <h2 class="h5 mb-2">
-            <a href="#" class="text-decoration-none">Theme Customization Guide</a>
+          <h2 class="text-lg font-bold mb-2">
+            <a href="#" class="no-underline">Theme Customization Guide</a>
           </h2>
           <p class="text-secondary mb-3">
             Create custom themes and override CSS variables to match your brand.
           </p>
-          <div class="d-flex align-items-center text-secondary text-sm">
-            <span data-icon="calendar" class="me-2"></span>
+          <div class="flex items-center text-secondary text-sm">
+            <span data-icon="calendar" class="mr-2"></span>
             <time>December 28, {{year}}</time>
           </div>
         </div>
       </article>
 
     <!-- Blog Post 5 -->
-    <article class="card h-100 hover shadow-md">
+    <article class="card h-full card-hover shadow-md">
         <div class="card-body">
-          <div class="d-flex gap-2 mb-3">
+          <div class="flex gap-2 mb-3">
             <span class="badge badge-info">Tips</span>
-            <span class="badge badge-outline">6 min read</span>
+            <span class="badge badge-secondary">6 min read</span>
           </div>
-          <h2 class="h5 mb-2">
-            <a href="#" class="text-decoration-none">10 Performance Optimization Tips</a>
+          <h2 class="text-lg font-bold mb-2">
+            <a href="#" class="no-underline">10 Performance Optimization Tips</a>
           </h2>
           <p class="text-secondary mb-3">
             Speed up your Domma applications with these proven optimization techniques.
           </p>
-          <div class="d-flex align-items-center text-secondary text-sm">
-            <span data-icon="calendar" class="me-2"></span>
+          <div class="flex items-center text-secondary text-sm">
+            <span data-icon="calendar" class="mr-2"></span>
             <time>December 20, {{year}}</time>
           </div>
         </div>
       </article>
 
     <!-- Blog Post 6 -->
-    <article class="card h-100 hover shadow-md">
+    <article class="card h-full card-hover shadow-md">
         <div class="card-body">
-          <div class="d-flex gap-2 mb-3">
+          <div class="flex gap-2 mb-3">
             <span class="badge badge-danger">Important</span>
-            <span class="badge badge-outline">2 min read</span>
+            <span class="badge badge-secondary">2 min read</span>
           </div>
-          <h2 class="h5 mb-2">
-            <a href="#" class="text-decoration-none">Security Best Practices</a>
+          <h2 class="text-lg font-bold mb-2">
+            <a href="#" class="no-underline">Security Best Practices</a>
           </h2>
           <p class="text-secondary mb-3">
             Essential security considerations when building with Domma.
           </p>
-          <div class="d-flex align-items-center text-secondary text-sm">
-            <span data-icon="calendar" class="me-2"></span>
+          <div class="flex items-center text-secondary text-sm">
+            <span data-icon="calendar" class="mr-2"></span>
             <time>December 15, {{year}}</time>
           </div>
         </div>
@@ -171,17 +171,17 @@
 <!-- Pagination -->
 <section class="container py-6">
   <nav aria-label="Blog pagination">
-    <ul class="pagination justify-content-center">
-      <li class="page-item disabled">
-        <a class="page-link" href="#" aria-label="Previous">
+    <ul class="pagination justify-center">
+      <li class="pagination-item disabled">
+        <a class="pagination-link" href="#" aria-label="Previous">
           <span data-icon="chevron-left"></span>
         </a>
       </li>
-      <li class="page-item active"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Next">
+      <li class="pagination-item active"><a class="pagination-link" href="#">1</a></li>
+      <li class="pagination-item"><a class="pagination-link" href="#">2</a></li>
+      <li class="pagination-item"><a class="pagination-link" href="#">3</a></li>
+      <li class="pagination-item">
+        <a class="pagination-link" href="#" aria-label="Next">
           <span data-icon="chevron-right"></span>
         </a>
       </li>
@@ -190,16 +190,16 @@
 </section>
 
 <!-- Newsletter Signup -->
-<section class="bg-surface py-6">
+<section class="bg-white py-6">
   <div class="container">
-    <div class="d-flex justify-content-center">
+    <div class="flex justify-center">
       <div class="text-center" style="max-width: 600px;">
-        <h2 class="h3 mb-3">Subscribe to Our Newsletter</h2>
+        <h2 class="text-2xl font-bold mb-3">Subscribe to Our Newsletter</h2>
         <p class="text-secondary mb-4">
           Get the latest updates and tutorials delivered to your inbox.
         </p>
-        <form class="d-flex gap-2">
-          <input type="email" class="form-control" placeholder="Enter your email" required>
+        <form class="flex gap-2">
+          <input type="email" class="form-input" placeholder="Enter your email" required>
           <button type="submit" class="btn btn-primary">Subscribe</button>
         </form>
       </div>

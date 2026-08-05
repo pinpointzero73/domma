@@ -22,8 +22,8 @@
 <section class="hero hero-center bg-dark bg-ambient-rotate-glow" style="min-height: 40vh; padding: 3rem 2rem;">
   <div class="hero-content">
     <span data-icon="mail" data-icon-size="72" class="mb-3" style="color: var(--dm-white-t85);"></span>
-    <h1 class="display-2 mb-3" style="color: var(--dm-white);">Get in Touch</h1>
-    <p class="lead" style="color: var(--dm-white-t85); max-width: 700px;">
+    <h1 class="text-4xl font-bold mb-3" style="color: var(--dm-white);">Get in Touch</h1>
+    <p class="text-lg" style="color: var(--dm-white-t85); max-width: 700px;">
       Have a question? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
     </p>
   </div>
@@ -31,36 +31,36 @@
 
 <!-- Contact Content -->
 <section class="container py-4">
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 grid-cols-3 gap-6">
     <!-- Contact Form -->
-    <div class="lg:col-span-2">
+    <div class="col-span-2">
       <div class="card shadow-lg">
         <div class="card-body">
-          <h2 class="h4 mb-4">Send us a Message</h2>
+          <h2 class="text-xl font-bold mb-4">Send us a Message</h2>
 
           <form id="contact-form">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 grid-cols-2 gap-4">
               <div>
                 <label for="name" class="form-label">Name *</label>
-                <input type="text" id="name" class="form-control" required>
+                <input type="text" id="name" class="form-input" required>
               </div>
 
               <div>
                 <label for="email" class="form-label">Email *</label>
-                <input type="email" id="email" class="form-control" required>
+                <input type="email" id="email" class="form-input" required>
               </div>
 
-              <div class="md:col-span-2">
+              <div class="col-span-2">
                 <label for="subject" class="form-label">Subject *</label>
-                <input type="text" id="subject" class="form-control" required>
+                <input type="text" id="subject" class="form-input" required>
               </div>
 
-              <div class="md:col-span-2">
+              <div class="col-span-2">
                 <label for="message" class="form-label">Message *</label>
-                <textarea id="message" class="form-control" rows="6" required></textarea>
+                <textarea id="message" class="form-input" rows="6" required></textarea>
               </div>
 
-              <div class="md:col-span-2">
+              <div class="col-span-2">
                 <button type="submit" class="btn btn-primary btn-lg">
                   <span data-icon="send"></span> Send Message
                 </button>
@@ -72,12 +72,12 @@
     </div>
 
     <!-- Contact Information -->
-    <div class="col-12 col-lg-4">
+    <div class="col-12 col-4">
       <!-- Address Card -->
       <div class="card shadow-lg mb-4">
         <div class="card-body">
-          <h3 class="h5 mb-4">
-            <span data-icon="map-pin" class="me-2"></span> Location
+          <h3 class="text-lg font-bold mb-4">
+            <span data-icon="map-pin" class="mr-2"></span> Location
           </h3>
           <p class="mb-2">123 Example Street</p>
           <p class="mb-2">Suite 100</p>
@@ -88,8 +88,8 @@
       <!-- Contact Details -->
       <div class="card shadow-lg mb-4">
         <div class="card-body">
-          <h3 class="h5 mb-4">
-            <span data-icon="mail" class="me-2"></span> Contact Details
+          <h3 class="text-lg font-bold mb-4">
+            <span data-icon="mail" class="mr-2"></span> Contact Details
           </h3>
           <p class="mb-2">
             <strong>Email:</strong><br>
@@ -105,20 +105,20 @@
       <!-- Social Links -->
       <div class="card">
         <div class="card-body">
-          <h3 class="h5 mb-4">
-            <span data-icon="share-2" class="me-2"></span> Follow Us
+          <h3 class="text-lg font-bold mb-4">
+            <span data-icon="share-2" class="mr-2"></span> Follow Us
           </h3>
-          <div class="d-flex flex-wrap gap-2">
-            <a href="#" class="btn btn-outline-primary">
+          <div class="flex flex-wrap gap-2">
+            <a href="#" class="btn btn-outline">
               <span data-icon="github"></span> GitHub
             </a>
-            <a href="#" class="btn btn-outline-primary">
+            <a href="#" class="btn btn-outline">
               <span data-icon="twitter"></span> Twitter
             </a>
-            <a href="#" class="btn btn-outline-primary">
+            <a href="#" class="btn btn-outline">
               <span data-icon="linkedin"></span> LinkedIn
             </a>
-            <a href="#" class="btn btn-outline-primary">
+            <a href="#" class="btn btn-outline">
               <span data-icon="youtube"></span> YouTube
             </a>
           </div>
@@ -129,53 +129,44 @@
 </section>
 
 <!-- FAQ Section -->
-<section class="bg-surface py-6">
+<section class="bg-white py-6">
   <div class="container">
     <h2 class="text-center mb-6">Frequently Asked Questions</h2>
 
-    <div class="d-flex justify-content-center">
+    <div class="flex justify-center">
       <div style="max-width: 800px; width: 100%;">
         <div class="accordion" id="faq-accordion">
           <!-- FAQ 1 -->
           <div class="accordion-item">
-            <h3 class="accordion-header">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                What is the response time?
-              </button>
-            </h3>
-            <div id="faq1" class="accordion-collapse collapse show">
-              <div class="accordion-body">
-                We typically respond to all enquiries within 24-48 hours during business days.
-              </div>
+            <div class="accordion-header">
+              <span>What is the response time?</span>
+              <span class="accordion-icon">&#9660;</span>
             </div>
+            <div class="accordion-body"><div class="accordion-content">
+                We typically respond to all enquiries within 24-48 hours during business days.
+              </div></div>
           </div>
 
           <!-- FAQ 2 -->
           <div class="accordion-item">
-            <h3 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                Do you offer support?
-              </button>
-            </h3>
-            <div id="faq2" class="accordion-collapse collapse">
-              <div class="accordion-body">
-                Yes! We offer community support through GitHub Issues and email support for enterprise clients.
-              </div>
+            <div class="accordion-header">
+              <span>Do you offer support?</span>
+              <span class="accordion-icon">&#9660;</span>
             </div>
+            <div class="accordion-body"><div class="accordion-content">
+                Yes! We offer community support through GitHub Issues and email support for enterprise clients.
+              </div></div>
           </div>
 
           <!-- FAQ 3 -->
           <div class="accordion-item">
-            <h3 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                Can I contribute to the project?
-              </button>
-            </h3>
-            <div id="faq3" class="accordion-collapse collapse">
-              <div class="accordion-body">
-                Absolutely! We welcome contributions. Check out our GitHub repository for contribution guidelines.
-              </div>
+            <div class="accordion-header">
+              <span>Can I contribute to the project?</span>
+              <span class="accordion-icon">&#9660;</span>
             </div>
+            <div class="accordion-body"><div class="accordion-content">
+                Absolutely! We welcome contributions. Check out our GitHub repository for contribution guidelines.
+              </div></div>
           </div>
         </div>
       </div>

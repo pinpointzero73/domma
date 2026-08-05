@@ -1135,6 +1135,15 @@ code, pre {
     text-align: left;
 }
 
+.list-none {
+    list-style: none;
+    padding-left: 0;
+}
+
+.no-underline {
+    text-decoration: none;
+}
+
 .text-center {
     text-align: center;
 }

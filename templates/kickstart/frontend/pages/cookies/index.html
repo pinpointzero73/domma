@@ -22,8 +22,8 @@
 <section class="hero hero-center bg-dark bg-ambient-rotate-glow" style="min-height: 40vh; padding: 3rem 2rem;">
   <div class="hero-content">
     <span data-icon="shield" data-icon-size="72" class="mb-3" style="color: var(--dm-white-t85);"></span>
-    <h1 class="display-2 mb-3" style="color: var(--dm-white);">Cookie Policy</h1>
-    <p class="lead" style="color: var(--dm-white-t85);">
+    <h1 class="text-4xl font-bold mb-3" style="color: var(--dm-white);">Cookie Policy</h1>
+    <p class="text-lg" style="color: var(--dm-white-t85);">
       Last updated: <time datetime="{{year}}-01-01">January {{year}}</time>
     </p>
   </div>
@@ -31,30 +31,30 @@
 
 <!-- Cookie Policy Content -->
 <section class="container py-4">
-  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+  <div class="grid grid-cols-1 grid-cols-4 gap-6">
     <!-- Table of Contents -->
     <aside>
       <div class="card sticky" style="top: 80px;">
         <div class="card-body">
-          <h2 class="h5 mb-3">Contents</h2>
-          <nav class="nav flex-column">
-            <a href="#what-are-cookies" class="nav-link">What Are Cookies</a>
-            <a href="#how-we-use" class="nav-link">How We Use Cookies</a>
-            <a href="#types-of-cookies" class="nav-link">Types of Cookies</a>
-            <a href="#third-party-cookies" class="nav-link">Third-Party Cookies</a>
-            <a href="#cookie-management" class="nav-link">Managing Cookies</a>
-            <a href="#updates" class="nav-link">Policy Updates</a>
-            <a href="#contact" class="nav-link">Contact Us</a>
+          <h2 class="text-lg font-bold mb-3">Contents</h2>
+          <nav class="list-group list-group-flush">
+            <a href="#what-are-cookies" class="list-group-item list-group-item-action">What Are Cookies</a>
+            <a href="#how-we-use" class="list-group-item list-group-item-action">How We Use Cookies</a>
+            <a href="#types-of-cookies" class="list-group-item list-group-item-action">Types of Cookies</a>
+            <a href="#third-party-cookies" class="list-group-item list-group-item-action">Third-Party Cookies</a>
+            <a href="#cookie-management" class="list-group-item list-group-item-action">Managing Cookies</a>
+            <a href="#updates" class="list-group-item list-group-item-action">Policy Updates</a>
+            <a href="#contact" class="list-group-item list-group-item-action">Contact Us</a>
           </nav>
         </div>
       </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="lg:col-span-3">
+    <main class="col-span-3">
       <!-- What Are Cookies -->
       <section id="what-are-cookies" class="mb-6">
-        <h2 class="h3 mb-4">What Are Cookies?</h2>
+        <h2 class="text-2xl font-bold mb-4">What Are Cookies?</h2>
         <p>
           Cookies are small text files that are placed on your computer or mobile device when you visit a website.
           They are widely used to make websites work more efficiently and provide information to website owners.
@@ -71,16 +71,16 @@
 
       <!-- How We Use Cookies -->
       <section id="how-we-use" class="mb-6">
-        <h2 class="h3 mb-4">How We Use Cookies</h2>
+        <h2 class="text-2xl font-bold mb-4">How We Use Cookies</h2>
         <p class="mb-4">
           {{projectName}} uses cookies to:
         </p>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 grid-cols-2 gap-4">
           <div class="card">
             <div class="card-body">
               <span data-icon="settings" class="mb-3" style="font-size: 2rem; color: var(--dm-primary);"></span>
-              <h3 class="h6 mb-2">Essential Functionality</h3>
+              <h3 class="text-base font-bold mb-2">Essential Functionality</h3>
               <p class="text-secondary mb-0">
                 Enable core features like authentication and security
               </p>
@@ -90,7 +90,7 @@
           <div class="card">
             <div class="card-body">
               <span data-icon="bar-chart" class="mb-3" style="font-size: 2rem; color: var(--dm-primary);"></span>
-              <h3 class="h6 mb-2">Analytics</h3>
+              <h3 class="text-base font-bold mb-2">Analytics</h3>
               <p class="text-secondary mb-0">
                 Understand how visitors interact with our website
               </p>
@@ -100,7 +100,7 @@
           <div class="card">
             <div class="card-body">
               <span data-icon="user" class="mb-3" style="font-size: 2rem; color: var(--dm-primary);"></span>
-              <h3 class="h6 mb-2">Personalisation</h3>
+              <h3 class="text-base font-bold mb-2">Personalisation</h3>
               <p class="text-secondary mb-0">
                 Remember your preferences and settings
               </p>
@@ -110,7 +110,7 @@
           <div class="card">
             <div class="card-body">
               <span data-icon="target" class="mb-3" style="font-size: 2rem; color: var(--dm-primary);"></span>
-              <h3 class="h6 mb-2">Marketing</h3>
+              <h3 class="text-base font-bold mb-2">Marketing</h3>
               <p class="text-secondary mb-0">
                 Show you relevant advertisements and content
               </p>
@@ -121,15 +121,15 @@
 
       <!-- Types of Cookies -->
       <section id="types-of-cookies" class="mb-6">
-        <h2 class="h3 mb-4">Types of Cookies We Use</h2>
+        <h2 class="text-2xl font-bold mb-4">Types of Cookies We Use</h2>
 
         <!-- Strictly Necessary Cookies -->
         <div class="card mb-4">
           <div class="card-body">
-            <div class="d-flex align-items-start mb-3">
-              <span class="badge badge-danger me-3">Required</span>
+            <div class="flex items-start mb-3">
+              <span class="badge badge-danger mr-3">Required</span>
               <div>
-                <h3 class="h5 mb-2">Strictly Necessary Cookies</h3>
+                <h3 class="text-lg font-bold mb-2">Strictly Necessary Cookies</h3>
                 <p class="text-secondary mb-0">
                   These cookies are essential for the website to function properly. They enable core features
                   such as security, network management, and accessibility.
@@ -164,10 +164,10 @@
         <!-- Performance Cookies -->
         <div class="card mb-4">
           <div class="card-body">
-            <div class="d-flex align-items-start mb-3">
-              <span class="badge badge-info me-3">Optional</span>
+            <div class="flex items-start mb-3">
+              <span class="badge badge-info mr-3">Optional</span>
               <div>
-                <h3 class="h5 mb-2">Performance Cookies</h3>
+                <h3 class="text-lg font-bold mb-2">Performance Cookies</h3>
                 <p class="text-secondary mb-0">
                   These cookies collect information about how you use our website, such as which pages you visit
                   most often. This data helps us improve how the website works.
@@ -202,10 +202,10 @@
         <!-- Functionality Cookies -->
         <div class="card mb-4">
           <div class="card-body">
-            <div class="d-flex align-items-start mb-3">
-              <span class="badge badge-success me-3">Optional</span>
+            <div class="flex items-start mb-3">
+              <span class="badge badge-success mr-3">Optional</span>
               <div>
-                <h3 class="h5 mb-2">Functionality Cookies</h3>
+                <h3 class="text-lg font-bold mb-2">Functionality Cookies</h3>
                 <p class="text-secondary mb-0">
                   These cookies allow the website to remember choices you make and provide enhanced features.
                 </p>
@@ -239,10 +239,10 @@
         <!-- Marketing Cookies -->
         <div class="card">
           <div class="card-body">
-            <div class="d-flex align-items-start mb-3">
-              <span class="badge badge-warning me-3">Optional</span>
+            <div class="flex items-start mb-3">
+              <span class="badge badge-warning mr-3">Optional</span>
               <div>
-                <h3 class="h5 mb-2">Marketing Cookies</h3>
+                <h3 class="text-lg font-bold mb-2">Marketing Cookies</h3>
                 <p class="text-secondary mb-0">
                   These cookies track your online activity to help advertisers deliver more relevant advertising
                   or to limit how many times you see an advertisement.
@@ -277,19 +277,19 @@
 
       <!-- Third-Party Cookies -->
       <section id="third-party-cookies" class="mb-6">
-        <h2 class="h3 mb-4">Third-Party Cookies</h2>
+        <h2 class="text-2xl font-bold mb-4">Third-Party Cookies</h2>
         <p class="mb-4">
           In addition to our own cookies, we may use various third-party cookies to report usage statistics,
           deliver advertisements, and provide enhanced features.
         </p>
 
         <div class="alert alert-warning">
-          <span data-icon="alert-triangle" class="me-2"></span>
+          <span data-icon="alert-triangle" class="mr-2"></span>
           <strong>Note:</strong> Third-party cookies are subject to the privacy policies of the respective
           third-party service providers. We do not control these cookies.
         </div>
 
-        <h3 class="h5 mt-4 mb-3">Third-Party Services We Use:</h3>
+        <h3 class="text-lg font-bold mt-4 mb-3">Third-Party Services We Use:</h3>
         <ul>
           <li><strong>Google Analytics:</strong> Website analytics and reporting</li>
           <li><strong>Google AdSense:</strong> Advertising network</li>
@@ -300,11 +300,11 @@
 
       <!-- Cookie Management -->
       <section id="cookie-management" class="mb-6">
-        <h2 class="h3 mb-4">Managing Your Cookie Preferences</h2>
+        <h2 class="text-2xl font-bold mb-4">Managing Your Cookie Preferences</h2>
 
-        <div class="card bg-surface mb-4">
+        <div class="card bg-white mb-4">
           <div class="card-body">
-            <h3 class="h5 mb-3">Browser Settings</h3>
+            <h3 class="text-lg font-bold mb-3">Browser Settings</h3>
             <p class="mb-3">
               You can control and manage cookies in various ways. Most browsers allow you to refuse or delete cookies.
             </p>
@@ -319,12 +319,12 @@
         </div>
 
         <div class="alert alert-info">
-          <span data-icon="info" class="me-2"></span>
+          <span data-icon="info" class="mr-2"></span>
           <strong>Important:</strong> Blocking or deleting cookies may impact your experience on our website.
           Some features may not function properly without cookies.
         </div>
 
-        <h3 class="h5 mt-4 mb-3">Do Not Track</h3>
+        <h3 class="text-lg font-bold mt-4 mb-3">Do Not Track</h3>
         <p>
           Some browsers include a "Do Not Track" (DNT) feature that signals to websites you visit that you do not
           want to have your online activity tracked. We respect DNT signals and will not track users who have
@@ -334,7 +334,7 @@
 
       <!-- Updates -->
       <section id="updates" class="mb-6">
-        <h2 class="h3 mb-4">Updates to This Cookie Policy</h2>
+        <h2 class="text-2xl font-bold mb-4">Updates to This Cookie Policy</h2>
         <p>
           We may update this Cookie Policy from time to time to reflect changes in the cookies we use or for
           other operational, legal, or regulatory reasons. Please revisit this Cookie Policy regularly to stay
@@ -344,12 +344,12 @@
 
       <!-- Contact -->
       <section id="contact" class="mb-6">
-        <h2 class="h3 mb-4">Contact Us</h2>
+        <h2 class="text-2xl font-bold mb-4">Contact Us</h2>
         <p class="mb-4">
           If you have any questions about our use of cookies, please contact us:
         </p>
 
-        <div class="card bg-surface">
+        <div class="card bg-white">
           <div class="card-body">
             <dl class="mb-0">
               <dt class="mb-2">Email</dt>
