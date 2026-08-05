@@ -98,6 +98,29 @@ npm run build:kickstart-files
 npm run showcase  # Comprehensive showcase with all features
 ```
 
+**Showcase page harness** (slow — loads 85 pages into jsdom; needs `npm run build:js` first):
+
+```bash
+npm run validate:showcase           # ratchet against scripts/showcase-pages.baseline.json
+npm run validate:showcase:strict    # every finding, baseline ignored
+npm run validate:showcase:baseline  # accept the current state
+```
+
+`src/showcase-pages.test.js` loads every page under `public/showcase/` against the built
+bundle, runs its scripts in document order, and asserts the page rendered and logged
+nothing. It runs as part of `npm test` and adds roughly 20 seconds.
+
+It exists because there was no browser-level coverage of showcase pages at all: a page that
+renders wrong throws no error and fails no test. Its first run found **13 broken pages**,
+all since fixed. The most instructive was a call to `Domma.init()`,
+a function that has never existed: it threw, killing every line of that page's demo below it,
+and four separate documents told you to call it. Domma self-initialises when the bundle
+loads; the only startup call a page needs is `Domma.icons.scan()`.
+
+Also a **ratchet**: `scripts/showcase-pages.baseline.json` records findings that are known
+and accepted, and a page fails only when it gains one that is not recorded. **It is currently
+empty** — all 85 pages are clean — so any finding is a failure. Keep it that way.
+
 **Tests:**
 Open `tests/test.html` in a browser.
 
