@@ -1,3 +1,70 @@
+### v0.35.0 - A List's Rows Can Act on the List (2026-08-05)
+
+**One new Domma API: `M.computed().value`.** Everything else arrives through the pinned
+`domma-reactive` dependency, which Rollup still inlines — `domma.min.js` remains a single
+self-contained file and consumers install nothing extra.
+
+✨ **New**
+
+*   **`M.computed()` is readable as `.value`**, the same read as `get()`.
+
+    ```javascript
+    const total = M.computed(() => order.get('price') * order.get('qty'));
+
+    total.value;   // 30 — identical to total.get()
+    ```
+
+    `M.observable()` has always been read through `.value`; `M.computed()` was a facade with only
+    `get()`, so the two halves of the same idea disagreed about how you read them. It also made a
+    computed unreadable from a template expression, where a method cannot be called — `{{total.get()}}`
+    does not parse and never will, because a call inside a render is a side effect.
+
+*   **`M.observableArray().remove()` takes a value or a test.**
+
+    ```javascript
+    rows.remove(row);              // that exact object, as before
+    rows.remove(r => r.id > 2);    // everything the test accepts
+    ```
+
+    A function used to be compared against each item by identity, never matched, and removed nothing
+    without a word — the failure mode you cannot see. The test is called with `(item, index)`. The one
+    case this gives up is an array of bare functions removing one of its own members by passing it;
+    `peek()` plus `splice()` still covers that.
+
+🐛 **Bug Fixes** (`domma-reactive` 0.4.0)
+
+*   **`&&` no longer breaks a binding inside a keyed block.** A keyed block's body is captured by
+    serialising DOM back to HTML, which escapes every `&` it writes — so
+    `data-bind-class="done && 'struck'"`, the documented idiom, came back out as `&amp;&amp;` and
+    failed to parse. Attribute values are now entity-decoded where they are read as expressions, in a
+    single pass so `&amp;lt;` cannot double-decode. Ordinary attributes are untouched, because there
+    the entities are markup.
+
+*   **`data-on-*` may call a method on your data.** Inside a list `$data` is the item, and a bare name
+    resolves against `$data` only, so `$parent.remove($data)` was the sole way for a row to reach the
+    list that owns it — and it did not parse.
+
+    The restriction is not lifted, it is **scoped**: only the event binding may do this, and the
+    evaluator still refuses to perform a method call, so `{{ }}`, `data-if` and `data-bind-*` remain
+    reads with no side effects. `this` follows JavaScript — a call keeps its receiver, a reference
+    does not. The method name is read through the same guard as any other property, so
+    `$data.constructor()` is refused exactly as `{{ $data.constructor }}` is.
+
+    **Note for component authors:** a component's `methods` are attached to the component context, not
+    to the data returned by `data()`, so a component template has nothing for `$parent.method()` to
+    resolve to. Reaching them from a template is part of the Tier 4 binding work and is not in this
+    release.
+
+🔧 **Internal**
+
+*   `domma-reactive` moves from 0.3.0 to **0.4.0** — keyed list reconciliation, instance lifecycle and
+    `applyBindings()`, plus the four fixes above. 676 tests, every new guarantee mutation-tested. Its
+    README is rewritten around a complete worked application, with every runnable example executed
+    against the built bundle.
+
+*   Domma's own suite grows to **448 passing**, pinning `.value` as both a real read and a real
+    dependency.
+
 ### v0.34.0 - CSP-Safe Expressions & a Binding Registry (2026-08-05)
 
 **No Domma API changes.** Everything below arrives through the pinned `domma-reactive` dependency,
