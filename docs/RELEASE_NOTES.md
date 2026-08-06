@@ -1,3 +1,117 @@
+### v0.37.0 - The Binding Layer, Reachable (2026-08-06)
+
+**`domma.min.js` has inlined the whole binding engine since v0.34.0, and almost none of it was
+reachable.** Domma imported ten names from `domma-reactive` and re-exported nearly none, so the
+only route to a binding was a template inside `Domma.component()`. There was no way to bind
+server-rendered markup and no way to register a custom binding. The evidence: across all 86
+showcase pages there were **zero** live uses of `data-bind-*`, `data-model`, `data-each` or
+`data-if` outside a component — because outside a component there was no way to use them.
+
+✨ **New**
+
+*   **`M.applyBindings(data, root, options)`** activates every binding attribute under a root on
+    markup that already exists — server-rendered, hand-written, whatever — in place, with no
+    build step and no second source of truth for the markup.
+
+    ```html
+    <div id="app">
+        <h1 data-bind-text="title">Rendered by the server</h1>
+        <input data-model="query">
+        <p data-if="query">Searching…</p>
+        <ul data-each="rows key=id"><li data-bind-text="name">row</li></ul>
+        <button data-on-click="clear">Clear</button>
+    </div>
+    ```
+
+    ```javascript
+    const handle = M.applyBindings(model, '#app', {
+        methods: { clear() { model.set('query', ''); } }
+    });
+
+    handle.dispose();   // on anything that outlives its markup
+    ```
+
+    Pass a **Model** and it is converted to `model.tracked()` — the read-tracked, write-through
+    view — so a `data-model` write lands in the model with validation, change notification and
+    persistence intact, rather than in a snapshot. A Model holds data and not behaviour, so
+    handlers arrive as `options.methods` and are layered behind the data; a data field of the
+    same name wins, exactly as in a component. The root accepts a selector, an element or a
+    Domma collection.
+
+*   **`M.registerBinding(name, handler)`** adds a binding kind, usable as `data-<name>` in both
+    entry points. It is not a side door: all eight built-ins are registered through this same
+    function, so anything a built-in can do, a custom binding can do.
+
+*   **`M.registerHelper(name, fn)`** adds a function an expression may call. Expressions cannot
+    call methods on your data — `{{total.get()}}` will not parse, deliberately — so a helper is
+    the supported way to shape a value in markup: `data-bind-text="upper(name)"`.
+
+    Both come with `unregisterBinding` / `unregisterHelper`.
+
+*   **[docs/Bindings.md](./Bindings.md)** — the reference for both entry points, the attribute
+    list, the expression grammar, the context keys (`$data`, `$index`, `$parent`, `$root`,
+    `$length`) and the full handler contract. Live demos on the
+    [bindings showcase](../public/showcase/models/bindings.html), which now binds real in-page
+    markup alongside its components.
+
+**Deliberately not exposed:** `compile()` and `renderTemplate()`, because Domma already has
+`_.render` and the two **diverge** — publishing both would be a trap — plus the raw expression
+API, the context builders and the graph internals. This is the two entry points, not the engine.
+
+🐛 **Bug Fixes**
+
+*   **`data-on-*` never resolved inside a component template.** `_mergeData()` returned
+    `{...data, ...props, ...computed}` and methods live on the component context, so every event
+    binding in every component logged *"did not resolve to a function"* and did nothing — while
+    every other binding on the same element worked perfectly.
+
+*   **`data-model` was one-way in a component.** Write-back assigns to `context.$data[key]`, and
+    `$data` was a fresh plain snapshot, so the write hit a throwaway object. It looked correct
+    because what you see while typing is your own keystrokes: the model never changed and
+    nothing else bound to that field moved.
+
+    Both were in the **adapter** between Domma and the engine, not in `domma-reactive`. Reads
+    worked throughout, which is exactly why they survived. The engine expects one object to
+    resolve expressions against **that can also be written to**; a read-only snapshot satisfies
+    half that contract and fails the other half in silence.
+
+*   **`applyBindings` warned about mustache it was about to substitute.** A `{{name}}` inside a
+    `data-each` body drew *"does not interpolate `{{ }}`"* — but a list's contents are a
+    *template*, lifted out and cloned per item, and the one place in already-rendered DOM where
+    mustache does work. The advice told authors to replace working markup. Fixed in
+    `domma-reactive` **0.4.1**; a regression test asserts it renders *and* stays quiet, so a
+    downgrade of the pin fails a test.
+
+*   **`validate-classes` read binding expressions as class names.** It matched `class="…"`
+    anywhere in a tag, so `data-bind-class="isActive && 'on'"` was reported as dead CSS. It now
+    requires a word boundary before the attribute.
+
+🔧 **Internal**
+
+*   **The showcase conventions sweep: 186 → 0.** The showcase teaches by example, and it was
+    teaching vanilla JavaScript — 186 call sites across 43 pages used `document.querySelector`,
+    `addEventListener`, `new Date()`, `fetch()` and `localStorage` on pages whose purpose is to
+    demonstrate `$`, `.on()`, `D()`, `H` and `S`.
+
+    Three of the five are **not** straight swaps, which is why this was done by hand: `S.set()`
+    namespaces its keys, `H.get()` resolves to parsed JSON rather than a `Response`, and `D()`
+    returns a wrapper rather than a `Date`.
+
+*   **`npm run validate:conventions`** keeps it there — a ratchet like the other two, failing
+    when a file gets worse or a new offender appears. `--list` prints every site, which is what
+    makes a sweep a work list rather than a number. The baseline is empty.
+
+    `$(window)` is deliberately **not** flagged: it is an empty collection, so `$(window).on(…)`
+    silently attaches nothing, and a mechanical sweep would have disabled every window listener
+    on the site without a word. The reason is recorded in the validator rather than left for
+    someone to rediscover.
+
+*   Every rewrite that touched behaviour was verified by dispatching a real event in jsdom. The
+    harness proves a page renders and logs nothing; it cannot prove a handler still fires.
+
+*   570 tests, up from 542. The `applyBindings` merge proxy is mutation-tested: swallow the
+    write, let methods win over data, or skip `tracked()`, and a test fails for each.
+
 ### v0.36.0 - Thirteen Broken Pages (2026-08-05)
 
 **A browser-level test harness for the showcase, and the thirteen broken pages it found on its
