@@ -1,3 +1,51 @@
+### v0.38.0 - One Adapter (2026-08-06)
+
+**No new API.** This is the seam between Domma and the binding engine, made single — plus a limitation
+found by measuring rather than assuming, and now written down.
+
+🔧 **Internal**
+
+*   **One binding adapter, shared.** The engine resolves every expression against *one* object and
+    writes back through that same object. Getting either half wrong fails **silently**, in two ways: a
+    read-only snapshot swallows every `data-model` write (the control looks right, because what you see
+    while typing is your own keystrokes), and an object carrying no functions resolves no `data-on-*`
+    handler while every other binding on the element works.
+
+    Both shipped, and were fixed in v0.37.0 — but the fix then existed **twice**, in
+    `component-factory.js` and again in `models.js`, in two slightly different shapes. It is now once,
+    in `src/binding-source.js`, with the failure modes documented where the code is rather than in two
+    comment blocks that drift apart.
+
+    The callers differ only in what can route a write: `M.applyBindings` passes a model's `tracked()`
+    view, which reaches the model itself; a component passes a snapshot, which cannot, so it supplies
+    an `onWrite` to tell the model.
+
+    Mutation-tested rather than assumed — skip `onWrite`, let the fallback win over the primary, or
+    drop the write to the primary, and a different existing test fails for each.
+
+📋 **Documented**
+
+*   **Writing to a nested path does not notify the model.** `data-model="profile.city"`, where
+    `profile` is a Model field holding an object, reads correctly and the write lands — but it mutates
+    that object in place, so the field's observable never fires. The model is not told, and no other
+    binding on that path updates.
+
+    Found while measuring whether `M.bind()`'s `parse` option could be retired. It cannot: `parse` is
+    currently the only way to write a nested path and have the model notice, because it clones the
+    field and returns a genuinely new value. Bind a top-level field where you can; where you cannot,
+    `parse` is the documented idiom.
+
+    Pinned by a test, so that fixing the behaviour fails it and forces the documentation to move with
+    it. A real fix means `tracked()` returning a deep proxy, which has performance implications and is
+    a separate decision.
+
+*   `domma-reactive` moves to **0.4.2** — every published artefact now carries a version banner
+    (`/*! domma-reactive v0.4.2 | MIT | … */`), kept through minification, so a bundle is no longer
+    anonymous and a stale `dist/` cannot be published as a fresh one. The package also gained a
+    CHANGELOG.
+
+*   571 tests, up from 570.
+
 ### v0.37.0 - The Binding Layer, Reachable (2026-08-06)
 
 **`domma.min.js` has inlined the whole binding engine since v0.34.0, and almost none of it was
