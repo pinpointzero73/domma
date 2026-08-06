@@ -112,6 +112,35 @@ not a path — a comparison, a helper call, `$data`/`$root`/`$parent`/`$index` �
 because a binding you cannot write through is not two-way. `__proto__`, `constructor` and `prototype` are refused as
 keys in every form, including `a[k]` where `k` holds one of them at runtime.
 
+### Writing to a nested path does not notify the model
+
+`data-model="profile.city"` reads correctly and the write lands — but if `profile` is a **Model field
+holding an object**, the write mutates that object in place, so the field's observable never fires:
+
+```javascript
+const model = M.create({profile: {}}, {profile: {city: 'London', zip: 'E1'}});
+M.applyBindings(model, '#app');            // <input data-model="profile.city">
+
+// after typing "Leeds":
+model.get('profile');   // {city: 'Leeds', zip: 'E1'}  — the write landed
+// …but onChange did not fire, and any other binding on profile.city still shows "London"
+```
+
+The engine evaluates `profile`, gets the raw object back, and assigns `city` on it. Nothing tells the
+model its field changed, and Domma's change detection is gated on `utils.isEqual` against the *same*
+object, so even a subsequent `set()` of it reads as unchanged.
+
+**Bind a top-level field**, and keep nested state as its own field where you can. Where you cannot,
+`M.bind()` with `parse` is the working idiom: it clones the field, sets the path, and returns the whole
+object, so the model sees a genuinely new value.
+
+```javascript
+M.bind(model, 'profile', '#city', {
+    format: (data) => _.get(data, 'city', ''),
+    parse:  (value) => { const next = _.cloneDeep(model.get('profile')); _.set(next, 'city', value); return next; }
+});
+```
+
 There is **no observable-unwrapping magic**:
 
 ```javascript
@@ -395,6 +424,7 @@ They compose. A page can `applyBindings` its shell and mount components inside i
 | `data-each` refused | `key=` is required for `applyBindings`. Add `key=id` |
 | Applying twice warns | The region is already bound. Dispose the first handle, or bind a narrower root |
 | An input shows `[object Object]` | A raw observable bound by name. Use `.value`, or pass a Model |
+| `data-model` on a nested path types fine but nothing else moves | The write mutates the object in place and the field's observable never fires — [see above](#writing-to-a-nested-path-does-not-notify-the-model) |
 
 ---
 

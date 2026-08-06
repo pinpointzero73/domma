@@ -34,6 +34,7 @@
 import { DommaElement, getThemeVariables } from './web-components/base/domma-element.js';
 import { models } from './models.js';
 import { utils } from './utils.js';
+import { createBindingSource } from './binding-source.js';
 import {
     TemplateCompiler,
     computed as createComputed,
@@ -584,29 +585,16 @@ export function createComponent(tagName, definition) {
             // Wrapped so that a WRITE reaches the model.
             //
             // `data-model` writes back by assigning to `context.$data[key]`,
-            // and $data is this object. As a plain snapshot it swallowed the
-            // write silently: the control looked fine, because what you see
-            // while typing is your own keystrokes, but the model never changed
-            // and nothing else bound to that field moved.
+            // and $data is this object. As a bare snapshot it swallowed the
+            // write silently — see binding-source.js for both failure modes.
             //
-            // Routing through model.set() is the same path a lifecycle hook
-            // uses, so validation and change notification still run. Reads fall
-            // through to the snapshot, and ownKeys/getOwnPropertyDescriptor are
-            // implemented because the renderer spreads this object.
+            // This snapshot cannot route a write itself (unlike a model's
+            // tracked() view, which M.applyBindings uses), so onWrite tells the
+            // model. That is the same path a lifecycle hook takes, so
+            // validation and change notification still run.
             const model = this._model;
-            return new Proxy(merged, {
-                get(target, key) { return target[key]; },
-                has(target, key) { return key in target; },
-                ownKeys(target) { return Reflect.ownKeys(target); },
-                getOwnPropertyDescriptor(target, key) {
-                    return Reflect.getOwnPropertyDescriptor(target, key)
-                        || { value: target[key], enumerable: true, configurable: true };
-                },
-                set(target, key, value) {
-                    target[key] = value;
-                    if (model && typeof key === 'string') model.set({ [key]: value });
-                    return true;
-                }
+            return createBindingSource(merged, {
+                onWrite: model ? (key, value) => model.set({ [key]: value }) : undefined
             });
         }
     }

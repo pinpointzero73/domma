@@ -5,6 +5,7 @@
 
 import {utils} from './utils.js';
 import {storage} from './storage.js';
+import {createBindingSource} from './binding-source.js';
 import {
     observable,
     observableArray,
@@ -612,27 +613,15 @@ function resolveRoot(root) {
 }
 
 /**
- * Whatever the caller passed as data → one object the binding engine can both
- * read expressions from AND write back through.
+ * Whatever the caller passed as data → the object the binding engine resolves
+ * expressions against and writes back through.
  *
- * That two-way contract is the whole job, and getting it wrong fails silently
- * in two specific ways — the same two that a component's `_mergeData()` hit
- * before v0.36:
+ * A Model becomes its `tracked()` view, which is what makes a write reach the
+ * model with validation, change notification and persistence intact. Handlers
+ * arrive separately, because a Model holds data and not behaviour.
  *
- *   - a read-only snapshot swallows every `data-model` write. The control still
- *     looks right, because what you see while typing is your own keystrokes,
- *     but nothing else bound to that field moves.
- *   - a data object with no functions on it resolves no `data-on-*` handler, so
- *     every event binding logs "did not resolve to a function" while every
- *     other binding on the page works perfectly.
- *
- * A Model's `tracked()` view solves the first: reads register a dependency,
- * writes route through `set()` so validation, change notification and
- * persistence all still run. It cannot solve the second — a Model holds data,
- * not behaviour — so handlers arrive separately as `options.methods` and are
- * layered behind the data here.
- *
- * Data wins over methods on a name collision, matching `Domma.component()`.
+ * The layering itself lives in binding-source.js, shared with the component
+ * factory — see there for the two silent failure modes it exists to prevent.
  *
  * @param {Object} data      A Model, a binding context, or a plain object.
  * @param {Object} [methods] Event handlers, looked up only when data has no
@@ -640,36 +629,10 @@ function resolveRoot(root) {
  * @returns {Object}
  */
 function bindingSource(data, methods) {
-    const base = data instanceof Model ? data.tracked() : data;
-
-    if (!methods || typeof methods !== 'object') return base;
-
-    const names = Object.keys(methods);
-    if (names.length === 0) return base;
-
-    return new Proxy({}, {
-        get(_, key) {
-            if (typeof key === 'string' && !(key in base) && key in methods) {
-                return methods[key];
-            }
-            return base[key];
-        },
-        has(_, key) {
-            return key in base || (typeof key === 'string' && key in methods);
-        },
-        ownKeys() {
-            return [...new Set([...names, ...Reflect.ownKeys(base)])];
-        },
-        // Both entry points spread this object; without a descriptor the spread
-        // throws on a proxy whose ownKeys are not real own properties.
-        getOwnPropertyDescriptor() {
-            return {enumerable: true, configurable: true};
-        },
-        set(_, key, value) {
-            base[key] = value;
-            return true;
-        }
-    });
+    return createBindingSource(
+        data instanceof Model ? data.tracked() : data,
+        {fallback: methods}
+    );
 }
 
 /**

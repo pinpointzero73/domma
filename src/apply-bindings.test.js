@@ -151,6 +151,36 @@ describe('M.applyBindings', () => {
         expect(seen).toEqual([['query', 'abc']]);
     });
 
+    // A KNOWN LIMITATION, pinned so it is a documented constraint rather than a
+    // latent surprise — and so that fixing it fails here and forces the docs to
+    // move with it.
+    //
+    // Writing a nested path mutates the object in place. The field's observable
+    // holds the same reference, so it never fires: the model is not notified and
+    // no other binding on that path updates. M.bind()'s `parse` remains the
+    // working idiom because it clones and replaces the whole field value.
+    // See docs/Bindings.md.
+    it('a nested data-model write lands but does NOT notify the model', () => {
+        const input = make('input', {'data-model': 'profile.city'});
+        const echo = make('span', {'data-bind-text': 'profile.city'});
+        const root = mount(input, echo);
+
+        const model = M.create({profile: {}}, {profile: {city: 'London', zip: 'E1'}});
+        const changed = [];
+        model.onChange((change) => changed.push(change.field));
+
+        apply(model, root);
+        expect(input.value).toBe('London');
+
+        type(input, 'Leeds');
+
+        // The write reaches the object…
+        expect(model.get('profile')).toEqual({city: 'Leeds', zip: 'E1'});
+        // …but nothing was told about it.
+        expect(changed).toEqual([]);
+        expect(echo.textContent).toBe('London');
+    });
+
     // ── Event handlers ───────────────────────────────────────────────────────
 
     it('resolves data-on-* from options.methods', () => {
