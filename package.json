@@ -63,10 +63,6 @@
         "watch:miniapps": "node scripts/watch-miniapps.js",
         "generate:bundles": "node scripts/generate-bundles.js",
         "generate:themes": "node scripts/generate-admin-themes.js",
-        "release": "bash scripts/release.sh",
-        "release:patch": "npm version patch && npm run release",
-        "release:minor": "npm version minor && npm run release",
-        "release:major": "npm version major && npm run release",
         "test:vitest": "vitest",
         "test": "vitest",
         "cypress:run": "cypress run"

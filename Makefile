@@ -42,8 +42,8 @@ help:
 	@echo "  make release-gh     - Push main, tag vX.Y.Z, GitHub release + assets"
 	@echo ""
 	@echo "  The tag must point at the 'Build vX.Y.Z' commit — that is the repo's"
-	@echo "  convention and release-build is what creates it. Do NOT use"
-	@echo "  'npm run release:patch'; see the note above the release targets."
+	@echo "  convention and release-build is what creates it. Full guide:"
+	@echo "  docs/RELEASING.md"
 	@echo ""
 	@echo "Utilities:"
 	@echo "  make clean          - Clean dist and build artifacts"
@@ -143,19 +143,22 @@ check: test validate
 
 # ── Release ──────────────────────────────────────────────────────────────────
 #
-# Do NOT use `npm run release:patch` (or :minor/:major). It is
-# `npm version patch && bash scripts/release.sh`, and both halves misbehave:
+# These targets are the whole release process. The `npm run release:patch`
+# scripts and scripts/release.sh were REMOVED, not merely deprecated, because
+# they could not work:
 #
-#   * `npm version patch` makes its own commit, which does not match this
+#   * `npm version patch` made its own commit, which does not match this
 #     repo's history — the version bump belongs in the `Build vX.Y.Z` commit.
-#   * release.sh commits `public/dist/`, which is GITIGNORED, so the Build
-#     commit it thinks it is making is empty and never happens.
-#   * release.sh then `git pull --rebase`s, which fails because the build has
-#     left `public/download/kickstart-manifest.json` unstaged.
-#   * release.sh force-deletes and re-pushes the remote tag — on a stale base
-#     that silently destroys a real release tag. It has happened.
+#   * release.sh committed `public/dist/`, which is GITIGNORED, so the Build
+#     commit it believed it was making was empty and never happened.
+#   * release.sh then `git pull --rebase`d, which failed outright because the
+#     build had just left `public/download/kickstart-manifest.json` unstaged.
+#   * release.sh force-deleted and re-pushed the remote tag — on a stale base
+#     that silently destroys a real release tag. It has happened here.
 #
-# The targets below are the manual process that works, in the order that works.
+# See docs/RELEASING.md. Full sequence:
+#   make bump V=X.Y.Z → write notes → commit → make release-build
+#   → make preflight → make release-npm → make release-gh
 
 # Bump only. Commit it yourself, with the release notes, in a message that says
 # what the release contains.
