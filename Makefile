@@ -1,7 +1,9 @@
 # Domma Development Makefile
 # Makes local development builds easier with proper environment settings
 
-.PHONY: help build build-dev build-prod dev garage garage-prod docs miniapps clean kill-ports release-gh release-npm
+.PHONY: help build build-dev build-prod prod core css dev garage garage-prod docs miniapps \
+        clean kill-ports watch-garage rebuild-after-core enliven \
+        test validate check bump release-build preflight release-npm release-gh
 
 VERSION := $(shell node -e "process.stdout.write(require('./package.json').version)")
 
@@ -18,16 +20,30 @@ help:
 	@echo "MiniApps:"
 	@echo "  make garage         - Build garage app (development mode)"
 	@echo "  make garage-prod    - Build garage app (production mode)"
-	@echo "  make docs           - Build docs app (development mode)"Ó
+	@echo "  make docs           - Build docs app (development mode)"
 	@echo "  make miniapps       - Build all miniapps (development mode)"
 	@echo ""
 	@echo "Core Domma:"
 	@echo "  make core           - Build Domma core only (domma.min.js)"
 	@echo "  make css            - Build CSS only"
 	@echo ""
-	@echo "Release:"
-	@echo "  make release-gh     - Build, tag, and publish a GitHub release"
-	@echo "  make release-npm    - Build and publish to npmjs.com"
+	@echo "Checks:"
+	@echo "  make test           - Full suite (includes the 86-page showcase harness)"
+	@echo "  make validate       - Dead classes, theme contrast, Domma conventions"
+	@echo "  make check          - test + validate"
+	@echo ""
+	@echo "Release  (v$(VERSION) — run in this order):"
+	@echo "  make bump V=X.Y.Z   - Set the version in package.json + package-lock.json"
+	@echo "  <write release notes> docs/RELEASE_NOTES.md + public/data/releases.json,"
+	@echo "                        then commit those and the bump"
+	@echo "  make release-build  - Full build, then commit it as 'Build vX.Y.Z'"
+	@echo "  make preflight      - Tree clean, not behind origin, unreleased, green"
+	@echo "  make release-npm    - Publish to npmjs.com"
+	@echo "  make release-gh     - Push main, tag vX.Y.Z, GitHub release + assets"
+	@echo ""
+	@echo "  The tag must point at the 'Build vX.Y.Z' commit — that is the repo's"
+	@echo "  convention and release-build is what creates it. Do NOT use"
+	@echo "  'npm run release:patch'; see the note above the release targets."
 	@echo ""
 	@echo "Utilities:"
 	@echo "  make clean          - Clean dist and build artifacts"
@@ -115,32 +131,130 @@ kill-ports:
 	done; \
 	echo "✅ Ports cleared"
 
-# Release to GitHub
-release-gh: build-prod
-	@echo ""
-	@echo "🏷️  Releasing v$(VERSION) to GitHub..."
-	@echo ""
-	@git tag -a v$(VERSION) -m "Release v$(VERSION)" 2>/dev/null || echo "   Tag v$(VERSION) already exists — skipping tag creation"
-	@git push origin v$(VERSION)
-	@awk '/^### v$(VERSION)/{p=1} p && /^### v[0-9]/ && !/^### v$(VERSION)/{p=0} p' docs/RELEASE_NOTES.md > /tmp/domma-release-notes.md
-	@gh release create v$(VERSION) \
-		--title "Domma v$(VERSION)" \
-		--notes-file /tmp/domma-release-notes.md
-	@rm -f /tmp/domma-release-notes.md
-	@echo ""
-	@echo "✅ GitHub release v$(VERSION) published!"
-	@echo "   https://github.com/pinpointzero73/domma/releases/tag/v$(VERSION)"
+# ── Checks ───────────────────────────────────────────────────────────────────
+
+test:
+	npx vitest run
+
+validate:
+	npm run validate
+
+check: test validate
+
+# ── Release ──────────────────────────────────────────────────────────────────
+#
+# Do NOT use `npm run release:patch` (or :minor/:major). It is
+# `npm version patch && bash scripts/release.sh`, and both halves misbehave:
+#
+#   * `npm version patch` makes its own commit, which does not match this
+#     repo's history — the version bump belongs in the `Build vX.Y.Z` commit.
+#   * release.sh commits `public/dist/`, which is GITIGNORED, so the Build
+#     commit it thinks it is making is empty and never happens.
+#   * release.sh then `git pull --rebase`s, which fails because the build has
+#     left `public/download/kickstart-manifest.json` unstaged.
+#   * release.sh force-deletes and re-pushes the remote tag — on a stale base
+#     that silently destroys a real release tag. It has happened.
+#
+# The targets below are the manual process that works, in the order that works.
+
+# Bump only. Commit it yourself, with the release notes, in a message that says
+# what the release contains.
+bump:
+	@test -n "$(V)" || { echo ""; echo "  usage: make bump V=X.Y.Z"; echo ""; exit 1; }
+	node scripts/bump.mjs $(V)
+	@echo "  Next: write docs/RELEASE_NOTES.md + public/data/releases.json, then"
+	@echo "  commit those together with the bump."
 	@echo ""
 
-# Release to npm
-release-npm: build-prod
+# The full build, then the commit the tag will point at.
+#
+# `public/dist/` is gitignored and ships via npm and the GitHub release assets,
+# so it is deliberately NOT staged here. The three files below are the entire
+# tracked footprint of a build, and `Build vX.Y.Z` is the exact message the tag
+# convention expects.
+release-build: build-prod
+	@git add package.json package-lock.json public/download/kickstart-manifest.json
+	@git diff --cached --quiet \
+		&& { echo ""; echo "  release-build: nothing to commit — did you run 'make bump' first?"; echo ""; exit 1; } \
+		|| git commit -m "Build v$(VERSION)"
+	@echo ""
+	@echo "  Committed Build v$(VERSION). Next: make preflight"
+	@echo ""
+
+# Everything cheaper to learn now than after publishing. npm will not let you
+# republish a version number, so a bad publish is permanent.
+preflight:
+	@git diff --quiet && git diff --cached --quiet \
+		|| { echo ""; echo "  preflight: working tree is dirty — commit or stash first"; echo ""; exit 1; }
+	@test "$$(git log -1 --pretty=%s)" = "Build v$(VERSION)" \
+		|| { echo ""; echo "  preflight: HEAD is \"$$(git log -1 --pretty=%s)\", expected \"Build v$(VERSION)\""; \
+		     echo "  The tag must point at the Build commit. Run 'make release-build'."; echo ""; exit 1; }
+	@git fetch --quiet origin
+	@git merge-base --is-ancestor origin/main HEAD \
+		|| { echo ""; echo "  preflight: HEAD is BEHIND origin/main — fast-forward before releasing"; \
+		     echo "  local  $$(git rev-parse --short HEAD)"; \
+		     echo "  remote $$(git rev-parse --short origin/main)"; echo ""; \
+		     echo "  Releasing from a stale base is how a real tag gets clobbered."; echo ""; exit 1; }
+	@git rev-parse -q --verify "refs/tags/v$(VERSION)" >/dev/null \
+		&& { echo ""; echo "  preflight: tag v$(VERSION) already exists — bump the version first"; echo ""; exit 1; } \
+		|| true
+	@npm view domma-js@$(VERSION) version >/dev/null 2>&1 \
+		&& { echo ""; echo "  preflight: $(VERSION) is already published — npm will refuse it"; echo ""; exit 1; } \
+		|| true
+	@grep -q "^### v$(VERSION) " docs/RELEASE_NOTES.md \
+		|| { echo ""; echo "  preflight: no '### v$(VERSION)' entry in docs/RELEASE_NOTES.md"; echo ""; exit 1; }
+	@node -e "const r=require('./public/data/releases.json').releases; \
+		if (r[0].year !== 'v$(VERSION)') { \
+			console.error('\n  preflight: public/data/releases.json leads with ' + r[0].year + ', expected v$(VERSION)\n'); \
+			process.exit(1); \
+		}"
+	$(MAKE) check
+	@echo ""
+	@echo "  preflight: clean, on Build v$(VERSION), not behind origin, unreleased,"
+	@echo "             notes present, tests and validators green"
+	@echo ""
+
+# Publish first, tag second: a failed publish must not leave a tag pointing at
+# a version npm does not have.
+release-npm:
 	@echo ""
 	@echo "📦 Publishing domma-js@$(VERSION) to npm..."
 	@echo ""
-	@npm publish
+	npm publish --access public
 	@echo ""
-	@echo "✅ Published domma-js@$(VERSION) to npm!"
+	@echo "✅ Published domma-js@$(VERSION)"
 	@echo "   https://www.npmjs.com/package/domma-js"
+	@echo "   jsDelivr lags npm by roughly 5–10 minutes."
+	@echo ""
+
+# Push, tag, and cut the GitHub release with the dist assets attached. The
+# assets matter: public/dist/ is gitignored, so the release page and npm are
+# the only places those built files exist.
+release-gh:
+	@echo ""
+	@echo "🏷️  Releasing v$(VERSION) to GitHub..."
+	@echo ""
+	git push origin main
+	git tag -a v$(VERSION) -m "Release v$(VERSION)"
+	git push origin v$(VERSION)
+	@awk '/^### v$(VERSION) /{p=1} p && /^### v[0-9]/ && !/^### v$(VERSION) /{p=0} p' \
+		docs/RELEASE_NOTES.md > /tmp/domma-release-notes.md
+	@test -s /tmp/domma-release-notes.md \
+		|| { echo "  release-gh: extracted empty notes for v$(VERSION) — check docs/RELEASE_NOTES.md"; exit 1; }
+	gh release create v$(VERSION) \
+		--title "Domma v$(VERSION)" \
+		--notes-file /tmp/domma-release-notes.md \
+		public/dist/domma.min.js \
+		public/dist/domma.esm.js \
+		public/dist/domma.css \
+		public/dist/grid.css \
+		public/dist/elements.css
+	@rm -f /tmp/domma-release-notes.md
+	@echo ""
+	@echo "✅ GitHub release v$(VERSION) published"
+	@echo "   https://github.com/pinpointzero73/domma/releases/tag/v$(VERSION)"
+	@echo ""
+	@echo "   The site still needs deploying — 'make enliven' on the server."
 	@echo ""
 
 # Making Live
