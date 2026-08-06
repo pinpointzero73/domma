@@ -321,11 +321,11 @@
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
   // Initialize
-  document.addEventListener('DOMContentLoaded', () => {
+  $(() => {
     // Add subtle firework to the fireworks card on hover
     const fireworkCard = $('a[href="fireworks.html"]')[0];
     if (fireworkCard) {
-      fireworkCard.addEventListener('mouseenter', () => {
+      $(fireworkCard).on('mouseenter', () => {
         const icon = fireworkCard.querySelector('.card-body > div');
         if (icon) {
           icon.style.animation = 'none';

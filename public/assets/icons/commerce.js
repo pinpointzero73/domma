@@ -205,6 +205,15 @@ export const commerce = {
         strokeWidth: 2,
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
+    },
+    'shopping-cart': {
+        viewBox: '0 0 24 24',
+        path: 'M9 22a1 1 0 100-2 1 1 0 000 2z M20 22a1 1 0 100-2 1 1 0 000 2z M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6',
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
     }};
 
 export default commerce;

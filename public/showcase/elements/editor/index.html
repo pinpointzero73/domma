@@ -720,7 +720,7 @@ editor.save();
         placeholder: 'Type something... it will save automatically every 2 seconds',
         minHeight: 150,
         onSave: (content) => {
-            $('#last-saved')[0].textContent = new Date().toLocaleTimeString();
+            $('#last-saved')[0].textContent = D().format('HH:mm:ss');
         }
     });
 
@@ -729,7 +729,7 @@ editor.save();
     };
 
     window.clearStorage = function () {
-        localStorage.removeItem('domma:editor:domma-autosave-demo');
+        S.remove('editor:domma-autosave-demo');
         autosaveEditor.clear();
         $('#last-saved')[0].textContent = 'Never';
         alert('Storage cleared!');

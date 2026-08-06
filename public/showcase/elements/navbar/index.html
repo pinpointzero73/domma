@@ -1181,7 +1181,7 @@ navbar.setActive(1);
         onItemClick: (item, index, event) => {
             event.preventDefault();
             const log = $('#tutorial-log')[0];
-            const timestamp = new Date().toLocaleTimeString();
+            const timestamp = D().format('HH:mm:ss');
             log.textContent = `[${timestamp}] Clicked: ${item.text} → ${item.url}`;
         }
     });

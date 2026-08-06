@@ -546,7 +546,7 @@ lights.stop();
 <script src="../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  $(() => {
 
     // Reduced-motion notice
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -555,14 +555,13 @@ lights.stop();
 
     // ── Status badge helper ───────────────────────────────────────────────
 
-    function setStatus(badgeEl, state) {
-      if (!badgeEl) return;
-      badgeEl.className = 'status-badge ' + state;
-      const dot = badgeEl.querySelector('.status-dot');
-      const text = badgeEl.querySelector('.status-text');
+    function setStatus($badge, state) {
+      if (!$badge || !$badge.length) return;
       const labels = { running: 'Running', paused: 'Paused', stopped: 'Stopped' };
-      if (dot) dot.className = 'status-dot' + (state === 'running' ? ' pulse-dot' : '');
-      if (text) text.textContent = labels[state] || state;
+      $badge.attr('class', 'status-badge ' + state);
+      $badge.find('.status-dot')
+            .attr('class', 'status-dot' + (state === 'running' ? ' pulse-dot' : ''));
+      $badge.find('.status-text').text(labels[state] || state);
     }
 
     // ── Preset swatch colours (for the picker dots only) ─────────────────
@@ -593,10 +592,10 @@ lights.stop();
     const pickerMarkup = Object.keys(presetColours).map(renderPresetCard).join('');
     $('#preset-picker').html(pickerMarkup, { safe: false });
 
-    document.getElementById('preset-picker').addEventListener('click', (e) => {
+    $('#preset-picker').on('click', (e) => {
       const card = e.target.closest('.preset-card');
       if (!card) return;
-      document.querySelectorAll('#preset-picker .preset-card').forEach(c => c.classList.remove('active'));
+      $('#preset-picker .preset-card').removeClass('active');
       card.classList.add('active');
       activePreset = card.getAttribute('data-preset');
     });
@@ -604,7 +603,7 @@ lights.stop();
     // ── Demo 1: Preset picker ────────────────────────────────────────────
 
     let ctrl1 = null;
-    const badge1 = document.getElementById('status-1');
+    const badge1 = $('#status-1');
 
     $('#start-1').on('click', () => {
       if (ctrl1) ctrl1.destroy();
@@ -629,11 +628,11 @@ lights.stop();
 
     $('#apply-2').on('click', () => {
       if (ctrl2) ctrl2.destroy();
-      const origins = Array.from(document.querySelectorAll('.opt-origin:checked')).map(c => c.value);
+      const origins = $('.opt-origin:checked').get().map(c => c.value);
       ctrl2 = Domma.effects.strobe('#strobe-container-2', {
         origins: origins.length ? origins : ['tl'],
         motion: $('#opt-motion').val(),
-        flicker: document.getElementById('opt-flicker').checked,
+        flicker: $('#opt-flicker').prop('checked'),
         sweepArc: parseFloat($('#opt-arc').val()),
         hz: parseFloat($('#opt-hz').val()),
         speed: parseFloat($('#opt-speed').val()),
@@ -648,7 +647,7 @@ lights.stop();
     // ── Demo 3: Full-page ────────────────────────────────────────────────
 
     let ctrl3 = null;
-    const badge3 = document.getElementById('status-3');
+    const badge3 = $('#status-3');
 
     $('#start-3').on('click', () => {
       if (ctrl3) ctrl3.destroy();
@@ -661,7 +660,7 @@ lights.stop();
     $('#stop-3').on('click', () => { if (ctrl3) { ctrl3.stop(); ctrl3 = null; setStatus(badge3, 'stopped'); } });
 
     // ── Cleanup full-page on navigation ─────────────────────────────────
-    window.addEventListener('beforeunload', () => {
+    $(window).on('beforeunload', () => {
       if (ctrl3) ctrl3.destroy();
     });
 

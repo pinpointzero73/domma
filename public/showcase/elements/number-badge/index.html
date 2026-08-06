@@ -522,11 +522,11 @@ cartBadge.setCount(5);</code></pre>
             <span class="demo-label">Web component target</span>
           </div>
           <div class="flex gap-2 flex-wrap items-start" style="padding-top: 0.5rem;">
-            <button class="btn btn-sm btn-primary" onclick="document.getElementById('wc-demo').increment()">+ Increment</button>
-            <button class="btn btn-sm btn-outline" onclick="document.getElementById('wc-demo').decrement()">− Decrement</button>
-            <button class="btn btn-sm btn-outline" onclick="document.getElementById('wc-demo').setVariant('success')">Success</button>
-            <button class="btn btn-sm btn-outline" onclick="document.getElementById('wc-demo').setVariant('danger')">Danger</button>
-            <button class="btn btn-sm btn-outline" onclick="document.getElementById('wc-demo').setCount(0)">Clear</button>
+            <button class="btn btn-sm btn-primary" data-wc-action="increment">+ Increment</button>
+            <button class="btn btn-sm btn-outline" data-wc-action="decrement">− Decrement</button>
+            <button class="btn btn-sm btn-outline" data-wc-action="setVariant" data-arg="success">Success</button>
+            <button class="btn btn-sm btn-outline" data-wc-action="setVariant" data-arg="danger">Danger</button>
+            <button class="btn btn-sm btn-outline" data-wc-action="setCount" data-arg="0">Clear</button>
           </div>
         </div>
       </div>
@@ -867,6 +867,19 @@ badge.setPulse(true);</code></pre>
       });
     }
   });
+  // The web-component demo buttons. One delegated handler rather than five
+  // inline onclick attributes, which are the thing .on() exists to replace.
+  $('body').on('click', '[data-wc-action]', function () {
+    const el = $('#wc-demo')[0];
+    if (!el) return;
+    // attr() rather than data(): the hook IS the attribute, and reading it
+    // directly avoids depending on kebab-to-camel key conversion.
+    const action = $(this).attr('data-wc-action');
+    const arg = $(this).attr('data-arg');
+    if (arg === undefined || arg === null) el[action]();
+    else el[action](action === 'setCount' ? Number(arg) : arg);
+  });
+
 </script>
 
 </body>

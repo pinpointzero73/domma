@@ -108,6 +108,12 @@
           "badge": "New"
         },
         {
+          "text": "Bindings",
+          "url": "showcase/models/bindings.html",
+          "section": "bindings",
+          "badge": "New"
+        },
+        {
           "text": "Tables",
           "url": "showcase/tables/index.html",
           "section": "tables"
@@ -581,7 +587,9 @@
           "section": "cms",
           "badge": "New"
         },
-        { "divider": true },
+        {
+          "divider": true
+        },
         {
           "text": "Getting Started",
           "url": "cms/getting-started/index.html",
@@ -612,7 +620,9 @@
           "url": "cms/data-pro/index.html",
           "section": "cms-pro"
         },
-        { "divider": true },
+        {
+          "divider": true
+        },
         {
           "text": "Tutorials",
           "url": "cms/tutorials/index.html",

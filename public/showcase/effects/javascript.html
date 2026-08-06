@@ -419,7 +419,7 @@ Domma.effects.scribe('.terminal-output', {
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script type="module">
   // Wait for DOM to be ready
-  document.addEventListener('DOMContentLoaded', () => {
+  $(() => {
     // Show notice if user has reduced motion enabled
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       $('#motion-notice').show();

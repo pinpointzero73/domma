@@ -1284,7 +1284,7 @@ Domma.http.post('/api/invoices', order).then(res =&gt; {
 <script src="../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+$(() => {
 
   // ── Colour palette swatches ───────────────────────────────────────────
   const colours = [
@@ -1301,9 +1301,9 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   function renderPalette() {
-    const host = document.getElementById('colour-palette');
-    if (!host) return;
-    host.replaceChildren();
+    const $host = $('#colour-palette');
+    if (!$host.length) return;
+    const host = $host.empty()[0];
     colours.forEach(c => {
       const swatch = document.createElement('div');
       swatch.className = 'themes-colour-swatch';
@@ -1321,15 +1321,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateActiveStates() {
     const current = Domma.theme.get();
-    document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll(`.theme-card[data-theme="${current}"]`).forEach(c => c.classList.add('active'));
+    $('.theme-card').removeClass('active');
+    $(`.theme-card[data-theme="${current}"]`).addClass('active');
   }
 
-  document.querySelectorAll('.theme-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const theme = card.dataset.theme;
-      Domma.theme.set(theme);
-    });
+  $('.theme-card').on('click', function () {
+    Domma.theme.set($(this).data('theme'));
   });
 
   Domma.theme.init({ persist: true, autoDetect: false });
@@ -1346,9 +1343,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Contrast checker (WCAG AA) ────────────────────────────────────────
   let auditEnabled = false;
-  const toggleBtn = document.getElementById('audit-toggle');
-  const toggleText = document.getElementById('audit-toggle-text');
-  const summaryEl = document.getElementById('audit-summary');
+  const $toggleBtn = $('#audit-toggle');
+  const $toggleText = $('#audit-toggle-text');
+  const $summary = $('#audit-summary');
 
   function parseRgb(str) {
     if (!str) return null;
@@ -1413,10 +1410,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function clearAuditMarks() {
-    document.querySelectorAll('.audit-fail').forEach(el => {
-      el.classList.remove('audit-fail');
-      el.removeAttribute('data-audit-ratio');
-    });
+    $('.audit-fail').removeClass('audit-fail').removeAttr('data-audit-ratio');
   }
 
   // Web-component hosts present known false-positives for background detection
@@ -1436,7 +1430,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function runAudit() {
     clearAuditMarks();
     let failures = 0;
-    document.querySelectorAll('.audit-section *').forEach(el => {
+    $('.audit-section *').each((i, el) => {
       if (!hasOwnText(el)) return;
       if (isInsideUnauditedHost(el)) return;
       const styles = getComputedStyle(el);
@@ -1458,27 +1452,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    summaryEl.classList.remove('idle', 'has-issues', 'clean');
+    $summary.removeClass('idle has-issues clean');
     if (failures === 0) {
-      summaryEl.textContent = 'No issues found';
-      summaryEl.classList.add('clean');
+      $summary.text('No issues found').addClass('clean');
     } else {
-      summaryEl.textContent = `${failures} contrast issue${failures === 1 ? '' : 's'}`;
-      summaryEl.classList.add('has-issues');
+      $summary.text(`${failures} contrast issue${failures === 1 ? '' : 's'}`).addClass('has-issues');
     }
   }
 
-  toggleBtn.addEventListener('click', () => {
+  $toggleBtn.on('click', () => {
     auditEnabled = !auditEnabled;
-    toggleBtn.classList.toggle('active', auditEnabled);
-    toggleText.textContent = auditEnabled ? 'Hide contrast issues' : 'Highlight contrast issues';
+    $toggleBtn.toggleClass('active', auditEnabled);
+    $toggleText.text(auditEnabled ? 'Hide contrast issues' : 'Highlight contrast issues');
     if (auditEnabled) {
       runAudit();
     } else {
       clearAuditMarks();
-      summaryEl.classList.remove('has-issues', 'clean');
-      summaryEl.classList.add('idle');
-      summaryEl.textContent = 'Audit off';
+      $summary.removeClass('has-issues clean').addClass('idle').text('Audit off');
     }
   });
 
@@ -1501,14 +1491,14 @@ document.addEventListener('DOMContentLoaded', () => {
     return parts.join(' > ');
   }
 
-  document.getElementById('audit-dump').addEventListener('click', async () => {
+  $('#audit-dump').on('click', async () => {
     let report = '';
     try {
       const allThemes = (Domma.theme && Domma.theme.listThemes) ? Domma.theme.listThemes() : [];
       const originalTheme = (Domma.theme && Domma.theme.get) ? Domma.theme.get() : null;
       const wasEnabled = auditEnabled;
 
-      report = `# Contrast failure dump — generated ${new Date().toISOString()}\n`;
+      report = `# Contrast failure dump — generated ${D().toISOString()}\n`;
       report += `Themes scanned: ${allThemes.length}\n\n`;
 
       const summary = [];
@@ -1526,7 +1516,7 @@ document.addEventListener('DOMContentLoaded', () => {
         runAudit();
 
         const fails = [];
-        document.querySelectorAll('.audit-fail').forEach(el => {
+        $('.audit-fail').each((i, el) => {
           try {
             const styles = getComputedStyle(el);
             const fg = parseRgb(styles.color);
@@ -1583,8 +1573,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Show a modal-style textarea with the report so the user can copy it
     // regardless of clipboard API availability.
-    const existing = document.getElementById('audit-dump-modal');
-    if (existing) existing.remove();
+    // .remove() on an empty collection is a no-op, so no guard is needed.
+    $('#audit-dump-modal').remove();
 
     const overlay = document.createElement('div');
     overlay.id = 'audit-dump-modal';
@@ -1611,7 +1601,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.createElement('button');
     closeBtn.textContent = '×';
     closeBtn.style.cssText = 'background: none; border: none; font-size: 1.5rem; cursor: pointer; line-height: 1; color: #000;';
-    closeBtn.addEventListener('click', () => overlay.remove());
+    $(closeBtn).on('click', () => overlay.remove());
     header.appendChild(title);
     header.appendChild(closeBtn);
 
@@ -1628,7 +1618,7 @@ document.addEventListener('DOMContentLoaded', () => {
     panel.appendChild(ta);
     overlay.appendChild(panel);
     document.body.appendChild(overlay);
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+    $(overlay).on('click', (e) => { if (e.target === overlay) overlay.remove(); });
     setTimeout(() => { ta.focus(); ta.select(); }, 50);
 
     // Best-effort attempt at modern clipboard, but never block the modal.
@@ -1709,11 +1699,11 @@ document.addEventListener('DOMContentLoaded', () => {
       };
       F.create(blueprint, {}, { layout: 'grid', columns: 2, submitLabel: 'Save customer' }).renderTo('#audit-form-host');
     } catch (err) {
-      const host = document.getElementById('audit-form-host');
-      const fallback = document.createElement('div');
-      fallback.className = 'alert alert-warning';
-      fallback.textContent = 'F.create() blueprint demo unavailable: ' + err.message;
-      host.appendChild(fallback);
+      $('#audit-form-host').append(
+        $('<div class="alert alert-warning"></div>').text(
+          'F.create() blueprint demo unavailable: ' + err.message
+        )
+      );
     }
   }
 
@@ -1784,29 +1774,29 @@ document.addEventListener('DOMContentLoaded', () => {
     return m;
   }
 
-  document.getElementById('audit-open-modal').addEventListener('click', () => {
-    if (!document.getElementById('audit-popup-modal')) buildPopupModal();
+  $('#audit-open-modal').on('click', () => {
+    if (!$('#audit-popup-modal').length) buildPopupModal();
     E.modal('#audit-popup-modal').open();
   });
-  document.getElementById('audit-open-alert').addEventListener('click', () => {
+  $('#audit-open-alert').on('click', () => {
     E.alert('Alert dialog content', { title: 'Notice' });
   });
-  document.getElementById('audit-open-confirm').addEventListener('click', () => {
+  $('#audit-open-confirm').on('click', () => {
     E.confirm('Are you sure you want to proceed with this action?', { title: 'Confirm action' });
   });
-  document.getElementById('audit-open-prompt').addEventListener('click', () => {
+  $('#audit-open-prompt').on('click', () => {
     E.prompt('Enter your name:', { title: 'Identify yourself', inputValue: 'Darryl' });
   });
-  document.getElementById('audit-toast-success').addEventListener('click', () => {
+  $('#audit-toast-success').on('click', () => {
     E.toast('Operation completed successfully', { type: 'success' });
   });
-  document.getElementById('audit-toast-error').addEventListener('click', () => {
+  $('#audit-toast-error').on('click', () => {
     E.toast('Something went wrong — please try again', { type: 'error' });
   });
 
   function openSlideover(position) {
     const id = 'audit-slideover-' + position;
-    let host = document.getElementById(id);
+    let host = $('#' + id)[0];
     if (!host) {
       host = document.createElement('div');
       host.id = id;
@@ -1820,22 +1810,22 @@ document.addEventListener('DOMContentLoaded', () => {
       backdropClose: true
     }).open();
   }
-  document.getElementById('slideover-left').addEventListener('click', () => openSlideover('left'));
-  document.getElementById('slideover-right').addEventListener('click', () => openSlideover('right'));
-  document.getElementById('slideover-top').addEventListener('click', () => openSlideover('top'));
-  document.getElementById('slideover-bottom').addEventListener('click', () => openSlideover('bottom'));
+  $('#slideover-left').on('click', () => openSlideover('left'));
+  $('#slideover-right').on('click', () => openSlideover('right'));
+  $('#slideover-top').on('click', () => openSlideover('top'));
+  $('#slideover-bottom').on('click', () => openSlideover('bottom'));
 
   // --- Admin Theme Builder ---
   (function initAdminBuilder() {
     const state = { finish: 'sharp', accent: 'steel' };
-    const currentEl = document.getElementById('admin-current');
-    const finishWrap = document.getElementById('admin-finish');
-    const accentWrap = document.getElementById('admin-accent');
-    if (!finishWrap || !accentWrap || !currentEl) return;
+    const $current = $('#admin-current');
+    const $finish = $('#admin-finish');
+    const $accent = $('#admin-accent');
+    if (!$finish.length || !$accent.length || !$current.length) return;
 
     // Wire real tooltips so data-tooltip isn't dead markup (one instance per button)
     if (window.Domma && Domma.elements && Domma.elements.tooltip) {
-      accentWrap.querySelectorAll('.admin-acc').forEach(btn => {
+      $accent.find('.admin-acc').each((i, btn) => {
         Domma.elements.tooltip(btn, { trigger: 'hover', position: 'top' });
       });
     }
@@ -1858,26 +1848,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function apply() {
       const name = `admin-${state.finish}-${state.accent}`;
-      currentEl.textContent = name;
+      $current.text(name);
       Domma.theme.set(name);
     }
 
-    finishWrap.querySelectorAll('[data-finish]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.finish = btn.dataset.finish;
-        finishWrap.querySelectorAll('[data-finish]').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        apply();
-      });
+    $finish.on('click', '[data-finish]', function () {
+      state.finish = $(this).data('finish');
+      $finish.find('[data-finish]').removeClass('active');
+      $(this).addClass('active');
+      apply();
     });
 
-    accentWrap.querySelectorAll('[data-accent]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.accent = btn.dataset.accent;
-        accentWrap.querySelectorAll('[data-accent]').forEach(b => b.style.borderColor = 'transparent');
-        btn.style.borderColor = 'var(--dm-text)';
-        apply();
-      });
+    $accent.on('click', '[data-accent]', function () {
+      state.accent = $(this).data('accent');
+      $accent.find('[data-accent]').css('border-color', 'transparent');
+      $(this).css('border-color', 'var(--dm-text)');
+      apply();
     });
   })();
 

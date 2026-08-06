@@ -1489,7 +1489,7 @@ await crud.init();
             console.warn('Output element not found:', selector);
             return;
           }
-          const timestamp = new Date().toLocaleTimeString();
+          const timestamp = D().format('HH:mm:ss');
           output.text(output.text() + `[${timestamp}] ${message}\n`);
           if (output[0]) {
             output.scrollTop(output[0].scrollHeight);
@@ -1599,8 +1599,8 @@ await crud.init();
 
         // ===== Chooser Field =====
         let chooserFormInstance = null;
-        const chooserOutput = document.getElementById('chooser-output');
-        const chooserContainer = document.getElementById('chooser-form-container');
+        const chooserOutput = $('#chooser-output')[0];
+        const chooserContainer = $('#chooser-form-container')[0];
 
         const cardChooserBlueprint = {
           plan: {

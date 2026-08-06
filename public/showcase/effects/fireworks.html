@@ -426,7 +426,7 @@ container.addEventListener('click', (e) => {
 <script>
   // Proper fireworks implementation with individual particles
   function launchFirework(containerId, theme = 'celebration', position = 50, particleCount = 200) {
-    const container = document.getElementById(containerId);
+    const container = $('#' + containerId)[0];
     if (!container) return;
 
     // DON'T clear container - allow multiple fireworks
@@ -617,7 +617,7 @@ container.addEventListener('click', (e) => {
 
   // Launch multiple fireworks function
   function launchMultipleFireworks(containerId = 'firework-demo-3', theme = 'mixed', count = 5) {
-    const container = document.getElementById(containerId);
+    const container = $('#' + containerId)[0];
     if (!container) return;
 
     // Clear any existing fireworks for a fresh display
@@ -663,7 +663,7 @@ container.addEventListener('click', (e) => {
   }
 
   // Add CSS for rocket launch animation
-  if (!document.getElementById('firework-styles')) {
+  if (!$('#firework-styles').length) {
     const style = document.createElement('style');
     style.id = 'firework-styles';
     style.textContent = `
@@ -682,13 +682,10 @@ container.addEventListener('click', (e) => {
   }
 
   // Restart animations on button click for demo
-  document.addEventListener('DOMContentLoaded', () => {
+  $(() => {
     // Add click to restart for demo boxes
-    $('.demo-box').each((i, box) => {
-      box.style.cursor = 'pointer';
-      box.addEventListener('click', () => {
-        const fireworks = box.querySelectorAll('.firework');
-        fireworks.forEach(fw => {
+    $('.demo-box').css('cursor', 'pointer').on('click', function () {
+      $(this).find('.firework').each((i, fw) => {
           // If it has the new structure
           const launch = fw.querySelector('.firework-launch');
           const particles = fw.querySelector('.firework-particles');
@@ -705,40 +702,34 @@ container.addEventListener('click', (e) => {
             fw.parentNode.replaceChild(newFw, fw);
           }
         });
-      });
     });
 
     // Celebrate button example
-    const celebrateBtn = document.getElementById('celebrate-btn');
-    if (celebrateBtn) {
-      celebrateBtn.addEventListener('click', () => {
+    const $celebrate = $('#celebrate-btn');
+    if ($celebrate.length) {
+      $celebrate.on('click', () => {
         // Launch multiple celebration fireworks
         launchMultipleFireworks('celebrate-demo', 'celebration', 5);
 
         // Change button text temporarily
-        const originalText = celebrateBtn.textContent;
-        celebrateBtn.textContent = '🎉 Purchase Complete!';
-        celebrateBtn.disabled = true;
+        const originalText = $celebrate.text();
+        $celebrate.text('🎉 Purchase Complete!').prop('disabled', true);
 
         setTimeout(() => {
-          celebrateBtn.textContent = originalText;
-          celebrateBtn.disabled = false;
+          $celebrate.text(originalText).prop('disabled', false);
         }, 3000);
       });
     }
 
     // Add hover trigger
-    const hoverBtn = document.getElementById('hover-btn');
-    if (hoverBtn) {
-      hoverBtn.addEventListener('mouseenter', () => {
-        launchFirework('hover-demo', 'celebration', 50);
-      });
-    }
+    $('#hover-btn').on('mouseenter', () => {
+      launchFirework('hover-demo', 'celebration', 50);
+    });
 
     // Add click to launch
-    const clickDemo = document.getElementById('click-demo');
+    const clickDemo = $('#click-demo')[0];
     if (clickDemo && clickDemo.parentElement) {
-      clickDemo.parentElement.addEventListener('click', (e) => {
+      $(clickDemo.parentElement).on('click', (e) => {
         if (e.target.tagName !== 'BUTTON') {
           const rect = clickDemo.getBoundingClientRect();
           const x = ((e.clientX - rect.left) / rect.width) * 100;

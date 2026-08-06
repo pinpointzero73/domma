@@ -851,7 +851,7 @@ $.setup({
 
                 setTimeout(() => {
                     $panel.html(`<p>Dynamically loaded content for Tab ${index + 1}</p>
-                    <p class="text-sm">Loaded at ${new Date().toLocaleTimeString()}</p>`);
+                    <p class="text-sm">Loaded at ${D().format('HH:mm:ss')}</p>`);
                     panel.dataset.loaded = 'true';
                 }, 800);
             }

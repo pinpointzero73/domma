@@ -1005,7 +1005,7 @@ $.setup({
     });
 
     $('#tutorial-confirm').on('click', () => {
-      $('#tutorial-result').removeClass('hidden').html('<span class="text-success">✓ Item deleted successfully at ' + new Date().toLocaleTimeString() + '</span>');
+      $('#tutorial-result').removeClass('hidden').html('<span class="text-success">✓ Item deleted successfully at ' + D().format('HH:mm:ss') + '</span>');
         tutorialModal.close();
     });
 
@@ -1136,7 +1136,7 @@ $.setup({
         name: 'John Doe',
         email: 'john.doe@example.com',
         role: 'Administrator',
-        lastLogin: new Date().toLocaleDateString()
+        lastLogin: D().format('DD/MM/YYYY')
       };
 
       // Update modal content
@@ -1203,7 +1203,7 @@ $.setup({
 
       const resultDiv = $('#promise-result-1');
       if (result === 'delete') {
-        resultDiv.html('<span class="text-danger">✓ Item deleted at ' + new Date().toLocaleTimeString() + '</span>');
+        resultDiv.html('<span class="text-danger">✓ Item deleted at ' + D().format('HH:mm:ss') + '</span>');
         Domma.elements.toast('Item deleted successfully', {type: 'success'});
       } else {
         resultDiv.html('<span class="text-secondary">Deletion cancelled</span>');
@@ -1300,7 +1300,7 @@ $.setup({
 
       const resultDiv = $('#promise-result-4');
       if (secondConfirm === 'yes') {
-        resultDiv.html('<span class="text-danger">✓ All data deleted at ' + new Date().toLocaleTimeString() + '</span>');
+        resultDiv.html('<span class="text-danger">✓ All data deleted at ' + D().format('HH:mm:ss') + '</span>');
         Domma.elements.toast('All data deleted', {type: 'error'});
       } else {
         resultDiv.html('<span class="text-secondary">Operation cancelled at step 2</span>');

@@ -81,7 +81,11 @@ function definedClasses(css) {
  */
 function usedClasses(html) {
     const used = new Set();
-    for (const match of html.matchAll(/class="([^"]*)"/g)) {
+    // The attribute must be exactly `class`, not the tail of another one.
+    // Without the boundary this also matched `data-bind-class="urgent && 'on'"`
+    // and read a binding EXPRESSION as a list of class names, reporting `&&`
+    // and `'on'` as undefined classes.
+    for (const match of html.matchAll(/(?:^|[\s"'])class="([^"]*)"/g)) {
         // A class attribute built by a JS template literal is computed at
         // runtime — `class="badge ${ok ? 'a' : 'b'}"` — so its tokens cannot be
         // checked statically. Skip the whole attribute rather than tokenising

@@ -127,12 +127,12 @@
             }
         }
 
-        run.addEventListener('click', execute);
-        reset.addEventListener('click', () => {
+        $(run).on('click', execute);
+        $(reset).on('click', () => {
             editor.value = original;
             execute();
         });
-        editor.addEventListener('keydown', e => {
+        $(editor).on('keydown', e => {
             if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
                 e.preventDefault();
                 execute();
@@ -147,7 +147,7 @@
     }
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => init());
+        $(() => init());
     } else {
         init();
     }

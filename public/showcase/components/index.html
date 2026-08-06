@@ -555,20 +555,19 @@ this.set({ loading: false, name: 'Alice' });</code></pre>
     });
 
     // ── Lifecycle log helper ────────────────────────────────────────────────
-    function makeLogger(logEl) {
+    function makeLogger($log) {
         return function log(msg, type = 'update') {
-            const now = new Date();
-            const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-            const p = document.createElement('p');
-            p.innerHTML = `<span class="log-time">${time}</span><span class="log-${type}">${msg}</span>`;
+            const time = D().format('HH:mm:ss');
             // Remove placeholder text on first log
-            if (logEl.querySelector('.text-muted')) logEl.textContent = '';
-            logEl.appendChild(p);
-            logEl.scrollTop = logEl.scrollHeight;
+            if ($log.find('.text-muted').length) $log.text('');
+            $log.append(
+                `<p><span class="log-time">${time}</span><span class="log-${type}">${msg}</span></p>`
+            );
+            $log.scrollTop($log[0].scrollHeight);
         };
     }
 
-    const counterLog = makeLogger(document.getElementById('counter-log'));
+    const counterLog = makeLogger($('#counter-log'));
 
     // ── Example 1: Counter ──────────────────────────────────────────────────
     Domma.component('counter-demo', {
@@ -777,7 +776,7 @@ this.set({ loading: false, name: 'Alice' });</code></pre>
     });
 
     // ── User Card controls ──────────────────────────────────────────────────
-    const userCardEl = document.querySelector('user-card-demo');
+    const userCardEl = $('user-card-demo')[0];
     let avatarVisible = true;
 
     $('#btn-user-42').on('click', () => {

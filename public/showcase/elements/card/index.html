@@ -1429,7 +1429,7 @@ $.setup({
             onClick: (e) => {
                 const result = $('#click-result')[0];
                 result.classList.remove('hidden');
-                result.textContent = `Card clicked at ${new Date().toLocaleTimeString()}`;
+                result.textContent = `Card clicked at ${D().format('HH:mm:ss')}`;
             }
         });
 
@@ -1513,7 +1513,7 @@ $.setup({
         });
 
         $('#update-btn').on('click', () => {
-            const timestamp = new Date().toLocaleTimeString();
+            const timestamp = D().format('HH:mm:ss');
             dynamicCard.setContent(`<p>Content updated at ${timestamp}</p>`);
             dynamicCard.updateHeight();
         });

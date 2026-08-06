@@ -792,7 +792,7 @@ Domma.elements.slideover(selector, options)
     logEl.html('');
 
     function log(message) {
-      const time = new Date().toLocaleTimeString();
+      const time = D().format('HH:mm:ss');
       logEl.append(`<div>[${time}] ${message}</div>`);
     }
 

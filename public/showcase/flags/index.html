@@ -285,7 +285,7 @@ $('#country-picker').on('change', function () {
                 cd.className = 'flag-code';
                 cd.textContent = code;
                 cell.append(name, cd);
-                cell.addEventListener('click', () => copy(code));
+                $(cell).on('click', () => copy(code));
                 grid.appendChild(cell);
             });
             gallery.append(grid);

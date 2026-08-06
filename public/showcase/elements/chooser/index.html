@@ -602,18 +602,18 @@ form.renderTo('#my-form');</code></pre>
             { value: 'mail',   label: 'Email',          icon: 'mail',        description: 'Transactional', badge: { text: 'NEW', type: 'success' } }
         ]
     });
-    const themeSel = document.getElementById('theme-select');
-    const variantSel = document.getElementById('theme-variant');
+    const $themeSel = $('#theme-select');
+    const $variantSel = $('#theme-variant');
     const applyTheme = () => {
         if (Domma.theme && typeof Domma.theme.set === 'function') {
-            Domma.theme.set(themeSel.value + '-' + variantSel.value);
+            Domma.theme.set($themeSel.val() + '-' + $variantSel.val());
         }
     };
-    themeSel.addEventListener('change', applyTheme);
-    variantSel.addEventListener('change', applyTheme);
+    $themeSel.on('change', applyTheme);
+    $variantSel.on('change', applyTheme);
 
     // ---- Accessibility demo ----
-    const a11yOutput = document.getElementById('a11y-output');
+    const $a11yOutput = $('#a11y-output');
     E.chooser('#a11y-demo', {
         variant: 'card', columns: 3,
         options: [
@@ -621,7 +621,7 @@ form.renderTo('#my-form');</code></pre>
             { value: 'medium', label: 'Medium', icon: 'square' },
             { value: 'large',  label: 'Large',  icon: 'maximize' }
         ],
-        onChange: (v) => { a11yOutput.textContent = 'value: ' + v; }
+        onChange: (v) => { $a11yOutput.text('value: ' + v); }
     });
 
     // ---- Inside a form demo ----
@@ -652,19 +652,18 @@ form.renderTo('#my-form');</code></pre>
         }
     });
     form.renderTo('#form-demo-host');
-    const formContainer = document.getElementById('form-demo-host');
-    const formOutput = document.getElementById('form-demo-output');
-    formContainer.addEventListener('submit', (e) => {
+    const $formContainer = $('#form-demo-host');
+    const $formOutput = $('#form-demo-output');
+    $formContainer.on('submit', (e) => {
         e.preventDefault();
-        const ok = form.validate();
-        if (!ok) {
-            formOutput.textContent = 'Validation failed — Plan is required.';
+        if (!form.validate()) {
+            $formOutput.text('Validation failed — Plan is required.');
             return;
         }
-        formOutput.textContent = JSON.stringify(form.getData(), null, 2);
+        $formOutput.text(JSON.stringify(form.getData(), null, 2));
     });
     // Add a submit button (Forma renders one by default — check if so; otherwise add)
-    if (!formContainer.querySelector('button[type="submit"]')) {
+    if (!$formContainer.find('button[type="submit"]').length) {
         const submitBtn = document.createElement('button');
         submitBtn.type = 'submit';
         submitBtn.className = 'btn btn-primary';
@@ -682,31 +681,29 @@ form.renderTo('#my-form');</code></pre>
             { value: 'beta',  label: 'Beta',  icon: 'circle' },
             { value: 'gamma', label: 'Gamma', icon: 'square' }
         ],
-        onChange: (v) => { document.getElementById('standalone-output').textContent = 'value: ' + JSON.stringify(v); }
+        onChange: (v) => { $('#standalone-output').text('value: ' + JSON.stringify(v)); }
     });
-    document.getElementById('standalone-set-a').addEventListener('click', () => {
+    $('#standalone-set-a').on('click', () => {
         standalone.setValue('alpha');
-        document.getElementById('standalone-output').textContent = 'value: ' + JSON.stringify(standalone.getValue());
+        $('#standalone-output').text('value: ' + JSON.stringify(standalone.getValue()));
     });
-    document.getElementById('standalone-set-b').addEventListener('click', () => {
+    $('#standalone-set-b').on('click', () => {
         standalone.setValue('beta');
-        document.getElementById('standalone-output').textContent = 'value: ' + JSON.stringify(standalone.getValue());
+        $('#standalone-output').text('value: ' + JSON.stringify(standalone.getValue()));
     });
-    document.getElementById('standalone-clear').addEventListener('click', () => {
+    $('#standalone-clear').on('click', () => {
         standalone.setValue(null);
-        document.getElementById('standalone-output').textContent = 'value: (none)';
+        $('#standalone-output').text('value: (none)');
     });
-    document.getElementById('standalone-disable').addEventListener('click', () => standalone.disable());
-    document.getElementById('standalone-enable').addEventListener('click', () => standalone.enable());
+    $('#standalone-disable').on('click', () => standalone.disable());
+    $('#standalone-enable').on('click', () => standalone.enable());
 
     // Scan icons
     if (Domma.icons) Domma.icons.scan();
 
     // Init tooltips on any data-tooltip elements
     if (E.tooltip) {
-        document.querySelectorAll('[data-tooltip]').forEach((el) => {
-            E.tooltip(el, { trigger: 'hover', position: 'top' });
-        });
+        $('[data-tooltip]').each((i, el) => E.tooltip(el, { trigger: 'hover', position: 'top' }));
     }
 </script>
 <script type="module" src="../../../layouts/js/layout.js"></script>

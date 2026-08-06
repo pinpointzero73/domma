@@ -1289,7 +1289,7 @@ elements.loader('#container', { color: '#ffffff' }) */
 
         $('#tutorial-result').html(`
             <h4>Data Loaded Successfully!</h4>
-            <p class="text-muted">Fetched at: ${new Date().toLocaleTimeString()}</p>
+            <p class="text-muted">Fetched at: ${D().format('HH:mm:ss')}</p>
             <pre class="mt-2 p-3 bg-dark text-white rounded">
 {
   "users": 42,
@@ -1479,7 +1479,7 @@ elements.loader('#container', { color: '#ffffff' }) */
     import { createLoaderWrapper } from '../../../src/web-components/wrappers/legacy-wrappers.js';
 
     // Web Components - Wrapper API demo
-    window.addEventListener('DOMContentLoaded', () => {
+    $(() => {
         if ($('#wrapper-loader-demo').length) {
             createLoaderWrapper('#wrapper-loader-demo', {
                 type: 'dots',

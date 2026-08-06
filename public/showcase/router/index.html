@@ -1099,7 +1099,7 @@ R.init({
     const log = $('#lifecycle-log');
     if (log.length === 0) return; // Element doesn't exist yet
 
-    const entry = $('<div class="lifecycle-log-entry">').text(`[${new Date().toLocaleTimeString()}] ${message}`);
+    const entry = $('<div class="lifecycle-log-entry">').text(`[${D().format('HH:mm:ss')}] ${message}`);
     log.append(entry);
 
     // Scroll to bottom

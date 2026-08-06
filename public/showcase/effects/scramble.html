@@ -250,7 +250,7 @@ Domma.effects.scramble('#binary', {
 <script src="../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  $(() => {
     // Show notice if user has reduced motion enabled
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       $('#motion-notice').show();
@@ -261,7 +261,7 @@ Domma.effects.scramble('#binary', {
     // Demo 1: Basic
     $('#scramble-start-1').on('click', () => {
       if (ctrl1) ctrl1.destroy();
-      document.getElementById('scramble-demo-1').textContent = 'Welcome to Domma';
+      $('#scramble-demo-1').text('Welcome to Domma');
       ctrl1 = Domma.effects.scramble('#scramble-demo-1', {
         respectMotionPreference: false
       });
@@ -275,7 +275,7 @@ Domma.effects.scramble('#binary', {
 
     $('#scramble-start-ltr').on('click', () => {
       if (ctrlLtr) ctrlLtr.destroy();
-      document.getElementById('scramble-ltr').textContent = 'Domma Effects';
+      $('#scramble-ltr').text('Domma Effects');
       ctrlLtr = Domma.effects.scramble('#scramble-ltr', {
         revealOrder: 'left-to-right',
         respectMotionPreference: false
@@ -283,7 +283,7 @@ Domma.effects.scramble('#binary', {
     });
     $('#scramble-start-rtl').on('click', () => {
       if (ctrlRtl) ctrlRtl.destroy();
-      document.getElementById('scramble-rtl').textContent = 'Domma Effects';
+      $('#scramble-rtl').text('Domma Effects');
       ctrlRtl = Domma.effects.scramble('#scramble-rtl', {
         revealOrder: 'right-to-left',
         respectMotionPreference: false
@@ -291,7 +291,7 @@ Domma.effects.scramble('#binary', {
     });
     $('#scramble-start-random').on('click', () => {
       if (ctrlRandom) ctrlRandom.destroy();
-      document.getElementById('scramble-random').textContent = 'Domma Effects';
+      $('#scramble-random').text('Domma Effects');
       ctrlRandom = Domma.effects.scramble('#scramble-random', {
         revealOrder: 'random',
         respectMotionPreference: false
@@ -299,7 +299,7 @@ Domma.effects.scramble('#binary', {
     });
     $('#scramble-start-center').on('click', () => {
       if (ctrlCenter) ctrlCenter.destroy();
-      document.getElementById('scramble-center').textContent = 'Domma Effects';
+      $('#scramble-center').text('Domma Effects');
       ctrlCenter = Domma.effects.scramble('#scramble-center', {
         revealOrder: 'center-out',
         respectMotionPreference: false
@@ -310,7 +310,7 @@ Domma.effects.scramble('#binary', {
     let ctrlLoop;
     $('#scramble-start-loop').on('click', () => {
       if (ctrlLoop) ctrlLoop.destroy();
-      document.getElementById('scramble-loop').textContent = 'Build Amazing Apps';
+      $('#scramble-loop').text('Build Amazing Apps');
       ctrlLoop = Domma.effects.scramble('#scramble-loop', {
         loop: true,
         loopDelay: 2000,
@@ -325,7 +325,7 @@ Domma.effects.scramble('#binary', {
     let ctrlCustom;
     $('#scramble-start-custom').on('click', () => {
       if (ctrlCustom) ctrlCustom.destroy();
-      document.getElementById('scramble-custom').textContent = '01100100';
+      $('#scramble-custom').text('01100100');
       ctrlCustom = Domma.effects.scramble('#scramble-custom', {
         characters: '01',
         scrambleDuration: 1500,
@@ -338,7 +338,7 @@ Domma.effects.scramble('#binary', {
     let ctrlFast, ctrlSlow;
     $('#scramble-start-fast').on('click', () => {
       if (ctrlFast) ctrlFast.destroy();
-      document.getElementById('scramble-fast').textContent = 'Quick Decode';
+      $('#scramble-fast').text('Quick Decode');
       ctrlFast = Domma.effects.scramble('#scramble-fast', {
         scrambleDuration: 300,
         speed: 20,
@@ -347,7 +347,7 @@ Domma.effects.scramble('#binary', {
     });
     $('#scramble-start-slow').on('click', () => {
       if (ctrlSlow) ctrlSlow.destroy();
-      document.getElementById('scramble-slow').textContent = 'Slow Reveal';
+      $('#scramble-slow').text('Slow Reveal');
       ctrlSlow = Domma.effects.scramble('#scramble-slow', {
         scrambleDuration: 2000,
         speed: 100,

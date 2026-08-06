@@ -36,12 +36,14 @@
 // exists is not the page under test.
 //
 // What is NOT executed, and why that is stated rather than hidden:
-//   * `type="module"` scripts. jsdom has no ES module support. In practice this
-//     is layouts/js/layout.js on 83 pages — the navbar, footer and theme chrome,
-//     not the page's own logic — plus 7 pages with an inline module script.
-//     `skipped` records every one, and a page that consists ONLY of module
-//     script is caught by the "rendered something" assertion rather than
-//     passing vacuously.
+//   * EXTERNAL `type="module"` scripts. jsdom has no ES module support. In
+//     practice this is layouts/js/layout.js on 83 pages — the navbar, footer and
+//     theme chrome, not the page's own logic.
+//   * INLINE module scripts that actually import something (2 pages). An inline
+//     module with no import or export is run, wrapped in an async IIFE to keep
+//     its scope and its top-level await — otherwise those pages pass on markup
+//     alone while none of their logic executes.
+//     `skipped` records every genuine skip.
 //   * Anything served from a CDN. DOMPurify is substituted from the npm package,
 //     exactly as src/examples.test.js does.
 //
@@ -178,13 +180,25 @@ function resolveToFile(pageDir, src) {
 function inlineScripts(html, pageDir) {
     const skipped = [];
 
-    const out = html.replace(/<script([^>]*)>([\s\S]*?)<\/script>/g, (whole, attrs) => {
+    const out = html.replace(/<script([^>]*)>([\s\S]*?)<\/script>/g, (whole, attrs, body) => {
         const src      = attrs.match(/\ssrc="([^"]*)"/);
         const isModule = /type\s*=\s*"module"/.test(attrs);
 
         if (!src) {
             if (!isModule) return whole;                  // inline classic: run as-is
-            skipped.push('inline <script type="module">');
+
+            // An inline module with no import or export is a module by habit,
+            // not by necessity — 5 of the 7 in this repository are. Running it
+            // is worth doing: without this the page's ENTIRE script never
+            // executes, so it passes on markup alone and its logic is untested.
+            //
+            // Wrapped in an async IIFE to keep two module properties that
+            // matter: its own scope, so a top-level `const` cannot collide with
+            // another script's, and top-level `await`.
+            if (!/^\s*(?:import|export)\s/m.test(body)) {
+                return `<script>\n(async function () {\n${body}\n})();\n</script>`;
+            }
+            skipped.push('inline <script type="module"> with imports');
             return '';
         }
         if (isModule) { skipped.push(`module: ${src[1]}`); return ''; }

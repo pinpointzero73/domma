@@ -709,9 +709,7 @@ const alarms = Domma.elements.alarm({
 
     // Helper to format alarm time (next minute)
     function getNextMinuteTime(minutesAhead = 1) {
-        const now = new Date();
-        now.setMinutes(now.getMinutes() + minutesAhead);
-        return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        return D().add(minutesAhead, 'minutes').format('HH:mm');
     }
 
     // Helper to render alarm list

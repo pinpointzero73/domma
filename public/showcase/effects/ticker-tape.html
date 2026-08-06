@@ -523,7 +523,7 @@ Domma.effects.tickerTape(null, {
 <script src="../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  $(() => {
 
     // Reduced-motion notice
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -532,14 +532,13 @@ Domma.effects.tickerTape(null, {
 
     // ── Status badge helper ───────────────────────────────────────────────
 
-    function setStatus(badgeEl, state) {
-      if (!badgeEl) return;
-      badgeEl.className = 'status-badge ' + state;
-      const dot = badgeEl.querySelector('.status-dot');
-      const text = badgeEl.querySelector('.status-text');
+    function setStatus($badge, state) {
+      if (!$badge || !$badge.length) return;
       const labels = { running: 'Running', paused: 'Paused', stopped: 'Stopped' };
-      if (dot) dot.className = 'status-dot' + (state === 'running' ? ' pulse-dot' : '');
-      if (text) text.textContent = labels[state] || state;
+      $badge.attr('class', 'status-badge ' + state);
+      $badge.find('.status-dot')
+            .attr('class', 'status-dot' + (state === 'running' ? ' pulse-dot' : ''));
+      $badge.find('.status-text').text(labels[state] || state);
     }
 
     // ── Render palette swatches ──────────────────────────────────────────
@@ -579,7 +578,7 @@ Domma.effects.tickerTape(null, {
     // ── Demo 1: Theme-aware container ────────────────────────────────────
 
     let ctrl1 = null;
-    const badge1 = document.getElementById('status-1');
+    const badge1 = $('#status-1');
 
     $('#start-1').on('click', () => {
       if (ctrl1) ctrl1.destroy();
@@ -603,10 +602,10 @@ Domma.effects.tickerTape(null, {
       respectMotionPreference: false
     });
 
-    document.getElementById('palette-picker').addEventListener('click', (e) => {
+    $('#palette-picker').on('click', (e) => {
       const card = e.target.closest('.palette-card');
       if (!card) return;
-      document.querySelectorAll('#palette-picker .palette-card').forEach(c => c.classList.remove('active'));
+      $('#palette-picker .palette-card').removeClass('active');
       card.classList.add('active');
       const name = card.getAttribute('data-palette');
       if (ctrl2) ctrl2.destroy();
@@ -660,7 +659,7 @@ Domma.effects.tickerTape(null, {
     // ── Demo 5: Full-page overlay ───────────────────────────────────────
 
     let ctrl5 = null;
-    const badge5 = document.getElementById('status-5');
+    const badge5 = $('#status-5');
 
     $('#start-5').on('click', () => {
       if (ctrl5) ctrl5.destroy();
@@ -677,7 +676,7 @@ Domma.effects.tickerTape(null, {
     $('#destroy-5').on('click', () => { if (ctrl5) { ctrl5.destroy(); ctrl5 = null; setStatus(badge5, 'stopped'); } });
 
     // ── Cleanup full-page on navigation ─────────────────────────────────
-    window.addEventListener('beforeunload', () => {
+    $(window).on('beforeunload', () => {
       if (ctrl5) ctrl5.destroy();
     });
 

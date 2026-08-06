@@ -678,7 +678,7 @@ tree.scrollToNode(nodeId);  // Scroll into view
   const eventLog = $('#eventLog')[0];
 
   function logEvent(message) {
-    const time = new Date().toLocaleTimeString();
+    const time = D().format('HH:mm:ss');
     eventLog.innerHTML = `[${time}] ${message}<br>` + eventLog.innerHTML;
   }
 

@@ -466,7 +466,7 @@ Domma.effects.twinkle('#shape-circle', { shape: 'circle', count: 60 });
 <script src="../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  $(() => {
 
     // Show notice if user has reduced motion enabled
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -475,24 +475,19 @@ Domma.effects.twinkle('#shape-circle', { shape: 'circle', count: 60 });
 
     // ── Status badge helper ───────────────────────────────────────────────
 
-    function setStatus(badgeEl, state) {
-      if (!badgeEl) return;
-      badgeEl.className = 'status-badge ' + state;
-      const dot = badgeEl.querySelector('.status-dot');
-      const text = badgeEl.querySelector('.status-text');
+    function setStatus($badge, state) {
+      if (!$badge || !$badge.length) return;
       const labels = { running: 'Running', paused: 'Paused', stopped: 'Stopped' };
-      if (dot) {
-        dot.className = 'status-dot' + (state === 'running' ? ' pulse-dot' : '');
-      }
-      if (text) {
-        text.textContent = labels[state] || state;
-      }
+      $badge.attr('class', 'status-badge ' + state);
+      $badge.find('.status-dot')
+            .attr('class', 'status-dot' + (state === 'running' ? ' pulse-dot' : ''));
+      $badge.find('.status-text').text(labels[state] || state);
     }
 
     // ── Demo 1: Container-scoped ──────────────────────────────────────────
 
     let ctrl1 = null;
-    const badge1 = document.getElementById('status-1');
+    const badge1 = $('#status-1');
 
     $('#start-1').on('click', () => {
       if (ctrl1) ctrl1.destroy();
@@ -525,7 +520,7 @@ Domma.effects.twinkle('#shape-circle', { shape: 'circle', count: 60 });
     // ── Demo 2: Full-page overlay ─────────────────────────────────────────
 
     let ctrl2 = null;
-    const badge2 = document.getElementById('status-2');
+    const badge2 = $('#status-2');
 
     $('#start-2').on('click', () => {
       if (ctrl2) ctrl2.destroy();
@@ -555,29 +550,27 @@ Domma.effects.twinkle('#shape-circle', { shape: 'circle', count: 60 });
     let ctrl3 = null;
     let selectedColour = 'rgba(255, 240, 200, 1)';
 
-    ['count', 'min-size', 'max-size', 'speed'].forEach(id => {
-      const el = document.getElementById('opt-' + id);
-      const val = document.getElementById('val-' + id);
-      if (el && val) {
-        el.addEventListener('input', () => { val.textContent = el.value; });
+    _.each(['count', 'min-size', 'max-size', 'speed'], id => {
+      const $el = $('#opt-' + id);
+      const $val = $('#val-' + id);
+      if ($el.length && $val.length) {
+        $el.on('input', () => $val.text($el.val()));
       }
     });
 
-    document.querySelectorAll('.colour-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        selectedColour = btn.getAttribute('data-colour');
-        document.querySelectorAll('.colour-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      });
+    $('.colour-btn').on('click', function () {
+      selectedColour = $(this).attr('data-colour');
+      $('.colour-btn').removeClass('active');
+      $(this).addClass('active');
     });
 
     $('#apply-3').on('click', () => {
       if (ctrl3) ctrl3.destroy();
       ctrl3 = Domma.effects.twinkle('#star-container-3', {
-        count: parseInt(document.getElementById('opt-count').value, 10),
-        minSize: parseFloat(document.getElementById('opt-min-size').value),
-        maxSize: parseFloat(document.getElementById('opt-max-size').value),
-        twinkleSpeed: parseFloat(document.getElementById('opt-speed').value),
+        count: parseInt($('#opt-count').val(), 10),
+        minSize: parseFloat($('#opt-min-size').val()),
+        maxSize: parseFloat($('#opt-max-size').val()),
+        twinkleSpeed: parseFloat($('#opt-speed').val()),
         colour: selectedColour,
         respectMotionPreference: false
       });

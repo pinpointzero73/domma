@@ -323,7 +323,7 @@ Domma.effects.counter('#counter-decimal', {
 <script src="../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../layouts/js/layout.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  $(() => {
     // Show notice if user has reduced motion enabled
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       $('#motion-notice').show();
@@ -331,18 +331,14 @@ Domma.effects.counter('#counter-decimal', {
 
     // Store original values for restart
     const originals1 = [];
-    document.querySelectorAll('.counter-demo-1').forEach(el => {
-      originals1.push(el.textContent);
-    });
+    $('.counter-demo-1').each((i, el) => originals1.push(el.textContent));
 
     let ctrl1;
 
     // Demo 1: Dashboard Stats
     $('#counter-start-1').on('click', () => {
       if (ctrl1) ctrl1.destroy();
-      originals1.forEach((val, i) => {
-        document.querySelectorAll('.counter-demo-1')[i].textContent = val;
-      });
+      $('.counter-demo-1').each((i, el) => { el.textContent = originals1[i]; });
       ctrl1 = Domma.effects.counter('.counter-demo-1', {
         duration: 2000,
         stagger: 200,
@@ -373,9 +369,9 @@ Domma.effects.counter('#counter-decimal', {
 
     // Demo 3: Easing Comparison
     $('#counter-start-3').on('click', () => {
-      document.getElementById('counter-linear').textContent = '0';
-      document.getElementById('counter-easeout').textContent = '0';
-      document.getElementById('counter-easeinout').textContent = '0';
+      $('#counter-linear').text('0');
+      $('#counter-easeout').text('0');
+      $('#counter-easeinout').text('0');
       Domma.effects.counter('#counter-linear', {
         to: 1000, easing: 'linear', duration: 3000, separator: ',',
         respectMotionPreference: false
@@ -401,7 +397,7 @@ Domma.effects.counter('#counter-decimal', {
 
     // Demo 5: Decimal
     $('#counter-start-decimal').on('click', () => {
-      document.getElementById('counter-decimal').textContent = '0';
+      $('#counter-decimal').text('0');
       Domma.effects.counter('#counter-decimal', {
         to: 42867.53,
         prefix: '$',
