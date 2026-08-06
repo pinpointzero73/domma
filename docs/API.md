@@ -2969,6 +2969,71 @@ M.effect(() => console.log(state.count));   // re-runs when count changes
 state.count = 5;                            // validated, notified, persisted
 ```
 
+### `M.applyBindings(data, root, options?)`
+
+Activates every binding attribute under `root` on markup that already exists — the counterpart to the template
+bindings a component gets. `M.bind()` wires one field to one element; this wires a whole region at once.
+
+```html
+<div id="app">
+    <h1 data-bind-text="title">Rendered by the server</h1>
+    <input data-model="query">
+    <p data-if="query">Searching…</p>
+    <ul data-each="rows key=id"><li data-bind-text="name">row</li></ul>
+    <button data-on-click="clear">Clear</button>
+</div>
+```
+
+```javascript
+const handle = M.applyBindings(model, '#app', {
+    methods: { clear() { model.set('query', ''); } }
+});
+
+handle.dispose();   // required on anything that outlives the markup
+```
+
+| Parameter | |
+|---|---|
+| `data` | A Model (converted to its `tracked()` view), or a plain object |
+| `root` | A selector, an element, or a Domma collection |
+| `options.methods` | Handlers for `data-on-*`; data of the same name wins |
+| `options.render` | Renderer for `data-each` item bodies. Defaults to `_.render` |
+
+**Returns** `{bindings, context(), update(data), dispose()}`.
+
+`{{ }}` is **not** interpolated in already-rendered DOM — `data-bind-text` is the supported spelling. Applying twice
+over a region skips what is already bound and warns once.
+
+### `M.registerBinding(name, handler)` / `M.unregisterBinding(name)`
+
+Adds a binding kind, usable as `data-<name>` in both entry points. Every built-in is registered through this same
+function.
+
+```javascript
+M.registerBinding('uppercase', {
+    attribute: 'data-uppercase',
+    expression: true, tracks: true, primes: true,
+    update({binding, nodes, context}) {
+        const value = binding.evaluate(context);
+        for (const el of nodes) el.textContent = String(value).toUpperCase();
+        return true;
+    }
+});
+```
+
+### `M.registerHelper(name, fn)` / `M.unregisterHelper(name)`
+
+Adds a function callable from a binding expression. Expressions cannot call methods on your data, so this is the
+supported way to shape a value in markup.
+
+```javascript
+M.registerHelper('upper', (s) => String(s).toUpperCase());
+// <p data-bind-text="upper(name)"></p>
+```
+
+**See [Bindings.md](./Bindings.md)** for the attribute reference, the expression grammar, context keys
+(`$data`, `$index`, `$parent`, `$root`, `$length`) and the full handler contract.
+
 ### Subscription methods compared
 
 | Method | Callback receives | Fires for |
@@ -2993,4 +3058,6 @@ state.count = 5;                            // validated, notified, persisted
 
 **See also:**
 - [Reactivity Showcase](../public/showcase/models/reactivity.html) - Live, interactive demos
+- [Bindings Showcase](../public/showcase/models/bindings.html) - The binding layer, end to end
 - [Reactivity.md](./Reactivity.md) - Full guide
+- [Bindings.md](./Bindings.md) - DOM bindings reference

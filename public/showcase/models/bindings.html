@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Bindings - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/models/bindings.html">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="/showcase/css/domma-showcase.css">
+    <style>
+        /* Every colour resolves through a --dm-* variable that the light and
+           dark theme blocks both redefine. A literal would be readable in one
+           variant and invisible in the other. */
+
+        .bind-demo {
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius, 8px);
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            padding: 1rem;
+        }
+
+        .bind-note {
+            border-left: 3px solid var(--dm-primary);
+            padding: 0.25rem 0 0.25rem 0.875rem;
+            color: var(--dm-text);
+        }
+
+        .bind-lead {
+            font-size: 1.0625rem;
+            line-height: 1.7;
+        }
+
+        .bind-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid var(--dm-border);
+            background: var(--dm-surface);
+            color: var(--dm-text);
+        }
+
+        .bind-row:last-child { border-bottom: none; }
+
+        .bind-struck {
+            text-decoration: line-through;
+            opacity: 0.55;
+        }
+
+        .bind-tag {
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.8125rem;
+            padding: 0.125rem 0.4rem;
+            border-radius: 4px;
+            background: var(--dm-hover-bg);
+            color: var(--dm-text);
+        }
+
+        .bind-stamp {
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.8125rem;
+            color: var(--dm-text-muted, var(--dm-text));
+        }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="subpage">
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Template Bindings</div>
+        <div class="hero-subtitle">
+            Say in the markup which piece of data each part of the page shows. Domma updates exactly those parts,
+            and leaves the rest of the DOM — and everything the visitor was doing in it — alone.
+        </div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <div class="alert alert-info mb-6">
+        <strong>This is the layer above <a href="reactivity.html">reactivity</a>.</strong> Reactivity works out
+        <em>when</em> something changed. Bindings work out <em>which nodes</em> have to change because of it. You can
+        use either alone; together they mean a data change repaints one text node rather than a whole panel.
+    </div>
+
+    <!-- ================= 1. Why ================= -->
+    <section class="card mb-6" id="sec-why" data-section="The code you stop writing">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">The code you stop writing</h2>
+        </div>
+        <div class="card-body">
+            <p class="bind-lead mb-4">
+                Every interface keeps two things in step: the data, and the pixels showing it. Without bindings you
+                write that second job by hand, once per element, and again every time either side changes.
+            </p>
+
+            <div class="row">
+                <div class="col-6">
+                    <h4 class="font-semibold mb-2">By hand</h4>
+                    <pre class="code-block language-javascript">function render() {
+  $('#name').text(user.name);
+  $('#email').text(user.email);
+  $('#badge').toggleClass('vip', user.vip);
+  $('#avatar').attr('src', user.avatar);
+}
+
+// …and remember to call it. Every time.
+// Miss one and the page quietly lies.</pre>
+                </div>
+                <div class="col-6">
+                    <h4 class="font-semibold mb-2">Declared once</h4>
+                    <pre class="code-block language-html">&lt;b data-bind-text="name"&gt;&lt;/b&gt;
+&lt;span data-bind-text="email"&gt;&lt;/span&gt;
+&lt;span data-bind-class="vip &amp;&amp; 'vip'"&gt;&lt;/span&gt;
+&lt;img data-bind-src="avatar"&gt;
+
+&lt;!-- no render(), no call sites --&gt;</pre>
+                </div>
+            </div>
+
+            <p class="bind-note mt-4 mb-0">
+                The difference is not the character count. It is that the second version cannot fall out of step,
+                because there is no step to miss.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= 2. Where bindings live ================= -->
+    <section class="card mb-6" id="sec-where" data-section="Where bindings live">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Where bindings live</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Two ways in, depending on <strong>who owns the markup</strong>. They share every binding, every
+                expression and the same list reconciler, so anything you learn about one applies to the other.
+            </p>
+
+            <div class="table-responsive mb-4">
+                <table class="table">
+                    <thead>
+                    <tr><th>Owns the markup</th><th>Entry point</th><th>You also get</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>A <strong>component</strong> — it has a template</td>
+                        <td><code>Domma.component()</code></td>
+                        <td><code>{{ }}</code>, <code>{{#if}}</code>, <code>{{#each}}</code>, lifecycle hooks</td>
+                    </tr>
+                    <tr>
+                        <td>A <strong>page</strong> — the HTML already exists</td>
+                        <td><code>M.applyBindings()</code></td>
+                        <td>No build step, no second source of truth for the markup</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <pre class="code-block language-javascript mb-4">// The component route — Domma generates the markup
+Domma.component('user-card', {
+    template: `&lt;b data-bind-text="name"&gt;&lt;/b&gt;`,
+    data() { return { name: 'Ada' }; }
+});
+
+// The page route — the markup is already there
+M.applyBindings(model, '#app');</pre>
+
+            <p class="mb-0">
+                Most of this page uses the component route, because it keeps each demo self-contained.
+                <a href="#sec-apply">Binding a page you already have</a> shows the other one, on real markup sitting in
+                this document. The engine behind both is published standalone as
+                <a href="https://www.npmjs.com/package/domma-reactive">domma-reactive</a>.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= 3. The nine kinds ================= -->
+    <section class="card mb-6" id="sec-kinds" data-section="The binding kinds">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">The binding kinds</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">Five come from mustache syntax, four from <code>data-*</code> attributes.</p>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr><th>Write</th><th>What it does</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td><code>{{name}}</code></td><td>Text, into a generated anchor span</td></tr>
+                    <tr><td><code>class="{{cls}} card"</code></td><td>An attribute, interpolated</td></tr>
+                    <tr><td><code>{{#if x}}…{{/if}}</code></td><td>A re-rendered region</td></tr>
+                    <tr><td><code>{{{html}}}</code></td><td>A re-rendered region, unescaped</td></tr>
+                    <tr><td><code>{{#each xs key=id}}…{{/each}}</code></td><td><strong>Reconciles</strong> — see below</td></tr>
+                    <tr><td><code>data-bind-text="expr"</code></td><td>A property, an attribute or a class</td></tr>
+                    <tr><td><code>data-model="path"</code></td><td>Two-way, control ↔ data</td></tr>
+                    <tr><td><code>data-on-click="save"</code></td><td>Any DOM event</td></tr>
+                    <tr><td><code>data-if="expr"</code></td><td>In the DOM, or not in it</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="bind-note mb-0">
+                Every value on the right is an <strong>expression</strong>, not just a property name — see
+                <a href="#sec-expressions">Expressions</a>.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= 4. One-way ================= -->
+    <section class="card mb-6" id="sec-oneway" data-section="Text, classes and attributes">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Text, classes and attributes</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                The suffix after <code>data-bind-</code> is the target. <code>text</code> writes
+                <code>textContent</code>; <code>class</code> adds and removes <em>only the tokens this binding
+                applied last time</em>, so static classes survive; anything else is a property when the DOM has one
+                and an attribute otherwise.
+            </p>
+
+            <div class="bind-demo mb-4" id="oneway-host"></div>
+
+            <pre class="code-block language-html mb-4">&lt;b data-bind-text="label"&gt;&lt;/b&gt;
+&lt;span class="badge" data-bind-class="urgent &amp;&amp; 'badge-danger'"&gt;&lt;/span&gt;
+&lt;button data-bind-disabled="!label"&gt;Send&lt;/button&gt;
+&lt;div data-bind-aria-hidden="!urgent"&gt;&lt;/div&gt;</pre>
+
+            <p class="bind-note mb-0">
+                For an attribute, <code>false</code>, <code>null</code> and <code>undefined</code>
+                <strong>remove</strong> it, and <code>true</code> sets it to the empty string — so
+                <code>data-bind-aria-hidden="collapsed"</code> does what you meant rather than rendering the string
+                <code>"false"</code>.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= 5. Two-way ================= -->
+    <section class="card mb-6" id="sec-model" data-section="Two-way with data-model">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Two-way with <code>data-model</code></h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Type in the box; the data changes, and everything derived from it follows. There is no
+                <code>onChange</code> handler in this demo, and no call to re-render.
+            </p>
+
+            <div class="bind-demo mb-4" id="model-host"></div>
+
+            <pre class="code-block language-html mb-4">&lt;input data-model="query"&gt;
+&lt;p&gt;Searching for &lt;b&gt;{{query}}&lt;/b&gt; ({{query.length}} characters)&lt;/p&gt;</pre>
+
+            <p class="mb-2">
+                The expression must be a <strong>settable path</strong> — a name, or a member chain ending in one —
+                because a binding you cannot write back through is not two-way. A comparison or a helper call is
+                refused at compile time with a warning rather than silently going one-way.
+            </p>
+            <p class="bind-note mb-0">
+                Checkboxes bind <code>checked</code>, multi-selects bind an array, and number inputs coerce to a
+                <code>Number</code> — with an empty box becoming <code>null</code> rather than <code>NaN</code>. The
+                data → DOM direction writes only when the value actually differs, so a re-render while someone is
+                typing does not jump their caret to the end.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= 6. Events ================= -->
+    <section class="card mb-6" id="sec-events" data-section="Events">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Events</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>data-on-</code> takes any DOM event name. The value is a method on your component, either as a
+                bare reference or as a call — and your declared arguments come first, with
+                <strong>the event always last</strong>, so a handler that wants only the event and one that wants
+                arguments are spelled the same way round.
+            </p>
+
+            <div class="bind-demo mb-4" id="events-host"></div>
+
+            <pre class="code-block language-html mb-4">&lt;button data-on-click="bump"&gt;+1&lt;/button&gt;
+&lt;button data-on-click="add(5)"&gt;+5&lt;/button&gt;
+&lt;input data-on-keyup="onKey"&gt;</pre>
+
+            <p class="bind-note mb-0">
+                Returning <code>false</code> calls <code>preventDefault()</code> — the same idiom Domma's
+                <code>.on()</code> uses. Event bindings declare no dependencies: the listener is attached once and
+                reads the data when it fires, so there is nothing for an effect to re-run.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= 7. Conditionals ================= -->
+    <section class="card mb-6" id="sec-if" data-section="Conditionals">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Conditionals</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>data-if</code> means the element is in the document, or it is not. It is not hidden with CSS: a
+                binding named after a conditional that left the element focusable and read aloud by a screen reader
+                would be lying about what it does. Use <code>data-bind-hidden</code> when you want it present but
+                invisible.
+            </p>
+
+            <div class="bind-demo mb-4" id="if-host"></div>
+
+            <pre class="code-block language-html mb-4">&lt;p data-if="items.length === 0"&gt;Nothing yet.&lt;/p&gt;
+&lt;p data-bind-hidden="items.length === 0"&gt;{{items.length}} item(s)&lt;/p&gt;</pre>
+
+            <p class="bind-note mb-0">
+                Truthiness is <em>mustache</em> truthiness, so an <strong>empty array is falsy</strong> — which means
+                <code>{{#if items}}</code> and <code>data-if="items"</code> can never disagree about an empty list.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= 8. Keyed lists ================= -->
+    <section class="card mb-6" id="sec-each" data-section="Keyed lists">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Keyed lists keep the DOM you were using</h2>
+        </div>
+        <div class="card-body">
+            <p class="bind-lead mb-4">
+                This is the one worth understanding. <code>{{#each items key=id}}</code> <strong>reconciles</strong>:
+                a row that is still in the list after a change keeps the very same DOM nodes it had before. Not
+                equivalent nodes — the same objects.
+            </p>
+
+            <p class="mb-4">
+                Which matters because a node carries state the data never sees: keyboard focus, a half-typed value,
+                scroll position, a running CSS transition, a playing video. Rebuild the node and all of it is gone.
+            </p>
+
+            <div class="bind-demo mb-4" id="keyed-host"></div>
+
+            <p class="mb-3">
+                <strong>Try it.</strong> Type into one of the boxes without pressing anything else, then press
+                <em>Prepend</em>. The row moves down the page and your text is still there, still focused. The count
+                underneath is measured, not claimed: it reports how many of the original row elements are still the
+                identical object after the change.
+            </p>
+
+            <pre class="code-block language-html mb-4">{{#each rows key=id}}
+  &lt;li&gt;&lt;input data-model="note"&gt; {{name}}&lt;/li&gt;
+{{/each}}</pre>
+
+            <p class="bind-note mb-0">
+                <code>key=</code> must name an <em>identity</em>, not a value. A key that changes when the row's
+                contents change defeats the whole mechanism — every row looks new, and you are back to rebuilding.
+                Without <code>key=</code> the block still works, but re-renders wholesale and says so once.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= 9. A whole small app ================= -->
+    <section class="card mb-6" id="sec-app" data-section="A whole small app">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">A whole small app</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Everything above, together, in the shape of the smallest application anyone actually writes: add,
+                tick off, delete, and a summary that cannot go stale.
+            </p>
+
+            <div class="bind-demo mb-4" id="todo-host"></div>
+
+            <pre class="code-block language-html mb-4">&lt;input data-model="draft" data-on-keyup="onKey"&gt;
+&lt;button data-on-click="add"&gt;Add&lt;/button&gt;
+
+{{#each todos key=id}}
+  &lt;li&gt;
+    &lt;input type="checkbox" data-on-change="$parent.toggle($data)"&gt;
+    &lt;span data-bind-class="done &amp;&amp; 'bind-struck'"&gt;{{title}}&lt;/span&gt;
+    &lt;button data-on-click="$parent.remove($data)"&gt;×&lt;/button&gt;
+  &lt;/li&gt;
+{{/each}}
+
+&lt;p data-if="todos.length === 0"&gt;Nothing to do.&lt;/p&gt;
+&lt;p&gt;{{summary}}&lt;/p&gt;</pre>
+
+            <p class="bind-note mb-0">
+                Read that handler carefully: <code>$parent.remove($data)</code>. Inside a list a bare name
+                resolves against the <em>row</em> — there is no scope walk, deliberately, because a name that
+                silently resolved one level up would mean something different depending on data you are not
+                looking at. So <code>$parent</code> names the component and <code>$data</code> is the row handing
+                <em>itself</em> over. <code>$index</code>, <code>$length</code> and <code>$root</code> are there
+                for the same reason.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= 10. Expressions ================= -->
+    <section class="card mb-6" id="sec-expressions" data-section="Expressions">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Expressions, and the reason they are hand-parsed</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                A binding value is a small expression language: paths and indexing, string and number literals,
+                <code>+ - * / %</code>, <code>=== !== &lt; &lt;= &gt; &gt;=</code>,
+                <code>&amp;&amp; || !</code> with short-circuiting, ternaries, and calls to helpers you registered.
+                Precedence is JavaScript's.
+            </p>
+
+            <pre class="code-block language-html mb-4">&lt;b data-bind-text="count &gt; 0 ? 'in stock' : 'sold out'"&gt;&lt;/b&gt;
+&lt;i data-bind-class="overdue &amp;&amp; 'text-danger'"&gt;&lt;/i&gt;
+&lt;span&gt;{{ price * qty }}&lt;/span&gt;</pre>
+
+            <p class="mb-2">
+                It is parsed by hand — a tokeniser, a Pratt parser and a tree-walking evaluator — rather than
+                compiled with the <code>Function</code> constructor. That is not stylistic. It means bindings work
+                under a strict Content Security Policy (<code>script-src 'self'</code>, no
+                <code>unsafe-eval</code>), which is the setting where evaluating binding strings at runtime stops
+                working.
+            </p>
+            <p class="bind-note mb-0">
+                Refused on purpose: assignment, <code>new</code>, and reads of <code>__proto__</code>,
+                <code>constructor</code> or <code>prototype</code> in any form — including
+                <code>a[key]</code> where <code>key</code> only holds one of them at runtime. Method calls are
+                refused too, except in <code>data-on-*</code>, where invoking a method is the entire point and the
+                call happens on a gesture rather than during a render.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= 11. applyBindings ================= -->
+    <section class="card mb-6" id="sec-apply" data-section="Binding a page you already have">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Binding a page you already have</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Everything above lives inside a component, which owns its template. <code>M.applyBindings()</code> is
+                the other direction: point it at markup that is <em>already in the document</em> — server-rendered,
+                hand-written, whatever — and it activates the binding attributes in place, leaving the markup
+                otherwise as it found it.
+            </p>
+
+            <p class="mb-4">
+                The panel below is <strong>not</strong> a component. It is plain HTML written directly into this page,
+                brought to life by one call. View source and you will find it exactly as shown.
+            </p>
+
+            <div class="bind-demo mb-4" id="apply-demo">
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input class="form-input" data-model="name" placeholder="type a name…">
+                </div>
+
+                <p class="mb-2">Greeting: <b data-bind-text="greet(name)">rendered by the server</b></p>
+                <p class="mb-3" data-uppercase="name">rendered by the server</p>
+
+                <p class="mb-3" data-if="name">
+                    <span class="badge badge-success">Ready</span>
+                </p>
+
+                <ul class="mb-3" data-each="rows key=id">
+                    <li>
+                        <span data-bind-text="label"></span>
+                        <!-- Inside a list a bare name is looked for on the ITEM, so a row
+                             reaches the handler that owns it through $parent. -->
+                        <button class="btn btn-sm" data-on-click="$parent.drop($data)">remove</button>
+                    </li>
+                </ul>
+
+                <button class="btn btn-primary btn-sm" data-on-click="add">Add a row</button>
+                <button class="btn btn-sm" data-on-click="reset">Reset</button>
+            </div>
+
+            <pre class="code-block language-javascript mb-4">// A helper, so the markup can shape a value without calling a method
+M.registerHelper('greet', (n) =&gt; n ? `Hello, ${n}` : 'Hello');
+
+// A custom binding kind, registered the same way every built-in is
+M.registerBinding('uppercase', {
+    attribute: 'data-uppercase',
+    expression: true, tracks: true, primes: true,
+    update({binding, nodes, context}) {
+        const value = binding.evaluate(context);
+        for (const el of nodes) el.textContent = String(value).toUpperCase();
+        return true;
+    }
+});
+
+const model = M.create({
+    name: {type: M.types.string},
+    rows: {type: M.types.array}
+}, {name: 'Ada', rows: [{id: 1, label: 'First row'}]});
+
+const handle = M.applyBindings(model, '#apply-demo', {
+    methods: {
+        add()  { /* push a row */ },
+        drop(row) { /* remove that row — called as $parent.drop($data) */ },
+        reset() { /* back to the start */ }
+    }
+});</pre>
+
+            <p class="bind-note mb-3">
+                A Model is the ergonomic thing to pass: reads track it and writes route back through
+                <code>set()</code>, so <code>data-model</code> lands in the model with validation and change
+                notification intact — not in a throwaway copy. A plain object works too, but only the parts of it that
+                are observable will be reactive.
+            </p>
+
+            <div class="table-responsive mb-3">
+                <table class="table">
+                    <thead>
+                    <tr><th>Difference from a component</th><th>Why</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><code>{{ }}</code> is <strong>not</strong> interpolated</td>
+                        <td>Either the server already rendered the value, or the page was broken until JavaScript ran.
+                            Use <code>data-bind-text</code>, which the server can render alongside the text.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><code>data-if</code> keeps the same node</td>
+                        <td>It detaches and restores the element, so children, listeners and focus survive a toggle. A
+                            template re-renders its region instead.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><code>key=</code> is required on <code>data-each</code></td>
+                        <td>There is no template to fall back to re-rendering — the markup <em>is</em> the page.</td>
+                    </tr>
+                    <tr>
+                        <td>Handlers arrive in <code>options.methods</code></td>
+                        <td>A Model holds data, not behaviour. In a component they are the <code>methods</code> block.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="mb-0">
+                <code>applyBindings</code> returns a handle. Call <code>handle.dispose()</code> on anything that
+                outlives its markup — a router view, a modal, a slideover — because an effect is a live node in the
+                dependency graph and does not go away just because its nodes did.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= 12. When not to ================= -->
+    <section class="card mb-6" id="sec-limits" data-section="When not to reach for it">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">When not to reach for it</h2>
+        </div>
+        <div class="card-body">
+            <ul class="mb-3">
+                <li class="mb-2">
+                    <strong>A one-off write.</strong> If a value is set once and never changes,
+                    <code>$('#el').text(v)</code> is clearer than a binding. Bindings earn their keep when something
+                    changes more than once.
+                </li>
+                <li class="mb-2">
+                    <strong>There is no <code>data-bind-html</code>, deliberately.</strong> Assigning
+                    <code>innerHTML</code> from data is the shortest route to a cross-site scripting hole. The
+                    template already has an explicit, greppable opt-out — <code>{{{triple-stache}}}</code> — which
+                    says so where a reviewer can see it.
+                </li>
+                <li class="mb-2">
+                    <strong>A list without a stable id.</strong> Reconciliation needs an identity. If your rows have
+                    no id, either give them one or accept the wholesale re-render; a key derived from the contents is
+                    worse than no key at all.
+                </li>
+                <li class="mb-0">
+                    <strong>Anything complicated.</strong> The expression language stops well short of JavaScript on
+                    purpose. If a binding needs more than the grammar above, it belongs in a
+                    <a href="reactivity.html">computed</a>, where it can be named, tested and read.
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <div class="alert alert-info">
+        <strong>Next:</strong> <a href="reactivity.html">Reactivity</a> for the layer underneath —
+        <code>M.observable()</code>, <code>M.computed()</code> and <code>M.effect()</code> —
+        <a href="index.html">Models</a> for schemas, validation and persistence, and
+        <a href="../components/index.html">Components</a> for the element lifecycle these templates live in.
+    </div>
+
+</div>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+    // ── One-way: text, class, property, attribute ─────────────────────────
+    Domma.component('bind-oneway', {
+        template: `
+            <div class="mb-3">
+                <label class="form-label">Label</label>
+                <input class="form-input" data-model="label" placeholder="type something…">
+            </div>
+            <label class="mb-3 block">
+                <input type="checkbox" data-on-change="toggleUrgent"> Urgent
+            </label>
+            <p class="mb-2">Text: <b data-bind-text="label"></b></p>
+            <p class="mb-2">
+                Class: <span class="badge" data-bind-class="urgent && 'badge-danger'">badge</span>
+            </p>
+            <p class="mb-0">
+                Property: <button class="btn btn-sm btn-primary" data-bind-disabled="!label">Send</button>
+            </p>`,
+        data() { return {label: 'Ada', urgent: false}; },
+        methods: {
+            toggleUrgent() { this.set({urgent: !this.data.urgent}); }
+        }
+    });
+    $('#oneway-host').append(document.createElement('bind-oneway'));
+
+    // ── Two-way ───────────────────────────────────────────────────────────
+    Domma.component('bind-model', {
+        template: `
+            <div class="mb-3">
+                <label class="form-label">Search</label>
+                <input class="form-input" data-model="query" placeholder="type to search…">
+            </div>
+            <p class="mb-0">
+                Searching for <b data-bind-text="query || '(nothing)'"></b>
+                — <span data-bind-text="query.length"></span> character(s)
+            </p>`,
+        data() { return {query: ''}; }
+    });
+    $('#model-host').append(document.createElement('bind-model'));
+
+    // ── Events ────────────────────────────────────────────────────────────
+    Domma.component('bind-events', {
+        template: `
+            <p class="mb-3">Count: <b data-bind-text="count"></b></p>
+            <div class="flex gap-2 flex-wrap">
+                <button class="btn btn-sm btn-primary" data-on-click="bump">+1</button>
+                <button class="btn btn-sm btn-outline" data-on-click="add(5)">+5</button>
+                <button class="btn btn-sm btn-outline" data-on-click="reset">Reset</button>
+            </div>
+            <p class="bind-stamp mt-3 mb-0" data-bind-text="last"></p>`,
+        data() { return {count: 0, last: 'nothing yet'}; },
+        methods: {
+            bump(event) { this.add(1, event); },
+            add(n, event) {
+                this.set({
+                    count: this.data.count + n,
+                    last: `${event ? event.type : 'call'} → +${n} at ${D().format('HH:mm:ss')}`
+                });
+            },
+            reset() { this.set({count: 0, last: 'reset'}); }
+        }
+    });
+    $('#events-host').append(document.createElement('bind-events'));
+
+    // ── Conditionals ──────────────────────────────────────────────────────
+    Domma.component('bind-if', {
+        template: `
+            <div class="flex gap-2 mb-3">
+                <button class="btn btn-sm btn-primary" data-on-click="addOne">Add an item</button>
+                <button class="btn btn-sm btn-outline" data-on-click="clear">Clear</button>
+            </div>
+            <p class="mb-0" data-if="isEmpty">Nothing yet.</p>
+            <p class="mb-0" data-bind-hidden="isEmpty"><b data-bind-text="count"></b> item(s)</p>`,
+        data() { return {count: 0}; },
+        computed: {
+            isEmpty() { return this.data.count === 0; }
+        },
+        methods: {
+            addOne() { this.set({count: this.data.count + 1}); },
+            clear() { this.set({count: 0}); }
+        }
+    });
+    $('#if-host').append(document.createElement('bind-if'));
+
+    // ── Keyed lists ───────────────────────────────────────────────────────
+    Domma.component('bind-keyed', {
+        template: `
+            <div class="flex gap-2 flex-wrap mb-3">
+                <button class="btn btn-sm btn-primary" data-on-click="prepend">Prepend</button>
+                <button class="btn btn-sm btn-outline" data-on-click="shuffle">Reverse</button>
+                <button class="btn btn-sm btn-outline" data-on-click="dropFirst">Remove first</button>
+            </div>
+            <div id="keyed-rows">
+                {{#each rows key=id}}
+                <div class="bind-row">
+                    <span class="bind-tag">{{id}}</span>
+                    <input class="form-input" data-model="note" placeholder="type here, then Prepend…">
+                    <span>{{name}}</span>
+                </div>
+                {{/each}}
+            </div>
+            <p class="bind-stamp mt-3 mb-0" data-bind-text="identity"></p>`,
+        data() {
+            return {
+                nextId: 4,
+                identity: 'no change yet',
+                rows: [
+                    {id: 1, name: 'first', note: ''},
+                    {id: 2, name: 'second', note: ''},
+                    {id: 3, name: 'third', note: ''}
+                ]
+            };
+        },
+        methods: {
+            // Measured rather than claimed: hold the actual node objects, make
+            // the change, then count how many are still the identical object.
+            _snapshot() {
+                return Array.from(this.root.querySelectorAll('.bind-row'));
+            },
+            _report(before) {
+                const after = this._snapshot();
+                const kept = before.filter((node) => after.includes(node)).length;
+                this.set({
+                    identity: `${kept} of ${before.length} original row element(s) survived — same objects, not rebuilt`
+                });
+            },
+            prepend() {
+                const before = this._snapshot();
+                const id = this.data.nextId;
+                this.set({
+                    nextId: id + 1,
+                    rows: [{id, name: 'new', note: ''}, ...this.data.rows]
+                });
+                setTimeout(() => this._report(before), 0);
+            },
+            shuffle() {
+                const before = this._snapshot();
+                this.set({rows: [...this.data.rows].reverse()});
+                setTimeout(() => this._report(before), 0);
+            },
+            dropFirst() {
+                const before = this._snapshot();
+                this.set({rows: this.data.rows.slice(1)});
+                setTimeout(() => this._report(before), 0);
+            }
+        }
+    });
+    $('#keyed-host').append(document.createElement('bind-keyed'));
+
+    // ── A whole small app ─────────────────────────────────────────────────
+    Domma.component('bind-todo', {
+        template: `
+            <div class="flex gap-2 mb-3">
+                <input class="form-input" data-model="draft" data-on-keyup="onKey"
+                       placeholder="What needs doing?">
+                <button class="btn btn-sm btn-primary" data-on-click="add">Add</button>
+            </div>
+            <div>
+                {{#each todos key=id}}
+                <div class="bind-row">
+                    <input type="checkbox" data-on-change="$parent.toggle($data)">
+                    <span data-bind-class="done && 'bind-struck'">{{title}}</span>
+                    <button class="btn btn-sm btn-outline" data-on-click="$parent.remove($data)">×</button>
+                </div>
+                {{/each}}
+            </div>
+            <p class="mt-3 mb-0" data-if="isEmpty">Nothing to do.</p>
+            <p class="mt-3 mb-0" data-bind-hidden="isEmpty" data-bind-text="summary"></p>`,
+        data() {
+            return {nextId: 1, draft: '', todos: []};
+        },
+        computed: {
+            isEmpty() { return this.data.todos.length === 0; },
+            summary() {
+                const all = this.data.todos;
+                return `${all.filter((t) => !t.done).length} of ${all.length} left`;
+            }
+        },
+        methods: {
+            onKey(event) {
+                if (event.key === 'Enter') this.add();
+            },
+            add() {
+                const title = (this.data.draft || '').trim();
+                if (!title) return;
+                const id = this.data.nextId;
+                this.set({
+                    nextId: id + 1,
+                    draft: '',
+                    todos: [...this.data.todos, {id, title, done: false}]
+                });
+            },
+            toggle(item) {
+                this.set({
+                    todos: this.data.todos.map(
+                        (t) => (t.id === item.id ? {...t, done: !t.done} : t)
+                    )
+                });
+            },
+            remove(item) {
+                this.set({todos: this.data.todos.filter((t) => t.id !== item.id)});
+            }
+        }
+    });
+    $('#todo-host').append(document.createElement('bind-todo'));
+
+    // ── The page route: M.applyBindings on markup already in this document ──
+    //
+    // Nothing below creates any HTML. #apply-demo is written out in full in the
+    // section above; this only brings it to life.
+
+    // A helper, so an expression can shape a value without calling a method.
+    M.registerHelper('greet', (n) => (n ? `Hello, ${n}` : 'Hello'));
+
+    // A custom binding kind, registered through the same function every
+    // built-in uses.
+    M.registerBinding('uppercase', {
+        attribute: 'data-uppercase',
+        expression: true,   // parse the attribute value
+        tracks: true,       // re-run when what it reads changes
+        primes: true,       // run once after the first paint
+        update({binding, nodes, context}) {
+            const value = binding.evaluate(context);
+            for (const el of nodes) el.textContent = String(value).toUpperCase();
+            return true;
+        }
+    });
+
+    const applyModel = M.create({
+        name: {type: M.types.string},
+        rows: {type: M.types.array}
+    }, {
+        name: 'Ada',
+        rows: [{id: 1, label: 'First row'}, {id: 2, label: 'Second row'}]
+    });
+
+    let nextRowId = 3;
+
+    M.applyBindings(applyModel, '#apply-demo', {
+        methods: {
+            add() {
+                const id = nextRowId++;
+                applyModel.set('rows', [...applyModel.get('rows'), {id, label: `Row ${id}`}]);
+            },
+            // A row's handler is given the item, via $data on the button.
+            drop(row) {
+                applyModel.set('rows', applyModel.get('rows').filter((r) => r.id !== row.id));
+            },
+            reset() {
+                nextRowId = 3;
+                applyModel.set({
+                    name: 'Ada',
+                    rows: [{id: 1, label: 'First row'}, {id: 2, label: 'Second row'}]
+                });
+            }
+        }
+    });
+
+    Domma.icons.scan(document.body);
+</script>
+</body>
+</html>

@@ -11,7 +11,12 @@ import {
     computed as createComputed,
     effect as createEffect,
     untracked as runUntracked,
-    flushSync as flushReactive
+    flushSync as flushReactive,
+    applyBindings as applyDomBindings,
+    registerBinding as addBindingKind,
+    unregisterBinding as removeBindingKind,
+    registerHelper as addExpressionHelper,
+    unregisterHelper as removeExpressionHelper
 } from 'domma-reactive';
 
 /**
@@ -582,6 +587,91 @@ class Binding {
     }
 }
 
+// ── applyBindings support ─────────────────────────────────────────────────────
+
+/**
+ * Whatever the caller passed as a root → a single Element.
+ *
+ * Domma's own components take "a selector, an element, or a collection"
+ * everywhere, and an entry point that only accepted one of the three would be
+ * the odd one out. domma-reactive itself is stricter on purpose — it is a
+ * standalone package with no `$` to lean on — so the normalising happens here.
+ *
+ * @param {string|Element|Object} root
+ * @returns {Element|null}
+ */
+function resolveRoot(root) {
+    if (typeof root === 'string') return document.querySelector(root);
+    if (root && root.nodeType === 1) return root;
+    // A DommaCollection: numeric indices since v0.36, `elements` before it.
+    if (root && typeof root === 'object') {
+        const first = root[0] || (Array.isArray(root.elements) ? root.elements[0] : null);
+        if (first && first.nodeType === 1) return first;
+    }
+    return null;
+}
+
+/**
+ * Whatever the caller passed as data → one object the binding engine can both
+ * read expressions from AND write back through.
+ *
+ * That two-way contract is the whole job, and getting it wrong fails silently
+ * in two specific ways — the same two that a component's `_mergeData()` hit
+ * before v0.36:
+ *
+ *   - a read-only snapshot swallows every `data-model` write. The control still
+ *     looks right, because what you see while typing is your own keystrokes,
+ *     but nothing else bound to that field moves.
+ *   - a data object with no functions on it resolves no `data-on-*` handler, so
+ *     every event binding logs "did not resolve to a function" while every
+ *     other binding on the page works perfectly.
+ *
+ * A Model's `tracked()` view solves the first: reads register a dependency,
+ * writes route through `set()` so validation, change notification and
+ * persistence all still run. It cannot solve the second — a Model holds data,
+ * not behaviour — so handlers arrive separately as `options.methods` and are
+ * layered behind the data here.
+ *
+ * Data wins over methods on a name collision, matching `Domma.component()`.
+ *
+ * @param {Object} data      A Model, a binding context, or a plain object.
+ * @param {Object} [methods] Event handlers, looked up only when data has no
+ *                           such key.
+ * @returns {Object}
+ */
+function bindingSource(data, methods) {
+    const base = data instanceof Model ? data.tracked() : data;
+
+    if (!methods || typeof methods !== 'object') return base;
+
+    const names = Object.keys(methods);
+    if (names.length === 0) return base;
+
+    return new Proxy({}, {
+        get(_, key) {
+            if (typeof key === 'string' && !(key in base) && key in methods) {
+                return methods[key];
+            }
+            return base[key];
+        },
+        has(_, key) {
+            return key in base || (typeof key === 'string' && key in methods);
+        },
+        ownKeys() {
+            return [...new Set([...names, ...Reflect.ownKeys(base)])];
+        },
+        // Both entry points spread this object; without a descriptor the spread
+        // throws on a proxy whose ownKeys are not real own properties.
+        getOwnPropertyDescriptor() {
+            return {enumerable: true, configurable: true};
+        },
+        set(_, key, value) {
+            base[key] = value;
+            return true;
+        }
+    });
+}
+
 /**
  * Models module
  */
@@ -897,6 +987,144 @@ export const models = {
                 binding.destroy();
             }
         };
+    },
+
+    /**
+     * Bring markup that already exists to life.
+     *
+     * `M.bind()` wires ONE field to ONE element. This activates every binding
+     * attribute under a root at once, and is the counterpart to the template
+     * bindings a `Domma.component()` already gets: a component owns its markup
+     * and renders it, a server-rendered page owns its markup and wants
+     * behaviour added to it.
+     *
+     *   <div id="app">
+     *     <h1 data-bind-text="title">Rendered by the server</h1>
+     *     <input data-model="query">
+     *     <p data-if="showHelp">Help text.</p>
+     *     <button data-on-click="save">Save</button>
+     *     <ul data-each="rows key=id">
+     *       <li data-bind-text="name">template row</li>
+     *     </ul>
+     *   </div>
+     *
+     *   const model = M.create(blueprint, {title: 'Live', query: '', rows: []});
+     *   const handle = M.applyBindings(model, '#app', {
+     *       methods: { save() { H.post('/api/save', model.toJSON()); } }
+     *   });
+     *
+     * Pass a Model and every binding reads and writes through it — `data-model`
+     * lands in the model, with validation and change notification, and any
+     * other binding on that field updates. A plain object works too, but only
+     * the parts of it that are observable will be reactive.
+     *
+     * `{{ }}` is deliberately NOT interpolated in markup that already exists;
+     * `data-bind-text` is the supported spelling. The one exception is the
+     * contents of a `data-each`, which are a template rather than rendered
+     * output. See docs/Bindings.md.
+     *
+     * Applying twice over the same region is safe: elements already bound are
+     * skipped, with one warning naming the root.
+     *
+     * @param {Object}               data      A Model, or a plain object.
+     * @param {string|Element|Object} root     Selector, element or collection.
+     * @param {Object}   [options]
+     * @param {Object}   [options.methods]     Handlers for `data-on-*`.
+     * @param {Function} [options.render]      Template renderer for list items.
+     *                                         Defaults to `utils.render`, so
+     *                                         `{{ }}` inside a `data-each`
+     *                                         behaves as it does everywhere
+     *                                         else in Domma.
+     * @returns {{bindings: Array, context: Function, update: Function, dispose: Function}}
+     */
+    applyBindings(data, root, options = {}) {
+        const element = resolveRoot(root);
+
+        if (!element) {
+            throw new TypeError(
+                `M.applyBindings: no element found for ${
+                    typeof root === 'string' ? `selector "${root}"` : String(root)
+                }`
+            );
+        }
+
+        const {methods, ...rest} = options;
+
+        return applyDomBindings(bindingSource(data, methods), element, {
+            render: (tmpl, values) => utils.render(tmpl, values),
+            ...rest
+        });
+    },
+
+    /**
+     * Add a binding kind, usable as `data-<name>` wherever bindings are.
+     *
+     * Not a side door: every built-in — text, attr, raw, if, event, bind,
+     * model — is registered through this same function, so a custom binding can
+     * do anything a built-in can.
+     *
+     *   M.registerBinding('uppercase', {
+     *       attribute: 'data-uppercase',
+     *       expression: true,   // parse the attribute value
+     *       tracks: true,       // re-run when what it reads changes
+     *       primes: true,       // run once after the first paint
+     *       update({binding, nodes, context}) {
+     *           const value = binding.evaluate(context);
+     *           for (const el of nodes) el.textContent = String(value).toUpperCase();
+     *           return true;
+     *       }
+     *   });
+     *   // <p data-uppercase="name"></p>
+     *
+     * `update` receives every node the binding owns at once, not one per call,
+     * so a handler that re-renders a region does so once however many regions
+     * it owns.
+     *
+     * @param {string} name    The binding kind, which becomes `binding.kind`.
+     * @param {Object} handler `{attribute|attributePrefix, expression, tracks,
+     *                         region, capturesBody, primes, update, attach,
+     *                         detach}` — see docs/Bindings.md.
+     */
+    registerBinding(name, handler) {
+        return addBindingKind(name, handler);
+    },
+
+    /**
+     * Remove a binding kind added with registerBinding().
+     *
+     * @param {string} name
+     */
+    unregisterBinding(name) {
+        return removeBindingKind(name);
+    },
+
+    /**
+     * Add a function callable from a binding expression.
+     *
+     * Expressions cannot call methods on your data — `{{total.get()}}` will not
+     * parse — because arbitrary calls are how an expression language turns into
+     * an execution surface. A registered helper is the supported way to shape a
+     * value in the markup:
+     *
+     *   M.registerHelper('upper', (s) => String(s).toUpperCase());
+     *   // <p data-bind-text="upper(name)"></p>
+     *
+     * Helpers are shared by every binding and every component template.
+     *
+     * @param {string}   name
+     * @param {Function} fn   Pure, synchronous.
+     */
+    registerHelper(name, fn) {
+        return addExpressionHelper(name, fn);
+    },
+
+    /**
+     * Remove a helper added with registerHelper().
+     *
+     * @param {string} name
+     */
+    unregisterHelper(name) {
+        return removeExpressionHelper(name);
     },
 
     // ============================================

@@ -2872,3 +2872,78 @@ Domma.component('order-summary', {
 
 Tracking is additive. `onChange`, `onFieldChange`, `M.bind()`, validation and persistence all behave exactly as
 before — only tracked computations are batched onto the microtask.
+
+---
+
+## DOM Bindings
+
+Declarative bindings connect markup to data, so there is no render function to remember to call and no place for the
+DOM and the data to drift apart. There are two ways in, depending on **who owns the markup**.
+
+Full guide: **[Bindings.md](./Bindings.md)**. Live demos: **[Bindings showcase](../public/showcase/models/bindings.html)**.
+
+### Markup that already exists
+
+`M.applyBindings()` activates binding attributes on HTML the page already has — server-rendered, hand-written,
+whatever — in place, with no build step.
+
+```html
+<div id="app">
+    <h1 data-bind-text="title">Rendered by the server</h1>
+    <input data-model="query">
+    <p data-if="query">Searching…</p>
+    <ul data-each="rows key=id"><li data-bind-text="name">row</li></ul>
+    <button data-on-click="clear">Clear</button>
+</div>
+```
+
+```javascript
+const handle = M.applyBindings(model, '#app', {
+    methods: { clear() { model.set('query', ''); } }
+});
+
+handle.dispose();   // on anything that outlives the markup
+```
+
+Pass a Model and every binding reads and writes through it: `data-model` lands in the model with validation and
+change notification intact, and any other binding on that field updates.
+
+### Markup a component owns
+
+The same attributes work in a `Domma.component()` template, alongside `{{ }}`, `{{#if}}` and `{{#each}}`. Methods are
+already in scope for `data-on-*`.
+
+### The binding attributes
+
+| Attribute | Does |
+|---|---|
+| `data-bind-text` / `data-bind-class` / `data-bind-<prop>` | Text, classes, a property or an attribute |
+| `data-model` | Two-way, control ↔ data |
+| `data-on-<event>` | Adds a listener |
+| `data-if` | The element is in the document, or it is not |
+| `data-each="rows key=id"` | A keyed list that preserves DOM nodes |
+
+Every value is an **expression** — paths, literals, arithmetic, comparisons, `&&`/`||`/`!`, ternaries and calls to
+registered helpers. Nothing uses `eval` or the `Function` constructor, so bindings work under a `script-src 'self'`
+Content Security Policy.
+
+### Extending the vocabulary
+
+```javascript
+M.registerHelper('upper', (s) => String(s).toUpperCase());
+// <p data-bind-text="upper(name)"></p>
+
+M.registerBinding('uppercase', { /* … */ });
+// <p data-uppercase="name"></p>
+```
+
+Every built-in binding is registered through that same `registerBinding` function, so a custom binding can do
+anything a built-in can.
+
+### Two things that surprise people
+
+- **`{{ }}` is not interpolated by `applyBindings`.** Either the server already rendered the value, or the page was
+  broken until JavaScript ran. `data-bind-text` is the supported spelling — explicit, greppable, and renderable by the
+  server alongside the text. The one exception is the contents of a `data-each`, which are a template.
+- **There is no scope chain.** Inside a list a bare name is the *item*. Reach outward explicitly with `$parent` or
+  `$root` — `$parent.remove($data)` is how a row reaches the list that owns it.

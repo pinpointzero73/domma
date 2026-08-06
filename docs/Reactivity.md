@@ -295,6 +295,7 @@ Only tracked computations are batched onto the microtask.
 
 ## Related
 
+- [docs/Bindings.md](./Bindings.md) — the DOM bindings built on this tracking layer
 - [src/CLAUDE.md](../src/CLAUDE.md) — core module architecture
 - [docs/Blueprints.md](./Blueprints.md) — schema system powering models and forms
 - [docs/Components.md](./Components.md) — standalone component definitions

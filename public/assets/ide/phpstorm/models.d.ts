@@ -3,6 +3,8 @@
  * Pub/Sub events and reactive data binding
  */
 
+import {DommaCollection} from './dom';
+
 export type TypeValidator = (value: any) => boolean;
 
 export interface FieldDefinition {
@@ -207,6 +209,79 @@ export declare class Model {
     isPersisted(): boolean;
 }
 
+// ============================================
+// applyBindings
+// ============================================
+
+export interface ApplyBindingsOptions {
+    /** Handlers for `data-on-*`. Looked up only when the data has no such key. */
+    methods?: Record<string, (...args: any[]) => any>;
+    /** Template renderer for `data-each` item bodies. Defaults to `_.render`. */
+    render?: (template: string, values: Record<string, any>) => string;
+    /** Label used in warnings. */
+    template?: string;
+}
+
+/**
+ * One activated binding. `deps` are the names its expression reads, which is
+ * what decides when it re-runs.
+ */
+export interface ActiveBinding {
+    id: string;
+    kind: string;
+    arg?: string;
+    expression?: string;
+    deps: Set<string>;
+}
+
+export interface BindingHandle {
+    bindings: ActiveBinding[];
+    /** The binding context expressions resolve against. */
+    context(): Record<string, any>;
+    /** Re-run every binding against new data. For plain, untracked objects. */
+    update(data: Record<string, any>): boolean;
+    /**
+     * Drop every effect, listener, list instance and marker this call created,
+     * restore a hidden `data-if` element, and leave the markup as found.
+     */
+    dispose(): void;
+}
+
+/**
+ * A binding handler. Only `update` is required; the rest declare how the
+ * binding is discovered and what the compiler prepares for it.
+ */
+export interface BindingHandler {
+    /** An exact attribute name, e.g. `data-model`. */
+    attribute?: string;
+    /** A prefix, e.g. `data-on-`; the remainder becomes `binding.arg`. */
+    attributePrefix?: string;
+    /** Parse the attribute value, setting `binding.ast` and `binding.evaluate`. */
+    expression?: boolean;
+    /** Contribute the expression's dependencies to `binding.deps`. */
+    tracks?: boolean;
+    /** Own a region of DOM between comment anchors rather than an element. */
+    region?: boolean;
+    /** Fill `binding.body` with the annotated source of that region. */
+    capturesBody?: boolean;
+    /** Run `update()` once immediately after the initial paint. */
+    primes?: boolean;
+    /** Write to the DOM. Receives every node the binding owns at once. */
+    update(args: {
+        binding: ActiveBinding & { evaluate?: (context: any) => any; body?: string };
+        nodes: HTMLElement[];
+        context: Record<string, any>;
+        render?: (template: string, values: Record<string, any>) => string;
+        replaceRegion?: (...args: any[]) => any;
+        reindex?: () => void;
+        controller?: any;
+    }): boolean;
+    /** Called once per node, when it is indexed. */
+    attach?(args: { binding: any; node: HTMLElement; controller: any }): void;
+    /** Called on teardown. */
+    detach?(args: { binding: any; node: HTMLElement; controller: any }): void;
+}
+
 export interface Store {
     /** Get current state */
     getState(): Record<string, any>;
@@ -322,6 +397,31 @@ export interface Models {
 
     /** Bind a model field to DOM element(s) */
     bind(model: Model, field: string, selector: string | HTMLElement, options?: BindingOptions): UnsubscribeFn;
+
+    /**
+     * Activate every binding attribute under a root on markup that already
+     * exists — `data-bind-*`, `data-model`, `data-on-*`, `data-if`, `data-each`.
+     *
+     * Pass a Model and bindings read and write through it. `{{ }}` is not
+     * interpolated here; `data-bind-text` is the supported spelling.
+     */
+    applyBindings(
+        data: Model | Record<string, any>,
+        root: string | HTMLElement | DommaCollection,
+        options?: ApplyBindingsOptions
+    ): BindingHandle;
+
+    /** Add a binding kind, usable as `data-<name>`. */
+    registerBinding(name: string, handler: BindingHandler): BindingHandler;
+
+    /** Remove a binding kind added with registerBinding(). */
+    unregisterBinding(name: string): boolean;
+
+    /** Add a function callable from a binding expression, e.g. `upper(name)`. */
+    registerHelper(name: string, fn: (...args: any[]) => any): void;
+
+    /** Remove a helper added with registerHelper(). */
+    unregisterHelper(name: string): boolean;
 
     // ============================================
     // Store (Simple State Management)

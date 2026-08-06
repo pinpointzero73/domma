@@ -132,22 +132,61 @@ Inside methods, computed properties, and lifecycle hooks, `this` provides:
 
 ## Template Binding
 
-Templates use the same Mustache syntax as the rest of Domma (`_.render()`).
+Templates use the same Mustache syntax as the rest of Domma (`_.render()`), plus the binding attributes described in
+**[Bindings](./Bindings.md)** — the full reference for expressions, `data-model`, custom bindings and helpers. This
+section covers only what is specific to a component template.
 
-### Binding Types
+### Mustache
 
-| Pattern                              | Behaviour                                           |
-|--------------------------------------|-----------------------------------------------------|
-| `{{field}}`                          | **Surgical** — only that text node updates          |
-| `{{field.nested}}`                   | **Surgical** — sub-path resolved on root change     |
-| `{{#if field}}…{{/if}}`             | **Full re-render** on condition change              |
-| `{{#unless field}}…{{/unless}}`     | **Full re-render** on condition change              |
-| `{{#each items}}…{{/each}}`         | **Full re-render** on array change                  |
-| `class="prefix-{{field}}"`          | **Full re-render** (attribute binding)              |
-| `{{computedProp}}`                   | Treated same as a field; full re-render if structural |
+| Pattern                             | Behaviour                                             |
+|-------------------------------------|-------------------------------------------------------|
+| `{{field}}`                         | **Surgical** — only that text node updates            |
+| `{{field.nested}}`                  | **Surgical** — sub-path resolved on root change       |
+| `{{{field}}}`                       | Raw HTML, unescaped — only for markup you control     |
+| `{{#if field}}…{{/if}}`             | **Full re-render** of the region on condition change  |
+| `{{#unless field}}…{{/unless}}`     | **Full re-render** of the region on condition change  |
+| `{{#each items}}…{{/each}}`         | **Full re-render** of the block on array change       |
+| `{{#each items key=id}}…{{/each}}`  | **Reconciled** — surviving items keep their DOM nodes |
+| `class="prefix-{{field}}"`          | **Full re-render** (attribute binding)                |
+| `{{computedProp}}`                  | Treated same as a field; full re-render if structural |
 
 **Rule of thumb:** `{{field}}` as standalone text content → surgical update.
 Anything inside block tags or HTML attribute values → full re-render of the component content.
+
+**Add `key=` to any list that can change.** With it, deleting the second row leaves the first row's actual DOM node in
+place, so focus, uncommitted input, scroll position and animation state survive. Without it the block re-renders
+wholesale and warns once.
+
+### Attribute bindings
+
+These work in a component template exactly as they do on a page:
+
+| Attribute | Does |
+|---|---|
+| `data-bind-text`, `data-bind-class`, `data-bind-<prop>` | Write text, classes, a property or an attribute |
+| `data-model` | Two-way binding to a field |
+| `data-on-<event>` | Call a method from the `methods` block |
+| `data-if` | Include the element, or not |
+| `data-each="items key=id"` | A keyed list |
+
+```javascript
+Domma.component('user-card', {
+    data: () => ({name: '', editing: false}),
+    methods: {
+        toggle() { this.set({editing: !this.data.editing}); }
+    },
+    template: `
+        <h2 data-bind-text="name"></h2>
+        <input data-if="editing" data-model="name">
+        <button data-on-click="toggle">Edit</button>
+    `
+});
+```
+
+Methods are in scope for `data-on-*` automatically. A data field of the same name wins over a method.
+
+`data-if` in a template **re-renders** its region, whereas on a page `M.applyBindings` detaches and restores the same
+node. Prefer `{{#if}}` in a template, where the re-render is the documented behaviour anyway.
 
 ## Lifecycle Sequence
 

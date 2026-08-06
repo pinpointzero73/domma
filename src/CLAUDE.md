@@ -131,7 +131,12 @@ Accessed via `Domma.models` or `M`:
   beneath Models. Also published standalone as `domma-reactive`.
 - **Reactivity**: `M.computed(fn)`, `M.effect(fn)`, `M.untracked(fn)`, `M.flush()`, `model.tracked()` — dependency
   tracking with a batched microtask flush. See [docs/Reactivity.md](../docs/Reactivity.md)
-- **DOM Binding**: `M.bind(model, field, selector, options)`, `M.unbind()`
+- **DOM Binding**: `M.bind(model, field, selector, options)`, `M.unbind()` — one field, one element
+- **Declarative Bindings**: `M.applyBindings(data, root, options)` activates every binding attribute under a root —
+  `data-bind-*`, `data-model`, `data-on-*`, `data-if`, `data-each="rows key=id"` — on markup that already exists.
+  Pass a Model and bindings read and write through it. `M.registerBinding()` / `M.unregisterBinding()` add binding
+  kinds; `M.registerHelper()` / `M.unregisterHelper()` add functions callable from an expression. The same bindings
+  work in a `Domma.component()` template. See [docs/Bindings.md](../docs/Bindings.md)
 - **Types**: `M.types.string`, `M.types.number`, `M.types.boolean`, `M.types.array`, `M.types.object`, `M.types.date`,
   `M.types.any`
 

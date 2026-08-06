@@ -66,12 +66,24 @@ Full build chain (in order):
 **Validators** (fast, no build needed — but read `public/dist/*.css`, so build CSS first):
 
 ```bash
-npm run validate            # both
-npm run validate:classes    # CSS classes used in HTML that resolve to nothing
-npm run validate:theme      # fixed backgrounds that inherit a themed text colour
+npm run validate              # all three
+npm run validate:classes      # CSS classes used in HTML that resolve to nothing
+npm run validate:theme        # fixed backgrounds that inherit a themed text colour
+npm run validate:conventions  # vanilla JS where Domma has a built-in
 ```
 
-Both are **ratchets**, not clean gates: the repository carries a known backlog
+`validate:conventions` finds `document.querySelector`, `addEventListener`, `new Date()`,
+`fetch()` and `localStorage` in pages that should be using `$()`, `.on()`, `D()`, `H` and `S`.
+It ignores anything inside `<pre>`, `<code>` or `<textarea>`, which is teaching material. The
+showcase carried **186 such call sites across 43 files**; it is now at **zero**, so its baseline
+is empty. `--list` prints every site, which is what makes a sweep a work list rather than a
+number.
+
+Note that three of the five are NOT straight swaps — `S.set()` namespaces keys, `H.get()`
+resolves to parsed JSON rather than a `Response`, and `D()` returns a wrapper rather than a
+`Date`. `$(window)` does not work either, so window listeners are deliberately not flagged.
+
+All are **ratchets**, not clean gates: the repository carries a known backlog
 recorded in `scripts/*.baseline.json`, and each fails only when a file gets worse
 or a new offender appears. Fix something and lower its baseline with
 `--update-baseline`; raising one should be deliberate. `--strict` ignores the
@@ -154,6 +166,8 @@ consult that folder's CLAUDE.md for detailed information.
 
 - [docs/API.md](./docs/API.md) - Complete API reference
 - [docs/Reactivity.md](./docs/Reactivity.md) - Dependency tracking: `M.computed()`, `M.effect()`, batching rules
+- [docs/Bindings.md](./docs/Bindings.md) - DOM bindings: `M.applyBindings()`, `data-bind-*`, `data-model`, `data-each`,
+  custom bindings and helpers
 - [docs/DommaDocumentation.md](./docs/DommaDocumentation.md) - Comprehensive user documentation
 - [docs/GettingStarted.md](./docs/GettingStarted.md) - Quick start guide
 - [README.md](./README.md) - Project overview
@@ -480,7 +494,10 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   beneath Models. Also published standalone as `domma-reactive`.
 - Reactivity: `M.computed()`, `M.effect()`, `M.untracked()`, `M.flush()`, `model.tracked()` — dependency tracking,
   batched microtask flush. See [docs/Reactivity.md](./docs/Reactivity.md)
-- DOM Binding: `M.bind()`, `M.unbind()` (two-way binding)
+- DOM Binding: `M.bind()`, `M.unbind()` (one field, one element)
+- Declarative Bindings: `M.applyBindings(data, root)` activates `data-bind-*`, `data-model`, `data-on-*`, `data-if`
+  and `data-each` on markup that already exists; `M.registerBinding()` / `M.registerHelper()` extend the vocabulary.
+  The same bindings work in a component template. See [docs/Bindings.md](./docs/Bindings.md)
 - Types: `M.types.string`, `M.types.number`, `M.types.boolean`, `M.types.array`, `M.types.object`, `M.types.date`
 
 #### Elements (`Domma.elements`)
@@ -630,7 +647,8 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 
 - **Typography:** Font families, sizes, weights, line heights
 - **Spacing:** Margin/padding utilities (`.m-*`, `.p-*`, `.mt-*`, `.mb-*`, etc.)
-- **Display:** `.d-block`, `.d-inline`, `.d-flex`, `.d-grid`, `.d-none`
+- **Display:** `.block`, `.inline-block`, `.flex`, `.grid`, `.hidden` — Tailwind-style names. There are no
+  `.d-*` variants; the Bootstrap spellings resolve to nothing.
 - **Colors:** Full color palette (slate, blue, green, red, amber, sky, etc.)
 - **Opacity:** Full scale `.opacity-0` → `.opacity-100` (steps of 10, plus `.opacity-25`, `.opacity-75`)
 - **Translucency:**
