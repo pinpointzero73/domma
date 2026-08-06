@@ -108,8 +108,37 @@ pulls from git carries the new HTML and the *old* bundles unless it rebuilds.
 On the server:
 
 ```bash
-make enliven      # git stash && git pull && make build
+make enliven
 ```
+
+Which does, in order:
+
+1. **Refuses if the checkout has local changes**, naming them. The one exception is
+   `public/download/kickstart-manifest.json`, which is a build artefact that happens to be tracked and
+   is therefore dirty after every build; it is discarded and regenerated.
+2. `git fetch origin`
+3. `git merge --ff-only origin/main` — a server that has diverged is something to look at, not to
+   paper over with a merge commit.
+4. `npm install` — honours the lock. **This step is not optional.** Rollup *inlines* exactly-pinned
+   dependencies from `node_modules`, so a release that moves a pin will otherwise build a bundle
+   containing the old package while `package-lock.json` claims the new one.
+5. `NODE_ENV=production npm run build`
+6. `node scripts/verify-build.mjs`
+
+### `make verify-build`
+
+Step 6 on its own, for checking a deploy you did not run yourself. It fails if:
+
+| Check | Catches |
+|---|---|
+| Every bundle exists and is not truncated | A build that never ran, or died part-way. `public/dist/` is gitignored, so on a fresh checkout the files are simply absent and the server 404s them |
+| `build-info.json` version matches `package.json` | Bundles built from a different checkout — usually a pull that landed *after* the build |
+| Every exactly-pinned dependency matches what is installed | The inlining problem above. An exact pin — no `^`, no `~` — is a deliberate statement that this build needs that version and no other |
+
+All three are otherwise silent: the build succeeds, the files look plausible, and the wrong thing is
+served.
+
+### jsDelivr
 
 **jsDelivr lags npm by roughly 5–10 minutes** — `domma-js@latest` will serve the previous version until
 it catches up. Purge manually at <https://www.jsdelivr.com/tools/purge> if you need it sooner.
