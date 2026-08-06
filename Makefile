@@ -2,7 +2,7 @@
 # Makes local development builds easier with proper environment settings
 
 .PHONY: help build build-dev build-prod prod core css dev garage garage-prod docs miniapps \
-        clean kill-ports watch-garage rebuild-after-core enliven \
+        clean kill-ports watch-garage rebuild-after-core enliven verify-build \
         test validate check bump release-build preflight release-npm release-gh
 
 VERSION := $(shell node -e "process.stdout.write(require('./package.json').version)")
@@ -44,6 +44,10 @@ help:
 	@echo "  The tag must point at the 'Build vX.Y.Z' commit — that is the repo's"
 	@echo "  convention and release-build is what creates it. Full guide:"
 	@echo "  docs/RELEASING.md"
+	@echo ""
+	@echo "Deploy (on the server):"
+	@echo "  make enliven        - Fast-forward, install, production build, verify"
+	@echo "  make verify-build   - Check the built bundles match this checkout"
 	@echo ""
 	@echo "Utilities:"
 	@echo "  make clean          - Clean dist and build artifacts"
@@ -260,12 +264,60 @@ release-gh:
 	@echo "   The site still needs deploying — 'make enliven' on the server."
 	@echo ""
 
-# Making Live
+# ── Deploy ───────────────────────────────────────────────────────────────────
+
+# Take a checkout from "behind" to "serving the current release".
+#
+# This used to be `git stash && git pull && make build`, which had three ways
+# to go quietly wrong on a server:
+#
+#   * `git stash` with no `pop`. Anything modified was parked in the stash list
+#     for ever. Since the build regenerates the TRACKED
+#     public/download/kickstart-manifest.json, the tree was dirty after every
+#     run and the next run stashed it — the list grows, and a genuinely
+#     diverged checkout is hidden rather than reported.
+#   * `git pull` merges, so a diverged server gets a merge commit instead of a
+#     refusal.
+#   * No install step. Rollup INLINES exactly-pinned dependencies from
+#     node_modules, so a release that moves a pin builds a bundle containing
+#     the OLD package while package-lock.json claims the new one. Silent.
+#
+# Now: refuse on anything unexpected, fast-forward only, install to the lock,
+# build, and check what was actually produced.
 enliven:
 	@echo ""
-	@echo "📦 Now stashing, pulling and building!"
+	@echo "🚀 Making live…"
 	@echo ""
-	git stash && git pull && make build
+	@# The manifest is a build artefact that happens to be tracked, so it is the
+	@# one modification that is expected here. Anything else is a local change
+	@# somebody made on the server, and losing it silently is not this target's
+	@# decision to make.
+	@DIRTY=$$(git status --porcelain --untracked-files=no \
+		| grep -v '^ M public/download/kickstart-manifest\.json$$' || true); \
+	if [ -n "$$DIRTY" ]; then \
+		echo "  enliven: this checkout has local changes:"; echo ""; \
+		echo "$$DIRTY" | sed 's/^/    /'; echo ""; \
+		echo "  Commit, stash or discard them yourself — refusing to guess."; echo ""; \
+		exit 1; \
+	fi
+	@git checkout -- public/download/kickstart-manifest.json 2>/dev/null || true
+	@echo "→ Fetching"
+	git fetch origin
+	@# --ff-only: a server that has diverged is a problem to look at, not to
+	@# paper over with a merge commit.
+	@echo "→ Fast-forwarding"
+	git merge --ff-only origin/main
+	@echo "→ Installing to the lock"
+	npm install
+	@echo "→ Building (production)"
+	NODE_ENV=production npm run build
+	@echo "→ Verifying"
+	@node scripts/verify-build.mjs
+	@echo "✅ Live — v$$(node -p "require('./package.json').version")"
 	@echo ""
-	@echo "✅ We are live!"
+	@echo "   jsDelivr lags npm by roughly 5–10 minutes."
 	@echo ""
+
+# What enliven runs last. Safe to run on its own to check a deploy.
+verify-build:
+	@node scripts/verify-build.mjs
