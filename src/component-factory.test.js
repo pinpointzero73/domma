@@ -519,3 +519,145 @@ describe('Domma component-factory - fine-grained updates', () => {
         expect(root(el).querySelector('#a')).toBeNull();
     });
 });
+
+// ── data-on-* inside a component template ─────────────────────────────────────
+//
+// A component's `methods` are attached to the component context, while the data
+// a template binds against came from `_mergeData()` — model + props + computed.
+// Methods were in neither, so `data-on-click="save"` had nothing to resolve to
+// and logged "did not resolve to a function" on every click. Every other binding
+// worked; this one silently did nothing, which is why it went unnoticed.
+//
+// Methods are merged FIRST, so a data field of the same name still wins. That is
+// the safer collision: templates mostly render data, and a method quietly
+// shadowing a rendered value would be the worse failure.
+
+describe('Domma component-factory - data-on-* reaches methods', () => {
+    const settle = () => new Promise(r => setTimeout(r, 30));
+    let n = 0;
+    const uniqueTag = (p) => `${p}-ev-${++n}`;
+
+    async function mount(tag, definition) {
+        Domma.component(tag, definition);
+        const el = document.createElement(tag);
+        document.body.appendChild(el);
+        await settle();
+        return el;
+    }
+    const root = (el) => el.shadowRoot.querySelector('.dm-component-root');
+
+    it('calls a method named by a bare reference', async () => {
+        const seen = [];
+        const el = await mount(uniqueTag('c'), {
+            template: '<button id="go" data-on-click="save">go</button>',
+            data() { return {n: 0}; },
+            methods: {save() { seen.push('called'); }}
+        });
+
+        root(el).querySelector('#go')
+            .dispatchEvent(new window.MouseEvent('click', {bubbles: true, composed: true}));
+        await settle();
+
+        expect(seen).toEqual(['called']);
+    });
+
+    it('runs the method with the component context as `this`, so set() works', async () => {
+        const el = await mount(uniqueTag('c'), {
+            template: '<b id="out" data-bind-text="count"></b><button id="go" data-on-click="bump"></button>',
+            data() { return {count: 3}; },
+            methods: {bump() { this.set({count: this.data.count + 1}); }}
+        });
+
+        expect(root(el).querySelector('#out').textContent).toBe('3');
+        root(el).querySelector('#go')
+            .dispatchEvent(new window.MouseEvent('click', {bubbles: true, composed: true}));
+        await settle();
+
+        expect(root(el).querySelector('#out').textContent).toBe('4');
+    });
+
+    it('lets a data field of the same name win, so a method cannot shadow it', async () => {
+        const el = await mount(uniqueTag('c'), {
+            template: '<b id="out">{{label}}</b>',
+            data() { return {label: 'from data'}; },
+            methods: {label() { return 'from method'; }}
+        });
+
+        expect(root(el).querySelector('#out').textContent).toBe('from data');
+    });
+});
+
+// ── data-model inside a component template ────────────────────────────────────
+//
+// The data → DOM direction always worked. The DOM → data direction did not:
+// `_mergeData()` builds a fresh plain object each render, and data-model's
+// write-back assigns to `context.$data[key]` — so the value landed on a
+// throwaway snapshot and the model never heard about it. The control appeared
+// to work, because the user's own keystrokes are what they see.
+//
+// The merged object is now a Proxy whose writes route through model.set(),
+// which is the same write path a lifecycle hook uses — validation and change
+// notification included.
+
+describe('Domma component-factory - data-model writes back', () => {
+    const settle = () => new Promise(r => setTimeout(r, 30));
+    let n = 0;
+    const uniqueTag = (p) => `${p}-dm-${++n}`;
+
+    async function mount(tag, definition) {
+        Domma.component(tag, definition);
+        const el = document.createElement(tag);
+        document.body.appendChild(el);
+        await settle();
+        return el;
+    }
+    const root = (el) => el.shadowRoot.querySelector('.dm-component-root');
+
+    it('renders the current value into the control', async () => {
+        const el = await mount(uniqueTag('c'), {
+            template: '<input id="i" data-model="q">',
+            data() { return {q: 'start'}; }
+        });
+        expect(root(el).querySelector('#i').value).toBe('start');
+    });
+
+    it('writes a typed value back to the model', async () => {
+        const el = await mount(uniqueTag('c'), {
+            template: '<input id="i" data-model="q">',
+            data() { return {q: 'start'}; }
+        });
+
+        const input = root(el).querySelector('#i');
+        input.value = 'typed';
+        input.dispatchEvent(new window.Event('input', {bubbles: true}));
+        await settle();
+
+        expect(el._model.get('q')).toBe('typed');
+    });
+
+    it('drives everything else bound to that field', async () => {
+        const el = await mount(uniqueTag('c'), {
+            template: '<input id="i" data-model="q"><b id="o" data-bind-text="q"></b>',
+            data() { return {q: 'start'}; }
+        });
+
+        const input = root(el).querySelector('#i');
+        input.value = 'onward';
+        input.dispatchEvent(new window.Event('input', {bubbles: true}));
+        await settle();
+
+        expect(root(el).querySelector('#o').textContent).toBe('onward');
+    });
+
+    it('still spreads and enumerates like a plain object', async () => {
+        // The renderer spreads the data object, so the Proxy must survive it.
+        const el = await mount(uniqueTag('c'), {
+            template: '<b id="o">{{a}}-{{b}}</b>',
+            data() { return {a: 'x', b: 'y'}; }
+        });
+        const merged = el._mergeData();
+        expect({...merged}.a).toBe('x');
+        expect(Object.keys(merged)).toEqual(expect.arrayContaining(['a', 'b']));
+        expect(root(el).querySelector('#o').textContent).toBe('x-y');
+    });
+});

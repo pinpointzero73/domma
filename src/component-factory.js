@@ -561,7 +561,53 @@ export function createComponent(tagName, definition) {
                 computed[name] = comp.get();
             }
 
-            return { ...data, ...this._props, ...computed };
+            // Methods go in FIRST, so a data field of the same name still wins.
+            //
+            // They belong here because `data-on-click="save"` resolves its
+            // handler against the template's data — the binding layer has no
+            // other view of the component. Without them every event binding in
+            // a component template logged "did not resolve to a function" and
+            // did nothing, while every other binding worked.
+            //
+            // Bound to the context, so `this.set(...)` inside a handler behaves
+            // exactly as it does in a lifecycle hook. First is the safer end of
+            // the merge: a template mostly renders data, and a method quietly
+            // shadowing a rendered value would be the worse failure.
+            const bound = {};
+            const ctx = this._ctx();
+            for (const name of Object.keys(methods)) {
+                bound[name] = ctx[name];
+            }
+
+            const merged = { ...bound, ...data, ...this._props, ...computed };
+
+            // Wrapped so that a WRITE reaches the model.
+            //
+            // `data-model` writes back by assigning to `context.$data[key]`,
+            // and $data is this object. As a plain snapshot it swallowed the
+            // write silently: the control looked fine, because what you see
+            // while typing is your own keystrokes, but the model never changed
+            // and nothing else bound to that field moved.
+            //
+            // Routing through model.set() is the same path a lifecycle hook
+            // uses, so validation and change notification still run. Reads fall
+            // through to the snapshot, and ownKeys/getOwnPropertyDescriptor are
+            // implemented because the renderer spreads this object.
+            const model = this._model;
+            return new Proxy(merged, {
+                get(target, key) { return target[key]; },
+                has(target, key) { return key in target; },
+                ownKeys(target) { return Reflect.ownKeys(target); },
+                getOwnPropertyDescriptor(target, key) {
+                    return Reflect.getOwnPropertyDescriptor(target, key)
+                        || { value: target[key], enumerable: true, configurable: true };
+                },
+                set(target, key, value) {
+                    target[key] = value;
+                    if (model && typeof key === 'string') model.set({ [key]: value });
+                    return true;
+                }
+            });
         }
     }
 
