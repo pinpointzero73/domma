@@ -119,6 +119,43 @@
                 </div>
             </a>
 
+            <!-- Reactivity -->
+            <a href="models/reactivity.html" class="card card-hover namespace-card no-underline text-inherit">
+                <div class="card-body flex-1">
+                    <div class="namespace-icon mb-4 text-primary" data-icon="zap"></div>
+                    <h3 class="card-title">Reactivity</h3>
+                    <p class="card-text">Dependency tracking — a write re-runs exactly the work that depends on it.
+                        Also published on its own as <code>domma-reactive</code>.</p>
+                    <ul class="list-none p-0 mt-4">
+                        <li class="py-1 text-gray-600 text-sm">Observables and computed values</li>
+                        <li class="py-1 text-gray-600 text-sm">Effects, batched onto one flush</li>
+                        <li class="py-1 text-gray-600 text-sm">Usable without Domma</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <code>M.computed(() =&gt; price.value * qty.value)</code>
+                </div>
+            </a>
+
+            <!-- Bindings -->
+            <a href="models/bindings.html" class="card card-hover namespace-card no-underline text-inherit">
+                <div class="card-body flex-1">
+                    <div class="namespace-icon mb-4 text-primary" data-icon="link"></div>
+                    <h3 class="card-title">Bindings</h3>
+                    <p class="card-text">Declarative bindings between markup and data, in a component template or on
+                        a page you already have.</p>
+                    <ul class="list-none p-0 mt-4">
+                        <li class="py-1 text-gray-600 text-sm"><code>data-bind-*</code>, <code>data-model</code>,
+                            <code>data-on-*</code></li>
+                        <li class="py-1 text-gray-600 text-sm">Keyed lists that keep their DOM</li>
+                        <li class="py-1 text-gray-600 text-sm">CSP-safe — no <code>eval</code></li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <code>M.applyBindings(model, '#app')</code>
+                </div>
+            </a>
+
             <!-- Blueprints -->
             <a href="blueprints/" class="card card-hover namespace-card no-underline text-inherit">
                 <div class="card-body flex-1">
