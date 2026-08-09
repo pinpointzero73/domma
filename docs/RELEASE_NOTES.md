@@ -1,3 +1,79 @@
+### v0.39.0 - Six Ways In (2026-08-09)
+
+**Six new binding attributes and two new reactive powers**, all of them things you previously had to
+write yourself. Nothing that already worked has changed.
+
+✨ **New bindings**
+
+*   **`data-options`** fills a `<select>` from a collection, with `data-options-text`,
+    `data-options-value` and `data-options-caption`. A `data-each` over `<option>` produces the same
+    markup — what it does not produce is the **selection**, and that is the whole difficulty:
+    rebuilding a select's options resets it, and the selection lives on the select rather than on any
+    option, so a keyed list has nothing to preserve it with.
+
+    The three companions are expressions against the item rather than property names, so a label can be
+    computed. Option values need not be strings: when the resolved value is an object or a number, the
+    real value is kept alongside the option and `data-model` reads back **that**, not
+    `"[object Object]"`. And a value the model asked for while no option carried it is remembered and
+    applied by the rebuild that brings it — so attribute order does not matter, and neither does a
+    collection that arrives from an `H.get()` long afterwards.
+
+*   **`data-focus`** is two-way between a value and focus. Setting it moves the caret into the field;
+    the user tabbing in sets it `true`; blurring sets it `false`. Both directions earn their place —
+    the first is how a model puts focus in the field it has just revealed without reaching for a DOM
+    node, the second is how it knows where the user is without a listener. Unlike `data-model`, an
+    expression it cannot write through is not fatal: focus still follows the value, and only the
+    write-back warns.
+
+*   **`data-bind-style-<property>`** and **`data-bind-style`** set one CSS property or a whole object of
+    them. Two spellings because a binding expression has no object literal and will not grow one —
+    parsing `{…}` safely is most of the way to the `eval` that Domma's CSP story depends on avoiding.
+    Ownership follows the `class` rule: only the properties this binding set last time are removed, so
+    a static `style=` attribute survives. A falsy value removes the property; `0` is kept, because
+    `opacity: 0` is a real value.
+
+*   **Virtual bindings** — `<!-- dm if: x -->` … `<!-- /dm -->`, plus `each` and `text`. A binding
+    attribute needs an element to sit on, and sometimes there is none to spare: a run of `<li>`s, three
+    `<td>`s in a row. Wrapping them in a `<div>` to carry the attribute changes the layout, and inside
+    a table it is not even valid HTML a browser will keep. They nest, and a block held out of the
+    document keeps its nodes together, so a nested block that changes while its parent is closed still
+    lands correctly when the parent reopens.
+
+✨ **New in the reactive core**
+
+*   **`M.observable(x).extend({...})`** layers behaviour onto an observable after it exists:
+    `rateLimit` (both methods — quiet-time and fixed-rate), `throttle` as the older name for it, and
+    `notify: 'always'`. `M.registerExtender()` opens the same registry to you, exactly as
+    `M.registerBinding()` does for bindings.
+
+    **The write is never delayed, only the announcement.** Worth stating plainly, because the obvious
+    implementation of a throttle defers the write — and then every read between the write and the
+    notification gives you a value that is already out of date. A rate-limited observable always reads
+    back what was last written to it.
+
+*   **`M.computed({read, write})`** — a computed you can write through, which is what lets
+    `data-model="fahrenheit.value"` bind a derived value. Assigning to one with no `write` now warns and
+    names it, rather than storing into the read cache where the next recompute would silently drop it.
+
+*   **`M.observableArray()`** gains `indexOf()` (tracked, unlike `peek().indexOf()`), `replace()`, and
+    `destroy()` / `destroyAll()`, which **mark** an item rather than removing it — for servers that
+    delete on a flag in the payload, where the array must still carry the item at submit time while no
+    longer showing it. Every render path skips a marked one.
+
+📋 **Documented**
+
+*   [Bindings](Bindings.md) gains sections for `data-options`, `data-focus`, style and virtual
+    bindings; [Reactivity](Reactivity.md) gains Extenders and Writable computeds; [API](API.md) tracks
+    both. The upstream package ships a [tutorial](https://github.com/pinpointzero73/domma-reactive/blob/main/Tutorial.md)
+    building a contacts page step by step, whose every listing is under test.
+
+🔧 **Internal**
+
+*   [domma-reactive](https://www.npmjs.com/package/domma-reactive) moves to 0.5.1 — 793 tests there, up
+    from 679. All six bindings above arrive with the pin, since the handler registry populates itself at
+    import; what needed Domma code was the other two, which were reachable in the package and not
+    through `M`. 577 tests here, up from 571.
+
 ### v0.38.0 - One Adapter (2026-08-06)
 
 **No new API.** This is the seam between Domma and the binding engine, made single — plus a limitation

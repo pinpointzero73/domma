@@ -68,11 +68,15 @@ binding on that field updates. Nothing re-renders that did not have to.
 |---|---|---|
 | `data-bind-text` | Sets `textContent` | `data-bind-text="user.name"` |
 | `data-bind-class` | Adds/removes only the classes this binding owns | `data-bind-class="isActive && 'on'"` |
+| `data-bind-style-<prop>` | Sets one CSS property | `data-bind-style-color="shade"` |
+| `data-bind-style` | Sets every property of an object | `data-bind-style="look"` |
 | `data-bind-<prop>` | Sets a property, or an attribute if there is no such property | `data-bind-disabled="isBusy"` |
 | `data-model` | Two-way: control ↔ data | `data-model="query"` |
 | `data-on-<event>` | Adds a listener | `data-on-click="save"` |
 | `data-if` | The element is in the document, or it is not | `data-if="showHelp"` |
 | `data-each` | A keyed list; the element's contents are the item template | `data-each="rows key=id"` |
+| `data-options` | Fills a `<select>` from a collection | `data-options="cities"` |
+| `data-focus` | Two-way: value ↔ focus | `data-focus="editing"` |
 
 Plus any kind added with [`M.registerBinding()`](#mregisterbindingname-handler).
 
@@ -95,6 +99,28 @@ in a component template, which says what it is doing where an author can see it.
 A falsy `data-bind-class` contributes no classes at all. That matters because the documented idiom is
 `data-bind-class="isActive && 'on'"`, which evaluates to `false` rather than `''` when it is off — and stringifying that
 would add the literal class `false` to the element.
+
+#### Style
+
+```html
+<p data-bind-style-color="shade"></p>            <!-- one property        -->
+<p data-bind-style-font-weight="weight"></p>     <!-- kebab-cased          -->
+<p data-bind-style---brand="accent"></p>         <!-- custom property      -->
+<p data-bind-style="look"></p>                   <!-- {color, fontWeight}  -->
+```
+
+Two spellings because a binding expression has no object literal — it cannot have one without becoming the
+`eval` that Domma's Content Security Policy story depends on avoiding. The single-property form is the common
+case anyway; the object form takes a map the model already holds.
+
+Property names are **kebab-cased in the attribute**, because an HTML attribute name is lowercased by the parser
+and `data-bind-style-fontWeight` would arrive as `fontweight`. In an object they may be camelCase and are
+converted. A falsy value removes the property, so `data-bind-style-color="isError && 'red'"` works the way the
+class idiom does — but `0` is kept, since `opacity: 0` is a real value. Ownership follows the same rule as
+`class`: only the properties this binding set last time are removed, so a static `style=` attribute survives.
+
+No unit is ever added: `data-bind-style-width="w"` with `w = 40` writes `width: 40`, which the browser ignores.
+Write `'40px'`.
 
 ### `data-model`
 
@@ -216,6 +242,88 @@ block and says so.
 
 In a component template the same list is `{{#each rows key=id}}…{{/each}}`. There `key=` is optional; omitting it
 re-renders the block wholesale and warns once.
+
+### `data-options`
+
+```html
+<select data-options="cities" data-model="chosen"></select>
+
+<select data-options="people"
+        data-options-text="first + ' ' + last"
+        data-options-value="id"
+        data-options-caption="'Anyone'"
+        data-model="assignee"></select>
+```
+
+| Attribute | Meaning |
+|---|---|
+| `data-options` | The collection |
+| `data-options-text` | The label — an expression against the item; defaults to the item |
+| `data-options-value` | The value — likewise |
+| `data-options-caption` | A leading option with an empty value |
+
+A `data-each` over `<option>` produces the same markup. What it does not produce is the **selection**:
+rebuilding a select's options resets it, and the selection lives on the select rather than on any option, so a
+keyed list has nothing to preserve it with. This binding rebuilds and puts the selection back.
+
+The three companions are expressions evaluated in the item's own context, so `$index` and `$parent` resolve and
+a label can be computed. Note the quotes inside the quotes on the caption — every binding value is an
+expression, so a literal string has to look like one, or it is read as a variable name.
+
+**Option values need not be strings.** An `<option>`'s `value` is always a string, so when the resolved value is
+not one the real value is kept alongside it and `data-model` reads back the object or the number that went in.
+With no `data-options-value` at all, the value **is** the item, matched by identity.
+
+Order does not matter, and neither does timing: `<select data-model="chosen" data-options="cities">` works, and
+so does a collection that arrives from an `H.get()` long afterwards. A value the model asked for while no option
+carried it is remembered and applied by the rebuild that brings it.
+
+### `data-focus`
+
+```html
+<input data-model="title" data-focus="editingTitle">
+```
+
+Two-way, between a value and focus. Setting `editingTitle` to `true` moves the caret into the field; the user
+tabbing in sets it `true`; blurring sets it `false`. Both directions earn their place — the first is how a model
+puts focus in the field it has just revealed without reaching for a DOM node, the second is how it knows where
+the user is without a listener.
+
+Unlike `data-model`, an expression it cannot write through is not fatal: `data-focus="isEditing && !isSaving"`
+is a sensible way to drive focus from derived state, so the value → focus direction keeps working and only the
+write-back warns.
+
+### Virtual bindings
+
+A binding attribute needs an element to sit on, and sometimes there is none to spare — a run of `<li>`s, three
+`<td>`s in a row. Wrapping them in a `<div>` to carry the attribute changes the layout, and inside a table it is
+not even valid HTML a browser will keep. Comments have no such problem.
+
+```html
+<ul>
+    <li>Always shown</li>
+    <!-- dm if: showExtras -->
+        <li>Only when showExtras</li>
+        <li>These two travel together</li>
+    <!-- /dm -->
+</ul>
+
+<p>Signed in as <!-- dm text: user.name -->…<!-- /dm -->.</p>
+```
+
+| Form | Behaviour |
+|---|---|
+| `<!-- dm if: expr -->` | The run of nodes is in the document, or held aside — **the same nodes** come back, with their listeners and their focus |
+| `<!-- dm each: expr key=id -->` | The run is the item template, lifted and compiled as `data-each` is; `key=` is required |
+| `<!-- dm text: expr -->` | One text node between the anchors, replacing whatever was there as a placeholder |
+
+Every closer is `<!-- /dm -->`, whatever it opened. They nest, and a block held out of the document keeps its
+nodes together, so a nested block that changes while its parent is closed still lands correctly when the parent
+reopens.
+
+These are a `M.applyBindings` feature. A component template has `{{#if}}` and `{{#each}}`, which already delimit
+a region without needing an element — and a virtual binding **inside** a `data-each` body is not read, because
+that body is compiled as a template and the compiler knows mustache rather than comments. It warns if you try.
 
 ---
 

@@ -383,4 +383,85 @@ describe('Domma.models - Models Module Tests', () => {
     Domma.models.publish('once-event'); // Should not trigger again
     expect(onceSpy).toHaveBeenCalledTimes(1);
   });
+
+  // ── Surfaced from domma-reactive 0.5.x ──────────────────────────────────────
+  //
+  // Two things arrived in the package that M did not pass on. `.extend()` works
+  // on M.observable already, because that is re-exported untouched — but the
+  // registry behind it was unreachable, so a consumer could use the three
+  // built-in extenders and never add a fourth. And M.computed is a facade with
+  // no setter, so a writable computed constructed through it could be read and
+  // not written, which is the half that makes it worth having.
+
+  it('Models - M.observable().extend() layers on behaviour', () => {
+    const count = Domma.models.observable(1);
+    expect(count.extend({notify: 'always'})).toBe(count);
+
+    const seen = [];
+    count.subscribe((v) => seen.push(v));
+
+    count.value = 1;                     // equal — normally silent
+    expect(seen).toEqual([1]);
+  });
+
+  it('Models - M.registerExtender adds one usable through .extend()', () => {
+    const log = [];
+    Domma.models.registerExtender('trace', (control, label) => {
+      control.intercept((next) => (value) => {
+        log.push(`${label}:${value}`);
+        next(value);
+      });
+    });
+
+    try {
+      const count = Domma.models.observable(0).extend({trace: 'count'});
+      count.value = 5;
+      expect(log).toEqual(['count:5']);
+    } finally {
+      Domma.models.unregisterExtender('trace');
+    }
+  });
+
+  it('Models - M.unregisterExtender reports whether it removed anything', () => {
+    Domma.models.registerExtender('trace', () => {});
+    expect(Domma.models.unregisterExtender('trace')).toBe(true);
+    expect(Domma.models.unregisterExtender('trace')).toBe(false);
+  });
+
+  it('Models - M.computed({read, write}) can be written through', () => {
+    const celsius = Domma.models.observable(100);
+
+    const fahrenheit = Domma.models.computed({
+      read: () => celsius.value * 9 / 5 + 32,
+      write: (f) => { celsius.value = (f - 32) * 5 / 9; }
+    });
+
+    expect(fahrenheit.value).toBe(212);
+
+    fahrenheit.value = 32;
+    expect(celsius.value).toBe(0);
+    expect(fahrenheit.value).toBe(32);
+  });
+
+  it('Models - M.computed().set() is the same write', () => {
+    const n = Domma.models.observable(1);
+    const double = Domma.models.computed({
+      read: () => n.value * 2,
+      write: (v) => { n.value = v / 2; }
+    });
+
+    double.set(10);
+    expect(n.value).toBe(5);
+  });
+
+  it('Models - writing to a read-only M.computed warns and changes nothing', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const total = Domma.models.computed(() => 7);
+
+    total.value = 99;
+
+    expect(total.value).toBe(7);
+    expect(warn).toHaveBeenCalledTimes(1);
+    warn.mockRestore();
+  });
 });

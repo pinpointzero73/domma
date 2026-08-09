@@ -17,7 +17,9 @@ import {
     registerBinding as addBindingKind,
     unregisterBinding as removeBindingKind,
     registerHelper as addExpressionHelper,
-    unregisterHelper as removeExpressionHelper
+    unregisterHelper as removeExpressionHelper,
+    registerExtender as addExtender,
+    unregisterExtender as removeExtender
 } from 'domma-reactive';
 
 /**
@@ -832,11 +834,25 @@ export const models = {
      *
      * The body must be synchronous: tracking stops at the first `await`.
      *
-     * @param {Function} fn                 Synchronous derivation.
+     * A computed is read-only unless you say where a write should land:
+     *
+     *   const celsius = M.observable(100);
+     *   const fahrenheit = M.computed({
+     *       read:  () => celsius.value * 9 / 5 + 32,
+     *       write: (f) => { celsius.value = (f - 32) * 5 / 9; }
+     *   });
+     *   fahrenheit.value = 32;       // celsius.value === 0
+     *
+     * That is what lets `data-model` bind a derived value. Assigning to one
+     * with no `write` warns and changes nothing, rather than storing into the
+     * read cache where the next recompute would silently drop it.
+     *
+     * @param {Function|Object} fn          Derivation, or {read, write}.
      * @param {Object}   [options]
      * @param {string}   [options.label]    Debug label used in warnings.
      * @param {Function} [options.onChange] Called with the new value when it changes.
-     * @returns {{value: *, get: Function, peek: Function, dispose: Function}}
+     * @returns {{value: *, get: Function, set: Function, peek: Function,
+     *            dispose: Function}}
      */
     computed(fn, options = {}) {
         const comp = createComputed(fn, {
@@ -858,8 +874,23 @@ export const models = {
                 return comp.get();
             },
 
+            /**
+             * Hand a value to the derivation's `write`, if it has one.
+             *
+             * The facade needs its own accessor pair: a getter alone makes the
+             * property read-only in a way that fails SILENTLY outside strict
+             * mode, so `total.value = 5` would look like it worked and do
+             * nothing. Delegating means the package's own warning is what a
+             * caller sees, naming the computed.
+             */
+            set value(next) {
+                comp.write(next);
+            },
+
             /** Current value, recomputing only if a dependency changed. */
             get: () => comp.get(),
+            /** Imperative alias for assigning `.value`, matching observable().set. */
+            set: (next) => comp.write(next),
             /** Current value without registering a dependency on the caller. */
             peek: () => runUntracked(() => comp.get()),
             /** Unlink from the dependency graph. */
@@ -1059,6 +1090,46 @@ export const models = {
      */
     unregisterBinding(name) {
         return removeBindingKind(name);
+    },
+
+    /**
+     * Add an extender, callable as `M.observable(x).extend({name: value})`.
+     *
+     * `rateLimit`, `throttle` and `notify` are registered through this same
+     * function, so an extender you add is not a second-class citizen — the
+     * built-ins have no privileged path.
+     *
+     *   M.registerExtender('trace', (control, label) => {
+     *       control.intercept((next) => (value) => {
+     *           console.log(label, value);
+     *           next(value);
+     *       });
+     *   });
+     *
+     *   const count = M.observable(0).extend({trace: 'count'});
+     *
+     * The control surface an extender is handed has exactly two powers:
+     * `setEquals(fn)` replaces the change gate, and `intercept(wrap)` wraps the
+     * announcement. Neither can touch the stored value, which is what keeps the
+     * guarantee that a write always lands immediately — even under a rate
+     * limit, where only the notification waits.
+     *
+     * @param {string}   name
+     * @param {Function} fn `(control, value) => void`
+     */
+    registerExtender(name, fn) {
+        return addExtender(name, fn);
+    },
+
+    /**
+     * Remove an extender added with registerExtender().
+     * The built-ins are refused.
+     *
+     * @param {string} name
+     * @returns {boolean} whether anything was removed
+     */
+    unregisterExtender(name) {
+        return removeExtender(name);
     },
 
     /**

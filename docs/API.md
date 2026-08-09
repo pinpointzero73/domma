@@ -2881,6 +2881,10 @@ items.remove(s => s.startsWith('a'));   // or by test
 | `push`, `pop`, `shift`, `unshift`, `splice`, `sort`, `reverse`, `fill`, `copyWithin` | Native behaviour and return value, then notify. |
 | `remove(valueOrTest)` | A value removes every occurrence by identity; a function is called with `(item, index)` and everything it accepts goes. Notifies even when nothing matched. |
 | `removeAll()` | Empty the array, in place. |
+| `indexOf(item)` | Tracked, unlike `peek().indexOf()`, which drops the dependency silently. |
+| `replace(old, new)` | Swap the first occurrence, in place. |
+| `destroy(valueOrTest)` / `destroyAll()` | **Mark** `_destroy: true` rather than remove — for servers that delete on a flag in the payload. Every render path skips a marked item. |
+| `extend(spec)` | Layer on behaviour — see `M.registerExtender()`. Returns the array. |
 
 **Options:** the same as `M.observable()`.
 
@@ -2912,13 +2916,30 @@ total.get();              // 40 — dependency moved, so it re-evaluates
 
 | Member | Returns | Description |
 |--------|---------|-------------|
-| `value` | `any` | The same read as `get()`, spelled as a property |
+| `value` | `any` | The same read as `get()`, spelled as a property. Assignable when the computed is writable. |
 | `get()` | `any` | Current value; registers a dependency on the caller |
+| `set(next)` | `void` | Imperative alias for assigning `.value` |
 | `peek()` | `any` | Current value **without** registering a dependency |
 | `dispose()` | `void` | Unlink from the dependency graph |
 
 Prefer `.value`. It is the only one a template expression can use — an expression cannot call a method, so
 `{{total.get()}}` will not parse — and it means `M.observable()` and `M.computed()` are read the same way.
+
+**Writable computeds.** Pass `{read, write}` instead of a function to say where an assignment should land:
+
+```javascript
+const celsius = M.observable(100);
+
+const fahrenheit = M.computed({
+    read:  () => celsius.value * 9 / 5 + 32,
+    write: (f) => { celsius.value = (f - 32) * 5 / 9; }
+});
+
+fahrenheit.value = 32;      // celsius.value === 0
+```
+
+That is what lets `data-model="fahrenheit.value"` bind a derived value. Assigning to a computed with no `write`
+warns and names it, rather than storing into the read cache where the next recompute would drop it.
 
 Computeds compose — one reading another links them automatically, and a computed shared by several readers is
 evaluated once per flush.
@@ -3003,6 +3024,30 @@ handle.dispose();   // required on anything that outlives the markup
 
 `{{ }}` is **not** interpolated in already-rendered DOM — `data-bind-text` is the supported spelling. Applying twice
 over a region skips what is already bound and warns once.
+
+### `M.registerExtender(name, fn)` / `M.unregisterExtender(name)`
+
+Adds an extender, usable as `M.observable(x).extend({name: value})`. The built-ins — `rateLimit`,
+`throttle` and `notify` — are registered through this same function.
+
+```javascript
+M.registerExtender('trace', (control, label) => {
+    control.intercept((next) => (value) => {
+        console.log(label, value);
+        next(value);
+    });
+});
+
+const count = M.observable(0).extend({trace: 'count'});
+```
+
+The `control` has exactly two powers: `setEquals(fn)` replaces the change gate, `intercept(wrap)`
+wraps the announcement. Neither can touch the stored value — which is what makes the guarantee hold
+that **a write always lands immediately**, even under a rate limit, where only the notification waits.
+
+`unregisterExtender()` returns whether it removed anything; the built-ins are refused.
+
+See [Reactivity](Reactivity.md#extenders) for `rateLimit`, `throttle` and `notify`.
 
 ### `M.registerBinding(name, handler)` / `M.unregisterBinding(name)`
 
