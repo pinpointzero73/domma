@@ -10,3 +10,6 @@ public/download/kickstart-files/
 firebase-debug.log
 release.json
 .playwright-mcp/
+
+# Machine-local Claude Code settings (skills are tracked, this is not)
+.claude/settings.local.json
