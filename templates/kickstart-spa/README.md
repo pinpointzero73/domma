@@ -107,7 +107,7 @@ The template is pre-configured with working defaults for testing within the Domm
 
 1. **Start a server from Domma root:**
    ```bash
-   cd /home/darryl/src/js/domma
+   cd /path/to/domma   # the repository root
    live-server . --port=3006
    ```
 

@@ -27,7 +27,7 @@ function findHTMLFiles(dir, fileList = []) {
     return fileList;
 }
 
-const showcaseDir = '/home/darryl/src/js/domma/public/showcase';
+const showcaseDir = path.join(__dirname, '..', '..', 'public', 'showcase');
 const files = findHTMLFiles(showcaseDir);
 
 console.log(`Found ${files.length} HTML files to process\n`);
@@ -100,7 +100,7 @@ files.forEach(file => {
         fs.writeFileSync(file, modified, 'utf8');
         filesModified++;
         totalFixed += fileFixCount;
-        console.log(`✓ ${path.relative('/home/darryl/src/js/domma', file)} - Fixed ${fileFixCount} code-block(s)`);
+        console.log(`✓ ${path.relative(path.join(__dirname, '..', '..'), file)} - Fixed ${fileFixCount} code-block(s)`);
     }
 });
 
