@@ -1,3 +1,71 @@
+### v0.40.0 - Two Levels Up (2026-08-21)
+
+**The inlined binding engine moves from 0.5.1 to 1.0.0, and brings two context names with it.** No new
+Domma API of its own; nothing that already worked has changed.
+
+🧭 **`$parents` and `$parentContext` - reaching past the immediate parent**
+
+*   `$parent` is one step out, and until now it was the only step there was. From inside a list inside
+    a list, **two levels up could not be reached at all**: a bare name is the item, `$parent` is the
+    group, and the root was simply unreachable. `$parents` is the whole ancestor chain, nearest first,
+    so `$parents[0]` is `$parent` and `$parents[1]` reads a grandparent with no `$data` in sight.
+
+    It is built only if a template asks for it, by walking the chain on first read and caching the
+    result. A keyed list mints a context per item per render whether or not anything mentions the
+    name, so a list that never uses it pays nothing for it.
+
+*   `$parentContext` is the enclosing **context** rather than its data - the one name here that is a
+    context. It exists because ancestor data cannot answer *which row of the outer list am I in?*:
+    position lives on the context, not on the item, so no amount of `$parents` reaches it.
+    `$parentContext.$index` answers it, and nothing could before.
+
+    `$parent` stays data and not a context. Making it one would mean writing `$parent.$data.name`
+    everywhere, which is why it is data in the first place.
+
+⚠️ **A list inside a list is `{{#each}}`, not a second `data-each`**
+
+*   This was always true and never said anything. `data-each` is the `applyBindings` spelling and the
+    compiler discovers lists from `{{#each}}` only - and a list's item template **is** compiled markup.
+    So a `data-each` nested inside one was left exactly as written: its body rendered **once**, as
+    ordinary markup, with every binding in it resolving against the **outer** item.
+
+    It looks close enough to working to survive review, which is how it survived. Activation now warns
+    once, quotes the expression back and names the form to write instead. `{{#each}}` nests to any
+    depth, both new context names included.
+
+*   Also arriving with the pin: a binding write to a **frozen** target now warns and skips instead of
+    throwing. It was reachable long before either of these names existed - `data-model` against a
+    frozen view model has always landed there - and a binding that throws takes the page down with it,
+    which is the one thing this layer promises never to do.
+
+📌 **Known limitation - `$parentContext.$index` does not survive a reorder**
+
+*   Appending to the outer list is fine, and so is anything that leaves existing positions alone.
+    **Moving** an outer row is not: a sort, a reverse or a prepend relocates the DOM correctly and
+    leaves every inner item reading the position its group used to be in. The gate that decides
+    whether an inner item needs a new context compares the parent context by its `$data` and `$root`,
+    and a move changes neither, so nothing tells the inner items anything happened.
+
+    Ancestor **data** is correct throughout - `$parent` and `$parents[n]` are unaffected. It is only
+    the enclosing **position**, and only after a move. It is documented next to the feature, in the
+    troubleshooting table and beside the showcase demo rather than left to be discovered, and the
+    demo appends rather than reorders for exactly that reason.
+
+📦 **Internal**
+
+*   [domma-reactive](https://www.npmjs.com/package/domma-reactive) moves from 0.5.1 to **1.0.0** - the
+    same code as 0.8.0 with a promise attached: thirty-three exported names are the public API, the
+    binding spellings are settled, and a breaking change needs a major version. 961 tests there, up
+    from 793, and 20 KB gzipped with no dependencies.
+
+*   Components and slots (0.7.0 and 0.8.0) are **not** part of this. Domma has its own web-component
+    factory and never imports `registerComponent`, so that half of the package is tree-shaken out of
+    the bundle rather than bundled and dormant - it is not reachable through `M`, and this release
+    does not pretend otherwise.
+
+*   579 tests here, up from 577: the two new context names are pinned at the Domma seam, because a
+    capability that arrives with a pin is exactly the kind that can leave with one.
+
 ### v0.39.2 - Carousels With Words In (2026-08-21)
 
 **A carousel whose slides are text rather than pictures did not appear at all.** One CSS rule; no API
